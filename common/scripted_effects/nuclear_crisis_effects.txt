@@ -3163,12 +3163,18 @@ nd_guarantee_act_honour = {
 }
 
 # Guarantor scope, from nuclear_crisis.20's immediate: our survivors against the
-# attacker, for the walk-away weight (.20.c).
+# attacker, for the walk-away weight (.20.c). The scope is cleared after the
+# read: left saved, it stays in the event's scope, and Stand With Them's
+# preview (nd_crisis_preview) can't save its own temporary nd_sv_enemy while a
+# permanent one exists, which logged twice a frame while the event was open
+# (2026-10-31). It is saved permanently, not temporarily, so it replaces the
+# victim a strike's caller saved under the same name (nuke.txt).
 nd_guarantor_store_survivors = {
 	if = {
 		limit = { exists = scope:nd_guarantee_attacker }
 		scope:nd_guarantee_attacker = { save_scope_as = nd_sv_enemy }
 		set_variable = { name = nd_survivors_vs_attacker value = nd_survivors_vs_saved }
+		clear_saved_scope = nd_sv_enemy
 	}
 }
 
