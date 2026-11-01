@@ -168,7 +168,8 @@ with the tier's name beneath it:
 ### The Climate Warming modifier
 
 Each month the entry gives every country the Climate Warming modifier, with
-every value multiplied by the current anomaly. At 1 °C it is:
+every value multiplied by the current anomaly, after any aerosol mask
+([Aerosol Injection](#aerosol-injection)). At 1 °C it is:
 
 - +5% mortality and −1 standard of living in every state;
 - −10% farm throughput and −2.5% throughput for every building;
@@ -211,22 +212,25 @@ rate. Until the first yearly figures arrive in January, the headline shows the
 anomaly with "(no rate yet)".
 
 Under the bar, a table gives the year's figures: Our Market's Emissions, Carbon
-Captured, World Emissions and Warming Last Year. Hover a row for what it counts.
+Captured, World Emissions and Warming Last Year. While aerosols mask any warming,
+or a country has just started them, an Aerosol Mask row joins them; hover it for
+the warming beneath the haze, how many countries fly it and where the mask is
+heading. Hover a row for what it counts.
 They update each January; before the first January of a game, a line says when
 they arrive.
 
 Two pies close the overview. Our Share is your market's share of world
 emissions. Emissions Cut is how far your country's remaining industrial
 emissions are cut, by its policies, the Ministry of the Environment and every
-other source together; hover it for how many of the ten policies you run. The cut changes the moment a policy is adopted or repealed.
+other source together; hover it for how many of the eleven policies you run. The cut changes the moment a policy is adopted or repealed.
 
 | Section | Starts | Shows |
 |---|---|---|
-| Mitigation Policies | Open | Ten policies: market-wide Fossil-Fuel Tariffs first, then nine National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, technology, treaty, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
+| Mitigation Policies | Open | Eleven policies: market-wide Fossil-Fuel Tariffs first, then ten National policies. Each row has an icon, its name and effect tooltip, an active check, and Adopt or Repeal. Grayed controls explain the warming, authority, technology, treaty, market ownership and customs conditions. Adoption Around the World counts countries using each policy; the tariff row counts market leaders. |
 | Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the next 25. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
-| How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions and the mitigation policies. |
+| How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions, the mitigation policies and geoengineering. |
 
 Top Emitters tells you whom to bind: every country controls its own industrial
 policies, whether it leads its market or belongs to another country's. A country
@@ -237,9 +241,10 @@ independently.
 
 ## Climate policies
 
-There are ten policies. Nine are national, open to every country. Only
+There are eleven policies. Ten are national, open to every country. Only
 Fossil-Fuel Tariffs is market-wide and controlled by the market leader. Every
-policy needs 0.5 °C of warming, except Fossil-Fuel Divestment, which needs 1.0 °C.
+policy needs 0.5 °C of warming, except Fossil-Fuel Divestment, which needs 1.0 °C,
+and Aerosol Injection, which needs 1.0 °C beneath any aerosol haze.
 A policy that depends on something you must be able to build also needs the
 technology for it:
 
@@ -250,6 +255,7 @@ technology for it:
 | Emission Standards | Pollution Control, era 7 |
 | Public Transit | Modern Urban Planning, era 7 |
 | Carbon Removal Support | Carbon Capture and Storage, era 10 |
+| Aerosol Injection | Geoengineering, era 12 |
 
 Carbon Tax, Climate Adaptation, Reforestation Subsidies, Fossil-Fuel Divestment
 and Fossil-Fuel Tariffs need no technology.
@@ -280,6 +286,7 @@ fuels.
 | Public Transit | National | 150 | Transportation output +10%; oil input −5%; infrastructure built 10% faster; pops' automobiles add less infrastructure. |
 | Fossil-Fuel Divestment | National | 200 | Taxes on oil extraction +25%; coal and oil input −5%; household emissions −15%. |
 | Green Building Codes | National | 100 | Construction goods input +5%; electricity input −2.5%; household emissions −60%. |
+| Aerosol Injection | National | none | Masks warming for every country (below); Environmental Movement radicalism +10 percentage points. Costs 1% of GDP a year, listed under Climate Policy in the Budget panel's Breakdown tab. |
 
 Carbon Removal Support funds the works in your own country, whether you lead
 your market or joined it. The policy itself removes no CO₂: staffed works must
@@ -299,12 +306,40 @@ your market or are a member. Tariffs are a separate choice for leaders: they can
 reduce fossil-fuel trade, but higher import tariffs can also protect domestic
 coal and oil producers. Watch the actual emissions figure when judging them.
 
+### Aerosol Injection
+
+Stratospheric Aerosol Injection hides warming instead of preventing it. Aircraft
+keep a haze of sulfate aerosols in the stratosphere, and the haze masks part of
+the warming for every country in the world. The countries running it together
+mask 1 °C for each fifth of world GDP among them, at most 2 °C and never more
+than the warming there is. The mask builds up over a year or two, about two
+thirds of the way in the first year. The temperature the entry shows, the
+Climate Warming modifier, the tiers and the warming events all read the warming
+less the mask. Emissions keep accumulating underneath, and the recovery events
+wait for the warming beneath the haze to fall, not the masked reading.
+
+When no country runs it any more, the mask fades as fast as it built: two thirds
+of the hidden warming returns within a year, nearly all within three. If at least
+0.25 °C is coming back, every country gets Termination Shock, a modifier that
+fades over five years on top of the returning warming: for each degree returning,
+−5% farm throughput, heatwaves 25% worse and longer, and droughts 25% worse.
+Once you start, stopping is expensive unless others keep flying.
+
+The haze has two more costs. A country whose capital lies in South Asia, the
+Himalayas, Indochina, Indonesia, southern China or West Africa carries Weakened
+Monsoon while any mask is up: for each degree masked, −5% farm throughput and
+droughts 25% worse and longer. That takes back half the farm relief the mask
+brings there and all of its drought relief. And other countries object: those in
+the monsoon regions, and those that would not run it themselves (their will for
+it, below, is more than 15 points short of its threshold), each lose 10 relations
+with a country that starts it, and 5 more every January while it keeps it up.
+
 ## How the AI adopts climate policy
 
 Each AI country weighs each policy separately, from its own conditions. For
 every policy it keeps a score, its will, and compares it with that policy's
 threshold in the table below. Every policy's will starts from a shared core: 20
-points per degree of warming (at most 100), 15 more with the Ministry of the
+points per degree of warming beneath any aerosol haze (at most 100), 15 more with the Ministry of the
 Environment established, and 8 more if an environmentalist leads an interest
 group in government. Five signals then push it up or down, weighted by who each
 policy costs or helps:
@@ -318,12 +353,18 @@ but counts against Climate Adaptation and Reforestation Subsidies;
 Fossil-Fuel Divestment, the Carbon Tax and Fossil-Fuel Tariffs, and mildly
 against Renewable Investment, Public Transit and Emission Standards.
 
+Aerosol Injection turns most of them around: laissez-faire, industrialists in
+government and fuel exports count for it, since it asks nothing of industry, and
+the Environmental Movement counts against it.
+
 The AI adopts a policy once the will reaches the threshold, if it has the
 authority and the policy's technology; for Carbon Removal Support it also needs
 a Carbon Conversion Works. It repeals a policy only once the will falls more
 than 15 points below the threshold, or while its authority is negative, and it
-also drops Carbon Removal Support when it has no works. Between the two it
-leaves the policy alone, so an election doesn't flip policies back and forth.
+also drops Carbon Removal Support when it has no works. It doesn't start Aerosol
+Injection in default or once the haze is as thick as it can get, and stops it in
+default. Between the two it leaves the policy alone, so an election doesn't flip
+policies back and forth.
 
 | Policy | Threshold |
 |---|---|
@@ -334,12 +375,14 @@ leaves the policy alone, so an election doesn't flip policies back and forth.
 | Green Building Codes, Emission Standards | 45 |
 | Carbon Removal Support | 50 |
 | Carbon Tax, Fossil-Fuel Tariffs | 55 |
+| Aerosol Injection | 60 |
 | Fossil-Fuel Divestment | 70 |
 
 In practice most countries take up Climate Adaptation around 1.25 °C if they
 have the authority, countries with an environment ministry move early, and
 Fossil-Fuel Divestment is rare below 3 °C. A laissez-faire oil exporter may
-never divest.
+never divest, but is the likeliest to fly aerosols, from about 1.6 °C with
+industrialists in government; most countries wait for 3 °C.
 
 ## The fossil transition
 
@@ -452,7 +495,9 @@ mortality and throughput, and four have an extra option for a Ministry of the
 Environment or of Consumer Protection funded to level 3. The Tide Comes In can
 leave you with Coastal Flooding or Coastal Population Relocation; while either
 lasts, a Settlement Authority on Managed Retreat can move people off your coasts
-([Resettlement programs](08-states.md#resettlement-programs)). Both lists are in
+([Resettlement programs](08-states.md#resettlement-programs)). Termination Shock
+fires for every country when the last country flying aerosols stops
+([Aerosol Injection](#aerosol-injection)). Both lists are in
 [Climate event list](19-appendix-events.md#climate-event-list).
 
 ## State pollution
@@ -553,7 +598,8 @@ Seven climate policies move its radicalism by 10 points: Carbon Tax, Renewable
 Investment, Climate Adaptation, Emission Standards, Reforestation Subsidies,
 Public Transit and Fossil-Fuel Divestment. Each one in force lowers it, and each
 one you could adopt but haven't raises it. Carbon Removal Support only lowers
-it, by 5 points, and Green Building Codes and Fossil-Fuel Tariffs don't count.
+it, by 5 points, Aerosol Injection in force raises it by 10, and Green Building
+Codes and Fossil-Fuel Tariffs don't count.
 Each unfunded level of the ministry raises it by 5 points. It disbands once the
 Ministry of the Environment is established and funded to its maximum. Its
 support also pushes AI countries toward climate policies.

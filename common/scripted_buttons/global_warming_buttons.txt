@@ -19,7 +19,7 @@
 #
 # `visible` is deliberately left as it was otherwise, inconsistencies included
 # (some rows hid themselves before the warming threshold, others showed greyed).
-# The widget normalises that by showing all ten rows always and letting
+# The widget normalises that by showing all eleven rows always and letting
 # `is_valid` carry the anomaly and authority gates as readable conditions, so it
 # is intentionally more forthcoming than this grid ever was.
 #
@@ -635,4 +635,70 @@ gw_remove_fossil_fuel_tariffs_button = {
 	possible = { gw_possible_remove_fossil_fuel_tariffs = yes }
 
 	effect = { gw_effect_remove_fossil_fuel_tariffs = yes }
+}
+
+# Stratospheric Aerosol Injection (Geoengineering). No authority cost; its
+# price is 1% of GDP a year, so the AI neither starts it in default nor keeps it
+# there. It also leaves a haze already at its ceiling alone (gw_aerosol_has_room):
+# one more country's aircraft would hide nothing more.
+gw_aerosol_injection_button = {
+	name = "GW_AEROSOL_INJECTION"
+	desc = "GW_AEROSOL_INJECTION_DESC"
+
+	visible = {
+		is_ai = yes
+		NOT = { je:je_global_warming = { has_modifier = aerosol_injection_modifier } }
+	}
+
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt).
+	ai_chance = {
+		value = 0
+		if = {
+			limit = {
+				gw_ai_adopt_margin_aerosol_injection >= 0
+				in_default = no
+				gw_aerosol_has_room = yes
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_aerosol_injection
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_aerosol_injection = yes }
+
+	effect = { gw_effect_aerosol_injection = yes }
+}
+
+gw_remove_aerosol_injection_button = {
+	name = "GW_REMOVE_AEROSOL_INJECTION"
+	desc = "GW_REMOVE_AEROSOL_INJECTION_DESC"
+
+	visible = {
+		is_ai = yes
+		je:je_global_warming = { has_modifier = aerosol_injection_modifier }
+	}
+
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while the country is in default. The will reads the warming
+	# beneath the haze (gw_ai_will_urgency), so the mask working is no reason
+	# to stop.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { gw_ai_repeal_margin_aerosol_injection > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_aerosol_injection
+		}
+		if = {
+			limit = { in_default = yes }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
+	}
+
+	possible = { gw_possible_remove_aerosol_injection = yes }
+
+	effect = { gw_effect_remove_aerosol_injection = yes }
 }

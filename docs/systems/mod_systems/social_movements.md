@@ -9,6 +9,7 @@ This section originally documented eight social-movement JEs that all shared a p
 ### Currently active JEs of this family
 - `je_civil_rights` — progress bar, 6 button toggle pairs, path-dependent victory/failure (see `docs/systems/journal_entry_systems.md`)
 - `je_human_augmentation` — passive timer (legacy shape; not yet redesigned)
+- `je_morphological_freedom` — passive timer, on the augmentation debate's pattern (era 13 phase 3; see [Morphological Freedom Debate and Bodily Autonomy](#morphological-freedom-debate-and-bodily-autonomy))
 - `je_digital_rights` — passive timer (legacy shape)
 - `je_post_scarcity` — passive timer (legacy shape)
 - `je_mental_health` — passive timer (legacy shape)
@@ -31,11 +32,12 @@ The `.100` (failure) and `.200` (victory) capstone events for these four have be
 | JE | Trigger Tech | Law Group | Complete | Fail |
 |---|---|---|---|---|
 | Human Augmentation | `biohacking_and_human_augmentation` OR `brain_computer_interfaces` (via `has_augmentation_tech`) | `lawgroup_human_augmentation` | any of `law_regulated_augmentation_market` / `law_mandatory_augmentation` / `law_unrestricted_augmentation` | `law_human_purity` |
+| Morphological Freedom | `morphological_freedom` (era 12) | `lawgroup_bodily_autonomy` | `law_morphological_freedom` | `law_natural_form` at the timeout (an `on_timeout` branch, not a `fail` block) |
 | Digital Rights | `automated_surveillance` / `cybersecurity` | `lawgroup_privacy_rights` | `law_strong_privacy_rights` | `law_intrusive_surveillance` + ministry of intel |
 | Post-Scarcity | `post_work_society` (era 12; `universal_basic_income` until the era 13 split, 2026-10-31) | `lawgroup_welfare` | `law_post-scarcity` | `fail = { always = no }` — timeout only |
 | Mental Health | `mental_health_awareness` | `lawgroup_criminal_justice` | `law_rehabilitation_focused_criminal_justice` + social_security ≥ 4 | `law_punishment_focused` or `law_penal_labor_camps`, once `journal_entry_age` ≥ 3650 days (10 years; timeout is 20) |
 
-**After a revolution.** A revolution's winner gets fresh records of every finished journal entry (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). For Human Augmentation and Mental Health, `possible` is tech-only and the end conditions are laws, so a finished debate would re-activate on the winner. It would then end again at once and replay its outcome event, or, after a timeout, run another twenty years. Both set a resolved variable (`human_augmentation_resolved`, `mental_health_crisis_resolved`) in `on_complete`, `on_fail` and `on_timeout`, and their `is_shown_when_inactive` / `possible` require its absence. Their `is_shown_when_inactive` also requires `is_revolutionary = no`, as civil rights' does. So rebels can't start their own debate mid-war, win, and keep a fresh outcome. The check is not in `possible`, so it can't affect an inherited active record. Their 10-year outcome modifiers are not rebuilt on the winner; civil rights' are (`journal_entry_systems.md` § Civil Rights). Digital Rights and Post-Scarcity have no such guard yet. Their completion is blocked while the target law holds, but on a winner a failed Digital Rights entry re-arms and fails again at once, and a timed-out entry of either starts a new timer.
+**After a revolution.** A revolution's winner gets fresh records of every finished journal entry (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). For Human Augmentation, Morphological Freedom and Mental Health, `possible` is tech-only and the end conditions are laws, so a finished debate would re-activate on the winner. It would then end again at once and replay its outcome event, or, after a timeout, run another twenty years. Each sets a resolved variable (`human_augmentation_resolved`, `morphological_freedom_resolved`, `mental_health_crisis_resolved`) in `on_complete`, `on_fail` and `on_timeout` (Morphological Freedom has no `on_fail`), and their `is_shown_when_inactive` / `possible` require its absence. Their `is_shown_when_inactive` also requires `is_revolutionary = no`, as civil rights' does. So rebels can't start their own debate mid-war, win, and keep a fresh outcome. The check is not in `possible`, so it can't affect an inherited active record. Their 10-year outcome modifiers are not rebuilt on the winner; civil rights' are (`journal_entry_systems.md` § Civil Rights). Digital Rights and Post-Scarcity have no such guard yet. Their completion is blocked while the target law holds, but on a winner a failed Digital Rights entry re-arms and fails again at once, and a timed-out entry of either starts a new timer.
 
 ### Event Design Patterns
 
@@ -54,12 +56,45 @@ Each surviving JE has monthly pulse events plus a fail-state event (except Post-
 | LGBTQ+ Rights | (JE deleted) | `society_technology_events.7`–`.8` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Second-Wave Feminism | (JE deleted) | `society_technology_events.1`–`.2` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Human Augmentation | `common/journal_entries/je_human_augmentation.txt` | `events/augmentation_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+| Morphological Freedom | `common/journal_entries/je_morphological_freedom.txt` | `events/morphological_freedom_events.txt` | `common/static_modifiers/extra_modifiers.txt` (`morphological_freedom_*`, `natural_form_*`, `mf_*`) |
 | Environmental Crisis | (JE deleted; folded into `je_global_warming`) | `events/environmentalism_events.txt` | `common/static_modifiers/extra_modifiers.txt` (event-flavor only) |
 | Digital Rights | `common/journal_entries/je_digital_rights.txt` | `events/surveillance_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Post-Scarcity | `common/journal_entries/je_post_scarcity.txt` | `events/post_scarcity_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Mental Health | `common/journal_entries/je_mental_health.txt` | `events/mental_health_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
 | Decline of Religion | (JE deleted) | `social_tensions_events.13`; `events/religious_revival_events.txt` | `common/static_modifiers/extra_modifiers.txt` (`rre_*`) |
 | Religious Revivals | — (no JE, event-driven) | `events/religious_revival_events.txt` | `common/static_modifiers/extra_modifiers.txt` |
+
+## Morphological Freedom Debate and Bodily Autonomy
+
+Era 13 phase 3 (`docs/superpowers/specs/2026-10-31-era-13-technology-tree-design.md` § 7.1, § 7.2). The **Morphological Freedom** technology (era 12, society; after Human Augmentation and the LGBTQ+ Rights Movement) opens a law group and a debate journal entry. The group is about how a body looks, chosen for self-expression: appearance, sex characteristics, fur, tails. What a body can do stays in Human Augmentation, a separate group, so the interest groups split differently on the two.
+
+**The law group.** `lawgroup_bodily_autonomy` (Human Rights, opinion impact 0.5, carried by regime change), in `common/laws/te_bodily_autonomy_laws.txt`:
+
+| Law | Unlocked by | Modifier |
+|---|---|---|
+| `law_natural_form` | none; every country's law from 1836 | none |
+| `law_licensed_modification` | `morphological_freedom` | acceptance without a shared heritage trait +5, migration pull +5%, institution bureaucracy cost +5% |
+| `law_morphological_freedom` | `morphological_freedom` | acceptance without a shared heritage trait +10, migration pull +10%, cultural hegemony art +5% |
+
+- **Natural Form first.** It is first in its file, so it is what any country without a law in the group gets: an old save loading the group, a country created later. `common/history/extra_history.txt` seeds it as well, beside `law_no_augmentation`.
+- **Natural Form carries nothing, and every ideology is neutral on it.** Every country holds it for two centuries before the technology, so a modifier or a stance on it would apply all that time with no law to answer it. The groups that want it show it by opposing the other two.
+- **The acceptance hook** (`country_acceptance_no_shared_heritage_trait_add`) adds to the citizenship law in force. The mod's citizenship laws (`common/laws/modified.txt`) are not vanilla's: no shared heritage reads −20 to 0, and Civil Rights Movement and Social Justice Movements add +10 each, so by era 12, under four of the six, a pop with no shared heritage trait already gets +20, against +20 to +25 for one sharing a heritage trait or group. The bonus lifts no-shared above them; whether the engine then gives a shared-trait pop the higher figure is on the play-test list (`scripting_best_practices.md` § "Citizenship Acceptance: Read the Mod's Laws, Not Vanilla's").
+- **Stances** (`ideology_modifications.py`, `BODILY_AUTONOMY_LISTS` and `BODILY_AUTONOMY_STANCES`, applied by the loop at the end of the file; hand-written in `extra_ideologies.txt` for the mod's own ideologies). Five classes, Natural / Licensed / Freedom: *traditional* N D SD (the Devout's ideologies of every religion, patriarchal, traditionalist, reactionary, integralist, fascist, ethno-nationalist, agrarian, isolationist); *cautious* N N D (paternalistic and its variants, particularist, patriotic, jingoist, loyalist, authoritarian, populist, proletarian, communist, vanguardist); *regulated* N A N (egalitarian, socialist, social democrat, reformer, plutocratic, technocratic, positivist, meritocratic, modernizer); *liberal* N A SA (the Intelligentsia's liberal, liberal modern, anti-clerical and republican, radical, egalitarian modern, humanitarian, feminist, multicultural, the transhumanist leader); *libertarian* N D SA (laissez-faire, individualist, market liberal, anarchist).
+- `gen_law_consistency.py` lists the group after Human Augmentation; its laws have no `unlocking_laws` or `disallowing_laws`, so the generated sweep has nothing to check in it.
+
+**The journal entry.** `je_morphological_freedom`, on `je_human_augmentation`'s pattern: the Social Movements rule, not decentralized, `is_revolutionary = no` in `is_shown_when_inactive`, the resolved variable `morphological_freedom_resolved` set in `on_complete` and `on_timeout`, and a 7,300-day timeout. While active, `morphological_freedom_debate_active_modifier` (+5% cultural hegemony art, +5% turmoil penalties).
+
+| Ending | When | Result |
+|---|---|---|
+| Success (`.200`, popup) | `law_morphological_freedom` enacted | `morphological_freedom_embraced_modifier` (+10% art, +5% prestige) for ten years, decaying; small loyalists among academics |
+| Failure (`.100`, popup) | `law_natural_form` in force at the timeout | Enforce (`natural_form_enforced_modifier`: −10% art, −5% migration pull; Devout and Rural Folk approve, Intelligentsia disapprove) or look away (`natural_form_tolerated_modifier`: +10% turmoil penalties, −2% prestige) |
+| Unsettled | `law_licensed_modification` in force at the timeout | `morphological_freedom_unsettled_modifier` (+10% turmoil penalties), ten years, decaying |
+
+The failure is a branch of `on_timeout`, not a `fail` block: the engine has no "failed at the deadline" hook, and a `fail` on the entry's age would race the timeout.
+
+**Events** (`events/morphological_freedom_events.txt`, pooled at 240 = 0 beside six 10s): `.1` the first clinics, `.2` a television host's transformation, `.3` sport and eligibility, `.4` parents and children (not under Natural Form), `.5` a religious backlash (a powerful Devout), `.6` a fashion that sweeps a generation (not under Natural Form). All six share a two-year lockout, `te_mf_event_recent`; `.1`, `.3`, `.4` and `.6` have a twenty-year cooldown (once per debate) and `.2` and `.5` a ten-year one, so a full debate brings about eight at most. Options trade the Devout and Rural Folk against the Intelligentsia, with small modifiers and treasury costs.
+
+**Clade Citizenship** (Self-Directed Evolution, era 13, spec § 7.3) joins as the fourth law, last in the file, at +20. To add it: the law (progressiveness 80); `law_clade_citizenship` in `_BODILY_AUTONOMY_LAWS` and a fourth code in each `BODILY_AUTONOMY_LISTS` row and each hand-written block in `extra_ideologies.txt` (`ideology_lawgroup_audit` names a miss); an `OR` in the entry's `complete` and a status line; then `scripts/generators/regen_ideologies_offline.py`.
 
 ## Religious Revival Events
 

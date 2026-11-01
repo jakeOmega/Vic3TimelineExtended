@@ -5882,6 +5882,50 @@ pm_microgravity_alloying = {
 	required_input_goods = electricity
 }
 
+# Fusion Torch Reclamation (Aneutronic Fusion, era 13 spec § 7.8): the fusion
+# torch Eastlund and Gough proposed in 1969, a plasma hot enough to break scrap
+# and waste back into its elements. It trades ore for electricity: a third of
+# Microgravity Alloying's iron, no coal and no launch capacity, for over three
+# times the electricity, at the same steel and staff.
+pm_fusion_torch_reclamation = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		aneutronic_fusion
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (10.00%)
+			goods_input_electricity_add = 600                    # Price:   30, Total cost: 18000.0 (90.00%)
+			# Output goods
+			goods_output_steel_add = 600                         # Price:   50, Total cost: 30000.0 (100.00%)
+			# Total input cost: 20000.0
+			# Total output cost: 30000.0
+			# Profit: 10000.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 3000
+			# Wage breakeven: 3.33
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_laborers_add = 2000
+			building_employment_engineers_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_bespoke_alloys = {
 	texture = "gfx/interface/icons/production_method_icons/chrome.dds"
 
@@ -5895,6 +5939,7 @@ pm_bespoke_alloys = {
 		pm_aluminum_substitution
 		pm_chromium_substitution
 		pm_microgravity_alloying
+		pm_fusion_torch_reclamation
 	}
 
 	building_modifiers = {
@@ -11264,6 +11309,48 @@ pm_base_building_nuclear_power = {
 	}
 }
 
+pm_base_building_advanced_fission_power = {
+	# Generation IV reactors (era 13 spec § 7.7): molten salt and thorium burn their fuel far more completely, so a
+	# level makes 75% more electricity and needs half the lead shielding and disposal of the light-water method. They
+	# run hotter, on corrosion-proof alloys: more tech metals and electronic components, and some Advanced Materials.
+	# The same staff as every reactor method, so the AI-managed reactor's cut stays exact (#996)
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p1.dds"
+
+	unlocking_technologies = {
+		advanced_fission
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 100                        # Price:   60, Total cost:  6000.0 (10.91%)
+			goods_input_electronic_components_add = 250          # Price:   80, Total cost: 20000.0 (36.36%)
+			goods_input_lead_add = 50                            # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_tech_metals_add = 100                    # Price:   80, Total cost:  8000.0 (14.55%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_telephones_add = 100                     # Price:   70, Total cost:  7000.0 (12.73%)
+			goods_input_glass_add = 50                           # Price:   40, Total cost:  2000.0 (3.64%)
+			goods_input_advanced_materials_add = 2               # Price: 4000, Total cost:  8000.0 (14.55%)
+			# Output goods
+			goods_output_electricity_add = 3500                  # Price:   30, Total cost: 105000.0 (100.00%)
+			# Total input cost: 55000.0
+			# Total output cost: 105000.0
+			# Profit: 50000.0
+			# Profit margin: 90.91%
+			# Zero profit price multiplier: 0.52
+			# Employment: 1100
+			# Wage breakeven: 45.45
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 500
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 100
+			building_employment_academics_add = 100
+		}
+	}
+}
+
 pm_base_building_tokamak_fusion_power = {
 	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p1.dds"
 
@@ -11374,6 +11461,58 @@ pm_base_building_compact_modular_fusion_power = {
 		level_scaled = {
 			building_employment_laborers_add = 500
 			building_employment_machinists_add = 400
+			building_employment_engineers_add = 100
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+# Aneutronic Fusion (era 13 spec § 7.8): proton-boron fusion releases charged
+# particles, not neutrons, and its current is drawn straight from the plasma.
+# Against Compact Fusion Power: a third more electricity, a quarter of the
+# engines (no turbines to drive) and of the lead (almost no neutron shielding;
+# the mod has no radioactive-waste mechanic, so "no waste" is this cut), more
+# tech metals (the boron fuel cycle and its magnets), more electronic
+# components (direct energy converters) and advanced materials, and a smaller
+# staff with no turbine hall: 950 a level, not 1,100. The staff differs from
+# the other reactor bases, so its AI-managed tier is its own method,
+# pm_ai_managed_power_plant_aneutronic (#996: each cut must be exact).
+pm_base_building_aneutronic_fusion_power = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		aneutronic_fusion
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 25                         # Price:   60, Total cost:  1500.0 (0.98%)
+			goods_input_electronic_components_add = 500          # Price:   80, Total cost: 40000.0 (26.23%)
+			goods_input_digital_access_add = 200                 # Price:  120, Total cost: 24000.0 (15.74%)
+			goods_input_radios_add = 50                          # Price:   80, Total cost:  4000.0 (2.62%)
+			goods_input_digital_assets_add = 50                  # Price:  100, Total cost:  5000.0 (3.28%)
+			goods_input_lead_add = 25                            # Price:   40, Total cost:  1000.0 (0.66%)
+			goods_input_tech_metals_add = 100                    # Price:   80, Total cost:  8000.0 (5.25%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (1.31%)
+			goods_input_telephones_add = 100                     # Price:   70, Total cost:  7000.0 (4.59%)
+			goods_input_advanced_materials_add = 15              # Price: 4000, Total cost: 60000.0 (39.34%)
+			# Output goods
+			goods_output_electricity_add = 16000                 # Price:   30, Total cost: 480000.0 (100.00%)
+			# Total input cost: 152500.0
+			# Total output cost: 480000.0
+			# Profit: 327500.0
+			# Profit margin: 214.75%
+			# Zero profit price multiplier: 0.32
+			# Employment: 950
+			# Wage breakeven: 344.74
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 450
+			building_employment_machinists_add = 300
 			building_employment_engineers_add = 100
 			building_employment_academics_add = 100
 		}
@@ -11583,6 +11722,7 @@ pm_ai_managed_power_plant_reactor = {
 		pm_base_building_inertial_fusion_power
 		pm_base_building_compact_modular_fusion_power
 		pm_base_building_nuclear_power
+		pm_base_building_advanced_fission_power
 	}
 
 	building_modifiers = {
@@ -11607,6 +11747,60 @@ pm_ai_managed_power_plant_reactor = {
 		level_scaled = {
 			building_employment_laborers_add = -500
 			building_employment_machinists_add = -400
+			building_employment_engineers_add = -100
+			building_employment_academics_add = -100
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_ai_managed_power_plant_aneutronic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_green_p4.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		smart_grids
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	# Split by base method so every cut is exact (#996); hidden when
+	# unavailable, so a building shows one AI-managed option. Aneutronic
+	# Fusion Power staffs 950 a level, not the other reactors' 1,100.
+	unlocking_production_methods = {
+		pm_base_building_aneutronic_fusion_power
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
+			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			# Output goods
+			# Total input cost: 1430.0
+			# Total output cost: 0
+			# Profit: -1430.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -950
+			# Wage breakeven: 1.51
+		}
+
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
+		level_scaled = {
+			building_employment_laborers_add = -450
+			building_employment_machinists_add = -300
 			building_employment_engineers_add = -100
 			building_employment_academics_add = -100
 		}
@@ -14404,6 +14598,52 @@ pm_autonomous_trains = {
 	}
 }
 
+# Vactrains (era 13 spec § 7.9): freight pods in evacuated tubes, the use the hyperloop
+# ventures of the 2010s turned to. Linear motors in the tube replace the locomotives'
+# engines and oil, so it burns no fuel; superconducting magnets (tech metals) lift the
+# pods and pumps hold the vacuum. Output is Autonomous Trains' +27%, infrastructure its
+# 55 +5. Heavy maintenance tier, as every freight method from Containerized Cargo on
+# (pm_maintenance_graded_standard/_heavy); code 8 in te_state_railway_train_code.
+pm_vactrain_freight = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p4.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		vactrains
+	}
+
+	disallowing_laws = { law_human_labor_quotas }	# Human Labor Quotas withdraws robotic and AI-managed methods (te_automation_policy_triggers.txt)
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (40.54%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (21.62%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (10.81%)
+			goods_input_digital_assets_add = 10                  # Price:  100, Total cost:  1000.0 (27.03%)
+			# Output goods
+			goods_output_transportation_add = 170                # Price:   30, Total cost:  5100.0 (100.00%)
+			# Total input cost: 3700.0
+			# Total output cost: 5100.0
+			# Profit: 1400.0
+			# Profit margin: 37.84%
+			# Zero profit price multiplier: 0.73
+			# Employment: 10
+			# Wage breakeven: 140.00
+		}
+		level_scaled = {
+			building_employment_engineers_add = 10
+		}
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_infrastructure_add = 60
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 REPLACE:pm_wooden_passenger_carriages = {
 	texture = "gfx/interface/icons/production_method_icons/passenger_trains.dds"
 
@@ -14549,6 +14789,46 @@ pm_maglev_trains = {
 			state_infrastructure_add = 10
 		}
 	}
+}
+
+# Vactrains (era 13 spec § 7.9): Maglev Trains in an evacuated tube, at airliner speed
+# between cities. Superconducting magnets (tech metals) lift and drive the capsules and
+# pumps hold the vacuum, on electricity. Output is Maglev Trains' +60%, infrastructure
+# its 10 +5 (Bullet Trains 5, Maglev 10); inputs cost about 44% of output at base prices,
+# within the passenger tiers' 40-45% (transport_goods.md). No staff of its own, as Maglev.
+pm_vactrains = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		vactrains
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 6                            # Price:   50, Total cost:   300.0 (14.29%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (38.10%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (19.05%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (28.57%)
+			# Output goods
+			goods_output_transportation_add = 160                # Price:   30, Total cost:  4800.0 (100.00%)
+			# Total input cost: 2100.0
+			# Total output cost: 4800.0
+			# Profit: 2700.0
+			# Profit margin: 128.57%
+			# Zero profit price multiplier: 0.44
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_infrastructure_add = 15
+		}
+	}
+
+	required_input_goods = electricity
 }
 
 # Vanilla's three port methods, restated so their infrastructure counts per
@@ -16177,7 +16457,7 @@ pm_ai_optimized_operations = {
 	required_input_goods = digital_access
 }
 
-# The Extraplanetary Base's four base methods hire a flat crew in `unscaled`, the same
+# The Extraplanetary Base's five base methods hire a flat crew in `unscaled`, the same
 # at any level (owner, 2026-10-31): a base needs its colonies' room to pay, so its
 # levels are off-world work, not jobs on Earth. Each crew is a very attractive job
 # (building_job_attractiveness_mult, as every flat crew: pm_ai_managed_* and the Grid
@@ -16349,6 +16629,56 @@ pm_space_colony_vacation = {
 	required_input_goods = digital_access
 }
 
+# Self-Replicating Miners (Von Neumann Machines, era 13 spec § 7.10): seed miners that
+# build their copies from the ore they dig, so a level launches two thirds of a Mining
+# Colony's Launch Capacity and adds robotics. They spread over more rock: every output a
+# quarter above the Mining Colony's, and half its crew directs the swarm. The logistics
+# upgrades cut a smaller launch bill, so they matter less here. At base prices it earns
+# 104,050 a level with neither upgrade and 142,450 with both, against the Mining Colony's
+# 37,000 and 94,600 (test_deep_sea_rebalance.py, SelfReplicatingMiners).
+pm_self_replicating_miners = {
+	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p5.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		von_neumann_machines
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 30           # Price:   80, Total cost:  2400.0 (2.92%)
+			goods_input_radios_add = 30                          # Price:   80, Total cost:  2400.0 (2.92%)
+			goods_input_digital_access_add = 15                  # Price:  120, Total cost:  1800.0 (2.19%)
+			goods_input_advanced_materials_add = 2.5             # Price: 4000, Total cost: 10000.0 (12.17%)
+			goods_input_robotics_add = 20                        # Price:   80, Total cost:  1600.0 (1.95%)
+			goods_input_launch_capacity_add = 320                # Price:  200, Total cost: 64000.0 (77.86%)
+			# Output goods
+			goods_output_gold_add = 250                          # Price:  100, Total cost: 25000.0 (13.42%)
+			goods_output_iron_add = 1250                         # Price:   40, Total cost: 50000.0 (26.85%)
+			goods_output_lead_add = 125                          # Price:   40, Total cost:  5000.0 (2.68%)
+			goods_output_sulfur_add = 125                        # Price:   50, Total cost:  6250.0 (3.36%)
+			goods_output_tech_metals_add = 1250                  # Price:   80, Total cost: 100000.0 (53.69%)
+			# Total input cost: 82200.0
+			# Total output cost: 186250.0
+			# Profit: 104050.0
+			# Profit margin: 126.58%
+			# Zero profit price multiplier: 0.44
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+
+		# A flat crew at any level (above pm_regolith_processing)
+		unscaled = {
+			# employment
+			building_employment_engineers_add = 400
+			building_employment_academics_add = 100
+			building_job_attractiveness_mult = 5
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
 # Deep-Sea Mine (Global Commons § 1.1, docs/superpowers/archive/specs/2026-10-16-global-commons-design.md).
 # Seabed licences cap its levels, so each level must be worth claiming. Against the
 # Extraplanetary Base's era-11 method (pm_space_mine) every output is at least as large,
@@ -16357,9 +16687,9 @@ pm_space_colony_vacation = {
 # The advanced and automated methods produce twice the base output on their own inputs.
 # Its ships are in the support-vessels group (the tenders after these methods), and the
 # comparisons count them. It out-earns the Extraplanetary Base per level until that
-# building has Space Colonization and both era-12 logistics upgrades
-# (te_global_commons_logistics_pms.txt). test_deep_sea_rebalance.py holds both orderings
-# at base prices.
+# building has Space Colonization and both logistics upgrades
+# (te_global_commons_logistics_pms.txt), or Self-Replicating Miners (era 13) with or
+# without them. test_deep_sea_rebalance.py holds both orderings at base prices.
 pm_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
 	is_hidden_when_unavailable = yes
@@ -16990,6 +17320,61 @@ pm_nanomaterial_buildings = {
 	}
 }
 
+# Von Neumann Machines (era 13 spec § 7.10): seed factories that build their own
+# tools, scaffolding and copies. The ladder's next step: 24 construction a level
+# (16 on Nanomaterial Buildings), robotics and more electricity and advanced
+# materials in, a point about 7% cheaper. Its staff is Nanomaterial Buildings',
+# so every automation method in pmg_construction_automation still fits
+# (pm_employment_audit), and its Construction Site twin is
+# pm_te_direct_construction_self_replicating (te_construction_market_pms.txt).
+pm_self_replicating_construction = {
+	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		von_neumann_machines
+	}
+
+	state_modifiers = {
+		unscaled = {
+			state_construction_mult = 0.3
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (6.68%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (4.28%)
+			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (2.67%)
+			goods_input_tools_add = 16                           # Price:   40, Total cost:   640.0 (4.28%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (8.02%)
+			goods_input_transportation_add = 41.5                # Price:   30, Total cost:  1245.0 (8.32%)
+			goods_input_engines_add = 4                          # Price:   60, Total cost:   240.0 (1.60%)
+			goods_input_digital_assets_add = 20                  # Price:  100, Total cost:  2000.0 (13.36%)
+			goods_input_advanced_materials_add = 1.5             # Price: 4000, Total cost:  6000.0 (40.09%)
+			goods_input_robotics_add = 20                        # Price:   80, Total cost:  1600.0 (10.69%)
+			# Output goods
+			goods_output_construction_add = 24                   # Price: 1000, Total cost: 24000.0 (100.00%)
+			# Total input cost: 14965.0
+			# Total output cost: 24000.0
+			# Profit: 9035.0
+			# Profit margin: 60.37%
+			# Zero profit price multiplier: 0.62
+			# Employment: 4570
+			# Wage breakeven: 1.98
+		}
+
+		level_scaled = {
+			building_employment_academics_add = 10
+			building_employment_bureaucrats_add = 410
+			building_employment_clerks_add = 400
+			building_employment_engineers_add = 250
+			building_employment_machinists_add = 500
+			building_employment_laborers_add = 3000
+		}
+	}
+}
+
 pm_no_construction_automation = {
 	texture = "gfx/interface/icons/production_method_icons/cat_building_green_p1.dds"
 }
@@ -17012,6 +17397,7 @@ pm_prefabricated_building_components = {
 		pm_reinforced_concrete_buildings
 		pm_advanced_construction
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 		pm_te_direct_construction_wooden
 		pm_te_direct_construction_iron_frame
 		pm_te_direct_construction_steel_frame
@@ -17019,6 +17405,7 @@ pm_prefabricated_building_components = {
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_advanced
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 	}
 
 	building_modifiers = {
@@ -17062,6 +17449,7 @@ pm_tower_cranes = {
 		pm_reinforced_concrete_buildings
 		pm_advanced_construction
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 		pm_te_direct_construction_wooden
 		pm_te_direct_construction_iron_frame
 		pm_te_direct_construction_steel_frame
@@ -17069,6 +17457,7 @@ pm_tower_cranes = {
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_advanced
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 	}
 
 	building_modifiers = {
@@ -17110,10 +17499,12 @@ pm_computer_aided_design = {
 		pm_reinforced_concrete_buildings
 		pm_arc_welded_buildings
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 		pm_advanced_construction
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_arc_welded
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 		pm_te_direct_construction_advanced
 	}
 
@@ -17160,10 +17551,12 @@ pm_3d_printed_buildings = {
 		pm_reinforced_concrete_buildings
 		pm_arc_welded_buildings
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 		pm_advanced_construction
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_arc_welded
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 		pm_te_direct_construction_advanced
 	}
 
@@ -18301,8 +18694,10 @@ pm_deep_space_exploration = {
 pm_interstellar_mission = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p6.dds"
 
+	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31); old saves:
+	# te_repair_era_13_technologies (te_old_save_repairs.txt)
 	unlocking_technologies = {
-		compact_fusion_reactors
+		aneutronic_fusion
 	}
 
 	building_modifiers = {
@@ -18723,6 +19118,7 @@ pm_construction_principle_2 = {
 		pm_reinforced_concrete_buildings
 		pm_advanced_construction
 		pm_nanomaterial_buildings
+		pm_self_replicating_construction
 		pm_te_direct_construction_wooden
 		pm_te_direct_construction_iron_frame
 		pm_te_direct_construction_steel_frame
@@ -18730,6 +19126,7 @@ pm_construction_principle_2 = {
 		pm_te_direct_construction_reinforced_concrete
 		pm_te_direct_construction_advanced
 		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_self_replicating
 	}
 
 	unlocking_principles = {
@@ -19862,6 +20259,7 @@ pm_maintenance_graded_standard = {
 		pm_containerized_cargo
 		pm_automated_loading_and_unloading
 		pm_autonomous_trains
+		pm_vactrain_freight
 		pm_container_ports
 		pm_global_ports
 		pm_magnetic_drive_ports
@@ -19882,6 +20280,7 @@ pm_maintenance_graded_heavy = {
 		pm_containerized_cargo
 		pm_automated_loading_and_unloading
 		pm_autonomous_trains
+		pm_vactrain_freight
 		pm_container_ports
 		pm_global_ports
 		pm_magnetic_drive_ports

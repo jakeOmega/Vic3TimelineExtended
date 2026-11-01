@@ -79,6 +79,8 @@ SECTIONS = {
         "te_officer_academies_standing", "te_political_commissars_indoctrination",
         # Heir education's focus
         "heir_ed_*",
+        # Liquid Democracy with Neural Lace (te_liquid_democracy_effects.txt)
+        "te_continuous_vote",
     ),
     "society": (
         # Inheritance: a dynasty's continuity (event outcome)
@@ -198,6 +200,7 @@ NOT_ON_COUNTRY = {
     "fossil_fuel_*": "je_global_warming", "green_building_codes_modifier": "je_global_warming",
     "public_transit_modifier": "je_global_warming", "reforestation_subsidies_modifier": "je_global_warming",
     "renewable_investment_modifier": "je_global_warming", "global_warming": "je_global_warming",
+    "aerosol_injection_modifier": "je_global_warming", "gw_aerosol_monsoon_modifier": "je_global_warming",
     "ch_cultural_*": "je_cultural_hegemony", "ch_global_media_campaign": "je_cultural_hegemony",
     "ch_world_exposition": "je_cultural_hegemony", "cultural_hegemony_*": "je_cultural_hegemony",
     "civil_rights_phase_*": "je_civil_rights",
@@ -221,7 +224,6 @@ NOT_ON_COUNTRY = {
     "sr_free_colony_supply": "je_space_race_solar_colonization",
     "sr_free_colony_trade": "je_space_race_solar_colonization",
     "sr_colonial_garrisons": "je_space_race_solar_colonization",
-    "sr_fleet_upkeep": "a Space Command building (the upkeep_inputs probe's candidate)",
     "sr_fleet_upkeep_goods": "a Space Command building",
     "te_seabed_long_haul": "a Deep-Sea Mine building (Long-Haul Seabed Operations)",
     "sr_funding_progress": "the running milestone's entry", "sr_space_program_cost": "the running milestone's entry",

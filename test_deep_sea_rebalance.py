@@ -29,6 +29,12 @@ design § 6, docs/superpowers/specs/2026-10-29-lunar-colonization-design.md), be
 any Deep-Sea Mine: an era with no Deep-Sea method has nothing to compare, and every
 ordering from era 11 on is unchanged.
 
+Von Neumann Machines (era 13 spec § 7.10) adds Self-Replicating Miners in era 13, after
+the Deep-Sea Mine's last method (era 12). The era-with-era comparisons skip it, as they
+skip Regolith Processing; the with-both-upgrades ordering covers it, and
+SelfReplicatingMiners holds it ahead of the era-12 base methods on every logistics
+combination. No ordering above changed.
+
 Run `python3 test_deep_sea_rebalance.py --table` to print the per-level figures.
 """
 import glob
@@ -486,6 +492,43 @@ class ExtraplanetaryBaseLogistics(unittest.TestCase):
                     self.assertGreater(launch, 0.0)
                     saving = self.d.profit(pm, [upgrade]) - self.d.profit(pm)
                     self.assertAlmostEqual(saving, -LOGISTICS_CUT * launch * self.d.prices["launch_capacity"])
+
+
+class SelfReplicatingMiners(unittest.TestCase):
+    """Era 13 spec § 7.10: Von Neumann Machines' miners build their copies from the ore
+    they dig, so they launch less than a Mining Colony and mine more."""
+
+    PM, COLONY, TECH = "pm_self_replicating_miners", "pm_space_colony_mining", "von_neumann_machines"
+
+    def setUp(self):
+        self.d = _DATA
+
+    def test_the_last_base_method_and_its_era(self):
+        space = self.d.group_methods(self.d.base_group(SPACE))
+        self.assertEqual(space[-1], self.PM)
+        self.assertEqual(_list(self.d.pms[self.PM].get("unlocking_technologies")), [self.TECH])
+        self.assertEqual(self.d.method_era(self.PM, SPACE), 13)
+
+    def test_less_launch_and_more_of_every_output_than_the_mining_colony(self):
+        own, colony = self.d.goods(self.PM, "output"), self.d.goods(self.COLONY, "output")
+        self.assertEqual(set(own), set(colony))
+        for good, qty in colony.items():
+            with self.subTest(good=good):
+                self.assertGreater(own[good], qty)
+        self.assertLess(self.d.goods(self.PM, "input")["launch_capacity"],
+                        self.d.goods(self.COLONY, "input")["launch_capacity"])
+        self.assertLessEqual(self.d.crew(self.PM), self.d.crew(self.COLONY))
+
+    def test_out_earns_the_era_12_methods_on_every_logistics_combination(self):
+        upgrades = list(self.d.logistics_upgrades().values())
+        era_12 = [pm for pm in self.d.group_methods(self.d.base_group(SPACE))
+                  if self.d.method_era(pm, SPACE) == 12]
+        self.assertTrue(era_12)
+        for n in range(len(upgrades) + 1):
+            for chosen in itertools.combinations(upgrades, n):
+                for pm in era_12:
+                    with self.subTest(against=pm, upgrades=chosen):
+                        self.assertGreater(self.d.profit(self.PM, chosen), self.d.profit(pm, chosen))
 
 
 class DeepSeaMineSupportVessels(unittest.TestCase):

@@ -75,7 +75,7 @@ IMAGES = {
     "underground_augmentation_clinic": {
         "prompt": "An underground surgical clinic with cybernetic implants.",
         "style": "digital painting, atmospheric, cyberpunk mood",
-        "events": ["augmentation_events.2", "extra_law_events.76"],
+        "events": ["augmentation_events.2", "extra_law_events.76", "morphological_freedom_events.100"],
     },
     "anti_augmentation_protest": {
         "prompt": "Night street protest outside a neon-lit clinic, raised hands and a police line in rain.",
@@ -95,7 +95,7 @@ IMAGES = {
     "augmented_harmony": {
         "prompt": "A community workspace with subtle technological enhancements.",
         "style": "oil painting, impressionist, warm optimistic light",
-        "events": ["augmentation_events.200"],
+        "events": ["augmentation_events.200", "morphological_freedom_events.200"],
     },
 
     # =========================================================================
@@ -670,7 +670,7 @@ IMAGES = {
     "lgbtq_religious_backlash": {
         "prompt": "Religious leaders delivering a sermon opposing social change.",
         "style": "oil painting, academic art, dramatic pulpit light",
-        "events": ["amendment_petition_events.13"],
+        "events": ["amendment_petition_events.13", "morphological_freedom_events.5"],
     },
     "hate_crime_vigil": {
         "prompt": "A candlelight vigil mourning victims of a hate crime.",
@@ -709,7 +709,7 @@ IMAGES = {
     "youth_mental_health_crisis": {
         "prompt": "A teenager sitting alone on a school corridor bench.",
         "style": "oil painting, intimate realism, empathetic light",
-        "events": ["mental_health_events.2"],
+        "events": ["mental_health_events.2", "morphological_freedom_events.4"],
     },
     "addiction_struggle": {
         "prompt": "A support group meeting in a community center.",
@@ -782,7 +782,7 @@ IMAGES = {
         "events": [
             "ministry_law_events.11", "ministry_law_events.12",
             "ministry_law_events.13", "ministry_law_events.14",
-            "ministry_law_events.15",
+            "ministry_law_events.15", "society_technology_events.37",
         ],
     },
     "ministry_reform": {
@@ -1046,7 +1046,7 @@ IMAGES = {
     "art_renaissance_future": {
         "prompt": "A vibrant future art district full of creators and installations.",
         "style": "oil painting, impressionist, vibrant color",
-        "events": ["post_scarcity_events.5"],
+        "events": ["post_scarcity_events.5", "morphological_freedom_events.6"],
     },
     "post_scarcity_achieved": {
         "prompt": "A futuristic city where material needs are fully met.",
@@ -1099,7 +1099,7 @@ IMAGES = {
     "media_moral_panic": {
         "prompt": "Television studio with an agitated anchor and anxious viewers gathered in a dim living room.",
         "style": "oil painting, contemporary realism, cool screen light",
-        "events": ["repeatable_events.30"],
+        "events": ["repeatable_events.30", "morphological_freedom_events.2"],
     },
     "cyber_attack_infrastructure": {
         "prompt": "City infrastructure failing under a cyberattack in a dark control room.",
@@ -1277,12 +1277,12 @@ IMAGES = {
     "neural_interface_consumer": {
         "prompt": "A patient receiving a small neural implant in a clinical chair.",
         "style": "digital painting, clean light, near-future",
-        "events": ["society_technology_events.16", "society_technology_events.20"],
+        "events": ["society_technology_events.16", "society_technology_events.20", "morphological_freedom_events.1"],
     },
     "augmented_athlete_arena": {
         "prompt": "An augmented athlete sprinting in a futuristic arena.",
         "style": "digital painting, cinematic light, near-future",
-        "events": ["society_technology_events.17"],
+        "events": ["society_technology_events.17", "morphological_freedom_events.3"],
     },
     "space_habitat_future": {
         "prompt": "Interior of a rotating space habitat with parks and farms.",
@@ -1879,7 +1879,7 @@ IMAGES = {
     "whistleblower_documents": {
         "prompt": "A whistleblower in a dimly lit room downloading classified documents onto a USB drive, reflection of screen data visible in their glasses. A decision that will change history — treason or heroism depending on who you ask.",
         "style": "oil painting, chiaroscuro, noir atmosphere",
-        "events": ["surveillance_events.1"],
+        "events": ["surveillance_events.1", "society_technology_events.36"],
     },
     "data_breach_screens": {
         "prompt": "A cybersecurity operations center in crisis: screens flashing red with breach alerts, data flowing out in real time, analysts scrambling to contain the damage. Personal records of millions exposed. The digital Pandora's box opened.",

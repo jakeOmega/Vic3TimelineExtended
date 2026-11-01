@@ -31,6 +31,7 @@ The mod uses 55 on-action files under `common/on_actions/`; the index below list
 | `te_civil_war_on_actions.txt` | The shared civil-war layer: outbreak, win and resolve hooks, which call each system's copy and repair (the tax code's `te_tax_on_uprising` and `te_tax_repair_after_civil_war` among them) | Immediate |
 | `te_orbital_debris_on_actions.txt` | Orbital debris (space race rule): the world's step on the global `on_monthly_pulse` (`te_debris_global_monthly`: the Kessler term, traffic, decay, removal, the panel's globals) and, on `on_monthly_pulse_country`, `te_debris_country_monthly` (the one refresh site of `te_orbital_debris` and `te_debris_cleaner_prestige`, and the ribbon-strike roll). See Space Race → *Orbital debris* | Pulse (monthly) |
 | `te_global_commons_seabed_on_actions.txt` | Seabed licences (§ Global Commons): the monthly country recording, the monthly state refresh of Long-Haul Seabed Operations, recording on `on_state_owner_change`, the yearly sharing from the global `on_monthly_pulse` when due, and the AI's policy on `on_yearly_pulse_country` | Mixed |
+| `te_frontier_ai_on_actions.txt` | Frontier AI Control: the global `on_monthly_pulse` count of Open Weights holders of major power rank or greater, read by `global_tech_spread_script_value` (see Governance Laws → *Frontier AI Control*) | Pulse (monthly) |
 
 ### Pulse Wiring (`extra_on_actions.txt`)
 

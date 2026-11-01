@@ -5,6 +5,10 @@
 gui_country_hidden_modifier_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = aerosol_injection_cost_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = agdiff_biotechnology }
 		add = 1
 	}
@@ -350,6 +354,10 @@ gui_country_hidden_modifier_count = {
 	}
 	if = {
 		limit = { has_modifier = te_construction_market_private_share_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
 	if = {
@@ -1031,6 +1039,10 @@ te_nation_list_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = heir_ed_trait_focus_active }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
 	if = {
@@ -2009,6 +2021,10 @@ te_nation_types_governance_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_continuous_vote }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_demog_health_bill_down }
 		add = 1
 	}
@@ -2557,6 +2573,10 @@ te_nation_group_legitimacy_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_continuous_vote }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_demog_ms_crash_campaign }
 		add = 1
 	}
@@ -2619,6 +2639,10 @@ te_nation_type_country_law_enactment_success_add_count = {
 		limit = { has_modifier = cr_grassroots_modifier }
 		add = 1
 	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
+		add = 1
+	}
 }
 
 # Used by: the character_coup_strength_mult row
@@ -2663,6 +2687,10 @@ te_nation_group_interest_groups_count = {
 	}
 	if = {
 		limit = { has_modifier = te_capital_controls_fatigue }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
 	if = {
@@ -3523,6 +3551,10 @@ te_nation_type_interest_group_ig_armed_forces_pop_attraction_mult_count = {
 te_nation_type_interest_group_in_government_attraction_mult_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = te_continuous_vote }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_political_commissars_indoctrination }
 		add = 1
 	}
@@ -3605,6 +3637,10 @@ te_nation_types_society_count = {
 	}
 	if = {
 		limit = { has_modifier = te_automation_dividend }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
 	if = {
@@ -3998,6 +4034,10 @@ te_nation_group_unrest_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_continuous_vote }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_demog_ms_crash_campaign }
 		add = 1
 	}
@@ -4045,6 +4085,10 @@ te_nation_type_state_radicals_from_political_movements_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = iron_fist_path_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
 	if = {

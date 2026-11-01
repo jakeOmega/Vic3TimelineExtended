@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# FRONTIER AI CONTROL — the world's monthly count (common/laws/te_frontier_ai_laws.txt)
+# ============================================================================
+# Global scope: the Open Weights count runs once for the world. The law's own
+# standing rules run from fix_incompatible_laws (extra_on_actions.txt wires
+# it to on_law_activated, on_acquired_technology and the yearly country
+# pulse). The engine unions same-name on_action declarations across files.
+# ============================================================================
+
+on_monthly_pulse = {
+	on_actions = {
+		te_frontier_ai_monthly_on_action
+	}
+}
+
+te_frontier_ai_monthly_on_action = {
+	effect = {
+		te_frontier_ai_refresh_open_weights_count = yes
+	}
+}

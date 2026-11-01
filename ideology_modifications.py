@@ -952,6 +952,190 @@ AUTOMATION_STANCES = {
     )},
 }
 
+# --- lawgroup_bodily_autonomy (era 13 spec § 7.1; common/laws/te_bodily_autonomy_laws.txt) ---
+# Every list names every law, in file order. Natural Form is neutral in all of
+# them: every country holds it from 1836 until era 12, so a stance on it would
+# move approval for two centuries with nothing to enact against it. A group
+# that wants Natural Form shows it by opposing the other laws. Applied to the
+# vanilla ideologies in BODILY_AUTONOMY_STANCES by the loop after
+# `modifications`; the mod's own ideologies carry the same lists by hand in
+# extra_ideologies.txt. Clade Citizenship (Self-Directed Evolution, era 13)
+# joins as a fourth law: add it to _BODILY_AUTONOMY_LAWS and a fourth code to
+# each row below (and to the hand-written blocks).
+_BODILY_AUTONOMY_LAWS = (
+    "law_natural_form",
+    "law_licensed_modification",
+    "law_morphological_freedom",
+)
+
+
+def bodily_autonomy_constructor(*codes):
+    """One stance code per law, in _BODILY_AUTONOMY_LAWS order, as (law, stance) pairs."""
+    assert len(codes) == len(_BODILY_AUTONOMY_LAWS)
+    return [(law, _STANCE_CODES[code]) for law, code in zip(_BODILY_AUTONOMY_LAWS, codes)]
+
+
+BODILY_AUTONOMY_LISTS = {
+    #                                                 Natural Licensed Freedom
+    # The body as given (or as God made it): the Devout, the Rural Folk.
+    "traditional": bodily_autonomy_constructor("0", "-", "--"),
+    # Order and uniformity first: tolerate a licensed trade, not a right.
+    "cautious": bodily_autonomy_constructor("0", "0", "-"),
+    # Safety and standards: licensed clinics, publicly overseen.
+    "regulated": bodily_autonomy_constructor("0", "+", "0"),
+    # A person's body is their own to express: the Intelligentsia.
+    "liberal": bodily_autonomy_constructor("0", "+", "++"),
+    # No license needed to own oneself.
+    "libertarian": bodily_autonomy_constructor("0", "-", "++"),
+}
+
+BODILY_AUTONOMY_STANCES = {
+    **{k: "traditional" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_theocrat", "ideology_papal_paternalistic",
+        "ideology_buddhist_moralist", "ideology_hindu_moralist", "ideology_hindu_moralist_british_india",
+        "ideology_sikh_moralist", "ideology_shinto_moralist", "ideology_papal_moralist",
+        "ideology_montenegrin_moralist", "ideology_orthodox_patriarch",
+        "ideology_oriental_orthodox_patriarch", "ideology_russian_patriarch", "ideology_confucian",
+        "ideology_ibadi_imamate", "ideology_ibadi_shura", "ideology_heavenly_kingdom_theocratic",
+        "ideology_patriarchal", "ideology_patriarchal_suffrage", "ideology_traditionalist",
+        "ideology_traditionalist_movement", "ideology_reactionary", "ideology_reactionary_movement",
+        "ideology_integralist", "ideology_integralist_movement", "ideology_fascist", "ideology_fascist_movement",
+        "ideology_ethno_nationalist", "ideology_ethno_nationalist_movement", "ideology_agrarian",
+        "ideology_agrarian_jeffersonian", "ideology_isolationist",
+    )},
+    **{k: "cautious" for k in (
+        "ideology_paternalistic", "ideology_hierarchic", "ideology_republican_paternalistic",
+        "ideology_scholar_paternalistic", "ideology_junker_paternalistic", "ideology_particularist",
+        "ideology_patriotic", "ideology_jingoist", "ideology_jingoist_leader", "ideology_loyalist",
+        "ideology_authoritarian", "ideology_populist", "ideology_proletarian", "ideology_communist",
+        "ideology_vanguardist",
+    )},
+    **{k: "regulated" for k in (
+        "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat", "ideology_reformer",
+        "ideology_plutocratic", "ideology_technocratic", "ideology_positivist", "ideology_meritocratic",
+        "ideology_modernizer",
+    )},
+    **{k: "liberal" for k in (
+        "ideology_liberal", "ideology_liberal_modern", "ideology_liberal_leader", "ideology_liberal_movement",
+        "ideology_anti_clerical", "ideology_republican", "ideology_republican_leader", "ideology_radical",
+        "ideology_radical_movement", "ideology_egalitarian_modern", "ideology_humanitarian",
+        "ideology_humanitarian_royalist", "ideology_feminist", "ideology_feminist_ig",
+        "ideology_feminist_movement",
+    )},
+    **{k: "libertarian" for k in (
+        "ideology_laissez_faire", "ideology_individualist", "ideology_market_liberal", "ideology_anarchist",
+        "ideology_anarchist_movement",
+    )},
+}
+
+# --- lawgroup_frontier_ai_control (era 13 spec § 7.1; common/laws/te_frontier_ai_laws.txt) ---
+# Who builds the most capable AI. Every list names all six laws, in file order
+# (the ideology_lawgroup audit; test_frontier_ai_control.py). The placeholder
+# held before AI Agents is neutral everywhere: nothing else can be enacted
+# while it is held, and the group leaves it once AI Agents arrives. The spec's
+# backers: the Armed Forces' ideologies peak at State Monopoly, the
+# Industrialists' at Private Labs and the Intelligentsia's at Open Weights;
+# most others meet at National Licensing. Applied to the vanilla ideologies
+# in FRONTIER_AI_STANCES by the loop after `modifications`; the mod's own
+# ideologies carry the same lists by hand in extra_ideologies.txt.
+_FRONTIER_AI_LAWS = (
+    "law_no_frontier_ai_policy",
+    "law_private_ai_labs",
+    "law_national_ai_licensing",
+    "law_state_ai_monopoly",
+    "law_international_ai_oversight",
+    "law_open_weights",
+)
+
+
+def frontier_ai_constructor(*codes):
+    """Five stance codes, Private Labs to Open Weights, as (law, stance) pairs
+    after the neutral placeholder."""
+    assert len(codes) == len(_FRONTIER_AI_LAWS) - 1
+    return [(_FRONTIER_AI_LAWS[0], "neutral")] + [
+        (law, _STANCE_CODES[code]) for law, code in zip(_FRONTIER_AI_LAWS[1:], codes)
+    ]
+
+
+FRONTIER_AI_LISTS = {
+    #                                          Priv  Lic   State Intl  Open
+    # The frontier as a weapon, kept at home.
+    "military": frontier_ai_constructor("0", "+", "++", "--", "--"),
+    # No laboratory answers to anyone but the state.
+    "statist": frontier_ai_constructor("-", "+", "++", "-", "--"),
+    # Control at home, and no foreign inspectors.
+    "national": frontier_ai_constructor("0", "+", "+", "--", "-"),
+    # A proprietary model is the moat.
+    "market": frontier_ai_constructor("++", "-", "--", "-", "-"),
+    # Build what you like, and publish it if you like.
+    "libertarian": frontier_ai_constructor("+", "-", "--", "-", "+"),
+    # Open science, held to account.
+    "liberal": frontier_ai_constructor("0", "+", "--", "+", "++"),
+    # A danger to everyone is everyone's business.
+    "internationalist": frontier_ai_constructor("-", "+", "-", "++", "+"),
+    # Not the bosses' machines: public control and shared gains.
+    "labour": frontier_ai_constructor("--", "+", "+", "+", "+"),
+    "vanguard": frontier_ai_constructor("--", "0", "++", "-", "0"),
+    "totalitarian": frontier_ai_constructor("-", "0", "++", "--", "--"),
+    # Whoever builds a mind answers for it.
+    "religious": frontier_ai_constructor("-", "++", "0", "0", "--"),
+    "traditional": frontier_ai_constructor("0", "+", "+", "-", "--"),
+    "populist": frontier_ai_constructor("-", "+", "0", "-", "0"),
+    "technocratic": frontier_ai_constructor("+", "++", "0", "+", "0"),
+    "anarchist": frontier_ai_constructor("-", "--", "--", "-", "++"),
+    # Faster, and in everyone's hands.
+    "accelerationist": frontier_ai_constructor("+", "-", "-", "--", "++"),
+}
+
+FRONTIER_AI_STANCES = {
+    **{k: "military" for k in ("ideology_jingoist", "ideology_jingoist_leader")},
+    **{k: "statist" for k in (
+        "ideology_loyalist", "ideology_authoritarian", "ideology_military_absolutist",
+        "ideology_caudillismo", "ideology_corporatist_movement",
+    )},
+    **{k: "national" for k in (
+        "ideology_patriotic", "ideology_reactionary", "ideology_isolationist", "ideology_ethno_nationalist",
+        "ideology_reactionary_movement", "ideology_ethno_nationalist_movement",
+    )},
+    **{k: "market" for k in ("ideology_plutocratic", "ideology_laissez_faire", "ideology_market_liberal")},
+    "ideology_individualist": "libertarian",
+    **{k: "liberal" for k in (
+        "ideology_liberal", "ideology_liberal_modern", "ideology_liberal_leader", "ideology_republican",
+        "ideology_republican_leader", "ideology_constitutionalist", "ideology_anti_clerical",
+        "ideology_radical", "ideology_liberal_movement", "ideology_radical_movement",
+    )},
+    **{k: "internationalist" for k in ("ideology_humanitarian", "ideology_pacifist")},
+    **{k: "labour" for k in (
+        "ideology_proletarian", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_socialist",
+        "ideology_social_democrat", "ideology_proletarian_movement", "ideology_socialist_movement",
+    )},
+    **{k: "vanguard" for k in (
+        "ideology_communist", "ideology_vanguardist", "ideology_communist_movement",
+        "ideology_vanguardist_movement",
+    )},
+    **{k: "totalitarian" for k in ("ideology_fascist", "ideology_fascist_movement")},
+    **{k: "religious" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_theocrat", "ideology_traditionalist_movement",
+        "ideology_buddhist_moralist", "ideology_hindu_moralist", "ideology_hindu_moralist_british_india",
+        "ideology_sikh_moralist", "ideology_shinto_moralist", "ideology_papal_moralist",
+        "ideology_montenegrin_moralist", "ideology_orthodox_patriarch",
+        "ideology_oriental_orthodox_patriarch", "ideology_russian_patriarch",
+    )},
+    **{k: "traditional" for k in (
+        "ideology_paternalistic", "ideology_hierarchic", "ideology_patriarchal",
+        "ideology_junker_paternalistic", "ideology_scholar_paternalistic", "ideology_papal_paternalistic",
+        "ideology_republican_paternalistic", "ideology_japan_paternalistic", "ideology_japan_hierarchic",
+    )},
+    **{k: "populist" for k in (
+        "ideology_populist", "ideology_agrarian", "ideology_particularist", "ideology_jacksonian_democrat",
+        "ideology_agrarian_jeffersonian",
+    )},
+    **{k: "technocratic" for k in (
+        "ideology_technocratic", "ideology_positivist", "ideology_meritocratic", "ideology_positivist_movement",
+    )},
+    **{k: "anarchist" for k in ("ideology_anarchist", "ideology_anarchist_movement")},
+}
+
 
 modifications = {
     "ideology_paternalistic": {
@@ -983,6 +1167,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "strongly_approve"),
@@ -1354,6 +1539,7 @@ modifications = {
         ),
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_approve"),
         ],
         "lawgroup_minority_rights": minority_like,
         "lawgroup_bureaucracy": [
@@ -1387,6 +1573,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_approve"),
         ],
         "lawgroup_language_policy": language_pluralist,
         "lawgroup_antitrust": antitrust_ordoliberal,
@@ -1456,6 +1643,7 @@ modifications = {
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_financial_regulation": finreg_social_dem,
         "lawgroup_family_reproductive_policy": [
@@ -1517,6 +1705,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "approve"),
+            ("law_liquid_democracy", "disapprove"),
         ],
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "disapprove"),
@@ -1583,6 +1772,7 @@ modifications = {
         ),
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
         "lawgroup_minority_rights": minority_hate,
         "lawgroup_state_power": [
@@ -1660,6 +1850,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_minority_rights": minority_like,
         "lawgroup_state_power": [
@@ -1873,6 +2064,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_jingoist": {
@@ -2114,6 +2306,7 @@ modifications = {
         "lawgroup_colonization": [("law_neocolonialism", "strongly_approve")],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_genetic_rights": [
             ("law_traditional_heredity", "neutral"),
@@ -2317,6 +2510,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
     },
     "ideology_republican_paternalistic": {
@@ -2327,6 +2521,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "disapprove"),
@@ -2413,6 +2608,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "disapprove"),
@@ -2456,6 +2652,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "approve"),
@@ -2499,6 +2696,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "neutral"),
@@ -2562,6 +2760,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_shinto_moralist": {
@@ -2575,6 +2774,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_caudillismo": {
@@ -2584,6 +2784,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "approve"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
@@ -2662,6 +2863,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_legitimist": {
@@ -2672,6 +2874,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_bonapartist": {
@@ -2682,6 +2885,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_army_model": [
             ("law_private_military_contractors", "disapprove"),
@@ -2732,6 +2936,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
@@ -2746,6 +2951,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_approve"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_family_reproductive_policy": [
             ("law_traditional_family_structure", "disapprove"),
@@ -2765,6 +2971,7 @@ modifications = {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_orthodox_patriarch": {
@@ -2772,6 +2979,7 @@ modifications = {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_oriental_orthodox_patriarch": {
@@ -2779,6 +2987,7 @@ modifications = {
         "lawgroup_inheritance": traditional_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_authoritarian": {
@@ -2790,6 +2999,7 @@ modifications = {
         ),
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_criminal_justice": authoritarian_criminal_justice,
         "lawgroup_policing": private_policing_disapprove + [
@@ -2903,6 +3113,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "approve"),
+            ("law_liquid_democracy", "approve"),
         ],
     },
     "ideology_corporatist_leader": {
@@ -2919,6 +3130,7 @@ modifications = {
         "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
@@ -2938,6 +3150,7 @@ modifications = {
         ),
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
@@ -2948,6 +3161,7 @@ modifications = {
     "ideology_liberal_leader": {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "neutral"),
         ],
         "lawgroup_minority_rights": minority_like,
         "lawgroup_criminal_justice": progressive_criminal_justice,
@@ -2960,6 +3174,7 @@ modifications = {
     "ideology_despotic_utopian": {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_approve"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_minority_rights": minority_love,
         "lawgroup_bureaucracy": [
@@ -2974,6 +3189,7 @@ modifications = {
     "ideology_absolutist_movement": {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
@@ -3105,6 +3321,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_ministry_of_propaganda": ministry_constructor(
             "ministry_of_propaganda", "--"
@@ -3140,6 +3357,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "disapprove"),
         ],
         "lawgroup_minority_rights": minority_love,
         "lawgroup_genetic_rights": [
@@ -3169,6 +3387,7 @@ modifications = {
         ),
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_minority_rights": minority_hate,
         "lawgroup_governance_principles": [
@@ -3234,6 +3453,7 @@ modifications = {
         "lawgroup_inheritance": liberal_movement_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_financial_regulation": finreg_liberal,
         "lawgroup_language_policy": language_pluralist,
@@ -3249,6 +3469,7 @@ modifications = {
         "lawgroup_inheritance": radical_movement_inheritance,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_approve"),
         ],
         "lawgroup_minority_rights": minority_love,
         "lawgroup_governance_principles": [
@@ -3302,6 +3523,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "neutral"),
         ],
     },
     "ideology_national_liberal_movement": {
@@ -3309,6 +3531,7 @@ modifications = {
         "lawgroup_criminal_justice": moderate_criminal_justice,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
     },
     "ideology_land_reformer_movement": {
@@ -3330,6 +3553,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_approve"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_ministry_of_science": ministry_constructor(
             "ministry_of_science", "+"
@@ -3496,6 +3720,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_bonapartist_movement": {
@@ -3506,6 +3731,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
         ],
         "lawgroup_army_model": [
             ("law_private_military_contractors", "disapprove"),
@@ -3523,6 +3749,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     # --- monetary_policy_design.md section 13: the country-flavoured
@@ -3577,6 +3804,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3595,6 +3823,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3613,6 +3842,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3631,6 +3861,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3661,6 +3892,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_meiji_restorationist_movement_shojoi": {
@@ -3673,6 +3905,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_mitogaku": {
@@ -3716,6 +3949,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_tokugawa_loyalist_movement_2": {
@@ -3728,6 +3962,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_carlist_ig_2": {
@@ -3742,6 +3977,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3755,6 +3991,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_enclavist": {
@@ -3769,6 +4006,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "neutral"),
@@ -3792,6 +4030,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_carlist_2": {
@@ -3801,6 +4040,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_carlist_movement": {
@@ -3810,6 +4050,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_carlist_movement_2": {
@@ -3819,6 +4060,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_miguelist": {
@@ -3828,6 +4070,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_miguelist_2": {
@@ -3837,6 +4080,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_miguelist_movement": {
@@ -3846,6 +4090,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_miguelist_movement_2": {
@@ -3855,6 +4100,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_conservative_praetorian": {
@@ -3864,6 +4110,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_liberal_praetorian": {
@@ -3873,6 +4120,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_ibadi_imamate": {
@@ -3887,6 +4135,7 @@ modifications = {
     "ideology_ibadi_shura": {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_integralist_movement": {
@@ -3896,6 +4145,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -3923,6 +4173,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "approve"),
         ],
     },
     "ideology_technocratic": {
@@ -3932,6 +4183,7 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "strongly_approve"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_utopian": {
@@ -3941,11 +4193,13 @@ modifications = {
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_approve"),
         ],
     },
     "ideology_military_absolutist": {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -4037,3 +4291,7 @@ for _ideology, _list in JUDICIARY_STANCES.items():
 
 for _ideology, _list in AUTOMATION_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_automation_policy"] = AUTOMATION_LISTS[_list]
+for _ideology, _list in BODILY_AUTONOMY_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_bodily_autonomy"] = BODILY_AUTONOMY_LISTS[_list]
+for _ideology, _list in FRONTIER_AI_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_frontier_ai_control"] = FRONTIER_AI_LISTS[_list]

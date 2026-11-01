@@ -24,14 +24,16 @@
 #     Arms Industry and Artillery Foundry, Munition Plant, Chemical Plant and
 #     the Synthetics Plants, Explosives Factory, Electronics (the fab), Textile
 #     Mill.
-#   AI-run infrastructure: the AI-managed Power Plant trio (Smart Grids),
+#   AI-run infrastructure: the AI-managed Power Plant trio and its Aneutronic
+#     Fusion variant (Smart Grids),
 #     Autonomous Networks (Smart Grids), Fully Automated Content Creation (AI
 #     Agents) and AI-Mediated Mind Sharing (Telepathic Communities) in the
 #     Software Industry, Automated Labs at the University and the automated
 #     Deep-Sea Mine, capped and uncapped (AGI).
 #   Robots and self-driving machines in services, transport and farming:
 #     Robotic Service Providers (Humanoid Robotics) and Drone Delivery Systems
-#     (Autonomous Vehicles) in Urban Centers; Autonomous Trains, the
+#     (Autonomous Vehicles) in Urban Centers; Autonomous Trains and Vactrain
+#     Freight (Vactrains), the
 #     Autonomous Highway and Automated Harvesters and Planters (Autonomous
 #     Vehicles).
 #
@@ -193,6 +195,7 @@ te_ap_runs_automated_method = {
 				has_active_production_method = pm_ai_managed_power_plant
 				has_active_production_method = pm_ai_managed_power_plant_reactor
 				has_active_production_method = pm_ai_managed_power_plant_hydro
+				has_active_production_method = pm_ai_managed_power_plant_aneutronic
 			}
 		}
 		# pmg_amenities
@@ -206,7 +209,10 @@ te_ap_runs_automated_method = {
 		# pmg_base_building_railway
 		AND = {
 			is_building_type = building_railway
-			has_active_production_method = pm_autonomous_trains
+			OR = {
+				has_active_production_method = pm_autonomous_trains
+				has_active_production_method = pm_vactrain_freight # driverless, and above Autonomous Trains (Vactrains, #1290)
+			}
 		}
 		# pmg_base_building_highway
 		AND = {
