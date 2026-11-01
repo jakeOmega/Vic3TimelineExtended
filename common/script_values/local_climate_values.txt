@@ -177,3 +177,22 @@ te_climate_penalty = {
 	max = te_climate_penalty_max
 	min = 0
 }
+
+# The state panel's Comfort row (Task 7). It shows what local_climate_discomfort applies, the penalty
+# te_update_local_climate_modifier stored at the state's last yearly refresh, not the live value, which
+# can drift between refreshes. 0 before the first application.
+te_climate_penalty_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_penalty_applied }
+		value = var:te_climate_penalty_applied
+	}
+}
+# 1 once the state's first monthly application has run; until then the row says Pending.
+te_climate_penalty_shown = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_penalty_applied }
+		value = 1
+	}
+}

@@ -299,7 +299,9 @@ class ScriptValues:
 
     def _limit(self, items, env):
         compare = {"<": operator.lt, ">": operator.gt, "<=": operator.le, ">=": operator.ge, "=": operator.eq}
-        return all(compare[op](self.read(key, env), self.read(value, env)) for key, op, value in items)
+        # has_variable = X holds when the env stubs var:X.
+        return all(f"var:{value}" in env if key == "has_variable" else
+                   compare[op](self.read(key, env), self.read(value, env)) for key, op, value in items)
 
     def _block(self, items, env, acc=0.0):
         for key, _, value in items:
@@ -503,6 +505,87 @@ class Modifier(unittest.TestCase):
         # Plain, no markup: the state panel hides it by comparing TimedModifier.GetName with Localize().
         self.assertEqual(name, "Local Climate")
         self.assertIn("[concept_local_climate]", desc or "")
+
+
+WIDGETS = ROOT / "gui" / "te_state_panel_widgets.gui"
+SHOWN = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')"
+HAS_RECORD = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')"
+
+
+def tile_rows():
+    """The visible-condition part and the whole text of each te_state_climate_row in the Local Climate tile."""
+    text = WIDGETS.read_text(encoding="utf-8-sig")
+    m = re.search(r"(?m)^\s*type te_state_climate_tile = flowcontainer \{", text)
+    depth, i = 1, m.end()
+    while depth:
+        c = text[i]
+        if c == "#":
+            i = text.index("\n", i)
+            continue
+        depth += {"{": 1, "}": -1}.get(c, 0)
+        i += 1
+    rows = text[m.end():i - 1].split("te_state_climate_row = {")[1:]
+    return [(row.split("row_tooltip")[0], row) for row in rows]
+
+
+class Tile(unittest.TestCase):
+    """Task 7: the tile's Comfort row and the readings' hovers (spec § 7)."""
+
+    def test_comfort_row_reads_applied(self):
+        """The row shows what the modifier applies (the yearly variable), red and signed, not the live value."""
+        self.assertEqual(values_body("te_climate_penalty_now"),
+                         "value = 0 if = { limit = { has_variable = te_climate_penalty_applied } "
+                         "value = var:te_climate_penalty_applied }")
+        self.assertEqual(loc_value("te_state_climate_comfort_value"),
+                         "#R -[State.MakeScope.ScriptValue('te_climate_penalty_now')|1]#!")
+        self.assertEqual(loc_value("TE_STATE_CLIMATE_ROW_COMFORT"), "Comfort")
+
+    def test_comfort_row_waits_for_first_application(self):
+        """Three Comfort rows, one shown at a time: the red cost, None when the climate costs nothing, and
+        Pending until the state's first monthly application."""
+        self.assertEqual(values_body("te_climate_penalty_shown"),
+                         "value = 0 if = { limit = { has_variable = te_climate_penalty_applied } value = 1 }")
+        comfort = [(gate, row) for gate, row in tile_rows() if "TE_STATE_CLIMATE_ROW_COMFORT" in row]
+        self.assertEqual(len(comfort), 3)
+        cost = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0')"
+        gates = {key: [g for g, r in comfort if f'"{key}"' in r] for key in
+                 ("te_state_climate_comfort_value", "te_state_climate_comfort_none", "te_state_climate_pending")}
+        self.assertEqual({k: len(v) for k, v in gates.items()}, dict.fromkeys(gates, 1))
+        self.assertIn(f"And(And({HAS_RECORD}, {SHOWN}), {cost})", gates["te_state_climate_comfort_value"][0])
+        self.assertIn(f"And(And({HAS_RECORD}, {SHOWN}), Not({cost}))", gates["te_state_climate_comfort_none"][0])
+        self.assertIn(f"And({HAS_RECORD}, Not({SHOWN}))", gates["te_state_climate_pending"][0])
+        for key in ("te_state_climate_comfort_none", "te_state_climate_pending"):
+            self.assertIsNotNone(loc_value(key), key)
+
+    def test_term_hovers(self):
+        """Each reading's hover gives its cost before relief, the relief the owner's technologies give, and the
+        cost left; the seasons' hovers also give today's normal and the warming against it."""
+        hovers = {"te_state_climate_summer_tt": ("heat", "heat"), "te_state_climate_winter_tt": ("cold", "cold"),
+                  "te_state_climate_water_tt": ("dry", "water"), "te_state_climate_malaria_tt": ("disease", "disease")}
+        for key, (term, relief) in hovers.items():
+            text = loc_value(key) or ""
+            for value in (f"te_climate_{term}_raw", f"te_climate_relief_{relief}", f"te_climate_{term}_term"):
+                self.assertIn(f"State.MakeScope.ScriptValue('{value}')", text, (key, value))
+        for key, season in (("te_state_climate_summer_tt", "summer"), ("te_state_climate_winter_tt", "winter")):
+            text = loc_value(key)
+            self.assertIn("State.MakeScope.ScriptValue('te_climate_warming')", text, key)
+            self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{season}_mean')", text, key)
+        comfort = loc_value("te_state_climate_comfort_tt") or ""
+        for term in ("heat", "cold", "dry", "disease"):
+            self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{term}_term')", comfort, term)
+        self.assertIn("[concept_migration_pull]", comfort)
+
+    def test_seasons_show_the_climate_now(self):
+        """The Summer and Winter rows show the record with the warming against today's normals, as the formula
+        reads them, so the tile moves as the world warms."""
+        self.assertIn("ScriptValue('te_climate_summer_eff')", loc_value("te_state_climate_summer_value"))
+        self.assertIn("ScriptValue('te_climate_winter_eff')", loc_value("te_state_climate_winter_value"))
+
+    def test_rows_gate_on_the_record(self):
+        rows = tile_rows()
+        self.assertEqual(len(rows), 8)
+        for gate, _ in rows:
+            self.assertIn(HAS_RECORD, gate)
 
 
 if __name__ == "__main__":
