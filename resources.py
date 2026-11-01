@@ -77,7 +77,8 @@ RESOURCE_BLOCK_RE = re.compile(
 )
 TYPE_LINE_RE = re.compile(r'(?m)^\s*type\s*=\s*"([^"]+)"\s*$')
 UNDISC_LINE_RE = re.compile(r"(?m)^\s*undiscovered_amount\s*=\s*(\d+)\s*$")
-TRAITS_RE = re.compile(r"(?m)^(\s*)traits\s*=\s*\{([^}]*)\}")
+# [ \t]*, not \s*: the indent must not reach back across a blank line, which a removal would then delete.
+TRAITS_RE = re.compile(r"(?m)^([ \t]*)traits\s*=\s*\{([^}]*)\}")
 SUBSISTENCE_RE = re.compile(r'(?m)^(\s*)subsistence_building\s*=\s*"[^"]*"\s*$')
 
 
@@ -212,19 +213,28 @@ def process_traits_block(block_text: str, state_name: str, trait_mapping: dict) 
 
     Driven by state_trait_config.json. Dedupes existing entries; if the state
     has no traits block, inserts one after the subsistence_building line.
-    Early-returns when the state has no mapped traits to avoid diff churn.
+    An entry written "-state_trait_x" removes vanilla's trait instead, and a
+    state left with none loses the line. Early-returns when the state has no
+    mapped traits to avoid diff churn.
     """
-    new_traits = trait_mapping.get(state_name)
-    if not new_traits:
+    entries = trait_mapping.get(state_name)
+    if not entries:
         return block_text
+    removed = {t[1:] for t in entries if t.startswith("-")}
+    new_traits = [t for t in entries if not t.startswith("-")]
     m = TRAITS_RE.search(block_text)
     if m:
-        existing = re.findall(r'"([^"]+)"', m.group(2))
-        merged = list(dict.fromkeys(existing + list(new_traits)))
+        # Vanilla writes some traits unquoted ("state_trait_parana_river" state_trait_terra_roxa); read both.
+        existing = re.findall(r'"?([A-Za-z0-9_]+)"?', m.group(2))
+        merged = [t for t in dict.fromkeys(existing + new_traits) if t not in removed]
         if merged == existing:
             return block_text
+        if not merged:
+            return block_text[: m.start()].rstrip(" \t").removesuffix("\n") + block_text[m.end():]
         rebuilt = m.group(1) + 'traits = { ' + ' '.join(f'"{t}"' for t in merged) + ' }'
         return block_text[: m.start()] + rebuilt + block_text[m.end():]
+    if not new_traits:
+        return block_text
     sm = SUBSISTENCE_RE.search(block_text)
     if not sm:
         return block_text  # extremely rare; skip rather than misplace

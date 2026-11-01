@@ -1160,6 +1160,118 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### LOCAL CLIMATE
+	###
+	### Local Climate's rows (docs/systems/mod_systems/local_climate.md): 80 px of label, 76 of
+	### value. "Humidity" needs about 75 px and "Seasonal" about 75 at fontsize_medium
+	### (gui_style_guide.md rule 3's budget), past both the number row's 60 and the word row's 60.
+	type te_state_climate_row = te_state_stat_row {
+		blockoverride "row_icon" {}
+		blockoverride "label_size" {
+			size = { 80 20 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 80
+		}
+		blockoverride "value_size" {
+			size = { 76 20 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 76
+		}
+	}
+
+	### The Local Climate tile: the climate record of the state's region, where most of its people
+	### live (common/script_values/local_climate_generated.txt). A region with no row says so.
+	type te_state_climate_tile = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 3
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_summer_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_SUMMER"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_summer_value"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_humidity_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_HUMIDITY"
+			}
+			blockoverride "row_value" {
+				raw_text = "#v [SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_summer_humidity'), '(CFixedPoint)2'), 'TE_CLIMATE_HUMIDITY_3', SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_summer_humidity'), '(CFixedPoint)1'), 'TE_CLIMATE_HUMIDITY_2', SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_summer_humidity'), '(CFixedPoint)0'), 'TE_CLIMATE_HUMIDITY_1', 'TE_CLIMATE_HUMIDITY_0')))]#!"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_winter_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_WINTER"
+			}
+			blockoverride "row_value" {
+				text = "te_state_climate_winter_value"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_water_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_WATER"
+			}
+			blockoverride "row_value" {
+				raw_text = "#v [SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_aridity'), '(CFixedPoint)1'), 'TE_CLIMATE_WATER_2', SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_aridity'), '(CFixedPoint)0'), 'TE_CLIMATE_WATER_1', 'TE_CLIMATE_WATER_0'))]#!"
+			}
+		}
+
+		te_state_climate_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_state_climate_malaria_tt"
+			}
+			blockoverride "row_label" {
+				text = "TE_STATE_CLIMATE_ROW_MALARIA"
+			}
+			blockoverride "row_value" {
+				raw_text = "#v [SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_malaria'), '(CFixedPoint)1'), 'TE_CLIMATE_MALARIA_2', SelectLocalization(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_malaria'), '(CFixedPoint)0'), 'TE_CLIMATE_MALARIA_1', 'TE_CLIMATE_MALARIA_0'))]#!"
+			}
+		}
+		textbox = {
+			visible = "[Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'))]"
+			autoresize = yes
+			max_width = 160
+			multiline = yes
+			using = fontsize_medium
+			text = "TE_STATE_CLIMATE_NO_DATA"
+		}
+	}
+
 	### WEALTH CONCENTRATION
 	###
 	### The Wealth Concentration tile's extra_widget (Nation tab plan, Part 2):

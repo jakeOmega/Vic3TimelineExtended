@@ -181,6 +181,9 @@ concept_te_construction_queue_cap = {
 concept_migration_crowding = {
 	texture = "gfx/interface/icons/generic_icons/population.dds"
 }
+concept_local_climate = {
+	texture = "gfx/interface/icons/state_trait_icons/tropical_climate.dds"
+}
 concept_urban_engineering = {
 	texture = "gfx/interface/icons/building_icons/urban_center.dds"
 }
