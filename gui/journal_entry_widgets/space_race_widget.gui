@@ -4859,15 +4859,15 @@ types space_race_widget_types
 	### strength now / full (the roles on hover), its drive (or its refit's
 	### months), its propellant in km/s (its capacity on the strength hover), its
 	### months of supply and its marines; then, at a location, its orders: the destination button
-	### (it opens the destination popup; the leg on hover), Go, Merge, Detach,
-	### Land, Embark; and from 6b its posture's four buttons (UI pass design
-	### § 7), then its target world (it opens the target popup) and Seize /
-	### Destroy. In transit, its landing instead. 90 + 92 + 96 + 48 + 58 + 66 +
-	### 5 × 4 + 2 × 4 = 478; the orders 108 + 5 × 60 + 5 × 4 + 2 × 4 = 436; the
-	### posture 4 × 104 + 3 × 4 + 2 × 4 = 436; target and Seize 190 + 80 + 4 +
-	### 2 × 4 = 282. Instances in te_sr_fleet_rows (sr_fleets_generated_rows.gui),
-	### one per slot; the scripted GUIs are sr_fleet_sguis.txt's, scope:op the
-	### slot (and scope:pick the posture).
+	### (it opens the destination popup; the leg on hover), Go, Transfer (its
+	### popup, te_sr_xfer_popup), Land, Embark; and from 6b its posture's four
+	### buttons (UI pass design § 7), then its target world (it opens the target
+	### popup) and Seize / Destroy. In transit, its landing instead. 90 + 92 + 96 +
+	### 48 + 58 + 66 + 5 × 4 + 2 × 4 = 478; the orders 108 + 60 + 80 + 2 × 60 +
+	### 4 × 4 + 2 × 4 = 392; the posture 4 × 104 + 3 × 4 + 2 × 4 = 436; target and
+	### Seize 190 + 80 + 4 + 2 × 4 = 282. Instances in te_sr_fleet_rows
+	### (sr_fleets_generated_rows.gui), one per slot; the scripted GUIs are
+	### sr_fleet_sguis.txt's, scope:op the slot (and scope:pick the posture).
 	type te_sr_fleet_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -5046,20 +5046,23 @@ types space_race_widget_types
 					text = "je_space_race_widget_fl_go"
 				}
 			}
-			te_sr_fl_button = {
-				blockoverride "fl_btn" {
-					block "fl_merge_button" {}
-				}
-				blockoverride "fl_btn_label" {
-					text = "je_space_race_widget_fl_merge"
-				}
-			}
-			te_sr_fl_button = {
-				blockoverride "fl_btn" {
-					block "fl_detach_button" {}
-				}
-				blockoverride "fl_btn_label" {
-					text = "je_space_race_widget_fl_detach"
+			### Transfer (UI pass design § 6): opens the slot's Transfer popup,
+			### which took in Merge and Detach. Wider than te_sr_fl_button's 60
+			### for its word.
+			button = {
+				using = default_button_action
+				size = { 80 22 }
+				parentanchor = vcenter
+				block "fl_transfer_button" {}
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 76
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_fl_transfer"
 				}
 			}
 			te_sr_fl_button = {
@@ -5887,6 +5890,230 @@ types space_race_widget_types
 					default_format = "#variable"
 					text = "je_space_race_widget_ft_targeted"
 				}
+			}
+		}
+	}
+
+	### ======================================================================
+	### TRANSFER (UI pass design § 6): the popup that took in Merge and Detach
+	### ======================================================================
+
+	### An Into button: a new fleet, or another fleet of ours here, named by its
+	### drive and strength, as its Fleets row shows them (the rows carry no
+	### number). `xf_to_btn` carries the scripted GUI's properties
+	### (sr_fleet_xfer_to_sgui, scope:op the slot, scope:pick 0 or the other slot)
+	### and, for a fleet, its visible (sr_disp_fl_<n>_xf_here_<m>: it is here).
+	type te_sr_xf_to_button = button {
+		using = default_button_action
+		size = { 168 26 }
+		parentanchor = vcenter
+		block "xf_to_btn" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 162
+			elide = right
+			using = te_sr_fontsize_row
+			block "xf_to_label" {}
+		}
+	}
+
+	### Into, then up to three lines of te_sr_xf_to_button: 60 + 3 × 168 + 3 × 4
+	### + 2 × 4 = 584, the rows' width. A line with no fleet here hides.
+	type te_sr_xf_to_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			size = { 60 26 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_xf_to_label"
+		}
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+			block "xf_to_rows" {}
+		}
+	}
+
+	### The column heads over te_sr_xf_role_row's cells; Move spans the − and +
+	### buttons and the amount between them (28 + 64 + 28 + 2 × 4 = 128).
+	type te_sr_xf_head_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		widget = {
+			size = { 160 20 }
+		}
+		textbox = {
+			size = { 64 20 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_xf_col_now"
+		}
+		textbox = {
+			size = { 128 20 }
+			align = center|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_xf_col_move"
+			tooltip = "je_space_race_widget_xf_col_move_tt"
+		}
+		textbox = {
+			size = { 104 20 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_xf_col_stay"
+			tooltip = "je_space_race_widget_xf_col_stay_tt"
+		}
+		textbox = {
+			size = { 104 20 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_xf_col_there"
+			tooltip = "je_space_race_widget_xf_col_there_tt"
+		}
+	}
+
+	### A role, the marines, or the strength's total: its name, what the fleet
+	### has now, − the amount to move + (the construction market's keys: the
+	### buttons' click_modifiers, sr_fleet_xfer_step_sgui), what stays and what
+	### the fleet it goes into then has. Each button sits in a fixed widget, so a
+	### hidden one (the total's) keeps its column. 160 + 64 + 28 + 64 + 28 + 104 +
+	### 104 + 6 × 4 + 2 × 4 = 584.
+	type te_sr_xf_role_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			size = { 160 26 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "xf_name" {}
+		}
+		textbox = {
+			size = { 64 26 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "xf_now" {}
+		}
+		widget = {
+			size = { 28 26 }
+
+			button_icon_minus_action = {
+				size = { 26 26 }
+				parentanchor = center
+				block "xf_less" {}
+			}
+		}
+		textbox = {
+			size = { 64 26 }
+			align = center|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "xf_amount" {}
+		}
+		widget = {
+			size = { 28 26 }
+
+			button_icon_plus_action = {
+				size = { 26 26 }
+				parentanchor = center
+				block "xf_more" {}
+			}
+		}
+		textbox = {
+			size = { 104 26 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "xf_stay" {}
+		}
+		textbox = {
+			size = { 104 26 }
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "xf_there" {}
+		}
+	}
+
+	### The popup's foot: Transfer (sr_fleet_transfer_sgui, scope:op the slot),
+	### centered under the rows in a slot their width (style guide rules 6 and 8).
+	### `xf_go_btn` carries its four properties: greyed, its hover names the
+	### refusal; a click moves what is chosen and closes the popup.
+	type te_sr_xf_go_row = widget {
+		size = { 584 38 }
+
+		button = {
+			using = default_button_action
+			size = { 140 30 }
+			parentanchor = center
+			block "xf_go_btn" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 134
+				elide = right
+				using = te_sr_fontsize_row
+				text = "je_space_race_widget_xf_go"
+			}
+		}
+	}
+
+	### The Transfer popup (UI pass design § 6), opened from a fleet's Transfer
+	### (te_popup = sr_xfer_<n>, n the slot); instanced in te_popups
+	### (gui/te_popups.gui). Its content is generated, a body a slot
+	### (te_sr_xfer_popup_body, sr_fleets_generated_rows.gui), under the
+	### entry's scope-free gate and its GetPlayerJournalEntry datacontext
+	### (gotchas #22, #29); with the entry gone, one line says so.
+	type te_sr_xfer_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_1'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_2'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_3'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_4'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_5'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_6'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_7'), Or( GetVariableSystem.HasValue('te_popup', 'sr_xfer_8'), GetVariableSystem.HasValue('te_popup', 'sr_xfer_9') ) ) ) ) ) ) ) )]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_xf_title"
+		}
+		### The rows' 584, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar, as the colony target popup: 712.
+		blockoverride "popup_size" {
+			size = { 712 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_xfer_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
 			}
 		}
 	}

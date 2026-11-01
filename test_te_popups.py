@@ -162,6 +162,17 @@ class PopupHostTest(unittest.TestCase):
         self.assertIn(f'visible = "[Not( {SR_GATE} )]"', body)
         self.assertIn("je_space_race_widget_tp_gone", body)
 
+    def test_the_transfer_popup(self):
+        """A fleet's Transfer (UI pass design § 6): one popup type for the nine
+        slots, up on any of their values; the bodies are generated, one a slot."""
+        body = self.popups["te_sr_xfer_popup"]
+        shown = _child(body, 'blockoverride "popup_visible" {')
+        self.assertEqual(sorted(int(n) for n in re.findall(r"HasValue\('te_popup', 'sr_xfer_(\d)'\)", shown)),
+                         list(range(1, 10)))
+        self.assertIn("te_sr_xfer_popup_body = {}", body)
+        self.assertIn('text = "je_space_race_widget_xf_title"', body)
+        self.assertIn(f'visible = "[Not( {SR_GATE} )]"', body)
+
     def test_the_fleet_popups(self):
         """UI pass design §§ 4, 7: the destination and target popups, each one
         popup for nine slots, open on any slot's value; the body shows the open
