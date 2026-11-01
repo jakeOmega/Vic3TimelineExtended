@@ -2,8 +2,9 @@
 # SOLAR SYSTEM COLONIZATION — Space Command (fleets design § 5)
 # ============================================================================
 # Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md.
-# A government building, built where the Space Program stands, under Full
-# Colonies. Its methods (sr_space_command_pms.txt) carry the fleet strength a
+# A government building, under Full Colonies: a nation's first is built where
+# the Space Program stands, and the one it has expands where it is (possible
+# below; one a nation, sr_sc_one_per_nation). Its methods (sr_space_command_pms.txt) carry the fleet strength a
 # level builds a month as a workforce-scaled state modifier
 # (state_sr_ship_construction_add), which sr_sc_rate sums over the states the
 # country controls; the month's construction joins the home fleet at Earth
@@ -35,8 +36,33 @@ building_space_command = {
 		sr_colonies_full_enabled = yes
 	}
 
+	# A new Space Command needs the Space Program's state, and a nation runs one
+	# (owner, 2026-10-31): it's refused while the owner has one of a level or
+	# more anywhere, with the reason in the build menu, so moving the capital
+	# doesn't build one the sweep would dismantle (sr_sc_one_per_nation, which
+	# stays for annexation). One it has expands wherever it stands, an annexed
+	# one included (review of #1287, I2): otherwise an AI that kept an annexed
+	# one would be held to its levels for good, and keep queuing new ones in
+	# its capital that the sweep removes. Building possible is state scope.
 	possible = {
-		has_building = building_space_program
+		trigger_if = {
+			limit = { has_building = building_space_command }
+			always = yes
+		}
+		trigger_else = {
+			has_building = building_space_program
+			custom_tooltip = {
+				text = sr_sc_one_per_nation_tt
+				owner ?= {
+					NOT = {
+						any_scope_building = {
+							is_building_type = building_space_command
+							level >= 1
+						}
+					}
+				}
+			}
+		}
 	}
 
 	required_construction = construction_cost_very_high
