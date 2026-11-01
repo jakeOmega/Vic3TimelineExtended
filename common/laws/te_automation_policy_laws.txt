@@ -1,0 +1,94 @@
+﻿# ============================================================================
+# AUTOMATION POLICY (era 13 spec § 7.1)
+# ============================================================================
+# Four laws in lawgroup_automation_policy (Economy), from Humanoid Robotics:
+#
+#   law_unrestricted_automation   the default; nothing changes
+#   law_robot_tax                 the machines stay and are taxed
+#   law_human_labor_quotas        the robotic and AI-managed methods are withdrawn
+#   law_automation_dividend       the machines' output is paid out as living standards
+#
+# ORDER MATTERS. law_unrestricted_automation comes first in this file and has
+# no gate: the engine gives any country history leaves without a law in a group
+# the group's first law in file order, which is also what an old save loading
+# the group for the first time gets (scripting_best_practices.md, "First Law
+# in a Lawgroup File Is the Unseeded Default"). history/extra_history.txt seeds
+# it for 1836 too. A country created later (released, formed, a revolution's)
+# has no history: it gets the first law or its creator's, which is unread in
+# game (docs/testing/era-13-playtest.md). Either is safe: the law has no gate,
+# so it is also the consistency walk's terminal fallback.
+#
+# WHAT THE LAWS DO.
+# - Human Labor Quotas works through the production methods: the 37 methods
+#   te_ap_runs_automated_method lists (common/scripted_triggers/
+#   te_automation_policy_triggers.txt, where the choice is explained) carry
+#   `disallowing_laws = { law_human_labor_quotas }`, as vanilla's slavery and
+#   Industry Banned methods are withdrawn. Every group keeps an ungated method.
+# - Robot Tax and Automation Dividend work through two scaled country
+#   modifiers, te_automation_robot_tax and te_automation_dividend
+#   (common/static_modifiers/te_automation_policy_modifiers.txt), refreshed
+#   monthly from the automated share by te_ap_monthly_update, their only
+#   writer (common/scripted_effects/te_automation_policy_effects.txt). So the
+#   law's own effects list is empty, and its on_enact lines say what the
+#   modifier will do (scripting_best_practices.md, "Law enactment preview").
+#
+# The interest groups' stances: AUTOMATION_STANCES in ideology_modifications.py.
+# ============================================================================
+
+law_unrestricted_automation = {
+	group = lawgroup_automation_policy
+
+	icon = "gfx/interface/icons/law_icons/law_automated_bureaucracy.dds" # Placeholder Icon
+
+	progressiveness = 0
+}
+
+law_robot_tax = {
+	group = lawgroup_automation_policy
+
+	icon = "gfx/interface/icons/law_icons/law_te_tax_code.dds" # Placeholder Icon
+
+	progressiveness = 25
+
+	unlocking_technologies = {
+		humanoid_robotics
+	}
+
+	on_enact = {
+		custom_tooltip = te_ap_law_robot_tax_tt
+		custom_tooltip = te_ap_law_share_tt
+	}
+}
+
+law_human_labor_quotas = {
+	group = lawgroup_automation_policy
+
+	icon = "gfx/interface/icons/law_icons/law_pro_labor_ministry_of_labor.dds" # Placeholder Icon
+
+	progressiveness = 50
+
+	unlocking_technologies = {
+		humanoid_robotics
+	}
+
+	on_enact = {
+		custom_tooltip = te_ap_law_quotas_tt
+	}
+}
+
+law_automation_dividend = {
+	group = lawgroup_automation_policy
+
+	icon = "gfx/interface/icons/law_icons/law_universal_basic_income.dds" # Placeholder Icon
+
+	progressiveness = 75
+
+	unlocking_technologies = {
+		humanoid_robotics
+	}
+
+	on_enact = {
+		custom_tooltip = te_ap_law_dividend_tt
+		custom_tooltip = te_ap_law_share_tt
+	}
+}

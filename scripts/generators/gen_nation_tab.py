@@ -79,6 +79,8 @@ SECTIONS = {
         "te_officer_academies_standing", "te_political_commissars_indoctrination",
         # Heir education's focus
         "heir_ed_*",
+        # Liquid Democracy with Neural Lace (te_liquid_democracy_effects.txt)
+        "te_continuous_vote",
     ),
     "society": (
         # Inheritance: a dynasty's continuity (event outcome)
@@ -116,6 +118,9 @@ SECTIONS = {
         # Solidified is also the entry's top band, which never reaches the country.
         "colonial_empire_solidified_modifier", "commonwealth_path_modifier", "iron_fist_path_modifier",
         "quiet_assimilation_path_modifier", "imperial_federation_modifier", "mandate_system_modifier",
+        # Automation Policy: the Robot Tax and the Automation Dividend, scaled
+        # monthly by the automated share (te_automation_policy_effects.txt)
+        "te_automation_robot_tax", "te_automation_dividend",
     ),
     "science_and_space": (
         # Space race milestones (first and later), the probe's data, the dividend
@@ -195,6 +200,7 @@ NOT_ON_COUNTRY = {
     "fossil_fuel_*": "je_global_warming", "green_building_codes_modifier": "je_global_warming",
     "public_transit_modifier": "je_global_warming", "reforestation_subsidies_modifier": "je_global_warming",
     "renewable_investment_modifier": "je_global_warming", "global_warming": "je_global_warming",
+    "aerosol_injection_modifier": "je_global_warming", "gw_aerosol_monsoon_modifier": "je_global_warming",
     "ch_cultural_*": "je_cultural_hegemony", "ch_global_media_campaign": "je_cultural_hegemony",
     "ch_world_exposition": "je_cultural_hegemony", "cultural_hegemony_*": "je_cultural_hegemony",
     "civil_rights_phase_*": "je_civil_rights",
@@ -292,7 +298,8 @@ TYPE_ROWS = {
     },
     "society": {
         "living_standards": (
-            "state_standard_of_living_add", "state_lower_strata_expected_sol_add",
+            "state_standard_of_living_add", "state_lower_strata_standard_of_living_add",
+            "state_middle_strata_standard_of_living_add", "state_lower_strata_expected_sol_add",
             "state_middle_strata_expected_sol_add", "state_upper_strata_expected_sol_add",
             "country_sol_expectations_lower_offset_add",
         ),
@@ -385,7 +392,8 @@ NOT_A_ROW = {
     "country_legitimacy_govt_total_votes_add": "row: Judicial Independence (Statutory Courts' votes line)",
     "political_movement_radicalism_from_enactment_disapproval_mult": "row: Judicial Independence",
     "country_max_weekly_construction_progress_add": "row: Private Construction",
-    "state_*_investment_pool_contribution_add": "row: Private Construction (Overinvestment's pool contributions)",
+    "state_*_investment_pool_contribution_add": "row: Private Construction (Overinvestment's pool contributions); the "
+                                                "Robot Tax's and the Automation Dividend's own lines in the Economy list",
     "country_tech_spread_add": "row: Global Technological Development",
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",

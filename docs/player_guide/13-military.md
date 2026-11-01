@@ -259,7 +259,7 @@ and those in no camp, oppose nobody, so their entry stays inactive.
 
 | Camp | Laws |
 |---|---|
-| Democratic | Census Suffrage, Universal Suffrage, Wealth Voting or Landed Voting; Presidential Republic, Parliamentary Republic or Monarchy; neither Single-Party State nor Autocracy |
+| Democratic | Census Suffrage, Universal Suffrage, Liquid Democracy, Wealth Voting or Landed Voting; Presidential Republic, Parliamentary Republic or Monarchy; neither Single-Party State nor Autocracy |
 | Communist | Council Republic, with Command Economy or Cooperative Ownership |
 | Fascist | Corporate State with Single-Party State, or Autocracy with Single-Party State and Ancestral, Cultural or Racialized Citizenship |
 | Authoritarian | Autocracy, Single-Party State or Oligarchy, when not communist or fascist |

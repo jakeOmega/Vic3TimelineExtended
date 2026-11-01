@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 136 laws, most of them in 35 new law groups, with the institutions,
+The mod adds 163 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,8 +12,8 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other nineteen are
-grouped here by theme, and ten further laws join base-game law groups.
+are ministries, covered in [Ministries](#ministries). The other twenty-three are
+grouped here by theme, and fifteen further laws join base-game law groups.
 
 Many laws need another law in force, and some can't stand beside one. Anarchy
 needs Cooperative Ownership, for example, and Cooperative Ownership needs a
@@ -38,6 +38,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
+| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on. |
 
 The mod renames the base game's six Citizenship laws and changes their effects.
 This guide, like the game, uses the new names:
@@ -80,6 +81,15 @@ Protection; Mandatory Augmentation needs a Ministry of War. The group's laws
 also drive a movement journal entry, described in [The augmentation
 debate](07-social-movements.md#the-augmentation-debate).
 
+Bodily Autonomy is about how a body looks; what it can do is Human
+Augmentation's. Every country holds Natural Form until Morphological Freedom
+opens the other two laws. They raise the acceptance of pops whose culture shares
+no heritage trait with your primary cultures, Licensed Modification by 5 and
+Morphological Freedom by 10, on top of your Citizenship law, and pull more
+migrants. The Devout and the Rural Folk oppose both, and the Intelligentsia
+support them. The group drives [the morphological freedom
+debate](07-social-movements.md#the-morphological-freedom-debate).
+
 ### Laws on state power and information
 
 | Law group | Laws | What it governs |
@@ -91,6 +101,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
+| Frontier AI Control | No Frontier AI Policy, Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights | Who builds the most capable AI, from AI Agents on: innovation against covert defense, authority and intelligence capacity. See [Who builds frontier AI](#who-builds-frontier-ai). |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
 Federal System makes decrees 25% cheaper and calms movements but lowers tax
@@ -133,6 +144,33 @@ country's situation calls for them: a ruling on slavery while abolitionists
 organize, a foreign power demanding an execution, a labor law struck down under
 Judicial Supremacy, an election voided, a new regime asking its courts to call
 it lawful, and two paths out of Religious Courts toward Statutory Courts.
+
+### Who builds frontier AI
+
+Every country holds No Frontier AI Policy until it researches AI Agents, and
+then moves to Private Labs on its own. The other four laws need AI Agents too.
+Economic Covert Defense raises the Detection Risk of a rival's Industrial
+Espionage, the operation that steals production technologies (see [Covert
+defense](11-influence.md#covert-defense)), so the group trades your research
+against what you keep from rivals and how firmly the state holds the
+technology.
+
+| Law | Gives | Costs |
+|---|---|---|
+| Private Labs | +10% innovation; the Industrialists gain political strength | −10 Economic Covert Defense |
+| National Licensing | +5% innovation, +5 Economic Covert Defense, +1 intelligence capacity | |
+| State Monopoly | 100 authority, +3 intelligence capacity, +10 Economic Covert Defense; the Armed Forces gain political strength | −5% innovation |
+| International Oversight | +5% innovation, +2 diplomatic reputation, +0.5 UN Authority Target | Needs membership of the United Nations |
+| Open Weights | +10% technology spread; more Global Technological Development for every country; the Intelligentsia attract more pops | −10 Economic Covert Defense |
+
+Leaving the United Nations, or its dissolution, drops International Oversight
+to National Licensing at once. While you are a major power or greater, Open
+Weights adds 100 technology spread to [Global Technological
+Development](02-timeline.md#global-technological-development) for every
+country, up to 300 from all the countries that hold it, so it helps the world
+catch up on what you and the other leaders have researched. The Industrialists
+back Private Labs, the Armed Forces State Monopoly and the Intelligentsia Open
+Weights; most other interest groups prefer National Licensing.
 
 ### The rules of war
 
@@ -189,9 +227,35 @@ or subjugate it, and back to another law once it is at peace.
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |
+| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Humanoid Robotics on ([Automation policy](#automation-policy)). |
 
 Monetary Policy and Financial Regulation are explained in [Banking and monetary
 policy](04-banking.md).
+
+### Automation policy
+
+Every country starts with Unrestricted Automation. Humanoid Robotics unlocks the
+other three laws. Two of them scale with your automated share: the part of your
+building levels that run a robotic or AI-managed production method, out of all
+levels of the buildings that have one. The tooltips of the law group and of
+those two laws show the share, counted once a month. The methods are factory
+automation from robotic assembly up and the AI-managed tier, AI-managed power
+plants and networks, Fully Automated Content Creation, Automated Labs, the
+automated Deep-Sea Mine, robot and drone services in Urban Centers, and
+self-driving trains, highways and harvesters.
+
+| Law | At an automated share of 100% | You pay |
+|---|---|---|
+| Unrestricted Automation | Nothing changes. | Nothing. |
+| Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits |
+| Human Labor Quotas | The methods above can't be used, so the buildings on them keep their workers | The output those methods add |
+| Automation Dividend | +2 standard of living for the lower strata and +1 for the middle strata, half as much again with Universal Basic Income or Post-Scarcity Economy | Capitalists invest 10% less of their profits |
+
+At a share of 40%, Robot Tax gives +4% taxes. Its effect and the Dividend's
+follow the share each month and start at the first count after the law passes.
+Under the quotas, buildings on a withdrawn method change to one still allowed.
+The Trade Unions back Human Labor Quotas and the Industrialists Unrestricted
+Automation.
 
 ### New laws in base-game law groups
 
@@ -206,6 +270,7 @@ policy](04-banking.md).
 | Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
+| Liquid Democracy | Distribution of Power | Liquid Democracy | Everyone votes on every question or lends the vote to someone they trust, and can take it back at any time. A voting law with Universal Suffrage's franchise: ideological incoherence costs less legitimacy and enacted laws stir their opponents less, but laws pass more slowly. With Neural Lace you also gain the Continuous Vote, checked once a year: more enactment success and fewer radicals from movements, but the groups in government draw less support. Women's Suffrage, Elected Bureaucrats, the campaign finance laws and the Tradition of Free Elections work with it as with any voting law; First Past the Post and the voting-age amendments don't. |
 | Neocolonialism | Colonization | Decolonization | See [Colonial empires and decolonization](12-decolonization.md). |
 | Private Policing | Policing | Computer Networks, with Laissez-Faire or Interventionism | Licensed private firms do most police work for whoever pays them; see [Who polices](#who-polices). |
 | Private Military Contractors | Army Model | Guided Missiles | Deniable force: 20% less infamy, faster infamy decay, fewer radicals from conquest and +0.25 war support a month, but casualties cost 30% more war support; −10% authority, 30% less conscription, 20% dearer military goods and −10% unit offense and defense. |
@@ -480,8 +545,8 @@ What it allows depends on your **Legislative Override Capacity**, summed from
 your laws, your institutions and a few technologies and power bloc principles.
 The [Nation tab](01-introduction.md#the-nation-tab) shows it with every source.
 Among the laws, Autocracy and Single-Party State give 3, Algorithmic Governance
-2 and Unitary State 1; Universal Suffrage, Anarchy and Traditional Vassalage
-take away 3, and Guaranteed Liberties, Devolved Administration and Communal
+2 and Unitary State 1; Universal Suffrage, Liquid Democracy, Anarchy and
+Traditional Vassalage take away 3, and Guaranteed Liberties, Devolved Administration and Communal
 Administration 2. Among the courts, Executive Tribunals give 1 and Algorithmic
 Jurisprudence 2 under Algorithmic Governance; Constitutional Review takes away
 2 and Judicial Supremacy 3.
@@ -638,8 +703,8 @@ Collective Governance is a governance principle in which nobody holds supreme
 executive power: a body of equals governs, and its chair is first among equals.
 It unlocks with Political Agitation and needs one of these Distribution of Power
 laws: Landed Voting, Wealth Voting, Census Suffrage, Universal Suffrage,
-Single-Party State, Technocracy, Oligarchy, Organic Regulation, Anarchy or
-Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
+Liquid Democracy, Single-Party State, Technocracy, Oligarchy, Organic
+Regulation, Anarchy or Algorithmic Governance. Cooperative Ownership, which Anarchy needs, is open to
 it as to a Council Republic. Under it you have 15% less authority and laws pass 10% more slowly, but broad
 coalitions earn more legitimacy and ideological incoherence costs less. The
 chair's interest group gets no head-of-state legitimacy bonus.
@@ -690,7 +755,7 @@ group that dislikes the current law doesn't back a new law it has no view on.
 | Multiculturalist | Leaders; also added to the Intelligentsia | Leaders once a Civil Rights Movement exists; the group ideology with the Civil Rights Movement technology |
 | Inclusive Multiculturalist | Leaders | As Multiculturalist, after the Sexual Revolution; adds LGBTQ+ rights |
 | Anti-Colonialist | Leaders; also added to the Trade Unions and Intelligentsia | With the Decolonization technology; opposes colonial laws |
-| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy and Algorithmic Governance |
+| Optimist Transhumanist | Leaders | From Brain-Computer Interfaces; favors augmentation, open genetics, Automated Bureaucracy, Algorithmic Governance and Liquid Democracy |
 | Corpocrat | Leaders | From Mutual Funds, mostly Industrialists; favors Neocameralism, Contracted Administration and Private Policing |
 | Islamic Inheritance | The Devout in Sunni and Shiite countries | From the start; favors Customary Inheritance and Forced Heirship |
 
@@ -950,7 +1015,8 @@ farming breakthroughs, and under the Legislated Tax Code rule the tax code with
 its passed bills and promises (under the Light Tax Code, its rates), all carry
 over. So do UN sanctions on the nation, which return within a month. A Civil
 Rights Movement, Human
-Augmentation Debate or Mental Health Crisis journal entry you already finished
+Augmentation Debate, Morphological Freedom Debate or Mental Health Crisis
+journal entry you already finished
 does not start over. Some things are still lost: policies switched on from
 journal-entry buttons, such as banking tools and climate policies, have to be
 switched on again, and history charts start empty. The colonial empire is the

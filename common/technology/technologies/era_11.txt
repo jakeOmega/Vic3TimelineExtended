@@ -177,7 +177,7 @@ synthetic_biology = {
 ai_agents = {
 	# Software that carries out multi-step work without supervision (era 13 spec § 6.1): Fully Automated Content
 	# Creation PM for Software Industries (from Brain-Computer Interfaces), Automated Bureaucracy law (from
-	# Generative AI)
+	# Generative AI), the Frontier AI Control law group (era 13 spec § 7.1; every country moves to Private Labs)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/generative_ai.dds" # Placeholder Icon
 	category = production
@@ -219,7 +219,8 @@ self_driving_laboratories = {
 humanoid_robotics = {
 	# General-purpose robots in homes, shops and warehouses (era 13 spec § 6.3): Robotic Service Providers PM for
 	# Urban Centers (from Artificial General Intelligence), Neuromorphic Computing PM for Electronics Industries
-	# (from Brain-Computer Interfaces)
+	# (from Brain-Computer Interfaces), the Automation Policy law group's Robot Tax, Human Labor Quotas and
+	# Automation Dividend laws (§ 7.1)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/autonomous_vehicles.dds" # Placeholder Icon
 	category = production

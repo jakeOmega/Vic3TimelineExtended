@@ -62,6 +62,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_algorithmic_governance
+					has_law = law_type:law_liquid_democracy
 				}
 				has_technology_researched = political_agitation
 			}
@@ -132,6 +133,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_algorithmic_governance
+					has_law = law_type:law_liquid_democracy
 				}
 				has_technology_researched = political_agitation
 			}
@@ -176,6 +178,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_algorithmic_governance
+					has_law = law_type:law_liquid_democracy
 				}
 				has_technology_researched = political_agitation
 			}
@@ -348,6 +351,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_algorithmic_governance
+					has_law = law_type:law_liquid_democracy
 				}
 				has_technology_researched = political_agitation
 			}
@@ -390,6 +394,7 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_organic_regulation
 					has_law = law_type:law_anarchy
 					has_law = law_type:law_algorithmic_governance
+					has_law = law_type:law_liquid_democracy
 				}
 			}
 		}
@@ -799,6 +804,16 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 		}
 		else_if = {
 			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = liquid_democracy
+			}
+			activate_law = law_type:law_liquid_democracy
+		}
+		else_if = {
+			limit = {
 				country_has_primary_culture = cu:romanian
 				is_subject = yes
 			}
@@ -826,6 +841,16 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 			}
 		}
 		if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = liquid_democracy
+			}
+			activate_law = law_type:law_liquid_democracy
+		}
+		else_if = {
 			limit = {
 				NOR = {
 					has_law = law_type:law_chiefdom
@@ -919,9 +944,116 @@ te_fix_inconsistent_lawgroup_distribution_of_power = {
 					has_law = law_type:law_chiefdom
 					has_law = law_type:law_command_economy
 				}
+				has_technology_researched = liquid_democracy
+			}
+			activate_law = law_type:law_liquid_democracy
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
 				has_technology_researched = egalitarianism
 			}
 			activate_law = law_type:law_universal_suffrage
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			activate_law = law_type:law_census_voting
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = political_agitation
+			}
+			activate_law = law_type:law_single_party_state
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = artificial_intelligence
+			}
+			activate_law = law_type:law_algorithmic_governance
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			activate_law = law_type:law_wealth_voting
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_chiefdom
+				}
+			}
+			activate_law = law_type:law_elder_council
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = democracy
+			}
+			activate_law = law_type:law_landed_voting
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = central_archives
+			}
+			activate_law = law_type:law_technocracy
+		}
+		else_if = {
+			limit = {
+				country_has_primary_culture = cu:romanian
+				is_subject = yes
+			}
+			activate_law = law_type:law_organic_regulation
+		}
+		else_if = {
+			limit = { always = yes }
+			activate_law = law_type:law_oligarchy
+		}
+	}
+
+	# Active: law_liquid_democracy  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_liquid_democracy
+			OR = {
+				has_law = law_type:law_chiefdom
+				has_law = law_type:law_command_economy
+			}
+		}
+		if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_chiefdom
+					has_law = law_type:law_command_economy
+				}
+				has_technology_researched = egalitarianism
+			}
+			activate_law = law_type:law_universal_suffrage
+		}
+		else_if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_cooperative_ownership
+				}
+				has_technology_researched = anarchism
+			}
+			activate_law = law_type:law_anarchy
 		}
 		else_if = {
 			limit = {
@@ -2009,6 +2141,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				NOR = {
@@ -2088,6 +2221,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				NOR = {
@@ -2165,6 +2299,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				NOR = {
@@ -2210,6 +2345,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_law = law_type:law_technocracy
@@ -2345,6 +2481,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				NOR = {
@@ -2393,6 +2530,7 @@ te_fix_inconsistent_lawgroup_bureaucracy = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				NOR = {
@@ -3575,6 +3713,7 @@ te_fix_inconsistent_lawgroup_rights_of_women = {
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
 					has_law = law_type:law_anarchy
+					has_law = law_type:law_liquid_democracy
 				}
 			}
 		}
@@ -5090,6 +5229,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 				has_law = law_type:law_wealth_voting
 				has_law = law_type:law_census_voting
 				has_law = law_type:law_universal_suffrage
+				has_law = law_type:law_liquid_democracy
 				has_law = law_type:law_anarchy
 			}
 		}
@@ -5100,6 +5240,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5112,6 +5253,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = mass_media
@@ -5125,6 +5267,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = keynesian_economics
@@ -5143,6 +5286,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5154,6 +5298,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5166,6 +5311,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = mass_media
@@ -5179,6 +5325,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = keynesian_economics
@@ -5197,6 +5344,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5208,6 +5356,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5220,6 +5369,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5232,6 +5382,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = keynesian_economics
@@ -5250,6 +5401,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5261,6 +5413,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 				has_technology_researched = mass_media
@@ -5274,6 +5427,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}
@@ -5286,6 +5440,7 @@ te_fix_inconsistent_lawgroup_electoral_finance = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 					has_law = law_type:law_anarchy
 				}
 			}

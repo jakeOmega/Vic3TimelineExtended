@@ -104,6 +104,227 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: Automation Policy
+
+1. **The group.** In a new game the Economy laws list Automation Policy with
+   Unrestricted Automation in force for every country, and its three other
+   laws greyed out until Humanoid Robotics. The group's tooltip shows the
+   automated share (0% before the first count). A country released or formed
+   later holds Unrestricted Automation, or its creator's law; record which.
+2. **The share.** With Humanoid Robotics, a country whose Tooling Workshops or
+   Urban Centers run Robotic Assembly Lines or Robotic Service Providers shows
+   a share above 0% after the next month, and it rises as more buildings take
+   robotic or AI-managed methods. Check it against the buildings' levels for
+   one small country.
+3. **Human Labor Quotas.**
+   - The preview names the withdrawn methods. After enactment no building runs
+     one: each AI-managed or robotic factory falls back to an earlier
+     automation tier, Urban Centers to E-Commerce or earlier, Railways to
+     Automated Loading and Unloading, farms to Automated Mechanical
+     Harvesters. Record which method the engine picks (the first in the
+     group, or the best still allowed) and whether the switch charges
+     retooling.
+   - Grep `debug.log` for `TE_SELF_CHECK OK|BROKEN automation_quotas`. BROKEN
+     means levels still run a withdrawn method two months on: the law then
+     needs a scripted switch.
+   - Employment rises and output falls in the affected buildings. The withdrawn
+     methods can't be picked in the building panel while the law holds.
+4. **Robot Tax.** The month after enactment the country carries Robot Tax in
+   the Nation tab's Economy list, with tax collection +10% and capitalists'
+   investment-pool contribution −0.05 at a share of 100%, scaled by the share.
+   The budget's tax lines rise to match. Repealing it removes the modifier at
+   the next month.
+5. **Automation Dividend.** The modifier gives the lower strata +2 and the
+   middle strata +1 standard of living at a share of 100%, scaled by the
+   share, and 1.5 times that with Universal Basic Income or Post-Scarcity
+   Economy. The Nation tab's living-standards rows show the two strata lines.
+   Only one of the two scaled modifiers is ever held, and neither stacks from
+   month to month.
+6. **Interest groups.** The Trade Unions approve of Human Labor Quotas and the
+   Industrialists of Unrestricted Automation in the law's tooltip. Watch
+   whether AI countries enact the quotas, and what it costs their output.
+7. **The observer run** (spec § 7.1 sizes the magnitudes from it): for the
+   leading great powers, the share at eras 11, 12 and 13, which Automation
+   Policy law each holds, and its tax income and lower-strata standard of
+   living beside a country under Unrestricted Automation.
+
+## Phase 3: Morphological Freedom and Bodily Autonomy
+
+1. **The technology.** Morphological Freedom sits in era 12's society column
+   after Human Augmentation and the LGBTQ+ Rights Movement, with Genetic
+   Engineering's icon until its own is painted. Its tooltip names Licensed
+   Modification and Morphological Freedom, and +3% services output.
+2. **The law group.**
+   - In a new game every country holds Natural Form in the laws panel's
+     Bodily Autonomy group (Human Rights), beside Human Augmentation.
+   - Load a save from before this change: every country holds Natural Form,
+     and none holds two laws in the group
+     (`scripts/analysis/save_country_probe.py --law-conflicts` on the next
+     save).
+   - A country released or formed later also holds Natural Form.
+   - The three laws borrow Human Purity's, Basic Protections' and
+     Anti-Discrimination Laws' icons.
+3. **The acceptance hook.** Under Universal Citizenship with Civil Rights
+   Movement and Social Justice Movements researched, enact Morphological
+   Freedom and read a pop's acceptance breakdown three ways: a culture that
+   shares a heritage trait with a primary culture, one that shares only a
+   heritage group, and one that shares neither. The third shows +10 from the
+   law. If it now reads higher than the first, the engine does not give a
+   shared-trait pop the higher no-shared figure, and the hook inverts heritage
+   under the four citizenship laws that leave little gap (Subjecthood,
+   Cultural, Assimilatory, Universal). Record which.
+4. **Interest groups.** With the technology, open Licensed Modification's
+   enactment: the Devout and the Rural Folk oppose it, the Intelligentsia
+   support it. Morphological Freedom: the Devout strongly opposed, the
+   Intelligentsia strongly in favor, Industrialists split between their
+   ideologies. Natural Form moves no group's approval before the technology.
+5. **The debate.**
+   - It appears with the technology under the Social Movements rule, and not
+     for a decentralized country, with Civil Rights' icon until its own.
+   - Each law shows its status line.
+   - Enacting Morphological Freedom completes it and opens The Chosen Body at
+     once (a popup).
+   - With Natural Form held for twenty years, The Body as Given opens at once
+     instead; with Licensed Modification held, An Unsettled Question appears
+     and no event.
+   - After a revolution, a finished debate does not start again on the winner.
+6. **Events.** Over a twenty-year debate, count the events: no two within two
+   years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
+   Ears Now once each, at most eight in all. Old Enough to Choose and Everyone
+   Has Ears Now never come under Natural Form, and The Pulpits Speak only with
+   a powerful Devout group, whose name it shows.
+
+## Phase 3: Frontier AI Control
+
+1. **A new game.** The laws panel shows Frontier AI Control among the power
+   structure groups from 1836, every country on No Frontier AI Policy, and no
+   other law of the group enactable. The six laws borrow other laws' icons (No
+   Internet Policy's, Corporate Genetic Licensing's, Ministry of Science's,
+   State Intellectual Property's, Ministry of International Aid's and Open
+   Source Innovation's) until theirs are painted.
+2. **The opening.** The day a country researches AI Agents (or gets it by
+   spread) it moves to Private Labs, with no enactment. No Frontier AI Policy then reads as not enactable, with its
+   tooltip.
+3. **Tooltips.** Each law lists its lines: innovation, Economic Covert Defense,
+   authority, intelligence capacity, diplomatic reputation, technology spread,
+   the interest group lines and International Oversight's UN Authority Target
+   +0.50. Open Weights' enactment tooltip names the 100 and the 300;
+   International Oversight's says it falls to National Licensing.
+4. **International Oversight.** With the United Nations rule off the law is not
+   in the panel. A non-member sees it greyed with "We are a member of the
+   United Nations". A member enacts it; then pressing Leave the United Nations
+   shows the line that the law falls to National Licensing, and the law is
+   National Licensing the same day. The same on the UN's dissolution, for every
+   member holding it.
+5. **Open Weights' world share.** With a great or major power holding Open
+   Weights, the Global Technological Development tooltip of every country,
+   recognized or not, rises by 100 at the next yearly pulse (up to 300 with
+   three or more holders). A minor power's Open Weights adds nothing.
+6. **Interest groups.** In a late game, the Armed Forces back State Monopoly,
+   the Industrialists Private Labs and the Intelligentsia Open Weights in the
+   law panel's interest group view, and most others National Licensing.
+7. **Old saves.** Load a save from before this change. Every country holds No
+   Frontier AI Policy (the group's first law), with no `two laws are active in
+   the same group` assert in `error.log`, and each AI Agents holder moves to
+   Private Labs at its next technology, law change or yearly pulse.
+8. **New countries.** A country released or formed after AI Agents holds a law
+   of the group (copied from its parent or the placeholder), and one that is
+   not a UN member does not keep International Oversight past its next yearly
+   pulse.
+
+## Phase 3: Liquid Democracy
+
+1. **The tree.** Liquid Democracy follows Universal Digital Identity in era
+   12's society tree, with +10% voting power, and borrows Universal Digital
+   Identity's icon until its own is painted.
+2. **The law.** It sits in Distribution of Power beside Algorithmic
+   Governance, with Publicly Funded Elections' icon for now. Its enactment
+   tooltip shows the Continuous Vote line and the modifier's three effects,
+   and nothing is granted on enactment.
+3. **A voting law.**
+   - Enact it from Universal Suffrage: elections and parties carry on, the
+     government type stays a democratic one (Presidential or Parliamentary
+     Republic, Constitutional Monarchy), and Women's Suffrage, Elected
+     Bureaucrats and the campaign finance law in force all stay.
+   - Enact it from Algorithmic Governance: parties come back and an election
+     campaign starts.
+   - A country holding the Tradition of Free Elections keeps it (the amendment
+     re-attaches on the new law). Voting Age amendments and First Past the
+     Post drop, by design.
+   - Under Collective Governance it becomes a Direct Democracy, with the
+     Direct Democracy amendment.
+4. **The Continuous Vote.** With Neural Lace, the Continuous Vote appears in
+   the Nation tab's Governance list within a year of enactment or of
+   researching Neural Lace (the yearly pulse), not in the country panel's
+   list, and it doesn't stack from year to year. It goes at once when the law
+   is repealed. After a revolution that the law's holders win, it comes back
+   at the winner's next yearly pulse.
+5. **Interest groups.** An Anarchist or Optimist Transhumanist leader's group
+   backs it over Universal Suffrage; groups with Republican, Liberal or Social
+   Democrat leaders prefer Universal Suffrage and back going back to it.
+   Radicals and Populists rate the two the same.
+6. **Law consistency.** An anarchist country that loses Cooperative Ownership
+   with the technology researched moves to Liquid Democracy, not Universal
+   Suffrage.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … liquid_democracy_elections` | once a game: OK at the first election campaign that starts under the law (`on_election_campaign_start`); BROKEN at the yearly pulse of a country that has held it six years, if no campaign has started under it anywhere | The engine holds elections under a mod Distribution of Power law with Universal Suffrage's voting power | It doesn't: no campaign in six years under the law, more than a four-year cycle and its campaign | Check what the engine keys elections on (the party emergence the law's `on_activate` runs, or a list of vanilla laws). If nothing a mod law can carry starts them, remake the law as a variant of Universal Suffrage (`parent = law_universal_suffrage`, shown only with the technology), which takes its stances and passes every `has_law_or_variant` check for it |
+
+No line after a few years means no country has held the law long enough; enact it in a test game.
+
+## Phase 3: Geoengineering
+
+Stratospheric Aerosol Injection, the climate policy Geoengineering unlocks
+(`docs/systems/mod_systems/global_warming.md` § Geoengineering). `event
+te_debug_gw.1` reaches every state below in minutes: **c** or **d** for the
+warming, **j** to adopt everything (Aerosol Injection included), **n** to run a
+year of the mask (`GW_AEROSOL` in `debug.log`), **k** then **n** for termination
+shock.
+
+1. **The tree.** Geoengineering sits in era 12's society column after
+   Environmental Movement and Globalization, on Environmental Movement's icon,
+   and its description names the policy.
+2. **The row.** Mitigation Policies ends with Aerosol Injection under National,
+   on the UN's climate icon. Before the technology, Adopt is greyed with the
+   technology crossed; below 1.0 °C beneath the haze, with "Warming beneath any
+   aerosol haze has reached 1.0 °C" crossed. The adopt tooltip shows the
+   policy's line (Environmental Movement radicalism +10), the weekly expense at
+   1% of GDP a year and the objection line. Around the World counts it.
+3. **The cost.** The Budget panel's Breakdown lists it under Climate Policy at
+   about 1% of GDP a year, and the figure follows GDP month to month without
+   stacking (one copy of Aerosol Injection: Running Cost in the country's
+   modifiers).
+4. **The mask.** After adopting, the overview's table gains an Aerosol Mask row
+   that grows a little each month (for a country with a fifth of world GDP,
+   about −0.6 °C after a year, heading to −1.00 °C). The temperature headline,
+   the bar, the tier and the Warming Penalty cell fall with it; the Climate
+   Warming modifier's multiplier is the masked reading. The row's hover gives
+   the warming beneath, which keeps rising with emissions.
+5. **Termination shock.** Repeal it with no other deployer: the mask shrinks
+   month by month (two thirds back within a year), Termination Shock fires for
+   every country once if 0.25 °C or more is coming back, and its modifier is
+   scaled by the degrees returning. Re-adopt and repeal again: it fires again.
+6. **Objection.** On adopting, countries in the monsoon regions and those whose
+   will is a band short (the `l` option's `aerosol=` figure below 45) lose 10
+   relations with us; each January while it runs, 5 more. No relations change
+   with ourselves, and no `Attempted to create relations between a country and
+   itself` assertion in `error.log`.
+7. **Weakened Monsoon.** With a mask up, India, Indochina, Indonesia, southern
+   China and West African countries carry Weakened Monsoon on the entry, scaled
+   by the mask; it goes when the mask reaches 0.
+8. **No false recovery.** A mask that pushes the felt reading below 3, 2 or
+   1 °C fires none of the recovery events (The Heat Recedes and the rest); they
+   still fire when the warming beneath falls.
+9. **AI.** In an observer run past 3 °C, some AIs adopt it (laissez-faire
+   exporters first), none adopts while in default, none adopts once the mask
+   is at its 2 °C ceiling, and a deployer doesn't drop it once its mask works.
+   Record when the first AI deploys and whether a termination shock happens.
+10. **Civil war.** A revolution that wins in a deploying country keeps the
+    policy (the row stays lit within a month) and its cost.
+
 ## Phase 3: AI Tutors
 
 1. **The tree.** AI Tutors sits in era 11's society column, its arrow from

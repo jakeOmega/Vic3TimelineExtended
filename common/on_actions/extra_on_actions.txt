@@ -1007,8 +1007,9 @@ global_warming_events_on_action = {
 		# this on_action is the one global-scope monthly pulse, so each runs
 		# exactly once for the whole world rather than once per country.
 		# gw_refresh_global_counts_effect is a single country sweep that fills
-		# all ten adoption counters; gw_rebase_annual_emissions_effect is O(1)
-		# and only does work in January. Neither has a gameplay effect.
+		# all eleven adoption counters; gw_rebase_annual_emissions_effect is O(1)
+		# and only does work in January. Neither has a gameplay effect of its
+		# own, but the aerosol mask's target is read off the counts.
 		# Tariff maintenance also runs with the rule off to restore prior settings.
 		# Emissions and threshold events remain gated on the climate rule.
 		gw_refresh_tariff_policies_effect = yes
@@ -1019,6 +1020,8 @@ global_warming_events_on_action = {
 			limit = { has_game_rule = global_warming_enabled }
 			gw_rebase_annual_emissions_effect = yes
 			gw_refresh_global_counts_effect = yes
+			# The aerosol mask (Geoengineering) reads the counts just taken.
+			gw_aerosol_update_mask_effect = yes
 
 			# Fire warming-threshold environmentalism events exactly once globally when
 			# temperature_anomaly_display crosses each threshold upward. Runs in the
@@ -1049,6 +1052,7 @@ global_warming_events_on_action = {
 				name = greenhouse_gas_emissions
 				value = 0
 			}
+			gw_aerosol_clear_mask_effect = yes
 		}
 
 		# Recurring random events for countries experiencing global warming.

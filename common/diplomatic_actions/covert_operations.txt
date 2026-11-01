@@ -147,6 +147,7 @@ covert_election_interference_action = {
 					has_law = law_type:law_wealth_voting
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
+					has_law = law_type:law_liquid_democracy
 				}
 			}
 		}
@@ -201,6 +202,7 @@ covert_election_interference_action = {
 							has_law = law_type:law_wealth_voting
 							has_law = law_type:law_census_voting
 							has_law = law_type:law_universal_suffrage
+							has_law = law_type:law_liquid_democracy
 						}
 					}
 				}

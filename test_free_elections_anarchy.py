@@ -6,8 +6,8 @@ it, no longer lowers the chance of enacting it, and comes back when Anarchy is
 enacted, as it does for the four voting laws. Two pieces carry that:
 
 - REPLACE:amendment_tradition_of_free_elections, a byte copy of vanilla's
-  amendment with law_anarchy added to allowed_laws and the Anarchy enactment
-  penalty removed. The copy test fails when the committed vanilla_parsed/
+  amendment with law_anarchy (and the mod's voting law, law_liquid_democracy)
+  added to allowed_laws and the Anarchy enactment penalty removed. The copy test fails when the committed vanilla_parsed/
   snapshot drifts from it, so a vanilla change to the amendment is caught on
   the next snapshot rebuild instead of being silently overwritten.
 - te_free_elections_inherit_under_anarchy, called from on_law_activated and
@@ -72,8 +72,9 @@ class AmendmentCopyTests(unittest.TestCase):
             cls.vanilla = _body(vanilla_parsed.decode(json.load(fh))[AMENDMENT])
 
     def test_anarchy_is_an_allowed_law(self):
+        # Liquid Democracy re-attaches the tradition in its own on_activate.
         self.assertEqual(_body(self.mod["allowed_laws"]),
-                         _body(self.vanilla["allowed_laws"]) + ["law_anarchy"])
+                         _body(self.vanilla["allowed_laws"]) + ["law_anarchy", "law_liquid_democracy"])
 
     def test_only_the_anarchy_penalty_is_removed(self):
         vanilla = dict(_body(self.vanilla["modifier"]))

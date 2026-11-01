@@ -1,0 +1,116 @@
+﻿# ============================================================================
+# AUTOMATION POLICY — effects (era 13 spec § 7.1)
+# ============================================================================
+# Laws: common/laws/te_automation_policy_laws.txt. Pulse:
+# common/on_actions/te_automation_policy_on_actions.txt.
+# ============================================================================
+
+# Country scope, from on_monthly_pulse_country. The only writer of the share
+# and of the two scaled modifiers (the dynamic-modifier pattern,
+# docs/systems/mod_systems/dynamic_modifier_pattern.md):
+#   1. A country the group is open to (Humanoid Robotics, or a share law held
+#      without it: a revolution's winner, a released country) counts its
+#      automated share. Everyone else skips the walk.
+#   2. Each modifier is removed, then re-added with the share as its
+#      multiplier while its law holds. A same-name add_modifier stacks, so the
+#      removal comes first, every month.
+#   3. The Human Labor Quotas self-check.
+# Variables only, and never removed while a modifier reads them, so a civil
+# war's winner keeps them and the next pulse rebuilds the modifier
+# (scripting_best_practices.md, "What a Civil War's Winner Inherits").
+te_ap_monthly_update = {
+	if = {
+		limit = {
+			OR = {
+				has_technology_researched = humanoid_robotics
+				te_ap_share_law = yes
+				has_law = law_type:law_human_labor_quotas
+			}
+		}
+		# Last month's count, for the self-check's "before".
+		if = {
+			limit = { has_variable = te_ap_automated }
+			set_variable = { name = te_ap_automated_prev value = var:te_ap_automated }
+		}
+		set_variable = { name = te_ap_automatable value = te_ap_automatable_levels }
+		set_variable = { name = te_ap_automated value = te_ap_automated_levels }
+		set_variable = { name = te_automation_share value = te_ap_share_value }
+		set_variable = { name = te_ap_dividend_scale value = te_ap_dividend_scale_value }
+	}
+	remove_modifier_if_exists_effect = { MODIFIER = te_automation_robot_tax }
+	remove_modifier_if_exists_effect = { MODIFIER = te_automation_dividend }
+	if = {
+		limit = {
+			has_law = law_type:law_robot_tax
+			has_variable = te_automation_share
+			var:te_automation_share > 0
+		}
+		add_modifier = {
+			name = te_automation_robot_tax
+			multiplier = var:te_automation_share
+		}
+	}
+	else_if = {
+		limit = {
+			has_law = law_type:law_automation_dividend
+			has_variable = te_ap_dividend_scale
+			var:te_ap_dividend_scale > 0
+		}
+		add_modifier = {
+			name = te_automation_dividend
+			multiplier = var:te_ap_dividend_scale
+		}
+	}
+	te_ap_quotas_selfcheck = yes
+}
+
+# Country scope. TEMPORARY self-check (CLAUDE.md, "In-game checks"): does
+# Human Labor Quotas take buildings off the methods it withdraws? The engine
+# withdraws vanilla's slavery and Industry Banned methods the same way, but
+# which method a building moves to, and how soon, is unread.
+#   te_ap_quota_months  months the country has held Quotas at this pulse
+#   te_ap_quota_before  its automated levels the month before it held Quotas
+# Once a game, the first country that held Quotas for two pulses after running
+# at least one automated level (so an OK can't come from a country that had
+# none to lose) logs:
+#   OK      no level of it runs a withdrawn method;
+#   BROKEN  some still do: the engine kept them on a withdrawn method, so the
+#           law needs a scripted switch (docs/testing/era-13-playtest.md).
+te_ap_quotas_selfcheck = {
+	if = {
+		limit = { has_law = law_type:law_human_labor_quotas }
+		if = {
+			limit = { NOT = { has_variable = te_ap_quota_months } }
+			set_variable = { name = te_ap_quota_months value = 1 }
+			set_variable = { name = te_ap_quota_before value = 0 }
+			if = {
+				limit = { has_variable = te_ap_automated_prev }
+				set_variable = { name = te_ap_quota_before value = var:te_ap_automated_prev }
+			}
+		}
+		else = {
+			change_variable = { name = te_ap_quota_months add = 1 }
+		}
+		if = {
+			limit = {
+				NOT = { has_global_variable = te_ap_quota_checked }
+				var:te_ap_quota_months >= 2
+				var:te_ap_quota_before > 0
+				has_variable = te_ap_automated
+			}
+			set_global_variable = te_ap_quota_checked
+			if = {
+				limit = { var:te_ap_automated = 0 }
+				debug_log = "TE_SELF_CHECK OK automation_quotas country=[THIS.GetCountry.GetTagName] before=[THIS.Var('te_ap_quota_before').GetValue|0] now=[THIS.Var('te_ap_automated').GetValue|0] (Human Labor Quotas moved every building off the robotic and AI-managed methods) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN automation_quotas country=[THIS.GetCountry.GetTagName] before=[THIS.Var('te_ap_quota_before').GetValue|0] now=[THIS.Var('te_ap_automated').GetValue|0] (building levels still run a method Human Labor Quotas withdraws two months on: the law needs a scripted switch; see docs/testing/era-13-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_ap_quota_months }
+		remove_variable = te_ap_quota_months
+		remove_variable = te_ap_quota_before
+	}
+}

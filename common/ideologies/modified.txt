@@ -3,6 +3,25 @@
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -126,6 +145,7 @@ REPLACE:ideology_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -173,6 +193,19 @@ REPLACE:ideology_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_policing
 REPLACE:ideology_particularist = {
 	icon = "gfx/interface/icons/ideology_icons/particularist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
 		law_freedom_of_contract = disapprove
@@ -267,6 +300,19 @@ REPLACE:ideology_particularist = {
 # Forced REPLACE due to existing section(s): lawgroup_navy_model, lawgroup_policing
 REPLACE:ideology_patriotic = {
 	icon = "gfx/interface/icons/ideology_icons/patriotic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -388,6 +434,25 @@ REPLACE:ideology_patriotic = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_policing
 REPLACE:ideology_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -567,6 +632,25 @@ REPLACE:ideology_liberal = {
 REPLACE:ideology_liberal_modern = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
 	priority = 100
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -754,6 +838,25 @@ REPLACE:ideology_liberal_modern = {
 REPLACE:ideology_market_liberal = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_market_liberal.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -1336,6 +1439,17 @@ REPLACE:ideology_market_liberal = {
 REPLACE:ideology_traditionalist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_traditionalist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
 		law_freedom_of_contract = disapprove
@@ -1619,6 +1733,17 @@ REPLACE:ideology_traditionalist = {
 REPLACE:ideology_reformer = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_reformer.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
 		law_freedom_of_contract = neutral
@@ -1938,6 +2063,25 @@ REPLACE:ideology_reformer = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_distribution_of_power
 REPLACE:ideology_populist = {
 	icon = "gfx/interface/icons/ideology_icons/populist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = neutral
@@ -2008,6 +2152,7 @@ REPLACE:ideology_populist = {
 		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_anarchy = approve
@@ -2043,6 +2188,25 @@ REPLACE:ideology_populist = {
 REPLACE:ideology_radical = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_radical.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -2121,6 +2285,7 @@ REPLACE:ideology_radical = {
 		law_social_monarchy = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -2613,6 +2778,25 @@ REPLACE:ideology_radical = {
 REPLACE:ideology_social_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -2765,6 +2949,7 @@ REPLACE:ideology_social_democrat = {
 		law_no_workers_rights = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = neutral
@@ -3068,6 +3253,25 @@ REPLACE:ideology_social_democrat = {
 REPLACE:ideology_vanguardist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_vanguardist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -3191,6 +3395,7 @@ REPLACE:ideology_vanguardist = {
 		law_council_republic = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = approve
 		law_oligarchy = strongly_disapprove
 		law_autocracy = strongly_disapprove
@@ -3716,6 +3921,25 @@ REPLACE:ideology_vanguardist = {
 REPLACE:ideology_fascist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_fascist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -3874,6 +4098,7 @@ REPLACE:ideology_fascist = {
 		law_secret_police = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = strongly_approve
 		law_autocracy = approve
@@ -4395,6 +4620,25 @@ REPLACE:ideology_fascist = {
 REPLACE:ideology_anarchist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_anarchist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = disapprove
 		law_contracted_administration = disapprove
@@ -4555,6 +4799,7 @@ REPLACE:ideology_anarchist = {
 		law_multicultural = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_anarchy = strongly_approve
 		law_universal_suffrage = neutral
@@ -4952,6 +5197,25 @@ REPLACE:ideology_anarchist = {
 # Forced REPLACE due to existing section(s): lawgroup_navy_model
 REPLACE:ideology_laissez_faire = {
 	icon = "gfx/interface/icons/ideology_icons/laissez_faire.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -5093,6 +5357,25 @@ REPLACE:ideology_laissez_faire = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -5217,12 +5500,50 @@ INJECT:ideology_egalitarian = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_egalitarian_modern = {
 	icon = "gfx/interface/icons/ideology_icons/egalitarian.dds"
 	priority = 100
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -5299,6 +5620,25 @@ REPLACE:ideology_egalitarian_modern = {
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy, lawgroup_distribution_of_power
 REPLACE:ideology_meritocratic = {
 	icon = "gfx/interface/icons/ideology_icons/meritocratic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = approve
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -5381,6 +5721,7 @@ REPLACE:ideology_meritocratic = {
 		law_mandatory_augmentation = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = approve
@@ -5423,6 +5764,25 @@ REPLACE:ideology_meritocratic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_colonization
 REPLACE:ideology_jingoist = {
 	icon = "gfx/interface/icons/ideology_icons/jingoist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -5505,6 +5865,19 @@ REPLACE:ideology_jingoist = {
 REPLACE:ideology_jingoist_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_jingoist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = disapprove
@@ -5813,6 +6186,25 @@ REPLACE:ideology_jingoist_leader = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_individualist = {
 	icon = "gfx/interface/icons/ideology_icons/individualist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -5890,6 +6282,25 @@ REPLACE:ideology_individualist = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -6027,6 +6438,25 @@ REPLACE:ideology_proletarian = {
 REPLACE:ideology_communist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_communist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -6524,6 +6954,14 @@ REPLACE:ideology_communist = {
 REPLACE:ideology_pacifist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_pacifist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = disapprove
+		law_international_ai_oversight = strongly_approve
+		law_open_weights = approve
+	}
 	lawgroup_rules_of_war = {
 		law_traditional_rules_of_war = disapprove
 		law_war_crimes_forbidden = neutral
@@ -6794,6 +7232,25 @@ REPLACE:ideology_pacifist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_colonization, lawgroup_distribution_of_power
 REPLACE:ideology_plutocratic = {
 	icon = "gfx/interface/icons/ideology_icons/plutocratic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -6852,6 +7309,7 @@ REPLACE:ideology_plutocratic = {
 		law_mass_conscription = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = approve
 		law_wealth_voting = approve
@@ -6893,6 +7351,19 @@ REPLACE:ideology_plutocratic = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_patriarchal = {
 	icon = "gfx/interface/icons/ideology_icons/patriarchal.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -6934,6 +7405,11 @@ REPLACE:ideology_patriarchal = {
 REPLACE:ideology_patriarchal_suffrage = {
 	icon = "gfx/interface/icons/ideology_icons/patriarchal.dds"
 	priority = 100 # Overrides other non-leader ideologies with a lower prio
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
 		law_pro_natalist_subsidies = approve
@@ -6967,6 +7443,11 @@ REPLACE:ideology_patriarchal_suffrage = {
 REPLACE:ideology_feminist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_womens_liberation.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -7237,6 +7718,11 @@ REPLACE:ideology_feminist = {
 REPLACE:ideology_feminist_ig = {
 	icon = "gfx/interface/icons/ideology_icons/womens_liberation.dds"
 	priority = 250 # Overrides other non-leader ideologies with a lower prio
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = strongly_disapprove
@@ -7264,6 +7750,25 @@ REPLACE:ideology_feminist_ig = {
 REPLACE:ideology_humanitarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = disapprove
+		law_international_ai_oversight = strongly_approve
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -7605,6 +8110,11 @@ REPLACE:ideology_humanitarian = {
 REPLACE:ideology_humanitarian_royalist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarian_royalist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_minority_rights = {
 		law_minority_rights_violent_hostility = strongly_disapprove
 		law_minority_rights_ghettoization = strongly_disapprove
@@ -7931,6 +8441,25 @@ REPLACE:ideology_humanitarian_royalist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_reactionary = {
 	icon = "gfx/interface/icons/ideology_icons/reactionary.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -8082,6 +8611,19 @@ REPLACE:ideology_reactionary = {
 REPLACE:ideology_theocrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_theocrat.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8303,6 +8845,19 @@ REPLACE:ideology_theocrat = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_republican = {
 	icon = "gfx/interface/icons/ideology_icons/republican.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -8323,6 +8878,7 @@ REPLACE:ideology_republican = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -8339,6 +8895,19 @@ REPLACE:ideology_republican = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_republican_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/republican_paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
 		law_pro_natalist_subsidies = neutral
@@ -8393,6 +8962,7 @@ REPLACE:ideology_republican_paternalistic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8424,6 +8994,25 @@ REPLACE:ideology_republican_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_socialist = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -8510,6 +9099,19 @@ REPLACE:ideology_socialist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_scholar_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/scholar_paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
 		law_pro_natalist_subsidies = neutral
@@ -8564,6 +9166,7 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8600,6 +9203,19 @@ REPLACE:ideology_scholar_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_junker_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/junker_paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
 		law_pro_natalist_subsidies = neutral
@@ -8654,6 +9270,7 @@ REPLACE:ideology_junker_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8685,6 +9302,19 @@ REPLACE:ideology_junker_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_papal_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8747,6 +9377,7 @@ REPLACE:ideology_papal_paternalistic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -8778,6 +9409,19 @@ REPLACE:ideology_papal_paternalistic = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_papal_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/papal_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8820,6 +9464,11 @@ REPLACE:ideology_papal_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_confucian = {
 	icon = "gfx/interface/icons/ideology_icons/confucian.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_inheritance = {
 		law_primogeniture = strongly_approve
 		law_partible = neutral
@@ -8892,6 +9541,7 @@ REPLACE:ideology_bakufu = {
 		law_collectivized_agriculture = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_autocracy = strongly_approve
@@ -8913,6 +9563,19 @@ REPLACE:ideology_bakufu = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_shinto_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/shinto_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -8951,6 +9614,7 @@ REPLACE:ideology_shinto_moralist = {
 		law_state_atheism = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_autocracy = strongly_approve
@@ -8972,6 +9636,14 @@ REPLACE:ideology_shinto_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_caudillismo = {
 	icon = "gfx/interface/icons/ideology_icons/caudillismo.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = strongly_disapprove
 		law_neocameralism = disapprove
@@ -8984,6 +9656,7 @@ REPLACE:ideology_caudillismo = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = approve
 		law_landed_voting = strongly_approve
 		law_autocracy = strongly_approve
@@ -9015,6 +9688,19 @@ REPLACE:ideology_caudillismo = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_buddhist_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/buddhist_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9062,6 +9748,19 @@ REPLACE:ideology_buddhist_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_bureaucracy
 REPLACE:ideology_hindu_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9118,6 +9817,19 @@ REPLACE:ideology_hindu_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_bureaucracy
 REPLACE:ideology_sikh_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/sikh_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -9176,6 +9888,11 @@ REPLACE:ideology_sikh_moralist = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_heavenly_kingdom_theocratic = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
 		law_ministry_of_religion = strongly_approve
@@ -9231,6 +9948,7 @@ REPLACE:ideology_orleanist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = disapprove
 		law_oligarchy = neutral
@@ -9523,6 +10241,7 @@ REPLACE:ideology_legitimist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = neutral
@@ -9797,6 +10516,7 @@ REPLACE:ideology_bonapartist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove # Napoleon III was an advocate for universal suffrage. Even if this was opportunistic, it's more accurate to say this than the alternative.
 		law_autocracy = disapprove
 		law_oligarchy = disapprove
@@ -10065,6 +10785,19 @@ REPLACE:ideology_bonapartist = {
 REPLACE:ideology_republican_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_republican.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -10587,6 +11320,14 @@ REPLACE:ideology_royalist = {
 REPLACE:ideology_jacksonian_democrat = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/jackson_democrat.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = neutral
@@ -10607,6 +11348,7 @@ REPLACE:ideology_jacksonian_democrat = {
 		law_presidential_republic = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -10717,6 +11459,25 @@ REPLACE:ideology_jacksonian_democrat = {
 REPLACE:ideology_positivist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_positivist.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = approve
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -10750,6 +11511,7 @@ REPLACE:ideology_positivist = {
 		law_state_atheism = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_technocracy = strongly_approve
 		law_single_party_state = approve
@@ -11050,6 +11812,19 @@ REPLACE:ideology_positivist = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_russian_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/russian_patriarch.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11067,6 +11842,7 @@ REPLACE:ideology_russian_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = approve
@@ -11103,6 +11879,19 @@ REPLACE:ideology_russian_patriarch = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/orthodox_patriarch.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11120,6 +11909,7 @@ REPLACE:ideology_orthodox_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -11149,6 +11939,19 @@ REPLACE:ideology_orthodox_patriarch = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women, lawgroup_distribution_of_power
 REPLACE:ideology_oriental_orthodox_patriarch = {
 	icon = "gfx/interface/icons/ideology_icons/coptic_patriarch.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -11166,6 +11969,7 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 		law_non_inheritable_usage_rights = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_autocracy = strongly_approve
@@ -11201,6 +12005,19 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 REPLACE:ideology_authoritarian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/authoritarian.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -11231,6 +12048,7 @@ REPLACE:ideology_authoritarian = {
 		law_ministry_of_thought_control = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_anarchy = strongly_disapprove
 		law_universal_suffrage = strongly_disapprove
@@ -11560,11 +12378,37 @@ INJECT:ideology_ethno_nationalist = {
 		law_minority_rights_protection = strongly_disapprove
 		law_minority_rights_affirmative_action = strongly_disapprove
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy
 REPLACE:ideology_anti_clerical = {
 	icon = "gfx/interface/icons/ideology_icons/anti_clerical.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = strongly_disapprove
@@ -11639,11 +12483,43 @@ INJECT:ideology_pious = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = strongly_disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_colonization, lawgroup_navy_model
 REPLACE:ideology_isolationist = {
 	icon = "gfx/interface/icons/ideology_icons/isolationist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_refugee_affairs = {
 		law_no_ministry_of_refugee_affairs = approve
 		law_ministry_of_refugee_affairs = neutral
@@ -11763,11 +12639,38 @@ INJECT:ideology_agrarian = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
 }
 
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_constitutionalist = {
 	icon = "gfx/interface/icons/ideology_icons/reformer.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -11788,6 +12691,7 @@ REPLACE:ideology_constitutionalist = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = approve
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -12098,6 +13002,19 @@ REPLACE:ideology_corporatist_leader = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
 REPLACE:ideology_agrarian_jeffersonian = {
 	icon = "gfx/interface/icons/ideology_icons/frontier_expansionist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
 		law_partible = approve
@@ -12152,6 +13069,7 @@ REPLACE:ideology_agrarian_jeffersonian = {
 		law_land_based_taxation = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -12169,6 +13087,11 @@ REPLACE:ideology_agrarian_jeffersonian = {
 REPLACE:ideology_integralist = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_integralist.dds"
 	character_ideology = yes
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_ministry_of_propaganda = {
 		law_no_ministry_of_propaganda = neutral
 		law_ministry_of_propaganda = approve
@@ -12205,6 +13128,7 @@ REPLACE:ideology_integralist = {
 		law_subjecthood = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_single_party_state = approve
@@ -12663,6 +13587,19 @@ REPLACE:ideology_integralist = {
 REPLACE:ideology_liberal_leader = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_liberal.dds"
 	character_ideology = yes
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -12687,6 +13624,7 @@ REPLACE:ideology_liberal_leader = {
 		law_minority_rights_affirmative_action = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = neutral
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = approve
 		law_census_voting = approve
@@ -12986,6 +13924,7 @@ REPLACE:ideology_despotic_utopian = {
 		law_minority_rights_affirmative_action = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_anarchy = strongly_disapprove
 		law_universal_suffrage = strongly_disapprove
@@ -13232,6 +14171,7 @@ REPLACE:ideology_absolutist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = approve
@@ -13305,6 +14245,20 @@ REPLACE:ideology_royalist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_proletarian_movement = {
 	icon = "gfx/interface/icons/ideology_icons/proletarian.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -13390,6 +14344,20 @@ REPLACE:ideology_proletarian_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare, lawgroup_governance_principles
 REPLACE:ideology_socialist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/socialist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = approve
+		law_open_weights = approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -13515,6 +14483,20 @@ REPLACE:ideology_socialist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_communist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/communist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -13626,6 +14608,25 @@ REPLACE:ideology_communist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_anarchist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/anarchist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_bureaucracy = {
 		law_communal_administration = strongly_approve
 		law_appointed_bureaucrats = disapprove
@@ -13689,6 +14690,7 @@ REPLACE:ideology_anarchist_movement = {
 		law_multicultural = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_anarchy = strongly_approve
 		law_universal_suffrage = neutral
@@ -13747,6 +14749,20 @@ REPLACE:ideology_anarchist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_vanguardist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/vanguardist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -13797,6 +14813,7 @@ REPLACE:ideology_vanguardist_movement = {
 		law_council_republic = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = strongly_disapprove
 		law_autocracy = strongly_disapprove
@@ -13844,6 +14861,25 @@ REPLACE:ideology_vanguardist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles, lawgroup_army_model
 REPLACE:ideology_fascist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/fascist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = neutral
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -13929,6 +14965,7 @@ REPLACE:ideology_fascist_movement = {
 		law_ministry_of_propaganda = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = strongly_approve
 		law_autocracy = approve
@@ -13984,6 +15021,14 @@ REPLACE:ideology_fascist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_welfare
 REPLACE:ideology_corporatist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/corporatist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
 		law_neocameralism = neutral
@@ -14027,6 +15072,25 @@ REPLACE:ideology_corporatist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_liberal_movement = {
 	icon = "gfx/interface/icons/ideology_icons/liberal.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -14087,6 +15151,7 @@ REPLACE:ideology_liberal_movement = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -14126,6 +15191,25 @@ REPLACE:ideology_liberal_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_governance_principles
 REPLACE:ideology_radical_movement = {
 	icon = "gfx/interface/icons/ideology_icons/radical.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -14212,6 +15296,7 @@ REPLACE:ideology_radical_movement = {
 		law_social_monarchy = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -14292,6 +15377,7 @@ REPLACE:ideology_liberal_republican_movement = {
 		law_outlawed_dissent = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = neutral
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = approve
 		law_census_voting = approve
@@ -14351,6 +15437,7 @@ REPLACE:ideology_national_liberal_movement = {
 		law_outlawed_dissent = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -14432,6 +15519,14 @@ REPLACE:ideology_nihilist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_bureaucracy
 REPLACE:ideology_positivist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/positivist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = approve
+		law_open_weights = neutral
+	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = approve
 		law_ministry_of_religion = neutral
@@ -14458,6 +15553,7 @@ REPLACE:ideology_positivist_movement = {
 		law_state_atheism = strongly_approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_technocracy = strongly_approve
 		law_single_party_state = approve
@@ -14482,6 +15578,11 @@ REPLACE:ideology_positivist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_feminist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/womens_liberation.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
 		law_pro_natalist_subsidies = strongly_disapprove
@@ -14508,6 +15609,19 @@ REPLACE:ideology_feminist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles
 REPLACE:ideology_reactionary_movement = {
 	icon = "gfx/interface/icons/ideology_icons/reactionary.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -14608,6 +15722,11 @@ INJECT:ideology_modernizer = {
 		law_no_national_bank = disapprove
 		law_national_bank = strongly_approve
 	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 }
 
 INJECT:ideology_regenerator = {
@@ -14638,6 +15757,19 @@ INJECT:ideology_modernizer_movement_2 = {
 # Forced REPLACE due to existing section(s): lawgroup_rights_of_women
 REPLACE:ideology_traditionalist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/traditionalist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_state_power = {
 		law_feudal_contracts = strongly_approve
 		law_unitary_state = disapprove
@@ -14752,6 +15884,19 @@ INJECT:ideology_ethno_nationalist_movement = {
 		law_minority_rights_indifference = disapprove
 		law_minority_rights_protection = strongly_disapprove
 		law_minority_rights_affirmative_action = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = disapprove
 	}
 }
 
@@ -14886,6 +16031,7 @@ REPLACE:ideology_orleanist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = disapprove
 		law_oligarchy = neutral
@@ -14945,6 +16091,7 @@ REPLACE:ideology_bonapartist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = disapprove # Napoleon III was an advocate for universal suffrage. Even if this was opportunistic, it's more accurate to say this than the alternative.
 		law_autocracy = disapprove
 		law_oligarchy = disapprove
@@ -15013,6 +16160,7 @@ REPLACE:ideology_legitimist_movement = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_autocracy = strongly_approve
 		law_oligarchy = neutral
@@ -15048,6 +16196,19 @@ REPLACE:ideology_legitimist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_welfare
 REPLACE:ideology_hierarchic = {
 	icon = "gfx/interface/icons/ideology_icons/hierarchic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -15116,6 +16277,14 @@ REPLACE:ideology_hierarchic = {
 # Forced REPLACE due to existing section(s): lawgroup_army_model, lawgroup_welfare
 REPLACE:ideology_japan_hierarchic = {
 	icon = "gfx/interface/icons/ideology_icons/hierarchic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 	lawgroup_monetary_policy = {
 		law_commodity_money = neutral
 		law_gold_standard = approve
@@ -15176,6 +16345,14 @@ REPLACE:ideology_japan_hierarchic = {
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy, lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_japan_paternalistic = {
 	icon = "gfx/interface/icons/ideology_icons/paternalistic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 	lawgroup_monetary_policy = {
 		law_commodity_money = neutral
 		law_gold_standard = approve
@@ -15195,6 +16372,7 @@ REPLACE:ideology_japan_paternalistic = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = approve
@@ -15255,6 +16433,7 @@ REPLACE:ideology_magnatial = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -15311,6 +16490,7 @@ REPLACE:ideology_carlist_ig = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -15377,6 +16557,7 @@ REPLACE:ideology_moderantist = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = neutral
 		law_landed_voting = strongly_approve
@@ -15474,6 +16655,7 @@ REPLACE:ideology_japan_hierarchic_2 = {
 REPLACE:ideology_meiji_restorationist_movement_daijoi = {
 	icon = "gfx/interface/icons/ideology_icons/patriotic.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = neutral
@@ -15528,6 +16710,7 @@ REPLACE:ideology_meiji_restorationist_movement_daijoi = {
 REPLACE:ideology_meiji_restorationist_movement_shojoi = {
 	icon = "gfx/interface/icons/ideology_icons/isolationist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = neutral
@@ -15949,6 +17132,7 @@ REPLACE:ideology_sikh_militancy = {
 REPLACE:ideology_tokugawa_loyalist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/bakufu.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = neutral
@@ -16000,6 +17184,7 @@ REPLACE:ideology_tokugawa_loyalist_movement = {
 REPLACE:ideology_tokugawa_loyalist_movement_2 = {
 	icon = "gfx/interface/icons/ideology_icons/bakufu.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_single_party_state = disapprove
 		law_landed_voting = neutral
@@ -16061,6 +17246,7 @@ REPLACE:ideology_carlist_ig_2 = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -16109,6 +17295,7 @@ REPLACE:ideology_carlist_ig_2 = {
 REPLACE:ideology_cartist = {
 	icon = "gfx/interface/icons/ideology_icons/enclavist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = approve
 		law_wealth_voting = neutral
@@ -16147,6 +17334,7 @@ REPLACE:ideology_cartist = {
 REPLACE:ideology_enclavist = {
 	icon = "gfx/interface/icons/ideology_icons/enclavist.dds"
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = neutral
 		law_oligarchy = strongly_approve
 		law_wealth_voting = disapprove
@@ -16197,6 +17385,19 @@ REPLACE:ideology_enclavist = {
 # Forced REPLACE due to existing section(s): lawgroup_bureaucracy, lawgroup_governance_principles
 REPLACE:ideology_hindu_moralist_british_india = {
 	icon = "gfx/interface/icons/ideology_icons/hindu_moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -16264,6 +17465,7 @@ REPLACE:ideology_carlist = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -16515,6 +17717,7 @@ REPLACE:ideology_carlist_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -16764,6 +17967,7 @@ REPLACE:ideology_carlist_movement = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -16816,6 +18020,7 @@ REPLACE:ideology_carlist_movement_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -16869,6 +18074,7 @@ REPLACE:ideology_miguelist = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17116,6 +18322,7 @@ REPLACE:ideology_miguelist_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve # Were opposed to absolutism, but the game defines Oligarchy as a bourgeois system
@@ -17361,6 +18568,7 @@ REPLACE:ideology_miguelist_movement = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -17413,6 +18621,7 @@ REPLACE:ideology_miguelist_movement_2 = {
 		law_extraction_economy = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_oligarchy = approve
 		law_autocracy = strongly_approve
@@ -17455,6 +18664,7 @@ REPLACE:ideology_conservative_praetorian = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_disapprove
 		law_census_voting = disapprove
@@ -17497,6 +18707,7 @@ REPLACE:ideology_liberal_praetorian = {
 		law_council_republic = strongly_disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = disapprove
 		law_census_voting = approve
@@ -17521,6 +18732,11 @@ REPLACE:ideology_liberal_praetorian = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_rights_of_women
 REPLACE:ideology_ibadi_imamate = {
 	icon = "gfx/interface/icons/ideology_icons/ibadi_imamate.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = disapprove
 		law_neocameralism = disapprove # preference for theocracy over monarchy
@@ -17550,7 +18766,13 @@ REPLACE:ideology_ibadi_imamate = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power
 REPLACE:ideology_ibadi_shura = {
 	icon = "gfx/interface/icons/ideology_icons/ibadi_shura.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = disapprove
 		law_algorithmic_governance = disapprove # Strong theological emphasis on community endorsement of an imam means that extreme autocracy is begrudged by even the most reactionary clerics
 		law_single_party_state = disapprove
 		law_autocracy = strongly_disapprove
@@ -17573,6 +18795,11 @@ REPLACE:ideology_ibadi_shura = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_integralist_movement = {
 	icon = "gfx/interface/icons/ideology_icons/integralist.dds"
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_militarized_police = strongly_approve
@@ -17595,6 +18822,7 @@ REPLACE:ideology_integralist_movement = {
 		law_subjecthood = approve
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_disapprove
 		law_autocracy = strongly_approve
 		law_single_party_state = approve
@@ -17630,6 +18858,19 @@ REPLACE:ideology_integralist_movement = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_policing
 REPLACE:ideology_montenegrin_moralist = {
 	icon = "gfx/interface/icons/ideology_icons/moralist.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -17977,6 +19218,7 @@ REPLACE:ideology_rangaku = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = approve
 		law_algorithmic_governance = neutral
 		law_universal_suffrage = strongly_approve
 		law_census_voting = strongly_approve
@@ -18009,6 +19251,25 @@ REPLACE:ideology_rangaku = {
 # Forced REPLACE due to existing section(s): lawgroup_governance_principles, lawgroup_distribution_of_power
 REPLACE:ideology_technocratic = {
 	icon = "gfx/interface/icons/ideology_icons/technocratic.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = approve
+		law_open_weights = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -18029,6 +19290,7 @@ REPLACE:ideology_technocratic = {
 		law_council_republic = disapprove
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = strongly_approve
 		law_universal_suffrage = disapprove
 		law_census_voting = disapprove
@@ -18056,12 +19318,19 @@ REPLACE:ideology_technocratic = {
 REPLACE:ideology_utopian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_utopian.dds"
 	character_ideology = yes
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_labor_rights = {
 		law_worker_protections = strongly_approve
 		law_regulatory_bodies = approve
 		law_no_workers_rights = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_approve
 		law_algorithmic_governance = disapprove
 		law_universal_suffrage = strongly_approve
 		law_census_voting = approve
@@ -18223,6 +19492,14 @@ REPLACE:ideology_utopian = {
 # Forced REPLACE due to existing section(s): lawgroup_distribution_of_power, lawgroup_policing
 REPLACE:ideology_military_absolutist = {
 	icon = "gfx/interface/icons/ideology_icons/authoritarian.dds"
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -18232,6 +19509,7 @@ REPLACE:ideology_military_absolutist = {
 		law_algorithmic_jurisprudence = neutral
 	}
 	lawgroup_distribution_of_power = {
+		law_liquid_democracy = strongly_disapprove
 		law_algorithmic_governance = disapprove
 		law_single_party_state = approve
 		law_landed_voting = neutral
@@ -18755,6 +20033,12 @@ REPLACE:ideology_utilitarian_millian = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_corporatist = {
 	icon = "gfx/interface/icons/ideology_icons/corporatist.dds"
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_health_system = {
 		law_charitable_health_system = approve
 		law_public_health_insurance = neutral
@@ -19089,6 +20373,19 @@ INJECT:ideology_loyalist = {
 		law_constitutional_review = strongly_disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = neutral
+	}
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
 	}
 }
 

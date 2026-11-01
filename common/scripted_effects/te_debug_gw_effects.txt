@@ -12,10 +12,11 @@
 # gameplay script.
 # ============================================================================
 
-# Force the world temperature anomaly. temperature_anomaly_display is
+# Force the world temperature anomaly. gw_unmasked_temperature is
 # global_var:greenhouse_gas_emissions / 10000 (via two divides with a round
 # between them), so the variable is the anomaly in hundredths of a degree times
-# 100 -- i.e. 10000 = 1.00 C.
+# 100 -- i.e. 10000 = 1.00 C. temperature_anomaly_display is that less any
+# aerosol mask (Geoengineering), which this leaves alone.
 #
 # With the global warming rule ENABLED, setting this activates je_global_warming
 # at the next evaluation once the value is above 0.1 C, and the next monthly
@@ -103,8 +104,9 @@ te_debug_gw_become_market_member = {
 	}
 }
 
-# Adopt all nine policies through the real shared helpers, ignoring the
-# authority and warming gates the widget would enforce.
+# Adopt every policy through the real shared helpers, ignoring the
+# authority, technology and warming gates the widget would enforce. Aerosol
+# Injection starts the world's mask building (option n runs a year of it).
 # Scope: country
 te_debug_gw_adopt_all = {
 	gw_effect_carbon_tax = yes
@@ -116,10 +118,11 @@ te_debug_gw_adopt_all = {
 	gw_effect_public_transit = yes
 	gw_effect_fossil_fuel_divestment = yes
 	gw_effect_green_building_codes = yes
+	gw_effect_aerosol_injection = yes
 	te_debug_gw_refresh_display = yes
 }
 
-# Repeal all nine, ignoring the treaty lock. The market-wide repeals skip
+# Repeal every policy, ignoring the treaty lock. The market-wide repeals skip
 # treaty-bound members (gw_bound_by_emissions_treaty), so the debugging
 # country's own three are also removed directly, in case option f bound it.
 # Scope: country
@@ -138,6 +141,7 @@ te_debug_gw_repeal_all = {
 	gw_effect_remove_public_transit = yes
 	gw_effect_remove_fossil_fuel_divestment = yes
 	gw_effect_remove_green_building_codes = yes
+	gw_effect_remove_aerosol_injection = yes
 	te_debug_gw_refresh_display = yes
 }
 
@@ -155,7 +159,7 @@ te_debug_gw_repeal_all = {
 # Scope: country (the player)
 te_debug_gw_log_ai_will = {
 	gw_refresh_global_counts_effect = yes
-	debug_log = "GW_AI_WILL: temperature=[GetGlobalVariable('greenhouse_gas_emissions').GetValue] (hundredths x100) mean_sol=[GetGlobalVariable('gw_g_mean_sol').GetValue]"
+	debug_log = "GW_AI_WILL: temperature=[GetGlobalVariable('greenhouse_gas_emissions').GetValue] (hundredths x100, before the aerosol mask) mean_sol=[GetGlobalVariable('gw_g_mean_sol').GetValue]"
 	every_country = {
 		limit = { has_journal_entry = je_global_warming }
 		set_variable = { name = te_dbg_gw_shared value = gw_ai_will_shared }
@@ -173,6 +177,7 @@ te_debug_gw_log_ai_will = {
 		set_variable = { name = te_dbg_gw_w_standards value = gw_ai_will_emission_standards }
 		set_variable = { name = te_dbg_gw_w_carbon value = gw_ai_will_carbon_tax }
 		set_variable = { name = te_dbg_gw_w_divest value = gw_ai_will_fossil_fuel_divestment }
+		set_variable = { name = te_dbg_gw_w_aerosol value = gw_ai_will_aerosol_injection }
 		set_variable = { name = te_dbg_gw_policies value = gw_policies_active_count_display }
 		set_variable = { name = te_dbg_gw_leader value = 0 }
 		if = {
@@ -204,7 +209,7 @@ te_debug_gw_log_ai_will = {
 			set_variable = { name = te_dbg_gw_auth value = -1 }
 		}
 		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] shared=[THIS.Var('te_dbg_gw_shared').GetValue|2] lf=[THIS.Var('te_dbg_gw_lf').GetValue|2] ind=[THIS.Var('te_dbg_gw_ind').GetValue|2] mov=[THIS.Var('te_dbg_gw_mov').GetValue|2] wealth=[THIS.Var('te_dbg_gw_wealth').GetValue|2] fossil=[THIS.Var('te_dbg_gw_fossil').GetValue|2] policies=[THIS.Var('te_dbg_gw_policies').GetValue|0] market_leader=[THIS.Var('te_dbg_gw_leader').GetValue|0] authority_covers=[THIS.Var('te_dbg_gw_auth').GetValue|0]"
-		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] wills adapt=[THIS.Var('te_dbg_gw_w_adapt').GetValue|2] refor=[THIS.Var('te_dbg_gw_w_refor').GetValue|2] renew=[THIS.Var('te_dbg_gw_w_renew').GetValue|2] transit=[THIS.Var('te_dbg_gw_w_transit').GetValue|2] codes=[THIS.Var('te_dbg_gw_w_codes').GetValue|2] standards=[THIS.Var('te_dbg_gw_w_standards').GetValue|2] carbon=[THIS.Var('te_dbg_gw_w_carbon').GetValue|2] divest=[THIS.Var('te_dbg_gw_w_divest').GetValue|2] removal=[THIS.Var('te_dbg_gw_w_removal').GetValue|2]"
+		debug_log = "GW_AI_WILL: [THIS.GetCountry.GetNameNoFormatting] wills adapt=[THIS.Var('te_dbg_gw_w_adapt').GetValue|2] refor=[THIS.Var('te_dbg_gw_w_refor').GetValue|2] renew=[THIS.Var('te_dbg_gw_w_renew').GetValue|2] transit=[THIS.Var('te_dbg_gw_w_transit').GetValue|2] codes=[THIS.Var('te_dbg_gw_w_codes').GetValue|2] standards=[THIS.Var('te_dbg_gw_w_standards').GetValue|2] carbon=[THIS.Var('te_dbg_gw_w_carbon').GetValue|2] divest=[THIS.Var('te_dbg_gw_w_divest').GetValue|2] removal=[THIS.Var('te_dbg_gw_w_removal').GetValue|2] aerosol=[THIS.Var('te_dbg_gw_w_aerosol').GetValue|2]"
 		remove_variable = te_dbg_gw_shared
 		remove_variable = te_dbg_gw_lf
 		remove_variable = te_dbg_gw_ind
@@ -220,8 +225,31 @@ te_debug_gw_log_ai_will = {
 		remove_variable = te_dbg_gw_w_standards
 		remove_variable = te_dbg_gw_w_carbon
 		remove_variable = te_dbg_gw_w_divest
+		remove_variable = te_dbg_gw_w_aerosol
 		remove_variable = te_dbg_gw_policies
 		remove_variable = te_dbg_gw_leader
 		remove_variable = te_dbg_gw_auth
 	}
+}
+
+# Run twelve months of the aerosol mask at once: the real counts and the real
+# monthly step, so the mask, the overview's Aerosol Mask line, termination
+# shock and the objectors' January relations can be checked without waiting a
+# year (relations move only if the twelve steps cross a January, which they do
+# not: `month` stays what it is). Scope: country (the player).
+te_debug_gw_advance_mask = {
+	gw_refresh_global_counts_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	gw_aerosol_update_mask_effect = yes
+	debug_log = "GW_AEROSOL: mask=[GetGlobalVariable('gw_g_aerosol_mask').GetValue] target=[GetGlobalVariable('gw_g_aerosol_target').GetValue] deployers=[GetGlobalVariable('gw_g_n_aerosol_injection').GetValue] world_gdp=[GetGlobalVariable('gw_g_gdp_sum').GetValue] their_gdp=[GetGlobalVariable('gw_g_aerosol_gdp').GetValue]"
 }
