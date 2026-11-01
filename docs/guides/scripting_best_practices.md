@@ -4972,6 +4972,10 @@ Three habits make it survivable:
   variants, `has_technology_researched` over an era's chain, `has_principle_group` plus a
   per-tier OR. Anything that says "at least" in a comment and enumerates in the body.
 
+## The Engine Range-Checks Some Defines
+
+A define the engine considers out of range is rejected at load, with one line in both debug.log and error.log: `defines.cpp:167: Define 'NPops::MASS_MIGRATION_TARGET_MIN_ARABLE_LAND' not valid with given value, reason: Must be greater than 0`. Nothing else marks it, the value doesn't take, and no offline check knows the engine's bounds. #1308 shipped that define at 0 to remove the floor; 1 does the same, since every state region has at least 2 arable land. After changing a define, read the first launch's log for `defines.cpp`.
+
 ## Gating a Mechanic on a Game Rule When It Lives in a Define, PM or Building Group
 
 A game rule reaches script through `has_game_rule`, reaches production methods through its `disable_<pm>` / `force_<pm>` flags ("Locking Production Methods" above), and reaches countries through `apply_modifier = <player|ai|all>:<static_modifier>` in a setting (vanilla `game_rules.md`): a static modifier on every country of that category for the whole game, with no script and nothing to refresh. Prefer it to a scripted pulse for any flat per-setting bonus. Defines and building groups have no rule gate at all. `free_market_construction_rule` shows how far that goes (`docs/systems/mod_systems/construction.md`, "Free Market Construction off"):
