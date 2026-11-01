@@ -1,0 +1,16 @@
+state,ref_place,summer_mean_c,summer_humidity,winter_mean_c,aridity,malaria,latitude,reason
+STATE_GEORGIA,Savannah,28,3,8,0,2,32,"Hot, humid coastal lowland; endemic malaria"
+STATE_WEST_BENGAL,Calcutta,31,3,20,0,2,23,"Hot, oppressively humid delta; endemic malaria"
+STATE_HOME_COUNTIES,London,18,1,5,0,0,51,Mild maritime
+STATE_ILE_DE_FRANCE,Paris,20,1,4,0,0,49,Mild temperate
+STATE_CATALONIA,Barcelona,25,2,10,0,0,41,Mediterranean coast with a humid summer
+STATE_LAZIO,Rome,25,2,8,0,2,42,Mediterranean; the Roman Campagna's malaria
+STATE_LOWER_ANDALUSIA,Seville,28,1,11,0,1,37,"Hot, dry-summer interior; marsh fevers on the Guadalquivir"
+STATE_SAHARA,Ghardaia,34,0,11,2,0,32,Desert oasis towns
+STATE_ARIZONA,Tucson,31,1,11,2,0,32,Hot desert with a summer monsoon
+STATE_YAKUTSK,Yakutsk,19,1,-38,0,0,62,Extreme continental cold
+STATE_MASSACHUSETTS,Boston,23,2,-2,0,0,42,"Humid continental, cold winters"
+STATE_OHIO,Cincinnati,25,2,0,0,1,39,Humid continental; Ohio valley ague
+STATE_FLORIDA,Tallahassee,28,3,11,0,2,30,"Hot, humid subtropical; endemic malaria"
+STATE_MIDDLE_EGYPT,Beni Suef,29,1,13,0,1,29,"Hot desert climate, watered by the Nile"
+STATE_MOSCOW,Moscow,19,1,-7,0,0,56,"Humid continental, cold winters"
