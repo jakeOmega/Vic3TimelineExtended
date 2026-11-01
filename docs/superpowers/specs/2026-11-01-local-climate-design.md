@@ -256,20 +256,31 @@ Four new modifier types, registered in `common/modifier_type_definitions/`,
 percent-styled, 0–1, with names and descriptions in loc:
 `state_climate_heat_relief_add`, `state_climate_cold_relief_add`,
 `state_climate_water_relief_add` and `state_climate_disease_relief_add`. The script values read each with
-`modifier:<type>` and clamp it to its cap. They are modifiers rather than
+`modifier:<type>` and clamp it to 1. They are modifiers rather than
 `has_technology` checks so that the engine's breakdown names every source on
 hover, and so that a law, building or event can grant relief later.
 
 Carriers are `INJECT:`s on existing technologies, as
 `te_demog_tech_injections.txt` does. A new technology is added only if no
-existing one fits. The schedule (owner: cold is addressable earlier):
+existing one fits. The schedule (owner: cold is addressable earlier; owner,
+2026-11-01: by the end of the game comfort is essentially fully mitigated
+everywhere):
 
-| Relief | When | Candidate carriers | Cap |
+| Relief | Historical eras (1–7) | Modern eras (8–10) | Future eras (11–13) |
 |---|---|---|---|
-| Cold | Eras 1–3 mostly, a little later | `railways` (era 2, coal by rail heats homes), an era 3 building technology for central heating, `rural_electrification` (era 6) | About 0.6: the far north stays thin today, from short summers and isolation as much as cold |
-| Disease | Eras 2 and 4 | `quinine` (era 2), about half. Migrants arrive without immunity, like the colonists it protected. `malaria_prevention` (era 4), the rest | 1.0 |
-| Heat | Era 3 a little, eras 6–7 mostly | `electrical_generation` (era 3, electric fans), `personal_appliances` (era 6, window units), an era 7 construction technology (central air in new housing) | About 0.8: outdoor heat remains |
-| Water | Eras 4–6 (dams, irrigation, pumped supply), era 7 or later (desalination) | No technology named for water was found in vanilla or the mod. The builder picks engineering and chemistry carriers in those eras, or adds one | About 0.7: a desert city stays dearer to supply |
+| Cold | To about 0.6. `railways` (era 2, coal by rail heats homes), an era 3 building technology for central heating, `rural_electrification` (era 6) | To about 0.8 by era 10: insulation and heat pumps. `advanced_structural_engineering` (era 10) | To 1.0. `compact_fusion_reactors` (era 12, heat too cheap to meter), then the shared capstone |
+| Disease | 1.0 by era 4. `quinine` (era 2), about half: migrants arrive without immunity, like the colonists it protected. `malaria_prevention` (era 4), the rest | Done | Done |
+| Heat | To about 0.8. `electrical_generation` (era 3, electric fans), `personal_appliances` (era 6, window units), an era 7 construction technology (central air in new housing) | To about 0.9 by era 10: cheap clean power for cooling. `clean_energy_technologies` (era 9) | To 1.0. `smart_grids` (era 11), then the shared capstone |
+| Water | To about 0.7. Eras 4–6 dams, irrigation and pumped supply, era 7 desalination. No water technology exists in vanilla or the mod; the builder picks engineering and chemistry carriers or adds one | To about 0.85 by era 10: desalination on cheap clean power. `clean_energy_technologies` (era 9) | To 1.0. `fusion_power` (era 11), then the shared capstone |
+
+- **The shared capstone** is one era 13 technology that finishes cold, heat
+  and water at once, `programmable_matter` or `molecular_assemblers`
+  (habitats built and climate-controlled to order) *(designer's call)*.
+- **Today (era 10) still has a residual**, as the real world does: Siberia
+  and northern Canada are still emptying, and desert cities are still dear to
+  supply. The residual goes in the future eras.
+- **Each figure is the sum of the carriers so far**, clamped to 1 in the
+  script values. There are no separate caps.
 
 The builder confirms each carrier by reading the technology tree
 (`common/technology/technologies/`, vanilla's and the mod's `era_*.txt`) and
@@ -281,8 +292,8 @@ the census (§ 2).
 ### 5.3 Calibration (before any number is final)
 
 Per the mod's evidence-based tuning rule, the builder produces a table before
-fixing constants. For a set of anchor regions it shows the penalty in 1836, at
-era 4 and at era 7, beside the same states' standard-of-living and jobs terms
+fixing constants. For a set of anchor regions it shows the penalty in 1836 and at
+eras 4, 7, 10 and 13, beside the same states' standard-of-living and jobs terms
 from an observer save. Suggested anchors: Georgia, Louisiana, Massachusetts,
 Ohio, Arizona, California, Florida; Île-de-France, Lazio, Andalusia; Moscow,
 Yakutia; Egypt's Nile valley, the Sahara, Arabia; Bengal, the Deccan; coastal
@@ -302,7 +313,11 @@ confirm against that table:
 - The Sahara or the Arabian interior before relief: about −30, most of it the
   dry term. Arizona: about −30 in 1836, about −5 once air conditioning and
   water projects arrive. Yakutia before relief: about −30, and about −15
-  after.
+  after the historical eras.
+- Era 10, a country with the technologies: Yakutia about −6, the Sahara
+  about −5, Georgia about 0. Era 13 with the capstone: 0 everywhere. A
+  country that lags in technology still pays, so the gap between rich and
+  poor countries shows in comfort too.
 - `P_max` around −40, so climate alone never outweighs a full jobs bonus plus
   a good standard of living.
 
@@ -358,6 +373,10 @@ removes.
   simple curve and states it.
 - Warming then raises the heat term and lowers the cold term, so Siberia gains
   and the Gulf loses. The panel's hover shows the shift.
+- Relief multiplies the warmed temperatures too. Once a country holds full
+  heat relief, warming costs its states no comfort, though it keeps costing
+  through global warming's own effects. A country without the technologies
+  feels the full shift.
 - This is one term in two script values plus a hover line. The builder may
   ship it in phase 2's PR *(designer's call)*.
 
