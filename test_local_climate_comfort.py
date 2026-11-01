@@ -29,12 +29,13 @@ cal = load("local_climate_calibration", "scripts/analysis/local_climate_calibrat
 gen = load("gen_local_climate", "scripts/generators/gen_local_climate.py")
 VALUES = ROOT / "common" / "script_values" / "local_climate_values.txt"
 
-# Spec § 5 and the plan's Task 5: the tuning constants at the head of local_climate_values.txt.
+# Spec § 11 (heat v2): the tuning constants at the head of local_climate_values.txt, in percent of migration pull.
 CONSTANTS = {
-    "te_climate_heat_start": 22, "te_climate_humidity_factor": 0.33, "te_climate_heat_weight": 1,
-    "te_climate_cold_start": 0, "te_climate_cold_weight": 0.8, "te_climate_dry_per_class": 8,
-    "te_climate_malaria_per_class": 2.5, "te_climate_penalty_max": 40, "te_climate_amp_low_lat": 30,
-    "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5, "te_climate_normals_warming": 1.1,
+    "te_climate_heat_start": 26, "te_climate_heat_linear": 4.1, "te_climate_heat_quadratic": 0.36,
+    "te_climate_index_per_degree": 0.8, "te_climate_cold_start": 0, "te_climate_cold_weight": 1.6,
+    "te_climate_dry_per_class": 16, "te_climate_malaria_per_class": 5, "te_climate_penalty_max": 80,
+    "te_climate_amp_low_lat": 30, "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5,
+    "te_climate_normals_warming": 1.1,
 }
 # Each term's raw value and the relief that eases it (the dry term's is water).
 TERMS = {"heat": "heat", "cold": "cold", "dry": "water", "disease": "disease"}
@@ -130,7 +131,7 @@ def values_body(name):
 def neutral_row():
     """A region with no row: the generator's neutral default for every field."""
     defaults = {field: default for _, field, default, _ in gen.VALUES if field}
-    return gen.Row(state="STATE_NO_ROW", ref_place="", reason="", **defaults)
+    return gen.Row(state="STATE_NO_ROW", ref_place="", summer_mean_c=15, heat_source="fit", reason="", **defaults)
 
 
 class Formula(unittest.TestCase):
@@ -176,13 +177,32 @@ class Formula(unittest.TestCase):
     def test_warming_shifts_both_seasons(self):
         # The record holds today's normals, so a region reads it exactly at the world's anomaly of today
         # (te_climate_normals_warming): 1836, at anomaly 0, is that much colder (owner, 2026-11-01).
-        self.assertEqual(values_body("te_climate_warming"),
+        # Arctic amplification is a cold-season effect: winters take the latitude's amplification, the hot
+        # days the world's warming as it is (spec § 11.3), or warming would raise Yakutsk's cost.
+        self.assertEqual(values_body("te_climate_summer_warming"),
+                         "value = temperature_anomaly_display subtract = te_climate_normals_warming")
+        self.assertEqual(values_body("te_climate_winter_warming"),
                          "value = temperature_anomaly_display subtract = te_climate_normals_warming "
                          "multiply = te_climate_amplification")
-        self.assertEqual(values_body("te_climate_summer_eff"),
-                         "value = te_climate_summer_mean add = te_climate_warming")
+        self.assertEqual(values_body("te_climate_hot_day_eff"),
+                         "value = te_climate_hot_day add = te_climate_summer_warming")
         self.assertEqual(values_body("te_climate_winter_eff"),
-                         "value = te_climate_winter_mean add = te_climate_warming")
+                         "value = te_climate_winter_mean add = te_climate_winter_warming")
+        # Heat stress rises a little slower than air temperature as the world warms (spec § 11.3).
+        self.assertEqual(values_body("te_climate_heat_index_eff"),
+                         "value = te_climate_heat_index add = { value = te_climate_summer_warming "
+                         "multiply = te_climate_index_per_degree }")
+
+    def test_heat_curve(self):
+        """Heat costs a x + b x^2 percent, x the heat stress above te_climate_heat_start: the 8th degree costs
+        a little over twice the 1st, a moderate curve (owner, 2026-11-01)."""
+        self.assertEqual(values_body("te_climate_heat_excess"),
+                         "value = te_climate_heat_index_eff subtract = te_climate_heat_start min = 0")
+        self.assertEqual(values_body("te_climate_heat_raw"),
+                         "value = te_climate_heat_excess multiply = te_climate_heat_quadratic "
+                         "add = te_climate_heat_linear multiply = te_climate_heat_excess")
+        a, b = CONSTANTS["te_climate_heat_linear"], CONSTANTS["te_climate_heat_quadratic"]
+        self.assertAlmostEqual((a + 2 * b * 7.5) / (a + 2 * b * 0.5), 2.2, delta=0.3)
 
     def test_amplification(self):
         c = self.c
@@ -197,24 +217,32 @@ class Formula(unittest.TestCase):
         self.assertEqual(cal.terms(neutral_row(), 1, self.c, self.s)["penalty"], 0)
 
     def test_anchor_targets(self):
-        """Spec § 5.3's targets, in attraction points (1 SoL = 2), in 1836: the world's anomaly 0, so each
-        region runs te_climate_normals_warming x its amplification below the record's normals."""
+        """Spec § 11.4's targets, in percent of migration pull, in 1836 unless an era is given: the world's
+        anomaly 0, so each region's hot days run te_climate_normals_warming below the record's normals and
+        its winters that times its amplification. Bengal stays near half, so a gap of 10 points between two of its states still moves pops
+        (owner's 1892 breakdowns, 2026-11-01)."""
         p = self.penalty
         ranges = (
-            ("STATE_GEORGIA", 1, 12, 16), ("STATE_GEORGIA", 7, 1, 4), ("STATE_GEORGIA", 10, 0, 2),
-            ("STATE_WEST_BENGAL", 1, 20, 25),
-            ("STATE_HOME_COUNTIES", 1, 0, 1), ("STATE_ILE_DE_FRANCE", 1, 0, 1),
-            ("STATE_CATALONIA", 1, 1, 5), ("STATE_LAZIO", 1, 7, 11), ("STATE_LAZIO", 4, 0, 4),
-            ("STATE_SAHARA", 1, 24, 34), ("STATE_ARIZONA", 1, 24, 34),
-            ("STATE_SAHARA", 10, 0, 6), ("STATE_ARIZONA", 10, 0, 6),
-            ("STATE_YAKUTSK", 1, 26, 34), ("STATE_YAKUTSK", 7, 10, 16), ("STATE_YAKUTSK", 10, 4, 8),
-            ("STATE_MASSACHUSETTS", 1, 0, 3),
+            ("STATE_GEORGIA", 1, 24, 32), ("STATE_GEORGIA", 7, 2, 8), ("STATE_GEORGIA", 10, 0, 4),
+            ("STATE_WEST_BENGAL", 1, 45, 55),
+            ("STATE_HOME_COUNTIES", 1, 0, 1), ("STATE_ILE_DE_FRANCE", 1, 0, 4),
+            ("STATE_CATALONIA", 1, 0, 5), ("STATE_LAZIO", 1, 10, 20), ("STATE_LAZIO", 4, 0, 8),
+            ("STATE_SAHARA", 1, 35, 55), ("STATE_ARIZONA", 1, 35, 55),
+            ("STATE_SAHARA", 10, 0, 10), ("STATE_ARIZONA", 10, 0, 10),
+            ("STATE_YAKUTSK", 1, 55, 75), ("STATE_YAKUTSK", 7, 18, 32), ("STATE_YAKUTSK", 10, 8, 18),
+            ("STATE_MASSACHUSETTS", 1, 5, 14), ("STATE_HAWAIIAN_ISLANDS", 1, 0, 4), ("STATE_VICTORIA", 1, 4, 14),
         )
         for state, era, low, high in ranges:
             with self.subTest(state=state, era=era):
                 self.assertTrue(low <= p(state, era) <= high, f"{state} era {era}: {p(state, era):.2f}")
         self.assertGreater(p("STATE_WEST_BENGAL", 1), p("STATE_GEORGIA", 1))
         self.assertLess(p("STATE_MASSACHUSETTS", 1), p("STATE_GEORGIA", 1))
+        # The owner's case: steady Honolulu costs less than northern Sweden before any technology.
+        self.assertLess(p("STATE_HAWAIIAN_ISLANDS", 1), p("STATE_NORRLAND", 1))
+        # And Paris, whose summers reach 37 °C some years, costs more than steady Honolulu: the hottest
+        # days count, not the warm month's mean.
+        self.assertLess(p("STATE_HAWAIIAN_ISLANDS", 1), p("STATE_ILE_DE_FRANCE", 1))
+        self.assertEqual(p("STATE_OMAN", 1), CONSTANTS["te_climate_penalty_max"])
         self.assertLess(p("STATE_MIDDLE_EGYPT", 1), p("STATE_SAHARA", 1))
         heat = {s: cal.terms(self.rows[s], 1, self.c, self.s)["heat"]
                 for s in ("STATE_LOWER_ANDALUSIA", "STATE_GEORGIA")}
@@ -348,9 +376,10 @@ def carrier_sums(era):
 
 
 def record_env(row, has_record=1):
-    return {"te_climate_has_record": has_record, "te_climate_summer_mean": row.summer_mean_c,
-            "te_climate_summer_humidity": row.summer_humidity, "te_climate_winter_mean": row.winter_mean_c,
-            "te_climate_aridity": row.aridity, "te_climate_malaria": row.malaria, "te_climate_latitude": row.latitude}
+    return {"te_climate_has_record": has_record, "te_climate_summer_humidity": row.summer_humidity,
+            "te_climate_winter_mean": row.winter_mean_c, "te_climate_aridity": row.aridity,
+            "te_climate_malaria": row.malaria, "te_climate_latitude": row.latitude,
+            "te_climate_hot_day": row.hot_day_c, "te_climate_heat_index": row.heat_index}
 
 
 class ScriptMatchesMirror(unittest.TestCase):
@@ -431,14 +460,16 @@ class Modifier(unittest.TestCase):
 
     def test_static_modifier(self):
         body = squash(top_block(MODIFIERS.read_text(encoding="utf-8-sig"), "local_climate_discomfort") or "")
+        # A percentage, not points: a cut every state in a market shares can't pin its poorer states at
+        # attraction's floor of 0 (spec § 11.1).
         self.assertEqual(body, "icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds "
-                               "state_migration_pull_add = -1")
+                               "state_migration_pull_mult = -0.01")
 
     def test_refresh_shape(self):
         body = squash(top_block(EFFECTS.read_text(encoding="utf-8-sig"), EFFECT) or "")
         self.assertEqual(body, "remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort } "
                                f"set_variable = {{ name = {APPLIED} value = te_climate_penalty }} "
-                               f"if = {{ limit = {{ var:{APPLIED} > 0 }} "
+                               f"if = {{ limit = {{ var:{APPLIED} >= 0.5 }} "
                                f"add_modifier = {{ name = local_climate_discomfort multiplier = var:{APPLIED} }} }}")
 
     def test_refresh_never_removes_the_variable(self):
@@ -554,7 +585,7 @@ class Tile(unittest.TestCase):
                          "value = 0 if = { limit = { has_variable = te_climate_penalty_applied } "
                          "value = var:te_climate_penalty_applied }")
         self.assertEqual(loc_value("te_state_climate_comfort_value"),
-                         "#R -[State.MakeScope.ScriptValue('te_climate_penalty_now')|1]#!")
+                         "#R -[State.MakeScope.ScriptValue('te_climate_penalty_now')|0]%#!")
         self.assertEqual(loc_value("TE_STATE_CLIMATE_ROW_COMFORT"), "Comfort")
 
     def test_comfort_row_waits_for_first_application(self):
@@ -564,8 +595,8 @@ class Tile(unittest.TestCase):
                          "value = 0 if = { limit = { has_variable = te_climate_penalty_applied } value = 1 }")
         comfort = [(gate, row) for gate, row in tile_rows() if "TE_STATE_CLIMATE_ROW_COMFORT" in row]
         self.assertEqual(len(comfort), 3)
-        # 0.05, not 0: a penalty under it prints as a red -0.0 at one decimal (the Ruhr's 0.04 in 1836).
-        cost = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.05')"
+        # 0.5, the modifier's own threshold: under it nothing applies, and a whole percent would print -0%.
+        cost = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.5')"
         gates = {key: [g for g, r in comfort if f'"{key}"' in r] for key in
                  ("te_state_climate_comfort_value", "te_state_climate_comfort_none", "te_state_climate_pending")}
         self.assertEqual({k: len(v) for k, v in gates.items()}, dict.fromkeys(gates, 1))
@@ -578,25 +609,27 @@ class Tile(unittest.TestCase):
     def test_term_hovers(self):
         """Each reading's hover gives its cost before relief, the relief the owner's technologies give, and the
         cost left; the seasons' hovers also give today's normal and the warming against it."""
-        hovers = {"te_state_climate_summer_tt": ("heat", "heat"), "te_state_climate_winter_tt": ("cold", "cold"),
+        hovers = {"te_state_climate_hot_day_tt": ("heat", "heat"), "te_state_climate_winter_tt": ("cold", "cold"),
                   "te_state_climate_water_tt": ("dry", "water"), "te_state_climate_malaria_tt": ("disease", "disease")}
         for key, (term, relief) in hovers.items():
             text = loc_value(key) or ""
             for value in (f"te_climate_{term}_raw", f"te_climate_relief_{relief}", f"te_climate_{term}_term"):
                 self.assertIn(f"State.MakeScope.ScriptValue('{value}')", text, (key, value))
-        for key, season in (("te_state_climate_summer_tt", "summer"), ("te_state_climate_winter_tt", "winter")):
+        for key, season, warming in (("te_state_climate_hot_day_tt", "hot_day", "summer"),
+                                     ("te_state_climate_winter_tt", "winter_mean", "winter")):
             text = loc_value(key)
-            self.assertIn("State.MakeScope.ScriptValue('te_climate_warming')", text, key)
-            self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{season}_mean')", text, key)
+            self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{warming}_warming')", text, key)
+            self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{season}')", text, key)
+        self.assertIn("State.MakeScope.ScriptValue('te_climate_heat_index_eff')", loc_value("te_state_climate_hot_day_tt"))
         comfort = loc_value("te_state_climate_comfort_tt") or ""
         for term in ("heat", "cold", "dry", "disease"):
             self.assertIn(f"State.MakeScope.ScriptValue('te_climate_{term}_term')", comfort, term)
         self.assertIn("[concept_migration_pull]", comfort)
 
     def test_seasons_show_the_climate_now(self):
-        """The Summer and Winter rows show the record with the warming against today's normals, as the formula
+        """The Hot days and Winter rows show the record with the warming against today's normals, as the formula
         reads them, so the tile moves as the world warms."""
-        self.assertIn("ScriptValue('te_climate_summer_eff')", loc_value("te_state_climate_summer_value"))
+        self.assertIn("ScriptValue('te_climate_hot_day_eff')", loc_value("te_state_climate_hot_day_value"))
         self.assertIn("ScriptValue('te_climate_winter_eff')", loc_value("te_state_climate_winter_value"))
 
     def test_rows_gate_on_the_record(self):

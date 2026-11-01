@@ -4,9 +4,11 @@
 The Local Climate design (docs/superpowers/specs/2026-11-01-local-climate-design.md § 4) gives
 every land state region a small record: the warmest month's mean temperature and dew-point class,
 the coldest month's mean, water for settlement, malaria as of 1836, and latitude, all taken where
-most of the region's people live. The rows are scripts/generators/data/local_climate.csv
-(state, ref_place, summer_mean_c, summer_humidity, winter_mean_c, aridity, malaria, latitude,
-reason). This writes one state-scope script value per field, each an if-chain on state_region,
+most of the region's people live, and (§ 11, heat v2) the hottest day of a typical year and the heat
+stress on the year's worst day, from station records. The rows are
+scripts/generators/data/local_climate.csv (state, ref_place, summer_mean_c, summer_humidity,
+winter_mean_c, aridity, malaria, latitude, hot_day_c, heat_index, heat_source, reason). This writes a
+state-scope script value for each field a script reads, each an if-chain on state_region,
 so every piece of a split region reads the region's climate. A region with no row reads neutral
 values (no penalty). Needs nothing but the repo. Re-run after editing the CSV;
 test_local_climate.py fails CI when the committed file is stale:
@@ -29,24 +31,32 @@ OUT = os.path.join(REPO, "common", "script_values", "local_climate_generated.txt
 STATE_REGIONS = os.path.join(REPO, "map_data", "state_regions")
 SEAS = "99_seas.txt"
 
-FIELDS = "state ref_place summer_mean_c summer_humidity winter_mean_c aridity malaria latitude reason"
+FIELDS = ("state ref_place summer_mean_c summer_humidity winter_mean_c aridity malaria latitude hot_day_c heat_index "
+          "heat_source reason")
 Row = collections.namedtuple("Row", FIELDS)
 NUMERIC = ("summer_mean_c", "summer_humidity", "winter_mean_c", "aridity", "malaria", "latitude")
+FLOATS = ("hot_day_c", "heat_index")
+# Where a row's heat figures come from (§ 11.2): a station (its code and distance), the fit from the record's own
+# fields, or another region's station.
+HEAT_SOURCE_RE = re.compile(r"[A-Z0-9]+:\d+km|fit|analog:STATE_\w+")
 
 # (script value, Row field or None for has_record, neutral default, what it holds)
 VALUES = (
     ("te_climate_has_record", None, 0, "1 when the region has a row, 0 when it reads the neutral defaults"),
-    ("te_climate_summer_mean", "summer_mean_c", 15, "the warmest month's mean temperature, °C"),
     ("te_climate_summer_humidity", "summer_humidity", 0,
-     "the warmest month's dew point: 0 dry (<10 °C), 1 moderate (10-16), 2 humid (16-20), 3 oppressive (>20)"),
+     "the warmest month's dew point: 0 dry (<10 °C), 1 moderate (10-16), 2 humid (16-20), 3 oppressive (>20); "
+     "the tile's Humidity word only"),
     ("te_climate_winter_mean", "winter_mean_c", 15, "the coldest month's mean temperature, °C"),
     ("te_climate_aridity", "aridity", 0, "water for settlement: 0 ample, 1 limited, 2 scarce"),
     ("te_climate_malaria", "malaria", 0, "malaria as of 1836: 0 none, 1 seasonal or local, 2 endemic"),
     ("te_climate_latitude", "latitude", 0, "signed degrees of the reference place"),
+    ("te_climate_hot_day", "hot_day_c", 20, "the hottest day of a typical year, °C (the mean of each year's highest)"),
+    ("te_climate_heat_index", "heat_index", 0,
+     "heat stress on a typical year's worst day, °C: 0.7 x wet-bulb + 0.3 x air temperature"),
 )
 
 RANGES = {"summer_mean_c": (-10, 45), "winter_mean_c": (-50, 30), "summer_humidity": (0, 3),
-          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90)}
+          "aridity": (0, 2), "malaria": (0, 2), "latitude": (-90, 90), "hot_day_c": (10, 52), "heat_index": (5, 40)}
 
 # A vanilla desert trait needs water 1 or more, except where the region's people live by a great river or
 # outside the desert: the trait describes the land, the record where people live (2026-11-01, PR #1307 review).
@@ -65,7 +75,8 @@ def load_rows(path=CSV):
     with open(path, encoding="utf-8-sig", newline="") as f:
         rows = []
         for r in csv.DictReader(f):
-            rows.append(Row(**{k: (int(r[k]) if k in NUMERIC else r[k]) for k in Row._fields}))
+            rows.append(Row(**{k: (int(r[k]) if k in NUMERIC else float(r[k]) if k in FLOATS else r[k])
+                               for k in Row._fields}))
     return rows
 
 
@@ -117,6 +128,12 @@ def validate(rows, regions, traits):
                 errors.append(f"{r.state}: {field} {value} outside {low}..{high}")
         if r.winter_mean_c > r.summer_mean_c:
             errors.append(f"{r.state}: winter {r.winter_mean_c} warmer than summer {r.summer_mean_c}")
+        if r.hot_day_c < r.summer_mean_c:
+            errors.append(f"{r.state}: hottest day {r.hot_day_c} cooler than the warmest month {r.summer_mean_c}")
+        if r.heat_index > r.hot_day_c:
+            errors.append(f"{r.state}: heat index {r.heat_index} above the hottest day {r.hot_day_c}")
+        if not HEAT_SOURCE_RE.fullmatch(r.heat_source):
+            errors.append(f"{r.state}: heat_source {r.heat_source!r} is not code:Nkm, fit or analog:STATE_X")
         own = traits.get(r.state, set())
         if "state_trait_severe_malaria" in own and r.malaria < 2:
             errors.append(f"{r.state}: vanilla's state_trait_severe_malaria needs malaria 2, not {r.malaria}")
@@ -155,6 +172,8 @@ def render(rows):
         lines += ["", f"# State scope: {meaning}.", f"{name} = {{", f"\tvalue = {default}"]
         for i, r in enumerate(rows):
             value = 1 if field is None else getattr(r, field)
+            if isinstance(value, float):
+                value = f"{value:g}"
             lines.append(f"\t{'if' if i == 0 else 'else_if'} = {{ limit = {{ state_region = s:{r.state} }} "
                          f"value = {value} }}")
         lines.append("}")

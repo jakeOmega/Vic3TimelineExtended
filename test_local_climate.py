@@ -19,15 +19,17 @@ _spec = importlib.util.spec_from_file_location(
 gen = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(gen)
 
-VALUES = ("te_climate_has_record", "te_climate_summer_mean", "te_climate_summer_humidity",
-          "te_climate_winter_mean", "te_climate_aridity", "te_climate_malaria", "te_climate_latitude")
-DEFAULTS = {"te_climate_has_record": 0, "te_climate_summer_mean": 15, "te_climate_summer_humidity": 0,
-            "te_climate_winter_mean": 15, "te_climate_aridity": 0, "te_climate_malaria": 0,
-            "te_climate_latitude": 0}
+VALUES = ("te_climate_has_record", "te_climate_summer_humidity", "te_climate_winter_mean", "te_climate_aridity",
+          "te_climate_malaria", "te_climate_latitude", "te_climate_hot_day", "te_climate_heat_index")
+DEFAULTS = {"te_climate_has_record": 0, "te_climate_summer_humidity": 0, "te_climate_winter_mean": 15,
+            "te_climate_aridity": 0, "te_climate_malaria": 0, "te_climate_latitude": 0, "te_climate_hot_day": 20,
+            "te_climate_heat_index": 0}
 
 
-def row(state="STATE_GEORGIA", summer=28, humidity=3, winter=8, aridity=0, malaria=2, latitude=32):
-    return gen.Row(state, "Savannah", summer, humidity, winter, aridity, malaria, latitude, "x")
+def row(state="STATE_GEORGIA", summer=28, humidity=3, winter=8, aridity=0, malaria=2, latitude=32, hot_day=36.6,
+        heat_index=30.2, source="KSVN:1km"):
+    return gen.Row(state, "Savannah", summer, humidity, winter, aridity, malaria, latitude, hot_day, heat_index, source,
+                   "x")
 
 
 def block(text, name):
@@ -49,8 +51,11 @@ class Render(unittest.TestCase):
             body = block(text, name)
             self.assertIsNotNone(body, name)
             self.assertIn("limit = { state_region = s:STATE_GEORGIA }", body, name)
-        self.assertIn("value = 28", block(text, "te_climate_summer_mean"))
+        self.assertIn("value = 36.6", block(text, "te_climate_hot_day"))
+        self.assertIn("value = 30.2", block(text, "te_climate_heat_index"))
         self.assertIn("value = 8", block(text, "te_climate_winter_mean"))
+        # The warmest month's mean stays in the CSV, for validation and the fill, but no script reads it.
+        self.assertIsNone(block(text, "te_climate_summer_mean"))
         self.assertIn("value = 1", block(text, "te_climate_has_record"))
 
     def test_render_negative_values(self):
@@ -75,12 +80,21 @@ class Validate(unittest.TestCase):
         self.assertEqual(self.errors([row()]), [])
 
     def test_validate_ranges(self):
-        bad = [row(summer=46), row(summer=-11, winter=-20), row(winter=31, summer=40), row(winter=-51), row(summer=10, winter=12),
-               row(humidity=4), row(aridity=3), row(malaria=3), row(latitude=91), row(humidity=-1)]
+        bad = [row(summer=46, hot_day=48), row(summer=-11, winter=-20), row(winter=31, summer=40, hot_day=42), row(winter=-51), row(summer=10, winter=12),
+               row(humidity=4), row(aridity=3), row(malaria=3), row(latitude=91), row(humidity=-1),
+               row(hot_day=53), row(hot_day=9, summer=5, winter=0, heat_index=8), row(heat_index=41, hot_day=45),
+               row(heat_index=4), row(heat_index=37, hot_day=36.6), row(hot_day=27, summer=28, heat_index=26),
+               row(source=""), row(source="KSVN"), row(source="nearby")]
         for r in bad:
             errs = self.errors([r])
             self.assertEqual(len(errs), 1, (r, errs))
             self.assertIn("STATE_GEORGIA", errs[0])
+
+    def test_heat_sources(self):
+        """A heat figure comes from a station (code:km), the fit from the record's own fields, or another
+        region's station (analog:STATE_X), so the next pass knows which rows are estimates."""
+        for source in ("KSVN:1km", "WMO02484:2km", "fit", "analog:STATE_HIMALAYAS"):
+            self.assertEqual(self.errors([row(source=source)]), [], source)
 
     def test_validate_unknown_and_duplicate(self):
         self.assertEqual(len(self.errors([row("STATE_NOWHERE")])), 1)
@@ -152,10 +166,10 @@ class Committed(unittest.TestCase):
 
 PANEL = ROOT / "gui" / "states_panel.gui"
 WIDGETS = ROOT / "gui" / "te_state_panel_widgets.gui"
-TILE_KEYS = ("TE_STATE_CLIMATE_STATUS", "TE_STATE_CLIMATE_TT", "TE_STATE_CLIMATE_ROW_SUMMER",
+TILE_KEYS = ("TE_STATE_CLIMATE_STATUS", "TE_STATE_CLIMATE_TT", "TE_STATE_CLIMATE_ROW_HOT_DAY",
              "TE_STATE_CLIMATE_ROW_HUMIDITY", "TE_STATE_CLIMATE_ROW_WINTER", "TE_STATE_CLIMATE_ROW_WATER",
-             "TE_STATE_CLIMATE_ROW_MALARIA", "TE_STATE_CLIMATE_NO_DATA", "te_state_climate_summer_value",
-             "te_state_climate_winter_value", "te_state_climate_summer_tt", "te_state_climate_humidity_tt",
+             "TE_STATE_CLIMATE_ROW_MALARIA", "TE_STATE_CLIMATE_NO_DATA", "te_state_climate_hot_day_value",
+             "te_state_climate_winter_value", "te_state_climate_hot_day_tt", "te_state_climate_humidity_tt",
              "te_state_climate_winter_tt", "te_state_climate_water_tt", "te_state_climate_malaria_tt",
              "TE_CLIMATE_HUMIDITY_0", "TE_CLIMATE_HUMIDITY_1", "TE_CLIMATE_HUMIDITY_2", "TE_CLIMATE_HUMIDITY_3",
              "TE_CLIMATE_WATER_0", "TE_CLIMATE_WATER_1", "TE_CLIMATE_WATER_2",
@@ -200,11 +214,11 @@ class Tile(unittest.TestCase):
         for value in ("te_climate_summer_humidity", "te_climate_aridity", "te_climate_malaria",
                       "te_climate_has_record"):
             self.assertIn(f"ScriptValue('{value}')", body, value)
-        for key in ("te_state_climate_summer_value", "te_state_climate_winter_value", "TE_STATE_CLIMATE_NO_DATA"):
+        for key in ("te_state_climate_hot_day_value", "te_state_climate_winter_value", "TE_STATE_CLIMATE_NO_DATA"):
             self.assertIn(key, body, key)
-        # Phase 2 shows the record with the warming against today's normals (te_climate_*_eff,
+        # The rows show the record with the warming against today's normals (te_climate_*_eff,
         # test_local_climate_comfort.py's test_seasons_show_the_climate_now); the hover gives the normal.
-        self.assertIn("te_climate_summer", loc_value("te_state_climate_summer_value"))
+        self.assertIn("te_climate_hot_day", loc_value("te_state_climate_hot_day_value"))
         self.assertIn("te_climate_winter", loc_value("te_state_climate_winter_value"))
 
     def test_word_chains_pick_each_class(self):

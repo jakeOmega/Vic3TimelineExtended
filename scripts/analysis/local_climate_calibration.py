@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Local Climate's calibration: the comfort formula in Python, against the anchor regions.
 
-The Local Climate design (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.3) asks for
-an evidence table before any constant is final: each anchor region's penalty in 1836 and at eras 4,
+The Local Climate design (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.3, § 11.4) asks
+for an evidence table before any constant is final: each anchor region's penalty, in percent of its
+migration attraction, in 1836 and at eras 4,
 7, 10 and 13. This mirrors common/script_values/local_climate_values.txt (terms), reading its
 constants from that file (load_constants), the relief carriers from the technology files
 (relief_schedule) and the record from scripts/generators/data/local_climate.csv. It prints the
@@ -169,13 +170,13 @@ def terms(row, era, c, schedule, warming=0.0):
     """A row's four penalty terms and their sum, for a country holding every carrier up to `era`.
 
     `warming` is the world's felt anomaly (temperature_anomaly_display; 0 in 1836). The record holds at
-    te_climate_normals_warming, so the row feels the anomaly less that, times its
-    latitude's amplification. Mirrors local_climate_values.txt step by step."""
-    felt = (warming - c["te_climate_normals_warming"]) * amplification(row.latitude, c)
-    summer, winter = row.summer_mean_c + felt, row.winter_mean_c + felt
+    te_climate_normals_warming, so the row's hot days feel the anomaly less that, and its winter that times
+    its latitude's amplification. Mirrors local_climate_values.txt step by step."""
+    summer_felt = warming - c["te_climate_normals_warming"]
+    winter = row.winter_mean_c + summer_felt * amplification(row.latitude, c)
+    excess = max(0.0, row.heat_index + summer_felt * c["te_climate_index_per_degree"] - c["te_climate_heat_start"])
     raw = {
-        "heat": max(0.0, summer - c["te_climate_heat_start"])
-        * (1 + c["te_climate_humidity_factor"] * row.summer_humidity) * c["te_climate_heat_weight"],
+        "heat": (excess * c["te_climate_heat_quadratic"] + c["te_climate_heat_linear"]) * excess,
         "cold": max(0.0, c["te_climate_cold_start"] - winter) * c["te_climate_cold_weight"],
         "dry": c["te_climate_dry_per_class"] * row.aridity,
         "disease": c["te_climate_malaria_per_class"] * row.malaria,
@@ -199,7 +200,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     c, schedule, rows = load_constants(), relief_schedule(), _load_rows()
     heads = "".join(f"  era {e:>2}" for e in ERAS)
-    print(f"Local Climate calibration: penalty in attraction points (1 SoL = 2), world anomaly {args.warming:+.1f} °C "
+    print(f"Local Climate calibration: penalty in percent of migration attraction, world anomaly {args.warming:+.1f} °C "
           f"(the record's normals hold at {c['te_climate_normals_warming']:+.1f}),")
     print("for a country holding every relief carrier up to each era (era 1 = 1836).\n")
 
