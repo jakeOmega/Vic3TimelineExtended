@@ -2316,6 +2316,24 @@ types state_panel_types
 				}
 			}
 
+			### LOCAL CLIMATE: the climate where most of the state's people live
+			### (te_state_climate_tile, te_state_panel_widgets.gui). Always shown.
+			state_panel_status_item_small = {
+				tooltip = "TE_STATE_CLIMATE_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_trait_icons/tropical_climate.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_CLIMATE_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					te_state_climate_tile = {}
+				}
+			}
+
 			### SOLAR COLLECTOR POINTS: the country's Solar Receiver slots, shown
 			### only in a state that holds a Solar Collector or a Receiver
 			### (te_state_solar_tile_shown, extra_script_values.txt). The slots are
