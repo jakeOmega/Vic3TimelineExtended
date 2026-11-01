@@ -210,9 +210,13 @@ climate costs nothing, and a harsh one costs migration attraction. Inside a
 market a penalty is not quite the same as favoring mild places: vanilla compares
 a state's attraction with multiples of the market's average
 (`MIGRATION_PULL_HIGH_THRESHOLD` 1.25, `MIGRATION_PULL_LOW_THRESHOLD` 0.75), so
-a penalty every state shares loosens both thresholds by a quarter of it, and a
-market whose average falls to 0 or below inverts them. Hot, poor markets in the
-early eras (Bengal about 21, Cuba about 15) are where that can bite; the
+a penalty every state shares loosens both thresholds by a quarter of it.
+Attraction floors at 0 (owner, 2026-11-01), so nothing inverts, but a penalty
+that pins a market's poorer states at 0 erases the gaps between them, and pops
+don't move for a gap under 5 points
+(`MARKET_MIGRATION_MIN_DIFFERENCE_IN_MIGRATION_ATTRACTION_TO_MOVE`), so internal
+migration there stalls. Hot, poor markets in the early eras (Bengal about 21,
+Cuba about 15) are where that can bite; the
 play-test list checks their internal migration (found at the whole-branch
 review).
 Across countries, a penalty keeps a desert from being picked without inflating
