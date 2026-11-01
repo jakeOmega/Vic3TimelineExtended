@@ -593,8 +593,14 @@ class PauseTest(unittest.TestCase):
                               ("je_space_race_widget_sc_resuming", state("EqualTo", 2))):
             with self.subTest(key=key):
                 i = section.index(f'text = "{key}"')
-                self.assertIn(shown_on, _block_around(section, i, 3))
+                self.assertIn(shown_on, _block_around(section, i, 2))
         self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 3)
+        # Each row's hover is its own (review of #1287, M6).
+        for figure, hover in (("je_space_race_widget_sc_rate_figure", "je_space_race_widget_sc_rate_tt"),
+                              ("je_space_race_widget_sc_rate_paused", "je_space_race_widget_sc_rate_paused_tt")):
+            with self.subTest(row=figure):
+                row = _block_around(section, section.index(f'text = "{figure}"'), 2)
+                self.assertIn(f'tooltip = "{hover}"', row)
 
     def test_the_modifier_cuts_the_yards_inputs(self):
         body = _block(_strip(_raw(STATIC)), "sr_space_command_paused")
@@ -635,6 +641,31 @@ class PauseTest(unittest.TestCase):
         # A building modifier, never the country's.
         self.assertIn('"sr_space_command_paused": "a Space Command building"',
                       _raw(ROOT / "scripts/generators/gen_nation_tab.py"))
+
+    def test_the_cut_reaches_every_state_s_space_command(self):
+        """Review of #1287, M6: every state the country owns, an occupied one's
+        included (it buys its inputs while its staff work), so the walk has
+        no other limit."""
+        apply = _block(self.effects, "sr_sc_pause_apply")
+        self.assertRegex(apply, r"^\s*every_scope_state = \{\s*limit = \{ has_building = building_space_command \}\s*"
+                                r"every_scope_building = \{\s*limit = \{ is_building_type = building_space_command \}")
+        self.assertNotIn("sr_state_held_by_owner", apply)
+
+    def test_the_texts_exist(self):
+        """Review of #1287, M6: the hovers and the modifier's description,
+        each with text (loc_coverage doesn't read custom tooltips' keys)."""
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for key in ("sr_sc_pause_tt", "sr_sc_resume_tt", "sr_sc_resume_cancel_tt", "sr_space_command_paused",
+                    "sr_space_command_paused_desc", "je_space_race_widget_sc_rate_paused_tt",
+                    "je_space_race_widget_sc_pause", "je_space_race_widget_sc_resume", "je_space_race_widget_sc_resuming"):
+            with self.subTest(key=key):
+                m = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc)
+                self.assertIsNotNone(m, f"no {key}")
+                self.assertTrue(m.group(1).strip(), f"{key} is empty")
+        # The resume's hover says it waits and a click cancels.
+        resume = re.search(r'(?m)^ sr_sc_resume_tt:0 "(.*)"$', loc).group(1)
+        self.assertIn("next month's construction", resume)
+        self.assertIn("cancels", resume)
 
     def test_the_ai_pauses_under_fiscal_stress(self):
         should = _block(self.triggers, "sr_sc_ai_should_pause")
