@@ -7,6 +7,7 @@ calibration, and the modifier that applies the penalty.
 """
 import contextlib
 import importlib.util
+import operator
 import io
 import re
 import unittest
@@ -250,6 +251,142 @@ class Formula(unittest.TestCase):
         self.assertIn("STATE_GEORGIA", text)
         self.assertIn("United States", text)
 
+
+
+class ScriptValues:
+    """A small interpreter for local_climate_values.txt, so the tests read the game's arithmetic, not only the
+    mirror's. It knows what the file uses: value/add/subtract/multiply/divide, min (a floor) and max (a ceiling)
+    at the point they stand, inline { } operands, and if with a limit of comparisons. Anything else raises, so a
+    new operation in the file fails the test until the interpreter learns it."""
+
+    OPS = ("value", "add", "subtract", "multiply", "divide", "min", "max", "if")
+    TOKEN = re.compile(r"[{}]|[<>]=?|=|[^\s{}=<>]+")
+
+    def __init__(self, path=VALUES):
+        tokens = self.TOKEN.findall(re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig")))
+        items, _ = self._parse(tokens, 0)
+        self.defs = {key: value for key, _, value in items}
+
+    def _parse(self, tokens, i):
+        items = []
+        while i < len(tokens) and tokens[i] != "}":
+            key, op = tokens[i], tokens[i + 1]
+            i += 2
+            if tokens[i] == "{":
+                value, i = self._parse(tokens, i + 1)
+                i += 1
+            else:
+                value, i = tokens[i], i + 1
+            items.append((key, op, value))
+        return items, i
+
+    def read(self, value, env):
+        if isinstance(value, list):
+            return self._block(value, env)
+        try:
+            return float(value)
+        except ValueError:
+            pass
+        if value in env:
+            return env[value]
+        if value not in self.defs:
+            raise KeyError(f"{value}: neither a script value in {VALUES.name} nor stubbed")
+        return self.read(self.defs[value], env)
+
+    def _limit(self, items, env):
+        compare = {"<": operator.lt, ">": operator.gt, "<=": operator.le, ">=": operator.ge, "=": operator.eq}
+        return all(compare[op](self.read(key, env), self.read(value, env)) for key, op, value in items)
+
+    def _block(self, items, env, acc=0.0):
+        for key, _, value in items:
+            if key not in self.OPS:
+                raise KeyError(f"the interpreter doesn't know '{key}'")
+            if key == "if":
+                limit = [v for k, _, v in value if k == "limit"]
+                if self._limit(limit[0], env):
+                    acc = self._block([x for x in value if x[0] != "limit"], env, acc)
+                continue
+            operand = self.read(value, env)
+            if key == "value":
+                acc = operand
+            elif key == "add":
+                acc += operand
+            elif key == "subtract":
+                acc -= operand
+            elif key == "multiply":
+                acc *= operand
+            elif key == "divide":
+                acc /= operand
+            elif key == "min":
+                acc = max(acc, operand)
+            else:
+                acc = min(acc, operand)
+        return acc
+
+
+def carrier_sums(era):
+    """modifier:<type> -> what a country holding every carrier up to `era` reads: each relief type, and the
+    census's Malaria Control apart from the disease relief, as the script reads them."""
+    eras = cal.tech_eras()
+    sums = {f"modifier:state_climate_{kind}_relief_add": 0.0 for kind in KINDS}
+    sums["modifier:state_malaria_control_add"] = 0.0
+    for _, text in cal._tech_texts(cal.REPO):
+        for _, key, body in cal._blocks(text):
+            if eras.get(key, 99) > era:
+                continue
+            for kind, amount in cal.RELIEF_RE.findall(body):
+                sums[f"modifier:state_climate_{kind}_relief_add"] += float(amount)
+            for amount in cal.CONTROL_RE.findall(body):
+                sums["modifier:state_malaria_control_add"] += float(amount)
+    return sums
+
+
+def record_env(row, has_record=1):
+    return {"te_climate_has_record": has_record, "te_climate_summer_mean": row.summer_mean_c,
+            "te_climate_summer_humidity": row.summer_humidity, "te_climate_winter_mean": row.winter_mean_c,
+            "te_climate_aridity": row.aridity, "te_climate_malaria": row.malaria, "te_climate_latitude": row.latitude}
+
+
+class ScriptMatchesMirror(unittest.TestCase):
+    """The game's script values compute what the calibration's mirror computes, for every row (Task 5 review I1:
+    a script-only slip, such as a raw term losing its floor, once left the suite green)."""
+
+    ERAS = (1, 4, 7, 10, 13)
+    WARMING = (-1.0, 0.0, 3.0)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.sv = ScriptValues()
+        cls.c, cls.s = cal.load_constants(), cal.relief_schedule()
+        cls.sums = {era: carrier_sums(era) for era in cls.ERAS}
+
+    def test_every_row_matches_the_mirror(self):
+        worst = (0.0, None)
+        for row in gen.load_rows() + [neutral_row()]:
+            for era in self.ERAS:
+                for warming in self.WARMING:
+                    env = {**record_env(row), **self.sums[era], "temperature_anomaly_display": warming}
+                    mirror = cal.terms(row, era, self.c, self.s, warming)
+                    for name in ("heat", "cold", "dry", "disease", "penalty"):
+                        sv = f"te_climate_{name}_term" if name != "penalty" else "te_climate_penalty"
+                        diff = abs(self.sv.read(sv, env) - mirror[name])
+                        if diff > worst[0]:
+                            worst = (diff, (row.state, era, warming, name, self.sv.read(sv, env), mirror[name]))
+        self.assertLess(worst[0], 1e-6, worst[1])
+
+    def test_no_record_costs_nothing_in_script(self):
+        row = neutral_row()
+        for warming in (-3.0, 0.0, 12.0):
+            env = {**record_env(row, has_record=0), **self.sums[1], "temperature_anomaly_display": warming}
+            self.assertEqual(self.sv.read("te_climate_penalty", env), 0.0, warming)
+
+    def test_interpreter_reads_every_value(self):
+        """Every value in the file evaluates, so none hides an operation the interpreter would skip."""
+        row = gen.load_rows()[0]
+        env = {**record_env(row), **self.sums[7], "temperature_anomaly_display": 1.0}
+        for name, body in self.sv.defs.items():
+            if isinstance(body, list):
+                self.sv.read(name, env)
 
 if __name__ == "__main__":
     unittest.main()
