@@ -28,7 +28,8 @@ EVENTS = os.path.join(REPO, "events", "morphological_freedom_events.txt")
 LAW_CONSISTENCY = os.path.join(REPO, "gen_law_consistency.py")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-LAW_ORDER = ["law_natural_form", "law_licensed_modification", "law_morphological_freedom"]
+# Clade Citizenship (Self-Directed Evolution, era 13 spec § 7.3) is last: test_self_directed_evolution.py.
+LAW_ORDER = ["law_natural_form", "law_licensed_modification", "law_morphological_freedom", "law_clade_citizenship"]
 POOLED = [f"morphological_freedom_events.{n}" for n in range(1, 7)]
 OUTCOMES = ["morphological_freedom_events.100", "morphological_freedom_events.200"]
 
@@ -182,7 +183,9 @@ class DebateTest(unittest.TestCase):
 
     def test_twenty_years_succeeds_on_the_law_fails_on_natural_form(self):
         self.assertRegex(self.je, r"timeout = 7300\b")
-        self.assertIn("has_law = law_type:law_morphological_freedom", _sub(self.je, "complete"))
+        complete = _sub(_sub(self.je, "complete"), "OR")
+        self.assertIn("has_law = law_type:law_morphological_freedom", complete)
+        self.assertIn("has_law = law_type:law_clade_citizenship", complete)
         self.assertIn("morphological_freedom_events.200", _sub(self.je, "on_complete"))
         timeout = _sub(self.je, "on_timeout")
         failed = _sub(timeout, "if")
@@ -234,7 +237,8 @@ class LocalizationTest(unittest.TestCase):
         keys = _loc_keys()
         wanted = ["morphological_freedom", "lawgroup_bodily_autonomy", "je_morphological_freedom",
                   "je_morphological_freedom_reason", "je_morphological_freedom_status_natural",
-                  "je_morphological_freedom_status_licensed", "je_morphological_freedom_status_free"]
+                  "je_morphological_freedom_status_licensed", "je_morphological_freedom_status_free",
+                  "je_morphological_freedom_status_clade"]
         wanted += LAW_ORDER
         for key in wanted:
             with self.subTest(key=key):

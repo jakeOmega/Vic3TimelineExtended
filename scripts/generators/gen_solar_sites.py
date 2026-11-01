@@ -239,6 +239,12 @@ HORIZON_MONTHS = 180
 # Population (slices 2-3 design § 10): growth a month, people a crew of one
 # module level, the priority weights (Closed, Low, Normal, High).
 GROWTH_PER_MONTH = 0.002
+# A held colony grows faster by its holder's GROWTH_MODIFIER, a script-only type
+# (space_race_modifier_types.txt) that Self-Directed Evolution carries at +0.001,
+# people adapted to low gravity and radiation (era 13 spec § 7.3). Each world's
+# sr_site_growth_<key> reads it through the holder, as the slots read
+# SLOTS_MODIFIER; a free colony has no holder and grows at the base rate.
+GROWTH_MODIFIER = "country_sr_colony_growth_add"
 CREW_PER_LEVEL = 5000
 PRIORITY_WEIGHTS = (0, 1, 2, 4)
 
@@ -788,7 +794,8 @@ def _monthly(site: Site) -> list[str]:
         "\t}",
         "\t# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a",
         "\t# Habitat's share while one comes down (sr_site_room_held_<key>); at a free",
-        "\t# colony only while someone supplies it.",
+        "\t# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,",
+        "\t# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).",
         "\tif = {",
         "\t\tlimit = {",
         "\t\t\tsr_colonies_contested_enabled = yes",
@@ -803,7 +810,7 @@ def _monthly(site: Site) -> list[str]:
         f"\t\t\tname = sr_site_pop_{k}",
         "\t\t\tvalue = {",
         f"\t\t\t\tvalue = global_var:sr_site_pop_{k}",
-        f"\t\t\t\tmultiply = {1 + GROWTH_PER_MONTH}",
+        f"\t\t\t\tmultiply = sr_site_growth_{k}",
         f"\t\t\t\tmax = sr_site_room_held_{k}",
         "\t\t\t}",
         "\t\t}",
@@ -1698,7 +1705,9 @@ def render_population_values() -> list[str]:
            "# room held while a Habitat comes down, sr_site_room_held_<key>), and",
            "# the module levels above the first its people can crew. Country scope:",
            "# THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when",
-           "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it."]
+           "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it.",
+           f"# Any scope: its growth a month, sr_site_growth_<key>, 1 + {GROWTH_PER_MONTH} and its",
+           f"# holder's {GROWTH_MODIFIER} (Self-Directed Evolution, era 13 spec § 7.3)."]
     for site in SITES:
         k = site.key
         out += [f"sr_site_base_room_{k} = {{ value = {site.room * 1000} }}",
@@ -1725,6 +1734,11 @@ def render_population_values() -> list[str]:
                 f"\tvalue = sr_site_pop_value_{k}",
                 "\tdivide = sr_site_crew_per_level",
                 "\tfloor = yes",
+                "}",
+                f"sr_site_growth_{k} = {{",
+                f"\tvalue = {1 + GROWTH_PER_MONTH}",
+                f"\tif = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} "
+                f"global_var:sr_site_holder_{k} = {{ add = modifier:{GROWTH_MODIFIER} }} }}",
                 "}",
                 f"sr_emig_prio_weight_{k} = {{",
                 f"\tvalue = {weights[2]}",

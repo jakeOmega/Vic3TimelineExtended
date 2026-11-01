@@ -2278,7 +2278,8 @@ sr_site_monthly_valles_marineris = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2293,7 +2294,7 @@ sr_site_monthly_valles_marineris = {
 			name = sr_site_pop_valles_marineris
 			value = {
 				value = global_var:sr_site_pop_valles_marineris
-				multiply = 1.002
+				multiply = sr_site_growth_valles_marineris
 				max = sr_site_room_held_valles_marineris
 			}
 		}
@@ -2554,7 +2555,8 @@ sr_site_monthly_olympus_mons = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2569,7 +2571,7 @@ sr_site_monthly_olympus_mons = {
 			name = sr_site_pop_olympus_mons
 			value = {
 				value = global_var:sr_site_pop_olympus_mons
-				multiply = 1.002
+				multiply = sr_site_growth_olympus_mons
 				max = sr_site_room_held_olympus_mons
 			}
 		}
@@ -2830,7 +2832,8 @@ sr_site_monthly_hellas_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2845,7 +2848,7 @@ sr_site_monthly_hellas_planitia = {
 			name = sr_site_pop_hellas_planitia
 			value = {
 				value = global_var:sr_site_pop_hellas_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_hellas_planitia
 				max = sr_site_room_held_hellas_planitia
 			}
 		}
@@ -3106,7 +3109,8 @@ sr_site_monthly_utopia_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3121,7 +3125,7 @@ sr_site_monthly_utopia_planitia = {
 			name = sr_site_pop_utopia_planitia
 			value = {
 				value = global_var:sr_site_pop_utopia_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_utopia_planitia
 				max = sr_site_room_held_utopia_planitia
 			}
 		}
@@ -3382,7 +3386,8 @@ sr_site_monthly_arcadia_planitia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3397,7 +3402,7 @@ sr_site_monthly_arcadia_planitia = {
 			name = sr_site_pop_arcadia_planitia
 			value = {
 				value = global_var:sr_site_pop_arcadia_planitia
-				multiply = 1.002
+				multiply = sr_site_growth_arcadia_planitia
 				max = sr_site_room_held_arcadia_planitia
 			}
 		}
@@ -3658,7 +3663,8 @@ sr_site_monthly_ceres = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3673,7 +3679,7 @@ sr_site_monthly_ceres = {
 			name = sr_site_pop_ceres
 			value = {
 				value = global_var:sr_site_pop_ceres
-				multiply = 1.002
+				multiply = sr_site_growth_ceres
 				max = sr_site_room_held_ceres
 			}
 		}
@@ -3934,7 +3940,8 @@ sr_site_monthly_vesta = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3949,7 +3956,7 @@ sr_site_monthly_vesta = {
 			name = sr_site_pop_vesta
 			value = {
 				value = global_var:sr_site_pop_vesta
-				multiply = 1.002
+				multiply = sr_site_growth_vesta
 				max = sr_site_room_held_vesta
 			}
 		}
@@ -4210,7 +4217,8 @@ sr_site_monthly_psyche = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4225,7 +4233,7 @@ sr_site_monthly_psyche = {
 			name = sr_site_pop_psyche
 			value = {
 				value = global_var:sr_site_pop_psyche
-				multiply = 1.002
+				multiply = sr_site_growth_psyche
 				max = sr_site_room_held_psyche
 			}
 		}
@@ -4486,7 +4494,8 @@ sr_site_monthly_pallas = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4501,7 +4510,7 @@ sr_site_monthly_pallas = {
 			name = sr_site_pop_pallas
 			value = {
 				value = global_var:sr_site_pop_pallas
-				multiply = 1.002
+				multiply = sr_site_growth_pallas
 				max = sr_site_room_held_pallas
 			}
 		}
@@ -4741,7 +4750,8 @@ sr_site_monthly_hygiea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4756,7 +4766,7 @@ sr_site_monthly_hygiea = {
 			name = sr_site_pop_hygiea
 			value = {
 				value = global_var:sr_site_pop_hygiea
-				multiply = 1.002
+				multiply = sr_site_growth_hygiea
 				max = sr_site_room_held_hygiea
 			}
 		}
@@ -5017,7 +5027,8 @@ sr_site_monthly_io = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5032,7 +5043,7 @@ sr_site_monthly_io = {
 			name = sr_site_pop_io
 			value = {
 				value = global_var:sr_site_pop_io
-				multiply = 1.002
+				multiply = sr_site_growth_io
 				max = sr_site_room_held_io
 			}
 		}
@@ -5314,7 +5325,8 @@ sr_site_monthly_europa = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5329,7 +5341,7 @@ sr_site_monthly_europa = {
 			name = sr_site_pop_europa
 			value = {
 				value = global_var:sr_site_pop_europa
-				multiply = 1.002
+				multiply = sr_site_growth_europa
 				max = sr_site_room_held_europa
 			}
 		}
@@ -5590,7 +5602,8 @@ sr_site_monthly_ganymede = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5605,7 +5618,7 @@ sr_site_monthly_ganymede = {
 			name = sr_site_pop_ganymede
 			value = {
 				value = global_var:sr_site_pop_ganymede
-				multiply = 1.002
+				multiply = sr_site_growth_ganymede
 				max = sr_site_room_held_ganymede
 			}
 		}
@@ -5866,7 +5879,8 @@ sr_site_monthly_callisto = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5881,7 +5895,7 @@ sr_site_monthly_callisto = {
 			name = sr_site_pop_callisto
 			value = {
 				value = global_var:sr_site_pop_callisto
-				multiply = 1.002
+				multiply = sr_site_growth_callisto
 				max = sr_site_room_held_callisto
 			}
 		}
@@ -6121,7 +6135,8 @@ sr_site_monthly_himalia = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6136,7 +6151,7 @@ sr_site_monthly_himalia = {
 			name = sr_site_pop_himalia
 			value = {
 				value = global_var:sr_site_pop_himalia
-				multiply = 1.002
+				multiply = sr_site_growth_himalia
 				max = sr_site_room_held_himalia
 			}
 		}
@@ -6376,7 +6391,8 @@ sr_site_monthly_amalthea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6391,7 +6407,7 @@ sr_site_monthly_amalthea = {
 			name = sr_site_pop_amalthea
 			value = {
 				value = global_var:sr_site_pop_amalthea
-				multiply = 1.002
+				multiply = sr_site_growth_amalthea
 				max = sr_site_room_held_amalthea
 			}
 		}
@@ -6652,7 +6668,8 @@ sr_site_monthly_venus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6667,7 +6684,7 @@ sr_site_monthly_venus = {
 			name = sr_site_pop_venus
 			value = {
 				value = global_var:sr_site_pop_venus
-				multiply = 1.002
+				multiply = sr_site_growth_venus
 				max = sr_site_room_held_venus
 			}
 		}
@@ -6928,7 +6945,8 @@ sr_site_monthly_mercury = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6943,7 +6961,7 @@ sr_site_monthly_mercury = {
 			name = sr_site_pop_mercury
 			value = {
 				value = global_var:sr_site_pop_mercury
-				multiply = 1.002
+				multiply = sr_site_growth_mercury
 				max = sr_site_room_held_mercury
 			}
 		}
@@ -7204,7 +7222,8 @@ sr_site_monthly_titan = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7219,7 +7238,7 @@ sr_site_monthly_titan = {
 			name = sr_site_pop_titan
 			value = {
 				value = global_var:sr_site_pop_titan
-				multiply = 1.002
+				multiply = sr_site_growth_titan
 				max = sr_site_room_held_titan
 			}
 		}
@@ -7480,7 +7499,8 @@ sr_site_monthly_enceladus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7495,7 +7515,7 @@ sr_site_monthly_enceladus = {
 			name = sr_site_pop_enceladus
 			value = {
 				value = global_var:sr_site_pop_enceladus
-				multiply = 1.002
+				multiply = sr_site_growth_enceladus
 				max = sr_site_room_held_enceladus
 			}
 		}
@@ -7735,7 +7755,8 @@ sr_site_monthly_rhea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7750,7 +7771,7 @@ sr_site_monthly_rhea = {
 			name = sr_site_pop_rhea
 			value = {
 				value = global_var:sr_site_pop_rhea
-				multiply = 1.002
+				multiply = sr_site_growth_rhea
 				max = sr_site_room_held_rhea
 			}
 		}
@@ -7990,7 +8011,8 @@ sr_site_monthly_mimas = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8005,7 +8027,7 @@ sr_site_monthly_mimas = {
 			name = sr_site_pop_mimas
 			value = {
 				value = global_var:sr_site_pop_mimas
-				multiply = 1.002
+				multiply = sr_site_growth_mimas
 				max = sr_site_room_held_mimas
 			}
 		}
@@ -8245,7 +8267,8 @@ sr_site_monthly_iapetus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8260,7 +8283,7 @@ sr_site_monthly_iapetus = {
 			name = sr_site_pop_iapetus
 			value = {
 				value = global_var:sr_site_pop_iapetus
-				multiply = 1.002
+				multiply = sr_site_growth_iapetus
 				max = sr_site_room_held_iapetus
 			}
 		}
@@ -8521,7 +8544,8 @@ sr_site_monthly_titania = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8536,7 +8560,7 @@ sr_site_monthly_titania = {
 			name = sr_site_pop_titania
 			value = {
 				value = global_var:sr_site_pop_titania
-				multiply = 1.002
+				multiply = sr_site_growth_titania
 				max = sr_site_room_held_titania
 			}
 		}
@@ -8776,7 +8800,8 @@ sr_site_monthly_oberon = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8791,7 +8816,7 @@ sr_site_monthly_oberon = {
 			name = sr_site_pop_oberon
 			value = {
 				value = global_var:sr_site_pop_oberon
-				multiply = 1.002
+				multiply = sr_site_growth_oberon
 				max = sr_site_room_held_oberon
 			}
 		}
@@ -9031,7 +9056,8 @@ sr_site_monthly_miranda = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9046,7 +9072,7 @@ sr_site_monthly_miranda = {
 			name = sr_site_pop_miranda
 			value = {
 				value = global_var:sr_site_pop_miranda
-				multiply = 1.002
+				multiply = sr_site_growth_miranda
 				max = sr_site_room_held_miranda
 			}
 		}
@@ -9286,7 +9312,8 @@ sr_site_monthly_ariel = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9301,7 +9328,7 @@ sr_site_monthly_ariel = {
 			name = sr_site_pop_ariel
 			value = {
 				value = global_var:sr_site_pop_ariel
-				multiply = 1.002
+				multiply = sr_site_growth_ariel
 				max = sr_site_room_held_ariel
 			}
 		}
@@ -9562,7 +9589,8 @@ sr_site_monthly_triton = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9577,7 +9605,7 @@ sr_site_monthly_triton = {
 			name = sr_site_pop_triton
 			value = {
 				value = global_var:sr_site_pop_triton
-				multiply = 1.002
+				multiply = sr_site_growth_triton
 				max = sr_site_room_held_triton
 			}
 		}
@@ -9817,7 +9845,8 @@ sr_site_monthly_proteus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9832,7 +9861,7 @@ sr_site_monthly_proteus = {
 			name = sr_site_pop_proteus
 			value = {
 				value = global_var:sr_site_pop_proteus
-				multiply = 1.002
+				multiply = sr_site_growth_proteus
 				max = sr_site_room_held_proteus
 			}
 		}
@@ -10093,7 +10122,8 @@ sr_site_monthly_pluto = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10108,7 +10138,7 @@ sr_site_monthly_pluto = {
 			name = sr_site_pop_pluto
 			value = {
 				value = global_var:sr_site_pop_pluto
-				multiply = 1.002
+				multiply = sr_site_growth_pluto
 				max = sr_site_room_held_pluto
 			}
 		}
@@ -10348,7 +10378,8 @@ sr_site_monthly_eris = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10363,7 +10394,7 @@ sr_site_monthly_eris = {
 			name = sr_site_pop_eris
 			value = {
 				value = global_var:sr_site_pop_eris
-				multiply = 1.002
+				multiply = sr_site_growth_eris
 				max = sr_site_room_held_eris
 			}
 		}
@@ -10603,7 +10634,8 @@ sr_site_monthly_makemake = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10618,7 +10650,7 @@ sr_site_monthly_makemake = {
 			name = sr_site_pop_makemake
 			value = {
 				value = global_var:sr_site_pop_makemake
-				multiply = 1.002
+				multiply = sr_site_growth_makemake
 				max = sr_site_room_held_makemake
 			}
 		}
@@ -10858,7 +10890,8 @@ sr_site_monthly_haumea = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10873,7 +10906,7 @@ sr_site_monthly_haumea = {
 			name = sr_site_pop_haumea
 			value = {
 				value = global_var:sr_site_pop_haumea
-				multiply = 1.002
+				multiply = sr_site_growth_haumea
 				max = sr_site_room_held_haumea
 			}
 		}
@@ -11113,7 +11146,8 @@ sr_site_monthly_sedna = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11128,7 +11162,7 @@ sr_site_monthly_sedna = {
 			name = sr_site_pop_sedna
 			value = {
 				value = global_var:sr_site_pop_sedna
-				multiply = 1.002
+				multiply = sr_site_growth_sedna
 				max = sr_site_room_held_sedna
 			}
 		}
@@ -11366,7 +11400,8 @@ sr_site_monthly_shackleton = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11381,7 +11416,7 @@ sr_site_monthly_shackleton = {
 			name = sr_site_pop_shackleton
 			value = {
 				value = global_var:sr_site_pop_shackleton
-				multiply = 1.002
+				multiply = sr_site_growth_shackleton
 				max = sr_site_room_held_shackleton
 			}
 		}
@@ -11619,7 +11654,8 @@ sr_site_monthly_peary = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11634,7 +11670,7 @@ sr_site_monthly_peary = {
 			name = sr_site_pop_peary
 			value = {
 				value = global_var:sr_site_pop_peary
-				multiply = 1.002
+				multiply = sr_site_growth_peary
 				max = sr_site_room_held_peary
 			}
 		}
@@ -11872,7 +11908,8 @@ sr_site_monthly_tranquility = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11887,7 +11924,7 @@ sr_site_monthly_tranquility = {
 			name = sr_site_pop_tranquility
 			value = {
 				value = global_var:sr_site_pop_tranquility
-				multiply = 1.002
+				multiply = sr_site_growth_tranquility
 				max = sr_site_room_held_tranquility
 			}
 		}
@@ -12125,7 +12162,8 @@ sr_site_monthly_marius_hills = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12140,7 +12178,7 @@ sr_site_monthly_marius_hills = {
 			name = sr_site_pop_marius_hills
 			value = {
 				value = global_var:sr_site_pop_marius_hills
-				multiply = 1.002
+				multiply = sr_site_growth_marius_hills
 				max = sr_site_room_held_marius_hills
 			}
 		}
@@ -12378,7 +12416,8 @@ sr_site_monthly_daedalus = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12393,7 +12432,7 @@ sr_site_monthly_daedalus = {
 			name = sr_site_pop_daedalus
 			value = {
 				value = global_var:sr_site_pop_daedalus
-				multiply = 1.002
+				multiply = sr_site_growth_daedalus
 				max = sr_site_room_held_daedalus
 			}
 		}
@@ -12631,7 +12670,8 @@ sr_site_monthly_imbrium = {
 	}
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
-	# colony only while someone supplies it.
+	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
+	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12646,7 +12686,7 @@ sr_site_monthly_imbrium = {
 			name = sr_site_pop_imbrium
 			value = {
 				value = global_var:sr_site_pop_imbrium
-				multiply = 1.002
+				multiply = sr_site_growth_imbrium
 				max = sr_site_room_held_imbrium
 			}
 		}

@@ -959,13 +959,17 @@ AUTOMATION_STANCES = {
 # that wants Natural Form shows it by opposing the other laws. Applied to the
 # vanilla ideologies in BODILY_AUTONOMY_STANCES by the loop after
 # `modifications`; the mod's own ideologies carry the same lists by hand in
-# extra_ideologies.txt. Clade Citizenship (Self-Directed Evolution, era 13)
-# joins as a fourth law: add it to _BODILY_AUTONOMY_LAWS and a fourth code to
-# each row below (and to the hand-written blocks).
+# extra_ideologies.txt. Clade Citizenship (Self-Directed Evolution, era 13) is
+# the fourth law. A group backs enacting a law only when its stance on it is
+# higher than on the law in force, so no list here that strongly approves of
+# Morphological Freedom can back the step on to Clade Citizenship: the
+# transhumanists (extra_ideologies.txt) rank it above Morphological Freedom
+# and carry that step.
 _BODILY_AUTONOMY_LAWS = (
     "law_natural_form",
     "law_licensed_modification",
     "law_morphological_freedom",
+    "law_clade_citizenship",
 )
 
 
@@ -976,17 +980,19 @@ def bodily_autonomy_constructor(*codes):
 
 
 BODILY_AUTONOMY_LISTS = {
-    #                                                 Natural Licensed Freedom
+    #                                                 Natural Licensed Freedom Clade
     # The body as given (or as God made it): the Devout, the Rural Folk.
-    "traditional": bodily_autonomy_constructor("0", "-", "--"),
-    # Order and uniformity first: tolerate a licensed trade, not a right.
-    "cautious": bodily_autonomy_constructor("0", "0", "-"),
-    # Safety and standards: licensed clinics, publicly overseen.
-    "regulated": bodily_autonomy_constructor("0", "+", "0"),
+    "traditional": bodily_autonomy_constructor("0", "-", "--", "--"),
+    # Order and uniformity first: tolerate a licensed trade, not a right, and
+    # least of all citizens who are no longer built like the rest.
+    "cautious": bodily_autonomy_constructor("0", "0", "-", "--"),
+    # Safety and standards: licensed clinics, publicly overseen; a body plan of
+    # one's own is past what any standard covers.
+    "regulated": bodily_autonomy_constructor("0", "+", "0", "-"),
     # A person's body is their own to express: the Intelligentsia.
-    "liberal": bodily_autonomy_constructor("0", "+", "++"),
+    "liberal": bodily_autonomy_constructor("0", "+", "++", "++"),
     # No license needed to own oneself.
-    "libertarian": bodily_autonomy_constructor("0", "-", "++"),
+    "libertarian": bodily_autonomy_constructor("0", "-", "++", "++"),
 }
 
 BODILY_AUTONOMY_STANCES = {
