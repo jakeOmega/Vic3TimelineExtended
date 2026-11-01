@@ -255,6 +255,7 @@ free_market_construction_rule = {
 		flag = disable_pm_te_direct_construction_reinforced_concrete
 		flag = disable_pm_te_direct_construction_advanced
 		flag = disable_pm_te_direct_construction_nanomaterial
+		flag = disable_pm_te_direct_construction_self_replicating
 
 		# Maintenance, company and Engineering & Logistics methods keep the
 		# construction good
@@ -279,6 +280,7 @@ free_market_construction_rule = {
 		flag = disable_pm_te_direct_construction_reinforced_concrete
 		flag = disable_pm_te_direct_construction_advanced
 		flag = disable_pm_te_direct_construction_nanomaterial
+		flag = disable_pm_te_direct_construction_self_replicating
 
 		# Maintenance, company and Engineering & Logistics methods keep the
 		# construction good
@@ -303,6 +305,7 @@ free_market_construction_rule = {
 		flag = disable_pm_te_direct_construction_reinforced_concrete
 		flag = disable_pm_te_direct_construction_advanced
 		flag = disable_pm_te_direct_construction_nanomaterial
+		flag = disable_pm_te_direct_construction_self_replicating
 
 		# Maintenance, company and Engineering & Logistics methods keep the
 		# construction good
@@ -327,6 +330,7 @@ free_market_construction_rule = {
 		flag = disable_pm_te_direct_construction_reinforced_concrete
 		flag = disable_pm_te_direct_construction_advanced
 		flag = disable_pm_te_direct_construction_nanomaterial
+		flag = disable_pm_te_direct_construction_self_replicating
 
 		# No construction maintenance
 		flag = disable_pm_maintenance

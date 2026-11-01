@@ -145,3 +145,72 @@ ahead, raised if they fall short.
      engine moved the Space Program off the Interstellar Mission at the load
      (the entry would then fail with Program Discontinued). Either one means
      the repair needs a day-one on-action.
+
+## Phase 3: Vactrains
+
+1. **The tree.** Vactrains sits in era 12's production column, after
+   Autonomous Vehicles (era 11) and Quantum Materials, and borrows Quantum
+   Materials' icon until its own is painted. Its tooltip names two Railway
+   methods, Vactrains and Vactrain Freight, and no modifiers.
+2. **Rolling Stock.** On a railway in a state with Electricity, Vactrains
+   follows Maglev Trains in the passenger group: 160 Transportation and +15
+   infrastructure a level, on steel, electronic components, tech metals and
+   electricity. In a state with no Electricity it can't be picked
+   (`required_input_goods`), and the AI's railways stay on Maglev Trains there.
+3. **Freight.** Vactrain Freight follows Autonomous Trains in the base group:
+   170 Transportation and 60 infrastructure a level, 10 engineers, on
+   electricity, electronic components, tech metals and digital assets. Its
+   tooltip shows no emissions or pollution line.
+4. **Maintenance.** A railway switched to Vactrain Freight settles on Heavy
+   Maintenance (0.15 construction a level); one switched from steam trains
+   straight to it steps up through Standard within a few days, as for
+   Containerized Cargo.
+5. **The AI.** Both groups are `most_productive`, so AI railways in electrified
+   states move to the two methods after the technology, each switch a
+   five-year retool. Watch that railways in states short of Electricity are
+   not pulled onto them and starved.
+6. **Retooling waiver.** A railway in a Transport principle tier 3 bloc that
+   switches from a diesel variant to Vactrain Freight pays the full
+   Retooling: the change is not read as the principle swap
+   (`te_state_railway_train_code` 13 to 8).
+
+## Phase 3: Von Neumann Machines
+
+1. **The tree.** Von Neumann Machines sits in era 13's production column with
+   arrows from Molecular Assemblers and Orbital Manufacturing. It borrows
+   Molecular Assemblers' icon until its own is painted. Its tooltip names
+   Self-Replicating Construction and Self-Replicating Miners and lists +100
+   maximum weekly construction progress.
+2. **Construction Sector (market game).** Self-Replicating Construction is the
+   last method of the base group, after Nanomaterial Buildings, and makes 24
+   construction a level before throughput (Nanomaterial Buildings: 16). It
+   borrows Nanorobots' icon. All four automation methods stay selectable on it
+   (Prefabricated Building Components, Tower Cranes, Computer-Aided Design, 3D
+   Printed Buildings), and none takes its employment below zero. The
+   construction principle's method applies to it. An AI sector moves up to it
+   once the technology arrives (the group is `most_productive`).
+3. **Construction Site (direct game).** The site lists eight tiers, the new one
+   hidden until researched, and gives 24 points a level on it. The construction
+   panel's Construction Capacity hover reads "from 1 a week for Wooden
+   Buildings to 24 for Self-Replicating Construction". An AI site on the new
+   tier that the AI downsizes comes back on the new tier at the next weekly
+   pulse (the guard's tier 8). In a market game the direct tier never shows.
+4. **Extraplanetary Base.** Self-Replicating Miners is the last base method,
+   after Resort Colony, with Intelligent Drilling Rigs' borrowed icon. Its
+   crew (400 engineers, 100 academics) fills at any level. With neither
+   logistics upgrade the method's tooltip shows 320 Launch Capacity a level;
+   Fusion Tugs and Tethered Launch each still cut it by 30%. The
+   `logistics_input_cut` self-check reads OK on a base running it, since the
+   method carries no launch multiplier of its own. An AI base on Mining Colony
+   switches to it (the group's default `most_profitable`).
+
+## Phase 3: Advanced Fission
+
+1. **The tree.** Advanced Fission sits in era 11's military tree after Nuclear
+   Energy, on Nuclear Energy's icon until its own is painted.
+2. **The method.** A Nuclear Plant offers Generation IV Reactors beside Nuclear
+   Power once Advanced Fission is researched. At the same staff it makes 3,500
+   electricity a level (Nuclear Power 2,000) and buys Advanced Materials. The
+   AI-managed reactor automation still shows for a plant on either method.
+3. **The AI switches.** An AI Nuclear Plant moves to Generation IV Reactors
+   within a year of the technology, where Advanced Materials are on its market.

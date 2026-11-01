@@ -97,6 +97,25 @@ orbital_manufacturing = {
 	}
 }
 
+vactrains = {
+	# Maglev in evacuated tubes (era 13 spec § 7.9): Vactrains PM for the Railway's Rolling Stock,
+	# Vactrain Freight PM for its base group. No modifier block: the payload is the two methods, and
+	# the transport technologies' Market Access Price Impact lines (+0.01 on five of them) already
+	# take a state to 100% at full technology (base 75%, vanilla's technologies +20%)
+	era = era_12
+	texture = "gfx/interface/icons/invention_icons/quantum_materials.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		autonomous_vehicles
+		quantum_materials
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 compact_fusion_reactors = {
 	# Spaceport PM for airport, Fusion SSTO Craft PM for Launch Facilities, DEW Tank unit,
 	# Compact Fusion Power PM for Fusion Plants (the Interstellar Mission PM moved to Aneutronic
