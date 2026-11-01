@@ -148,7 +148,7 @@ normals *(designer's call)*:
 | `summer_mean_c` | Warmest month's mean temperature, °C, integer | 28 |
 | `summer_humidity` | The warmest month's mean dew point as a class: 0 dry (under 10 °C), 1 moderate (10–16), 2 humid (16–20), 3 oppressive (over 20). A dry-summer Mediterranean climate is 0 or 1 | 3 |
 | `winter_mean_c` | Coldest month's mean temperature, °C, integer | 8 |
-| `aridity` | Water: 0 humid, 1 semi-arid (Köppen BS), 2 arid (Köppen BW) | 0 |
+| `aridity` | Water for settlement at the reference place: 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river or oasis that waters the main settled area counts as ample, so the Nile valley is 0 | 0 |
 | `malaria` | Malaria as of 1836: 0 none, 1 seasonal or local, 2 endemic | 2 |
 | `latitude` | Signed degrees of the reference place, integer | 32 |
 | `ref_place` | The place the figures describe (CSV only) | Savannah |
@@ -240,12 +240,16 @@ penalty  = min(P_max, w_heat × heat + w_cold × cold + dry + disease)
 - **Dynamic-modifier pattern**: a state on-action on `on_yearly_pulse_state`
   calls `te_update_local_climate_modifier`, which removes the old copy
   (`remove_modifier_if_exists_effect`) and adds the new one, as
-  `migration_crowding_on_action` does. Its single refresh site is that pulse,
-  plus a seed for every state at game start, so 1836 has it from the first
-  day (the builder picks the start hook the mod already uses for state
-  seeding). A newly researched relief shows within a year. A state carrying
-  the modifier from before a revolution keeps it until its next pulse, which
-  is fine.
+  `migration_crowding_on_action` does. Its refresh is that pulse, plus a
+  first application on the state's monthly pulse for a state that has none
+  yet (no `var:te_climate_penalty_applied`). So 1836 has it within a month,
+  as do an old save and a newly colonized state. It can't be seeded from
+  `on_game_started`: `add_modifier`'s multiplier is read against ROOT, which
+  that hook doesn't have, and the engine would silently apply ×1
+  (`scripting_best_practices.md` § "`add_modifier { multiplier = var:X }`
+  Resolves Against ROOT"). A newly researched relief shows within a year. A
+  state that changes hands keeps its penalty until its next yearly pulse,
+  which is fine.
 - The refresh stores the penalty it applied
   (`var:te_climate_penalty_applied`), so the panel can show what is in force,
   as Migration Crowding stores `migration_crowding_mult_applied`.
@@ -302,9 +306,11 @@ and interior Brazil; Quebec.
 Targets, in attraction points (1 SoL = 2 attraction), for the builder to
 confirm against that table:
 
-- A mild maritime or coastal Mediterranean climate (London, Lazio): 0. A hot,
-  dry-summer interior (Andalusia at Seville): a small heat cost, well under
-  Georgia's.
+- A mild maritime climate (the Home Counties, Île-de-France): 0. A coastal
+  Mediterranean one (Catalonia): a few points for its humid summer. Lazio
+  carries the Roman Campagna's malaria in 1836, about −9, until Malaria
+  Prevention. A hot, dry-summer interior (Lower Andalusia at Seville): a heat
+  cost well under Georgia's.
 - Georgia in 1836: about −12 to −16 (6–8 SoL). With malaria and heat eased by
   era 7: about −3.
 - Bengal in 1836: about −20 to −25, worse than Georgia, as its climate is.
@@ -416,7 +422,7 @@ signed rows.
    tests, the tile's three reading rows, the concept, the system doc. No
    gameplay effect.
 2. **Comfort.** The penalty script values and constants, the static modifier
-   and its yearly refresh and start seed, the four relief types and their
+   and its yearly refresh and first application, the four relief types and their
    carriers, the calibration table, the defines, the Comfort row and the term
    hovers, the player guide section, the economy reference fix.
 3. **Global warming.** Amplification, the shifted temperatures, the hover
@@ -438,7 +444,7 @@ record; air conditioning as electricity demand; climate in tourism.
   relief types are carried by technologies, so they need type-registry lines
   (`TYPE_ROWS` or `NOT_A_ROW`). Rerun the generator; `test_nation_tab.py`
   names what is missing.
-- Loc for the modifier, the three types, the concept and every tile key, then
+- Loc for the modifier, the four types, the concept and every tile key, then
   `organize_loc.py`. `loc_coverage_audit` and `concept_reference_audit` run in
   CI.
 - Player guide (`docs/player_guide/08-states.md`): a Local climate section
@@ -459,5 +465,5 @@ record; air conditioning as electricity demand; climate in tourism.
 ## 10. Left to the builder
 
 The tuning constants (by § 5.3); the final carrier technologies (by § 5.2's
-eras); the amplification curve; the tile's layout; the start hook for the
-seed; the CSV's production split across subagents; icons.
+eras); the amplification curve; the tile's layout; the CSV's production
+split across subagents; icons.
