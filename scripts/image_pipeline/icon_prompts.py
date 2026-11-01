@@ -1196,6 +1196,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
+        # Automation Policy (era 13 spec § 7.1): placeholders borrow other law icons until these are rendered.
+        "law_unrestricted_automation": {"subject": "a bright orange industrial robot arm welding a car door on a factory line, sparks flying", "seed": None},
+        "law_robot_tax": {"subject": "a small white humanoid robot dropping a gold coin into a slot in a black iron strongbox", "seed": None},
+        "law_human_labor_quotas": {"subject": "a worker's yellow hard hat resting on a wrench, a switched-off robot arm folded down behind it", "seed": None},
+        "law_automation_dividend": {"subject": "a white robot hand pouring gold coins from a tipped steel cog into a row of open cupped human hands", "seed": None},
         # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md). Closed
         # books with plain covers: an open book or an unrolled charter gets written on.
         "law_executive_tribunals": {"subject": "a royal crown resting on top of a thick closed leather-bound book with a plain unmarked cover", "seed": 2},

@@ -31,6 +31,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 | [Banking Cycle](mod_systems/banking_cycle.md) | The boom-and-bust cycle, the policy dashboard and its tools, the simplified rule, banking laws | Banking Cycle (`je_banking_cycle`) |
 | [Monetary Policy](mod_systems/monetary_policy.md) | The central bank: rates, mandates, the delegated bank, currencies and pegs (phases 1 to 6) | Monetary Policy (part of `je_banking_cycle`) |
 | [Global Warming and Resource Transition](mod_systems/global_warming.md) | Emissions, carbon capture, climate policy, geoengineering and the fossil-fuel transition laws | Global Warming (`je_global_warming`)<br>Geoengineering (Stratospheric Aerosol Injection)<br>Resource Transition (`lawgroup_resource_transition`, #660) |
+| [Automation Policy](mod_systems/automation_policy.md) | Robots and AI in place of workers: the automated share, Human Labor Quotas' withdrawn methods, the Robot Tax and the Automation Dividend | Automation Policy (`lawgroup_automation_policy`) |
 | [Wonder Buildings](mod_systems/wonder_buildings.md) | The megaprojects' construction-site pattern | Wonder Buildings (Construction Site Pattern) |
 
 ## Politics and law

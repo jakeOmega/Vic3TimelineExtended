@@ -219,7 +219,8 @@ self_driving_laboratories = {
 humanoid_robotics = {
 	# General-purpose robots in homes, shops and warehouses (era 13 spec § 6.3): Robotic Service Providers PM for
 	# Urban Centers (from Artificial General Intelligence), Neuromorphic Computing PM for Electronics Industries
-	# (from Brain-Computer Interfaces)
+	# (from Brain-Computer Interfaces), the Automation Policy law group's Robot Tax, Human Labor Quotas and
+	# Automation Dividend laws (§ 7.1)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/autonomous_vehicles.dds" # Placeholder Icon
 	category = production

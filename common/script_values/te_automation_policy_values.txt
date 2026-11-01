@@ -1,0 +1,98 @@
+﻿# ============================================================================
+# AUTOMATION POLICY — values (era 13 spec § 7.1)
+# ============================================================================
+# The automated share and the multipliers of the two scaled modifiers.
+# Triggers: common/scripted_triggers/te_automation_policy_triggers.txt.
+# Effects: common/scripted_effects/te_automation_policy_effects.txt.
+#
+# THE SHARE IS A SNAPSHOT. Counting it walks every building the country has,
+# so it is counted once a month, by te_ap_monthly_update, into the country
+# variables te_ap_automatable (levels of the buildings that could run a
+# robotic or AI-managed method), te_ap_automated (levels of those that do)
+# and te_automation_share (the second over the first, 0 to 1). The modifiers'
+# multipliers and the panels read those variables, never the walk.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Tuning (first estimates; the PR lists them for the owner)
+# ----------------------------------------------------------------------------
+
+# The Automation Dividend under Universal Basic Income or Post-Scarcity
+# Economy: half as much again, paid through a system that already reaches
+# everyone.
+TE_AP_DIVIDEND_WELFARE_FACTOR = 1.5
+
+# ----------------------------------------------------------------------------
+# The walk. Scope: country.
+# ----------------------------------------------------------------------------
+
+# Levels of the country's buildings that have a robotic or AI-managed method
+# in one of their groups (te_ap_automatable_building).
+te_ap_automatable_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = { te_ap_automatable_building = yes }
+			add = level
+		}
+	}
+}
+
+# Levels of those that run one (te_ap_runs_automated_method). A building
+# counts once, however many of its groups run one.
+te_ap_automated_levels = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				te_ap_automatable_building = yes
+				te_ap_runs_automated_method = yes
+			}
+			add = level
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Readers of the snapshot. Scope: country. O(1).
+# ----------------------------------------------------------------------------
+
+# The automated share, 0 to 1, from the month's two counts.
+te_ap_share_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_ap_automatable
+			has_variable = te_ap_automated
+			var:te_ap_automatable > 0
+		}
+		value = var:te_ap_automated
+		divide = var:te_ap_automatable
+	}
+	min = 0
+	max = 1
+}
+
+# The Automation Dividend's multiplier: the share, half as much again under a
+# welfare law that pays everyone.
+te_ap_dividend_scale_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_automation_share }
+		value = var:te_automation_share
+		if = {
+			limit = { te_ap_dividend_welfare_law = yes }
+			multiply = TE_AP_DIVIDEND_WELFARE_FACTOR
+		}
+	}
+}
+
+# The share for loc (the law group's description, the laws' preview lines):
+# 0 before the first count.
+te_ap_share_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_automation_share }
+		value = var:te_automation_share
+	}
+}

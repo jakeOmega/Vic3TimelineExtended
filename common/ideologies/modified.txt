@@ -16,6 +16,12 @@ REPLACE:ideology_paternalistic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
 		law_religious_courts = neutral
@@ -441,6 +447,12 @@ REPLACE:ideology_liberal = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -632,6 +644,12 @@ REPLACE:ideology_liberal_modern = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -832,6 +850,12 @@ REPLACE:ideology_market_liberal = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
@@ -1420,6 +1444,12 @@ REPLACE:ideology_traditionalist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
 		law_freedom_of_contract = disapprove
@@ -1707,6 +1737,12 @@ REPLACE:ideology_reformer = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
 	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = disapprove
@@ -2040,6 +2076,12 @@ REPLACE:ideology_populist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = neutral
@@ -2158,6 +2200,12 @@ REPLACE:ideology_radical = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
 	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
@@ -2743,6 +2791,12 @@ REPLACE:ideology_social_democrat = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -3211,6 +3265,12 @@ REPLACE:ideology_vanguardist = {
 		law_natural_form = neutral
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -3873,6 +3933,12 @@ REPLACE:ideology_fascist = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -4567,6 +4633,12 @@ REPLACE:ideology_anarchist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_bureaucracy = {
 		law_automated_bureaucracy = disapprove
 		law_contracted_administration = disapprove
@@ -5138,6 +5210,12 @@ REPLACE:ideology_laissez_faire = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -5292,6 +5370,12 @@ REPLACE:ideology_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
 		law_religious_courts = strongly_approve
@@ -5416,6 +5500,12 @@ INJECT:ideology_egalitarian = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
+	}
 	lawgroup_bodily_autonomy = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
@@ -5447,6 +5537,12 @@ REPLACE:ideology_egalitarian_modern = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -5536,6 +5632,12 @@ REPLACE:ideology_meritocratic = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
@@ -5674,6 +5776,12 @@ REPLACE:ideology_jingoist = {
 		law_natural_form = neutral
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
@@ -6091,6 +6199,12 @@ REPLACE:ideology_individualist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -6180,6 +6294,12 @@ REPLACE:ideology_proletarian = {
 		law_natural_form = neutral
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
@@ -6330,6 +6450,12 @@ REPLACE:ideology_communist = {
 		law_natural_form = neutral
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -7119,6 +7245,12 @@ REPLACE:ideology_plutocratic = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_approve
+		law_robot_tax = disapprove
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = disapprove
@@ -7630,6 +7762,12 @@ REPLACE:ideology_humanitarian = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -8316,6 +8454,12 @@ REPLACE:ideology_reactionary = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = neutral
@@ -8862,6 +9006,12 @@ REPLACE:ideology_socialist = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
@@ -11322,6 +11472,12 @@ REPLACE:ideology_positivist = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -12327,6 +12483,12 @@ INJECT:ideology_pious = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = strongly_disapprove
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
+	}
 	lawgroup_bodily_autonomy = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
@@ -12476,6 +12638,12 @@ INJECT:ideology_agrarian = {
 		law_constitutional_review = disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = neutral
+		law_human_labor_quotas = approve
+		law_automation_dividend = disapprove
 	}
 	lawgroup_bodily_autonomy = {
 		law_natural_form = neutral
@@ -14085,6 +14253,12 @@ REPLACE:ideology_proletarian_movement = {
 		law_international_ai_oversight = approve
 		law_open_weights = approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
+	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
 		law_no_police = neutral
@@ -14177,6 +14351,12 @@ REPLACE:ideology_socialist_movement = {
 		law_state_ai_monopoly = approve
 		law_international_ai_oversight = approve
 		law_open_weights = approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
@@ -14311,6 +14491,12 @@ REPLACE:ideology_communist_movement = {
 		law_international_ai_oversight = disapprove
 		law_open_weights = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -14434,6 +14620,12 @@ REPLACE:ideology_anarchist_movement = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
 	}
 	lawgroup_bureaucracy = {
 		law_communal_administration = strongly_approve
@@ -14565,6 +14757,12 @@ REPLACE:ideology_vanguardist_movement = {
 		law_international_ai_oversight = disapprove
 		law_open_weights = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
 		law_religious_courts = strongly_disapprove
@@ -14675,6 +14873,12 @@ REPLACE:ideology_fascist_movement = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_approve
+		law_automation_dividend = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -14881,6 +15085,12 @@ REPLACE:ideology_liberal_movement = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = neutral
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = disapprove
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
 		law_religious_courts = disapprove
@@ -14993,6 +15203,12 @@ REPLACE:ideology_radical_movement = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = disapprove
+		law_robot_tax = approve
+		law_human_labor_quotas = neutral
+		law_automation_dividend = approve
 	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
@@ -19048,6 +19264,12 @@ REPLACE:ideology_technocratic = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 	}
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = approve
+		law_robot_tax = approve
+		law_human_labor_quotas = strongly_disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = disapprove
 		law_religious_courts = strongly_disapprove
@@ -19096,6 +19318,12 @@ REPLACE:ideology_technocratic = {
 REPLACE:ideology_utopian = {
 	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_utopian.dds"
 	character_ideology = yes
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = strongly_disapprove
+		law_robot_tax = neutral
+		law_human_labor_quotas = neutral
+		law_automation_dividend = strongly_approve
+	}
 	lawgroup_labor_rights = {
 		law_worker_protections = strongly_approve
 		law_regulatory_bodies = approve
@@ -19805,6 +20033,12 @@ REPLACE:ideology_utilitarian_millian = {
 # Forced REPLACE due to existing section(s): lawgroup_welfare
 REPLACE:ideology_corporatist = {
 	icon = "gfx/interface/icons/ideology_icons/corporatist.dds"
+	lawgroup_automation_policy = {
+		law_unrestricted_automation = neutral
+		law_robot_tax = approve
+		law_human_labor_quotas = disapprove
+		law_automation_dividend = neutral
+	}
 	lawgroup_health_system = {
 		law_charitable_health_system = approve
 		law_public_health_insurance = neutral

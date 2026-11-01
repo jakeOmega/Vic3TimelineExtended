@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 159 laws, most of them in 38 new law groups, with the institutions,
+The mod adds 163 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,7 +12,7 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other twenty-two are
+are ministries, covered in [Ministries](#ministries). The other twenty-three are
 grouped here by theme, and fifteen further laws join base-game law groups.
 
 Many laws need another law in force, and some can't stand beside one. Anarchy
@@ -227,9 +227,35 @@ or subjugate it, and back to another law once it is at peace.
 | Monetary Policy | Commodity Money, Gold Standard, Fiat Money, Digital Currency, Decentralized Cryptocurrency | Currency regime. |
 | Financial Regulation | Unregulated Banking, Free & Mutual Banking, Universal Banking (Light Prudence), Prudential / Narrow Banking, Directed Credit & Development Banks, State-Owned Banking, Central Bank Independence | How banks are supervised. |
 | Resource Transition | Unrestricted Extraction, Fossil Expansion Moratorium, Managed Fossil Phaseout | Whether coal mines, oil rigs and power plants may be built, and retiring them ([The fossil transition](15-climate.md#the-fossil-transition)). |
+| Automation Policy | Unrestricted Automation, Robot Tax, Human Labor Quotas, Automation Dividend | Robots and AI doing the work of people, from Humanoid Robotics on ([Automation policy](#automation-policy)). |
 
 Monetary Policy and Financial Regulation are explained in [Banking and monetary
 policy](04-banking.md).
+
+### Automation policy
+
+Every country starts with Unrestricted Automation. Humanoid Robotics unlocks the
+other three laws. Two of them scale with your automated share: the part of your
+building levels that run a robotic or AI-managed production method, out of all
+levels of the buildings that have one. The tooltips of the law group and of
+those two laws show the share, counted once a month. The methods are factory
+automation from robotic assembly up and the AI-managed tier, AI-managed power
+plants and networks, Fully Automated Content Creation, Automated Labs, the
+automated Deep-Sea Mine, robot and drone services in Urban Centers, and
+self-driving trains, highways and harvesters.
+
+| Law | At an automated share of 100% | You pay |
+|---|---|---|
+| Unrestricted Automation | Nothing changes. | Nothing. |
+| Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits |
+| Human Labor Quotas | The methods above can't be used, so the buildings on them keep their workers | The output those methods add |
+| Automation Dividend | +2 standard of living for the lower strata and +1 for the middle strata, half as much again with Universal Basic Income or Post-Scarcity Economy | Capitalists invest 10% less of their profits |
+
+At a share of 40%, Robot Tax gives +4% taxes. Its effect and the Dividend's
+follow the share each month and start at the first count after the law passes.
+Under the quotas, buildings on a withdrawn method change to one still allowed.
+The Trade Unions back Human Labor Quotas and the Industrialists Unrestricted
+Automation.
 
 ### New laws in base-game law groups
 

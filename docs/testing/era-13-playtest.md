@@ -104,6 +104,50 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: Automation Policy
+
+1. **The group.** In a new game the Economy laws list Automation Policy with
+   Unrestricted Automation in force for every country, and its three other
+   laws greyed out until Humanoid Robotics. The group's tooltip shows the
+   automated share (0% before the first count). A country released or formed
+   later holds Unrestricted Automation, or its creator's law; record which.
+2. **The share.** With Humanoid Robotics, a country whose Tooling Workshops or
+   Urban Centers run Robotic Assembly Lines or Robotic Service Providers shows
+   a share above 0% after the next month, and it rises as more buildings take
+   robotic or AI-managed methods. Check it against the buildings' levels for
+   one small country.
+3. **Human Labor Quotas.**
+   - The preview names the withdrawn methods. After enactment no building runs
+     one: each AI-managed or robotic factory falls back to an earlier
+     automation tier, Urban Centers to E-Commerce or earlier, Railways to
+     Automated Loading and Unloading, farms to Automated Mechanical
+     Harvesters. Record which method the engine picks (the first in the
+     group, or the best still allowed) and whether the switch charges
+     retooling.
+   - Grep `debug.log` for `TE_SELF_CHECK OK|BROKEN automation_quotas`. BROKEN
+     means levels still run a withdrawn method two months on: the law then
+     needs a scripted switch.
+   - Employment rises and output falls in the affected buildings. The withdrawn
+     methods can't be picked in the building panel while the law holds.
+4. **Robot Tax.** The month after enactment the country carries Robot Tax in
+   the Nation tab's Economy list, with tax collection +10% and capitalists'
+   investment-pool contribution −0.05 at a share of 100%, scaled by the share.
+   The budget's tax lines rise to match. Repealing it removes the modifier at
+   the next month.
+5. **Automation Dividend.** The modifier gives the lower strata +2 and the
+   middle strata +1 standard of living at a share of 100%, scaled by the
+   share, and 1.5 times that with Universal Basic Income or Post-Scarcity
+   Economy. The Nation tab's living-standards rows show the two strata lines.
+   Only one of the two scaled modifiers is ever held, and neither stacks from
+   month to month.
+6. **Interest groups.** The Trade Unions approve of Human Labor Quotas and the
+   Industrialists of Unrestricted Automation in the law's tooltip. Watch
+   whether AI countries enact the quotas, and what it costs their output.
+7. **The observer run** (spec § 7.1 sizes the magnitudes from it): for the
+   leading great powers, the share at eras 11, 12 and 13, which Automation
+   Policy law each holds, and its tax income and lower-strata standard of
+   living beside a country under Unrestricted Automation.
+
 ## Phase 3: Morphological Freedom and Bodily Autonomy
 
 1. **The technology.** Morphological Freedom sits in era 12's society column
