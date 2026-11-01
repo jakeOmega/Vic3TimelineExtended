@@ -1756,6 +1756,9 @@ class TransferPopupTest(unittest.TestCase):
         self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), ["sr_fl_xf_marines_follow_tt"])
         fx.scopes["pick"] = _fxn(1)
         self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [])
+        # The hand-written gate names the marines' code the generator gives them.
+        self.assertEqual(gsf.XF_CODE["marines"], 6)
+        self.assertIn("limit = { scope:pick = 6 }", _block(self.sguis, "sr_fleet_xfer_step_sgui"))
 
     def test_opening_resets_the_amounts(self):
         for n in range(1, gsf.SLOTS + 1):
