@@ -205,6 +205,10 @@ rows whose latitude and temperatures disagree badly (a 60° region with a
 
 ## 5. Comfort
 
+*Heat v2 (§ 11) replaced the heat term, moved the penalty from attraction points to a
+percentage of migration attraction, and gave winters alone the latitude's
+amplification; § 5's formula and § 5.3's targets are phase 2's, kept as the record.*
+
 **Shape.** Comfort is a penalty, never a bonus *(designer's call)*: a mild
 climate costs nothing, and a harsh one costs migration attraction. Inside a
 market a penalty is not quite the same as favoring mild places: vanilla compares
@@ -491,3 +495,114 @@ record; air conditioning as electricity demand; climate in tourism.
 The tuning constants (by § 5.3); the final carrier technologies (by § 5.2's
 eras); the amplification curve; the tile's layout; the CSV's production
 split across subagents; icons.
+
+## 11. Heat v2: the hottest days, a curve, and percent (2026-11-01)
+
+### 11.1 Why
+
+After phase 2 the owner found Hawaii's penalty, all of it heat, about as bad as
+northern Sweden's before any technology. Two faults: a warm month's mean can't
+tell a steady 27 °C (Honolulu) from a summer that swings between 15 and 38 °C,
+and the cost was linear in temperature, though heat stress isn't: around 31 °C
+wet-bulb the body can't shed heat at all, so the last degrees should cost far
+more than the first. The owner agreed to heat from each region's hottest days,
+from station data for all 675 regions, and a capped curve that steepens
+moderately.
+
+The owner's 1892 breakdowns (a save ahead of its era on technology) showed
+migration attraction floors at 0 and that the mod's points sit beside large
+standard-of-living terms: Bihar about 26 before its percentages, Georgia 33,
+New York 44, and West Bengal at 0 from mass unemployment. A points penalty
+every state of a hot, poor market shares can pin its poorer states at 0 and
+erase the gaps pops move for (§ 5). A percentage scales each state's
+attraction instead, so gaps survive in proportion: a pair 20 apart stays 10
+apart at −50%. Percentages add to a state's others before they multiply, so a
+climate cut weighs less where buildings, laws and decrees already add a lot
+(Georgia's +48% in the save). The owner ruled out a further cap: a crowded,
+hot state with nothing else going for it should lose people and draw none.
+
+### 11.2 Data
+
+- **Fields.** `hot_day_c` is the mean over years of each year's highest daily
+  maximum. `heat_index` is the mean over years of each year's highest daily
+  0.7 × wet-bulb + 0.3 × maximum, the wet-bulb by Stull's formula from the
+  day's maximum and its mean dew point; the blend leans on the wet-bulb, which
+  sets whether sweat can cool the body, and keeps some dry heat. `heat_source`
+  says where a row's figures come from.
+- **Pull.** Wolfram `WeatherData`, daily maximum temperature and dew point,
+  2010–2020, at the first of the six stations nearest each region's reference
+  place with at least six years holding 300 days of both (2000–2020 where none
+  had). Better stations replaced the nearest for South Tyrol, Calabria,
+  Piedmont and New York (LaGuardia). The Eastern Himalayas take the Himalayas'
+  Kathmandu figures (`analog:STATE_HIMALAYAS`).
+- **The fit.** A least-squares fit of each figure on the record's other fields
+  (RMSE 1.3 for the index, 2.2 for the hot day). A row whose station is over
+  150 km away or 300 m above or below the place, and whose figure differs from
+  the fit by 2.5 or more, takes the fit (`heat_source = fit`): Eritrea,
+  Darfur, Amhara, Gonder, Kazembe, Congo Orientale, East Angola, La Paz,
+  Potosí, Goiás, Yemen, Isfahan, the Central Highlands, Beijing, Sakhalin and
+  Irkutsk. Adelaide and Melbourne keep their stations' high figures, which are
+  real heat waves. STATE_OROMIA's place is Ankober and STATE_AMHARA's Jimma,
+  which look swapped but follow vanilla's map: Shewa's capital sits in
+  STATE_OROMIA.
+- **Kept.** `summer_mean_c` stays in the CSV for the generator's checks and
+  plausibility list; the formula no longer reads it. `summer_humidity` stays as
+  the tile's Humidity word, a description: the index carries humidity.
+
+### 11.3 Formula
+
+```
+summer warming = anomaly − normals            (te_climate_summer_warming)
+winter warming = summer warming × amp(|lat|)  (te_climate_winter_warming)
+x        = max(0, heat_index + 0.8 × summer warming − 26)
+heat     = (4.1 x + 0.36 x²) × (1 − heat_relief)
+cold     = 1.6 × max(0, 0 − (winter + winter warming)) × (1 − cold_relief)
+dry      = 16 × aridity × (1 − water_relief)
+disease  = 5 × malaria × (1 − disease_relief)
+penalty  = min(80, heat + cold + dry + disease)   percent of migration attraction
+```
+
+- **The curve.** The eighth degree over 26 costs a little over twice the first
+  (slope 9.5 against 4.5 points of percent). 26 is about where an index starts
+  to tell against a mild summer: London 25.4 and Stockholm 23.7 pay nothing,
+  Paris's 27.6 a little.
+- **0.8 per degree.** The index rises a little slower than air temperature as
+  the world warms, relative humidity holding roughly steady.
+- **Winters alone take amplification** *(designer's call)*. Arctic
+  amplification is mostly a cold-season effect. With it on the hot days,
+  Yakutsk (index 25.4, amplification 2.3) crossed 26 under warming and its
+  cost rose with warming, against § 6. The cost of the call: 1836 Paris is
+  1.1 °C colder on its hottest days, not 1.9, so it pays 3% rather than 0.
+- **Applied** as `local_climate_discomfort` with `state_migration_pull_mult =
+  -0.01`, times the penalty, from the yearly refresh; added at 0.5 and over,
+  since a smaller cut would show as −0%.
+
+### 11.4 Calibration
+
+Targets, in percent in 1836 unless an era is given (`test_local_climate_comfort.py`
+pins them): Georgia about 27, falling to 2–8 by era 7; West Bengal about 50, so
+two of its states 10 apart still move pops; the Home Counties, Île-de-France and
+Catalonia near 0; Hawaii under Norrland and under Paris (the owner's case);
+Yakutsk 55–75; Oman at the cap. Outcome, with every carrier to each era:
+
+| Region | Heat | Cold | Dry | Malaria | 1836 | Era 4 | Era 7 | Era 10 |
+|---|---|---|---|---|---|---|---|---|
+| Georgia (Savannah) | 17.6 | 0 | 0 | 10 | 27.6 | 15.8 | 3.5 | 1.8 |
+| West Bengal (Calcutta) | 40.3 | 0 | 0 | 10 | 50.3 | 36.3 | 8.1 | 4.0 |
+| Massachusetts (Boston) | 6.5 | 5.8 | 0 | 0 | 12.4 | 9.1 | 3.6 | 1.8 |
+| Arizona (Tucson) | 12.6 | 0 | 32 | 0 | 44.6 | 37.0 | 12.1 | 6.1 |
+| Lazio (Rome) | 7.6 | 0 | 0 | 10 | 17.6 | 6.8 | 1.5 | 0.8 |
+| Île-de-France (Paris) | 3.1 | 0 | 0 | 0 | 3.1 | 2.8 | 0.6 | 0.3 |
+| Hawaii (Honolulu) | 1.3 | 0 | 0 | 0 | 1.3 | 1.2 | | |
+| Norrland (Sundsvall) | 0 | 13.7 | 0 | 0 | 13.7 | 7.5 | | |
+| Yakutsk | 0 | 64.9 | 0 | 0 | 64.9 | 35.7 | 25.9 | 13.0 |
+| Oman (Muscat) | 53.1 | 0 | 32 | 5 | 80 | 73.4 | | |
+
+Across all 675 regions in 1836: median 19.6%, 48 at 0, 44 at 50 or more, 4
+at the cap. Every region costs nothing at era 13.
+
+### 11.5 Old saves
+
+A state carries phase 2's points in `te_climate_penalty_applied` until its
+yearly refresh, and the new modifier reads them as percent meanwhile (Georgia's
+14.6 points become −14.6%). No repair: it lasts at most a year and errs low.

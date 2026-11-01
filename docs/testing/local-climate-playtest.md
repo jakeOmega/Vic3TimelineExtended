@@ -42,3 +42,17 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | Observer run to 1930 | The US South's net migration below the North's; no desert state (Sahara, Nejd, Arizona) a mass migration target before era 4 | The calibration's heat or dry weights are too low |
 | Destination shares to 1914 | Against an observer run without comfort (the formula's constants at 0): fewer mass migrations to the tropics and Siberia, more to temperate coasts | |
 
+## Heat v2 (2026-11-01)
+
+Heat from each region's hottest days, a steepening curve, and the cost in percent (spec § 11). It supersedes phase 2's
+figures above: Georgia's Comfort is now about −28%, not −14.6 points.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The modifier's size | The migration attraction breakdown shows "Local Climate" as a percentage equal to the tile's Comfort (Georgia about −28% in 1836, Yakutsk about −65%, Oman −80%) | −1%: the multiplier didn't resolve against the state, so the modifier applied once; a points figure: the old static modifier is still deployed |
+| Hot days row | Georgia reads 35 or 36°C in 1836; its hover gives the record's 37°C, a −1.1°C shift and a heat stress reading near 29.3 | A raw key or `0°C`: the renamed loc keys (`te_state_climate_hot_day_*`) didn't deploy |
+| The owner's case | Hawaii's Comfort is about −1%, below Norrland's (about −14%) and Paris's (about −3%) | The heat index column or the curve |
+| Small costs | London reads None; nothing reads −0% | The 0.5 gates in the tile and the refresh disagree |
+| Old save | A save from before heat v2 shows its old points as a percentage (Georgia −14.6%) until the state's yearly refresh, then the new figure | The variable is not rewritten at the yearly pulse |
+| Internal migration in a hot, poor market | India's or Brazil's internal migration to about 1880, against a run with comfort off: migrants still move from the poorer states to the richer, at a volume near the comfort-off run's. The percentage cut keeps the gaps in proportion, so this should now pass where phase 2's points could stall it | A share every state pays still pinning poor states at 0: lower the heat curve or the cap |
+| Warming and the cold north | At +3 °C, Yakutsk's Comfort falls (cold eases faster than its hot days start to cost) and Georgia's rises | Winter amplification not applied (`te_climate_winter_warming`) |
