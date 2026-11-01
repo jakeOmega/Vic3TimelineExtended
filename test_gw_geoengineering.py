@@ -56,6 +56,26 @@ class TechnologyTest(unittest.TestCase):
         self.assertTrue(_loc("geoengineering"))
         self.assertIn("Stratospheric Aerosol Injection", _loc("geoengineering_desc"))
 
+    def test_its_tooltip_names_the_policy(self):
+        """The policy is all it unlocks, and the engine lists no climate policy,
+        so a display-only marker says so; it shipped without one and read as a
+        technology that did nothing (2026-11-01). The gate reads the technology
+        (test_the_policy_needs_it), so the marker must sit on that technology."""
+        tech = load("common/technology/technologies/era_12.txt")["geoengineering"]
+        self.assertEqual(tech["modifier"], {"country_gw_aerosol_injection_bool": "yes"})
+        possible = load(TRIGGERS)["gw_possible_aerosol_injection"]
+        self.assertEqual(possible["has_technology_researched"], "geoengineering")
+        marker = load("common/modifier_type_definitions/global_warming_modifier_types.txt")[
+            "country_gw_aerosol_injection_bool"]
+        self.assertEqual(marker["boolean"], "yes")
+        self.assertEqual(marker["script_only"], "yes")
+        self.assertEqual(marker["color"], "good")
+        self.assertIn("Stratospheric Aerosol Injection", _loc("country_gw_aerosol_injection_bool"))
+        desc = _loc("country_gw_aerosol_injection_bool_desc")
+        self.assertIn("1.0 °C", desc)
+        self.assertIn("2 °C", desc)
+        self.assertIn("one percent of GDP", desc)
+
     def test_the_policy_needs_it(self):
         possible = load(TRIGGERS)["gw_possible_aerosol_injection"]
         self.assertEqual(possible["has_technology_researched"], "geoengineering")
