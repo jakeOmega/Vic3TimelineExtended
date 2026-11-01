@@ -25,17 +25,17 @@ STATE_MUNSTER,Cork,15,1,6,0,0,52,Mild wet maritime
 STATE_LEINSTER,Dublin,15,1,5,0,0,53,Mild maritime
 STATE_CONNAUGHT,Galway,15,1,6,0,0,53,Mild wet Atlantic maritime
 STATE_ILE_DE_FRANCE,Paris,20,1,4,0,0,49,Mild temperate
-STATE_PROVENCE,Marseille,24,1,7,0,0,43,Dry-summer Mediterranean coast
+STATE_PROVENCE,Marseille,24,1,7,0,1,43,Dry-summer Mediterranean coast; ague of the Camargue
 STATE_NORMANDY,Rouen,17,1,4,0,0,49,Mild maritime
-STATE_LANGUEDOC,Toulouse,22,1,5,0,0,44,Warm temperate southern lowland
+STATE_LANGUEDOC,Toulouse,22,1,5,0,1,44,Warm temperate southern lowland; ague of the coastal lagoons
 STATE_RHONE,Lyon,21,1,3,0,0,46,Warm temperate river valley
 STATE_FRENCH_LOW_COUNTRIES,Lille,18,1,3,0,0,51,Mild maritime
 STATE_PICARDY,Amiens,18,1,4,0,0,50,Mild maritime
 STATE_ALSACE_LORRAINE,Strasbourg,20,1,1,0,1,49,Temperate Rhine valley; ague of the unregulated Rhine plain
-STATE_POITOU,Poitiers,20,1,5,0,0,47,Mild Atlantic temperate
+STATE_POITOU,Poitiers,20,1,5,0,1,47,Mild Atlantic temperate; ague of the Marais poitevin
 STATE_GUYENNE,Montauban,22,1,5,0,0,44,Warm temperate southern lowland
 STATE_AUVERGNE_LIMOUSIN,Limoges,19,1,4,0,0,46,Mild temperate upland
-STATE_BRITTANY,Nantes,19,1,6,0,0,47,Mild Atlantic maritime
+STATE_BRITTANY,Nantes,19,1,6,0,1,47,Mild Atlantic maritime; ague of the Briere and the Loire estuary
 STATE_BURGUNDY,Dijon,20,1,2,0,0,47,Temperate with cool winters
 STATE_CHAMPAGNE,Reims,19,1,3,0,0,49,Mild temperate
 STATE_FRANCHE_COMTE,Besançon,19,1,2,0,0,47,Temperate with cool winters
@@ -62,7 +62,7 @@ STATE_ANHALT,Magdeburg,19,1,0,0,0,52,Temperate dry lee lowland
 STATE_RHINELAND,Saarbrücken,18,1,1,0,0,49,Mild temperate
 STATE_NORTH_RHINE,Cologne,18,1,2,0,0,51,Mild temperate
 STATE_BRANDENBURG,Berlin,19,1,0,0,0,53,Temperate cool winters
-STATE_SCHLESWIG_HOLSTEIN,Kiel,17,1,1,0,0,54,Cool maritime
+STATE_SCHLESWIG_HOLSTEIN,Kiel,17,1,1,0,1,54,Cool maritime; marsh fever of the west coast
 STATE_WURTTEMBERG,Stuttgart,19,1,1,0,0,49,Temperate
 STATE_BADEN,Karlsruhe,20,1,1,0,1,49,Warm temperate Rhine valley; ague of the unregulated Rhine plain
 STATE_HANNOVER,Hanover,18,1,1,0,0,52,Mild temperate
@@ -164,7 +164,7 @@ STATE_BESSARABIA,Chişinău,22,1,-2,0,1,47,Warm continental Dniester and Danube 
 STATE_LOWER_EGYPT,Cairo,29,2,14,0,1,30,Hot desert climate on the Nile Delta
 STATE_UPPER_EGYPT,Luxor,34,1,15,0,1,26,Very hot desert valley watered by the Nile
 STATE_MIDDLE_EGYPT,Beni Suef,29,1,13,0,1,29,"Hot desert climate, watered by the Nile"
-STATE_EGYPTIAN_DESERT,Aswan,35,0,16,1,1,24,Extreme desert heat on the Nile at Aswan
+STATE_EGYPTIAN_DESERT,Aswan,35,0,16,0,1,24,Extreme desert heat; its people live on the Nile at Aswan
 STATE_MATRUH,Marsa Matruh,27,2,14,2,0,31,Humid Mediterranean desert coast
 STATE_SINAI,Port Said,28,3,15,2,0,31,Hot humid desert coast
 STATE_ERITREA,Asmara,18,0,13,1,0,15,Mild dry semi-arid highland plateau
@@ -185,9 +185,9 @@ STATE_LIBYA,Benghazi,27,2,13,1,0,32,Warm semi-arid Mediterranean coast
 STATE_LIBYAN_DESERT,Murzuq,34,0,13,2,1,26,Hot desert oasis fevers
 STATE_SAHARA,Ghardaia,34,0,11,2,0,32,Desert oasis towns
 STATE_EAST_SAHARA,Touggourt,34,0,11,2,1,33,Desert palm oases with oasis fevers
-STATE_WEST_SAHARA,Laayoune,26,2,17,2,0,27,Mild Atlantic desert coast
+STATE_WEST_SAHARA,Laayoune,24,2,17,2,0,27,Mild Atlantic desert coast
 STATE_MAURITANIA,Rosso,31,2,23,0,1,17,Hot Sahel steppe on the Senegal river
-STATE_INNER_MAURITANIA,Kiffa,37,2,22,2,1,17,Very hot desert edge seasonal fevers
+STATE_INNER_MAURITANIA,Kiffa,35,2,22,2,1,17,Very hot desert edge seasonal fevers
 STATE_EASTERN_MALI,Sikasso,32,2,25,0,2,11,Hot humid Sudanian savanna endemic malaria
 STATE_WESTERN_MALI,Kayes,35,1,25,0,2,14,Very hot savanna on the Senegal river
 STATE_TIMBUKTU,Gao,35,1,23,0,1,16,Very hot desert edge watered by the Niger
@@ -268,7 +268,7 @@ STATE_NORTH_DAKOTA,Bismarck,22,1,-10,0,0,47,Cold continental northern plains
 STATE_SOUTH_DAKOTA,Sioux Falls,23,2,-8,0,0,44,Humid continental prairie cold winters
 STATE_NEBRASKA,Omaha,25,2,-4,0,1,41,Humid continental Missouri valley ague
 STATE_KANSAS,Topeka,26,2,-2,0,1,39,Humid continental prairie river ague
-STATE_OKLAHOMA,Tulsa,29,2,3,0,1,36,Hot humid Arkansas valley seasonal ague
+STATE_OKLAHOMA,Tulsa,29,3,3,0,1,36,Hot humid Arkansas valley seasonal ague
 STATE_ARKANSAS,Little Rock,28,3,5,0,2,35,Hot humid river lowland endemic malaria
 STATE_MISSOURI,St Louis,27,2,0,0,1,39,Hot humid Mississippi valley ague
 STATE_IOWA,Des Moines,25,2,-5,0,1,42,Humid continental prairie river ague
@@ -592,8 +592,8 @@ STATE_VICTORIA,Melbourne,20,1,10,0,0,-38,Mild temperate coast
 STATE_TASMANIA,Hobart,17,1,8,0,0,-43,Cool maritime
 STATE_QUEENSLAND,Brisbane,25,2,15,0,0,-27,Hot humid subtropical coast
 STATE_SOUTH_AUSTRALIA,Adelaide,23,0,11,1,0,-35,Hot dry-summer Mediterranean semi-arid edge
-STATE_WESTERN_AUSTRALIA,Perth,24,1,13,1,0,-32,Hot dry-summer Mediterranean coast
-STATE_NORTHERN_TERRITORY,Darwin,29,3,25,1,1,-12,Hot tropical savanna long dry season
+STATE_WESTERN_AUSTRALIA,Perth,24,1,13,0,0,-32,Hot dry-summer Mediterranean coast of the south-west
+STATE_NORTHERN_TERRITORY,Darwin,29,3,25,0,1,-12,Hot tropical savanna of the Top End with a long dry season
 STATE_NORTH_ISLAND,Auckland,20,1,11,0,0,-37,Mild oceanic
 STATE_SOUTH_ISLAND,Christchurch,17,1,6,0,0,-44,Cool oceanic
 STATE_URAL,Yekaterinburg,19,1,-12,0,0,57,Cold continental Ural foothills
@@ -647,7 +647,7 @@ STATE_KHIVA,Khiva,28,1,-3,0,1,41,Hot desert oasis watered by the Amu Darya
 STATE_SEMIRECHE,Semipalatinsk,21,1,-15,1,0,50,Semi-arid steppe severe winters
 STATE_JETISY,Verny,24,1,-5,0,0,43,Continental foothills below the Tian Shan
 STATE_AKMOLINSK,Akmolinsk,20,1,-14,1,0,51,Semi-arid steppe severe winters
-STATE_FERGANA,Tashkent,28,1,1,0,2,41,Hot dry-summer irrigated oasis endemic malaria
+STATE_FERGANA,Tashkent,28,1,1,1,2,41,Hot dry-summer oasis on the Chirchiq; endemic malaria
 STATE_MERZ,Chardzhuy,30,0,0,0,2,39,Hot desert on the Amu Darya endemic malaria
 STATE_SYRDARYA,Shymkent,27,0,-1,1,1,42,Hot dry-summer foothill oases
 STATE_AKTOBE,Aktobe,22,0,-13,1,0,50,Semi-arid steppe severe winters

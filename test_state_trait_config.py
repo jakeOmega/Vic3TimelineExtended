@@ -57,6 +57,27 @@ class TraitStep(unittest.TestCase):
         block = BLOCK.replace('    traits = { "state_trait_a" "state_trait_b" }\n', "")
         self.assertEqual(resources.process_traits_block(block, "STATE_X", {"STATE_X": ["-state_trait_a"]}), block)
 
+    def test_remove_and_add_together(self):
+        """Zambezi's form: take vanilla's trait away and give another in its place."""
+        out = resources.process_traits_block(BLOCK, "STATE_X", {"STATE_X": ["-state_trait_a", "state_trait_c"]})
+        self.assertIn('traits = { "state_trait_b" "state_trait_c" }', out)
+
+    def test_unquoted_traits_survive(self):
+        """Vanilla writes some traits unquoted (traits = { "state_trait_parana_river" state_trait_terra_roxa })."""
+        mixed = BLOCK.replace('"state_trait_a" "state_trait_b"', '"state_trait_a" state_trait_b')
+        removed = resources.process_traits_block(mixed, "STATE_X", {"STATE_X": ["-state_trait_a"]})
+        self.assertIn('traits = { "state_trait_b" }', removed)
+        added = resources.process_traits_block(mixed, "STATE_X", {"STATE_X": ["state_trait_c"]})
+        self.assertIn('traits = { "state_trait_a" "state_trait_b" "state_trait_c" }', added)
+        unquoted = BLOCK.replace('"state_trait_a" "state_trait_b"', "state_trait_b")
+        gone = resources.process_traits_block(unquoted, "STATE_X", {"STATE_X": ["-state_trait_b"]})
+        self.assertNotIn("traits", gone)
+
+    def test_a_removal_keeps_a_blank_line_before_the_traits(self):
+        block = BLOCK.replace("    traits", "\n    traits").replace('"state_trait_a" "state_trait_b"', '"state_trait_a"')
+        out = resources.process_traits_block(block, "STATE_X", {"STATE_X": ["-state_trait_a"]})
+        self.assertIn('subsistence_building = "building_subsistence_farms"\n\n    city = "x1"\n', out)
+
 
 class Committed(unittest.TestCase):
     def test_malaria_traits_follow_history(self):

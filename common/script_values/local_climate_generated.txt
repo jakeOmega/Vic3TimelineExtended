@@ -874,9 +874,9 @@ te_climate_summer_mean = {
 	else_if = { limit = { state_region = s:STATE_LIBYAN_DESERT } value = 34 }
 	else_if = { limit = { state_region = s:STATE_SAHARA } value = 34 }
 	else_if = { limit = { state_region = s:STATE_EAST_SAHARA } value = 34 }
-	else_if = { limit = { state_region = s:STATE_WEST_SAHARA } value = 26 }
+	else_if = { limit = { state_region = s:STATE_WEST_SAHARA } value = 24 }
 	else_if = { limit = { state_region = s:STATE_MAURITANIA } value = 31 }
-	else_if = { limit = { state_region = s:STATE_INNER_MAURITANIA } value = 37 }
+	else_if = { limit = { state_region = s:STATE_INNER_MAURITANIA } value = 35 }
 	else_if = { limit = { state_region = s:STATE_EASTERN_MALI } value = 32 }
 	else_if = { limit = { state_region = s:STATE_WESTERN_MALI } value = 35 }
 	else_if = { limit = { state_region = s:STATE_TIMBUKTU } value = 35 }
@@ -1637,7 +1637,7 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_SOUTH_DAKOTA } value = 2 }
 	else_if = { limit = { state_region = s:STATE_NEBRASKA } value = 2 }
 	else_if = { limit = { state_region = s:STATE_KANSAS } value = 2 }
-	else_if = { limit = { state_region = s:STATE_OKLAHOMA } value = 2 }
+	else_if = { limit = { state_region = s:STATE_OKLAHOMA } value = 3 }
 	else_if = { limit = { state_region = s:STATE_ARKANSAS } value = 3 }
 	else_if = { limit = { state_region = s:STATE_MISSOURI } value = 2 }
 	else_if = { limit = { state_region = s:STATE_IOWA } value = 2 }
@@ -2893,7 +2893,7 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_LOWER_EGYPT } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UPPER_EGYPT } value = 0 }
 	else_if = { limit = { state_region = s:STATE_MIDDLE_EGYPT } value = 0 }
-	else_if = { limit = { state_region = s:STATE_EGYPTIAN_DESERT } value = 1 }
+	else_if = { limit = { state_region = s:STATE_EGYPTIAN_DESERT } value = 0 }
 	else_if = { limit = { state_region = s:STATE_MATRUH } value = 2 }
 	else_if = { limit = { state_region = s:STATE_SINAI } value = 2 }
 	else_if = { limit = { state_region = s:STATE_ERITREA } value = 1 }
@@ -3321,8 +3321,8 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_TASMANIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_QUEENSLAND } value = 0 }
 	else_if = { limit = { state_region = s:STATE_SOUTH_AUSTRALIA } value = 1 }
-	else_if = { limit = { state_region = s:STATE_WESTERN_AUSTRALIA } value = 1 }
-	else_if = { limit = { state_region = s:STATE_NORTHERN_TERRITORY } value = 1 }
+	else_if = { limit = { state_region = s:STATE_WESTERN_AUSTRALIA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_NORTHERN_TERRITORY } value = 0 }
 	else_if = { limit = { state_region = s:STATE_NORTH_ISLAND } value = 0 }
 	else_if = { limit = { state_region = s:STATE_SOUTH_ISLAND } value = 0 }
 	else_if = { limit = { state_region = s:STATE_URAL } value = 0 }
@@ -3376,7 +3376,7 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_SEMIRECHE } value = 1 }
 	else_if = { limit = { state_region = s:STATE_JETISY } value = 0 }
 	else_if = { limit = { state_region = s:STATE_AKMOLINSK } value = 1 }
-	else_if = { limit = { state_region = s:STATE_FERGANA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_FERGANA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_MERZ } value = 0 }
 	else_if = { limit = { state_region = s:STATE_SYRDARYA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_AKTOBE } value = 1 }
@@ -3434,17 +3434,17 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_LEINSTER } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CONNAUGHT } value = 0 }
 	else_if = { limit = { state_region = s:STATE_ILE_DE_FRANCE } value = 0 }
-	else_if = { limit = { state_region = s:STATE_PROVENCE } value = 0 }
+	else_if = { limit = { state_region = s:STATE_PROVENCE } value = 1 }
 	else_if = { limit = { state_region = s:STATE_NORMANDY } value = 0 }
-	else_if = { limit = { state_region = s:STATE_LANGUEDOC } value = 0 }
+	else_if = { limit = { state_region = s:STATE_LANGUEDOC } value = 1 }
 	else_if = { limit = { state_region = s:STATE_RHONE } value = 0 }
 	else_if = { limit = { state_region = s:STATE_FRENCH_LOW_COUNTRIES } value = 0 }
 	else_if = { limit = { state_region = s:STATE_PICARDY } value = 0 }
 	else_if = { limit = { state_region = s:STATE_ALSACE_LORRAINE } value = 1 }
-	else_if = { limit = { state_region = s:STATE_POITOU } value = 0 }
+	else_if = { limit = { state_region = s:STATE_POITOU } value = 1 }
 	else_if = { limit = { state_region = s:STATE_GUYENNE } value = 0 }
 	else_if = { limit = { state_region = s:STATE_AUVERGNE_LIMOUSIN } value = 0 }
-	else_if = { limit = { state_region = s:STATE_BRITTANY } value = 0 }
+	else_if = { limit = { state_region = s:STATE_BRITTANY } value = 1 }
 	else_if = { limit = { state_region = s:STATE_BURGUNDY } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CHAMPAGNE } value = 0 }
 	else_if = { limit = { state_region = s:STATE_FRANCHE_COMTE } value = 0 }
@@ -3471,7 +3471,7 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_RHINELAND } value = 0 }
 	else_if = { limit = { state_region = s:STATE_NORTH_RHINE } value = 0 }
 	else_if = { limit = { state_region = s:STATE_BRANDENBURG } value = 0 }
-	else_if = { limit = { state_region = s:STATE_SCHLESWIG_HOLSTEIN } value = 0 }
+	else_if = { limit = { state_region = s:STATE_SCHLESWIG_HOLSTEIN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_WURTTEMBERG } value = 0 }
 	else_if = { limit = { state_region = s:STATE_BADEN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_HANNOVER } value = 0 }

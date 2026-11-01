@@ -180,7 +180,7 @@ normals *(designer's call)*:
   warming, and v2 agriculture will probably want it.
 
 **Source and production.** One CSV,
-`scripts/generators/data/local_climate.csv`, about 760 rows. It is filled by
+`scripts/generators/data/local_climate.csv`, 675 rows. It is filled by
 subagents in bulk, each with its own scratch directory and a slice of regions,
 from climate normals they know for each region's reference place. The owner
 prefers subscription subagents to paid API calls for bulk work. A generator,
@@ -197,7 +197,9 @@ length doesn't matter. `--check` mode and a staleness test, as
 −10…45, winter −50…30, summer ≥ winter); humidity, aridity and malaria are in
 their classes; the vanilla malaria traits agree; every region with one of
 vanilla's desert traits (`state_trait_sahara_desert` and the like) has aridity
-2. A plausibility pass also flags
+1 or more, except the three named in `DESERT_TRAIT_EXCEPTIONS`, whose people live
+by a great river or outside the desert (Aswan, Perth, the Top End; ruled at the
+PR #1307 review). A plausibility pass also flags
 rows whose latitude and temperatures disagree badly (a 60° region with a
 30 °C winter), for a person to look at.
 
@@ -400,8 +402,9 @@ like the Migration Crowding tile. It follows `docs/guides/gui_style_guide.md`:
 a brief label and value per row, the detail on hover, the parts of a total as
 signed rows.
 
-- **Phase 1 (readings):** Summer (°C, with the humidity word), Winter (°C),
-  Water (Humid, Semi-arid or Arid), Malaria (None, Seasonal or Endemic). Each
+- **Phase 1 (readings):** Summer (°C), Humidity (Dry, Moderate, Humid or
+  Sultry), Winter (°C), Water (Ample, Limited or Scarce), Malaria (None,
+  Seasonal or Endemic), as built. Each
   row's hover says what the reading means and that the figures describe the
   region's main settled area. The reference place is not named in game
   *(designer's call)*: naming it would take about 675 generated place-name
@@ -425,7 +428,7 @@ signed rows.
 ## 8. Phases
 
 1. **The record and its readings.** CSV, generator, generated script values,
-   tests, the tile's three reading rows, the concept, the system doc. No
+   tests, the tile's five reading rows, the concept, the system doc. No
    gameplay effect.
 2. **Comfort.** The penalty script values and constants, the static modifier
    and its yearly refresh and first application, the four relief types and their

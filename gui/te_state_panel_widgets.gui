@@ -1160,18 +1160,8 @@ types te_state_panel_widget_types
 		}
 	}
 
-	### WEALTH CONCENTRATION
+	### LOCAL CLIMATE
 	###
-	### The Wealth Concentration tile's extra_widget (Nation tab plan, Part 2):
-	### the state's score heading for its target once it has been scored, then
-	### the state modifiers wealth concentration and the inheritance law give
-	### it, each with its own tooltip. The tile shows while the state carries
-	### any of them (gui_state_wealth_modifier_count), whatever the Demographics
-	### rule, and both modifier rows in states_panel.gui leave the same six out
-	### (test_hidden_state_modifiers.py's SHOWN_ON_A_CARD_NAMES). The score row
-	### reads te_dg_wc only behind te_demog_state_wealth_sgui, as the
-	### Demographics subtab's Wealth section does, so an unscored state reads
-	### no missing variable.
 	### Local Climate's rows (docs/systems/mod_systems/local_climate.md): 80 px of label, 76 of
 	### value. "Humidity" needs about 75 px and "Seasonal" about 75 at fontsize_medium
 	### (gui_style_guide.md rule 3's budget), past both the number row's 60 and the word row's 60.
@@ -1282,6 +1272,18 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### WEALTH CONCENTRATION
+	###
+	### The Wealth Concentration tile's extra_widget (Nation tab plan, Part 2):
+	### the state's score heading for its target once it has been scored, then
+	### the state modifiers wealth concentration and the inheritance law give
+	### it, each with its own tooltip. The tile shows while the state carries
+	### any of them (gui_state_wealth_modifier_count), whatever the Demographics
+	### rule, and both modifier rows in states_panel.gui leave the same six out
+	### (test_hidden_state_modifiers.py's SHOWN_ON_A_CARD_NAMES). The score row
+	### reads te_dg_wc only behind te_demog_state_wealth_sgui, as the
+	### Demographics subtab's Wealth section does, so an unscored state reads
+	### no missing variable.
 	type te_state_wealth_tile = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes

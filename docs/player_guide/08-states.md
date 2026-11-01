@@ -24,7 +24,7 @@ tooltip breaks the numbers down.
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Local Climate | Always | The climate where most of the state's people live: summer temperature and humidity, winter temperature, water and malaria. |
+| Local Climate | Always | The climate where most of the region's people live: summer temperature and humidity, winter temperature, water and malaria. |
 | Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |

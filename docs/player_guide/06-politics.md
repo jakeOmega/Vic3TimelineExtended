@@ -791,12 +791,15 @@ such as Die Grünen or Movimento 5 Stelle.
 
 The First Past the Post amendment gives each seat to whoever tops the poll, so a
 vote for a small party is wasted. While it is on your voting law, the two
-parties whose members hold the most clout win interest groups more easily (+5
-affiliation) and every other party far less easily (−20). A third party forms
-only around a group that fits it strongly. The party affiliation tooltips show
-both lines. The two are re-ranked every month, so a party that gains clout can
-take a major party's place at the next campaign. Until two parties exist the
-amendment does nothing to parties.
+parties whose members hold the most clout are big tents: +10 affiliation, less
+1 for each group joining ahead, and the base game's party-size limit (about
+three groups to a party) doesn't apply to them. Every other party gets −20. So
+every interest group joins one of the two unless it dislikes both, taking the
+one it fits better, and groups with no preference split between them. A third
+party forms only around a group that fits it strongly. The party affiliation
+tooltips show these lines. The two are re-ranked every month, so a party that
+gains clout can take a major party's place at the next campaign. Until two
+parties exist the amendment does nothing to parties.
 
 Each major party is a broad coalition, so the government loses 25% less
 legitimacy to disagreement inside it, and 5 legitimacy for the voters left

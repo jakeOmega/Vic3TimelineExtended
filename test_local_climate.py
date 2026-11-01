@@ -99,6 +99,18 @@ class Validate(unittest.TestCase):
         self.assertEqual(self.errors([row("STATE_SAHARA", aridity=1, malaria=0)], traits), [])
 
 
+    def test_desert_trait_exceptions(self):
+        """A desert-trait region whose people live by a great river or outside the desert may read ample water;
+        each one is named, with its reason, in DESERT_TRAIT_EXCEPTIONS."""
+        traits = {s: {"state_trait_sahara_desert"} for s in ("STATE_EGYPTIAN_DESERT", "STATE_SAHARA")}
+        regions = set(traits)
+        self.assertEqual(gen.validate([row("STATE_EGYPTIAN_DESERT", aridity=0, malaria=0)], regions, traits), [])
+        self.assertEqual(len(gen.validate([row("STATE_SAHARA", aridity=0, malaria=0)], regions, traits)), 1)
+        self.assertEqual(set(gen.DESERT_TRAIT_EXCEPTIONS),
+                         {"STATE_EGYPTIAN_DESERT", "STATE_WESTERN_AUSTRALIA", "STATE_NORTHERN_TERRITORY"})
+        for state, reason in gen.DESERT_TRAIT_EXCEPTIONS.items():
+            self.assertTrue(reason, state)
+
 class Committed(unittest.TestCase):
     def test_csv_rows_validate(self):
         self.assertEqual(gen.validate(gen.load_rows(), gen.land_regions(), gen.region_traits()), [])
@@ -192,6 +204,27 @@ class Tile(unittest.TestCase):
             self.assertIn(key, body, key)
         self.assertIn("te_climate_summer_mean", loc_value("te_state_climate_summer_value"))
         self.assertIn("te_climate_winter_mean", loc_value("te_state_climate_winter_value"))
+
+    def test_word_chains_pick_each_class(self):
+        """Each word row's nested SelectLocalization maps class n to its own key: thresholds run down from the
+        top class, each GreaterThan n picking _(n+1), and _0 is the last fallback."""
+        body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
+        chains = {"te_climate_summer_humidity": ("TE_CLIMATE_HUMIDITY", 3), "te_climate_aridity": ("TE_CLIMATE_WATER", 2),
+                  "te_climate_malaria": ("TE_CLIMATE_MALARIA", 2)}
+        for value, (prefix, top) in chains.items():
+            line = next(x for x in body.splitlines() if "raw_text" in x and f"'{value}'" in x)
+            picks = re.findall(rf"ScriptValue\('{value}'\), '\(CFixedPoint\)(\d)'\), '({prefix}_\d)'", line)
+            self.assertEqual(picks, [(str(n), f"{prefix}_{n + 1}") for n in range(top - 1, -1, -1)], value)
+            self.assertTrue(line.rstrip().endswith(f"'{prefix}_0'" + ")" * top + ']#!"'), value)
+
+    def test_rows_wait_for_a_record(self):
+        """Every reading row hides when the region has no row, so the no-data line shows alone."""
+        body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
+        rows = body.split("te_state_climate_row = {")[1:]
+        self.assertEqual(len(rows), 5)
+        for row in rows:
+            self.assertIn("row_visible", row)
+            self.assertIn("ScriptValue('te_climate_has_record'), '(CFixedPoint)0')", row.split("row_tooltip")[0])
 
     def test_tile_loc_exists(self):
         for key in TILE_KEYS:
