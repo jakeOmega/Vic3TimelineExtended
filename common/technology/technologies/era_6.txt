@@ -62,6 +62,7 @@ personal_appliances = {
 	category = production
 
 	modifier = {
+		state_climate_heat_relief_add = 0.35 # Local Climate: window air conditioners
 		state_demog_womens_work_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 	}
 
@@ -491,6 +492,7 @@ rural_electrification = {
 	category = society
 
 	modifier = {
+		state_climate_cold_relief_add = 0.15 # Local Climate: electric heat reaches the countryside
 		state_infrastructure_from_population_max_add = 100
 		country_sol_expectations_target_add = 0.5
 		building_power_plant_throughput_add = 0.25
@@ -536,6 +538,7 @@ modern_chemical_processes = {
 	category = production
 
 	modifier = {
+		state_climate_water_relief_add = 0.15 # Local Climate: water treatment
 		country_weekly_innovation_max_add = 25
 		state_arable_land_mult = 0.30
 		country_st_res_ammunition_decay_add = -0.005

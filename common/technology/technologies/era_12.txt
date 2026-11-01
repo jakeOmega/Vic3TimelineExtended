@@ -130,6 +130,7 @@ compact_fusion_reactors = {
 	}
 
 	modifier = {
+		state_climate_cold_relief_add = 0.1 # Local Climate: heat too cheap to meter
 		country_max_weekly_construction_progress_add = 50
 		military_formation_army_movement_speed_mult = 1
 		state_building_airport_max_level_add = 1
