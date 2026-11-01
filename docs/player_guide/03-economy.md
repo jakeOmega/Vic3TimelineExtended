@@ -66,6 +66,7 @@ methods:
 | Reinforced Concrete Buildings | 6 |
 | Advanced Construction | 10 |
 | Nanomaterial Buildings | 16 |
+| Self-Replicating Construction | 24 |
 
 ### Construction maintenance and retooling
 
@@ -185,7 +186,7 @@ normal retooling costs; penalties already removed stay removed.
 With the rule disabled, construction works as in the base game, but the
 Construction Site takes the Construction Sector's place. The government builds,
 expands and downsizes Construction Sites like any government building, and each
-level provides 1 to 16 points a week by production method, the same tiers as the
+level provides 1 to 24 points a week by production method, the same tiers as the
 table above. The government pays their wages, and they buy materials for each
 point your queues spend. Construction Sites are built from the state view.
 Every country also gets Base Construction, 5 points a week, so a country without

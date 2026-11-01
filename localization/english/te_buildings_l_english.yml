@@ -534,7 +534,7 @@
  building_solar_receiver_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_solar_receiver$ buildings"
  building_sony_pictures_studios:0 "Sony Pictures Studios"
  building_space_command:0 "Space Command"
- building_space_command_desc:0 "The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep raises its inputs."
+ building_space_command_desc:0 "The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep multiplies its maintenance goods."
  building_space_elevator:0 "Space Elevator"
  building_space_elevator_construction_site:0 "Space Elevator Construction Site"
  building_space_elevator_throughput_add:0 "$building_space_elevator$ [concept_throughput]"

@@ -90,18 +90,43 @@ sr_sc_rate = {
 	}
 }
 
-# The upkeep: Space Command's input goods rise 1% for every this many points
-# of fleet strength in service, at full (design § 5).
+# The upkeep: Space Command's maintenance line rises +900% for every this many
+# points of fleet strength in service, at full (Space Race UI pass design § 10).
 sr_fleet_upkeep_points = { value = 10 }
 
-# Country scope. The upkeep's multiplier, set on the country before it is
-# applied to each Space Command building (sr_fl_upkeep_refresh). The ground
-# reserve (6d) counts: hulls kept on the ground cost the same as in orbit, so
-# holding them back saves nothing.
+# Country scope. The upkeep's units, set on the country before they are
+# applied (sr_fl_upkeep_refresh). The ground reserve (6d) counts: hulls kept on
+# the ground cost the same as in orbit, so holding them back saves nothing.
 sr_fleet_upkeep_units_value = {
 	value = sr_fl_strength_full_total
 	add = sr_reserve_total
 	divide = sr_fleet_upkeep_points
+}
+
+# Country scope. Its Space Command buildings of a level or more, wherever they
+# stand (a second comes with an annexed or formed space power): each has the
+# maintenance line, and the units are split between them.
+sr_sc_buildings = {
+	value = 0
+	every_scope_state = {
+		every_scope_building = {
+			limit = {
+				is_building_type = building_space_command
+				level >= 1
+			}
+			add = 1
+		}
+	}
+}
+
+# Country scope. The multiplier on each of them: the fleets pay the upkeep
+# once, however many buildings carry it.
+sr_fleet_upkeep_per_building_value = {
+	value = sr_fleet_upkeep_units_value
+	if = {
+		limit = { sr_sc_buildings > 1 }
+		divide = sr_sc_buildings
+	}
 }
 
 # The AI's Space Command: up to 2 + its colonies levels, at most 10 (design § 14).
@@ -235,17 +260,6 @@ sr_ws_battle_rout = { value = 0.25 }
 # ---- Survey Colony Defences (design § 11) ---------------------------------------------------
 # Our fire on the target's defences: +20% x the operation's multiplier.
 sr_cov_survey_edge = { value = 0.2 }
-
-# ---- The upkeep_inputs probe (design § 18) ------------------------------------------------
-# Country scope: its market's Launch Capacity buy orders (te_debug_space_race.6).
-sr_fl_probe_lc_orders = {
-	value = 0
-	market = {
-		mg:launch_capacity = {
-			add = market_goods_buy_orders
-		}
-	}
-}
 
 # ---- The combat record's reads (6b; sr_fleet_combat_effects.txt) -----------------------------
 # Country scope, a power at the location being fought over, while its sr_cb_*

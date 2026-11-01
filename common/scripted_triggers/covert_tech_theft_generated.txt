@@ -1320,6 +1320,18 @@ covert_tech_stealable_production = {
 			$TARGET$ ?= { has_technology_researched = vacuum_canning }
 		}
 		AND = {
+			NOT = { has_technology_researched = von_neumann_machines }
+			OR = {
+				can_research = von_neumann_machines
+				AND = {
+					is_researching_technology = von_neumann_machines
+					has_technology_researched = molecular_assemblers
+					has_technology_researched = orbital_manufacturing
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = von_neumann_machines }
+		}
+		AND = {
 			NOT = { has_technology_researched = vulcanization }
 			OR = {
 				can_research = vulcanization
@@ -1403,6 +1415,17 @@ covert_tech_stealable_military = {
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = advanced_body_armor }
+		}
+		AND = {
+			NOT = { has_technology_researched = advanced_fission }
+			OR = {
+				can_research = advanced_fission
+				AND = {
+					is_researching_technology = advanced_fission
+					has_technology_researched = nuclear_energy
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = advanced_fission }
 		}
 		AND = {
 			NOT = { has_technology_researched = advanced_materials_armor }
