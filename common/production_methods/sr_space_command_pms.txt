@@ -14,6 +14,15 @@
 #   Torch Yards         compact_fusion_reactors           1.5                600             15            200
 #   Antimatter Yards    antimatter_production             2.0                700             20            400
 #
+# Every method also carries one identical maintenance line, unscaled (so not
+# multiplied by levels), of six goods no method otherwise uses: 20 Electronic
+# Components, 20 Wired and 20 Wireless Telecommunication Gear, 10 Software, 20
+# Robotics and 40 Chemicals a week, about 8,400 at base prices, run at the
+# building's occupancy as any goods line is. The fleets' upkeep multiplies only
+# those (sr_fleet_upkeep_goods, Space Race UI pass design § 10), so it follows
+# neither the method nor Space Command's levels: nothing to gain by switching
+# down or downsizing once the fleet is built.
+#
 # Antimatter Yards needs only its technology: a method can't require another
 # building (unlocking_production_methods reads the same building's other
 # groups), so the Antimatter Containment Facility gates the drive
@@ -38,6 +47,15 @@ pm_sr_space_command_orbital_shipyards = {
 			building_employment_officers_add = 500
 			building_employment_engineers_add = 2000
 			building_employment_machinists_add = 2500
+		}
+
+		unscaled = {
+			goods_input_electronic_components_add = 20
+			goods_input_telephones_add = 20
+			goods_input_radios_add = 20
+			goods_input_digital_assets_add = 10
+			goods_input_robotics_add = 20
+			goods_input_fertilizer_add = 40
 		}
 	}
 
@@ -65,6 +83,15 @@ pm_sr_space_command_fusion_yards = {
 			building_employment_officers_add = 500
 			building_employment_engineers_add = 2000
 			building_employment_machinists_add = 2500
+		}
+
+		unscaled = {
+			goods_input_electronic_components_add = 20
+			goods_input_telephones_add = 20
+			goods_input_radios_add = 20
+			goods_input_digital_assets_add = 10
+			goods_input_robotics_add = 20
+			goods_input_fertilizer_add = 40
 		}
 	}
 
@@ -94,6 +121,15 @@ pm_sr_space_command_torch_yards = {
 			building_employment_engineers_add = 2000
 			building_employment_machinists_add = 2500
 		}
+
+		unscaled = {
+			goods_input_electronic_components_add = 20
+			goods_input_telephones_add = 20
+			goods_input_radios_add = 20
+			goods_input_digital_assets_add = 10
+			goods_input_robotics_add = 20
+			goods_input_fertilizer_add = 40
+		}
 	}
 
 	state_modifiers = {
@@ -121,6 +157,15 @@ pm_sr_space_command_antimatter_yards = {
 			building_employment_officers_add = 500
 			building_employment_engineers_add = 2000
 			building_employment_machinists_add = 2500
+		}
+
+		unscaled = {
+			goods_input_electronic_components_add = 20
+			goods_input_telephones_add = 20
+			goods_input_radios_add = 20
+			goods_input_digital_assets_add = 10
+			goods_input_robotics_add = 20
+			goods_input_fertilizer_add = 40
 		}
 	}
 

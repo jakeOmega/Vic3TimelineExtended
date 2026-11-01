@@ -782,7 +782,7 @@ IMAGES = {
         "events": [
             "ministry_law_events.11", "ministry_law_events.12",
             "ministry_law_events.13", "ministry_law_events.14",
-            "ministry_law_events.15",
+            "ministry_law_events.15", "society_technology_events.37",
         ],
     },
     "ministry_reform": {
@@ -1879,7 +1879,7 @@ IMAGES = {
     "whistleblower_documents": {
         "prompt": "A whistleblower in a dimly lit room downloading classified documents onto a USB drive, reflection of screen data visible in their glasses. A decision that will change history — treason or heroism depending on who you ask.",
         "style": "oil painting, chiaroscuro, noir atmosphere",
-        "events": ["surveillance_events.1"],
+        "events": ["surveillance_events.1", "society_technology_events.36"],
     },
     "data_breach_screens": {
         "prompt": "A cybersecurity operations center in crisis: screens flashing red with breach alerts, data flowing out in real time, analysts scrambling to contain the damage. Personal records of millions exposed. The digital Pandora's box opened.",

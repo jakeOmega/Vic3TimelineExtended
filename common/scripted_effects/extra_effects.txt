@@ -1376,14 +1376,17 @@ gw_fire_warming_threshold_event = {
 	}
 }
 
-# Cooling counterpart: fires once when temperature_anomaly_display crosses
-# back below $THRESHOLD$, gated on $PREREQ$ (the warming-side flag) so cooling
-# only triggers if the matching warming flag fired earlier in the run. Same
+# Cooling counterpart: fires once when the warming crosses back below
+# $THRESHOLD$, gated on $PREREQ$ (the warming-side flag) so cooling only
+# triggers if the matching warming flag fired earlier in the run. Same
 # every_country dispatch shape. Called from on_monthly_pulse (world scope).
+# It reads the warming beneath any aerosol haze (gw_unmasked_temperature), not
+# the felt anomaly: the cooling events tell of emissions brought under
+# control, and a haze that hides the warming has not done that (Geoengineering).
 gw_fire_cooling_threshold_event = {
 	if = {
 		limit = {
-			temperature_anomaly_display < $THRESHOLD$
+			gw_unmasked_temperature < $THRESHOLD$
 			has_global_variable = $PREREQ$
 			NOT = { has_global_variable = $FLAG$ }
 		}

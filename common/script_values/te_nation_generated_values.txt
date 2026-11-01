@@ -5,6 +5,10 @@
 gui_country_hidden_modifier_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = aerosol_injection_cost_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = agdiff_biotechnology }
 		add = 1
 	}
