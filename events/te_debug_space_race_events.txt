@@ -281,6 +281,15 @@ te_debug_space_race.4 = { # REVIEWED 2026-10-25: console-only test event (`event
 		sr_emig_refresh_modifiers = yes
 	}
 
+	# Ten years of terraforming at every colony of ours that takes it, at this
+	# month's pace (era 13 spec § 7.11), then the entry's modifiers.
+	option = {
+		name = te_debug_space_race.4.i
+		trigger = { sr_colonies_contested_enabled = yes }
+		sr_terra_debug_advance = yes
+		sr_emig_refresh_modifiers = yes
+	}
+
 	# Our Extraplanetary Base room recomputed now.
 	option = {
 		name = te_debug_space_race.4.g

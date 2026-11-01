@@ -283,3 +283,25 @@ post-scarcity_economy = {
 		value = 1
 	}
 }
+
+terraforming = {
+	# The Terraforming colony module on Mars, Venus, Titan, Ganymede and Callisto (era 13 spec § 7.11):
+	# its marker below, which the module's queue reads. Geoengineering is the same practice at home
+	era = era_13
+	texture = "gfx/interface/icons/invention_icons/space_colonization.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		space_colonization
+		geoengineering
+	}
+
+	modifier = {
+		# the colonies' Terraforming module (gen_solar_sites.TERRA_MARKER)
+		country_sr_terraforming_bool = yes
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}

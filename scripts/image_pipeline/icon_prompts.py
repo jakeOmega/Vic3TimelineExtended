@@ -795,6 +795,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": None},
         "liquid_democracy": {"subject": "a glowing blue fingerprint pressed onto a paper ballot, thin lines of light running from it to many small hands", "seed": None},
         "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
+        "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": None},
         "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },

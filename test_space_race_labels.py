@@ -419,7 +419,15 @@ CELLS = {
     "a module cell's label (te_sr_mod_cell)": (
         ("te_sr_mod_cell", 'block "cell_label"'),
         r"je_space_race_widget_modules_col_(a|b|hab|port|def|mine|yard|lab|culture|resort|black|train|bunker"
-        r"|foundry|admin)"),
+        r"|foundry|admin|terra)"),
+    # Terraforming's line in the Modules view (era 13 spec § 7.11): its label, and
+    # the years left, or that the work is finished or idle.
+    "terraforming's label (te_sr_colony_row)": (
+        ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_terraformed"'),
+        r"je_space_race_widget_modules_col_terraformed"),
+    **{f"terraforming's {word} (te_sr_colony_row)": (
+        ("te_sr_colony_row", f'text = "je_space_race_widget_terra_{word}"'), f"je_space_race_widget_terra_{word}")
+       for word in ("years_left", "finished", "idle")},
     "a colony's slots label (te_sr_colony_row)": (
         ("te_sr_colony_row", 'text = "je_space_race_widget_modules_col_slots"'),
         r"je_space_race_widget_modules_col_slots"),
@@ -441,10 +449,11 @@ CELLS = {
         r"je_space_race_widget_cv_(people|modules|autonomy|defences)"),
     "a tile's caption on a colony's page (te_sr_page_tile)": (
         ("te_sr_page_tile", 'block "tile_caption"'),
-        r"je_space_race_widget_(page_(staffing|bases|status)|ch_\w+|modules_col_slots)"),
+        r"je_space_race_widget_(page_(staffing|bases|status|terraformed)|ch_\w+|modules_col_slots)"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
-        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+|settlers_agi)"),
+        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+|settlers_agi"
+        r"|terra_(?:years_left|finished|idle))"),
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),
         r"je_space_race_widget_mod_name_\w+"),
@@ -733,6 +742,10 @@ class FigureBudgetTest(unittest.TestCase):
         "module_slots": "13/9", "module_slots_past": "13/9", "module_bases": "160", "aut_build": "100% (+5.0)",
         # a site's grade beside its room (gen_solar_sites.SITES: -45% to +30%)
         "module_grade": "(\u221245%)",
+        # Terraforming (era 13 spec § 7.11): the room its work has added (at most
+        # gen_solar_sites.TERRA_MAX_LEVELS shares of +100%), and the years left,
+        # shown up to 999 (one level at the least staffing would take longer)
+        "terra_pct": "+300%", "terra_years": "999",
     }
     # a module cell (te_sr_mod_cell): a level (10 past a world's slots at most) and what is on its way
     CELL = {"cell_level": "8", "cell_pending": "+8"}

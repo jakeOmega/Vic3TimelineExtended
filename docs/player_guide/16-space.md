@@ -698,8 +698,8 @@ ones you don't want settled to Closed.
 People are crews: the Crews figure counts how many module levels a colony's
 people can run, one for every 5,000. A colony's founding specialization runs
 without a crew. With Artificial General Intelligence colonies need no crews at
-all, and the figure reads AGI. Habitats add room for more people (see [Colony
-modules](#colony-modules)).
+all, and the figure reads AGI. Habitats, and Terraforming on the worlds that
+take it, add room for more people (see [Colony modules](#colony-modules)).
 
 Your people off Earth give Off-World Population on Solar System Colonization:
 +1% prestige and +2% cultural pull for every 100,000 of them, up to a million.
@@ -717,6 +717,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people | The colony's slots, shared with Spaceports, Defenses and facilities: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets |
+| Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | The colony's slots, up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | The colony's slots; none on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | The colony's slots |
 | Facilities | See the table below | The colony's slots |
@@ -739,6 +740,20 @@ colonies:
 
 A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
 occupied colony's facilities give nothing.
+
+Terraforming (an era 13 technology, after Space Colonization and
+Geoengineering) works the world itself, on the five Martian sites, the Venus
+cloud habitat, Titan, Ganymede and Callisto. Each staffed level adds 4% of the
+colony's starting room for people a year. Up to three work at a colony at once,
+so a world takes at least 25 years to finish, at +300%, where a Habitat gives
++50% at once and holds its slot for good. The room the work has added belongs
+to the world: it stays when the colony changes hands, is released, or takes a
+level down. A finished world's Terraforming levels stand down and free their
+slots. An occupation stops the work, and a colony short of crews works at its
+staffing share. Once you have the technology, the Modules view shows a
+Terraforming line under the facilities, with the room added so far and the
+years to go at this month's pace; the colony's page shows the same in its
+Terraformed tile.
 
 A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
 Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
@@ -804,8 +819,8 @@ top three, queues one module a year at each colony when it has money to spare:
 a Habitat once its people fill three quarters of its room, otherwise the next
 specialization level its crews can run, its founding specialization first, then
 a facility: an Administration where autonomy has reached 25 and is heading for 45
-or more, a Mining Complex when its bases outgrow their room, a Nuclear Command Center with nuclear
-weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
+or more, a Mining Complex when its bases outgrow their room, Terraforming once its
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. It
 runs the best fabrication method it has while anything is queued, never builds
 Spaceports or Defenses, and never pays for a module past a colony's slots.
 
