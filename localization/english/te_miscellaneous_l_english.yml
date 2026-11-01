@@ -2369,6 +2369,7 @@
  country_combined_arms_bonus_enabled_bool:0 "[concept_combined_arms] Doctrine"
  country_court_challenges_ignored_bool:0 "Courts Can’t Challenge the Government"
  country_court_reviews_forced_laws_bool:0 "Courts Review Forced Laws"
+ country_gw_aerosol_injection_bool:0 "Enables #bold Stratospheric Aerosol Injection#!"
  country_homelands_can_change_bool:0 "Homelands Can Change"
  country_longevity_care_banned_bool:0 "Longevity Care Banned[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  country_nd_automatic_answer_bool:0 "A Strike on Our Cities Is Answered Automatically"

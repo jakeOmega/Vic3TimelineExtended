@@ -352,9 +352,10 @@ liquid_democracy = {
 }
 
 geoengineering = {
-	# The Stratospheric Aerosol Injection climate policy in the Global Warming entry (era 13 spec § 7.5);
-	# Terraforming (era 13) will require it. Society, not production: aircraft can already loft the aerosols,
-	# so what it stands for is the will to cool the world on purpose
+	# The Stratospheric Aerosol Injection climate policy in the Global Warming entry (era 13 spec § 7.5),
+	# and milder droughts and hailstorms from weather modification; Terraforming (era 13) requires it.
+	# Society, not production: aircraft can already loft the aerosols, so what it stands for is the will
+	# to change the weather and the climate on purpose
 	era = era_12
 	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds" # Placeholder Icon
 	category = society
@@ -362,6 +363,17 @@ geoengineering = {
 	unlocking_technologies = {
 		environmental_movement
 		globalization
+	}
+
+	modifier = {
+		# Display only, so the tooltip names the policy: its gate reads the technology (global_warming_modifier_types.txt)
+		country_gw_aerosol_injection_bool = yes
+		# Weather modification: cloud seeding for rain and hail suppression, in every state whether or not the
+		# country flies aerosols. Below Reforestation Subsidies' -25% drought, a policy that costs; vanilla's
+		# harvest-condition technologies take 5-20% (Modern Sewerage, Antibiotics, Pharmaceuticals)
+		state_harvest_condition_drought_impact_mult = -0.10
+		state_harvest_condition_drought_duration_mult = -0.10
+		state_harvest_condition_hailstorm_impact_mult = -0.20
 	}
 
 	ai_weight = {
