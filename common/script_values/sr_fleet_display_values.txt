@@ -22,11 +22,13 @@ sr_disp_sc_rate = {
 	value = 0
 	if = { limit = { has_variable = sr_sc_built_last } value = var:sr_sc_built_last }
 }
-# 1 while construction is paused: Built a Month reads Paused, and Pause turns
-# to Resume.
+# 1 while construction is paused, 2 while a resume waits for the next step:
+# Built a month reads Paused for both (that step builds nothing), and the
+# button reads Pause, Resume, then Resuming.
 sr_disp_sc_paused = {
 	value = 0
 	if = { limit = { sr_sc_is_paused = yes } value = 1 }
+	if = { limit = { sr_sc_is_resuming = yes } value = 2 }
 }
 sr_disp_sc_levels = {
 	value = sr_sc_levels

@@ -495,21 +495,51 @@ class PauseTest(unittest.TestCase):
 
     def test_the_toggle_and_its_variable(self):
         self.assertRegex(_block(self.triggers, "sr_sc_is_paused"), r"^\s*has_variable = sr_sc_paused\s*$")
+        self.assertRegex(_block(self.triggers, "sr_sc_is_resuming"), r"^\s*has_variable = sr_sc_resume_pending\s*$")
         toggle = _block(self.effects, "sr_sc_toggle_pause")
-        # Paused is yes; building is the variable's absence, the default.
-        self.assertRegex(toggle, r"limit = \{ sr_sc_is_paused = yes \}\s*remove_variable = sr_sc_paused\s*\}\s*"
+        # Resuming, a click cancels; paused, it asks to resume; building, it
+        # pauses at once. Paused is yes; building is the variable's absence.
+        self.assertRegex(toggle, r"^\s*if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*remove_variable = sr_sc_resume_pending\s*\}\s*"
+                                 r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                                 r"set_variable = \{ name = sr_sc_resume_pending value = yes \}\s*\}\s*"
                                  r"else = \{\s*set_variable = \{ name = sr_sc_paused value = yes \}\s*\}\s*"
                                  r"sr_sc_pause_apply = yes\s*$")
+        # A click never ends the pause itself: only the step (or the AI's
+        # resume, at its step) clears sr_sc_paused.
+        self.assertNotIn("remove_variable = sr_sc_paused", toggle)
+        self.assertNotIn("sr_sc_clear_pause", toggle)
         sgui = _block(self.sguis, "sr_sc_pause_sgui")
         self.assertIn("always = no", _block("x = {" + sgui.split("ai_is_valid = {", 1)[1], "x"))
         # The tooltip says what each state's click does; the variable is set out of sight.
-        self.assertRegex(sgui, r"limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_resume_tt\s*\}\s*"
+        self.assertRegex(sgui, r"limit = \{ sr_sc_is_resuming = yes \}\s*custom_tooltip = sr_sc_resume_cancel_tt\s*\}\s*"
+                               r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_resume_tt\s*\}\s*"
                                r"else = \{\s*custom_tooltip = sr_sc_pause_tt\s*\}\s*"
                                r"hidden_effect = \{\s*sr_sc_toggle_pause = yes\s*\}")
-        # No cost and no wait: the toggle does nothing else.
-        self.assertEqual(re.findall(r"(\w+) = ", toggle),
-                         ["if", "limit", "sr_sc_is_paused", "remove_variable", "else", "set_variable", "name", "value",
-                          "sr_sc_pause_apply"])
+        clear = _block(self.effects, "sr_sc_clear_pause")
+        for var in ("sr_sc_resume_pending", "sr_sc_paused"):
+            with self.subTest(var=var):
+                self.assertRegex(clear, rf"limit = \{{ has_variable = {var} \}}\s*remove_variable = {var}")
+
+    def test_a_resume_waits_for_the_step_which_builds_nothing(self):
+        """Review of #1287, I1: the build is the month's rate in one lump, so a
+        step may build only when the cut was off since the last one. The build
+        check comes before the pending resume is cleared, and the cut follows
+        after; the other way round, a resume the day before the step would
+        build a month the inputs never paid for."""
+        month = _block(self.effects, "sr_sc_month")
+        build = month.index("limit = { sr_sc_is_paused = yes }")
+        resume = re.search(r"if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*sr_sc_clear_pause = yes\s*\}", month)
+        self.assertIsNotNone(resume, "the step doesn't end a pending resume")
+        apply = month.index("sr_sc_pause_apply = yes")
+        self.assertLess(build, resume.start())
+        self.assertLess(resume.end(), apply)
+        # The build reads the variable alone, never the pending resume.
+        self.assertEqual(month.count("sr_sc_is_resuming"), 1)
+        self.assertEqual(month.count("sr_sc_clear_pause = yes"), 1)
+        # Only the step and the AI end a pause.
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("sr_sc_clear_pause = yes"), 2)
+        self.assertEqual(everything.count("remove_variable = sr_sc_paused"), 1)
 
     def test_the_month_builds_nothing_while_paused(self):
         month = _block(self.effects, "sr_sc_month")
@@ -531,18 +561,22 @@ class PauseTest(unittest.TestCase):
 
     def test_the_panel_reads_paused(self):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_paused")
-        self.assertIn("if = { limit = { sr_sc_is_paused = yes } value = 1 }", shown)
+        self.assertRegex(shown, r"if = \{ limit = \{ sr_sc_is_paused = yes \} value = 1 \}\s*"
+                                r"if = \{ limit = \{ sr_sc_is_resuming = yes \} value = 2 \}")
         gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
         section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
                          "te_sr_sec_space_command")
-        paused = "ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]\""
-        building = "ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]\""
-        for key, state in (("je_space_race_widget_sc_rate_figure", building), ("je_space_race_widget_sc_rate_paused", paused),
-                           ("je_space_race_widget_sc_pause", building), ("je_space_race_widget_sc_resume", paused)):
+        def state(cmp, n):
+            return f"[{cmp}_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint){n}' )]\""
+        for key, shown_on in (("je_space_race_widget_sc_rate_figure", state("EqualTo", 0)),
+                              ("je_space_race_widget_sc_rate_paused", state("GreaterThanOrEqualTo", 1)),
+                              ("je_space_race_widget_sc_pause", state("EqualTo", 0)),
+                              ("je_space_race_widget_sc_resume", state("EqualTo", 1)),
+                              ("je_space_race_widget_sc_resuming", state("EqualTo", 2))):
             with self.subTest(key=key):
                 i = section.index(f'text = "{key}"')
-                self.assertIn(state, _block_around(section, i, 3))
-        self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 2)
+                self.assertIn(shown_on, _block_around(section, i, 3))
+        self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 3)
 
     def test_the_modifier_cuts_the_yards_inputs(self):
         body = _block(_strip(_raw(STATIC)), "sr_space_command_paused")
@@ -572,13 +606,14 @@ class PauseTest(unittest.TestCase):
         self.assertLess(apply.index("remove_modifier = sr_space_command_paused"), apply.index("add_modifier"))
         self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root = \{ sr_sc_is_paused = yes \}\s*\}\s*"
                                 r"add_modifier = \{ name = sr_space_command_paused \}")
-        # Two callers: the monthly step, first, and the toggle.
-        self.assertEqual(everything.count("sr_sc_pause_apply = yes"), 2)
-        self.assertTrue(_block(self.effects, "sr_sc_month").strip().startswith("sr_sc_pause_apply = yes"))
-        self.assertIn("sr_sc_pause_apply = yes", _block(self.effects, "sr_sc_toggle_pause"))
-        # The toggle's callers: the button and the AI.
-        self.assertEqual(everything.count("sr_sc_toggle_pause = yes"), 3)
-        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_toggle_pause = yes"), 2)
+        # Three callers: the monthly step, the toggle and the AI's resume.
+        self.assertEqual(everything.count("sr_sc_pause_apply = yes"), 3)
+        for caller in ("sr_sc_month", "sr_sc_toggle_pause", "sr_sc_ai_pause_review"):
+            with self.subTest(caller=caller):
+                self.assertEqual(_block(self.effects, caller).count("sr_sc_pause_apply = yes"), 1)
+        # The toggle's callers: the button and the AI's pause.
+        self.assertEqual(everything.count("sr_sc_toggle_pause = yes"), 2)
+        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_toggle_pause = yes"), 1)
         # A building modifier, never the country's.
         self.assertIn('"sr_space_command_paused": "a Space Command building"',
                       _raw(ROOT / "scripts/generators/gen_nation_tab.py"))
@@ -601,7 +636,7 @@ class PauseTest(unittest.TestCase):
                                  r"sr_sc_toggle_pause = yes\s*"
                                  r"set_variable = \{ name = sr_sc_pause_hold value = yes months = 6 \}\s*\}\s*"
                                  r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_ai_may_resume = yes\s*\}\s*"
-                                 r"sr_sc_toggle_pause = yes\s*\}\s*$")
+                                 r"sr_sc_clear_pause = yes\s*sr_sc_pause_apply = yes\s*\}\s*$")
         # The hold is the AI's alone, on the country (not a container: a timed
         # variable there runs down).
         everything = "\n".join(_strip(_raw(p)) for p in (ROOT / "common").rglob("*.txt"))
@@ -628,7 +663,7 @@ class PauseTest(unittest.TestCase):
                 self.assertNotIn("sr_sc_is_paused", body)
         # Auto's step runs every month, paused or not.
         month = _block(self.effects, "sr_sc_month")
-        self.assertTrue(month.rstrip().endswith("}\n\tsr_reserve_auto_step = yes"))
+        self.assertTrue(month.rstrip().endswith("\n\tsr_sc_pause_apply = yes\n\tsr_reserve_auto_step = yes"))
         for lim in _enclosing_limits(month, month.index("sr_reserve_auto_step = yes")):
             self.assertNotIn("sr_sc_is_paused", lim)
         # Only Space Command's own month, its panel, its button and the AI read it.

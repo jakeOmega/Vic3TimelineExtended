@@ -743,7 +743,9 @@ and No Space Command bullets). All under Full Colonies. No self-check line: each
    month reads Paused at once, and the building's modifiers list Construction Paused. At the next monthly step
    nothing is built: Fleet strength at full doesn't rise, nor the Reserve with Auto off. A fleet still takes Go,
    posture and target orders, Launch still sends a reserve up, and with Auto on a reserve built before the pause still
-   launches itself. Resume: the next month builds the full month's figure again, and Built a month shows it.
+   launches itself. Resume: the button reads Resuming, the inputs stay cut, and the next step builds nothing (Built a
+   month still Paused); then Construction Paused comes off, and the step after builds the full month's figure again.
+   A click on Resuming before the step cancels it: still paused after the step.
 2. **The inputs' tooltip read (unverified engine fact).** Paused, the building's input tooltip shows Launch Capacity
    and Advanced Materials at 0, each with a −100% Construction Paused line, while the six maintenance goods keep
    their lines and Fleet Upkeep. **Fallback** if a −100% sum doesn't zero an input (it shows a small figure, or
@@ -777,8 +779,10 @@ and No Space Command bullets). All under Full Colonies. No self-check line: each
    strength. At Earth, Orbital Superiority falls by about half the margin, and an inbound hostile fleet that our
    fleet's full strength would hold now brings the Earth Is Threatened popup. The battlestation and the batteries fire
    as before.
-7. **Pause micromanagement (known limit).** Construction is counted at the country's monthly step, and Pause cuts the
-   inputs at once, so pausing just after the step and resuming just before the next would build a month for a few
-   days' inputs. Note whether that is practical to do by hand (the step's day isn't shown); the owner chose no cost
-   or delay on the toggle.
+7. **No month built for free (review of #1287, I1).** A month is built in one lump at the country's monthly step,
+   so Resume waits for the step, and that step builds nothing. Pause the day after a step (Built a month just
+   changed) and Resume the day before the next: that step builds nothing, Construction Paused comes off after it,
+   and only the step after builds. Pausing mid-month bills the days since the last step for nothing, at most a
+   month's inputs. **The owner's alternative** (zero waste, a slower crisis pause): both a pause and a resume wait
+   for the step.
 

@@ -500,9 +500,19 @@ sr_sc_one_per_nation = {
 # Space Command's nor the colonies' Orbital Yards' strength, and the yards
 # buy none of their inputs (sr_sc_pause_apply); the reserve, Auto and the
 # fleets' orders carry on.
+#
+# The order is the rule that no built month went unpaid (review of #1287,
+# I1): the build is the whole month's sr_sc_rate in one lump, which doesn't
+# depend on the inputs, so a step builds only when the cut was off from the
+# last step to this one. A pause cuts the inputs at once and holds until a
+# step clears it; a resume (sr_sc_resume_pending) waits for this step, which
+# builds nothing (1, the build check, before 2, the resume), and the cut comes
+# off here (3), so the month after is bought in full before it is built.
+# Clearing the resume first would let a resume the day before the step build
+# a month the inputs never paid for.
 sr_sc_month = {
-	sr_sc_pause_apply = yes
 	sr_sc_self_check = yes
+	# 1. The build: nothing while paused, a resume pending or not.
 	if = {
 		limit = { sr_sc_is_paused = yes }
 		set_variable = { name = sr_sc_built_last value = 0 }
@@ -515,15 +525,23 @@ sr_sc_month = {
 			sr_reserve_build = yes
 		}
 	}
+	# 2. A pending resume takes effect.
+	if = {
+		limit = { sr_sc_is_resuming = yes }
+		sr_sc_clear_pause = yes
+	}
+	# 3. The cut follows the variables (and reaches a building built since).
+	sr_sc_pause_apply = yes
 	sr_reserve_auto_step = yes
 }
 
 # Country scope: the pause's building modifier, derived from sr_sc_paused.
 # Its one apply site (a same-name add_modifier stacks, so removed first), on
-# each Space Command building of a level or more, wherever it stands: the
-# monthly step (sr_sc_month, which also reaches a building built or expanded
-# since) and the toggle (sr_sc_toggle_pause), so a pause or a resume reaches
-# the yards' inputs, and the building's tooltip, at once.
+# each Space Command building of a level or more, wherever it stands, an
+# occupied state's included: the monthly step (sr_sc_month, which also
+# reaches a building built since), the toggle (sr_sc_toggle_pause), so a
+# pause reaches the yards' inputs and the building's tooltip at once, and the
+# AI's resume (sr_sc_ai_pause_review).
 sr_sc_pause_apply = {
 	every_scope_state = {
 		limit = { has_building = building_space_command }
@@ -544,18 +562,39 @@ sr_sc_pause_apply = {
 	}
 }
 
-# Country scope: Pause or Resume (sr_sc_pause_sgui; the AI, sr_sc_ai_pause_review).
-# Paused is recorded as yes; building is the variable's absence. No cost and
-# no wait either way: a paused month buys nothing and builds nothing.
+# Country scope: Pause, Resume and Resuming (sr_sc_pause_sgui; the AI's
+# pause, sr_sc_ai_pause_review). Building, a click pauses at once (sr_sc_paused,
+# yes; building is its absence) and cuts the inputs. Paused, a click asks to
+# resume (sr_sc_resume_pending): the inputs stay cut and the next step, which
+# builds nothing, ends the pause (sr_sc_month). Resuming, a click cancels it.
+# No cost: a pause mid-month bills the days since the last step for nothing,
+# at most a month's inputs a pause.
 sr_sc_toggle_pause = {
 	if = {
+		limit = { sr_sc_is_resuming = yes }
+		remove_variable = sr_sc_resume_pending
+	}
+	else_if = {
 		limit = { sr_sc_is_paused = yes }
-		remove_variable = sr_sc_paused
+		set_variable = { name = sr_sc_resume_pending value = yes }
 	}
 	else = {
 		set_variable = { name = sr_sc_paused value = yes }
 	}
 	sr_sc_pause_apply = yes
+}
+
+# Country scope: the pause ends (the step's pending resume, sr_sc_month; the
+# AI's resume, at its step after the build). The caller applies the cut.
+sr_sc_clear_pause = {
+	if = {
+		limit = { has_variable = sr_sc_resume_pending }
+		remove_variable = sr_sc_resume_pending
+	}
+	if = {
+		limit = { has_variable = sr_sc_paused }
+		remove_variable = sr_sc_paused
+	}
 }
 
 # Country scope, the fleets' month: the upkeep's one refresh site (design § 5;
@@ -763,7 +802,10 @@ sr_fl_ai_review = {
 # fiscal stress (sr_sc_ai_should_pause) and resumes once out of it, not before
 # six months (sr_sc_ai_may_resume). The toggle applies the inputs' cut at
 # once, so a pause decided this month saves the coming month's inputs and the
-# next month's step builds nothing; a resume buys them again from now.
+# next month's step builds nothing. A resume ends the pause directly, not
+# through the pending resume a player's waits on: this runs at the step,
+# after the month's build (nothing, while paused), so the inputs are bought
+# again from now and the next step builds a month they paid for.
 sr_sc_ai_pause_review = {
 	if = {
 		limit = {
@@ -778,7 +820,8 @@ sr_sc_ai_pause_review = {
 			sr_sc_is_paused = yes
 			sr_sc_ai_may_resume = yes
 		}
-		sr_sc_toggle_pause = yes
+		sr_sc_clear_pause = yes
+		sr_sc_pause_apply = yes
 	}
 }
 

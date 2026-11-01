@@ -368,9 +368,11 @@ sr_sc_mix_sgui = {
 	}
 }
 
-# Space Command's Pause and Resume (owner, 2026-10-31): paused, it builds no
-# fleet strength and its yards buy no inputs; fleets, the reserve and Auto
-# carry on. The AI pauses through the same effect (sr_sc_ai_pause_review).
+# Space Command's Pause, Resume and Resuming (owner, 2026-10-31): paused, it
+# builds no fleet strength and its yards buy no inputs; fleets, the reserve
+# and Auto carry on. A resume waits for the next monthly step, which builds
+# nothing (sr_sc_month); a click while it waits cancels it. The AI pauses
+# through the same effect (sr_sc_ai_pause_review).
 sr_sc_pause_sgui = {
 	scope = country
 
@@ -389,6 +391,10 @@ sr_sc_pause_sgui = {
 
 	effect = {
 		if = {
+			limit = { sr_sc_is_resuming = yes }
+			custom_tooltip = sr_sc_resume_cancel_tt
+		}
+		else_if = {
 			limit = { sr_sc_is_paused = yes }
 			custom_tooltip = sr_sc_resume_tt
 		}

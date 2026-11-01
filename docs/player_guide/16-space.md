@@ -1052,12 +1052,16 @@ Space Command dearer to run; it builds as fast while those goods can be bought.
 Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
 raise your fleets' fire by a quarter.
 
-Pause, beside Launch and Auto, stops construction: neither Space Command nor
-your colonies' Orbital Yards build fleet strength, Built a month reads Paused,
-and the yards buy no Launch Capacity, Advanced Materials or electricity. The
-maintenance line and the upkeep are still paid, and your fleets, Launch and
-Auto work as before. Resume builds again from the next month. Neither costs
-anything, so pause whenever you have the fleet you want.
+Pause, beside Launch and Auto, stops construction at once: neither Space
+Command nor your colonies' Orbital Yards build fleet strength, Built a month
+reads Paused, and the yards buy no Launch Capacity, Advanced Materials or
+electricity. The maintenance line and the upkeep are still paid, and your
+fleets, Launch and Auto work as before. Resume waits for the next month's
+construction, which builds nothing; the button reads Resuming until then, and a
+click cancels it. From that month the yards buy their inputs again, and the
+month after builds. A month is built in one go, so it is built only if the
+yards bought their inputs all month. Pausing costs the inputs bought since the
+last month's construction, so pause just after Built a month changes.
 
 ### Moving fleets
 

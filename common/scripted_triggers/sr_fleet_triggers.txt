@@ -82,6 +82,12 @@ sr_sc_is_paused = {
 	has_variable = sr_sc_paused
 }
 
+# Country scope. Paused, with a resume asked for (sr_sc_resume_pending): the
+# next monthly step builds nothing and then ends the pause (sr_sc_month).
+sr_sc_is_resuming = {
+	has_variable = sr_sc_resume_pending
+}
+
 # Country scope, an AI's pause: in default, or in deficit at peace. At war only
 # default pauses it: a war puts most countries in deficit, and a deficit pause
 # would stop the fleets being built for the space war. The fiscal terms of
