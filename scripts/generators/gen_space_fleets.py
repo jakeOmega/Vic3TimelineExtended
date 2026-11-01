@@ -1786,13 +1786,13 @@ def render_debug() -> list[str]:
     for n in range(1, SLOTS + 1):
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'exists')} = yes }}",
-                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.MakeScope.ScriptValue('{var(n, 'loc_value')}')|0] "
+                f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.ScriptValue('{var(n, 'loc_value')}')|0] "
                 f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at month "
                 f"[THIS.Var('{var(n, 'arrive')}').GetValue|0]) "
-                f"strength [THIS.MakeScope.ScriptValue('{var(n, 'strength')}')|1] of [THIS.MakeScope.ScriptValue('{var(n, 'strength_full')}')|1] "
-                f"drive [THIS.MakeScope.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.MakeScope.ScriptValue('{var(n, 'dv_value')}')|1] "
-                f"of [THIS.MakeScope.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.MakeScope.ScriptValue('{var(n, 'supply_value')}')|1] "
-                f"marines [THIS.MakeScope.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.MakeScope.ScriptValue('{var(n, 'posture_value')}')|0]\"",
+                f"strength [THIS.ScriptValue('{var(n, 'strength')}')|1] of [THIS.ScriptValue('{var(n, 'strength_full')}')|1] "
+                f"drive [THIS.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.ScriptValue('{var(n, 'dv_value')}')|1] "
+                f"of [THIS.ScriptValue('{var(n, 'dv_capacity')}')|1] supply [THIS.ScriptValue('{var(n, 'supply_value')}')|1] "
+                f"marines [THIS.ScriptValue('{var(n, 'marines_value')}')|0] posture [THIS.ScriptValue('{var(n, 'posture_value')}')|0]\"",
                 "\t}"]
     out += ["}",
            "sr_loc_debug_log = {"]

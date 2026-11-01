@@ -221,7 +221,9 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 - **Logged with no input:** start a game at Full Colonies and grep `error.log` and `debug.log` for the new files
   (`sr_fleet*`, `sr_fleets_generated*`, `space_race_events.txt`, `covert_operations.txt`): script errors in them show at
   load. `ship_construction` logs by itself once any country has run a Space Command at half staff for a month: an AI
-  space power in an observer run, or you.
+  space power in an observer run, or you. Its first form fired on 2026-10-31 and printed nothing (its `rate=` read
+  `THIS.MakeScope.ScriptValue`, which `debug_log` drops the line for); the fixed line's marker is
+  `sr_sc_checked_v2`, so a save that already ran the old one checks again.
 - **Logged after one action:**
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
