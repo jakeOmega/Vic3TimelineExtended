@@ -42,8 +42,8 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
 Transfer (UI pass design § 6) took in Merge and Detach on the panel: the amounts
 are country variables (``sr_det_amt_<key>``, ``sr_det_to``) read only through
 ``sr_fl_<n>_xf_<key>``, which holds each to what the slot has; ``sr_fl_transfer_new``
-and ``sr_fl_transfer_into`` move them. ``sr_fl_merge`` and ``sr_fl_detach`` stay,
-with no caller left (the AI never merged or detached).
+and ``sr_fl_transfer_into`` move them. Merge's and Detach's own effects, with no
+caller left (the AI never merged or detached), are gone (#1298).
 
 Run ``python3 scripts/generators/gen_space_fleets.py [--dry-run | --check]``.
 A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
@@ -118,8 +118,8 @@ SLOT_LISTS = ("warned_quiet", "warned_loud")
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
-SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick", "merge",
-                "detach", "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
+SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marines", "go", "step_pick",
+                "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "step_posture", "step_target", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
                 "xfer_open", "xfer_step", "transfer")
@@ -493,7 +493,8 @@ def render_slot_triggers(n: int) -> list[str]:
             "\tOR = {"]
     out += [f"\t\tAND = {{ var:sr_fl_dest_pick_{n} = {b.code} {var(n, f'may_depart_{b.key}')} = yes }}" for b in LOCATIONS]
     out += ["\t}", "}",
-            "# Another fleet of ours at the same location, to merge into.",
+            "# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the",
+            "# same location to move into (Merge's old test) ...",
             f"{var(n, 'can_merge')} = {{",
             f"\thas_variable = {loc}",
             "\tOR = {"]
@@ -501,7 +502,7 @@ def render_slot_triggers(n: int) -> list[str]:
         if m != n:
             out.append(f"\t\tAND = {{ has_variable = {var(m, 'loc')} var:{var(m, 'loc')} = var:{loc} }}")
     out += ["\t}", "}",
-            "# Strength to halve, and an empty slot to take the half.",
+            "# ... or strength to split, and an empty slot for a new fleet (Detach's).",
             f"{var(n, 'can_detach')} = {{",
             f"\thas_variable = {loc}",
             f"\t{var(n, 'strength')} >= {{ value = sr_fl_minimum_strength multiply = 4 }}",
@@ -667,8 +668,8 @@ def render_triggers() -> str:
            "# The fleets' per-slot and per-location triggers, from gen_space_fleets.",
            "# Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,",
            "# _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,",
-           "# its propellant covering the leg), and the panel's _can_go, _can_merge,",
-           "# _can_detach, _can_land, _can_embark; the Transfer popup's _can_transfer,",
+           "# its propellant covering the leg), and the panel's _can_go, _can_land,",
+           "# _can_embark; the Transfer popup's _can_transfer (_can_merge or _can_detach),",
            "# _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).",
            ""]
     for n in range(1, SLOTS + 1):
@@ -884,74 +885,6 @@ def render_role_effects() -> list[str]:
     return out
 
 
-def render_merge_detach() -> list[str]:
-    out = ["# ===== Merge and detach (design § 4) =====",
-           "# Slot n merges into the next of ours at its location: every number added, the",
-           "# drive the lower, propellant and supply the lower share of their capacities,",
-           "# then n is cleared. Detach: half of each role into the lowest empty slot."]
-    for n in range(1, SLOTS + 1):
-        others = [m for m in range(1, SLOTS + 1) if m != n]
-        out += [f"sr_fl_{n}_merge_now = {{"]
-        out += _chain([(f"has_variable = {var(m, 'loc')} var:{var(m, 'loc')} = var:{var(n, 'loc')}",
-                        [f"sr_fl_merge = {{ N = {n} M = {m} }}"]) for m in others])
-        out += ["}", f"sr_fl_{n}_detach_now = {{"]
-        out += _chain([(f"NOT = {{ {var(m, 'exists')} = yes }}", [f"sr_fl_detach = {{ N = {n} M = {m} }}"]) for m in others])
-        out += ["}"]
-    out += ["sr_fl_merge_at = { sr_fl_$N$_merge_now = yes }",
-            "sr_fl_detach_at = { sr_fl_$N$_detach_now = yes }"]
-    out += ["# N into M: shares first, then the numbers, then N cleared.",
-            "sr_fl_merge = {",
-            "\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
-            "\tif = { limit = { sr_fl_$M$_dv_capacity > 0 sr_fl_$M$_dv_value < { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } } "
-            "set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$M$_dv_value divide = sr_fl_$M$_dv_capacity max = 1 } } }",
-            "\tset_local_variable = { name = sr_fl_supply_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_endurance > 0 } set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$N$_supply_value divide = sr_fl_$N$_endurance max = 1 } } }",
-            "\tif = { limit = { sr_fl_$M$_endurance > 0 sr_fl_$M$_supply_value < { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } } "
-            "set_local_variable = { name = sr_fl_supply_share value = { value = sr_fl_$M$_supply_value divide = sr_fl_$M$_endurance max = 1 } } }"]
-    for r in ROLES:
-        for suffix in ("", "_full"):
-            out.append(f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_{r.key}{suffix} }} "
-                       f"sr_fl_add_role_part = {{ N = $M$ VAR = {r.key}{suffix} AMOUNT = var:sr_fl_$N$_{r.key}{suffix} }} }}")
-    out += ["\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = sr_fl_$N$_marines_value } }",
-            "\tif = { limit = { sr_fl_$N$_drive_value < sr_fl_$M$_drive_value } set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value } }",
-            "\tif = {",
-            "\t\tlimit = { has_variable = sr_fl_$N$_refit_until }",
-            "\t\tif = {",
-            "\t\t\tlimit = { OR = { NOT = { has_variable = sr_fl_$M$_refit_until } var:sr_fl_$M$_refit_until < var:sr_fl_$N$_refit_until } }",
-            "\t\t\tset_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }",
-            "\t\t}",
-            "\t}",
-            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
-            "\tset_variable = { name = sr_fl_$M$_supply value = { value = sr_fl_$M$_endurance multiply = local_var:sr_fl_supply_share } }",
-            "\tsr_fl_clear_at = { N = $N$ }",
-            "\tsr_loc_rebuild = yes",
-            "}",
-            "# Half of N into the empty M, at N's location, posture and shares.",
-            "sr_fl_detach = {",
-            "\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
-            "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
-            "\tset_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
-            "\tset_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
-            "\tset_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
-            "\tif = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until } }",
-            "\tset_variable = { name = sr_fl_$M$_supply value = sr_fl_$N$_supply_value }",
-            "\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$N$_marines_value multiply = 0.5 } }",
-            "\tset_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value multiply = 0.5 } }"]
-    for r in ROLES:
-        for suffix in ("", "_full"):
-            out += ["\tif = {",
-                    f"\t\tlimit = {{ has_variable = sr_fl_$N$_{r.key}{suffix} }}",
-                    f"\t\tset_variable = {{ name = sr_fl_$M$_{r.key}{suffix} value = {{ value = var:sr_fl_$N$_{r.key}{suffix} multiply = 0.5 }} }}",
-                    f"\t\tchange_variable = {{ name = sr_fl_$N$_{r.key}{suffix} multiply = 0.5 }}",
-                    "\t}"]
-    out += ["\tset_variable = { name = sr_fl_$N$_dv value = { value = sr_fl_$N$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
-            "\tset_variable = { name = sr_fl_$M$_dv value = { value = sr_fl_$M$_dv_capacity multiply = local_var:sr_fl_dv_share } }",
-            "\tsr_loc_rebuild = yes",
-            "}"]
-    return out
-
-
 # ---------------------------------------------------------------------------
 # Transfer (UI pass design § 6): the popup that replaced Merge and Detach
 # ---------------------------------------------------------------------------
@@ -1021,7 +954,8 @@ def render_transfer_values(n: int) -> list[str]:
 
 def render_transfer_triggers(n: int) -> list[str]:
     others = _others(n)
-    return ["# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.",
+    return ["# Transfer (UI pass design § 6): the popup opens where a fleet could move into another",
+            "# of ours here or split off a new one.",
             f"{var(n, 'can_transfer')} = {{ OR = {{ {var(n, 'can_merge')} = yes {var(n, 'can_detach')} = yes }} }}",
             "# An Into button's slot (scope:pick) is a fleet of ours here.",
             f"{var(n, 'xf_pick_here')} = {{", "\tOR = {",
@@ -1181,7 +1115,7 @@ def _xf_move() -> list[str]:
 def render_transfer() -> list[str]:
     """Transfer (UI pass design § 6): slot N's chosen share of each role and its
     marines into slot M, a new fleet (Detach's shape) or one of ours there
-    (Merge's). sr_fl_merge and sr_fl_detach stay as they are."""
+    (Merge's rules)."""
     out = ["# Transfer (sr_fleet_transfer_sgui): into the lowest empty slot (sr_det_to 0),",
            "# or into that slot while it is still here."]
     for n in range(1, SLOTS + 1):
@@ -1917,7 +1851,7 @@ def render_effects() -> str:
              "# design). The one-slot arithmetic they call is hand-written in",
              "# common/scripted_effects/sr_fleet_effects.txt; country scope unless said.",
              ""]
-    for block in (render_dispatchers(), render_role_effects(), render_merge_detach(), render_transfer_effects(),
+    for block in (render_dispatchers(), render_role_effects(), render_transfer_effects(),
                   render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
                   render_ai_attack(), render_debug(), render_overview_list(), render_earth_alert()):

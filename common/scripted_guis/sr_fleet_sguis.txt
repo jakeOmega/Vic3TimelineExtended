@@ -133,7 +133,7 @@ sr_fleet_go_sgui = {
 # popup (te_sr_xfer_popup) chooses how much of each role and how many marines
 # move (the country variables sr_det_amt_<role>, held to what the slot has by
 # sr_fl_<n>_xf_<role>), and where (sr_det_to: 0 a new fleet, else a slot here).
-# The AI never merged or detached; sr_fl_merge and sr_fl_detach stay.
+# The AI never merged or detached, so it has no Transfer.
 #
 # Opening the popup: each amount to half the role, rounded, and the transfer
 # bound for a new fleet (or, with no slot free, the first fleet of ours here).

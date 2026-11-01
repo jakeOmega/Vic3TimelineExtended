@@ -2,8 +2,8 @@
 # The fleets' per-slot and per-location triggers, from gen_space_fleets.
 # Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,
 # _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,
-# its propellant covering the leg), and the panel's _can_go, _can_merge,
-# _can_detach, _can_land, _can_embark; the Transfer popup's _can_transfer,
+# its propellant covering the leg), and the panel's _can_go, _can_land,
+# _can_embark; the Transfer popup's _can_transfer (_can_merge or _can_detach),
 # _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).
 
 # --- Slot 1 ---
@@ -266,7 +266,8 @@ sr_fl_1_can_go = {
 		AND = { var:sr_fl_dest_pick_1 = 9 sr_fl_1_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_1_can_merge = {
 	has_variable = sr_fl_1_loc
 	OR = {
@@ -280,7 +281,7 @@ sr_fl_1_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_1_can_detach = {
 	has_variable = sr_fl_1_loc
 	sr_fl_1_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -981,7 +982,8 @@ sr_fl_2_can_go = {
 		AND = { var:sr_fl_dest_pick_2 = 9 sr_fl_2_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_2_can_merge = {
 	has_variable = sr_fl_2_loc
 	OR = {
@@ -995,7 +997,7 @@ sr_fl_2_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_2_can_detach = {
 	has_variable = sr_fl_2_loc
 	sr_fl_2_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -1696,7 +1698,8 @@ sr_fl_3_can_go = {
 		AND = { var:sr_fl_dest_pick_3 = 9 sr_fl_3_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_3_can_merge = {
 	has_variable = sr_fl_3_loc
 	OR = {
@@ -1710,7 +1713,7 @@ sr_fl_3_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_3_can_detach = {
 	has_variable = sr_fl_3_loc
 	sr_fl_3_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -2411,7 +2414,8 @@ sr_fl_4_can_go = {
 		AND = { var:sr_fl_dest_pick_4 = 9 sr_fl_4_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_4_can_merge = {
 	has_variable = sr_fl_4_loc
 	OR = {
@@ -2425,7 +2429,7 @@ sr_fl_4_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_4_can_detach = {
 	has_variable = sr_fl_4_loc
 	sr_fl_4_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -3126,7 +3130,8 @@ sr_fl_5_can_go = {
 		AND = { var:sr_fl_dest_pick_5 = 9 sr_fl_5_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_5_can_merge = {
 	has_variable = sr_fl_5_loc
 	OR = {
@@ -3140,7 +3145,7 @@ sr_fl_5_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_5_can_detach = {
 	has_variable = sr_fl_5_loc
 	sr_fl_5_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -3841,7 +3846,8 @@ sr_fl_6_can_go = {
 		AND = { var:sr_fl_dest_pick_6 = 9 sr_fl_6_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_6_can_merge = {
 	has_variable = sr_fl_6_loc
 	OR = {
@@ -3855,7 +3861,7 @@ sr_fl_6_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_6_can_detach = {
 	has_variable = sr_fl_6_loc
 	sr_fl_6_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -4556,7 +4562,8 @@ sr_fl_7_can_go = {
 		AND = { var:sr_fl_dest_pick_7 = 9 sr_fl_7_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_7_can_merge = {
 	has_variable = sr_fl_7_loc
 	OR = {
@@ -4570,7 +4577,7 @@ sr_fl_7_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_7_can_detach = {
 	has_variable = sr_fl_7_loc
 	sr_fl_7_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -5271,7 +5278,8 @@ sr_fl_8_can_go = {
 		AND = { var:sr_fl_dest_pick_8 = 9 sr_fl_8_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_8_can_merge = {
 	has_variable = sr_fl_8_loc
 	OR = {
@@ -5285,7 +5293,7 @@ sr_fl_8_can_merge = {
 		AND = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_8_can_detach = {
 	has_variable = sr_fl_8_loc
 	sr_fl_8_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -5986,7 +5994,8 @@ sr_fl_9_can_go = {
 		AND = { var:sr_fl_dest_pick_9 = 9 sr_fl_9_may_depart_kuiper = yes }
 	}
 }
-# Another fleet of ours at the same location, to merge into.
+# Transfer's two ways (sr_fl_<n>_can_transfer): another fleet of ours at the
+# same location to move into (Merge's old test) ...
 sr_fl_9_can_merge = {
 	has_variable = sr_fl_9_loc
 	OR = {
@@ -6000,7 +6009,7 @@ sr_fl_9_can_merge = {
 		AND = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
 	}
 }
-# Strength to halve, and an empty slot to take the half.
+# ... or strength to split, and an empty slot for a new fleet (Detach's).
 sr_fl_9_can_detach = {
 	has_variable = sr_fl_9_loc
 	sr_fl_9_strength >= { value = sr_fl_minimum_strength multiply = 4 }
@@ -6441,7 +6450,8 @@ sr_fl_9_ai_attacks_kuiper = {
 	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_1_can_transfer = { OR = { sr_fl_1_can_merge = yes sr_fl_1_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_1_xf_pick_here = {
@@ -6487,7 +6497,8 @@ sr_fl_1_xf_room = {
 	OR = { sr_fl_1_xf_left <= 0 sr_fl_1_xf_stay_over <= sr_fl_1_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_2_can_transfer = { OR = { sr_fl_2_can_merge = yes sr_fl_2_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_2_xf_pick_here = {
@@ -6533,7 +6544,8 @@ sr_fl_2_xf_room = {
 	OR = { sr_fl_2_xf_left <= 0 sr_fl_2_xf_stay_over <= sr_fl_2_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_3_can_transfer = { OR = { sr_fl_3_can_merge = yes sr_fl_3_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_3_xf_pick_here = {
@@ -6579,7 +6591,8 @@ sr_fl_3_xf_room = {
 	OR = { sr_fl_3_xf_left <= 0 sr_fl_3_xf_stay_over <= sr_fl_3_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_4_can_transfer = { OR = { sr_fl_4_can_merge = yes sr_fl_4_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_4_xf_pick_here = {
@@ -6625,7 +6638,8 @@ sr_fl_4_xf_room = {
 	OR = { sr_fl_4_xf_left <= 0 sr_fl_4_xf_stay_over <= sr_fl_4_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_5_can_transfer = { OR = { sr_fl_5_can_merge = yes sr_fl_5_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_5_xf_pick_here = {
@@ -6671,7 +6685,8 @@ sr_fl_5_xf_room = {
 	OR = { sr_fl_5_xf_left <= 0 sr_fl_5_xf_stay_over <= sr_fl_5_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_6_can_transfer = { OR = { sr_fl_6_can_merge = yes sr_fl_6_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_6_xf_pick_here = {
@@ -6717,7 +6732,8 @@ sr_fl_6_xf_room = {
 	OR = { sr_fl_6_xf_left <= 0 sr_fl_6_xf_stay_over <= sr_fl_6_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_7_can_transfer = { OR = { sr_fl_7_can_merge = yes sr_fl_7_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_7_xf_pick_here = {
@@ -6763,7 +6779,8 @@ sr_fl_7_xf_room = {
 	OR = { sr_fl_7_xf_left <= 0 sr_fl_7_xf_stay_over <= sr_fl_7_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_8_can_transfer = { OR = { sr_fl_8_can_merge = yes sr_fl_8_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_8_xf_pick_here = {
@@ -6809,7 +6826,8 @@ sr_fl_8_xf_room = {
 	OR = { sr_fl_8_xf_left <= 0 sr_fl_8_xf_stay_over <= sr_fl_8_xf_now_over }
 }
 
-# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+# Transfer (UI pass design § 6): the popup opens where a fleet could move into another
+# of ours here or split off a new one.
 sr_fl_9_can_transfer = { OR = { sr_fl_9_can_merge = yes sr_fl_9_can_detach = yes } }
 # An Into button's slot (scope:pick) is a fleet of ours here.
 sr_fl_9_xf_pick_here = {

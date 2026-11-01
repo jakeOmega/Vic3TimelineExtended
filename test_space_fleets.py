@@ -2283,11 +2283,15 @@ class TransferPopupTest(unittest.TestCase):
                           self.triggers)
 
     def test_merge_and_detach_are_gone_from_the_panel(self):
-        """The popup took them in. The effects stay (no caller is left; the AI never had one)."""
+        """The popup took them in, and their effects went with them (#1298: no
+        caller was left; the AI never had one)."""
         self.assertNotIn("sr_fleet_merge_sgui", self.sguis)
         self.assertNotIn("sr_fleet_detach_sgui", self.sguis)
-        self.assertRegex(self.effects, r"(?m)^sr_fl_merge = \{")
-        self.assertRegex(self.effects, r"(?m)^sr_fl_detach = \{")
+        for pattern in (r"(?m)^sr_fl_merge = \{", r"(?m)^sr_fl_detach = \{", r"(?m)^sr_fl_merge_at = \{",
+                        r"(?m)^sr_fl_detach_at = \{", r"(?m)^sr_fl_\d_merge_now = \{", r"(?m)^sr_fl_\d_detach_now = \{"):
+            with self.subTest(pattern=pattern):
+                self.assertNotRegex(self.effects, pattern)
+        self.assertFalse({"merge", "detach"} & set(gsf.SLOT_ACTIONS))
 
 
 class TransferTest(unittest.TestCase):
