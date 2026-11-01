@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds eight more eras, numbered 6 to 13, with 185 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 186 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -30,7 +30,7 @@ them. Era 13's need breakthroughs nobody yet knows how to plan for.
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | the near future | 800,000 | 25 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 11 | the near future | 800,000 | 26 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
 | 12 | the medium-term future | 1,500,000 | 13 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
 | 13 | the speculative future | 3,000,000 | 11 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
@@ -187,6 +187,23 @@ gain has to be kept up as the bar rises.
 Each of the four also raises the Schools institution's maximum investment by one
 level. Funding schools and the laws that raise education access are how a
 country holds its literacy against the drop.
+
+AI Tutors (era 11, after Digital Education) works the other way. A personal
+tutor for every child adds 10 points of education access, speeds literacy growth
+and raises qualifications by 10%, so pops retrain for new jobs sooner. With all
+five researched, education access ends 30 points down rather than 40.
+
+What the tutors teach is the catch. AI Tutors raises the Ministry of Thought
+Control's maximum investment by one level, and two events can follow, each at
+most once. Under Unregulated Internet, a private tutoring platform is caught
+steering its pupils' politics. Under State-Controlled Internet, or with a
+Ministry of Propaganda or of Thought Control, the state has written the syllabus
+every tutor will teach. Each event trades loyalty against trust and research.
+Controlling the lessons turns a small share of your people loyalist every month
+for ten years, fading, at a cost in legitimacy and research speed. Opening them
+up gives legitimacy and research speed instead, pleases the Intelligentsia, and
+radicalizes whoever lost control of them: the platform's capitalist owners or
+the ministry's bureaucrats.
 
 ### Technologies that open the mod's systems
 

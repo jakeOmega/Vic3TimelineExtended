@@ -6,7 +6,7 @@
 #         LGBTQ+ Rights, Globalization, Terrorism, Social Media,
 #         Social Justice, Brain-Computer Interfaces, Human Augmentation,
 #         Space Colonization, Telepathic Communities, Nuclear Power,
-#         AI, Bioengineering, Autonomous Vehicles
+#         AI, Bioengineering, Autonomous Vehicles, AI Tutors
 # ============================================================================
 
 # ============================================================================
@@ -2883,6 +2883,193 @@ society_technology_events.31 = {
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# ============================================================================
+# 18. AI TUTORS (Events 36-37)
+# Tech: ai_tutors (era_11). The owner's call 8 (era 13 spec § 7.6): a tutor for
+# every child can be used to indoctrinate, by a private platform or by the state.
+# Each event trades loyalty (a monthly loyalist trickle, the Ministry of Thought
+# Control's own lever, state_monthly_loyalists_add) against trust (legitimacy)
+# and innovation (research speed). Each fires once per country.
+# ============================================================================
+
+# Event 36: Lessons Between the Lines
+# A private tutoring platform is caught steering its pupils' politics, under
+# Unregulated Internet, where nothing stopped it.
+society_technology_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/whistleblower_documents.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = society_technology_events.36.t
+	desc = society_technology_events.36.d
+	flavor = society_technology_events.36.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = ai_tutors
+		has_law = law_type:law_unregulated_internet
+		NOT = { has_variable = ste_event_36_fired }
+	}
+
+	immediate = {
+		set_variable = ste_event_36_fired
+	}
+
+	option = {
+		name = society_technology_events.36.a
+		default_option = yes
+		# Open every tutor's lessons to public audit: trust and innovation, paid
+		# for by the platforms' owners
+		add_modifier = {
+			name = ste_ai_tutor_open_curricula
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = capitalists }
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_industrialists = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+		}
+	}
+
+	option = {
+		name = society_technology_events.36.b
+		# A quiet contract: the platform keeps its market and teaches loyalty to
+		# the state instead of its owners' views
+		add_modifier = {
+			name = ste_ai_tutor_platform_contract
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_industrialists = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_single_party_state
+						has_law = law_type:law_secret_police
+						has_law = law_type:law_outlawed_dissent
+					}
+				}
+				add = 3
+			}
+		}
+	}
+}
+
+# Event 37: The Ministry's Syllabus
+# The state writes what every AI tutor teaches: under State-Controlled
+# Internet, or where a Ministry of Propaganda or of Thought Control exists.
+society_technology_events.37 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/ministry_policy_debate.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = society_technology_events.37.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_ministry_of_thought_control }
+				desc = society_technology_events.37.d_thought_control
+			}
+			triggered_desc = {
+				trigger = { has_law = law_type:law_ministry_of_propaganda }
+				desc = society_technology_events.37.d_propaganda
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.37.d
+			}
+		}
+	}
+	flavor = society_technology_events.37.f
+
+	duration = 3
+	cooldown = { days = long_modifier_time }
+
+	trigger = {
+		has_technology_researched = ai_tutors
+		OR = {
+			has_law = law_type:law_state_controlled_internet
+			has_law = law_type:law_ministry_of_propaganda
+			has_law = law_type:law_ministry_of_thought_control
+		}
+		NOT = { has_variable = ste_event_37_fired }
+	}
+
+	immediate = {
+		set_variable = ste_event_37_fired
+	}
+
+	option = {
+		name = society_technology_events.37.a
+		default_option = yes
+		# Approve it: a generation taught loyalty, at the cost of trust and of
+		# children taught answers rather than questions
+		add_modifier = {
+			name = ste_ai_tutor_state_syllabus
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_ministry_of_propaganda
+						has_law = law_type:law_ministry_of_thought_control
+					}
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = {
+		name = society_technology_events.37.b
+		# Hand the syllabus to teachers and scholars: trust and innovation, and
+		# the ministry's officials take it as a purge
+		add_modifier = {
+			name = ste_ai_tutor_scholars_syllabus
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		add_radicals = { value = small_radicals pop_type = bureaucrats }
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ig:ig_intelligentsia = { is_in_government = yes } }
+				add = 2
+			}
+		}
 	}
 }
 
