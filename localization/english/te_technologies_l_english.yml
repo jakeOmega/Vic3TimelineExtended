@@ -17,6 +17,8 @@
  advanced_assembly_lines_desc:0 "Further refining the assembly line with modular components and just-in-time production makes our factories even more efficient. We can now produce a wider variety of goods at lower costs, which is good for the economy, I suppose."
  advanced_body_armor:0 "Advanced Body Armor"
  advanced_body_armor_desc:0 "With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat."
+ advanced_fission:0 "Advanced Fission"
+ advanced_fission_desc:0 "Molten-salt and thorium reactors run hotter, waste less of their fuel and cannot melt down the way the old light-water designs could. Our existing nuclear plants can be rebuilt around them for far more power from every level, if we can find the specialized alloys to keep the salt from eating through the pipes."
  advanced_materials_armor:0 "Advanced Materials Armor"
  advanced_materials_armor_desc:0 "The use of advanced materials like Composite and Reactive Armor makes our military vehicles tougher. Hopefully, this will keep them from blowing up so easily."
  advanced_military_aircraft:0 "Advanced Military Aircraft"

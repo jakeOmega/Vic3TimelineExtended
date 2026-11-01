@@ -32,930 +32,934 @@ covert_stolen_tech_name = {
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 7 }
-		localization_key = advanced_materials_armor
+		localization_key = advanced_fission
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 8 }
-		localization_key = advanced_military_aircraft
+		localization_key = advanced_materials_armor
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 9 }
-		localization_key = advanced_nanofabrication
+		localization_key = advanced_military_aircraft
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 10 }
-		localization_key = advanced_structural_engineering
+		localization_key = advanced_nanofabrication
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 11 }
-		localization_key = advanced_submarine_technology
+		localization_key = advanced_structural_engineering
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 12 }
-		localization_key = ai_agents
+		localization_key = advanced_submarine_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 13 }
-		localization_key = aluminum_mass_production
+		localization_key = ai_agents
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 14 }
-		localization_key = aniline
+		localization_key = aluminum_mass_production
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 15 }
-		localization_key = anti_sub_warfare
+		localization_key = aniline
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 16 }
-		localization_key = antimatter_production
+		localization_key = anti_sub_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 17 }
-		localization_key = arc_welding
+		localization_key = antimatter_production
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 18 }
-		localization_key = army_reserves
+		localization_key = arc_welding
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 19 }
-		localization_key = art_silk
+		localization_key = army_reserves
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 20 }
-		localization_key = artificial_intelligence
+		localization_key = art_silk
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 21 }
-		localization_key = artillery
+		localization_key = artificial_intelligence
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 22 }
-		localization_key = asteroid_mining
+		localization_key = artillery
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 23 }
-		localization_key = atmospheric_engine
+		localization_key = asteroid_mining
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 24 }
-		localization_key = augmented_reality_warfare
+		localization_key = atmospheric_engine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 25 }
-		localization_key = automated_surveillance
+		localization_key = augmented_reality_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 26 }
-		localization_key = automatic_bottle_blowers
+		localization_key = automated_surveillance
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 27 }
-		localization_key = automatic_machine_guns
+		localization_key = automatic_bottle_blowers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 28 }
-		localization_key = autonomous_vehicles
+		localization_key = automatic_machine_guns
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 29 }
-		localization_key = autonomous_weapons
+		localization_key = autonomous_vehicles
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 30 }
-		localization_key = baking_powder
+		localization_key = autonomous_weapons
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 31 }
-		localization_key = barcodes_and_scanners
+		localization_key = baking_powder
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 32 }
-		localization_key = battlefleet_tactics
+		localization_key = barcodes_and_scanners
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 33 }
-		localization_key = battleship_tech
+		localization_key = battlefleet_tactics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 34 }
-		localization_key = bergius_process
+		localization_key = battleship_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 35 }
-		localization_key = bessemer_process
+		localization_key = bergius_process
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 36 }
-		localization_key = bioenhanced_soldiers
+		localization_key = bessemer_process
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 37 }
-		localization_key = biotechnology
+		localization_key = bioenhanced_soldiers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 38 }
-		localization_key = bolt_action_rifles
+		localization_key = biotechnology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 39 }
-		localization_key = bombing_aircraft
+		localization_key = bolt_action_rifles
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 40 }
-		localization_key = breech_loading_artillery
+		localization_key = bombing_aircraft
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 41 }
-		localization_key = canneries
+		localization_key = breech_loading_artillery
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 42 }
-		localization_key = carbon_capture_and_storage
+		localization_key = canneries
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 43 }
-		localization_key = carrier_tech
+		localization_key = carbon_capture_and_storage
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 44 }
-		localization_key = cellular_networks
+		localization_key = carrier_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 45 }
-		localization_key = chemical_bleaching
+		localization_key = cellular_networks
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 46 }
-		localization_key = chemical_warfare
+		localization_key = chemical_bleaching
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 47 }
-		localization_key = cislunar_infrastructure
+		localization_key = chemical_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 48 }
-		localization_key = clean_energy_technologies
+		localization_key = cislunar_infrastructure
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 49 }
-		localization_key = cloud_computing
+		localization_key = clean_energy_technologies
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 50 }
-		localization_key = combined_arms
+		localization_key = cloud_computing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 51 }
-		localization_key = combustion_engine
+		localization_key = combined_arms
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 52 }
-		localization_key = compact_fusion_reactors
+		localization_key = combustion_engine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 53 }
-		localization_key = compression_ignition
+		localization_key = compact_fusion_reactors
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 54 }
-		localization_key = computer_aided_design
+		localization_key = compression_ignition
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 55 }
-		localization_key = computer_networks
+		localization_key = computer_aided_design
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 56 }
-		localization_key = concrete_dockyards
+		localization_key = computer_networks
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 57 }
-		localization_key = concrete_fortifications
+		localization_key = concrete_dockyards
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 58 }
-		localization_key = conveyors
+		localization_key = concrete_fortifications
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 59 }
-		localization_key = cotton_gin
+		localization_key = conveyors
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 60 }
-		localization_key = cryptography
+		localization_key = cotton_gin
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 61 }
-		localization_key = crystal_glass
+		localization_key = cryptography
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 62 }
-		localization_key = cyber_warfare
+		localization_key = crystal_glass
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 63 }
-		localization_key = defense_in_depth
+		localization_key = cyber_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 64 }
-		localization_key = destroyer
+		localization_key = defense_in_depth
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 65 }
-		localization_key = digital_telecommunications
+		localization_key = destroyer
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 66 }
-		localization_key = directed_energy_defenses
+		localization_key = digital_telecommunications
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 67 }
-		localization_key = directed_energy_weapons
+		localization_key = directed_energy_defenses
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 68 }
-		localization_key = distillation
+		localization_key = directed_energy_weapons
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 69 }
-		localization_key = dough_rollers
+		localization_key = distillation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 70 }
-		localization_key = dreadnought_tech
+		localization_key = dough_rollers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 71 }
-		localization_key = drydocks
+		localization_key = dreadnought_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 72 }
-		localization_key = dynamite
+		localization_key = drydocks
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 73 }
-		localization_key = e-commerce
+		localization_key = dynamite
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 74 }
-		localization_key = early_nanotechnology
+		localization_key = e-commerce
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 75 }
-		localization_key = electric_arc_process
+		localization_key = early_nanotechnology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 76 }
-		localization_key = electric_railway
+		localization_key = electric_arc_process
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 77 }
-		localization_key = electric_telegraph
+		localization_key = electric_railway
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 78 }
-		localization_key = electric_vehicles
+		localization_key = electric_telegraph
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 79 }
-		localization_key = electrical_capacitors
+		localization_key = electric_vehicles
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 80 }
-		localization_key = electrical_generation
+		localization_key = electrical_capacitors
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 81 }
-		localization_key = electronic_warfare
+		localization_key = electrical_generation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 82 }
-		localization_key = enclosure
+		localization_key = electronic_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 83 }
-		localization_key = enlistment_offices
+		localization_key = enclosure
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 84 }
-		localization_key = fiber_optics
+		localization_key = enlistment_offices
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 85 }
-		localization_key = field_works
+		localization_key = fiber_optics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 86 }
-		localization_key = flamethrowers
+		localization_key = field_works
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 87 }
-		localization_key = flash_freezing
+		localization_key = flamethrowers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 88 }
-		localization_key = floating_harbor
+		localization_key = flash_freezing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 89 }
-		localization_key = fluorescent_lamps
+		localization_key = floating_harbor
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 90 }
-		localization_key = fractional_distillation
+		localization_key = fluorescent_lamps
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 91 }
-		localization_key = fusion_batteries
+		localization_key = fractional_distillation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 92 }
-		localization_key = fusion_power
+		localization_key = fusion_batteries
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 93 }
-		localization_key = gantry_cranes
+		localization_key = fusion_power
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 94 }
-		localization_key = gene_splicing
+		localization_key = gantry_cranes
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 95 }
-		localization_key = general_staff
+		localization_key = gene_splicing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 96 }
-		localization_key = generative_ai
+		localization_key = general_staff
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 97 }
-		localization_key = genetic_engineering
+		localization_key = generative_ai
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 98 }
-		localization_key = green_revolution
+		localization_key = genetic_engineering
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 99 }
-		localization_key = guided_missiles
+		localization_key = green_revolution
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 100 }
-		localization_key = gunsmithing
+		localization_key = guided_missiles
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 101 }
-		localization_key = handcranked_machine_gun
+		localization_key = gunsmithing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 102 }
-		localization_key = humanoid_robotics
+		localization_key = handcranked_machine_gun
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 103 }
-		localization_key = hydraulic_cranes
+		localization_key = humanoid_robotics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 104 }
-		localization_key = hydraulic_fracturing
+		localization_key = hydraulic_cranes
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 105 }
-		localization_key = hypersonic_weapons
+		localization_key = hydraulic_fracturing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 106 }
-		localization_key = improved_fertilizer
+		localization_key = hypersonic_weapons
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 107 }
-		localization_key = in_situ_resource_utilization
+		localization_key = improved_fertilizer
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 108 }
-		localization_key = inertial_navigation_systems
+		localization_key = in_situ_resource_utilization
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 109 }
-		localization_key = infrared_night_vision
+		localization_key = inertial_navigation_systems
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 110 }
-		localization_key = integrated_circuits
+		localization_key = infrared_night_vision
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 111 }
-		localization_key = intensive_agriculture
+		localization_key = integrated_circuits
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 112 }
-		localization_key = internet_of_things
+		localization_key = intensive_agriculture
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 113 }
-		localization_key = ironclad_tech
+		localization_key = internet_of_things
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 114 }
-		localization_key = isoprene
+		localization_key = ironclad_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 115 }
-		localization_key = jadc2
+		localization_key = isoprene
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 116 }
-		localization_key = jet_engine_technology
+		localization_key = jadc2
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 117 }
-		localization_key = jeune_ecole
+		localization_key = jet_engine_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 118 }
-		localization_key = landing_craft
+		localization_key = jeune_ecole
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 119 }
-		localization_key = laser_technology
+		localization_key = landing_craft
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 120 }
-		localization_key = lathe
+		localization_key = laser_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 121 }
-		localization_key = line_infantry
+		localization_key = lathe
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 122 }
-		localization_key = logistics
+		localization_key = line_infantry
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 123 }
-		localization_key = machine_learning
+		localization_key = logistics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 124 }
-		localization_key = mainframe_computers
+		localization_key = machine_learning
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 125 }
-		localization_key = mandatory_service
+		localization_key = mainframe_computers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 126 }
-		localization_key = manufacturies
+		localization_key = mandatory_service
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 127 }
-		localization_key = mechanical_tools
+		localization_key = manufacturies
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 128 }
-		localization_key = mechanized_farming
+		localization_key = mechanical_tools
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 129 }
-		localization_key = mechanized_workshops
+		localization_key = mechanized_farming
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 130 }
-		localization_key = microprocessor
+		localization_key = mechanized_workshops
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 131 }
-		localization_key = military_aviation
+		localization_key = microprocessor
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 132 }
-		localization_key = military_drill
+		localization_key = military_aviation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 133 }
-		localization_key = military_grade_cybersecurity
+		localization_key = military_drill
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 134 }
-		localization_key = military_statistics
+		localization_key = military_grade_cybersecurity
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 135 }
-		localization_key = missile_defense_systems
+		localization_key = military_statistics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 136 }
-		localization_key = mobile_armor
+		localization_key = missile_defense_systems
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 137 }
-		localization_key = modern_automotive_technology
+		localization_key = mobile_armor
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 138 }
-		localization_key = modern_chemical_processes
+		localization_key = modern_automotive_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 139 }
-		localization_key = modern_material_science
+		localization_key = modern_chemical_processes
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 140 }
-		localization_key = modern_materials
+		localization_key = modern_material_science
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 141 }
-		localization_key = modern_nursing
+		localization_key = modern_materials
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 142 }
-		localization_key = modern_skyscrapers
+		localization_key = modern_nursing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 143 }
-		localization_key = modern_tools
+		localization_key = modern_skyscrapers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 144 }
-		localization_key = molecular_assemblers
+		localization_key = modern_tools
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 145 }
-		localization_key = monitor_tech
+		localization_key = molecular_assemblers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 146 }
-		localization_key = motorized_artillery
+		localization_key = monitor_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 147 }
-		localization_key = napoleonic_warfare
+		localization_key = motorized_artillery
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 148 }
-		localization_key = naval_convoy_defense
+		localization_key = napoleonic_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 149 }
-		localization_key = naval_fire_control_systems
+		localization_key = naval_convoy_defense
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 150 }
-		localization_key = navigation
+		localization_key = naval_fire_control_systems
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 151 }
-		localization_key = nco_training
+		localization_key = navigation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 152 }
-		localization_key = network_centric_warfare
+		localization_key = nco_training
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 153 }
-		localization_key = nitrogen_fixation
+		localization_key = network_centric_warfare
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 154 }
-		localization_key = nitroglycerin
+		localization_key = nitrogen_fixation
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 155 }
-		localization_key = nuclear_energy
+		localization_key = nitroglycerin
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 156 }
-		localization_key = nuclear_thermal_propulsion
+		localization_key = nuclear_energy
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 157 }
-		localization_key = nuclear_weapons
+		localization_key = nuclear_thermal_propulsion
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 158 }
-		localization_key = oil_turbine
+		localization_key = nuclear_weapons
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 159 }
-		localization_key = open_hearth_process
+		localization_key = oil_turbine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 160 }
-		localization_key = orbital_manufacturing
+		localization_key = open_hearth_process
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 161 }
-		localization_key = orbital_weapon_platforms
+		localization_key = orbital_manufacturing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 162 }
-		localization_key = paddle_steamer
+		localization_key = orbital_weapon_platforms
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 163 }
-		localization_key = pasteurization
+		localization_key = paddle_steamer
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 164 }
-		localization_key = percussion_cap
+		localization_key = pasteurization
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 165 }
-		localization_key = personal_appliances
+		localization_key = percussion_cap
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 166 }
-		localization_key = personal_computers
+		localization_key = personal_appliances
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 167 }
-		localization_key = photocopiers
+		localization_key = personal_computers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 168 }
-		localization_key = plastic_mass_production
+		localization_key = photocopiers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 169 }
-		localization_key = plastics
+		localization_key = plastic_mass_production
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 170 }
-		localization_key = pneumatic_tools
+		localization_key = plastics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 171 }
-		localization_key = power_of_the_purse
+		localization_key = pneumatic_tools
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 172 }
-		localization_key = pre_dreadnought_tech
+		localization_key = power_of_the_purse
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 173 }
-		localization_key = precision_guided_munitions
+		localization_key = pre_dreadnought_tech
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 174 }
-		localization_key = predictive_logistics
+		localization_key = precision_guided_munitions
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 175 }
-		localization_key = prefabricated_construction
+		localization_key = predictive_logistics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 176 }
-		localization_key = programmable_matter
+		localization_key = prefabricated_construction
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 177 }
-		localization_key = prospecting
+		localization_key = programmable_matter
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 178 }
-		localization_key = pumpjacks
+		localization_key = prospecting
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 179 }
-		localization_key = quantum_communications
+		localization_key = pumpjacks
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 180 }
-		localization_key = quantum_computing
+		localization_key = quantum_communications
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 181 }
-		localization_key = quantum_materials
+		localization_key = quantum_computing
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 182 }
-		localization_key = radar
+		localization_key = quantum_materials
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 183 }
-		localization_key = radio
+		localization_key = radar
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 184 }
-		localization_key = railways
+		localization_key = radio
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 185 }
-		localization_key = rapid_deployment_forces
+		localization_key = railways
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 186 }
-		localization_key = recon_satellites
+		localization_key = rapid_deployment_forces
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 187 }
-		localization_key = reinforced_concrete
+		localization_key = recon_satellites
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 188 }
-		localization_key = repeaters
+		localization_key = reinforced_concrete
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 189 }
-		localization_key = reusable_rocketry
+		localization_key = repeaters
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 190 }
-		localization_key = rifling
+		localization_key = reusable_rocketry
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 191 }
-		localization_key = robotics
+		localization_key = rifling
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 192 }
-		localization_key = rocketry
+		localization_key = robotics
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 193 }
-		localization_key = rotary_valve_engine
+		localization_key = rocketry
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 194 }
-		localization_key = rubber_mastication
+		localization_key = rotary_valve_engine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 195 }
-		localization_key = satellite_communications
+		localization_key = rubber_mastication
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 196 }
-		localization_key = screw_frigate
+		localization_key = satellite_communications
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 197 }
-		localization_key = sea_lane_strategies
+		localization_key = screw_frigate
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 198 }
-		localization_key = self_driving_laboratories
+		localization_key = sea_lane_strategies
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 199 }
-		localization_key = self_propelled_torpedoes
+		localization_key = self_driving_laboratories
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 200 }
-		localization_key = semiautomatic_rifle
+		localization_key = self_propelled_torpedoes
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 201 }
-		localization_key = shaft_mining
+		localization_key = semiautomatic_rifle
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 202 }
-		localization_key = shell_gun
+		localization_key = shaft_mining
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 203 }
-		localization_key = shift_work
+		localization_key = shell_gun
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 204 }
-		localization_key = smart_grids
+		localization_key = shift_work
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 205 }
-		localization_key = sonar
+		localization_key = smart_grids
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 206 }
-		localization_key = space_based_solar_power
+		localization_key = sonar
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 207 }
-		localization_key = space_elevator
+		localization_key = space_based_solar_power
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 208 }
-		localization_key = space_exploration
+		localization_key = space_elevator
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 209 }
-		localization_key = space_militarization
+		localization_key = space_exploration
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 210 }
-		localization_key = stainless_steel_mass_production
+		localization_key = space_militarization
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 211 }
-		localization_key = standing_army
+		localization_key = stainless_steel_mass_production
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 212 }
-		localization_key = stealth_technology
+		localization_key = standing_army
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 213 }
-		localization_key = steam_donkey
+		localization_key = stealth_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 214 }
-		localization_key = steam_turbine
+		localization_key = steam_donkey
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 215 }
-		localization_key = steel_railway_cars
+		localization_key = steam_turbine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 216 }
-		localization_key = steelworking
+		localization_key = steel_railway_cars
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 217 }
-		localization_key = stormtroopers
+		localization_key = steelworking
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 218 }
-		localization_key = submarine
+		localization_key = stormtroopers
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 219 }
-		localization_key = supersonic_aircraft
+		localization_key = submarine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 220 }
-		localization_key = supply_chain_management
+		localization_key = supersonic_aircraft
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 221 }
-		localization_key = swarm_technology
+		localization_key = supply_chain_management
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 222 }
-		localization_key = synthetic_biology
+		localization_key = swarm_technology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 223 }
-		localization_key = tactical_nuclear_weapons
+		localization_key = synthetic_biology
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 224 }
-		localization_key = telephone
+		localization_key = tactical_nuclear_weapons
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 225 }
-		localization_key = television
+		localization_key = telephone
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 226 }
-		localization_key = threshing_machine
+		localization_key = television
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 227 }
-		localization_key = transistors
+		localization_key = threshing_machine
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 228 }
-		localization_key = trench_works
+		localization_key = transistors
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 229 }
-		localization_key = triage
+		localization_key = trench_works
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 230 }
-		localization_key = unmanned_aerial_vehicles
+		localization_key = triage
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 231 }
-		localization_key = vacuum_canning
+		localization_key = unmanned_aerial_vehicles
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 232 }
-		localization_key = von_neumann_machines
+		localization_key = vacuum_canning
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 233 }
-		localization_key = vulcanization
+		localization_key = von_neumann_machines
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 234 }
-		localization_key = war_propaganda
+		localization_key = vulcanization
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 235 }
-		localization_key = wargaming
+		localization_key = war_propaganda
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 236 }
-		localization_key = watertube_boiler
+		localization_key = wargaming
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 237 }
-		localization_key = wireless_internet
+		localization_key = watertube_boiler
 	}
 	text = {
 		trigger = { var:iw_stolen_last = 238 }
+		localization_key = wireless_internet
+	}
+	text = {
+		trigger = { var:iw_stolen_last = 239 }
 		localization_key = world_wide_web
 	}
 }

@@ -1405,6 +1405,17 @@ covert_tech_stealable_military = {
 			$TARGET$ ?= { has_technology_researched = advanced_body_armor }
 		}
 		AND = {
+			NOT = { has_technology_researched = advanced_fission }
+			OR = {
+				can_research = advanced_fission
+				AND = {
+					is_researching_technology = advanced_fission
+					has_technology_researched = nuclear_energy
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = advanced_fission }
+		}
+		AND = {
 			NOT = { has_technology_researched = advanced_materials_armor }
 			OR = {
 				can_research = advanced_materials_armor
