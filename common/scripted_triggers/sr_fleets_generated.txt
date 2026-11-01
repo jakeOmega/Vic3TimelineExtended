@@ -3,7 +3,8 @@
 # Country scope. Per slot n: sr_fl_<n>_exists, _all_rapid, _refitting, _docked,
 # _refills_fully, _may_depart_<loc> (at a location, not there, not refitting,
 # its propellant covering the leg), and the panel's _can_go, _can_merge,
-# _can_detach, _can_land, _can_embark.
+# _can_detach, _can_land, _can_embark; the Transfer popup's _can_transfer,
+# _xf_pick_here and its refusals (_xf_moves, _xf_keeps, ...).
 
 # --- Slot 1 ---
 sr_fl_1_exists = { OR = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_dest } }
@@ -6438,6 +6439,437 @@ sr_fl_9_ai_attacks_kuiper = {
 		sr_fl_9_dv_value >= { value = sr_fl_9_leg_dv_kuiper add = sr_fl_9_return_dv_kuiper }
 	}
 	sr_fl_9_strength >= { value = sr_loc_ai_enemy_force_kuiper multiply = sr_fl_ai_attack_margin }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_1_can_transfer = { OR = { sr_fl_1_can_merge = yes sr_fl_1_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_1_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_1_xf_moves = { OR = { sr_fl_1_xf_strength > 0 sr_fl_1_xf_marines_moved > 0 AND = { sr_fl_1_xf_left <= 0 sr_fl_1_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_1_xf_some_stays = { sr_fl_1_xf_left > 0 }
+sr_fl_1_xf_keeps = { sr_fl_1_xf_left >= sr_fl_minimum_strength }
+sr_fl_1_xf_keeps_or_all = { OR = { sr_fl_1_xf_left >= sr_fl_minimum_strength sr_fl_1_xf_left <= 0 } }
+sr_fl_1_xf_new_min = { sr_fl_1_xf_strength >= sr_fl_minimum_strength }
+sr_fl_1_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_1_loc var:sr_fl_2_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_1_loc var:sr_fl_3_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_1_loc var:sr_fl_4_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_1_loc var:sr_fl_5_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_1_loc var:sr_fl_6_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_1_loc var:sr_fl_7_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_1_loc var:sr_fl_8_loc = var:sr_fl_1_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
+	}
+}
+sr_fl_1_xf_room = {
+	sr_fl_1_xf_there_marines <= sr_fl_1_xf_there_room
+	OR = { sr_fl_1_xf_left <= 0 sr_fl_1_xf_stay_over <= sr_fl_1_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_2_can_transfer = { OR = { sr_fl_2_can_merge = yes sr_fl_2_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_2_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_2_xf_moves = { OR = { sr_fl_2_xf_strength > 0 sr_fl_2_xf_marines_moved > 0 AND = { sr_fl_2_xf_left <= 0 sr_fl_2_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_2_xf_some_stays = { sr_fl_2_xf_left > 0 }
+sr_fl_2_xf_keeps = { sr_fl_2_xf_left >= sr_fl_minimum_strength }
+sr_fl_2_xf_keeps_or_all = { OR = { sr_fl_2_xf_left >= sr_fl_minimum_strength sr_fl_2_xf_left <= 0 } }
+sr_fl_2_xf_new_min = { sr_fl_2_xf_strength >= sr_fl_minimum_strength }
+sr_fl_2_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_2_loc var:sr_fl_1_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_2_loc var:sr_fl_3_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_2_loc var:sr_fl_4_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_2_loc var:sr_fl_5_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_2_loc var:sr_fl_6_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_2_loc var:sr_fl_7_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_2_loc var:sr_fl_8_loc = var:sr_fl_2_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
+	}
+}
+sr_fl_2_xf_room = {
+	sr_fl_2_xf_there_marines <= sr_fl_2_xf_there_room
+	OR = { sr_fl_2_xf_left <= 0 sr_fl_2_xf_stay_over <= sr_fl_2_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_3_can_transfer = { OR = { sr_fl_3_can_merge = yes sr_fl_3_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_3_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_3_xf_moves = { OR = { sr_fl_3_xf_strength > 0 sr_fl_3_xf_marines_moved > 0 AND = { sr_fl_3_xf_left <= 0 sr_fl_3_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_3_xf_some_stays = { sr_fl_3_xf_left > 0 }
+sr_fl_3_xf_keeps = { sr_fl_3_xf_left >= sr_fl_minimum_strength }
+sr_fl_3_xf_keeps_or_all = { OR = { sr_fl_3_xf_left >= sr_fl_minimum_strength sr_fl_3_xf_left <= 0 } }
+sr_fl_3_xf_new_min = { sr_fl_3_xf_strength >= sr_fl_minimum_strength }
+sr_fl_3_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_3_loc var:sr_fl_1_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_3_loc var:sr_fl_2_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_3_loc var:sr_fl_4_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_3_loc var:sr_fl_5_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_3_loc var:sr_fl_6_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_3_loc var:sr_fl_7_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_3_loc var:sr_fl_8_loc = var:sr_fl_3_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
+	}
+}
+sr_fl_3_xf_room = {
+	sr_fl_3_xf_there_marines <= sr_fl_3_xf_there_room
+	OR = { sr_fl_3_xf_left <= 0 sr_fl_3_xf_stay_over <= sr_fl_3_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_4_can_transfer = { OR = { sr_fl_4_can_merge = yes sr_fl_4_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_4_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_4_xf_moves = { OR = { sr_fl_4_xf_strength > 0 sr_fl_4_xf_marines_moved > 0 AND = { sr_fl_4_xf_left <= 0 sr_fl_4_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_4_xf_some_stays = { sr_fl_4_xf_left > 0 }
+sr_fl_4_xf_keeps = { sr_fl_4_xf_left >= sr_fl_minimum_strength }
+sr_fl_4_xf_keeps_or_all = { OR = { sr_fl_4_xf_left >= sr_fl_minimum_strength sr_fl_4_xf_left <= 0 } }
+sr_fl_4_xf_new_min = { sr_fl_4_xf_strength >= sr_fl_minimum_strength }
+sr_fl_4_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_4_loc var:sr_fl_1_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_4_loc var:sr_fl_2_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_4_loc var:sr_fl_3_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_4_loc var:sr_fl_5_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_4_loc var:sr_fl_6_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_4_loc var:sr_fl_7_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_4_loc var:sr_fl_8_loc = var:sr_fl_4_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
+	}
+}
+sr_fl_4_xf_room = {
+	sr_fl_4_xf_there_marines <= sr_fl_4_xf_there_room
+	OR = { sr_fl_4_xf_left <= 0 sr_fl_4_xf_stay_over <= sr_fl_4_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_5_can_transfer = { OR = { sr_fl_5_can_merge = yes sr_fl_5_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_5_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_5_xf_moves = { OR = { sr_fl_5_xf_strength > 0 sr_fl_5_xf_marines_moved > 0 AND = { sr_fl_5_xf_left <= 0 sr_fl_5_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_5_xf_some_stays = { sr_fl_5_xf_left > 0 }
+sr_fl_5_xf_keeps = { sr_fl_5_xf_left >= sr_fl_minimum_strength }
+sr_fl_5_xf_keeps_or_all = { OR = { sr_fl_5_xf_left >= sr_fl_minimum_strength sr_fl_5_xf_left <= 0 } }
+sr_fl_5_xf_new_min = { sr_fl_5_xf_strength >= sr_fl_minimum_strength }
+sr_fl_5_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_5_loc var:sr_fl_1_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_5_loc var:sr_fl_2_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_5_loc var:sr_fl_3_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_5_loc var:sr_fl_4_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_5_loc var:sr_fl_6_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_5_loc var:sr_fl_7_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_5_loc var:sr_fl_8_loc = var:sr_fl_5_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
+	}
+}
+sr_fl_5_xf_room = {
+	sr_fl_5_xf_there_marines <= sr_fl_5_xf_there_room
+	OR = { sr_fl_5_xf_left <= 0 sr_fl_5_xf_stay_over <= sr_fl_5_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_6_can_transfer = { OR = { sr_fl_6_can_merge = yes sr_fl_6_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_6_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_6_xf_moves = { OR = { sr_fl_6_xf_strength > 0 sr_fl_6_xf_marines_moved > 0 AND = { sr_fl_6_xf_left <= 0 sr_fl_6_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_6_xf_some_stays = { sr_fl_6_xf_left > 0 }
+sr_fl_6_xf_keeps = { sr_fl_6_xf_left >= sr_fl_minimum_strength }
+sr_fl_6_xf_keeps_or_all = { OR = { sr_fl_6_xf_left >= sr_fl_minimum_strength sr_fl_6_xf_left <= 0 } }
+sr_fl_6_xf_new_min = { sr_fl_6_xf_strength >= sr_fl_minimum_strength }
+sr_fl_6_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_6_loc var:sr_fl_1_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_6_loc var:sr_fl_2_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_6_loc var:sr_fl_3_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_6_loc var:sr_fl_4_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_6_loc var:sr_fl_5_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_6_loc var:sr_fl_7_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_6_loc var:sr_fl_8_loc = var:sr_fl_6_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
+	}
+}
+sr_fl_6_xf_room = {
+	sr_fl_6_xf_there_marines <= sr_fl_6_xf_there_room
+	OR = { sr_fl_6_xf_left <= 0 sr_fl_6_xf_stay_over <= sr_fl_6_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_7_can_transfer = { OR = { sr_fl_7_can_merge = yes sr_fl_7_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_7_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_7_xf_moves = { OR = { sr_fl_7_xf_strength > 0 sr_fl_7_xf_marines_moved > 0 AND = { sr_fl_7_xf_left <= 0 sr_fl_7_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_7_xf_some_stays = { sr_fl_7_xf_left > 0 }
+sr_fl_7_xf_keeps = { sr_fl_7_xf_left >= sr_fl_minimum_strength }
+sr_fl_7_xf_keeps_or_all = { OR = { sr_fl_7_xf_left >= sr_fl_minimum_strength sr_fl_7_xf_left <= 0 } }
+sr_fl_7_xf_new_min = { sr_fl_7_xf_strength >= sr_fl_minimum_strength }
+sr_fl_7_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_7_loc var:sr_fl_1_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_7_loc var:sr_fl_2_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_7_loc var:sr_fl_3_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_7_loc var:sr_fl_4_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_7_loc var:sr_fl_5_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_7_loc var:sr_fl_6_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_7_loc var:sr_fl_8_loc = var:sr_fl_7_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
+	}
+}
+sr_fl_7_xf_room = {
+	sr_fl_7_xf_there_marines <= sr_fl_7_xf_there_room
+	OR = { sr_fl_7_xf_left <= 0 sr_fl_7_xf_stay_over <= sr_fl_7_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_8_can_transfer = { OR = { sr_fl_8_can_merge = yes sr_fl_8_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_8_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc }
+		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_8_xf_moves = { OR = { sr_fl_8_xf_strength > 0 sr_fl_8_xf_marines_moved > 0 AND = { sr_fl_8_xf_left <= 0 sr_fl_8_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_8_xf_some_stays = { sr_fl_8_xf_left > 0 }
+sr_fl_8_xf_keeps = { sr_fl_8_xf_left >= sr_fl_minimum_strength }
+sr_fl_8_xf_keeps_or_all = { OR = { sr_fl_8_xf_left >= sr_fl_minimum_strength sr_fl_8_xf_left <= 0 } }
+sr_fl_8_xf_new_min = { sr_fl_8_xf_strength >= sr_fl_minimum_strength }
+sr_fl_8_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_8_loc var:sr_fl_1_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_8_loc var:sr_fl_2_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_8_loc var:sr_fl_3_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_8_loc var:sr_fl_4_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_8_loc var:sr_fl_5_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_8_loc var:sr_fl_6_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_8_loc var:sr_fl_7_loc = var:sr_fl_8_loc }
+		AND = { sr_det_to_value = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
+	}
+}
+sr_fl_8_xf_room = {
+	sr_fl_8_xf_there_marines <= sr_fl_8_xf_there_room
+	OR = { sr_fl_8_xf_left <= 0 sr_fl_8_xf_stay_over <= sr_fl_8_xf_now_over }
+}
+
+# Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
+sr_fl_9_can_transfer = { OR = { sr_fl_9_can_merge = yes sr_fl_9_can_detach = yes } }
+# An Into button's slot (scope:pick) is a fleet of ours here.
+sr_fl_9_xf_pick_here = {
+	OR = {
+		AND = { scope:pick = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc }
+		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
+	}
+}
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_9_xf_moves = { OR = { sr_fl_9_xf_strength > 0 sr_fl_9_xf_marines_moved > 0 AND = { sr_fl_9_xf_left <= 0 sr_fl_9_strength_full > 0 } } }
+# Some of its strength stays: else every marine goes with the last ship, and
+# the marines' - and + grey (sr_fleet_xfer_step_sgui).
+sr_fl_9_xf_some_stays = { sr_fl_9_xf_left > 0 }
+sr_fl_9_xf_keeps = { sr_fl_9_xf_left >= sr_fl_minimum_strength }
+sr_fl_9_xf_keeps_or_all = { OR = { sr_fl_9_xf_left >= sr_fl_minimum_strength sr_fl_9_xf_left <= 0 } }
+sr_fl_9_xf_new_min = { sr_fl_9_xf_strength >= sr_fl_minimum_strength }
+sr_fl_9_xf_partner_here = {
+	OR = {
+		AND = { sr_det_to_value = 1 has_variable = sr_fl_1_loc has_variable = sr_fl_9_loc var:sr_fl_1_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 2 has_variable = sr_fl_2_loc has_variable = sr_fl_9_loc var:sr_fl_2_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 3 has_variable = sr_fl_3_loc has_variable = sr_fl_9_loc var:sr_fl_3_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 4 has_variable = sr_fl_4_loc has_variable = sr_fl_9_loc var:sr_fl_4_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 5 has_variable = sr_fl_5_loc has_variable = sr_fl_9_loc var:sr_fl_5_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 6 has_variable = sr_fl_6_loc has_variable = sr_fl_9_loc var:sr_fl_6_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 7 has_variable = sr_fl_7_loc has_variable = sr_fl_9_loc var:sr_fl_7_loc = var:sr_fl_9_loc }
+		AND = { sr_det_to_value = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
+	}
+}
+sr_fl_9_xf_room = {
+	sr_fl_9_xf_there_marines <= sr_fl_9_xf_there_room
+	OR = { sr_fl_9_xf_left <= 0 sr_fl_9_xf_stay_over <= sr_fl_9_xf_now_over }
+}
+
+# An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the
+# transfer's (sr_det_to): the button greys, as the approach selector's does.
+sr_xf_pick_chosen = {
+	OR = {
+		AND = { scope:pick = 0 sr_det_to_value = 0 }
+		AND = { scope:pick = 1 sr_det_to_value = 1 }
+		AND = { scope:pick = 2 sr_det_to_value = 2 }
+		AND = { scope:pick = 3 sr_det_to_value = 3 }
+		AND = { scope:pick = 4 sr_det_to_value = 4 }
+		AND = { scope:pick = 5 sr_det_to_value = 5 }
+		AND = { scope:pick = 6 sr_det_to_value = 6 }
+		AND = { scope:pick = 7 sr_det_to_value = 7 }
+		AND = { scope:pick = 8 sr_det_to_value = 8 }
+		AND = { scope:pick = 9 sr_det_to_value = 9 }
+	}
 }
 
 # ===== Per world: Survey Colony Defences (6b, design § 11) =====
