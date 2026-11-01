@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 163 laws, most of them in 39 new law groups, with the institutions,
+The mod adds 164 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -38,7 +38,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
-| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on. |
+| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on, and from Self-Directed Evolution (era 13) whether someone who leaves the human body plan behind is still a citizen. |
 
 The mod renames the base game's six Citizenship laws and changes their effects.
 This guide, like the game, uses the new names:
@@ -83,12 +83,26 @@ debate](07-social-movements.md#the-augmentation-debate).
 
 Bodily Autonomy is about how a body looks; what it can do is Human
 Augmentation's. Every country holds Natural Form until Morphological Freedom
-opens the other two laws. They raise the acceptance of pops whose culture shares
+opens the next two laws. They raise the acceptance of pops whose culture shares
 no heritage trait with your primary cultures, Licensed Modification by 5 and
 Morphological Freedom by 10, on top of your Citizenship law, and pull more
 migrants. The Devout and the Rural Folk oppose both, and the Intelligentsia
 support them. The group drives [the morphological freedom
 debate](07-social-movements.md#the-morphological-freedom-debate).
+
+Clade Citizenship, with Self-Directed Evolution (era 13), keeps every right of
+people who have left the human body plan behind, and takes heritage out of
+acceptance. Each month it raises the acceptance from a shared heritage trait, a
+shared heritage trait group and no shared heritage to the highest of the three,
+so your Citizenship law's heritage figures rank no pop above another (language,
+religion and homeland still count). Every pop gets at least what a shared
+heritage trait gives, 60 under Racialized Citizenship, and pops with no shared
+heritage at least Morphological Freedom's 10 more than your Citizenship law
+gives them. It also pulls 15% more migrants. The Devout, the
+Rural Folk and most groups that only tolerate Licensed Modification strongly
+oppose it. The groups that strongly support Morphological Freedom are content
+with either law, so the push from Morphological Freedom to Clade Citizenship
+comes from transhumanist leaders and the Transhumanist movement.
 
 ### Laws on state power and information
 

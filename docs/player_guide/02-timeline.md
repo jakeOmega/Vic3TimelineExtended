@@ -119,7 +119,8 @@ Transition](07-social-movements.md#movement-journal-entries-at-a-glance).
 Era 13 is the speculative future. Molecular Assemblers and Programmable Matter
 add a final tier to many industries. Space Elevator, Antimatter Production, Mind
 Backups, Molecular Assemblers and Telepathic Communities each unlock a
-megaproject. Biological Immortality and Post-Scarcity Economy are among the last
+megaproject. Self-Directed Evolution brings the Clade Citizenship law, and
+Biological Immortality and Post-Scarcity Economy are among the last
 technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the

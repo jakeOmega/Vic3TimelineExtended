@@ -20,7 +20,7 @@ described in [The mod's new laws](06-politics.md#the-mods-new-laws).
 |---|---|---|---|---|
 | Civil Rights Movement | Civil Rights Movement (era 7), while an incorporated state holds pops below Provisional Acceptance | Movement Support reaches 100, or you enact Affirmative Action, or Universal Citizenship together with Protection | Movement Support falls to 0, or the Civil Rights political movement is gone | None |
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
-| Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom | Natural Form still in force when time runs out | 20 years |
+| Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom or Clade Citizenship | Natural Form still in force when time runs out | 20 years |
 | Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 15 years |
 | Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps still in force 10 years after the entry opens | 20 years |
 | Post-Scarcity Transition | Post-Work Society (era 12) | Post-Scarcity Economy law | Never | 30 years |
@@ -171,7 +171,8 @@ workplace discrimination, augmented crime and religious condemnation.
 
 Every country starts on Natural Form, and the Morphological Freedom technology
 (era 12) unlocks Licensed Modification and Morphological Freedom. Enacting
-Morphological Freedom settles the debate. Licensed Modification is a step on
+Morphological Freedom settles the debate, as does Clade Citizenship if Self-Directed
+Evolution (era 13) arrives while it runs. Licensed Modification is a step on
 the way: held to the end, it leaves the question unsettled. If Natural Form is
 still in force when the twenty years run out, the debate is lost, and an event
 asks whether to enforce the law against people already changed or look away.
