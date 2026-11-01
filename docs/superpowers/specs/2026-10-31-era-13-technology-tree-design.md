@@ -758,8 +758,31 @@ are named here.
 Merging them in turn meant regenerating the shared generated files (covert
 theft indices, ideologies, law consistency, the Nation tab) and the guide's
 counts at each step, and recounting 06-politics' laws: 163 laws in 39 groups
-after wave 1. Wave 2, Terraforming and Self-Directed Evolution (with Clade
-Citizenship), is under way.
+after wave 1.
+
+Wave 2, after its parents:
+- **Terraforming** (#1302):
+  - It is a colony module (code 16) on nine worlds: Mars's five sites, Venus,
+    Titan, Ganymede and Callisto, the last two added to the spec's three.
+  - Each staffed level adds 4% of the world's starting room a year, three
+    levels at most, +300% when finished (at least 25 years).
+  - A finished world's levels stand down and free their slots, since the AI
+    never dismantles.
+  - Each Mars site is terraformed on its own.
+- **Self-Directed Evolution and Clade Citizenship** (#1303):
+  - Clade Citizenship is Bodily Autonomy's fourth law. Instead of the spec's
+    flat +20, it carries +10 and a monthly heritage parity, which lifts the
+    three heritage acceptance figures to the highest of them. A flat +20
+    would rank no-shared-heritage pops first under the mod's four inclusive
+    citizenship laws. The parity has a self-check, `clade_heritage_parity`.
+  - The transhumanist ideology's Morphological Freedom stance went from
+    strongly approve to approve, so that some group backs the step to Clade.
+  - The technology also gives held colonies 0.3% growth a month (0.2%), and
+    work safety +0.05 to its cap.
+
+With wave 2 the tree has 191 technologies in eras 6 to 13, 13 of them in era
+13 (14 when Superintelligence lands, § 3.5), and 06-politics counts 164 laws
+in 39 groups.
 
 **Play-test list** (a new `docs/testing/era-13-playtest.md`): the technology
 tree draws a thirteenth era column; old saves load with the moved methods and
