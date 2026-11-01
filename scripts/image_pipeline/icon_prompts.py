@@ -781,6 +781,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "molecular_assemblers": {"subject": "a cluster of coloured atom spheres being snapped together by tiny robotic arms", "seed": 0},
         "orbital_manufacturing": {"subject": "a space station module with a robotic arm assembling a glowing crystal", "seed": 1},
         "programmable_matter": {"subject": "a shimmering silver liquid-metal blob reshaping itself into a cube and a sphere", "seed": 1},
+        "von_neumann_machines": {"subject": "a small boxy silver robot factory on a grey asteroid assembling a smaller copy of itself with its own robotic arms", "seed": None},
         "quantum_materials": {"subject": "a glowing iridescent crystal block levitating above a superconducting disc", "seed": 1},
         "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 1},
         "mind_backups": {"subject": "a glowing crystal data cube with the faint shape of a brain inside", "seed": 1},
@@ -789,6 +790,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {

@@ -1870,12 +1870,32 @@ covert_tech_steal_production = {
 	}
 	else_if = {
 		limit = {
+			is_researching_technology = vactrains
+			NOT = { has_technology_researched = vactrains }
+			has_technology_researched = autonomous_vehicles
+			has_technology_researched = quantum_materials
+			scope:iw_theft_target ?= { has_technology_researched = vactrains }
+		}
+		covert_tech_grant_era_12 = { TECH = vactrains IDX = 232 }
+	}
+	else_if = {
+		limit = {
 			is_researching_technology = vacuum_canning
 			NOT = { has_technology_researched = vacuum_canning }
 			has_technology_researched = mechanized_workshops
 			scope:iw_theft_target ?= { has_technology_researched = vacuum_canning }
 		}
-		covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 232 }
+		covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 233 }
+	}
+	else_if = {
+		limit = {
+			is_researching_technology = von_neumann_machines
+			NOT = { has_technology_researched = von_neumann_machines }
+			has_technology_researched = molecular_assemblers
+			has_technology_researched = orbital_manufacturing
+			scope:iw_theft_target ?= { has_technology_researched = von_neumann_machines }
+		}
+		covert_tech_grant_era_13 = { TECH = von_neumann_machines IDX = 234 }
 	}
 	else_if = {
 		limit = {
@@ -1884,7 +1904,7 @@ covert_tech_steal_production = {
 			has_technology_researched = rubber_mastication
 			scope:iw_theft_target ?= { has_technology_researched = vulcanization }
 		}
-		covert_tech_grant_era_3 = { TECH = vulcanization IDX = 233 }
+		covert_tech_grant_era_3 = { TECH = vulcanization IDX = 235 }
 	}
 	else_if = {
 		limit = {
@@ -1893,7 +1913,7 @@ covert_tech_steal_production = {
 			has_technology_researched = atmospheric_engine
 			scope:iw_theft_target ?= { has_technology_researched = watertube_boiler }
 		}
-		covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 236 }
+		covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 238 }
 	}
 	else_if = {
 		limit = {
@@ -1903,7 +1923,7 @@ covert_tech_steal_production = {
 			has_technology_researched = personal_computers
 			scope:iw_theft_target ?= { has_technology_researched = wireless_internet }
 		}
-		covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 237 }
+		covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 239 }
 	}
 	else_if = {
 		limit = {
@@ -1913,7 +1933,7 @@ covert_tech_steal_production = {
 			has_technology_researched = computer_networks
 			scope:iw_theft_target ?= { has_technology_researched = world_wide_web }
 		}
-		covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 238 }
+		covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 240 }
 	}
 	else_if = {
 		limit = { covert_tech_stealable_production = { TARGET = scope:iw_theft_target } }
@@ -2832,11 +2852,27 @@ covert_tech_steal_production = {
 			}
 			1 = {
 				trigger = {
+					NOT = { has_technology_researched = vactrains }
+					can_research = vactrains
+					scope:iw_theft_target ?= { has_technology_researched = vactrains }
+				}
+				covert_tech_grant_era_12 = { TECH = vactrains IDX = 232 }
+			}
+			1 = {
+				trigger = {
 					NOT = { has_technology_researched = vacuum_canning }
 					can_research = vacuum_canning
 					scope:iw_theft_target ?= { has_technology_researched = vacuum_canning }
 				}
-				covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 232 }
+				covert_tech_grant_era_3 = { TECH = vacuum_canning IDX = 233 }
+			}
+			1 = {
+				trigger = {
+					NOT = { has_technology_researched = von_neumann_machines }
+					can_research = von_neumann_machines
+					scope:iw_theft_target ?= { has_technology_researched = von_neumann_machines }
+				}
+				covert_tech_grant_era_13 = { TECH = von_neumann_machines IDX = 234 }
 			}
 			1 = {
 				trigger = {
@@ -2844,7 +2880,7 @@ covert_tech_steal_production = {
 					can_research = vulcanization
 					scope:iw_theft_target ?= { has_technology_researched = vulcanization }
 				}
-				covert_tech_grant_era_3 = { TECH = vulcanization IDX = 233 }
+				covert_tech_grant_era_3 = { TECH = vulcanization IDX = 235 }
 			}
 			1 = {
 				trigger = {
@@ -2852,7 +2888,7 @@ covert_tech_steal_production = {
 					can_research = watertube_boiler
 					scope:iw_theft_target ?= { has_technology_researched = watertube_boiler }
 				}
-				covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 236 }
+				covert_tech_grant_era_2 = { TECH = watertube_boiler IDX = 238 }
 			}
 			1 = {
 				trigger = {
@@ -2860,7 +2896,7 @@ covert_tech_steal_production = {
 					can_research = wireless_internet
 					scope:iw_theft_target ?= { has_technology_researched = wireless_internet }
 				}
-				covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 237 }
+				covert_tech_grant_era_9 = { TECH = wireless_internet IDX = 239 }
 			}
 			1 = {
 				trigger = {
@@ -2868,7 +2904,7 @@ covert_tech_steal_production = {
 					can_research = world_wide_web
 					scope:iw_theft_target ?= { has_technology_researched = world_wide_web }
 				}
-				covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 238 }
+				covert_tech_grant_era_9 = { TECH = world_wide_web IDX = 240 }
 			}
 		}
 	}
@@ -3974,7 +4010,7 @@ covert_tech_steal_military = {
 			has_technology_researched = enlistment_offices
 			scope:iw_theft_target ?= { has_technology_researched = war_propaganda }
 		}
-		covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 234 }
+		covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 236 }
 	}
 	else_if = {
 		limit = {
@@ -3983,7 +4019,7 @@ covert_tech_steal_military = {
 			has_technology_researched = military_statistics
 			scope:iw_theft_target ?= { has_technology_researched = wargaming }
 		}
-		covert_tech_grant_era_4 = { TECH = wargaming IDX = 235 }
+		covert_tech_grant_era_4 = { TECH = wargaming IDX = 237 }
 	}
 	else_if = {
 		limit = { covert_tech_stealable_military = { TARGET = scope:iw_theft_target } }
@@ -4930,7 +4966,7 @@ covert_tech_steal_military = {
 					can_research = war_propaganda
 					scope:iw_theft_target ?= { has_technology_researched = war_propaganda }
 				}
-				covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 234 }
+				covert_tech_grant_era_4 = { TECH = war_propaganda IDX = 236 }
 			}
 			1 = {
 				trigger = {
@@ -4938,7 +4974,7 @@ covert_tech_steal_military = {
 					can_research = wargaming
 					scope:iw_theft_target ?= { has_technology_researched = wargaming }
 				}
-				covert_tech_grant_era_4 = { TECH = wargaming IDX = 235 }
+				covert_tech_grant_era_4 = { TECH = wargaming IDX = 237 }
 			}
 		}
 	}
@@ -7774,6 +7810,19 @@ covert_tech_selfcheck_research_tally = {
 		}
 	}
 	else_if = {
+		limit = { is_researching_technology = vactrains }
+		if = {
+			limit = {
+				has_technology_researched = autonomous_vehicles
+				has_technology_researched = quantum_materials
+			}
+			covert_tech_selfcheck_held = { TECH = vactrains }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = vactrains }
+		}
+	}
+	else_if = {
 		limit = { is_researching_technology = vacuum_canning }
 		if = {
 			limit = {
@@ -7783,6 +7832,19 @@ covert_tech_selfcheck_research_tally = {
 		}
 		else = {
 			covert_tech_selfcheck_stranded = { TECH = vacuum_canning }
+		}
+	}
+	else_if = {
+		limit = { is_researching_technology = von_neumann_machines }
+		if = {
+			limit = {
+				has_technology_researched = molecular_assemblers
+				has_technology_researched = orbital_manufacturing
+			}
+			covert_tech_selfcheck_held = { TECH = von_neumann_machines }
+		}
+		else = {
+			covert_tech_selfcheck_stranded = { TECH = von_neumann_machines }
 		}
 	}
 	else_if = {

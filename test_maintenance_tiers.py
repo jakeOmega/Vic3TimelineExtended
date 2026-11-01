@@ -39,7 +39,8 @@ GRADED_BUILDINGS = {
         "pm_electric_trains": 1, "pm_electric_trains_principle_transport_3": 1,
         "pm_diesel_trains": 1, "pm_diesel_trains_principle_transport_3": 1,
         "pm_centralized_traffic_control": 1, "pm_containerized_cargo": 2,
-        "pm_automated_loading_and_unloading": 2, "pm_autonomous_trains": 2}),
+        "pm_automated_loading_and_unloading": 2, "pm_autonomous_trains": 2,
+        "pm_vactrain_freight": 2}),
     "building_port": ("pmg_base_building_port", {
         "pm_modern_port": 1, "pm_container_ports": 2, "pm_global_ports": 2, "pm_magnetic_drive_ports": 2}),
 }

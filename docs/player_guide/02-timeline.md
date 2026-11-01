@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds eight more eras, numbered 6 to 13, with 182 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 184 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -31,8 +31,8 @@ them. Era 13's need breakthroughs nobody yet knows how to plan for.
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
 | 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
 | 11 | the near future | 800,000 | 25 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
-| 12 | the medium-term future | 1,500,000 | 12 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
-| 13 | the speculative future | 3,000,000 | 9 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
+| 12 | the medium-term future | 1,500,000 | 13 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
+| 13 | the speculative future | 3,000,000 | 10 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
 ### Research costs in the new eras
 
@@ -297,8 +297,11 @@ level. Its staff is the same at any size: a large base needs no more workers
 than a small one. It starts on Regolith Processing, which makes Structural Metals,
 Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
 level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
-and after Space Colonization the base can switch to the Resort Colony production
-method, which produces art and tourism instead. With
+and Space Colonization the larger Mining Colony, or the Resort Colony production
+method, which produces art and tourism instead. Von Neumann Machines (era 13)
+brings Self-Replicating Miners, which build their copies from the ore they dig:
+against a Mining Colony, a level uses a third less Launch Capacity and mines a
+quarter more of each good. With
 the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
@@ -312,7 +315,9 @@ Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
 Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
 13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. With the Global Commons rule off, the Deep-Sea Mine has no
+as much again. Self-Replicating Miners with neither upgrade earn more than a
+Mining Colony with both, and the upgrades add less to them, since they launch
+less. With the Global Commons rule off, the Deep-Sea Mine has no
 licenses and keeps its older, smaller output.
 
 ### Seabed licenses

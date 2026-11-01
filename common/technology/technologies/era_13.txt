@@ -54,6 +54,29 @@ programmable_matter = {
 	}
 }
 
+von_neumann_machines = {
+	# Factories that build copies of themselves (era 13 spec § 7.10): Self-Replicating Construction PM for
+	# Construction Sectors (and its Construction Site twin in direct-construction games), Self-Replicating Miners
+	# PM for Extraplanetary Bases
+	era = era_13
+	texture = "gfx/interface/icons/invention_icons/molecular_assemblers.dds" # Placeholder Icon
+	category = production
+
+	unlocking_technologies = {
+		molecular_assemblers
+		orbital_manufacturing
+	}
+
+	modifier = {
+		# machines that put up their own scaffolding: between Programmable Matter's 75 and Molecular Assemblers' 200
+		country_max_weekly_construction_progress_add = 100
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 fusion_batteries = {
 	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
 	# Fusion Battery Appliances PM for Consumer Appliance Industries
