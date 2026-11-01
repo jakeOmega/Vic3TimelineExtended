@@ -2,12 +2,12 @@
 
 resources.py rebuilds map_data/state_regions/ from vanilla's files, adding the traits the config lists
 for each state. An entry written "-state_trait_x" takes vanilla's trait away instead: Fiji and Tonga
-lose vanilla's Severe Malaria, since the islands had no malaria (Local Climate design 2026-11-01 § 4).
+lose vanilla's Severe Malaria, since the islands had no malaria (Local Climate design 2026-11-01 § 4);
+so does Namaqualand, and Zambezi and Botswana swap it for the mild trait.
 
     python3 test_state_trait_config.py
 """
 import importlib.util
-import json
 import re
 import unittest
 from pathlib import Path
@@ -59,11 +59,15 @@ class TraitStep(unittest.TestCase):
 
 
 class Committed(unittest.TestCase):
-    def test_islands_without_malaria_lose_the_trait(self):
-        config = json.loads(CONFIG.read_text(encoding="utf-8"))
-        for state in ("STATE_FIJI", "STATE_TONGA"):
-            self.assertIn("-state_trait_severe_malaria", config.get(state, []), state)
-            self.assertNotIn("state_trait_severe_malaria", traits_of(state), state)
+    def test_malaria_traits_follow_history(self):
+        """The owner's fixes of 2026-11-01: no malaria trait on Fiji, Tonga and Namaqualand; the mild one in
+        Zambezi and Botswana, where malaria held the river valleys, not the places most people lived."""
+        malaria = {"state_trait_malaria", "state_trait_severe_malaria"}
+        for state in ("STATE_FIJI", "STATE_TONGA", "STATE_NAMAQUALAND"):
+            self.assertFalse(traits_of(state) & malaria, state)
+        for state in ("STATE_ZAMBEZI", "STATE_BOTSWANA"):
+            self.assertEqual(traits_of(state) & malaria, {"state_trait_malaria"}, state)
+        self.assertIn("state_trait_zambezi_river", traits_of("STATE_ZAMBEZI"))
 
     def test_config_traits_applied(self):
         """Every config entry is reflected in the committed map files: added traits present, removed ones gone."""

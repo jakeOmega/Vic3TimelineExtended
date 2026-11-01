@@ -61,9 +61,9 @@ class TestMalariaLevels(unittest.TestCase):
         where = {of[s] for s in levels}
         self.assertLessEqual(where, set(africa) | {"region_oceania", "region_indonesia"})
         self.assertEqual(sum(1 for s in levels if of[s] == "region_indonesia"), 3)
-        # Vanilla's 75 and 26, less Fiji and Tonga, which state_trait_config.json takes the severe trait from
-        # (Local Climate, 2026-11-01: the islands had no malaria).
-        self.assertEqual((len(levels), sum(1 for v in levels.values() if v == 2)), (73, 24))
+        # Vanilla's 75 and 26, after state_trait_config.json's fixes (Local Climate, 2026-11-01): Fiji, Tonga and
+        # Namaqualand lose Severe Malaria, and Zambezi and Botswana take the mild trait instead.
+        self.assertEqual((len(levels), sum(1 for v in levels.values() if v == 2)), (72, 21))
 
     def test_a_region_with_both_traits_takes_the_severe_one(self):
         levels = {"state_trait_malaria": 1, "state_trait_severe_malaria": 2}

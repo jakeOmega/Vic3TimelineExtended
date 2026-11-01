@@ -28,7 +28,10 @@
 
   "STATE_PALESTINE": ["state_trait_dead_sea_potash"],
 
-  "_comment_removals": "Vanilla traits taken away. Fiji and Tonga had no malaria (no Anopheles east of Vanuatu), so they lose vanilla's Severe Malaria; Local Climate design 2026-11-01 § 4.",
+  "_comment_removals": "Vanilla traits taken away or swapped where they contradict history (owner, 2026-11-01; Local Climate design § 4). Fiji and Tonga had no malaria (no Anopheles east of Vanuatu) and central Namibia almost none, so they lose vanilla's Severe Malaria; in Zambezi and Botswana malaria held the river valleys, not the highveld and the south-east where most people lived, so Severe becomes the mild trait.",
   "STATE_FIJI": ["-state_trait_severe_malaria"],
-  "STATE_TONGA": ["-state_trait_severe_malaria"]
+  "STATE_TONGA": ["-state_trait_severe_malaria"],
+  "STATE_NAMAQUALAND": ["-state_trait_severe_malaria"],
+  "STATE_ZAMBEZI": ["-state_trait_severe_malaria", "state_trait_malaria"],
+  "STATE_BOTSWANA": ["-state_trait_severe_malaria", "state_trait_malaria"]
 }

@@ -242,8 +242,8 @@ STATE_KATANGA,Kapanga,25,1,21,0,2,-8,Hot savanna plateau with a long dry season
 STATE_GABON,Libreville,27,3,24,0,2,0,Hot humid equatorial coast endemic malaria
 STATE_ZAMBIA,Lusaka,24,0,16,0,2,-15,Warm plateau savanna with a hot dry season
 STATE_ZAMBEZIA,Quelimane,28,3,22,0,2,-18,Hot humid Zambezi delta coast endemic malaria
-STATE_ZAMBEZI,Harare,21,1,14,0,2,-18,"Mild highveld plateau with a dry winter; 2 follows vanilla's Severe Malaria trait, though the highveld had little"
-STATE_NAMAQUALAND,Rehoboth,24,0,13,2,2,-23,"Hot semi-desert plateau with frosty nights; 2 follows vanilla's Severe Malaria trait, though the plateau had little"
+STATE_ZAMBEZI,Harare,21,1,14,0,1,-18,Mild highveld plateau with a dry winter; malaria in the Zambezi valley
+STATE_NAMAQUALAND,Rehoboth,24,0,13,2,0,-23,Hot semi-desert plateau with frosty nights
 STATE_HEREROLAND,Ondangwa,27,1,16,1,2,-18,Hot semi-arid floodplain with summer rains
 STATE_ZULULAND,Ulundi,24,2,15,0,1,-28,Warm humid subtropical hills river-valley fevers
 STATE_VRYSTAAT,Bloemfontein,23,1,8,1,0,-29,Semi-arid highveld with frosty winters
@@ -251,7 +251,7 @@ STATE_TRANSVAAL,Pretoria,23,1,12,0,1,-26,Warm highveld with summer rains
 STATE_EASTERN_CAPE,Grahamstown,21,1,12,0,0,-33,Mild temperate hills with year-round rain
 STATE_CAPE_COLONY,Cape Town,21,1,12,0,0,-34,Mediterranean coast with dry windy summers
 STATE_NORTHERN_CAPE,Kimberley,25,1,10,1,0,-29,Hot semi-arid interior plateau
-STATE_BOTSWANA,Tlokweng,26,1,13,1,2,-25,"Hot semi-arid savanna with summer rains; 2 follows vanilla's Severe Malaria trait, though the east had little"
+STATE_BOTSWANA,Tlokweng,26,1,13,1,1,-25,Hot semi-arid savanna with summer rains; malaria in the northern swamps
 STATE_LOURENCO_MARQUES,Inhambane,27,3,20,0,2,-24,Hot humid subtropical coast endemic malaria
 STATE_DISTRICT_OF_COLUMBIA,Washington,27,2,2,0,1,39,Humid subtropical Potomac tidewater fevers
 STATE_LOUISIANA,New Orleans,28,3,12,0,2,30,Hot oppressively humid delta endemic malaria

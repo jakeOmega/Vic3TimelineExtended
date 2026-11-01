@@ -3651,8 +3651,8 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_GABON } value = 2 }
 	else_if = { limit = { state_region = s:STATE_ZAMBIA } value = 2 }
 	else_if = { limit = { state_region = s:STATE_ZAMBEZIA } value = 2 }
-	else_if = { limit = { state_region = s:STATE_ZAMBEZI } value = 2 }
-	else_if = { limit = { state_region = s:STATE_NAMAQUALAND } value = 2 }
+	else_if = { limit = { state_region = s:STATE_ZAMBEZI } value = 1 }
+	else_if = { limit = { state_region = s:STATE_NAMAQUALAND } value = 0 }
 	else_if = { limit = { state_region = s:STATE_HEREROLAND } value = 2 }
 	else_if = { limit = { state_region = s:STATE_ZULULAND } value = 1 }
 	else_if = { limit = { state_region = s:STATE_VRYSTAAT } value = 0 }
@@ -3660,7 +3660,7 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_EASTERN_CAPE } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CAPE_COLONY } value = 0 }
 	else_if = { limit = { state_region = s:STATE_NORTHERN_CAPE } value = 0 }
-	else_if = { limit = { state_region = s:STATE_BOTSWANA } value = 2 }
+	else_if = { limit = { state_region = s:STATE_BOTSWANA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_LOURENCO_MARQUES } value = 2 }
 	else_if = { limit = { state_region = s:STATE_DISTRICT_OF_COLUMBIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_LOUISIANA } value = 2 }
