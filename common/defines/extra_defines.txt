@@ -67,6 +67,12 @@ NPops = {
 	WORKING_ADULT_RATIO_SKEW_MAXIMUM = 1000000
 
 	CULTURAL_FERVOR_ASSIMILATIOM_EFFECT = 0.0075						# REVIEWED 2026-05-16: mirrors vanilla typo in 00_defines.txt:1520 (terminal M not N)
+
+	# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.4): no arable land floor for a
+	# mass migration target (vanilla's is 10). Climate comfort now steers mass migration through migration
+	# attraction, so a city-state or a small partial state can be picked too. The few-target-states penalty stays
+	# vanilla's (owner, 2026-11-01). local_climate_log_on_action logs how many targets fall under 10.
+	MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0
 }
 
 NPowerBlocs = {

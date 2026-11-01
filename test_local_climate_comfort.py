@@ -388,5 +388,105 @@ class ScriptMatchesMirror(unittest.TestCase):
             if isinstance(body, list):
                 self.sv.read(name, env)
 
+
+MODIFIERS = ROOT / "common" / "static_modifiers" / "local_climate_modifiers.txt"
+EFFECTS = ROOT / "common" / "scripted_effects" / "local_climate_effects.txt"
+ON_ACTIONS = ROOT / "common" / "on_actions" / "local_climate_on_actions.txt"
+DEFINES = ROOT / "common" / "defines" / "extra_defines.txt"
+EFFECT = "te_update_local_climate_modifier"
+APPLIED = "te_climate_penalty_applied"
+FEW_STATES_DEFINES = ("MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY", "MASS_MIGRATION_FEW_TARGET_STATES_PENALTY")
+
+
+def top_blocks(text, name):
+    """Every top-level `name = { ... }` body in the text, in order (a file may open one more than once)."""
+    found, rest = [], text
+    while (body := top_block(rest, name)) is not None:
+        found.append(body)
+        rest = rest[re.search(rf"(?m)^{re.escape(name)} = \{{", rest).end() + len(body) + 1:]
+    return found
+
+
+def script_texts(*dirs):
+    """(path, text without comments) for every .txt under the given repo directories."""
+    for d in dirs:
+        for path in sorted((ROOT / d).rglob("*.txt")):
+            yield path, re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig"))
+
+
+class Modifier(unittest.TestCase):
+    """The penalty applied: one static modifier, refreshed yearly from a state pulse (spec § 5.1, § 5.4)."""
+
+    def test_files_have_one_bom(self):
+        for path in (MODIFIERS, EFFECTS, ON_ACTIONS):
+            raw = path.read_bytes()
+            self.assertTrue(raw.startswith(b"\xef\xbb\xbf"), f"{path.name} needs a UTF-8 BOM")
+            self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"), f"{path.name}: doubled BOM")
+
+    def test_static_modifier(self):
+        body = squash(top_block(MODIFIERS.read_text(encoding="utf-8-sig"), "local_climate_discomfort") or "")
+        self.assertEqual(body, "icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds "
+                               "state_migration_pull_add = -1")
+
+    def test_refresh_shape(self):
+        body = squash(top_block(EFFECTS.read_text(encoding="utf-8-sig"), EFFECT) or "")
+        self.assertEqual(body, "remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort } "
+                               f"set_variable = {{ name = {APPLIED} value = te_climate_penalty }} "
+                               f"if = {{ limit = {{ var:{APPLIED} > 0 }} "
+                               f"add_modifier = {{ name = local_climate_discomfort multiplier = var:{APPLIED} }} }}")
+
+    def test_refresh_never_removes_the_variable(self):
+        """The modifier's multiplier reads the variable on later ticks too (modifier_multiplier_var_audit)."""
+        for path, text in script_texts("common", "events"):
+            self.assertNotRegex(text, rf"remove_variable\s*=\s*{APPLIED}\b", path.name)
+            self.assertNotRegex(text, rf"remove_variable\s*=\s*\{{\s*name\s*=\s*{APPLIED}\b", path.name)
+
+    def test_refresh_sites(self):
+        text = ON_ACTIONS.read_text(encoding="utf-8-sig")
+        yearly = [squash(b) for b in top_blocks(text, "on_yearly_pulse_state")]
+        monthly = [squash(b) for b in top_blocks(text, "on_monthly_pulse_state")]
+        self.assertEqual(yearly, ["on_actions = { local_climate_yearly_on_action }"])
+        self.assertEqual(monthly, ["on_actions = { local_climate_first_on_action }"])
+        self.assertEqual(squash(top_block(text, "local_climate_yearly_on_action") or ""),
+                         f"effect = {{ {EFFECT} = yes }}")
+        self.assertEqual(squash(top_block(text, "local_climate_first_on_action") or ""),
+                         f"trigger = {{ NOT = {{ has_variable = {APPLIED} }} }} effect = {{ {EFFECT} = yes }}")
+        # One refresh site plus the first application, and nothing else calls the effect.
+        calls = [(path.name, n) for path, text in script_texts("common", "events")
+                 for n in [len(re.findall(rf"\b{EFFECT}\s*=\s*yes\b", text))] if n]
+        self.assertEqual(calls, [(ON_ACTIONS.name, 2)])
+
+    def test_decade_log(self):
+        """Informational, not a self-check: every ten years, how many mass migration targets there are and how
+        many of them have under 10 arable land, the floor the define removes."""
+        text = ON_ACTIONS.read_text(encoding="utf-8-sig")
+        country = [squash(b) for b in top_blocks(text, "on_yearly_pulse_country")]
+        self.assertEqual(country, ["on_actions = { local_climate_log_on_action }"])
+        body = squash(top_block(text, "local_climate_log_on_action") or "")
+        self.assertIn("days = 3650", body)
+        self.assertIn("every_state = { limit = { is_mass_migration_target = yes }", body)
+        self.assertIn("arable_land < 10", body)
+        self.assertIn('debug_log = "TE_LOCAL_CLIMATE mass_migration_targets=', body)
+        self.assertIn("under_10_arable=", body)
+        self.assertNotIn("$", body, "no $PARAM$ inside a debug_log string")
+
+    def test_defines(self):
+        """The arable land floor goes; the few-states penalty stays vanilla's (owner, 2026-11-01)."""
+        text = DEFINES.read_text(encoding="utf-8-sig")
+        blocks = [squash(b) for b in top_blocks(text, "NPops")]
+        self.assertTrue(blocks)
+        self.assertEqual(sum(b.count("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0") for b in blocks), 1, blocks)
+        for path, body in script_texts("common/defines"):
+            self.assertEqual(body.count("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND"), int(path == DEFINES), path.name)
+            for define in FEW_STATES_DEFINES:
+                self.assertNotIn(define, body, path.name)
+
+    def test_modifier_loc(self):
+        name, desc = loc_value("local_climate_discomfort"), loc_value("local_climate_discomfort_desc")
+        self.assertIsNotNone(name)
+        self.assertIn("Local Climate", name)
+        self.assertIn("[concept_local_climate]", desc or "")
+
+
 if __name__ == "__main__":
     unittest.main()

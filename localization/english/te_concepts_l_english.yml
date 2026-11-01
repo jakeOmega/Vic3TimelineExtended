@@ -1885,6 +1885,8 @@
  lgbtq_reform_civil_rights_movement_modifier_desc:0 "Public outrage over hate crimes has attracted more supporters to the civil rights movement."
  lgbtq_reform_leverage_modifier_desc:0 "Public outrage over hate crimes has created momentum for protective legislation."
  lgbtq_social_progress:0 "Social Progress Tailwind"
+ local_climate_discomfort:0 "Local Climate"
+ local_climate_discomfort_desc:0 "Newcomers weigh the [concept_local_climate] where they would live: summer heat, winter cold, scarce water and malaria all cost a state [concept_migration_pull]. Technologies that ease each one reduce the cost, which is recalculated every year."
  magnetic_drive_ships:0 "Magnetic Drive Ships"
  magnetic_drive_ships_desc:0 "Vessels propelled by magnetohydrodynamic drives — superconducting magnets accelerate seawater through electromagnetic conduits, eliminating propellers and bearings entirely. The exotic apex of civilian shipbuilding."
  malnourishment:0 "Malnourishment"

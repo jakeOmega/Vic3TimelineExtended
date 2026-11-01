@@ -1,0 +1,13 @@
+﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.1).
+# The migration attraction a state's climate costs, applied as one modifier with
+# multiplier = the penalty in points (te_climate_penalty, local_climate_values.txt),
+# refreshed by te_update_local_climate_modifier (local_climate_effects.txt). The
+# penalty is never negative, so the unit value is a cost and the multiplier never
+# turns it into a bonus. An add, not a _mult: a multiplier would scale with the
+# economy, and on a state whose attraction is negative it would push toward zero.
+# The blank icon hides it from the state panel's modifier rows: the Local Climate
+# tile shows it (test_hidden_state_modifiers.py).
+local_climate_discomfort = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_migration_pull_add = -1
+}
