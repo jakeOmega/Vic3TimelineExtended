@@ -261,6 +261,24 @@ sr_colony_module_sgui = {
 					text = sr_mod_req_slot_room_tt
 					sr_mod_scope_slot_room = yes
 				}
+				# Terraforming (code 16; era 13 spec § 7.11): the technology's marker, at
+				# most three at a world at once, and only while the world is unfinished.
+				# Only the worlds that take it have its button.
+				trigger_if = {
+					limit = { scope:op = 16 }
+					custom_tooltip = {
+						text = sr_mod_req_terra_tech_tt
+						modifier:country_sr_terraforming_bool = yes
+					}
+					custom_tooltip = {
+						text = sr_mod_req_terra_room_tt
+						sr_mod_scope_terra_room = yes
+					}
+					custom_tooltip = {
+						text = sr_mod_req_terra_open_tt
+						sr_mod_scope_terra_open = yes
+					}
+				}
 			}
 		}
 	}
@@ -376,6 +394,14 @@ sr_colony_module_sgui = {
 			limit = { scope:op = 15 }
 			custom_tooltip = {
 				text = sr_mod_queue_admin_tt
+				sr_mod_queue_from_scope = yes
+			}
+		}
+		# Terraforming (era 13 spec § 7.11).
+		else_if = {
+			limit = { scope:op = 16 }
+			custom_tooltip = {
+				text = sr_mod_queue_terra_tt
 				sr_mod_queue_from_scope = yes
 			}
 		}

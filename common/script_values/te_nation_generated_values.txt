@@ -353,6 +353,18 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_clade_parity_group }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_none }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_trait }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_construction_market_private_share_modifier }
 		add = 1
 	}
@@ -1128,6 +1140,18 @@ te_nation_list_society_count = {
 	}
 	if = {
 		limit = { has_modifier = sol_expectations_upper_strata_shift }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_group }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_none }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_trait }
 		add = 1
 	}
 	if = {
@@ -3640,6 +3664,18 @@ te_nation_types_society_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_clade_parity_group }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_none }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_trait }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
@@ -3921,6 +3957,18 @@ te_nation_group_acceptance_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_clade_parity_group }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_none }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_clade_parity_trait }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_cultural_diversity_modifier }
 		add = 1
 	}
@@ -3963,6 +4011,33 @@ te_nation_type_country_acceptance_not_homeland_add_count = {
 	}
 	if = {
 		limit = { has_modifier = quiet_assimilation_path_modifier }
+		add = 1
+	}
+}
+
+# Used by: the country_acceptance_shared_heritage_trait_add row
+te_nation_type_country_acceptance_shared_heritage_trait_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_clade_parity_trait }
+		add = 1
+	}
+}
+
+# Used by: the country_acceptance_shared_heritage_trait_group_add row
+te_nation_type_country_acceptance_shared_heritage_trait_group_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_clade_parity_group }
+		add = 1
+	}
+}
+
+# Used by: the country_acceptance_no_shared_heritage_trait_add row
+te_nation_type_country_acceptance_no_shared_heritage_trait_add_count = {
+	value = 0
+	if = {
+		limit = { has_modifier = te_clade_parity_none }
 		add = 1
 	}
 }

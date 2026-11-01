@@ -469,3 +469,103 @@ shock.
    AI-managed reactor automation still shows for a plant on either method.
 3. **The AI switches.** An AI Nuclear Plant moves to Generation IV Reactors
    within a year of the technology, where Advanced Materials are on its market.
+
+## Phase 3: Terraforming
+
+The Terraforming colony module (`docs/systems/mod_systems/space_race.md` §
+Colony modules), under Simple or Full Colonies. `event te_debug_space_race.4`
+logs every colony's modules and work done (**a**, `TE_SR_MODULES … terraformed=N/900
+months`), fills the stock (**b**), queues one of each module the first colony
+allows (**c**), lands shipments now (**e**) and runs ten years of terraforming
+at this month's pace (**i**).
+
+1. **The tree.** Terraforming sits in era 13's society column with arrows from
+   Space Colonization and Geoengineering, on Space Colonization's icon until
+   its own is painted. Its tooltip lists Terraforming for Colonies, whose hover
+   names Mars, Venus, Titan, Ganymede and Callisto.
+2. **The line.** Before the technology a Mars colony's Modules view shows the
+   usual three lines of cells and no Terraforming line. After it, a fourth
+   line shows on the Martian sites, Venus, Titan, Ganymede and Callisto only:
+   the Terr cell, then "Terraformed +0% no work under way". A colony's page
+   shows a Terraforming row (Mars icon) and a Terraformed tile beside Base
+   Room. Nothing of it shows on Europa, the Moon or any other world.
+3. **The queue.** The cell's + queues a level; the hover's lines tick for the
+   technology, fewer than three levels and an unfinished world. A fourth level
+   at the same world is refused with the second line crossed, counting queued
+   and shipped levels. The queue lists it as Terraforming.
+4. **The work.** With a level landed and staffed, the line reads "+N% … years to
+   go" and the figure climbs 4% a year (about 0.33% a month) a level; the
+   colony's people / room in the People view climbs with it, and settlers keep
+   landing past the old room. Option **i** adds ten years at once (+40% a
+   staffed level). A colony short of crews climbs at its Modules Crewed share.
+5. **Finished.** At +300% the line reads "finished", the levels stand down
+   (`TE_SR_MODULES <key>: terraformed; its Terraforming levels stand down`), the
+   Slots figure falls by three and Module Upkeep drops. The + button's third line
+   is crossed. The room stays at +300%.
+6. **The work is the world's.** Cede a terraforming colony (Cede Colony): the new
+   holder's row shows the same +N% and the work goes on, even without the
+   technology. Take a Terraforming level down on the colony's page: the room
+   stays where it was. Release a world with work done, found it again: its room
+   starts at the terraformed figure.
+7. **Occupation.** Under Full Colonies an occupied world's figure stops rising;
+   it resumes when the occupation ends.
+8. **The AI.** In an observer run to the late game, an AI with the technology
+   queues Terraforming at a Martian, Venusian, Titan, Ganymede or Callisto
+   colony whose people fill half its room, within its slots (option **a**, run as
+   its tag, lists the levels).
+9. **Self-check.** The marker is read as the drive markers are, so
+   `TE_SELF_CHECK OK drive_marker` covers it; no check of its own.
+
+## Phase 3: Self-Directed Evolution
+
+1. **The tree.** Self-Directed Evolution sits in era 13's society column with
+   arrows from Morphological Freedom and Rejuvenation Therapies, on Synthetic
+   Biology's icon until its own is painted. Its tooltip names Clade
+   Citizenship and lists Colony Growth a Month +0.1% and, with the
+   Demographics rule, Safer Work +5%.
+2. **The law.**
+   - Clade Citizenship is the fourth law of Bodily Autonomy, after
+     Morphological Freedom, on Unrestricted Augmentation's icon. Its tooltip
+     shows +10 acceptance without a shared heritage trait, +15% migration
+     pull, +5% Cultural Pull from Art and the parity line ("Heritage no longer
+     divides our people").
+   - Interest groups: on Morphological Freedom, open Clade Citizenship's
+     enactment. The Intelligentsia neither back nor oppose it (strongly
+     approving of both laws), the Devout and the Rural Folk strongly oppose
+     it, and a group led by a transhumanist backs it. On Natural Form or
+     Licensed Modification the Intelligentsia back it.
+3. **The heritage parity.** Under Universal Citizenship with Civil Rights
+   Movement and Social Justice Movements, enact Clade Citizenship and wait for
+   the month's pulse.
+   - The Nation tab's Society section lists Clade Citizenship: Shared Heritage
+     Trait and Clade Citizenship: Shared Heritage Group, and its Acceptance
+     rows read 30 for all three heritage figures (each row's hover breaks it
+     down). No Clade Citizenship: No Shared Heritage shows, since no shared
+     heritage is already the highest at 30.
+   - Read a pop's acceptance breakdown three ways: a culture that shares a
+     heritage trait with a primary culture, one that shares only a heritage
+     group, and one that shares neither. All three show the same heritage
+     line, 30.
+   - Change to Racialized Citizenship (or start a test country on it): after
+     the next pulse the figures read 60 for all three.
+   - Repeal the law: within a month the parity modifiers are gone and the
+     figures fall back to the Citizenship law's and the technologies'.
+4. **The debate.** If the Morphological Freedom Debate is still running when
+   Self-Directed Evolution arrives, enacting Clade Citizenship shows its
+   status line for a moment and completes the debate with The Chosen Body.
+5. **Colonies** (Simple or Full Colonies). A colony of ours grows by about 0.3%
+   a month after the technology, against 0.2% before (its people, month on
+   month, on the Colonies section's People view); a free colony stays at 0.2%.
+6. **The census** (Demographics rule at Full). A state's Work row in Causes of
+   Death shows Safety ×0.05 after the technology (×0.10 before), and the
+   hover lists Self-Directed Evolution among the technologies.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … clade_heritage_parity` | once a game, the month after a country's parity first closed a gap of at least 1 point; or at once if all three heritage figures read 0 under the law | The country's `modifier:` reads of the three heritage figures carry its laws', technologies' and the parity's own lines, so the lifts land and all three read the same | The three still differ a month on (the lifts never landed, or a read misses a line), or they read 0 (the read returns nothing). A Citizenship law or heritage line that changed in that same month also reads BROKEN, which its numbers show | Drop the parity modifiers and give the law a static line on all three figures, +10 each over Morphological Freedom's, which ranks heritage as the Citizenship law does and never inverts it |
+
+No line after a few years means no country has held the law: its own +10 for
+no shared heritage leaves a gap to close under every Citizenship law, so enact
+it in a test game.

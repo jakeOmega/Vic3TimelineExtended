@@ -96,6 +96,9 @@ SECTIONS = {
         "cr_*",
         # Resettlement's politics and the declaration's violation
         "resettlement_*_politics", "resettlement_declaration_violation",
+        # Clade Citizenship's heritage parity, scaled monthly to each heritage
+        # figure's gap (te_bodily_autonomy_effects.txt)
+        "te_clade_parity_*",
     ),
     "economy": (
         # Agricultural diffusion: arable land and yields a farming technology spreads
@@ -304,8 +307,9 @@ TYPE_ROWS = {
             "country_sol_expectations_lower_offset_add",
         ),
         "acceptance": (
-            "country_acceptance_not_homeland_add", "state_assimilation_mult", "state_conversion_mult",
-            "state_homeland_removal_speed_mult",
+            "country_acceptance_not_homeland_add", "country_acceptance_shared_heritage_trait_add",
+            "country_acceptance_shared_heritage_trait_group_add", "country_acceptance_no_shared_heritage_trait_add",
+            "state_assimilation_mult", "state_conversion_mult", "state_homeland_removal_speed_mult",
         ),
         "unrest": (
             "state_turmoil_effects_mult", "state_radicals_from_political_movements_mult",

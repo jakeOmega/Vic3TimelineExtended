@@ -1571,7 +1571,8 @@ types space_race_widget_types
 		### Modules: every type in three lines of cells, each its label, the level
 		### (its hover what it does), "+N" queued or on its way and a button that
 		### queues one more: the specializations, Habitat, Spaceport and Defenses;
-		### then the facilities (colony management design § 7).
+		### then the facilities (colony management design § 7); then, on a fourth
+		### line on the worlds that take it, Terraforming (era 13 spec § 7.11).
 		flowcontainer = {
 			visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ), GetVariableSystem.HasValue('sr_colony_view', 'modules') )]"
 			direction = vertical
@@ -1944,6 +1945,102 @@ types space_race_widget_types
 					}
 				}
 			}
+			### Terraforming (era 13 spec § 7.11): hidden unless the world takes it
+			### and we have the technology or it has work done (terra_visible,
+			### generated); its cell, then the room the work has added and the years
+			### left at this pace, or that it is finished or idle.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				block "terra_visible" {
+					visible = no
+				}
+
+				te_sr_mod_cell = {
+					blockoverride "cell_label" {
+						text = "je_space_race_widget_modules_col_terra"
+						tooltip = "je_space_race_widget_mod_terra_tt"
+					}
+					blockoverride "cell_level" {
+						block "mod_terra_level" {}
+					}
+					blockoverride "cell_pending" {
+						block "mod_terra_pending" {}
+					}
+					blockoverride "cell_button" {
+						block "mod_terra_button" {}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+					parentanchor = vcenter
+					tooltip = "je_space_race_widget_terra_progress_tt"
+
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 110
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_modules_col_terraformed"
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 52
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "terra_pct" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 36
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "terra_years" {}
+						block "terra_under_way_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 120
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_terra_years_left"
+						block "terra_under_way_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 150
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_terra_finished"
+						block "terra_finished_visible" {}
+					}
+					textbox = {
+						parentanchor = left|vcenter
+						autoresize = yes
+						max_width = 170
+						align = left|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						text = "je_space_race_widget_terra_idle"
+						block "terra_idle_visible" {}
+					}
+				}
+			}
 		}
 		### Autonomy: autonomy, and its drift a month (that colony's terms on hover).
 		flowcontainer = {
@@ -2244,6 +2341,44 @@ types space_race_widget_types
 						}
 						te_sr_page_value = {
 							block "module_grade" {}
+						}
+					}
+				}
+				### Terraforming (era 13 spec § 7.11), where the list shows its line.
+				te_sr_page_tile = {
+					block "terra_visible" {
+						visible = no
+					}
+					blockoverride "tile_tooltip" {
+						tooltip = "je_space_race_widget_terra_progress_tt"
+					}
+					blockoverride "tile_icon" {
+						texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+					}
+					blockoverride "tile_caption" {
+						text = "je_space_race_widget_page_terraformed"
+					}
+					blockoverride "tile_value" {
+						te_sr_page_value = {
+							default_format = "#v"
+							block "terra_pct" {}
+						}
+						te_sr_page_value = {
+							default_format = "#v"
+							block "terra_years" {}
+							block "terra_under_way_visible" {}
+						}
+						te_sr_page_value = {
+							text = "je_space_race_widget_terra_years_left"
+							block "terra_under_way_visible" {}
+						}
+						te_sr_page_value = {
+							text = "je_space_race_widget_terra_finished"
+							block "terra_finished_visible" {}
+						}
+						te_sr_page_value = {
+							text = "je_space_race_widget_terra_idle"
+							block "terra_idle_visible" {}
 						}
 					}
 				}
@@ -2649,6 +2784,36 @@ types space_race_widget_types
 				}
 				blockoverride "row_dismantle" {
 					block "mod_admin_dismantle_button" {}
+				}
+			}
+			te_sr_page_mod_row = {
+				block "terra_visible" {
+					visible = no
+				}
+				blockoverride "row_icon" {
+					texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				}
+				blockoverride "row_name" {
+					text = "je_space_race_widget_mod_name_terra"
+					tooltip = "je_space_race_widget_mod_terra_tt"
+				}
+				blockoverride "row_level" {
+					block "mod_terra_level" {}
+				}
+				blockoverride "row_pending" {
+					block "mod_terra_pending" {}
+				}
+				blockoverride "row_button" {
+					block "mod_terra_button" {}
+				}
+				blockoverride "row_dismantling" {
+					block "mod_terra_dismantling" {}
+				}
+				blockoverride "row_dismantling_months" {
+					block "mod_terra_dismantling_months" {}
+				}
+				blockoverride "row_dismantle" {
+					block "mod_terra_dismantle_button" {}
 				}
 			}
 

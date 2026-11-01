@@ -1,0 +1,135 @@
+﻿# ============================================================================
+# BODILY AUTONOMY — Clade Citizenship's heritage parity (era 13 spec § 7.3)
+# ============================================================================
+# Laws: common/laws/te_bodily_autonomy_laws.txt. Values:
+# common/script_values/te_bodily_autonomy_values.txt. Modifiers:
+# common/static_modifiers/te_bodily_autonomy_modifiers.txt. Pulse:
+# common/on_actions/te_bodily_autonomy_on_actions.txt.
+# ============================================================================
+
+# Country scope, from on_monthly_pulse_country. The only writer of the three
+# parity modifiers and their variables (the dynamic-modifier pattern,
+# docs/systems/mod_systems/dynamic_modifier_pattern.md). Under Clade
+# Citizenship each heritage figure (a shared heritage trait, a shared trait
+# group, none) is lifted to the highest of the three, so every pop reads the
+# same figure and heritage ranks no pop above another:
+#   1. The three lifts are worked out first, into locals, from the figures less
+#      last month's lifts (te_clade_base_*_value): each base reads a variable
+#      the next step overwrites.
+#   2. The variables take the new lifts, and each modifier is removed, then
+#      re-added at its lift while that is above zero. A same-name add_modifier
+#      stacks, so the removal comes first, every month.
+#   3. Without the law, the modifiers go first and their variables after, so no
+#      multiplier is left reading a removed variable.
+# Up to a month passes between enacting (or repealing) the law and the parity.
+te_clade_parity_refresh = {
+	if = {
+		limit = { has_law = law_type:law_clade_citizenship }
+		te_clade_parity_selfcheck = yes
+		set_local_variable = { name = te_clade_new_trait value = te_clade_lift_trait_value }
+		set_local_variable = { name = te_clade_new_group value = te_clade_lift_group_value }
+		set_local_variable = { name = te_clade_new_none value = te_clade_lift_none_value }
+		set_variable = { name = te_clade_lift_trait value = local_var:te_clade_new_trait }
+		set_variable = { name = te_clade_lift_group value = local_var:te_clade_new_group }
+		set_variable = { name = te_clade_lift_none value = local_var:te_clade_new_none }
+		remove_modifier_if_exists_effect = { MODIFIER = te_clade_parity_trait }
+		remove_modifier_if_exists_effect = { MODIFIER = te_clade_parity_group }
+		remove_modifier_if_exists_effect = { MODIFIER = te_clade_parity_none }
+		if = {
+			limit = { var:te_clade_lift_trait > 0 }
+			add_modifier = {
+				name = te_clade_parity_trait
+				multiplier = var:te_clade_lift_trait
+			}
+		}
+		if = {
+			limit = { var:te_clade_lift_group > 0 }
+			add_modifier = {
+				name = te_clade_parity_group
+				multiplier = var:te_clade_lift_group
+			}
+		}
+		if = {
+			limit = { var:te_clade_lift_none > 0 }
+			add_modifier = {
+				name = te_clade_parity_none
+				multiplier = var:te_clade_lift_none
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_variable = te_clade_lift_trait
+				has_variable = te_clade_chk_target
+			}
+		}
+		if = {
+			limit = { has_modifier = te_clade_parity_trait }
+			remove_modifier = te_clade_parity_trait
+		}
+		if = {
+			limit = { has_modifier = te_clade_parity_group }
+			remove_modifier = te_clade_parity_group
+		}
+		if = {
+			limit = { has_modifier = te_clade_parity_none }
+			remove_modifier = te_clade_parity_none
+		}
+		remove_variable = te_clade_lift_trait
+		remove_variable = te_clade_lift_group
+		remove_variable = te_clade_lift_none
+		remove_variable = te_clade_chk_target
+	}
+}
+
+# Country scope, from te_clade_parity_refresh under the law, before it works
+# out the month's lifts. TEMPORARY self-check (CLAUDE.md, "In-game checks"):
+# do the country's modifier reads of the three heritage figures carry its
+# laws', technologies' and the parity's own lines? The parity rests on them,
+# and nothing else in the mod reads these three.
+#   te_clade_chk_target   the figure last month's lifts aimed at, set only when
+#                         they closed a gap of at least 1, so an OK can't come
+#                         from a country with nothing to lift
+# Once a game, the month after, the first such country logs:
+#   OK      the three read the same, the target: every pop's heritage figure is
+#           one;
+#   BROKEN  they still differ: a read misses a line, or the parity's lines
+#           never landed, so the law falls back to its static +10 alone
+#           (docs/testing/era-13-playtest.md). A citizenship law or heritage
+#           line that changed in that month reads BROKEN too; the numbers show
+#           it, and the next country's check is lost with it.
+# A shared heritage trait reads at least 20 under every citizenship law, so
+# three reads of 0 mean the read itself returns nothing: BROKEN at once.
+te_clade_parity_selfcheck = {
+	if = {
+		limit = { NOT = { has_global_variable = te_clade_parity_checked } }
+		if = {
+			limit = { has_variable = te_clade_chk_target }
+			set_global_variable = te_clade_parity_checked
+			set_variable = { name = te_clade_chk_trait value = modifier:country_acceptance_shared_heritage_trait_add }
+			set_variable = { name = te_clade_chk_group value = modifier:country_acceptance_shared_heritage_trait_group_add }
+			set_variable = { name = te_clade_chk_none value = modifier:country_acceptance_no_shared_heritage_trait_add }
+			if = {
+				limit = { te_clade_read_spread_value < 0.01 }
+				debug_log = "TE_SELF_CHECK OK clade_heritage_parity country=[THIS.GetCountry.GetTagName] trait=[THIS.Var('te_clade_chk_trait').GetValue|1] group=[THIS.Var('te_clade_chk_group').GetValue|1] none=[THIS.Var('te_clade_chk_none').GetValue|1] target=[THIS.Var('te_clade_chk_target').GetValue|1] (under Clade Citizenship the three heritage figures read the same, so heritage ranks no pop above another) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN clade_heritage_parity country=[THIS.GetCountry.GetTagName] trait=[THIS.Var('te_clade_chk_trait').GetValue|1] group=[THIS.Var('te_clade_chk_group').GetValue|1] none=[THIS.Var('te_clade_chk_none').GetValue|1] target=[THIS.Var('te_clade_chk_target').GetValue|1] (a month after the parity lifted them, the three heritage figures still differ: the modifier reads miss a line or the lifts never landed; see docs/testing/era-13-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_variable = te_clade_chk_target
+			remove_variable = te_clade_chk_trait
+			remove_variable = te_clade_chk_group
+			remove_variable = te_clade_chk_none
+		}
+		else_if = {
+			limit = { te_clade_read_highest_value <= 0 }
+			set_global_variable = te_clade_parity_checked
+			debug_log = "TE_SELF_CHECK BROKEN clade_heritage_parity country=[THIS.GetCountry.GetTagName] (under Clade Citizenship all three heritage figures read 0: a modifier read of them returns nothing, so the parity lifts nothing; see docs/testing/era-13-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = { te_clade_parity_gap_value >= 1 }
+			set_variable = { name = te_clade_chk_target value = te_clade_parity_target_value }
+		}
+	}
+}

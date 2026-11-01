@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# BODILY AUTONOMY — country pulse (era 13 spec § 7.3)
+# ============================================================================
+# Clade Citizenship's heritage parity (te_clade_parity_refresh,
+# common/scripted_effects/te_bodily_autonomy_effects.txt), its one refresh
+# site. A country without the law, and without the parity's variables, checks
+# a law and two variables a month.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_bodily_autonomy_country_monthly_on_action
+	}
+}
+
+te_bodily_autonomy_country_monthly_on_action = {
+	effect = {
+		te_clade_parity_refresh = yes
+	}
+}

@@ -791,10 +791,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "post-scarcity_economy": {"subject": "an overflowing cornucopia horn spilling fruit, bread and gleaming gadgets", "seed": 1},
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
+        "self_directed_evolution": {"subject": "a glass bell jar holding a small pale salamander-like figure with feathery pink gills and large dark eyes, a thin double helix of light curling up beside it", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
         "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": None},
         "liquid_democracy": {"subject": "a glowing blue fingerprint pressed onto a paper ballot, thin lines of light running from it to many small hands", "seed": None},
         "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
+        "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": None},
         "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
@@ -1332,6 +1334,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": None},
         "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": None},
         "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": None},
+        # Clade Citizenship (era 13 spec § 7.3) borrows Unrestricted Augmentation's icon.
+        "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": None},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll

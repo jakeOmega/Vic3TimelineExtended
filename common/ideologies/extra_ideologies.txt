@@ -256,6 +256,7 @@ ideology_multicultural = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+		law_clade_citizenship = strongly_approve
 	}
 }
 
@@ -293,6 +294,7 @@ ideology_multicultural_ig = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+		law_clade_citizenship = strongly_approve
 	}
 }
 
@@ -397,6 +399,7 @@ ideology_multicultural_inclusive = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+		law_clade_citizenship = strongly_approve
 	}
 }
 
@@ -641,7 +644,8 @@ ideology_optimist_transhumanist = {
 	lawgroup_bodily_autonomy = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
-		law_morphological_freedom = strongly_approve
+		law_morphological_freedom = approve
+		law_clade_citizenship = strongly_approve
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -1526,6 +1530,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
+		law_clade_citizenship = strongly_disapprove
 	}
 }
 
@@ -1631,6 +1636,7 @@ ideology_custom_religion_inclusive_society = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
+		law_clade_citizenship = strongly_approve
 	}
 }
 
@@ -1736,6 +1742,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_natural_form = neutral
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
+		law_clade_citizenship = strongly_disapprove
 	}
 }
 
@@ -1841,6 +1848,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
+		law_clade_citizenship = disapprove
 	}
 }
 
@@ -1946,6 +1954,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
+		law_clade_citizenship = strongly_disapprove
 	}
 }
 
@@ -2060,6 +2069,7 @@ ideology_custom_religion_theocratic_society = {
 		law_natural_form = neutral
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
+		law_clade_citizenship = strongly_disapprove
 	}
 }
 

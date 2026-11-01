@@ -196,6 +196,33 @@ biological_immortality = {
 	}
 }
 
+self_directed_evolution = {
+	# Clade Citizenship, the fourth Bodily Autonomy law (era 13 spec § 7.3; common/laws/te_bodily_autonomy_laws.txt);
+	# faster-growing colonies (the marker below). People alter their biology radically, beyond appearance: new senses,
+	# engineered metabolisms, bodies built for oceans, cold, vacuum or low gravity
+	era = era_13
+	texture = "gfx/interface/icons/invention_icons/synthetic_biology.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		morphological_freedom
+		rejuvenation_therapies
+	}
+
+	modifier = {
+		# colonists adapted to low gravity and radiation: every colony we hold grows by 0.3% a month, not 0.2%
+		# (each world's sr_site_growth_<key>, gen_solar_sites.GROWTH_MODIFIER)
+		country_sr_colony_growth_add = 0.001
+		# the census's modern safety for work (demographics_params.SAFETY_TYPES): bodies built for heat, cold, depth
+		# and vacuum take the era 7-9 carriers' 0.90 to the cap, SAFETY_MAX 0.95
+		state_work_safety_add = 0.05
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
 mind_backups = {
 	era = era_13
 	texture = "gfx/interface/icons/invention_icons/mind_backups.dds"
@@ -277,6 +304,28 @@ post-scarcity_economy = {
 		country_institution_social_security_max_investment_add = 2
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_voting_power_mult = 0.2
+	}
+
+	ai_weight = {
+		value = 1
+	}
+}
+
+terraforming = {
+	# The Terraforming colony module on Mars, Venus, Titan, Ganymede and Callisto (era 13 spec § 7.11):
+	# its marker below, which the module's queue reads. Geoengineering is the same practice at home
+	era = era_13
+	texture = "gfx/interface/icons/invention_icons/space_colonization.dds" # Placeholder Icon
+	category = society
+
+	unlocking_technologies = {
+		space_colonization
+		geoengineering
+	}
+
+	modifier = {
+		# the colonies' Terraforming module (gen_solar_sites.TERRA_MARKER)
+		country_sr_terraforming_bool = yes
 	}
 
 	ai_weight = {

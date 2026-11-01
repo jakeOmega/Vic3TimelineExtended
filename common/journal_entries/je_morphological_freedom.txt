@@ -1,12 +1,10 @@
 ﻿# The Morphological Freedom Debate (era 13 spec § 7.2): je_human_augmentation's
 # pattern, for lawgroup_bodily_autonomy (common/laws/te_bodily_autonomy_laws.txt).
 # It opens with the Morphological Freedom technology, succeeds on the law of the
-# same name and fails on Natural Form held to the end. Licensed Modification at
-# the end leaves the question unsettled. The engine has no "failed at the
-# deadline" hook, so both of those are the timeout's branches.
-#
-# Clade Citizenship (Self-Directed Evolution, era 13) settles it too: add it to
-# `complete` as an OR, and give it a status line.
+# same name or on Clade Citizenship (Self-Directed Evolution, era 13), and fails
+# on Natural Form held to the end. Licensed Modification at the end leaves the
+# question unsettled. The engine has no "failed at the deadline" hook, so both
+# of those are the timeout's branches.
 je_morphological_freedom = {
 	icon = "gfx/interface/icons/event_icons/je_civil_rights.dds" # Placeholder Icon
 	group = je_group_internal_affairs
@@ -72,11 +70,20 @@ je_morphological_freedom = {
 					has_law = law_type:law_morphological_freedom
 				}
 			}
+			triggered_desc = {
+				desc = je_morphological_freedom_status_clade
+				trigger = {
+					has_law = law_type:law_clade_citizenship
+				}
+			}
 		}
 	}
 
 	complete = {
-		has_law = law_type:law_morphological_freedom
+		OR = {
+			has_law = law_type:law_morphological_freedom
+			has_law = law_type:law_clade_citizenship
+		}
 	}
 
 	on_complete = {
