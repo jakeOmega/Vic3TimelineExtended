@@ -468,6 +468,10 @@ class OneSpaceCommandTest(unittest.TestCase):
         desc = re.search(r'(?m)^ notification_sr_space_command_dismantled_notice_desc:0 "(.*)"$', loc).group(1)
         self.assertIn("[SCOPE.sState('sr_sc_dismantled').GetName]", desc)
         self.assertIn("[SCOPE.sState('sr_sc_keeper').GetName]", desc)
+        # The tie goes to the market capital, which needn't have more levels
+        # (review of #1287, M2).
+        self.assertIn("market capital", desc)
+        self.assertNotIn("the one with the most levels", desc)
         for suffix in ("_name", "_tooltip"):
             with self.subTest(key=suffix):
                 self.assertRegex(loc, rf"(?m)^ notification_sr_space_command_dismantled_notice{suffix}:0 ")
@@ -488,7 +492,7 @@ class OneSpaceCommandTest(unittest.TestCase):
 
     def test_no_text_still_promises_a_split(self):
         loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
-        for phrase in ("shared between them", "each building's tooltip shows its share"):
+        for phrase in ("shared between them", "each building's tooltip shows its share", "keeping the larger"):
             with self.subTest(phrase=phrase):
                 self.assertNotIn(phrase, loc)
 

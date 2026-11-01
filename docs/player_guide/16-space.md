@@ -1047,10 +1047,11 @@ Telecommunication Gear, 10 Software, 20 Industrial Robotics and 40 Chemicals a
 week at full staff, about 8,400 at base prices. Fleets cost upkeep as +900% of
 that line for every 10 points of strength at full, the reserve's included, so a
 fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
-method or cutting levels doesn't lower it. A nation runs one Space Command: one
-that comes with annexed land is dismantled, keeping the larger (your market
-capital's if they are the same size), and you are told. A large fleet makes
-Space Command dearer to run; it builds as fast while those goods can be bought.
+method or cutting levels doesn't lower it. If annexed or formed land brings a
+second Space Command, the smaller of the two is dismantled, whichever it is (on
+a tie, the one outside your market capital), and you are told. A large fleet
+makes Space Command dearer to run; it builds as fast while those goods can be
+bought.
 Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
 raise your fleets' fire by a quarter.
 

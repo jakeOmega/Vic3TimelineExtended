@@ -678,7 +678,7 @@
  notification_sr_earth_hostile_notice_desc:0 "A fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName], a power at war with us, is on its way to Earth. The overview's Hostile Fleet cell shows when the first lands, and what is bound for Earth against what we have there."
  notification_sr_earth_hostile_notice_name:0 "A Hostile Fleet Is Bound for Earth"
  notification_sr_earth_hostile_notice_tooltip:0 "#header $notification_sr_earth_hostile_notice_name$#!\n$notification_sr_earth_hostile_notice_desc$"
- notification_sr_space_command_dismantled_notice_desc:0 "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the one with the most levels."
+ notification_sr_space_command_dismantled_notice_desc:0 "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the larger (or the market capital's, if they are the same size)."
  notification_sr_space_command_dismantled_notice_name:0 "Space Command Dismantled"
  notification_sr_space_command_dismantled_notice_tooltip:0 "#header $notification_sr_space_command_dismantled_notice_name$#!\n$notification_sr_space_command_dismantled_notice_desc$"
  notification_tactical_nuke_fails_attacker_desc:0 "Our tactical [concept_nuclear_strike] on [SCOPE.sState('target_state').GetName] was stopped by their defenses."
