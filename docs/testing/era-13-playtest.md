@@ -107,7 +107,7 @@ ahead, raised if they fall short.
 ## Phase 3: Aneutronic Fusion
 
 1. **The tree.** Aneutronic Fusion sits in era 13's military column after
-   Compact Fusion Reactors, and Fusion Batteries' arrow now comes from it, not
+   Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
    from Compact Fusion Reactors. It borrows Compact Fusion Reactors' icon
    until its own is painted. Its tooltip names Aneutronic Fusion Power, Fusion
    Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
@@ -132,7 +132,7 @@ ahead, raised if they fall short.
    all wait for Aneutronic Fusion. A country with Compact Fusion Reactors and
    the Deep-Space Probe and Mars Landing done sees none of them.
 6. **Old saves** (a save from before this change):
-   - A Fusion Batteries holder is given Aneutronic Fusion in the first month.
+   - A Microfusion Cells holder is given Aneutronic Fusion in the first month.
    - A Compact Fusion Reactors holder whose Space Program runs the
      Interstellar Mission is given it too, whether its probe is running,
      finished or not yet started.

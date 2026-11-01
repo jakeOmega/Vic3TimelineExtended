@@ -72,8 +72,9 @@ aneutronic_fusion = {
 }
 
 fusion_batteries = {
-	# Fusion Battery Motors PM for Motor Industries, Fusion Battery Vehicles PM for Automotive Industries,
-	# Fusion Battery Appliances PM for Consumer Appliance Industries
+	# Microfusion Cells (Fusion Batteries until 2026-10-31; the key stays): Microfusion Motors PM for Motor
+	# Industries, Microfusion Vehicles PM for Automotive Industries, Microfusion Appliances PM for Consumer
+	# Appliance Industries
 	era = era_13
 	texture = "gfx/interface/icons/invention_icons/fusion_batteries.dds"
 	category = military

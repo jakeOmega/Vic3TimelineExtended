@@ -66,6 +66,10 @@ Follow-up calls, the same day (PR #1276):
     direction (§ 4.1).
 20. **The trio's law names stand for now** (§ 7.1); phase 3's plans can
     revisit them.
+21. **Fusion Batteries is renamed Microfusion Cells** (2026-10-31, at phase 3):
+    fusion reactors small and safe enough to replace batteries, which "battery"
+    misread as storage. Its methods are Microfusion Motors, Vehicles and
+    Appliances. Loc only: the key stays `fusion_batteries`.
 
 ## 2. The eras
 
@@ -591,7 +595,7 @@ from the plasma. It brings:
   electricity.
 - **The Interstellar Probe** (`je_space_race`'s milestone, `pm_interstellar_mission`
   and its decision), moved from Compact Fusion Reactors.
-- **Fusion Batteries** comes to require it.
+- **Microfusion Cells** (`fusion_batteries`, call 21) comes to require it.
 
 ### 7.9 Vactrains (12, production)
 
