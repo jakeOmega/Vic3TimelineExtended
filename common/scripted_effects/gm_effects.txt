@@ -1752,7 +1752,10 @@ gm_preview_choices = {
 	}
 }
 
-# State scope, a contested primary; scope:gm_prev_country its owner.
+# State scope, a contested primary; scope:gm_prev_country its owner. The
+# *_on_country helpers read the country's ledgers and nets, so they run in
+# scope:gm_prev_country; called from here they read the state's, which has
+# none (2026-10-31: the figures never computed, and logged at seeding).
 gm_state_preview_choices = {
 	set_variable = { name = gm_prev_g value = gm_state_primary_grandeur }
 	scope:gm_prev_country = {
@@ -1763,7 +1766,7 @@ gm_state_preview_choices = {
 		limit = { has_variable = gm_base_ig }
 		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_base_ig } }
 	}
-	gm_preview_choices_on_country = yes
+	scope:gm_prev_country = { gm_preview_choices_on_country = yes }
 	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
 	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
 	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
@@ -1771,7 +1774,7 @@ gm_state_preview_choices = {
 		limit = { has_variable = gm_supporter_ig }
 		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_supporter_ig } }
 	}
-	gm_preview_supporters_on_country = yes
+	scope:gm_prev_country = { gm_preview_supporters_on_country = yes }
 	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
 	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
 }
@@ -1787,7 +1790,7 @@ gm_mon_preview_choices = {
 		limit = { has_variable = gm_tr_base_ig }
 		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_base_ig } }
 	}
-	gm_preview_choices_on_country = yes
+	scope:gm_prev_country = { gm_preview_choices_on_country = yes }
 	set_variable = { name = gm_prev_td_legit value = scope:gm_prev_country.var:gm_prev_td_legit }
 	set_variable = { name = gm_prev_td_base value = scope:gm_prev_country.var:gm_prev_td_base }
 	scope:gm_prev_country = { set_variable = { name = gm_prev_who value = flag:none } }
@@ -1795,7 +1798,7 @@ gm_mon_preview_choices = {
 		limit = { has_variable = gm_tr_supporter_ig }
 		scope:gm_prev_country = { set_variable = { name = gm_prev_who value = prev.var:gm_tr_supporter_ig } }
 	}
-	gm_preview_supporters_on_country = yes
+	scope:gm_prev_country = { gm_preview_supporters_on_country = yes }
 	set_variable = { name = gm_prev_td_sup value = scope:gm_prev_country.var:gm_prev_td_sup }
 	set_variable = { name = gm_prev_rd_sup value = scope:gm_prev_country.var:gm_prev_rd_sup }
 }
