@@ -1063,8 +1063,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 |---|---|
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window, your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
-| Merge | Joins another of your fleets at the same location |
-| Detach | Splits half of each role into a new fleet |
+| Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state
