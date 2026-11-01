@@ -745,14 +745,15 @@ Terraforming (an era 13 technology, after Space Colonization and
 Geoengineering) works the world itself, on the five Martian sites, the Venus
 cloud habitat, Titan, Ganymede and Callisto. Each staffed level adds 4% of the
 colony's starting room for people a year. Up to three work at a colony at once,
-so a world takes at least 25 years to reach its whole, +300%, where a Habitat
-gives +50% at once and holds its slot for good. The room the work has added belongs to
-the world: it stays when the colony changes hands, is released, or takes a
+so a world takes at least 25 years to finish, at +300%, where a Habitat gives
++50% at once and holds its slot for good. The room the work has added belongs
+to the world: it stays when the colony changes hands, is released, or takes a
 level down. A finished world's Terraforming levels stand down and free their
 slots. An occupation stops the work, and a colony short of crews works at its
 staffing share. Once you have the technology, the Modules view shows a
 Terraforming line under the facilities, with the room added so far and the
-years to go at this month's pace; the colony's page shows them as Terraformed.
+years to go at this month's pace; the colony's page shows the same in its
+Terraformed tile.
 
 A colony has 1 to 4 slots by its size, and one more each with Nuclear Thermal
 Propulsion, Orbital Manufacturing, Advanced Nanofabrication, Space Colonization
