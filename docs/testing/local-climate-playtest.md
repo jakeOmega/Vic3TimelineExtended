@@ -21,3 +21,4 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | The words' nested `SelectLocalization` | Each class shows its own word (find a Dry, a Moderate and a Humid state; a Limited and a Scarce one; a Seasonal one) | Every state shows the same word: the nesting reads one test only |
 | No row elides with "..." | "Humidity", "Seasonal" and "Moderate" fit their columns | Widen `te_state_climate_row`'s columns |
 | Hovers | Each row's hover explains its reading; the tile's hover names Local Climate | |
+| Fiji and Tonga | No Severe Malaria among the state's traits; the tile reads Malaria: None | The deployed `12_indonesia.txt` is stale, or a later-loaded mod overrides it |
