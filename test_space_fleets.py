@@ -472,6 +472,20 @@ class OneSpaceCommandTest(unittest.TestCase):
             with self.subTest(key=suffix):
                 self.assertRegex(loc, rf"(?m)^ notification_sr_space_command_dismantled_notice{suffix}:0 ")
 
+    def test_a_second_is_refused_at_the_source_and_the_one_held_expands(self):
+        """Review of #1287, I2: a new Space Command needs the Space Program and
+        no other of a level or more, with the reason shown; the one a country
+        has expands where it stands, so an AI that kept an annexed one neither
+        stalls at its levels nor re-queues one the sweep removes."""
+        building = _block(_strip(_raw(BUILDING)), "building_space_command")
+        possible = _block("x = {" + building.split("possible = {", 1)[1], "x")
+        self.assertRegex(possible, r"^\s*trigger_if = \{\s*limit = \{ has_building = building_space_command \}\s*always = yes\s*\}\s*"
+                                   r"trigger_else = \{\s*has_building = building_space_program\s*"
+                                   r"custom_tooltip = \{\s*text = sr_sc_one_per_nation_tt\s*owner \?= \{\s*NOT = \{\s*"
+                                   r"any_scope_building = \{\s*is_building_type = building_space_command\s*level >= 1\s*\}\s*\}\s*\}\s*\}\s*\}\s*$")
+        loc = _raw(ROOT / "localization/english/te_miscellaneous_l_english.yml")
+        self.assertRegex(loc, r'(?m)^ sr_sc_one_per_nation_tt:0 "[^"]+"$')
+
     def test_no_text_still_promises_a_split(self):
         loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
         for phrase in ("shared between them", "each building's tooltip shows its share"):

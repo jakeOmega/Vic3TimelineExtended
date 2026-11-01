@@ -1014,9 +1014,11 @@ here exists under Simple Colonies.
 
 ### Space Command
 
-Space Command is a government building, unlocked by Space Militarization and
-built only in a state with a Space Program. Each level builds fleet strength
-every month, by its production method:
+Space Command is a government building, unlocked by Space Militarization. A
+nation runs one: the first is built in a state with a Space Program, and while
+you have one the build menu refuses another, with the reason, so after moving
+your capital you keep expanding the one you have where it stands, or demolish it
+first. Each level builds fleet strength every month, by its production method:
 
 | Method | Technology | Strength a level a month |
 |---|---|---|
