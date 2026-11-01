@@ -864,7 +864,7 @@ te_decision_space_mission_deep_space = {
 te_decision_space_mission_interstellar = {
 	is_shown = {
 		sr_space_race_on = yes
-		has_technology_researched = compact_fusion_reactors
+		has_technology_researched = aneutronic_fusion
 		sr_has_space_program = yes
 		modifier:country_sr_mars_mission_program_bool = yes
 		NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }

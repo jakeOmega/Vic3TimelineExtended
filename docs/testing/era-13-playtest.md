@@ -104,6 +104,48 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: Aneutronic Fusion
+
+1. **The tree.** Aneutronic Fusion sits in era 13's military column after
+   Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
+   from Compact Fusion Reactors. It borrows Compact Fusion Reactors' icon
+   until its own is painted. Its tooltip names Aneutronic Fusion Power, Fusion
+   Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
+   no longer names the Interstellar Mission.
+2. **Aneutronic Fusion Power.** A Fusion Plant offers it after Compact Fusion
+   Power, with a purple bolt as a borrowed icon. A level employs 950 (450
+   laborers, 300 machinists, 100 engineers, 100 academics) and makes 16,000
+   electricity before throughput. Its description shows in the tooltip.
+3. **The AI-managed option on it.** With Smart Grids, a Fusion Plant on
+   Aneutronic Fusion Power shows one AI Managed Power Plant option, and on it
+   the building employs only the 1,000-engineer crew, with no laborers,
+   machinists or academics left. Switching the base back to Compact Fusion
+   Power swaps it for the reactor option (one AI-managed option either way).
+   Centralized Control and Integrated Smart Systems leave 30 laborers and 20
+   machinists a level on the new base, never a negative count.
+4. **Fusion Torch Reclamation.** A Steel Mill offers it after Microgravity
+   Alloying: 50 iron and 600 electricity for 600 steel a level, 3,000 staff,
+   pollution 10. Bespoke Alloys can run beside it, and its carbon-capture group
+   shows only the not-applicable option.
+5. **The Interstellar Probe** in a new game: the Interstellar Mission method,
+   Begin the Interstellar Mission and the inactive Interstellar Probe entry
+   all wait for Aneutronic Fusion. A country with Compact Fusion Reactors and
+   the Deep-Space Probe and Mars Landing done sees none of them.
+6. **Old saves** (a save from before this change):
+   - A Microfusion Cells holder is given Aneutronic Fusion in the first month.
+   - A Compact Fusion Reactors holder whose Space Program runs the
+     Interstellar Mission is given it too, whether its probe is running,
+     finished or not yet started.
+   - A Compact Fusion Reactors holder on a lower mission gets nothing.
+   - One `TE_ERA13_TECH_REPAIR` line per grant.
+   - **A probe under way keeps its progress.** Its entry's `possible` now
+     names Aneutronic Fusion, so it may deactivate before the repair month and
+     re-activate on the grant. Record whether the bar comes back where it was,
+     or at 0 (the monthly milestone cleanup ran between them), and whether the
+     engine moved the Space Program off the Interstellar Mission at the load
+     (the entry would then fail with Program Discontinued). Either one means
+     the repair needs a day-one on-action.
+
 ## Phase 3: Vactrains
 
 1. **The tree.** Vactrains sits in era 12's production column, after
