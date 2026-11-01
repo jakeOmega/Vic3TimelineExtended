@@ -674,7 +674,8 @@ progress it cost. Either way an event tells you.
 
 Under Simple Colonies and Full Colonies, colonies hold people. A colony starts as
 an automated outpost with no one in it, so it grows only once settlers arrive:
-then by about 2.4% a year up to its room, from 10,000 people on the smallest
+then by about 2.4% a year up to its room (3.7% once you have Self-Directed
+Evolution, era 13, whose people are adapted to low gravity and radiation), from 10,000 people on the smallest
 moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
 and Utopia plains. The Colonies section's People view in Solar System
 Colonization sets how many settlers you send from Earth:

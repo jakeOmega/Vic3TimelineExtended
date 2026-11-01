@@ -231,15 +231,16 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_modern_safety_sits_on_the_era_7_to_9_technologies(self):
         """Modern safety (owner, 2026-10-16): work safety from building, robots, container ports and office work, 0.90 by
-        era 9; accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and
-        self-driving cars in era 11, 0.50."""
+        era 9, and bodies built for the work in era 13 (Self-Directed Evolution, era 13 spec § 7.3), the cap 0.95;
+        accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and self-driving
+        cars in era 11, 0.50."""
         carried = {}
         for c in self.carriers:
             if c.type in P.SAFETY_TYPES.values():
                 carried.setdefault(c.type, {})[c.key] = c.value
         self.assertEqual(carried, {
             P.SAFETY_TYPES["work"]: {"prefabricated_construction": 0.15, "robotics": 0.35, "containerization": 0.15,
-                                     "knowledge_economy": 0.25},
+                                     "knowledge_economy": 0.25, "self_directed_evolution": 0.05},
             P.SAFETY_TYPES["external"]: {"modern_urban_planning": 0.2, "computer_aided_design": 0.1,
                                          "cellular_networks": 0.1, "autonomous_vehicles": 0.1}})
         self.assertLessEqual(max(sum(v.values()) for v in carried.values()), P.SAFETY_MAX)

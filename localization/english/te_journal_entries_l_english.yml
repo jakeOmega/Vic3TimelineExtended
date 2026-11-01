@@ -691,6 +691,7 @@
  je_morphological_freedom:0 "Morphological Freedom Debate"
  je_morphological_freedom_desc:0 "Decide whether people may change how their bodies look."
  je_morphological_freedom_reason:0 "Clinics can now give a person a new face, a new skin or a different sex, and fur and a tail besides. Our citizens want to know whether they may have the work done at home, and what the law will make of them if they do."
+ je_morphological_freedom_status_clade:0 "People may leave the human body plan behind and remain citizens: the debate is settled."
  je_morphological_freedom_status_free:0 "People may change their bodies as they choose: the debate is settled."
  je_morphological_freedom_status_licensed:0 "Licensed clinics may change how adults look. Next: enact $law_morphological_freedom$ to settle the debate; held to the end, this law leaves it unsettled."
  je_morphological_freedom_status_natural:0 "Every body is held to its natural form. Next: enact $law_licensed_modification$ as a step, or $law_morphological_freedom$ to settle the debate. If $law_natural_form$ still holds when time runs out, the debate is lost."

@@ -1369,6 +1369,8 @@ sr_site_crew_per_level = { value = 5000 }
 # the module levels above the first its people can crew. Country scope:
 # THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
+# Any scope: its growth a month, sr_site_growth_<key>, 1 + 0.002 and its
+# holder's country_sr_colony_growth_add (Self-Directed Evolution, era 13 spec § 7.3).
 sr_site_base_room_valles_marineris = { value = 50000 }
 sr_site_room_valles_marineris = {
 	value = sr_site_hab_value_valles_marineris
@@ -1394,6 +1396,10 @@ sr_site_crews_valles_marineris = {
 	value = sr_site_pop_value_valles_marineris
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_valles_marineris = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_valles_marineris = {
 	value = 2
@@ -1431,6 +1437,10 @@ sr_site_crews_olympus_mons = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_olympus_mons = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_olympus_mons = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_olympus_mons var:sr_emig_prio_olympus_mons = 0 } value = 0 }
@@ -1466,6 +1476,10 @@ sr_site_crews_hellas_planitia = {
 	value = sr_site_pop_value_hellas_planitia
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_hellas_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_hellas_planitia = {
 	value = 2
@@ -1503,6 +1517,10 @@ sr_site_crews_utopia_planitia = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_utopia_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_utopia_planitia = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_utopia_planitia var:sr_emig_prio_utopia_planitia = 0 } value = 0 }
@@ -1539,6 +1557,10 @@ sr_site_crews_arcadia_planitia = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_arcadia_planitia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_arcadia_planitia = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_arcadia_planitia var:sr_emig_prio_arcadia_planitia = 0 } value = 0 }
@@ -1573,6 +1595,10 @@ sr_site_crews_ceres = {
 	value = sr_site_pop_value_ceres
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_ceres = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_ceres = {
 	value = 2
@@ -1609,6 +1635,10 @@ sr_site_crews_vesta = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_vesta = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_vesta = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_vesta var:sr_emig_prio_vesta = 0 } value = 0 }
@@ -1643,6 +1673,10 @@ sr_site_crews_psyche = {
 	value = sr_site_pop_value_psyche
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_psyche = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_psyche = {
 	value = 2
@@ -1679,6 +1713,10 @@ sr_site_crews_pallas = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_pallas = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_pallas = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_pallas var:sr_emig_prio_pallas = 0 } value = 0 }
@@ -1713,6 +1751,10 @@ sr_site_crews_hygiea = {
 	value = sr_site_pop_value_hygiea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_hygiea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_hygiea = {
 	value = 2
@@ -1749,6 +1791,10 @@ sr_site_crews_io = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_io = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_io = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_io var:sr_emig_prio_io = 0 } value = 0 }
@@ -1783,6 +1829,10 @@ sr_site_crews_europa = {
 	value = sr_site_pop_value_europa
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_europa = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_europa = {
 	value = 2
@@ -1820,6 +1870,10 @@ sr_site_crews_ganymede = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_ganymede = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_ganymede = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_ganymede var:sr_emig_prio_ganymede = 0 } value = 0 }
@@ -1856,6 +1910,10 @@ sr_site_crews_callisto = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_callisto = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_callisto = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_callisto var:sr_emig_prio_callisto = 0 } value = 0 }
@@ -1891,6 +1949,10 @@ sr_site_crews_himalia = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_himalia = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_himalia = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_himalia var:sr_emig_prio_himalia = 0 } value = 0 }
@@ -1925,6 +1987,10 @@ sr_site_crews_amalthea = {
 	value = sr_site_pop_value_amalthea
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_amalthea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_amalthea = {
 	value = 2
@@ -1962,6 +2028,10 @@ sr_site_crews_venus = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_venus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_venus = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_venus var:sr_emig_prio_venus = 0 } value = 0 }
@@ -1996,6 +2066,10 @@ sr_site_crews_mercury = {
 	value = sr_site_pop_value_mercury
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_mercury = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_mercury = {
 	value = 2
@@ -2033,6 +2107,10 @@ sr_site_crews_titan = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_titan = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_titan = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_titan var:sr_emig_prio_titan = 0 } value = 0 }
@@ -2067,6 +2145,10 @@ sr_site_crews_enceladus = {
 	value = sr_site_pop_value_enceladus
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_enceladus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_enceladus = {
 	value = 2
@@ -2103,6 +2185,10 @@ sr_site_crews_rhea = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_rhea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_rhea = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_rhea var:sr_emig_prio_rhea = 0 } value = 0 }
@@ -2137,6 +2223,10 @@ sr_site_crews_mimas = {
 	value = sr_site_pop_value_mimas
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_mimas = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_mimas = {
 	value = 2
@@ -2173,6 +2263,10 @@ sr_site_crews_iapetus = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_iapetus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_iapetus = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_iapetus var:sr_emig_prio_iapetus = 0 } value = 0 }
@@ -2207,6 +2301,10 @@ sr_site_crews_titania = {
 	value = sr_site_pop_value_titania
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_titania = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_titania = {
 	value = 2
@@ -2243,6 +2341,10 @@ sr_site_crews_oberon = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_oberon = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_oberon = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_oberon var:sr_emig_prio_oberon = 0 } value = 0 }
@@ -2277,6 +2379,10 @@ sr_site_crews_miranda = {
 	value = sr_site_pop_value_miranda
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_miranda = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_miranda = {
 	value = 2
@@ -2313,6 +2419,10 @@ sr_site_crews_ariel = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_ariel = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_ariel = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_ariel var:sr_emig_prio_ariel = 0 } value = 0 }
@@ -2347,6 +2457,10 @@ sr_site_crews_triton = {
 	value = sr_site_pop_value_triton
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_triton = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_triton = {
 	value = 2
@@ -2383,6 +2497,10 @@ sr_site_crews_proteus = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_proteus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_proteus = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_proteus var:sr_emig_prio_proteus = 0 } value = 0 }
@@ -2417,6 +2535,10 @@ sr_site_crews_pluto = {
 	value = sr_site_pop_value_pluto
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_pluto = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_pluto = {
 	value = 2
@@ -2453,6 +2575,10 @@ sr_site_crews_eris = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_eris = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_eris = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_eris var:sr_emig_prio_eris = 0 } value = 0 }
@@ -2487,6 +2613,10 @@ sr_site_crews_makemake = {
 	value = sr_site_pop_value_makemake
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_makemake = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_makemake = {
 	value = 2
@@ -2523,6 +2653,10 @@ sr_site_crews_haumea = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_haumea = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_haumea = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_haumea var:sr_emig_prio_haumea = 0 } value = 0 }
@@ -2557,6 +2691,10 @@ sr_site_crews_sedna = {
 	value = sr_site_pop_value_sedna
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_sedna = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_sedna = {
 	value = 2
@@ -2593,6 +2731,10 @@ sr_site_crews_shackleton = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_shackleton = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_shackleton = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_shackleton var:sr_emig_prio_shackleton = 0 } value = 0 }
@@ -2627,6 +2769,10 @@ sr_site_crews_peary = {
 	value = sr_site_pop_value_peary
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_peary = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_peary = {
 	value = 2
@@ -2663,6 +2809,10 @@ sr_site_crews_tranquility = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_tranquility = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_tranquility = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_tranquility var:sr_emig_prio_tranquility = 0 } value = 0 }
@@ -2697,6 +2847,10 @@ sr_site_crews_marius_hills = {
 	value = sr_site_pop_value_marius_hills
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_marius_hills = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_marius_hills = {
 	value = 2
@@ -2733,6 +2887,10 @@ sr_site_crews_daedalus = {
 	divide = sr_site_crew_per_level
 	floor = yes
 }
+sr_site_growth_daedalus = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = modifier:country_sr_colony_growth_add } }
+}
 sr_emig_prio_weight_daedalus = {
 	value = 2
 	if = { limit = { has_variable = sr_emig_prio_daedalus var:sr_emig_prio_daedalus = 0 } value = 0 }
@@ -2767,6 +2925,10 @@ sr_site_crews_imbrium = {
 	value = sr_site_pop_value_imbrium
 	divide = sr_site_crew_per_level
 	floor = yes
+}
+sr_site_growth_imbrium = {
+	value = 1.002
+	if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = modifier:country_sr_colony_growth_add } }
 }
 sr_emig_prio_weight_imbrium = {
 	value = 2

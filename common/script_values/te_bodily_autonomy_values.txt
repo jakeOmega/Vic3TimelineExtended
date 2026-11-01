@@ -1,0 +1,97 @@
+﻿# ======================================================================
+#  BODILY AUTONOMY — script values (era 13 spec § 7.3)
+#  Laws: common/laws/te_bodily_autonomy_laws.txt. Effects:
+#  common/scripted_effects/te_bodily_autonomy_effects.txt.
+# ======================================================================
+# Country scope, all of them.
+
+# The three heritage figures in force, less the lift Clade Citizenship's
+# parity added to each last month (te_clade_parity_refresh). A modifier read
+# can't see an add or a removal made in the same effect, so the lift comes off
+# the read, and only while its modifier is there: a revolution's winner keeps
+# the variables but not the modifiers.
+te_clade_base_trait_value = {
+	value = modifier:country_acceptance_shared_heritage_trait_add
+	if = {
+		limit = {
+			has_modifier = te_clade_parity_trait
+			has_variable = te_clade_lift_trait
+		}
+		subtract = var:te_clade_lift_trait
+	}
+}
+
+te_clade_base_group_value = {
+	value = modifier:country_acceptance_shared_heritage_trait_group_add
+	if = {
+		limit = {
+			has_modifier = te_clade_parity_group
+			has_variable = te_clade_lift_group
+		}
+		subtract = var:te_clade_lift_group
+	}
+}
+
+te_clade_base_none_value = {
+	value = modifier:country_acceptance_no_shared_heritage_trait_add
+	if = {
+		limit = {
+			has_modifier = te_clade_parity_none
+			has_variable = te_clade_lift_none
+		}
+		subtract = var:te_clade_lift_none
+	}
+}
+
+# The highest of the three, which every pop reads under the parity (min = X
+# raises the value to at least X).
+te_clade_parity_target_value = {
+	value = te_clade_base_trait_value
+	min = te_clade_base_group_value
+	min = te_clade_base_none_value
+}
+
+# Each figure's lift up to the target.
+te_clade_lift_trait_value = {
+	value = te_clade_parity_target_value
+	subtract = te_clade_base_trait_value
+	min = 0
+}
+
+te_clade_lift_group_value = {
+	value = te_clade_parity_target_value
+	subtract = te_clade_base_group_value
+	min = 0
+}
+
+te_clade_lift_none_value = {
+	value = te_clade_parity_target_value
+	subtract = te_clade_base_none_value
+	min = 0
+}
+
+# The largest of the three lifts: the gap the parity closes this month.
+te_clade_parity_gap_value = {
+	value = te_clade_lift_trait_value
+	min = te_clade_lift_group_value
+	min = te_clade_lift_none_value
+}
+
+# The self-check's reads (te_clade_parity_selfcheck): the three figures as the
+# engine holds them now, lifts included, highest and lowest.
+te_clade_read_highest_value = {
+	value = modifier:country_acceptance_shared_heritage_trait_add
+	min = modifier:country_acceptance_shared_heritage_trait_group_add
+	min = modifier:country_acceptance_no_shared_heritage_trait_add
+}
+
+te_clade_read_lowest_value = {
+	value = modifier:country_acceptance_shared_heritage_trait_add
+	max = modifier:country_acceptance_shared_heritage_trait_group_add
+	max = modifier:country_acceptance_no_shared_heritage_trait_add
+}
+
+te_clade_read_spread_value = {
+	value = te_clade_read_highest_value
+	subtract = te_clade_read_lowest_value
+}
