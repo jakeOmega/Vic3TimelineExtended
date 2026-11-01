@@ -9536,6 +9536,10 @@ sr_fl_1_xf_there_strength = {
 }
 sr_fl_1_xf_stay_room = { value = sr_fl_1_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_1_xf_there_room = { value = sr_fl_1_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_1_xf_stay_over = { value = sr_fl_1_xf_stay_marines subtract = sr_fl_1_xf_stay_room min = 0 }
+sr_fl_1_xf_now_over = { value = sr_fl_1_marines_value subtract = sr_fl_1_marine_capacity min = 0 }
 
 # Slot 2's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9674,6 +9678,10 @@ sr_fl_2_xf_there_strength = {
 }
 sr_fl_2_xf_stay_room = { value = sr_fl_2_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_2_xf_there_room = { value = sr_fl_2_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_2_xf_stay_over = { value = sr_fl_2_xf_stay_marines subtract = sr_fl_2_xf_stay_room min = 0 }
+sr_fl_2_xf_now_over = { value = sr_fl_2_marines_value subtract = sr_fl_2_marine_capacity min = 0 }
 
 # Slot 3's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9812,6 +9820,10 @@ sr_fl_3_xf_there_strength = {
 }
 sr_fl_3_xf_stay_room = { value = sr_fl_3_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_3_xf_there_room = { value = sr_fl_3_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_3_xf_stay_over = { value = sr_fl_3_xf_stay_marines subtract = sr_fl_3_xf_stay_room min = 0 }
+sr_fl_3_xf_now_over = { value = sr_fl_3_marines_value subtract = sr_fl_3_marine_capacity min = 0 }
 
 # Slot 4's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9950,6 +9962,10 @@ sr_fl_4_xf_there_strength = {
 }
 sr_fl_4_xf_stay_room = { value = sr_fl_4_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_4_xf_there_room = { value = sr_fl_4_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_4_xf_stay_over = { value = sr_fl_4_xf_stay_marines subtract = sr_fl_4_xf_stay_room min = 0 }
+sr_fl_4_xf_now_over = { value = sr_fl_4_marines_value subtract = sr_fl_4_marine_capacity min = 0 }
 
 # Slot 5's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10088,6 +10104,10 @@ sr_fl_5_xf_there_strength = {
 }
 sr_fl_5_xf_stay_room = { value = sr_fl_5_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_5_xf_there_room = { value = sr_fl_5_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_5_xf_stay_over = { value = sr_fl_5_xf_stay_marines subtract = sr_fl_5_xf_stay_room min = 0 }
+sr_fl_5_xf_now_over = { value = sr_fl_5_marines_value subtract = sr_fl_5_marine_capacity min = 0 }
 
 # Slot 6's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10226,6 +10246,10 @@ sr_fl_6_xf_there_strength = {
 }
 sr_fl_6_xf_stay_room = { value = sr_fl_6_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_6_xf_there_room = { value = sr_fl_6_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_6_xf_stay_over = { value = sr_fl_6_xf_stay_marines subtract = sr_fl_6_xf_stay_room min = 0 }
+sr_fl_6_xf_now_over = { value = sr_fl_6_marines_value subtract = sr_fl_6_marine_capacity min = 0 }
 
 # Slot 7's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10364,6 +10388,10 @@ sr_fl_7_xf_there_strength = {
 }
 sr_fl_7_xf_stay_room = { value = sr_fl_7_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_7_xf_there_room = { value = sr_fl_7_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_7_xf_stay_over = { value = sr_fl_7_xf_stay_marines subtract = sr_fl_7_xf_stay_room min = 0 }
+sr_fl_7_xf_now_over = { value = sr_fl_7_marines_value subtract = sr_fl_7_marine_capacity min = 0 }
 
 # Slot 8's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10502,6 +10530,10 @@ sr_fl_8_xf_there_strength = {
 }
 sr_fl_8_xf_stay_room = { value = sr_fl_8_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_8_xf_there_room = { value = sr_fl_8_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_8_xf_stay_over = { value = sr_fl_8_xf_stay_marines subtract = sr_fl_8_xf_stay_room min = 0 }
+sr_fl_8_xf_now_over = { value = sr_fl_8_marines_value subtract = sr_fl_8_marine_capacity min = 0 }
 
 # Slot 9's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10640,6 +10672,10 @@ sr_fl_9_xf_there_strength = {
 }
 sr_fl_9_xf_stay_room = { value = sr_fl_9_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_9_xf_there_room = { value = sr_fl_9_xf_there_carrier multiply = sr_fl_marines_per_carrier }
+# How far past its carriers' room the fleet would be, and is now (carriers
+# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
+sr_fl_9_xf_stay_over = { value = sr_fl_9_xf_stay_marines subtract = sr_fl_9_xf_stay_room min = 0 }
+sr_fl_9_xf_now_over = { value = sr_fl_9_marines_value subtract = sr_fl_9_marine_capacity min = 0 }
 
 # Where a transfer goes (sr_det_to): 0 a new fleet, else that slot.
 sr_det_to_value = {

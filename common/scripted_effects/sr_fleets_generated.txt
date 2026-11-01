@@ -2166,27 +2166,25 @@ sr_fl_transfer_at = { sr_fl_$N$_transfer_now = yes }
 
 # N into the empty M, Detach's shape: M at N's location, on its drive, posture
 # and refit; then both fleets N's shares of propellant and supply, of their
-# new capacities (with the roles halved, as Detach's, the same months).
+# new capacities (with the roles halved, as Detach's, the same months). A
+# source closing in (3) or interdicting (4) leaves M at Stand off (2): M gets
+# no target (owner, 2026-10-31).
 sr_fl_transfer_new = {
 	set_local_variable = { name = sr_xf_all value = 0 }
 	if = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }
 	set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }
+	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }
 	set_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }
-	set_local_variable = { name = sr_xf_share_war value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_war value = 1 } }
-	else_if = { limit = { sr_fl_$N$_war_value > 0 } set_local_variable = { name = sr_xf_share_war value = { value = sr_fl_$N$_xf_war divide = sr_fl_$N$_war_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_rapid value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_rapid value = 1 } }
-	else_if = { limit = { sr_fl_$N$_rapid_value > 0 } set_local_variable = { name = sr_xf_share_rapid value = { value = sr_fl_$N$_xf_rapid divide = sr_fl_$N$_rapid_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_siege value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_siege value = 1 } }
-	else_if = { limit = { sr_fl_$N$_siege_value > 0 } set_local_variable = { name = sr_xf_share_siege value = { value = sr_fl_$N$_xf_siege divide = sr_fl_$N$_siege_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_carrier value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_carrier value = 1 } }
-	else_if = { limit = { sr_fl_$N$_carrier_value > 0 } set_local_variable = { name = sr_xf_share_carrier value = { value = sr_fl_$N$_xf_carrier divide = sr_fl_$N$_carrier_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_tender value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_tender value = 1 } }
-	else_if = { limit = { sr_fl_$N$_tender_value > 0 } set_local_variable = { name = sr_xf_share_tender value = { value = sr_fl_$N$_xf_tender divide = sr_fl_$N$_tender_value max = 1 } } }
+	set_local_variable = { name = sr_xf_amt_war value = sr_fl_$N$_xf_war }
+	set_local_variable = { name = sr_xf_now_war value = sr_fl_$N$_war_value }
+	set_local_variable = { name = sr_xf_amt_rapid value = sr_fl_$N$_xf_rapid }
+	set_local_variable = { name = sr_xf_now_rapid value = sr_fl_$N$_rapid_value }
+	set_local_variable = { name = sr_xf_amt_siege value = sr_fl_$N$_xf_siege }
+	set_local_variable = { name = sr_xf_now_siege value = sr_fl_$N$_siege_value }
+	set_local_variable = { name = sr_xf_amt_carrier value = sr_fl_$N$_xf_carrier }
+	set_local_variable = { name = sr_xf_now_carrier value = sr_fl_$N$_carrier_value }
+	set_local_variable = { name = sr_xf_amt_tender value = sr_fl_$N$_xf_tender }
+	set_local_variable = { name = sr_xf_now_tender value = sr_fl_$N$_tender_value }
 	set_local_variable = { name = sr_fl_dv_share value = 1 }
 	if = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }
 	set_local_variable = { name = sr_fl_supply_share value = 1 }
@@ -2194,68 +2192,73 @@ sr_fl_transfer_new = {
 	sr_fl_clear_at = { N = $M$ }
 	set_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }
 	set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }
-	set_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }
+	set_variable = { name = sr_fl_$M$_posture value = { value = sr_fl_$N$_posture_value max = 2 } }
 	if = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until } }
 	set_variable = { name = sr_fl_$M$_marines value = 0 }
 	if = {
-		limit = { has_variable = sr_fl_$N$_war local_var:sr_xf_share_war > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_war multiply = local_var:sr_xf_share_war } }
-		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_war value = { value = var:sr_fl_$N$_war subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_war } sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = var:sr_fl_$N$_war } set_variable = { name = sr_fl_$N$_war value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_war_full } sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = var:sr_fl_$N$_war_full } set_variable = { name = sr_fl_$N$_war_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_war_full local_var:sr_xf_share_war > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_war_full multiply = local_var:sr_xf_share_war } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_war > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_war_full_value multiply = local_var:sr_xf_amt_war divide = local_var:sr_xf_now_war min = local_var:sr_xf_amt_war } }
+		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_amt_war }
 		sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_war_full value = { value = var:sr_fl_$N$_war_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_war value = { value = sr_fl_$N$_war_value subtract = local_var:sr_xf_amt_war min = 0 } }
+		set_variable = { name = sr_fl_$N$_war_full value = { value = sr_fl_$N$_war_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_rapid local_var:sr_xf_share_rapid > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_rapid multiply = local_var:sr_xf_share_rapid } }
-		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_rapid value = { value = var:sr_fl_$N$_rapid subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_rapid } sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = var:sr_fl_$N$_rapid } set_variable = { name = sr_fl_$N$_rapid value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_rapid_full } sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = var:sr_fl_$N$_rapid_full } set_variable = { name = sr_fl_$N$_rapid_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_rapid_full local_var:sr_xf_share_rapid > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_rapid_full multiply = local_var:sr_xf_share_rapid } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_rapid > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_rapid_full_value multiply = local_var:sr_xf_amt_rapid divide = local_var:sr_xf_now_rapid min = local_var:sr_xf_amt_rapid } }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_amt_rapid }
 		sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_rapid_full value = { value = var:sr_fl_$N$_rapid_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid value = { value = sr_fl_$N$_rapid_value subtract = local_var:sr_xf_amt_rapid min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid_full value = { value = sr_fl_$N$_rapid_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_siege local_var:sr_xf_share_siege > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_siege multiply = local_var:sr_xf_share_siege } }
-		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_siege value = { value = var:sr_fl_$N$_siege subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_siege } sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = var:sr_fl_$N$_siege } set_variable = { name = sr_fl_$N$_siege value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_siege_full } sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = var:sr_fl_$N$_siege_full } set_variable = { name = sr_fl_$N$_siege_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_siege_full local_var:sr_xf_share_siege > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_siege_full multiply = local_var:sr_xf_share_siege } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_siege > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_siege_full_value multiply = local_var:sr_xf_amt_siege divide = local_var:sr_xf_now_siege min = local_var:sr_xf_amt_siege } }
+		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_amt_siege }
 		sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_siege_full value = { value = var:sr_fl_$N$_siege_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege value = { value = sr_fl_$N$_siege_value subtract = local_var:sr_xf_amt_siege min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege_full value = { value = sr_fl_$N$_siege_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_carrier local_var:sr_xf_share_carrier > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_carrier multiply = local_var:sr_xf_share_carrier } }
-		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_carrier value = { value = var:sr_fl_$N$_carrier subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_carrier } sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = var:sr_fl_$N$_carrier } set_variable = { name = sr_fl_$N$_carrier value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_carrier_full } sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = var:sr_fl_$N$_carrier_full } set_variable = { name = sr_fl_$N$_carrier_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_carrier_full local_var:sr_xf_share_carrier > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_carrier_full multiply = local_var:sr_xf_share_carrier } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_carrier > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_carrier_full_value multiply = local_var:sr_xf_amt_carrier divide = local_var:sr_xf_now_carrier min = local_var:sr_xf_amt_carrier } }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_amt_carrier }
 		sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_carrier_full value = { value = var:sr_fl_$N$_carrier_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier value = { value = sr_fl_$N$_carrier_value subtract = local_var:sr_xf_amt_carrier min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier_full value = { value = sr_fl_$N$_carrier_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_tender local_var:sr_xf_share_tender > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_tender multiply = local_var:sr_xf_share_tender } }
-		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_tender value = { value = var:sr_fl_$N$_tender subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_tender } sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = var:sr_fl_$N$_tender } set_variable = { name = sr_fl_$N$_tender value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_tender_full } sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = var:sr_fl_$N$_tender_full } set_variable = { name = sr_fl_$N$_tender_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_tender_full local_var:sr_xf_share_tender > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_tender_full multiply = local_var:sr_xf_share_tender } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_tender > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_tender_full_value multiply = local_var:sr_xf_amt_tender divide = local_var:sr_xf_now_tender min = local_var:sr_xf_amt_tender } }
+		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_amt_tender }
 		sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_tender_full value = { value = var:sr_fl_$N$_tender_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender value = { value = sr_fl_$N$_tender_value subtract = local_var:sr_xf_amt_tender min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender_full value = { value = sr_fl_$N$_tender_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }
 	set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value subtract = local_var:sr_xf_marines min = 0 } }
@@ -2273,22 +2276,18 @@ sr_fl_transfer_into = {
 	set_local_variable = { name = sr_xf_all value = 0 }
 	if = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }
 	set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }
+	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }
 	set_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }
-	set_local_variable = { name = sr_xf_share_war value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_war value = 1 } }
-	else_if = { limit = { sr_fl_$N$_war_value > 0 } set_local_variable = { name = sr_xf_share_war value = { value = sr_fl_$N$_xf_war divide = sr_fl_$N$_war_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_rapid value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_rapid value = 1 } }
-	else_if = { limit = { sr_fl_$N$_rapid_value > 0 } set_local_variable = { name = sr_xf_share_rapid value = { value = sr_fl_$N$_xf_rapid divide = sr_fl_$N$_rapid_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_siege value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_siege value = 1 } }
-	else_if = { limit = { sr_fl_$N$_siege_value > 0 } set_local_variable = { name = sr_xf_share_siege value = { value = sr_fl_$N$_xf_siege divide = sr_fl_$N$_siege_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_carrier value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_carrier value = 1 } }
-	else_if = { limit = { sr_fl_$N$_carrier_value > 0 } set_local_variable = { name = sr_xf_share_carrier value = { value = sr_fl_$N$_xf_carrier divide = sr_fl_$N$_carrier_value max = 1 } } }
-	set_local_variable = { name = sr_xf_share_tender value = 0 }
-	if = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_share_tender value = 1 } }
-	else_if = { limit = { sr_fl_$N$_tender_value > 0 } set_local_variable = { name = sr_xf_share_tender value = { value = sr_fl_$N$_xf_tender divide = sr_fl_$N$_tender_value max = 1 } } }
+	set_local_variable = { name = sr_xf_amt_war value = sr_fl_$N$_xf_war }
+	set_local_variable = { name = sr_xf_now_war value = sr_fl_$N$_war_value }
+	set_local_variable = { name = sr_xf_amt_rapid value = sr_fl_$N$_xf_rapid }
+	set_local_variable = { name = sr_xf_now_rapid value = sr_fl_$N$_rapid_value }
+	set_local_variable = { name = sr_xf_amt_siege value = sr_fl_$N$_xf_siege }
+	set_local_variable = { name = sr_xf_now_siege value = sr_fl_$N$_siege_value }
+	set_local_variable = { name = sr_xf_amt_carrier value = sr_fl_$N$_xf_carrier }
+	set_local_variable = { name = sr_xf_now_carrier value = sr_fl_$N$_carrier_value }
+	set_local_variable = { name = sr_xf_amt_tender value = sr_fl_$N$_xf_tender }
+	set_local_variable = { name = sr_xf_now_tender value = sr_fl_$N$_tender_value }
 	set_local_variable = { name = sr_fl_dv_share value = 1 }
 	if = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }
 	set_local_variable = { name = sr_fl_supply_share value = 1 }
@@ -2311,64 +2310,69 @@ sr_fl_transfer_into = {
 		}
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_war local_var:sr_xf_share_war > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_war multiply = local_var:sr_xf_share_war } }
-		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_war value = { value = var:sr_fl_$N$_war subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_war } sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = var:sr_fl_$N$_war } set_variable = { name = sr_fl_$N$_war value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_war_full } sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = var:sr_fl_$N$_war_full } set_variable = { name = sr_fl_$N$_war_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_war_full local_var:sr_xf_share_war > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_war_full multiply = local_var:sr_xf_share_war } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_war > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_war_full_value multiply = local_var:sr_xf_amt_war divide = local_var:sr_xf_now_war min = local_var:sr_xf_amt_war } }
+		sr_fl_add_role_part = { N = $M$ VAR = war AMOUNT = local_var:sr_xf_amt_war }
 		sr_fl_add_role_part = { N = $M$ VAR = war_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_war_full value = { value = var:sr_fl_$N$_war_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_war value = { value = sr_fl_$N$_war_value subtract = local_var:sr_xf_amt_war min = 0 } }
+		set_variable = { name = sr_fl_$N$_war_full value = { value = sr_fl_$N$_war_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_rapid local_var:sr_xf_share_rapid > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_rapid multiply = local_var:sr_xf_share_rapid } }
-		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_rapid value = { value = var:sr_fl_$N$_rapid subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_rapid } sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = var:sr_fl_$N$_rapid } set_variable = { name = sr_fl_$N$_rapid value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_rapid_full } sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = var:sr_fl_$N$_rapid_full } set_variable = { name = sr_fl_$N$_rapid_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_rapid_full local_var:sr_xf_share_rapid > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_rapid_full multiply = local_var:sr_xf_share_rapid } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_rapid > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_rapid_full_value multiply = local_var:sr_xf_amt_rapid divide = local_var:sr_xf_now_rapid min = local_var:sr_xf_amt_rapid } }
+		sr_fl_add_role_part = { N = $M$ VAR = rapid AMOUNT = local_var:sr_xf_amt_rapid }
 		sr_fl_add_role_part = { N = $M$ VAR = rapid_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_rapid_full value = { value = var:sr_fl_$N$_rapid_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid value = { value = sr_fl_$N$_rapid_value subtract = local_var:sr_xf_amt_rapid min = 0 } }
+		set_variable = { name = sr_fl_$N$_rapid_full value = { value = sr_fl_$N$_rapid_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_siege local_var:sr_xf_share_siege > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_siege multiply = local_var:sr_xf_share_siege } }
-		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_siege value = { value = var:sr_fl_$N$_siege subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_siege } sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = var:sr_fl_$N$_siege } set_variable = { name = sr_fl_$N$_siege value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_siege_full } sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = var:sr_fl_$N$_siege_full } set_variable = { name = sr_fl_$N$_siege_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_siege_full local_var:sr_xf_share_siege > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_siege_full multiply = local_var:sr_xf_share_siege } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_siege > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_siege_full_value multiply = local_var:sr_xf_amt_siege divide = local_var:sr_xf_now_siege min = local_var:sr_xf_amt_siege } }
+		sr_fl_add_role_part = { N = $M$ VAR = siege AMOUNT = local_var:sr_xf_amt_siege }
 		sr_fl_add_role_part = { N = $M$ VAR = siege_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_siege_full value = { value = var:sr_fl_$N$_siege_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege value = { value = sr_fl_$N$_siege_value subtract = local_var:sr_xf_amt_siege min = 0 } }
+		set_variable = { name = sr_fl_$N$_siege_full value = { value = sr_fl_$N$_siege_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_carrier local_var:sr_xf_share_carrier > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_carrier multiply = local_var:sr_xf_share_carrier } }
-		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_carrier value = { value = var:sr_fl_$N$_carrier subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_carrier } sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = var:sr_fl_$N$_carrier } set_variable = { name = sr_fl_$N$_carrier value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_carrier_full } sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = var:sr_fl_$N$_carrier_full } set_variable = { name = sr_fl_$N$_carrier_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_carrier_full local_var:sr_xf_share_carrier > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_carrier_full multiply = local_var:sr_xf_share_carrier } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_carrier > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_carrier_full_value multiply = local_var:sr_xf_amt_carrier divide = local_var:sr_xf_now_carrier min = local_var:sr_xf_amt_carrier } }
+		sr_fl_add_role_part = { N = $M$ VAR = carrier AMOUNT = local_var:sr_xf_amt_carrier }
 		sr_fl_add_role_part = { N = $M$ VAR = carrier_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_carrier_full value = { value = var:sr_fl_$N$_carrier_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier value = { value = sr_fl_$N$_carrier_value subtract = local_var:sr_xf_amt_carrier min = 0 } }
+		set_variable = { name = sr_fl_$N$_carrier_full value = { value = sr_fl_$N$_carrier_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	if = {
-		limit = { has_variable = sr_fl_$N$_tender local_var:sr_xf_share_tender > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_tender multiply = local_var:sr_xf_share_tender } }
-		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_tender value = { value = var:sr_fl_$N$_tender subtract = local_var:sr_xf_part min = 0 } }
+		limit = { local_var:sr_xf_all = 1 }
+		if = { limit = { has_variable = sr_fl_$N$_tender } sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = var:sr_fl_$N$_tender } set_variable = { name = sr_fl_$N$_tender value = 0 } }
+		if = { limit = { has_variable = sr_fl_$N$_tender_full } sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = var:sr_fl_$N$_tender_full } set_variable = { name = sr_fl_$N$_tender_full value = 0 } }
 	}
-	if = {
-		limit = { has_variable = sr_fl_$N$_tender_full local_var:sr_xf_share_tender > 0 }
-		set_local_variable = { name = sr_xf_part value = { value = var:sr_fl_$N$_tender_full multiply = local_var:sr_xf_share_tender } }
+	else_if = {
+		limit = { local_var:sr_xf_amt_tender > 0 }
+		set_local_variable = { name = sr_xf_part value = { value = sr_fl_$N$_tender_full_value multiply = local_var:sr_xf_amt_tender divide = local_var:sr_xf_now_tender min = local_var:sr_xf_amt_tender } }
+		sr_fl_add_role_part = { N = $M$ VAR = tender AMOUNT = local_var:sr_xf_amt_tender }
 		sr_fl_add_role_part = { N = $M$ VAR = tender_full AMOUNT = local_var:sr_xf_part }
-		set_variable = { name = sr_fl_$N$_tender_full value = { value = var:sr_fl_$N$_tender_full subtract = local_var:sr_xf_part min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender value = { value = sr_fl_$N$_tender_value subtract = local_var:sr_xf_amt_tender min = 0 } }
+		set_variable = { name = sr_fl_$N$_tender_full value = { value = sr_fl_$N$_tender_full_value subtract = local_var:sr_xf_part min = 0 } }
 	}
 	set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }
 	set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value subtract = local_var:sr_xf_marines min = 0 } }

@@ -935,7 +935,11 @@ def render_transfer_values(n: int) -> list[str]:
             *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, 'strength')} }}" for m in _others(n)],
             "}",
             f"{var(n, 'xf_stay_room')} = {{ value = {var(n, 'xf_stay_carrier')} multiply = sr_fl_marines_per_carrier }}",
-            f"{var(n, 'xf_there_room')} = {{ value = {var(n, 'xf_there_carrier')} multiply = sr_fl_marines_per_carrier }}"]
+            f"{var(n, 'xf_there_room')} = {{ value = {var(n, 'xf_there_carrier')} multiply = sr_fl_marines_per_carrier }}",
+            "# How far past its carriers' room the fleet would be, and is now (carriers",
+            "# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).",
+            f"{var(n, 'xf_stay_over')} = {{ value = {var(n, 'xf_stay_marines')} subtract = {var(n, 'xf_stay_room')} min = 0 }}",
+            f"{var(n, 'xf_now_over')} = {{ value = {var(n, 'marines_value')} subtract = {var(n, 'marine_capacity')} min = 0 }}"]
     return out
 
 
@@ -946,11 +950,15 @@ def render_transfer_triggers(n: int) -> list[str]:
             "# An Into button's slot (scope:pick) is a fleet of ours here.",
             f"{var(n, 'xf_pick_here')} = {{", "\tOR = {",
             *[f"\t\tAND = {{ scope:pick = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
-            "# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet",
-            "# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new",
-            "# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no",
-            "# fleet is left with more marines than its assault carriers hold.",
-            f"{var(n, 'xf_moves')} = {{ OR = {{ {var(n, 'xf_strength')} > 0 {var(n, 'xf_marines_moved')} > 0 }} }}",
+            "# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a",
+            "# fleet damaged to nothing now takes its full strength along, as Merge did,",
+            "# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it",
+            "# goes into another fleet; a new fleet gets that much; the fleet it goes into",
+            "# (sr_det_to) is still here; the fleet it goes into carries no more marines",
+            "# than its assault carriers hold, and this one no further past its room than",
+            "# it is now.",
+            f"{var(n, 'xf_moves')} = {{ OR = {{ {var(n, 'xf_strength')} > 0 {var(n, 'xf_marines_moved')} > 0 "
+            f"AND = {{ {var(n, 'xf_left')} <= 0 {var(n, 'strength_full')} > 0 }} }} }}",
             f"{var(n, 'xf_keeps')} = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength }}",
             f"{var(n, 'xf_keeps_or_all')} = {{ OR = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength "
             f"{var(n, 'xf_left')} <= 0 }} }}",
@@ -959,7 +967,7 @@ def render_transfer_triggers(n: int) -> list[str]:
             *[f"\t\tAND = {{ sr_det_to_value = {m} {_here(m, n)} }}" for m in others], "\t}", "}",
             f"{var(n, 'xf_room')} = {{",
             f"\t{var(n, 'xf_there_marines')} <= {var(n, 'xf_there_room')}",
-            f"\tOR = {{ {var(n, 'xf_left')} <= 0 {var(n, 'xf_stay_marines')} <= {var(n, 'xf_stay_room')} }}",
+            f"\tOR = {{ {var(n, 'xf_left')} <= 0 {var(n, 'xf_stay_over')} <= {var(n, 'xf_now_over')} }}",
             "}"]
 
 
@@ -1019,20 +1027,21 @@ def render_transfer_effects() -> list[str]:
 
 def _xf_shares() -> list[str]:
     """Read before anything moves (the values follow the variables): each role's
-    share, the amount held to what N has over its strength now, or all of it
-    when nothing of N's strength stays (a role damaged to nothing then takes its
-    full strength along, as Merge did); the marines; whether ships move; N's
-    propellant and supply shares (Merge's and Detach's)."""
+    amount, held to what N has, and its strength now; whether all of it goes
+    (nothing of N's strength stays: every role then goes as it stands, a role
+    damaged to nothing with its full strength, as Merge did); the marines;
+    whether ships move (all of a fleet's full strength counts, so a wreck joining
+    takes the slower drive as Merge's did); N's propellant and supply shares
+    (Merge's and Detach's)."""
     out = ["\tset_local_variable = { name = sr_xf_all value = 0 }",
            "\tif = { limit = { sr_fl_$N$_xf_left <= 0 } set_local_variable = { name = sr_xf_all value = 1 } }",
            "\tset_local_variable = { name = sr_xf_ships value = sr_fl_$N$_xf_strength }",
+           "\tif = { limit = { local_var:sr_xf_all = 1 } set_local_variable = { name = sr_xf_ships value = sr_fl_$N$_strength_full } }",
            "\tset_local_variable = { name = sr_xf_marines value = sr_fl_$N$_xf_marines_moved }"]
     for r in ROLES:
         k = r.key
-        out += [f"\tset_local_variable = {{ name = sr_xf_share_{k} value = 0 }}",
-                f"\tif = {{ limit = {{ local_var:sr_xf_all = 1 }} set_local_variable = {{ name = sr_xf_share_{k} value = 1 }} }}",
-                f"\telse_if = {{ limit = {{ sr_fl_$N$_{k}_value > 0 }} set_local_variable = {{ name = sr_xf_share_{k} "
-                f"value = {{ value = sr_fl_$N$_xf_{k} divide = sr_fl_$N$_{k}_value max = 1 }} }} }}"]
+        out += [f"\tset_local_variable = {{ name = sr_xf_amt_{k} value = sr_fl_$N$_xf_{k} }}",
+                f"\tset_local_variable = {{ name = sr_xf_now_{k} value = sr_fl_$N$_{k}_value }}"]
     out += ["\tset_local_variable = { name = sr_fl_dv_share value = 1 }",
             "\tif = { limit = { sr_fl_$N$_dv_capacity > 0 } set_local_variable = { name = sr_fl_dv_share "
             "value = { value = sr_fl_$N$_dv_value divide = sr_fl_$N$_dv_capacity max = 1 } } }",
@@ -1043,20 +1052,33 @@ def _xf_shares() -> list[str]:
 
 
 def _xf_move() -> list[str]:
-    """Each role's share of N into M, now and at full by the one share (so a
-    damaged role keeps its damage ratio), then the marines by amount."""
+    """Each role of N into M: all of it as it stands, or the amount itself at
+    its strength now and its full by full x amount / now, multiplied first and
+    never under the amount, so a damaged role keeps its ratio on both sides.
+    (Moving by a share, var x (amount / var), left 1e-5 behind in fixed point: a
+    role no figure showed, which cost a fleet its pace and its endurance, #1286's
+    review I-1.) Then the marines by amount."""
     out = []
     for r in ROLES:
-        for suffix in ("", "_full"):
-            v = f"{r.key}{suffix}"
-            out += ["\tif = {",
-                    f"\t\tlimit = {{ has_variable = sr_fl_$N$_{v} local_var:sr_xf_share_{r.key} > 0 }}",
-                    f"\t\tset_local_variable = {{ name = sr_xf_part value = {{ value = var:sr_fl_$N$_{v} "
-                    f"multiply = local_var:sr_xf_share_{r.key} }} }}",
-                    f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {v} AMOUNT = local_var:sr_xf_part }}",
-                    f"\t\tset_variable = {{ name = sr_fl_$N$_{v} value = {{ value = var:sr_fl_$N$_{v} "
-                    "subtract = local_var:sr_xf_part min = 0 } }",
-                    "\t}"]
+        k = r.key
+        now, full = f"sr_fl_$N$_{k}", f"sr_fl_$N$_{k}_full"
+        out += ["\tif = {",
+                "\t\tlimit = { local_var:sr_xf_all = 1 }",
+                f"\t\tif = {{ limit = {{ has_variable = {now} }} sr_fl_add_role_part = {{ N = $M$ VAR = {k} AMOUNT = var:{now} }} "
+                f"set_variable = {{ name = {now} value = 0 }} }}",
+                f"\t\tif = {{ limit = {{ has_variable = {full} }} sr_fl_add_role_part = {{ N = $M$ VAR = {k}_full AMOUNT = var:{full} }} "
+                f"set_variable = {{ name = {full} value = 0 }} }}",
+                "\t}",
+                "\telse_if = {",
+                f"\t\tlimit = {{ local_var:sr_xf_amt_{k} > 0 }}",
+                f"\t\tset_local_variable = {{ name = sr_xf_part value = {{ value = sr_fl_$N$_{k}_full_value "
+                f"multiply = local_var:sr_xf_amt_{k} divide = local_var:sr_xf_now_{k} min = local_var:sr_xf_amt_{k} }} }}",
+                f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {k} AMOUNT = local_var:sr_xf_amt_{k} }}",
+                f"\t\tsr_fl_add_role_part = {{ N = $M$ VAR = {k}_full AMOUNT = local_var:sr_xf_part }}",
+                f"\t\tset_variable = {{ name = {now} value = {{ value = sr_fl_$N$_{k}_value subtract = local_var:sr_xf_amt_{k} min = 0 }} }}",
+                f"\t\tset_variable = {{ name = {full} value = {{ value = sr_fl_$N$_{k}_full_value "
+                f"subtract = local_var:sr_xf_part min = 0 }} }}",
+                "\t}"]
     out += ["\tset_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value add = local_var:sr_xf_marines } }",
             "\tset_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value "
             "subtract = local_var:sr_xf_marines min = 0 } }"]
@@ -1079,13 +1101,15 @@ def render_transfer() -> list[str]:
     out += ["sr_fl_transfer_at = { sr_fl_$N$_transfer_now = yes }", "",
             "# N into the empty M, Detach's shape: M at N's location, on its drive, posture",
             "# and refit; then both fleets N's shares of propellant and supply, of their",
-            "# new capacities (with the roles halved, as Detach's, the same months).",
+            "# new capacities (with the roles halved, as Detach's, the same months). A",
+            "# source closing in (3) or interdicting (4) leaves M at Stand off (2): M gets",
+            "# no target (owner, 2026-10-31).",
             "sr_fl_transfer_new = {",
             *_xf_shares(),
             "\tsr_fl_clear_at = { N = $M$ }",
             "\tset_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
             "\tset_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
-            "\tset_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
+            "\tset_variable = { name = sr_fl_$M$_posture value = { value = sr_fl_$N$_posture_value max = 2 } }",
             "\tif = { limit = { has_variable = sr_fl_$N$_refit_until } set_variable = { name = sr_fl_$M$_refit_until "
             "value = var:sr_fl_$N$_refit_until } }",
             "\tset_variable = { name = sr_fl_$M$_marines value = 0 }",

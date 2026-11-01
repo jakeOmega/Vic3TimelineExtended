@@ -14,6 +14,7 @@ import math
 import re
 import sys
 import unittest
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -1769,33 +1770,40 @@ class TransferTest(unittest.TestCase):
         cls.into = _block(cls.effects, "sr_fl_transfer_into")
 
     def test_amounts_are_clamped_before_moving(self):
-        """Shares read the clamped amount (sr_fl_$N$_xf_<role>, held to what N
-        has), never the raw variable, and are all read before the first move."""
+        """Each role's amount is the clamped one (sr_fl_$N$_xf_<role>, held to
+        what N has), never the raw variable; it and the role's strength now are
+        read before the first move (the clamp follows the variables)."""
         for name, body in (("new", self.new), ("into", self.into)):
             with self.subTest(effect=name):
                 self.assertNotIn("sr_det_amt_", body)
                 first_move = body.index("sr_fl_add_role_part")
                 for r in gsf.ROLES:
-                    share = body.index(f"value = {{ value = sr_fl_$N$_xf_{r.key} divide = sr_fl_$N$_{r.key}_value max = 1 }}")
-                    self.assertLess(share, first_move)
+                    for read in (f"set_local_variable = {{ name = sr_xf_amt_{r.key} value = sr_fl_$N$_xf_{r.key} }}",
+                                 f"set_local_variable = {{ name = sr_xf_now_{r.key} value = sr_fl_$N$_{r.key}_value }}"):
+                        self.assertLess(body.index(read), first_move)
                 for read in ("sr_xf_marines value = sr_fl_$N$_xf_marines_moved", "sr_xf_ships value = sr_fl_$N$_xf_strength",
                              "sr_fl_$N$_xf_left <= 0"):
                     self.assertLess(body.index(read), first_move)
         self.assertNotIn("sr_det_amt_", _block(self.effects, "sr_fl_1_transfer_now"))
 
-    def test_full_and_current_move_by_one_share(self):
+    def test_each_role_moves_its_amount_and_its_full_in_proportion(self):
+        """The amount itself at the strength now; full x amount / now at full,
+        multiplied first, never under the amount; all of a role as it stands when
+        all of the fleet goes (TransferRunTest runs them)."""
         for name, body in (("new", self.new), ("into", self.into)):
             for r in gsf.ROLES:
-                for v in (r.key, f"{r.key}_full"):
-                    with self.subTest(effect=name, var=v):
-                        self.assertRegex(body, rf"limit = \{{ has_variable = sr_fl_\$N\$_{v} local_var:sr_xf_share_{r.key} > 0 \}}\s*"
-                                               rf"set_local_variable = \{{ name = sr_xf_part value = \{{ value = var:sr_fl_\$N\$_{v} "
-                                               rf"multiply = local_var:sr_xf_share_{r.key} \}} \}}\s*"
-                                               rf"sr_fl_add_role_part = \{{ N = \$M\$ VAR = {v} AMOUNT = local_var:sr_xf_part \}}\s*"
-                                               rf"set_variable = \{{ name = sr_fl_\$N\$_{v} value = \{{ value = var:sr_fl_\$N\$_{v} "
-                                               r"subtract = local_var:sr_xf_part min = 0 \} \}")
-                self.assertIn(f"if = {{ limit = {{ local_var:sr_xf_all = 1 }} set_local_variable = {{ name = sr_xf_share_{r.key} value = 1 }} }}",
-                              body)
+                k = r.key
+                with self.subTest(effect=name, role=k):
+                    self.assertRegex(body, rf"limit = \{{ local_var:sr_xf_all = 1 \}}\s*"
+                                           rf"if = \{{ limit = \{{ has_variable = sr_fl_\$N\$_{k} \}} sr_fl_add_role_part = \{{ N = \$M\$ "
+                                           rf"VAR = {k} AMOUNT = var:sr_fl_\$N\$_{k} \}}")
+                    self.assertRegex(body, rf"limit = \{{ local_var:sr_xf_amt_{k} > 0 \}}\s*"
+                                           rf"set_local_variable = \{{ name = sr_xf_part value = \{{ value = sr_fl_\$N\$_{k}_full_value "
+                                           rf"multiply = local_var:sr_xf_amt_{k} divide = local_var:sr_xf_now_{k} "
+                                           rf"min = local_var:sr_xf_amt_{k} \}} \}}\s*"
+                                           rf"sr_fl_add_role_part = \{{ N = \$M\$ VAR = {k} AMOUNT = local_var:sr_xf_amt_{k} \}}\s*"
+                                           rf"sr_fl_add_role_part = \{{ N = \$M\$ VAR = {k}_full AMOUNT = local_var:sr_xf_part \}}")
+                    self.assertNotIn("sr_xf_share_", body)
             self.assertIn("set_variable = { name = sr_fl_$M$_marines value = { value = sr_fl_$M$_marines_value "
                           "add = local_var:sr_xf_marines } }", body)
             self.assertIn("set_variable = { name = sr_fl_$N$_marines value = { value = sr_fl_$N$_marines_value "
@@ -1817,7 +1825,7 @@ class TransferTest(unittest.TestCase):
         clear = body.index("sr_fl_clear_at = { N = $M$ }")
         for line in ("set_variable = { name = sr_fl_$M$_loc value = var:sr_fl_$N$_loc }",
                      "set_variable = { name = sr_fl_$M$_drive value = sr_fl_$N$_drive_value }",
-                     "set_variable = { name = sr_fl_$M$_posture value = sr_fl_$N$_posture_value }",
+                     "set_variable = { name = sr_fl_$M$_posture value = { value = sr_fl_$N$_posture_value max = 2 } }",
                      "set_variable = { name = sr_fl_$M$_refit_until value = var:sr_fl_$N$_refit_until }"):
             with self.subTest(line=line):
                 self.assertLess(clear, body.index(line))
@@ -1878,7 +1886,7 @@ class TransferTest(unittest.TestCase):
         self.assertIn(f"sr_fl_{n}_xf_new_min = {{ sr_fl_{n}_xf_strength >= sr_fl_minimum_strength }}", t)
         room = _block(t, f"sr_fl_{n}_xf_room")
         self.assertIn(f"sr_fl_{n}_xf_there_marines <= sr_fl_{n}_xf_there_room", room)
-        self.assertIn(f"OR = {{ sr_fl_{n}_xf_left <= 0 sr_fl_{n}_xf_stay_marines <= sr_fl_{n}_xf_stay_room }}", room)
+        self.assertIn(f"OR = {{ sr_fl_{n}_xf_left <= 0 sr_fl_{n}_xf_stay_over <= sr_fl_{n}_xf_now_over }}", room)
         partner = _block(t, f"sr_fl_{n}_xf_partner_here")
         self.assertEqual(sorted(int(m) for m in re.findall(r"sr_det_to_value = (\d)", partner)), gsf._others(n))
 
@@ -1893,6 +1901,467 @@ class TransferTest(unittest.TestCase):
                               f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )", row)
                 self.assertIn("onclick = \"[GetVariableSystem.Clear('te_popup')]\"", row)
                 self.assertIn("IsValidTooltip", row)
+
+
+# ---------------------------------------------------------------------------
+# Transfer, run: the script itself in the engine's fixed point (#1286's review, I-2)
+# ---------------------------------------------------------------------------
+
+_FX_SCALE = 100_000  # the engine's values: i64 x 1e-5, every result cut toward zero
+_FX_TOKEN = re.compile(r'"[^"]*"|#[^\n]*|<=|>=|!=|\?=|[{}=<>]|[^\s{}=<>#"?]+')
+_FX_OPS = {"=": lambda a, b: a == b, "?=": lambda a, b: a == b, "!=": lambda a, b: a != b, "<": lambda a, b: a < b,
+           "<=": lambda a, b: a <= b, ">": lambda a, b: a > b, ">=": lambda a, b: a >= b}
+
+
+def _fxn(x):
+    """A figure in fixed point."""
+    return int(Decimal(str(x)) * _FX_SCALE)
+
+
+def _fx_cut(p, q):
+    """p / q, cut toward zero, as the engine's every operation is."""
+    r = abs(p) // abs(q)
+    return r if (p < 0) == (q < 0) else -r
+
+
+def _fx_mul(a, b):
+    return _fx_cut(a * b, _FX_SCALE)
+
+
+def _fx_div(a, b):
+    return _fx_cut(a * _FX_SCALE, b)
+
+
+def _fx_tokens(text):
+    return [t for t in _FX_TOKEN.findall(text) if not t.startswith("#")]
+
+
+def _fx_parse(tokens, i=0):
+    """[(key, op, value)] up to the matching '}' (value a token or a nested list)."""
+    out = []
+    while i < len(tokens) and tokens[i] != "}":
+        if tokens[i + 1] not in _FX_OPS:  # a bare word in a list
+            out.append((tokens[i], None, None))
+            i += 1
+            continue
+        key, op = tokens[i], tokens[i + 1]
+        if tokens[i + 2] == "{":
+            value, i = _fx_parse(tokens, i + 3)
+            i += 1
+        else:
+            value, i = tokens[i + 2], i + 3
+        out.append((key, op, value))
+    return out, i
+
+
+def _fx_top_raw(text):
+    """Each top-level `name = { ... }` of a file, its body's raw text (for $ARG$)."""
+    out, depth, name, start = {}, 0, None, 0
+    for m in _FX_TOKEN.finditer(text):
+        t = m.group(0)
+        if t[0] in '#"':
+            continue
+        if t == "{":
+            start = m.end() if depth == 0 else start
+            depth += 1
+        elif t == "}":
+            depth -= 1
+            if depth == 0:
+                out[name] = text[start:m.start()]
+        elif depth == 0 and t not in _FX_OPS:
+            name = t
+    return out
+
+
+class _Fx:
+    """Enough of the engine to run a transfer, from the files as they are: value
+    blocks applied in order (min and max clamp where they stand), variables and
+    locals, if / else_if / else, triggers, scripted effects and triggers with
+    their $ARG$ substituted as text, saved scopes, and a scripted GUI's is_valid.
+    Every value is an integer of 1e-5 and every operation is cut toward zero:
+    test_demographics_registry._Engine(truncate=True)'s model, exactly. A read of
+    a variable or local never set fails, as does an argument the callee doesn't
+    name or one it names and isn't given (script_argument_audit's rule)."""
+
+    STUBS = ("sr_loc_rebuild",)  # the location records: recorded, not run
+    _sources = None
+
+    def __init__(self, **scopes):
+        if _Fx._sources is None:
+            values = {}
+            for path in (gsf.ROOT / gsf.VALUES_OUT, gsf.ROOT / gsf.DISPLAY_OUT, FLEET_VALUES):
+                values.update({k: _fx_parse(_fx_tokens(v))[0] for k, v in _fx_top_raw(_raw(path)).items()})
+            triggers = {**_fx_top_raw(_raw(gsf.ROOT / gsf.TRIGGERS_OUT)), **_fx_top_raw(_raw(FLEET_TRIGGERS))}
+            effects = {**_fx_top_raw(_raw(gsf.ROOT / gsf.EFFECTS_OUT)), **_fx_top_raw(_raw(FLEET_EFFECTS))}
+            sguis = {k: _fx_parse(_fx_tokens(v))[0] for k, v in _fx_top_raw(_raw(SGUIS)).items()}
+            _Fx._sources = values, triggers, effects, sguis, {}
+        self.values, self.triggers, self.effects, self.sguis, self._parsed = _Fx._sources
+        self.scopes = {k: _fxn(v) for k, v in scopes.items()}
+        self.vars, self.locals, self.globals = {}, {}, set()
+        self.calls, self.logs = [], []
+
+    # -- the fixtures ---------------------------------------------------------
+    def fleet(self, n, loc, drive=0, posture=1, marines=0, refit=None, dv=0.5, supply=0.5, **roles):
+        """Slot n at loc: each role (now, full); dv and supply as shares of its capacity."""
+        self.vars[f"sr_fl_{n}_loc"] = _fxn(loc)
+        for k, (now, full) in roles.items():
+            self.vars[f"sr_fl_{n}_{k}"], self.vars[f"sr_fl_{n}_{k}_full"] = _fxn(now), _fxn(full)
+        self.vars[f"sr_fl_{n}_drive"] = _fxn(drive)
+        self.vars[f"sr_fl_{n}_posture"] = _fxn(posture)
+        self.vars[f"sr_fl_{n}_marines"] = _fxn(marines)
+        if refit is not None:
+            self.vars[f"sr_fl_{n}_refit_until"] = _fxn(refit)
+        self.vars[f"sr_fl_{n}_dv"] = _fx_mul(self.num(f"sr_fl_{n}_dv_capacity"), _fxn(dv))
+        self.vars[f"sr_fl_{n}_supply"] = _fx_mul(self.num(f"sr_fl_{n}_endurance"), _fxn(supply))
+
+    def choose(self, to, **amounts):
+        """The popup's choice: sr_det_to and each amount (sr_det_amt_<key>)."""
+        self.vars["sr_det_to"] = _fxn(to)
+        for k, x in amounts.items():
+            self.vars[f"sr_det_amt_{k}"] = _fxn(x)
+
+    def slot(self, n):
+        """Slot n's variables, as figures."""
+        return {k[len(f"sr_fl_{n}_"):]: Decimal(v) / _FX_SCALE for k, v in self.vars.items() if k.startswith(f"sr_fl_{n}_")}
+
+    def share(self, n, what):
+        """Slot n's propellant (dv) or supply over its capacity now, as the transfer reads it."""
+        cap = self.num(f"sr_fl_{n}_dv_capacity" if what == "dv" else f"sr_fl_{n}_endurance")
+        return min(_fx_div(self.vars[f"sr_fl_{n}_{what}"], cap), _FX_SCALE)
+
+    # -- the engine -----------------------------------------------------------
+    def num(self, v):
+        if isinstance(v, list):
+            return self.calc(v)
+        for prefix, store in (("var:", self.vars), ("local_var:", self.locals), ("scope:", self.scopes)):
+            if v.startswith(prefix):
+                assert v[len(prefix):] in store, f"{v} read, never set"
+                return store[v[len(prefix):]]
+        if v in self.values:
+            return self.calc(self.values[v])
+        try:
+            return _fxn(v)
+        except InvalidOperation:
+            raise AssertionError(f"no value {v}") from None
+
+    def calc(self, block, acc=0):
+        taken = False
+        for key, _, v in block:
+            if key in ("if", "else_if", "else"):
+                taken = False if key == "if" else taken
+                if taken or (key != "else" and not self.test(next(x for k, _, x in v if k == "limit"))):
+                    continue
+                taken = True
+                acc = self.calc([e for e in v if e[0] != "limit"], acc)
+            elif key == "round":
+                q, r = divmod(abs(acc), _FX_SCALE)
+                acc = (q + (2 * r >= _FX_SCALE)) * _FX_SCALE * (1 if acc >= 0 else -1)
+            else:
+                x = self.num(v)
+                if key == "value":
+                    acc = x
+                elif key == "add":
+                    acc += x
+                elif key == "subtract":
+                    acc -= x
+                elif key == "multiply":
+                    acc = _fx_mul(acc, x)
+                elif key == "divide":
+                    assert x != 0, "a division by zero"
+                    acc = _fx_div(acc, x)
+                elif key == "min":
+                    acc = max(acc, x)
+                elif key == "max":
+                    acc = min(acc, x)
+                else:
+                    raise AssertionError(f"unsupported value step {key}")
+        return acc
+
+    def _body(self, table, name, args):
+        given = {} if args == "yes" else {k: x for k, _, x in args}
+        raw = table[name]
+        for k, x in given.items():
+            assert isinstance(x, str), f"{name}: argument {k} is a block"
+            assert f"${k}$" in raw, f"{name} doesn't name ${k}$"
+            raw = raw.replace(f"${k}$", x)
+        key = (id(table), name, tuple(sorted(given.items())))
+        if key not in self._parsed:
+            tokens = _fx_tokens(raw)
+            assert not [t for t in tokens if "$" in t and not t.startswith('"')], f"{name}: an argument missing"
+            self._parsed[key] = _fx_parse(tokens)[0]
+        return self._parsed[key]
+
+    def test(self, block):
+        return all(self.cond(*c) for c in block)
+
+    def cond(self, key, op, v):
+        if key == "OR":
+            return any(self.cond(*c) for c in v)
+        if key == "AND":
+            return self.test(v)
+        if key == "NOT":
+            assert len(v) == 1, "NOT over more than one trigger"
+            return not self.cond(*v[0])
+        if key == "has_variable":
+            return v in self.vars
+        if key == "has_global_variable":
+            return v in self.globals
+        if key == "has_variable_list":
+            return False
+        if key in self.triggers:
+            if v in ("yes", "no"):
+                return self.test(self._body(self.triggers, key, "yes")) == (v == "yes")
+            return self.test(self._body(self.triggers, key, v))
+        return _FX_OPS[op](self.num(key), self.num(v))
+
+    def run(self, block):
+        taken = False
+        for key, _, v in block:
+            if key in ("if", "else_if", "else"):
+                taken = False if key == "if" else taken
+                if taken or (key != "else" and not self.test(next(x for k, _, x in v if k == "limit"))):
+                    continue
+                taken = True
+                self.run([e for e in v if e[0] != "limit"])
+            elif key in ("set_variable", "set_local_variable"):
+                d = {k: x for k, _, x in v}
+                (self.locals if key == "set_local_variable" else self.vars)[d["name"]] = self.num(d["value"])
+            elif key == "change_variable":
+                d = {k: x for k, _, x in v}
+                assert d["name"] in self.vars, f"change_variable on {d['name']}, never set"
+                self.vars[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+            elif key == "remove_variable":
+                del self.vars[v]
+            elif key == "set_global_variable":
+                self.globals.add(dict((k, x) for k, _, x in v)["name"])
+            elif key == "debug_log":
+                read = re.findall(r"THIS\.Var\('(\w+)'\)", v)   # what the line reads is set when it logs
+                assert all(name in self.vars for name in read), f"the line reads {read}, not all set"
+                self.logs.append((v, {name: self.vars[name] for name in read}))
+            elif key == "hidden_effect":
+                self.run(v)
+            elif key in self.STUBS:
+                self.calls.append(key)
+            elif key in self.effects:
+                self.calls.append(key)
+                self.run(self._body(self.effects, key, v))
+            else:
+                raise AssertionError(f"unsupported effect {key}")
+
+    def effect(self, name, **args):
+        self.run([(name, "=", [(k, "=", str(x)) for k, x in args.items()] if args else "yes")])
+
+    def refusals(self, sgui):
+        """The is_valid lines of a scripted GUI that fail: each custom_tooltip's
+        text, through trigger_if / trigger_else."""
+        out = []
+
+        def walk(block):
+            taken = False
+            for key, op, v in block:
+                if key in ("trigger_if", "trigger_else"):
+                    if key == "trigger_if":
+                        taken = self.test(next(x for k, _, x in v if k == "limit"))
+                        if taken:
+                            walk([e for e in v if e[0] != "limit"])
+                    elif not taken:
+                        walk(v)
+                elif key == "custom_tooltip":
+                    if not self.test([e for e in v if e[0] != "text"]):
+                        out.append(next(x for k, _, x in v if k == "text"))
+                elif not self.cond(key, op, v):
+                    out.append(key)
+
+        walk(next(v for k, _, v in self.sguis[sgui] if k == "is_valid"))
+        return out
+
+
+class TransferRunTest(unittest.TestCase):
+    """Transfer run as the engine runs it, in fixed point (#1286's review, I-2):
+    what each fleet holds after, and the refusals' verdicts. From the scripted
+    GUI's own effect, sr_fl_by_op = { DO = transfer } with scope:op."""
+
+    def go(self, fx, n):
+        fx.scopes["op"] = _fxn(n)
+        self.assertEqual(fx.refusals("sr_fleet_transfer_sgui"), [], "Transfer greyed")
+        fx.effect("sr_fl_by_op", DO="transfer")
+
+    def roles(self, fx, n):
+        s = fx.slot(n)
+        return {r.key: (s.get(r.key), s.get(f"{r.key}_full")) for r in gsf.ROLES if r.key in s or f"{r.key}_full" in s}
+
+    def test_part_of_a_fleet_into_a_new_one(self):
+        """The lowest empty slot; the amounts exactly; the location, the drive,
+        the refit; a source closing in leaves the new fleet at Stand off (owner,
+        2026-10-31); both fleets N's shares of their new capacities, with the
+        tenders moving (so both capacities change)."""
+        fx = _Fx()
+        fx.fleet(1, loc=3, drive=1, posture=3, refit=500, dv=0.5, supply=0.6, war=(6, 6), tender=(2, 2))
+        fx.fleet(3, loc=3, war=(1, 1))
+        fx.choose(0, war=3, tender=2)
+        dv, supply = fx.share(1, "dv"), fx.share(1, "supply")
+        caps = {n: (fx.num(f"sr_fl_{n}_dv_capacity"), fx.num(f"sr_fl_{n}_endurance")) for n in (1, 2)}
+        self.go(fx, 1)
+        self.assertEqual(self.roles(fx, 2), {"war": (3, 3), "tender": (2, 2)})
+        self.assertEqual(self.roles(fx, 1), {"war": (3, 3), "tender": (0, 0)})
+        new = fx.slot(2)
+        self.assertEqual((new["loc"], new["drive"], new["posture"], new["refit_until"], new["marines"]), (3, 1, 2, 500, 0))
+        for n in range(4, gsf.SLOTS + 1):
+            self.assertEqual(fx.slot(n), {}, f"slot {n}")
+        for n in (1, 2):
+            cap, end = fx.num(f"sr_fl_{n}_dv_capacity"), fx.num(f"sr_fl_{n}_endurance")
+            self.assertNotEqual((cap, end), caps[n])
+            self.assertEqual(fx.vars[f"sr_fl_{n}_dv"], _fx_mul(cap, dv), n)
+            self.assertEqual(fx.vars[f"sr_fl_{n}_supply"], _fx_mul(end, supply), n)
+        self.assertEqual(fx.calls[-1], "sr_loc_rebuild")
+
+    def test_a_new_fleet_from_one_at_station_or_stand_off_keeps_its_posture(self):
+        for posture in (1, 2):
+            fx = _Fx()
+            fx.fleet(1, loc=3, posture=posture, war=(6, 6))
+            fx.choose(0, war=3)
+            self.go(fx, 1)
+            self.assertEqual(fx.slot(2)["posture"], posture)
+
+    def test_part_of_a_fleet_into_another(self):
+        """Merge's rules with ships joining: the slower drive, the later refit, the
+        lower of each share; the other fleet keeps its posture; the source keeps
+        its own shares, of its new capacities (its tenders gone, both change)."""
+        fx = _Fx()
+        fx.fleet(4, loc=5, drive=1, posture=2, refit=600, dv=0.9, supply=0.3, war=(4, 4), tender=(2, 2))
+        fx.fleet(7, loc=5, drive=2, posture=1, dv=0.4, supply=0.8, war=(5, 5))
+        fx.choose(7, war=2, tender=2)
+        n_dv, n_supply, m_dv, m_supply = fx.share(4, "dv"), fx.share(4, "supply"), fx.share(7, "dv"), fx.share(7, "supply")
+        self.assertGreater(n_dv, m_dv)
+        self.assertLess(n_supply, m_supply)
+        n_end = fx.num("sr_fl_4_endurance")
+        self.go(fx, 4)
+        self.assertEqual(self.roles(fx, 7), {"war": (7, 7), "tender": (2, 2)})
+        self.assertEqual(self.roles(fx, 4), {"war": (2, 2), "tender": (0, 0)})
+        m = fx.slot(7)
+        self.assertEqual((m["drive"], m["refit_until"], m["posture"]), (1, 600, 1))
+        self.assertEqual(fx.vars["sr_fl_7_dv"], _fx_mul(fx.num("sr_fl_7_dv_capacity"), m_dv))
+        self.assertEqual(fx.vars["sr_fl_7_supply"], _fx_mul(fx.num("sr_fl_7_endurance"), n_supply))
+        self.assertEqual(fx.vars["sr_fl_4_dv"], _fx_mul(fx.num("sr_fl_4_dv_capacity"), n_dv))
+        self.assertNotEqual(fx.num("sr_fl_4_endurance"), n_end)
+        self.assertEqual(fx.vars["sr_fl_4_supply"], _fx_mul(fx.num("sr_fl_4_endurance"), n_supply))
+        self.assertEqual(fx.calls[-1], "sr_loc_rebuild")
+
+    def test_a_faster_fleet_or_a_later_refit_joining_changes_neither(self):
+        fx = _Fx()
+        fx.fleet(4, loc=5, drive=3, refit=300, war=(4, 4))
+        fx.fleet(7, loc=5, drive=1, refit=600, war=(5, 5))
+        fx.choose(7, war=2)
+        self.go(fx, 4)
+        self.assertEqual((fx.slot(7)["drive"], fx.slot(7)["refit_until"]), (1, 600))
+
+    def test_all_of_a_fleet_into_another_with_a_role_damaged_to_nothing(self):
+        """Every role goes, the one damaged to 0 now with its full strength, and
+        the source is cleared, as Merge did; an amount past what it has moves no more."""
+        fx = _Fx()
+        fx.fleet(2, loc=4, drive=2, war=(0, 2), rapid=(3, 3))
+        fx.fleet(5, loc=4, drive=3, war=(1, 1))
+        fx.choose(5, war=1, rapid=5)
+        self.go(fx, 2)
+        self.assertEqual(self.roles(fx, 5), {"war": (1, 3), "rapid": (3, 3)})
+        self.assertEqual(fx.slot(5)["drive"], 2)
+        self.assertEqual(fx.slot(2), {})
+
+    def test_a_wreck_s_full_strength_goes_into_another_fleet(self):
+        """All of a fleet damaged to 0 now, no marines: its full strength counts as
+        something moving, as Merge allowed (owner, 2026-10-31), and joins as ships do."""
+        fx = _Fx()
+        fx.fleet(2, loc=4, drive=1, war=(0, 2))
+        fx.fleet(5, loc=4, drive=3, war=(1, 1))
+        fx.choose(5)
+        self.go(fx, 2)
+        self.assertEqual(self.roles(fx, 5), {"war": (1, 3)})
+        self.assertEqual(fx.slot(5)["drive"], 1)
+        self.assertEqual(fx.slot(2), {})
+
+    def test_marines_alone(self):
+        """Nothing but the marines changes: no drive, refit or share."""
+        fx = _Fx()
+        fx.fleet(1, loc=6, drive=0, refit=700, marines=4, dv=0.2, war=(1, 1), carrier=(2, 2))
+        fx.fleet(2, loc=6, drive=3, dv=0.5, supply=0.5, carrier=(3, 3))
+        fx.choose(2, marines=2)
+        before = dict(fx.vars)
+        self.go(fx, 1)
+        self.assertEqual((fx.slot(1)["marines"], fx.slot(2)["marines"]), (2, 2))
+        for k in ("sr_fl_2_drive", "sr_fl_2_dv", "sr_fl_2_supply", "sr_fl_2_carrier", "sr_fl_2_carrier_full",
+                  "sr_fl_1_war", "sr_fl_1_carrier", "sr_fl_1_dv"):
+            self.assertEqual(fx.vars[k], before[k], k)
+        self.assertNotIn("sr_fl_2_refit_until", fx.vars)
+
+    def test_no_phantom_role_is_left_behind(self):
+        """Review I-1: 3 of 7 warships out, then the 4 shown into another fleet.
+        Each amount moves exactly, so nothing of 1e-5 stays to cost the fleet its
+        rapid response pace or its endurance."""
+        fx = _Fx()
+        fx.fleet(1, loc=2, war=(7, 7), rapid=(10, 10))
+        fx.fleet(3, loc=2, rapid=(1, 1))
+        fx.choose(0, war=3, rapid=0)
+        self.go(fx, 1)
+        self.assertEqual(self.roles(fx, 2), {"war": (3, 3)})
+        self.assertEqual(self.roles(fx, 1)["war"], (4, 4))
+        fx.choose(3, war=4)
+        self.go(fx, 1)
+        self.assertEqual(self.roles(fx, 1), {"war": (0, 0), "rapid": (10, 10)})
+        self.assertEqual(self.roles(fx, 3), {"war": (4, 4), "rapid": (1, 1)})
+        self.assertTrue(fx.cond("sr_fl_1_all_rapid", "=", "yes"))
+        self.assertEqual(fx.num("sr_fl_1_endurance"), _fxn(12))
+
+    def test_a_damaged_role_keeps_its_ratio(self):
+        """The amount moves exactly at its strength now; its full by full x amount
+        / now, multiplied first, never under the amount (so full >= now on both sides)."""
+        fx = _Fx()
+        fx.fleet(1, loc=2, war=("7.33333", "9.1"), rapid=(1, 1))
+        fx.choose(0, war=3, rapid=0)
+        self.go(fx, 1)
+        ratio = Decimal("7.33333") / Decimal("9.1")
+        for n, now in ((2, 3), (1, Decimal("4.33333"))):
+            got_now, got_full = self.roles(fx, n)["war"]
+            self.assertEqual(got_now, now)
+            self.assertGreaterEqual(got_full, got_now)
+            self.assertAlmostEqual(float(got_now / got_full), float(ratio), places=4)
+        self.assertEqual(sum(self.roles(fx, n)["war"][1] for n in (1, 2)), Decimal("9.1"))
+
+    def test_the_marines_room(self):
+        """There: the other fleet's own marines and carriers count; here: the
+        carriers that stay. A fleet already past its room (carriers lost in
+        battle) may still move marines out, or ships with no carriers; it can't
+        move carriers away from its marines (owner, 2026-10-31)."""
+        def room(**amounts):
+            fx = _Fx(op=1)
+            fx.fleet(1, loc=2, marines=2, war=(2, 2), carrier=(1, 1))
+            fx.fleet(3, loc=2, marines=3, carrier=(2, 2))
+            fx.choose(3, **amounts)
+            return "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
+        self.assertFalse(room(marines=2))             # 5 there, room for 4
+        self.assertTrue(room(marines=2, carrier=1))   # 5 there, room for 6; none here
+        self.assertFalse(room(carrier=1))             # 2 here, room for none
+
+        def over(**amounts):
+            fx = _Fx(op=1)
+            fx.fleet(1, loc=2, marines=4, war=(2, 2), carrier=(1, 1))   # room for 2: 2 over
+            fx.fleet(3, loc=2, carrier=(3, 3))
+            fx.choose(3, **amounts)
+            return "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
+        self.assertTrue(over(marines=1))     # 3 here, 1 over
+        self.assertTrue(over(war=1))         # still 2 over, no worse
+        self.assertFalse(over(carrier=1))    # 4 over
+
+    def test_the_fleet_it_goes_into_must_still_be_here(self):
+        fx = _Fx(op=1)
+        fx.fleet(1, loc=2, war=(4, 4))
+        fx.fleet(3, loc=5, war=(4, 4))
+        fx.choose(3, war=2)
+        self.assertIn("sr_fl_xf_partner_here_tt", fx.refusals("sr_fleet_transfer_sgui"))
+        before = dict(fx.vars)
+        fx.effect("sr_fl_by_op", DO="transfer")
+        self.assertEqual(fx.vars, before)
+        fx.vars["sr_fl_3_loc"] = _fxn(2)
+        self.assertEqual(fx.refusals("sr_fleet_transfer_sgui"), [])
 
 
 if __name__ == "__main__":

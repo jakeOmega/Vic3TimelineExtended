@@ -5808,11 +5808,14 @@ sr_fl_1_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_1_loc var:sr_fl_9_loc = var:sr_fl_1_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_1_xf_moves = { OR = { sr_fl_1_xf_strength > 0 sr_fl_1_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_1_xf_moves = { OR = { sr_fl_1_xf_strength > 0 sr_fl_1_xf_marines_moved > 0 AND = { sr_fl_1_xf_left <= 0 sr_fl_1_strength_full > 0 } } }
 sr_fl_1_xf_keeps = { sr_fl_1_xf_left >= sr_fl_minimum_strength }
 sr_fl_1_xf_keeps_or_all = { OR = { sr_fl_1_xf_left >= sr_fl_minimum_strength sr_fl_1_xf_left <= 0 } }
 sr_fl_1_xf_new_min = { sr_fl_1_xf_strength >= sr_fl_minimum_strength }
@@ -5830,7 +5833,7 @@ sr_fl_1_xf_partner_here = {
 }
 sr_fl_1_xf_room = {
 	sr_fl_1_xf_there_marines <= sr_fl_1_xf_there_room
-	OR = { sr_fl_1_xf_left <= 0 sr_fl_1_xf_stay_marines <= sr_fl_1_xf_stay_room }
+	OR = { sr_fl_1_xf_left <= 0 sr_fl_1_xf_stay_over <= sr_fl_1_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -5848,11 +5851,14 @@ sr_fl_2_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_2_loc var:sr_fl_9_loc = var:sr_fl_2_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_2_xf_moves = { OR = { sr_fl_2_xf_strength > 0 sr_fl_2_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_2_xf_moves = { OR = { sr_fl_2_xf_strength > 0 sr_fl_2_xf_marines_moved > 0 AND = { sr_fl_2_xf_left <= 0 sr_fl_2_strength_full > 0 } } }
 sr_fl_2_xf_keeps = { sr_fl_2_xf_left >= sr_fl_minimum_strength }
 sr_fl_2_xf_keeps_or_all = { OR = { sr_fl_2_xf_left >= sr_fl_minimum_strength sr_fl_2_xf_left <= 0 } }
 sr_fl_2_xf_new_min = { sr_fl_2_xf_strength >= sr_fl_minimum_strength }
@@ -5870,7 +5876,7 @@ sr_fl_2_xf_partner_here = {
 }
 sr_fl_2_xf_room = {
 	sr_fl_2_xf_there_marines <= sr_fl_2_xf_there_room
-	OR = { sr_fl_2_xf_left <= 0 sr_fl_2_xf_stay_marines <= sr_fl_2_xf_stay_room }
+	OR = { sr_fl_2_xf_left <= 0 sr_fl_2_xf_stay_over <= sr_fl_2_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -5888,11 +5894,14 @@ sr_fl_3_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_3_loc var:sr_fl_9_loc = var:sr_fl_3_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_3_xf_moves = { OR = { sr_fl_3_xf_strength > 0 sr_fl_3_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_3_xf_moves = { OR = { sr_fl_3_xf_strength > 0 sr_fl_3_xf_marines_moved > 0 AND = { sr_fl_3_xf_left <= 0 sr_fl_3_strength_full > 0 } } }
 sr_fl_3_xf_keeps = { sr_fl_3_xf_left >= sr_fl_minimum_strength }
 sr_fl_3_xf_keeps_or_all = { OR = { sr_fl_3_xf_left >= sr_fl_minimum_strength sr_fl_3_xf_left <= 0 } }
 sr_fl_3_xf_new_min = { sr_fl_3_xf_strength >= sr_fl_minimum_strength }
@@ -5910,7 +5919,7 @@ sr_fl_3_xf_partner_here = {
 }
 sr_fl_3_xf_room = {
 	sr_fl_3_xf_there_marines <= sr_fl_3_xf_there_room
-	OR = { sr_fl_3_xf_left <= 0 sr_fl_3_xf_stay_marines <= sr_fl_3_xf_stay_room }
+	OR = { sr_fl_3_xf_left <= 0 sr_fl_3_xf_stay_over <= sr_fl_3_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -5928,11 +5937,14 @@ sr_fl_4_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_4_loc var:sr_fl_9_loc = var:sr_fl_4_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_4_xf_moves = { OR = { sr_fl_4_xf_strength > 0 sr_fl_4_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_4_xf_moves = { OR = { sr_fl_4_xf_strength > 0 sr_fl_4_xf_marines_moved > 0 AND = { sr_fl_4_xf_left <= 0 sr_fl_4_strength_full > 0 } } }
 sr_fl_4_xf_keeps = { sr_fl_4_xf_left >= sr_fl_minimum_strength }
 sr_fl_4_xf_keeps_or_all = { OR = { sr_fl_4_xf_left >= sr_fl_minimum_strength sr_fl_4_xf_left <= 0 } }
 sr_fl_4_xf_new_min = { sr_fl_4_xf_strength >= sr_fl_minimum_strength }
@@ -5950,7 +5962,7 @@ sr_fl_4_xf_partner_here = {
 }
 sr_fl_4_xf_room = {
 	sr_fl_4_xf_there_marines <= sr_fl_4_xf_there_room
-	OR = { sr_fl_4_xf_left <= 0 sr_fl_4_xf_stay_marines <= sr_fl_4_xf_stay_room }
+	OR = { sr_fl_4_xf_left <= 0 sr_fl_4_xf_stay_over <= sr_fl_4_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -5968,11 +5980,14 @@ sr_fl_5_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_5_loc var:sr_fl_9_loc = var:sr_fl_5_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_5_xf_moves = { OR = { sr_fl_5_xf_strength > 0 sr_fl_5_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_5_xf_moves = { OR = { sr_fl_5_xf_strength > 0 sr_fl_5_xf_marines_moved > 0 AND = { sr_fl_5_xf_left <= 0 sr_fl_5_strength_full > 0 } } }
 sr_fl_5_xf_keeps = { sr_fl_5_xf_left >= sr_fl_minimum_strength }
 sr_fl_5_xf_keeps_or_all = { OR = { sr_fl_5_xf_left >= sr_fl_minimum_strength sr_fl_5_xf_left <= 0 } }
 sr_fl_5_xf_new_min = { sr_fl_5_xf_strength >= sr_fl_minimum_strength }
@@ -5990,7 +6005,7 @@ sr_fl_5_xf_partner_here = {
 }
 sr_fl_5_xf_room = {
 	sr_fl_5_xf_there_marines <= sr_fl_5_xf_there_room
-	OR = { sr_fl_5_xf_left <= 0 sr_fl_5_xf_stay_marines <= sr_fl_5_xf_stay_room }
+	OR = { sr_fl_5_xf_left <= 0 sr_fl_5_xf_stay_over <= sr_fl_5_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -6008,11 +6023,14 @@ sr_fl_6_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_6_loc var:sr_fl_9_loc = var:sr_fl_6_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_6_xf_moves = { OR = { sr_fl_6_xf_strength > 0 sr_fl_6_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_6_xf_moves = { OR = { sr_fl_6_xf_strength > 0 sr_fl_6_xf_marines_moved > 0 AND = { sr_fl_6_xf_left <= 0 sr_fl_6_strength_full > 0 } } }
 sr_fl_6_xf_keeps = { sr_fl_6_xf_left >= sr_fl_minimum_strength }
 sr_fl_6_xf_keeps_or_all = { OR = { sr_fl_6_xf_left >= sr_fl_minimum_strength sr_fl_6_xf_left <= 0 } }
 sr_fl_6_xf_new_min = { sr_fl_6_xf_strength >= sr_fl_minimum_strength }
@@ -6030,7 +6048,7 @@ sr_fl_6_xf_partner_here = {
 }
 sr_fl_6_xf_room = {
 	sr_fl_6_xf_there_marines <= sr_fl_6_xf_there_room
-	OR = { sr_fl_6_xf_left <= 0 sr_fl_6_xf_stay_marines <= sr_fl_6_xf_stay_room }
+	OR = { sr_fl_6_xf_left <= 0 sr_fl_6_xf_stay_over <= sr_fl_6_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -6048,11 +6066,14 @@ sr_fl_7_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_7_loc var:sr_fl_9_loc = var:sr_fl_7_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_7_xf_moves = { OR = { sr_fl_7_xf_strength > 0 sr_fl_7_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_7_xf_moves = { OR = { sr_fl_7_xf_strength > 0 sr_fl_7_xf_marines_moved > 0 AND = { sr_fl_7_xf_left <= 0 sr_fl_7_strength_full > 0 } } }
 sr_fl_7_xf_keeps = { sr_fl_7_xf_left >= sr_fl_minimum_strength }
 sr_fl_7_xf_keeps_or_all = { OR = { sr_fl_7_xf_left >= sr_fl_minimum_strength sr_fl_7_xf_left <= 0 } }
 sr_fl_7_xf_new_min = { sr_fl_7_xf_strength >= sr_fl_minimum_strength }
@@ -6070,7 +6091,7 @@ sr_fl_7_xf_partner_here = {
 }
 sr_fl_7_xf_room = {
 	sr_fl_7_xf_there_marines <= sr_fl_7_xf_there_room
-	OR = { sr_fl_7_xf_left <= 0 sr_fl_7_xf_stay_marines <= sr_fl_7_xf_stay_room }
+	OR = { sr_fl_7_xf_left <= 0 sr_fl_7_xf_stay_over <= sr_fl_7_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -6088,11 +6109,14 @@ sr_fl_8_xf_pick_here = {
 		AND = { scope:pick = 9 has_variable = sr_fl_9_loc has_variable = sr_fl_8_loc var:sr_fl_9_loc = var:sr_fl_8_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_8_xf_moves = { OR = { sr_fl_8_xf_strength > 0 sr_fl_8_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_8_xf_moves = { OR = { sr_fl_8_xf_strength > 0 sr_fl_8_xf_marines_moved > 0 AND = { sr_fl_8_xf_left <= 0 sr_fl_8_strength_full > 0 } } }
 sr_fl_8_xf_keeps = { sr_fl_8_xf_left >= sr_fl_minimum_strength }
 sr_fl_8_xf_keeps_or_all = { OR = { sr_fl_8_xf_left >= sr_fl_minimum_strength sr_fl_8_xf_left <= 0 } }
 sr_fl_8_xf_new_min = { sr_fl_8_xf_strength >= sr_fl_minimum_strength }
@@ -6110,7 +6134,7 @@ sr_fl_8_xf_partner_here = {
 }
 sr_fl_8_xf_room = {
 	sr_fl_8_xf_there_marines <= sr_fl_8_xf_there_room
-	OR = { sr_fl_8_xf_left <= 0 sr_fl_8_xf_stay_marines <= sr_fl_8_xf_stay_room }
+	OR = { sr_fl_8_xf_left <= 0 sr_fl_8_xf_stay_over <= sr_fl_8_xf_now_over }
 }
 
 # Transfer (UI pass design § 6): the popup opens where Merge or Detach could run.
@@ -6128,11 +6152,14 @@ sr_fl_9_xf_pick_here = {
 		AND = { scope:pick = 8 has_variable = sr_fl_8_loc has_variable = sr_fl_9_loc var:sr_fl_8_loc = var:sr_fl_9_loc }
 	}
 }
-# Transfer's refusals (sr_fleet_transfer_sgui): something moves; the fleet
-# keeps sr_fl_minimum_strength, unless all of it goes into another fleet; a new
-# fleet gets that much; the fleet it goes into (sr_det_to) is still here; no
-# fleet is left with more marines than its assault carriers hold.
-sr_fl_9_xf_moves = { OR = { sr_fl_9_xf_strength > 0 sr_fl_9_xf_marines_moved > 0 } }
+# Transfer's refusals (sr_fleet_transfer_sgui): something moves (all of a
+# fleet damaged to nothing now takes its full strength along, as Merge did,
+# owner 2026-10-31); the fleet keeps sr_fl_minimum_strength, unless all of it
+# goes into another fleet; a new fleet gets that much; the fleet it goes into
+# (sr_det_to) is still here; the fleet it goes into carries no more marines
+# than its assault carriers hold, and this one no further past its room than
+# it is now.
+sr_fl_9_xf_moves = { OR = { sr_fl_9_xf_strength > 0 sr_fl_9_xf_marines_moved > 0 AND = { sr_fl_9_xf_left <= 0 sr_fl_9_strength_full > 0 } } }
 sr_fl_9_xf_keeps = { sr_fl_9_xf_left >= sr_fl_minimum_strength }
 sr_fl_9_xf_keeps_or_all = { OR = { sr_fl_9_xf_left >= sr_fl_minimum_strength sr_fl_9_xf_left <= 0 } }
 sr_fl_9_xf_new_min = { sr_fl_9_xf_strength >= sr_fl_minimum_strength }
@@ -6150,7 +6177,7 @@ sr_fl_9_xf_partner_here = {
 }
 sr_fl_9_xf_room = {
 	sr_fl_9_xf_there_marines <= sr_fl_9_xf_there_room
-	OR = { sr_fl_9_xf_left <= 0 sr_fl_9_xf_stay_marines <= sr_fl_9_xf_stay_room }
+	OR = { sr_fl_9_xf_left <= 0 sr_fl_9_xf_stay_over <= sr_fl_9_xf_now_over }
 }
 
 # An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the

@@ -227,9 +227,10 @@ sr_fleet_xfer_to_sgui = {
 # amount held to what the slot has (sr_fl_<n>_xf_<role>). Refused, each its own
 # line: nothing moves; no slot is free for a new fleet, or the fleet chosen has
 # left; the fleet would keep less than sr_fl_minimum_strength (all of it into
-# another fleet excepted) or a new fleet get less; a fleet would carry more
-# marines than its assault carriers hold. Not gated by Space Command, as Merge
-# and Detach weren't (UI pass design § 10; an open owner's call).
+# another fleet excepted) or a new fleet get less; the fleet it goes into would
+# carry more marines than its assault carriers hold, or this one be further past
+# its room than it is now. Not gated by Space Command, as Merge and Detach
+# weren't (UI pass design § 10; an open owner's call).
 sr_fleet_transfer_sgui = {
 	scope = country
 	saved_scopes = { op }
