@@ -362,6 +362,8 @@
  video_games_desc:0 "Video games have become a massive new form of entertainment and art. They've had a huge influence on popular culture, and they're only getting more immersive and complex."
  virtual_reality:0 "Virtual Reality"
  virtual_reality_desc:0 "Virtual reality technologies can create incredibly immersive experiences for entertainment, education, and training. It's a new way to interact with the digital world, and it's full of potential."
+ von_neumann_machines:0 "Von Neumann Machines"
+ von_neumann_machines_desc:0 "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched."
  wireless_internet:0 "Wireless Internet (Wi-Fi)"
  wireless_internet_desc:0 "Wi-Fi has made it possible to connect to the internet without cables. It has made our lives more convenient and has revolutionized the way we work, communicate, and entertain ourselves."
  world_wide_web:0 "World Wide Web"

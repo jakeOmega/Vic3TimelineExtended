@@ -39,6 +39,7 @@ te_direct_construction_convert_state_sector = {
 	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 5 PM = pm_reinforced_concrete_buildings }
 	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 6 PM = pm_advanced_construction }
 	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 7 PM = pm_nanomaterial_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 8 PM = pm_self_replicating_construction }
 
 	remove_building = building_construction_sector
 	if = {
@@ -58,13 +59,14 @@ te_direct_construction_convert_state_sector = {
 	te_direct_construction_activate_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
 	te_direct_construction_activate_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
 	te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+	te_direct_construction_activate_site_tier = { TIER = 8 PM = pm_te_direct_construction_self_replicating }
 
 	remove_variable = te_dc_convert_level
 	remove_variable = te_dc_target_tier
 }
 
 # State scope. Tier helpers of the sector conversion and of the AI site guard,
-# which pass the tier through the state variable te_dc_target_tier (1-7, the
+# which pass the tier through the state variable te_dc_target_tier (1-8, the
 # order of pmg_base_te_construction_market_site's direct tiers).
 #
 # Set te_dc_target_tier to TIER if this state's BUILDING runs PM.
@@ -262,6 +264,7 @@ te_direct_construction_restore_site_tier = {
 		te_direct_construction_activate_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
 		te_direct_construction_activate_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
 		te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+		te_direct_construction_activate_site_tier = { TIER = 8 PM = pm_te_direct_construction_self_replicating }
 		remove_variable = te_dc_target_tier
 	}
 }
@@ -287,6 +290,7 @@ te_direct_construction_record_state_site = {
 		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
 		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 6 PM = pm_te_direct_construction_advanced }
 		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 8 PM = pm_te_direct_construction_self_replicating }
 		set_variable = {
 			name = te_dc_site_tier
 			value = var:te_dc_target_tier
