@@ -769,9 +769,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": None},
         "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": None},
         "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": None},
+        "ai_tutors": {"subject": "a small friendly white robot with a glowing blue screen for a face, pointing at a child's blank chalk slate", "seed": None},
         # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},
+        "aneutronic_fusion": {"subject": "a glowing violet plasma ring inside a slim metal torus, with copper current leads drawing a bright spark straight off it", "seed": None},
         "fusion_batteries": {"subject": "a chunky cylindrical battery cell with a glowing sun-like core behind a glass window", "seed": 3},
         "orbital_weapon_platforms": {"subject": "a large armed space station with a long cannon barrel and solar panel wings", "seed": 1},
         "space_based_solar_power": {"subject": "a vast orbiting solar panel array sending a thin red energy beam downward", "seed": 0},

@@ -1463,6 +1463,17 @@ covert_tech_stealable_military = {
 			$TARGET$ ?= { has_technology_researched = advanced_submarine_technology }
 		}
 		AND = {
+			NOT = { has_technology_researched = aneutronic_fusion }
+			OR = {
+				can_research = aneutronic_fusion
+				AND = {
+					is_researching_technology = aneutronic_fusion
+					has_technology_researched = compact_fusion_reactors
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = aneutronic_fusion }
+		}
+		AND = {
 			NOT = { has_technology_researched = anti_sub_warfare }
 			OR = {
 				can_research = anti_sub_warfare
@@ -1878,7 +1889,7 @@ covert_tech_stealable_military = {
 				can_research = fusion_batteries
 				AND = {
 					is_researching_technology = fusion_batteries
-					has_technology_researched = compact_fusion_reactors
+					has_technology_researched = aneutronic_fusion
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = fusion_batteries }

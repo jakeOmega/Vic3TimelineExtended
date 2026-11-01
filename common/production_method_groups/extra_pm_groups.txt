@@ -132,6 +132,7 @@ INJECT:pmg_steelmaking_process = {
 		pm_aluminum_substitution
 		pm_chromium_substitution
 		pm_microgravity_alloying
+		pm_fusion_torch_reclamation
 	}
 }
 INJECT:pmg_automation_building_steel_mill = {
@@ -882,6 +883,7 @@ REPLACE_OR_CREATE:pmg_power_automation = {
 		pm_power_integrated_smart_systems
 		pm_ai_managed_power_plant
 		pm_ai_managed_power_plant_reactor
+		pm_ai_managed_power_plant_aneutronic
 		pm_ai_managed_power_plant_hydro
 	}
 }
@@ -904,6 +906,7 @@ REPLACE_OR_CREATE:pmg_base_building_fusion_power = {
 		pm_base_building_tokamak_fusion_power
 		pm_base_building_inertial_fusion_power
 		pm_base_building_compact_modular_fusion_power
+		pm_base_building_aneutronic_fusion_power
 	}
 }
 REPLACE_OR_CREATE:pmg_base_building_renewable_power = {

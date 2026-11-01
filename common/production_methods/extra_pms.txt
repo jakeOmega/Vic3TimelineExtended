@@ -5876,6 +5876,50 @@ pm_microgravity_alloying = {
 	required_input_goods = electricity
 }
 
+# Fusion Torch Reclamation (Aneutronic Fusion, era 13 spec § 7.8): the fusion
+# torch Eastlund and Gough proposed in 1969, a plasma hot enough to break scrap
+# and waste back into its elements. It trades ore for electricity: a third of
+# Microgravity Alloying's iron, no coal and no launch capacity, for over three
+# times the electricity, at the same steel and staff.
+pm_fusion_torch_reclamation = {
+	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		aneutronic_fusion
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (10.00%)
+			goods_input_electricity_add = 600                    # Price:   30, Total cost: 18000.0 (90.00%)
+			# Output goods
+			goods_output_steel_add = 600                         # Price:   50, Total cost: 30000.0 (100.00%)
+			# Total input cost: 20000.0
+			# Total output cost: 30000.0
+			# Profit: 10000.0
+			# Profit margin: 50.00%
+			# Zero profit price multiplier: 0.67
+			# Employment: 3000
+			# Wage breakeven: 3.33
+		}
+
+		level_scaled = {
+			# employment
+			building_employment_laborers_add = 2000
+			building_employment_engineers_add = 1000
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_bespoke_alloys = {
 	texture = "gfx/interface/icons/production_method_icons/chrome.dds"
 
@@ -5889,6 +5933,7 @@ pm_bespoke_alloys = {
 		pm_aluminum_substitution
 		pm_chromium_substitution
 		pm_microgravity_alloying
+		pm_fusion_torch_reclamation
 	}
 
 	building_modifiers = {
@@ -11400,6 +11445,58 @@ pm_base_building_compact_modular_fusion_power = {
 	required_input_goods = digital_access
 }
 
+# Aneutronic Fusion (era 13 spec § 7.8): proton-boron fusion releases charged
+# particles, not neutrons, and its current is drawn straight from the plasma.
+# Against Compact Fusion Power: a third more electricity, a quarter of the
+# engines (no turbines to drive) and of the lead (almost no neutron shielding;
+# the mod has no radioactive-waste mechanic, so "no waste" is this cut), more
+# tech metals (the boron fuel cycle and its magnets), more electronic
+# components (direct energy converters) and advanced materials, and a smaller
+# staff with no turbine hall: 950 a level, not 1,100. The staff differs from
+# the other reactor bases, so its AI-managed tier is its own method,
+# pm_ai_managed_power_plant_aneutronic (#996: each cut must be exact).
+pm_base_building_aneutronic_fusion_power = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		aneutronic_fusion
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_engines_add = 25                         # Price:   60, Total cost:  1500.0 (0.98%)
+			goods_input_electronic_components_add = 500          # Price:   80, Total cost: 40000.0 (26.23%)
+			goods_input_digital_access_add = 200                 # Price:  120, Total cost: 24000.0 (15.74%)
+			goods_input_radios_add = 50                          # Price:   80, Total cost:  4000.0 (2.62%)
+			goods_input_digital_assets_add = 50                  # Price:  100, Total cost:  5000.0 (3.28%)
+			goods_input_lead_add = 25                            # Price:   40, Total cost:  1000.0 (0.66%)
+			goods_input_tech_metals_add = 100                    # Price:   80, Total cost:  8000.0 (5.25%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (1.31%)
+			goods_input_telephones_add = 100                     # Price:   70, Total cost:  7000.0 (4.59%)
+			goods_input_advanced_materials_add = 15              # Price: 4000, Total cost: 60000.0 (39.34%)
+			# Output goods
+			goods_output_electricity_add = 16000                 # Price:   30, Total cost: 480000.0 (100.00%)
+			# Total input cost: 152500.0
+			# Total output cost: 480000.0
+			# Profit: 327500.0
+			# Profit margin: 214.75%
+			# Zero profit price multiplier: 0.32
+			# Employment: 950
+			# Wage breakeven: 344.74
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 450
+			building_employment_machinists_add = 300
+			building_employment_engineers_add = 100
+			building_employment_academics_add = 100
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
 pm_base_building_renewable_power = {
 	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p1.dds"
 
@@ -11622,6 +11719,58 @@ pm_ai_managed_power_plant_reactor = {
 		level_scaled = {
 			building_employment_laborers_add = -500
 			building_employment_machinists_add = -400
+			building_employment_engineers_add = -100
+			building_employment_academics_add = -100
+		}
+
+		unscaled = {
+			building_employment_engineers_add = 1000
+			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# other jobs, and an employed pop's job satisfaction grows with it.
+			building_job_attractiveness_mult = 5
+		}
+	}
+
+	required_input_goods = digital_access
+}
+
+pm_ai_managed_power_plant_aneutronic = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_green_p4.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		smart_grids
+	}
+
+	# Split by base method so every cut is exact (#996); hidden when
+	# unavailable, so a building shows one AI-managed option. Aneutronic
+	# Fusion Power staffs 950 a level, not the other reactors' 1,100.
+	unlocking_production_methods = {
+		pm_base_building_aneutronic_fusion_power
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (27.97%)
+			goods_input_transportation_add = 1                   # Price:   30, Total cost:    30.0 (2.10%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (27.97%)
+			goods_input_digital_access_add = 5                   # Price:  120, Total cost:   600.0 (41.96%)
+			# Output goods
+			# Total input cost: 1430.0
+			# Total output cost: 0
+			# Profit: -1430.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: -950
+			# Wage breakeven: 1.51
+		}
+
+		# Flat crew (as pm_ai_managed_fab, #993): the cut cancels the per-level
+		# workforce, and a fixed crew runs the building at any size.
+		level_scaled = {
+			building_employment_laborers_add = -450
+			building_employment_machinists_add = -300
 			building_employment_engineers_add = -100
 			building_employment_academics_add = -100
 		}
@@ -18467,8 +18616,10 @@ pm_deep_space_exploration = {
 pm_interstellar_mission = {
 	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p6.dds"
 
+	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31); old saves:
+	# te_repair_era_13_technologies (te_old_save_repairs.txt)
 	unlocking_technologies = {
-		compact_fusion_reactors
+		aneutronic_fusion
 	}
 
 	building_modifiers = {

@@ -104,6 +104,82 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: AI Tutors
+
+1. **The tree.** AI Tutors sits in era 11's society column, its arrow from
+   Digital Education (era 9), and borrows Digital Education's icon until its
+   own is painted. Its tooltip lists qualifications +10%, literacy growth,
+   education access +10 and the Ministry of Thought Control's maximum
+   investment +1.
+2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
+   Ministry of Thought Control, not +3. Under the Ministry of Thought Control
+   law with Cyber Warfare, Brain-Computer Interfaces, Human Augmentation and AI
+   Tutors researched, the ministry's maximum investment reads 9. In an old
+   save, a country at level 9 without AI Tutors now has a ceiling of 8: record
+   whether the engine lowers its investment at once or holds it until it
+   changes (no repair grants AI Tutors for it).
+3. **Education access.** A state's education access rises by 10 points when
+   AI Tutors completes, and its breakdown names the technology.
+4. **Lessons Between the Lines** (`event society_technology_events.36` in a
+   country under Unregulated Internet with AI Tutors). It shows the
+   whistleblower picture. The first option gives Open Curricula, capitalist
+   radicals, and the Intelligentsia's and Industrialists' approval lines; the
+   second gives Contracted Curriculum and the reverse approvals.
+5. **The Ministry's Syllabus** (`event society_technology_events.37`). Its
+   description names the Ministry of Thought Control, the Ministry of
+   Propaganda, or the censors under State-Controlled Internet alone. The
+   second option radicalizes bureaucrats.
+6. **The loyalty line.** Contracted Curriculum and The State Syllabus show a
+   Monthly Loyalists line of 0.1%. The type sets no `decimals`, so confirm it
+   doesn't render as 0%. After either, an incorporated state's pops gain
+   loyalists each month, even in a country without a Ministry of Thought
+   Control (the state's Monthly Loyalists breakdown names the modifier), and
+   the line fades over ten years.
+7. **Once each.** Neither event comes back in the same country, whichever
+   option was taken.
+
+## Phase 3: Aneutronic Fusion
+
+1. **The tree.** Aneutronic Fusion sits in era 13's military column after
+   Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
+   from Compact Fusion Reactors. It borrows Compact Fusion Reactors' icon
+   until its own is painted. Its tooltip names Aneutronic Fusion Power, Fusion
+   Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
+   no longer names the Interstellar Mission.
+2. **Aneutronic Fusion Power.** A Fusion Plant offers it after Compact Fusion
+   Power, with a purple bolt as a borrowed icon. A level employs 950 (450
+   laborers, 300 machinists, 100 engineers, 100 academics) and makes 16,000
+   electricity before throughput. Its description shows in the tooltip.
+3. **The AI-managed option on it.** With Smart Grids, a Fusion Plant on
+   Aneutronic Fusion Power shows one AI Managed Power Plant option, and on it
+   the building employs only the 1,000-engineer crew, with no laborers,
+   machinists or academics left. Switching the base back to Compact Fusion
+   Power swaps it for the reactor option (one AI-managed option either way).
+   Centralized Control and Integrated Smart Systems leave 30 laborers and 20
+   machinists a level on the new base, never a negative count.
+4. **Fusion Torch Reclamation.** A Steel Mill offers it after Microgravity
+   Alloying: 50 iron and 600 electricity for 600 steel a level, 3,000 staff,
+   pollution 10. Bespoke Alloys can run beside it, and its carbon-capture group
+   shows only the not-applicable option.
+5. **The Interstellar Probe** in a new game: the Interstellar Mission method,
+   Begin the Interstellar Mission and the inactive Interstellar Probe entry
+   all wait for Aneutronic Fusion. A country with Compact Fusion Reactors and
+   the Deep-Space Probe and Mars Landing done sees none of them.
+6. **Old saves** (a save from before this change):
+   - A Microfusion Cells holder is given Aneutronic Fusion in the first month.
+   - A Compact Fusion Reactors holder whose Space Program runs the
+     Interstellar Mission is given it too, whether its probe is running,
+     finished or not yet started.
+   - A Compact Fusion Reactors holder on a lower mission gets nothing.
+   - One `TE_ERA13_TECH_REPAIR` line per grant.
+   - **A probe under way keeps its progress.** Its entry's `possible` now
+     names Aneutronic Fusion, so it may deactivate before the repair month and
+     re-activate on the grant. Record whether the bar comes back where it was,
+     or at 0 (the monthly milestone cleanup ran between them), and whether the
+     engine moved the Space Program off the Interstellar Mission at the load
+     (the entry would then fail with Program Discontinued). Either one means
+     the repair needs a day-one on-action.
+
 ## Phase 3: Vactrains
 
 1. **The tree.** Vactrains sits in era 12's production column, after
