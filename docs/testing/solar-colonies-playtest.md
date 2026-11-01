@@ -873,3 +873,9 @@ gotcha).
     location, the slot read from a country variable. Scroll Space Fleets with nine fleets at locations too: each row
     now asks four posture buttons' `IsValid` (36 a frame for nine fleets), where the step button asked one. Fallback
     if that stutters: the four buttons' state from one display value a fleet, set monthly and on each order.
+11. **The two buttons' gates (#1298).** The destination and target buttons grey on `sr_fleet_pick_sgui` and
+    `sr_fleet_target_sgui`, which lost their effects (never run) in #1298. Hover a greyed target button (no hostile
+    site at the fleet's location, or no Space Command in a state we control): the hover still opens with the
+    reason, then the target. The destination button's hover still opens with the leg. A missing reason or a raw
+    key means `IsValidTooltip` reads differently from a scripted GUI with no `effect`; the fallback is an `effect`
+    holding only its `custom_tooltip`.
