@@ -11,8 +11,8 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
   - `summer_mean_c` (`te_climate_summer_mean`): the warmest month's mean temperature, °C.
   - `summer_humidity` (`te_climate_summer_humidity`): that month's dew point as a class, 0 dry (under 10 °C), 1 moderate (10–16), 2 humid (16–20), 3 oppressive (over 20).
   - `winter_mean_c` (`te_climate_winter_mean`): the coldest month's mean, °C.
-  - `aridity` (`te_climate_aridity`): water for settlement, 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river or oasis that waters the main settled area counts as ample, so the Nile valley is 0.
-  - `malaria` (`te_climate_malaria`): malaria as of 1836, from history rather than vanilla's traits. 0 none, 1 seasonal or local, 2 endemic.
+  - `aridity` (`te_climate_aridity`): water for settlement, 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river whose valley holds the main settled area counts as ample, so the Nile valley is 0; a desert whose settled area a lesser river or a large oasis waters is 1 (Lima, Isfahan); a desert of small oases and wells is 2 (Ghardaia). Ruled 2026-11-01 when the eight agents' rows were merged.
+  - `malaria` (`te_climate_malaria`): malaria as of 1836, from history rather than vanilla's traits. 0 none, 1 seasonal or local, 2 endemic. Local ague in a region's lowland counts as 1 (the Sologne, the unregulated Rhine plain, the Mälaren basin), as do the Hungarian plain and the Yangtze lowland's vivax.
   - `latitude` (`te_climate_latitude`): signed degrees of the reference place.
   - `ref_place` and `reason`: the place the figures describe and a short note on the climate. CSV only, never shown in game.
 - **Neutral defaults:** a region with no row (one a vanilla patch adds) reads summer 15, winter 15 and zero for the rest, which costs no comfort, and `te_climate_has_record` is 0.

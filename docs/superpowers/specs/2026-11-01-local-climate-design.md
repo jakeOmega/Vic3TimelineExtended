@@ -148,7 +148,7 @@ normals *(designer's call)*:
 | `summer_mean_c` | Warmest month's mean temperature, °C, integer | 28 |
 | `summer_humidity` | The warmest month's mean dew point as a class: 0 dry (under 10 °C), 1 moderate (10–16), 2 humid (16–20), 3 oppressive (over 20). A dry-summer Mediterranean climate is 0 or 1 | 3 |
 | `winter_mean_c` | Coldest month's mean temperature, °C, integer | 8 |
-| `aridity` | Water for settlement at the reference place: 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river or oasis that waters the main settled area counts as ample, so the Nile valley is 0 | 0 |
+| `aridity` | Water for settlement at the reference place: 0 ample, 1 limited (Köppen BS), 2 scarce (Köppen BW). A great river whose valley holds the main settled area counts as ample, so the Nile valley is 0; a desert whose settled area a lesser river or a large oasis waters is 1 (Lima, Isfahan); a desert of small oases and wells is 2 (Ghardaia; ruled 2026-11-01 at the merge) | 0 |
 | `malaria` | Malaria as of 1836: 0 none, 1 seasonal or local, 2 endemic | 2 |
 | `latitude` | Signed degrees of the reference place, integer | 32 |
 | `ref_place` | The place the figures describe (CSV only) | Savannah |

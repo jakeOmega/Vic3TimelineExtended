@@ -103,6 +103,15 @@ class Committed(unittest.TestCase):
     def test_csv_rows_validate(self):
         self.assertEqual(gen.validate(gen.load_rows(), gen.land_regions(), gen.region_traits()), [])
 
+    def test_every_land_region_has_a_row(self):
+        self.assertEqual({r.state for r in gen.load_rows()}, gen.land_regions())
+
+    def test_rows_follow_map_order(self):
+        """Rows sit in map_data file order, then order within the file, so a diff reads by region."""
+        order = gen.region_order()
+        states = [r.state for r in gen.load_rows()]
+        self.assertEqual(states, [s for s in order if s in set(states)])
+
     def test_land_regions_skip_seas(self):
         regions = gen.land_regions()
         self.assertIn("STATE_GEORGIA", regions)
