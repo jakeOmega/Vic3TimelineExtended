@@ -209,7 +209,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 17)
+        self.assertEqual(len(names), 18)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -348,33 +348,31 @@ class UpkeepTest(unittest.TestCase):
         apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
         self.assertIn("is_building_type = building_space_command", apply)
         self.assertLess(apply.index("remove_modifier = sr_fleet_upkeep_goods"), apply.index("add_modifier"))
-        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root\.var:sr_fleet_upkeep_per_building > 0\s*\}\s*"
-                                r"add_modifier = \{ name = sr_fleet_upkeep_goods multiplier = root\.var:sr_fleet_upkeep_per_building \}")
+        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root\.var:sr_fleet_upkeep_units > 0\s*\}\s*"
+                                r"add_modifier = \{ name = sr_fleet_upkeep_goods multiplier = root\.var:sr_fleet_upkeep_units \}")
         calls = re.findall(r"sr_fl_upkeep_apply = yes", _strip(_raw(FLEET_EFFECTS)))
         self.assertEqual(len(calls), 1)
         refreshes = re.findall(r"sr_fl_upkeep_refresh = yes", _strip(_raw(FLEET_EFFECTS)) + _strip(_raw(DEBUG_EVENTS)))
         self.assertEqual(len(refreshes), 1)
 
-    def test_a_second_building_doesn_t_charge_twice(self):
-        """I1 (PR 7 task review): the units are split between the Space
-        Command buildings of a level or more, so the fleets pay once."""
+    def test_one_building_carries_the_whole_upkeep(self):
+        """One Space Command a nation (owner, 2026-10-31) replaced PR 7's
+        split: the upkeep sits on the one building at the fleets' units."""
         values = _strip(_raw(FLEET_VALUES))
+        self.assertNotIn("sr_fleet_upkeep_per_building_value", values)
+        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
+        self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_units value = sr_fleet_upkeep_units_value \}\s*"
+                                  r"if = \{\s*limit = \{ has_variable = sr_fleet_upkeep_per_building \}\s*"
+                                  r"remove_variable = sr_fleet_upkeep_per_building\s*\}\s*sr_fl_upkeep_apply = yes")
+        # Nothing reads the old split's variable any more.
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertNotIn("var:sr_fleet_upkeep_per_building", everything)
+        self.assertNotIn("name = sr_fleet_upkeep_per_building", everything)
+        # The count the sweep reads: every state's buildings (an occupied one's
+        # included), of a level or more, as the apply walks them.
         count = _block(values, "sr_sc_buildings")
         self.assertRegex(count, r"every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*"
                                 r"is_building_type = building_space_command\s*level >= 1\s*\}\s*add = 1")
-        per = _block(values, "sr_fleet_upkeep_per_building_value")
-        # The whole block: nothing after the division undoes it.
-        self.assertRegex(per, r"^\s*value = sr_fleet_upkeep_units_value\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}\s*"
-                              r"divide = sr_sc_buildings\s*\}\s*$")
-        # The count and the apply walk the same buildings: every state's (an
-        # occupied one's included), of a level or more.
-        apply = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_apply")
-        for body in (count, apply):
-            self.assertRegex(body, r"^\s*(value = 0\s*)?every_scope_state = \{\s*every_scope_building = \{\s*limit = \{\s*is_building_type = building_space_command")
-        self.assertIn("level >= 1", apply)
-        refresh = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_refresh")
-        self.assertRegex(refresh, r"set_variable = \{ name = sr_fleet_upkeep_per_building value = sr_fleet_upkeep_per_building_value \}\s*"
-                                  r"sr_fl_upkeep_apply = yes")
 
     def test_the_upkeep_probe_is_retired(self):
         """§ 10's fixed line answered the 6a upkeep_inputs probe's question."""
@@ -396,7 +394,7 @@ class UpkeepTest(unittest.TestCase):
                         refresh.index("set_variable = { name = sr_fleet_upkeep_units"))
         check = _block(_strip(_raw(FLEET_EFFECTS)), "sr_fl_upkeep_self_check")
         self.assertIn("NOT = { has_global_variable = sr_fl_upkeep_line_checked }", check)
-        self.assertIn("var:sr_fleet_upkeep_per_building > 0", check)
+        self.assertIn("var:sr_fleet_upkeep_units > 0", check)
         self.assertIn("has_modifier = sr_fleet_upkeep_goods", check)
         # The three axes registered for the line, each against 9 x the building's units.
         for good, var in (("robotics", "sr_fl_upkeep_line_read"), ("telephones", "sr_fl_upkeep_line_read_tel"),
@@ -405,7 +403,8 @@ class UpkeepTest(unittest.TestCase):
                 self.assertIn(f"set_variable = {{ name = {var} value = prev.modifier:goods_input_{good}_mult }}", check)
                 self.assertIn(f"var:{var} > {{ value = var:sr_fl_upkeep_line_want subtract = 0.01 }}", check)
                 self.assertIn(f"var:{var} < {{ value = var:sr_fl_upkeep_line_want add = 0.01 }}", check)
-        self.assertRegex(check, rf"value = var:sr_fleet_upkeep_per_building\s*multiply = {self.K}")
+        self.assertRegex(check, rf"value = var:sr_fleet_upkeep_units\s*multiply = {self.K}")
+        self.assertNotIn("per_building", check)
         self.assertIn("TE_SELF_CHECK OK fleet_upkeep_line", check)
         self.assertIn("TE_SELF_CHECK BROKEN fleet_upkeep_line", check)
 
@@ -413,6 +412,317 @@ class UpkeepTest(unittest.TestCase):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_upkeep_pct")
         # The whole fleet's, and nothing with no Space Command to carry it.
         self.assertRegex(shown, rf"limit = \{{ sr_sc_buildings >= 1 \}}\s*value = sr_fleet_upkeep_units_value\s*multiply = {self.K * 100}")
+
+
+class OneSpaceCommandTest(unittest.TestCase):
+    """A nation runs one Space Command (owner, 2026-10-31): with two or more of
+    a level or more, the month's first step keeps the one with the most levels
+    (the market capital's on a tie) and dismantles the rest, telling a player
+    of each."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.sweep = _block(cls.effects, "sr_sc_one_per_nation")
+
+    def test_it_runs_first_in_the_month(self):
+        month = _block(self.effects, "sr_fl_country_month")
+        self.assertTrue(month.strip().startswith("sr_sc_one_per_nation = yes"))
+        for later in ("sr_sc_month = yes", "sr_fl_upkeep_refresh = yes", "sr_fl_each_slot = { DO = month }"):
+            with self.subTest(step=later):
+                self.assertLess(month.index("sr_sc_one_per_nation = yes"), month.index(later))
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("sr_sc_one_per_nation = yes"), 1)
+
+    def test_it_acts_only_on_a_second_building(self):
+        self.assertRegex(self.sweep, r"^\s*if = \{\s*limit = \{ sr_sc_buildings > 1 \}")
+
+    def test_the_keeper_has_the_most_levels_and_the_capital_breaks_a_tie(self):
+        self.assertRegex(self.sweep, r"ordered_scope_state = \{\s*limit = \{ has_building = building_space_command \}\s*"
+                                     r"order_by = sr_sc_keeper_score\s*max = 1\s*save_scope_as = sr_sc_keeper\s*\}")
+        score = _block(self.values, "sr_sc_keeper_score")
+        self.assertRegex(score, r"limit = \{ has_building = building_space_command \}\s*"
+                                r"value = b:building_space_command\.level\s*multiply = 10")
+        # A level outweighs the capital: 10 a level against 1.
+        self.assertRegex(score, r"limit = \{\s*exists = owner\.market_capital\s*owner\.market_capital = this\s*\}\s*add = 1\s*\}\s*$")
+
+    def test_every_other_one_is_removed(self):
+        m = re.search(r"every_scope_state = \{\s*limit = \{\s*has_building = building_space_command\s*"
+                      r"NOT = \{ this = scope:sr_sc_keeper \}\s*\}", self.sweep)
+        self.assertIsNotNone(m)
+        body = _block("x = {" + self.sweep[m.start() + len("every_scope_state = {"):], "x")
+        self.assertTrue(body.rstrip().endswith("remove_building = building_space_command"))
+        self.assertEqual(self.sweep.count("remove_building"), 1)
+
+    def test_a_player_hears_of_each(self):
+        self.assertRegex(self.sweep, r"limit = \{ owner = \{ is_player = yes \} \}\s*"
+                                     r"save_scope_as = sr_sc_dismantled\s*"
+                                     r"owner = \{ post_notification = sr_space_command_dismantled_notice \}")
+        # Told before the building goes.
+        self.assertLess(self.sweep.index("post_notification"), self.sweep.index("remove_building"))
+        messages = _strip(_raw(ROOT / "common/messages/extra_messages.txt"))
+        body = _block(messages, "sr_space_command_dismantled_notice")
+        self.assertIn("type = country", body)
+        self.assertIn("notification_type = feed", body)
+        loc = _raw(ROOT / "localization/english/te_notifications_l_english.yml")
+        desc = re.search(r'(?m)^ notification_sr_space_command_dismantled_notice_desc:0 "(.*)"$', loc).group(1)
+        self.assertIn("[SCOPE.sState('sr_sc_dismantled').GetName]", desc)
+        self.assertIn("[SCOPE.sState('sr_sc_keeper').GetName]", desc)
+        # The tie goes to the market capital, which needn't have more levels
+        # (review of #1287, M2).
+        self.assertIn("market capital", desc)
+        self.assertNotIn("the one with the most levels", desc)
+        for suffix in ("_name", "_tooltip"):
+            with self.subTest(key=suffix):
+                self.assertRegex(loc, rf"(?m)^ notification_sr_space_command_dismantled_notice{suffix}:0 ")
+
+    def test_a_second_is_refused_at_the_source_and_the_one_held_expands(self):
+        """Review of #1287, I2: a new Space Command needs the Space Program and
+        no other of a level or more, with the reason shown; the one a country
+        has expands where it stands, so an AI that kept an annexed one neither
+        stalls at its levels nor re-queues one the sweep removes."""
+        building = _block(_strip(_raw(BUILDING)), "building_space_command")
+        possible = _block("x = {" + building.split("possible = {", 1)[1], "x")
+        self.assertRegex(possible, r"^\s*trigger_if = \{\s*limit = \{ has_building = building_space_command \}\s*always = yes\s*\}\s*"
+                                   r"trigger_else = \{\s*has_building = building_space_program\s*"
+                                   r"custom_tooltip = \{\s*text = sr_sc_one_per_nation_tt\s*owner \?= \{\s*NOT = \{\s*"
+                                   r"any_scope_building = \{\s*is_building_type = building_space_command\s*level >= 1\s*\}\s*\}\s*\}\s*\}\s*\}\s*$")
+        loc = _raw(ROOT / "localization/english/te_miscellaneous_l_english.yml")
+        self.assertRegex(loc, r'(?m)^ sr_sc_one_per_nation_tt:0 "[^"]+"$')
+
+    def test_no_text_still_promises_a_split(self):
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for phrase in ("shared between them", "each building's tooltip shows its share", "keeping the larger"):
+            with self.subTest(phrase=phrase):
+                self.assertNotIn(phrase, loc)
+
+
+class PauseTest(unittest.TestCase):
+    """Pausing Space Command (owner, 2026-10-31): paused, a country builds no
+    fleet strength and its yards buy none of their inputs; fleets, the reserve
+    and Auto carry on. The AI pauses in default, or in deficit at peace."""
+
+    INPUTS = ("launch_capacity", "advanced_materials", "electricity")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.earth = _strip(_raw(EARTH_EFFECTS))
+
+    def test_the_toggle_and_its_variable(self):
+        self.assertRegex(_block(self.triggers, "sr_sc_is_paused"), r"^\s*has_variable = sr_sc_paused\s*$")
+        self.assertRegex(_block(self.triggers, "sr_sc_is_resuming"), r"^\s*has_variable = sr_sc_resume_pending\s*$")
+        toggle = _block(self.effects, "sr_sc_toggle_pause")
+        # Resuming, a click cancels; paused, it asks to resume; building, it
+        # pauses at once. Paused is yes; building is the variable's absence.
+        self.assertRegex(toggle, r"^\s*if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*remove_variable = sr_sc_resume_pending\s*\}\s*"
+                                 r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                                 r"set_variable = \{ name = sr_sc_resume_pending value = yes \}\s*\}\s*"
+                                 r"else = \{\s*set_variable = \{ name = sr_sc_paused value = yes \}\s*\}\s*"
+                                 r"sr_sc_pause_apply = yes\s*$")
+        # A click never ends the pause itself: only the step (or the AI's
+        # resume, at its step) clears sr_sc_paused.
+        self.assertNotIn("remove_variable = sr_sc_paused", toggle)
+        self.assertNotIn("sr_sc_clear_pause", toggle)
+        sgui = _block(self.sguis, "sr_sc_pause_sgui")
+        self.assertIn("always = no", _block("x = {" + sgui.split("ai_is_valid = {", 1)[1], "x"))
+        # The tooltip says what each state's click does; the variable is set out of sight.
+        self.assertRegex(sgui, r"limit = \{ sr_sc_is_resuming = yes \}\s*custom_tooltip = sr_sc_resume_cancel_tt\s*\}\s*"
+                               r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_resume_tt\s*\}\s*"
+                               r"else = \{\s*custom_tooltip = sr_sc_pause_tt\s*\}\s*"
+                               r"hidden_effect = \{\s*sr_sc_toggle_pause = yes\s*\}")
+        clear = _block(self.effects, "sr_sc_clear_pause")
+        for var in ("sr_sc_resume_pending", "sr_sc_paused"):
+            with self.subTest(var=var):
+                self.assertRegex(clear, rf"limit = \{{ has_variable = {var} \}}\s*remove_variable = {var}")
+
+    def test_a_resume_waits_for_the_step_which_builds_nothing(self):
+        """Review of #1287, I1: the build is the month's rate in one lump, so a
+        step may build only when the cut was off since the last one. The build
+        check comes before the pending resume is cleared, and the cut follows
+        after; the other way round, a resume the day before the step would
+        build a month the inputs never paid for."""
+        month = _block(self.effects, "sr_sc_month")
+        build = month.index("limit = { sr_sc_is_paused = yes }")
+        resume = re.search(r"if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*sr_sc_clear_pause = yes\s*\}", month)
+        self.assertIsNotNone(resume, "the step doesn't end a pending resume")
+        apply = month.index("sr_sc_pause_apply = yes")
+        self.assertLess(build, resume.start())
+        self.assertLess(resume.end(), apply)
+        # The build reads the variable alone, never the pending resume.
+        self.assertEqual(month.count("sr_sc_is_resuming"), 1)
+        self.assertEqual(month.count("sr_sc_clear_pause = yes"), 1)
+        # Only the step and the AI end a pause.
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("sr_sc_clear_pause = yes"), 2)
+        self.assertEqual(everything.count("remove_variable = sr_sc_paused"), 1)
+
+    def test_the_month_builds_nothing_while_paused(self):
+        month = _block(self.effects, "sr_sc_month")
+        gate = re.search(r"if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                         r"set_variable = \{ name = sr_sc_built_last value = 0 \}\s*\}\s*else = \{", month)
+        self.assertIsNotNone(gate, "no paused branch reading Built a month 0")
+        build = _block("x = {" + month[gate.end():], "x")
+        self.assertIn("value = sr_sc_rate", build)
+        self.assertRegex(build, r"limit = \{ local_var:sr_sc_points > 0 \}\s*sr_reserve_build = yes")
+        # The month's strength (Space Command's and the Orbital Yards', both in
+        # sr_sc_rate) joins the reserve only there.
+        rest = month.replace(build, "")
+        for name in ("sr_sc_rate", "sr_reserve_build", "sr_mod_units_yard"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, rest)
+        calls = re.findall(r"sr_reserve_build = yes", self.effects + self.earth + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)))
+        self.assertEqual(len(calls), 1)
+        self.assertIn("add = {\n\t\tvalue = sr_mod_units_yard", _block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate"))
+
+    def test_the_panel_reads_paused(self):
+        shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_paused")
+        self.assertRegex(shown, r"if = \{ limit = \{ sr_sc_is_paused = yes \} value = 1 \}\s*"
+                                r"if = \{ limit = \{ sr_sc_is_resuming = yes \} value = 2 \}")
+        gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
+        section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
+                         "te_sr_sec_space_command")
+        def state(cmp, n):
+            return f"[{cmp}_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint){n}' )]\""
+        for key, shown_on in (("je_space_race_widget_sc_rate_figure", state("EqualTo", 0)),
+                              ("je_space_race_widget_sc_rate_paused", state("GreaterThanOrEqualTo", 1)),
+                              ("je_space_race_widget_sc_pause", state("EqualTo", 0)),
+                              ("je_space_race_widget_sc_resume", state("EqualTo", 1)),
+                              ("je_space_race_widget_sc_resuming", state("EqualTo", 2))):
+            with self.subTest(key=key):
+                i = section.index(f'text = "{key}"')
+                self.assertIn(shown_on, _block_around(section, i, 2))
+        self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 3)
+        # Each row's hover is its own (review of #1287, M6).
+        for figure, hover in (("je_space_race_widget_sc_rate_figure", "je_space_race_widget_sc_rate_tt"),
+                              ("je_space_race_widget_sc_rate_paused", "je_space_race_widget_sc_rate_paused_tt")):
+            with self.subTest(row=figure):
+                row = _block_around(section, section.index(f'text = "{figure}"'), 2)
+                self.assertIn(f'tooltip = "{hover}"', row)
+
+    def test_the_modifier_cuts_the_yards_inputs(self):
+        body = _block(_strip(_raw(STATIC)), "sr_space_command_paused")
+        self.assertEqual(re.findall(r"(\w+) = (\S+)", body)[1:],
+                         [(f"goods_input_{g}_mult", "-1") for g in self.INPUTS])
+        # The three are every workforce-scaled input of every yard method, and
+        # none is the maintenance line's (the upkeep stays).
+        text = _strip(_raw(METHODS))
+        for m in re.finditer(r"(?m)^(pm_sr_space_command_\w+) = \{", text):
+            body = _block(text, m.group(1))
+            at = body.index("workforce_scaled = {")
+            self.assertLess(body.index("building_modifiers = {"), at)
+            self.assertLess(at, body.index("state_modifiers = {"))
+            scaled = _block(body[at:], "workforce_scaled")
+            with self.subTest(method=m.group(1)):
+                goods = set(re.findall(r"goods_input_(\w+)_add", scaled))
+                self.assertTrue(goods)
+                self.assertLessEqual(goods, set(self.INPUTS))
+        self.assertFalse(set(self.INPUTS) & set(UpkeepTest.LINE))
+
+    def test_one_apply_site_removed_first(self):
+        everything = "\n".join(_strip(p.read_text(encoding="utf-8-sig"))
+                               for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("add_modifier = { name = sr_space_command_paused"), 1)
+        apply = _block(self.effects, "sr_sc_pause_apply")
+        self.assertIn("is_building_type = building_space_command", apply)
+        self.assertLess(apply.index("remove_modifier = sr_space_command_paused"), apply.index("add_modifier"))
+        self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root = \{ sr_sc_is_paused = yes \}\s*\}\s*"
+                                r"add_modifier = \{ name = sr_space_command_paused \}")
+        # Three callers: the monthly step, the toggle and the AI's resume.
+        self.assertEqual(everything.count("sr_sc_pause_apply = yes"), 3)
+        for caller in ("sr_sc_month", "sr_sc_toggle_pause", "sr_sc_ai_pause_review"):
+            with self.subTest(caller=caller):
+                self.assertEqual(_block(self.effects, caller).count("sr_sc_pause_apply = yes"), 1)
+        # The toggle's callers: the button and the AI's pause.
+        self.assertEqual(everything.count("sr_sc_toggle_pause = yes"), 2)
+        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_toggle_pause = yes"), 1)
+        # A building modifier, never the country's.
+        self.assertIn('"sr_space_command_paused": "a Space Command building"',
+                      _raw(ROOT / "scripts/generators/gen_nation_tab.py"))
+
+    def test_the_cut_reaches_every_state_s_space_command(self):
+        """Review of #1287, M6: every state the country owns, an occupied one's
+        included (it buys its inputs while its staff work), so the walk has
+        no other limit."""
+        apply = _block(self.effects, "sr_sc_pause_apply")
+        self.assertRegex(apply, r"^\s*every_scope_state = \{\s*limit = \{ has_building = building_space_command \}\s*"
+                                r"every_scope_building = \{\s*limit = \{ is_building_type = building_space_command \}")
+        self.assertNotIn("sr_state_held_by_owner", apply)
+
+    def test_the_texts_exist(self):
+        """Review of #1287, M6: the hovers and the modifier's description,
+        each with text (loc_coverage doesn't read custom tooltips' keys)."""
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for key in ("sr_sc_pause_tt", "sr_sc_resume_tt", "sr_sc_resume_cancel_tt", "sr_space_command_paused",
+                    "sr_space_command_paused_desc", "je_space_race_widget_sc_rate_paused_tt",
+                    "je_space_race_widget_sc_pause", "je_space_race_widget_sc_resume", "je_space_race_widget_sc_resuming"):
+            with self.subTest(key=key):
+                m = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc)
+                self.assertIsNotNone(m, f"no {key}")
+                self.assertTrue(m.group(1).strip(), f"{key} is empty")
+        # The resume's hover says it waits and a click cancels.
+        resume = re.search(r'(?m)^ sr_sc_resume_tt:0 "(.*)"$', loc).group(1)
+        self.assertIn("next month's construction", resume)
+        self.assertIn("cancels", resume)
+
+    def test_the_ai_pauses_under_fiscal_stress(self):
+        should = _block(self.triggers, "sr_sc_ai_should_pause")
+        self.assertRegex(should, r"^\s*OR = \{\s*in_default = yes\s*AND = \{\s*net_fixed_income < 0\s*"
+                                 r"is_at_war = no\s*\}\s*\}\s*$")
+        # The same fiscal terms the AI builds Space Command on, turned round.
+        build = _block(self.triggers, "sr_sc_may_build_government")
+        self.assertIn("in_default = no", build)
+        self.assertIn("net_fixed_income > 0", build)
+
+    def test_the_ai_resumes_out_of_it_six_months_on(self):
+        resume = _block(self.triggers, "sr_sc_ai_may_resume")
+        self.assertRegex(resume, r"^\s*in_default = no\s*OR = \{\s*net_fixed_income > 0\s*is_at_war = yes\s*\}\s*"
+                                 r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*$")
+        review = _block(self.effects, "sr_sc_ai_pause_review")
+        self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_has_space_command = yes\s*"
+                                 r"sr_sc_ai_should_pause = yes\s*\}\s*"
+                                 r"sr_sc_toggle_pause = yes\s*"
+                                 r"set_variable = \{ name = sr_sc_pause_hold value = yes months = 6 \}\s*\}\s*"
+                                 r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_ai_may_resume = yes\s*\}\s*"
+                                 r"sr_sc_clear_pause = yes\s*sr_sc_pause_apply = yes\s*\}\s*$")
+        # The hold is the AI's alone, on the country (not a container: a timed
+        # variable there runs down).
+        everything = "\n".join(_strip(_raw(p)) for p in (ROOT / "common").rglob("*.txt"))
+        self.assertEqual(everything.count("name = sr_sc_pause_hold"), 1)
+        # In the AI branch of the country's month, after its construction.
+        month = _block(self.effects, "sr_fl_country_month")
+        self.assertRegex(month, r"limit = \{ is_ai = yes \}\s*sr_fl_ai_review = yes\s*sr_sc_ai_pause_review = yes\s*\}")
+        self.assertLess(month.index("sr_sc_month = yes"), month.index("sr_sc_ai_pause_review = yes"))
+
+    def test_orders_the_reserve_and_auto_are_untouched(self):
+        generated = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        bodies = {
+            "sr_sc_operational": _block(self.triggers, "sr_sc_operational"),
+            "sr_reserve_may_launch": _block(self.triggers, "sr_reserve_may_launch"),
+            "sr_reserve_auto_on": _block(self.triggers, "sr_reserve_auto_on"),
+            "sr_reserve_launch": _block(self.earth, "sr_reserve_launch"),
+            "sr_reserve_auto_step": _block(self.earth, "sr_reserve_auto_step"),
+            "sr_reserve_toggle_auto": _block(self.earth, "sr_reserve_toggle_auto"),
+            "sr_fl_1_may_depart_mars": _block(generated, "sr_fl_1_may_depart_mars"),
+        }
+        for name, body in bodies.items():
+            with self.subTest(name=name):
+                self.assertNotIn("sr_sc_paused", body)
+                self.assertNotIn("sr_sc_is_paused", body)
+        # Auto's step runs every month, paused or not.
+        month = _block(self.effects, "sr_sc_month")
+        self.assertTrue(month.rstrip().endswith("\n\tsr_sc_pause_apply = yes\n\tsr_reserve_auto_step = yes"))
+        for lim in _enclosing_limits(month, month.index("sr_reserve_auto_step = yes")):
+            self.assertNotIn("sr_sc_is_paused", lim)
+        # Only Space Command's own month, its panel, its button and the AI read it.
+        readers = set()
+        for path in (ROOT / "common").rglob("*.txt"):
+            if "sr_sc_is_paused = yes" in _strip(_raw(path)):
+                readers.add(path.name)
+        self.assertEqual(readers, {"sr_fleet_effects.txt", "sr_fleet_sguis.txt", "sr_fleet_display_values.txt"})
 
 
 class ShippingTest(unittest.TestCase):
@@ -947,7 +1257,7 @@ class OrbitalSuperiorityTest(unittest.TestCase):
 
     def test_the_margin(self):
         margin = _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin")
-        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = var:sr_fl_at_earth",
+        for line in ("limit = { has_variable = sr_fl_at_earth }", "value = sr_fl_at_earth_ready",
                      "subtract = sr_loc_ai_enemy_fleets_earth", "min = sr_orbital_superiority_floor",
                      "max = 1", "min = 0"):
             with self.subTest(line=line):
@@ -1249,7 +1559,9 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertIn("sr_loc_add_present = { LOC = earth }", note)
         self.assertNotIn("posture", note)
         self.assertNotIn("posture", _block(_strip(_raw(FLEET_EFFECTS)), "sr_loc_add_present"))
-        self.assertIn("value = var:sr_fl_at_earth", _block(_strip(_raw(FLEET_VALUES)), "sr_orbital_superiority_margin"))
+        values = _strip(_raw(FLEET_VALUES))
+        self.assertIn("value = sr_fl_at_earth_ready", _block(values, "sr_orbital_superiority_margin"))
+        self.assertIn("value = var:sr_fl_at_earth", _block(values, "sr_fl_at_earth_ready"))
 
 
 class EarthAlertTest(unittest.TestCase):
@@ -1444,8 +1756,8 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("sr_loc_hostile_inbound_strength_earth > 0", loud)
         self.assertRegex(loud, r"AND = \{\s*NOT = \{ has_variable = sr_fl_at_earth \}\s*NOT = \{ sr_earth_blockaded = yes \}\s*\}")
         self.assertRegex(loud, r"AND = \{\s*has_variable = sr_fl_at_earth\s*"
-                               r"var:sr_fl_at_earth >= sr_loc_ai_enemy_fleets_earth\s*"
-                               r"sr_earth_hostile_total > var:sr_fl_at_earth\s*\}")
+                               r"sr_fl_at_earth_ready >= sr_loc_ai_enemy_fleets_earth\s*"
+                               r"sr_earth_hostile_total > sr_fl_at_earth_ready\s*\}")
         total = _block(_strip(_raw(FLEET_VALUES)), "sr_earth_hostile_total")
         self.assertIn("value = sr_loc_hostile_inbound_strength_earth", total)
         self.assertIn("add = sr_loc_ai_enemy_fleets_earth", total)
@@ -1461,6 +1773,79 @@ class EarthAlertTest(unittest.TestCase):
     def test_the_step_runs_beside_the_blockade_notice(self):
         on = _strip(_raw(ON_ACTIONS))
         self.assertRegex(on, r"sr_earth_notice_step = yes\s*sr_earth_alert_step = yes")
+
+class ReadinessTest(unittest.TestCase):
+    """Half fire without a Space Command (owner, 2026-10-31): a country with no
+    Space Command level in a state it controls fires at half strength on
+    fleets and on colony Defences, and its fleets at Earth weigh half in
+    orbital fire support and the Earth alert. Losses, the battlestation, the
+    batteries, the panel and the AI's estimates are unchanged."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+
+    def test_the_value(self):
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_fleet_readiness_grounded"), 0.5)
+        body = _block(self.values, "sr_fleet_readiness")
+        self.assertRegex(body, r"^\s*value = 1\s*if = \{\s*limit = \{ NOT = \{ sr_sc_operational = yes \} \}\s*"
+                               r"value = sr_fleet_readiness_grounded\s*\}\s*$")
+
+    def test_both_fire_locals_take_it_beside_quality(self):
+        gather = _block(self.combat, "sr_fl_gather_at")
+        self.assertIn("set_local_variable = { name = sr_cb_f value = { value = sr_fl_$N$_fire_fleets "
+                      "multiply = sr_fleet_quality multiply = sr_fleet_readiness } }", gather)
+        target = _block(self.combat, "sr_cb_add_target")
+        self.assertRegex(target, r"name = sr_cb_fd\s*value = \{\s*value = sr_fl_\$N\$_fire_defences\s*"
+                                 r"multiply = sr_fleet_quality\s*multiply = sr_fleet_readiness\s*multiply = sr_cb_edge_\$KEY\$")
+        # Read in the fleet's owner's scope, as sr_fleet_quality is: the gather
+        # runs inside the fleet powers' walk.
+        at = _block(self.combat, "sr_combat_at")
+        self.assertRegex(at, r"every_in_global_list = \{\s*variable = sr_fleet_powers\s*limit = \{ is_country_alive = yes \}\s*"
+                             r"sr_cb_clear_\$LOC\$ = yes\s*if = \{\s*limit = \{ has_variable = sr_fl_at_\$LOC\$ \}\s*"
+                             r"sr_fl_each_slot = \{ DO = gather \}")
+
+    def test_only_the_fleets_fire_is_halved(self):
+        """The battlestation and the batteries are buildings: their fire and
+        every loss are as before."""
+        everything = self.combat + self.values + _strip(_raw(EARTH_EFFECTS)) + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) \
+            + _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        self.assertEqual(everything.count("multiply = sr_fleet_readiness"), 3)
+        self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_battlestation_fire"))
+        self.assertNotIn("sr_fleet_readiness", _block(self.combat, "sr_cb_battery_gather"))
+        self.assertNotIn("sr_fleet_readiness", _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")))
+
+    def test_earth_weighs_ours_at_it(self):
+        ready = _block(self.values, "sr_fl_at_earth_ready")
+        self.assertRegex(ready, r"limit = \{ has_variable = sr_fl_at_earth \}\s*value = var:sr_fl_at_earth\s*"
+                                r"multiply = sr_fleet_readiness")
+        margin = _block(self.values, "sr_orbital_superiority_margin")
+        self.assertIn("value = sr_fl_at_earth_ready", margin)
+        self.assertNotIn("var:sr_fl_at_earth", margin)
+        loud = _block(self.triggers, "sr_earth_alert_loud")
+        # Ours only: the hostile side stays hull strength.
+        self.assertNotIn("var:sr_fl_at_earth >=", loud)
+        self.assertNotIn("> var:sr_fl_at_earth", loud)
+        self.assertEqual(loud.count("sr_fl_at_earth_ready"), 2)
+        self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_earth_hostile_total"))
+
+    def test_the_player_is_told(self):
+        loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+        for key in ("je_space_race_widget_space_fleets_no_sc", "sr_fl_req_space_command_tt"):
+            with self.subTest(key=key):
+                line = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc).group(1)
+                self.assertIn("half strength", line)
+        # The Earth alert prints ours at hull strength, so it says so while
+        # grounded (review of #1287, M5): the popup and the Hostile Fleet hover.
+        self.assertIn("half strength", re.search(r'(?m)^ sr_earth_alert_half_fire:0 "(.*)"$', loc).group(1))
+        for key, root in (("space_race_events.111.d", "ROOT.GetCountry"), ("je_space_race_widget_ovc_earth_tt", "JournalEntry.GetCountry")):
+            with self.subTest(key=key):
+                line = re.search(rf'(?m)^ {re.escape(key)}:0 "(.*)"$', loc).group(1)
+                self.assertIn(f"[AddLocalizationIf( EqualTo_CFixedPoint( {root}.MakeScope.ScriptValue('sr_disp_sc_operational'), "
+                              f"'(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )]", line)
+
 
 class NoSpaceCommandTest(unittest.TestCase):
     """No Space Command, no fleet orders (UI pass design § 10): with no Space

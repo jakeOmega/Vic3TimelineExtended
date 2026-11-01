@@ -344,7 +344,7 @@ CELLS = {
         ("te_sr_value_row", 'block "row_value"'),
         r"je_space_race_widget_((setbacks|eta)_(?!label)\w+|colonies_held_figure|cf_in_flight_figure"
         r"|emig_month_figure|offworld_figure|fab_figure|shipments_figure|mod_upkeep_figure|ebase_figure|ebase_queued_figure"
-        r"|free_trade_figure|sc_rate_figure|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
+        r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
         r"|cf_drive_value|mq_next_(?:months|full|none))"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
@@ -592,9 +592,9 @@ CELLS = {
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
-    "the build mix, Launch and Auto (te_sr_sc_mix_button)": (
+    "the build mix, Launch, Auto and Pause (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off)"),
+        r"je_space_race_widget_sc_(mix_(war|rapid|siege|carrier|tender)|launch|auto_on|auto_off|pause|resume|resuming)"),
     # Dismantling (owner, 2026-10-31): a module level coming down, under its name.
     "a module coming down on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
