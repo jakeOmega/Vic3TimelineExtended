@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, xfer_open, xfer_step, transfer:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, step_pick, merge, detach, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, step_posture, step_target, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -2598,6 +2598,48 @@ sr_fl_step_pick_at = {
 	set_variable = { name = sr_fl_dest_pick_$N$ value = local_var:sr_fl_pick }
 }
 
+# The destination popup's choice (UI pass design § 4): the location whose code
+# is scope:pick (sr_fleet_set_dest_sgui). The step above runs from nowhere since
+# the popups (sr_fleet_pick_sgui's effect): kept for a revert.
+sr_fl_set_pick_at = {
+	if = {
+		limit = { scope:pick = 1 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 3 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 3 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 4 }
+	}
+	else_if = {
+		limit = { scope:pick = 5 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 5 }
+	}
+	else_if = {
+		limit = { scope:pick = 6 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 6 }
+	}
+	else_if = {
+		limit = { scope:pick = 7 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 7 }
+	}
+	else_if = {
+		limit = { scope:pick = 8 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 8 }
+	}
+	else_if = {
+		limit = { scope:pick = 9 }
+		set_variable = { name = sr_fl_dest_pick_$N$ value = 9 }
+	}
+}
+
 # The slot into the location records (sr_loc_rebuild): where it is, or where
 # it is bound and when it lands.
 sr_fl_note_at = {
@@ -4521,6 +4563,182 @@ sr_fl_step_target_at = {
 	}
 	else = {
 		sr_fl_step_hostile_target_at = { N = $N$ }
+	}
+}
+
+# The target popup's choice (UI pass design § 7; sr_fleet_set_target_sgui): the
+# world whose index is scope:pick, then the step's charge: interdicting, the
+# interdiction's price when its holder is a new one; closing in, a free
+# colony's. The scripted GUI holds the pick to the step's rule.
+sr_fl_set_target_at = {
+	if = {
+		limit = { scope:pick = 1 }
+		set_variable = { name = sr_fl_$N$_target value = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		set_variable = { name = sr_fl_$N$_target value = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 3 }
+		set_variable = { name = sr_fl_$N$_target value = 3 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_fl_$N$_target value = 4 }
+	}
+	else_if = {
+		limit = { scope:pick = 5 }
+		set_variable = { name = sr_fl_$N$_target value = 5 }
+	}
+	else_if = {
+		limit = { scope:pick = 6 }
+		set_variable = { name = sr_fl_$N$_target value = 6 }
+	}
+	else_if = {
+		limit = { scope:pick = 7 }
+		set_variable = { name = sr_fl_$N$_target value = 7 }
+	}
+	else_if = {
+		limit = { scope:pick = 8 }
+		set_variable = { name = sr_fl_$N$_target value = 8 }
+	}
+	else_if = {
+		limit = { scope:pick = 9 }
+		set_variable = { name = sr_fl_$N$_target value = 9 }
+	}
+	else_if = {
+		limit = { scope:pick = 10 }
+		set_variable = { name = sr_fl_$N$_target value = 10 }
+	}
+	else_if = {
+		limit = { scope:pick = 11 }
+		set_variable = { name = sr_fl_$N$_target value = 11 }
+	}
+	else_if = {
+		limit = { scope:pick = 12 }
+		set_variable = { name = sr_fl_$N$_target value = 12 }
+	}
+	else_if = {
+		limit = { scope:pick = 13 }
+		set_variable = { name = sr_fl_$N$_target value = 13 }
+	}
+	else_if = {
+		limit = { scope:pick = 14 }
+		set_variable = { name = sr_fl_$N$_target value = 14 }
+	}
+	else_if = {
+		limit = { scope:pick = 15 }
+		set_variable = { name = sr_fl_$N$_target value = 15 }
+	}
+	else_if = {
+		limit = { scope:pick = 16 }
+		set_variable = { name = sr_fl_$N$_target value = 16 }
+	}
+	else_if = {
+		limit = { scope:pick = 17 }
+		set_variable = { name = sr_fl_$N$_target value = 17 }
+	}
+	else_if = {
+		limit = { scope:pick = 18 }
+		set_variable = { name = sr_fl_$N$_target value = 18 }
+	}
+	else_if = {
+		limit = { scope:pick = 19 }
+		set_variable = { name = sr_fl_$N$_target value = 19 }
+	}
+	else_if = {
+		limit = { scope:pick = 20 }
+		set_variable = { name = sr_fl_$N$_target value = 20 }
+	}
+	else_if = {
+		limit = { scope:pick = 21 }
+		set_variable = { name = sr_fl_$N$_target value = 21 }
+	}
+	else_if = {
+		limit = { scope:pick = 22 }
+		set_variable = { name = sr_fl_$N$_target value = 22 }
+	}
+	else_if = {
+		limit = { scope:pick = 23 }
+		set_variable = { name = sr_fl_$N$_target value = 23 }
+	}
+	else_if = {
+		limit = { scope:pick = 24 }
+		set_variable = { name = sr_fl_$N$_target value = 24 }
+	}
+	else_if = {
+		limit = { scope:pick = 25 }
+		set_variable = { name = sr_fl_$N$_target value = 25 }
+	}
+	else_if = {
+		limit = { scope:pick = 26 }
+		set_variable = { name = sr_fl_$N$_target value = 26 }
+	}
+	else_if = {
+		limit = { scope:pick = 27 }
+		set_variable = { name = sr_fl_$N$_target value = 27 }
+	}
+	else_if = {
+		limit = { scope:pick = 28 }
+		set_variable = { name = sr_fl_$N$_target value = 28 }
+	}
+	else_if = {
+		limit = { scope:pick = 29 }
+		set_variable = { name = sr_fl_$N$_target value = 29 }
+	}
+	else_if = {
+		limit = { scope:pick = 30 }
+		set_variable = { name = sr_fl_$N$_target value = 30 }
+	}
+	else_if = {
+		limit = { scope:pick = 31 }
+		set_variable = { name = sr_fl_$N$_target value = 31 }
+	}
+	else_if = {
+		limit = { scope:pick = 32 }
+		set_variable = { name = sr_fl_$N$_target value = 32 }
+	}
+	else_if = {
+		limit = { scope:pick = 33 }
+		set_variable = { name = sr_fl_$N$_target value = 33 }
+	}
+	else_if = {
+		limit = { scope:pick = 34 }
+		set_variable = { name = sr_fl_$N$_target value = 34 }
+	}
+	else_if = {
+		limit = { scope:pick = 35 }
+		set_variable = { name = sr_fl_$N$_target value = 35 }
+	}
+	else_if = {
+		limit = { scope:pick = 36 }
+		set_variable = { name = sr_fl_$N$_target value = 36 }
+	}
+	else_if = {
+		limit = { scope:pick = 37 }
+		set_variable = { name = sr_fl_$N$_target value = 37 }
+	}
+	else_if = {
+		limit = { scope:pick = 38 }
+		set_variable = { name = sr_fl_$N$_target value = 38 }
+	}
+	else_if = {
+		limit = { scope:pick = 39 }
+		set_variable = { name = sr_fl_$N$_target value = 39 }
+	}
+	else_if = {
+		limit = { scope:pick = 40 }
+		set_variable = { name = sr_fl_$N$_target value = 40 }
+	}
+	if = {
+		limit = { sr_fl_$N$_posture_value = 4 }
+		sr_fl_charge_icpt_at = { N = $N$ }
+		sr_icpt_rebuild = yes
+	}
+	else_if = {
+		limit = { sr_fl_$N$_posture_value = 3 }
+		sr_fl_charge_free_at = { N = $N$ }
 	}
 }
 

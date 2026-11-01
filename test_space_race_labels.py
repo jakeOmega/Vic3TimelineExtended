@@ -250,7 +250,7 @@ def _longest_figure(name):
         return MIX_WEIGHT
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
-    if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Fleet of 99999"
+    if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Antimatter 99999"
         return FLEET_STRENGTH
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
              "sr_interstellar_transit_value": TRANSIT_MONTHS, "sr_total_global_colonies": WORLDS, "sr_sites_world_count": WORLDS,
@@ -318,7 +318,7 @@ def _render(value):
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
-             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone)")
+             r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -510,12 +510,37 @@ CELLS = {
     "a fleet's landing (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'block "fl_transit"'),
         r"je_space_race_widget_fl_\d_transit"),
-    "a fleet's posture (te_sr_fleet_row)": (
-        ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_posture_1"'),
+    "a fleet's posture (te_sr_posture_choice, UI pass design § 7)": (
+        ("te_sr_posture_choice", 'block "pc_label"'),
         r"je_space_race_widget_fl_posture_\d"),
     "seize or destroy (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_seize"'),
         r"je_space_race_widget_fl_(seize|destroy)"),
+    # The destination popup (UI pass design § 4): the fleet's heads, the rows'
+    # heads, Next Windows' window keys in a narrower cell, and Choose.
+    **{f"the destination popup's fleet {col} head (te_sr_dest_slot)": (
+        ("te_sr_dest_slot", f'text = "je_space_race_widget_fl_col_{col}"'), f"je_space_race_widget_fl_col_{col}")
+       for col in ("where", "strength", "dv", "supply")},
+    **{f"the destination popup's {col} column head (te_sr_dest_header_row)": (
+        ("te_sr_dest_header_row", f'text = "je_space_race_widget_dp_col_{col}"'), f"je_space_race_widget_dp_col_{col}")
+       for col in ("where", "months", "dv", "window", "ours", "enemy", "inbound")},
+    "a destination's window, open (te_sr_dest_row)": (
+        ("te_sr_dest_row", 'text = "je_space_race_widget_win_open"'),
+        r"je_space_race_widget_win_open"),
+    "a destination's window, waiting (te_sr_dest_row)": (
+        ("te_sr_dest_row", 'block "dr_win_wait"'),
+        r"je_space_race_widget_win_wait_\w+"),
+    # The target popup (UI pass design § 7): Solar System's holder words and
+    # Target, and Targeted, in the target row's cells.
+    **{f"a world's holder in the target popup: {word} (te_sr_ftarget_row)": (
+        ("te_sr_ftarget_row", f'text = "je_space_race_widget_ss_{word}"'), f"je_space_race_widget_ss_{word}")
+       for word in ("ours", "unknown", "unclaimed", "free", "occupied", "ruined")},
+    "the target popup's Target and Targeted (te_sr_ftarget_row)": (
+        ("te_sr_ftarget_row", 'text = "je_space_race_widget_ss_target_button"'),
+        r"je_space_race_widget_(ss_target_button|ft_targeted)"),
+    "a destination's Choose and Chosen (te_sr_dest_row)": (
+        ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
+        r"je_space_race_widget_dp_(choose|chosen)"),
     **{f"the locations' {col} column head (te_sr_location_header_row)": (
         ("te_sr_location_header_row", f'text = "je_space_race_widget_loc_col_{col}"'), f"je_space_race_widget_loc_col_{col}")
        for col in ("where", "ours", "others", "inbound", "status")},
@@ -577,7 +602,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title)")
 
 
 # Cells that wrap to a second line on purpose: the overview's state cell, where
@@ -715,6 +740,13 @@ class FigureBudgetTest(unittest.TestCase):
     FLEET = {"fl_strength": "9999/9999", "fl_dv": "5000", "fl_supply": "36", "fl_marines": "99"}
     # The Transfer popup's role rows: a role, the marines or the total, now, the amount, after
     TRANSFER = {"xf_now": "99999", "xf_amount": "99999", "xf_stay": "99999", "xf_there": "99999"}
+    # The destination popup (UI pass design § 4): the fleet's figures, its
+    # propellant to a tenth; a leg's months (611 the longest), its delta-v
+    # (gen_launch_windows.LEG_DV_CAP, 9999), our worlds there (six at Jupiter
+    # and at Earth) and the enemy's strength there and on its way.
+    DEST_FLEET = {"dp_strength": "9999/9999", "dp_dv": "5000.0", "dp_supply": "36"}
+    DEST = {"dr_months": "999", "dr_dv_covered": "9999.0", "dr_dv_short": "9999.0", "dr_worlds": "6",
+            "dr_enemy": "99999", "dr_inbound": "99999"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
     SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
     QUEUE = {"mq_place": "20."}
@@ -780,6 +812,39 @@ class FigureBudgetTest(unittest.TestCase):
         self._check("te_sr_fleet_row", self.FLEET)
         self._check("te_sr_xf_role_row", self.TRANSFER)
         self._check("te_sr_location_row", self.LOCATION)
+
+    def test_the_destination_popup(self):
+        self._check("te_sr_dest_slot", self.DEST_FLEET)
+        self._check("te_sr_dest_row", self.DEST)
+        gui = _read(GUI)
+        # Where the fleet is (custom loc) and every location's name.
+        box = _textbox_with(_type_body(gui, "te_sr_dest_slot"), 'block "dp_where"')
+        longest = max((_render(_loc(k)) for k in _custom_options("sr_fl_1_where_name")), key=len)
+        self.assertLessEqual(len(longest) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), longest)
+        box = _textbox_with(_type_body(gui, "te_sr_dest_row"), 'block "dr_name"')
+        names = re.findall(r'text = "(sr_loc_name_\w+)"', _read(FLEET_ROWS))
+        self.assertTrue(names)
+        for key in set(names):
+            with self.subTest(key=key):
+                self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
+        # The body holds the widest row: the rows' cells and their gaps.
+        row = _type_body(gui, "te_sr_dest_row")
+        cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\n\t\t\tsize = \{ (\d+) 24 \}", row)]
+        self.assertEqual(len(cells), 8)
+        width = sum(cells) + 4 * (len(cells) - 1) + 2 * 4
+        self.assertEqual(width, int(re.search(r"minimumsize = \{ (\d+) -1 \}", _type_body(gui, "te_sr_dest_slot")).group(1)))
+        heads = [int(w) for w in re.findall(r"size = \{ (\d+) 20 \}", _type_body(gui, "te_sr_dest_header_row"))]
+        self.assertEqual(heads, cells[:7])
+
+    def test_the_target_popup(self):
+        """Every world's name fits the target row's name cell (UI pass design § 7)."""
+        gui = _read(GUI)
+        box = _textbox_with(_type_body(gui, "te_sr_ftarget_row"), 'block "fr_name"')
+        names = set(re.findall(r'text = "(sr_site_name_\w+)"', _read(FLEET_ROWS)))
+        self.assertEqual(len(names), 40)
+        for key in names:
+            with self.subTest(key=key):
+                self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
 
     def test_the_fleet_names(self):
         """A fleet's where, drive and target are custom loc: their longest option."""

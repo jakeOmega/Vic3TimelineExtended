@@ -8,6 +8,13 @@
 #   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination
 #   sr_disp_fl_<n>_combat, _posture, _destroy  the 6b orders
 #   sr_disp_fl_<n>_tgt_*        its target world's figures (the target hover)
+#   sr_disp_fl_<n>_why          why it can't leave this month, whatever the leg (the
+#                               destination popup's note): 0 it may, 4 no Space
+#                               Command of ours (it pauses a refit, so first), 1
+#                               refitting, 2 below the minimum strength, 3 Earth's
+#                               launches barred
+#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)
+#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)
 sr_disp_fl_1 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_loc } value = 1 }
@@ -45,6 +52,21 @@ sr_disp_fl_1_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 7 } value = sr_fl_1_leg_dv_uranus }
 	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 8 } value = sr_fl_1_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 9 } value = sr_fl_1_leg_dv_kuiper }
+}
+sr_disp_fl_1_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_1_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_1_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_1_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_1_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_1 } value = var:sr_fl_dest_pick_1 }
+}
+sr_disp_fl_1_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_target } value = var:sr_fl_1_target }
 }
 sr_disp_fl_1_combat = {
 	value = 0
@@ -96,6 +118,21 @@ sr_disp_fl_2_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 8 } value = sr_fl_2_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 9 } value = sr_fl_2_leg_dv_kuiper }
 }
+sr_disp_fl_2_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_2_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_2_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_2_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_2_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_2 } value = var:sr_fl_dest_pick_2 }
+}
+sr_disp_fl_2_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_2_target } value = var:sr_fl_2_target }
+}
 sr_disp_fl_2_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_loc NOT = { var:sr_fl_2_loc = 1 } } value = 1 }
@@ -145,6 +182,21 @@ sr_disp_fl_3_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 7 } value = sr_fl_3_leg_dv_uranus }
 	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 8 } value = sr_fl_3_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 9 } value = sr_fl_3_leg_dv_kuiper }
+}
+sr_disp_fl_3_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_3_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_3_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_3_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_3_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_3 } value = var:sr_fl_dest_pick_3 }
+}
+sr_disp_fl_3_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_3_target } value = var:sr_fl_3_target }
 }
 sr_disp_fl_3_combat = {
 	value = 0
@@ -196,6 +248,21 @@ sr_disp_fl_4_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 8 } value = sr_fl_4_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 9 } value = sr_fl_4_leg_dv_kuiper }
 }
+sr_disp_fl_4_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_4_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_4_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_4_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_4_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_4 } value = var:sr_fl_dest_pick_4 }
+}
+sr_disp_fl_4_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_4_target } value = var:sr_fl_4_target }
+}
 sr_disp_fl_4_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_loc NOT = { var:sr_fl_4_loc = 1 } } value = 1 }
@@ -245,6 +312,21 @@ sr_disp_fl_5_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 7 } value = sr_fl_5_leg_dv_uranus }
 	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 8 } value = sr_fl_5_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 9 } value = sr_fl_5_leg_dv_kuiper }
+}
+sr_disp_fl_5_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_5_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_5_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_5_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_5_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_5 } value = var:sr_fl_dest_pick_5 }
+}
+sr_disp_fl_5_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_5_target } value = var:sr_fl_5_target }
 }
 sr_disp_fl_5_combat = {
 	value = 0
@@ -296,6 +378,21 @@ sr_disp_fl_6_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 8 } value = sr_fl_6_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 9 } value = sr_fl_6_leg_dv_kuiper }
 }
+sr_disp_fl_6_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_6_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_6_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_6_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_6_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_6 } value = var:sr_fl_dest_pick_6 }
+}
+sr_disp_fl_6_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_6_target } value = var:sr_fl_6_target }
+}
 sr_disp_fl_6_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_loc NOT = { var:sr_fl_6_loc = 1 } } value = 1 }
@@ -345,6 +442,21 @@ sr_disp_fl_7_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 7 } value = sr_fl_7_leg_dv_uranus }
 	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 8 } value = sr_fl_7_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 9 } value = sr_fl_7_leg_dv_kuiper }
+}
+sr_disp_fl_7_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_7_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_7_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_7_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_7_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_7 } value = var:sr_fl_dest_pick_7 }
+}
+sr_disp_fl_7_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_7_target } value = var:sr_fl_7_target }
 }
 sr_disp_fl_7_combat = {
 	value = 0
@@ -396,6 +508,21 @@ sr_disp_fl_8_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 8 } value = sr_fl_8_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 9 } value = sr_fl_8_leg_dv_kuiper }
 }
+sr_disp_fl_8_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_8_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_8_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_8_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_8_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_8 } value = var:sr_fl_dest_pick_8 }
+}
+sr_disp_fl_8_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_8_target } value = var:sr_fl_8_target }
+}
 sr_disp_fl_8_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_loc NOT = { var:sr_fl_8_loc = 1 } } value = 1 }
@@ -446,6 +573,21 @@ sr_disp_fl_9_leg_dv = {
 	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 8 } value = sr_fl_9_leg_dv_neptune }
 	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 9 } value = sr_fl_9_leg_dv_kuiper }
 }
+sr_disp_fl_9_why = {
+	value = 0
+	if = { limit = { NOT = { sr_sc_operational = yes } } value = 4 }
+	else_if = { limit = { sr_fl_9_refitting = yes } value = 1 }
+	else_if = { limit = { sr_fl_9_strength < sr_fl_minimum_strength } value = 2 }
+	else_if = { limit = { sr_fl_9_at_earth = yes sr_launches_barred = yes } value = 3 }
+}
+sr_disp_fl_9_pick = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_dest_pick_9 } value = var:sr_fl_dest_pick_9 }
+}
+sr_disp_fl_9_target = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_9_target } value = var:sr_fl_9_target }
+}
 sr_disp_fl_9_combat = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_loc NOT = { var:sr_fl_9_loc = 1 } } value = 1 }
@@ -459,8 +601,8 @@ sr_disp_fl_9_destroy = {
 	if = { limit = { has_variable = sr_fl_9_destroy } value = 1 }
 }
 
-# Per location: our strength there, the strongest other power's, and the
-# inbound record (as the Solar System rows).
+# Per location: our strength there, the strongest other power's, the
+# inbound record (as the Solar System rows), and our worlds there.
 sr_disp_loc_ours_earth = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_earth } value = var:sr_fl_at_earth }
@@ -486,6 +628,15 @@ sr_disp_loc_inbound_months_earth = {
 sr_disp_loc_inbound_ours_earth = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_earth ?= this } value = 1 }
+}
+sr_disp_loc_worlds_earth = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_peary ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } add = 1 }
 }
 sr_disp_loc_ours_inner = {
 	value = 0
@@ -513,6 +664,11 @@ sr_disp_loc_inbound_ours_inner = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_inner ?= this } value = 1 }
 }
+sr_disp_loc_worlds_inner = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_venus ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } add = 1 }
+}
 sr_disp_loc_ours_mars = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_mars } value = var:sr_fl_at_mars }
@@ -538,6 +694,14 @@ sr_disp_loc_inbound_months_mars = {
 sr_disp_loc_inbound_ours_mars = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_mars ?= this } value = 1 }
+}
+sr_disp_loc_worlds_mars = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } add = 1 }
 }
 sr_disp_loc_ours_asteroids = {
 	value = 0
@@ -565,6 +729,14 @@ sr_disp_loc_inbound_ours_asteroids = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_asteroids ?= this } value = 1 }
 }
+sr_disp_loc_worlds_asteroids = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_ceres ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_hygiea ?= this } add = 1 }
+}
 sr_disp_loc_ours_jupiter = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_jupiter } value = var:sr_fl_at_jupiter }
@@ -590,6 +762,15 @@ sr_disp_loc_inbound_months_jupiter = {
 sr_disp_loc_inbound_ours_jupiter = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_jupiter ?= this } value = 1 }
+}
+sr_disp_loc_worlds_jupiter = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_io ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_europa ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_himalia ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_amalthea ?= this } add = 1 }
 }
 sr_disp_loc_ours_saturn = {
 	value = 0
@@ -617,6 +798,14 @@ sr_disp_loc_inbound_ours_saturn = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_saturn ?= this } value = 1 }
 }
+sr_disp_loc_worlds_saturn = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titan ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_rhea ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_mimas ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_iapetus ?= this } add = 1 }
+}
 sr_disp_loc_ours_uranus = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_uranus } value = var:sr_fl_at_uranus }
@@ -642,6 +831,13 @@ sr_disp_loc_inbound_months_uranus = {
 sr_disp_loc_inbound_ours_uranus = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_uranus ?= this } value = 1 }
+}
+sr_disp_loc_worlds_uranus = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_titania ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_oberon ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_miranda ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_ariel ?= this } add = 1 }
 }
 sr_disp_loc_ours_neptune = {
 	value = 0
@@ -669,6 +865,11 @@ sr_disp_loc_inbound_ours_neptune = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_neptune ?= this } value = 1 }
 }
+sr_disp_loc_worlds_neptune = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_triton ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_proteus ?= this } add = 1 }
+}
 sr_disp_loc_ours_kuiper = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_kuiper } value = var:sr_fl_at_kuiper }
@@ -694,6 +895,14 @@ sr_disp_loc_inbound_months_kuiper = {
 sr_disp_loc_inbound_ours_kuiper = {
 	value = 0
 	if = { limit = { global_var:sr_loc_inbound_by_kuiper ?= this } value = 1 }
+}
+sr_disp_loc_worlds_kuiper = {
+	value = 0
+	if = { limit = { global_var:sr_site_holder_pluto ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_eris ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = 1 }
+	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = 1 }
 }
 
 # Per location, the viewer's status there (6b): 1 a battle this month or last,

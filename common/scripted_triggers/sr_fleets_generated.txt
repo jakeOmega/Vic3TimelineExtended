@@ -236,6 +236,21 @@ sr_fl_1_earth_barred = {
 	var:sr_fl_1_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_1_pick_elsewhere = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_1_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_1_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_1_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_1_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_1_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_1_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_1_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_1_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_1_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_1_can_go = {
 	has_variable = sr_fl_dest_pick_1
@@ -363,6 +378,7 @@ sr_fl_1_target_hostile = {
 		AND = { var:sr_fl_1_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_1_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 1 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -425,6 +441,62 @@ sr_fl_1_target_interdictable = {
 	}
 }
 sr_fl_1_interdicting = { sr_fl_1_posture_value = 4 }
+sr_fl_1_closing_in = { sr_fl_1_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_1_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_1_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_1_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_1_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_1_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_1_pick_world_here = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_1_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_1_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_1_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_1_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_1_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_1_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_1_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_1_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_1_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_1_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_1_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_1_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -879,6 +951,21 @@ sr_fl_2_earth_barred = {
 	var:sr_fl_2_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_2_pick_elsewhere = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_2_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_2_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_2_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_2_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_2_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_2_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_2_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_2_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_2_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_2_can_go = {
 	has_variable = sr_fl_dest_pick_2
@@ -1006,6 +1093,7 @@ sr_fl_2_target_hostile = {
 		AND = { var:sr_fl_2_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_2_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 2 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -1068,6 +1156,62 @@ sr_fl_2_target_interdictable = {
 	}
 }
 sr_fl_2_interdicting = { sr_fl_2_posture_value = 4 }
+sr_fl_2_closing_in = { sr_fl_2_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_2_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_2_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_2_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_2_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_2_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_2_pick_world_here = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_2_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_2_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_2_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_2_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_2_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_2_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_2_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_2_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_2_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_2_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_2_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_2_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_2_closing_at_earth = { sr_fl_2_at_earth = yes sr_fl_2_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -1522,6 +1666,21 @@ sr_fl_3_earth_barred = {
 	var:sr_fl_3_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_3_pick_elsewhere = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_3_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_3_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_3_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_3_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_3_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_3_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_3_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_3_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_3_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_3_can_go = {
 	has_variable = sr_fl_dest_pick_3
@@ -1649,6 +1808,7 @@ sr_fl_3_target_hostile = {
 		AND = { var:sr_fl_3_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_3_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 3 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -1711,6 +1871,62 @@ sr_fl_3_target_interdictable = {
 	}
 }
 sr_fl_3_interdicting = { sr_fl_3_posture_value = 4 }
+sr_fl_3_closing_in = { sr_fl_3_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_3_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_3_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_3_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_3_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_3_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_3_pick_world_here = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_3_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_3_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_3_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_3_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_3_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_3_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_3_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_3_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_3_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_3_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_3_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_3_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -2165,6 +2381,21 @@ sr_fl_4_earth_barred = {
 	var:sr_fl_4_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_4_pick_elsewhere = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_4_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_4_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_4_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_4_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_4_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_4_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_4_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_4_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_4_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_4_can_go = {
 	has_variable = sr_fl_dest_pick_4
@@ -2292,6 +2523,7 @@ sr_fl_4_target_hostile = {
 		AND = { var:sr_fl_4_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_4_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 4 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -2354,6 +2586,62 @@ sr_fl_4_target_interdictable = {
 	}
 }
 sr_fl_4_interdicting = { sr_fl_4_posture_value = 4 }
+sr_fl_4_closing_in = { sr_fl_4_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_4_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_4_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_4_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_4_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_4_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_4_pick_world_here = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_4_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_4_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_4_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_4_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_4_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_4_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_4_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_4_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_4_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_4_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_4_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_4_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_4_closing_at_earth = { sr_fl_4_at_earth = yes sr_fl_4_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -2808,6 +3096,21 @@ sr_fl_5_earth_barred = {
 	var:sr_fl_5_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_5_pick_elsewhere = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_5_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_5_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_5_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_5_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_5_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_5_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_5_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_5_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_5_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_5_can_go = {
 	has_variable = sr_fl_dest_pick_5
@@ -2935,6 +3238,7 @@ sr_fl_5_target_hostile = {
 		AND = { var:sr_fl_5_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_5_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 5 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -2997,6 +3301,62 @@ sr_fl_5_target_interdictable = {
 	}
 }
 sr_fl_5_interdicting = { sr_fl_5_posture_value = 4 }
+sr_fl_5_closing_in = { sr_fl_5_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_5_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_5_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_5_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_5_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_5_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_5_pick_world_here = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_5_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_5_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_5_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_5_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_5_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_5_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_5_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_5_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_5_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_5_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_5_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_5_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -3451,6 +3811,21 @@ sr_fl_6_earth_barred = {
 	var:sr_fl_6_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_6_pick_elsewhere = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_6_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_6_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_6_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_6_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_6_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_6_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_6_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_6_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_6_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_6_can_go = {
 	has_variable = sr_fl_dest_pick_6
@@ -3578,6 +3953,7 @@ sr_fl_6_target_hostile = {
 		AND = { var:sr_fl_6_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_6_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 6 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -3640,6 +4016,62 @@ sr_fl_6_target_interdictable = {
 	}
 }
 sr_fl_6_interdicting = { sr_fl_6_posture_value = 4 }
+sr_fl_6_closing_in = { sr_fl_6_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_6_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_6_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_6_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_6_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_6_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_6_pick_world_here = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_6_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_6_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_6_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_6_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_6_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_6_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_6_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_6_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_6_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_6_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_6_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_6_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_6_closing_at_earth = { sr_fl_6_at_earth = yes sr_fl_6_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -4094,6 +4526,21 @@ sr_fl_7_earth_barred = {
 	var:sr_fl_7_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_7_pick_elsewhere = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_7_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_7_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_7_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_7_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_7_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_7_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_7_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_7_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_7_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_7_can_go = {
 	has_variable = sr_fl_dest_pick_7
@@ -4221,6 +4668,7 @@ sr_fl_7_target_hostile = {
 		AND = { var:sr_fl_7_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_7_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 7 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -4283,6 +4731,62 @@ sr_fl_7_target_interdictable = {
 	}
 }
 sr_fl_7_interdicting = { sr_fl_7_posture_value = 4 }
+sr_fl_7_closing_in = { sr_fl_7_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_7_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_7_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_7_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_7_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_7_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_7_pick_world_here = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_7_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_7_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_7_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_7_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_7_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_7_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_7_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_7_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_7_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_7_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_7_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_7_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -4737,6 +5241,21 @@ sr_fl_8_earth_barred = {
 	var:sr_fl_8_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_8_pick_elsewhere = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_8_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_8_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_8_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_8_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_8_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_8_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_8_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_8_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_8_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_8_can_go = {
 	has_variable = sr_fl_dest_pick_8
@@ -4864,6 +5383,7 @@ sr_fl_8_target_hostile = {
 		AND = { var:sr_fl_8_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_8_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 8 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -4926,6 +5446,62 @@ sr_fl_8_target_interdictable = {
 	}
 }
 sr_fl_8_interdicting = { sr_fl_8_posture_value = 4 }
+sr_fl_8_closing_in = { sr_fl_8_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_8_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_8_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_8_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_8_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_8_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_8_pick_world_here = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_8_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_8_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_8_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_8_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_8_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_8_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_8_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_8_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_8_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_8_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_8_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_8_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -5380,6 +5956,21 @@ sr_fl_9_earth_barred = {
 	var:sr_fl_9_loc = 1
 	sr_launches_barred = yes
 }
+# The destination popup's pick (scope:pick, a location's code) is not where it is.
+sr_fl_9_pick_elsewhere = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { scope:pick = 1 NOT = { var:sr_fl_9_loc = 1 } }
+		AND = { scope:pick = 2 NOT = { var:sr_fl_9_loc = 2 } }
+		AND = { scope:pick = 3 NOT = { var:sr_fl_9_loc = 3 } }
+		AND = { scope:pick = 4 NOT = { var:sr_fl_9_loc = 4 } }
+		AND = { scope:pick = 5 NOT = { var:sr_fl_9_loc = 5 } }
+		AND = { scope:pick = 6 NOT = { var:sr_fl_9_loc = 6 } }
+		AND = { scope:pick = 7 NOT = { var:sr_fl_9_loc = 7 } }
+		AND = { scope:pick = 8 NOT = { var:sr_fl_9_loc = 8 } }
+		AND = { scope:pick = 9 NOT = { var:sr_fl_9_loc = 9 } }
+	}
+}
 # The panel's Go: its picked destination may be flown now.
 sr_fl_9_can_go = {
 	has_variable = sr_fl_dest_pick_9
@@ -5507,6 +6098,7 @@ sr_fl_9_target_hostile = {
 		AND = { var:sr_fl_9_target = 40 sr_site_hostile_target = { KEY = imbrium } }
 	}
 }
+sr_fl_9_hostile_step_free = { sr_fl_hostile_step_free_at = { N = 9 } }
 # 6c: a world at its location it may interdict (a country at peace with us,
 # not our ally, holds it); its target is one; it interdicts. Never at Earth
 # (lunar colonization § 8.3).
@@ -5569,6 +6161,62 @@ sr_fl_9_target_interdictable = {
 	}
 }
 sr_fl_9_interdicting = { sr_fl_9_posture_value = 4 }
+sr_fl_9_closing_in = { sr_fl_9_posture_value = 3 }
+# The posture buttons' pick (scope:pick, 1 to 4) is the posture it holds.
+sr_fl_9_pick_is_posture = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_9_posture_value = 1 }
+		AND = { scope:pick = 2 sr_fl_9_posture_value = 2 }
+		AND = { scope:pick = 3 sr_fl_9_posture_value = 3 }
+		AND = { scope:pick = 4 sr_fl_9_posture_value = 4 }
+	}
+}
+# The target popup's pick (scope:pick, a world's index) is a world where it is.
+sr_fl_9_pick_world_here = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 2 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 3 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 4 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 5 var:sr_fl_9_loc = 3 }
+		AND = { scope:pick = 6 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 7 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 8 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 9 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 10 var:sr_fl_9_loc = 4 }
+		AND = { scope:pick = 11 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 12 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 13 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 14 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 15 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 16 var:sr_fl_9_loc = 5 }
+		AND = { scope:pick = 17 var:sr_fl_9_loc = 2 }
+		AND = { scope:pick = 18 var:sr_fl_9_loc = 2 }
+		AND = { scope:pick = 19 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 20 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 21 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 22 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 23 var:sr_fl_9_loc = 6 }
+		AND = { scope:pick = 24 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 25 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 26 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 27 var:sr_fl_9_loc = 7 }
+		AND = { scope:pick = 28 var:sr_fl_9_loc = 8 }
+		AND = { scope:pick = 29 var:sr_fl_9_loc = 8 }
+		AND = { scope:pick = 30 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 31 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 32 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 33 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 34 var:sr_fl_9_loc = 9 }
+		AND = { scope:pick = 35 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 36 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 37 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 38 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 39 var:sr_fl_9_loc = 1 }
+		AND = { scope:pick = 40 var:sr_fl_9_loc = 1 }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_9_closing_at_earth = { sr_fl_9_at_earth = yes sr_fl_9_posture_value = 3 }
 # The target button: interdicting, the worlds it may interdict; else the
@@ -6545,6 +7193,510 @@ sr_fl_any_bound = {
 		AND = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = $CODE$ }
 		AND = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = $CODE$ }
 		AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = $CODE$ }
+	}
+}
+
+# Close in's hover (UI pass design § 7): the world the hostile step would take
+# at slot N's location is a free colony (the first hostile world there after
+# its target, table order, else the first; sr_fl_step_hostile_target_at).
+sr_fl_hostile_step_free_at = {
+	has_variable = sr_fl_$N$_loc
+	OR = {
+		AND = {
+			var:sr_fl_$N$_loc = 1
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_shackleton
+					sr_site_hostile_target = { KEY = shackleton }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_peary
+					sr_site_hostile_target = { KEY = peary }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } NOT = { OR = { sr_site_hostile_target = { KEY = shackleton } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_tranquility
+					sr_site_hostile_target = { KEY = tranquility }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } NOT = { OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_marius_hills
+					sr_site_hostile_target = { KEY = marius_hills }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } NOT = { OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_daedalus
+					sr_site_hostile_target = { KEY = daedalus }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } NOT = { OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_imbrium
+					sr_site_hostile_target = { KEY = imbrium }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 35 } sr_site_hostile_target = { KEY = shackleton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 36 } sr_site_hostile_target = { KEY = peary } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 37 } sr_site_hostile_target = { KEY = tranquility } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 38 } sr_site_hostile_target = { KEY = marius_hills } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 39 } sr_site_hostile_target = { KEY = daedalus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 40 } sr_site_hostile_target = { KEY = imbrium } } } } NOT = { OR = { sr_site_hostile_target = { KEY = shackleton } sr_site_hostile_target = { KEY = peary } sr_site_hostile_target = { KEY = tranquility } sr_site_hostile_target = { KEY = marius_hills } sr_site_hostile_target = { KEY = daedalus } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 2
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_venus
+					sr_site_hostile_target = { KEY = venus }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 17 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 17 } sr_site_hostile_target = { KEY = venus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 18 } sr_site_hostile_target = { KEY = mercury } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_mercury
+					sr_site_hostile_target = { KEY = mercury }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 18 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 17 } sr_site_hostile_target = { KEY = venus } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 17 } sr_site_hostile_target = { KEY = venus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 18 } sr_site_hostile_target = { KEY = mercury } } } } NOT = { OR = { sr_site_hostile_target = { KEY = venus } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 3
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_valles_marineris
+					sr_site_hostile_target = { KEY = valles_marineris }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } sr_site_hostile_target = { KEY = arcadia_planitia } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_olympus_mons
+					sr_site_hostile_target = { KEY = olympus_mons }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } sr_site_hostile_target = { KEY = arcadia_planitia } } } } NOT = { OR = { sr_site_hostile_target = { KEY = valles_marineris } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_hellas_planitia
+					sr_site_hostile_target = { KEY = hellas_planitia }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } sr_site_hostile_target = { KEY = arcadia_planitia } } } } NOT = { OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_utopia_planitia
+					sr_site_hostile_target = { KEY = utopia_planitia }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } sr_site_hostile_target = { KEY = arcadia_planitia } } } } NOT = { OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_arcadia_planitia
+					sr_site_hostile_target = { KEY = arcadia_planitia }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 1 } sr_site_hostile_target = { KEY = valles_marineris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 2 } sr_site_hostile_target = { KEY = olympus_mons } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 3 } sr_site_hostile_target = { KEY = hellas_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 4 } sr_site_hostile_target = { KEY = utopia_planitia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 5 } sr_site_hostile_target = { KEY = arcadia_planitia } } } } NOT = { OR = { sr_site_hostile_target = { KEY = valles_marineris } sr_site_hostile_target = { KEY = olympus_mons } sr_site_hostile_target = { KEY = hellas_planitia } sr_site_hostile_target = { KEY = utopia_planitia } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 4
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_ceres
+					sr_site_hostile_target = { KEY = ceres }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } sr_site_hostile_target = { KEY = hygiea } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_vesta
+					sr_site_hostile_target = { KEY = vesta }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } sr_site_hostile_target = { KEY = hygiea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = ceres } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_psyche
+					sr_site_hostile_target = { KEY = psyche }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } sr_site_hostile_target = { KEY = hygiea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_pallas
+					sr_site_hostile_target = { KEY = pallas }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } sr_site_hostile_target = { KEY = hygiea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_hygiea
+					sr_site_hostile_target = { KEY = hygiea }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 6 } sr_site_hostile_target = { KEY = ceres } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 7 } sr_site_hostile_target = { KEY = vesta } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 8 } sr_site_hostile_target = { KEY = psyche } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 9 } sr_site_hostile_target = { KEY = pallas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 10 } sr_site_hostile_target = { KEY = hygiea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = ceres } sr_site_hostile_target = { KEY = vesta } sr_site_hostile_target = { KEY = psyche } sr_site_hostile_target = { KEY = pallas } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 5
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_io
+					sr_site_hostile_target = { KEY = io }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_europa
+					sr_site_hostile_target = { KEY = europa }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = io } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_ganymede
+					sr_site_hostile_target = { KEY = ganymede }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = io } sr_site_hostile_target = { KEY = europa } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_callisto
+					sr_site_hostile_target = { KEY = callisto }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = io } sr_site_hostile_target = { KEY = europa } sr_site_hostile_target = { KEY = ganymede } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_himalia
+					sr_site_hostile_target = { KEY = himalia }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = io } sr_site_hostile_target = { KEY = europa } sr_site_hostile_target = { KEY = ganymede } sr_site_hostile_target = { KEY = callisto } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_amalthea
+					sr_site_hostile_target = { KEY = amalthea }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 11 } sr_site_hostile_target = { KEY = io } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 12 } sr_site_hostile_target = { KEY = europa } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 13 } sr_site_hostile_target = { KEY = ganymede } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 14 } sr_site_hostile_target = { KEY = callisto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 15 } sr_site_hostile_target = { KEY = himalia } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 16 } sr_site_hostile_target = { KEY = amalthea } } } } NOT = { OR = { sr_site_hostile_target = { KEY = io } sr_site_hostile_target = { KEY = europa } sr_site_hostile_target = { KEY = ganymede } sr_site_hostile_target = { KEY = callisto } sr_site_hostile_target = { KEY = himalia } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 6
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_titan
+					sr_site_hostile_target = { KEY = titan }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } sr_site_hostile_target = { KEY = iapetus } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_enceladus
+					sr_site_hostile_target = { KEY = enceladus }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } sr_site_hostile_target = { KEY = iapetus } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titan } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_rhea
+					sr_site_hostile_target = { KEY = rhea }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } sr_site_hostile_target = { KEY = iapetus } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titan } sr_site_hostile_target = { KEY = enceladus } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_mimas
+					sr_site_hostile_target = { KEY = mimas }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } sr_site_hostile_target = { KEY = iapetus } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titan } sr_site_hostile_target = { KEY = enceladus } sr_site_hostile_target = { KEY = rhea } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_iapetus
+					sr_site_hostile_target = { KEY = iapetus }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 19 } sr_site_hostile_target = { KEY = titan } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 20 } sr_site_hostile_target = { KEY = enceladus } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 21 } sr_site_hostile_target = { KEY = rhea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 22 } sr_site_hostile_target = { KEY = mimas } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 23 } sr_site_hostile_target = { KEY = iapetus } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titan } sr_site_hostile_target = { KEY = enceladus } sr_site_hostile_target = { KEY = rhea } sr_site_hostile_target = { KEY = mimas } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 7
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_titania
+					sr_site_hostile_target = { KEY = titania }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } sr_site_hostile_target = { KEY = miranda } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 27 } sr_site_hostile_target = { KEY = ariel } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_oberon
+					sr_site_hostile_target = { KEY = oberon }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } sr_site_hostile_target = { KEY = miranda } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 27 } sr_site_hostile_target = { KEY = ariel } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titania } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_miranda
+					sr_site_hostile_target = { KEY = miranda }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } sr_site_hostile_target = { KEY = miranda } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 27 } sr_site_hostile_target = { KEY = ariel } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titania } sr_site_hostile_target = { KEY = oberon } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_ariel
+					sr_site_hostile_target = { KEY = ariel }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 27 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } sr_site_hostile_target = { KEY = miranda } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 24 } sr_site_hostile_target = { KEY = titania } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 25 } sr_site_hostile_target = { KEY = oberon } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 26 } sr_site_hostile_target = { KEY = miranda } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 27 } sr_site_hostile_target = { KEY = ariel } } } } NOT = { OR = { sr_site_hostile_target = { KEY = titania } sr_site_hostile_target = { KEY = oberon } sr_site_hostile_target = { KEY = miranda } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 8
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_triton
+					sr_site_hostile_target = { KEY = triton }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 28 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 28 } sr_site_hostile_target = { KEY = triton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 29 } sr_site_hostile_target = { KEY = proteus } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_proteus
+					sr_site_hostile_target = { KEY = proteus }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 29 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 28 } sr_site_hostile_target = { KEY = triton } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 28 } sr_site_hostile_target = { KEY = triton } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 29 } sr_site_hostile_target = { KEY = proteus } } } } NOT = { OR = { sr_site_hostile_target = { KEY = triton } } } }
+					}
+				}
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_loc = 9
+			OR = {
+				AND = {
+					has_global_variable = sr_site_free_pluto
+					sr_site_hostile_target = { KEY = pluto }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } sr_site_hostile_target = { KEY = sedna } } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_eris
+					sr_site_hostile_target = { KEY = eris }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } sr_site_hostile_target = { KEY = sedna } } } } NOT = { OR = { sr_site_hostile_target = { KEY = pluto } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_makemake
+					sr_site_hostile_target = { KEY = makemake }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } sr_site_hostile_target = { KEY = sedna } } } } NOT = { OR = { sr_site_hostile_target = { KEY = pluto } sr_site_hostile_target = { KEY = eris } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_haumea
+					sr_site_hostile_target = { KEY = haumea }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } sr_site_hostile_target = { KEY = sedna } } } } NOT = { OR = { sr_site_hostile_target = { KEY = pluto } sr_site_hostile_target = { KEY = eris } sr_site_hostile_target = { KEY = makemake } } } }
+					}
+				}
+				AND = {
+					has_global_variable = sr_site_free_sedna
+					sr_site_hostile_target = { KEY = sedna }
+					OR = {
+						AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } } } }
+						AND = { NOT = { OR = { AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 30 } sr_site_hostile_target = { KEY = pluto } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 31 } sr_site_hostile_target = { KEY = eris } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 32 } sr_site_hostile_target = { KEY = makemake } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 33 } sr_site_hostile_target = { KEY = haumea } } AND = { OR = { NOT = { has_variable = sr_fl_$N$_target } var:sr_fl_$N$_target < 34 } sr_site_hostile_target = { KEY = sedna } } } } NOT = { OR = { sr_site_hostile_target = { KEY = pluto } sr_site_hostile_target = { KEY = eris } sr_site_hostile_target = { KEY = makemake } sr_site_hostile_target = { KEY = haumea } } } }
+					}
+				}
+			}
+		}
+	}
+}
+
+# The target popup's pick (scope:pick, a world's index): a world we may close
+# in on (sr_site_hostile_target), interdict (sr_site_interdict_target; never
+# at Earth, lunar colonization § 8.3), and a free colony.
+sr_fl_pick_hostile = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_hostile_target = { KEY = valles_marineris } }
+		AND = { scope:pick = 2 sr_site_hostile_target = { KEY = olympus_mons } }
+		AND = { scope:pick = 3 sr_site_hostile_target = { KEY = hellas_planitia } }
+		AND = { scope:pick = 4 sr_site_hostile_target = { KEY = utopia_planitia } }
+		AND = { scope:pick = 5 sr_site_hostile_target = { KEY = arcadia_planitia } }
+		AND = { scope:pick = 6 sr_site_hostile_target = { KEY = ceres } }
+		AND = { scope:pick = 7 sr_site_hostile_target = { KEY = vesta } }
+		AND = { scope:pick = 8 sr_site_hostile_target = { KEY = psyche } }
+		AND = { scope:pick = 9 sr_site_hostile_target = { KEY = pallas } }
+		AND = { scope:pick = 10 sr_site_hostile_target = { KEY = hygiea } }
+		AND = { scope:pick = 11 sr_site_hostile_target = { KEY = io } }
+		AND = { scope:pick = 12 sr_site_hostile_target = { KEY = europa } }
+		AND = { scope:pick = 13 sr_site_hostile_target = { KEY = ganymede } }
+		AND = { scope:pick = 14 sr_site_hostile_target = { KEY = callisto } }
+		AND = { scope:pick = 15 sr_site_hostile_target = { KEY = himalia } }
+		AND = { scope:pick = 16 sr_site_hostile_target = { KEY = amalthea } }
+		AND = { scope:pick = 17 sr_site_hostile_target = { KEY = venus } }
+		AND = { scope:pick = 18 sr_site_hostile_target = { KEY = mercury } }
+		AND = { scope:pick = 19 sr_site_hostile_target = { KEY = titan } }
+		AND = { scope:pick = 20 sr_site_hostile_target = { KEY = enceladus } }
+		AND = { scope:pick = 21 sr_site_hostile_target = { KEY = rhea } }
+		AND = { scope:pick = 22 sr_site_hostile_target = { KEY = mimas } }
+		AND = { scope:pick = 23 sr_site_hostile_target = { KEY = iapetus } }
+		AND = { scope:pick = 24 sr_site_hostile_target = { KEY = titania } }
+		AND = { scope:pick = 25 sr_site_hostile_target = { KEY = oberon } }
+		AND = { scope:pick = 26 sr_site_hostile_target = { KEY = miranda } }
+		AND = { scope:pick = 27 sr_site_hostile_target = { KEY = ariel } }
+		AND = { scope:pick = 28 sr_site_hostile_target = { KEY = triton } }
+		AND = { scope:pick = 29 sr_site_hostile_target = { KEY = proteus } }
+		AND = { scope:pick = 30 sr_site_hostile_target = { KEY = pluto } }
+		AND = { scope:pick = 31 sr_site_hostile_target = { KEY = eris } }
+		AND = { scope:pick = 32 sr_site_hostile_target = { KEY = makemake } }
+		AND = { scope:pick = 33 sr_site_hostile_target = { KEY = haumea } }
+		AND = { scope:pick = 34 sr_site_hostile_target = { KEY = sedna } }
+		AND = { scope:pick = 35 sr_site_hostile_target = { KEY = shackleton } }
+		AND = { scope:pick = 36 sr_site_hostile_target = { KEY = peary } }
+		AND = { scope:pick = 37 sr_site_hostile_target = { KEY = tranquility } }
+		AND = { scope:pick = 38 sr_site_hostile_target = { KEY = marius_hills } }
+		AND = { scope:pick = 39 sr_site_hostile_target = { KEY = daedalus } }
+		AND = { scope:pick = 40 sr_site_hostile_target = { KEY = imbrium } }
+	}
+}
+sr_fl_pick_interdictable = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_interdict_target = { KEY = valles_marineris } }
+		AND = { scope:pick = 2 sr_site_interdict_target = { KEY = olympus_mons } }
+		AND = { scope:pick = 3 sr_site_interdict_target = { KEY = hellas_planitia } }
+		AND = { scope:pick = 4 sr_site_interdict_target = { KEY = utopia_planitia } }
+		AND = { scope:pick = 5 sr_site_interdict_target = { KEY = arcadia_planitia } }
+		AND = { scope:pick = 6 sr_site_interdict_target = { KEY = ceres } }
+		AND = { scope:pick = 7 sr_site_interdict_target = { KEY = vesta } }
+		AND = { scope:pick = 8 sr_site_interdict_target = { KEY = psyche } }
+		AND = { scope:pick = 9 sr_site_interdict_target = { KEY = pallas } }
+		AND = { scope:pick = 10 sr_site_interdict_target = { KEY = hygiea } }
+		AND = { scope:pick = 11 sr_site_interdict_target = { KEY = io } }
+		AND = { scope:pick = 12 sr_site_interdict_target = { KEY = europa } }
+		AND = { scope:pick = 13 sr_site_interdict_target = { KEY = ganymede } }
+		AND = { scope:pick = 14 sr_site_interdict_target = { KEY = callisto } }
+		AND = { scope:pick = 15 sr_site_interdict_target = { KEY = himalia } }
+		AND = { scope:pick = 16 sr_site_interdict_target = { KEY = amalthea } }
+		AND = { scope:pick = 17 sr_site_interdict_target = { KEY = venus } }
+		AND = { scope:pick = 18 sr_site_interdict_target = { KEY = mercury } }
+		AND = { scope:pick = 19 sr_site_interdict_target = { KEY = titan } }
+		AND = { scope:pick = 20 sr_site_interdict_target = { KEY = enceladus } }
+		AND = { scope:pick = 21 sr_site_interdict_target = { KEY = rhea } }
+		AND = { scope:pick = 22 sr_site_interdict_target = { KEY = mimas } }
+		AND = { scope:pick = 23 sr_site_interdict_target = { KEY = iapetus } }
+		AND = { scope:pick = 24 sr_site_interdict_target = { KEY = titania } }
+		AND = { scope:pick = 25 sr_site_interdict_target = { KEY = oberon } }
+		AND = { scope:pick = 26 sr_site_interdict_target = { KEY = miranda } }
+		AND = { scope:pick = 27 sr_site_interdict_target = { KEY = ariel } }
+		AND = { scope:pick = 28 sr_site_interdict_target = { KEY = triton } }
+		AND = { scope:pick = 29 sr_site_interdict_target = { KEY = proteus } }
+		AND = { scope:pick = 30 sr_site_interdict_target = { KEY = pluto } }
+		AND = { scope:pick = 31 sr_site_interdict_target = { KEY = eris } }
+		AND = { scope:pick = 32 sr_site_interdict_target = { KEY = makemake } }
+		AND = { scope:pick = 33 sr_site_interdict_target = { KEY = haumea } }
+		AND = { scope:pick = 34 sr_site_interdict_target = { KEY = sedna } }
+	}
+}
+sr_fl_pick_free = {
+	OR = {
+		AND = { scope:pick = 1 has_global_variable = sr_site_free_valles_marineris }
+		AND = { scope:pick = 2 has_global_variable = sr_site_free_olympus_mons }
+		AND = { scope:pick = 3 has_global_variable = sr_site_free_hellas_planitia }
+		AND = { scope:pick = 4 has_global_variable = sr_site_free_utopia_planitia }
+		AND = { scope:pick = 5 has_global_variable = sr_site_free_arcadia_planitia }
+		AND = { scope:pick = 6 has_global_variable = sr_site_free_ceres }
+		AND = { scope:pick = 7 has_global_variable = sr_site_free_vesta }
+		AND = { scope:pick = 8 has_global_variable = sr_site_free_psyche }
+		AND = { scope:pick = 9 has_global_variable = sr_site_free_pallas }
+		AND = { scope:pick = 10 has_global_variable = sr_site_free_hygiea }
+		AND = { scope:pick = 11 has_global_variable = sr_site_free_io }
+		AND = { scope:pick = 12 has_global_variable = sr_site_free_europa }
+		AND = { scope:pick = 13 has_global_variable = sr_site_free_ganymede }
+		AND = { scope:pick = 14 has_global_variable = sr_site_free_callisto }
+		AND = { scope:pick = 15 has_global_variable = sr_site_free_himalia }
+		AND = { scope:pick = 16 has_global_variable = sr_site_free_amalthea }
+		AND = { scope:pick = 17 has_global_variable = sr_site_free_venus }
+		AND = { scope:pick = 18 has_global_variable = sr_site_free_mercury }
+		AND = { scope:pick = 19 has_global_variable = sr_site_free_titan }
+		AND = { scope:pick = 20 has_global_variable = sr_site_free_enceladus }
+		AND = { scope:pick = 21 has_global_variable = sr_site_free_rhea }
+		AND = { scope:pick = 22 has_global_variable = sr_site_free_mimas }
+		AND = { scope:pick = 23 has_global_variable = sr_site_free_iapetus }
+		AND = { scope:pick = 24 has_global_variable = sr_site_free_titania }
+		AND = { scope:pick = 25 has_global_variable = sr_site_free_oberon }
+		AND = { scope:pick = 26 has_global_variable = sr_site_free_miranda }
+		AND = { scope:pick = 27 has_global_variable = sr_site_free_ariel }
+		AND = { scope:pick = 28 has_global_variable = sr_site_free_triton }
+		AND = { scope:pick = 29 has_global_variable = sr_site_free_proteus }
+		AND = { scope:pick = 30 has_global_variable = sr_site_free_pluto }
+		AND = { scope:pick = 31 has_global_variable = sr_site_free_eris }
+		AND = { scope:pick = 32 has_global_variable = sr_site_free_makemake }
+		AND = { scope:pick = 33 has_global_variable = sr_site_free_haumea }
+		AND = { scope:pick = 34 has_global_variable = sr_site_free_sedna }
+		AND = { scope:pick = 35 has_global_variable = sr_site_free_shackleton }
+		AND = { scope:pick = 36 has_global_variable = sr_site_free_peary }
+		AND = { scope:pick = 37 has_global_variable = sr_site_free_tranquility }
+		AND = { scope:pick = 38 has_global_variable = sr_site_free_marius_hills }
+		AND = { scope:pick = 39 has_global_variable = sr_site_free_daedalus }
+		AND = { scope:pick = 40 has_global_variable = sr_site_free_imbrium }
 	}
 }
 
