@@ -3299,7 +3299,11 @@ sr_loc_clear_country = {
 	if = { limit = { has_variable = sr_fl_at_kuiper } remove_variable = sr_fl_at_kuiper }
 }
 
-# The strongest two powers at each location, after the rebuild.
+# The strongest two powers at each location, after the rebuild. Second place
+# only where two powers are there: past the end of the list, position = 1
+# caps to the last item, so a lone power was its own runner-up and the
+# iterator logged `Given position was bigger than the list`
+# (scripting_best_practices.md, ordered_scope_state clamps out-of-range).
 sr_loc_rank = {
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3308,12 +3312,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_earth value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_earth }
-		order_by = var:sr_fl_at_earth
-		position = 1
-		set_global_variable = { name = sr_loc_second_earth value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_earth count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_earth }
+			order_by = var:sr_fl_at_earth
+			position = 1
+			set_global_variable = { name = sr_loc_second_earth value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3322,12 +3329,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_inner value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_inner }
-		order_by = var:sr_fl_at_inner
-		position = 1
-		set_global_variable = { name = sr_loc_second_inner value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_inner count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_inner }
+			order_by = var:sr_fl_at_inner
+			position = 1
+			set_global_variable = { name = sr_loc_second_inner value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3336,12 +3346,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_mars value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_mars }
-		order_by = var:sr_fl_at_mars
-		position = 1
-		set_global_variable = { name = sr_loc_second_mars value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_mars count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_mars }
+			order_by = var:sr_fl_at_mars
+			position = 1
+			set_global_variable = { name = sr_loc_second_mars value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3350,12 +3363,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_asteroids value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_asteroids }
-		order_by = var:sr_fl_at_asteroids
-		position = 1
-		set_global_variable = { name = sr_loc_second_asteroids value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_asteroids count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_asteroids }
+			order_by = var:sr_fl_at_asteroids
+			position = 1
+			set_global_variable = { name = sr_loc_second_asteroids value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3364,12 +3380,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_jupiter value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_jupiter }
-		order_by = var:sr_fl_at_jupiter
-		position = 1
-		set_global_variable = { name = sr_loc_second_jupiter value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_jupiter count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_jupiter }
+			order_by = var:sr_fl_at_jupiter
+			position = 1
+			set_global_variable = { name = sr_loc_second_jupiter value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3378,12 +3397,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_saturn value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_saturn }
-		order_by = var:sr_fl_at_saturn
-		position = 1
-		set_global_variable = { name = sr_loc_second_saturn value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_saturn count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_saturn }
+			order_by = var:sr_fl_at_saturn
+			position = 1
+			set_global_variable = { name = sr_loc_second_saturn value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3392,12 +3414,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_uranus value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_uranus }
-		order_by = var:sr_fl_at_uranus
-		position = 1
-		set_global_variable = { name = sr_loc_second_uranus value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_uranus count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_uranus }
+			order_by = var:sr_fl_at_uranus
+			position = 1
+			set_global_variable = { name = sr_loc_second_uranus value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3406,12 +3431,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_neptune value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_neptune }
-		order_by = var:sr_fl_at_neptune
-		position = 1
-		set_global_variable = { name = sr_loc_second_neptune value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_neptune count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_neptune }
+			order_by = var:sr_fl_at_neptune
+			position = 1
+			set_global_variable = { name = sr_loc_second_neptune value = this }
+		}
 	}
 	ordered_in_global_list = {
 		variable = sr_fleet_powers
@@ -3420,12 +3448,15 @@ sr_loc_rank = {
 		position = 0
 		set_global_variable = { name = sr_loc_top_kuiper value = this }
 	}
-	ordered_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { is_country_alive = yes has_variable = sr_fl_at_kuiper }
-		order_by = var:sr_fl_at_kuiper
-		position = 1
-		set_global_variable = { name = sr_loc_second_kuiper value = this }
+	if = {
+		limit = { any_in_global_list = { variable = sr_fleet_powers is_country_alive = yes has_variable = sr_fl_at_kuiper count >= 2 } }
+		ordered_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes has_variable = sr_fl_at_kuiper }
+			order_by = var:sr_fl_at_kuiper
+			position = 1
+			set_global_variable = { name = sr_loc_second_kuiper value = this }
+		}
 	}
 }
 
