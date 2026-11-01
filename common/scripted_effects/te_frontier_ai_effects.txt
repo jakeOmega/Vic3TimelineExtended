@@ -1,0 +1,64 @@
+﻿# ============================================================================
+# FRONTIER AI CONTROL — effects (common/laws/te_frontier_ai_laws.txt)
+# docs/systems/mod_systems/governance_laws.md § Frontier AI Control
+# ============================================================================
+
+# The group's two standing rules, which no law constraint can say. Called from
+# fix_incompatible_laws (extra_effects.txt), which runs on every law change, on
+# every acquired technology and on the yearly country pulse.
+# - The group opens with AI Agents: No Frontier AI Policy moves to Private
+#   Labs, the default (Internet Governance's pattern).
+# - International Oversight needs UN membership: a holder that is no longer a
+#   member falls to National Licensing, the nearest law.
+# Scope: country
+te_frontier_ai_fix_law = {
+	if = {
+		limit = {
+			has_law = law_type:law_no_frontier_ai_policy
+			has_technology_researched = ai_agents
+		}
+		activate_law = law_type:law_private_ai_labs
+	}
+	if = {
+		limit = {
+			has_law = law_type:law_international_ai_oversight
+			NOT = { te_frontier_ai_un_member = yes }
+		}
+		activate_law = law_type:law_national_ai_licensing
+	}
+}
+
+# Leaving the United Nations, or its dissolution, ends International
+# Oversight at once rather than at the next yearly pulse. Called at the end of
+# un_membership_end_effect (un_ladder_effects.txt), after the membership
+# modifier is gone; the leave button's tooltip says so
+# (un_leave_organisation).
+# Scope: country
+te_frontier_ai_on_un_membership_end = {
+	if = {
+		limit = { has_law = law_type:law_international_ai_oversight }
+		activate_law = law_type:law_national_ai_licensing
+	}
+}
+
+# Open Weights' share of Global Technological Development: how many countries
+# of major power rank or greater hold the law. Once a month, from the global
+# pulse (te_frontier_ai_on_actions.txt), so global_tech_spread_script_value
+# reads a variable instead of sweeping the world again.
+# Scope: any (global pulse)
+te_frontier_ai_refresh_open_weights_count = {
+	set_global_variable = {
+		name = te_frontier_ai_open_weights_count
+		value = 0
+	}
+	every_country = {
+		limit = {
+			has_law = law_type:law_open_weights
+			country_rank >= rank_value:major_power
+		}
+		change_global_variable = {
+			name = te_frontier_ai_open_weights_count
+			add = 1
+		}
+	}
+}

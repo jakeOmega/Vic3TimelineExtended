@@ -1,0 +1,16 @@
+﻿# ============================================================================
+# FRONTIER AI CONTROL — triggers (common/laws/te_frontier_ai_laws.txt)
+# ============================================================================
+
+# A member of the United Nations, for International Oversight's can_enact and
+# its standing check (te_frontier_ai_fix_law): the membership modifier, or its
+# mirror while a revolution's winner waits for its entry to be rebuilt
+# (un_member_represented_by_record's reading, un_state_triggers.txt). A member
+# whose representation is suspended is still a member and keeps the law.
+# Scope: country
+te_frontier_ai_un_member = {
+	OR = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_variable = un_member_modifier_on
+	}
+}

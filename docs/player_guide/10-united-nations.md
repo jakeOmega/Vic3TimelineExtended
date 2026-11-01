@@ -137,6 +137,7 @@ weight, so for a typical great power each point is one point of target.
 |---|---|
 | Rules of War law | Total War −2, Traditional Rules of War 0, War Crimes Forbidden +0.5, Humanitarian Regulations +1, Limited War +1.5 |
 | Isolationism (trade policy) | −1.5 |
+| International Oversight (Frontier AI Control law, members only; see [Laws on state power and information](06-politics.md#laws-on-state-power-and-information)) | +0.5 |
 | Ministry of International Aid | +0.15 for each level of investment (+1.35 at the cap of 9) |
 | Nuclear doctrine | No First Use +0.5, Existential Deterrence 0, Flexible First Use −0.5, Nuclear Compellence −1, Nuclear Warfighting −1.5 |
 | The Burden of the Bomb | Up to −1, in step with your arsenal's burden |

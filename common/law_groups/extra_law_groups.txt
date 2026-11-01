@@ -103,6 +103,15 @@ lawgroup_internet_governance = {
 	affected_by_regime_change = yes
 }
 
+# Frontier AI Control (era 13 spec § 7.1): who builds the most capable AI
+# systems. common/laws/te_frontier_ai_laws.txt. Internet Governance's weights:
+# a technology-era policy, and a regime change carries it.
+lawgroup_frontier_ai_control = {
+	law_group_category = power_structure
+	ideological_opinion_impact = 0.25
+	affected_by_regime_change = yes
+}
+
 lawgroup_family_reproductive_policy = {
 	law_group_category = human_rights
 	ideological_opinion_impact = 0.5

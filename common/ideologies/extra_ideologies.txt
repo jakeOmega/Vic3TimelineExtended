@@ -142,6 +142,15 @@
 			}
 		}
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = disapprove
+		law_international_ai_oversight = strongly_approve
+		law_open_weights = approve
+	}
 }
 
 ideology_multicultural = {
@@ -602,6 +611,15 @@ ideology_optimist_transhumanist = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = strongly_approve
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = disapprove
+		law_international_ai_oversight = strongly_disapprove
+		law_open_weights = strongly_approve
+	}
 }
 
 ideology_islamic_inheritance = {
@@ -779,6 +797,15 @@ ideology_corporate = {
 		law_constitutional_review = strongly_approve
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = approve
+	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = disapprove
 	}
 }
 
@@ -2049,6 +2076,15 @@ ideology_custom_religion_aristocratic_governance = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = disapprove
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 }
 
 ideology_custom_religion_technocratic_governance = {
@@ -2138,6 +2174,15 @@ ideology_custom_religion_technocratic_governance = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = strongly_approve
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = approve
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = approve
+		law_open_weights = neutral
+	}
 }
 
 ideology_custom_religion_republican_governance = {
@@ -2226,6 +2271,15 @@ ideology_custom_religion_republican_governance = {
 		law_constitutional_review = strongly_approve
 		law_judicial_supremacy = neutral
 		law_algorithmic_jurisprudence = disapprove
+	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = neutral
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = approve
+		law_open_weights = strongly_approve
 	}
 }
 
@@ -2324,6 +2378,15 @@ ideology_custom_religion_corporate_governance = {
 		law_judicial_supremacy = disapprove
 		law_algorithmic_jurisprudence = approve
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = strongly_approve
+		law_national_ai_licensing = disapprove
+		law_state_ai_monopoly = strongly_disapprove
+		law_international_ai_oversight = disapprove
+		law_open_weights = disapprove
+	}
 }
 
 ideology_custom_religion_imperial_cult_governance = {
@@ -2413,6 +2476,15 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = neutral
 	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = approve
+		law_state_ai_monopoly = strongly_approve
+		law_international_ai_oversight = disapprove
+		law_open_weights = strongly_disapprove
+	}
 }
 
 ideology_custom_religion_theocratic_governance = {
@@ -2501,6 +2573,15 @@ ideology_custom_religion_theocratic_governance = {
 		law_constitutional_review = disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = strongly_disapprove
+	}
+
+	lawgroup_frontier_ai_control = {
+		law_no_frontier_ai_policy = neutral
+		law_private_ai_labs = disapprove
+		law_national_ai_licensing = strongly_approve
+		law_state_ai_monopoly = neutral
+		law_international_ai_oversight = neutral
+		law_open_weights = strongly_disapprove
 	}
 }
 

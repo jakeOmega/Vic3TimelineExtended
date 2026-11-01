@@ -9459,6 +9459,7 @@
  un_ideological_champion_modifier:0 "Ideological Champion at the UN"
  un_law_of_sea_modifier:0 "Convention on the Law of the Sea"
  un_law_of_sea_refusal_modifier:0 "Rejected Law of the Sea"
+ un_leave_drops_international_ai_oversight_tt:0 "$law_international_ai_oversight$ falls to $law_national_ai_licensing$: it needs membership"
  un_ledger_tt_credibility_down_0_5:0 "#R UN credibility −0.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"
  un_ledger_tt_credibility_down_1:0 "#R UN credibility −1#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"
  un_ledger_tt_credibility_down_1_5:0 "#R UN credibility −1.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"

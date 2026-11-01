@@ -135,6 +135,9 @@ LAWGROUP_PRIORITY = [
     "lawgroup_antitrust",
     "lawgroup_financial_regulation",
     "lawgroup_internet_governance",
+    # No constrained law today, so no helper; listed for when one gains a
+    # constraint (te_frontier_ai_laws.txt's header).
+    "lawgroup_frontier_ai_control",
     "lawgroup_privacy_rights",
     "lawgroup_electoral_finance",
 

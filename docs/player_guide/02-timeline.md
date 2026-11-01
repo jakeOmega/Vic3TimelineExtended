@@ -137,7 +137,10 @@ The bonuses add up, and the later the technology, the more it is worth: the
 earliest tier adds a small step, era 12's (Artificial Intelligence, Space
 Colonization and their peers) ten times as much, and era 13's two (Biological
 Immortality and Post-Scarcity Economy) fifteen times. Only great powers count, so a technology first reached by a
-minor country does not move the world's pace until a great power follows.
+minor country does not move the world's pace until a great power follows. One
+law adds to the bonus too: each major power or greater that holds Open Weights
+([Who builds frontier AI](06-politics.md#who-builds-frontier-ai)) adds 100, up
+to 300.
 
 The bonus appears on your country as the Global Technological Development
 modifier, and every country gets the same one, recognized or not. It is a

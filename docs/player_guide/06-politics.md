@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 136 laws, most of them in 35 new law groups, with the institutions,
+The mod adds 156 laws, most of them in 37 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -12,8 +12,8 @@ default) and State Collapse, which has no rule.
 ## The mod's new laws
 
 The new law groups sit beside the base game's in the laws panel. Sixteen of them
-are ministries, covered in [Ministries](#ministries). The other nineteen are
-grouped here by theme, and ten further laws join base-game law groups.
+are ministries, covered in [Ministries](#ministries). The other twenty-one are
+grouped here by theme, and fifteen further laws join base-game law groups.
 
 Many laws need another law in force, and some can't stand beside one. Anarchy
 needs Cooperative Ownership, for example, and Cooperative Ownership needs a
@@ -91,6 +91,7 @@ debate](07-social-movements.md#the-augmentation-debate).
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
+| Frontier AI Control | No Frontier AI Policy, Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights | Who builds the most capable AI, from AI Agents on: innovation against covert defense, authority and intelligence capacity. See [Who builds frontier AI](#who-builds-frontier-ai). |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
 Federal System makes decrees 25% cheaper and calms movements but lowers tax
@@ -133,6 +134,33 @@ country's situation calls for them: a ruling on slavery while abolitionists
 organize, a foreign power demanding an execution, a labor law struck down under
 Judicial Supremacy, an election voided, a new regime asking its courts to call
 it lawful, and two paths out of Religious Courts toward Statutory Courts.
+
+### Who builds frontier AI
+
+Every country holds No Frontier AI Policy until it researches AI Agents, and
+then moves to Private Labs on its own. The other four laws need AI Agents too.
+Economic Covert Defense raises the Detection Risk of a rival's Industrial
+Espionage, the operation that steals production technologies (see [Covert
+defense](11-influence.md#covert-defense)), so the group trades your research
+against what you keep from rivals and how firmly the state holds the
+technology.
+
+| Law | Gives | Costs |
+|---|---|---|
+| Private Labs | +10% innovation; the Industrialists gain political strength | −10 Economic Covert Defense |
+| National Licensing | +5% innovation, +5 Economic Covert Defense, +1 intelligence capacity | |
+| State Monopoly | 100 authority, +3 intelligence capacity, +10 Economic Covert Defense; the Armed Forces gain political strength | −5% innovation |
+| International Oversight | +5% innovation, +2 diplomatic reputation, +0.5 UN Authority Target | Needs membership of the United Nations |
+| Open Weights | +10% technology spread; more Global Technological Development for every country; the Intelligentsia attract more pops | −10 Economic Covert Defense |
+
+Leaving the United Nations, or its dissolution, drops International Oversight
+to National Licensing at once. While you are a major power or greater, Open
+Weights adds 100 technology spread to [Global Technological
+Development](02-timeline.md#global-technological-development) for every
+country, up to 300 from all the countries that hold it, so it helps the world
+catch up on what you and the other leaders have researched. The Industrialists
+back Private Labs, the Armed Forces State Monopoly and the Intelligentsia Open
+Weights; most other interest groups prefer National Licensing.
 
 ### The rules of war
 
