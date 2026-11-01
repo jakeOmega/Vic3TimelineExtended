@@ -790,6 +790,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
         "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
         "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
+        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {

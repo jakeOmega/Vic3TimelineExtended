@@ -1297,6 +1297,18 @@ covert_tech_stealable_production = {
 			$TARGET$ ?= { has_technology_researched = transistors }
 		}
 		AND = {
+			NOT = { has_technology_researched = vactrains }
+			OR = {
+				can_research = vactrains
+				AND = {
+					is_researching_technology = vactrains
+					has_technology_researched = autonomous_vehicles
+					has_technology_researched = quantum_materials
+				}
+			}
+			$TARGET$ ?= { has_technology_researched = vactrains }
+		}
+		AND = {
 			NOT = { has_technology_researched = vacuum_canning }
 			OR = {
 				can_research = vacuum_canning

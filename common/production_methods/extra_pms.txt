@@ -14387,6 +14387,50 @@ pm_autonomous_trains = {
 	}
 }
 
+# Vactrains (era 13 spec § 7.9): freight pods in evacuated tubes, the use the hyperloop
+# ventures of the 2010s turned to. Linear motors in the tube replace the locomotives'
+# engines and oil, so it burns no fuel; superconducting magnets (tech metals) lift the
+# pods and pumps hold the vacuum. Output is Autonomous Trains' +27%, infrastructure its
+# 55 +5. Heavy maintenance tier, as every freight method from Containerized Cargo on
+# (pm_maintenance_graded_standard/_heavy); code 8 in te_state_railway_train_code.
+pm_vactrain_freight = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p4.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		vactrains
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 50                     # Price:   30, Total cost:  1500.0 (40.54%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (21.62%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (10.81%)
+			goods_input_digital_assets_add = 10                  # Price:  100, Total cost:  1000.0 (27.03%)
+			# Output goods
+			goods_output_transportation_add = 170                # Price:   30, Total cost:  5100.0 (100.00%)
+			# Total input cost: 3700.0
+			# Total output cost: 5100.0
+			# Profit: 1400.0
+			# Profit margin: 37.84%
+			# Zero profit price multiplier: 0.73
+			# Employment: 10
+			# Wage breakeven: 140.00
+		}
+		level_scaled = {
+			building_employment_engineers_add = 10
+		}
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_infrastructure_add = 60
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 REPLACE:pm_wooden_passenger_carriages = {
 	texture = "gfx/interface/icons/production_method_icons/passenger_trains.dds"
 
@@ -14532,6 +14576,46 @@ pm_maglev_trains = {
 			state_infrastructure_add = 10
 		}
 	}
+}
+
+# Vactrains (era 13 spec § 7.9): Maglev Trains in an evacuated tube, at airliner speed
+# between cities. Superconducting magnets (tech metals) lift and drive the capsules and
+# pumps hold the vacuum, on electricity. Output is Maglev Trains' +60%, infrastructure
+# its 10 +5 (Bullet Trains 5, Maglev 10); inputs cost about 44% of output at base prices,
+# within the passenger tiers' 40-45% (transport_goods.md). No staff of its own, as Maglev.
+pm_vactrains = {
+	texture = "gfx/interface/icons/production_method_icons/cat_train_purple_p3.dds" # Placeholder Icon
+
+	unlocking_technologies = {
+		vactrains
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 6                            # Price:   50, Total cost:   300.0 (14.29%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (38.10%)
+			goods_input_tech_metals_add = 5                      # Price:   80, Total cost:   400.0 (19.05%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (28.57%)
+			# Output goods
+			goods_output_transportation_add = 160                # Price:   30, Total cost:  4800.0 (100.00%)
+			# Total input cost: 2100.0
+			# Total output cost: 4800.0
+			# Profit: 2700.0
+			# Profit margin: 128.57%
+			# Zero profit price multiplier: 0.44
+			# Employment: 0
+			# Wage breakeven: 0.00
+		}
+	}
+
+	state_modifiers = {
+		level_scaled = {
+			state_infrastructure_add = 15
+		}
+	}
+
+	required_input_goods = electricity
 }
 
 # Vanilla's three port methods, restated so their infrastructure counts per
@@ -19946,6 +20030,7 @@ pm_maintenance_graded_standard = {
 		pm_containerized_cargo
 		pm_automated_loading_and_unloading
 		pm_autonomous_trains
+		pm_vactrain_freight
 		pm_container_ports
 		pm_global_ports
 		pm_magnetic_drive_ports
@@ -19966,6 +20051,7 @@ pm_maintenance_graded_heavy = {
 		pm_containerized_cargo
 		pm_automated_loading_and_unloading
 		pm_autonomous_trains
+		pm_vactrain_freight
 		pm_container_ports
 		pm_global_ports
 		pm_magnetic_drive_ports

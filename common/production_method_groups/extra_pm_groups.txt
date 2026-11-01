@@ -658,6 +658,7 @@ INJECT:pmg_base_building_railway = {
 		pm_containerized_cargo
 		pm_automated_loading_and_unloading
 		pm_autonomous_trains
+		pm_vactrain_freight
 	}
 }
 INJECT:pmg_passenger_trains = {
@@ -665,6 +666,7 @@ INJECT:pmg_passenger_trains = {
 		pm_double-decker_passenger_carriages
 		pm_bullet_trains
 		pm_maglev_trains
+		pm_vactrains
 	}
 }
 
