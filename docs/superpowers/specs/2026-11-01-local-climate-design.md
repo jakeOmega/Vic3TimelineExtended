@@ -364,8 +364,12 @@ In an `NPops = { }` block of `common/defines/extra_defines.txt`, shipped in the
 same PR as comfort and never before it:
 
 ```
-MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0
+MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 1
 ```
+
+It was 0 in #1308, which the engine rejects at load (`defines.cpp:167 … Must be
+greater than 0`), so that build kept vanilla's floor. 1 is below every state
+region's arable land (the least is 2), so it has the same effect as no floor.
 
 `MASS_MIGRATION_NUM_TARGET_STATES_FOR_NO_PENALTY` and
 `MASS_MIGRATION_FEW_TARGET_STATES_PENALTY` stay at vanilla's 4 and 0.2

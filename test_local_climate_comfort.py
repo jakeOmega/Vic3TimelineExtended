@@ -488,12 +488,20 @@ class Modifier(unittest.TestCase):
         self.assertNotIn("$", body, "no $PARAM$ inside a debug_log string")
 
     def test_defines(self):
-        """The arable land floor goes; the few-states penalty stays vanilla's (owner, 2026-11-01)."""
+        """The arable land floor goes; the few-states penalty stays vanilla's (owner, 2026-11-01).
+
+        The engine rejects 0 at load ("Must be greater than 0", defines.cpp:167, 2026-11-01), so the
+        floor is 1: below every state region's arable land (the least is 2).
+        """
         text = DEFINES.read_text(encoding="utf-8-sig")
         blocks = [squash(b) for b in top_blocks(text, "NPops")]
         self.assertTrue(blocks)
-        self.assertEqual(sum(len(re.findall(r"MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 0(?![\d.])", b)) for b in blocks),
+        self.assertEqual(sum(len(re.findall(r"MASS_MIGRATION_TARGET_MIN_ARABLE_LAND = 1(?![\d.])", b)) for b in blocks),
                          1, blocks)
+        arable = [int(n) for f in sorted((ROOT / "map_data/state_regions").glob("*.txt"))
+                  for n in re.findall(r"(?m)^\s*arable_land\s*=\s*(\d+)", f.read_text(encoding="utf-8-sig"))]
+        self.assertGreater(len(arable), 600)
+        self.assertGreater(min(arable), 1, "a region below the floor can't be a mass migration target")
         for path, body in script_texts("common/defines"):
             self.assertEqual(body.count("MASS_MIGRATION_TARGET_MIN_ARABLE_LAND"), int(path == DEFINES), path.name)
             for define in FEW_STATES_DEFINES:
