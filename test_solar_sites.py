@@ -1499,7 +1499,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(f"local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{site.key} ?= this",
                               head)
                 for t in gss.module_types(site):
-                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]} }} sr_mod_fab_build = "
+                    # A Terraforming level for a world finished meanwhile is dropped unbuilt.
+                    extra = f" sr_site_terra_open_{site.key} = yes" if t == "terra" else ""
+                    self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]}{extra} }} sr_mod_fab_build = "
                                   f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
                                   head)
         # A new entry takes the first free place; a removal moves every later entry up one.
@@ -1616,8 +1618,9 @@ class ModulesTest(unittest.TestCase):
             body = _block(self.effects, f"sr_mod_ai_plan_{k}")
             with self.subTest(site=k):
                 queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
-                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"})
-                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6)
+                terra = {"terra"} if gss.terraformable(site) else set()
+                self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "bunker", "yard", "lab"} | terra)
+                self.assertEqual(body.count(f"sr_mod_slots_used_{k} < sr_site_slots_{k}"), 6 + len(terra))
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)

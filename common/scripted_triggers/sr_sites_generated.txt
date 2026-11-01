@@ -1509,6 +1509,7 @@ sr_mq_any_valles_marineris = {
 		has_variable = sr_mq_bunker_valles_marineris
 		has_variable = sr_mq_foundry_valles_marineris
 		has_variable = sr_mq_admin_valles_marineris
+		has_variable = sr_mq_terra_valles_marineris
 	}
 }
 sr_mod_can_queue_a_valles_marineris = {
@@ -1588,6 +1589,16 @@ sr_mod_can_queue_admin_valles_marineris = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
 }
+sr_mod_can_queue_terra_valles_marineris = {
+	global_var:sr_site_holder_valles_marineris ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_valles_marineris < sr_site_slots_max_valles_marineris
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_valles_marineris < sr_terra_max_levels
+	sr_site_terra_open_valles_marineris = yes
+}
+# Valles Marineris has terraforming still to do (any scope).
+sr_site_terra_open_valles_marineris = { sr_site_terra_done_value_valles_marineris < sr_terra_full_months }
 sr_mod_departs_valles_marineris = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_valles_marineris = {
 	OR = {
@@ -1606,6 +1617,7 @@ sr_site_shipping_valles_marineris = {
 		has_global_variable = sr_site_ship_bunker_valles_marineris
 		has_global_variable = sr_site_ship_foundry_valles_marineris
 		has_global_variable = sr_site_ship_admin_valles_marineris
+		has_global_variable = sr_site_ship_terra_valles_marineris
 	}
 }
 sr_mq_any_olympus_mons = {
@@ -1625,6 +1637,7 @@ sr_mq_any_olympus_mons = {
 		has_variable = sr_mq_bunker_olympus_mons
 		has_variable = sr_mq_foundry_olympus_mons
 		has_variable = sr_mq_admin_olympus_mons
+		has_variable = sr_mq_terra_olympus_mons
 	}
 }
 sr_mod_can_queue_a_olympus_mons = {
@@ -1704,6 +1717,16 @@ sr_mod_can_queue_admin_olympus_mons = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
 }
+sr_mod_can_queue_terra_olympus_mons = {
+	global_var:sr_site_holder_olympus_mons ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_olympus_mons < sr_site_slots_max_olympus_mons
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_olympus_mons < sr_terra_max_levels
+	sr_site_terra_open_olympus_mons = yes
+}
+# Olympus Mons has terraforming still to do (any scope).
+sr_site_terra_open_olympus_mons = { sr_site_terra_done_value_olympus_mons < sr_terra_full_months }
 sr_mod_departs_olympus_mons = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_olympus_mons = {
 	OR = {
@@ -1722,6 +1745,7 @@ sr_site_shipping_olympus_mons = {
 		has_global_variable = sr_site_ship_bunker_olympus_mons
 		has_global_variable = sr_site_ship_foundry_olympus_mons
 		has_global_variable = sr_site_ship_admin_olympus_mons
+		has_global_variable = sr_site_ship_terra_olympus_mons
 	}
 }
 sr_mq_any_hellas_planitia = {
@@ -1741,6 +1765,7 @@ sr_mq_any_hellas_planitia = {
 		has_variable = sr_mq_bunker_hellas_planitia
 		has_variable = sr_mq_foundry_hellas_planitia
 		has_variable = sr_mq_admin_hellas_planitia
+		has_variable = sr_mq_terra_hellas_planitia
 	}
 }
 sr_mod_can_queue_a_hellas_planitia = {
@@ -1820,6 +1845,16 @@ sr_mod_can_queue_admin_hellas_planitia = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
 }
+sr_mod_can_queue_terra_hellas_planitia = {
+	global_var:sr_site_holder_hellas_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_hellas_planitia < sr_site_slots_max_hellas_planitia
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_hellas_planitia < sr_terra_max_levels
+	sr_site_terra_open_hellas_planitia = yes
+}
+# Hellas Planitia has terraforming still to do (any scope).
+sr_site_terra_open_hellas_planitia = { sr_site_terra_done_value_hellas_planitia < sr_terra_full_months }
 sr_mod_departs_hellas_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_hellas_planitia = {
 	OR = {
@@ -1838,6 +1873,7 @@ sr_site_shipping_hellas_planitia = {
 		has_global_variable = sr_site_ship_bunker_hellas_planitia
 		has_global_variable = sr_site_ship_foundry_hellas_planitia
 		has_global_variable = sr_site_ship_admin_hellas_planitia
+		has_global_variable = sr_site_ship_terra_hellas_planitia
 	}
 }
 sr_mq_any_utopia_planitia = {
@@ -1857,6 +1893,7 @@ sr_mq_any_utopia_planitia = {
 		has_variable = sr_mq_bunker_utopia_planitia
 		has_variable = sr_mq_foundry_utopia_planitia
 		has_variable = sr_mq_admin_utopia_planitia
+		has_variable = sr_mq_terra_utopia_planitia
 	}
 }
 sr_mod_can_queue_a_utopia_planitia = {
@@ -1936,6 +1973,16 @@ sr_mod_can_queue_admin_utopia_planitia = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
 }
+sr_mod_can_queue_terra_utopia_planitia = {
+	global_var:sr_site_holder_utopia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_utopia_planitia < sr_site_slots_max_utopia_planitia
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_utopia_planitia < sr_terra_max_levels
+	sr_site_terra_open_utopia_planitia = yes
+}
+# Utopia Planitia has terraforming still to do (any scope).
+sr_site_terra_open_utopia_planitia = { sr_site_terra_done_value_utopia_planitia < sr_terra_full_months }
 sr_mod_departs_utopia_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_utopia_planitia = {
 	OR = {
@@ -1954,6 +2001,7 @@ sr_site_shipping_utopia_planitia = {
 		has_global_variable = sr_site_ship_bunker_utopia_planitia
 		has_global_variable = sr_site_ship_foundry_utopia_planitia
 		has_global_variable = sr_site_ship_admin_utopia_planitia
+		has_global_variable = sr_site_ship_terra_utopia_planitia
 	}
 }
 sr_mq_any_arcadia_planitia = {
@@ -1973,6 +2021,7 @@ sr_mq_any_arcadia_planitia = {
 		has_variable = sr_mq_bunker_arcadia_planitia
 		has_variable = sr_mq_foundry_arcadia_planitia
 		has_variable = sr_mq_admin_arcadia_planitia
+		has_variable = sr_mq_terra_arcadia_planitia
 	}
 }
 sr_mod_can_queue_a_arcadia_planitia = {
@@ -2052,6 +2101,16 @@ sr_mod_can_queue_admin_arcadia_planitia = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
 }
+sr_mod_can_queue_terra_arcadia_planitia = {
+	global_var:sr_site_holder_arcadia_planitia ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_arcadia_planitia < sr_site_slots_max_arcadia_planitia
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_arcadia_planitia < sr_terra_max_levels
+	sr_site_terra_open_arcadia_planitia = yes
+}
+# Arcadia Planitia has terraforming still to do (any scope).
+sr_site_terra_open_arcadia_planitia = { sr_site_terra_done_value_arcadia_planitia < sr_terra_full_months }
 sr_mod_departs_arcadia_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_arcadia_planitia = {
 	OR = {
@@ -2070,6 +2129,7 @@ sr_site_shipping_arcadia_planitia = {
 		has_global_variable = sr_site_ship_bunker_arcadia_planitia
 		has_global_variable = sr_site_ship_foundry_arcadia_planitia
 		has_global_variable = sr_site_ship_admin_arcadia_planitia
+		has_global_variable = sr_site_ship_terra_arcadia_planitia
 	}
 }
 sr_mq_any_ceres = {
@@ -2901,6 +2961,7 @@ sr_mq_any_ganymede = {
 		has_variable = sr_mq_bunker_ganymede
 		has_variable = sr_mq_foundry_ganymede
 		has_variable = sr_mq_admin_ganymede
+		has_variable = sr_mq_terra_ganymede
 	}
 }
 sr_mod_can_queue_a_ganymede = {
@@ -2980,6 +3041,16 @@ sr_mod_can_queue_admin_ganymede = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
 }
+sr_mod_can_queue_terra_ganymede = {
+	global_var:sr_site_holder_ganymede ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_ganymede < sr_site_slots_max_ganymede
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_ganymede < sr_terra_max_levels
+	sr_site_terra_open_ganymede = yes
+}
+# Ganymede has terraforming still to do (any scope).
+sr_site_terra_open_ganymede = { sr_site_terra_done_value_ganymede < sr_terra_full_months }
 sr_mod_departs_ganymede = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_ganymede = {
 	OR = {
@@ -2998,6 +3069,7 @@ sr_site_shipping_ganymede = {
 		has_global_variable = sr_site_ship_bunker_ganymede
 		has_global_variable = sr_site_ship_foundry_ganymede
 		has_global_variable = sr_site_ship_admin_ganymede
+		has_global_variable = sr_site_ship_terra_ganymede
 	}
 }
 sr_mq_any_callisto = {
@@ -3017,6 +3089,7 @@ sr_mq_any_callisto = {
 		has_variable = sr_mq_bunker_callisto
 		has_variable = sr_mq_foundry_callisto
 		has_variable = sr_mq_admin_callisto
+		has_variable = sr_mq_terra_callisto
 	}
 }
 sr_mod_can_queue_a_callisto = {
@@ -3096,6 +3169,16 @@ sr_mod_can_queue_admin_callisto = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
 }
+sr_mod_can_queue_terra_callisto = {
+	global_var:sr_site_holder_callisto ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_callisto < sr_site_slots_max_callisto
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_callisto < sr_terra_max_levels
+	sr_site_terra_open_callisto = yes
+}
+# Callisto has terraforming still to do (any scope).
+sr_site_terra_open_callisto = { sr_site_terra_done_value_callisto < sr_terra_full_months }
 sr_mod_departs_callisto = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_callisto = {
 	OR = {
@@ -3114,6 +3197,7 @@ sr_site_shipping_callisto = {
 		has_global_variable = sr_site_ship_bunker_callisto
 		has_global_variable = sr_site_ship_foundry_callisto
 		has_global_variable = sr_site_ship_admin_callisto
+		has_global_variable = sr_site_ship_terra_callisto
 	}
 }
 sr_mq_any_himalia = {
@@ -3365,6 +3449,7 @@ sr_mq_any_venus = {
 		has_variable = sr_mq_bunker_venus
 		has_variable = sr_mq_foundry_venus
 		has_variable = sr_mq_admin_venus
+		has_variable = sr_mq_terra_venus
 	}
 }
 sr_mod_can_queue_a_venus = {
@@ -3444,6 +3529,16 @@ sr_mod_can_queue_admin_venus = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_venus < sr_site_slots_max_venus
 }
+sr_mod_can_queue_terra_venus = {
+	global_var:sr_site_holder_venus ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_venus < sr_site_slots_max_venus
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_venus < sr_terra_max_levels
+	sr_site_terra_open_venus = yes
+}
+# Venus Cloud Habitat has terraforming still to do (any scope).
+sr_site_terra_open_venus = { sr_site_terra_done_value_venus < sr_terra_full_months }
 sr_mod_departs_venus = { sr_mod_departs = { BODY = venus } }
 sr_site_shipping_venus = {
 	OR = {
@@ -3462,6 +3557,7 @@ sr_site_shipping_venus = {
 		has_global_variable = sr_site_ship_bunker_venus
 		has_global_variable = sr_site_ship_foundry_venus
 		has_global_variable = sr_site_ship_admin_venus
+		has_global_variable = sr_site_ship_terra_venus
 	}
 }
 sr_mq_any_mercury = {
@@ -3597,6 +3693,7 @@ sr_mq_any_titan = {
 		has_variable = sr_mq_bunker_titan
 		has_variable = sr_mq_foundry_titan
 		has_variable = sr_mq_admin_titan
+		has_variable = sr_mq_terra_titan
 	}
 }
 sr_mod_can_queue_a_titan = {
@@ -3676,6 +3773,16 @@ sr_mod_can_queue_admin_titan = {
 	sr_mq_has_room = yes
 	sr_mod_slots_used_titan < sr_site_slots_max_titan
 }
+sr_mod_can_queue_terra_titan = {
+	global_var:sr_site_holder_titan ?= this
+	sr_mq_has_room = yes
+	sr_mod_slots_used_titan < sr_site_slots_max_titan
+	modifier:country_sr_terraforming_bool = yes
+	sr_mod_terra_used_titan < sr_terra_max_levels
+	sr_site_terra_open_titan = yes
+}
+# Titan has terraforming still to do (any scope).
+sr_site_terra_open_titan = { sr_site_terra_done_value_titan < sr_terra_full_months }
 sr_mod_departs_titan = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_titan = {
 	OR = {
@@ -3694,6 +3801,7 @@ sr_site_shipping_titan = {
 		has_global_variable = sr_site_ship_bunker_titan
 		has_global_variable = sr_site_ship_foundry_titan
 		has_global_variable = sr_site_ship_admin_titan
+		has_global_variable = sr_site_ship_terra_titan
 	}
 }
 sr_mq_any_enceladus = {
@@ -6229,6 +6337,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 1 scope:op = 13 sr_mod_can_queue_bunker_valles_marineris = yes }
 		AND = { scope:site = 1 scope:op = 14 sr_mod_can_queue_foundry_valles_marineris = yes }
 		AND = { scope:site = 1 scope:op = 15 sr_mod_can_queue_admin_valles_marineris = yes }
+		AND = { scope:site = 1 scope:op = 16 sr_mod_can_queue_terra_valles_marineris = yes }
 		AND = { scope:site = 2 scope:op = 1 sr_mod_can_queue_a_olympus_mons = yes }
 		AND = { scope:site = 2 scope:op = 2 sr_mod_can_queue_b_olympus_mons = yes }
 		AND = { scope:site = 2 scope:op = 3 sr_mod_can_queue_hab_olympus_mons = yes }
@@ -6244,6 +6353,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 2 scope:op = 13 sr_mod_can_queue_bunker_olympus_mons = yes }
 		AND = { scope:site = 2 scope:op = 14 sr_mod_can_queue_foundry_olympus_mons = yes }
 		AND = { scope:site = 2 scope:op = 15 sr_mod_can_queue_admin_olympus_mons = yes }
+		AND = { scope:site = 2 scope:op = 16 sr_mod_can_queue_terra_olympus_mons = yes }
 		AND = { scope:site = 3 scope:op = 1 sr_mod_can_queue_a_hellas_planitia = yes }
 		AND = { scope:site = 3 scope:op = 2 sr_mod_can_queue_b_hellas_planitia = yes }
 		AND = { scope:site = 3 scope:op = 3 sr_mod_can_queue_hab_hellas_planitia = yes }
@@ -6259,6 +6369,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 3 scope:op = 13 sr_mod_can_queue_bunker_hellas_planitia = yes }
 		AND = { scope:site = 3 scope:op = 14 sr_mod_can_queue_foundry_hellas_planitia = yes }
 		AND = { scope:site = 3 scope:op = 15 sr_mod_can_queue_admin_hellas_planitia = yes }
+		AND = { scope:site = 3 scope:op = 16 sr_mod_can_queue_terra_hellas_planitia = yes }
 		AND = { scope:site = 4 scope:op = 1 sr_mod_can_queue_a_utopia_planitia = yes }
 		AND = { scope:site = 4 scope:op = 2 sr_mod_can_queue_b_utopia_planitia = yes }
 		AND = { scope:site = 4 scope:op = 3 sr_mod_can_queue_hab_utopia_planitia = yes }
@@ -6274,6 +6385,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 4 scope:op = 13 sr_mod_can_queue_bunker_utopia_planitia = yes }
 		AND = { scope:site = 4 scope:op = 14 sr_mod_can_queue_foundry_utopia_planitia = yes }
 		AND = { scope:site = 4 scope:op = 15 sr_mod_can_queue_admin_utopia_planitia = yes }
+		AND = { scope:site = 4 scope:op = 16 sr_mod_can_queue_terra_utopia_planitia = yes }
 		AND = { scope:site = 5 scope:op = 1 sr_mod_can_queue_a_arcadia_planitia = yes }
 		AND = { scope:site = 5 scope:op = 2 sr_mod_can_queue_b_arcadia_planitia = yes }
 		AND = { scope:site = 5 scope:op = 3 sr_mod_can_queue_hab_arcadia_planitia = yes }
@@ -6289,6 +6401,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 5 scope:op = 13 sr_mod_can_queue_bunker_arcadia_planitia = yes }
 		AND = { scope:site = 5 scope:op = 14 sr_mod_can_queue_foundry_arcadia_planitia = yes }
 		AND = { scope:site = 5 scope:op = 15 sr_mod_can_queue_admin_arcadia_planitia = yes }
+		AND = { scope:site = 5 scope:op = 16 sr_mod_can_queue_terra_arcadia_planitia = yes }
 		AND = { scope:site = 6 scope:op = 1 sr_mod_can_queue_a_ceres = yes }
 		AND = { scope:site = 6 scope:op = 2 sr_mod_can_queue_b_ceres = yes }
 		AND = { scope:site = 6 scope:op = 3 sr_mod_can_queue_hab_ceres = yes }
@@ -6409,6 +6522,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 13 scope:op = 13 sr_mod_can_queue_bunker_ganymede = yes }
 		AND = { scope:site = 13 scope:op = 14 sr_mod_can_queue_foundry_ganymede = yes }
 		AND = { scope:site = 13 scope:op = 15 sr_mod_can_queue_admin_ganymede = yes }
+		AND = { scope:site = 13 scope:op = 16 sr_mod_can_queue_terra_ganymede = yes }
 		AND = { scope:site = 14 scope:op = 1 sr_mod_can_queue_a_callisto = yes }
 		AND = { scope:site = 14 scope:op = 2 sr_mod_can_queue_b_callisto = yes }
 		AND = { scope:site = 14 scope:op = 3 sr_mod_can_queue_hab_callisto = yes }
@@ -6424,6 +6538,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 14 scope:op = 13 sr_mod_can_queue_bunker_callisto = yes }
 		AND = { scope:site = 14 scope:op = 14 sr_mod_can_queue_foundry_callisto = yes }
 		AND = { scope:site = 14 scope:op = 15 sr_mod_can_queue_admin_callisto = yes }
+		AND = { scope:site = 14 scope:op = 16 sr_mod_can_queue_terra_callisto = yes }
 		AND = { scope:site = 15 scope:op = 1 sr_mod_can_queue_a_himalia = yes }
 		AND = { scope:site = 15 scope:op = 2 sr_mod_can_queue_b_himalia = yes }
 		AND = { scope:site = 15 scope:op = 3 sr_mod_can_queue_hab_himalia = yes }
@@ -6469,6 +6584,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 17 scope:op = 13 sr_mod_can_queue_bunker_venus = yes }
 		AND = { scope:site = 17 scope:op = 14 sr_mod_can_queue_foundry_venus = yes }
 		AND = { scope:site = 17 scope:op = 15 sr_mod_can_queue_admin_venus = yes }
+		AND = { scope:site = 17 scope:op = 16 sr_mod_can_queue_terra_venus = yes }
 		AND = { scope:site = 18 scope:op = 1 sr_mod_can_queue_a_mercury = yes }
 		AND = { scope:site = 18 scope:op = 2 sr_mod_can_queue_b_mercury = yes }
 		AND = { scope:site = 18 scope:op = 3 sr_mod_can_queue_hab_mercury = yes }
@@ -6499,6 +6615,7 @@ sr_mod_scope_can_queue = {
 		AND = { scope:site = 19 scope:op = 13 sr_mod_can_queue_bunker_titan = yes }
 		AND = { scope:site = 19 scope:op = 14 sr_mod_can_queue_foundry_titan = yes }
 		AND = { scope:site = 19 scope:op = 15 sr_mod_can_queue_admin_titan = yes }
+		AND = { scope:site = 19 scope:op = 16 sr_mod_can_queue_terra_titan = yes }
 		AND = { scope:site = 20 scope:op = 1 sr_mod_can_queue_a_enceladus = yes }
 		AND = { scope:site = 20 scope:op = 2 sr_mod_can_queue_b_enceladus = yes }
 		AND = { scope:site = 20 scope:op = 3 sr_mod_can_queue_hab_enceladus = yes }
@@ -7038,6 +7155,35 @@ sr_mod_scope_has_queue = {
 		AND = { scope:site = 40 sr_mq_any_imbrium = yes }
 	}
 }
+# Terraforming (era 13 spec § 7.11; only the worlds that take it have its button):
+# the world has fewer than sr_terra_max_levels (3) of it, counting queue and shipments,
+sr_mod_scope_terra_room = {
+	OR = {
+		AND = { scope:site = 1 sr_mod_terra_used_valles_marineris < sr_terra_max_levels }
+		AND = { scope:site = 2 sr_mod_terra_used_olympus_mons < sr_terra_max_levels }
+		AND = { scope:site = 3 sr_mod_terra_used_hellas_planitia < sr_terra_max_levels }
+		AND = { scope:site = 4 sr_mod_terra_used_utopia_planitia < sr_terra_max_levels }
+		AND = { scope:site = 5 sr_mod_terra_used_arcadia_planitia < sr_terra_max_levels }
+		AND = { scope:site = 13 sr_mod_terra_used_ganymede < sr_terra_max_levels }
+		AND = { scope:site = 14 sr_mod_terra_used_callisto < sr_terra_max_levels }
+		AND = { scope:site = 17 sr_mod_terra_used_venus < sr_terra_max_levels }
+		AND = { scope:site = 19 sr_mod_terra_used_titan < sr_terra_max_levels }
+	}
+}
+# ... and has terraforming still to do.
+sr_mod_scope_terra_open = {
+	OR = {
+		AND = { scope:site = 1 sr_site_terra_open_valles_marineris = yes }
+		AND = { scope:site = 2 sr_site_terra_open_olympus_mons = yes }
+		AND = { scope:site = 3 sr_site_terra_open_hellas_planitia = yes }
+		AND = { scope:site = 4 sr_site_terra_open_utopia_planitia = yes }
+		AND = { scope:site = 5 sr_site_terra_open_arcadia_planitia = yes }
+		AND = { scope:site = 13 sr_site_terra_open_ganymede = yes }
+		AND = { scope:site = 14 sr_site_terra_open_callisto = yes }
+		AND = { scope:site = 17 sr_site_terra_open_venus = yes }
+		AND = { scope:site = 19 sr_site_terra_open_titan = yes }
+	}
+}
 
 # ===== Dismantling (owner, 2026-10-31) =====
 # The dismantle scripted GUI's conditions, one by one (scope:site, scope:op the
@@ -7150,6 +7296,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 1 scope:op = 13 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 13 }
 		AND = { scope:site = 1 scope:op = 14 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 14 }
 		AND = { scope:site = 1 scope:op = 15 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 15 }
+		AND = { scope:site = 1 scope:op = 16 has_variable = sr_md_type_valles_marineris var:sr_md_type_valles_marineris = 16 }
 		AND = { scope:site = 2 scope:op = 1 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 1 }
 		AND = { scope:site = 2 scope:op = 2 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 2 }
 		AND = { scope:site = 2 scope:op = 3 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 3 }
@@ -7165,6 +7312,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 2 scope:op = 13 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 13 }
 		AND = { scope:site = 2 scope:op = 14 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 14 }
 		AND = { scope:site = 2 scope:op = 15 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 15 }
+		AND = { scope:site = 2 scope:op = 16 has_variable = sr_md_type_olympus_mons var:sr_md_type_olympus_mons = 16 }
 		AND = { scope:site = 3 scope:op = 1 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 1 }
 		AND = { scope:site = 3 scope:op = 2 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 2 }
 		AND = { scope:site = 3 scope:op = 3 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 3 }
@@ -7180,6 +7328,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 3 scope:op = 13 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 13 }
 		AND = { scope:site = 3 scope:op = 14 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 14 }
 		AND = { scope:site = 3 scope:op = 15 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 15 }
+		AND = { scope:site = 3 scope:op = 16 has_variable = sr_md_type_hellas_planitia var:sr_md_type_hellas_planitia = 16 }
 		AND = { scope:site = 4 scope:op = 1 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 1 }
 		AND = { scope:site = 4 scope:op = 2 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 2 }
 		AND = { scope:site = 4 scope:op = 3 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 3 }
@@ -7195,6 +7344,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 4 scope:op = 13 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 13 }
 		AND = { scope:site = 4 scope:op = 14 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 14 }
 		AND = { scope:site = 4 scope:op = 15 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 15 }
+		AND = { scope:site = 4 scope:op = 16 has_variable = sr_md_type_utopia_planitia var:sr_md_type_utopia_planitia = 16 }
 		AND = { scope:site = 5 scope:op = 1 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 1 }
 		AND = { scope:site = 5 scope:op = 2 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 2 }
 		AND = { scope:site = 5 scope:op = 3 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 3 }
@@ -7210,6 +7360,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 5 scope:op = 13 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 13 }
 		AND = { scope:site = 5 scope:op = 14 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 14 }
 		AND = { scope:site = 5 scope:op = 15 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 15 }
+		AND = { scope:site = 5 scope:op = 16 has_variable = sr_md_type_arcadia_planitia var:sr_md_type_arcadia_planitia = 16 }
 		AND = { scope:site = 6 scope:op = 1 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 1 }
 		AND = { scope:site = 6 scope:op = 2 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 2 }
 		AND = { scope:site = 6 scope:op = 3 has_variable = sr_md_type_ceres var:sr_md_type_ceres = 3 }
@@ -7330,6 +7481,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 13 scope:op = 13 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 13 }
 		AND = { scope:site = 13 scope:op = 14 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 14 }
 		AND = { scope:site = 13 scope:op = 15 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 15 }
+		AND = { scope:site = 13 scope:op = 16 has_variable = sr_md_type_ganymede var:sr_md_type_ganymede = 16 }
 		AND = { scope:site = 14 scope:op = 1 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 1 }
 		AND = { scope:site = 14 scope:op = 2 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 2 }
 		AND = { scope:site = 14 scope:op = 3 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 3 }
@@ -7345,6 +7497,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 14 scope:op = 13 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 13 }
 		AND = { scope:site = 14 scope:op = 14 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 14 }
 		AND = { scope:site = 14 scope:op = 15 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 15 }
+		AND = { scope:site = 14 scope:op = 16 has_variable = sr_md_type_callisto var:sr_md_type_callisto = 16 }
 		AND = { scope:site = 15 scope:op = 1 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 1 }
 		AND = { scope:site = 15 scope:op = 2 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 2 }
 		AND = { scope:site = 15 scope:op = 3 has_variable = sr_md_type_himalia var:sr_md_type_himalia = 3 }
@@ -7390,6 +7543,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 17 scope:op = 13 has_variable = sr_md_type_venus var:sr_md_type_venus = 13 }
 		AND = { scope:site = 17 scope:op = 14 has_variable = sr_md_type_venus var:sr_md_type_venus = 14 }
 		AND = { scope:site = 17 scope:op = 15 has_variable = sr_md_type_venus var:sr_md_type_venus = 15 }
+		AND = { scope:site = 17 scope:op = 16 has_variable = sr_md_type_venus var:sr_md_type_venus = 16 }
 		AND = { scope:site = 18 scope:op = 1 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 1 }
 		AND = { scope:site = 18 scope:op = 2 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 2 }
 		AND = { scope:site = 18 scope:op = 3 has_variable = sr_md_type_mercury var:sr_md_type_mercury = 3 }
@@ -7420,6 +7574,7 @@ sr_md_scope_is_this = {
 		AND = { scope:site = 19 scope:op = 13 has_variable = sr_md_type_titan var:sr_md_type_titan = 13 }
 		AND = { scope:site = 19 scope:op = 14 has_variable = sr_md_type_titan var:sr_md_type_titan = 14 }
 		AND = { scope:site = 19 scope:op = 15 has_variable = sr_md_type_titan var:sr_md_type_titan = 15 }
+		AND = { scope:site = 19 scope:op = 16 has_variable = sr_md_type_titan var:sr_md_type_titan = 16 }
 		AND = { scope:site = 20 scope:op = 1 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 1 }
 		AND = { scope:site = 20 scope:op = 2 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 2 }
 		AND = { scope:site = 20 scope:op = 3 has_variable = sr_md_type_enceladus var:sr_md_type_enceladus = 3 }
@@ -7750,6 +7905,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 1 scope:op = 13 sr_site_bunker_value_valles_marineris > 0 }
 		AND = { scope:site = 1 scope:op = 14 sr_site_foundry_value_valles_marineris > 0 }
 		AND = { scope:site = 1 scope:op = 15 sr_site_admin_value_valles_marineris > 0 }
+		AND = { scope:site = 1 scope:op = 16 sr_site_terra_value_valles_marineris > 0 }
 		AND = { scope:site = 2 scope:op = 1 sr_site_lvl_a_value_olympus_mons > sr_md_floor_a_olympus_mons }
 		AND = { scope:site = 2 scope:op = 2 sr_site_lvl_b_value_olympus_mons > sr_md_floor_b_olympus_mons }
 		AND = { scope:site = 2 scope:op = 3 sr_site_hab_value_olympus_mons > 0 }
@@ -7765,6 +7921,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 2 scope:op = 13 sr_site_bunker_value_olympus_mons > 0 }
 		AND = { scope:site = 2 scope:op = 14 sr_site_foundry_value_olympus_mons > 0 }
 		AND = { scope:site = 2 scope:op = 15 sr_site_admin_value_olympus_mons > 0 }
+		AND = { scope:site = 2 scope:op = 16 sr_site_terra_value_olympus_mons > 0 }
 		AND = { scope:site = 3 scope:op = 1 sr_site_lvl_a_value_hellas_planitia > sr_md_floor_a_hellas_planitia }
 		AND = { scope:site = 3 scope:op = 2 sr_site_lvl_b_value_hellas_planitia > sr_md_floor_b_hellas_planitia }
 		AND = { scope:site = 3 scope:op = 3 sr_site_hab_value_hellas_planitia > 0 }
@@ -7780,6 +7937,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 3 scope:op = 13 sr_site_bunker_value_hellas_planitia > 0 }
 		AND = { scope:site = 3 scope:op = 14 sr_site_foundry_value_hellas_planitia > 0 }
 		AND = { scope:site = 3 scope:op = 15 sr_site_admin_value_hellas_planitia > 0 }
+		AND = { scope:site = 3 scope:op = 16 sr_site_terra_value_hellas_planitia > 0 }
 		AND = { scope:site = 4 scope:op = 1 sr_site_lvl_a_value_utopia_planitia > sr_md_floor_a_utopia_planitia }
 		AND = { scope:site = 4 scope:op = 2 sr_site_lvl_b_value_utopia_planitia > sr_md_floor_b_utopia_planitia }
 		AND = { scope:site = 4 scope:op = 3 sr_site_hab_value_utopia_planitia > 0 }
@@ -7795,6 +7953,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 4 scope:op = 13 sr_site_bunker_value_utopia_planitia > 0 }
 		AND = { scope:site = 4 scope:op = 14 sr_site_foundry_value_utopia_planitia > 0 }
 		AND = { scope:site = 4 scope:op = 15 sr_site_admin_value_utopia_planitia > 0 }
+		AND = { scope:site = 4 scope:op = 16 sr_site_terra_value_utopia_planitia > 0 }
 		AND = { scope:site = 5 scope:op = 1 sr_site_lvl_a_value_arcadia_planitia > sr_md_floor_a_arcadia_planitia }
 		AND = { scope:site = 5 scope:op = 2 sr_site_lvl_b_value_arcadia_planitia > sr_md_floor_b_arcadia_planitia }
 		AND = { scope:site = 5 scope:op = 3 sr_site_hab_value_arcadia_planitia > 0 }
@@ -7810,6 +7969,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 5 scope:op = 13 sr_site_bunker_value_arcadia_planitia > 0 }
 		AND = { scope:site = 5 scope:op = 14 sr_site_foundry_value_arcadia_planitia > 0 }
 		AND = { scope:site = 5 scope:op = 15 sr_site_admin_value_arcadia_planitia > 0 }
+		AND = { scope:site = 5 scope:op = 16 sr_site_terra_value_arcadia_planitia > 0 }
 		AND = { scope:site = 6 scope:op = 1 sr_site_lvl_a_value_ceres > sr_md_floor_a_ceres }
 		AND = { scope:site = 6 scope:op = 2 sr_site_lvl_b_value_ceres > sr_md_floor_b_ceres }
 		AND = { scope:site = 6 scope:op = 3 sr_site_hab_value_ceres > 0 }
@@ -7930,6 +8090,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 13 scope:op = 13 sr_site_bunker_value_ganymede > 0 }
 		AND = { scope:site = 13 scope:op = 14 sr_site_foundry_value_ganymede > 0 }
 		AND = { scope:site = 13 scope:op = 15 sr_site_admin_value_ganymede > 0 }
+		AND = { scope:site = 13 scope:op = 16 sr_site_terra_value_ganymede > 0 }
 		AND = { scope:site = 14 scope:op = 1 sr_site_lvl_a_value_callisto > sr_md_floor_a_callisto }
 		AND = { scope:site = 14 scope:op = 2 sr_site_lvl_b_value_callisto > sr_md_floor_b_callisto }
 		AND = { scope:site = 14 scope:op = 3 sr_site_hab_value_callisto > 0 }
@@ -7945,6 +8106,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 14 scope:op = 13 sr_site_bunker_value_callisto > 0 }
 		AND = { scope:site = 14 scope:op = 14 sr_site_foundry_value_callisto > 0 }
 		AND = { scope:site = 14 scope:op = 15 sr_site_admin_value_callisto > 0 }
+		AND = { scope:site = 14 scope:op = 16 sr_site_terra_value_callisto > 0 }
 		AND = { scope:site = 15 scope:op = 1 sr_site_lvl_a_value_himalia > sr_md_floor_a_himalia }
 		AND = { scope:site = 15 scope:op = 2 sr_site_lvl_b_value_himalia > sr_md_floor_b_himalia }
 		AND = { scope:site = 15 scope:op = 3 sr_site_hab_value_himalia > 0 }
@@ -7990,6 +8152,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 17 scope:op = 13 sr_site_bunker_value_venus > 0 }
 		AND = { scope:site = 17 scope:op = 14 sr_site_foundry_value_venus > 0 }
 		AND = { scope:site = 17 scope:op = 15 sr_site_admin_value_venus > 0 }
+		AND = { scope:site = 17 scope:op = 16 sr_site_terra_value_venus > 0 }
 		AND = { scope:site = 18 scope:op = 1 sr_site_lvl_a_value_mercury > sr_md_floor_a_mercury }
 		AND = { scope:site = 18 scope:op = 2 sr_site_lvl_b_value_mercury > sr_md_floor_b_mercury }
 		AND = { scope:site = 18 scope:op = 3 sr_site_hab_value_mercury > 0 }
@@ -8020,6 +8183,7 @@ sr_md_scope_above_floor = {
 		AND = { scope:site = 19 scope:op = 13 sr_site_bunker_value_titan > 0 }
 		AND = { scope:site = 19 scope:op = 14 sr_site_foundry_value_titan > 0 }
 		AND = { scope:site = 19 scope:op = 15 sr_site_admin_value_titan > 0 }
+		AND = { scope:site = 19 scope:op = 16 sr_site_terra_value_titan > 0 }
 		AND = { scope:site = 20 scope:op = 1 sr_site_lvl_a_value_enceladus > sr_md_floor_a_enceladus }
 		AND = { scope:site = 20 scope:op = 2 sr_site_lvl_b_value_enceladus > sr_md_floor_b_enceladus }
 		AND = { scope:site = 20 scope:op = 3 sr_site_hab_value_enceladus > 0 }
