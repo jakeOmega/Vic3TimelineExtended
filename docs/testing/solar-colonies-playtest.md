@@ -240,15 +240,16 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep on its six maintenance goods,
    +900% for every 10 strength at full, and the section's Upkeep figure matches (the UI pass section, PR 7, has the
    detail). The methods' other inputs don't change.
-5. **Orders.** Pick a destination (the button steps through the other eight; its hover gives the leg's months and
-   km/s), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
+5. **Orders.** Pick a destination in the Fleet Destination popup (its rows give each trip's months and propellant;
+   the PR 3 section below), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
    at Earth outside Mars's window, for instance). In transit the row reads "→ Mars" and its landing month; on landing
    `fleet_leg` logs OK and the months flown match `docs/engine/launch_windows_report.md`.
 6. **Docking and refits.** A fleet back at Earth refills propellant and supply, repairs 20% of its damage a month, and
    refits to a newer drive (Refit shows three months). A fleet at our colony with a Spaceport repairs 10% a level, and
    refills propellant by 25% a month only on a world that makes it (Utopia Planitia, Ceres, Europa, Ganymede, Callisto,
    Titan, Enceladus, Rhea, Triton, Pluto). Away from a dock, supply counts down; at zero the fleet loses 5% a month.
-7. **Merge, detach, marines.** Merge two fleets at one location; detach half of one into a free slot. At Earth the
+7. **Transfer, marines.** Move all of one fleet into another at its location, then part of one into a new fleet, in
+   the Transfer popup (the PR 4 section below, which took in Merge and Detach). At Earth the
    carriers fill with marines (2 battalions a point of carrier strength); Land puts them at our colony there (Colony
    Defences shows them), Embark takes them back.
 8. **Garrisons under Full.** Answer a demand for self-government (`.94`, option b of `te_debug_space_race.5`) with a
