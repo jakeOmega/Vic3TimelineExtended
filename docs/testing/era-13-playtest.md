@@ -104,6 +104,52 @@ ahead, raised if they fall short.
 | Before (main at 6b71e07) | | | | | |
 | After (phases 1 and 2) | | | | | |
 
+## Phase 3: Morphological Freedom and Bodily Autonomy
+
+1. **The technology.** Morphological Freedom sits in era 12's society column
+   after Human Augmentation and the LGBTQ+ Rights Movement, with Genetic
+   Engineering's icon until its own is painted. Its tooltip names Licensed
+   Modification and Morphological Freedom, and +3% services output.
+2. **The law group.**
+   - In a new game every country holds Natural Form in the laws panel's
+     Bodily Autonomy group (Human Rights), beside Human Augmentation.
+   - Load a save from before this change: every country holds Natural Form,
+     and none holds two laws in the group
+     (`scripts/analysis/save_country_probe.py --law-conflicts` on the next
+     save).
+   - A country released or formed later also holds Natural Form.
+   - The three laws borrow Human Purity's, Basic Protections' and
+     Anti-Discrimination Laws' icons.
+3. **The acceptance hook.** Under Universal Citizenship with Civil Rights
+   Movement and Social Justice Movements researched, enact Morphological
+   Freedom and read a pop's acceptance breakdown three ways: a culture that
+   shares a heritage trait with a primary culture, one that shares only a
+   heritage group, and one that shares neither. The third shows +10 from the
+   law. If it now reads higher than the first, the engine does not give a
+   shared-trait pop the higher no-shared figure, and the hook inverts heritage
+   under the four citizenship laws that leave little gap (Subjecthood,
+   Cultural, Assimilatory, Universal). Record which.
+4. **Interest groups.** With the technology, open Licensed Modification's
+   enactment: the Devout and the Rural Folk oppose it, the Intelligentsia
+   support it. Morphological Freedom: the Devout strongly opposed, the
+   Intelligentsia strongly in favor, Industrialists split between their
+   ideologies. Natural Form moves no group's approval before the technology.
+5. **The debate.**
+   - It appears with the technology under the Social Movements rule, and not
+     for a decentralized country, with Civil Rights' icon until its own.
+   - Each law shows its status line.
+   - Enacting Morphological Freedom completes it and opens The Chosen Body at
+     once (a popup).
+   - With Natural Form held for twenty years, The Body as Given opens at once
+     instead; with Licensed Modification held, An Unsettled Question appears
+     and no event.
+   - After a revolution, a finished debate does not start again on the winner.
+6. **Events.** Over a twenty-year debate, count the events: no two within two
+   years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
+   Ears Now once each, at most eight in all. Old Enough to Choose and Everyone
+   Has Ears Now never come under Natural Form, and The Pulpits Speak only with
+   a powerful Devout group, whose name it shows.
+
 ## Phase 3: Frontier AI Control
 
 1. **A new game.** The laws panel shows Frontier AI Control among the power

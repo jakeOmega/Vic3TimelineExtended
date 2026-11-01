@@ -884,6 +884,82 @@ JUDICIARY_STANCES = {
 }
 
 
+# --- lawgroup_bodily_autonomy (era 13 spec § 7.1; common/laws/te_bodily_autonomy_laws.txt) ---
+# Every list names every law, in file order. Natural Form is neutral in all of
+# them: every country holds it from 1836 until era 12, so a stance on it would
+# move approval for two centuries with nothing to enact against it. A group
+# that wants Natural Form shows it by opposing the other laws. Applied to the
+# vanilla ideologies in BODILY_AUTONOMY_STANCES by the loop after
+# `modifications`; the mod's own ideologies carry the same lists by hand in
+# extra_ideologies.txt. Clade Citizenship (Self-Directed Evolution, era 13)
+# joins as a fourth law: add it to _BODILY_AUTONOMY_LAWS and a fourth code to
+# each row below (and to the hand-written blocks).
+_BODILY_AUTONOMY_LAWS = (
+    "law_natural_form",
+    "law_licensed_modification",
+    "law_morphological_freedom",
+)
+
+
+def bodily_autonomy_constructor(*codes):
+    """One stance code per law, in _BODILY_AUTONOMY_LAWS order, as (law, stance) pairs."""
+    assert len(codes) == len(_BODILY_AUTONOMY_LAWS)
+    return [(law, _STANCE_CODES[code]) for law, code in zip(_BODILY_AUTONOMY_LAWS, codes)]
+
+
+BODILY_AUTONOMY_LISTS = {
+    #                                                 Natural Licensed Freedom
+    # The body as given (or as God made it): the Devout, the Rural Folk.
+    "traditional": bodily_autonomy_constructor("0", "-", "--"),
+    # Order and uniformity first: tolerate a licensed trade, not a right.
+    "cautious": bodily_autonomy_constructor("0", "0", "-"),
+    # Safety and standards: licensed clinics, publicly overseen.
+    "regulated": bodily_autonomy_constructor("0", "+", "0"),
+    # A person's body is their own to express: the Intelligentsia.
+    "liberal": bodily_autonomy_constructor("0", "+", "++"),
+    # No license needed to own oneself.
+    "libertarian": bodily_autonomy_constructor("0", "-", "++"),
+}
+
+BODILY_AUTONOMY_STANCES = {
+    **{k: "traditional" for k in (
+        "ideology_pious", "ideology_moralist", "ideology_theocrat", "ideology_papal_paternalistic",
+        "ideology_buddhist_moralist", "ideology_hindu_moralist", "ideology_hindu_moralist_british_india",
+        "ideology_sikh_moralist", "ideology_shinto_moralist", "ideology_papal_moralist",
+        "ideology_montenegrin_moralist", "ideology_orthodox_patriarch",
+        "ideology_oriental_orthodox_patriarch", "ideology_russian_patriarch", "ideology_confucian",
+        "ideology_ibadi_imamate", "ideology_ibadi_shura", "ideology_heavenly_kingdom_theocratic",
+        "ideology_patriarchal", "ideology_patriarchal_suffrage", "ideology_traditionalist",
+        "ideology_traditionalist_movement", "ideology_reactionary", "ideology_reactionary_movement",
+        "ideology_integralist", "ideology_integralist_movement", "ideology_fascist", "ideology_fascist_movement",
+        "ideology_ethno_nationalist", "ideology_ethno_nationalist_movement", "ideology_agrarian",
+        "ideology_agrarian_jeffersonian", "ideology_isolationist",
+    )},
+    **{k: "cautious" for k in (
+        "ideology_paternalistic", "ideology_hierarchic", "ideology_republican_paternalistic",
+        "ideology_scholar_paternalistic", "ideology_junker_paternalistic", "ideology_particularist",
+        "ideology_patriotic", "ideology_jingoist", "ideology_jingoist_leader", "ideology_loyalist",
+        "ideology_authoritarian", "ideology_populist", "ideology_proletarian", "ideology_communist",
+        "ideology_vanguardist",
+    )},
+    **{k: "regulated" for k in (
+        "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat", "ideology_reformer",
+        "ideology_plutocratic", "ideology_technocratic", "ideology_positivist", "ideology_meritocratic",
+        "ideology_modernizer",
+    )},
+    **{k: "liberal" for k in (
+        "ideology_liberal", "ideology_liberal_modern", "ideology_liberal_leader", "ideology_liberal_movement",
+        "ideology_anti_clerical", "ideology_republican", "ideology_republican_leader", "ideology_radical",
+        "ideology_radical_movement", "ideology_egalitarian_modern", "ideology_humanitarian",
+        "ideology_humanitarian_royalist", "ideology_feminist", "ideology_feminist_ig",
+        "ideology_feminist_movement",
+    )},
+    **{k: "libertarian" for k in (
+        "ideology_laissez_faire", "ideology_individualist", "ideology_market_liberal", "ideology_anarchist",
+        "ideology_anarchist_movement",
+    )},
+}
+
 # --- lawgroup_frontier_ai_control (era 13 spec § 7.1; common/laws/te_frontier_ai_laws.txt) ---
 # Who builds the most capable AI. Every list names all six laws, in file order
 # (the ideology_lawgroup audit; test_frontier_ai_control.py). The placeholder
@@ -4145,5 +4221,7 @@ modifications = {
 for _ideology, _list in JUDICIARY_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_judiciary"] = JUDICIARY_LISTS[_list]
 
+for _ideology, _list in BODILY_AUTONOMY_STANCES.items():
+    modifications.setdefault(_ideology, {})["lawgroup_bodily_autonomy"] = BODILY_AUTONOMY_LISTS[_list]
 for _ideology, _list in FRONTIER_AI_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_frontier_ai_control"] = FRONTIER_AI_LISTS[_list]

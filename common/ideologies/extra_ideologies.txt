@@ -251,6 +251,12 @@ ideology_multicultural = {
 		law_judicial_supremacy = strongly_approve
 		law_algorithmic_jurisprudence = disapprove
 	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 }
 
 ideology_multicultural_ig = {
@@ -281,6 +287,12 @@ ideology_multicultural_ig = {
 		law_federal_system = approve
 		law_devolution = strongly_approve
 		law_feudal_contracts = disapprove
+	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
 	}
 }
 
@@ -379,6 +391,12 @@ ideology_multicultural_inclusive = {
 
 	non_interest_group_leader_weight = {
 		value = 0
+	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
 	}
 }
 
@@ -612,6 +630,11 @@ ideology_optimist_transhumanist = {
 		law_algorithmic_jurisprudence = strongly_approve
 	}
 
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
+	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
 		law_private_ai_labs = approve
@@ -1482,6 +1505,12 @@ ideology_custom_religion_traditionalist_society = {
 		law_migration_controls = neutral
 		law_closed_borders = approve
 	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
+	}
 }
 
 ideology_custom_religion_inclusive_society = {
@@ -1580,6 +1609,12 @@ ideology_custom_religion_inclusive_society = {
 		law_no_migration_controls = approve
 		law_migration_controls = neutral
 		law_closed_borders = strongly_disapprove
+	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = strongly_approve
 	}
 }
 
@@ -1680,6 +1715,12 @@ ideology_custom_religion_totalitarian_society = {
 		law_migration_controls = approve
 		law_closed_borders = approve
 	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = neutral
+		law_morphological_freedom = disapprove
+	}
 }
 
 ideology_custom_religion_meritocratic_society = {
@@ -1779,6 +1820,12 @@ ideology_custom_religion_meritocratic_society = {
 		law_migration_controls = approve
 		law_closed_borders = disapprove
 	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = approve
+		law_morphological_freedom = neutral
+	}
 }
 
 ideology_custom_religion_imperial_cult_society = {
@@ -1877,6 +1924,12 @@ ideology_custom_religion_imperial_cult_society = {
 		law_no_migration_controls = neutral
 		law_migration_controls = approve
 		law_closed_borders = disapprove
+	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
 	}
 }
 
@@ -1985,6 +2038,12 @@ ideology_custom_religion_theocratic_society = {
 		law_constitutional_review = disapprove
 		law_judicial_supremacy = strongly_disapprove
 		law_algorithmic_jurisprudence = strongly_disapprove
+	}
+
+	lawgroup_bodily_autonomy = {
+		law_natural_form = neutral
+		law_licensed_modification = disapprove
+		law_morphological_freedom = strongly_disapprove
 	}
 }
 

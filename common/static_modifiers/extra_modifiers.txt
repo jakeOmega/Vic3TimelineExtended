@@ -6007,6 +6007,89 @@ augmentation_crime_ban_modifier = {
 }
 
 # ============================================================================
+# MORPHOLOGICAL FREEDOM DEBATE MODIFIERS (je_morphological_freedom,
+# events/morphological_freedom_events.txt; era 13 spec § 7.2)
+# ============================================================================
+
+# JE active: a society arguing about how its people may look
+morphological_freedom_debate_active_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_hegemony_art_mult = 0.05
+	state_turmoil_effects_mult = 0.05
+}
+
+# JE success (.200)
+morphological_freedom_embraced_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_cultural_hegemony_art_mult = 0.1
+	country_prestige_mult = 0.05
+}
+
+# JE timeout under Licensed Modification
+morphological_freedom_unsettled_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.1
+}
+
+# JE timeout under Natural Form (.100): enforce the law, or look away
+natural_form_enforced_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_cultural_hegemony_art_mult = -0.1
+	state_migration_pull_mult = -0.05
+}
+
+natural_form_tolerated_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_turmoil_effects_mult = 0.1
+	country_prestige_mult = -0.02
+}
+
+# Event 1: the first clinics
+mf_clinic_inspections_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_turmoil_effects_mult = -0.03
+}
+
+mf_clinic_boom_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	goods_output_services_mult = 0.03
+}
+
+# Event 2: a public figure's transformation
+mf_public_figure_praised_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_cultural_pull_mult = 0.05
+}
+
+# Event 3: sport and eligibility
+mf_open_competition_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+mf_natural_teams_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.02
+}
+
+# Event 5: a religious backlash (on the Devout)
+mf_devout_rebuffed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_pol_str_mult = -0.1
+}
+
+mf_devout_emboldened_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_pol_str_mult = 0.1
+}
+
+# Event 6: a fashion that sweeps a generation
+mf_fashion_export_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_cultural_hegemony_art_mult = 0.05
+}
+
+# ============================================================================
 # ENVIRONMENTAL CRISIS RESPONSE MODIFIERS
 # ============================================================================
 

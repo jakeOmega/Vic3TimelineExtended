@@ -129,6 +129,7 @@ LAWGROUP_PRIORITY = [
     "lawgroup_right_to_information",
     "lawgroup_inheritance",
     "lawgroup_human_augmentation",
+    "lawgroup_bodily_autonomy",
     "lawgroup_genetic_rights",
     "lawgroup_family_reproductive_policy",
     "lawgroup_language_policy",
