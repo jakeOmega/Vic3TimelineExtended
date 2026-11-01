@@ -874,8 +874,13 @@ gotcha).
     now asks four posture buttons' `IsValid` (36 a frame for nine fleets), where the step button asked one. Fallback
     if that stutters: the four buttons' state from one display value a fleet, set monthly and on each order.
 11. **The two buttons' gates (#1298).** The destination and target buttons grey on `sr_fleet_pick_sgui` and
-    `sr_fleet_target_sgui`, which lost their effects (never run) in #1298. Hover a greyed target button (no hostile
-    site at the fleet's location, or no Space Command in a state we control): the hover still opens with the
-    reason, then the target. The destination button's hover still opens with the leg. A missing reason or a raw
-    key means `IsValidTooltip` reads differently from a scripted GUI with no `effect`; the fallback is an `effect`
-    holding only its `custom_tooltip`.
+    `sr_fleet_target_sgui`, which lost their effects (never run) in #1298. No precedent: vanilla never calls
+    `IsValidTooltip`, and every other effect-less scripted GUI is read only through `IsValid`. Hover a greyed
+    target button (no hostile site at the fleet's location, or no Space Command in a state we control): it opens
+    with the failed reason, crossed ("A site here is held by a country at war with us…" or "We have a Space Command
+    in a state we control…"), then the target. Hover an enabled one: the same lines ticked. The destination button
+    can't grey (its orders line shows only at a location, the gate's one condition), so its hover must open with the
+    ticked "The fleet is at a location, not in transit", then the leg; the leg alone is a fail. A missing line or a
+    raw key means `IsValidTooltip` renders nothing for a scripted GUI with no `effect`. Fallback: give each gate
+    `effect = { custom_tooltip = sr_fl_not_at_location_tt }` (the target gate: `sr_fl_no_target_tt`), a text-only
+    effect that changes nothing.
