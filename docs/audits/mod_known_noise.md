@@ -194,6 +194,7 @@ Variable 'tp_4_gdp_pct' is used but is never set
 Variable 'tp_5_tc' is used but is never set
 Variable 'tp_5_total' is used but is never set
 Variable 'tp_5_gdp_pct' is used but is never set
+Variable 'sr_fleet_upkeep_per_building' is used but is never set
 Variable 'tp_count' is used but is never set
 Variable 'gw_emitter_1' is used but is never set
 Variable 'gw_emitter_2' is used but is never set
