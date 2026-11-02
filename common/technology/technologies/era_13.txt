@@ -50,6 +50,9 @@ programmable_matter = {
 		country_st_res_aeroplanes_decay_add = -0.007
 		country_st_res_tanks_decay_add = -0.006
 		country_st_res_artillery_decay_add = -0.002
+		# Public Housing's cap: homes that reshape themselves around whoever
+		# moves in (pops_and_migration.md § Public Housing)
+		state_building_public_housing_max_level_add = 50
 	}
 
 	ai_weight = {

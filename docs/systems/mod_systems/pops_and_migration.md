@@ -20,25 +20,29 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 - **What (2026-10-31, owner's request):** `building_public_housing` (`common/buildings/extra_buildings.txt`), a government building (`bg_government`, paid from the budget) that raises its own state's crowding threshold. Its methods grant the state Urban Engineering (`state_building_construction_sector_max_level_add`, `state_modifiers` `workforce_scaled`), the modifier the threshold already reads (§ Migration Crowding), so there is no new modifier, script value or pulse: the tile's Urban Engineering breakdown lists the building, and an unstaffed level houses no one. Like the technologies' points, a level's points are multiplied by the state's tolerance (`state_migration_crowding_density_mult`). Crowding is refreshed yearly, so a new level shows in the pull penalty within a year.
 - **Unlock and gate:** `urban_planning` (era 1). No eligibility gate (§ Design defaults: soft caps): it can be built anywhere, and in a state below its threshold it does nothing.
-- **Level cap (2026-11-02, owner's request):** `has_max_level = yes`, with `state_building_public_housing_max_level_add` (`mod_entity_modifier_types.txt`) granted only by technologies. The rule: at the cap, the newest method a country has the technology for houses about the population of the world's largest rich city in that era, before tolerance. The cap is in levels and each method houses more a level, so the cap rises only where the cities outgrew the methods: London's growth to 1900 kept pace with the first four methods at 200 levels.
+- **Level cap (2026-11-02, owner's request):** `has_max_level = yes`, with `state_building_public_housing_max_level_add` (`mod_entity_modifier_types.txt`) granted only by technologies. The rule: at the cap, the newest method a country has the technology for, multiplied by the crowding tolerance the technologies give by then, houses between half and all of the world's largest rich city in that era. Before tolerance that is 0.4 to two-thirds of the city; the cap was first sized to the whole city before tolerance, and the owner cut it to half to two-thirds of that because the tolerance technologies reach +70% by era 10 and +100% by era 13. The cap is in levels and each method houses more a level, so the cap rises only where the cities outgrew the methods: London's growth to 1900 kept pace with the first four methods at a flat 125 levels.
 
-  | Era | Cap step | Cap | Newest method (points a level) | Housed at the cap | Largest rich city |
-  |---|---|---|---|---|---|
-  | 1 | `urban_planning` +200 (`modified.txt`) | 200 | Model Dwellings (10) | 2.0 million | London in 1836, 2.0 million |
-  | 2 | | 200 | Sanitary Tenements (15) | 3.0 million | London in 1856, 2.9 million |
-  | 3 | | 200 | Steel-Frame Apartments (20) | 4.0 million | London in 1876, 4.3 million |
-  | 4 | | 200 | High-Rise Apartments (30) | 6.0 million | London in 1896, 6.1 million |
-  | 5 | `paved_roads` +50 (`modified.txt`) | 250 | High-Rise Apartments (30) | 7.5 million | London in 1911, 7.2 million |
-  | 6 | `modern_skyscrapers` +100 | 350 | High-Rise Apartments (30) | 10.5 million | New York in the 1930s, about 11 million |
-  | 7 | | 350 | Prefabricated Tower Blocks (45) | 15.75 million | New York in 1956, 13.5 million |
-  | 8 | `computer_aided_design` +250 | 600 | Prefabricated Tower Blocks (45) | 27 million | Tokyo in 1977, 27 million |
-  | 9 | | 600 | Prefabricated Tower Blocks (45) | 27 million | Tokyo in 2000, 34.4 million |
-  | 10–13 | | 600 | Arcologies (70) | 42 million | Tokyo in 2020, 37.4 million |
+  | Era | Cap step | Cap | Newest method (points a level) | Before tolerance | Technologies' tolerance | Housed at the cap | Largest rich city |
+  |---|---|---|---|---|---|---|---|
+  | 1 | `urban_planning` 125 (`modified.txt`) | 125 | Model Dwellings (10) | 1.25 million | | 1.25 million | London in 1836, 2.0 million |
+  | 2 | | 125 | Sanitary Tenements (15) | 1.9 million | | 1.9 million | London in 1856, 2.9 million |
+  | 3 | | 125 | Steel-Frame Apartments (20) | 2.5 million | | 2.5 million | London in 1876, 4.3 million |
+  | 4 | | 125 | High-Rise Apartments (30) | 3.75 million | | 3.75 million | London in 1896, 6.1 million |
+  | 5 | `paved_roads` +25 (`modified.txt`) | 150 | High-Rise Apartments (30) | 4.5 million | | 4.5 million | London in 1911, 7.2 million |
+  | 6 | `modern_skyscrapers` +50 | 200 | High-Rise Apartments (30) | 6.0 million | +15% | 6.9 million | New York in the 1930s, about 11 million |
+  | 7 | | 200 | Prefabricated Tower Blocks (45) | 9.0 million | +35% | 12.2 million | New York in 1956, 13.5 million |
+  | 8 | `computer_aided_design` +100 | 300 | Prefabricated Tower Blocks (45) | 13.5 million | +35% | 18.2 million | Tokyo in 1977, 27 million |
+  | 9 | | 300 | Prefabricated Tower Blocks (45) | 13.5 million | +50% | 20.3 million | Tokyo in 2000, 34.4 million |
+  | 10 | | 300 | Arcologies (70) | 21 million | +70% | 35.7 million | Tokyo in 2020, 37.4 million |
+  | 11 | | 300 | Arcologies (70) | 21 million | +85% | 38.9 million | |
+  | 12 | `advanced_nanofabrication` +50 | 350 | Arcologies (70) | 24.5 million | +85% | 45 million | |
+  | 13 | `programmable_matter` +50 | 400 | Arcologies (70) | 28 million | +100% | 56 million | |
 
   - **Sources:** Greater London's censuses to 1911, New York's metropolitan district in the 1930 and 1940 censuses, then the UN's *World Urbanization Prospects* (2018) for New York–Newark and Tokyo. Tokyo counts from about 1970, once Japan was rich.
-  - **Eras 9 and 10 share a cap.** Arcologies house 1.56 times what Tower Blocks do a level, and Tokyo grew 1.09 times from 2000 to 2020, so no single cap fits both. 600 levels lands 21% under the first and 12% over the second. Eras 11–13 add no levels: they have no real city to aim at, and their tolerance technologies still raise what each level houses.
-  - **Tolerance comes on top.** The figures are before `state_migration_crowding_density_mult`, which multiplies housing as it does everything else in the threshold: the technologies alone give +70% by era 10.
-  - **The pin:** `test_public_housing_cap.py` adds up every era's grants, multiplies by the best method's points and `migration_crowding_urban_engineering_pop`, and fails if an era leaves 0.75–1.25 of its city. A change to a method's points or to a grant has to keep the table in band.
+  - **Tolerance:** only the technologies' (§ Migration Crowding). The Ministry of Urban Planning, the Urban Planning power bloc principle and highways add more where a country invests in them, so a state at the cap can house more than the city.
+  - **Eras 9 and 10 share a cap.** Arcologies house 1.56 times what Tower Blocks do a level, and Tokyo grew 1.09 times from 2000 to 2020, so no single cap fits both: 300 levels houses 0.59 of the city in era 9 and 0.95 in era 10.
+  - **Eras 11–13** have no real city to aim at. Two technologies that build taller and stranger housing add 50 levels each, Advanced Nanofabrication's nanotube frames (it already unlocks Nanomaterial Buildings for Construction Sectors) and Programmable Matter's homes that reshape themselves, to 56 million with era 13's tolerance, half again Tokyo's size today.
+  - **The pin:** `test_public_housing_cap.py` adds up every era's cap and tolerance grants, multiplies by the best method's points and `migration_crowding_urban_engineering_pop`, and fails if an era from 1 to 10 leaves half to all of its city. A change to a method's points, a cap grant or a tolerance grant has to keep the table in band.
 - **Methods** (`pmg_base_building_public_housing`, `common/production_methods/extra_pms.txt`; inputs at base prices, about £30–45 a week per 1,000 people housed on every method; ~1,000 staff a level):
 
   | Method | Technology | Urban Engineering a level | People housed a level (before tolerance) | Inputs a level |
