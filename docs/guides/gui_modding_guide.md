@@ -1757,7 +1757,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 50 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 22 additive files (marked below):
+Currently 51 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 23 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1802,8 +1802,9 @@ Currently 50 GUI files at the top of `gui/`: 28 full-file replacements of vanill
 | `te_popups.gui` | (additive, scripted widget) | The mod's centred popups: one root, `te_popups`, on the popups layer, holding each picker's popup (the Space Race's colony target first), shown on the client-side `te_popup` key. Registered in `gui/scripted_widgets/te_systems_window.txt`; see the popups paragraph under [Creating Standalone Panels](#creating-standalone-panels) |
 | `te_seabed_widgets.gui` | (additive, type library) | The Seabed tab's panels (Global Commons): the overview, the seabed policy buttons, the basins table and How Seabed Licences Work, instanced from `te_systems_window.gui` |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card, the Grand Monument card (only where one stands; it instances the journal entry's `gm_row_status`) |
-| `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), and `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Budget, Diplomacy and Market panels) |
-| `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, Nation first (always open; `te_nation_tab.gui`), then a tab each for the Space Race, Grand Monuments, the Colonial Empire and the Seabed, all five on one vanilla `tab_buttons` strip as in vanilla's Diplomacy panel (the entries' composers under `GetPlayerJournalEntry`), and its launcher, a small sidebar button under Map List. Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |
+| `te_system_tab_widgets.gui` | (additive, type library) | For system tabs in vanilla panels and the Timeline Extended window: a journal entry's bars, goal bar, status description and button grid (`te_je_*`), `te_tab_buttons_six`, vanilla's tab strip with a sixth slot (the Budget, Diplomacy and Market panels), and `te_system_tab_frame`, the shape a system's tab body takes (header, gate, entry, 520 column, Open Journal Entry) |
+| `te_systems_window.gui` | (additive, scripted widget) | The Timeline Extended window, the mod's own, Nation first (always open; `te_nation_tab.gui`), then a tab each for the Space Race, Grand Monuments, the Colonial Empire and the Seabed, all five on one vanilla `tab_buttons` strip as in vanilla's Diplomacy panel (each tab a body type on `te_system_tab_frame`), and its launcher, a small sidebar button under Map List. The strip, the selection templates and the tab mounts are generated (`te_systems_window_generated.gui`). Registered in `gui/scripted_widgets/te_systems_window.txt`, so it replaces nothing; see [Creating Standalone Panels](#creating-standalone-panels) |
+| `te_systems_window_generated.gui` | (additive, generated templates and types) | The Timeline Extended window's selection templates, strips, tab mounts and the Space Race tab's per-milestone frames, written by `scripts/generators/gen_te_systems_window.py` from its `TABS` registry; never edit it by hand |
 | `te_trade_partner_tooltips.gui` | (additive) | Per-partner goods-breakdown tooltip used by `market_panel.gui` |
 | `te_widget_library.gui` | (additive, type library) | Shared `te_ui_*` types (Space Race UI pass design § 13): `te_ui_popup`, the shell every popup derives from. The rest of the panels' shared types move here one system at a time |
 | `tooltip.gui` | Tooltip widget | Custom tooltip content |

@@ -89,6 +89,20 @@ line, or a file below is stale. It writes:
 
 This generator runs explicitly; it is not a post-load regenerator.
 
+## Timeline Extended window (explicit regeneration)
+
+Run `python3 scripts/generators/gen_te_systems_window.py` after changing its
+`TABS` registry (a tab's key, strip, label, tooltips, gates, body type) or
+`SR_MILESTONES`, or its renderers; `--check` writes nothing and exits 1 when
+the file is stale. `test_te_systems_window.py` fails while it is. It writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `gui/te_systems_window_generated.gui` | `scripts/generators/gen_te_systems_window.py` | `TABS` and `SR_MILESTONES`: the selection templates (`te_systems_window_<tab>_selected` / `_unselected`, `te_systems_window_tax_probes_selected`), the strips (`te_systems_window_strips_narrow`), the scroll area's column of tab mounts (`te_systems_window_tabs_narrow`) and the Space Race body's entries (`te_sr_window_milestones`, one `te_system_tab_frame` per milestone). The window's own, hand-written file keeps the frame, the launcher and the root, and instances them |
+
+This generator runs explicitly; it is not a post-load regenerator, so a reload
+never rewrites the window.
+
 ## Law effects (explicit regeneration)
 
 Run `python3 scripts/generators/gen_law_effects_gui.py` after a vanilla patch,

@@ -12,9 +12,14 @@ import glob
 import itertools
 import os
 import re
+import sys
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, REPO)
+from scripts.generators import gen_te_systems_window as gen  # noqa: E402
+
+GENERATED = os.path.join(REPO, "gui", "te_systems_window_generated.gui")
 GUI = os.path.join(REPO, "gui", "te_systems_window.gui")
 REGISTRATION = os.path.join(REPO, "gui", "scripted_widgets", "te_systems_window.txt")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
@@ -727,6 +732,45 @@ class SeabedTabTest(unittest.TestCase):
         nation = _named(gui, "te_systems_window_nation_tab")
         self.assertIn("using = te_systems_window_nation_selected", nation.split("\n\n")[0])
         self.assertIn("te_nation_tab_sections = {}", nation)
+
+
+class GeneratorTest(unittest.TestCase):
+    """scripts/generators/gen_te_systems_window.py writes the window's strip,
+    selection templates and tab mounts from its TABS registry (spec § 9.3)."""
+
+    def test_generated_file_is_current(self):
+        with open(GENERATED, "rb") as f:
+            committed = f.read()
+        self.assertTrue(committed.startswith(b"\xef\xbb\xbf"))
+        self.assertFalse(committed[3:].startswith(b"\xef\xbb\xbf"))    # exactly one BOM
+        self.assertEqual(committed.decode("utf-8-sig"), gen.render(),
+                         "stale: run python3 scripts/generators/gen_te_systems_window.py")
+        self.assertEqual(gen.main(["--check"]), 0)
+
+    def test_nation_is_first_and_the_fallback(self):
+        self.assertEqual(gen.TABS[0].key, "nation")
+        self.assertIsNone(gen.TABS[0].open_)
+        self.assertIsNone(gen.TABS[0].strip)
+        self.assertTrue(all(t.open_ for t in gen.TABS[1:]), "every other tab has an open gate")
+        self.assertEqual(len({t.key for t in gen.TABS}), len(gen.TABS))
+        self.assertNotIn("tax_probes", {t.key for t in gen.TABS})
+
+    def test_templates_are_binary(self):
+        """And and Or take exactly two arguments (gui_modding_guide.md)."""
+        text = _strip_comments(_read(GENERATED))
+        for expr in re.findall(r'visible = "\[(.*?)\]"', text):
+            for m in re.finditer(r"\b(And|Or)\( ", expr):
+                depth, args, i = 1, 1, m.end()
+                while depth:
+                    ch = expr[i]
+                    if ch == "(":
+                        depth += 1
+                    elif ch == ")":
+                        depth -= 1
+                    elif ch == "," and depth == 1:
+                        args += 1
+                    i += 1
+                self.assertEqual(args, 2, expr[m.start():i][:120])
 
 
 class LocTest(unittest.TestCase):
