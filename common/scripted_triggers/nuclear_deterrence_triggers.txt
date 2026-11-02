@@ -1692,20 +1692,35 @@ nd_crisis_public_either = {
 	}
 }
 
+# The issuer's record: talks are open, so the pressure events pause, the
+# danger is 15 lower and the hotline works (nd_hold_chance, the incident
+# draw). Either a proposal awaits an answer (nd_crisis_talks = 1, to stand down
+# or to trade), or an exercise notice opened them and they have weeks left
+# (nd_crisis_talks_weeks, nuclear_incident.10.a and .12.a; #1230). Only the
+# first blocks a new proposal (nd_crisis_no_proposal_pending).
+nd_crisis_talks_open = {
+	OR = {
+		AND = {
+			has_variable = nd_crisis_talks
+			var:nd_crisis_talks = 1
+		}
+		AND = {
+			has_variable = nd_crisis_talks_weeks
+			var:nd_crisis_talks_weeks > 0
+		}
+	}
+}
+
 # Either party: talks are open (the pressure events are paused).
 nd_crisis_talks_open_either = {
 	OR = {
 		AND = {
 			nd_is_crisis_owner = yes
-			has_variable = nd_crisis_talks
-			var:nd_crisis_talks = 1
+			nd_crisis_talks_open = yes
 		}
 		AND = {
 			nd_is_crisis_target = yes
-			var:nd_crisis_opponent ?= {
-				has_variable = nd_crisis_talks
-				var:nd_crisis_talks = 1
-			}
+			var:nd_crisis_opponent ?= { nd_crisis_talks_open = yes }
 		}
 	}
 }
@@ -2601,7 +2616,9 @@ nd_can_propose_talks = {
 }
 
 # Either party: no proposal, to stand down or to trade, awaits an answer. Both
-# set the issuer's nd_crisis_talks (a trade offer is talks with terms).
+# set the issuer's nd_crisis_talks (a trade offer is talks with terms). Talks an
+# exercise notice opened (nd_crisis_talks_weeks) are no proposal: either side
+# may still make one while they last.
 nd_crisis_no_proposal_pending = {
 	OR = {
 		AND = {
