@@ -839,9 +839,11 @@ class TabContentTest(unittest.TestCase):
         for name in ("te_sr_sec_powers", "te_sr_sec_orbit"):
             self.assertIn(f"type {name} = flowcontainer", self.sr)
             self.assertNotIn("JournalEntry", _type_body(self.sr, name))
-            # never mounted in the journal: only the tab's body composes them
-            self.assertEqual(self.sr.count(f"{name} = {{}}"), 1)
-            self.assertIn(f"{name} = {{}}", body)
+            # never mounted in the journal: only the tab's body and its
+            # full-screen layout (te_sr_wide_sections) compose them, once each
+            wide = _type_body(self.sr, "te_sr_wide_sections")
+            self.assertEqual(self.sr.count(f"{name} = {{}}"), 2)
+            self.assertEqual((body.count(f"{name} = {{}}"), wide.count(f"{name} = {{}}")), (1, 1))
 
     def test_the_milestone_types_are_the_journal_roots_bodies(self):
         """Each controlled milestone's roots are thin wrappers around its own
@@ -1054,9 +1056,9 @@ class WideTest(unittest.TestCase):
     def test_the_wide_column(self):
         """The full-screen frame's column: three 520 columns' width, centered,
         each tab's mount as narrow, holding its body until a wide layout is
-        registered (PR D); then the body with its layout block overridden by
-        the wide layout, or, for a body with no layout block, the wide layout
-        in its place."""
+        registered (PR D). Then the mount holds the wide layout: in place of
+        the body for a tab with no layout block, else the body with its
+        layout block overridden by the wide layout."""
         column = _type_body(self.generated, "te_systems_window_tabs_wide")
         head = column.split("\n\n")[0]
         for line in ('name = "te_systems_window_content_wide"', "minimumsize = { 1620 -1 }", "parentanchor = hcenter"):
@@ -1066,14 +1068,18 @@ class WideTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 mount = _named(self.generated, f"te_systems_window_{t.key}_tab_wide")
                 self.assertIn(f"using = te_systems_window_{t.key}_selected", mount)
+                # the mount's properties, a blank line, then its content (the generator's _mount)
+                self.assertIn("\n\n", mount)
+                content = mount.split("\n\n", 1)[1]
                 if t.wide is None:
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
                 elif t.layout is None:
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide])
+                    self.assertNotIn(t.body, content)
                 else:
-                    self.assertRegex(mount, rf'\n\t+{t.body} = \{{\s*blockoverride "{t.layout}" \{{\s*'
-                                            rf'{t.wide} = \{{\}}\s*\}}\s*\}}\s*\}}$')
-                    self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide])
+                    # ^ and $ without re.M: the whole content is the body and its one override
+                    self.assertRegex(content, rf'^\t+{t.body} = \{{\n\t+blockoverride "{t.layout}" \{{\n'
+                                              rf'\t+{t.wide} = \{{\}}\n\t+\}}\n\t+\}}\n\t+\}}$')
         at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]
         self.assertEqual(at, sorted(at))
 

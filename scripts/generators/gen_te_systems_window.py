@@ -170,13 +170,14 @@ TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
     Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
-        body="te_nation_tab_sections"),
-    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout"),
-    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout"),
-    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout"),
+        body="te_nation_tab_sections", wide="te_nation_wide_sections"),
+    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections"),
+    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections"),
+    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
-    _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt"),
+    _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
+            wide="te_seabed_wide_sections"),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -191,7 +192,7 @@ TABS: list[Tab] = [
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt"),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
-        body="te_budget_breakdown_panel"),
+        body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.
     _mirror("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_st_res_tab_body", "te_st_res_tab_layout",
             "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"),

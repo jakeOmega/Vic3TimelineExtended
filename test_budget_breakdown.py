@@ -10,8 +10,10 @@ from pathlib import Path
 import re
 import unittest
 
+from gui_test_helpers import _children, _strip_comments, _type_body, assert_wide_matches_narrow
 from paradox_file_parser import ParadoxFileParser
 from scripts.generators import gen_budget_breakdown as gen
+from scripts.generators import gen_te_systems_window as window_gen
 from test_cultural_hegemony_share import entries
 
 ROOT = Path(__file__).resolve().parent
@@ -646,8 +648,24 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         expected = [k for sub, _, note, _ in gen.HOW_TOPICS for k in (sub, note)]
         self.assertEqual(drawn, expected)
         self.assertNotIn("te_budget_chart_how_text", gui)
-        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_breakdown_panel"))
+        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_sec_how"))
         self.assertRegex(gui[first:first + 200], r'blockoverride "subheader_margin" \{\}')
+
+    def test_the_panel_is_its_three_sections(self):
+        """The panel instances Income, Expenses and How the Breakdown Works, in
+        that order and nothing else, so the full-screen layout can place each
+        (spec 2026-11-02-te-window-wide-mode § 7). How keeps the panel's 8
+        between its header and its topics, and collapses on its flag."""
+        gui = _strip_comments(LAYOUT.read_text(encoding="utf-8-sig"))
+        panel = _children(_type_body(gui, "te_budget_breakdown_panel"))
+        self.assertEqual([name for kind, name, _ in panel if kind != "property"],
+                         ["te_budget_income_section", "te_budget_expense_section", "te_budget_sec_how"])
+        how = _children(_type_body(gui, "te_budget_sec_how"))
+        props = {name: value for kind, name, value in how if kind == "property"}
+        self.assertEqual((props["spacing"], props["ignoreinvisible"]), ("8", "yes"))
+        self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button", "flowcontainer"])
+        self.assertIn("GetVariableSystem.Toggle('te_budget_chart_how_open')", how[-2][2])
+        self.assertIn("visible = \"[GetVariableSystem.Exists('te_budget_chart_how_open')]\"", how[-1][2])
 
     def test_no_ui_help(self):
         text = " ".join(note for _, _, _, note in gen.HOW_TOPICS)
@@ -715,6 +733,28 @@ class BreakdownWidthBudgetTest(unittest.TestCase):
                 text = re.sub(r"\[[^\]]*\]|#\w+ |#!|\$\w+\$", "", text)
                 with self.subTest(label=node.label):
                     self.assertLessEqual(len(text) * self.per_char("row"), gen.LABEL_WIDTH - 14 * len(ancestors))
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_budget_breakdown_wide_sections, the window's full-screen Budget
+    Breakdown (spec 2026-11-02-te-window-wide-mode § 7): income, expenses and
+    How the Breakdown Works side by side. The tab has no layout block, so the
+    registry mounts it in place of the panel, whose root carries no gate."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_budget_breakdown_wide_sections", ["te_budget_breakdown_panel"],
+                                             composers={"te_budget_breakdown_panel"})
+        self.assertEqual(columns, [
+            ["te_budget_income_section"],
+            ["te_budget_expense_section"],
+            ["te_budget_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "budget_breakdown")
+        self.assertEqual((tab.layout, tab.wide), (None, "te_budget_breakdown_wide_sections"))
+        panel = _children(_strip_comments(_type_body(LAYOUT.read_text(encoding="utf-8-sig"),
+                                                     "te_budget_breakdown_panel")))
+        self.assertFalse([k for kind, k, _ in panel if kind == "property" and k in ("visible", "datacontext")])
 
 
 if __name__ == "__main__":
