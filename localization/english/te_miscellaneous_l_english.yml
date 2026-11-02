@@ -9303,7 +9303,7 @@
  te_systems_window_wide_off:0 "Side Panel"
  te_systems_window_wide_off_tt:0 "Show this window at the width of the other side panels."
  te_systems_window_wide_on:0 "Full Screen"
- te_systems_window_wide_on_tt:0 "Show this window across the screen, with each tab in columns."
+ te_systems_window_wide_on_tt:0 "Show this window across the screen."
  te_trade_center_boost:0 "Merchant Quarter Bustles"
  te_trade_center_chill:0 "Merchant Quarter Sluggish"
  te_window_colonial_empire_open_journal_tt:0 "Opens $je_colonial_empire$ in the journal, which shows these same panels."

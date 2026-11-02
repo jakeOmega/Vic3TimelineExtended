@@ -909,12 +909,29 @@ class WideTest(unittest.TestCase):
                 self.assertNotIn("com_open_window", toggle)
                 # first in fixed_top, above the strips
                 self.assertLess(frame.index("te_systems_window_toggle = {"), frame.index("te_systems_window_strips_"))
-        toggle_type = _type_body(self.gui, "te_systems_window_toggle")
-        self.assertRegex(toggle_type, r'expand = \{\}\s*button = \{')    # right-aligned
-        self.assertIn("using = default_button", toggle_type)
+        self.assertIn("using = default_button", _type_body(self.gui, "te_systems_window_toggle"))
         loc = _all_loc()
         self.assertEqual(loc["te_systems_window_wide_on"], "Full Screen")
         self.assertEqual(loc["te_systems_window_wide_off"], "Side Panel")
+
+    def test_the_full_screen_toggle_sits_clear_of_the_outliner(self):
+        """Vanilla's outliner, on the HUD layer above this window, covers the
+        screen's right 360 px from y = 155 (ingame_hud.gui) and hides only for
+        vanilla's own full screens (half_and_fullscreen_hide reads
+        InformationPanelBar.IsPanelOpen), and the full-screen width is kept
+        for the session. So the full-screen frame's toggle sits at the left,
+        under Back; the side panel's stays at its right."""
+        toggle_type = _type_body(self.gui, "te_systems_window_toggle")
+        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*button = \{')
+        button = toggle_type.index("button = {")
+        self.assertRegex(toggle_type[_close(toggle_type, button + len("button = {") - 1):],
+                         r'^\}\s*block "toggle_trail" \{\}\s*$')
+        narrow = _override(self.narrow, "fixed_top")
+        self.assertIsNone(_override(narrow, "toggle_lead"))    # right-aligned
+        self.assertIsNone(_override(narrow, "toggle_trail"))
+        wide = _override(self.wide, "fixed_top")
+        self.assertEqual(_override(wide, "toggle_lead").strip(), "")    # left-aligned
+        self.assertEqual(_override(wide, "toggle_trail").strip(), "expand = {}")
 
     def test_both_frames_close_alike(self):
         clear = "onclick = \"[GetVariableSystem.Clear('com_open_window')]\""
@@ -946,6 +963,12 @@ class WideTest(unittest.TestCase):
         self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*tab_buttons = \{")
         self.assertRegex(row, r"\}\s*expand = \{\}\s*\}$")
         self.assertEqual(row.count("tab_buttons = {"), len({t.row for t in gen.TABS}))
+        self.assertNotIn("visible", row.split("tab_buttons = {")[0])    # the system strips show to all
+        # the developer strip's row carries its gate (its strip, as the wide
+        # strips do, carries none)
+        dev = _block_at(wide, wide.index("hbox = {", wide.index("TEMPORARY")))
+        self.assertIn(f'visible = "[{gen.shown("te_tp_tab_sgui")}]"', dev.split("tab_buttons = {")[0])
+        self.assertIn('text = "te_tp_tab"', dev)
 
     def test_the_wide_column(self):
         """The full-screen frame's column: three 520 columns' width, centered,

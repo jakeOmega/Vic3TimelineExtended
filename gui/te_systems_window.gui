@@ -151,8 +151,9 @@ types te_systems_window_types
 	### te_fullscreen_block_window, vanilla's fullscreen_block_window with Back
 	### and Close clearing com_open_window (generated from vanilla's file; see
 	### test_te_fullscreen_frame.py), titled as the side panel is. Its fixed_top
-	### holds the same toggle, in the same place, then the strips side by
-	### side; its column holds each tab's wide mount.
+	### holds the same toggle, at the left (clear of the outliner, see the
+	### toggle's type), then the strips side by side; its column holds each
+	### tab's wide mount.
 	type te_systems_window_panel_wide = te_fullscreen_block_window {
 		name = "te_systems_window_panel_wide"
 
@@ -167,6 +168,10 @@ types te_systems_window_types
 				ignoreinvisible = yes
 
 				te_systems_window_toggle = {
+					blockoverride "toggle_lead" {}
+					blockoverride "toggle_trail" {
+						expand = {}
+					}
 					blockoverride "toggle" {
 						text = "te_systems_window_wide_off"
 						tooltip = "te_systems_window_wide_off_tt"
@@ -183,22 +188,33 @@ types te_systems_window_types
 	}
 
 	### The width toggle (spec § 4.2): a slim row first in each frame's
-	### fixed_top, a small text button at its right. The frames expose no
-	### header slot for it. It writes only te_systems_window_wide, so the
-	### chosen tab survives the switch. An icon can replace the text later
-	### (style guide rule 10).
+	### fixed_top, a small text button. The frames expose no header slot for
+	### it. It writes only te_systems_window_wide, so the chosen tab survives
+	### the switch. An icon can replace the text later (style guide rule 10).
+	###
+	### At the row's right by default (the side panel). The full-screen frame
+	### moves it to the left ("toggle_lead" empty, "toggle_trail" the expand):
+	### vanilla's outliner sits on the HUD layer, above this window, over the
+	### screen's right 360 px from y = 155 (ingame_hud.gui), and hides only for
+	### vanilla's own full screens (half_and_fullscreen_hide reads
+	### InformationPanelBar.IsPanelOpen). The width is kept for the session, so
+	### a covered Side Panel would leave the window full screen until reload.
 	type te_systems_window_toggle = hbox {
 		layoutpolicy_horizontal = expanding
 		layoutpolicy_vertical = fixed
-		margin_right = 10
+		margin = { 10 0 }
 
-		expand = {}
+		block "toggle_lead" {
+			expand = {}
+		}
 
 		button = {
 			using = default_button
 			size = { 140 26 }
 			block "toggle" {}
 		}
+
+		block "toggle_trail" {}
 	}
 }
 
