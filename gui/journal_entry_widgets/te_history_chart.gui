@@ -307,7 +307,10 @@ types te_history_chart_types
 	### "bar_tooltip". Optional: "zero_axis" (signed series only),
 	### "marker_pips" (override to nothing for a series with no markers) and
 	### "plot_size" (the frame, for a chart whose bars are not 480px wide or
-	### 84px tall, with "plot_layouts" carrying the matching bar sizes).
+	### 84px tall, with "plot_layouts" carrying the matching bar sizes),
+	### "chart_text_width" (the title's and the legend's max_width) and
+	### "empty_width" (the empty state's), so one chart draws at another size:
+	### the full-screen viewer's (gen_te_history_charts.py sets all four).
 	### Override them here, on the chart instance; a custom "plot_layouts" holds
 	### plain te_history_plot instances. A type derived from te_history_plot
 	### that carries these blocks drew nothing in game (gui_modding_guide.md
@@ -357,7 +360,9 @@ types te_history_chart_types
 			### the panel's text too small, 2026-10-13); the others keep these.
 			textbox = {
 				autoresize = yes
-				max_width = 484
+				block "chart_text_width" {
+					max_width = 484
+				}
 				elide = right
 				align = nobaseline
 				block "chart_title_font" {
@@ -370,7 +375,9 @@ types te_history_chart_types
 			textbox = {
 				autoresize = yes
 				multiline = yes
-				max_width = 484
+				block "chart_text_width" {
+					max_width = 484
+				}
 				align = nobaseline
 				block "chart_legend_font" {
 					using = fontsize_small
@@ -425,7 +432,9 @@ types te_history_chart_types
 				parentanchor = center
 				autoresize = yes
 				multiline = yes
-				max_width = 420
+				block "empty_width" {
+					max_width = 420
+				}
 				align = hcenter|nobaseline
 				block "empty_text" {
 					text = "te_hist_empty_state"

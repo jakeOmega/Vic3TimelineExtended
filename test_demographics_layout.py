@@ -557,8 +557,8 @@ class WidthTest(unittest.TestCase):
     def test_the_chart_titles(self):
         chart = _read(CHART)
         title = chart[chart.index("type te_history_chart"):]
-        width = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = nobaseline\s*block "chart_title_font"',
-                              title).group(1))
+        width = int(re.search(r'block "chart_text_width" \{\s*max_width = (\d+)\s*\}\s*elide = right\s*align = nobaseline'
+                              r'\s*block "chart_title_font"', title).group(1))
         history = _type_body(self.widgets, "te_demog_sec_history")
         titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
                   for c in _instances(history, "te_history_chart")]
