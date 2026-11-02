@@ -1068,6 +1068,8 @@ class WideTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 mount = _named(self.generated, f"te_systems_window_{t.key}_tab_wide")
                 self.assertIn(f"using = te_systems_window_{t.key}_selected", mount)
+                # the mount's properties, a blank line, then its content (the generator's _mount)
+                self.assertIn("\n\n", mount)
                 content = mount.split("\n\n", 1)[1]
                 if t.wide is None:
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
@@ -1075,6 +1077,7 @@ class WideTest(unittest.TestCase):
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide])
                     self.assertNotIn(t.body, content)
                 else:
+                    # ^ and $ without re.M: the whole content is the body and its one override
                     self.assertRegex(content, rf'^\t+{t.body} = \{{\n\t+blockoverride "{t.layout}" \{{\n'
                                               rf'\t+{t.wide} = \{{\}}\n\t+\}}\n\t+\}}\n\t+\}}$')
         at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]

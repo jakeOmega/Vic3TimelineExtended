@@ -215,7 +215,7 @@ class SeabedPanelTest(unittest.TestCase):
 class WideLayoutTest(unittest.TestCase):
     """te_seabed_wide_sections, the window's full-screen Seabed tab (spec
     2026-11-02-te-window-wide-mode § 7): the overview and policy, the basins,
-    then How Seabed Licences Work."""
+    then How Seabed Licenses Work."""
 
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_seabed_wide_sections", layout=("te_seabed_tab_body", "te_seabed_tab_layout"))
