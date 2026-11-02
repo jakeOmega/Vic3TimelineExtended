@@ -24,7 +24,7 @@
 # ============================================================================
 
 pm_orbital_battery_kinetic = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_orbital_battery_kinetic.dds"
 
 	unlocking_technologies = {
 		space_militarization
@@ -51,7 +51,7 @@ pm_orbital_battery_kinetic = {
 }
 
 pm_orbital_battery_lasers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_orbital_battery_lasers.dds"
 
 	unlocking_technologies = {
 		directed_energy_weapons
