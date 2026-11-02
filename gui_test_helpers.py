@@ -140,6 +140,11 @@ def _own_gates(items):
 # drawn in a layout is content the check can't follow: make it a te_* section.
 WRAPPERS = {"flowcontainer", "widget", "vbox", "hbox", "container"}
 
+# What a wrapper in a wide layout may carry: it gates and spaces its sections,
+# nothing else (no datacontext, margin, position or size of its own).
+WIDE_WRAPPER_PROPS = {"direction", "parentanchor", "ignoreinvisible", "spacing", "minimumsize", "maximumsize", "name",
+                      "visible"}
+
 
 def _find_block(body, name):
     """The content of `block "name"` anywhere in a body, or None."""
@@ -159,17 +164,27 @@ class _Walk:
     column; and its columns, if any. A composer instance expands into its
     type's sections, under the instance's blockoverrides."""
 
-    def __init__(self, test, where, text, composers, skip=()):
+    def __init__(self, test, where, text, composers, skip=(), narrow_spacing=None):
         self.test, self.where, self.text = test, where, text
         self.composers, self.skip = composers, set(skip)
         self.sections, self.columns, self.skipped = [], [], set()
+        # the narrow side records each gated level's spacing, by the gates down to it;
+        # the wide side checks its wrappers against that record
+        self.narrow_spacing = narrow_spacing
+        self.spacing = {}
 
     def is_composer(self, name):
         return name in self.composers if self.composers is not None else name.endswith("_sections")
 
-    def body(self, body, gates, overrides=None):
+    def body(self, body, gates, overrides=None, wrapper=None):
         items = _children(body)
-        gates = gates + _own_gates(items)
+        own = _own_gates(items)
+        gates = gates + own
+        props = {k: v for kind, k, v in items if kind == "property"}
+        if own and self.narrow_spacing is None:
+            self.spacing.setdefault(frozenset(gates), set()).add(props.get("spacing"))
+        if wrapper and self.narrow_spacing is not None:
+            self.check_wrapper(wrapper, props, own, gates)
         for kind, name, inner in items:
             if kind == "block":                       # a block draws its override, or its default content
                 self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides)
@@ -182,10 +197,25 @@ class _Walk:
             elif name.startswith("te_"):
                 self.instance(name, inner, gates)
             elif name in WRAPPERS:
-                self.body(inner, gates, overrides)
+                self.body(inner, gates, overrides, wrapper=name)
             else:
                 self.test.fail(f"{self.where} draws {name} inline: make it a te_* section type, so the check can "
                                f"follow it")
+
+    def check_wrapper(self, name, props, own, gates):
+        extra = sorted(set(props) - WIDE_WRAPPER_PROPS)
+        self.test.assertFalse(extra, f"{self.where}: a wrapper carries {extra}; a wide layout's wrappers only gate and "
+                                     f"space their sections")
+        self.test.assertEqual(props.get("ignoreinvisible"), "yes",
+                              f"{self.where}: a wrapper without ignoreinvisible = yes keeps a hidden section's space")
+        if name == "flowcontainer":
+            self.test.assertEqual(props.get("direction"), "vertical",
+                                  f"{self.where}: a flowcontainer wrapper runs vertically in its column")
+        narrow = self.narrow_spacing.get(frozenset(gates))
+        if own and narrow is not None:
+            self.test.assertIn(props.get("spacing"), narrow,
+                               f"{self.where}: a wrapper spaces its sections {props.get('spacing')} apart under "
+                               f"{sorted(set(gates))}, the narrow layout {sorted(narrow, key=str)}")
 
     def type_gates(self, name):
         """A type's own root visible, or () when it has none or isn't found."""
@@ -256,6 +286,11 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       may carry more (the Census Data window's How waits for the first
       census). An instance's visible over a type's own fails either way: in
       game it replaces the type's (gotcha #17).
+    - A wrapper in the wide layout only gates and spaces its sections: it
+      carries nothing but direction, parentanchor, ignoreinvisible = yes,
+      spacing, a size limit, a name and its visible; a flowcontainer runs
+      vertically; and one under the same gates as a narrow composer or wrapper
+      spaces its sections as that one does.
     - A name in `extra`, `outside` or `added_gates` that no longer applies
       fails, so a stale one can't hide a change.
 
@@ -277,7 +312,7 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
 
     m = re.search(rf"\btype {wide_type} = (\w+) \{{", text)
     test.assertIsNotNone(m, f"no type {wide_type}")
-    wide = _Walk(test, wide_type, text, composers, skip=extra)
+    wide = _Walk(test, wide_type, text, composers, skip=extra, narrow_spacing=narrow.spacing)
     if m.group(1) in COLUMN_TYPES:
         wide.columns_of(m.group(1), _type_body(text, wide_type), ())
     else:

@@ -16,11 +16,13 @@ NARROW = """
 types fixture {
 	type te_x_status_sections = flowcontainer {
 		direction = vertical
+		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
 		te_x_sec_a = {}
 		# te_x_sec_commented = {}
 		flowcontainer = {
+			spacing = 4
 			visible = "[Not( IsLight )]"
 			te_x_sec_b = {}
 			block "summary" {
@@ -45,7 +47,13 @@ types fixture {
 NARROW_TYPES = ["te_x_overview", "te_x_status_sections", "te_x_reference_sections"]
 
 
-def fixture(wide):
+# What every wrapper in a wide layout carries (the D PRs' wrappers): vertical, hidden sections taking no space, and its
+# narrow composer's spacing. fixture() adds it to each multi-line wrapper, so the cases below stay short.
+WRAPPER = "direction = vertical parentanchor = hcenter ignoreinvisible = yes spacing = 4"
+
+
+def fixture(wide, wrapper=WRAPPER):
+    wide = wide.replace("flowcontainer = {\n", f"flowcontainer = {{ {wrapper}\n")
     return NARROW + "\ntypes wide {\n" + wide + "\n}\n"
 
 
@@ -83,8 +91,8 @@ COLUMNS = [["te_x_overview", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te
 
 
 class WideMatchesNarrowTest(unittest.TestCase):
-    def check(self, wide, **kw):
-        return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=fixture(wide), **kw)
+    def check(self, wide, wrapper=WRAPPER, **kw):
+        return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=fixture(wide, wrapper), **kw)
 
     def fails(self, message, wide, **kw):
         with self.assertRaisesRegex(AssertionError, message):
@@ -238,7 +246,7 @@ class WideMatchesNarrowTest(unittest.TestCase):
 
         def check(wide):
             return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
-                                              text=narrow + "\ntypes wide {\n" + wide + "\n}\n")
+                                              text=narrow + fixture(wide)[len(NARROW):])
 
         with self.assertRaisesRegex(AssertionError, r"te_x_sec_b shows in the narrow layout only while \['IsBig'\]"):
             check(GOOD)
@@ -270,9 +278,32 @@ class WideMatchesNarrowTest(unittest.TestCase):
 
     def test_a_one_line_wrapper_is_walked(self):
         wide = GOOD.replace('flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}\n\t\t\t}',
-                            'flowcontainer = { visible = "[JournalEntry.IsActive]" te_x_sec_a = {} }')
+                            f'flowcontainer = {{ {WRAPPER} visible = "[JournalEntry.IsActive]" te_x_sec_a = {{}} }}')
         self.assertEqual(self.check(wide), COLUMNS)
 
+
+    def test_a_wrapper_that_keeps_a_hidden_sections_space(self):
+        """Without ignoreinvisible, a hidden section still takes its place and the spacing around it."""
+        self.fails("without ignoreinvisible = yes keeps a hidden section's space", GOOD,
+                   wrapper="direction = vertical parentanchor = hcenter spacing = 4")
+
+    def test_a_wrapper_that_runs_across(self):
+        """A flowcontainer runs horizontally by default; in a 520 column its sections would sit side by side."""
+        self.fails("a flowcontainer wrapper runs vertically", GOOD,
+                   wrapper="parentanchor = hcenter ignoreinvisible = yes spacing = 4")
+
+    def test_a_wrapper_with_a_context_or_a_margin_of_its_own(self):
+        """A wide wrapper only gates and spaces its sections: a datacontext changes what they read, a margin where
+        they sit."""
+        self.fails(r"a wrapper carries \['datacontext'\]", GOOD,
+                   wrapper=WRAPPER + ' datacontext = "[GetPlayer]"')
+        self.fails(r"a wrapper carries \['margin_left'\]", GOOD, wrapper=WRAPPER + " margin_left = 200")
+
+    def test_a_wrappers_spacing_against_its_narrow_composers(self):
+        """The wrapper standing in for a narrow composer under the same gates spaces its sections as the composer
+        does."""
+        self.fails(r"spaces its sections 30 apart under \['JournalEntry.IsActive'\], the narrow layout \['4'\]", GOOD,
+                   wrapper="direction = vertical parentanchor = hcenter ignoreinvisible = yes spacing = 30")
 
 BODY = """
 types body {
