@@ -2888,6 +2888,44 @@ types colonial_empire_widget_types
 		te_ce_sec_history = {}
 		te_ce_sec_how = {}
 	}
+
+	### The Colonial Empire tab of the Timeline Extended window
+	### (te_system_tab_frame, gui/te_system_tab_widgets.gui; the window mounts it
+	### from gui/te_systems_window_generated.gui). The three composers the
+	### entry's roots wrap, in its order: the overview (which draws the
+	### stability bar, so the entry mounts the bars-on-top marker and nothing
+	### here draws a bar), the live sections, the history charts and How the
+	### Colonial Empire Works. Then Open Journal Entry. Not drawn: the status
+	### line (empty while the entry runs: the overview says it) and the nine
+	### scripted buttons (the AI's: every one's `visible` carries is_ai = yes;
+	### the programme and decision rows carry the same actions for a human).
+	### te_ce_tab_layout is the block a wide mount overrides.
+	type te_ce_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_colonial_empire"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
+		}
+		blockoverride "tab_content" {
+			block "te_ce_tab_layout" {
+				te_ce_overview_panel = {}
+				te_ce_status_sections = {}
+				te_ce_reference_sections = {}
+			}
+		}
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_window_colonial_empire_open_journal_tt"
+		}
+	}
 }
 
 

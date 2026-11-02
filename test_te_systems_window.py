@@ -628,8 +628,9 @@ class TabContentTest(unittest.TestCase):
             self.assertIn(f"type {name} = flowcontainer", widgets)
             body = _type_body(widgets, name)
             self.assertNotIn("JournalEntry", body)
-            # never mounted in the journal: only the tab composes them
-            self.assertEqual(widgets.count(f"{name} = {{}}"), 0)
+            # never mounted in the journal: only the tab's body composes them
+            self.assertEqual(widgets.count(f"{name} = {{}}"), 1)
+            self.assertIn(f"{name} = {{}}", _type_body(widgets, "te_sr_tab_body"))
 
     def test_the_milestone_types_are_the_journal_roots_bodies(self):
         """Each controlled milestone's roots are thin wrappers around its own
