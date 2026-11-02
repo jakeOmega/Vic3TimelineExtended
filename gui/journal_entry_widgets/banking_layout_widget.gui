@@ -249,6 +249,7 @@ types banking_layout_widget_types
 	type te_banking_tab_body = te_system_tab_frame {
 		blockoverride "tab_header" {
 			default_header = {
+				using = default_list_position
 				visible = "[Not( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 				blockoverride "text" {
 					text = "je_banking_cycle"
@@ -256,6 +257,7 @@ types banking_layout_widget_types
 			}
 
 			default_header = {
+				using = default_list_position
 				visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				blockoverride "text" {
 					text = "banking_dash_cat_monetary"

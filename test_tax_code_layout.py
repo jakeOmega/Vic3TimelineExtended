@@ -27,7 +27,8 @@ import re
 import unittest
 from pathlib import Path
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import _block_at, _strip_comments, _type_body, assert_wide_matches_narrow
+from gui_test_helpers import _read as _read_gui
 from test_tax_code_state import KEYS, block, close, gen, top_level_names
 
 ROOT = Path(__file__).resolve().parent
@@ -391,8 +392,10 @@ class LayoutTest(unittest.TestCase):
         cls.all = "\n".join(gui(path) for path in NEW_GUI)
 
     def test_status_sections(self):
-        # The legislated code's sections in a wrapper hidden under the light
-        # setting, then the light code's own section, which gates itself.
+        # The light code's own section, which gates itself, then the legislated
+        # code's sections in a wrapper hidden under the light setting. The light
+        # section leads so one row of full-screen columns keeps the order
+        # (wide-mode PR D2); the two never draw together.
         body = type_body(self.layout, "te_tax_status_sections")
         self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), STATUS)
         self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), ["te_tax_light_section"])
@@ -488,6 +491,15 @@ class WideTest(unittest.TestCase):
         from scripts.generators import gen_te_systems_window as window
         self.assertEqual(next(t for t in window.TABS if t.key == "tax_code").wide, "te_tax_wide_sections")
 
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read_gui(LAYOUT)), "te_tax_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertEqual(header.count("default_header = {"), 1)
+        self.assertEqual(header.count("using = default_list_position"), 1)
 
 class JournalEntryTest(unittest.TestCase):
     @classmethod

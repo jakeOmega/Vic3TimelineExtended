@@ -137,8 +137,9 @@ class GateTest(unittest.TestCase):
         tab = _tab_content()
         # both headers in the frame's header block, which ignores the hidden one
         self.assertIn("default_header", tab[tab.index('blockoverride "tab_header"'):tab.index('blockoverride "tab_before_gate"')])
-        headers = re.findall(r'default_header = \{\s*visible = "(.*)"\s*blockoverride "text" \{\s*text = "(\w+)"',
-                             tab)
+        # each centered over the full-screen columns (#1335's review)
+        headers = re.findall(r'default_header = \{\s*using = default_list_position\s*visible = "(.*)"\s*'
+                             r'blockoverride "text" \{\s*text = "(\w+)"', tab)
         self.assertEqual(headers, [(f"[Not( {_shown(READOUT_SGUI)} )]", "je_banking_cycle"),
                                    (f"[{_shown(READOUT_SGUI)}]", "banking_dash_cat_monetary")])
         at = tab.index("te_banking_mon_readout = {}")
