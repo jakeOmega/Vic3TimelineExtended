@@ -11,6 +11,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "cultural_hegemony_widget.gui")
@@ -27,6 +29,10 @@ ICONS_DOC = os.path.join(REPO, "docs", "systems", "cultural_hegemony_gui_icons.m
 STATUS = ["te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"]   # board first (owner, 2026-09-29)
 REFERENCE = ["te_ch_sec_history", "te_ch_sec_how"]
 COMPOSERS = ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_ch_overview_panel", "te_ch_sec_board"],
+                ["te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"],
+                ["te_ch_sec_history", "te_ch_sec_how"]]
 ROOTS = {   # named root -> (container, composer)
     "widget_je_ch_overview": ("custom_widget_container_1", "te_ch_overview_panel"),
     "widget_je_ch_status": ("custom_widget_container_2", "te_ch_status_sections"),
@@ -999,6 +1005,32 @@ class ProgramsCellTest(unittest.TestCase):
             self.assertIn(f"$je_ch_widget_prog_{p}_status$", listing)
         # Below the leaders: the owner's board-first order and leader flags stand.
         self.assertLess(ov.index("ch_leader_seat_3"), ov.index("te_banking_ov_cell = {"))
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_ch_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_ch_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_ch_wide_sections",
+                                             layout=("te_ch_tab_body", "te_ch_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["cultural_hegemony"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_ch_tab_body", "te_ch_tab_layout", "te_ch_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(WIDGET)), "te_ch_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
 
 if __name__ == "__main__":
     unittest.main()
