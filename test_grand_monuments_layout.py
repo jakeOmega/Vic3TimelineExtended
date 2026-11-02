@@ -8,6 +8,9 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "grand_monuments_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_grand_monuments.txt")
@@ -1325,6 +1328,23 @@ class SignatureRowsTest(unittest.TestCase):
             self.assertIn(f"te_state_gm_row = {{ visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue("
                           f"'{value}'), '(CFixedPoint)0')]\" blockoverride \"row_tooltip\" {{ tooltip = \"{tip}\" }}",
                           card, value)
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_gm_wide_sections, the window's full-screen Grand Monuments (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns,
+    read down each and then across, under the narrow layout's gates."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_gm_wide_sections", layout=("te_gm_tab_body", "te_gm_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_awaiting"],
+            ["te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments"],
+            ["te_gm_sec_trophies", "te_gm_sec_abroad", "te_gm_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "grand_monuments")
+        self.assertEqual((tab.layout, tab.wide), ("te_gm_tab_layout", "te_gm_wide_sections"))
 
 
 if __name__ == "__main__":

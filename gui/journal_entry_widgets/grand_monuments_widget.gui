@@ -3410,6 +3410,59 @@ types grand_monuments_widget_types
 			tooltip = "te_window_grand_monuments_open_journal_tt"
 		}
 	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_gm_tab_layout's override in the window's full-screen frame:
+	### the three composers' sections in three columns of a fixed 520, read
+	### down each and then across. The overview first, ungated as on the tab;
+	### each column's run of te_gm_status_sections on a wrapper with that
+	### composer's gate and spacing; How Grand Monuments Work in its composer.
+	type te_gm_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_gm_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_commission = {}
+				te_gm_sec_decisions = {}
+				te_gm_sec_awaiting = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_archaeology = {}
+				te_gm_sec_national = {}
+				te_gm_sec_monuments = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_trophies = {}
+				te_gm_sec_abroad = {}
+			}
+
+			te_gm_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================

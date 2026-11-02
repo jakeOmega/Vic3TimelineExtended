@@ -187,4 +187,24 @@ types te_budget_breakdown {
 		te_budget_expense_section = {}
 		te_budget_sec_how = {}
 	}
+
+	### The Timeline Extended window's Budget Breakdown full screen (spec
+	### docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 7):
+	### the panel's three sections side by side, each in a column of a fixed
+	### 520. The window mounts it in place of the panel, whose root carries no
+	### gate: its fixed 520 is the columns', and its spacing has nothing to
+	### separate with one section to a column.
+	type te_budget_breakdown_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_budget_income_section = {}
+		}
+
+		blockoverride "column_2" {
+			te_budget_expense_section = {}
+		}
+
+		blockoverride "column_3" {
+			te_budget_sec_how = {}
+		}
+	}
 }

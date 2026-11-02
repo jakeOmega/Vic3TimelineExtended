@@ -1627,4 +1627,24 @@ types te_seabed_widget_types
 		}
 		blockoverride "tab_open_journal" {}
 	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_seabed_tab_layout's override in the window's full-screen
+	### frame: the overview and the policy, the Ocean Basins table, then How
+	### Seabed Licenses Work, in three columns of a fixed 520. The tab's gate
+	### stays on the frame's parent; the panels' spacing of 10 is the columns'.
+	type te_seabed_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_seabed_overview_panel = {}
+			te_seabed_policy_panel = {}
+		}
+
+		blockoverride "column_2" {
+			te_seabed_basins_panel = {}
+		}
+
+		blockoverride "column_3" {
+			te_seabed_how_panel = {}
+		}
+	}
 }

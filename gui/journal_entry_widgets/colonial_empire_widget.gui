@@ -2926,6 +2926,47 @@ types colonial_empire_widget_types
 			tooltip = "te_window_colonial_empire_open_journal_tt"
 		}
 	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_ce_tab_layout's override in the window's full-screen frame:
+	### the three composers' sections in three columns of a fixed 520, read
+	### down each and then across. The overview first, ungated as on the tab;
+	### each column's run of te_ce_status_sections on a wrapper with that
+	### composer's gate and spacing; the history charts and How the Colonial
+	### Empire Works in their composer.
+	type te_ce_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_ce_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ce_sec_holdings = {}
+				te_ce_sec_stability = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ce_sec_pressure = {}
+				te_ce_sec_programmes = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_ce_reference_sections = {}
+		}
+	}
 }
 
 

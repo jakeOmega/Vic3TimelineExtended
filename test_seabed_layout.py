@@ -12,6 +12,8 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
 from test_banking_layout import MARGIN, _all_loc, _block_from, _custom_options, _read, _type_body
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -208,6 +210,23 @@ class SeabedPanelTest(unittest.TestCase):
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
         keys |= set(re.findall(r", '(te_seabed_\w+)'", self.gui))
         self.assertEqual(sorted(k for k in keys if k not in loc and not k.endswith("_sgui")), [])
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_seabed_wide_sections, the window's full-screen Seabed tab (spec
+    2026-11-02-te-window-wide-mode § 7): the overview and policy, the basins,
+    then How Seabed Licences Work."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_seabed_wide_sections", layout=("te_seabed_tab_body", "te_seabed_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_seabed_overview_panel", "te_seabed_policy_panel"],
+            ["te_seabed_basins_panel"],
+            ["te_seabed_how_panel"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "seabed")
+        self.assertEqual((tab.layout, tab.wide), ("te_seabed_tab_layout", "te_seabed_wide_sections"))
 
 
 if __name__ == "__main__":
