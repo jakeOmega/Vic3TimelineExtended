@@ -4,7 +4,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -761,6 +761,15 @@ class WideTest(unittest.TestCase):
     def test_the_window_registers_it(self):
         tab = {t.key: t for t in gen.TABS}["united_nations"]
         self.assertEqual((tab.body, tab.layout, tab.wide), ("te_un_tab_body", "te_un_tab_layout", "te_un_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(LAYOUT)), "te_un_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
 
 
 if __name__ == "__main__":

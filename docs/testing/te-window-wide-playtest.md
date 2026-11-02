@@ -78,6 +78,7 @@ In full screen, Cultural Hegemony, the United Nations, Nuclear Weapons and Cover
 520, 30 apart, centered (spec § 7). Each holds the side-panel tab's sections in the same order, read down each column
 and then across, under the same gates. The side panel and the host tabs (Society, Diplomacy, Military) keep their one
 column. The UN's Status section is now a type of its own (`te_un_sec_status`); it should look as before in every host.
+Each tab's header sits centered over the columns; one at the left edge lacks `using = default_list_position`.
 A section that hides empties its place, so a column can stand empty in some states (check 3). If every tab shows one
 column, or three empty ones, the wide mount's override of the body's `te_<x>_tab_layout` block, or the composer
 derived from `te_ui_columns_three`, didn't take: fall back to a `te_<x>_wide_body` frame registered with
