@@ -180,20 +180,103 @@ class WideMatchesNarrowTest(unittest.TestCase):
     def test_an_extra_the_layout_no_longer_has(self):
         self.fails(GOOD, extra=("te_x_divider",))
 
-    def test_omit_drops_a_narrow_section_placed_elsewhere(self):
-        """Tax Code's draft summary sits in the window's footer, not its columns."""
-        wide = GOOD.replace("te_x_summary = {}", "")
-        self.fails(wide)
-        self.check(wide, omit=("te_x_summary",))
-
-    def test_an_omit_the_narrow_layout_no_longer_has(self):
-        self.fails(GOOD, omit=("te_x_gone",))
-
     def test_composers_names_what_expands(self):
-        """By default a narrow type named *_sections is a composer; others are sections."""
+        """By default a type named *_sections is a composer, on either side; others are sections."""
+        self.fails(GOOD, composers=("te_x_status_sections",))
         wide = GOOD.replace("te_x_sec_how = {}", "te_x_reference_sections = {}")
-        self.fails(wide)
+        self.check(wide)
         self.check(wide, composers=("te_x_status_sections",))
+
+    def test_an_and_gate_counts_as_its_two_parts(self):
+        """Global Warming's reference sections: And( IsActive, the rule ). A wide layout may put the two parts on
+        different wrappers, or keep the And whole."""
+        narrow = NARROW.replace('visible = "[Not( IsLight )]"', 'visible = "[And( IsBig, Not( IsLight ) )]"')
+
+        def check(wide):
+            return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
+                                              text=narrow + "\ntypes wide {\n" + wide + "\n}\n")
+
+        with self.assertRaises(AssertionError):
+            check(GOOD)                                              # IsBig is on nothing
+        split = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
+                             'type te_x_wide_sections = flowcontainer {\n\t\tvisible = "[IsBig]"\n\t\tte_ui_columns_three = {')
+        check(split.rstrip() + "\n\t}\n")
+        check(GOOD.replace('"[Not( IsLight )]"', '"[And( IsBig, Not( IsLight ) )]"'))
+
+
+BODY = """
+types body {
+	type te_x_tab_body = te_system_tab_frame {
+		blockoverride "tab_gate" {
+			visible = "[TabShown]"
+		}
+		blockoverride "tab_content" {
+			block "te_x_tab_layout" {
+				te_x_overview = {}
+				flowcontainer = {
+					visible = "[HasGoal]"
+					te_x_goal_bar = {}
+				}
+				te_x_status_sections = {
+					blockoverride "summary" {}
+				}
+				te_x_reference_sections = {}
+			}
+		}
+	}
+}
+"""
+
+# The body's layout: the goal bar's inline wrapper gates it, and the body blanks the summary.
+LAID_OUT = """
+	type te_x_wide_sections = te_ui_columns_three {
+		visible = "[JournalEntry.IsActive]"
+		blockoverride "column_1" {
+			te_x_overview = {}
+			te_x_goal_bar = { visible = "[HasGoal]" }
+			te_x_sec_a = {}
+		}
+		blockoverride "column_2" {
+			flowcontainer = {
+				visible = "[Not( IsLight )]"
+				te_x_sec_b = {}
+			}
+		}
+		blockoverride "column_3" {
+			te_x_sec_c = { visible = "[HasC]" }
+			te_x_sec_how = {}
+		}
+	}
+"""
+
+
+class LayoutTest(unittest.TestCase):
+    """layout=(body, block): the narrow layout read from a tab body's layout block."""
+
+    def check(self, wide, **kw):
+        return assert_wide_matches_narrow(self, "te_x_wide_sections", layout=("te_x_tab_body", "te_x_tab_layout"),
+                                          text=fixture(wide) + BODY, **kw)
+
+    def test_a_body_layout_with_an_inline_wrapper_and_a_blanked_block(self):
+        self.check(LAID_OUT)
+
+    def test_the_inline_wrappers_gate_is_kept(self):
+        with self.assertRaises(AssertionError):
+            self.check(LAID_OUT.replace('te_x_goal_bar = { visible = "[HasGoal]" }', "te_x_goal_bar = {}"))
+
+    def test_a_block_the_body_blanks_is_not_wanted(self):
+        with self.assertRaises(AssertionError):
+            self.check(LAID_OUT.replace("te_x_sec_b = {}", "te_x_sec_b = {}\n\t\t\t\tte_x_summary = {}"))
+
+    def test_a_wide_layout_may_place_a_composer_whole(self):
+        wide = LAID_OUT.replace("te_x_sec_c = { visible = \"[HasC]\" }\n\t\t\tte_x_sec_how = {}",
+                                "te_x_sec_c = { visible = \"[HasC]\" }\n\t\t\tte_x_reference_sections = {}")
+        self.check(wide)
+
+    def test_names_or_a_layout_not_both(self):
+        with self.assertRaises(AssertionError):
+            assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, layout=("te_x_tab_body", "te_x_tab_layout"),
+                                       text=fixture(LAID_OUT) + BODY)
 
 
 class ChildrenTest(unittest.TestCase):

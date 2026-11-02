@@ -105,13 +105,33 @@ def _all_gui():
     return "\n".join(_strip_comments(_read(p)) for p in paths)
 
 
-def _gate(value):
-    """A visible's expression, for comparing: no quotes, no spacing."""
-    return re.sub(r"\s+", "", value.strip().strip('"'))
+def _split_args(inner):
+    """A call's arguments, split at its top-level commas."""
+    out, depth, start = [], 0, 0
+    for i, ch in enumerate(inner):
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            out.append(inner[start:i])
+            start = i + 1
+    return out + [inner[start:]]
+
+
+def _gates(value):
+    """A visible's expression, for comparing: no quotes, no brackets, no
+    spacing, and a top-level And( a, b ) as its two parts."""
+    expr = re.sub(r"\s+", "", value.strip().strip('"'))
+    if expr.startswith("[") and expr.endswith("]"):
+        expr = expr[1:-1]
+    if expr.startswith("And(") and expr.endswith(")") and _close(expr.replace("(", "{").replace(")", "}"), 3) == len(expr) - 1:
+        return tuple(g for arg in _split_args(expr[4:-1]) for g in _gates(arg))
+    return (expr,)
 
 
 def _own_gates(items):
-    return tuple(_gate(v) for kind, k, v in items if kind == "property" and k == "visible")
+    return tuple(g for kind, k, v in items if kind == "property" and k == "visible" for g in _gates(v))
 
 
 def _instance(kind, name, inner):
@@ -125,34 +145,63 @@ def _instance(kind, name, inner):
     return None
 
 
-class _Walk:
-    """The sections a composer places, in the order they draw, each with the
-    gates (visible expressions) on its way down; and the columns, if any."""
+def _find_block(body, name):
+    """The content of `block "name"` anywhere in a body, or None."""
+    for kind, n, inner in _children(body):
+        if kind == "block" and n == name:
+            return inner
+        if kind in ("block", "blockoverride", "widget"):
+            found = _find_block(inner, name)
+            if found is not None:
+                return found
+    return None
 
-    def __init__(self, test, where, skip=()):
-        self.test, self.where, self.skip = test, where, set(skip)
+
+class _Walk:
+    """The sections a layout places, in the order they draw, each with the
+    gates (visible expressions) on its way down; and its columns, if any. A
+    composer instance expands into its type's sections, under the instance's
+    blockoverrides."""
+
+    def __init__(self, test, where, text, composers, skip=()):
+        self.test, self.where, self.text = test, where, text
+        self.composers, self.skip = composers, set(skip)
         self.sections, self.columns, self.skipped = [], [], set()
 
-    def body(self, body, gates):
+    def is_composer(self, name):
+        return name in self.composers if self.composers is not None else name.endswith("_sections")
+
+    def body(self, body, gates, overrides=None):
         items = _children(body)
         gates = gates + _own_gates(items)
         for kind, name, inner in items:
-            if kind in ("block", "blockoverride"):    # a block's default content draws in place
-                self.body(inner, gates)
+            if kind == "block":                       # a block draws its override, or its default content
+                self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides)
+                continue
+            if kind == "blockoverride":
+                self.body(inner, gates, overrides)
                 continue
             if name in COLUMN_TYPES:
                 self.columns_of(name, inner, gates)
                 continue
             own = _instance(kind, name, inner)
             if own is not None:
-                if name in self.skip:
-                    self.skipped.add(name)
-                else:
-                    self.sections.append((name, gates + _own_gates(_children(own))))
-                    if self.columns and self.columns[-1] is not None:
-                        self.columns[-1].append(name)
+                self.instance(name, own, gates)
             elif kind == "widget":                    # a plain wrapper: flowcontainer, widget, …
-                self.body(inner, gates)
+                self.body(inner, gates, overrides)
+
+    def instance(self, name, own, gates):
+        items = _children(own)
+        gates = gates + _own_gates(items)
+        if name in self.skip:
+            self.skipped.add(name)
+        elif self.is_composer(name):
+            filled = {n: inner for kind, n, inner in items if kind == "blockoverride"}
+            self.body(_type_body(self.text, name), gates, filled)
+        else:
+            self.sections.append((name, gates))
+            if self.columns and self.columns[-1] is not None:
+                self.columns[-1].append(name)
 
     def columns_of(self, column_type, body, gates):
         n = COLUMN_TYPES[column_type]
@@ -171,45 +220,50 @@ class _Walk:
             self.columns.append(None)                 # a section after the columns sits in none
 
 
-def assert_wide_matches_narrow(test, wide_type, narrow_types, *, extra=(), omit=(), composers=None, text=None):
+def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), composers=None, text=None):
     """Check a wide composer against the narrow layout it widens, and return
     its columns (a list of section-name lists, read down each column).
 
-    - narrow_types: the narrow layout in order, as its tab body lists it. A
-      composer among them (named in `composers`, by default each one named
+    - The narrow layout is either `narrow_types`, its types in order, or
+      `layout=(body_type, block_name)`, the tab body's layout block (for
+      example ("te_un_tab_body", "te_un_tab_layout")), read with its inline
+      wrappers and the blockoverrides it gives its composers. Give one.
+    - A composer (named in `composers`, by default each type named
       *_sections) expands into the sections it places, through its plain
-      wrappers and blocks; any other name is a section.
+      wrappers and blocks, on either side; any other te_* instance is a
+      section.
     - The wide composer, `wide_type`, must lay its sections out on
       te_ui_columns_three or te_ui_columns_two (spec § 9.4) and place exactly
       the narrow sections, in the same order read down each column and then
       across. A section outside the columns (the Census Data window's pending
       line) counts where it draws. Every column holds at least one section.
-    - `extra` names wide-only te_* instances to skip, and `omit` narrow
-      sections the wide layout places elsewhere (Tax Code's draft summary is
-      in the window's footer). Each must still be there, so a stale one fails.
+    - `extra` names wide-only te_* instances to skip. Each must still be
+      there, so a stale one fails.
     - Every gate the narrow layout puts on a section (a composer's or a
-      wrapper's visible, or the instance's own) is on the wide section's way
-      down too: on the instance, a wrapper, the column type's instance or the
-      wide composer's root. The wide layout may add gates.
+      wrapper's visible, or the instance's own; an And( a, b ) counts as a and
+      b) is on the wide section's way down too: on the instance, a wrapper,
+      the column type's instance or the wide composer's root. The wide layout
+      may add gates.
 
     `text` is the markup to read the types from: by default every mod .gui.
     """
+    test.assertTrue(bool(narrow_types) != bool(layout), "give narrow_types or layout, not both")
     text = _all_gui() if text is None else _strip_comments(text)
-    composers = set(composers) if composers is not None else {n for n in narrow_types if n.endswith("_sections")}
+    composers = set(composers) if composers is not None else None
 
-    narrow = _Walk(test, "the narrow layout")
-    for name in narrow_types:
-        if name in composers:
-            narrow.body(_type_body(text, name), ())
-        else:
-            narrow.sections.append((name, ()))
-    stale = set(omit) - {s for s, _ in narrow.sections}
-    test.assertFalse(stale, f"{wide_type}: omit names {sorted(stale)}, which the narrow layout doesn't place")
-    narrow_sections = [(s, g) for s, g in narrow.sections if s not in omit]
+    narrow = _Walk(test, "the narrow layout", text, composers)
+    if layout:
+        body_type, block_name = layout
+        block = _find_block(_type_body(text, body_type), block_name)
+        test.assertIsNotNone(block, f"{body_type} has no block {block_name}")
+        narrow.body(block, ())
+    else:
+        for name in narrow_types:
+            narrow.instance(name, "", ())
 
     m = re.search(rf"\btype {wide_type} = (\w+) \{{", text)
     test.assertIsNotNone(m, f"no type {wide_type}")
-    wide = _Walk(test, wide_type, skip=extra)
+    wide = _Walk(test, wide_type, text, composers, skip=extra)
     if m.group(1) in COLUMN_TYPES:
         wide.columns_of(m.group(1), _type_body(text, wide_type), ())
     else:
@@ -218,9 +272,9 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types, *, extra=(), omit=
     stale = set(extra) - wide.skipped
     test.assertFalse(stale, f"{wide_type}: extra names {sorted(stale)}, which it doesn't place")
 
-    test.assertEqual([s for s, _ in wide.sections], [s for s, _ in narrow_sections],
+    test.assertEqual([s for s, _ in wide.sections], [s for s, _ in narrow.sections],
                      f"{wide_type}: the narrow layout's sections, read down each column and then across")
-    for (section, narrow_gates), (_, wide_gates) in zip(narrow_sections, wide.sections):
+    for (section, narrow_gates), (_, wide_gates) in zip(narrow.sections, wide.sections):
         missing = sorted(set(narrow_gates) - set(wide_gates))
         test.assertFalse(missing, f"{wide_type}: {section} shows in the narrow layout only while {missing}, "
                                   f"but in the wide one without it")
