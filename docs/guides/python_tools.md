@@ -204,8 +204,10 @@ GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it):
 `_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
 composer on `te_ui_columns_three` or `te_ui_columns_two` against the narrow layout it widens: the same sections in
 order, read down each column, each under exactly the narrow layout's gates. It fails on any widget a layout draws inline
-other than a plain container or a `te_*` section, and on an instance's `visible` over its type's own (gotcha #17). A
-test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
+other than a plain container or a `te_*` section, on an instance's `visible` over its type's own (gotcha #17), and on a
+wide wrapper that does more than gate and space its sections: one with `ignoreinvisible` unset, a horizontal
+flowcontainer, a property outside `WIDE_WRAPPER_PROPS` (a datacontext, a margin), or a `spacing` its narrow composer
+under the same gates doesn't use. A test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
 
 ## Formatting & Maintenance
 

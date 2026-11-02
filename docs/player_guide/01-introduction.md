@@ -15,7 +15,7 @@ tab each for the space race, your Grand Monuments and your colonial empire, the
 same panels as their journal entries, and one for the seabed. Two more rows of
 tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
 and Military panels, the same as there, so every system is in one place. Full Screen, at
-the window's top right, spreads it across the screen; Side Panel, at its top
+the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
 left there, brings it back to the width of the other panels. The tab you chose
 stays chosen when you switch.
 
