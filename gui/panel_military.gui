@@ -635,6 +635,9 @@ types panel_military {
 				# so each visibility block tests the gate as well as the tab. Gates:
 				# common/scripted_guis/te_system_tab_sguis.txt. No icon: system tabs
 				# carry none, as vanilla's don't (gui_style_guide.md rule 9).
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fourth_button" {
 					text = "te_military_tab_nuclear"
 				}
@@ -646,10 +649,10 @@ types panel_military {
 					onclick = "[InformationPanel.SelectTab('te_nuclear')]"
 				}
 				blockoverride "fourth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_nuclear'), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_nuclear'), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_nuclear') ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_nuclear') ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_selected" {
 					text = "te_military_tab_nuclear"
@@ -665,6 +668,8 @@ types panel_military {
 				# unlock test with a tick or a cross. Gates:
 				# common/scripted_guis/te_system_tab_sguis.txt. No icon, as for
 				# Nuclear (gui_style_guide.md rule 9).
+				# Not( GetMetaPlayer.IsObserver ) first in each visibility block, as
+				# for Nuclear: an observer has no GetPlayer.
 				blockoverride "fifth_button" {
 					text = "te_military_tab_covert"
 				}
@@ -676,10 +681,10 @@ types panel_military {
 					onclick = "[InformationPanel.SelectTab('te_covert')]"
 				}
 				blockoverride "fifth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_covert'), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_covert'), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_covert') ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_covert') ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_military_tab_covert"
