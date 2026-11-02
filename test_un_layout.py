@@ -4,6 +4,9 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "un_layout_widget.gui")
@@ -14,6 +17,13 @@ UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
           "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure"]
 REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7). The
+# Assembly is by far the largest section, so column 1 holds it under only the
+# overview and the Status line (shown at a founding or a dissolution).
+WIDE_COLUMNS = [["te_un_overview_panel", "te_un_sec_status", "te_un_sec_assembly"],
+                ["te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes", "te_un_sec_mandates"],
+                ["te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure",
+                 "te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
@@ -735,6 +745,23 @@ class ReviewRound2Test(unittest.TestCase):
 
     def test_the_refugee_target_line_ends_its_sentence(self):
         self.assertTrue(_loc("je_un_chamber_propose_target_refugee").endswith("nobody."))
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_un_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_un_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_un_wide_sections",
+                                             layout=("te_un_tab_body", "te_un_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["united_nations"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_un_tab_body", "te_un_tab_layout", "te_un_wide_sections"))
+
 
 if __name__ == "__main__":
     unittest.main()

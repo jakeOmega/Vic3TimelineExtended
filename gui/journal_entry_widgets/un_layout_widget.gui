@@ -705,6 +705,62 @@ types un_layout_widget_types
 			tooltip = "te_diplomacy_un_open_journal_tt"
 		}
 	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_un_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The General Assembly is by far the largest
+	### section, so column 1 holds it under only the overview and the Status
+	### section. The window's wide mount puts it in place of te_un_tab_layout;
+	### the Diplomacy panel and the side panel keep the one column.
+	### test_un_layout.py holds the columns.
+	type te_un_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_un_overview_panel = {}
+			te_un_sec_status = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_assembly = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_why = {}
+				te_un_sec_missions = {}
+				te_un_sec_programmes = {}
+				te_un_sec_mandates = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_obligations = {}
+				te_un_sec_dev_fund = {}
+				te_un_sec_exposure = {}
+			}
+
+			te_un_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================

@@ -204,13 +204,13 @@ TABS: list[Tab] = [
             "te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui", locked="te_pops_tab_demog_locked_tt",
             open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui"))),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
-            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui"),
+            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections"),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
-            "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui"),
+            "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
-            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui"),
+            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections"),
     _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
-            "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui"),
+            "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
 
 # The Space Race's nine entries, in je_space_race.txt's order. Each has its

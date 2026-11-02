@@ -226,6 +226,72 @@ types nuclear_layout_widget_types
 			tooltip = "te_military_nuclear_open_journal_tt"
 		}
 	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_nuclear_tab_layout's sections
+	### on te_ui_columns_three, read down each column and then across, each
+	### under its composer's gate. The goal bar keeps its wrapper and gate,
+	### under The Programme. The window's wide mount puts it in place of
+	### te_nuclear_tab_layout; the Military panel and the side panel keep the
+	### one column. test_nuclear_layout.py holds the columns.
+	type te_nuclear_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_nuclear_overview_panel = {}
+			te_nuclear_sec_programme = {}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('nuclear_program_has_programme_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_je_goal_bar = {}
+			}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_nuclear_sec_crisis = {}
+				te_nuclear_sec_strike = {}
+				te_nuclear_sec_world_crises = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_nuclear_sec_posture = {}
+				te_nuclear_sec_forces = {}
+				te_nuclear_sec_home = {}
+				te_nuclear_sec_reputation = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_nuclear_sec_taboo = {}
+				te_nuclear_sec_delivery = {}
+				te_nuclear_sec_powers = {}
+			}
+
+			te_nuclear_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================
