@@ -12,7 +12,10 @@ most can be switched off with a game rule.
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed.
+same panels as their journal entries, and one for the seabed. Full Screen, at
+the window's top right, spreads it across the screen; Side Panel, at its top
+left there, brings it back to the width of the other panels. The tab you chose
+stays chosen when you switch.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and

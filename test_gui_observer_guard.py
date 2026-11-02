@@ -207,7 +207,8 @@ class SystemTabButtonsTestTheObserverFirst(unittest.TestCase):
     def _only_instanced_in(self, rel, text, root_file):
         """A file of types gated by another file's root: it has no root of its
         own, and only that file instances the types holding its tab buttons."""
-        code = re.sub(r"#[^\n]*", "", text)
+        # comments out, but not a "#" inside a string ("#header")
+        code = "\n".join(re.sub(r'^((?:[^"#\n]|"[^"\n]*")*)#.*$', r"\1", ln) for ln in text.split("\n"))
         self.assertEqual(re.findall(r"^(?!types\b|template\b)(\w+)\s*=\s*\{", code, re.M), [],
                          f"gui/{rel}: a root widget of its own")
         holders = set()

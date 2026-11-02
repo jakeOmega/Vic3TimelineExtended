@@ -53,6 +53,187 @@ template te_systems_window_tax_probes_selected {
 
 types te_systems_window_generated_types
 {
+	### The full-screen frame: vanilla's fullscreen_block_window (copied from
+	### test_fixtures/vanilla_gui/block_windows.gui), its type name, Back and Close
+	### changed. It fills the screen from its origin, as vanilla's full-screen
+	### panels do (ingame_hud.gui), its own top filler under the top bar.
+	type te_fullscreen_block_window = widget {
+		size = { 100% 100% }
+		using = clickthrough_blocker
+
+		block "animation_state_block" {}
+
+		state = {
+			name = _show
+			alpha = 1
+			duration = 0
+			start_sound = {
+				soundeffect = "snapshot:/Dynamic/mute_world_80"
+			}
+		}
+
+		state = {
+			name = _hide
+			alpha = 0
+			duration = 0.2
+			using = Animation_Curve_Default
+		}
+
+		background = {
+			using = default_bg
+			margin = { 40 40 }
+		}
+
+		### HEADER BG
+		fullscreen_top_header = {}
+
+		#left dark fade
+		widget = {
+			size = { 50 100% }
+			parentanchor = left
+
+			background = {
+				using = dark_area
+				alpha = 0.5
+				mirror = horizontal
+
+				modify_texture = {
+					texture = "gfx/interface/masks/fade_horizontal_left_full.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = alphamultiply
+				}
+			}
+		}
+
+		#right dark fade
+		widget = {
+			size = { 50 100% }
+			parentanchor = right
+
+			background = {
+				using = dark_area
+				alpha = 0.5
+
+				modify_texture = {
+					texture = "gfx/interface/masks/fade_horizontal_left_full.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = alphamultiply
+				}
+			}
+		}
+
+		### TOP FILLER
+		widget = {
+			size = { 100% 78 }
+
+			background = {
+				texture = "gfx/interface/main_hud/topbar_bg.dds"
+				shaderfile = "gfx/FX/pdxgui_default.shader"
+				spriteType = Corneredtiled
+				spriteborder = { 0 0 }
+				spriteborder_right = 100
+				margin_right = 100
+				texture_density = 2
+				using = hud_elements_alpha
+
+				modify_texture = {
+					texture = "gfx/interface/backgrounds/default_bg_shading.dds"
+					spriteType = Corneredstretched
+					spriteborder = { 0 0 }
+					blend_mode = overlay
+					alpha = 0.5
+				}
+				modify_texture = {
+					using = texture_velvet
+				}
+				modify_texture = {
+					using = fancy_pattern
+				}
+			}
+			icon = {
+				texture = "gfx/interface/main_hud/topbar_bg_border.dds"
+				position = { 0 -3 }
+				size = { 100% 2 }
+				spriteType = Corneredtiled
+				spriteborder = { 0 0 }
+				texture_density = 2
+				parentanchor = bottom
+				alpha = 0.06
+			}
+		}
+
+		### CONTENT
+		vbox = {
+			using = clickthrough_blocker
+			margin_top = 100
+			margin_left = 50
+			layoutpolicy_vertical = expanding
+			layoutpolicy_horizontal = preferred
+			
+			block "content_margin_right" {
+				margin_right = 45
+			}
+
+			### header text / back / close
+			widget = {
+				size = { 0 70 }
+				layoutpolicy_horizontal = expanding
+
+				hbox = {
+					layoutpolicy_vertical = expanding
+					layoutpolicy_horizontal = expanding
+					margin = { 250 0 }
+					margin_bottom = 8
+
+					textbox = {
+						size = { 0 50 }
+						layoutpolicy_horizontal = expanding
+						fontsize_min = 14
+						using = header_font_fancy
+						using = header_font_fancy_size
+
+						block "window_header_name" {
+							raw_text = "Default Window Name"
+						}
+
+						default_format = "#header"
+						align = center|nobaseline
+					}
+				}
+
+				block "back_button_fullscreen" {
+					back_button_large = {
+						position = { 11 15 }
+						parentanchor = top|left
+						onclick = "[GetVariableSystem.Clear('com_open_window')]"
+						input_action = "back"
+					}
+				}
+
+				close_button_large = {
+					name = "tutorial_highlight_close_button"
+					parentanchor = top|right
+					onclick = "[GetVariableSystem.Clear('com_open_window')]"
+					shortcut = "close_window"
+
+					block "close_button_position" {
+						position = { -11 15 }
+					}
+				}
+			}
+
+			block "fixed_top" {}
+
+			block "entire_content_area" {
+				fullscreen_scrollarea = {}
+			}
+
+			block "fixed_bottom" {}
+		}
+	}
+
 	### The strips, in fixed_top: vanilla's five-slot strip (as the Military
 	### and Diplomacy panels use it) per row of the registry. tab_buttons
 	### derives from hbox, and a flowcontainer cannot own box layouts, so this
@@ -250,6 +431,233 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_seabed_tab"
+			using = te_systems_window_seabed_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_seabed_tab_body = {}
+		}
+	}
+
+	### The full-screen frame's strips: the narrow strips side by side in one
+	### centered row, each at its narrow width, so one strip of up to fifteen
+	### tabs at the narrow slot width; then the developer strip.
+	type te_systems_window_strips_wide = vbox {
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = fixed
+		ignoreinvisible = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = fixed
+
+			expand = {}
+			tab_buttons = {
+				minimumsize = { 540 -1 }
+				maximumsize = { 540 -1 }
+
+				### nation
+				blockoverride "first_button" {
+					text = "te_window_tab_nation"
+				}
+				blockoverride "first_button_tooltip" {
+					tooltip = "te_window_tab_nation_tt"
+				}
+				blockoverride "first_button_click" {
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
+				}
+				blockoverride "first_button_visibility" {
+					using = te_systems_window_nation_selected
+				}
+				blockoverride "first_button_visibility_checked" {
+					using = te_systems_window_nation_unselected
+				}
+				blockoverride "first_button_selected" {
+					text = "te_window_tab_nation"
+				}
+
+				### space_race
+				blockoverride "second_button" {
+					text = "te_window_tab_space_race"
+				}
+				blockoverride "second_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "second_button_click" {
+					enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'space_race')]"
+				}
+				blockoverride "second_button_visibility" {
+					using = te_systems_window_space_race_selected
+				}
+				blockoverride "second_button_visibility_checked" {
+					using = te_systems_window_space_race_unselected
+				}
+				blockoverride "second_button_selected" {
+					text = "te_window_tab_space_race"
+				}
+
+				### grand_monuments
+				blockoverride "third_button" {
+					text = "te_window_tab_grand_monuments"
+				}
+				blockoverride "third_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "third_button_click" {
+					enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]"
+				}
+				blockoverride "third_button_visibility" {
+					using = te_systems_window_grand_monuments_selected
+				}
+				blockoverride "third_button_visibility_checked" {
+					using = te_systems_window_grand_monuments_unselected
+				}
+				blockoverride "third_button_selected" {
+					text = "te_window_tab_grand_monuments"
+				}
+
+				### colonial_empire
+				blockoverride "fourth_button" {
+					text = "te_window_tab_colonial_empire"
+				}
+				blockoverride "fourth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "fourth_button_click" {
+					enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
+				}
+				blockoverride "fourth_button_visibility" {
+					using = te_systems_window_colonial_empire_selected
+				}
+				blockoverride "fourth_button_visibility_checked" {
+					using = te_systems_window_colonial_empire_unselected
+				}
+				blockoverride "fourth_button_selected" {
+					text = "te_window_tab_colonial_empire"
+				}
+
+				### seabed
+				blockoverride "fifth_button" {
+					text = "te_window_tab_seabed"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "fifth_button_click" {
+					enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'seabed')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					using = te_systems_window_seabed_selected
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					using = te_systems_window_seabed_unselected
+				}
+				blockoverride "fifth_button_selected" {
+					text = "te_window_tab_seabed"
+				}
+			}
+			expand = {}
+		}
+
+		# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming
+		# the probes never shrinks the system tabs.
+		hbox = {
+			visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = fixed
+
+			expand = {}
+			tab_buttons = {
+				minimumsize = { 540 -1 }
+				maximumsize = { 540 -1 }
+				blockoverride "first_button" { text = "te_tp_tab" }
+				blockoverride "first_button_selected" { text = "te_tp_tab" }
+				blockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }
+				blockoverride "first_button_click" { onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'tax_probes')]" }
+				blockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }
+				blockoverride "first_button_visibility_checked" { visible = "[Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]" }
+			}
+			expand = {}
+		}
+	}
+
+	### The full-screen frame's column: three 520 columns and their 30 px
+	### gaps wide (spec § 4.3), centered, so the frame scrolls sideways
+	### below that width. Each tab's mount as narrow, holding its wide
+	### layout once the registry names one (its `wide`), else its body.
+	type te_systems_window_tabs_wide = flowcontainer {
+		name = "te_systems_window_content_wide"
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 1620 -1 }
+
+		te_tp_panel = {
+			using = te_systems_window_tax_probes_selected
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_nation_tab_wide"
+			using = te_systems_window_nation_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_nation_tab_sections = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_space_race_tab_wide"
+			using = te_systems_window_space_race_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_sr_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_grand_monuments_tab_wide"
+			using = te_systems_window_grand_monuments_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_gm_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_colonial_empire_tab_wide"
+			using = te_systems_window_colonial_empire_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_ce_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_seabed_tab_wide"
 			using = te_systems_window_seabed_selected
 			using = default_fade_in_out
 			parentanchor = hcenter

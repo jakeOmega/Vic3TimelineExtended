@@ -23,11 +23,14 @@
 ### te_systems_window           the window, vanilla's default_block_window
 ###                             where vanilla's side panels sit
 ###
-### STATE. Both are client-side GetVariableSystem values (never saved):
+### STATE. All three are client-side GetVariableSystem values (never saved):
 ###   com_open_window = te_systems_window   the window is open. The key is the
 ###       Community Mod Framework's (system_panels_feasibility.md §7.5, item 3):
 ###       with CMF enabled, its own clearing closes this window along with its
 ###       own; without CMF nothing else reads the key.
+###   te_systems_window_wide = yes   the window is full screen (the toggle in
+###       each frame's fixed_top); unset, it is a side panel. A separate key,
+###       so the chosen tab survives the switch.
 ###   te_systems_window_tab = nation | space_race | grand_monuments
 ###       | colonial_empire | seabed
 ###       the tab the player last chose. The tab shown is that one while it is
@@ -118,7 +121,20 @@ types te_systems_window_types
 		### strip so the names kept one line (owner: two levels for five tabs
 		### was a bit silly when the other windows hold up to six on one).
 		blockoverride "fixed_top" {
-			te_systems_window_strips_narrow = {}
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = fixed
+				ignoreinvisible = yes
+
+				te_systems_window_toggle = {
+					blockoverride "toggle" {
+						text = "te_systems_window_wide_on"
+						tooltip = "te_systems_window_wide_on_tt"
+						onclick = "[GetVariableSystem.Set('te_systems_window_wide', 'yes')]"
+					}
+				}
+				te_systems_window_strips_narrow = {}
+			}
 		}
 
 		### One fixed-width column (style guide rule 8), holding each tab's
@@ -129,6 +145,76 @@ types te_systems_window_types
 		blockoverride "scrollarea_content" {
 			te_systems_window_tabs_narrow = {}
 		}
+	}
+
+	### The full-screen frame (spec 2026-11-02-te-window-wide-mode § 4):
+	### te_fullscreen_block_window, vanilla's fullscreen_block_window with Back
+	### and Close clearing com_open_window (generated from vanilla's file; see
+	### test_te_fullscreen_frame.py), titled as the side panel is. Its fixed_top
+	### holds the same toggle, at the left (clear of the outliner, see the
+	### toggle's type), then the strips side by side; its column holds each
+	### tab's wide mount.
+	type te_systems_window_panel_wide = te_fullscreen_block_window {
+		name = "te_systems_window_panel_wide"
+
+		blockoverride "window_header_name" {
+			text = "te_systems_window_title"
+		}
+
+		blockoverride "fixed_top" {
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = fixed
+				ignoreinvisible = yes
+
+				te_systems_window_toggle = {
+					blockoverride "toggle_lead" {}
+					blockoverride "toggle_trail" {
+						expand = {}
+					}
+					blockoverride "toggle" {
+						text = "te_systems_window_wide_off"
+						tooltip = "te_systems_window_wide_off_tt"
+						onclick = "[GetVariableSystem.Clear('te_systems_window_wide')]"
+					}
+				}
+				te_systems_window_strips_wide = {}
+			}
+		}
+
+		blockoverride "scrollarea_content" {
+			te_systems_window_tabs_wide = {}
+		}
+	}
+
+	### The width toggle (spec § 4.2): a slim row first in each frame's
+	### fixed_top, a small text button. The frames expose no header slot for
+	### it. It writes only te_systems_window_wide, so the chosen tab survives
+	### the switch. An icon can replace the text later (style guide rule 10).
+	###
+	### At the row's right by default (the side panel). The full-screen frame
+	### moves it to the left ("toggle_lead" empty, "toggle_trail" the expand):
+	### vanilla's outliner sits on the HUD layer, above this window, over the
+	### screen's right 360 px from y = 155 (ingame_hud.gui), and hides only for
+	### vanilla's own full screens (half_and_fullscreen_hide reads
+	### InformationPanelBar.IsPanelOpen). The width is kept for the session, so
+	### a covered Side Panel would leave the window full screen until reload.
+	type te_systems_window_toggle = hbox {
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = fixed
+		margin = { 10 0 }
+
+		block "toggle_lead" {
+			expand = {}
+		}
+
+		button = {
+			using = default_button
+			size = { 140 26 }
+			block "toggle" {}
+		}
+
+		block "toggle_trail" {}
 	}
 }
 
@@ -337,23 +423,40 @@ widget = {
 		on_start = "[MapListPanelManager.CloseCurrentPanel]"
 	}
 
-	vbox = {
-		parentanchor = top|left
-		layoutpolicy_horizontal = expanding
-		layoutpolicy_vertical = expanding
-		margin_top = 85
+	### The side panel: where vanilla's side panels sit, while
+	### te_systems_window_wide is unset (the toggle; client-side, never saved).
+	widget = {
+		size = { 100% 100% }
+		visible = "[Not( GetVariableSystem.Exists('te_systems_window_wide') )]"
 
-		widget = {
+		vbox = {
+			parentanchor = top|left
 			layoutpolicy_horizontal = expanding
 			layoutpolicy_vertical = expanding
+			margin_top = 85
 
-			hbox = {
+			widget = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
-				te_systems_window_panel = {}
-				expand = {}
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+
+					te_systems_window_panel = {}
+					expand = {}
+				}
 			}
 		}
+	}
+
+	### The full screen, while it is set: at the root's origin, full size, as
+	### vanilla's full-screen panels sit in ingame_hud.gui. The frame draws its
+	### own top filler, which the top bar draws over, and starts its content
+	### below it (margin_top = 100), so no inset. The HUD's layer is above this
+	### one, so the top bar, the sidebar and the outliner draw over the frame
+	### (docs/testing/te-window-wide-playtest.md, item 1).
+	te_systems_window_panel_wide = {
+		visible = "[GetVariableSystem.Exists('te_systems_window_wide')]"
 	}
 }

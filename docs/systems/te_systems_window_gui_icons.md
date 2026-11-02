@@ -13,3 +13,11 @@ The Timeline Extended window (`gui/te_systems_window.gui`) draws one icon of its
 | The sidebar button, closed and lit | A small brass hourglass whose upper bulb holds a blue globe and whose lower bulb a rising silver rocket | `gfx/interface/main_hud/te_systems_window_btn.dds` |
 
 The brief asked for gold line art. Vanilla's sidebar buttons are painted objects on transparency (a book, a globe on its stand, a stack of coins), so the launcher is painted too, at their size: 76 px, the object about three quarters of the side. The rocket is small at 40 px; the hourglass and the globe carry the picture. It replaced vanilla's Journal button art, the same picture as the Journal button three slots above it.
+
+## Candidates for an icon later
+
+| Where | Today | Note |
+|---|---|---|
+| The width toggle, at the top right of each frame (`te_systems_window_toggle`, 2026-11-02) | A text button: "Full Screen" in the side panel, "Side Panel" full screen | Text until there is art (style guide rule 10, placeholder art is fine). An icon would need two pictures, expand and collapse; the tooltips stay as they are. |
+
+The full-screen frame (`te_fullscreen_block_window`) draws vanilla's own art: its top filler, fades and borders, copied with the type from vanilla's `block_windows.gui`. They are vanilla files, so this page doesn't list them (`IconsTest` holds them to the vanilla type's).

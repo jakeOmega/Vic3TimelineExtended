@@ -531,6 +531,8 @@ Wrap each column's run of status or reference sections in a vertical flowcontain
 
 Each PR's body: "Player guide: below the guide's level of detail" (the guide describes the toggle, not each layout).
 
+The last of D1–D3 to merge also restores the Full Screen tooltip's clause about columns (`te_systems_window_wide_on_tt`: "Show this window across the screen, with each tab in columns."). PR B shipped it as "Show this window across the screen." because B has no columns (#1328's review).
+
 ## Later: vanilla bases for the hosts (spec § 9.7)
 
 On the owner's machine, after C: for each host whose diff from vanilla is only its tab blocks, commit vanilla's file under `test_fixtures/vanilla_gui/` and a test that the override changes it only inside `### MOD:` blocks. Retag `market_panel.gui`'s `### TE:` markers as `### MOD:` in the same PR.

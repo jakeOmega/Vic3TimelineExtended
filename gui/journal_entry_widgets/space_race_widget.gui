@@ -17,7 +17,8 @@
 ### script values and loc keys the panel reads), passed as sr_* blockoverrides
 ### by one pair of types per milestone (te_sr_<m>_overview, te_sr_<m>_status).
 ### The roots at the foot of this file wrap those, and the Timeline Extended
-### window's Space Race tab (gui/te_systems_window.gui) instances the same
+### window's Space Race tab (te_sr_tab_body, and its milestones' frames in
+### gui/te_systems_window_generated.gui) instances the same
 ### types, so the two hosts draw one body. Vanilla ships several named widgets
 ### in one journal-entry widget file
 ### (gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550 mounted by
@@ -6932,8 +6933,8 @@ types space_race_widget_types
 	}
 
 	### ======================================================================
-	### THE SPACE RACE TAB'S OWN SECTIONS (the Timeline Extended window,
-	### gui/te_systems_window.gui). The tab stays open once the country is in
+	### THE SPACE RACE TAB'S OWN SECTIONS (the Timeline Extended window's
+	### te_sr_tab_body, below). The tab stays open once the country is in
 	### the race (sr_in_space_race), with or without a milestone running, so
 	### these read no journal entry: the player through GetPlayer, a power
 	### through its capital. Below the milestones' blocks; never in the journal.
@@ -7713,7 +7714,8 @@ types space_race_widget_types
 	### ======================================================================
 	### PER-MILESTONE PANELS. What each milestone's journal roots wrap, and
 	### what the Timeline Extended window's Space Race tab instances
-	### (gui/te_systems_window.gui), so the two hosts cannot drift: the
+	### (te_sr_window_milestones, gui/te_systems_window_generated.gui), so the
+	### two hosts cannot drift: the
 	### milestone's scripted GUI as the datacontext its controls address,
 	### and its data passed to the composers as sr_* blockoverrides. Each
 	### reads only its own milestone (test_space_race_layout.py).

@@ -46,12 +46,17 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 GUI_OUT = ROOT / "gui" / "te_systems_window_generated.gui"
+# vanilla's gui/block_windows.gui, byte for byte (test_te_fullscreen_frame.py
+# holds it to the install): the full-screen frame is copied from it
+VANILLA_FRAMES = ROOT / "test_fixtures" / "vanilla_gui" / "block_windows.gui"
 
 STORED = "te_systems_window_tab"
+BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
 
 
@@ -136,11 +141,11 @@ class Tab:
     tooltip_expr: str | None = None
 
 
-def _system(key: str, body: str, layout: str, **kw) -> Tab:
+def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
     """A tab of the window's own systems: te_window_<key>_tab_sgui opens it and
     te_window_<key>_tab_unlock_sgui puts it on the strip and gives the
     checklist (common/scripted_guis/te_system_tab_sguis.txt)."""
-    return Tab(key, 1, label=f"te_window_tab_{key}", tooltip=f"te_window_tab_{key}_tt",
+    return Tab(key, row, label=f"te_window_tab_{key}", tooltip=f"te_window_tab_{key}_tt",
                locked=f"te_window_tab_{key}_locked_tt",
                open_=shown(f"te_window_{key}_tab_sgui"), strip=shown(f"te_window_{key}_tab_unlock_sgui"),
                unlock=f"te_window_{key}_tab_unlock_sgui", body=body, layout=layout, **kw)
@@ -185,7 +190,7 @@ def unselected(tab: Tab) -> str:
 
 
 def _any_system_shown() -> str:
-    return or_all([and_(stored(t.key), t.open_) for t in TABS[1:]])
+    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), t.open_) for t in TABS[1:]])
 
 
 def _template(name: str, expr: str) -> list[str]:
@@ -226,9 +231,14 @@ def _slot(slot: str, tab: Tab) -> list[str]:
             + override("button_selected", f'text = "{tab.label}"'))
 
 
-def _strip(tabs: list[Tab]) -> list[str]:
+# The wide frame's strips keep the narrow slot width: 540, the Census
+# window's strip (pop_browser_panel.gui).
+WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
+
+
+def _strip(tabs: list[Tab], wide: bool = False) -> list[str]:
     assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
-    out = ["tab_buttons = {"]
+    out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
     for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
         if i:
             out.append("")
@@ -237,19 +247,26 @@ def _strip(tabs: list[Tab]) -> list[str]:
     return out + ["}"]
 
 
-TAX_PROBES_STRIP = [
-    "# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming",
-    "# the probes never shrinks the system tabs.",
-    "tab_buttons = {",
-    f'\tvisible = "[{shown("te_tp_tab_sgui")}]"',
-    '\tblockoverride "first_button" { text = "te_tp_tab" }',
-    '\tblockoverride "first_button_selected" { text = "te_tp_tab" }',
-    '\tblockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }',
-    f"\tblockoverride \"first_button_click\" {{ onclick = \"[GetVariableSystem.Set('{STORED}', 'tax_probes')]\" }}",
-    '\tblockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }',
-    f'\tblockoverride "first_button_visibility_checked" {{ visible = "[{not_(TAX_PROBES)}]" }}',
-    "}",
-]
+def _tax_probes_strip(wide: bool = False) -> list[str]:
+    """TEMPORARY: a strip of its own for the developer tax-probes tab, so
+    arming the probes never shrinks the system tabs. Wide, centered in a row
+    of its own, which carries the strip's gate."""
+    gate = f'visible = "[{shown("te_tp_tab_sgui")}]"'
+    strip = (["tab_buttons = {"]
+             + ([f"\t{ln}" for ln in WIDE_STRIP] if wide else [f"\t{gate}"])
+             + ['\tblockoverride "first_button" { text = "te_tp_tab" }',
+                '\tblockoverride "first_button_selected" { text = "te_tp_tab" }',
+                '\tblockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }',
+                f"\tblockoverride \"first_button_click\" {{ onclick = \"[GetVariableSystem.Set('{STORED}', 'tax_probes')]\" }}",
+                '\tblockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }',
+                f'\tblockoverride "first_button_visibility_checked" {{ visible = "[{not_(TAX_PROBES)}]" }}',
+                "}"])
+    head = ["# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming",
+            "# the probes never shrinks the system tabs."]
+    if not wide:
+        return head + strip
+    return head + ["hbox = {", f"\t{gate}", "\tlayoutpolicy_horizontal = expanding", "\tlayoutpolicy_vertical = fixed", "",
+                   "\texpand = {}"] + [f"\t{ln}" for ln in strip] + ["\texpand = {}", "}"]
 
 
 def strips_narrow() -> list[str]:
@@ -265,15 +282,43 @@ def strips_narrow() -> list[str]:
     for row in sorted({t.row for t in TABS}):
         out += [f"\t{ln}" if ln else "" for ln in _strip([t for t in TABS if t.row == row])]
         out.append("")
-    out += [f"\t{ln}" for ln in TAX_PROBES_STRIP]
+    out += [f"\t{ln}" for ln in _tax_probes_strip()]
+    return out + ["}"]
+
+
+def strips_wide() -> list[str]:
+    out = ["### The full-screen frame's strips: the narrow strips side by side in one",
+           "### centered row, each at its narrow width, so one strip of up to fifteen",
+           "### tabs at the narrow slot width; then the developer strip.",
+           "type te_systems_window_strips_wide = vbox {",
+           "\tlayoutpolicy_horizontal = expanding",
+           "\tlayoutpolicy_vertical = fixed",
+           "\tignoreinvisible = yes",
+           "",
+           "\thbox = {",
+           "\t\tlayoutpolicy_horizontal = expanding",
+           "\t\tlayoutpolicy_vertical = fixed",
+           "",
+           "\t\texpand = {}"]
+    for row in sorted({t.row for t in TABS}):
+        out += [f"\t\t{ln}" if ln else "" for ln in _strip([t for t in TABS if t.row == row], wide=True)]
+    out += ["\t\texpand = {}", "\t}", ""]
+    out += [f"\t{ln}" if ln else "" for ln in _tax_probes_strip(wide=True)]
     return out + ["}"]
 
 
 # --- the mounts ---------------------------------------------------------------
 
-def _mount(tab: Tab) -> list[str]:
+def _mount(tab: Tab, wide: bool = False) -> list[str]:
+    if not wide or tab.wide is None:
+        content = [f"\t{tab.body} = {{}}"]
+    elif tab.layout is None:
+        content = [f"\t{tab.wide} = {{}}"]
+    else:
+        content = [f"\t{tab.body} = {{", f'\t\tblockoverride "{tab.layout}" {{', f"\t\t\t{tab.wide} = {{}}",
+                   "\t\t}", "\t}"]
     return ["flowcontainer = {",
-            f'\tname = "te_systems_window_{tab.key}_tab"',
+            f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
             f"\tusing = te_systems_window_{tab.key}_selected",
             "\tusing = default_fade_in_out",
             "\tparentanchor = hcenter",
@@ -281,9 +326,7 @@ def _mount(tab: Tab) -> list[str]:
             "\tignoreinvisible = yes",
             "\tmargin_top = 10",
             "\tmargin_bottom = 15",
-            "",
-            f"\t{tab.body} = {{}}",
-            "}"]
+            ""] + content + ["}"]
 
 
 def tabs_narrow() -> list[str]:
@@ -304,6 +347,27 @@ def tabs_narrow() -> list[str]:
     for tab in TABS:
         out.append("")
         out += [f"\t{ln}" if ln else "" for ln in _mount(tab)]
+    return out + ["}"]
+
+
+def tabs_wide() -> list[str]:
+    out = ["### The full-screen frame's column: three 520 columns and their 30 px",
+           "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
+           "### below that width. Each tab's mount as narrow, holding its wide",
+           "### layout once the registry names one (its `wide`), else its body.",
+           "type te_systems_window_tabs_wide = flowcontainer {",
+           '\tname = "te_systems_window_content_wide"',
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tminimumsize = { 1620 -1 }",
+           "",
+           "\tte_tp_panel = {",
+           "\t\tusing = te_systems_window_tax_probes_selected",
+           "\t}"]
+    for tab in TABS:
+        out.append("")
+        out += [f"\t{ln}" if ln else "" for ln in _mount(tab, wide=True)]
     return out + ["}"]
 
 
@@ -379,6 +443,43 @@ def sr_milestones() -> list[str]:
     return out + ["}"]
 
 
+# --- the full-screen frame ----------------------------------------------------
+
+CLEAR_OPEN = "[GetVariableSystem.Clear('com_open_window')]"
+FRAME_CHANGES = [
+    ("type fullscreen_block_window = widget {", "type te_fullscreen_block_window = widget {"),
+    ('onclick = "[InformationPanelBar.OpenPreviousPanel]"', f'onclick = "{CLEAR_OPEN}"'),
+    ('onclick = "[InformationPanelBar.ClosePanel]"', f'onclick = "{CLEAR_OPEN}"'),
+]
+
+
+def fullscreen_frame() -> list[str]:
+    """Vanilla's fullscreen_block_window under the mod's name, Back and Close
+    clearing the window's open state: vanilla's call the information panel
+    bar, which a scripted widget isn't in (spec § 4.1). Each change must match
+    exactly once, so a patch that moves them fails here."""
+    text = VANILLA_FRAMES.read_text(encoding="utf-8-sig")
+    m = re.search(r"^\ttype fullscreen_block_window = widget \{$", text, re.M)
+    if not m:
+        raise ValueError(f"{VANILLA_FRAMES.name}: no fullscreen_block_window")
+    depth, end = 0, None
+    for i in range(m.end() - 1, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        if depth == 0:
+            end = i
+            break
+    frame = text[m.start():end + 1]
+    for old, new in FRAME_CHANGES:
+        if frame.count(old) != 1:
+            raise ValueError(f"vanilla's fullscreen_block_window changed: {old!r} is there {frame.count(old)} times")
+        frame = frame.replace(old, new)
+    body = [ln[1:] if ln.startswith("\t") else ln for ln in frame.split("\n")]
+    return ["### The full-screen frame: vanilla's fullscreen_block_window (copied from",
+            "### test_fixtures/vanilla_gui/block_windows.gui), its type name, Back and Close",
+            "### changed. It fills the screen from its origin, as vanilla's full-screen",
+            "### panels do (ingame_hud.gui), its own top filler under the top bar."] + body
+
+
 # --- the file -----------------------------------------------------------------
 
 HEADER = [
@@ -390,16 +491,27 @@ HEADER = [
 ]
 
 
+def _validate() -> None:
+    if not (TABS[0].key == "nation" and TABS[0].open_ is None and TABS[0].strip is None):
+        raise ValueError("Nation is the first tab and the fallback: always open, always on the strip")
+    if len({t.key for t in TABS}) != len(TABS) or "tax_probes" in {t.key for t in TABS}:
+        raise ValueError("tab keys are unique and never the developer tab's")
+    for t in TABS:
+        if t.open_ is not None and t.tooltip_expr is None and not (t.unlock and t.locked):
+            raise ValueError(f"{t.key}: a tab with an open gate shows a checklist while grayed: "
+                             "give it unlock and locked, or a tooltip_expr")
+
+
 def render() -> str:
-    assert TABS[0].key == "nation" and TABS[0].open_ is None and TABS[0].strip is None, \
-        "Nation is the first tab and the fallback: always open, always on the strip"
+    _validate()
     lines = list(HEADER)
     lines += ["### Which tab is shown: the last one chosen while it is open, otherwise",
               "### Nation, which always is. A system tab's unselected half shows while it",
               "### is on the strip and not shown; Nation's while another tab is.", ""]
     lines += templates()
     lines += ["types te_systems_window_generated_types", "{"]
-    for i, part in enumerate((strips_narrow(), tabs_narrow(), sr_milestones())):
+    for i, part in enumerate((fullscreen_frame(), strips_narrow(), tabs_narrow(), strips_wide(), tabs_wide(),
+                              sr_milestones())):
         if i:
             lines.append("")
         lines += [f"\t{ln}" if ln else "" for ln in part]
@@ -409,14 +521,13 @@ def render() -> str:
 
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
-    text = render()
+    data = BOM + render().encode("utf-8")
     if "--check" in argv:
-        current = GUI_OUT.read_text(encoding="utf-8-sig") if GUI_OUT.exists() else None
-        if current != text:
-            print(f"stale: {GUI_OUT.relative_to(ROOT)} (run python3 scripts/generators/gen_te_systems_window.py)")
+        if not GUI_OUT.exists() or GUI_OUT.read_bytes() != data:
+            print(f"stale: {GUI_OUT} (run python3 scripts/generators/gen_te_systems_window.py)")
             return 1
         return 0
-    GUI_OUT.write_text("﻿" + text, encoding="utf-8", newline="\n")
+    GUI_OUT.write_bytes(data)
     return 0
 
 

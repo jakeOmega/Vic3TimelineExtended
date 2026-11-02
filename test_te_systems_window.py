@@ -18,7 +18,9 @@ import glob
 import os
 import re
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, REPO)
@@ -333,7 +335,8 @@ class WindowTest(unittest.TestCase):
     def test_the_panel_instances_the_generated_pieces(self):
         """The strips, the templates and the tabs' mounts come from the
         registry; this file keeps the frame, the launcher and the root."""
-        self.assertRegex(self.panel, r'blockoverride "fixed_top" \{\s*te_systems_window_strips_narrow = \{\}\s*\}')
+        self.assertRegex(self.panel, re.compile(r'blockoverride "fixed_top" \{\s*vbox = \{[^{}]*te_systems_window_toggle = \{'
+                                                r'.*?te_systems_window_strips_narrow = \{\}\s*\}\s*\}', re.S))
         self.assertRegex(self.panel, r'blockoverride "scrollarea_content" \{\s*te_systems_window_tabs_narrow = \{\}\s*\}')
         code = _strip_comments(self.gui)
         self.assertIsNone(re.search(r"^template ", code, re.M))
@@ -426,12 +429,17 @@ class SelectionTest(unittest.TestCase):
                                 shown |= _atoms(_tab(k).open_)
                             if on_strip:
                                 shown |= _atoms(_tab(k).strip)
+                        # each state is the one enumerated, compound gates too
+                        for k, (opened, on_strip) in states.items():
+                            for gate, want in ((_tab(k).open_, opened), (_tab(k).strip, on_strip)):
+                                if gate is not None:
+                                    self.assertEqual(_evaluate(gate, shown, stored), want, (k, gate))
                         yield states, stored, shown, probe
 
     def _expected(self, stored, shown, probe):
         if stored == "tax_probes" and probe:
             return "tax_probes"
-        if stored in self.tabs[1:] and _evaluate(_tab(stored).open_, shown, stored):
+        if stored in self.tabs[1:] and (_tab(stored).open_ is None or _evaluate(_tab(stored).open_, shown, stored)):
             return stored
         return "nation"
 
@@ -468,6 +476,11 @@ class SelectionTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 expr = self.sel[t.key] + self.unsel[t.key]
                 self.assertLessEqual(_atoms(expr), _atoms(t.open_) | _atoms(t.strip) | probe)
+                # each gate as written, so a dropped term of a compound gate shows
+                if t.open_ is not None:
+                    self.assertIn(t.open_, self.sel[t.key])
+                if t.strip is not None:
+                    self.assertIn(t.strip, self.unsel[t.key])
                 self.assertLessEqual(_stored_reads(expr), {t.key, "tax_probes"})
         for half in (self.sel["nation"], self.unsel["nation"]):
             guarded = set()
@@ -476,7 +489,7 @@ class SelectionTest(unittest.TestCase):
                     continue
                 args = _call_args(half, m.start())
                 self.assertEqual(len(args), 2)
-                self.assertEqual(_atoms(args[1]), _atoms(_tab(m.group(1)).open_), m.group(1))
+                self.assertEqual(args[1], _tab(m.group(1)).open_, m.group(1))
                 guarded |= _atoms(args[1])
             self.assertEqual(_atoms(half) - probe, guarded)
             self.assertEqual(_stored_reads(half), {t.key for t in gen.TABS[1:]} | {"tax_probes"})
@@ -843,6 +856,139 @@ class SeabedTabTest(unittest.TestCase):
         self.assertIn("te_nation_tab_sections = {}", nation)
 
 
+WIDE = "GetVariableSystem.Exists('te_systems_window_wide')"
+
+
+class WideTest(unittest.TestCase):
+    """The toggle between the side-panel frame and the full-screen one (spec
+    § 4): one client-side key, te_systems_window_wide, the root showing one
+    frame or the other; the chosen tab a separate key, so it survives."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.generated = _read(GENERATED)
+        cls.root = _top_level(cls.gui, "te_systems_window")
+        cls.narrow = _type_body(cls.gui, "te_systems_window_panel")
+        cls.wide = _type_body(cls.gui, "te_systems_window_panel_wide")
+
+    def _child(self, opener):
+        """The root's direct child opening with `opener`."""
+        m = re.search(rf"^\t{re.escape(opener)} = \{{$", self.root, re.M)
+        self.assertTrue(m, opener)
+        return _block_at(self.root, m.start())
+
+    def test_the_root_switches(self):
+        """Narrow: where vanilla's side panels sit, its vbox under the top bar.
+        Wide: at the root's origin, full size, as vanilla's full-screen panels
+        sit in ingame_hud.gui, the frame's own top filler under the top bar."""
+        narrow = self._child("widget")
+        self.assertIn(f'visible = "[Not( {WIDE} )]"', narrow.split("\n\n")[0])
+        self.assertIn("size = { 100% 100% }", narrow.split("\n\n")[0])
+        self.assertRegex(narrow, r"vbox = \{[^}]*margin_top = 85")
+        self.assertIn("te_systems_window_panel = {}", narrow)
+        wide = self._child("te_systems_window_panel_wide")
+        self.assertEqual(wide.strip(), f'te_systems_window_panel_wide = {{\n\t\tvisible = "[{WIDE}]"\n\t}}')
+        self.assertIn("type te_systems_window_panel_wide = te_fullscreen_block_window {", self.gui)
+        self.assertNotIn("margin_widget", _strip_comments(self.gui))
+        # the state that closes vanilla's panels stays on the root: switching
+        # width doesn't rerun it
+        self.assertEqual(self.root.count("name = _show"), 1)
+
+    def test_the_toggle_keeps_the_tab(self):
+        on = _override(self.narrow, "fixed_top")
+        off = _override(self.wide, "fixed_top")
+        for frame, text, onclick in ((on, "te_systems_window_wide_on", "GetVariableSystem.Set('te_systems_window_wide', 'yes')"),
+                                     (off, "te_systems_window_wide_off", "GetVariableSystem.Clear('te_systems_window_wide')")):
+            with self.subTest(toggle=text):
+                toggle = _override(frame, "toggle")
+                self.assertIn(f'text = "{text}"', toggle)
+                self.assertIn(f'tooltip = "{text}_tt"', toggle)
+                self.assertIn(f'onclick = "[{onclick}]"', toggle)
+                self.assertNotIn("te_systems_window_tab", toggle)
+                self.assertNotIn("com_open_window", toggle)
+                # first in fixed_top, above the strips
+                self.assertLess(frame.index("te_systems_window_toggle = {"), frame.index("te_systems_window_strips_"))
+        self.assertIn("using = default_button", _type_body(self.gui, "te_systems_window_toggle"))
+        loc = _all_loc()
+        self.assertEqual(loc["te_systems_window_wide_on"], "Full Screen")
+        self.assertEqual(loc["te_systems_window_wide_off"], "Side Panel")
+
+    def test_the_full_screen_toggle_sits_clear_of_the_outliner(self):
+        """Vanilla's outliner, on the HUD layer above this window, covers the
+        screen's right 360 px from y = 155 (ingame_hud.gui) and hides only for
+        vanilla's own full screens (half_and_fullscreen_hide reads
+        InformationPanelBar.IsPanelOpen), and the full-screen width is kept
+        for the session. So the full-screen frame's toggle sits at the left,
+        under Back; the side panel's stays at its right."""
+        toggle_type = _type_body(self.gui, "te_systems_window_toggle")
+        self.assertRegex(toggle_type, r'block "toggle_lead" \{\s*expand = \{\}\s*\}\s*button = \{')
+        button = toggle_type.index("button = {")
+        self.assertRegex(toggle_type[_close(toggle_type, button + len("button = {") - 1):],
+                         r'^\}\s*block "toggle_trail" \{\}\s*$')
+        narrow = _override(self.narrow, "fixed_top")
+        self.assertIsNone(_override(narrow, "toggle_lead"))    # right-aligned
+        self.assertIsNone(_override(narrow, "toggle_trail"))
+        wide = _override(self.wide, "fixed_top")
+        self.assertEqual(_override(wide, "toggle_lead").strip(), "")    # left-aligned
+        self.assertEqual(_override(wide, "toggle_trail").strip(), "expand = {}")
+
+    def test_both_frames_close_alike(self):
+        clear = "onclick = \"[GetVariableSystem.Clear('com_open_window')]\""
+        for block in ("header_back_button", "header_close_button"):
+            self.assertIn(clear, _override(self.narrow, block))
+        frame = _type_body(self.generated, "te_fullscreen_block_window")
+        self.assertEqual(frame.count(clear), 2)    # Back and Close (test_te_fullscreen_frame.py)
+        for block in ("back_button_fullscreen", "entire_content_area"):
+            self.assertIsNone(_override(self.wide, block))
+        for panel in (self.narrow, self.wide):
+            self.assertRegex(panel, r'blockoverride "window_header_name" \{\s*text = "te_systems_window_title"')
+
+    def test_the_wide_strip_is_the_narrow_strips_side_by_side(self):
+        narrow = _type_body(self.generated, "te_systems_window_strips_narrow")
+        wide = _type_body(self.generated, "te_systems_window_strips_wide")
+        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\btab_buttons = \{", narrow)]
+        w = [_block_at(wide, m.start()) for m in re.finditer(r"\btab_buttons = \{", wide)]
+        self.assertEqual(len(n), len(w))
+        size = "minimumsize = { 540 -1 }\nmaximumsize = { 540 -1 }"
+        for a, b in zip(n, w):
+            lines = [ln.strip() for ln in b.splitlines() if ln.strip()]
+            self.assertIn(size, "\n".join(lines))
+            # the same slots, but for the width (and the developer strip's
+            # gate, which its wide row carries)
+            self.assertEqual([ln for ln in lines if not ln.endswith("size = { 540 -1 }") and not ln.startswith("visible")],
+                             [ln.strip() for ln in a.splitlines() if ln.strip() and not ln.strip().startswith("visible")])
+        # the system strips in one centered row, then the developer strip
+        row = _block_at(wide, wide.index("hbox = {"))
+        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*tab_buttons = \{")
+        self.assertRegex(row, r"\}\s*expand = \{\}\s*\}$")
+        self.assertEqual(row.count("tab_buttons = {"), len({t.row for t in gen.TABS}))
+        self.assertNotIn("visible", row.split("tab_buttons = {")[0])    # the system strips show to all
+        # the developer strip's row carries its gate (its strip, as the wide
+        # strips do, carries none)
+        dev = _block_at(wide, wide.index("hbox = {", wide.index("TEMPORARY")))
+        self.assertIn(f'visible = "[{gen.shown("te_tp_tab_sgui")}]"', dev.split("tab_buttons = {")[0])
+        self.assertIn('text = "te_tp_tab"', dev)
+
+    def test_the_wide_column(self):
+        """The full-screen frame's column: three 520 columns' width, centered,
+        each tab's mount as narrow, holding its body until a wide layout is
+        registered (PR D)."""
+        column = _type_body(self.generated, "te_systems_window_tabs_wide")
+        head = column.split("\n\n")[0]
+        for line in ('name = "te_systems_window_content_wide"', "minimumsize = { 1620 -1 }", "parentanchor = hcenter"):
+            self.assertIn(line, head)
+        self.assertRegex(_override(self.wide, "scrollarea_content"), r"^\s*te_systems_window_tabs_wide = \{\}\s*$")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                mount = _named(self.generated, f"te_systems_window_{t.key}_tab_wide")
+                self.assertIn(f"using = te_systems_window_{t.key}_selected", mount)
+                self.assertIsNone(t.wide)    # PR D registers the wide layouts
+                self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
+        at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]
+        self.assertEqual(at, sorted(at))
+
+
 class GeneratorTest(unittest.TestCase):
     """scripts/generators/gen_te_systems_window.py writes the window's strip,
     selection templates and tab mounts from its TABS registry (spec § 9.3)."""
@@ -864,10 +1010,55 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(len({t.key for t in gen.TABS}), len(gen.TABS))
         self.assertNotIn("tax_probes", {t.key for t in gen.TABS})
 
+    def test_an_always_open_tab_reads_only_its_stored_value(self):
+        """A tab with no open gate (PR C's Budget Breakdown) is shown whenever
+        it was last chosen, and Nation's fallback reads it so."""
+        extra = gen.Tab("always_open", 2, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        with mock.patch.object(gen, "TABS", gen.TABS + [extra]):
+            text = gen.render()
+        self.assertNotIn("None", text)
+        stored = "GetVariableSystem.HasValue('te_systems_window_tab', 'always_open')"
+        self.assertEqual(_template(text, "te_systems_window_always_open_selected"),
+                         f"And( Not( {gen.TAX_PROBES} ), {stored} )")
+        for half in ("selected", "unselected"):
+            nation = _template(text, f"te_systems_window_nation_{half}")
+            self.assertIn(stored, nation)
+            self.assertNotIn(f"And( {stored}", nation)
+        self.assertIn('tooltip = "te_x_tt"', text)
+
+    def test_a_gated_tab_needs_its_checklist(self):
+        """A tab with an open gate shows a checklist while grayed, so it names
+        the scripted GUI and the locked line, unless it brings its own tooltip."""
+        bad = gen.Tab("no_checklist", 2, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
+        with mock.patch.object(gen, "TABS", gen.TABS + [bad]):
+            with self.assertRaisesRegex(ValueError, "no_checklist"):
+                gen.render()
+        own = gen.Tab("own_tooltip", 2, label="te_x", tooltip="te_x_tt", body="te_x_body",
+                      open_=gen.shown("te_x_sgui"), tooltip_expr="Localize( 'te_x_tt' )")
+        with mock.patch.object(gen, "TABS", gen.TABS + [own]):
+            self.assertIn("tooltip = \"[Localize( 'te_x_tt' )]\"", gen.render())
+
+    def test_a_system_tab_can_sit_on_any_strip(self):
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3).row, 3)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout").row, 1)
+
+    def test_check_fails_on_a_file_without_its_bom(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = gen.Path(tmp) / "generated.gui"
+            with mock.patch.object(gen, "GUI_OUT", path):
+                path.write_bytes(gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+                path.write_bytes(b"\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 0)
+                path.write_bytes(b"\xef\xbb\xbf\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+
     def test_templates_are_binary(self):
         """And and Or take exactly two arguments (gui_modding_guide.md)."""
         text = _strip_comments(_read(GENERATED))
-        for expr in re.findall(r'visible = "\[(.*?)\]"', text):
+        exprs = re.findall(r'"\[(.*?)\]"', text)
+        self.assertGreater(len(exprs), 2 * len(gen.TABS))
+        for expr in exprs:
             for m in re.finditer(r"\b(And|Or)\( ", expr):
                 depth, args, i = 1, 1, m.end()
                 while depth:
@@ -890,6 +1081,7 @@ class LocTest(unittest.TestCase):
             text = _read(path)
             bodies += [_type_body(text, t.body) for t in gen.TABS if f"type {t.body} = " in text]
         self.assertEqual(len(bodies), len(gen.TABS))
+        bodies.append(_type_body(_read(os.path.join(REPO, "gui", "te_system_tab_widgets.gui")), "te_system_tab_frame"))
         gui = _strip_comments("\n".join([_read(GUI), _read(GENERATED)] + bodies))
         keys = set(re.findall(r'\b(?:text|tooltip) = "([A-Za-z]\w*)"', gui))
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", gui))
@@ -915,9 +1107,10 @@ class LocTest(unittest.TestCase):
         loc = _all_loc()
         per_char = TAB_UNITS_PER_CHAR * 1.1 * TAB_FONT_MIN / TAB_FONT
         vanilla_word = max(len(w) for w in VANILLA_FIVE_SLOT_NAME.split())
+        self.assertEqual(set(FULL_NAMES), {t.key for t in gen.TABS})
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
-                name = loc[f"te_window_tab_{tab}"]
+                name = loc[_tab(tab).label]
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)
@@ -945,9 +1138,15 @@ class IconsTest(unittest.TestCase):
         # the hover strip's fade is vanilla's mask, not the window's art
         textures = [t for t in re.findall(r'texture = "([^"]+)"', button) if t != self.FADE_MASK]
         self.assertEqual(textures, [self.LAUNCHER] * 2)
-        # ...and it is the window's only icon
+        # ...and it is the window's only icon: the generated file's textures
+        # are vanilla's full-screen frame's (test_te_fullscreen_frame.py)
         self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)) - {self.FADE_MASK}, {self.LAUNCHER})
-        self.assertNotIn("texture =", _read(GENERATED))
+        frame = _type_body(_read(GENERATED), "te_fullscreen_block_window")
+        vanilla = _type_body(_read(os.path.join(REPO, "test_fixtures", "vanilla_gui", "block_windows.gui")),
+                             "fullscreen_block_window")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', _read(GENERATED)),
+                         re.findall(r'texture = "([^"]+)"', frame))
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', frame), re.findall(r'texture = "([^"]+)"', vanilla))
 
     def test_every_texture_is_listed(self):
         doc = _read(ICON_DOC)
