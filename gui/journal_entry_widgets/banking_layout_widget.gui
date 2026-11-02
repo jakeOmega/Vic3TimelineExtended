@@ -312,6 +312,48 @@ types banking_layout_widget_types
 			tooltip = "te_budget_banking_open_journal_tt"
 		}
 	}
+
+	### The Timeline Extended window's full-screen Banking tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down three
+	### columns of 520 (te_ui_columns_three), the overview and what is in
+	### force, then the dial and the tools, then the record and How Banking
+	### Works. Each section keeps its narrow gates: the overview its own, the
+	### rest their composer's, whose spacing the wrappers repeat. The
+	### window's wide mount puts it in te_banking_tab_layout
+	### (gen_te_systems_window.py); test_banking_layout.WideTest checks it
+	### against the narrow layout.
+	type te_banking_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_banking_overview_panel = {}
+
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_banking_sec_active = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_banking_sec_monetary = {}
+				te_banking_sec_interventions = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_banking_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================

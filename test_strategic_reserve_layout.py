@@ -11,6 +11,8 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "strategic_reserve_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_strategic_reserve.txt")
@@ -109,6 +111,23 @@ class OrderTest(unittest.TestCase):
         overview = _type_body(_read(WIDGET), "te_st_res_overview_panel")
         self.assertNotIn("GetVariableSystem", overview)
         self.assertIn('visible = "[JournalEntry.IsActive]"', overview)
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Strategic Reserve tab (spec
+    2026-11-02-te-window-wide-mode § 7): two columns of 520, the overview and
+    the inventory, then How the Strategic Reserve Works, under the gates the
+    narrow tab gives them."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_two_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_st_res_wide_sections",
+                                             layout=("te_st_res_tab_body", "te_st_res_tab_layout"))
+        self.assertEqual(columns, [["te_st_res_overview_panel"] + STATUS, REFERENCE])
+        self.assertIn("type te_st_res_wide_sections = te_ui_columns_two {", _read(WIDGET))
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "strategic_reserve").wide, "te_st_res_wide_sections")
 
 
 class FlagTest(unittest.TestCase):

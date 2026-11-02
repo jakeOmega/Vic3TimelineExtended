@@ -187,22 +187,28 @@ TABS: list[Tab] = [
             locked="te_budget_tab_banking_locked_tt", open_=BANKING_OPEN,
             tooltip_expr=f"SelectLocalization( {shown('te_budget_banking_tab_sgui')}, 'te_budget_tab_banking_tt', "
                          f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
-                         "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )"),
+                         "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )",
+            wide="te_banking_wide_sections"),
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
-            "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt"),
+            "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
+            wide="te_tax_wide_sections"),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
         body="te_budget_breakdown_panel"),
     # The Market tabs' own tooltips speak of another market: the window's own.
     _mirror("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_st_res_tab_body", "te_st_res_tab_layout",
-            "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"),
+            "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui",
+            wide="te_st_res_wide_sections"),
     _mirror("global_warming", 2, "te_window_tab_global_warming_tt", "te_gw_tab_body", "te_gw_tab_layout",
-            "te_market_global_warming_tab_sgui", "te_market_global_warming_tab_unlock_sgui"),
+            "te_market_global_warming_tab_sgui", "te_market_global_warming_tab_unlock_sgui",
+            wide="te_gw_wide_sections"),
 
     # The Population, Society, Diplomacy and Military panels' tabs (strip 3).
-    # Demographics opens with its first census, as on the Population panel.
+    # Demographics opens with its first census, as on the Population panel;
+    # full screen, it takes the Census Data window's three columns.
     _mirror("demographics", 3, "te_pops_tab_demog_tt", "te_demog_window_body", "te_demog_tab_layout",
             "te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui", locked="te_pops_tab_demog_locked_tt",
-            open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui"))),
+            open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui")),
+            wide="te_demog_browser_sections"),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
             "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui"),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",

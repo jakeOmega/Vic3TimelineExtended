@@ -1319,7 +1319,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_banking_tab_body = {}
+			te_banking_tab_body = {
+				blockoverride "te_banking_tab_layout" {
+					te_banking_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1332,7 +1336,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_tax_tab_body = {}
+			te_tax_tab_body = {
+				blockoverride "te_tax_tab_layout" {
+					te_tax_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1358,7 +1366,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_st_res_tab_body = {}
+			te_st_res_tab_body = {
+				blockoverride "te_st_res_tab_layout" {
+					te_st_res_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1371,7 +1383,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_gw_tab_body = {}
+			te_gw_tab_body = {
+				blockoverride "te_gw_tab_layout" {
+					te_gw_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1384,7 +1400,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_demog_window_body = {}
+			te_demog_window_body = {
+				blockoverride "te_demog_tab_layout" {
+					te_demog_browser_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {

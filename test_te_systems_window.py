@@ -1053,8 +1053,10 @@ class WideTest(unittest.TestCase):
 
     def test_the_wide_column(self):
         """The full-screen frame's column: three 520 columns' width, centered,
-        each tab's mount as narrow, holding its body until a wide layout is
-        registered (PR D)."""
+        each tab's mount as narrow, holding its wide layout where the registry
+        names one (PR D): the body with its layout block overridden, or the
+        wide composer alone for a body that is its own layout. A tab with
+        none holds its body."""
         column = _type_body(self.generated, "te_systems_window_tabs_wide")
         head = column.split("\n\n")[0]
         for line in ('name = "te_systems_window_content_wide"', "minimumsize = { 1620 -1 }", "parentanchor = hcenter"):
@@ -1064,8 +1066,10 @@ class WideTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 mount = _named(self.generated, f"te_systems_window_{t.key}_tab_wide")
                 self.assertIn(f"using = te_systems_window_{t.key}_selected", mount)
-                self.assertIsNone(t.wide)    # PR D registers the wide layouts
-                self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
+                self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide or t.body])
+                if t.wide and t.layout:
+                    self.assertRegex(mount, rf'\b{t.body} = \{{\s*blockoverride "{t.layout}" \{{\s*{t.wide} = \{{\}}'
+                                            rf'\s*\}}\s*\}}')
         at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]
         self.assertEqual(at, sorted(at))
 

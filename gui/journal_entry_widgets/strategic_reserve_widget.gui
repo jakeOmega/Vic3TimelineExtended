@@ -2694,6 +2694,24 @@ types strategic_reserve_widget_types
 			tooltip = "te_market_strategic_reserve_open_journal_tt"
 		}
 	}
+
+	### The Timeline Extended window's full-screen Strategic Reserve tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout in two columns of
+	### 520 (te_ui_columns_two), the overview and the inventory, then How the
+	### Strategic Reserve Works, each composer whole, so each section keeps its
+	### narrow gates. The window's wide mount puts it in te_st_res_tab_layout
+	### (gen_te_systems_window.py); test_strategic_reserve_layout.WideTest
+	### checks it against the narrow layout.
+	type te_st_res_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_st_res_overview_panel = {}
+			te_st_res_status_sections = {}
+		}
+
+		blockoverride "column_2" {
+			te_st_res_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================

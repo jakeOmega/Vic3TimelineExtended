@@ -2241,6 +2241,52 @@ types global_warming_widget_types
 			tooltip = "te_market_global_warming_open_journal_tt"
 		}
 	}
+
+	### The Timeline Extended window's full-screen Global Warming tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down three
+	### columns of 520 (te_ui_columns_three), the overview and Mitigation
+	### Policies, then Top Emitters and the Fossil Transition, then History and
+	### How Global Warming Works. Each section keeps its narrow gates: the
+	### overview its own, the live sections their composer's, whose spacing
+	### the wrappers repeat, and the reference composer whole. It replaces the
+	### whole te_gw_tab_layout, so it shows the player's own market, the
+	### body's default view. With the Global Warming rule off only the Fossil
+	### Transition shows, in the middle column. The window's wide mount puts
+	### it in te_gw_tab_layout (gen_te_systems_window.py);
+	### test_global_warming_layout.WideTest checks it against the narrow
+	### layout.
+	type te_gw_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_gw_overview_panel = {}
+
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_gw_sec_policies = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_gw_sec_emitters = {}
+				te_gw_sec_transition = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_gw_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================

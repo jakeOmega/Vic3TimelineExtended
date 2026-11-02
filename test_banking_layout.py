@@ -12,6 +12,7 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import assert_wide_matches_narrow
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
@@ -157,6 +158,23 @@ class OrderTest(unittest.TestCase):
                     "widget_je_banking_conditions", "widget_je_banking_policies",
                     "widget_je_banking_history"):
             self.assertNotIn(old, text, old)
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Banking tab (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns
+    of 520, under the gates the narrow tab gives them."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_banking_wide_sections",
+                                             layout=("te_banking_tab_body", "te_banking_tab_layout"))
+        self.assertEqual(columns, [["te_banking_overview_panel", "te_banking_sec_active"],
+                                   ["te_banking_sec_monetary", "te_banking_sec_interventions"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "banking").wide, "te_banking_wide_sections")
 
 
 class FlagTest(unittest.TestCase):

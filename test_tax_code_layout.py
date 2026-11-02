@@ -27,6 +27,7 @@ import re
 import unittest
 from pathlib import Path
 
+from gui_test_helpers import assert_wide_matches_narrow
 from test_tax_code_state import KEYS, block, close, gen, top_level_names
 
 ROOT = Path(__file__).resolve().parent
@@ -465,6 +466,27 @@ class LayoutTest(unittest.TestCase):
         datamodel item's tooltip have no JournalEntry to start from."""
         self.assertNotIn("JournalEntry.GetCountry", self.all)
         self.assertNotIn("GetCountry", re.sub(r"GetPlayerJournalEntry", "", self.all))
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Tax Code tab (spec
+    2026-11-02-te-window-wide-mode § 7): one row of three 520 columns, under
+    the gates the narrow tab gives each section. Under the full code it reads
+    the spec's columns; under the light code, the overview and the light
+    section, then the light How, then an empty column, as the full code's
+    sections hide. The draft summary is in the window's footer, so neither
+    layout places it."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_tax_wide_sections",
+                                             layout=("te_tax_tab_body", "te_tax_tab_layout"))
+        self.assertEqual(columns, [["te_tax_overview_panel", "te_tax_light_section"] + STATUS[:3],
+                                   STATUS[3:] + ["te_tax_light_how_section"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as window
+        self.assertEqual(next(t for t in window.TABS if t.key == "tax_code").wide, "te_tax_wide_sections")
 
 
 class JournalEntryTest(unittest.TestCase):
