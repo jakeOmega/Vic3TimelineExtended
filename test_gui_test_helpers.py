@@ -1,11 +1,12 @@
 """gui_test_helpers.assert_wide_matches_narrow, on made-up markup (spec
 docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 9.5).
 
-A wide composer must place exactly the narrow composers' sections, in their
+A wide composer must place exactly the narrow layout's sections, in their
 order read down each column and then across, on te_ui_columns_three or
-te_ui_columns_two, and keep every gate the narrow layout puts on a section.
+te_ui_columns_two, each under exactly the gates the narrow layout gives it.
 The real calls are in each system's layout test (test_demographics_layout.py
-for the Census Data window).
+for the Census Data window). Each failing case names the message it expects,
+so a case can't pass on some other failure.
 """
 import unittest
 
@@ -34,6 +35,11 @@ types fixture {
 	type te_x_reference_sections = flowcontainer {
 		te_x_sec_how = {}
 	}
+
+	# a section with a visible of its own, which an instance's would replace (gotcha #17)
+	type te_x_sec_gated = flowcontainer {
+		visible = "[OwnGate]"
+	}
 }
 """
 NARROW_TYPES = ["te_x_overview", "te_x_status_sections", "te_x_reference_sections"]
@@ -43,63 +49,77 @@ def fixture(wide):
     return NARROW + "\ntypes wide {\n" + wide + "\n}\n"
 
 
-# The sections in the narrow order, every gate kept: IsActive on the root,
-# Not( IsLight ) on a wrapper, HasC on the instance.
+# The sections in the narrow order, each under exactly its narrow gates: IsActive (the status composer's root) on
+# wrappers, Not( IsLight ) on a wrapper, HasC on the instance; the overview and How under none.
 GOOD = """
 	type te_x_wide_sections = te_ui_columns_three {
-		visible = "[JournalEntry.IsActive]"
 		blockoverride "column_1" {
 			te_x_overview = {}
-			te_x_sec_a = {}
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+			}
 		}
 		blockoverride "column_2" {
 			flowcontainer = {
-				visible = "[Not( IsLight )]"
-				te_x_sec_b = {}
-				te_x_summary = {}
+				visible = "[JournalEntry.IsActive]"
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
 			}
 		}
 		blockoverride "column_3" {
-			te_x_sec_c = { visible = "[HasC]" }
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_c = { visible = "[HasC]" }
+			}
 			te_x_sec_how = {}
 		}
 	}
 """
+COLUMNS = [["te_x_overview", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c", "te_x_sec_how"]]
 
 
 class WideMatchesNarrowTest(unittest.TestCase):
     def check(self, wide, **kw):
         return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, text=fixture(wide), **kw)
 
-    def fails(self, wide, **kw):
-        with self.assertRaises(AssertionError):
+    def fails(self, message, wide, **kw):
+        with self.assertRaisesRegex(AssertionError, message):
             self.check(wide, **kw)
 
     def test_a_matching_layout_passes_and_returns_its_columns(self):
-        self.assertEqual(self.check(GOOD), [["te_x_overview", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"],
-                                            ["te_x_sec_c", "te_x_sec_how"]])
+        self.assertEqual(self.check(GOOD), COLUMNS)
 
     def test_a_section_left_out(self):
-        self.fails(GOOD.replace("te_x_sec_how = {}", ""))
+        self.fails("the narrow layout's sections", GOOD.replace("te_x_sec_how = {}", ""))
 
     def test_a_section_out_of_order(self):
-        self.fails(GOOD.replace("te_x_overview = {}\n\t\t\tte_x_sec_a = {}", "te_x_sec_a = {}\n\t\t\tte_x_overview = {}"))
+        self.fails("the narrow layout's sections",
+                   GOOD.replace("te_x_sec_b = {}\n\t\t\t\t\tte_x_summary = {}", "te_x_summary = {}\n\t\t\t\t\tte_x_sec_b = {}"))
 
     def test_the_columns_are_read_by_number_not_by_where_they_are_written(self):
         moved = GOOD.replace('blockoverride "column_1"', 'blockoverride "column_tmp"')
         moved = moved.replace('blockoverride "column_3"', 'blockoverride "column_1"')
-        self.fails(moved.replace('blockoverride "column_tmp"', 'blockoverride "column_3"'))
+        self.fails("the narrow layout's sections", moved.replace('blockoverride "column_tmp"', 'blockoverride "column_3"'))
 
-    def test_a_gate_on_the_narrow_root_dropped(self):
-        self.fails(GOOD.replace('visible = "[JournalEntry.IsActive]"', ""))
+    def test_a_composers_gate_dropped(self):
+        self.fails(r"te_x_sec_a shows in the narrow layout only while \['JournalEntry.IsActive'\]",
+                   GOOD.replace('visible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a', "te_x_sec_a", 1))
 
-    def test_a_gate_on_a_narrow_wrapper_dropped(self):
-        self.fails(GOOD.replace('visible = "[Not( IsLight )]"', ""))
+    def test_a_wrappers_gate_dropped(self):
+        self.fails(r"te_x_sec_b shows in the narrow layout only while \['Not\(IsLight\)'\]",
+                   GOOD.replace('visible = "[Not( IsLight )]"', ""))
 
-    def test_a_gate_on_a_narrow_instance_dropped(self):
-        self.fails(GOOD.replace('te_x_sec_c = { visible = "[HasC]" }', "te_x_sec_c = {}"))
+    def test_an_instances_gate_dropped(self):
+        self.fails(r"te_x_sec_c shows in the narrow layout only while \['HasC'\]",
+                   GOOD.replace('te_x_sec_c = { visible = "[HasC]" }', "te_x_sec_c = {}"))
 
     def test_a_gate_may_sit_on_the_columns_instance_or_an_outer_wrapper(self):
+        """No overview or How here, so IsActive can gate the whole row."""
+        narrow = ["te_x_status_sections"]
         wide = """
 	type te_x_wide_sections = flowcontainer {
 		flowcontainer = {
@@ -107,7 +127,6 @@ class WideMatchesNarrowTest(unittest.TestCase):
 			te_ui_columns_three = {
 				visible = "[Not( IsLight )]"
 				blockoverride "column_1" {
-					te_x_overview = {}
 					te_x_sec_a = {}
 				}
 				blockoverride "column_2" {
@@ -118,44 +137,64 @@ class WideMatchesNarrowTest(unittest.TestCase):
 					te_x_sec_c = {
 						visible = "[HasC]"
 					}
-					te_x_sec_how = {}
 				}
 			}
 		}
 	}
 """
-        self.check(wide)
+        # sec_a and sec_c gain Not( IsLight ): an added gate, named
+        assert_wide_matches_narrow(self, "te_x_wide_sections", narrow, text=fixture(wide),
+                                   added_gates=("te_x_sec_a", "te_x_sec_c"))
 
-    def test_a_wide_layout_may_add_a_gate(self):
-        self.check(GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = { visible = "[Pending]" }'))
+    def test_an_added_gate_fails_unless_named(self):
+        """A gate the narrow layout lacks hides the section where the narrow one shows it: every overview draws ungated,
+        so a row gated on IsActive would hide it for an inactive entry."""
+        gated = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
+                             'type te_x_wide_sections = te_ui_columns_three {\n\t\tvisible = "[JournalEntry.IsActive]"')
+        self.fails(r"te_x_overview shows in the wide layout only while \['JournalEntry.IsActive'\]", gated)
+        how = GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = { visible = "[Pending]" }')
+        self.fails(r"te_x_sec_how shows in the wide layout only while \['Pending'\]", how)
+        self.check(how, added_gates=("te_x_sec_how",))
+
+    def test_an_added_gate_named_for_a_section_that_has_none(self):
+        self.fails(r"added_gates names \['te_x_sec_a'\], which the wide layout gates no further",
+                   GOOD, added_gates=("te_x_sec_a",))
 
     def test_gates_compare_without_their_spacing(self):
         self.check(GOOD.replace('"[Not( IsLight )]"', '"[Not(IsLight)]"').replace(
             'visible = "[HasC]"', 'visible = "[ HasC ]"'))
 
     def test_an_empty_column(self):
-        self.fails(GOOD.replace("te_x_sec_c = { visible = \"[HasC]\" }\n\t\t\tte_x_sec_how = {}", "")
-                   .replace("te_x_summary = {}", "te_x_summary = {}\n\t\t\t\tte_x_sec_c = { visible = \"[HasC]\" }"
-                            "\n\t\t\t\tte_x_sec_how = {}"))
+        two = GOOD.replace('\t\t\tflowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n'
+                           '\t\t\t}\n\t\t\tte_x_sec_how = {}\n', "")
+        two = two.replace("\t\t\t\t\tte_x_summary = {}\n\t\t\t\t}\n\t\t\t}\n",
+                          '\t\t\t\t\tte_x_summary = {}\n\t\t\t\t}\n\t\t\t\tte_x_sec_c = { visible = "[HasC]" }\n\t\t\t}\n'
+                          '\t\t\tte_x_sec_how = {}\n')
+        self.fails("column_3 is empty", two)
 
     def test_a_column_the_type_lacks(self):
-        self.fails(GOOD.replace("te_ui_columns_three", "te_ui_columns_two"))
+        self.fails("te_ui_columns_two fills column_1 to column_2", GOOD.replace("te_ui_columns_three", "te_ui_columns_two"))
 
     def test_two_columns(self):
         wide = """
 	type te_x_wide_sections = te_ui_columns_two {
-		visible = "[JournalEntry.IsActive]"
 		blockoverride "column_1" {
 			te_x_overview = {}
-			te_x_sec_a = {}
 			flowcontainer = {
-				visible = "[Not( IsLight )]"
-				te_x_sec_b = {}
-				te_x_summary = {}
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
 			}
 		}
 		blockoverride "column_2" {
-			te_x_sec_c = { visible = "[HasC]" }
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_c = { visible = "[HasC]" }
+			}
 			te_x_sec_how = {}
 		}
 	}
@@ -163,26 +202,31 @@ class WideMatchesNarrowTest(unittest.TestCase):
         self.assertEqual(len(self.check(wide)), 2)
 
     def test_no_column_type(self):
-        self.fails(GOOD.replace("te_ui_columns_three", "flowcontainer"))
+        self.fails("lays its sections out on te_ui_columns_three or te_ui_columns_two",
+                   GOOD.replace("te_ui_columns_three", "flowcontainer").replace('blockoverride "column_', 'block "column_'))
 
-    def test_sections_outside_the_columns_count_in_place(self):
-        """The Census Data window's pending line sits above its columns."""
+    def test_a_section_outside_the_columns_must_be_named(self):
+        """The Census Data window's pending line sits above its columns, by name."""
         wide = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
                             "type te_x_wide_sections = flowcontainer {\n\t\tte_x_overview = {}\n\t\tte_ui_columns_three = {")
         wide = wide.replace("\t\t\tte_x_overview = {}\n", "").rstrip() + "\n\t}\n"
-        self.assertEqual(self.check(wide)[0], ["te_x_sec_a"])
+        self.fails(r"places \['te_x_overview'\] outside its columns", wide)
+        self.assertEqual(self.check(wide, outside=("te_x_overview",))[0], ["te_x_sec_a"])
+
+    def test_an_outside_the_layout_no_longer_has(self):
+        self.fails(r"outside names \['te_x_gone'\], which it doesn't place outside its columns", GOOD, outside=("te_x_gone",))
 
     def test_extra_skips_a_wide_only_instance(self):
         wide = GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = {}\n\t\t\tte_x_divider = {}")
-        self.fails(wide)
+        self.fails("the narrow layout's sections", wide)
         self.check(wide, extra=("te_x_divider",))
 
     def test_an_extra_the_layout_no_longer_has(self):
-        self.fails(GOOD, extra=("te_x_divider",))
+        self.fails(r"extra names \['te_x_divider'\]", GOOD, extra=("te_x_divider",))
 
     def test_composers_names_what_expands(self):
         """By default a type named *_sections is a composer, on either side; others are sections."""
-        self.fails(GOOD, composers=("te_x_status_sections",))
+        self.fails("the narrow layout's sections", GOOD, composers=("te_x_status_sections",))
         wide = GOOD.replace("te_x_sec_how = {}", "te_x_reference_sections = {}")
         self.check(wide)
         self.check(wide, composers=("te_x_status_sections",))
@@ -196,12 +240,38 @@ class WideMatchesNarrowTest(unittest.TestCase):
             return assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
                                               text=narrow + "\ntypes wide {\n" + wide + "\n}\n")
 
-        with self.assertRaises(AssertionError):
-            check(GOOD)                                              # IsBig is on nothing
-        split = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
-                             'type te_x_wide_sections = flowcontainer {\n\t\tvisible = "[IsBig]"\n\t\tte_ui_columns_three = {')
-        check(split.rstrip() + "\n\t}\n")
+        with self.assertRaisesRegex(AssertionError, r"te_x_sec_b shows in the narrow layout only while \['IsBig'\]"):
+            check(GOOD)
+        check(GOOD.replace('visible = "[Not( IsLight )]"',
+                           'visible = "[Not( IsLight )]"\n\t\t\t\t\tflowcontainer = {\n\t\t\t\t\t\tvisible = "[IsBig]"')
+              .replace("te_x_summary = {}\n", "te_x_summary = {}\n\t\t\t\t\t}\n", 1))
         check(GOOD.replace('"[Not( IsLight )]"', '"[And( IsBig, Not( IsLight ) )]"'))
+
+    def test_an_instances_visible_over_its_types_own(self):
+        """An instance's visible replaces its type's (gotcha #17): the section would draw where its own gate hides it."""
+        narrow = NARROW_TYPES + ["te_x_sec_gated"]
+        wide = GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = {}\n\t\t\tte_x_sec_gated = { visible = "[Other]" }')
+        with self.assertRaisesRegex(AssertionError, "te_x_sec_gated's visible replaces its type's own"):
+            assert_wide_matches_narrow(self, "te_x_wide_sections", narrow, text=fixture(wide))
+        wide = GOOD.replace("te_x_sec_how = {}",
+                            "te_x_sec_how = {}\n\t\t\tte_x_status_sections = {\n\t\t\t\tvisible = \"[Pending]\"\n\t\t\t}")
+        with self.assertRaisesRegex(AssertionError, "te_x_status_sections's visible replaces its type's own"):
+            assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES + ["te_x_status_sections"],
+                                       text=fixture(wide))
+
+    def test_a_widget_that_is_not_a_wrapper_or_a_section(self):
+        """A heading drawn inline (the UN's status block) would go unchecked: it must be a te_* section."""
+        self.fails(r"draws textbox inline", GOOD.replace("te_x_sec_how = {}", 'te_x_sec_how = {}\n\t\t\ttextbox = { text = "x" }'))
+        self.fails(r"draws divider_clean inline", GOOD.replace("te_x_sec_how = {}", "te_x_sec_how = {}\n\t\t\tdivider_clean = {}"))
+        narrow = NARROW.replace("te_x_sec_how = {}", "te_x_sec_how = {}\n\t\tsection_header = {\n\t\t\tsize = { 1 2 }\n\t\t}")
+        with self.assertRaisesRegex(AssertionError, r"the narrow layout draws section_header inline"):
+            assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES,
+                                       text=narrow + "\ntypes wide {\n" + GOOD + "\n}\n")
+
+    def test_a_one_line_wrapper_is_walked(self):
+        wide = GOOD.replace('flowcontainer = {\n\t\t\t\tvisible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a = {}\n\t\t\t}',
+                            'flowcontainer = { visible = "[JournalEntry.IsActive]" te_x_sec_a = {} }')
+        self.assertEqual(self.check(wide), COLUMNS)
 
 
 BODY = """
@@ -230,20 +300,28 @@ types body {
 # The body's layout: the goal bar's inline wrapper gates it, and the body blanks the summary.
 LAID_OUT = """
 	type te_x_wide_sections = te_ui_columns_three {
-		visible = "[JournalEntry.IsActive]"
 		blockoverride "column_1" {
 			te_x_overview = {}
 			te_x_goal_bar = { visible = "[HasGoal]" }
-			te_x_sec_a = {}
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+			}
 		}
 		blockoverride "column_2" {
 			flowcontainer = {
-				visible = "[Not( IsLight )]"
-				te_x_sec_b = {}
+				visible = "[JournalEntry.IsActive]"
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+				}
 			}
 		}
 		blockoverride "column_3" {
-			te_x_sec_c = { visible = "[HasC]" }
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_c = { visible = "[HasC]" }
+			}
 			te_x_sec_how = {}
 		}
 	}
@@ -261,20 +339,18 @@ class LayoutTest(unittest.TestCase):
         self.check(LAID_OUT)
 
     def test_the_inline_wrappers_gate_is_kept(self):
-        with self.assertRaises(AssertionError):
+        with self.assertRaisesRegex(AssertionError, r"te_x_goal_bar shows in the narrow layout only while \['HasGoal'\]"):
             self.check(LAID_OUT.replace('te_x_goal_bar = { visible = "[HasGoal]" }', "te_x_goal_bar = {}"))
 
     def test_a_block_the_body_blanks_is_not_wanted(self):
-        with self.assertRaises(AssertionError):
-            self.check(LAID_OUT.replace("te_x_sec_b = {}", "te_x_sec_b = {}\n\t\t\t\tte_x_summary = {}"))
+        with self.assertRaisesRegex(AssertionError, "the narrow layout's sections"):
+            self.check(LAID_OUT.replace("te_x_sec_b = {}", "te_x_sec_b = {}\n\t\t\t\t\tte_x_summary = {}"))
 
     def test_a_wide_layout_may_place_a_composer_whole(self):
-        wide = LAID_OUT.replace("te_x_sec_c = { visible = \"[HasC]\" }\n\t\t\tte_x_sec_how = {}",
-                                "te_x_sec_c = { visible = \"[HasC]\" }\n\t\t\tte_x_reference_sections = {}")
-        self.check(wide)
+        self.check(LAID_OUT.replace("te_x_sec_how = {}", "te_x_reference_sections = {}"))
 
     def test_names_or_a_layout_not_both(self):
-        with self.assertRaises(AssertionError):
+        with self.assertRaisesRegex(AssertionError, "give narrow_types or layout, not both"):
             assert_wide_matches_narrow(self, "te_x_wide_sections", NARROW_TYPES, layout=("te_x_tab_body", "te_x_tab_layout"),
                                        text=fixture(LAID_OUT) + BODY)
 
@@ -283,6 +359,21 @@ class ChildrenTest(unittest.TestCase):
     def test_a_blockoverride(self):
         self.assertEqual(_children('blockoverride "column_1" {\n\tte_a = {}\n}\n'),
                          [("blockoverride", "column_1", "\n\tte_a = {}\n")])
+
+    def test_two_properties_on_one_line(self):
+        """Budget Breakdown's `blockoverride "layout" { parentanchor = hcenter size = { 520 38 } }`."""
+        self.assertEqual(_children(' parentanchor = hcenter size = { 520 38 } '),
+                         [("property", "parentanchor", "hcenter"), ("property", "size", "{ 520 38 }")])
+
+    def test_a_one_line_block_of_widgets_is_a_widget(self):
+        """A one-line `x = { … }` is a property when it holds only numbers (size, margin), else a widget."""
+        self.assertEqual([k for k, _, _ in _children('te_a = {}\nflowcontainer = { te_b = {} }\nsize = { 100% 38 }\n'
+                                                     'margin = { 10 6 }\n')],
+                         ["widget", "widget", "property", "property"])
+
+    def test_a_quoted_value_with_spaces(self):
+        self.assertEqual(_children('visible = "[Not( X )]" text = "a b"\n'),
+                         [("property", "visible", '"[Not( X )]"'), ("property", "text", '"a b"')])
 
 
 if __name__ == "__main__":

@@ -65,12 +65,14 @@ def _type_body(text, name):
 def _children(body):
     """The top-level items of a block's body, in order: (kind, name, text).
     kind is "block" for `block "x" {…}`, "blockoverride" for
-    `blockoverride "x" {…}`, "widget" for `name = {…}`, and "property" for a
-    one-line `key = value` (a one-line `x = { … }` too)."""
+    `blockoverride "x" {…}`, "widget" for `name = {…}`, and "property" for
+    `key = value`. A one-line `x = { … }` is a property when it holds only
+    numbers (size = { 480 32 }, margin = { 10 6 }), else a widget."""
     items = []
     i = 0
+    pattern = re.compile(r'\s*(?:(block|blockoverride) "(\w+)" \{|(\w+) = \{|(\w+) = ("(?:[^"\\]|\\.)*"|[^\s{}"]+))')
     while i < len(body):
-        m = re.compile(r'\s*(?:(block|blockoverride) "(\w+)" \{|(\w+) = \{|(\w+) = ([^\n{]+))').match(body, i)
+        m = pattern.match(body, i)
         if not m or m.end() == i:
             rest = body[i:].strip()
             assert not rest, f"unparsed: {rest[:60]}"
@@ -78,7 +80,7 @@ def _children(body):
         if m.group(2) or m.group(3):
             end = _close(body, m.end() - 1)
             inner = body[m.end():end]
-            if m.group(3) and "\n" not in inner:    # a one-line value: size = { 480 32 }
+            if m.group(3) and "\n" not in inner and inner.strip() and re.fullmatch(r"[\s\d.%-]*", inner):
                 items.append(("property", m.group(3), "{" + inner + "}"))
             else:
                 items.append((m.group(1) or "widget", m.group(2) or m.group(3), inner))
@@ -134,15 +136,9 @@ def _own_gates(items):
     return tuple(g for kind, k, v in items if kind == "property" and k == "visible" for g in _gates(v))
 
 
-def _instance(kind, name, inner):
-    """A te_* instance's body, or None. A one-line `te_x = {}` parses as a property."""
-    if not name.startswith("te_"):
-        return None
-    if kind == "widget":
-        return inner
-    if kind == "property" and inner.startswith("{"):
-        return inner[1:-1]
-    return None
+# The plain containers a layout may wrap its sections in. Any other widget
+# drawn in a layout is content the check can't follow: make it a te_* section.
+WRAPPERS = {"flowcontainer", "widget", "vbox", "hbox", "container"}
 
 
 def _find_block(body, name):
@@ -159,9 +155,9 @@ def _find_block(body, name):
 
 class _Walk:
     """The sections a layout places, in the order they draw, each with the
-    gates (visible expressions) on its way down; and its columns, if any. A
-    composer instance expands into its type's sections, under the instance's
-    blockoverrides."""
+    gates (visible expressions) on its way down, and whether it sits in a
+    column; and its columns, if any. A composer instance expands into its
+    type's sections, under the instance's blockoverrides."""
 
     def __init__(self, test, where, text, composers, skip=()):
         self.test, self.where, self.text = test, where, text
@@ -177,30 +173,42 @@ class _Walk:
         for kind, name, inner in items:
             if kind == "block":                       # a block draws its override, or its default content
                 self.body(overrides[name] if overrides and name in overrides else inner, gates, overrides)
-                continue
-            if kind == "blockoverride":
+            elif kind == "blockoverride":
                 self.body(inner, gates, overrides)
+            elif kind != "widget":
                 continue
-            if name in COLUMN_TYPES:
+            elif name in COLUMN_TYPES:
                 self.columns_of(name, inner, gates)
-                continue
-            own = _instance(kind, name, inner)
-            if own is not None:
-                self.instance(name, own, gates)
-            elif kind == "widget":                    # a plain wrapper: flowcontainer, widget, …
+            elif name.startswith("te_"):
+                self.instance(name, inner, gates)
+            elif name in WRAPPERS:
                 self.body(inner, gates, overrides)
+            else:
+                self.test.fail(f"{self.where} draws {name} inline: make it a te_* section type, so the check can "
+                               f"follow it")
+
+    def type_gates(self, name):
+        """A type's own root visible, or () when it has none or isn't found."""
+        if not re.search(rf"\btype {name} = \w+ \{{", self.text):
+            return ()
+        return _own_gates(_children(_type_body(self.text, name)))
 
     def instance(self, name, own, gates):
         items = _children(own)
-        gates = gates + _own_gates(items)
+        mine = _own_gates(items)
+        if mine and self.type_gates(name):
+            self.test.fail(f"{self.where}: {name}'s visible replaces its type's own (gotcha #17), so it draws where "
+                           f"its own gate hides it; gate a wrapper instead")
+        gates = gates + mine
         if name in self.skip:
             self.skipped.add(name)
         elif self.is_composer(name):
             filled = {n: inner for kind, n, inner in items if kind == "blockoverride"}
             self.body(_type_body(self.text, name), gates, filled)
         else:
-            self.sections.append((name, gates))
-            if self.columns and self.columns[-1] is not None:
+            in_column = bool(self.columns) and self.columns[-1] is not None
+            self.sections.append((name, gates, in_column))
+            if in_column:
                 self.columns[-1].append(name)
 
     def columns_of(self, column_type, body, gates):
@@ -220,7 +228,8 @@ class _Walk:
             self.columns.append(None)                 # a section after the columns sits in none
 
 
-def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), composers=None, text=None):
+def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), outside=(),
+                               added_gates=(), composers=None, text=None):
     """Check a wide composer against the narrow layout it widens, and return
     its columns (a list of section-name lists, read down each column).
 
@@ -230,20 +239,25 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       wrappers and the blockoverrides it gives its composers. Give one.
     - A composer (named in `composers`, by default each type named
       *_sections) expands into the sections it places, through its plain
-      wrappers and blocks, on either side; any other te_* instance is a
-      section.
+      wrappers (flowcontainer, widget, vbox, hbox, container) and blocks, on
+      either side; any other te_* instance is a section. Any other widget
+      drawn inline fails: make it a te_* section.
     - The wide composer, `wide_type`, must lay its sections out on
       te_ui_columns_three or te_ui_columns_two (spec § 9.4) and place exactly
       the narrow sections, in the same order read down each column and then
-      across. A section outside the columns (the Census Data window's pending
-      line) counts where it draws. Every column holds at least one section.
-    - `extra` names wide-only te_* instances to skip. Each must still be
-      there, so a stale one fails.
-    - Every gate the narrow layout puts on a section (a composer's or a
-      wrapper's visible, or the instance's own; an And( a, b ) counts as a and
-      b) is on the wide section's way down too: on the instance, a wrapper,
-      the column type's instance or the wide composer's root. The wide layout
-      may add gates.
+      across. Every column holds at least one section. A section outside the
+      columns (the Census Data window's pending line) must be named in
+      `outside`, and counts where it draws.
+    - `extra` names wide-only te_* instances to skip.
+    - Each section sits under exactly the gates the narrow layout gives it (a
+      composer's or a wrapper's visible, or the instance's own; an And( a, b )
+      counts as a and b), on the instance, a wrapper, the column type's
+      instance or the wide composer's root. A section named in `added_gates`
+      may carry more (the Census Data window's How waits for the first
+      census). An instance's visible over a type's own fails either way: in
+      game it replaces the type's (gotcha #17).
+    - A name in `extra`, `outside` or `added_gates` that no longer applies
+      fails, so a stale one can't hide a change.
 
     `text` is the markup to read the types from: by default every mod .gui.
     """
@@ -272,10 +286,24 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     stale = set(extra) - wide.skipped
     test.assertFalse(stale, f"{wide_type}: extra names {sorted(stale)}, which it doesn't place")
 
-    test.assertEqual([s for s, _ in wide.sections], [s for s, _ in narrow.sections],
+    test.assertEqual([s for s, _, _ in wide.sections], [s for s, _, _ in narrow.sections],
                      f"{wide_type}: the narrow layout's sections, read down each column and then across")
-    for (section, narrow_gates), (_, wide_gates) in zip(narrow.sections, wide.sections):
+    out = [s for s, _, in_column in wide.sections if not in_column]
+    test.assertFalse(sorted(set(out) - set(outside)),
+                     f"{wide_type} places {sorted(set(out) - set(outside))} outside its columns; name each in outside")
+    stale = set(outside) - set(out)
+    test.assertFalse(stale, f"{wide_type}: outside names {sorted(stale)}, which it doesn't place outside its columns")
+
+    further = set()
+    for (section, narrow_gates, _), (_, wide_gates, _) in zip(narrow.sections, wide.sections):
         missing = sorted(set(narrow_gates) - set(wide_gates))
         test.assertFalse(missing, f"{wide_type}: {section} shows in the narrow layout only while {missing}, "
                                   f"but in the wide one without it")
+        more = sorted(set(wide_gates) - set(narrow_gates))
+        if more:
+            further.add(section)
+            test.assertIn(section, added_gates, f"{wide_type}: {section} shows in the wide layout only while {more}, "
+                                                f"but in the narrow one without it; name it in added_gates if meant")
+    stale = set(added_gates) - further
+    test.assertFalse(stale, f"{wide_type}: added_gates names {sorted(stale)}, which the wide layout gates no further")
     return [c for c in wide.columns if c is not None]

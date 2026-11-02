@@ -160,8 +160,10 @@ class OrderTest(unittest.TestCase):
 
     def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
         """The tab's sections and gates on te_ui_columns_three (spec 2026-11-02-te-window-wide-mode §§ 9.4, 9.5): the
-        pending line above the columns, then the sections read down each column and then across."""
-        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"])
+        pending line above the columns, then the sections read down each column and then across. How Demographics
+        Works waits for the first census here, as the columns do; on the tab it shows from the start."""
+        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"],
+                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
         self.assertEqual(len(columns), 3)
         self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
 

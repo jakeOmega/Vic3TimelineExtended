@@ -161,7 +161,7 @@ class BodyTest(unittest.TestCase):
         layout = [text for kind, _, text in top if kind == "block"][0]
         parts = _children(layout)
         self.assertEqual([name for _, name, _ in parts], ["te_sr_window_milestones", "flowcontainer", "flowcontainer"])
-        self.assertEqual(parts[0], ("property", "te_sr_window_milestones", "{}"))
+        self.assertEqual(parts[0], ("widget", "te_sr_window_milestones", ""))
         for (_, _, part), name, spacing, sections in (
                 (parts[1], "te_systems_window_space_race_summary", "4", ["te_sr_sec_powers", "te_sr_sec_orbit"]),
                 (parts[2], "te_systems_window_space_race_reference", None, ["te_sr_sec_how"])):
@@ -276,7 +276,6 @@ class HostBodyTest(unittest.TestCase):
                 props = [(n, v) for kind, n, v in items if kind == "property"]
                 self.assertIn(("visible", f"\"[InformationPanel.IsTabSelected('{key}')]\""), props)
                 # the body is its only child but for a state the host keeps
-                # (`te_x = {}` parses as a one-line value)
                 self.assertEqual([n for kind, n, _ in items
                                   if (kind != "property" or n.startswith("te_")) and n != "state"], [body])
                 self.assertNotIn("datacontext", [n for n, _ in props])
