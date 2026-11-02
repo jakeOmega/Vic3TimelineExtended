@@ -62,6 +62,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | Doc | Status | What's left |
 |-----|--------|-------------|
 | [specs/2026-11-02-te-window-wide-mode-design.md](specs/2026-11-02-te-window-wide-mode-design.md): a toggle between the Timeline Extended window's side-panel width and a full-screen frame, the ten system tabs that live in vanilla panels mirrored in the window (kept where they are), a wide layout for all fifteen tabs, and the standardization that keeps them maintainable (one tab frame and body type per system, the window's strip generated from a registry, shared column types and a narrow-versus-wide check) | Scoping, nothing built (2026-11-02); the owner accepts either strip option (§ 5) | All of it: its § 11 build order, starting with the frame, which needs vanilla's `block_windows.gui` from the owner's install; the owner's calls in its § 12 |
+| [plans/2026-11-02-te-window-wide-mode.md](plans/2026-11-02-te-window-wide-mode.md): PRs A–D: A the registry, the tab frame type and the window's five bodies (no visible change, no game needed), B the full-screen frame and the toggle, C the ten hosts' tabs on body types and in the window, D0 the column types and the narrow-versus-wide check, D1–D3 the wide composers | Not started (2026-11-02) | All of it; B needs vanilla's `block_windows.gui` from the owner's install |
 
 ## Archived — `archive/`
 

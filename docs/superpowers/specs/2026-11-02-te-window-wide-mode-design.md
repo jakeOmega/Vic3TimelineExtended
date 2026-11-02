@@ -93,9 +93,10 @@ mod's name, `te_fullscreen_block_window`, with Close and Back clearing
 - **The button:** in `fixed_top`, in both frames, in the same place, right-aligned
   on a slim row above the strips. The blocks `default_block_window` exposes
   (`gui_modding_guide.md`: the header name, back, close, `fixed_top`, `content`,
-  `fixed_bottom`) leave no header slot for it. A placeholder icon (style guide
-  rule 10), listed in `docs/systems/te_systems_window_gui_icons.md`, and a tooltip
-  that says what it switches to ("Full screen" / "Side panel").
+  `fixed_bottom`) leave no header slot for it. A small text button, "Full Screen"
+  in the narrow frame and "Side Panel" in the wide one, with a tooltip saying what
+  it switches to. It needs no art. An icon can replace it later (style guide
+  rule 10, listed in `docs/systems/te_systems_window_gui_icons.md`).
 
 ### 4.3 How wide
 
@@ -173,7 +174,7 @@ own, all rooted at `GetPlayer`, reused as they are; no new scripted GUIs.
 | Budget Breakdown | No entry, no gate, no Open Journal Entry: always open |
 | Strategic Reserve | The player's own market only. The window always shows that, so the host keeps its other-market note |
 | Global Warming | The own-market view only. The host keeps the other-market branch and its map-mode reset (`MarketPanel` reads) |
-| Demographics | No entry. Its sections read the Country in their context, which the Population panel supplies, so the window sets `datacontext = "[GetPlayer]"`. The Wealth strata incomes read `PopsOverviewPanel`, which the window lacks: `te_demog_tab_sections` passes the `te_demog_wealth_strata_incomes` block through and the window blanks it, as the Census window does |
+| Demographics | No entry. Its sections read the Country in their context, which the Population panel supplies, so the window's body sets `datacontext = "[GetPlayer]"`. The Wealth strata incomes read `PopsOverviewPanel`, which the window lacks, so the window gets its own composer in `te_demographics_layout.gui`: the tab's sections with the `te_demog_wealth_strata_incomes` block blanked, as the Census window's composer does. `test_demographics_layout.py` already holds every host's order. The Population panel keeps its mount as it is |
 | Cultural Hegemony | Nothing extra. `society_panel_tab_contents_properties` is a Society template and stays in the host |
 | United Nations | Its Status section with its `te_un_tab_status_closed` flag |
 | Nuclear Weapons | The goal bar under The Program (`te_je_goal_bar`, gated on `nuclear_program_has_programme_sgui`) |
@@ -288,8 +289,10 @@ Mirroring doubles the mounts, so fix the shape once:
   flowcontainer keeps its fade, position and host-only extras.
 
 This touches all six overrides, inside their mod blocks, with no visible change
-there except the three columns' width and the button fonts made the same (the
-play-test confirms nothing moved).
+there except the three columns' new fixed width (the play-test confirms nothing
+moved). The button font becomes a block (`tab_open_journal_font`) rather than one
+font for all: Banking and Tax Code set their row fonts there, since
+`test_tax_code_layout.py` holds every Tax Code button to `te_tax_fontsize_row`.
 
 ### 9.2 The gate names: **leave them**
 
@@ -354,11 +357,13 @@ forgotten in the wide composer, so it never shows full-screen.
 
 ### 9.6 The new tabs' text points at the hosts' text: **do it**
 
-The window's new tab tooltips repeat what each host tab's says, so they take it
-by reference, `te_window_tab_banking_tt:0 "$te_budget_tab_banking_tt$"`, where
-the host's text fits the window as written. The names (`te_window_tab_<system>`)
-are the window's own, since it shows full names. The grayed checklists' header
-already has one shape (rule 9, WIN-1).
+The window's new tab tooltips would repeat what each host tab's says, so the
+registry names the host's own key wherever its text fits the window as written:
+one key, no copy to drift. Two don't fit: Global Warming's and the Strategic
+Reserve's speak of "another market" and "this tab", so they get window keys.
+The names (`te_window_tab_<system>`) are the window's own, since it shows full
+names. So are the grayed checklists' headers where the host's tab name differs
+(Hegemony, UN, Nuclear, Covert, Climate, Reserve), in rule 9's one shape (WIN-1).
 
 ### 9.7 Vanilla bases for the six host overrides: **worth doing, on the owner's machine, after the build**
 
@@ -415,16 +420,20 @@ None gates a merge (`CLAUDE.md`). They go on `docs/testing/te-window-wide-playte
 
 ## 11. Build order
 
+The steps are in the [implementation plan](../plans/2026-11-02-te-window-wide-mode.md).
+
 | PR | Contents | Size | Depends on |
 |---|---|---|---|
-| 0 | This spec | — | — |
-| 1 | The frame (§ 4, with the owner's `block_windows.gui`), the toggle, the generator (§ 9.3) for today's five tabs, the selection test restructured. The wide frame shows today's tabs as single columns | medium | — |
-| 2 | The tab frame and body types (§ 9.1) with the six hosts moved onto them, then the ten mirrored tabs in the window (§ 6), rows 2 and 3 (§ 5.1), loc (§ 9.6), Tax Code's footer | large | 1 |
-| 3 | The column types and the fifteen wide composers (§ 7, § 9.4), the shared check (§ 9.5); can split into a few PRs of several systems each, run in parallel | medium | 2 |
-| 4 | Docs, the play-test list and the player guide, unless each PR carries its own | small | 1–3 |
-| later | Vanilla bases for the hosts (§ 9.7), on the owner's machine | small–medium | 2 |
+| 0 | This spec and the plan | — | — |
+| A | The window's tabs from a registry, no visible change: the tab frame type (§ 9.1), body types for today's five tabs, the generator (§ 9.3), the selection test restructured. Needs no game | medium | — |
+| B | The full-screen frame (§ 4, with the owner's `block_windows.gui`) and the toggle. The wide frame shows each tab as a single column | medium | A |
+| C | The ten hosts' tabs onto body types (§ 9.1), then in the window (§ 6) as strips 2 and 3 (§ 5.1), with loc (§ 9.6) and Tax Code's footer | large | A, B |
+| D0 | The column types (§ 9.4) and the shared check (§ 9.5), Demographics' Census layout rebased on them | small | A |
+| D1–D3 | The wide composers (§ 7), a few systems per PR, in parallel | medium each | B, D0 |
+| later | Vanilla bases for the hosts (§ 9.7), on the owner's machine | small–medium | C |
 
-Play-test after PR 1, before the wide layouts are built against the frame.
+Each PR carries its own docs, play-test items and player guide changes. Play-test
+after B, before the wide layouts are built against the frame.
 
 ## 12. Open questions for the owner
 
