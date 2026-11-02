@@ -2188,6 +2188,59 @@ types global_warming_widget_types
 		te_gw_sec_history = {}
 		te_gw_sec_how = {}
 	}
+
+	### ======================================================================
+	### THE TAB'S BODY (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Market
+	### panel's Climate tab and the Timeline Extended window's Global Warming
+	### tab. In the entry's order: the overview and the live sections (Mitigation
+	### Policies, Top Emitters, the Fossil Transition), then History and How
+	### Global Warming Works, then the frame's Open Journal Entry. Not drawn:
+	### the goal bar (the entry mounts the bars-on-top marker, and the overview
+	### draws the temperature bar), the status description (empty while the
+	### entry is active) and the sixteen scripted buttons (the AI's; the policy
+	### rows carry the same actions for a human). Nothing here reads a panel:
+	### Top Emitters' rows set their own State datacontext, and its two list
+	### tooltips take a state root (gw_te_members_sgui, gw_top_emitters_sgui),
+	### so they read the same here as in the journal.
+	###
+	### te_gw_tab_market_view is the player's own market, the journal's view,
+	### which the window always shows. The Market panel overrides it with its
+	### two views, its own market's and another market's (gui/market_panel.gui).
+	### te_gw_tab_layout, around everything, is what a wide mount overrides.
+	### ======================================================================
+	type te_gw_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_global_warming"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_global_warming')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_gw_tab_layout" {
+				block "te_gw_tab_market_view" {
+					te_gw_overview_panel = {}
+					te_gw_status_sections = {}
+				}
+				te_gw_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_market_global_warming_open_journal_tt"
+		}
+	}
 }
 
 ### ==========================================================================

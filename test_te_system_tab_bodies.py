@@ -214,6 +214,8 @@ class BodyTest(unittest.TestCase):
 HOST_MOUNTS = [
     ("budget_panel.gui", "te_budget_banking_tab", "te_banking", "te_banking_tab_body"),
     ("budget_panel.gui", "te_budget_tax_tab", "te_tax_code", "te_tax_tab_body"),
+    ("market_panel.gui", "te_market_global_warming_tab", "te_global_warming", "te_gw_tab_body"),
+    ("market_panel.gui", "te_market_strategic_reserve_tab", "te_strategic_reserve", "te_st_res_tab_body"),
 ]
 
 # The hosts' bodies, as the frame's blocks fill them: (body type, file, gate,
@@ -230,6 +232,16 @@ HOST_BODIES = [
      "te_budget_tax_tab_sgui", "je_tax_code", "te_tax_tab_layout",
      ["te_tax_overview_panel", "te_tax_status_sections", "te_tax_reference_sections"],
      "te_tax_open_journal_tt", "te_tax_fontsize_row"),
+    # the host overrides te_gw_tab_market_view with its two markets' views
+    ("te_gw_tab_body", os.path.join(JE_WIDGETS, "global_warming_widget.gui"),
+     "te_market_global_warming_tab_sgui", "je_global_warming", "te_gw_tab_layout",
+     ["te_gw_overview_panel", "te_gw_status_sections", "te_gw_reference_sections"],
+     "te_market_global_warming_open_journal_tt", None),
+    # the host adds the own-market test to the gate (te_st_res_tab_gate)
+    ("te_st_res_tab_body", os.path.join(JE_WIDGETS, "strategic_reserve_widget.gui"),
+     "te_market_strategic_reserve_tab_sgui", "je_strategic_reserve", "te_st_res_tab_layout",
+     ["te_st_res_overview_panel", "te_st_res_status_sections", "te_st_res_reference_sections"],
+     "te_market_strategic_reserve_open_journal_tt", None),
 ]
 
 
@@ -248,16 +260,21 @@ class HostBodyTest(unittest.TestCase):
                 self.assertTrue(re.search(rf"^\ttype {name} = te_system_tab_frame \{{", text, re.M), f"no type {name}")
                 body = _type_body(text, name)
                 self.assertIsNotNone(_override(body, "tab_header"))
-                self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
+                # the gate, as is or as a block's default a host may override
+                own_gate = re.sub(r'^\s*block "\w+" \{(.*)\}\s*$', r"\1", _override(body, "tab_gate"), flags=re.S)
+                self.assertEqual(own_gate.strip(), f'visible = "[{_gate(gate)}]"')
                 self.assertEqual(_override(body, "tab_entry").strip(),
                                  f"datacontext = \"[GetPlayerJournalEntry('{entry}')]\"")
                 self.assertIsNone(_override(body, "tab_open_journal"))    # the frame's link
                 self.assertEqual(_override(body, "tab_open_journal_tooltip").strip(), f'tooltip = "{tooltip}"')
-                self.assertEqual(_override(body, "tab_open_journal_font").strip(), f"using = {font}")
+                if font:
+                    self.assertEqual(_override(body, "tab_open_journal_font").strip(), f"using = {font}")
+                else:
+                    self.assertIsNone(_override(body, "tab_open_journal_font"))
                 content = _override(body, "tab_content")
                 m = re.fullmatch(rf'\s*block "{layout}" \{{(.*)\}}\s*', content, re.S)
                 self.assertTrue(m, content)
-                self.assertEqual([c for c in _instances(m.group(1))], composers)
+                self.assertEqual(_instances(m.group(1)), composers)
 
     def test_each_host_tab_mounts_its_body(self):
         for host, outer, key, body in HOST_MOUNTS:
@@ -266,8 +283,10 @@ class HostBodyTest(unittest.TestCase):
                 items = _children(block)
                 props = [(n, v) for kind, n, v in items if kind == "property"]
                 self.assertIn(("visible", f"\"[InformationPanel.IsTabSelected('{key}')]\""), props)
-                # the body is its only child (`te_x = {}` parses as a one-line value)
-                self.assertEqual([n for kind, n, _ in items if kind != "property" or n.startswith("te_")], [body])
+                # the body is its only child but for a state the host keeps
+                # (`te_x = {}` parses as a one-line value)
+                self.assertEqual([n for kind, n, _ in items
+                                  if (kind != "property" or n.startswith("te_")) and n != "state"], [body])
                 self.assertNotIn("datacontext", [n for n, _ in props])
 
 
