@@ -3987,7 +3987,7 @@ pm_mass_marketing_building_textile_mill = {
 }
 
 pm_programmable_matter_furniture = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_matter_furniture.dds"
 
 
 	unlocking_technologies = {
@@ -5164,7 +5164,7 @@ pm_industrial_robotics = {
 }
 
 pm_nanobot_assemblers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_nanobot_assemblers.dds"
 	unlocking_technologies = {
 		molecular_assemblers
 	}
@@ -5323,7 +5323,7 @@ pm_graphene_electric_motors = {
 }
 
 pm_fusion_battery_motors = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_battery_motors.dds"
 	unlocking_technologies = {
 		fusion_batteries
 	}
@@ -5519,7 +5519,7 @@ pm_swarm_release_munitions = {
 }
 
 pm_programmable_munitions = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_munitions.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -5718,7 +5718,7 @@ pm_continuous_bleaching = {
 }
 
 pm_programmable_paper = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_paper.dds"
 
 
 	unlocking_technologies = {
@@ -6040,7 +6040,7 @@ pm_advanced_am_fabrication = {
 }
 
 pm_self_replicating_assemblers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_self_replicating_assemblers.dds"
 
 
 	unlocking_technologies = {
@@ -6081,7 +6081,7 @@ pm_self_replicating_assemblers = {
 }
 
 pm_advanced_self_replicating_assemblers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_self_replicating_assemblers.dds"
 
 
 	unlocking_technologies = {
@@ -6528,7 +6528,7 @@ pm_massed_produced_plastics = {
 }
 
 pm_programmable_plastics = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_plastics.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -6984,7 +6984,7 @@ pm_advanced_material_fibers = {
 }
 
 pm_programmable_fibers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_fibers.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -7722,7 +7722,7 @@ pm_electroenzymatic_synthesis = {
 }
 
 pm_programmable_sweetness = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_sweetness.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -8602,7 +8602,7 @@ pm_quantum_communications = {
 }
 
 pm_neural_lace_telepathy = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_neural_lace_telepathy.dds"
 
 	unlocking_technologies = {
 		telepathic_communities
@@ -8920,7 +8920,7 @@ pm_bioelectronic_implants = {
 }
 
 pm_fusion_battery_appliances = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_battery_appliances.dds"
 
 	unlocking_technologies = {
 		fusion_batteries
@@ -9275,7 +9275,7 @@ pm_smart_robots = {
 }
 
 pm_nanorobots = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_nanorobots.dds"
 
 	unlocking_technologies = {
 		molecular_assemblers
@@ -10195,7 +10195,7 @@ pm_electric_cars = {
 }
 
 pm_fusion_battery_vehicles = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_battery_vehicles.dds"
 
 	unlocking_technologies = {
 		fusion_batteries
@@ -10370,7 +10370,7 @@ pm_programmable_matter_artillery = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_matter_artillery.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -11965,7 +11965,7 @@ pm_programmable_matter_small_arms = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_matter_small_arms.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -12345,7 +12345,7 @@ pm_food_additives = {
 }
 
 pm_programmable_food_synthesis = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_food_synthesis.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -13382,7 +13382,7 @@ pm_ai_managed_building_munition_plant_shells = {
 }
 
 pm_programmable_matter_clothing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_programmable_matter_clothing.dds"
 
 	unlocking_technologies = {
 		programmable_matter
@@ -15941,7 +15941,7 @@ pm_fully_automated_content_creation = {
 }
 
 pm_ai_mediated_mind_sharing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_mediated_mind_sharing.dds"
 	unlocking_technologies = {
 		telepathic_communities
 	}
@@ -18692,7 +18692,7 @@ pm_deep_space_exploration = {
 }
 
 pm_interstellar_mission = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p6.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_interstellar_mission.dds"
 
 	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31); old saves:
 	# te_repair_era_13_technologies (te_old_save_repairs.txt)
@@ -21595,7 +21595,7 @@ pm_antimatter_facility = {
 
 # Antimatter engine - propulsion applications
 pm_antimatter_engine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_antimatter_engine.dds"
 
 	country_modifiers = {
 		workforce_scaled = {
@@ -21640,7 +21640,7 @@ pm_antimatter_engine = {
 
 # Antimatter warhead plant - weapons applications
 pm_antimatter_warhead_plant = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_antimatter_warhead_plant.dds"
 
 	country_modifiers = {
 		workforce_scaled = {
@@ -22039,7 +22039,7 @@ pm_consciousness_network = {
 # Research speed, innovation, political freedom effects.
 # Available when NOT running oppressive laws.
 pm_consciousness_network_open = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_consciousness_network_open.dds"
 
 	disallowing_laws = {
 		law_secret_police
@@ -22070,7 +22070,7 @@ pm_consciousness_network_open = {
 # Reduces turmoil, radicals; increases government IG attraction.
 # Only available with oppressive laws.
 pm_consciousness_network_social_control = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_consciousness_network_social_control.dds"
 
 	unlocking_laws = {
 		law_secret_police
