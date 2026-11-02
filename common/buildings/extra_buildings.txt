@@ -2378,9 +2378,11 @@ building_military_base = {
 # Level cap (2026-11-02, owner): state_building_public_housing_max_level_add
 # from six technologies, sized so the newest method at the cap, with the
 # technologies' crowding tolerance, houses half to all of the era's largest
-# rich city (urban_planning 125, paved_roads +25, modern_skyscrapers +50,
-# computer_aided_design +100, advanced_nanofabrication +50,
-# programmable_matter +50; test_public_housing_cap.py).
+# rich city (urban_planning 12, paved_roads +3, modern_skyscrapers +5,
+# computer_aided_design +10, advanced_nanofabrication +5,
+# programmable_matter +5; test_public_housing_cap.py). Scaled 2026-11-02
+# (owner): each level consumes and houses ten times what it did, for the same
+# staff, and the cap is a tenth of what it was.
 # docs/systems/mod_systems/pops_and_migration.md § Public Housing.
 building_public_housing = {
 	building_group = bg_government

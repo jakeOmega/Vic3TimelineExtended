@@ -64,18 +64,18 @@ Engineering to its own state, for each staffed level:
 
 | Method | Needs | Urban Engineering per level |
 |---|---|---|
-| Model Dwellings | | +10 |
-| Sanitary Tenements | Modern Sewerage | +15 |
-| Steel-Frame Apartments | Steel-Frame Buildings | +20 |
-| High-Rise Apartments | Elevators | +30 |
-| Prefabricated Tower Blocks | Prefabricated Construction | +45 |
-| Arcologies | Advanced Structural Engineering | +70 |
+| Model Dwellings | | +100 |
+| Sanitary Tenements | Modern Sewerage | +150 |
+| Steel-Frame Apartments | Steel-Frame Buildings | +200 |
+| High-Rise Apartments | Elevators | +300 |
+| Prefabricated Tower Blocks | Prefabricated Construction | +450 |
+| Arcologies | Advanced Structural Engineering | +700 |
 
-Technology caps how many levels a state can hold: 125 with Urban Planning,
-then +25 with Paved Roads, +50 with Modern Skyscrapers, +100 with
-Computer-Aided Design and +50 each with Advanced Nanofabrication and
-Programmable Matter, for 400 in all. On the newest method you can build, a
-state at the cap houses 1.25 million people with Model Dwellings, 3.75 million
+Technology caps how many levels a state can hold: 12 with Urban Planning,
+then +3 with Paved Roads, +5 with Modern Skyscrapers, +10 with
+Computer-Aided Design and +5 each with Advanced Nanofabrication and
+Programmable Matter, for 40 in all. On the newest method you can build, a
+state at the cap houses 1.2 million people with Model Dwellings, 3.6 million
 with High-Rise Apartments, 13.5 million with Prefabricated Tower Blocks and 21
 to 28 million with Arcologies, before tolerance. With the tolerance your
 technologies give, that is between half and nearly all of the world's largest

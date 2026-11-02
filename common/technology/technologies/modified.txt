@@ -3,16 +3,16 @@
 		state_building_highway_max_level_add = 1
 		# Public Housing's cap: buses and paved streets spread a city into its
 		# suburbs (pops_and_migration.md § Public Housing)
-		state_building_public_housing_max_level_add = 25
+		state_building_public_housing_max_level_add = 3
 	}
 
 }
 
-# Public Housing's cap: Model Dwellings at 125 levels house 1.25 million, about
-# two-thirds of London in 1836 (pops_and_migration.md § Public Housing)
+# Public Housing's cap: Model Dwellings at 12 levels house 1.2 million, about
+# three-fifths of London in 1836 (pops_and_migration.md § Public Housing)
 INJECT:urban_planning = {
 	modifier = {
-		state_building_public_housing_max_level_add = 125
+		state_building_public_housing_max_level_add = 12
 	}
 }
 

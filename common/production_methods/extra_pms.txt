@@ -22577,21 +22577,21 @@ pm_public_housing_model_dwellings = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 15                            # Price:   20, Total cost:   300.0 (100.00%)
+			goods_input_wood_add = 150                           # Price:   20, Total cost:  3000.0 (100.00%)
 			# Output goods
-			# Total input cost: 300.0
+			# Total input cost: 3000.0
 			# Total output cost: 0
-			# Profit: -300.0
+			# Profit: -3000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -0.30
+			# Wage breakeven: -3.00
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 10
+			state_building_construction_sector_max_level_add = 100
 		}
 	}
 }
@@ -22613,23 +22613,23 @@ pm_public_housing_sanitary_tenements = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_wood_add = 10                            # Price:   20, Total cost:   200.0 (33.33%)
-			goods_input_iron_add = 5                             # Price:   40, Total cost:   200.0 (33.33%)
-			goods_input_glass_add = 5                            # Price:   40, Total cost:   200.0 (33.33%)
+			goods_input_wood_add = 100                           # Price:   20, Total cost:  2000.0 (33.33%)
+			goods_input_iron_add = 50                            # Price:   40, Total cost:  2000.0 (33.33%)
+			goods_input_glass_add = 50                           # Price:   40, Total cost:  2000.0 (33.33%)
 			# Output goods
-			# Total input cost: 600.0
+			# Total input cost: 6000.0
 			# Total output cost: 0
-			# Profit: -600.0
+			# Profit: -6000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -0.60
+			# Wage breakeven: -6.00
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 15
+			state_building_construction_sector_max_level_add = 150
 		}
 	}
 }
@@ -22651,22 +22651,22 @@ pm_public_housing_steel_frame_apartments = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (55.56%)
-			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (44.44%)
+			goods_input_steel_add = 100                          # Price:   50, Total cost:  5000.0 (55.56%)
+			goods_input_glass_add = 100                          # Price:   40, Total cost:  4000.0 (44.44%)
 			# Output goods
-			# Total input cost: 900.0
+			# Total input cost: 9000.0
 			# Total output cost: 0
-			# Profit: -900.0
+			# Profit: -9000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -0.90
+			# Wage breakeven: -9.00
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 20
+			state_building_construction_sector_max_level_add = 200
 		}
 	}
 }
@@ -22689,23 +22689,23 @@ pm_public_housing_high_rise_apartments = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (41.67%)
-			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (33.33%)
-			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (25.00%)
+			goods_input_steel_add = 100                          # Price:   50, Total cost:  5000.0 (41.67%)
+			goods_input_glass_add = 100                          # Price:   40, Total cost:  4000.0 (33.33%)
+			goods_input_electricity_add = 100                    # Price:   30, Total cost:  3000.0 (25.00%)
 			# Output goods
-			# Total input cost: 1200.0
+			# Total input cost: 12000.0
 			# Total output cost: 0
-			# Profit: -1200.0
+			# Profit: -12000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -1.20
+			# Wage breakeven: -12.00
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 30
+			state_building_construction_sector_max_level_add = 300
 		}
 	}
 }
@@ -22728,23 +22728,23 @@ pm_public_housing_tower_blocks = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (46.88%)
-			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (25.00%)
-			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (28.12%)
+			goods_input_steel_add = 150                          # Price:   50, Total cost:  7500.0 (46.88%)
+			goods_input_glass_add = 100                          # Price:   40, Total cost:  4000.0 (25.00%)
+			goods_input_electricity_add = 150                    # Price:   30, Total cost:  4500.0 (28.12%)
 			# Output goods
-			# Total input cost: 1600.0
+			# Total input cost: 16000.0
 			# Total output cost: 0
-			# Profit: -1600.0
+			# Profit: -16000.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -1.60
+			# Wage breakeven: -16.00
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 45
+			state_building_construction_sector_max_level_add = 450
 		}
 	}
 }
@@ -22766,23 +22766,23 @@ pm_public_housing_arcologies = {
 		}
 		workforce_scaled = {
 			# Input goods
-			goods_input_advanced_materials_add = 0.5             # Price: 4000, Total cost:  2000.0 (66.89%)
-			goods_input_electricity_add = 25                     # Price:   30, Total cost:   750.0 (25.08%)
-			goods_input_robotics_add = 3                         # Price:   80, Total cost:   240.0 (8.03%)
+			goods_input_advanced_materials_add = 5               # Price: 4000, Total cost: 20000.0 (66.89%)
+			goods_input_electricity_add = 250                    # Price:   30, Total cost:  7500.0 (25.08%)
+			goods_input_robotics_add = 30                        # Price:   80, Total cost:  2400.0 (8.03%)
 			# Output goods
-			# Total input cost: 2990.0
+			# Total input cost: 29900.0
 			# Total output cost: 0
-			# Profit: -2990.0
+			# Profit: -29900.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
 			# Employment: 1000
-			# Wage breakeven: -2.99
+			# Wage breakeven: -29.90
 		}
 	}
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_building_construction_sector_max_level_add = 70
+			state_building_construction_sector_max_level_add = 700
 		}
 	}
 }
