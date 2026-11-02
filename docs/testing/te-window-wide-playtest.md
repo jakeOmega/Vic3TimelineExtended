@@ -62,3 +62,12 @@ The hosts should look as before, but for three columns now fixed at 520.
 | **7. Demographics.** Choose Demographics in the window after the first census, then read `debug.log`. | The Population tab's sections, without a header (as in the Population panel) and without the strata incomes (as in the Census Data window); no `PopsOverviewPanel` errors. | Errors: something the window draws reads the Population panel (`test_the_te_window_draws_nothing_that_reads_the_population_panel`). |
 | **8. Another market.** Open the Market panel on another market, then its Strategic Reserve and Climate tabs. | The Reserve tab shows the note that the reserve is your own market's (with its button to open yours), not your reserve. Climate shows that market's emissions and its leader's policies. | The Reserve or Climate shows your own market: the Market panel's blockoverrides didn't reach the blocks declared inside the body's `tab_content` override (`te_st_res_tab_elsewhere`, `te_st_res_tab_gate`, `te_gw_tab_market_view`). Move the own-market gate onto the host's outer flowcontainer, or give Market its own body type. |
 | **9. Load and frame rate.** Time a load before and after this PR, open the window's Demographics tab for the first time, and watch the frame rate with the window closed. | No longer load, no stall on first open beyond the Population tab's, and no frame-rate drop with the window closed. The window is a scripted widget made at startup, so its ten new tabs exist even while it is closed. | A slower load or a drop: the heaviest tabs (Demographics, the UN, Budget Breakdown) can mount only while chosen. |
+
+## The column types (PR D0, 2026-11-02)
+
+`te_ui_columns_three` and `te_ui_columns_two` (`gui/te_widget_library.gui`) hold the full-screen layouts' fixed 520
+columns. The Census Data window's Demographics tab is the first layout on them; its widget tree should be unchanged.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The Census Data window.** Open Population, then Census Data, then its Demographics tab, before and after the first census. | Before: the pending line alone. After: the tab's sections in three columns of 520, 30 apart, centered, as before 2026-11-02. | No columns or a different layout: a blockoverride inside the type's nested columns didn't reach them; put the three flowcontainers back in `te_demog_browser_sections` (`git show 8c8ad6f1a:gui/te_demographics_layout.gui`). |
