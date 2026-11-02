@@ -443,6 +443,233 @@ types te_systems_window_generated_types
 		}
 	}
 
+	### The full-screen frame's strips: the narrow strips side by side in one
+	### centered row, each at its narrow width, so one strip of up to fifteen
+	### tabs at the narrow slot width; then the developer strip.
+	type te_systems_window_strips_wide = vbox {
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = fixed
+		ignoreinvisible = yes
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = fixed
+
+			expand = {}
+			tab_buttons = {
+				minimumsize = { 540 -1 }
+				maximumsize = { 540 -1 }
+
+				### nation
+				blockoverride "first_button" {
+					text = "te_window_tab_nation"
+				}
+				blockoverride "first_button_tooltip" {
+					tooltip = "te_window_tab_nation_tt"
+				}
+				blockoverride "first_button_click" {
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
+				}
+				blockoverride "first_button_visibility" {
+					using = te_systems_window_nation_selected
+				}
+				blockoverride "first_button_visibility_checked" {
+					using = te_systems_window_nation_unselected
+				}
+				blockoverride "first_button_selected" {
+					text = "te_window_tab_nation"
+				}
+
+				### space_race
+				blockoverride "second_button" {
+					text = "te_window_tab_space_race"
+				}
+				blockoverride "second_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "second_button_click" {
+					enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'space_race')]"
+				}
+				blockoverride "second_button_visibility" {
+					using = te_systems_window_space_race_selected
+				}
+				blockoverride "second_button_visibility_checked" {
+					using = te_systems_window_space_race_unselected
+				}
+				blockoverride "second_button_selected" {
+					text = "te_window_tab_space_race"
+				}
+
+				### grand_monuments
+				blockoverride "third_button" {
+					text = "te_window_tab_grand_monuments"
+				}
+				blockoverride "third_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "third_button_click" {
+					enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]"
+				}
+				blockoverride "third_button_visibility" {
+					using = te_systems_window_grand_monuments_selected
+				}
+				blockoverride "third_button_visibility_checked" {
+					using = te_systems_window_grand_monuments_unselected
+				}
+				blockoverride "third_button_selected" {
+					text = "te_window_tab_grand_monuments"
+				}
+
+				### colonial_empire
+				blockoverride "fourth_button" {
+					text = "te_window_tab_colonial_empire"
+				}
+				blockoverride "fourth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "fourth_button_click" {
+					enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
+				}
+				blockoverride "fourth_button_visibility" {
+					using = te_systems_window_colonial_empire_selected
+				}
+				blockoverride "fourth_button_visibility_checked" {
+					using = te_systems_window_colonial_empire_unselected
+				}
+				blockoverride "fourth_button_selected" {
+					text = "te_window_tab_colonial_empire"
+				}
+
+				### seabed
+				blockoverride "fifth_button" {
+					text = "te_window_tab_seabed"
+				}
+				blockoverride "fifth_button_tooltip" {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				}
+				blockoverride "fifth_button_click" {
+					enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'seabed')]"
+				}
+				blockoverride "fifth_button_visibility" {
+					using = te_systems_window_seabed_selected
+				}
+				blockoverride "fifth_button_visibility_checked" {
+					using = te_systems_window_seabed_unselected
+				}
+				blockoverride "fifth_button_selected" {
+					text = "te_window_tab_seabed"
+				}
+			}
+			expand = {}
+		}
+
+		# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming
+		# the probes never shrinks the system tabs.
+		hbox = {
+			visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = fixed
+
+			expand = {}
+			tab_buttons = {
+				minimumsize = { 540 -1 }
+				maximumsize = { 540 -1 }
+				blockoverride "first_button" { text = "te_tp_tab" }
+				blockoverride "first_button_selected" { text = "te_tp_tab" }
+				blockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }
+				blockoverride "first_button_click" { onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'tax_probes')]" }
+				blockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }
+				blockoverride "first_button_visibility_checked" { visible = "[Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]" }
+			}
+			expand = {}
+		}
+	}
+
+	### The full-screen frame's column: three 520 columns and their 30 px
+	### gaps wide (spec § 4.3), centered, so the frame scrolls sideways
+	### below that width. Each tab's mount as narrow, holding its wide
+	### layout once the registry names one (its `wide`), else its body.
+	type te_systems_window_tabs_wide = flowcontainer {
+		name = "te_systems_window_content_wide"
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 1620 -1 }
+
+		te_tp_panel = {
+			using = te_systems_window_tax_probes_selected
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_nation_tab_wide"
+			using = te_systems_window_nation_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_nation_tab_sections = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_space_race_tab_wide"
+			using = te_systems_window_space_race_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_sr_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_grand_monuments_tab_wide"
+			using = te_systems_window_grand_monuments_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_gm_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_colonial_empire_tab_wide"
+			using = te_systems_window_colonial_empire_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_ce_tab_body = {}
+		}
+
+		flowcontainer = {
+			name = "te_systems_window_seabed_tab_wide"
+			using = te_systems_window_seabed_selected
+			using = default_fade_in_out
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+			margin_top = 10
+			margin_bottom = 15
+
+			te_seabed_tab_body = {}
+		}
+	}
+
 	### The Space Race body's entries (te_sr_tab_body, space_race_widget.gui):
 	### GetPlayerJournalEntry takes one literal key, so each entry has its own
 	### frame, in je_space_race.txt's order, shown only while the player holds

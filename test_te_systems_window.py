@@ -335,7 +335,8 @@ class WindowTest(unittest.TestCase):
     def test_the_panel_instances_the_generated_pieces(self):
         """The strips, the templates and the tabs' mounts come from the
         registry; this file keeps the frame, the launcher and the root."""
-        self.assertRegex(self.panel, r'blockoverride "fixed_top" \{\s*te_systems_window_strips_narrow = \{\}\s*\}')
+        self.assertRegex(self.panel, re.compile(r'blockoverride "fixed_top" \{\s*vbox = \{[^{}]*te_systems_window_toggle = \{'
+                                                r'.*?te_systems_window_strips_narrow = \{\}\s*\}\s*\}', re.S))
         self.assertRegex(self.panel, r'blockoverride "scrollarea_content" \{\s*te_systems_window_tabs_narrow = \{\}\s*\}')
         code = _strip_comments(self.gui)
         self.assertIsNone(re.search(r"^template ", code, re.M))
@@ -853,6 +854,116 @@ class SeabedTabTest(unittest.TestCase):
         nation = _named(generated, "te_systems_window_nation_tab")
         self.assertIn("using = te_systems_window_nation_selected", nation.split("\n\n")[0])
         self.assertIn("te_nation_tab_sections = {}", nation)
+
+
+WIDE = "GetVariableSystem.Exists('te_systems_window_wide')"
+
+
+class WideTest(unittest.TestCase):
+    """The toggle between the side-panel frame and the full-screen one (spec
+    § 4): one client-side key, te_systems_window_wide, the root showing one
+    frame or the other; the chosen tab a separate key, so it survives."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.generated = _read(GENERATED)
+        cls.root = _top_level(cls.gui, "te_systems_window")
+        cls.narrow = _type_body(cls.gui, "te_systems_window_panel")
+        cls.wide = _type_body(cls.gui, "te_systems_window_panel_wide")
+
+    def _child(self, opener):
+        """The root's direct child opening with `opener`."""
+        m = re.search(rf"^\t{re.escape(opener)} = \{{$", self.root, re.M)
+        self.assertTrue(m, opener)
+        return _block_at(self.root, m.start())
+
+    def test_the_root_switches(self):
+        """Narrow: where vanilla's side panels sit, its vbox under the top bar.
+        Wide: at the root's origin, full size, as vanilla's full-screen panels
+        sit in ingame_hud.gui, the frame's own top filler under the top bar."""
+        narrow = self._child("widget")
+        self.assertIn(f'visible = "[Not( {WIDE} )]"', narrow.split("\n\n")[0])
+        self.assertIn("size = { 100% 100% }", narrow.split("\n\n")[0])
+        self.assertRegex(narrow, r"vbox = \{[^}]*margin_top = 85")
+        self.assertIn("te_systems_window_panel = {}", narrow)
+        wide = self._child("te_systems_window_panel_wide")
+        self.assertEqual(wide.strip(), f'te_systems_window_panel_wide = {{\n\t\tvisible = "[{WIDE}]"\n\t}}')
+        self.assertIn("type te_systems_window_panel_wide = te_fullscreen_block_window {", self.gui)
+        self.assertNotIn("margin_widget", _strip_comments(self.gui))
+        # the state that closes vanilla's panels stays on the root: switching
+        # width doesn't rerun it
+        self.assertEqual(self.root.count("name = _show"), 1)
+
+    def test_the_toggle_keeps_the_tab(self):
+        on = _override(self.narrow, "fixed_top")
+        off = _override(self.wide, "fixed_top")
+        for frame, text, onclick in ((on, "te_systems_window_wide_on", "GetVariableSystem.Set('te_systems_window_wide', 'yes')"),
+                                     (off, "te_systems_window_wide_off", "GetVariableSystem.Clear('te_systems_window_wide')")):
+            with self.subTest(toggle=text):
+                toggle = _override(frame, "toggle")
+                self.assertIn(f'text = "{text}"', toggle)
+                self.assertIn(f'tooltip = "{text}_tt"', toggle)
+                self.assertIn(f'onclick = "[{onclick}]"', toggle)
+                self.assertNotIn("te_systems_window_tab", toggle)
+                self.assertNotIn("com_open_window", toggle)
+                # first in fixed_top, above the strips
+                self.assertLess(frame.index("te_systems_window_toggle = {"), frame.index("te_systems_window_strips_"))
+        toggle_type = _type_body(self.gui, "te_systems_window_toggle")
+        self.assertRegex(toggle_type, r'expand = \{\}\s*button = \{')    # right-aligned
+        self.assertIn("using = default_button", toggle_type)
+        loc = _all_loc()
+        self.assertEqual(loc["te_systems_window_wide_on"], "Full Screen")
+        self.assertEqual(loc["te_systems_window_wide_off"], "Side Panel")
+
+    def test_both_frames_close_alike(self):
+        clear = "onclick = \"[GetVariableSystem.Clear('com_open_window')]\""
+        for block in ("header_back_button", "header_close_button"):
+            self.assertIn(clear, _override(self.narrow, block))
+        frame = _type_body(self.generated, "te_fullscreen_block_window")
+        self.assertEqual(frame.count(clear), 2)    # Back and Close (test_te_fullscreen_frame.py)
+        for block in ("back_button_fullscreen", "entire_content_area"):
+            self.assertIsNone(_override(self.wide, block))
+        for panel in (self.narrow, self.wide):
+            self.assertRegex(panel, r'blockoverride "window_header_name" \{\s*text = "te_systems_window_title"')
+
+    def test_the_wide_strip_is_the_narrow_strips_side_by_side(self):
+        narrow = _type_body(self.generated, "te_systems_window_strips_narrow")
+        wide = _type_body(self.generated, "te_systems_window_strips_wide")
+        n = [_block_at(narrow, m.start()) for m in re.finditer(r"\btab_buttons = \{", narrow)]
+        w = [_block_at(wide, m.start()) for m in re.finditer(r"\btab_buttons = \{", wide)]
+        self.assertEqual(len(n), len(w))
+        size = "minimumsize = { 540 -1 }\nmaximumsize = { 540 -1 }"
+        for a, b in zip(n, w):
+            lines = [ln.strip() for ln in b.splitlines() if ln.strip()]
+            self.assertIn(size, "\n".join(lines))
+            # the same slots, but for the width (and the developer strip's
+            # gate, which its wide row carries)
+            self.assertEqual([ln for ln in lines if not ln.endswith("size = { 540 -1 }") and not ln.startswith("visible")],
+                             [ln.strip() for ln in a.splitlines() if ln.strip() and not ln.strip().startswith("visible")])
+        # the system strips in one centered row, then the developer strip
+        row = _block_at(wide, wide.index("hbox = {"))
+        self.assertRegex(row, r"^hbox = \{[^{}]*expand = \{\}\s*tab_buttons = \{")
+        self.assertRegex(row, r"\}\s*expand = \{\}\s*\}$")
+        self.assertEqual(row.count("tab_buttons = {"), len({t.row for t in gen.TABS}))
+
+    def test_the_wide_column(self):
+        """The full-screen frame's column: three 520 columns' width, centered,
+        each tab's mount as narrow, holding its body until a wide layout is
+        registered (PR D)."""
+        column = _type_body(self.generated, "te_systems_window_tabs_wide")
+        head = column.split("\n\n")[0]
+        for line in ('name = "te_systems_window_content_wide"', "minimumsize = { 1620 -1 }", "parentanchor = hcenter"):
+            self.assertIn(line, head)
+        self.assertRegex(_override(self.wide, "scrollarea_content"), r"^\s*te_systems_window_tabs_wide = \{\}\s*$")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                mount = _named(self.generated, f"te_systems_window_{t.key}_tab_wide")
+                self.assertIn(f"using = te_systems_window_{t.key}_selected", mount)
+                self.assertIsNone(t.wide)    # PR D registers the wide layouts
+                self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
+        at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]
+        self.assertEqual(at, sorted(at))
 
 
 class GeneratorTest(unittest.TestCase):

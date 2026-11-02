@@ -231,9 +231,14 @@ def _slot(slot: str, tab: Tab) -> list[str]:
             + override("button_selected", f'text = "{tab.label}"'))
 
 
-def _strip(tabs: list[Tab]) -> list[str]:
+# The wide frame's strips keep the narrow slot width: 540, the Census
+# window's strip (pop_browser_panel.gui).
+WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
+
+
+def _strip(tabs: list[Tab], wide: bool = False) -> list[str]:
     assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
-    out = ["tab_buttons = {"]
+    out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
     for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
         if i:
             out.append("")
@@ -242,19 +247,26 @@ def _strip(tabs: list[Tab]) -> list[str]:
     return out + ["}"]
 
 
-TAX_PROBES_STRIP = [
-    "# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming",
-    "# the probes never shrinks the system tabs.",
-    "tab_buttons = {",
-    f'\tvisible = "[{shown("te_tp_tab_sgui")}]"',
-    '\tblockoverride "first_button" { text = "te_tp_tab" }',
-    '\tblockoverride "first_button_selected" { text = "te_tp_tab" }',
-    '\tblockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }',
-    f"\tblockoverride \"first_button_click\" {{ onclick = \"[GetVariableSystem.Set('{STORED}', 'tax_probes')]\" }}",
-    '\tblockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }',
-    f'\tblockoverride "first_button_visibility_checked" {{ visible = "[{not_(TAX_PROBES)}]" }}',
-    "}",
-]
+def _tax_probes_strip(wide: bool = False) -> list[str]:
+    """TEMPORARY: a strip of its own for the developer tax-probes tab, so
+    arming the probes never shrinks the system tabs. Wide, centered in a row
+    of its own, which carries the strip's gate."""
+    gate = f'visible = "[{shown("te_tp_tab_sgui")}]"'
+    strip = (["tab_buttons = {"]
+             + ([f"\t{ln}" for ln in WIDE_STRIP] if wide else [f"\t{gate}"])
+             + ['\tblockoverride "first_button" { text = "te_tp_tab" }',
+                '\tblockoverride "first_button_selected" { text = "te_tp_tab" }',
+                '\tblockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }',
+                f"\tblockoverride \"first_button_click\" {{ onclick = \"[GetVariableSystem.Set('{STORED}', 'tax_probes')]\" }}",
+                '\tblockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }',
+                f'\tblockoverride "first_button_visibility_checked" {{ visible = "[{not_(TAX_PROBES)}]" }}',
+                "}"])
+    head = ["# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming",
+            "# the probes never shrinks the system tabs."]
+    if not wide:
+        return head + strip
+    return head + ["hbox = {", f"\t{gate}", "\tlayoutpolicy_horizontal = expanding", "\tlayoutpolicy_vertical = fixed", "",
+                   "\texpand = {}"] + [f"\t{ln}" for ln in strip] + ["\texpand = {}", "}"]
 
 
 def strips_narrow() -> list[str]:
@@ -270,15 +282,43 @@ def strips_narrow() -> list[str]:
     for row in sorted({t.row for t in TABS}):
         out += [f"\t{ln}" if ln else "" for ln in _strip([t for t in TABS if t.row == row])]
         out.append("")
-    out += [f"\t{ln}" for ln in TAX_PROBES_STRIP]
+    out += [f"\t{ln}" for ln in _tax_probes_strip()]
+    return out + ["}"]
+
+
+def strips_wide() -> list[str]:
+    out = ["### The full-screen frame's strips: the narrow strips side by side in one",
+           "### centered row, each at its narrow width, so one strip of up to fifteen",
+           "### tabs at the narrow slot width; then the developer strip.",
+           "type te_systems_window_strips_wide = vbox {",
+           "\tlayoutpolicy_horizontal = expanding",
+           "\tlayoutpolicy_vertical = fixed",
+           "\tignoreinvisible = yes",
+           "",
+           "\thbox = {",
+           "\t\tlayoutpolicy_horizontal = expanding",
+           "\t\tlayoutpolicy_vertical = fixed",
+           "",
+           "\t\texpand = {}"]
+    for row in sorted({t.row for t in TABS}):
+        out += [f"\t\t{ln}" if ln else "" for ln in _strip([t for t in TABS if t.row == row], wide=True)]
+    out += ["\t\texpand = {}", "\t}", ""]
+    out += [f"\t{ln}" if ln else "" for ln in _tax_probes_strip(wide=True)]
     return out + ["}"]
 
 
 # --- the mounts ---------------------------------------------------------------
 
-def _mount(tab: Tab) -> list[str]:
+def _mount(tab: Tab, wide: bool = False) -> list[str]:
+    if not wide or tab.wide is None:
+        content = [f"\t{tab.body} = {{}}"]
+    elif tab.layout is None:
+        content = [f"\t{tab.wide} = {{}}"]
+    else:
+        content = [f"\t{tab.body} = {{", f'\t\tblockoverride "{tab.layout}" {{', f"\t\t\t{tab.wide} = {{}}",
+                   "\t\t}", "\t}"]
     return ["flowcontainer = {",
-            f'\tname = "te_systems_window_{tab.key}_tab"',
+            f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
             f"\tusing = te_systems_window_{tab.key}_selected",
             "\tusing = default_fade_in_out",
             "\tparentanchor = hcenter",
@@ -286,9 +326,7 @@ def _mount(tab: Tab) -> list[str]:
             "\tignoreinvisible = yes",
             "\tmargin_top = 10",
             "\tmargin_bottom = 15",
-            "",
-            f"\t{tab.body} = {{}}",
-            "}"]
+            ""] + content + ["}"]
 
 
 def tabs_narrow() -> list[str]:
@@ -309,6 +347,27 @@ def tabs_narrow() -> list[str]:
     for tab in TABS:
         out.append("")
         out += [f"\t{ln}" if ln else "" for ln in _mount(tab)]
+    return out + ["}"]
+
+
+def tabs_wide() -> list[str]:
+    out = ["### The full-screen frame's column: three 520 columns and their 30 px",
+           "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
+           "### below that width. Each tab's mount as narrow, holding its wide",
+           "### layout once the registry names one (its `wide`), else its body.",
+           "type te_systems_window_tabs_wide = flowcontainer {",
+           '\tname = "te_systems_window_content_wide"',
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tminimumsize = { 1620 -1 }",
+           "",
+           "\tte_tp_panel = {",
+           "\t\tusing = te_systems_window_tax_probes_selected",
+           "\t}"]
+    for tab in TABS:
+        out.append("")
+        out += [f"\t{ln}" if ln else "" for ln in _mount(tab, wide=True)]
     return out + ["}"]
 
 
@@ -451,7 +510,8 @@ def render() -> str:
               "### is on the strip and not shown; Nation's while another tab is.", ""]
     lines += templates()
     lines += ["types te_systems_window_generated_types", "{"]
-    for i, part in enumerate((fullscreen_frame(), strips_narrow(), tabs_narrow(), sr_milestones())):
+    for i, part in enumerate((fullscreen_frame(), strips_narrow(), tabs_narrow(), strips_wide(), tabs_wide(),
+                              sr_milestones())):
         if i:
             lines.append("")
         lines += [f"\t{ln}" if ln else "" for ln in part]
