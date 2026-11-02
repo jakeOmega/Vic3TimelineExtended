@@ -549,6 +549,12 @@ CATEGORIES = {
         folder="production_method_icons", size=208, mode="emboss", fill=0.865,
         entity_dir="common/production_methods", field="texture",
         color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
+    # Carbon capture's ladder: production methods in look, but hosted in effect, since
+    # pm_carbon_capture.py writes the 456 methods and names these files, and `wire` must
+    # never edit its output. "now" is the shield glyph each replaced.
+    "carbon_capture": dict(
+        folder="production_method_icons", size=208, mode="emboss", fill=0.865, gui=(),
+        color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
     # Political parties (100 px, `icon = { default = "/gfx/..." }`): vanilla's 12 are
     # embossed silver-tan silhouettes on transparency, uncompressed with mips. Measured:
     # the shape spans 0.87 of the side (median), its top quarter (164,154,134) and its
@@ -2588,6 +2594,59 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_ore_sorting_and_separation_technology_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
         "pm_geophysical_survey_techniques_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
         "pm_ore_sorting_and_separation_technology_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        # Era 9 (icon batch 13). Carbon capture's ladder is its own category (carbon_capture), set by its generator.
+        "pm_active_protection_systems": {"subject": "a battle tank with a small radar dish and two boxy launcher pods on its turret, seen from the side", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_automated_routing_protocols": {"subject": "a network router box with four antennas and a row of cables plugged into its back", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_predictive_maintenance_systems": {"subject": "a computer monitor showing a jagged line graph with a big wrench leaning against it", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_automated_trading": {"subject": "a tall computer server rack with rows of small lights beside a small stack of coins", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_biotech_dyes": {"subject": "a folded dyed cloth beside a small DNA double helix", "seed": 3},
+        "pm_high_fructose_syrup": {"subject": "a tall jug of thick syrup beside an ear of corn", "seed": 1},
+        "pm_cellulosic_hydrolysis": {"subject": "a bundle of cut plant stalks beside a squat round tank and a heap of sugar cubes", "seed": 1},
+        "pm_punchcards": {"subject": "a stack of punched cards with rows of small square holes beside a boxy card reader machine", "seed": 3},
+        "pm_web_one": {"subject": "a boxy old computer monitor showing a simple globe, a mouse on a cord beside it", "seed": 1},
+        "pm_cloud_computing": {"subject": "a big puffy cloud floating above a tall server rack", "seed": 1},
+        "pm_digital_creation_tools": {"subject": "a flat drawing tablet with a stylus pen lying across it", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_version_control_and_distribution_platforms": {"subject": "a branching diagram of round nodes joined by thick lines, splitting into two branches that merge again", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_workflow_optimization": {"subject": "three interlocking gear wheels beside a computer monitor", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_customized_clothing": {"subject": "a tailor's dress form mannequin with a measuring tape draped around its neck", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_influencers_and_content_creators": {"subject": "a smartphone on a small tripod with a round ring light behind it", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_digital_streaming": {"subject": "a flat-screen television showing a big play button triangle", "seed": 1},
+        "pm_distributed_control_systems": {"subject": "three small computer control boxes linked by cables to a tall chemical column", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_e-commerce": {"subject": "a laptop computer with a small shopping cart on its screen beside a cardboard parcel", "seed": 2},
+        "pm_ectogenesis": {"subject": "a tall glass artificial womb tank filled with fluid, a curled baby inside, tubes running from its lid", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_flow_chemistry_production": {"subject": "a coiled glass tube reactor on a stand with fluid flowing through it", "seed": 3},
+        "pm_fracking": {"subject": "a drilling rig on the ground, its pipe running down to a horizontal underground rock layer with cracks spreading from it", "seed": 0},
+        "GMO_plantation_building_banana_plantation": {"subject": "a banana plant with a heavy bunch of bananas beside a small DNA double helix", "seed": 1},
+        "GMO_plantation_building_coffee_plantation": {"subject": "a coffee branch heavy with round coffee cherries beside a small DNA double helix", "seed": 3},
+        "GMO_plantation_building_sugar_plantation": {"subject": "tall sugar cane stalks beside a small DNA double helix", "seed": 2},
+        "GMO_plantation_building_tea_plantation": {"subject": "a tea bush with pointed leaves beside a small DNA double helix", "seed": 2},
+        "GMO_plantation_building_tobacco_plantation": {"subject": "a tall tobacco plant with broad leaves beside a small DNA double helix", "seed": 1},
+        "GMO_plantation_building_vineyard": {"subject": "a heavy bunch of grapes on a vine beside a small DNA double helix", "seed": 3},
+        "pm_global_ports": {"subject": "a row of three tall gantry cranes along a quay beside a huge container ship", "seed": 1},
+        "pm_intelligent_manufacturing_systems": {"subject": "a car body on a conveyor line watched by a camera on a gantry, a computer screen beside it", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_internet_communications": {"subject": "a computer monitor showing a closed envelope, a small globe beside it", "seed": 1},
+        "pm_trade_center_trade_quantity_advanced_3": {"subject": "a boxy delivery truck beside a big stopwatch", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_led_streetlights": {"subject": "a slim straight streetlight pole with a thin square glowing lamp panel at its top", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_maglev_trains": {"subject": "a sleek maglev train hovering above a wide concrete guideway, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_mars_mission": {"subject": "a small spacecraft with solar panels flying toward a big cratered planet", "seed": 1},
+        "pm_no_missile_defense": {"subject": "a boxy missile canister launcher inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_missile_defense_battery": {"subject": "a truck-mounted launcher with four boxy missile canisters raised up, a radar dish beside it", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_multicore_processors": {"subject": "a square processor chip whose face is divided into four equal raised squares", "seed": 2},
+        "pm_networked_munitions": {"subject": "three artillery shells standing in a row linked by curved radio waves", "seed": 1},
+        "pm_networked_small_arms": {"subject": "an assault rifle with a scope and a small antenna mounted on it, seen from the side", "seed": 3},
+        "pm_performance_textiles": {"subject": "a hooded running jacket with a zipper beside a roll of fabric", "seed": 3},
+        "pm_remote_work": {"subject": "a laptop computer on a kitchen table beside a coffee mug", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_food_processing": {"subject": "a jointed robot arm placing a loaf of bread into a box on a conveyor", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_smart_phones": {"subject": "a smartphone with a big blank glass touchscreen, standing upright", "seed": 2},
+        "pm_virtual_reality_headsets": {"subject": "a virtual reality headset with a wide visor and a head strap", "seed": 2},
+        # Twins: the same method on another building's group.
+        "pm_distributed_control_systems_explosives_factory": {"use": f"{_GI}/production_method_icons/pm_distributed_control_systems.dds"},
+    },
+    "carbon_capture": {
+        "carbon_capture_none": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p0.dds", "subject": "a factory chimney with a capture hood on top inside a thick round ring with one thick diagonal bar across it", "seed": 4},
+        "carbon_capture_partial": {"now": f"{_GI}/production_method_icons/cat_shield_green_p1.dds", "subject": "a short factory chimney with a small capture hood on top and one thin pipe leading down from it", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "carbon_capture_storage": {"now": f"{_GI}/production_method_icons/cat_shield_green_p2.dds", "subject": "a factory chimney with a big capture hood on top and a thick pipe running down under the ground line to a round storage tank", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "carbon_capture_advanced": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p3.dds", "subject": "a tall capture tower with a row of big round fans on its side and a thick pipe running down under the ground line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
     },
     # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
     # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
