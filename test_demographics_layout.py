@@ -167,6 +167,16 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(len(columns), 3)
         self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
 
+    def test_the_te_windows_wide_tab_is_the_census_windows_layout(self):
+        """The Timeline Extended window's full-screen Demographics tab (spec 2026-11-02-te-window-wide-mode § 7) mounts
+        the Census Data window's composer in place of te_demog_window_sections: the same sections and pending line, less
+        the strata incomes, read from the Country in context, the player's (te_demog_window_body's datacontext)."""
+        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, layout=(WINDOW_BODY, "te_demog_tab_layout"),
+                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
+        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "demographics").wide, BROWSER_COMPOSER)
+
     def test_the_layout_file_holds_only_the_composers_and_the_windows_body(self):
         self.assertEqual(sorted(_types(self.layout)),
                          sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER, WINDOW_COMPOSER,

@@ -7,6 +7,8 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "global_warming_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_global_warming.txt")
@@ -115,6 +117,25 @@ class OrderTest(unittest.TestCase):
         for old in ("widget_je_gw_conditions", "widget_je_gw_policies", "widget_je_gw_history"):
             self.assertNotIn(old, _read(JE))
             self.assertNotIn(old, _read(GUI))
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Global Warming tab (spec
+    2026-11-02-te-window-wide-mode § 7): three columns of 520 under the gates
+    the narrow tab gives each section. It replaces the whole te_gw_tab_layout,
+    so it shows the player's own market, the body's default view, as the
+    window wants."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_gw_wide_sections",
+                                             layout=("te_gw_tab_body", "te_gw_tab_layout"))
+        self.assertEqual(columns, [["te_gw_overview_panel", "te_gw_sec_policies"],
+                                   ["te_gw_sec_emitters", "te_gw_sec_transition"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "global_warming").wide, "te_gw_wide_sections")
 
 
 class FlagTest(unittest.TestCase):

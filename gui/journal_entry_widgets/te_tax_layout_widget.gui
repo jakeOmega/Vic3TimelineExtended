@@ -31,7 +31,10 @@ types te_tax_layout_widget_types
 	### opened). Each monitoring section hides itself when its record is
 	### closed, so a quiet code still opens on the Enacted Code. The summary
 	### sits in the "draft_summary" block so the Budget tab, which draws it in
-	### its fixed_bottom, can leave this copy out.
+	### its fixed_bottom, can leave this copy out. The light code's section
+	### comes first: it and the legislated code's never draw together, and
+	### placed first it shares the wide layout's first column with the
+	### overview (te_tax_wide_sections).
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -39,6 +42,8 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		# The light code's rates (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_section = {}
 		# The legislated code's sections, hidden under the light setting.
 		flowcontainer = {
 			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
@@ -57,8 +62,6 @@ types te_tax_layout_widget_types
 			}
 			te_tax_review_section = {}
 		}
-		# The light code's rates (te_tax_light_widget.gui; it gates itself).
-		te_tax_light_section = {}
 	}
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,
@@ -195,7 +198,9 @@ types te_tax_layout_widget_types
 	}
 
 	### The record, then how it all works: the history, collapsed (a list of
-	### past items), and How Tax Legislation Works, collapsed, last.
+	### past items), and How Tax Legislation Works, collapsed, last. The light
+	### code's How comes first, as its section does in te_tax_status_sections,
+	### so the wide layout's second column ends on it.
 	type te_tax_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -203,6 +208,8 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		# How the Light Tax Code Works (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_how_section = {}
 		# The legislated code's history and explanation, hidden under the light
 		# setting, which keeps no history.
 		flowcontainer = {
@@ -215,7 +222,6 @@ types te_tax_layout_widget_types
 			te_tax_history_section = {}
 			te_tax_how_section = {}
 		}
-		te_tax_light_how_section = {}
 	}
 
 	### The Tax Code tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
@@ -230,6 +236,7 @@ types te_tax_layout_widget_types
 	type te_tax_tab_body = te_system_tab_frame {
 		blockoverride "tab_header" {
 			default_header = {
+				using = default_list_position
 				blockoverride "text" {
 					text = "je_tax_code"
 				}
@@ -260,6 +267,85 @@ types te_tax_layout_widget_types
 
 		blockoverride "tab_open_journal_tooltip" {
 			tooltip = "te_tax_open_journal_tt"
+		}
+	}
+
+	### The Timeline Extended window's full-screen Tax Code tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down one
+	### row of three columns of 520 (te_ui_columns_three). Under the full
+	### code: the overview and the bills and promises to watch, then the code
+	### in force, the workbench and the review, then the history and How Tax
+	### Legislation Works. Under the light code: the overview and the light
+	### section, then the light How, and the third column empty (it keeps its
+	### 520). Each section keeps its narrow gates, the wrappers repeating the
+	### composers' and the full code's Not( light ), with their spacing; a run
+	### of the full code's sections alone takes both in one And, so under the
+	### light code its wrapper hides and leaves no gap above the light How. The
+	### draft summary is in the window's footer, so it is left out here as the
+	### tab body leaves it out. The window's wide mount puts it in
+	### te_tax_tab_layout (gen_te_systems_window.py);
+	### test_tax_code_layout.WideTest checks it against the narrow layout.
+	type te_tax_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_tax_overview_panel = {}
+
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_light_section = {}
+				flowcontainer = {
+					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					direction = vertical
+					parentanchor = hcenter
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_tax_politics_section = {}
+					te_tax_pending_section = {}
+					te_tax_obligations_section = {}
+				}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_enacted_table = {}
+				te_tax_workbench_section = {}
+				te_tax_review_section = {}
+			}
+
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_light_how_section = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_history_section = {}
+				te_tax_how_section = {}
+			}
 		}
 	}
 }

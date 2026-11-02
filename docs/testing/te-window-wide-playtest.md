@@ -92,6 +92,27 @@ overrides `tab_content` itself. A section that hides empties its place but keeps
 | **5. Seabed.** Open the tab in full screen. | The overview and Seabed Policy; the Ocean Basins table; How Seabed Licenses Work. Nothing is cut off, with a basin opened onto its claimants. | As above, in `te_seabed_wide_sections` (`te_seabed_widgets.gui`); `test_seabed_layout.py` pins it. |
 | **6. Budget Breakdown.** Open the tab in full screen, then the Budget panel's Breakdown tab. | Weekly Income, Weekly Expenses and How the Breakdown Works side by side; in the Budget panel, the three one under another as before (How is its own section type now). Nothing is cut off. | As above, in `te_budget_breakdown_wide_sections` (`te_budget_breakdown.gui`); `test_budget_breakdown.py` pins it. A gap changed in the Budget panel: `te_budget_sec_how`'s spacing should be the panel's 8. |
 
+## The wide layouts: PR D2 (2026-11-02)
+
+Banking, Tax Code, Strategic Reserve, Global Warming and Demographics now lay their sections out in columns of 520 in
+full screen, read down each column and then across, in the side panel's order. The side panel is unchanged. Each
+column's sections were balanced by GUI line count, a poor proxy for height, so these checks settle them. For each, the
+fallback is the same: move a section to the next or previous column in its `te_<system>_wide_sections`, keeping the
+order (the system's layout test pins the order, not the split).
+Each tab's header sits centered over the columns (a header at the row's left edge lacks
+`using = default_list_position`). If a tab draws its one narrow column in full screen, the mount's override didn't
+reach the body's `te_<system>_tab_layout` block (the engine fact of PR C's check 8): give the system a wide body that
+overrides `tab_content` itself.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Banking.** Open Banking in full screen with the cycle running, then for a country with the monetary readout only. | Three columns: the overview and Active Policies; Monetary Policy and Available Interventions; the history charts and How Banking Works. Nothing is cut off. With the readout only, the readout and its note alone, as in the side panel. | Uneven or cut off: move a section between columns in `te_banking_wide_sections` (`test_banking_layout.WideTest`). |
+| **2. Tax Code, full code.** Open Tax Code in full screen under the legislated code, with a bill under debate and a draft open. | Three columns: the overview, the bill, passed bills and promises; the Enacted Code, the workbench and the review; the history and How Tax Legislation Works. The draft or bill summary stays in the footer. Nothing is cut off. | Uneven or cut off: move a section in `te_tax_wide_sections`, keeping the order (`test_tax_code_layout.WideTest`). |
+| **3. Tax Code, Light code.** The same under the Light code. | The overview and the light section; How the Light Tax Code Works; and an empty third column, which keeps its 520, so the content sits in the left two thirds. Expected: note whether it reads well. | If the empty column looks wrong, raise it with the owner: the alternative is the plan's first design, the Light code in its own two-column row under the light gate (the controller ruled on one row, 2026-11-02). |
+| **4. Strategic Reserve.** Open Strategic Reserve in full screen. | Two columns: the overview and the inventory; How the Strategic Reserve Works. Nothing is cut off. | Cut off or uneven: move a section in `te_st_res_wide_sections` (`test_strategic_reserve_layout.WideTest`). |
+| **5. Global Warming.** Open Global Warming in full screen, after opening the Market panel on another market's Climate tab. | Three columns: the overview and Mitigation Policies; Top Emitters and the Fossil Transition; History and How Global Warming Works. Your own market's figures. With the Global Warming rule off, the Fossil Transition alone, in the middle column. Nothing is cut off. | Another market's figures: the wide layout should replace the whole `te_gw_tab_layout`. Uneven or cut off: move a section in `te_gw_wide_sections` (`test_global_warming_layout.WideTest`). |
+| **6. Demographics.** Open Demographics in full screen after the first census, then read `debug.log`. | The Census Data window's three columns, for your country: the overview, Causes of Death and the pyramid; Work and Retirement, Longevity, Family Policy and History; Wealth (without the strata incomes), Where People Live, States and How Demographics Works. No `PopsOverviewPanel` errors. Nothing is cut off. | Errors or another country's figures: `te_demog_browser_sections` reads the Country in context, which the window body sets to the player. Uneven or cut off: move a section in `te_demog_browser_sections`, which moves it in the Census Data window too (`test_demographics_layout.OrderTest`). |
+
 ## The wide layouts: PR D3 (2026-11-02)
 
 In full screen, Cultural Hegemony, the United Nations, Nuclear Weapons and Covert Warfare now show in three columns of

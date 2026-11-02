@@ -354,9 +354,10 @@ class PanelTest(unittest.TestCase):
     def test_is_active_gates_only_the_containers(self):
         # JournalEntry.IsActive is true for a dormant entry, so it may gate only
         # the containers (the panel opened on an entry not yet activated), never
-        # what reads the cycle.
+        # what reads the cycle. The window's full-screen layout's wrappers
+        # repeat the status composer's gate around its sections.
         allowed = {"te_banking_status_sections", "te_banking_reference_sections", "te_banking_overview_panel",
-                   "te_banking_topbar_gate"}
+                   "te_banking_topbar_gate", "te_banking_wide_sections"}
         for path in (DASH, HISTORY, LAYOUT):
             text = _strip_comments(_read(path))
             for m in re.finditer(r"type (\w+) = \w+ \{", text):
