@@ -16,7 +16,9 @@
 #   heat    = (a x + b x^2) x (1 - heat relief)
 #   winter' = winter + winter warming
 #   cold    = max(0, C0 - winter') x cold weight x (1 - cold relief)
-#   mildness= (N - min(winter', M)) x per degree x (1 - winter relief)    negative: a bonus
+#   winter  = (max(0, N - winter') - max(0, min(winter', M) - N) x summer share) x per degree
+#             x (1 - winter relief)                                    negative: a bonus
+#   summer share = max(0, 1 - raw heat / K): a hot summer cancels a mild winter's draw
 #   dry     = W x aridity x (1 - water relief)
 #   disease = D x malaria x (1 - disease relief)
 #   penalty = min(P_max, heat + cold + mildness + dry + disease)
@@ -31,6 +33,7 @@ te_climate_cold_weight = 0.94 # per degree of frost, on top of the winter's mild
 te_climate_winter_neutral = 3 # N: a coldest-month mean like London's in 1836, which neither costs nor draws
 te_climate_winter_mild = 15 # M: winters milder than this draw no more
 te_climate_winter_per_degree = 0.6 # per degree of coldest-month mean from N, so the bonus is at most 7.2
+te_climate_winter_heat_cancel = 20 # K: the heat cost before relief, percent, at which a hot summer cancels a mild winter's draw
 te_climate_dry_per_class = 16 # W: per aridity class (1 limited water, 2 scarce)
 te_climate_malaria_per_class = 5 # D: per malaria class (1 seasonal or local, 2 endemic)
 te_climate_penalty_max = 80 # P_max: climate alone never takes all of a state's pull; a boom's jobs can still draw people
@@ -159,14 +162,36 @@ te_climate_cold_raw = {
 	min = 0
 	multiply = te_climate_cold_weight
 }
-# A winter milder than N draws settlers and a harsher one turns them away, per degree; past M a
+# A winter harsher than N turns settlers away and a milder one draws them, per degree; past M a
 # milder winter draws no more. Negative is a bonus. The frost term adds below 0 °C.
-te_climate_winter_raw = {
+te_climate_winter_harsh = {
+	value = te_climate_winter_neutral
+	subtract = te_climate_winter_eff
+	min = 0
+	multiply = te_climate_winter_per_degree
+}
+# A mild winter's draw shrinks with the summer's heat cost before relief and is gone at K: people who
+# prize mild winters avoid hot, humid summers too, so Khartoum's or Singapore's warm winter draws
+# nothing once air conditioning eases their heat (owner, 2026-11-01). Before relief, since a cooled
+# house doesn't make the summer outside milder.
+te_climate_summer_share = {
+	value = te_climate_heat_raw
+	divide = te_climate_winter_heat_cancel
+	multiply = -1
+	add = 1
+	min = 0
+}
+te_climate_winter_mildness = {
 	value = te_climate_winter_eff
 	max = te_climate_winter_mild
-	multiply = -1
-	add = te_climate_winter_neutral
+	subtract = te_climate_winter_neutral
+	min = 0
 	multiply = te_climate_winter_per_degree
+	multiply = te_climate_summer_share
+}
+te_climate_winter_raw = {
+	value = te_climate_winter_harsh
+	subtract = te_climate_winter_mildness
 }
 te_climate_dry_raw = {
 	value = te_climate_aridity

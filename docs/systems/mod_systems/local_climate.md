@@ -34,7 +34,8 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
   - heat = (4.1 x + 0.36 x²) × (1 − heat relief), so the eighth degree over 26 costs a little over twice the first
   - winter' = winter + winter warming
   - cold (frost) = max(0, 0 − winter') × 0.94 × (1 − cold relief)
-  - winter (mildness) = (3 − min(winter', 15)) × 0.6 × (1 − winter relief): a winter like London's in 1836 (3 °C) is neutral, a harsher one costs, a milder one draws, up to 7.2% at 15 °C and over (owner, 2026-11-01)
+  - winter (mildness) = (max(0, 3 − winter') − max(0, min(winter', 15) − 3) × summer share) × 0.6 × (1 − winter relief): a winter like London's in 1836 (3 °C) is neutral, a harsher one costs, a milder one draws, up to 7.2% at 15 °C and over (owner, 2026-11-01)
+  - summer share = max(0, 1 − heat before relief / 20): a hot summer cancels a mild winter's draw, so Khartoum or Singapore never out-draw London once air conditioning eases their heat (owner, 2026-11-01, after #1313's review)
   - dry = 16 × water class × (1 − water relief)
   - disease = 5 × malaria class × (1 − disease relief)
   - `te_climate_penalty` = the sum, capped at 80, and 0 for a region with no row. Negative only through the winter term, so never below −7.2; `te_climate_bonus` is its negative part, as a positive percent.
@@ -43,7 +44,7 @@ Spec: `docs/superpowers/specs/2026-11-01-local-climate-design.md`; plan: `docs/s
   - The heat index rises 0.8 per degree of warming, relative humidity holding about steady.
   - With the Global Warming rule off the anomaly stays 0, and every region keeps its 1836 climate.
   - The felt anomaly is used because an aerosol haze cools the air people live in. It can go negative when carbon removal passes zero.
-- **Constants** sit at the head of the values file, and each is a script value: `te_climate_heat_start` (26), `_heat_linear`, `_heat_quadratic`, `_index_per_degree`, `_cold_start`, `_cold_weight`, `_winter_neutral`, `_winter_mild`, `_winter_per_degree`, `_dry_per_class`, `_malaria_per_class`, `_penalty_max`, `_amp_low_lat`, `_amp_high_lat`, `_amp_max`, `_normals_warming`.
+- **Constants** sit at the head of the values file, and each is a script value: `te_climate_heat_start` (26), `_heat_linear`, `_heat_quadratic`, `_index_per_degree`, `_cold_start`, `_cold_weight`, `_winter_neutral`, `_winter_mild`, `_winter_per_degree`, `_winter_heat_cancel`, `_dry_per_class`, `_malaria_per_class`, `_penalty_max`, `_amp_low_lat`, `_amp_high_lat`, `_amp_max`, `_normals_warming`.
 - **Terms stay separate** (`te_climate_<term>_raw`, `te_climate_<term>_term`) all the way to the tile, because each has its own technologies. The `_term`s aren't gated on `te_climate_has_record`, but the tile's rows are, so a no-row region shows none.
 
 ## Relief

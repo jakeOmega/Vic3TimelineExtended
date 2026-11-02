@@ -60,11 +60,12 @@ figures above: Georgia's Comfort is now about −28%, not −14.6 points.
 ## Winter's mildness (2026-11-01)
 
 Winters measured against London's, a small bonus for milder ones, and Winter Relief (spec § 12). It supersedes the
-heat v2 figures above where they differ: Georgia is now about −25%, Hawaii about +6%.
+heat v2 figures above where they differ: Georgia is now about −27%, Hawaii about +5%.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| The bonus | Madeira's tile reads Comfort +7% in green, and its migration attraction breakdown shows "Local Climate +7%"; Hawaii about +6%, Cape Colony +5% | No line: `local_climate_amenity` wasn't added (`te_climate_bonus_applied` not set); "−7%": the cost modifier applied a negative penalty |
+| The bonus | Madeira's tile reads Comfort +7% in green, and its migration attraction breakdown shows "Local Climate +7%"; Hawaii about +5%, Cape Colony +5% | No line: `local_climate_amenity` wasn't added (`te_climate_bonus_applied` not set); "−7%": the cost modifier applied a negative penalty |
+| Hot states | Khartoum, Singapore and Calcutta never show a green Comfort, in any era | `te_climate_summer_share` |
 | London | Comfort reads None; Glasgow about −1% (red); Paris about −4% | The neutral point (`te_climate_winter_neutral`) |
 | Hidden | Neither "Local Climate" modifier appears among the state panel's modifier rows | `local_climate_amenity` missing from the `TimedModifier.GetName` filters |
 | Winter hover | Madeira's Winter hover: a +7% draw before relief, Winter Relief 0%, +7% left; Massachusetts' a −4% draw and a frost cost | `te_climate_winter_draw` signs |

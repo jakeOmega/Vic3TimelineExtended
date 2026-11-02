@@ -34,6 +34,7 @@ CONSTANTS = {
     "te_climate_heat_start": 26, "te_climate_heat_linear": 4.1, "te_climate_heat_quadratic": 0.36,
     "te_climate_index_per_degree": 0.8, "te_climate_cold_start": 0, "te_climate_cold_weight": 0.94,
     "te_climate_winter_neutral": 3, "te_climate_winter_mild": 15, "te_climate_winter_per_degree": 0.6,
+    "te_climate_winter_heat_cancel": 20,
     "te_climate_dry_per_class": 16, "te_climate_malaria_per_class": 5, "te_climate_penalty_max": 80,
     "te_climate_amp_low_lat": 30, "te_climate_amp_high_lat": 66.5, "te_climate_amp_max": 2.5,
     "te_climate_normals_warming": 1.1,
@@ -213,9 +214,19 @@ class Formula(unittest.TestCase):
     def test_winter_axis(self):
         """Winters milder than London's in 1836 earn a small bonus and harsher ones cost, both per degree, the
         bonus stopping at te_climate_winter_mild (owner, 2026-11-01; spec § 12). The one signed term."""
+        self.assertEqual(values_body("te_climate_winter_harsh"),
+                         "value = te_climate_winter_neutral subtract = te_climate_winter_eff min = 0 "
+                         "multiply = te_climate_winter_per_degree")
+        self.assertEqual(values_body("te_climate_winter_mildness"),
+                         "value = te_climate_winter_eff max = te_climate_winter_mild subtract = te_climate_winter_neutral "
+                         "min = 0 multiply = te_climate_winter_per_degree multiply = te_climate_summer_share")
+        # A hot summer cancels a mild winter's draw: in proportion to the heat cost before relief, gone at
+        # te_climate_winter_heat_cancel (owner, 2026-11-01, after the review of #1313 found Khartoum out-drawing
+        # London from era 7).
+        self.assertEqual(values_body("te_climate_summer_share"),
+                         "value = te_climate_heat_raw divide = te_climate_winter_heat_cancel multiply = -1 add = 1 min = 0")
         self.assertEqual(values_body("te_climate_winter_raw"),
-                         "value = te_climate_winter_eff max = te_climate_winter_mild multiply = -1 "
-                         "add = te_climate_winter_neutral multiply = te_climate_winter_per_degree")
+                         "value = te_climate_winter_harsh subtract = te_climate_winter_mildness")
         c, s = self.c, self.s
         bonus_max = c["te_climate_winter_per_degree"] * (c["te_climate_winter_mild"] - c["te_climate_winter_neutral"])
         self.assertAlmostEqual(cal.terms(self.rows["STATE_HOME_COUNTIES"], 1, c, s)["winter"], 0, delta=0.3)
@@ -223,6 +234,13 @@ class Formula(unittest.TestCase):
         self.assertGreater(cal.terms(self.rows["STATE_MASSACHUSETTS"], 1, c, s)["winter"], 0)
         for r in self.rows.values():
             self.assertGreaterEqual(cal.terms(r, 1, c, s, 4.0)["winter"], -bonus_max - 1e-9, r.state)
+            # No state whose summer costs te_climate_winter_heat_cancel or more draws on its winter, at any era.
+            for era in (1, 7, 10):
+                got = cal.terms(r, era, c, s)
+                if cal.terms(r, 1, c, s)["heat"] >= c["te_climate_winter_heat_cancel"]:
+                    self.assertGreaterEqual(got["winter"], 0, (r.state, era))
+        # Madeira's summer is mild, so it keeps its whole draw.
+        self.assertAlmostEqual(cal.terms(self.rows["STATE_MADEIRA"], 1, c, s)["winter"], -7.1, delta=0.1)
 
     def test_amplification(self):
         c = self.c
@@ -244,13 +262,13 @@ class Formula(unittest.TestCase):
         """Spec § 12.4's targets, in percent of migration pull (negative a bonus), in 1836 unless an era is
         given: the world's anomaly 0, so each region's hot days run te_climate_normals_warming below the
         record's normals and its winters that times its amplification. London is the winter's neutral point
-        (owner, 2026-11-01): a milder winter draws a little, a harsher one costs. Bengal stays a little under
-        half, so two of its states 10 points apart stay over 5 apart, the gap pops need (owner's 1892
+        (owner, 2026-11-01): a milder winter draws a little unless the summer is hot, a harsher one costs. Bengal
+        stays near half, so two of its states 10 points apart stay about 5 apart, the gap pops need (owner's 1892
         breakdowns, 2026-11-01)."""
         p = self.penalty
         ranges = (
             ("STATE_GEORGIA", 1, 24, 32), ("STATE_GEORGIA", 7, 0, 6), ("STATE_GEORGIA", 10, -2, 3),
-            ("STATE_WEST_BENGAL", 1, 38, 48),
+            ("STATE_WEST_BENGAL", 1, 45, 55),
             ("STATE_HOME_COUNTIES", 1, -1, 1), ("STATE_ILE_DE_FRANCE", 1, 0, 6),
             ("STATE_CATALONIA", 1, -3, 3), ("STATE_LAZIO", 1, 10, 20), ("STATE_LAZIO", 4, 0, 8),
             ("STATE_SAHARA", 1, 35, 55), ("STATE_ARIZONA", 1, 35, 55),
@@ -274,6 +292,11 @@ class Formula(unittest.TestCase):
         self.assertLess(p("STATE_HAWAIIAN_ISLANDS", 1), p("STATE_ILE_DE_FRANCE", 1))
         # Madeira's mild winter beats London's, the neutral point (owner, 2026-11-01).
         self.assertLess(p("STATE_MADEIRA", 1), p("STATE_HOME_COUNTIES", 1))
+        # Hot states don't out-draw London once air conditioning eases their heat: their summers cancel the
+        # winter's draw (owner, 2026-11-01).
+        for hot in ("STATE_BLUE_NILE", "STATE_MALAYA", "STATE_LIBERIA", "STATE_LOWER_EGYPT"):
+            for era in (7, 10):
+                self.assertGreater(p(hot, era), p("STATE_HOME_COUNTIES", era), (hot, era))
         self.assertEqual(p("STATE_OMAN", 1), CONSTANTS["te_climate_penalty_max"])
         self.assertLess(p("STATE_MIDDLE_EGYPT", 1), p("STATE_SAHARA", 1))
         heat = {s: cal.terms(self.rows[s], 1, self.c, self.s)["heat"]

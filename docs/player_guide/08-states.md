@@ -124,7 +124,7 @@ through it the pull that draws mass migrations. Five things count:
 | Part | When |
 |---|---|
 | Heat | The hottest days are hot and humid enough to strain the body; each degree costs more than the last |
-| Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little |
+| Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little unless the summer is hot |
 | Frost | The coldest month averages below freezing, on top of Winter |
 | Dry land | Water is limited (semi-arid country) or scarce (desert) |
 | Malaria | It was seasonal or endemic in 1836 |
@@ -137,9 +137,10 @@ stops sweat cooling the body.
 The tile's Comfort row gives the total as a percentage of the state's
 migration pull, worked out again once a year, and hovering a reading shows what
 it costs before and after technology. In 1836 a hot, humid, malarial state
-such as Georgia loses about 25%, Bengal about 43% and Yakutsk about 64%;
+such as Georgia loses about 27%, Bengal about 50% and Yakutsk about 64%;
 London loses nothing and Paris 4%. A mild winter with little else against it
-adds pull, at most about 7%: Madeira gains 7%, Hawaii 6% and Cape Town 5%.
+adds pull, at most about 7%: Madeira gains 7%, Hawaii 5% and Cape Town 5%. A
+hot summer cancels that, so Bengal's or Singapore's warm winter adds nothing.
 Climate never costs more than 80%.
 
 Technologies ease each cost, for the country that researches them:

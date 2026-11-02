@@ -634,7 +634,9 @@ heating or somesuch").
 ```
 winter'  = winter + winter warming
 cold     = 0.94 × max(0, 0 − winter') × (1 − cold_relief)                  frost
-winter   = 0.6 × (3 − min(winter', 15)) × (1 − winter_relief)              signed
+share    = max(0, 1 − heat_raw / 20)                       a hot summer cancels the draw
+winter   = 0.6 × (max(0, 3 − winter') − max(0, min(winter', 15) − 3) × share)
+           × (1 − winter_relief)                                           signed
 penalty  = min(80, heat + cold + winter + dry + disease)                   no floor
 ```
 
@@ -642,6 +644,13 @@ penalty  = min(80, heat + cold + winter + dry + disease)                   no fl
   cooling), so London is neutral then and gains a little as the world warms.
 - The bonus stops growing at 15 °C, so it is at most 7.2%, against costs up to
   80% *(designer's call: asymmetric magnitudes)*.
+- **A hot summer cancels the draw** (owner, 2026-11-01). The bonus shrinks with
+  the heat cost before relief and is gone at 20%. Without it, heat relief (0.8
+  by era 7) outran winter relief (0.2), and 191 regions netted a bonus in era 7,
+  95 of them hot and humid: Khartoum, with a 49 °C hottest day, read +2% while
+  London read 0 (#1313's review). People who prize mild winters avoid hot,
+  humid summers too (Rappaport). Before relief, since a cooled house doesn't
+  make the summer outside milder. A harsh winter's cost is untouched.
 - The frost weight fell from 1.6 to 0.94 so Yakutsk, which now also pays the
   winter term, stays near 65%.
 - **Applied** as two fixed-sign modifiers: `local_climate_discomfort`
@@ -678,27 +687,29 @@ Percent, negative a bonus, every carrier to each era:
 | Region | 1836 | Era 4 | Era 7 | Era 10 |
 |---|---|---|---|---|
 | Madeira (Funchal) | −7.1 | −6.4 | −5.6 | −4.2 |
-| Hawaii (Honolulu) | −5.9 | −5.3 | −5.5 | −4.2 |
+| Hawaii (Honolulu) | −5.4 | −4.8 | −5.1 | −3.9 |
 | Cape Colony | −4.5 | −4.1 | −3.7 | −2.8 |
-| Catalonia (Barcelona) | −0.1 | −0.1 | −2.0 | −1.6 |
+| Catalonia (Barcelona) | 0.4 | 0.4 | −1.6 | −1.3 |
 | Home Counties (London) | 0 | 0 | 0 | 0 |
 | Lowlands (Glasgow) | 0.8 | 0.7 | 0.6 | 0.5 |
 | Île-de-France (Paris) | 3.7 | 3.3 | 1.1 | 0.7 |
 | Massachusetts (Boston) | 14.0 | 11.4 | 5.9 | 3.7 |
-| Georgia (Savannah) | 25.3 | 13.8 | 1.7 | 0.4 |
-| West Bengal (Calcutta) | 43.1 | 29.8 | 2.3 | −0.3 |
+| Georgia (Savannah) | 27.3 | 15.6 | 3.3 | 1.6 |
+| West Bengal (Calcutta) | 50.3 | 36.3 | 8.1 | 4.0 |
+| Blue Nile (Khartoum) | 22.6 | 15.8 | 3.1 | 1.4 |
 | Moscow | 16.1 | 11.4 | 9.4 | 6.2 |
 | Yakutsk | 64.2 | 44.5 | 36.1 | 23.3 |
 
 - **The Sun Belt.** In 1836 Georgia costs more than Massachusetts; by era 7 air
   conditioning has eased the South's heat while the North's winters still
   count, and the order turns. The test pins it.
-- **Bengal** falls from 50 to 43: its winters are mild. Two of its states 10
-  points apart stay over 5 apart, the gap pops need (§ 11.4).
+- **Bengal** stays at 50: its summer cancels its mild winter's draw (§ 11.4's
+  target holds).
 - **Siberia** stays costly into the late eras (Yakutsk 23% at era 10), as the
   Russian Far North emptied once subsidies stopped.
-- Across 675 regions in 1836: median 17.8%, 40 with a bonus over 0.5, 12
-  neither, 36 at 50 or more, 4 at the cap, the largest bonus 7.2.
+- Across 675 regions in 1836: median 19.2%, 39 with a bonus over 0.5, 12
+  neither, 45 at 50 or more, 4 at the cap, the largest bonus 7.2. In era 7, 87
+  have a bonus, none of them a hot state.
 
 ### 12.5 Not built: cool summers
 

@@ -179,11 +179,14 @@ def terms(row, era, c, schedule, warming=0.0):
     raw = {
         "heat": (excess * c["te_climate_heat_quadratic"] + c["te_climate_heat_linear"]) * excess,
         "cold": max(0.0, c["te_climate_cold_start"] - winter) * c["te_climate_cold_weight"],
-        "winter": (c["te_climate_winter_neutral"] - min(winter, c["te_climate_winter_mild"]))
-                  * c["te_climate_winter_per_degree"],
         "dry": c["te_climate_dry_per_class"] * row.aridity,
         "disease": c["te_climate_malaria_per_class"] * row.malaria,
     }
+    # A hot summer cancels a mild winter's draw, in proportion to the heat cost before relief.
+    summer_share = max(0.0, 1 - raw["heat"] / c["te_climate_winter_heat_cancel"])
+    raw["winter"] = (max(0.0, c["te_climate_winter_neutral"] - winter)
+                     - max(0.0, min(winter, c["te_climate_winter_mild"]) - c["te_climate_winter_neutral"]) * summer_share
+                     ) * c["te_climate_winter_per_degree"]
     out = {term: value * (1 - relief_at(schedule, TERM_RELIEF[term], era)) for term, value in raw.items()}
     out["penalty"] = min(c["te_climate_penalty_max"], sum(out.values()))
     return out
