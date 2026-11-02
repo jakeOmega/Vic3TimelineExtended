@@ -1112,6 +1112,42 @@ class WideTest(unittest.TestCase):
         self.assertEqual(at, sorted(at))
 
 
+class TaxFooterTest(unittest.TestCase):
+    """Tax Code's footer in both frames (plan C9): Budget's (budget_panel.gui
+    fixed_bottom), the draft summary or the bill under debate's, below the
+    scrolling content so their buttons stay on screen. Only on the Tax Code
+    tab (its selected template, which carries the tab's open gate) and only
+    while a draft or a bill is; the tab's body leaves its own copy out."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.footer = _type_body(cls.gui, "te_systems_window_tax_footer")
+
+    def test_both_frames_show_it(self):
+        for frame in ("te_systems_window_panel", "te_systems_window_panel_wide"):
+            with self.subTest(frame=frame):
+                self.assertRegex(_override(_type_body(self.gui, frame), "fixed_bottom"),
+                                 r"^\s*te_systems_window_tax_footer = \{\}\s*$")
+
+    def test_only_on_the_tax_code_tab_while_a_draft_or_a_bill_is(self):
+        head = self.footer[:self.footer.index("flowcontainer = {")]
+        self.assertIn("using = te_systems_window_tax_code_selected", head)
+        self.assertNotRegex(head, r"(?m)^\s*visible =")    # one visible per widget: the template's
+        inner = _block_at(self.footer, self.footer.index("flowcontainer = {"))
+        self.assertIn(f'visible = "[Or( {_shown("te_tax_show_draft_sgui")}, {_shown("te_tax_show_bill_sgui")} )]"',
+                      inner.split("divider_clean")[0])
+        at = [inner.index(t) for t in ("divider_clean", "using = dark_area", "te_tax_draft_summary = {}",
+                                        "te_tax_bill_summary = {}")]
+        self.assertEqual(at, sorted(at))
+        self.assertIn("size = { 554 4 }", inner)    # Budget's @panel_width_plus_14
+        # the tab's gate rides on the template
+        self.assertIn(_tab("tax_code").open_, _template(_read(GENERATED), "te_systems_window_tax_code_selected"))
+        # the body draws none of its own
+        body = _type_body(_read(os.path.join(WIDGETS, "te_tax_layout_widget.gui")), "te_tax_tab_body")
+        self.assertRegex(body, r'te_tax_status_sections = \{\s*blockoverride "draft_summary" \{\s*\}\s*\}')
+
+
 class GeneratorTest(unittest.TestCase):
     """scripts/generators/gen_te_systems_window.py writes the window's strip,
     selection templates and tab mounts from its TABS registry (spec § 9.3)."""

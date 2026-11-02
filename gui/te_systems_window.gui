@@ -145,6 +145,10 @@ types te_systems_window_types
 		blockoverride "scrollarea_content" {
 			te_systems_window_tabs_narrow = {}
 		}
+
+		blockoverride "fixed_bottom" {
+			te_systems_window_tax_footer = {}
+		}
 	}
 
 	### The full-screen frame (spec 2026-11-02-te-window-wide-mode § 4):
@@ -184,6 +188,49 @@ types te_systems_window_types
 
 		blockoverride "scrollarea_content" {
 			te_systems_window_tabs_wide = {}
+		}
+
+		blockoverride "fixed_bottom" {
+			te_systems_window_tax_footer = {}
+		}
+	}
+
+	### Tax Code's footer, in both frames' fixed_bottom (plan C9): the Budget
+	### panel's (gui/budget_panel.gui), the draft summary (te_tax_draft_summary,
+	### te_tax_workbench_widget.gui) or, with no draft open, the bill under
+	### debate's (te_tax_bill_summary, te_tax_politics_widget.gui: its support,
+	### its debate, Pass, Force Through and Withdraw), below the scrolling
+	### content so their buttons stay on screen while the player works through
+	### the workbench. Each summary gates itself. Only on the Tax Code tab (its
+	### selected template, which carries the tab's open gate) and only while a
+	### draft or a bill is; the tab's body leaves the draft's own copy out
+	### (te_tax_tab_body's "draft_summary"). The summaries read GetPlayer only.
+	### Budget's band at Budget's width in both frames: a flowcontainer can't
+	### stretch to the full-screen frame, and a fixed 1,620 would overflow a
+	### 1600 wide screen.
+	type te_systems_window_tax_footer = flowcontainer {
+		using = te_systems_window_tax_code_selected
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			visible = "[Or( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			parentanchor = hcenter
+			margin_bottom = 4
+			ignoreinvisible = yes
+
+			divider_clean = {
+				size = { 554 4 }
+			}
+
+			background = {
+				using = dark_area
+			}
+
+			te_tax_draft_summary = {}
+			te_tax_bill_summary = {}
 		}
 	}
 
