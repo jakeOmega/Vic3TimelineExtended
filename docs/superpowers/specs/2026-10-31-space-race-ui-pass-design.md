@@ -508,6 +508,9 @@ present and inbound with their owner's side, and launch windows. Not a priority
 
 ## 13. Reusable widgets (separate project)
 
+Scoped in full on 2026-11-02: `specs/2026-11-02-gui-widget-library-scope.md`
+(the catalog, the migration, the test tooling and the phases).
+
 Evidence: about a dozen systems each define their own `*_section_header`,
 `*_subheader`, `*_note`, `*_value_row`, `*_panel` and `*_ov_cell`, mostly copied
 from the UN chamber's. GUI types are global across files, so one library file
