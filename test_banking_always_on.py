@@ -369,7 +369,7 @@ class PanelTest(unittest.TestCase):
     def test_the_dormant_notes(self):
         self.assertIn('text = "banking_dash_dormant_tools_note"', _type_body(self.dash, "te_banking_sec_interventions"))
         self.assertIn('text = "banking_dash_dormant_monetary_note"', _type_body(self.dash, "te_banking_sec_monetary"))
-        self.assertIn('text = "banking_dash_how_start"', _type_body(self.layout, "te_banking_sec_how"))
+        self.assertIn('text = "banking_dash_how_start"', _type_body(self.layout, "te_banking_help_body"))
         loc = _loc()
         for key in ("te_banking_cycle_started_tt", "banking_dash_not_started_value",
                     "banking_dash_not_started_conditions", "banking_dash_not_started_tt",

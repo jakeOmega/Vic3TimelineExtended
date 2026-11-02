@@ -195,7 +195,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = {f for f in re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text)
                  if f.startswith(("banking_", "te_banking_", "te_hist_"))}
-        self.assertGreaterEqual(len(flags), 16)
+        self.assertGreaterEqual(len(flags), 15)
         for f in flags:
             self.assertRegex(f, r"_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -211,12 +211,21 @@ class FlagTest(unittest.TestCase):
     def test_no_old_flag_survives(self):
         self.assertNotIn("banking_dash_collapsed_", self.text)
 
-    def test_the_live_sections_start_open_and_how_it_works_collapsed(self):
+    def test_the_live_sections_start_open(self):
         dash = _read(DASH)
         for sec, flag in (("te_banking_sec_active", "banking_dash_active_closed"),
                           ("te_banking_sec_monetary", "banking_dash_monetary_closed")):
             self.assertIn(f"Toggle('{flag}')", _type_body(dash, sec), sec)
-        self.assertIn("Toggle('banking_dash_how_open')", _type_body(_read(LAYOUT), "te_banking_sec_how"))
+
+    def test_how_banking_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_banking_help_popup, on te_popup = help_banking); its collapse flag
+        retired with its content (test_te_help_pages.py)."""
+        how = _type_body(_strip_comments(_read(LAYOUT)), "te_banking_sec_how")
+        self.assertIn('text = "banking_dash_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_banking')]\"", how)
+        self.assertNotIn("banking_dash_how_open", self.text)
+        self.assertNotIn("banking_dash_note", how)
 
 
 class GateTest(unittest.TestCase):
@@ -240,8 +249,11 @@ class GateTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('banking_dash_omo_fallback_shown').IsShown", body)
 
     def test_how_it_works_explains_the_monetary_layer_only_while_it_is_on(self):
-        body = _type_body(_read(LAYOUT), "te_banking_sec_how")
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)", body)
+        """The Help page's monetary topics, under the player's gate: a page
+        reads GetPlayer, never the entry (test_te_help_pages.py)."""
+        body = _type_body(_read(LAYOUT), "te_banking_help_body")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)"
+                      r"\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)\]\"", body)
         self.assertTrue(m, "no monetary block gated on banking_mon_system_shown")
         gated = _block_from(body, m.start())
         for key in MONETARY_HOW:
@@ -275,9 +287,10 @@ class TidyTest(unittest.TestCase):
     def test_no_block_opens_on_a_gap(self):
         """The first heading of the Monetary Policy block and of How Banking
         Works drops its top margin (style guide rule 8)."""
-        for path, key in ((DASH, "banking_dash_mon_sub_rates"), (LAYOUT, "banking_dash_how_sub_cycle")):
+        for path, typ, key in ((DASH, "type te_banking_sec_", "banking_dash_mon_sub_rates"),
+                               (LAYOUT, "type te_banking_help_body", "banking_dash_how_sub_cycle")):
             text = _read(path)
-            first = text.index("banking_dash_subheader = {", text.index("type te_banking_sec_"))
+            first = text.index("banking_dash_subheader = {", text.index(typ))
             self.assertRegex(_block_from(text, first),
                              rf'blockoverride "subheader_margin" \{{\}}\s*blockoverride "subheader_text" '
                              rf'\{{\s*text = "{key}"', path)

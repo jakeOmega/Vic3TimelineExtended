@@ -42,6 +42,12 @@ HELP_ICON = "gfx/interface/buttons/button_icons/unused/help.dds"
 Page = collections.namedtuple("Page", "key sections title flags tabs")
 
 PAGES = [
+    Page("banking", ("te_banking_sec_how",), "banking_dash_how_header",
+         ("banking_dash_how_open",), ("te_banking_tab_body",)),
+    Page("grand_monuments", ("te_gm_sec_how",), "gm_je_how_header",
+         ("gm_how_open",), ("te_gm_tab_body",)),
+    Page("colonial_empire", ("te_ce_sec_how",), "je_colonial_empire_how_header",
+         ("colonial_empire_how_open",), ("te_ce_tab_body",)),
 ]
 
 def _open(key):

@@ -8621,6 +8621,7 @@
  te_grid_mode_sending:0 "Sending"
  te_grid_station_adjacent_tt:0 "Borders a state of ours with a $building_grid_transfer_station$, or would be our first in this market area"
  te_help_button_tt:0 "How this system works: the rules behind each figure and button."
+ te_help_link_tt:0 "Opens the Help page."
  te_hist_chart_bank_bubble_legend:0 "#lore one bar per month#!"
  te_hist_chart_bank_bubble_title:0 "Bubble Pressure"
  te_hist_chart_bank_momentum_legend:0 "#lore one bar per month; above the line is rising#!"

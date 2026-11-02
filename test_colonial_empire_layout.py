@@ -28,7 +28,9 @@ ROOTS = {   # root name -> (what it instances, the journal container it is attac
 }
 OLD_ROOTS = ["widget_je_colonial_empire", "widget_je_colonial_empire_history"]
 OLD_FLAGS = ["colonial_empire_history_open", "colonial_empire_pressure_open",
-             "colonial_empire_decisions_closed", "colonial_empire_territories_open"]
+             "colonial_empire_decisions_closed", "colonial_empire_territories_open",
+             # How the Colonial Empire Works, now a Help page (test_te_help_pages.py)
+             "colonial_empire_how_open"]
 PROGRAMMES = ("invest", "garrison", "assimilation")
 
 # The explanations "How the Colonial Empire Works" holds, and the live
@@ -231,7 +233,7 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(len(flags), 6)
+        self.assertEqual(len(flags), 5)
         for f in flags:
             self.assertRegex(f, r"^colonial_empire_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -243,14 +245,23 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(negated, 1, f)
                 self.assertGreaterEqual(bare, 2, f)
 
-    def test_live_sections_open_and_explanations_collapsed(self):
+    def test_live_sections_open(self):
         for sec, flag in (("te_ce_sec_stability", "colonial_empire_stability_closed"),
                           ("te_ce_sec_pressure", "colonial_empire_pressure_closed"),
                           ("te_ce_sec_programmes", "colonial_empire_programmes_closed"),
                           ("te_ce_sec_holdings", "colonial_empire_holdings_closed"),
-                          ("te_ce_sec_history", "colonial_empire_history_closed"),
-                          ("te_ce_sec_how", "colonial_empire_how_open")):
+                          ("te_ce_sec_history", "colonial_empire_history_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_colonial_empire_help_popup, on te_popup = help_colonial_empire);
+        its collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _strip_comments(_type_body(self.text, "te_ce_sec_how"))
+        self.assertIn('text = "je_colonial_empire_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]\"", how)
+        self.assertNotIn("colonial_empire_how_open", self.text)
+        self.assertNotIn("colonial_empire_note", how)
 
     def test_no_section_is_an_exception(self):
         """Live lists stay open (owner, play-test round 2): International
@@ -742,7 +753,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.loc = _loc()
 
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(self.gui, "te_ce_sec_how")
+        how = _type_body(self.gui, "te_colonial_empire_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'text = "{key}"', how, key)
         self.assertNotIn("ExecuteTooltip", how)
