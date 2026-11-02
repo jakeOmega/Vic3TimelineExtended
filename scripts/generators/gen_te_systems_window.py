@@ -23,9 +23,10 @@ launcher and the root, and instances what this writes:
                                      te_system_tab_frame per milestone
 
 WHICH TAB IS SHOWN. U = the tab is open (its `open_` gate: for a system tab,
-te_window_<system>_tab_sgui, its rule on and an entry running; the Space
-Race's stays open once the country is in the race), R = the tab is on the
-strip (its `strip` gate, te_window_<system>_tab_unlock_sgui: its rule on),
+te_window_<system>_tab_sgui, or a mirrored tab's host gate (te_<host>_<system>_
+tab_sgui), its rule on and an entry running; the Space Race's stays open once
+the country is in the race), R = the tab is on the strip (its `strip` gate,
+te_window_<system>_tab_unlock_sgui or the host's unlock gate: its rule on),
 S = the player last chose it (te_systems_window_tab), T = the developer tax
 tab is chosen and armed. With V = "a system tab last chosen is open" (S and U
 for one of the system tabs):

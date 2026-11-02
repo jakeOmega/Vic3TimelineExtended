@@ -119,7 +119,7 @@ types te_systems_window_types
 		###
 		### No tab carries an icon, as vanilla's tabs and the mod's other tabs
 		### don't (owner, 2026-09-30), so each tab shows the system's full name.
-		### All five share one strip, as vanilla's Diplomacy panel puts its five
+		### Each strip holds five, as vanilla's Diplomacy panel puts its five
 		### (diplomatic_overview.gui: Overview, Subjects, Release Subject, Nation
 		### Formation, Countries) on plain tab_buttons in this same 540 window,
 		### with no size or height override. A slot is 104.8 wide ((540 - 2 x 3
