@@ -3,7 +3,8 @@
 ### te_demog_tab_sections), the Census Data window's Demographics tab (gui/pop_browser_panel.gui instances
 ### te_demog_browser_sections, the same sections for whichever country the window shows), the Timeline Extended
 ### window's Demographics tab (its generated mount instances te_demog_window_body, which holds
-### te_demog_window_sections) and the state panel's Demographics subtab (gui/states_panel.gui instances
+### te_demog_window_sections, or in full screen te_demog_browser_sections for the player's country) and the state
+### panel's Demographics subtab (gui/states_panel.gui instances
 ### te_state_demog_content). The sections are types in
 ### gui/te_demographics_widgets.gui, and the country's read the Country in their context: the player's in the Population
 ### panel (its window's AccessPlayer), the window's in the Census Data window (PopBrowserPanel.GetCountry).
@@ -66,7 +67,9 @@ types te_demographics_layout
 	### The Census Data window, a fullscreen one: the tab's sections in three columns of a fixed 520 (rule 8), 30 apart,
 	### on te_ui_columns_three (gui/te_widget_library.gui), read down each column and then across, so the order is the
 	### tab's: the people's health, then the levers and the record, then the per-state detail with How Demographics Works at
-	### the foot. Until the country's first census the pending line alone, at the column's width.
+	### the foot. Until the country's first census the pending line alone, at the column's width. The Timeline Extended
+	### window's full-screen Demographics tab places the same composer for the player's country (wide-mode PR D2), so
+	### nothing in it may read either window's own panel: it reads the Country in its context.
 	type te_demog_browser_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

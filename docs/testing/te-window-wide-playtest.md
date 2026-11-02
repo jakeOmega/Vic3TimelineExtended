@@ -79,6 +79,10 @@ full screen, read down each column and then across, in the side panel's order. T
 column's sections were balanced by GUI line count, a poor proxy for height, so these checks settle them. For each, the
 fallback is the same: move a section to the next or previous column in its `te_<system>_wide_sections`, keeping the
 order (the system's layout test pins the order, not the split).
+Each tab's header sits centered over the columns (a header at the row's left edge lacks
+`using = default_list_position`). If a tab draws its one narrow column in full screen, the mount's override didn't
+reach the body's `te_<system>_tab_layout` block (the engine fact of PR C's check 8): give the system a wide body that
+overrides `tab_content` itself.
 
 | Check | Expect | If it fails |
 |---|---|---|
