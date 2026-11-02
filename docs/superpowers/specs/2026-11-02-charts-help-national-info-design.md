@@ -27,6 +27,12 @@ The owner, 2026-11-02, extending the wide-mode work:
   other systems.
 - **Plots may be left out** for a country whose history isn't stored.
 - **The Census Data window is a candidate host**, to be weighed against others (§ 6.1).
+- **Not shown for another country (owner, on this spec's first draft):**
+  - **Global Warming.** The one thing about another country a player acts on is who emits
+    most, so as to make treaties that cut their CO2, and Top Emitters already shows that.
+  - **The United Nations.** Most of its panel shows the same world to every country.
+    What is the country's own (membership, standing, dues arrears) becomes lines on the
+    Nation tab instead (§ 6.4).
 
 ## 3. What exists today
 
@@ -277,8 +283,8 @@ one. Leave it until the play-test says the long pages read badly.
   side by side, as in the TE window's full-screen frame. The window shows each tab's wide
   composer (`te_<system>_wide_sections`, built in #1333–#1335) under its `Country`.
   - **Which tabs:** Pops and Demographics, then the systems § 6.4 makes public: Nation,
-    Banking, Tax Code, Grand Monuments, Colonial Empire, Seabed, Global Warming, Cultural
-    Hegemony, the United Nations, the Space Race and Nuclear Weapons. That is 13 tabs.
+    Banking, Tax Code, Grand Monuments, Colonial Empire, Seabed, Cultural Hegemony, the
+    Space Race and Nuclear Weapons. That is 11 tabs: two strips of five and a third of one.
   - **Generated, not hand-written.** The strip and its mounts are generated from the TABS
     registry (§ 7.3), and the hand-written two-tab strip moves there.
   - **The shown tab:** one client key, `te_ni_tab` (Pops when unset), replacing
@@ -316,7 +322,6 @@ This is the main cost of the feature, and any host needs it.
   - the scripted bars (`te_je_scripted_bars`);
   - Colonial Empire's stability bar;
   - Nuclear Weapons' goal bar;
-  - the UN's status description;
   - the Open Journal Entry button.
   
   Each either goes into an own-country part or reads the variable behind it:
@@ -332,10 +337,10 @@ This is the main cost of the feature, and any host needs it.
 - **The gates.** Every tab gate roots on `GetPlayer` (`_root()` in `gen_te_systems_window.py`),
   so the generator takes the root as a parameter.
 - **Loc that reads the entry or the player** renders in the widget's context and is
-  rewritten too:
-  - about 1,150 keys read `JournalEntry.` (the Space Race 417, Grand Monuments 145, Strategic
-    Reserve 135, the UN 109, Nuclear Weapons 97, Banking 93, …);
-  - about 600 read `GetPlayer` (Tax Code 228, Nation 160, Seabed 65, …).
+  rewritten too. In the systems § 6.4 makes public:
+  - about 850 keys read `JournalEntry.` (the Space Race 417, Grand Monuments 145, Nuclear
+    Weapons 97, Banking 93, Cultural Hegemony 56, Colonial Empire 40);
+  - about 530 read `GetPlayer` (Tax Code 228, Nation 160, Seabed 65, …).
   - A key the journal entry's own text also uses (its status or description, where only
     `JournalEntry` is in context) must be split, not rewritten.
 
@@ -350,17 +355,20 @@ This is the main cost of the feature, and any host needs it.
 | Tax Code | 0 | about 560 + about 3,300 gen | 37 | the interest-group cards iterate `AccessPlayer.AccessAllInterestGroups` |
 | Budget Breakdown | 0 | 65 gen | 0 | `Predict*` getters untested on a foreign country |
 | Strategic Reserve | 254 | 1 | 25 | |
-| Global Warming | 40 | 1 | 2, already disabled off the player | 38 `Country` reads already (`gw_market_country`) |
+| Global Warming | 40 | 1 | 2, already disabled off the player | not shown (§ 2): not rebound |
 | Demographics | (done) | 22 | 2, already hidden | already reads `Country` |
 | Cultural Hegemony | 155 | 3 | 10 | |
-| United Nations | 1,895 | 1 | 212 (delegations 122, proposals 68, missions 16) | |
+| United Nations | 1,895 | 1 | 212 (delegations 122, proposals 68, missions 16) | not shown (§ 2): not rebound. Its three lines on Nation read country variables |
 | Nuclear Weapons | 272 | 5 | 40 | the goal bar |
 | Covert Warfare | 97 | 3 | 6 | private (§ 6.4): not rebound |
 
+In the systems to be shown, that comes to about 1,400 hand-written `JournalEntry.GetCountry`
+reads. The UN alone held 1,895, so leaving it out halves the hand-written work.
+
 ### 6.4 What each system shows another country
 
-The owner's six are decided. The rest are proposals, from what each system stores and what
-is public in real-world terms.
+The owner's six are decided, and so are Global Warming and the UN (§ 2). The rest are
+proposals, from what each system stores and what is public in real-world terms.
 
 | System | Another country sees | Hidden |
 |---|---|---|
@@ -370,10 +378,10 @@ is public in real-world terms.
 | **Grand Monuments** (owner) | monuments built and under way, the national effects, trophies, works abroad, archaeology | the open opportunity and the interest groups' ledgers (open question 5) |
 | **Colonial Empire** (owner) | holdings, stability, the programs (its colonial policy), pressure, the history | controls |
 | **Seabed** (owner) | its policy, basins, mines and claims (the claimant rows show these already) | controls |
-| Nation | the national modifiers. The country panel's Information tab hides them for another country today and shows a count (`00_te_country_panel_information.gui:1013`), so this reverses a choice | — |
-| Global Warming | emissions share, its policies (as the Climate tab shows another market's), the transition, the history | controls |
-| Cultural Hegemony | score, rank, programs, models; the world history (global) | controls |
-| United Nations | membership, standing, dues arrears, the dossier, missions it serves | the delegations' lobbying, proposals, controls |
+| Nation | the national modifiers. The country panel's Information tab hides them for another country today and shows a count (`00_te_country_panel_information.gui:1013`), so this reverses a choice. Also the UN lines: membership, standing and dues arrears, from country variables (`un_standing`, the membership mirrors `<modifier>_on`), so the UN needs no rebinding | — |
+| **Global Warming** (owner) | not shown. Top Emitters already names the five largest emitters, the countries a treaty would target, and the Climate tab shows another market's policies | everything |
+| Cultural Hegemony | score, rank, its programs and where its pull comes from (the breakdown) | controls. The board and the models are the same world for every country |
+| **United Nations** (owner) | not a tab: the lines on Nation above. The Assembly, missions, mandates, the archive and the authority history are the same for every country, and the case against a country already shows in the chamber when a motion names it | everything else |
 | Space Race | the milestones reached, program icons, colonies, and a progress band (`sr_fuzz_<m>`, as the Rivals rows show) | exact progress, funding, approach, setbacks, fleets |
 | Nuclear Weapons | the public estimate (`nd_believed_stockpile`, `nd_display_public_estimate`), crises, guarantees; nothing before a first test | the true stockpile, progress, funding, readiness, custody |
 | Strategic Reserve | private in this work. At most later: that a reserve exists, its hub and the goods it covers | stocks, rates and policies (six of its goods are military) |
@@ -416,13 +424,11 @@ place of exact progress, and Nuclear Weapons' estimate in place of the true coun
 
 ### 6.7 Display data only players get
 
-Some lists are written for players only:
-- the UN's permanent seats (`un_overview_display_effects.txt:24`) and its proposal snapshot;
+Some lists in the systems to be shown are written for players only:
 - Colonial Empire's blocs, subject capitals and great-power rows
   (`colonial_empire_display_effects.txt:213`);
 - Cultural Hegemony's leader flags and board (`cultural_hegemony_effects.txt:43`, `:1029`);
 - the Space Race's rival estimates and powers list (`space_race_on_actions.txt:78`, `:157`);
-- Global Warming's Top Emitters;
 - the seabed claimant rankings.
 
 Most of them describe the world, not the country. For those, the foreign view reads the
@@ -432,8 +438,8 @@ call per list.
 
 ### 6.8 Wording
 
-- **The house voice is "our" and "we",** in about 490 of the keys the bodies use, against
-  about 120 that say "you" (72 of them Banking's). Read for another country, "Our arsenal" credits the player with
+- **The house voice is "our" and "we",** in about 410 of the keys the shown systems use,
+  against about 100 that say "you" (72 of them Banking's). Read for another country, "Our arsenal" credits the player with
   France's figures.
 - **Recommended:**
   - neutral labels where a line is a label ("Arsenal: 120");
@@ -484,6 +490,7 @@ holds that every system with a tab has a help page and a "?".
 - a topic list for the long Help pages (§ 5.3);
 - year ticks on the large charts (§ 4.2);
 - Budget Breakdown and the Strategic Reserve for another country (§ 6.4);
+- Global Warming and the UN as tabs for another country (§ 2);
 - vanilla's tutorial lessons (§ 5.1, D);
 - recording history for countries below major power, which would cost 240 containers each.
 
@@ -553,7 +560,7 @@ None gates a merge (`CLAUDE.md`). They go on the play-test list:
    - No `wanted context of type 'JournalEntry'`, `Failed to fetch variable` or null-country
      lines in `debug.log`.
    - The entry modifiers read through `je:` show the AI's own (Banking's interventions,
-     Global Warming's policies).
+     Cultural Hegemony's programs).
 4. **The player's own country in National Info:** the controls work.
 5. **A former major power's history** after the sort fix: oldest month on the left.
 6. **The renamed title and buttons** read as intended, for the player and another country.
@@ -570,7 +577,7 @@ None gates a merge (`CLAUDE.md`). They go on the play-test list:
 | C2 | The chart viewer for the player's country, and the "⤢" buttons | medium | C1 |
 | F0 | The binding rule: mounts supply `Country`, `te_own_country_only`, the chart defaults, the gates' root as a parameter, the tests of §§ 7.1–7.2 (no visible change) | medium | H2, so the How sections are moved, not rebound; C1, so the charts are rebound once, in the registry |
 | F1 | National Info: the rename, the strip and mounts from the registry (Pops and Demographics at first), the Information tab's goto, the foreign chart viewer, the history fix and empty state | medium | F0, C2 |
-| F2–F4 | Each system bound and made public, the owner's six first (Banking; Tax Code with its generator; Grand Monuments; Colonial Empire; Seabed; Nation), then Global Warming, Cultural Hegemony, the UN, the Space Race (its generators and band) and Nuclear Weapons (the estimate), a few per PR, in parallel | medium–large each | F1 |
+| F2–F4 | Each system bound and made public, the owner's six first (Banking; Tax Code with its generator; Grand Monuments; Colonial Empire; Seabed; Nation with its UN lines), then Cultural Hegemony, the Space Race (its generators and band) and Nuclear Weapons (the estimate), a few per PR, in parallel | medium–large each | F1 |
 
 - **Independent work.** H and C are independent and can run in parallel.
 - **Self-contained PRs.** Each PR carries its own docs, play-test items and player guide
@@ -587,9 +594,9 @@ None gates a merge (`CLAUDE.md`). They go on the play-test list:
    `country_politics_panel.gui`?
 3. **The player's own country in National Info:** the same view with the player's controls
    (recommended), or Pops and Demographics only?
-4. **The public list beyond the six** (§ 6.4): Nation, Global Warming, Cultural Hegemony and
-   the UN public; the Space Race and Nuclear Weapons partly; the Strategic Reserve, Budget
-   Breakdown and Covert Warfare private?
+4. **The public list beyond the six** (§ 6.4): Nation (with the UN lines) and Cultural
+   Hegemony public; the Space Race and Nuclear Weapons partly; the Strategic Reserve,
+   Budget Breakdown and Covert Warfare private?
 5. **Grand Monuments:** keep the open opportunity and the interest groups' ledgers private?
 6. **Wording:** neutral labels and `SelectLocalization` (recommended), or keep "our"?
 7. **The chart viewer's width:** 1200 for every chart, too wide below about 1,300 px of
