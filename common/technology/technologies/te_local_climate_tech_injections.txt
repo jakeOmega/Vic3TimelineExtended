@@ -33,6 +33,7 @@ INJECT:arc_welding = {
 INJECT:watertube_boiler = {
 	modifier = {
 		state_climate_cold_relief_add = 0.25 # Local Climate: steam and hot-water boilers heat whole buildings
+		state_climate_winter_relief_add = 0.1 # Local Climate: a heated house makes a long winter easier to bear
 	}
 }
 

@@ -93,8 +93,20 @@ class Validate(unittest.TestCase):
     def test_heat_sources(self):
         """A heat figure comes from a station (code:km), the fit from the record's own fields, or another
         region's station (analog:STATE_X), so the next pass knows which rows are estimates."""
-        for source in ("KSVN:1km", "WMO02484:2km", "fit", "analog:STATE_HIMALAYAS"):
+        for source in ("KSVN:1km", "WMO02484:2km", "fit", "KSVN:312km;fit_hot_day", "KSVN:14km;fit_index"):
             self.assertEqual(self.errors([row(source=source)]), [], source)
+        for source in ("KSVN:1km;fit", "KSVN:1km;fit_hot_day;fit_index", "fit_index"):
+            self.assertEqual(len(self.errors([row(source=source)])), 1, source)
+
+    def test_analog_copies_its_source(self):
+        """An analog row takes another region's station figures, so it must name a region with a row and match
+        that row's heat figures (review of #1312)."""
+        source = row(state="STATE_SAHARA")
+        self.assertEqual(self.errors([source, row(source="analog:STATE_SAHARA")]), [])
+        errs = self.errors([source, row(hot_day=37, source="analog:STATE_SAHARA")])
+        self.assertEqual(len(errs), 1, errs)
+        self.assertIn("STATE_GEORGIA", errs[0])
+        self.assertEqual(len(self.errors([row(source="analog:STATE_SAHARA")])), 1)
 
     def test_validate_unknown_and_duplicate(self):
         self.assertEqual(len(self.errors([row("STATE_NOWHERE")])), 1)
@@ -237,7 +249,7 @@ class Tile(unittest.TestCase):
         """Every reading row hides when the region has no row, so the no-data line shows alone."""
         body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
         rows = body.split("te_state_climate_row = {")[1:]
-        self.assertEqual(len(rows), 8)  # five readings and Comfort's three (cost, none, pending)
+        self.assertEqual(len(rows), 9)  # five readings and Comfort's four (cost, bonus, none, pending)
         for row in rows:
             self.assertIn("row_visible", row)
             self.assertIn("ScriptValue('te_climate_has_record'), '(CFixedPoint)0')", row.split("row_tooltip")[0])

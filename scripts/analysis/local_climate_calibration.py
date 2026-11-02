@@ -29,9 +29,9 @@ TECH = os.path.join(REPO, "common", "technology", "technologies")
 VANILLA_TECH = os.path.join(REPO, "vanilla_parsed", "common", "technologies.json")
 VALUES = os.path.join(REPO, "common", "script_values", "local_climate_values.txt")
 GENERATOR = os.path.join(REPO, "scripts", "generators", "gen_local_climate.py")
-KINDS = ("heat", "cold", "water", "disease")
+KINDS = ("heat", "cold", "winter", "water", "disease")
 # Each penalty term and the relief kind that eases it.
-TERM_RELIEF = {"heat": "heat", "cold": "cold", "dry": "water", "disease": "disease"}
+TERM_RELIEF = {"heat": "heat", "cold": "cold", "winter": "winter", "dry": "water", "disease": "disease"}
 ERAS = (1, 4, 7, 10, 13)
 CONSTANT_RE = re.compile(r"(?m)^(te_climate_\w+) = (-?[\d.]+)\s*(?:#.*)?$")
 
@@ -43,6 +43,7 @@ ANCHORS = (
     "STATE_LOWER_ANDALUSIA", "STATE_MOSCOW", "STATE_YAKUTSK",
     "STATE_MIDDLE_EGYPT", "STATE_SAHARA", "STATE_NEJD", "STATE_WEST_BENGAL", "STATE_HYDERABAD",
     "STATE_RIO_DE_JANEIRO", "STATE_GOIAS",
+    "STATE_HAWAIIAN_ISLANDS", "STATE_MADEIRA", "STATE_CAPE_COLONY", "STATE_LOWLANDS",
 )
 
 # Each anchor country's 1836 heartland: the regions its 1836 history incorporates (vanilla
@@ -81,7 +82,7 @@ COUNTRIES = (
 )
 
 TOP_RE = re.compile(r"(?m)^(INJECT:|REPLACE:)?(\w+) = \{")
-RELIEF_RE = re.compile(r"state_climate_(heat|cold|water|disease)_relief_add\s*=\s*(-?[\d.]+)")
+RELIEF_RE = re.compile(r"state_climate_(heat|cold|winter|water|disease)_relief_add\s*=\s*(-?[\d.]+)")
 # Malaria Prevention's relief is the census's Malaria Control, which the comfort formula adds to the
 # disease relief (te_climate_relief_disease, local_climate_values.txt).
 CONTROL_RE = re.compile(r"state_malaria_control_add\s*=\s*(-?[\d.]+)")
@@ -167,7 +168,7 @@ def amplification(lat, c):
 
 
 def terms(row, era, c, schedule, warming=0.0):
-    """A row's four penalty terms and their sum, for a country holding every carrier up to `era`.
+    """A row's five terms (winter's signed, negative a bonus) and their sum, for a country holding every carrier up to `era`.
 
     `warming` is the world's felt anomaly (temperature_anomaly_display; 0 in 1836). The record holds at
     te_climate_normals_warming, so the row's hot days feel the anomaly less that, and its winter that times
@@ -178,11 +179,13 @@ def terms(row, era, c, schedule, warming=0.0):
     raw = {
         "heat": (excess * c["te_climate_heat_quadratic"] + c["te_climate_heat_linear"]) * excess,
         "cold": max(0.0, c["te_climate_cold_start"] - winter) * c["te_climate_cold_weight"],
+        "winter": (c["te_climate_winter_neutral"] - min(winter, c["te_climate_winter_mild"]))
+                  * c["te_climate_winter_per_degree"],
         "dry": c["te_climate_dry_per_class"] * row.aridity,
         "disease": c["te_climate_malaria_per_class"] * row.malaria,
     }
     out = {term: value * (1 - relief_at(schedule, TERM_RELIEF[term], era)) for term, value in raw.items()}
-    out["penalty"] = max(0.0, min(c["te_climate_penalty_max"], sum(out.values())))
+    out["penalty"] = min(c["te_climate_penalty_max"], sum(out.values()))
     return out
 
 
@@ -208,16 +211,16 @@ def main(argv=None):
     for kind in KINDS:
         print(f"  {kind:<18}" + "".join(f"  {relief_at(schedule, kind, e):6.2f}" for e in ERAS))
 
-    split_heads = "".join(f"{h:>6}" for h in ("heat", "cold", "dry", "dis."))
+    split_heads = "".join(f"{h:>6}" for h in ("heat", "cold", "wint.", "dry", "dis."))
     print(f"\n  {'Anchor region':<26}  {'place':<14}  {split_heads}{heads}")
-    print(f"  {'':<26}  {'':<14}  {'(the 1836 terms)':>24}")
+    print(f"  {'':<26}  {'':<14}  {'(the 1836 terms; negative is a bonus)':>30}")
     for state in ANCHORS:
         r = rows.get(state)
         if r is None:
             print(f"  {state:<26}  (no row yet)")
             continue
         t1 = terms(r, 1, c, schedule, args.warming)
-        split = "".join(f"{t1[k]:6.1f}" for k in ("heat", "cold", "dry", "disease"))
+        split = "".join(f"{t1[k]:6.1f}" for k in ("heat", "cold", "winter", "dry", "disease"))
         eras = "".join(f"  {terms(r, e, c, schedule, args.warming)['penalty']:6.1f}" for e in ERAS)
         print(f"  {state:<26}  {r.ref_place[:14]:<14}  {split}{eras}")
 

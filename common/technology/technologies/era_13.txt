@@ -46,6 +46,7 @@ programmable_matter = {
 		state_climate_cold_relief_add = 0.1 # Local Climate: habitats built and climate-controlled to order
 		state_climate_heat_relief_add = 0.05 # Local Climate: habitats built and climate-controlled to order
 		state_climate_water_relief_add = 0.05 # Local Climate: habitats built and climate-controlled to order
+		state_climate_winter_relief_add = 0.2 # Local Climate: habitats built and climate-controlled to order
 		country_max_weekly_construction_progress_add = 75
 		country_st_res_aeroplanes_decay_add = -0.007
 		country_st_res_tanks_decay_add = -0.006

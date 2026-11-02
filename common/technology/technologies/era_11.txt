@@ -12,6 +12,7 @@
 	modifier = {
 		country_institution_ministry_of_science_max_investment_add = 1
 		country_st_res_small_arms_decay_add = -0.002
+		state_climate_winter_relief_add = 0.2 # Local Climate: heated, insulating fabrics carry warmth on the body
 	}
 
 	unlocking_technologies = {

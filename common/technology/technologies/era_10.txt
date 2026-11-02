@@ -80,6 +80,7 @@ advanced_structural_engineering = {
 
 	modifier = {
 		state_climate_cold_relief_add = 0.2 # Local Climate: insulation and heat pumps
+		state_climate_winter_relief_add = 0.2 # Local Climate: insulated homes stay warm whatever the winter
 		country_max_weekly_construction_progress_add = 25
 		state_urbanization_per_level_add = -5
 		state_migration_crowding_density_mult = 0.2

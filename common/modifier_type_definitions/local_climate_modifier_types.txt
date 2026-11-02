@@ -15,6 +15,13 @@ state_climate_cold_relief_add = {
 	decimals = 0
 	script_only = yes
 }
+# Winter's mildness (§ 12): narrows the gap between a raw winter and a mild one, both ways.
+state_climate_winter_relief_add = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
 state_climate_water_relief_add = {
 	color = good
 	percent = yes

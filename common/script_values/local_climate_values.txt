@@ -1,10 +1,11 @@
-﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11).
+﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12).
 # State scope throughout. Each state region's climate record (local_climate_generated.txt), the four
-# technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
-# and the world's felt warming become four penalty terms, kept separate for the state panel, and
-# their sum, te_climate_penalty: the percent of its migration attraction a state loses
-# (local_climate_discomfort, state_migration_pull_mult). It is never negative, so comfort is a
-# penalty, never a bonus, and a region with no row costs nothing. The constants are the
+# five technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
+# and the world's felt warming become five terms, kept separate for the state panel, and their sum,
+# te_climate_penalty: the percent of its migration attraction a state loses (local_climate_discomfort,
+# state_migration_pull_mult). Four terms only cost; winter's mildness is signed, so a mild-wintered
+# state with little else against it gains (te_climate_bonus, local_climate_amenity; § 12). A region
+# with no row reads 0. The constants are the
 # calibration's (§ 11.4); scripts/analysis/local_climate_calibration.py mirrors this file and prints
 # its anchor table, and test_local_climate_comfort.py pins the anchors' targets. Change a constant
 # here and rerun both.
@@ -13,18 +14,23 @@
 #   winter warming = summer warming x amplification(latitude)
 #   x       = max(0, heat index + summer warming x index per degree - H0)
 #   heat    = (a x + b x^2) x (1 - heat relief)
-#   cold    = max(0, C0 - winter - winter warming) x cold weight x (1 - cold relief)
+#   winter' = winter + winter warming
+#   cold    = max(0, C0 - winter') x cold weight x (1 - cold relief)
+#   mildness= (N - min(winter', M)) x per degree x (1 - winter relief)    negative: a bonus
 #   dry     = W x aridity x (1 - water relief)
 #   disease = D x malaria x (1 - disease relief)
-#   penalty = min(P_max, heat + cold + dry + disease)
+#   penalty = min(P_max, heat + cold + mildness + dry + disease)
 
 # Tuning constants (§ 11.4), in percent of migration attraction.
 te_climate_heat_start = 26 # H0: the heat index (0.7 x wet-bulb + 0.3 x air, on a typical year's worst day, °C) above which heat costs
 te_climate_heat_linear = 4.1 # a: percent per degree of heat index at H0
 te_climate_heat_quadratic = 0.36 # b: the curve, so the 8th degree costs a little over twice the 1st
 te_climate_index_per_degree = 0.8 # the heat index's rise per degree of warming, with relative humidity about steady
-te_climate_cold_start = 0 # C0: the coldest month's mean, °C, below which cold costs
-te_climate_cold_weight = 1.6
+te_climate_cold_start = 0 # C0: the coldest month's mean, °C, below which frost costs
+te_climate_cold_weight = 0.94 # per degree of frost, on top of the winter's mildness below
+te_climate_winter_neutral = 3 # N: a coldest-month mean like London's in 1836, which neither costs nor draws
+te_climate_winter_mild = 15 # M: winters milder than this draw no more
+te_climate_winter_per_degree = 0.6 # per degree of coldest-month mean from N, so the bonus is at most 7.2
 te_climate_dry_per_class = 16 # W: per aridity class (1 limited water, 2 scarce)
 te_climate_malaria_per_class = 5 # D: per malaria class (1 seasonal or local, 2 endemic)
 te_climate_penalty_max = 80 # P_max: climate alone never takes all of a state's pull; a boom's jobs can still draw people
@@ -103,6 +109,13 @@ te_climate_relief_cold = {
 	min = 0
 	max = 1
 }
+# Winter's mildness shrinks with heating, insulation and warm clothing more slowly than frost does,
+# and only the era 11+ technologies close it (owner, 2026-11-01; § 12).
+te_climate_relief_winter = {
+	value = modifier:state_climate_winter_relief_add
+	min = 0
+	max = 1
+}
 te_climate_relief_water = {
 	value = modifier:state_climate_water_relief_add
 	min = 0
@@ -146,6 +159,15 @@ te_climate_cold_raw = {
 	min = 0
 	multiply = te_climate_cold_weight
 }
+# A winter milder than N draws settlers and a harsher one turns them away, per degree; past M a
+# milder winter draws no more. Negative is a bonus. The frost term adds below 0 °C.
+te_climate_winter_raw = {
+	value = te_climate_winter_eff
+	max = te_climate_winter_mild
+	multiply = -1
+	add = te_climate_winter_neutral
+	multiply = te_climate_winter_per_degree
+}
 te_climate_dry_raw = {
 	value = te_climate_aridity
 	multiply = te_climate_dry_per_class
@@ -170,6 +192,13 @@ te_climate_cold_term = {
 		subtract = te_climate_relief_cold
 	}
 }
+te_climate_winter_term = {
+	value = te_climate_winter_raw
+	multiply = {
+		value = 1
+		subtract = te_climate_relief_winter
+	}
+}
 te_climate_dry_term = {
 	value = te_climate_dry_raw
 	multiply = {
@@ -185,17 +214,25 @@ te_climate_disease_term = {
 	}
 }
 
-# The comfort penalty, 0 to te_climate_penalty_max. A region with no row reads 0 whatever the warming.
+# The comfort penalty, at most te_climate_penalty_max. Negative only through a mild winter, so never
+# below minus te_climate_winter_per_degree x (te_climate_winter_mild - te_climate_winter_neutral). A
+# region with no row reads 0 whatever the warming.
 te_climate_penalty = {
 	value = 0
 	if = {
 		limit = { te_climate_has_record > 0 }
 		add = te_climate_heat_term
 		add = te_climate_cold_term
+		add = te_climate_winter_term
 		add = te_climate_dry_term
 		add = te_climate_disease_term
 	}
 	max = te_climate_penalty_max
+}
+# The bonus local_climate_amenity applies: the penalty's negative part, as a positive percent.
+te_climate_bonus = {
+	value = te_climate_penalty
+	multiply = -1
 	min = 0
 }
 
@@ -208,6 +245,28 @@ te_climate_penalty_now = {
 		limit = { has_variable = te_climate_penalty_applied }
 		value = var:te_climate_penalty_applied
 	}
+}
+# The bonus local_climate_amenity applies, from the same refresh; 0 on a save from before § 12 until then.
+te_climate_bonus_now = {
+	value = 0
+	if = {
+		limit = { has_variable = te_climate_bonus_applied }
+		value = var:te_climate_bonus_applied
+	}
+}
+# What the climate does to the state's pull, signed for the Comfort hover: negative a cost.
+te_climate_effect_now = {
+	value = te_climate_penalty_now
+	multiply = -1
+}
+# Winter's mildness as what it draws, for the hovers: positive a bonus, negative a cost.
+te_climate_winter_draw = {
+	value = te_climate_winter_term
+	multiply = -1
+}
+te_climate_winter_draw_raw = {
+	value = te_climate_winter_raw
+	multiply = -1
 }
 # 1 once the state's first monthly application has run; until then the row says Pending.
 te_climate_penalty_shown = {
