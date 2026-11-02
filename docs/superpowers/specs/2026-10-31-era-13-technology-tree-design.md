@@ -784,6 +784,10 @@ With wave 2 the tree has 191 technologies in eras 6 to 13, 13 of them in era
 13 (14 when Superintelligence lands, § 3.5), and 06-politics counts 164 laws
 in 39 groups.
 
+**Icons, after both waves (2026-11-02).** Icon batch 9 painted every placeholder the
+phases left: the 16 technologies, the 15 laws, Morphological Freedom's journal entry,
+the Aerosol Injection policy row and the six era 13 production methods.
+
 **Play-test list** (a new `docs/testing/era-13-playtest.md`): the technology
 tree draws a thirteenth era column; old saves load with the moved methods and
 units (§ 5.6); an active Post-Scarcity Transition in an old save; each phase-3

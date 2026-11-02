@@ -51,8 +51,8 @@ class TechnologyTest(unittest.TestCase):
         self.assertEqual(tech["category"], "society")
         self.assertEqual(sorted(tech["unlocking_technologies"]), ["environmental_movement", "globalization"])
         self.assertEqual(tech["ai_weight"], {"value": "1"})
-        self.assertRegex(_text("common/technology/technologies/era_12.txt"),
-                         r'geoengineering = \{[^}]*texture = "[^"]+" # Placeholder Icon')
+        self.assertRegex(_text("common/technology/technologies/era_12.txt"),   # painted in icon batch 9
+                         r'geoengineering = \{[^}]*texture = "gfx/interface/icons/invention_icons/geoengineering\.dds"\n')
         self.assertTrue(_loc("geoengineering"))
         self.assertIn("Stratospheric Aerosol Injection", _loc("geoengineering_desc"))
 

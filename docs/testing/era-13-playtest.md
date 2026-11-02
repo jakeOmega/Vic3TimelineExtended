@@ -23,8 +23,7 @@ Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
      character health in its tooltip.
    - Post-Work Society (after Universal Basic Income) lists its three
      modifiers.
-   - Both draw a borrowed icon until the icon pipeline paints theirs:
-     Biological Immortality's hourglass, and Universal Basic Income's.
+   - Both show their own icons.
 4. **The rename.** Compact Fusion Reactors reads that way in the tree, in the
    Fusion Plant's Compact Fusion Power method, in the launch-window footers
    and in the drives concept. No "Muon-Catalyzed" is left in English; German
@@ -55,9 +54,7 @@ Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
    AI. Self-Driving Laboratories and Humanoid Robotics follow AI Agents.
    Autonomous Weapons follows Swarm Technology and JADC2. Artificial General
    Intelligence's arrows come from Self-Driving Laboratories and Humanoid
-   Robotics. The four new technologies borrow icons (Generative AI's, Additive
-   Manufacturing's, Autonomous Vehicles' and Swarm Technology's) until theirs
-   are painted.
+   Robotics. The four new technologies show their own icons.
 2. **The moved unlocks.**
    - AI Agents' tooltip names the Automated Bureaucracy law and Fully
      Automated Content Creation.
@@ -162,8 +159,7 @@ ahead, raised if they fall short.
      (`scripts/analysis/save_country_probe.py --law-conflicts` on the next
      save).
    - A country released or formed later also holds Natural Form.
-   - The three laws borrow Human Purity's, Basic Protections' and
-     Anti-Discrimination Laws' icons.
+   - The three laws show their own icons.
 3. **The acceptance hook.** Under Universal Citizenship with Civil Rights
    Movement and Social Justice Movements researched, enact Morphological
    Freedom and read a pop's acceptance breakdown three ways: a culture that
@@ -198,10 +194,7 @@ ahead, raised if they fall short.
 
 1. **A new game.** The laws panel shows Frontier AI Control among the power
    structure groups from 1836, every country on No Frontier AI Policy, and no
-   other law of the group enactable. The six laws borrow other laws' icons (No
-   Internet Policy's, Corporate Genetic Licensing's, Ministry of Science's,
-   State Intellectual Property's, Ministry of International Aid's and Open
-   Source Innovation's) until theirs are painted.
+   other law of the group enactable. The six laws show their own icons.
 2. **The opening.** The day a country researches AI Agents (or gets it by
    spread) it moves to Private Labs, with no enactment. No Frontier AI Policy then reads as not enactable, with its
    tooltip.
@@ -235,10 +228,9 @@ ahead, raised if they fall short.
 ## Phase 3: Liquid Democracy
 
 1. **The tree.** Liquid Democracy follows Universal Digital Identity in era
-   12's society tree, with +10% voting power, and borrows Universal Digital
-   Identity's icon until its own is painted.
+   12's society tree, with +10% voting power and its own icon.
 2. **The law.** It sits in Distribution of Power beside Algorithmic
-   Governance, with Publicly Funded Elections' icon for now. Its enactment
+   Governance, with its own icon. Its enactment
    tooltip shows the Continuous Vote line and the modifier's three effects,
    and nothing is granted on enactment.
 3. **A voting law.**
@@ -333,8 +325,7 @@ shock.
 ## Phase 3: AI Tutors
 
 1. **The tree.** AI Tutors sits in era 11's society column, its arrow from
-   Digital Education (era 9), and borrows Digital Education's icon until its
-   own is painted. Its tooltip lists qualifications +10%, literacy growth,
+   Digital Education (era 9), with its own icon. Its tooltip lists qualifications +10%, literacy growth,
    education access +10 and the Ministry of Thought Control's maximum
    investment +1.
 2. **The ministry's ceiling.** Human Augmentation now lists +2 for the
@@ -368,12 +359,11 @@ shock.
 
 1. **The tree.** Aneutronic Fusion sits in era 13's military column after
    Compact Fusion Reactors, and Microfusion Cells' (formerly Fusion Batteries) arrow now comes from it, not
-   from Compact Fusion Reactors. It borrows Compact Fusion Reactors' icon
-   until its own is painted. Its tooltip names Aneutronic Fusion Power, Fusion
+   from Compact Fusion Reactors. It has its own icon. Its tooltip names Aneutronic Fusion Power, Fusion
    Torch Reclamation and the Interstellar Mission; Compact Fusion Reactors'
    no longer names the Interstellar Mission.
 2. **Aneutronic Fusion Power.** A Fusion Plant offers it after Compact Fusion
-   Power, with a purple bolt as a borrowed icon. A level employs 950 (450
+   Power, with its own icon. A level employs 950 (450
    laborers, 300 machinists, 100 engineers, 100 academics) and makes 16,000
    electricity before throughput. Its description shows in the tooltip.
 3. **The AI-managed option on it.** With Smart Grids, a Fusion Plant on
@@ -409,8 +399,7 @@ shock.
 ## Phase 3: Vactrains
 
 1. **The tree.** Vactrains sits in era 12's production column, after
-   Autonomous Vehicles (era 11) and Quantum Materials, and borrows Quantum
-   Materials' icon until its own is painted. Its tooltip names two Railway
+   Autonomous Vehicles (era 11) and Quantum Materials, with its own icon. Its tooltip names two Railway
    methods, Vactrains and Vactrain Freight, and no modifiers.
 2. **Rolling Stock.** On a railway in a state with Electricity, Vactrains
    follows Maglev Trains in the passenger group: 160 Transportation and +15
@@ -437,14 +426,13 @@ shock.
 ## Phase 3: Von Neumann Machines
 
 1. **The tree.** Von Neumann Machines sits in era 13's production column with
-   arrows from Molecular Assemblers and Orbital Manufacturing. It borrows
-   Molecular Assemblers' icon until its own is painted. Its tooltip names
+   arrows from Molecular Assemblers and Orbital Manufacturing, and its own icon. Its tooltip names
    Self-Replicating Construction and Self-Replicating Miners and lists +100
    maximum weekly construction progress.
 2. **Construction Sector (market game).** Self-Replicating Construction is the
    last method of the base group, after Nanomaterial Buildings, and makes 24
    construction a level before throughput (Nanomaterial Buildings: 16). It
-   borrows Nanorobots' icon. All four automation methods stay selectable on it
+   has its own icon. All four automation methods stay selectable on it
    (Prefabricated Building Components, Tower Cranes, Computer-Aided Design, 3D
    Printed Buildings), and none takes its employment below zero. The
    construction principle's method applies to it. An AI sector moves up to it
@@ -456,7 +444,7 @@ shock.
    tier that the AI downsizes comes back on the new tier at the next weekly
    pulse (the guard's tier 8). In a market game the direct tier never shows.
 4. **Extraplanetary Base.** Self-Replicating Miners is the last base method,
-   after Resort Colony, with Intelligent Drilling Rigs' borrowed icon. Its
+   after Resort Colony, with its own icon. Its
    crew (400 engineers, 100 academics) fills at any level. With neither
    logistics upgrade the method's tooltip shows 320 Launch Capacity a level;
    Fusion Tugs and Tethered Launch each still cut it by 30%. The

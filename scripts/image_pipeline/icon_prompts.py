@@ -568,6 +568,15 @@ CATEGORIES = {
         gui=("gui/journal_entry_widgets/te_tax_overview_widget.gui",
              "gui/journal_entry_widgets/te_tax_light_widget.gui"),
         style=UN_STYLE),
+    # The state panel's status items (state_panel_status_item_small): vanilla's 28 are
+    # painted objects on a dark disc under a bronze ring, 128 px. The disc is measured
+    # on their bare pixels (centre, then edge), lifted a little at the centre as the
+    # decrees' is. The game concept that names the item uses the same file.
+    "state_status": dict(
+        folder="state_status_icons", size=128, mode="medallion", fill=0.8,
+        disc=((34, 27, 26), (24, 19, 19)), grade="spread",
+        gui=("gui/states_panel.gui",),
+        style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
 }
 
 
@@ -764,16 +773,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
-        "advanced_fission": {"subject": "a squat steel reactor vessel with glowing orange molten salt visible through a round porthole", "seed": None},
-        "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": None},
-        "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": None},
-        "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": None},
-        "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": None},
-        "ai_tutors": {"subject": "a small friendly white robot with a glowing blue screen for a face, pointing at a child's blank chalk slate", "seed": None},
+        "advanced_fission": {"subject": "a squat steel reactor vessel with glowing orange molten salt visible through a round porthole", "seed": 1},
+        "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": 3},
+        "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": 1},
+        "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": 1},
+        "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": 1},
+        "ai_tutors": {"subject": "a small friendly white robot with a glowing blue screen for a face, pointing at a child's blank chalk slate", "seed": 3},
         # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},
-        "aneutronic_fusion": {"subject": "a glowing violet plasma ring inside a slim metal torus, with copper current leads drawing a bright spark straight off it", "seed": None},
+        "aneutronic_fusion": {"subject": "a glowing violet plasma ring inside a slim metal torus, with copper current leads drawing a bright spark straight off it", "seed": 3},
         "fusion_batteries": {"subject": "a chunky cylindrical battery cell with a glowing sun-like core behind a glass window", "seed": 3},
         "orbital_weapon_platforms": {"subject": "a large armed space station with a long cannon barrel and solar panel wings", "seed": 1},
         "space_based_solar_power": {"subject": "a vast orbiting solar panel array sending a thin red energy beam downward", "seed": 0},
@@ -783,21 +792,21 @@ ICONS: dict[str, dict[str, dict]] = {
         "molecular_assemblers": {"subject": "a cluster of coloured atom spheres being snapped together by tiny robotic arms", "seed": 0},
         "orbital_manufacturing": {"subject": "a space station module with a robotic arm assembling a glowing crystal", "seed": 1},
         "programmable_matter": {"subject": "a shimmering silver liquid-metal blob reshaping itself into a cube and a sphere", "seed": 1},
-        "von_neumann_machines": {"subject": "a small boxy silver robot factory on a grey asteroid assembling a smaller copy of itself with its own robotic arms", "seed": None},
+        "von_neumann_machines": {"subject": "a small boxy silver robot factory on a grey asteroid assembling a smaller copy of itself with its own robotic arms", "seed": 3},
         "quantum_materials": {"subject": "a glowing iridescent crystal block levitating above a superconducting disc", "seed": 1},
         "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 1},
         "mind_backups": {"subject": "a glowing crystal data cube with the faint shape of a brain inside", "seed": 1},
         "neural_lace": {"subject": "a delicate glowing silver mesh net shaped like a human brain", "seed": 1},
         "post-scarcity_economy": {"subject": "an overflowing cornucopia horn spilling fruit, bread and gleaming gadgets", "seed": 1},
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
-        "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": None},
-        "self_directed_evolution": {"subject": "a glass bell jar holding a small pale salamander-like figure with feathery pink gills and large dark eyes, a thin double helix of light curling up beside it", "seed": None},
-        "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": None},
-        "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": None},
-        "liquid_democracy": {"subject": "a glowing blue fingerprint pressed onto a paper ballot, thin lines of light running from it to many small hands", "seed": None},
-        "geoengineering": {"subject": "a white high-altitude jet trailing a pale haze across a deep blue sky, the sun dimmed behind it", "seed": None},
-        "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": None},
-        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": None},
+        "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": 3},
+        "self_directed_evolution": {"subject": "a glass bell jar holding a small pale salamander-like figure with feathery pink gills and large dark eyes, a thin double helix of light curling up beside it", "seed": 1},
+        "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": 0},
+        "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": 1},
+        "liquid_democracy": {"subject": "a big glowing blue fingerprint with thin glowing lines branching from it to a ring of small round dots", "seed": 1},
+        "geoengineering": {"subject": "a jet plane flying in front of a big round sun, a thick white trail of mist behind it veiling half of the sun", "seed": 1},
+        "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": 1},
+        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": 1},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {
@@ -1199,10 +1208,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
         # Automation Policy (era 13 spec § 7.1): placeholders borrow other law icons until these are rendered.
-        "law_unrestricted_automation": {"subject": "a bright orange industrial robot arm welding a car door on a factory line, sparks flying", "seed": None},
-        "law_robot_tax": {"subject": "a small white humanoid robot dropping a gold coin into a slot in a black iron strongbox", "seed": None},
-        "law_human_labor_quotas": {"subject": "a worker's yellow hard hat resting on a wrench, a switched-off robot arm folded down behind it", "seed": None},
-        "law_automation_dividend": {"subject": "a white robot hand pouring gold coins from a tipped steel cog into a row of open cupped human hands", "seed": None},
+        "law_unrestricted_automation": {"subject": "a bright orange industrial robot arm welding a car door on a factory line, sparks flying", "seed": 3},
+        "law_robot_tax": {"subject": "a small white humanoid robot dropping a gold coin into a slot in a black iron strongbox", "seed": 2},
+        "law_human_labor_quotas": {"subject": "a worker's yellow hard hat resting on a wrench, a switched-off robot arm folded down behind it", "seed": 0},
+        "law_automation_dividend": {"subject": "a white robot hand pouring gold coins from a tipped steel cog into a row of open cupped human hands", "seed": 2},
         # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md). Closed
         # books with plain covers: an open book or an unrolled charter gets written on.
         "law_executive_tribunals": {"subject": "a royal crown resting on top of a thick closed leather-bound book with a plain unmarked cover", "seed": 2},
@@ -1287,7 +1296,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_restorative_justice": {"subject": "a cracked clay pot held together by thick metal staples across its cracks and a tight band of twine", "seed": 0},
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
-        "law_liquid_democracy": {"subject": "a wooden ballot box with a stream of small glowing paper ballots flowing in and out of its slot like water", "seed": None},
+        "law_liquid_democracy": {"subject": "a wooden ballot box with a stream of small glowing paper ballots flowing in and out of its slot like water", "seed": 1},
         # Electoral Finance
         "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
@@ -1331,11 +1340,11 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
         # Bodily Autonomy (era 13 spec § 7.1): placeholders borrow Human Purity's, Basic
         # Protections' and Anti-Discrimination Laws' icons until these are painted.
-        "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": None},
-        "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": None},
-        "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": None},
+        "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": 1},
+        "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": 1},
+        "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": 0},
         # Clade Citizenship (era 13 spec § 7.3) borrows Unrestricted Augmentation's icon.
-        "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": None},
+        "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": 0},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
@@ -1415,12 +1424,12 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_universal_basic_income": {"subject": "a sturdy knotted rope safety net slung taut between two thick wooden posts", "seed": 1},
         # Frontier AI Control (era 13 spec § 7.1): placeholders borrow other laws'
         # icons until these are painted. Unreviewed subjects.
-        "law_no_frontier_ai_policy": {"subject": "a plain closed cardboard box with a coiled unplugged power cable lying on its lid", "seed": None},
-        "law_private_ai_labs": {"subject": "a glowing blue computer chip resting on a short stack of gold coins", "seed": None},
-        "law_national_ai_licensing": {"subject": "a glowing blue computer chip with a paper license tag tied to it by a string and stamped with a plain red wax seal", "seed": None},
-        "law_state_ai_monopoly": {"subject": "a glowing blue computer chip locked inside a small heavy steel safe with its door ajar", "seed": None},
-        "law_international_ai_oversight": {"subject": "a glowing blue computer chip under a large brass magnifying glass held on a stand, a small globe beside it", "seed": None},
-        "law_open_weights": {"subject": "a glowing blue computer chip in an open wooden box, its lid thrown back and rays of light spilling out", "seed": None},
+        "law_no_frontier_ai_policy": {"subject": "a plain closed cardboard box with a coiled unplugged power cable lying on its lid", "seed": 2},
+        "law_private_ai_labs": {"subject": "a glowing blue computer chip resting on a short stack of gold coins", "seed": 1},
+        "law_national_ai_licensing": {"subject": "a glowing blue computer chip with a paper license tag tied to it by a string and stamped with a plain red wax seal", "seed": 1},
+        "law_state_ai_monopoly": {"subject": "a glowing blue computer chip locked inside a small heavy steel safe with its door ajar", "seed": 2},
+        "law_international_ai_oversight": {"subject": "a glowing blue computer chip under a large brass magnifying glass held on a stand, a small globe beside it", "seed": 3},
+        "law_open_weights": {"subject": "a glowing blue computer chip in an open wooden box, its lid thrown back and rays of light spilling out", "seed": 2},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1586,7 +1595,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_grand_monuments": {"subject": "a tall grey stone obelisk with a golden pyramid tip on a stepped stone base", "seed": 0},
         "je_heir_education": {"subject": "a small gold crown resting on a stack of three closed leather-bound books with blank covers", "seed": 1},
         "je_human_augmentation": {"subject": "a polished steel prosthetic hand with an open palm, brass pistons and gears showing at the wrist", "seed": 3},
-        "je_morphological_freedom": {"subject": "a tall oval standing mirror on a wooden frame, a pair of pointed fox ears on a headband hanging from one corner", "seed": None},
+        "je_morphological_freedom": {"subject": "a tall oval standing mirror on a wooden frame, a pair of pointed fox ears on a headband hanging from one corner", "seed": 3, "solid": True},
         "je_mental_health_crisis": {"subject": "a featureless grey plaster mannequin head in profile with a tangled knot of black wire rising from the top of it", "seed": 0},
         "je_post_scarcity": {"subject": "a golden cornucopia horn spilling ripe fruit, golden wheat and small brass gears", "seed": 1},
         "je_strategic_reserve": {"subject": "a neat stack of olive-green wooden ammunition crates and rust-red steel oil barrels with a brown burlap grain sack on top", "seed": 1},
@@ -2114,7 +2123,7 @@ ICONS: dict[str, dict[str, dict]] = {
                                                   "wagon heaped with coal", "seed": 0,
                                        "now": f"{_GI}/trade_icons/max_tariffs.dds"},
         "policy_aerosol_injection": {"subject": "a small white jet aircraft high over a blue globe, a pale grey haze "
-                                                "spreading behind it under a dimmed yellow sun", "seed": None,
+                                                "spreading behind it under a dimmed yellow sun", "seed": 3,
                                      "now": f"{_GI}/un_icons/topic_climate.dds"},
     },
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
@@ -2309,6 +2318,49 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_debris_laser_broom": {"subject": "an observatory dome on the ground firing one thick straight laser beam up at a small jagged rock fragment", "seed": 1},
         # "Space tug" drew a sea tugboat with a fishing net on all four seeds.
         "pm_debris_fusion_sweepers": {"subject": "a squat cylindrical rocket spacecraft with a big round engine bell and stubby fins, towing a wide round net bulging with jagged rocks behind it on a thick cable", "seed": 3},
+        # Era 13 phase 3 (#1289-#1291), on other methods' cat_* glyphs until now. The Construction
+        # Site's twin shares the sector's icon, as its name does.
+        "pm_fusion_torch_reclamation": {"subject": "a thick round nozzle pointing straight down and blasting one broad straight jet of plasma onto a heap of chunky twisted scrap metal beams", "seed": 0},
+        "pm_base_building_aneutronic_fusion_power": {"subject": "a fat ring-shaped donut reactor lying flat on a low square base, a thick zigzag lightning bolt springing straight up out of its hole", "seed": 0},
+        "pm_vactrains": {"subject": "a sleek bullet-nosed passenger capsule with a row of round windows, inside a long thick straight tube raised on two stout pylons, seen from the side", "seed": 0},
+        "pm_vactrain_freight": {"subject": "a sleek bullet-nosed capsule carrying a row of stacked shipping containers, inside a long thick straight tube raised on two stout pylons, seen from the side", "seed": 0},
+        "pm_self_replicating_miners": {"subject": "a squat boxy robot with a thick drill arm standing on a lumpy asteroid, a half-built smaller copy of itself beside it", "seed": 2},
+        "pm_self_replicating_construction": {"subject": "a big squat robot with a thick jointed arm lowering a heavy steel girder onto a half-built smaller copy of itself", "seed": 2},
+        "pm_te_direct_construction_self_replicating": {"use": f"{_GI}/production_method_icons/pm_self_replicating_construction.dds"},
+        # The cat_* glyphs replaced era by era (owner, 2026-11-01): eras 1-5, flagships and
+        # the hidden maintenance methods aside. Vanilla colours its ladders: automation and
+        # rail green, passenger methods purple (passenger_trains), the rest bronze. The
+        # colours below are vanilla's top and bottom quarters, measured on six green and
+        # three purple methods and scaled by the bronze fit's ratios. A "no X" step is the X
+        # inside a prohibition ring, as vanilla's no_passenger_trains is. FLUX draws the ring
+        # without its bar, so a "no" step's pick is a seed past the rendered ones: vanilla's ring
+        # and bar drawn around the object of one of them (~/flux_runs/tools/no_ring.py, off-repo
+        # like a retouch; the committed DDS is the record).
+        "pm_no_water_personal_transport": {"subject": "a small passenger steamboat inside a thick round ring with one thick diagonal bar across it", "seed": 4,
+                                           "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_sailing_ships": {"subject": "a three-masted passenger sailing ship with full square sails, seen from the side", "seed": 2,
+                             "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_steam_paddleboats": {"subject": "a side-wheel paddle steamer with a tall smokestack and a big round paddle box, seen from the side", "seed": 0,
+                                 "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_partial_bulk_transport": {"subject": "a mule pulling a small heaped ore cart along a short stretch of narrow rails, seen from the side", "seed": 0,
+                                      "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_manual_batch_processing": {"subject": "a big round open wooden vat on legs with a long wooden paddle standing in it", "seed": 1,
+                                       "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_continuous_processing": {"subject": "three tall round chemical columns of different heights joined by thick pipes", "seed": 1,
+                                     "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_power_manual_operation": {"subject": "a big spoked valve handwheel on a thick pipe beside a large lever switch", "seed": 1,
+                                      "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_power_centralized_control_systems": {"subject": "a sloped control desk with a row of big round dial gauges and short levers", "seed": 3,
+                                                 "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_pharma_alkaloid_extraction": {"subject": "a round poppy seed head on a curved stem beside a squat glass flask", "seed": 1},
+        "pm_pharma_synthetic_chemistry": {"subject": "a round-bottomed glass flask clamped on a stand over a small burner, a squat pill bottle beside it", "seed": 0},
+        "pm_grand_monument_site": {"subject": "a tall obelisk wrapped in wooden scaffolding with a tall wooden crane beside it", "seed": 1},
+        # The State Youth Centers' philosophies (Family Policy), open from era 3 with the laws that allow the building.
+        "pm_voluntary_daycare": {"subject": "a wooden rocking horse beside a stack of three toy building blocks", "seed": 0},
+        "pm_communal_child_rearing": {"subject": "a long low communal dormitory house with a row of small children's cots lined up in front of it", "seed": 1},
+        "pm_youth_cadre_programs": {"subject": "a snare drum with two crossed drumsticks on top, a small triangular pennant flag on a tall pole beside it", "seed": 1},
+        "pm_behavioral_conditioning": {"subject": "a big brass hand bell on a stand above a small round feeding bowl", "seed": 0},
+        "pm_eugenics_programs": {"subject": "a large pair of brass measuring calipers standing open beside a tall glass specimen jar", "seed": 0},
     },
     # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
     # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
@@ -2401,6 +2453,13 @@ ICONS: dict[str, dict[str, dict]] = {
                                 "yellow and red zones, standing on a short stack of plain gold coins stamped with a "
                                 "small star", "seed": 2,
                      "now": f"{_GI}/banking_icons/budget.dds"},
+    },
+    # Local Climate (docs/systems/mod_systems/local_climate.md): the state panel's climate
+    # item and concept_local_climate, on vanilla's tropical climate trait until now.
+    "state_status": {
+        "local_climate": {"subject": "a fat glass thermometer with a big round red bulb, a small bright yellow sun beside "
+                                     "its top and a small pale blue snowflake beside its bottom",
+                          "seed": None, "now": f"{_GI}/state_trait_icons/tropical_climate.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.

@@ -181,7 +181,7 @@ ai_agents = {
 	# Creation PM for Software Industries (from Brain-Computer Interfaces), Automated Bureaucracy law (from
 	# Generative AI), the Frontier AI Control law group (era 13 spec § 7.1; every country moves to Private Labs)
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/generative_ai.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/ai_agents.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -201,7 +201,7 @@ self_driving_laboratories = {
 	# AI that designs, runs and reads its own experiments (era 13 spec § 6.2): AI Assisted Research PM for
 	# Universities (from Brain-Computer Interfaces)
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/additive_manufacturing.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/self_driving_laboratories.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -224,7 +224,7 @@ humanoid_robotics = {
 	# (from Brain-Computer Interfaces), the Automation Policy law group's Robot Tax, Human Labor Quotas and
 	# Automation Dividend laws (§ 7.1)
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/autonomous_vehicles.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/humanoid_robotics.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -436,7 +436,7 @@ fusion_power = {
 autonomous_weapons = {
 	# Weapons that select and engage targets on their own (era 13 spec § 6.4): Robotic Soldiers unit (from JADC2)
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/swarm_technology.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/autonomous_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -457,7 +457,7 @@ advanced_fission = {
 	# Generation IV reactors, molten salt and thorium (era 13 spec § 7.7): the Generation IV Reactors base method
 	# for the Nuclear Plant, its second since Nuclear Energy (era 7). Military, as the reactor line is
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/nuclear_energy.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/advanced_fission.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -604,7 +604,7 @@ ai_tutors = {
 	# Internet) and .37 (the state's syllabus, under State-Controlled Internet or a Ministry of Propaganda or of
 	# Thought Control).
 	era = era_11
-	texture = "gfx/interface/icons/invention_icons/digital_education.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/ai_tutors.dds"
 	category = society
 
 	unlocking_technologies = {

@@ -5888,7 +5888,7 @@ pm_microgravity_alloying = {
 # Microgravity Alloying's iron, no coal and no launch capacity, for over three
 # times the electricity, at the same steel and staff.
 pm_fusion_torch_reclamation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_torch_reclamation.dds"
 
 	unlocking_technologies = {
 		aneutronic_fusion
@@ -7328,7 +7328,7 @@ pm_bioengineered_rubber = {
 # employment that pm_ai_managed_chemical_plant removes, so the automation
 # group can't drive a profession negative.
 pm_pharma_alkaloid_extraction = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_alkaloid_extraction.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -7363,7 +7363,7 @@ pm_pharma_synthetic_chemistry = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_synthetic_chemistry.dds"
 
 	unlocking_technologies = {
 		antibiotics
@@ -7888,11 +7888,11 @@ pm_synthetic_biomass = {
 }
 
 pm_manual_batch_processing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_manual_batch_processing.dds"
 }
 
 pm_continuous_processing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_processing.dds"
 
 	unlocking_technologies = {
 		nitrogen_fixation
@@ -11480,7 +11480,7 @@ pm_base_building_compact_modular_fusion_power = {
 # the other reactor bases, so its AI-managed tier is its own method,
 # pm_ai_managed_power_plant_aneutronic (#996: each cut must be exact).
 pm_base_building_aneutronic_fusion_power = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_purple_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_base_building_aneutronic_fusion_power.dds"
 
 	unlocking_technologies = {
 		aneutronic_fusion
@@ -11583,11 +11583,11 @@ pm_base_building_advanced_renewable_power = {
 }
 
 pm_power_manual_operation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_green_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_power_manual_operation.dds"
 }
 
 pm_power_centralized_control_systems = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_power_centralized_control_systems.dds"
 
 	unlocking_technologies = {
 		oil_turbine
@@ -14605,7 +14605,7 @@ pm_autonomous_trains = {
 # 55 +5. Heavy maintenance tier, as every freight method from Containerized Cargo on
 # (pm_maintenance_graded_standard/_heavy); code 8 in te_state_railway_train_code.
 pm_vactrain_freight = {
-	texture = "gfx/interface/icons/production_method_icons/cat_train_gold_p4.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_vactrain_freight.dds"
 
 	unlocking_technologies = {
 		vactrains
@@ -14797,7 +14797,7 @@ pm_maglev_trains = {
 # its 10 +5 (Bullet Trains 5, Maglev 10); inputs cost about 44% of output at base prices,
 # within the passenger tiers' 40-45% (transport_goods.md). No staff of its own, as Maglev.
 pm_vactrains = {
-	texture = "gfx/interface/icons/production_method_icons/cat_train_purple_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_vactrains.dds"
 
 	unlocking_technologies = {
 		vactrains
@@ -15039,11 +15039,11 @@ pm_global_ports = {
 }
 
 pm_no_water_personal_transport = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_purple_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_water_personal_transport.dds"
 }
 
 pm_sailing_ships = {
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sailing_ships.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -15069,7 +15069,7 @@ pm_steam_paddleboats = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_steam_paddleboats.dds"
 
 	unlocking_technologies = {
 		gantry_cranes
@@ -16637,7 +16637,7 @@ pm_space_colony_vacation = {
 # 104,050 a level with neither upgrade and 142,450 with both, against the Mining Colony's
 # 37,000 and 94,600 (test_deep_sea_rebalance.py, SelfReplicatingMiners).
 pm_self_replicating_miners = {
-	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p5.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_self_replicating_miners.dds"
 
 	unlocking_technologies = {
 		von_neumann_machines
@@ -17328,7 +17328,7 @@ pm_nanomaterial_buildings = {
 # (pm_employment_audit), and its Construction Site twin is
 # pm_te_direct_construction_self_replicating (te_construction_market_pms.txt).
 pm_self_replicating_construction = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_self_replicating_construction.dds"
 
 	unlocking_technologies = {
 		von_neumann_machines
@@ -18908,7 +18908,7 @@ INJECT:pm_road_carts = {
 }
 
 pm_partial_bulk_transport = {
-	texture = "gfx/interface/icons/production_method_icons/cat_train_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_partial_bulk_transport.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19800,7 +19800,7 @@ pm_space_tourism = {
 }
 
 pm_voluntary_daycare = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_voluntary_daycare.dds"
 
 	building_modifiers = {
 		level_scaled = {
@@ -19832,7 +19832,7 @@ pm_voluntary_daycare = {
 }
 
 pm_communal_child_rearing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_communal_child_rearing.dds"
 
 	unlocking_laws = {
 		law_communal_child_rearing
@@ -19870,7 +19870,7 @@ pm_communal_child_rearing = {
 }
 
 pm_youth_cadre_programs = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_youth_cadre_programs.dds"
 
 	unlocking_laws = {
 		law_single_party_state
@@ -19918,7 +19918,7 @@ pm_youth_cadre_programs = {
 }
 
 pm_behavioral_conditioning = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_behavioral_conditioning.dds"
 
 	unlocking_laws = {
 		law_secret_police
@@ -19960,7 +19960,7 @@ pm_behavioral_conditioning = {
 }
 
 pm_eugenics_programs = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_eugenics_programs.dds"
 
 	unlocking_laws = {
 		law_state_eugenics_program
