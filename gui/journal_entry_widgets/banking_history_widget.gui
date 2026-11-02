@@ -52,6 +52,13 @@ types te_banking_history_types
 	### in the overview's Cycle Phase cell (banking_dash_phase_*_value).
 	### Panic and Frenzy share red, which is why six bars cover seven phases. If either the ladder or a phase
 	### colour moves, move it here too.
+	###
+	### THE FLOOR AND THE CAP ARE BLOCKS. A bar's floor (2) and its cap (4) are in
+	### the axis's units, so a chart drawn taller (the full-screen viewer) thins
+	### them by the height ratio. "phase_value" (all six bars: one blockoverride
+	### fills every block of its name, as vanilla's game_rules.gui ai_icon_size)
+	### and "phase_cover_value" keep today's as defaults; the chart's instance
+	### sets both (scripts/generators/te_history_charts/banking.gui.in).
 	type te_history_bar_cycle_phase = widget {
 		size = { 100% 100% }
 
@@ -68,7 +75,9 @@ types te_banking_history_types
 			color = { 0.88 0.34 0.34 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Downturn (10-24) — gold.
@@ -84,7 +93,9 @@ types te_banking_history_types
 			color = { 1.0 0.674 0.454 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Stagnation (25-39) — yellow.
@@ -100,7 +111,9 @@ types te_banking_history_types
 			color = { 1.0 0.97 0.66 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Stable (40-59) — white, the phase with nothing to say about it.
@@ -116,7 +129,9 @@ types te_banking_history_types
 			color = { 0.94 0.95 0.88 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Expansion (60-74) — green.
@@ -132,7 +147,9 @@ types te_banking_history_types
 			color = { 0.39 0.67 0.33 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Boom (75-87) — blue.
@@ -148,7 +165,9 @@ types te_banking_history_types
 			color = { 0.41 0.67 0.74 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### The shared cover, declared last so it draws over whichever colour
@@ -165,7 +184,9 @@ types te_banking_history_types
 			color = { 0.05 0.06 0.08 0.78 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+			block "phase_cover_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+			}
 		}
 	}
 
@@ -268,6 +289,12 @@ types te_banking_history_types
 			blockoverride "bar_body" {
 				te_history_bar_cycle_phase = {
 					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
+					blockoverride "phase_value" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+					}
+					blockoverride "phase_cover_value" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+					}
 				}
 			}
 		}
