@@ -1877,7 +1877,7 @@ pm_high_pressure_hydraulic_pump_building_tech_metals_mine = {
 }
 
 pm_continuous_miners_building_coal_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -1920,7 +1920,7 @@ pm_continuous_miners_building_coal_mine = {
 }
 
 pm_continuous_miners_building_iron_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -1963,7 +1963,7 @@ pm_continuous_miners_building_iron_mine = {
 }
 
 pm_continuous_miners_building_lead_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -2006,7 +2006,7 @@ pm_continuous_miners_building_lead_mine = {
 }
 
 pm_continuous_miners_building_sulfur_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -2054,7 +2054,7 @@ pm_continuous_miners_building_gold_mine = {
 			country_minting_add = 3000
 		}
 	}
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -2097,7 +2097,7 @@ pm_continuous_miners_building_gold_mine = {
 }
 
 pm_continuous_miners_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_continuous_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		transistors
@@ -2931,7 +2931,7 @@ pm_electrified_rotary_drilling_rigs = {
 }
 
 pm_offshore_rigs = {
-	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_offshore_rigs.dds"
 
 
 	unlocking_technologies = {
@@ -2975,7 +2975,7 @@ pm_offshore_rigs = {
 }
 
 pm_directional_drilling_rigs = {
-	texture = "gfx/interface/icons/production_method_icons/cat_drill_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_directional_drilling_rigs.dds"
 
 
 	unlocking_technologies = {
@@ -4294,7 +4294,7 @@ pm_automated_labs = {
 }
 
 pm_multimodal_transit = {
-	texture = "gfx/interface/icons/production_method_icons/cat_train_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_multimodal_transit.dds"
 
 	unlocking_technologies = {
 		modern_urban_planning
@@ -4419,7 +4419,7 @@ INJECT:pm_public_motor_carriages = {
 }
 
 pm_department_stores = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_department_stores.dds"
 	unlocking_technologies = {
 		modern_urban_planning
 	}
@@ -4708,7 +4708,7 @@ pm_secular_society = {
 }
 
 pm_high_pressure_sodium_streetlights = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_high_pressure_sodium_streetlights.dds"
 
 	unlocking_technologies = {
 		television_broadcasting
@@ -4823,7 +4823,7 @@ pm_smart_led_streetlights = {
 }
 
 pm_teletype_communications = {
-	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_teletype_communications.dds"
 	unlocking_technologies = {
 		transistors
 	}
@@ -5099,7 +5099,7 @@ pm_material_handling_equipment = {
 }
 
 pm_electrochemical_machining = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_electrochemical_machining.dds"
 	unlocking_technologies = {
 		laser_technology
 	}
@@ -5394,7 +5394,7 @@ pm_modern_cartridges = {
 }
 
 pm_smart_fuzes = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_fuzes.dds"
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -6302,7 +6302,7 @@ INJECT:pm_bone_china = {
 }
 
 pm_injection_molding = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_injection_molding.dds"
 
 	unlocking_technologies = {
 		plastic_mass_production
@@ -6822,7 +6822,7 @@ pm_nylon = {
 }
 
 pm_microfiber_blends = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_microfiber_blends.dds"
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -6862,7 +6862,7 @@ pm_microfiber_blends = {
 }
 
 pm_elastomeric_blends = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_elastomeric_blends.dds"
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -7189,7 +7189,7 @@ pm_styrene_butadiene_rubber = {
 }
 
 pm_ziegler_natta_catalyzation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ziegler_natta_catalyzation.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -7396,7 +7396,7 @@ pm_pharma_synthetic_chemistry = {
 }
 
 pm_pharma_antibiotic_fermentation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_antibiotic_fermentation.dds"
 
 	unlocking_technologies = {
 		antibiotic_mass_production
@@ -8521,7 +8521,7 @@ pm_vhf_and_uhf_transmission = {
 }
 
 pm_satellite_communications = {
-	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_satellite_communications.dds"
 
 	unlocking_technologies = {
 		satellite_communications
@@ -8965,7 +8965,7 @@ pm_fusion_battery_appliances = {
 }
 
 pm_transistors = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_transistors.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -8998,7 +8998,7 @@ pm_transistors = {
 }
 
 pm_integrated_circuits = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_integrated_circuits.dds"
 	unlocking_technologies = {
 		integrated_circuits
 	}
@@ -9319,7 +9319,7 @@ pm_nanorobots = {
 }
 
 pm_modern_farming = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_farming.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -9355,7 +9355,7 @@ pm_modern_farming = {
 }
 
 pm_modern_farming_rice_farm = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_farming.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -9447,7 +9447,7 @@ pm_designed_crops_rice_farm = {
 }
 
 pm_modern_potatoes = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_potatoes.dds"
 
 	unlocking_production_methods = {
 		pm_modern_farming
@@ -9472,7 +9472,7 @@ pm_modern_potatoes = {
 }
 
 pm_modern_apple_orchards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_apple_orchards.dds"
 
 	unlocking_production_methods = {
 		pm_modern_farming
@@ -9498,7 +9498,7 @@ pm_modern_apple_orchards = {
 }
 
 pm_modern_citrus_orchards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_citrus_orchards.dds"
 
 	unlocking_production_methods = {
 		pm_modern_farming
@@ -9524,7 +9524,7 @@ pm_modern_citrus_orchards = {
 }
 
 pm_modern_fig_orchards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_fig_orchards.dds"
 
 	unlocking_production_methods = {
 		pm_modern_farming
@@ -9652,7 +9652,7 @@ pm_designed_fig_orchards = {
 }
 
 pm_hydraulic_equipment = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hydraulic_equipment.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -9780,7 +9780,7 @@ pm_automated_harvesters_and_planters = {
 }
 
 pm_hydraulic_equipment_building_rice_farm = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hydraulic_equipment.dds"
 
 	unlocking_technologies = {
 		green_revolution
@@ -9908,7 +9908,7 @@ pm_automated_harvesters_and_planters_building_rice_farm = {
 }
 
 pm_debarkers_and_chippers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_debarkers_and_chippers.dds"
 	unlocking_technologies = {
 		integrated_circuits
 	}
@@ -9954,7 +9954,7 @@ INJECT:pm_increased_hardwood = {
 }
 
 pm_skidders_and_forwarders = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_skidders_and_forwarders.dds"
 	unlocking_technologies = {
 		integrated_circuits
 	}
@@ -10002,7 +10002,7 @@ pm_purse_seine_nets = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_purse_seine_nets.dds"
 
 
 	unlocking_technologies = {
@@ -10694,7 +10694,7 @@ REPLACE:pm_aeroplane_production = {
 }
 
 pm_aeroplane_production_2 = {
-	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_aeroplane_production_2.dds"
 
 	unlocking_technologies = {
 		advanced_military_aircraft
@@ -12036,7 +12036,7 @@ pm_sound_film = {
 }
 
 pm_broadcast_television = {
-	texture = "gfx/interface/icons/production_method_icons/cat_film_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_broadcast_television.dds"
 
 	unlocking_technologies = {
 		television_broadcasting
@@ -13837,7 +13837,7 @@ pm_catalytic_cracking = {
 }
 
 pm_polymerization_processes = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_polymerization_processes.dds"
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 27.84 # AUTO-GENERATED: industrial emissions
@@ -14724,7 +14724,7 @@ pm_double-decker_passenger_carriages = {
 }
 
 pm_bullet_trains = {
-	texture = "gfx/interface/icons/production_method_icons/cat_train_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_bullet_trains.dds"
 
 	unlocking_technologies = {
 		modern_urban_planning
@@ -15100,7 +15100,7 @@ pm_diesel_electric_ferries = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_diesel_electric_ferries.dds"
 
 	unlocking_technologies = {
 		advanced_submarine_technology
@@ -15163,7 +15163,7 @@ pm_modern_cruise_ships = {
 # moment motor_ships supply unlocks.
 
 pm_motor_trawlers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_motor_trawlers.dds"
 
 	unlocking_technologies = {
 		advanced_submarine_technology
@@ -15201,7 +15201,7 @@ pm_motor_trawlers = {
 }
 
 pm_motor_whaling_ships = {
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_motor_whaling_ships.dds"
 
 	unlocking_technologies = {
 		advanced_submarine_technology
@@ -15977,11 +15977,11 @@ pm_ai_mediated_mind_sharing = {
 }
 
 pm_no_rockets = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_rockets.dds"
 }
 
 pm_chemical_rockets = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_chemical_rockets.dds"
 	unlocking_technologies = {
 		guided_missiles
 	}
@@ -17178,7 +17178,7 @@ REPLACE:pm_arc_welded_buildings = {
 }
 
 pm_reinforced_concrete_buildings = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_reinforced_concrete_buildings.dds"
 
 	unlocking_technologies = {
 		modern_urban_planning
@@ -17228,7 +17228,7 @@ pm_reinforced_concrete_buildings = {
 }
 
 pm_advanced_construction = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_construction.dds"
 
 	unlocking_technologies = {
 		prefabricated_construction
@@ -17432,7 +17432,7 @@ pm_prefabricated_building_components = {
 }
 
 pm_tower_cranes = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_tower_cranes.dds"
 
 	unlocking_technologies = {
 		modern_urban_planning
@@ -17648,7 +17648,7 @@ pm_diesel_shipbuilding = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_diesel_shipbuilding.dds"
 
 
 	unlocking_technologies = {
@@ -17900,7 +17900,7 @@ REPLACE:pm_financial_district_principle_divine_economics_2 = {
 }
 
 pm_electronic_brokerage = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cube_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18479,7 +18479,7 @@ pm_advanced_research_no_effect = {
 }
 
 pm_earth_orbit = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_earth_orbit.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18516,7 +18516,7 @@ pm_earth_orbit = {
 }
 
 pm_moon_mission = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_moon_mission.dds"
 
 	unlocking_technologies = {
 		space_exploration
@@ -18740,7 +18740,7 @@ pm_interstellar_mission = {
 }
 
 pm_national_park = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_national_park.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18775,7 +18775,7 @@ pm_national_park = {
 }
 
 pm_national_forest = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_national_forest.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -18812,7 +18812,7 @@ pm_national_forest = {
 }
 
 pm_national_wildlife_refuge = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_national_wildlife_refuge.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19635,7 +19635,7 @@ pm_trade_center_trade_quantity_advanced_4 = {
 }
 
 pm_tourism = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_tourism.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19662,7 +19662,7 @@ pm_tourism = {
 }
 
 pm_mass_tourism = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_mass_tourism.dds"
 
 	unlocking_technologies = {
 		television_broadcasting
@@ -19695,7 +19695,7 @@ pm_mass_tourism = {
 }
 
 pm_jet_age_tourism = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_jet_age_tourism.dds"
 
 	unlocking_technologies = {
 		space_exploration
@@ -20300,7 +20300,7 @@ pm_maintenance_graded_heavy = {
 # ---- Default "No Mitigation" Methods (zero cost, zero effect) ----
 
 pm_no_tailings_management = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_tailings_management.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20308,7 +20308,7 @@ pm_no_tailings_management = {
 }
 
 pm_no_facility_emission_standards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_facility_emission_standards.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20316,7 +20316,7 @@ pm_no_facility_emission_standards = {
 }
 
 pm_no_synthesis_scrubbing = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_synthesis_scrubbing.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20324,7 +20324,7 @@ pm_no_synthesis_scrubbing = {
 }
 
 pm_no_precision_environmental_management = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_precision_environmental_management.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20332,7 +20332,7 @@ pm_no_precision_environmental_management = {
 }
 
 pm_no_effluent_filtration = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_effluent_filtration.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20340,7 +20340,7 @@ pm_no_effluent_filtration = {
 }
 
 pm_no_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_emissions_control.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20380,7 +20380,7 @@ pm_no_emissions_control = {
 # Operational cost: +1 electricity
 
 pm_settling_ponds = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_settling_ponds.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20415,7 +20415,7 @@ pm_settling_ponds = {
 # Operational cost: +1 electricity
 
 pm_ventilation_systems = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ventilation_systems.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20450,7 +20450,7 @@ pm_ventilation_systems = {
 # Operational cost: +1 electricity
 
 pm_basic_fume_scrubbers = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_basic_fume_scrubbers.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20485,7 +20485,7 @@ pm_basic_fume_scrubbers = {
 # Operational cost: none (improved farming practices)
 
 pm_improved_crop_rotation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_improved_crop_rotation.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20503,7 +20503,7 @@ pm_improved_crop_rotation = {
 # Operational cost: none (reuse of waste fiber)
 
 pm_waste_fiber_recovery = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_waste_fiber_recovery.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20523,7 +20523,7 @@ pm_waste_fiber_recovery = {
 # Operational cost: +2 electricity
 
 pm_tailings_treatment = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_tailings_treatment.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20573,7 +20573,7 @@ pm_tailings_treatment = {
 # Operational cost: +2 electricity
 
 pm_green_assembly = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_green_assembly.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20615,7 +20615,7 @@ pm_green_assembly = {
 # Operational cost: +3 electricity
 
 pm_closed_loop_synthesis = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_closed_loop_synthesis.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20655,7 +20655,7 @@ pm_closed_loop_synthesis = {
 # Operational cost: +1 fertilizer (chemicals)
 
 pm_precision_agriculture = {
-	texture = "gfx/interface/icons/production_method_icons/cat_wheat_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_precision_agriculture.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20694,7 +20694,7 @@ pm_precision_agriculture = {
 # Operational cost: +1 fertilizer (chemicals)
 
 pm_effluent_filtration = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_effluent_filtration.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20728,7 +20728,7 @@ pm_effluent_filtration = {
 }
 
 pm_basic_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_basic_emissions_control.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20760,7 +20760,7 @@ pm_basic_emissions_control = {
 }
 
 pm_advanced_emissions_control = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_emissions_control.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -20796,7 +20796,7 @@ pm_advanced_emissions_control = {
 # ---- No Glassworks Fume Ventilation (Default) ----
 
 pm_no_glassworks_fume_ventilation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_no_glassworks_fume_ventilation.dds"
 
 	unlocking_laws = {
 		law_no_ministry_of_the_environment
@@ -20810,7 +20810,7 @@ pm_no_glassworks_fume_ventilation = {
 # Operational cost: +1 electricity
 
 pm_glassworks_fume_extraction = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_glassworks_fume_extraction.dds"
 
 	unlocking_technologies = {
 		pollution_control
@@ -20856,7 +20856,7 @@ pm_glassworks_fume_extraction = {
 # Operational cost: +2 electricity
 
 pm_glassworks_closed_loop_recycling = {
-	texture = "gfx/interface/icons/production_method_icons/cat_leaf_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_glassworks_closed_loop_recycling.dds"
 
 	unlocking_laws = {
 		law_ministry_of_the_environment
@@ -22711,7 +22711,7 @@ pm_public_housing_high_rise_apartments = {
 }
 
 pm_public_housing_tower_blocks = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_public_housing_tower_blocks.dds"
 	ai_value = 16000
 
 	unlocking_technologies = {
