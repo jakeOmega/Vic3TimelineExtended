@@ -207,7 +207,9 @@ rows whose latitude and temperatures disagree badly (a 60° region with a
 
 *Heat v2 (§ 11) replaced the heat term, moved the penalty from attraction points to a
 percentage of migration attraction, and gave winters alone the latitude's
-amplification; § 5's formula and § 5.3's targets are phase 2's, kept as the record.*
+amplification; § 12 made winter's mildness a signed term with London neutral, so
+comfort can be a small bonus. § 5's formula and § 5.3's targets are phase 2's, kept
+as the record.*
 
 **Shape.** Comfort is a penalty, never a bonus *(designer's call)*: a mild
 climate costs nothing, and a harsh one costs migration attraction. Inside a
@@ -610,3 +612,123 @@ yearly refresh, and the new modifier reads them as percent meanwhile. That errs
 low almost everywhere (Georgia −15%, against −28%) but high where phase 2's heat
 overcounted a steady climate: Hawaii shows about −8% against −1%, Bermuda −10%
 against −4%; 12 regions err high in 1836. No repair: it lasts at most a year.
+
+## 12. Winter's mildness: London neutral, a small bonus (2026-11-01)
+
+### 12.1 Why
+
+The owner asked whether the Home Counties should be maximally comfortable. Under
+§ 11 cold cost only below a 0 °C winter mean, so London (5 °C) tied for best with
+47 other regions: Funchal, Medellín and Cape Town, but also Glasgow, Inverness
+and the Falklands, while Barcelona and San Francisco paid a little for heat or
+malaria. People prefer mild winters, and the preference shows strongly once
+incomes allow it: the US Sun Belt, Britons retiring to Spain; winter warmth is
+among the strongest predictors of where Americans moved between 1970 and 2000
+(Rappaport 2007, "Moving to nice weather"). The owner chose London as the
+neutral point, with a small bonus for milder winters (Madeira), and asked that
+this part shrink with technology but go fully only in eras 11+ ("personal
+heating or somesuch").
+
+### 12.2 Formula
+
+```
+winter'  = winter + winter warming
+cold     = 0.94 × max(0, 0 − winter') × (1 − cold_relief)                  frost
+share    = max(0, 1 − heat_raw / 20)                       a hot summer cancels the draw
+winter   = 0.6 × (max(0, 3 − winter') − max(0, min(winter', 15) − 3) × share)
+           × (1 − winter_relief)                                           signed
+penalty  = min(80, heat + cold + winter + dry + disease)                   no floor
+```
+
+- 3 °C is London's coldest-month mean in 1836 (5 °C less 2.07 of amplified
+  cooling), so London is neutral then and gains a little as the world warms.
+- The bonus stops growing at 15 °C, so it is at most 7.2%, against costs up to
+  80% *(designer's call: asymmetric magnitudes)*.
+- **A hot summer cancels the draw** (owner, 2026-11-01). The bonus shrinks with
+  the heat cost before relief and is gone at 20%. Without it, heat relief (0.8
+  by era 7) outran winter relief (0.2), and 191 regions netted a bonus in era 7,
+  95 of them hot and humid: Khartoum, with a 49 °C hottest day, read +2% while
+  London read 0 (#1313's review). People who prize mild winters avoid hot,
+  humid summers too (Rappaport). Before relief, since a cooled house doesn't
+  make the summer outside milder. A harsh winter's cost is untouched.
+- The frost weight fell from 1.6 to 0.94 so Yakutsk, which now also pays the
+  winter term, stays near 65%.
+- **Applied** as two fixed-sign modifiers: `local_climate_discomfort`
+  (−0.01 × the penalty) or `local_climate_amenity` (+0.01 × `te_climate_bonus`,
+  the penalty's negative part), each above 0.5. Nobody has seen a negative
+  multiplier work, and monetary policy's `te_fx_weak`/`_strong` made the same
+  choice.
+
+### 12.3 Relief
+
+A new type, `state_climate_winter_relief_add` (Winter Relief), closes the gap
+from both sides: a raw winter's cost and a mild one's draw shrink together, as
+heated, insulated homes make any winter bearable and a mild one matters less.
+So a carrier lowers a mild-wintered state's pull a little (Malta's 0.5 at
+Water-tube Boiler) while it raises a cold one's, as the owner chose ("the whole
+winter measure, bonus and cost together, shrinks").
+
+| Technology | Era | Winter relief | Why |
+|---|---|---|---|
+| Water-tube Boiler | 2 | 0.1 | a heated house |
+| Rural Electrification | 6 | 0.1 | light and heat through long evenings |
+| Advanced Structural Engineering | 10 | 0.2 | insulated homes |
+| Modern Material Science | 11 | 0.2 | heated, insulating fabrics: the owner's "personal heating" |
+| Compact Fusion Reactors | 12 | 0.2 | streets and arcades heated through winter |
+| Programmable Matter | 13 | 0.2 | habitats climate-controlled to order |
+
+So 0.2 by era 7 and 0.4 by era 10, against frost relief's 0.6 and 0.8, and
+gone only at era 13.
+
+### 12.4 Calibration
+
+Percent, negative a bonus, every carrier to each era:
+
+| Region | 1836 | Era 4 | Era 7 | Era 10 |
+|---|---|---|---|---|
+| Madeira (Funchal) | −7.1 | −6.4 | −5.6 | −4.2 |
+| Hawaii (Honolulu) | −5.4 | −4.8 | −5.1 | −3.9 |
+| Cape Colony | −4.5 | −4.1 | −3.7 | −2.8 |
+| Catalonia (Barcelona) | 0.4 | 0.4 | −1.6 | −1.3 |
+| Home Counties (London) | 0 | 0 | 0 | 0 |
+| Lowlands (Glasgow) | 0.8 | 0.7 | 0.6 | 0.5 |
+| Île-de-France (Paris) | 3.7 | 3.3 | 1.1 | 0.7 |
+| Massachusetts (Boston) | 14.0 | 11.4 | 5.9 | 3.7 |
+| Georgia (Savannah) | 27.3 | 15.6 | 3.3 | 1.6 |
+| West Bengal (Calcutta) | 50.3 | 36.3 | 8.1 | 4.0 |
+| Blue Nile (Khartoum) | 22.6 | 15.8 | 3.1 | 1.4 |
+| Moscow | 16.1 | 11.4 | 9.4 | 6.2 |
+| Yakutsk | 64.2 | 44.5 | 36.1 | 23.3 |
+
+- **The Sun Belt.** In 1836 Georgia costs more than Massachusetts; by era 7 air
+  conditioning has eased the South's heat while the North's winters still
+  count, and the order turns. The test pins it.
+- **Bengal** stays at 50: its summer cancels its mild winter's draw (§ 11.4's
+  target holds).
+- **Siberia** stays costly into the late eras (Yakutsk 23% at era 10), as the
+  Russian Far North emptied once subsidies stopped.
+- Across 675 regions in 1836: median 19.2%, 39 with a bonus over 0.5, 12
+  neither, 45 at 50 or more, 4 at the cap, the largest bonus 7.2. In era 7, 87
+  have a bonus, none of them a hot state.
+
+### 12.5 Not built: cool summers
+
+The owner asked about the Falklands, which stay cheap (2%): their winter is
+Glasgow's, and their problem is that summer never comes (warmest month 10 °C).
+A cool-summer cost would misfire on the Andes, where Bogotá, Quito and Cuzco
+(summers of 14–15 °C) were great population centers; what separates them from
+Stanley is the rest of the year, which the winter term already reads. The real
+cost of a cool summer is farming (no wheat), which belongs with agriculture
+from climate, set aside for later.
+
+### 12.6 Data: the fit per figure
+
+#1312's review found far stations' hottest days wrong for their places (Kumasi
+39.2 °C, Mbandaka 37.5 °C), because § 11.2's fit rule had been applied to the
+heat index only. It now applies to each figure on its own: a far or high
+station that misses the fit by 2.5 or more on a figure gives way to the fit for
+that figure (`heat_source` `CODE:Nkm;fit_hot_day` or `;fit_index`). Khartoum,
+Bauchi, Kumasi and Mbandaka took the fit's hot day, Caracas its heat index
+(its station is 861 m below the city), and Barquisimeto both. Mogadishu keeps
+Wajir's 39.4 °C from 584 km inland, 2.2 from a fit that can't see the coast.
+An `analog:` row must now copy its source's figures.

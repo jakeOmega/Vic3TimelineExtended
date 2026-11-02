@@ -1,11 +1,13 @@
 ﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.1, § 5.4).
 # Effects: common/scripted_effects/local_climate_effects.txt.
 #
-#   on_yearly_pulse_state     the yearly refresh of local_climate_discomfort, its one
-#                             refresh site (a different day per state across the year)
+#   on_yearly_pulse_state     the yearly refresh of local_climate_discomfort and
+#                             local_climate_amenity, their one refresh site (a different
+#                             day per state across the year)
 #   on_monthly_pulse_state    the first application, only on a state with no
-#                             te_climate_penalty_applied yet (a new game's first month,
-#                             a save from before this, a newly colonized state)
+#                             te_climate_bonus_applied yet (a new game's first month, a
+#                             save from before the winter axis, § 12, a newly colonized
+#                             state); the refresh sets it, so this runs once a state
 #   on_yearly_pulse_country   once a year, from the first country to pulse, a sample of
 #                             the mass migration targets; every ten years a debug.log
 #                             line with the decade's sums
@@ -39,7 +41,7 @@ local_climate_yearly_on_action = {
 
 local_climate_first_on_action = {
 	trigger = {
-		NOT = { has_variable = te_climate_penalty_applied }
+		NOT = { has_variable = te_climate_bonus_applied }
 	}
 	effect = {
 		te_update_local_climate_modifier = yes

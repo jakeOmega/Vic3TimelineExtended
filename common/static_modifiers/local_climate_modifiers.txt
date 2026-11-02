@@ -1,17 +1,22 @@
 ﻿# Local Climate (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5.1, § 11.1).
 # The share of its migration attraction a state's climate costs, applied as one modifier
 # with multiplier = the penalty in percent (te_climate_penalty, local_climate_values.txt),
-# refreshed by te_update_local_climate_modifier (local_climate_effects.txt). The
-# penalty is never negative, so the unit value is a cost and the multiplier never
-# turns it into a bonus. A _mult, not an add (§ 11.1): attraction floors at 0, so points
+# refreshed by te_update_local_climate_modifier (local_climate_effects.txt). A mild
+# winter can make the total a bonus (§ 12), which local_climate_amenity below applies with
+# the bonus as a positive multiplier: two fixed-sign modifiers, since no one has seen a
+# negative multiplier work (monetary policy's te_fx_weak/_strong chose the same). A _mult, not an add (§ 11.1): attraction floors at 0, so points
 # that every state of a hot, poor market shared pinned its poorer states there and
 # stalled the migration between them; a percentage scales each state's pull instead.
 # The game sums a state's percentages, so the cut weighs less where other modifiers add, and
 # more where famine, turmoil, pollution, blockade or devastation already cut: those can take a
 # hot state to 0 outright. By design (owner, 2026-11-01: no further cap; spec § 11.1).
-# The blank icon hides it from the state panel's modifier rows: the Local Climate
-# tile shows it (test_hidden_state_modifiers.py).
+# The blank icon hides both from the state panel's modifier rows: the Local Climate
+# tile shows them (test_hidden_state_modifiers.py).
 local_climate_discomfort = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_migration_pull_mult = -0.01
+}
+local_climate_amenity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
+	state_migration_pull_mult = 0.01
 }
