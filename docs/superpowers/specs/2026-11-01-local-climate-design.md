@@ -653,8 +653,11 @@ penalty  = min(80, heat + cold + winter + dry + disease)                   no fl
 ### 12.3 Relief
 
 A new type, `state_climate_winter_relief_add` (Winter Relief), closes the gap
-both ways: a raw winter's cost and a mild one's draw shrink together, since
-heating makes London's winter easier rather than Madeira's worse.
+from both sides: a raw winter's cost and a mild one's draw shrink together, as
+heated, insulated homes make any winter bearable and a mild one matters less.
+So a carrier lowers a mild-wintered state's pull a little (Malta's 0.5 at
+Water-tube Boiler) while it raises a cold one's, as the owner chose ("the whole
+winter measure, bonus and cost together, shrinks").
 
 | Technology | Era | Winter relief | Why |
 |---|---|---|---|

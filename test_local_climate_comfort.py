@@ -441,6 +441,12 @@ class ScriptMatchesMirror(unittest.TestCase):
                         diff = abs(self.sv.read(sv, env) - mirror[name])
                         if diff > worst[0]:
                             worst = (diff, (row.state, era, warming, name, self.sv.read(sv, env), mirror[name]))
+                    # The values the bonus modifier and the hovers read (review of #1313).
+                    for sv, want in (("te_climate_bonus", max(0.0, -mirror["penalty"])),
+                                     ("te_climate_winter_draw", -mirror["winter"])):
+                        diff = abs(self.sv.read(sv, env) - want)
+                        if diff > worst[0]:
+                            worst = (diff, (row.state, era, warming, sv, self.sv.read(sv, env), want))
         self.assertLess(worst[0], 1e-6, worst[1])
 
     def test_no_record_costs_nothing_in_script(self):
@@ -532,7 +538,7 @@ class Modifier(unittest.TestCase):
         self.assertEqual(squash(top_block(text, "local_climate_yearly_on_action") or ""),
                          f"effect = {{ {EFFECT} = yes }}")
         self.assertEqual(squash(top_block(text, "local_climate_first_on_action") or ""),
-                         f"trigger = {{ NOT = {{ has_variable = {APPLIED} }} }} effect = {{ {EFFECT} = yes }}")
+                         f"trigger = {{ NOT = {{ has_variable = {BONUS} }} }} effect = {{ {EFFECT} = yes }}")
         # One refresh site plus the first application, and nothing else calls the effect.
         calls = [(path.name, n) for path, text in script_texts("common", "events")
                  for n in [len(re.findall(rf"\b{EFFECT}\s*=\s*yes\b", text))] if n]

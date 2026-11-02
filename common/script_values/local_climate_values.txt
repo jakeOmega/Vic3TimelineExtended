@@ -1,5 +1,5 @@
 ﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11, § 12).
-# State scope throughout. Each state region's climate record (local_climate_generated.txt), the four
+# State scope throughout. Each state region's climate record (local_climate_generated.txt), the
 # five technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
 # and the world's felt warming become five terms, kept separate for the state panel, and their sum,
 # te_climate_penalty: the percent of its migration attraction a state loses (local_climate_discomfort,

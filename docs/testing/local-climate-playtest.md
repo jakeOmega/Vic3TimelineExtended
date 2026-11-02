@@ -65,9 +65,10 @@ heat v2 figures above where they differ: Georgia is now about −25%, Hawaii abo
 | Check | Expect | If it fails |
 |---|---|---|
 | The bonus | Madeira's tile reads Comfort +7% in green, and its migration attraction breakdown shows "Local Climate +7%"; Hawaii about +6%, Cape Colony +5% | No line: `local_climate_amenity` wasn't added (`te_climate_bonus_applied` not set); "−7%": the cost modifier applied a negative penalty |
-| London | Comfort reads None; Glasgow about −1% (None); Paris about −4% | The neutral point (`te_climate_winter_neutral`) |
+| London | Comfort reads None; Glasgow about −1% (red); Paris about −4% | The neutral point (`te_climate_winter_neutral`) |
 | Hidden | Neither "Local Climate" modifier appears among the state panel's modifier rows | `local_climate_amenity` missing from the `TimedModifier.GetName` filters |
 | Winter hover | Madeira's Winter hover: a +7% draw before relief, Winter Relief 0%, +7% left; Massachusetts' a −4% draw and a frost cost | `te_climate_winter_draw` signs |
 | Winter Relief | Water-tube Boiler's tooltip lists Winter Relief +10%; after it, Madeira's bonus and Massachusetts' winter cost both shrink a tenth at the next yearly refresh | The INJECT line in `te_local_climate_tech_injections.txt` |
 | The Sun Belt | In an observer run to era 7, the US South's migration attraction overtakes New England's | Heat relief or the winter term's weights |
-| A save from heat v2 | A state with a bonus shows None until its yearly refresh, then the bonus | `te_climate_bonus_now` reads a variable the refresh hasn't set yet; it is 0 until then |
+| A save from heat v2 | Every state refreshes within a month of loading (the first application keys on `te_climate_bonus_applied`), so Madeira shows its bonus by then | The monthly on-action's trigger |
+| Signed hover figures | Madeira's Winter hover shows its draw as a green +7%, Massachusetts' as a red −4%; London's draw of −0.02 may print −0% or +0% | `|+=0` shows a sign but no color: wrap the figures in `#G`/`#R` by sign |
