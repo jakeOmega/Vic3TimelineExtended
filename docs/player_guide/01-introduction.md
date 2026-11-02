@@ -12,7 +12,9 @@ most can be switched off with a game rule.
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed. Full Screen, at
+same panels as their journal entries, and one for the seabed. Two more rows of
+tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
+and Military panels, the same as there, so every system is in one place. Full Screen, at
 the window's top right, spreads it across the screen; Side Panel, at its top
 left there, brings it back to the width of the other panels. The tab you chose
 stays chosen when you switch.
@@ -103,8 +105,9 @@ turn a default system off.
 
 ## Reading the Budget breakdown
 
-The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
-and expandable lists. Groups start collapsed; click an arrow to see their
+The Budget panel's Breakdown tab, also the Timeline Extended window's Budget
+Breakdown tab, shows weekly income and expenses as pie charts and expandable
+lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
 Colors and percentages match across the pies and lists. Hover a tax, tariff,

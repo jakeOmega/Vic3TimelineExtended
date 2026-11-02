@@ -236,19 +236,12 @@ types diplomatic_panel
 				}
 
 				### MOD: UN tab (te_un) ###
-				# The United Nations journal entry, laid out for the tab in the order
-				# gui/journal_entry_widgets/un_layout_widget.gui sets for both hosts:
-				# the overview, the entry's status text as a Status section (open;
-				# only a founding conference or a dissolution), the status sections,
-				# the chart, the record and the explanations, then a link back. The
-				# entry's scripted buttons are the AI's (`is_ai = yes`, the
-				# 2026-10-27 audit's UN-9), so the tab's old Actions section is
-				# gone: each control sits beside the figure it acts on, and
-				# founding sits under the overview's No UN cell. Spec:
-				# docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md. The gate sits
-				# on a parent of the GetPlayerJournalEntry datacontext, never on the
-				# widget carrying it (vanilla's shape: states_panel.gui, the Meiji
-				# faction button).
+				# The tab's content is te_un_tab_body
+				# (gui/journal_entry_widgets/un_layout_widget.gui), which the
+				# Timeline Extended window's United Nations tab mounts too: the
+				# header, the entry's panels under the tab's gate, and the link back
+				# to the entry. This flowcontainer keeps what is the panel's own: the
+				# tab's selection, its fade, its position and its margins.
 				flowcontainer = {
 					name = "te_diplomacy_un_tab"
 					visible = "[InformationPanel.IsTabSelected('te_un')]"
@@ -259,79 +252,7 @@ types diplomatic_panel
 					margin_top = 10
 					margin_bottom = 15
 
-					default_header = {
-						blockoverride "text" {
-							text = "je_united_nations"
-						}
-					}
-
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						using = default_list_position
-						direction = vertical
-						ignoreinvisible = yes
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
-							using = default_list_position
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-
-							te_un_overview_panel = {}
-
-							# The entry's own status text (a founding conference or a
-							# dissolution), open by default (the owner's call, 2026-09-28):
-							# nothing the journal says is lost from the tab. The whole
-							# section hides while the text is empty (un_status_text_sgui),
-							# which is whenever a UN stands: the Assembly's statistics moved
-							# into the overview (the 2026-10-27 audit, UN-20).
-							# te_je_status_desc has a visible of its own, so the section's
-							# gate is on a wrapper (gotcha #17).
-							flowcontainer = {
-								visible = "[GetScriptedGui('un_status_text_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-								parentanchor = hcenter
-								direction = vertical
-								ignoreinvisible = yes
-
-								un_chamber_section_header = {
-									blockoverride "left_text" {
-										text = "te_diplomacy_un_tab_status_header"
-									}
-									blockoverride "onclick" {
-										onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
-									}
-									blockoverride "onclick_showmore" {
-										visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
-									}
-									blockoverride "onclick_showless" {
-										visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
-									}
-								}
-								flowcontainer = {
-									visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
-									parentanchor = hcenter
-									direction = vertical
-
-									te_je_status_desc = {}
-								}
-							}
-
-							te_un_status_sections = {}
-
-							te_un_reference_sections = {}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_diplomacy_un_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
+					te_un_tab_body = {}
 				}
 				### END MOD ###
 			}

@@ -1,8 +1,8 @@
 ﻿### Legislated Tax Code — layout (plan Task 7). The one place that sets the
 ### order of the tax code's sections, for both hosts: je_tax_code attaches the
-### named roots at the foot of this file, and the Budget panel's Tax Code tab
-### (gui/budget_panel.gui, tab te_tax_code) instances the overview and the two
-### composers. The sections are types in te_tax_overview_widget.gui (the
+### named roots at the foot of this file, and the Tax Code tab, in the Budget
+### panel (tab te_tax_code) and the Timeline Extended window, mounts
+### te_tax_tab_body, which instances the overview and the two composers. The sections are types in te_tax_overview_widget.gui (the
 ### overview, the enacted code, the history), te_tax_workbench_widget.gui
 ### (the workbench and the draft summary), te_tax_review_widget.gui (the
 ### review), te_tax_politics_widget.gui (passage and passed bills) and here
@@ -216,6 +216,51 @@ types te_tax_layout_widget_types
 			te_tax_how_section = {}
 		}
 		te_tax_light_how_section = {}
+	}
+
+	### The Tax Code tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Budget
+	### panel's Tax Code tab and the Timeline Extended window's. The overview
+	### and the two composers inside te_tax_tab_layout, which a wide mount
+	### overrides, then the frame's Open Journal Entry in the tab's row font.
+	### The types read the player's country (GetPlayer), so the datacontext
+	### serves only the IsActive gates and the link. Each frame draws the
+	### draft and bill summaries in its fixed_bottom, so the live sections
+	### leave their own copy out ("draft_summary").
+	type te_tax_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				blockoverride "text" {
+					text = "je_tax_code"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_tax_code')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_tax_tab_layout" {
+				te_tax_overview_panel = {}
+				te_tax_status_sections = {
+					blockoverride "draft_summary" {}
+				}
+				te_tax_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_font" {
+			using = te_tax_fontsize_row
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_tax_open_journal_tt"
+		}
 	}
 }
 

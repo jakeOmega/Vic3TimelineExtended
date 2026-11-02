@@ -854,6 +854,9 @@ class MarketTabTest(unittest.TestCase):
         cls.market = _read(MARKET)
         cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
         cls.content = _te_blocks(cls.market, "### TE: Reserve tab (te_strategic_reserve) ###")
+        # the tab's body, which the Timeline Extended window's tab mounts too
+        # (test_te_system_tab_bodies.py checks the mounts)
+        cls.body = _type_body(_read(WIDGET), "te_st_res_tab_body")
 
     def _sr_buttons(self):
         return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("sixth_button")}
@@ -874,27 +877,25 @@ class MarketTabTest(unittest.TestCase):
         self.assertIn("te_tab_buttons_six = {", self.market)
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
-        body = self.content[0]
-        found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
+        found = re.findall(r"^\t+(te_\w+) = \{\}", self.body, re.M)
         self.assertEqual(found, [wrapped for _, wrapped in ROOTS.values()])
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_st_res_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # the link back to the entry is the frame's, after every section
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.body)
+        self.assertIn("te_st_res_tab_body = {", self.content[0])
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
-        body = self.content[0]
-        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_strategic_reserve')]\"")
-        gate = body.index(f'visible = "[And( {SR_TAB_GATE}, {OWN_MARKET} )]"')
-        self.assertLess(gate, dc)
-        self.assertLess(body.index('text = "je_strategic_reserve"'), gate)   # the header sits outside it
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
-
-    def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self.content[0]
-        dc = body.index("GetPlayerJournalEntry('je_strategic_reserve')")
-        head = body[dc:body.index("te_st_res_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's blocks: the header outside the gate, the gate on the
+        datacontext's parent (te_system_tab_frame, its fixed 520 column). The
+        body's gate is the tab's; the panel adds the own-market test."""
+        self.assertRegex(_read(WIDGET), r"type te_st_res_tab_body = te_system_tab_frame \{")
+        gate = self.body[self.body.index('blockoverride "tab_gate"'):self.body.index('blockoverride "tab_entry"')]
+        self.assertRegex(gate, r'block "te_st_res_tab_gate" \{\s*visible = "\[' + re.escape(SR_TAB_GATE) + r'\]"\s*\}')
+        self.assertIn("datacontext = \"[GetPlayerJournalEntry('je_strategic_reserve')]\"",
+                      self.body[self.body.index('blockoverride "tab_entry"'):])
+        head = self.body[self.body.index('blockoverride "tab_header"'):self.body.index('blockoverride "tab_gate"')]
+        self.assertIn('text = "je_strategic_reserve"', head)
+        self.assertRegex(self.content[0], r'blockoverride "te_st_res_tab_gate" \{\s*visible = "\[And\( '
+                         + re.escape(f"{SR_TAB_GATE}, {OWN_MARKET}") + r' \)\]"\s*\}')
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         halves = self._sr_buttons()
@@ -992,8 +993,12 @@ class MarketTabTest(unittest.TestCase):
             self.assertRegex(_body(buttons, rf"(?m)^{name} = \{{"), r"visible = \{\s*is_ai = yes", name)
 
     def test_the_types_read_nothing_from_the_panel(self):
-        """No section type reads the Market panel's ambient Market or Country."""
-        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", _read(WIDGET))
+        """No section type reads the Market panel's ambient Market or Country.
+        The tab's body aside: its gate and datacontext are the tab's, read
+        through the player as in every host (test_te_system_tab_bodies.py)."""
+        text = _read(WIDGET)
+        text = text.replace("type te_st_res_tab_body = te_system_tab_frame {" + _type_body(text, "te_st_res_tab_body"), "")
+        ambient = re.findall(r"(?<![\w.'])(Market|Country|GetPlayer|GetMetaPlayer)\.\w+", text)
         self.assertEqual(ambient, [])
 
     def test_one_visible_per_widget(self):

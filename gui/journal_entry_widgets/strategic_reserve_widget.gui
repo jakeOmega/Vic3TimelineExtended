@@ -2617,7 +2617,7 @@ types strategic_reserve_widget_types
 
 	### ======================================================================
 	### COMPOSERS. The one order of the sections, for the journal entry's
-	### roots below and for the Market panel's Reserve tab.
+	### roots below and for the tab's body (te_st_res_tab_body).
 	### ======================================================================
 
 	### What a returning player checks, open by default.
@@ -2640,6 +2640,59 @@ types strategic_reserve_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_st_res_sec_how = {}
+	}
+
+	### ======================================================================
+	### THE TAB'S BODY (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Market
+	### panel's Reserve tab and the Timeline Extended window's Strategic
+	### Reserve tab. In the entry's order: the overview, the inventory, then
+	### How the Strategic Reserve Works, then the frame's Open Journal Entry.
+	### Not drawn: the status description (the no-hub line, which prints only
+	### while the entry is inactive) and the two scripted buttons (the AI's;
+	### the inventory's Cycle Step Size and Reset Reserve Rates are the
+	### player's). The entry has no goal bar and no scripted bars.
+	###
+	### The Market panel, which can show another market, fills two blocks:
+	### te_st_res_tab_elsewhere with a note on where the reserve trades, and
+	### te_st_res_tab_gate with the own-market test added to the tab's gate.
+	### The window always shows the player's own reserve.
+	### ======================================================================
+	type te_st_res_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_strategic_reserve"
+				}
+			}
+		}
+
+		blockoverride "tab_before_gate" {
+			block "te_st_res_tab_elsewhere" {}
+		}
+
+		blockoverride "tab_gate" {
+			block "te_st_res_tab_gate" {
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_st_res_tab_layout" {
+				te_st_res_overview_panel = {}
+				te_st_res_status_sections = {}
+				te_st_res_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_market_strategic_reserve_open_journal_tt"
+		}
 	}
 }
 

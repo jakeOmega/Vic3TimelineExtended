@@ -855,6 +855,18 @@ def _txt_block(text, name):
     return _top_level(text, name)
 
 
+def _gui_block(text, name):
+    """The contents of `block "<name>" { … }` in a GUI type."""
+    m = re.search(rf'\bblock "{name}" \{{', text)
+    assert m, name
+    depth = 0
+    for k in range(m.end() - 1, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[k], 0)
+        if depth == 0:
+            return text[m.end():k]
+    raise AssertionError(f"unclosed block {name}")
+
+
 class MarketTabTest(unittest.TestCase):
     """The Market panel's Climate tab (style guide rule 9; feasibility §5.1): the
     journal entry's own composers under GetPlayerJournalEntry, gated, greyed
@@ -866,6 +878,9 @@ class MarketTabTest(unittest.TestCase):
         cls.market = _read(MARKET)
         cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
         cls.content = _te_blocks(cls.market, "### TE: Climate tab (te_global_warming) ###")
+        # the tab's body, which the Timeline Extended window's tab mounts too
+        # (test_te_system_tab_bodies.py checks the mounts)
+        cls.body = _type_body(_read(GUI), "te_gw_tab_body")
 
     def _gw_buttons(self):
         return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("fifth_button")}
@@ -927,29 +942,27 @@ class MarketTabTest(unittest.TestCase):
         status = re.findall(r"^\t\t(te_gw_sec_\w+) = \{", _type_body(_read(GUI), "te_gw_status_sections"), re.M)
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", foreign, re.M),
                          roots[:1] + [s for s in status if s not in OWN_MARKET_ONLY])
-        # The reference sections follow both, as the entry's third root does.
-        rest = body[body.index(foreign) + len(foreign):]
+        # The two views are the host's override of the body's market view,
+        # whose default, the window's, is the own-market one.
+        self.assertIn('blockoverride "te_gw_tab_market_view"', body)
+        view = _gui_block(self.body, "te_gw_tab_market_view")
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", view, re.M), roots[:2])
+        # The reference sections follow the view, as the entry's third root does.
+        layout = _gui_block(self.body, "te_gw_tab_layout")
+        rest = layout[layout.index(view) + len(view):]
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", rest, re.M), roots[2:])
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_gw_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.body)
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
-        body = self.content[0]
-        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_global_warming')]\"")
-        self.assertLess(body.index(f'visible = "[{GW_TAB_GATE}]"'), dc)
-        # The header sits outside the gate.
-        self.assertLess(body.index('text = "je_global_warming"'), body.index(f'visible = "[{GW_TAB_GATE}]"'))
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
-
-    def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self.content[0]
-        dc = body.index("GetPlayerJournalEntry('je_global_warming')")
-        head = body[dc:body.index("te_gw_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's blocks: the header outside the gate, the gate on the
+        datacontext's parent (te_system_tab_frame, its fixed 520 column)."""
+        self.assertRegex(_read(GUI), r"type te_gw_tab_body = te_system_tab_frame \{")
+        o = _overrides(self.body)
+        self.assertEqual(o["tab_gate"], f'visible = "[{GW_TAB_GATE}]"')
+        self.assertEqual(o["tab_entry"], "datacontext = \"[GetPlayerJournalEntry('je_global_warming')]\"")
+        head = self.body[self.body.index('blockoverride "tab_header"'):self.body.index('blockoverride "tab_gate"')]
+        self.assertIn('text = "je_global_warming"', head)
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         halves = self._gw_buttons()
@@ -980,8 +993,8 @@ class MarketTabTest(unittest.TestCase):
         gw_market_country block. Each sits under the gate on the leader's entry
         running, and never carries a visible of its own."""
         body = self.content[0]
-        self.assertEqual(re.findall(r"\.GetJournalEntry\(", body), [])
-        self.assertEqual(re.findall(r"GetPlayerJournalEntry\('(\w+)'\)", body), ["je_global_warming"])
+        self.assertEqual(re.findall(r"\.GetJournalEntry\(", body + self.body), [])
+        self.assertEqual(re.findall(r"GetPlayerJournalEntry\('(\w+)'\)", body + self.body), ["je_global_warming"])
         foreign = _widget_with(body, f'visible = "[Not( {OWN_MARKET} )]"')
         sites = [m.start() for m in re.finditer(re.escape(f'datacontext = "[{LEADER}]"'), foreign)]
         self.assertEqual(len(sites), 3)   # the intro line, the overview's market cells, the policies
@@ -1211,7 +1224,11 @@ class MarketTabTest(unittest.TestCase):
         sguis = _read(SGUIS)
         for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
             self.assertIn("scope = state", _top_level(sguis, name), name)
-        code = "\n".join(line.split("#", 1)[0] for line in _read(GUI).splitlines())
+        # the tab's body aside: its gate and datacontext are the tab's, read
+        # through the player as in every host (test_te_system_tab_bodies.py)
+        text = _read(GUI)
+        text = text.replace("type te_gw_tab_body = te_system_tab_frame {" + _type_body(text, "te_gw_tab_body"), "")
+        code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
         ambient = re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
         self.assertEqual(ambient, [])
         # Country is only ever the section's own (a gw_market_country block's),

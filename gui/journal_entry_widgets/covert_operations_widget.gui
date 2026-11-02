@@ -2625,6 +2625,47 @@ types covert_operations_widget_types
 
 		te_covert_sec_how = {}
 	}
+
+	### The tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Military
+	### panel's Covert tab and the Timeline Extended window's Covert Warfare
+	### tab. The same types the entry's three roots wrap, in the entry's order:
+	### the overview, the live sections, then How Covert Warfare Works, inside
+	### te_covert_tab_layout, which a wide mount overrides; then the frame's
+	### Open Journal Entry. Nothing else to draw: the entry has no goal bar, no
+	### scripted bars and no status description, and its two scripted buttons
+	### are the AI's (the Funding stepper carries the same actions for a
+	### human).
+	type te_covert_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_covert_warfare"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_covert_warfare')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_covert_tab_layout" {
+				te_covert_overview_panel = {}
+				te_covert_status_sections = {}
+				te_covert_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_military_covert_open_journal_tt"
+		}
+	}
 }
 
 ### ==========================================================================

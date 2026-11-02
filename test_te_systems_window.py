@@ -46,14 +46,65 @@ RULES = {"space_race": "sr_space_race_on = yes",
 # slot of the first strip, then these.
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
 ALL_TABS = [(t.key, RULES[t.key], SLOTS[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
-            for t in gen.TABS[1:]]
+            for t in gen.TABS[1:] if t.key in RULES]
+
+
+def _shown(sgui):
+    return f"GetScriptedGui('{sgui}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+
+
+def _valid(sgui):
+    return f"GetScriptedGui('{sgui}').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+
+
+# The ten tabs mirrored from vanilla panels (spec § 5.1, § 6, § 9.6): (key,
+# strip, tooltip key, locked key, open gate, unlock scripted GUI, body). The
+# gates are the host tab's own; the tooltip is the host's where its text fits
+# the window, and the window's own for Global Warming and the Strategic
+# Reserve, whose host tooltips speak of another market. The grayed line is the
+# window's where the host's tab name differs from the window's.
+MIRRORED = [
+    ("banking", 2, "te_budget_tab_banking_tt", "te_budget_tab_banking_locked_tt",
+     f"Or( {_shown('te_budget_banking_tab_sgui')}, {_shown('te_budget_banking_readout_sgui')} )",
+     "te_budget_banking_tab_unlock_sgui", "te_banking_tab_body"),
+    ("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_locked_tt", _shown("te_budget_tax_tab_sgui"),
+     "te_budget_tax_tab_unlock_sgui", "te_tax_tab_body"),
+    ("budget_breakdown", 2, "te_budget_chart_tab_tt", None, None, None, "te_budget_breakdown_panel"),
+    ("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_window_tab_strategic_reserve_locked_tt",
+     _shown("te_market_strategic_reserve_tab_sgui"), "te_market_strategic_reserve_tab_unlock_sgui",
+     "te_st_res_tab_body"),
+    ("global_warming", 2, "te_window_tab_global_warming_tt", "te_window_tab_global_warming_locked_tt",
+     _shown("te_market_global_warming_tab_sgui"), "te_market_global_warming_tab_unlock_sgui", "te_gw_tab_body"),
+    ("demographics", 3, "te_pops_tab_demog_tt", "te_pops_tab_demog_locked_tt",
+     f"And( {_shown('te_pops_demog_tab_sgui')}, {_valid('te_pops_demog_tab_unlock_sgui')} )",
+     "te_pops_demog_tab_unlock_sgui", "te_demog_window_body"),
+    ("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_window_tab_cultural_hegemony_locked_tt",
+     _shown("te_society_ch_tab_sgui"), "te_society_ch_tab_unlock_sgui", "te_ch_tab_body"),
+    ("united_nations", 3, "te_diplomacy_tab_un_tt", "te_window_tab_united_nations_locked_tt",
+     _shown("te_diplomacy_un_tab_sgui"), "te_diplomacy_un_tab_unlock_sgui", "te_un_tab_body"),
+    ("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_window_tab_nuclear_weapons_locked_tt",
+     _shown("te_military_nuclear_tab_sgui"), "te_military_nuclear_tab_unlock_sgui", "te_nuclear_tab_body"),
+    ("covert_warfare", 3, "te_military_tab_covert_tt", "te_window_tab_covert_warfare_locked_tt",
+     _shown("te_military_covert_tab_sgui"), "te_military_covert_tab_unlock_sgui", "te_covert_tab_body"),
+]
+# spec § 5.1: three strips of five
+STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed"],
+               2: ["banking", "tax_code", "budget_breakdown", "strategic_reserve", "global_warming"],
+               3: ["demographics", "cultural_hegemony", "united_nations", "nuclear_weapons", "covert_warfare"]}
 SR = gen.SR_MILESTONES   # je_space_race.txt order (test_the_gates_read_the_rule_and_the_entries)
 # The systems' full names (owner, 2026-09-30), and the width a tab's name gets:
 # five slots share 540 less vanilla tab_buttons' 3 px margins and two 5 px
 # dividers, 104.8 each, less tab_text_properties' 10 px margin each side (no
 # icon): 84.8.
 FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
-              "grand_monuments": "Grand Monuments", "seabed": "Seabed"}
+              "grand_monuments": "Grand Monuments", "seabed": "Seabed",
+              # the mirrored tabs: the entries' names (owner, 2026-11-02), not
+              # the Market tabs' Climate and Reserve
+              "banking": "Banking", "tax_code": "Tax Code", "budget_breakdown": "Budget Breakdown",
+              "strategic_reserve": "Strategic Reserve", "global_warming": "Global Warming",
+              "demographics": "Demographics", "cultural_hegemony": "Cultural Hegemony",
+              "united_nations": "United Nations", "nuclear_weapons": "Nuclear Weapons",
+              "covert_warfare": "Covert Warfare"}
 NAME_WIDTH = (540 - 2 * 3 - 2 * 5) / 5 - 2 * 10
 # tab_text_properties wraps a name (multiline = yes) and shrinks it from the
 # tab font's 17 down to fontsize_min = 12 before it elides.
@@ -233,6 +284,10 @@ class LauncherTest(unittest.TestCase):
         self.assertIn("onclick = \"[GetVariableSystem.Clear('com_open_window')]\"", button)
         self.assertEqual(button.count("sidepanel_button_small = {"), 2)
         self.assertIn('tooltip = "te_systems_window_launcher_tt"', button)
+        # fifteen tabs: the tooltip names none of them (plan C8)
+        self.assertEqual(_all_loc()["te_systems_window_launcher_tt"],
+                         "#b Timeline Extended#!\\nYour nation's lasting scores and modifiers, and a tab for each of "
+                         "the mod's systems.")
 
     def test_it_has_vanillas_hover_label(self):
         """The sidebar's label: a strip and a label pair that slide out on the
@@ -549,28 +604,96 @@ class StripTest(unittest.TestCase):
         self.assertIn("using = te_systems_window_nation_unselected",
                       self._override("first_button_visibility_checked", first))
 
-    def test_one_strip_holds_all_five_tabs(self):
-        """Owner, 2026-10-17: two levels for five tabs was a bit silly, when
-        the other windows hold up to six on one strip. Vanilla's tab_buttons
-        has five slots, so the five system tabs fill it in the windows' order
-        and the strip itself carries no gate (Nation always shows). Only the
-        developer tax-probes tab keeps a strip of its own, after it."""
-        self.assertEqual({t.row for t in gen.TABS}, {1})
-        self.assertEqual(len(gen.TABS), 5)
-        strip = self._strip()
-        self.assertTrue(strip.startswith("tab_buttons = {"))
-        self.assertNotIn("visible =", strip.split("blockoverride")[0])
-        at = [strip.index(f'text = "te_window_tab_{t}"') for t in ["nation"] + [t for t, _, _ in ALL_TABS]]
-        self.assertEqual(at, sorted(at))
-        for slot in ("first", "second", "third", "fourth", "fifth"):
-            self.assertIn(f'blockoverride "{slot}_button"', strip)
-        self.assertNotIn("sixth_button", strip)
-        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 2)
-        rest = self.strips[self.strips.index(strip) + len(strip):]
+    def test_three_strips_of_five(self):
+        """Spec § 5.1 (owner, 2026-11-02): the window's own five, then the
+        Budget and Market panels' five, then the Population, Society,
+        Diplomacy and Military panels' five, each vanilla's five-slot
+        tab_buttons with no gate of its own (Nation always shows). Only the
+        developer tax-probes tab keeps a strip of its own, after them."""
+        self.assertEqual({row: [t.key for t in gen.TABS if t.row == row] for row in (1, 2, 3)}, STRIP_ORDER)
+        self.assertEqual(len(gen.TABS), 15)
+        for row, keys in STRIP_ORDER.items():
+            with self.subTest(strip=row):
+                strip = self._strip(row)
+                self.assertTrue(strip.startswith("tab_buttons = {"))
+                self.assertNotIn("visible =", strip.split("blockoverride")[0])
+                at = [strip.index(f'text = "{_tab(k).label}"') for k in keys]
+                self.assertEqual(at, sorted(at))
+                for slot in SLOTS:
+                    self.assertIn(f'blockoverride "{slot}_button"', strip)
+                self.assertNotIn("sixth_button", strip)
+        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 4)
+        last = self._strip(3)
+        rest = self.strips[self.strips.index(last) + len(last):]
         self.assertNotIn("te_window_tab_", rest)
         self.assertIn("te_tp_tab_sgui", rest)
         self.assertNotIn("tab_buttons", _strip_comments(self.gui))
         self.assertNotIn("second_strip", self.gui)
+
+    def test_each_mirrored_tab_takes_its_hosts_gates_and_text(self):
+        for key, row, tooltip, locked, open_, unlock, body in MIRRORED:
+            with self.subTest(tab=key):
+                t = _tab(key)
+                self.assertEqual((t.row, t.body, t.label), (row, body, f"te_window_tab_{key}"))
+                slot = SLOTS[STRIP_ORDER[row].index(key)]
+                within = self._strip(row)
+                click = self._override(f"{slot}_button_click", within)
+                self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_systems_window_tab', '{key}')]\"", click)
+                tt = self._override(f"{slot}_button_tooltip", within)
+                for half in (f"{slot}_button", f"{slot}_button_selected"):
+                    self.assertIn(f'text = "te_window_tab_{key}"', self._override(half, within))
+                if open_ is None:
+                    # always open: no gate, no checklist
+                    self.assertNotIn("enabled", click)
+                    self.assertEqual(tt.strip(), f'tooltip = "{tooltip}"')
+                    self.assertIsNone(t.strip)
+                    continue
+                self.assertIn(f'enabled = "[{open_}]"', click)
+                self.assertEqual(t.strip, _shown(unlock))
+                if key == "banking":
+                    # the Budget tab's two-branch form: no checklist, the
+                    # readout's line for a country with no entry (#805)
+                    self.assertEqual(tt.strip(), (
+                        f"tooltip = \"[SelectLocalization( {_shown('te_budget_banking_tab_sgui')}, '{tooltip}', "
+                        f"SelectLocalization( {_shown('te_budget_banking_readout_sgui')}, "
+                        f"'te_budget_tab_banking_readout_tt', '{locked}' ) )]\""))
+                    continue
+                self.assertEqual(tt.strip(), (
+                    f"tooltip = \"[SelectLocalization( {open_}, '{tooltip}', SelectLocalization( {_valid(unlock)}, "
+                    f"'te_system_tab_met_tt', Concatenate( Localize( '{locked}' ), "
+                    f"GetScriptedGui('{unlock}').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]\""))
+
+    def test_the_new_grayed_lines_name_the_window_tab(self):
+        """Rule 9's one shape (WIN-1), where the host's tab name differs."""
+        loc = _all_loc()
+        for key, _, _, locked, _, _, _ in MIRRORED:
+            if locked and locked.startswith("te_window_tab_"):
+                with self.subTest(tab=key):
+                    self.assertEqual(loc[locked], f"#b $te_window_tab_{key}$#!\\nNot open yet. It opens once:\\n")
+
+    def test_banking_opens_on_either_branch_and_never_off_the_strip(self):
+        """The entry's gate or the #805 readout's opens Banking. The readout
+        needs the full banking rule, which puts the tab on the strip, so an
+        open Banking is never off the strip."""
+        banking = _tab("banking")
+        tab, readout, unlock = "te_budget_banking_tab_sgui", "te_budget_banking_readout_sgui", "te_budget_banking_tab_unlock_sgui"
+        for shown, want in (({tab, unlock}, True), ({readout, unlock}, True), ({unlock}, False), (set(), False)):
+            with self.subTest(shown=sorted(shown)):
+                self.assertEqual(_evaluate(banking.open_, shown, "banking"), want)
+        self.assertIn("te_mon_full_system = yes", _txt_block(self.sguis, readout))
+        self.assertIn("is_shown = { te_banking_system_on = yes }", _txt_block(self.sguis, unlock))
+        full = _txt_block(_read(os.path.join(TRIGGERS, "te_monetary_triggers.txt")), "te_mon_full_system")
+        on = _txt_block(_read(os.path.join(TRIGGERS, "banking_policy_triggers.txt")), "te_banking_system_on")
+        self.assertIn("has_game_rule = banking_system_enabled", full)
+        self.assertIn("has_game_rule = banking_system_enabled", on)
+
+    def test_demographics_opens_with_its_first_census(self):
+        """As the Population panel's tab: its gate and its checklist passing."""
+        demog = _tab("demographics")
+        for shown, want in (({"te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui:valid"}, True),
+                            ({"te_pops_demog_tab_sgui"}, False), ({"te_pops_demog_tab_unlock_sgui:valid"}, False)):
+            with self.subTest(shown=sorted(shown)):
+                self.assertEqual(_evaluate(demog.open_, shown, "demographics"), want)
 
     def test_the_gates_read_the_rule_and_the_entries(self):
         for tab, rule, _ in ALL_TABS:
@@ -989,6 +1112,42 @@ class WideTest(unittest.TestCase):
         self.assertEqual(at, sorted(at))
 
 
+class TaxFooterTest(unittest.TestCase):
+    """Tax Code's footer in both frames (plan C9): Budget's (budget_panel.gui
+    fixed_bottom), the draft summary or the bill under debate's, below the
+    scrolling content so their buttons stay on screen. Only on the Tax Code
+    tab (its selected template, which carries the tab's open gate) and only
+    while a draft or a bill is; the tab's body leaves its own copy out."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.footer = _type_body(cls.gui, "te_systems_window_tax_footer")
+
+    def test_both_frames_show_it(self):
+        for frame in ("te_systems_window_panel", "te_systems_window_panel_wide"):
+            with self.subTest(frame=frame):
+                self.assertRegex(_override(_type_body(self.gui, frame), "fixed_bottom"),
+                                 r"^\s*te_systems_window_tax_footer = \{\}\s*$")
+
+    def test_only_on_the_tax_code_tab_while_a_draft_or_a_bill_is(self):
+        head = self.footer[:self.footer.index("flowcontainer = {")]
+        self.assertIn("using = te_systems_window_tax_code_selected", head)
+        self.assertNotRegex(head, r"(?m)^\s*visible =")    # one visible per widget: the template's
+        inner = _block_at(self.footer, self.footer.index("flowcontainer = {"))
+        self.assertIn(f'visible = "[Or( {_shown("te_tax_show_draft_sgui")}, {_shown("te_tax_show_bill_sgui")} )]"',
+                      inner.split("divider_clean")[0])
+        at = [inner.index(t) for t in ("divider_clean", "using = dark_area", "te_tax_draft_summary = {}",
+                                        "te_tax_bill_summary = {}")]
+        self.assertEqual(at, sorted(at))
+        self.assertIn("size = { 554 4 }", inner)    # Budget's @panel_width_plus_14
+        # the tab's gate rides on the template
+        self.assertIn(_tab("tax_code").open_, _template(_read(GENERATED), "te_systems_window_tax_code_selected"))
+        # the body draws none of its own
+        body = _type_body(_read(os.path.join(WIDGETS, "te_tax_layout_widget.gui")), "te_tax_tab_body")
+        self.assertRegex(body, r'te_tax_status_sections = \{\s*blockoverride "draft_summary" \{\s*\}\s*\}')
+
+
 class GeneratorTest(unittest.TestCase):
     """scripts/generators/gen_te_systems_window.py writes the window's strip,
     selection templates and tab mounts from its TABS registry (spec § 9.3)."""
@@ -1006,14 +1165,19 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(gen.TABS[0].key, "nation")
         self.assertIsNone(gen.TABS[0].open_)
         self.assertIsNone(gen.TABS[0].strip)
-        self.assertTrue(all(t.open_ for t in gen.TABS[1:]), "every other tab has an open gate")
+        # every other tab has an open gate, but Budget Breakdown, which has no
+        # entry and no rule (always open, as on the Budget panel)
+        self.assertTrue(all(t.open_ for t in gen.TABS[1:] if t.key != "budget_breakdown"), "every other tab has an open gate")
+        self.assertIsNone(_tab("budget_breakdown").open_)
+        self.assertIsNone(_tab("budget_breakdown").strip)
         self.assertEqual(len({t.key for t in gen.TABS}), len(gen.TABS))
         self.assertNotIn("tax_probes", {t.key for t in gen.TABS})
 
     def test_an_always_open_tab_reads_only_its_stored_value(self):
-        """A tab with no open gate (PR C's Budget Breakdown) is shown whenever
-        it was last chosen, and Nation's fallback reads it so."""
-        extra = gen.Tab("always_open", 2, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        """A tab with no open gate (as Budget Breakdown) is shown whenever it
+        was last chosen, and Nation's fallback reads it so. (On a strip of its
+        own: the three are full.)"""
+        extra = gen.Tab("always_open", 4, label="te_x", tooltip="te_x_tt", body="te_x_body")
         with mock.patch.object(gen, "TABS", gen.TABS + [extra]):
             text = gen.render()
         self.assertNotIn("None", text)
@@ -1029,11 +1193,11 @@ class GeneratorTest(unittest.TestCase):
     def test_a_gated_tab_needs_its_checklist(self):
         """A tab with an open gate shows a checklist while grayed, so it names
         the scripted GUI and the locked line, unless it brings its own tooltip."""
-        bad = gen.Tab("no_checklist", 2, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
+        bad = gen.Tab("no_checklist", 4, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
         with mock.patch.object(gen, "TABS", gen.TABS + [bad]):
             with self.assertRaisesRegex(ValueError, "no_checklist"):
                 gen.render()
-        own = gen.Tab("own_tooltip", 2, label="te_x", tooltip="te_x_tt", body="te_x_body",
+        own = gen.Tab("own_tooltip", 4, label="te_x", tooltip="te_x_tt", body="te_x_body",
                       open_=gen.shown("te_x_sgui"), tooltip_expr="Localize( 'te_x_tt' )")
         with mock.patch.object(gen, "TABS", gen.TABS + [own]):
             self.assertIn("tooltip = \"[Localize( 'te_x_tt' )]\"", gen.render())
@@ -1110,14 +1274,18 @@ class LocTest(unittest.TestCase):
         self.assertEqual(set(FULL_NAMES), {t.key for t in gen.TABS})
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
-                name = loc[_tab(tab).label]
+                # a label may splice its entry's name ($je_x$), single-sourced
+                name = re.sub(r"\$(\w+)\$", lambda m: loc[m.group(1)], loc[_tab(tab).label])
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)
                 for word in words:
                     self.assertLessEqual(len(word) * per_char, NAME_WIDTH, word)
-                self.assertLessEqual(len(name), len(VANILLA_FIVE_SLOT_NAME), name)
-                self.assertLessEqual(max(len(w) for w in words), vanilla_word, name)
+                if tab in RULES or tab == "nation":
+                    # the mirrored tabs take the entries' names, the owner's
+                    # call, however long; "Demographics" shrinks toward 12
+                    self.assertLessEqual(len(name), len(VANILLA_FIVE_SLOT_NAME), name)
+                    self.assertLessEqual(max(len(w) for w in words), vanilla_word, name)
 
 
 class IconsTest(unittest.TestCase):

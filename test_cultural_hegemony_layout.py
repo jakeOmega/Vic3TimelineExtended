@@ -124,16 +124,19 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(je.count('gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"'), 3)
 
     def test_the_tab_composes_the_same_sections_then_the_link(self):
+        """The tab's body (te_ch_tab_body), which the Society panel's tab and
+        the Timeline Extended window's both mount (test_te_system_tab_bodies.py
+        checks the mounts and the frame's blocks: the gate on a parent of the
+        GetPlayerJournalEntry datacontext, the link after every section)."""
         tab = _read(TAB)
         start = tab.index('name = "te_society_ch_tab"')
-        body = tab[start:tab.index("### END MOD ###", start)]
+        self.assertIn("te_ch_tab_body = {}", tab[start:tab.index("### END MOD ###", start)])
+        body = _type_body(_read(WIDGET), "te_ch_tab_body")
         found = re.findall(r"^\t+(te_ch_\w+) = \{\}", body, re.M)
         self.assertEqual(found, COMPOSERS)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_ch_reference_sections"))
-        # The gate sits on a parent of the widget carrying the GetPlayerJournalEntry datacontext.
-        gate = body.index("GetScriptedGui('te_society_ch_tab_sgui').IsShown")
-        self.assertLess(gate, body.index("GetPlayerJournalEntry('je_cultural_hegemony')"))
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
+        self.assertIn("GetScriptedGui('te_society_ch_tab_sgui').IsShown", body)
+        self.assertIn("GetPlayerJournalEntry('je_cultural_hegemony')", body)
 
     def test_the_greyed_tab_keeps_its_unlock_checklist(self):
         tab = _read(TAB)
