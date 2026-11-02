@@ -217,6 +217,7 @@ HOST_MOUNTS = [
     ("market_panel.gui", "te_market_global_warming_tab", "te_global_warming", "te_gw_tab_body"),
     ("market_panel.gui", "te_market_strategic_reserve_tab", "te_strategic_reserve", "te_st_res_tab_body"),
     ("culture_panel.gui", "te_society_ch_tab", "te_ch", "te_ch_tab_body"),
+    ("diplomatic_overview.gui", "te_diplomacy_un_tab", "te_un", "te_un_tab_body"),
 ]
 
 # The hosts' bodies, as the frame's blocks fill them: (body type, file, gate,
@@ -247,6 +248,11 @@ HOST_BODIES = [
      "te_society_ch_tab_sgui", "je_cultural_hegemony", "te_ch_tab_layout",
      ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"],
      "te_society_ch_open_journal_tt", None),
+    # the entry's status text as a Status section, after the overview
+    ("te_un_tab_body", os.path.join(JE_WIDGETS, "un_layout_widget.gui"),
+     "te_diplomacy_un_tab_sgui", "je_united_nations", "te_un_tab_layout",
+     ["te_un_overview_panel", "te_je_status_desc", "te_un_status_sections", "te_un_reference_sections"],
+     "te_diplomacy_un_open_journal_tt", None),
 ]
 
 

@@ -113,8 +113,10 @@ class PillarBarTest(unittest.TestCase):
 
 class TabStatusTest(unittest.TestCase):
     def test_the_tab_keeps_the_entrys_status_text_open(self):
-        """Open by default (owner, 2026-09-28): the flag is the CLOSED flag."""
-        tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
+        """Open by default (owner, 2026-09-28): the flag is the CLOSED flag. In
+        the tab's body, which the Diplomacy panel and the Timeline Extended
+        window both mount."""
+        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
         m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
         self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
@@ -708,7 +710,7 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertIn("$je_un_conv_name_decolonization$", _loc("je_un_chamber_regime_colonial_pressure"))
 
     def test_the_tab_status_hides_with_nothing_to_say(self):
-        tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
+        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
         self.assertIn("GetScriptedGui('un_status_text_sgui').IsShown", tab)
         for key in ("je_un_status_conference", "je_un_status_dissolved"):
             self.assertFalse(_loc(key).endswith("\\n"), key)

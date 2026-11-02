@@ -618,6 +618,87 @@ types un_layout_widget_types
 		te_un_sec_archive = {}
 		te_un_sec_how = {}
 	}
+
+	### The tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Diplomacy
+	### panel's UN tab and the Timeline Extended window's United Nations tab.
+	### In the order this file sets for both hosts: the overview, the entry's
+	### status text as a Status section (open; only a founding conference or a
+	### dissolution), the status sections (the chart among them), the record
+	### and the explanations, inside te_un_tab_layout, which a wide mount
+	### overrides; then the frame's Open Journal Entry. The entry's scripted
+	### buttons are the AI's (`is_ai = yes`, the 2026-10-27 audit's UN-9), so
+	### the tab has no Actions section: each control sits beside the figure it
+	### acts on, and founding sits under the overview's No UN cell. Spec:
+	### docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md.
+	type te_un_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				blockoverride "text" {
+					text = "je_united_nations"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_un_tab_layout" {
+				te_un_overview_panel = {}
+
+				# The entry's own status text (a founding conference or a
+				# dissolution), open by default (the owner's call, 2026-09-28):
+				# nothing the journal says is lost from the tab. The whole
+				# section hides while the text is empty (un_status_text_sgui),
+				# which is whenever a UN stands: the Assembly's statistics moved
+				# into the overview (the 2026-10-27 audit, UN-20).
+				# te_je_status_desc has a visible of its own, so the section's
+				# gate is on a wrapper (gotcha #17).
+				flowcontainer = {
+					visible = "[GetScriptedGui('un_status_text_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					un_chamber_section_header = {
+						blockoverride "left_text" {
+							text = "te_diplomacy_un_tab_status_header"
+						}
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
+						}
+						blockoverride "onclick_showmore" {
+							visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
+						}
+						blockoverride "onclick_showless" {
+							visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+						}
+					}
+					flowcontainer = {
+						visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+						parentanchor = hcenter
+						direction = vertical
+
+						te_je_status_desc = {}
+					}
+				}
+
+				te_un_status_sections = {}
+
+				te_un_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_diplomacy_un_open_journal_tt"
+		}
+	}
 }
 
 ### ==========================================================================
