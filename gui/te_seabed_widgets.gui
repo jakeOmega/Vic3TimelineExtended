@@ -1594,4 +1594,36 @@ types te_seabed_widget_types
 			}
 		}
 	}
+
+	### ----------------------------------------------------------------------
+	### The Seabed tab of the Timeline Extended window (te_system_tab_frame,
+	### gui/te_system_tab_widgets.gui; the window mounts it from
+	### gui/te_systems_window_generated.gui). No journal entry: the panels read
+	### the player's country through GetPlayer, under the tab's gate
+	### (te_window_seabed_tab_sgui) on a parent, the header outside it, and no
+	### Open Journal Entry. te_seabed_tab_layout is the block a wide mount
+	### overrides.
+	### ----------------------------------------------------------------------
+	type te_seabed_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_seabed_tab_header"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_content" {
+			block "te_seabed_tab_layout" {
+				te_seabed_overview_panel = {}
+				te_seabed_policy_panel = {}
+				te_seabed_basins_panel = {}
+				te_seabed_how_panel = {}
+			}
+		}
+		blockoverride "tab_open_journal" {}
+	}
 }

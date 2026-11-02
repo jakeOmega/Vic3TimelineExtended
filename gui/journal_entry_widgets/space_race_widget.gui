@@ -7652,6 +7652,64 @@ types space_race_widget_types
 		te_sr_sec_how = {}
 	}
 
+	### The Space Race tab of the Timeline Extended window (the window mounts
+	### it from gui/te_systems_window_generated.gui). Open from the first
+	### milestone on, with or without one running (te_window_space_race_tab_sgui,
+	### sr_in_space_race). First the entries (owner, 2026-10-27):
+	### te_sr_window_milestones (generated, from the generator's SR_MILESTONES)
+	### holds a te_system_tab_frame per entry, since GetPlayerJournalEntry takes
+	### one literal key, each shown only while the player holds that entry
+	### active, and a note in their place while none is. Then the tab's own
+	### sections, which read no entry: Space Powers (our program and every other
+	### power's) and Orbit (debris, satellites, strikes), after the milestones
+	### (owner, 2026-10-27: the milestone we run is the summary a player acts
+	### on), under the tab's own gate, so they show between milestones too.
+	### Orbit holds the debris row. Then How the Space Race Works, once for
+	### every entry: the journal wraps it in te_sr_reference_sections, whose
+	### IsActive gate needs one entry's datacontext, so the tab has the section
+	### itself, under the tab's gate, in the same fixed 520 column.
+	###
+	### Not drawn, as in the journal: the goal bar (every entry mounts the
+	### bars-on-top marker, and the overview draws the progress), the status
+	### line (only for an inactive entry) and the 32 scripted buttons (the AI's:
+	### each `visible` carries is_ai = yes; Mission Control carries the same
+	### actions for a human). te_sr_tab_layout is the block a wide mount
+	### overrides.
+	type te_sr_tab_body = flowcontainer {
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 10
+
+		block "te_sr_tab_layout" {
+			te_sr_window_milestones = {}
+
+			flowcontainer = {
+				name = "te_systems_window_space_race_summary"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 520 -1 }
+
+				te_sr_sec_powers = {}
+				te_sr_sec_orbit = {}
+			}
+
+			flowcontainer = {
+				name = "te_systems_window_space_race_reference"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+				minimumsize = { 520 -1 }
+
+				te_sr_sec_how = {}
+			}
+		}
+	}
+
 	### ======================================================================
 	### PER-MILESTONE PANELS. What each milestone's journal roots wrap, and
 	### what the Timeline Extended window's Space Race tab instances

@@ -1015,6 +1015,8 @@ class LabelBudgetTest(unittest.TestCase):
 STATE_GUI = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 STATES_PANEL = os.path.join(REPO, "gui", "states_panel.gui")
 WINDOW = os.path.join(REPO, "gui", "te_systems_window.gui")
+# the window's strip, templates and tab mounts (scripts/generators/gen_te_systems_window.py)
+WINDOW_GENERATED = os.path.join(REPO, "gui", "te_systems_window_generated.gui")
 
 
 class StateCardTest(unittest.TestCase):
@@ -1093,13 +1095,18 @@ class StateCardTest(unittest.TestCase):
 
     def test_the_goto_sets_what_the_window_reads(self):
         """The goto's two values are the ones the window's Grand Monuments tab
-        sets and its root shows on, and its gate is the tab content's own."""
+        sets and its root shows on, and its gate is the tab content's own: the
+        gate of te_gm_tab_body, the body the tab's mount holds."""
         window = _squash(_read(WINDOW))
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]\"", window)
+        generated = _squash(_read(WINDOW_GENERATED))
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]\"", generated)
         self.assertIn("GetVariableSystem.HasValue('com_open_window', 'te_systems_window')", window)
-        self.assertIn("GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments')", window)
-        tab = re.search(r'name = "te_systems_window_grand_monuments_tab"(.*?)datacontext', window).group(1)
-        self.assertIn("GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown", tab)
+        self.assertIn("GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments')", generated)
+        mount = re.search(r'name = "te_systems_window_grand_monuments_tab"(.*?)\}', generated).group(1)
+        self.assertIn("te_gm_tab_body = {", mount)
+        body = _type_body(_read(GUI), "te_gm_tab_body")
+        gate = re.search(r'blockoverride "tab_gate" \{(.*?)\}', body, re.S).group(1)
+        self.assertIn("GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown", gate)
 
     def test_every_rendered_key_exists(self):
         loc = _loc()

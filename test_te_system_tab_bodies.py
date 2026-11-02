@@ -1,0 +1,228 @@
+"""The shared system-tab frame and the tab bodies built on it
+(gui/te_system_tab_widgets.gui; spec
+docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 9.1).
+
+One shape for every journal-entry tab, in the window and in the vanilla
+panels that host a system's tab: the header, the tab's gate on a parent of the
+GetPlayerJournalEntry datacontext (gotcha #29), a fixed 520 column, the
+content, and Open Journal Entry. Each body type derives from the frame and
+fills its blocks, so two hosts of one tab can't drift apart.
+"""
+import glob
+import os
+import re
+import unittest
+
+from test_te_systems_window import _close, _read, _strip_comments, _type_body
+
+REPO = os.path.dirname(os.path.abspath(__file__))
+WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
+JE_WIDGETS = os.path.join(REPO, "gui", "journal_entry_widgets")
+
+OPEN_JOURNAL = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+
+
+def _children(body):
+    """The top-level items of a block's body, in order: (kind, name, text).
+    kind is "block" for `block "x" {…}`, "widget" for `name = {…}`, and
+    "property" for a one-line `key = value`."""
+    items = []
+    i = 0
+    while i < len(body):
+        m = re.compile(r'\s*(?:block "(\w+)" \{|(\w+) = \{|(\w+) = ([^\n{]+))').match(body, i)
+        if not m or m.end() == i:
+            rest = body[i:].strip()
+            assert not rest, f"unparsed: {rest[:60]}"
+            break
+        if m.group(1) or m.group(2):
+            end = _close(body, m.end() - 1)
+            inner = body[m.end():end]
+            if m.group(2) and "\n" not in inner:    # a one-line value: size = { 480 32 }
+                items.append(("property", m.group(2), "{" + inner + "}"))
+            else:
+                items.append(("block" if m.group(1) else "widget", m.group(1) or m.group(2), inner))
+            i = end + 1
+        else:
+            items.append(("property", m.group(3), m.group(4).strip()))
+            i = m.end()
+    return items
+
+
+def _gate(sgui):
+    return f"GetScriptedGui('{sgui}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+
+
+def _override(body, name):
+    """A blockoverride's contents in a type body, or None when it has none."""
+    m = re.search(rf'blockoverride "{name}" \{{', body)
+    return None if m is None else body[m.end():_close(body, m.end() - 1)]
+
+
+def _instances(text):
+    """The te_* types a block instances, in order (one level or deeper)."""
+    return re.findall(r"^\t+(te_\w+) = \{", text, re.M)
+
+
+class FrameTest(unittest.TestCase):
+    """te_system_tab_frame: the shape every frame-based tab body shares."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.body = _strip_comments(_type_body(_read(WIDGETS), "te_system_tab_frame"))
+
+    def test_the_frame_shape(self):
+        self.assertRegex(_read(WIDGETS), r"type te_system_tab_frame = flowcontainer \{")
+        top = _children(self.body)
+        # the header, then what goes before the gate (Banking's readout), then the gate
+        blocks = [name for kind, name, _ in top if kind == "block"]
+        self.assertEqual(blocks, ["tab_header", "tab_before_gate"])
+        widgets = [(name, text) for kind, name, text in top if kind == "widget"]
+        self.assertEqual([name for name, _ in widgets], ["flowcontainer"])
+        names = [name for _, name, _ in top]
+        self.assertLess(names.index("tab_before_gate"), names.index("flowcontainer"))
+        self.assertNotIn("visible", names)   # the root's visible is the instance's
+        # the gate: on the parent's own properties, never with the datacontext
+        gate = _children(widgets[0][1])
+        own = [(kind, name) for kind, name, _ in gate if kind != "widget"]
+        self.assertIn(("block", "tab_gate"), own)
+        self.assertNotIn("datacontext", [name for _, name in own])
+        inner = [text for kind, name, text in gate if kind == "widget"]
+        self.assertEqual(len(inner), 1)
+        # the entry's column: its datacontext block, a fixed 520, the content,
+        # then the link
+        column = _children(inner[0])
+        self.assertEqual([name for kind, name, _ in column if kind == "block"],
+                         ["tab_entry", "tab_content", "tab_open_journal"])
+        self.assertIn(("property", "minimumsize", "{ 520 -1 }"), column)
+        self.assertNotIn("visible", [name for kind, name, _ in column if kind == "property"])
+        link = [text for kind, name, text in column if kind == "block" and name == "tab_open_journal"][0]
+        self.assertEqual([name for kind, name, _ in _children(link)], ["button"])
+
+    def test_the_link(self):
+        """Open Journal Entry: shown while the entry runs, at the width every
+        host uses, with its font and tooltip left to the body."""
+        m = re.search(r'block "tab_open_journal" \{', self.body)
+        self.assertTrue(m)
+        link = self.body[m.end():_close(self.body, m.end() - 1)]
+        button = _children(link)[0][2]
+        for line in ('visible = "[JournalEntry.IsActive]"', "using = default_button", "size = { 480 32 }",
+                     'text = "te_system_tab_open_journal"', f'onclick = "{OPEN_JOURNAL}"',
+                     'block "tab_open_journal_font" {}', 'block "tab_open_journal_tooltip" {}'):
+            self.assertIn(line, button)
+        # the font block after default_button, so a body's font wins
+        self.assertLess(button.index("using = default_button"), button.index('block "tab_open_journal_font"'))
+
+
+# The window's journal-entry and seabed tabs, as the frame's blocks fill them:
+# (body type, file, header text, gate, journal entry or None, layout block,
+# composers in order, Open Journal Entry's tooltip or None).
+WINDOW_BODIES = [
+    ("te_gm_tab_body", os.path.join(JE_WIDGETS, "grand_monuments_widget.gui"),
+     "te_window_tab_grand_monuments", "te_window_grand_monuments_tab_sgui", "je_grand_monuments",
+     "te_gm_tab_layout", ["te_gm_overview_panel", "te_gm_status_sections", "te_gm_reference_sections"],
+     "te_window_grand_monuments_open_journal_tt"),
+    ("te_ce_tab_body", os.path.join(JE_WIDGETS, "colonial_empire_widget.gui"),
+     "je_colonial_empire", "te_window_colonial_empire_tab_sgui", "je_colonial_empire",
+     "te_ce_tab_layout", ["te_ce_overview_panel", "te_ce_status_sections", "te_ce_reference_sections"],
+     "te_window_colonial_empire_open_journal_tt"),
+    ("te_seabed_tab_body", os.path.join(REPO, "gui", "te_seabed_widgets.gui"),
+     "te_seabed_tab_header", "te_window_seabed_tab_sgui", None,
+     "te_seabed_tab_layout", ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
+                              "te_seabed_how_panel"],
+     None),
+]
+
+
+class BodyTest(unittest.TestCase):
+    """Each tab's body: the frame with its blocks filled, the content the
+    window's tab drew inline before the frame (spec § 9.1)."""
+
+    def test_window_bodies(self):
+        for name, path, header, gate, entry, layout, composers, tooltip in WINDOW_BODIES:
+            with self.subTest(body=name):
+                text = _strip_comments(_read(path))
+                self.assertTrue(re.search(rf"type {name} = te_system_tab_frame \{{", text), f"no type {name}")
+                body = _type_body(text, name)
+                # the header outside the gate, as every tab's is
+                head = _override(body, "tab_header")
+                self.assertRegex(head, rf'default_header = \{{\s*using = default_list_position\s*'
+                                       rf'blockoverride "text" \{{\s*text = "{header}"\s*\}}\s*\}}')
+                self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
+                if entry:
+                    self.assertEqual(_override(body, "tab_entry").strip(),
+                                     f"datacontext = \"[GetPlayerJournalEntry('{entry}')]\"")
+                    self.assertIsNone(_override(body, "tab_open_journal"))
+                    self.assertEqual(_override(body, "tab_open_journal_tooltip").strip(), f'tooltip = "{tooltip}"')
+                else:
+                    # no entry: no datacontext and no link, whose JournalEntry would not resolve
+                    self.assertIsNone(_override(body, "tab_entry"))
+                    self.assertEqual(_override(body, "tab_open_journal").strip(), "")
+                    self.assertNotIn("JournalEntry", body)
+                # the composers, inside the layout block a wide mount overrides
+                content = _override(body, "tab_content")
+                m = re.fullmatch(rf'\s*block "{layout}" \{{(.*)\}}\s*', content, re.S)
+                self.assertTrue(m, content)
+                self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}$", m.group(1), re.M), composers)
+                self.assertNotIn("visible", body.replace(_override(body, "tab_gate"), ""))
+
+    def test_the_space_race_body(self):
+        """Nine entries, each its own frame (te_sr_window_milestones, generated),
+        then the tab's own sections, which read no entry, then How the Space
+        Race Works once, all in the layout block a wide mount overrides."""
+        text = _strip_comments(_read(os.path.join(JE_WIDGETS, "space_race_widget.gui")))
+        self.assertTrue(re.search(r"type te_sr_tab_body = flowcontainer \{", text), "no type te_sr_tab_body")
+        body = _type_body(text, "te_sr_tab_body")
+        top = _children(body)
+        props = [(name, value) for kind, name, value in top if kind == "property"]
+        for prop in (("direction", "vertical"), ("parentanchor", "hcenter"), ("ignoreinvisible", "yes"),
+                     ("spacing", "10")):
+            self.assertIn(prop, props)
+        self.assertNotIn("visible", [name for name, _ in props])
+        self.assertEqual([(kind, name) for kind, name, _ in top if kind != "property"], [("block", "te_sr_tab_layout")])
+        layout = [text for kind, _, text in top if kind == "block"][0]
+        parts = _children(layout)
+        self.assertEqual([name for _, name, _ in parts], ["te_sr_window_milestones", "flowcontainer", "flowcontainer"])
+        self.assertEqual(parts[0], ("property", "te_sr_window_milestones", "{}"))
+        for (_, _, part), name, spacing, sections in (
+                (parts[1], "te_systems_window_space_race_summary", "4", ["te_sr_sec_powers", "te_sr_sec_orbit"]),
+                (parts[2], "te_systems_window_space_race_reference", None, ["te_sr_sec_how"])):
+            with self.subTest(part=name):
+                own = dict((n, v) for kind, n, v in _children(part) if kind == "property")
+                self.assertEqual(own["name"], f'"{name}"')
+                self.assertEqual(own["visible"], f'"[{_gate("te_window_space_race_tab_sgui")}]"')
+                self.assertEqual(own["minimumsize"], "{ 520 -1 }")
+                self.assertEqual(own.get("spacing"), spacing)
+                self.assertEqual([n for kind, n, _ in _children(part) if kind != "property" or n.startswith("te_")],
+                                 sections)
+                self.assertNotIn("JournalEntry", part)
+
+
+# What only a tab's vanilla host has: its panel's own datacontext. A body is
+# shown by the window too, which has none of them, so none may read them; a
+# host's extras that do (the Market panel's map-mode reset, Global Warming's
+# other-market view) stay in the host (spec § 3, plan Review Focus 2).
+HOST_PANELS = re.compile(r"\bInformationPanel\.|\b(?:MarketPanel|PopsOverviewPanel|BudgetPanel|SocietyPanel|MilitaryPanel)\b")
+
+
+class HostPanelTest(unittest.TestCase):
+    def test_no_body_reads_a_host_panel(self):
+        """Every te_*_tab_body type, the frame, and what the window's
+        generated file draws."""
+        checked = []
+        for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+            text = _strip_comments(_read(path))
+            names = re.findall(r"^\ttype (te_\w+_tab_body|te_system_tab_frame) = ", text, re.M)
+            if path.endswith("te_systems_window_generated.gui"):
+                names += re.findall(r"^\ttype (\w+) = ", text, re.M)
+            for name in names:
+                with self.subTest(type=name):
+                    hit = HOST_PANELS.search(_type_body(text, name))
+                    self.assertIsNone(hit, f"{name} reads {hit and hit.group(0)}")
+                checked.append(name)
+        for name in ("te_system_tab_frame", "te_gm_tab_body", "te_ce_tab_body", "te_seabed_tab_body", "te_sr_tab_body",
+                     "te_systems_window_tabs_narrow", "te_sr_window_milestones"):
+            self.assertIn(name, checked)
+
+
+if __name__ == "__main__":
+    unittest.main()

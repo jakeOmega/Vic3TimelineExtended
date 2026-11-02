@@ -1,0 +1,424 @@
+"""Generate the Timeline Extended window's strip, selection templates and tab
+mounts from one registry (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+§ 9.3).
+
+    python3 scripts/generators/gen_te_systems_window.py           # write the file
+    python3 scripts/generators/gen_te_systems_window.py --check   # exit 1 if stale
+
+Writes gui/te_systems_window_generated.gui. Never edit that file: edit TABS,
+SR_MILESTONES or the renderers here, and run this script.
+test_te_systems_window.py reads TABS and fails while the committed file is
+stale. A manual generator, kept out of POST_LOAD_REGENERATORS, so a reload
+never rewrites the window. gui/te_systems_window.gui keeps the frame, the
+launcher and the root, and instances what this writes:
+
+    te_systems_window_strips_narrow  the fixed_top's strips: one vanilla
+                                     tab_buttons per strip, then the developer
+                                     tax-probes strip
+    te_systems_window_tabs_narrow    the scroll area's column: the tax-probes
+                                     panel, then each tab's mount, holding its
+                                     body type
+    te_sr_window_milestones          the Space Race body's entries: a note
+                                     while none runs, then one
+                                     te_system_tab_frame per milestone
+
+WHICH TAB IS SHOWN. U = the tab is open (its `open_` gate: for a system tab,
+te_window_<system>_tab_sgui, its rule on and an entry running; the Space
+Race's stays open once the country is in the race), R = the tab is on the
+strip (its `strip` gate, te_window_<system>_tab_unlock_sgui: its rule on),
+S = the player last chose it (te_systems_window_tab), T = the developer tax
+tab is chosen and armed. With V = "a system tab last chosen is open" (S and U
+for one of the system tabs):
+
+    Nation       not T and not V
+    a system t   not T and S_t and U_t
+
+so exactly one tab is shown: Nation unless an open system tab was the last
+choice. A system tab's unselected half shows while it is on the strip and not
+shown, Nation's while another tab is. And and Or take two arguments, so V is
+a balanced binary tree of Or.
+
+ADDING A TAB: a body type (te_<system>_tab_body, on te_system_tab_frame in
+gui/te_system_tab_widgets.gui, unless it has no entry and no gate), one Tab
+line below, its loc (label, tooltip, locked line), then run this script.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[2]
+GUI_OUT = ROOT / "gui" / "te_systems_window_generated.gui"
+
+STORED = "te_systems_window_tab"
+SLOTS = ["first", "second", "third", "fourth", "fifth"]
+
+
+# --- expressions: the exact GUI text the templates and the strip use ---------
+
+def _root():
+    return "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+
+
+def shown(sgui: str) -> str:
+    return f"GetScriptedGui('{sgui}').IsShown( {_root()} )"
+
+
+def valid(sgui: str) -> str:
+    return f"GetScriptedGui('{sgui}').IsValid( {_root()} )"
+
+
+def valid_tooltip(sgui: str) -> str:
+    return f"GetScriptedGui('{sgui}').IsValidTooltip( {_root()} )"
+
+
+def stored(key: str) -> str:
+    return f"GetVariableSystem.HasValue('{STORED}', '{key}')"
+
+
+def and_(a: str, b: str) -> str:
+    return f"And( {a}, {b} )"
+
+
+def or_(a: str, b: str) -> str:
+    return f"Or( {a}, {b} )"
+
+
+def not_(a: str) -> str:
+    return f"Not( {a} )"
+
+
+def or_all(terms: list[str]) -> str:
+    """Or over every term, as a balanced binary tree: Or takes two."""
+    assert terms
+    if len(terms) == 1:
+        return terms[0]
+    mid = (len(terms) + 1) // 2
+    return or_(or_all(terms[:mid]), or_all(terms[mid:]))
+
+
+# --- the registry -------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Tab:
+    """One tab of the window.
+
+    key           the stored value (te_systems_window_tab) and the names'
+                  stem: te_systems_window_<key>_tab, _selected, _unselected
+    row           its strip (1 = the first)
+    label         the tab's name (loc key)
+    tooltip       its tooltip while open (loc key)
+    locked        the grayed tab's first line, before its checklist (loc key)
+    met           the grayed tab's line when the checklist all passes
+    open_         the expression for "open", or None for always
+    strip         the expression for "on the strip", or None for always
+    unlock        the scripted GUI whose IsValid and IsValidTooltip make the
+                  grayed tab's checklist
+    body          the type the tab's mount instances
+    layout        the layout block the body declares, which a wide mount
+                  overrides (None: the body is the layout)
+    wide          the wide composer (PR D)
+    tooltip_expr  a tooltip expression replacing the three-branch one
+    """
+    key: str
+    row: int
+    label: str
+    tooltip: str
+    body: str
+    locked: str | None = None
+    met: str = "te_system_tab_met_tt"
+    open_: str | None = None
+    strip: str | None = None
+    unlock: str | None = None
+    layout: str | None = None
+    wide: str | None = None
+    tooltip_expr: str | None = None
+
+
+def _system(key: str, body: str, layout: str, **kw) -> Tab:
+    """A tab of the window's own systems: te_window_<key>_tab_sgui opens it and
+    te_window_<key>_tab_unlock_sgui puts it on the strip and gives the
+    checklist (common/scripted_guis/te_system_tab_sguis.txt)."""
+    return Tab(key, 1, label=f"te_window_tab_{key}", tooltip=f"te_window_tab_{key}_tt",
+               locked=f"te_window_tab_{key}_locked_tt",
+               open_=shown(f"te_window_{key}_tab_sgui"), strip=shown(f"te_window_{key}_tab_unlock_sgui"),
+               unlock=f"te_window_{key}_tab_unlock_sgui", body=body, layout=layout, **kw)
+
+
+TABS: list[Tab] = [
+    # Nation: always open (no journal entry, no game rule), so never grayed and
+    # never a checklist (style guide rule 9's exception). It is the fallback.
+    Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
+        body="te_nation_tab_sections"),
+    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout"),
+    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout"),
+    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout"),
+    # No journal entry: open once the country has taken part in a seabed
+    # sharing, so its own "met" line.
+    _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt"),
+]
+
+# The Space Race's nine entries, in je_space_race.txt's order. Each has its
+# overview and its live sections (te_sr_<m>_overview, te_sr_<m>_status), but
+# the waiting entry, which has the transit overview only.
+SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
+                 "interstellar_probe", "interstellar_results", "solar_colonization"]
+SR_TRANSIT = {"interstellar_results"}
+
+TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
+
+
+# --- templates ----------------------------------------------------------------
+
+def selected(tab: Tab) -> str:
+    if tab.key == TABS[0].key:
+        return and_(not_(TAX_PROBES), not_(_any_system_shown()))
+    mine = stored(tab.key) if tab.open_ is None else and_(stored(tab.key), tab.open_)
+    return and_(not_(TAX_PROBES), mine)
+
+
+def unselected(tab: Tab) -> str:
+    if tab.key == TABS[0].key:
+        return or_(TAX_PROBES, _any_system_shown())
+    return not_(selected(tab)) if tab.strip is None else and_(tab.strip, not_(selected(tab)))
+
+
+def _any_system_shown() -> str:
+    return or_all([and_(stored(t.key), t.open_) for t in TABS[1:]])
+
+
+def _template(name: str, expr: str) -> list[str]:
+    return [f"template {name} {{", f'\tvisible = "[{expr}]"', "}", ""]
+
+
+def templates() -> list[str]:
+    out = []
+    for tab in TABS:
+        out += _template(f"te_systems_window_{tab.key}_selected", selected(tab))
+        out += _template(f"te_systems_window_{tab.key}_unselected", unselected(tab))
+    out += _template("te_systems_window_tax_probes_selected", TAX_PROBES)
+    return out
+
+
+# --- the strip ----------------------------------------------------------------
+
+def _tooltip(tab: Tab) -> str:
+    if tab.tooltip_expr:
+        return f'tooltip = "[{tab.tooltip_expr}]"'
+    if tab.open_ is None:
+        return f'tooltip = "{tab.tooltip}"'
+    checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock)} )"
+    return (f"tooltip = \"[SelectLocalization( {tab.open_}, '{tab.tooltip}', "
+            f"SelectLocalization( {valid(tab.unlock)}, '{tab.met}', {checklist} ) )]\"")
+
+
+def _slot(slot: str, tab: Tab) -> list[str]:
+    def override(name, *lines):
+        return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
+    click = [] if tab.open_ is None else [f'enabled = "[{tab.open_}]"']
+    click.append(f"onclick = \"[GetVariableSystem.Set('{STORED}', '{tab.key}')]\"")
+    return (override("button", f'text = "{tab.label}"')
+            + override("button_tooltip", _tooltip(tab))
+            + override("button_click", *click)
+            + override("button_visibility", f"using = te_systems_window_{tab.key}_selected")
+            + override("button_visibility_checked", f"using = te_systems_window_{tab.key}_unselected")
+            + override("button_selected", f'text = "{tab.label}"'))
+
+
+def _strip(tabs: list[Tab]) -> list[str]:
+    assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
+    out = ["tab_buttons = {"]
+    for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
+        if i:
+            out.append("")
+        out.append(f"\t### {tab.key}")
+        out += [f"\t{ln}" for ln in _slot(slot, tab)]
+    return out + ["}"]
+
+
+TAX_PROBES_STRIP = [
+    "# TEMPORARY: a strip of its own for the developer tax-probes tab, so arming",
+    "# the probes never shrinks the system tabs.",
+    "tab_buttons = {",
+    f'\tvisible = "[{shown("te_tp_tab_sgui")}]"',
+    '\tblockoverride "first_button" { text = "te_tp_tab" }',
+    '\tblockoverride "first_button_selected" { text = "te_tp_tab" }',
+    '\tblockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }',
+    f"\tblockoverride \"first_button_click\" {{ onclick = \"[GetVariableSystem.Set('{STORED}', 'tax_probes')]\" }}",
+    '\tblockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }',
+    f'\tblockoverride "first_button_visibility_checked" {{ visible = "[{not_(TAX_PROBES)}]" }}',
+    "}",
+]
+
+
+def strips_narrow() -> list[str]:
+    out = ["### The strips, in fixed_top: vanilla's five-slot strip (as the Military",
+           "### and Diplomacy panels use it) per row of the registry. tab_buttons",
+           "### derives from hbox, and a flowcontainer cannot own box layouts, so this",
+           "### is a vbox.",
+           "type te_systems_window_strips_narrow = vbox {",
+           "\tlayoutpolicy_horizontal = expanding",
+           "\tlayoutpolicy_vertical = fixed",
+           "\tignoreinvisible = yes",
+           ""]
+    for row in sorted({t.row for t in TABS}):
+        out += [f"\t{ln}" if ln else "" for ln in _strip([t for t in TABS if t.row == row])]
+        out.append("")
+    out += [f"\t{ln}" for ln in TAX_PROBES_STRIP]
+    return out + ["}"]
+
+
+# --- the mounts ---------------------------------------------------------------
+
+def _mount(tab: Tab) -> list[str]:
+    return ["flowcontainer = {",
+            f'\tname = "te_systems_window_{tab.key}_tab"',
+            f"\tusing = te_systems_window_{tab.key}_selected",
+            "\tusing = default_fade_in_out",
+            "\tparentanchor = hcenter",
+            "\tdirection = vertical",
+            "\tignoreinvisible = yes",
+            "\tmargin_top = 10",
+            "\tmargin_bottom = 15",
+            "",
+            f"\t{tab.body} = {{}}",
+            "}"]
+
+
+def tabs_narrow() -> list[str]:
+    out = ["### The scroll area's column: one fixed width (style guide rule 8), so",
+           "### switching tabs never moves the content sideways. Each tab's content",
+           "### is up only while its tab is shown (the *_selected templates), so a",
+           "### closed tab's panels are never built.",
+           "type te_systems_window_tabs_narrow = flowcontainer {",
+           '\tname = "te_systems_window_content"',
+           "\tusing = default_list_position",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tminimumsize = { 540 -1 }",
+           "",
+           "\tte_tp_panel = {",
+           "\t\tusing = te_systems_window_tax_probes_selected",
+           "\t}"]
+    for tab in TABS:
+        out.append("")
+        out += [f"\t{ln}" if ln else "" for ln in _mount(tab)]
+    return out + ["}"]
+
+
+def _milestone(m: str) -> list[str]:
+    if m in SR_TRANSIT:
+        content = ["te_sr_overview_transit = {}"]
+    else:
+        content = [f"te_sr_{m}_overview = {{}}", f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
+    return ([f"### {m}",
+             "te_system_tab_frame = {",
+             f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui")}]"',
+             '\tblockoverride "tab_header" {',
+             "\t\tdefault_header = {",
+             "\t\t\tusing = default_list_position",
+             '\t\t\tblockoverride "text" {',
+             f'\t\t\t\ttext = "je_space_race_{m}"',
+             "\t\t\t}",
+             "\t\t}",
+             "\t}",
+             '\tblockoverride "tab_entry" {',
+             f"\t\tdatacontext = \"[GetPlayerJournalEntry('je_space_race_{m}')]\"",
+             "\t}",
+             '\tblockoverride "tab_content" {']
+            + [f"\t\t{ln}" for ln in content]
+            + ["\t}",
+               '\tblockoverride "tab_open_journal_tooltip" {',
+               '\t\ttooltip = "te_window_space_race_open_journal_tt"',
+               "\t}",
+               "}"])
+
+
+def sr_milestones() -> list[str]:
+    out = ["### The Space Race body's entries (te_sr_tab_body, space_race_widget.gui):",
+           "### GetPlayerJournalEntry takes one literal key, so each entry has its own",
+           "### frame, in je_space_race.txt's order, shown only while the player holds",
+           "### it (te_window_space_race_<m>_sgui, on the frame's root, so its header",
+           "### goes with it), and a note in their place while none runs",
+           "### (te_window_space_race_idle_sgui). Several can run at once. Each shows",
+           "### the types its journal roots wrap, the debris row overridden out (Orbit",
+           "### shows it once), then Open Journal Entry for that entry.",
+           "type te_sr_window_milestones = flowcontainer {",
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tspacing = 10",
+           "",
+           "\t### No milestone running: one note in the entries' place, so the tab",
+           "\t### never ends on the reference alone.",
+           "\tflowcontainer = {",
+           '\t\tname = "te_systems_window_space_race_idle"',
+           f'\t\tvisible = "[{shown("te_window_space_race_idle_sgui")}]"',
+           "\t\tparentanchor = hcenter",
+           "\t\tdirection = vertical",
+           "\t\tignoreinvisible = yes",
+           "\t\tspacing = 10",
+           "\t\tminimumsize = { 520 -1 }",
+           "",
+           "\t\tdefault_header = {",
+           "\t\t\tusing = default_list_position",
+           '\t\t\tblockoverride "text" {',
+           '\t\t\t\ttext = "te_window_space_race_idle_header"',
+           "\t\t\t}",
+           "\t\t}",
+           "\t\tte_sr_panel = {",
+           "\t\t\tte_sr_text = {",
+           '\t\t\t\ttext = "te_window_space_race_idle_note"',
+           "\t\t\t}",
+           "\t\t}",
+           "\t}"]
+    for m in SR_MILESTONES:
+        out.append("")
+        out += [f"\t{ln}" for ln in _milestone(m)]
+    return out + ["}"]
+
+
+# --- the file -----------------------------------------------------------------
+
+HEADER = [
+    "### AUTO-GENERATED by scripts/generators/gen_te_systems_window.py from its TABS registry. Do not edit.",
+    "### The Timeline Extended window's strip, selection templates and tab mounts;",
+    "### gui/te_systems_window.gui instances them. The generator's docstring has the",
+    "### selection rule and how to add a tab.",
+    "",
+]
+
+
+def render() -> str:
+    assert TABS[0].key == "nation" and TABS[0].open_ is None and TABS[0].strip is None, \
+        "Nation is the first tab and the fallback: always open, always on the strip"
+    lines = list(HEADER)
+    lines += ["### Which tab is shown: the last one chosen while it is open, otherwise",
+              "### Nation, which always is. A system tab's unselected half shows while it",
+              "### is on the strip and not shown; Nation's while another tab is.", ""]
+    lines += templates()
+    lines += ["types te_systems_window_generated_types", "{"]
+    for i, part in enumerate((strips_narrow(), tabs_narrow(), sr_milestones())):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in part]
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+    text = render()
+    if "--check" in argv:
+        current = GUI_OUT.read_text(encoding="utf-8-sig") if GUI_OUT.exists() else None
+        if current != text:
+            print(f"stale: {GUI_OUT.relative_to(ROOT)} (run python3 scripts/generators/gen_te_systems_window.py)")
+            return 1
+        return 0
+    GUI_OUT.write_text("﻿" + text, encoding="utf-8", newline="\n")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
