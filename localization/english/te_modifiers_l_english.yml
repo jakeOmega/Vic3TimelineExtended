@@ -1199,6 +1199,8 @@
  state_building_portalis_lyon_silk_house_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_portalis_lyon_silk_house').GetName] can expand to in this state"
  state_building_prussian_railway_directorate_max_level_add:0 "[GetBuildingType('building_prussian_railway_directorate').GetName] Max Level"
  state_building_prussian_railway_directorate_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_prussian_railway_directorate').GetName] can expand to in this state"
+ state_building_public_housing_max_level_add:0 "[GetBuildingType('building_public_housing').GetName] Max Level"
+ state_building_public_housing_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_public_housing').GetName] can expand to in this state"
  state_building_putilov_works_max_level_add:0 "[GetBuildingType('building_putilov_works').GetName] Max Level"
  state_building_putilov_works_max_level_add_desc:0 "Increases the maximum number of levels that [GetBuildingType('building_putilov_works').GetName] can expand to in this state"
  state_building_rac_sitka_trading_post_max_level_add:0 "[GetBuildingType('building_rac_sitka_trading_post').GetName] Max Level"

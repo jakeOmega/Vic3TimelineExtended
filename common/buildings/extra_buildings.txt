@@ -2375,11 +2375,16 @@ building_military_base = {
 # tolerance (extra_script_values.txt, § MIGRATION CROWDING). No eligibility
 # gate beyond the technology: a state that isn't crowded gains nothing from
 # it, and the AI's ai_value is 0 there.
+# Level cap (2026-11-02, owner): state_building_public_housing_max_level_add
+# from four technologies, sized so the newest method at the cap houses about
+# the largest rich city of the era (urban_planning 200, paved_roads +50,
+# modern_skyscrapers +100, computer_aided_design +250; test_public_housing_cap.py).
 # docs/systems/mod_systems/pops_and_migration.md § Public Housing.
 building_public_housing = {
 	building_group = bg_government
 	icon = "gfx/interface/icons/building_icons/building_public_housing.dds"
 	city_type = city
+	has_max_level = yes
 
 	unlocking_technologies = {
 		urban_planning

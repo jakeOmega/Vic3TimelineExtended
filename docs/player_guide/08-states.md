@@ -71,6 +71,14 @@ Engineering to its own state, for each staffed level:
 | Prefabricated Tower Blocks | Prefabricated Construction | +45 |
 | Arcologies | Advanced Structural Engineering | +70 |
 
+Technology caps how many levels a state can hold: 200 with Urban Planning,
+then +50 with Paved Roads, +100 with Modern Skyscrapers and +250 with
+Computer-Aided Design, for 600 in all. On the newest method you can build, a
+state at the cap houses about as many people as the world's largest rich city
+of that era: 2 million with Model Dwellings, 6 million with High-Rise
+Apartments, 27 million with Prefabricated Tower Blocks and 42 million with
+Arcologies, before tolerance.
+
 Its upkeep comes out of your budget, so build it where crowding bites: in a
 state below its threshold it does nothing.
 

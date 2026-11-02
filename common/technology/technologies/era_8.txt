@@ -355,6 +355,9 @@ computer_aided_design = {
 	modifier = {
 		# census only, modern safety (demographics_params.SAFETY_TYPES): cars and buildings designed and crash-tested on computers
 		state_external_safety_add = 0.1
+		# Public Housing's cap: estates of tens of thousands of flats, designed
+		# and run on computers (Tokyo in 1977, about 27 million)
+		state_building_public_housing_max_level_add = 250
 	}
 
 	ai_weight = {
