@@ -1,8 +1,10 @@
 # Timeline Extended window: a wide mode and every system tab (2026-11-02)
 
-> **Status: scoping, nothing built.** Checked against `main` at `62f7200`. The frame
-> rests on vanilla's `block_windows.gui`, which this repository doesn't hold
-> (§ 4.1), and on what only the game can show (§ 10).
+> **Status: built 2026-11-02** in #1327–#1337, from its
+> [plan](../plans/2026-11-02-te-window-wide-mode.md); § 9.9's observer guard in #1325.
+> Left: § 9.7 (the hosts' vanilla bases, on the owner's machine) and the play-test list
+> (`docs/testing/te-window-wide-playtest.md`). Written against `main` at `62f7200`; the
+> text below is the design as scoped.
 
 ## 1. The request
 

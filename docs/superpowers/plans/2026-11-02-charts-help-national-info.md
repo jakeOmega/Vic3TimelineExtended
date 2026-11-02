@@ -48,7 +48,7 @@
   - `.venv/bin/ruff check .`, and every touched generator's `--check`;
   - `test_tax_code_bypass.py`, `test_nightly_audit_select.py`, `test_test_files_main_block.py` (a new test file ends with the `unittest.main()` block);
   - the suite.
-- **In-game checks never gate a merge.** Each PR adds its own to `docs/testing/charts-help-national-info-playtest.md` (created in H1), each a checkbox: what to do, what to see, the fallback.
+- **In-game checks never gate a merge.** Each PR adds its own section to `docs/testing/charts-help-national-info-playtest.md` (created in H1): a table of Check, Expect and If it fails, as `docs/testing/te-window-wide-playtest.md` has.
 
 ## Owner calls this plan assumes
 
