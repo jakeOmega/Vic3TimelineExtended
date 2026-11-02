@@ -30,7 +30,7 @@ pm_sr_fabrication_none = {
 }
 
 pm_sr_fabrication_orbital_assembly = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_fabrication_orbital_assembly.dds"
 
 	unlocking_technologies = {
 		cislunar_infrastructure

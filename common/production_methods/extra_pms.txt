@@ -2140,7 +2140,7 @@ pm_continuous_miners_building_tech_metals_mine = {
 }
 
 pm_smart_miners_building_coal_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -2187,7 +2187,7 @@ pm_smart_miners_building_coal_mine = {
 }
 
 pm_smart_miners_building_iron_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -2234,7 +2234,7 @@ pm_smart_miners_building_iron_mine = {
 }
 
 pm_smart_miners_building_lead_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -2281,7 +2281,7 @@ pm_smart_miners_building_lead_mine = {
 }
 
 pm_smart_miners_building_sulfur_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -2333,7 +2333,7 @@ pm_smart_miners_building_gold_mine = {
 			country_minting_add = 8250
 		}
 	}
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -2380,7 +2380,7 @@ pm_smart_miners_building_gold_mine = {
 }
 
 pm_smart_miners_building_tech_metals_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_miners_building_coal_mine.dds"
 
 	unlocking_technologies = {
 		internet_of_things
@@ -4695,7 +4695,7 @@ pm_decentralized_religious_structures = {
 }
 
 pm_secular_society = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_secular_society.dds"
 
 	unlocking_laws = {
 		law_total_separation
@@ -5241,7 +5241,7 @@ pm_gas_turbine_engines = {
 }
 
 pm_hydrogen_fuel_cell_engines = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hydrogen_fuel_cell_engines.dds"
 	unlocking_technologies = {
 		electric_vehicles
 	}
@@ -6450,7 +6450,7 @@ pm_modern_design_porcelain = {
 }
 
 pm_3d_printed_porcelain = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_purple_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_3d_printed_porcelain.dds"
 
 	unlocking_technologies = {
 		additive_manufacturing
@@ -7465,7 +7465,7 @@ pm_synthetic_opium = {
 }
 
 pm_pharma_biologics = {
-	texture = "gfx/interface/icons/production_method_icons/cat_flask_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_biologics.dds"
 
 	unlocking_technologies = {
 		mrna_therapeutics
@@ -9197,7 +9197,7 @@ pm_orbital_nanolithography = {
 }
 
 pm_robots = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_robots.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -9232,7 +9232,7 @@ pm_robots = {
 }
 
 pm_smart_robots = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_smart_robots.dds"
 
 	unlocking_technologies = {
 		machine_learning
@@ -10152,7 +10152,7 @@ pm_modern_automobile_production = {
 }
 
 pm_electric_cars = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_electric_cars.dds"
 
 	unlocking_technologies = {
 		electric_vehicles
@@ -10958,7 +10958,7 @@ pm_industrial_highway = {
 }
 
 pm_electric_civil_highway = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_electric_civil_highway.dds"
 
 	unlocking_technologies = {
 		electric_vehicles
@@ -11004,7 +11004,7 @@ pm_electric_civil_highway = {
 }
 
 pm_electric_industrial_highway = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_electric_industrial_highway.dds"
 
 	unlocking_technologies = {
 		electric_vehicles
@@ -15494,7 +15494,7 @@ pm_medium_bandwidth = {
 }
 
 pm_high_bandwidth = {
-	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_high_bandwidth.dds"
 	unlocking_technologies = {
 		machine_learning
 	}
@@ -15765,7 +15765,7 @@ pm_cloud_computing = {
 }
 
 pm_machine_learning_assisted_code_generation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_machine_learning_assisted_code_generation.dds"
 	unlocking_technologies = {
 		generative_ai
 	}
@@ -16010,7 +16010,7 @@ pm_chemical_rockets = {
 }
 
 pm_reusable_rockets = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_reusable_rockets.dds"
 	unlocking_technologies = {
 		reusable_rocketry
 	}
@@ -17538,7 +17538,7 @@ pm_computer_aided_design = {
 }
 
 pm_3d_printed_buildings = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_3d_printed_buildings.dds"
 
 	unlocking_technologies = {
 		additive_manufacturing
@@ -18601,7 +18601,7 @@ pm_mars_mission = {
 }
 
 pm_solar_colonization = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_solar_colonization.dds"
 
 	# Era 10 (lunar colonization design § 4): 10,000 a week, sized for Reusable
 	# Rockets; the 25,000 it had was sized for era 11's Ablative Rockets.
@@ -19729,7 +19729,7 @@ pm_jet_age_tourism = {
 }
 
 pm_modern_tourism = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_tourism.dds"
 
 	unlocking_technologies = {
 		decline_of_organized_religion
@@ -22289,7 +22289,7 @@ pm_missile_defense_battery = {
 }
 
 pm_directed_energy_point_defense = {
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_directed_energy_point_defense.dds"
 
 	unlocking_technologies = {
 		directed_energy_defenses
@@ -22750,7 +22750,7 @@ pm_public_housing_tower_blocks = {
 }
 
 pm_public_housing_arcologies = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p7.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_public_housing_arcologies.dds"
 	ai_value = 32000
 
 	unlocking_technologies = {
