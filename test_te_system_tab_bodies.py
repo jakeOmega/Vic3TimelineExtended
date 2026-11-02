@@ -304,7 +304,7 @@ class DemogWindowBodyTest(unittest.TestCase):
 # host's extras that do (the Market panel's map-mode reset, Global Warming's
 # other-market view) stay in the host (spec § 3, plan Review Focus 2).
 HOST_PANELS = re.compile(r"\bInformationPanel\.|\b(?:MarketPanel|PopsOverviewPanel|PopBrowserPanel|BudgetPanel|"
-                         r"SocietyPanel|MilitaryPanel)\b")
+                         r"SocietyPanel|MilitaryPanel|DiplomaticOverviewPanel)\b")
 
 
 class HostPanelTest(unittest.TestCase):
@@ -328,24 +328,37 @@ class HostPanelTest(unittest.TestCase):
 
     def test_no_window_tab_reads_a_host_panel(self):
         """What each of the window's tabs mounts (the registry's bodies and
-        wide layouts, whatever their names), and the types each instances one
-        level down (its composers and sections), read none of the hosts'
-        panels. The Census Data window's own panel (PopBrowserPanel) counts:
-        Demographics' wide layout is that window's composer."""
+        wide layouts, whatever their names), and every type those reach
+        through instances and base types, all the way down (composers,
+        sections, rows, cells), read none of the hosts' panels. The Census
+        Data window's own panel (PopBrowserPanel) counts: Demographics' wide
+        layout is that window's composer. A block a tab blanks with a
+        blockoverride is still read, so its default may not read one either."""
         from scripts.generators import gen_te_systems_window as gen
-        types = {}
+        types, bases = {}, {}
         for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
             text = _strip_comments(_read(path))
-            for name in re.findall(r"^\ttype (\w+) = \w+ \{", text, re.M):
-                types[name] = _type_body(text, name)
+            for name, base in re.findall(r"^\ttype (\w+) = (\w+) \{", text, re.M):
+                types[name], bases[name] = _type_body(text, name), base
         for t in gen.TABS:
             with self.subTest(tab=t.key):
                 self.assertIn(t.body, types)
                 self.assertIn(t.wide, types)
-                for name in [n for top in (t.body, t.wide) for n in [top] + [c for c in _instances(types[top]) if c in types]]:
+                reached, todo = set(), [t.body, t.wide]
+                while todo:
+                    name = todo.pop()
+                    if name in reached:
+                        continue
+                    reached.add(name)
+                    todo += [c for c in [bases[name], *_instances(types[name])] if c in types]
+                for name in sorted(reached):
                     hit = HOST_PANELS.search(types[name])
                     self.assertIsNone(hit, f"{t.key}: {name} reads {hit and hit.group(0)}")
-
+                # the walk goes past the composers: Strategic Reserve's
+                # sections sit inside the status composer its wide layout
+                # places whole
+                if t.key == "strategic_reserve":
+                    self.assertIn("te_st_res_sec_inventory", reached)
 
 if __name__ == "__main__":
     unittest.main()

@@ -124,7 +124,8 @@ class Tab:
     body          the type the tab's mount instances
     layout        the layout block the body declares, which a wide mount
                   overrides (None: the body is the layout)
-    wide          the wide composer (PR D)
+    wide          the wide composer the full-screen mount places (every tab has
+                  one; test_te_systems_window.py fails on a tab without)
     tooltip_expr  a tooltip expression replacing the three-branch one
     """
     key: str
