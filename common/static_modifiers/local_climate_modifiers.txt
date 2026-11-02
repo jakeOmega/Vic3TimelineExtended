@@ -6,7 +6,9 @@
 # turns it into a bonus. A _mult, not an add (§ 11.1): attraction floors at 0, so points
 # that every state of a hot, poor market shared pinned its poorer states there and
 # stalled the migration between them; a percentage scales each state's pull instead.
-# The game sums a state's percentages, so the cut weighs less where other modifiers add.
+# The game sums a state's percentages, so the cut weighs less where other modifiers add, and
+# more where famine, turmoil, pollution, blockade or devastation already cut: those can take a
+# hot state to 0 outright. By design (owner, 2026-11-01: no further cap; spec § 11.1).
 # The blank icon hides it from the state panel's modifier rows: the Local Climate
 # tile shows it (test_hidden_state_modifiers.py).
 local_climate_discomfort = {

@@ -518,8 +518,10 @@ erase the gaps pops move for (§ 5). A percentage scales each state's
 attraction instead, so gaps survive in proportion: a pair 20 apart stays 10
 apart at −50%. Percentages add to a state's others before they multiply, so a
 climate cut weighs less where buildings, laws and decrees already add a lot
-(Georgia's +48% in the save). The owner ruled out a further cap: a crowded,
-hot state with nothing else going for it should lose people and draw none.
+(Georgia's +48% in the save), and more where famine, turmoil, pollution, a
+blockade or devastation already cut, which can take a hot state to 0 outright.
+The owner ruled out a further cap: a crowded, hot state with nothing else going
+for it should lose people and draw none.
 
 ### 11.2 Data
 
@@ -574,14 +576,14 @@ penalty  = min(80, heat + cold + dry + disease)   percent of migration attractio
   cost rose with warming, against § 6. The cost of the call: 1836 Paris is
   1.1 °C colder on its hottest days, not 1.9, so it pays 3% rather than 0.
 - **Applied** as `local_climate_discomfort` with `state_migration_pull_mult =
-  -0.01`, times the penalty, from the yearly refresh; added at 0.5 and over,
-  since a smaller cut would show as −0%.
+  -0.01`, times the penalty, from the yearly refresh; added above 0.5, the
+  tile's gate too, since a smaller cut would show as −0%.
 
 ### 11.4 Calibration
 
 Targets, in percent in 1836 unless an era is given (`test_local_climate_comfort.py`
 pins them): Georgia about 27, falling to 2–8 by era 7; West Bengal about 50, so
-two of its states 10 apart still move pops; the Home Counties, Île-de-France and
+two of its states 10 points apart stay about 5 apart, the gap pops need; the Home Counties, Île-de-France and
 Catalonia near 0; Hawaii under Norrland and under Paris (the owner's case);
 Yakutsk 55–75; Oman at the cap. Outcome, with every carrier to each era:
 
@@ -598,11 +600,13 @@ Yakutsk 55–75; Oman at the cap. Outcome, with every carrier to each era:
 | Yakutsk | 0 | 64.9 | 0 | 0 | 64.9 | 35.7 | 25.9 | 13.0 |
 | Oman (Muscat) | 53.1 | 0 | 32 | 5 | 80 | 73.4 | | |
 
-Across all 675 regions in 1836: median 19.6%, 48 at 0, 44 at 50 or more, 4
-at the cap. Every region costs nothing at era 13.
+Across all 675 regions in 1836: median 19.6%, 42 at 0 and 48 under 0.5 (no
+modifier), 44 at 50 or more, 4 at the cap. Every region costs nothing at era 13.
 
 ### 11.5 Old saves
 
 A state carries phase 2's points in `te_climate_penalty_applied` until its
-yearly refresh, and the new modifier reads them as percent meanwhile (Georgia's
-14.6 points become −14.6%). No repair: it lasts at most a year and errs low.
+yearly refresh, and the new modifier reads them as percent meanwhile. That errs
+low almost everywhere (Georgia −15%, against −28%) but high where phase 2's heat
+overcounted a steady climate: Hawaii shows about −8% against −1%, Bermuda −10%
+against −4%; 12 regions err high in 1836. No repair: it lasts at most a year.

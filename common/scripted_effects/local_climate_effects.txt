@@ -9,13 +9,14 @@
 #
 # te_climate_penalty_applied is the penalty in force, set on every refresh and never
 # removed: the modifier's multiplier reads it on later ticks too, and the state
-# panel's Comfort row shows it. Under 0.5 the state carries no modifier: the game shows
-# the percentage whole, and the attraction breakdown would list "Local Climate -0%".
+# panel's Comfort row shows it. At 0.5 and under the state carries no modifier: the game shows
+# the percentage whole, and the attraction breakdown would list "Local Climate -0%". The tile's
+# Comfort rows gate on the same > 0.5 (a GUI has no >=), so the two agree at exactly 0.5.
 te_update_local_climate_modifier = {
 	remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort }
 	set_variable = { name = te_climate_penalty_applied value = te_climate_penalty }
 	if = {
-		limit = { var:te_climate_penalty_applied >= 0.5 }
+		limit = { var:te_climate_penalty_applied > 0.5 }
 		add_modifier = { name = local_climate_discomfort multiplier = var:te_climate_penalty_applied }
 	}
 }

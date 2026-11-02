@@ -14,8 +14,8 @@ test_local_climate_comfort.py pins the anchors' targets.
     python3 scripts/analysis/local_climate_calibration.py [--warming W]
 
 W is the world's felt anomaly, °C (temperature_anomaly_display): 0 in 1836, about 1.1 today. The record
-holds today's normals, so each region feels W less te_climate_normals_warming, times its latitude's
-amplification; the default W = 0 is 1836.
+holds today's normals, so each region's hot days feel W less te_climate_normals_warming, and its winter
+that times its latitude's amplification; the default W = 0 is 1836.
 """
 import argparse
 import importlib.util

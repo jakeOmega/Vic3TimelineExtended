@@ -219,7 +219,7 @@ class Formula(unittest.TestCase):
     def test_anchor_targets(self):
         """Spec § 11.4's targets, in percent of migration pull, in 1836 unless an era is given: the world's
         anomaly 0, so each region's hot days run te_climate_normals_warming below the record's normals and
-        its winters that times its amplification. Bengal stays near half, so a gap of 10 points between two of its states still moves pops
+        its winters that times its amplification. Bengal stays near half, so two of its states 10 points apart stay about 5 apart, the gap pops need
         (owner's 1892 breakdowns, 2026-11-01)."""
         p = self.penalty
         ranges = (
@@ -469,7 +469,7 @@ class Modifier(unittest.TestCase):
         body = squash(top_block(EFFECTS.read_text(encoding="utf-8-sig"), EFFECT) or "")
         self.assertEqual(body, "remove_modifier_if_exists_effect = { MODIFIER = local_climate_discomfort } "
                                f"set_variable = {{ name = {APPLIED} value = te_climate_penalty }} "
-                               f"if = {{ limit = {{ var:{APPLIED} >= 0.5 }} "
+                               f"if = {{ limit = {{ var:{APPLIED} > 0.5 }} "
                                f"add_modifier = {{ name = local_climate_discomfort multiplier = var:{APPLIED} }} }}")
 
     def test_refresh_never_removes_the_variable(self):
