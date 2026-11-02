@@ -41,6 +41,9 @@ advanced_nanofabrication = {
 		# the census's infection treatment (#1045): nanomedicine, machines in the blood that find and destroy pathogens;
 		# with Personalized Medicine's it reaches the cap, 0.99
 		state_infection_treatment_add = 0.02
+		# Public Housing's cap: nanotube frames carry arcologies a kilometer up
+		# (pops_and_migration.md § Public Housing)
+		state_building_public_housing_max_level_add = 50
 		# a module slot at every colony (colony management design § 5; sr_site_slots_<key>)
 		country_sr_colony_slots_add = 1
 	}
