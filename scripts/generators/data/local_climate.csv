@@ -171,7 +171,7 @@ STATE_ERITREA,Asmara,18,0,13,1,0,15,32.5,22.6,fit,Mild dry semi-arid highland pl
 STATE_DONGOLA,Dongola,36,1,18,0,1,19,49,31.3,HSDN:1km,Extreme desert heat watered by the Nile
 STATE_KORDOFAN,El Obeid,32,1,22,1,1,13,43.9,30.3,HSOB:4km,Hot semi-arid Sahel seasonal fevers
 STATE_DARFUR,Zalingei,28,1,20,1,1,13,40.4,28.6,fit,Hot semi-arid uplands below Jebel Marra
-STATE_BLUE_NILE,Khartoum,35,0,24,0,1,16,43.9,30.3,HSOB:365km,Extreme dry heat where the two Niles meet
+STATE_BLUE_NILE,Khartoum,35,0,24,0,1,16,48.6,30.3,HSOB:365km;fit_hot_day,Extreme dry heat where the two Niles meet
 STATE_MARRAKECH,Marrakech,29,2,13,1,1,32,45.9,30.6,GMMX:5km,Hot semi-arid plain below the Atlas
 STATE_FEZ,Fez,27,2,10,0,1,34,43.7,29.4,GMFF:13km,Hot-summer Mediterranean interior
 STATE_AL_RIF,Tangier,24,2,13,0,1,36,38.2,28,GMTT:11km,Mild Mediterranean strait coast
@@ -205,10 +205,10 @@ STATE_YORUBA_STATES,Ibadan,28,3,24,0,2,7,38.5,31.7,DNMM:111km,Hot humid forest-s
 STATE_NIGER_DELTA,Onitsha,29,3,26,0,2,6,36.3,30.4,FGSL:341km,Hot humid forest above the delta endemic malaria
 STATE_OUTER_HAUSALAND,Zinder,33,1,22,1,1,14,44.5,31,DRZR:2km,Hot semi-arid Sahel seasonal fevers
 STATE_BORNU,Kukawa,33,1,22,1,2,13,45.2,32.6,DRZF:115km,Hot semi-arid Sahel near Lake Chad
-STATE_NIGERIA,Bauchi,30,1,23,0,2,10,44.5,31.8,WMO61091:312km,Hot tropical savanna with a long dry season
+STATE_NIGERIA,Bauchi,30,1,23,0,2,10,41.7,31.8,WMO61091:312km;fit_hot_day,Hot tropical savanna with a long dry season
 STATE_EAST_HAUSALAND,Kano,31,1,22,1,2,12,44.5,31.8,WMO61091:118km,Hot semi-arid savanna endemic malaria
 STATE_GUINEA,Kindia,28,2,24,0,2,10,38.4,30.9,GUCY:97km,Hot wet savanna foothills endemic malaria
-STATE_GOLD_COAST,Kumasi,27,3,24,0,2,7,39.2,30.1,DIBU:197km,Hot humid forest endemic malaria
+STATE_GOLD_COAST,Kumasi,27,3,24,0,2,7,35.6,30.1,DIBU:197km;fit_hot_day,Hot humid forest endemic malaria
 STATE_TOGO,Atakpame,28,3,24,0,2,8,38.3,30.2,DXAK:6km,Hot humid forest-savanna hills endemic malaria
 STATE_DAHOMEY,Abomey,29,3,25,0,2,7,38.5,31.4,DBBC:9km,Hot humid savanna plateau endemic malaria
 STATE_LINDI,Iringa,21,1,16,0,1,-8,32.5,24.8,HTIR:13km,Mild upland plateau with a dry winter
@@ -234,7 +234,7 @@ STATE_CONGO,Brazzaville,27,3,22,0,2,-4,36.4,29.6,FCBB:3km,Hot humid Congo savann
 STATE_CONGO_ORIENTALE,Kisangani,26,3,25,0,2,1,35.4,29.5,fit,Hot humid equatorial rainforest endemic malaria
 STATE_KASAI,Kananga,25,2,23,0,2,-6,36.6,29.8,FZAA:788km,Hot humid savanna-forest mosaic endemic malaria
 STATE_BAS_CONGO,Kinshasa,27,3,23,0,2,-4,36.4,29.6,FCBB:10km,Hot humid Congo river savanna endemic malaria
-STATE_EQUATEUR,Mbandaka,26,3,25,0,2,0,37.5,30.6,FCOI:176km,Hot humid equatorial rainforest endemic malaria
+STATE_EQUATEUR,Mbandaka,26,3,25,0,2,0,34,30.6,FCOI:176km;fit_hot_day,Hot humid equatorial rainforest endemic malaria
 STATE_NORTH_ANGOLA,Sao Salvador,25,3,20,0,2,-6,34.9,29.8,FNCA:241km,Hot humid Kongo plateau endemic malaria
 STATE_SOUTH_ANGOLA,Huambo,21,1,16,0,1,-13,32,24.2,FNHU:6km,Mild highland plateau with a dry winter
 STATE_EAST_ANGOLA,Malanje,23,1,19,0,2,-10,35.8,26.5,fit,Warm plateau savanna with a dry winter
@@ -348,8 +348,8 @@ STATE_EASTERN_CUBA,Santiago de Cuba,28,3,25,0,2,20,35.1,28.6,MUCU:6km,Hot humid 
 STATE_CENTRAL_CUBA,Puerto Principe,28,3,22,0,2,21,35.5,29.2,MUCM:9km,Hot humid interior plains endemic malaria
 STATE_ECUADOR,Quito,15,0,14,0,0,0,24.8,18.4,SEQM:21km,Cool spring-like equatorial highland
 STATE_GUAYANA,Georgetown,28,3,27,0,2,7,36.2,30.1,SYCJ:34km,Hot humid equatorial coast endemic malaria
-STATE_ZULIA,Barquisimeto,25,2,24,1,1,10,38.2,30,SVVA:152km,Warm semi-arid upland valley
-STATE_MIRANDA,Caracas,25,2,22,0,1,10,36.4,30.3,SVMI:14km,Warm humid highland valley
+STATE_ZULIA,Barquisimeto,25,2,24,1,1,10,35.3,27.3,fit,Warm semi-arid upland valley
+STATE_MIRANDA,Caracas,25,2,22,0,1,10,36.4,27.7,SVMI:14km;fit_index,Warm humid highland valley
 STATE_BOLIVAR,Ciudad Bolivar,30,3,26,0,2,8,37.7,31,SVBC:252km,Hot humid Orinoco savanna endemic malaria
 STATE_ANTIOQUIA,Medellin,24,2,22,0,0,6,32.6,24.7,SKMD:3km,Warm humid Andean valley
 STATE_GUAVIARE,Villavicencio,27,2,24,0,2,4,35.4,28.1,SKVV:3km,Hot wet llanos foothills endemic malaria

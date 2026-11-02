@@ -1391,6 +1391,8 @@
  state_climate_heat_relief_add_desc:0 "How far fans and air conditioning ease the summer heat that makes a state less comfortable to live in, cutting the heat part of its [concept_local_climate] penalty by this share."
  state_climate_water_relief_add:0 "Water Supply"
  state_climate_water_relief_add_desc:0 "How far pumps, dams and desalination make up for a dry state's want of water, cutting the water part of its [concept_local_climate] penalty by this share."
+ state_climate_winter_relief_add:0 "Winter Relief"
+ state_climate_winter_relief_add_desc:0 "How far heating, insulation and warm clothing close the gap between a raw winter and a mild one, shrinking by this share both what a harsh winter costs a state in [concept_local_climate] and what a mild one draws."
  state_contraception_add:0 "Contraception[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  state_contraception_add_desc:0 "The methods families have to space or limit births, beyond the traditional ones everyone has. How much of it people use depends on how many can read. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  state_custom_religion_animist_standard_of_living_add:0 "[concept_sol] Modifier for $custom_religion_animist$"

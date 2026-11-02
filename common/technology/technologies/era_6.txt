@@ -494,6 +494,7 @@ rural_electrification = {
 
 	modifier = {
 		state_climate_cold_relief_add = 0.15 # Local Climate: electric heat reaches the countryside
+		state_climate_winter_relief_add = 0.1 # Local Climate: electric light and heat through the long winter evenings
 		state_infrastructure_from_population_max_add = 100
 		country_sol_expectations_target_add = 0.5
 		building_power_plant_throughput_add = 0.25

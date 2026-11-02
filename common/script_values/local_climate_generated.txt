@@ -4260,7 +4260,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_DONGOLA } value = 49 }
 	else_if = { limit = { state_region = s:STATE_KORDOFAN } value = 43.9 }
 	else_if = { limit = { state_region = s:STATE_DARFUR } value = 40.4 }
-	else_if = { limit = { state_region = s:STATE_BLUE_NILE } value = 43.9 }
+	else_if = { limit = { state_region = s:STATE_BLUE_NILE } value = 48.6 }
 	else_if = { limit = { state_region = s:STATE_MARRAKECH } value = 45.9 }
 	else_if = { limit = { state_region = s:STATE_FEZ } value = 43.7 }
 	else_if = { limit = { state_region = s:STATE_AL_RIF } value = 38.2 }
@@ -4294,10 +4294,10 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_NIGER_DELTA } value = 36.3 }
 	else_if = { limit = { state_region = s:STATE_OUTER_HAUSALAND } value = 44.5 }
 	else_if = { limit = { state_region = s:STATE_BORNU } value = 45.2 }
-	else_if = { limit = { state_region = s:STATE_NIGERIA } value = 44.5 }
+	else_if = { limit = { state_region = s:STATE_NIGERIA } value = 41.7 }
 	else_if = { limit = { state_region = s:STATE_EAST_HAUSALAND } value = 44.5 }
 	else_if = { limit = { state_region = s:STATE_GUINEA } value = 38.4 }
-	else_if = { limit = { state_region = s:STATE_GOLD_COAST } value = 39.2 }
+	else_if = { limit = { state_region = s:STATE_GOLD_COAST } value = 35.6 }
 	else_if = { limit = { state_region = s:STATE_TOGO } value = 38.3 }
 	else_if = { limit = { state_region = s:STATE_DAHOMEY } value = 38.5 }
 	else_if = { limit = { state_region = s:STATE_LINDI } value = 32.5 }
@@ -4323,7 +4323,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_CONGO_ORIENTALE } value = 35.4 }
 	else_if = { limit = { state_region = s:STATE_KASAI } value = 36.6 }
 	else_if = { limit = { state_region = s:STATE_BAS_CONGO } value = 36.4 }
-	else_if = { limit = { state_region = s:STATE_EQUATEUR } value = 37.5 }
+	else_if = { limit = { state_region = s:STATE_EQUATEUR } value = 34 }
 	else_if = { limit = { state_region = s:STATE_NORTH_ANGOLA } value = 34.9 }
 	else_if = { limit = { state_region = s:STATE_SOUTH_ANGOLA } value = 32 }
 	else_if = { limit = { state_region = s:STATE_EAST_ANGOLA } value = 35.8 }
@@ -4437,7 +4437,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_CENTRAL_CUBA } value = 35.5 }
 	else_if = { limit = { state_region = s:STATE_ECUADOR } value = 24.8 }
 	else_if = { limit = { state_region = s:STATE_GUAYANA } value = 36.2 }
-	else_if = { limit = { state_region = s:STATE_ZULIA } value = 38.2 }
+	else_if = { limit = { state_region = s:STATE_ZULIA } value = 35.3 }
 	else_if = { limit = { state_region = s:STATE_MIRANDA } value = 36.4 }
 	else_if = { limit = { state_region = s:STATE_BOLIVAR } value = 37.7 }
 	else_if = { limit = { state_region = s:STATE_ANTIOQUIA } value = 32.6 }
@@ -5117,8 +5117,8 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_CENTRAL_CUBA } value = 29.2 }
 	else_if = { limit = { state_region = s:STATE_ECUADOR } value = 18.4 }
 	else_if = { limit = { state_region = s:STATE_GUAYANA } value = 30.1 }
-	else_if = { limit = { state_region = s:STATE_ZULIA } value = 30 }
-	else_if = { limit = { state_region = s:STATE_MIRANDA } value = 30.3 }
+	else_if = { limit = { state_region = s:STATE_ZULIA } value = 27.3 }
+	else_if = { limit = { state_region = s:STATE_MIRANDA } value = 27.7 }
 	else_if = { limit = { state_region = s:STATE_BOLIVAR } value = 31 }
 	else_if = { limit = { state_region = s:STATE_ANTIOQUIA } value = 24.7 }
 	else_if = { limit = { state_region = s:STATE_GUAVIARE } value = 28.1 }

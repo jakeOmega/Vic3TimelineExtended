@@ -36,9 +36,10 @@ FIELDS = ("state ref_place summer_mean_c summer_humidity winter_mean_c aridity m
 Row = collections.namedtuple("Row", FIELDS)
 NUMERIC = ("summer_mean_c", "summer_humidity", "winter_mean_c", "aridity", "malaria", "latitude")
 FLOATS = ("hot_day_c", "heat_index")
-# Where a row's heat figures come from (§ 11.2): a station (its code and distance), the fit from the record's own
-# fields, or another region's station.
-HEAT_SOURCE_RE = re.compile(r"[A-Z0-9]+:\d+km|fit|analog:STATE_\w+")
+# Where a row's heat figures come from (§ 11.2): a station (its code and distance), the station with one figure
+# from the fit on the record's own fields (a far or high station that missed the fit by 2.5 or more on it), the
+# fit for both, or another region's row.
+HEAT_SOURCE_RE = re.compile(r"[A-Z0-9]+:\d+km(?:;fit_(?:hot_day|index))?|fit|analog:STATE_\w+")
 
 # (script value, Row field or None for has_record, neutral default, what it holds)
 VALUES = (
@@ -133,7 +134,8 @@ def validate(rows, regions, traits):
         if r.heat_index > r.hot_day_c:
             errors.append(f"{r.state}: heat index {r.heat_index} above the hottest day {r.hot_day_c}")
         if not HEAT_SOURCE_RE.fullmatch(r.heat_source):
-            errors.append(f"{r.state}: heat_source {r.heat_source!r} is not code:Nkm, fit or analog:STATE_X")
+            errors.append(f"{r.state}: heat_source {r.heat_source!r} is not code:Nkm[;fit_hot_day|;fit_index], "
+                          "fit or analog:STATE_X")
         own = traits.get(r.state, set())
         if "state_trait_severe_malaria" in own and r.malaria < 2:
             errors.append(f"{r.state}: vanilla's state_trait_severe_malaria needs malaria 2, not {r.malaria}")
@@ -142,6 +144,15 @@ def validate(rows, regions, traits):
         if (any(re.fullmatch(r"state_trait_\w+_desert", t) for t in own) and r.aridity < 1
                 and r.state not in DESERT_TRAIT_EXCEPTIONS):
             errors.append(f"{r.state}: a vanilla desert trait needs aridity 1 or more, not 0")
+    by_state = {r.state: r for r in rows}
+    for r in rows:
+        if r.heat_source.startswith("analog:"):
+            src = by_state.get(r.heat_source.removeprefix("analog:"))
+            if src is None:
+                errors.append(f"{r.state}: {r.heat_source} names a region with no row")
+            elif (src.hot_day_c, src.heat_index) != (r.hot_day_c, r.heat_index):
+                errors.append(f"{r.state}: {r.heat_source} has hot day {src.hot_day_c} and heat index "
+                              f"{src.heat_index}, not {r.hot_day_c} and {r.heat_index}")
     return errors
 
 
