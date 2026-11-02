@@ -2666,6 +2666,56 @@ types covert_operations_widget_types
 			tooltip = "te_military_covert_open_journal_tt"
 		}
 	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_covert_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The window's wide mount puts it in place of
+	### te_covert_tab_layout; the Military panel and the side panel keep the one
+	### column. test_covert_layout.py holds the columns.
+	type te_covert_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_covert_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_operations = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_funding = {}
+				te_covert_sec_networks = {}
+				te_covert_sec_counterintel = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_known = {}
+			}
+
+			te_covert_reference_sections = {}
+		}
+	}
 }
 
 ### ==========================================================================
