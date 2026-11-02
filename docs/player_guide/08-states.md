@@ -24,7 +24,7 @@ tooltip breaks the numbers down.
 | Homeland Dynamics | Where a culture could gain or lose a homeland, even while changes are paused | Which cultures are gaining or losing homeland status here, with a progress bar for each, or why progress is paused. |
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
-| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs the state in migration pull. |
+| Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
 | Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
@@ -119,12 +119,13 @@ there is, and how common malaria was in 1836. The
 Local Climate tile shows it, and every part of a split region shares it.
 
 Migrants weigh the climate, so a harsh one cuts a state's migration pull, and
-through it the pull that draws mass migrations. Four things cost:
+through it the pull that draws mass migrations. Five things count:
 
-| Cost | When |
+| Part | When |
 |---|---|
 | Heat | The hottest days are hot and humid enough to strain the body; each degree costs more than the last |
-| Cold | The coldest month averages below freezing |
+| Winter | Measured against a winter like London's: a harsher one costs, a milder one adds a little |
+| Frost | The coldest month averages below freezing, on top of Winter |
 | Dry land | Water is limited (semi-arid country) or scarce (desert) |
 | Malaria | It was seasonal or endemic in 1836 |
 
@@ -136,18 +137,23 @@ stops sweat cooling the body.
 The tile's Comfort row gives the total as a percentage of the state's
 migration pull, worked out again once a year, and hovering a reading shows what
 it costs before and after technology. In 1836 a hot, humid, malarial state
-such as Georgia loses about 28%, Bengal about 50% and Yakutsk about 65%;
-London loses nothing and Paris 3%. Climate never adds pull, and it never costs
-more than 80%.
+such as Georgia loses about 25%, Bengal about 43% and Yakutsk about 64%;
+London loses nothing and Paris 4%. A mild winter with little else against it
+adds pull, at most about 7%: Madeira gains 7%, Hawaii 6% and Cape Town 5%.
+Climate never costs more than 80%.
 
 Technologies ease each cost, for the country that researches them:
 
-- Cold eases early, with steam heating and concrete.
+- Frost eases early, with steam heating and concrete.
+- Winter's pull, harsh against mild, shrinks more slowly with heating and
+  insulation, and goes only with the last eras' technologies.
 - Malaria goes with Quinine and then Malaria Prevention.
 - Water follows mechanized farming, welding and chemistry.
 - Heat waits for the 20th century's appliances and air conditioning.
 
-By the last era none of the four costs anything.
+By the last era none of the five costs or adds anything. On the way, air
+conditioning eases the South's heat sooner than heating closes the gap between
+winters, so once central air arrives Georgia costs less than Massachusetts.
 
 The record is today's climate. With [global warming](15-climate.md) at 0 the
 world runs about a degree colder than that, and winters more toward the

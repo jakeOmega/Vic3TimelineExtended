@@ -56,3 +56,18 @@ figures above: Georgia's Comfort is now about −28%, not −14.6 points.
 | Old save | A save from before heat v2 shows its old points as a percentage (Georgia −15%, Hawaii −8%) until the state's yearly refresh, then the new figure (Georgia −28%, Hawaii −1%) | The variable is not rewritten at the yearly pulse |
 | Internal migration in a hot, poor market | India's or Brazil's internal migration to about 1880, against a run with comfort off: migrants still move from the poorer states to the richer, at a volume near the comfort-off run's. The percentage cut keeps the gaps in proportion, so this should now pass where phase 2's points could stall it | A share every state pays still pinning poor states at 0: lower the heat curve or the cap |
 | Warming and the cold north | At +3 °C, Yakutsk's Comfort falls (cold eases faster than its hot days start to cost) and Georgia's rises | Winter amplification not applied (`te_climate_winter_warming`) |
+
+## Winter's mildness (2026-11-01)
+
+Winters measured against London's, a small bonus for milder ones, and Winter Relief (spec § 12). It supersedes the
+heat v2 figures above where they differ: Georgia is now about −25%, Hawaii about +6%.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The bonus | Madeira's tile reads Comfort +7% in green, and its migration attraction breakdown shows "Local Climate +7%"; Hawaii about +6%, Cape Colony +5% | No line: `local_climate_amenity` wasn't added (`te_climate_bonus_applied` not set); "−7%": the cost modifier applied a negative penalty |
+| London | Comfort reads None; Glasgow about −1% (None); Paris about −4% | The neutral point (`te_climate_winter_neutral`) |
+| Hidden | Neither "Local Climate" modifier appears among the state panel's modifier rows | `local_climate_amenity` missing from the `TimedModifier.GetName` filters |
+| Winter hover | Madeira's Winter hover: a +7% draw before relief, Winter Relief 0%, +7% left; Massachusetts' a −4% draw and a frost cost | `te_climate_winter_draw` signs |
+| Winter Relief | Water-tube Boiler's tooltip lists Winter Relief +10%; after it, Madeira's bonus and Massachusetts' winter cost both shrink a tenth at the next yearly refresh | The INJECT line in `te_local_climate_tech_injections.txt` |
+| The Sun Belt | In an observer run to era 7, the US South's migration attraction overtakes New England's | Heat relief or the winter term's weights |
+| A save from heat v2 | A state with a bonus shows None until its yearly refresh, then the bonus | `te_climate_bonus_now` reads a variable the refresh hasn't set yet; it is 0 until then |
