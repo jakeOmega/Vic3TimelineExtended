@@ -948,15 +948,22 @@ class MilitaryTabTest(unittest.TestCase):
         cls.military = _read(MILITARY)
         cls.blocks = _mod_blocks(cls.military)
 
-    def _content(self):
+    def _host(self):
         body = self.blocks[1]
         self.assertIn('name = "te_military_nuclear_tab"', body)
         return body
 
+    def _content(self):
+        """The tab's body (te_nuclear_tab_body), which the Military panel's tab
+        and the Timeline Extended window's both mount
+        (test_te_system_tab_bodies.py checks the mounts)."""
+        self.assertIn("te_nuclear_tab_body = {}", self._host())
+        return _type_body(_read(LAYOUT), "te_nuclear_tab_body")
+
     def test_two_marked_blocks_the_button_and_the_content(self):
         self.assertEqual(len(self.blocks), 2)
         self.assertIn('blockoverride "fourth_button"', self.blocks[0])
-        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_nuclear')]\"", self._content())
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_nuclear')]\"", self._host())
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
@@ -964,23 +971,21 @@ class MilitaryTabTest(unittest.TestCase):
         roots = [wrapped for _, _, wrapped in ROOTS]
         # The journal's roots, with the entry's own bar under The Programme, as in the journal.
         self.assertEqual(found, roots[:2] + ["te_je_goal_bar"] + roots[2:])
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_nuclear_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
         body = self._content()
         dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_nuclear_program')]\"")
         self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
+        # Never on the widget that carries the datacontext itself (the
+        # frame's tab_entry block holds it alone).
+        self.assertNotIn("visible", body[body.index('blockoverride "tab_entry"'):dc])
 
     def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self._content()
-        dc = body.index("GetPlayerJournalEntry('je_nuclear_program')")
-        self.assertIn("minimumsize = { 520 -1 }", body[dc:body.index("te_nuclear_overview_panel", dc)])
-        self.assertIn("parentanchor = hcenter", body[dc:body.index("te_nuclear_overview_panel", dc)])
+        """The frame's column, a fixed 520 (test_te_system_tab_bodies.py)."""
+        self._content()
+        self.assertRegex(_read(LAYOUT), r"type te_nuclear_tab_body = te_system_tab_frame \{")
 
     def test_the_bar_shows_with_a_programme_only(self):
         body = self._content()

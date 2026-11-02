@@ -594,9 +594,12 @@ class KnownSectionTest(unittest.TestCase):
         self.assertLess(composer.index("te_covert_sec_counterintel = {}"), composer.index("te_covert_sec_known = {}"))
 
     def test_the_military_tab_gets_it_from_the_composer(self):
-        # The Covert tab instances te_covert_status_sections, so it needs no edit of its own.
+        # The Covert tab's body instances te_covert_status_sections, so the
+        # tab needs no edit of its own.
         self.assertNotIn("te_covert_sec_known", _read(MILITARY))
-        self.assertIn("te_covert_status_sections = {}", _read(MILITARY))
+        self.assertIn("te_covert_tab_body = {}", _read(MILITARY))
+        self.assertIn("te_covert_status_sections = {}", _type_body(_read(GUI), "te_covert_tab_body"))
+        self.assertNotIn("te_covert_sec_known", _type_body(_read(GUI), "te_covert_tab_body"))
 
     def test_hidden_while_nothing_is_watched(self):
         self.assertIn("visible = \"[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]\"",
@@ -1147,15 +1150,22 @@ class MilitaryCovertTabTest(unittest.TestCase):
         cls.military = _read(MILITARY)
         cls.blocks = _marked(cls.military, TAB_TAG)
 
-    def _content(self):
+    def _host(self):
         body = self.blocks[1]
         self.assertIn('name = "te_military_covert_tab"', body)
         return body
 
+    def _content(self):
+        """The tab's body (te_covert_tab_body), which the Military panel's tab
+        and the Timeline Extended window's both mount
+        (test_te_system_tab_bodies.py checks the mounts)."""
+        self.assertIn("te_covert_tab_body = {}", self._host())
+        return _type_body(_read(GUI), "te_covert_tab_body")
+
     def test_two_marked_blocks_the_button_and_the_content(self):
         self.assertEqual(len(self.blocks), 2)
         self.assertIn('blockoverride "fifth_button"', self.blocks[0])
-        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._content())
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._host())
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
@@ -1164,9 +1174,8 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections",
                                    "te_covert_reference_sections"])
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index(wrapped[-1]))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
     def test_the_journal_draws_nothing_the_composers_do_not(self):
         """No te_je_* piece is needed (feasibility study 5.1): no goal bar, no
@@ -1185,18 +1194,16 @@ class MilitaryCovertTabTest(unittest.TestCase):
         body = self._content()
         dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_covert_warfare')]\"")
         self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
+        # Never on the widget that carries the datacontext itself (the
+        # frame's tab_entry block holds it alone).
+        self.assertNotIn("visible", body[body.index('blockoverride "tab_entry"'):dc])
         # The header sits outside the gate.
         self.assertLess(body.index('text = "je_covert_warfare"'), body.index(f'visible = "[{TAB_GATE}]"'))
 
     def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self._content()
-        dc = body.index("GetPlayerJournalEntry('je_covert_warfare')")
-        head = body[dc:body.index("te_covert_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's column, a fixed 520 (test_te_system_tab_bodies.py)."""
+        self._content()
+        self.assertRegex(_read(GUI), r"type te_covert_tab_body = te_system_tab_frame \{")
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         button = self.blocks[0]
