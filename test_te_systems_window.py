@@ -1004,9 +1004,15 @@ class IconsTest(unittest.TestCase):
         # the hover strip's fade is vanilla's mask, not the window's art
         textures = [t for t in re.findall(r'texture = "([^"]+)"', button) if t != self.FADE_MASK]
         self.assertEqual(textures, [self.LAUNCHER] * 2)
-        # ...and it is the window's only icon
+        # ...and it is the window's only icon: the generated file's textures
+        # are vanilla's full-screen frame's (test_te_fullscreen_frame.py)
         self.assertEqual(set(re.findall(r'texture = "([^"]+)"', gui)) - {self.FADE_MASK}, {self.LAUNCHER})
-        self.assertNotIn("texture =", _read(GENERATED))
+        frame = _type_body(_read(GENERATED), "te_fullscreen_block_window")
+        vanilla = _type_body(_read(os.path.join(REPO, "test_fixtures", "vanilla_gui", "block_windows.gui")),
+                             "fullscreen_block_window")
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', _read(GENERATED)),
+                         re.findall(r'texture = "([^"]+)"', frame))
+        self.assertEqual(re.findall(r'texture = "([^"]+)"', frame), re.findall(r'texture = "([^"]+)"', vanilla))
 
     def test_every_texture_is_listed(self):
         doc = _read(ICON_DOC)

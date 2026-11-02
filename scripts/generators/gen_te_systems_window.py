@@ -46,10 +46,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 GUI_OUT = ROOT / "gui" / "te_systems_window_generated.gui"
+# vanilla's gui/block_windows.gui, byte for byte (test_te_fullscreen_frame.py
+# holds it to the install): the full-screen frame is copied from it
+VANILLA_FRAMES = ROOT / "test_fixtures" / "vanilla_gui" / "block_windows.gui"
 
 STORED = "te_systems_window_tab"
 BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
@@ -380,6 +384,43 @@ def sr_milestones() -> list[str]:
     return out + ["}"]
 
 
+# --- the full-screen frame ----------------------------------------------------
+
+CLEAR_OPEN = "[GetVariableSystem.Clear('com_open_window')]"
+FRAME_CHANGES = [
+    ("type fullscreen_block_window = widget {", "type te_fullscreen_block_window = widget {"),
+    ('onclick = "[InformationPanelBar.OpenPreviousPanel]"', f'onclick = "{CLEAR_OPEN}"'),
+    ('onclick = "[InformationPanelBar.ClosePanel]"', f'onclick = "{CLEAR_OPEN}"'),
+]
+
+
+def fullscreen_frame() -> list[str]:
+    """Vanilla's fullscreen_block_window under the mod's name, Back and Close
+    clearing the window's open state: vanilla's call the information panel
+    bar, which a scripted widget isn't in (spec § 4.1). Each change must match
+    exactly once, so a patch that moves them fails here."""
+    text = VANILLA_FRAMES.read_text(encoding="utf-8-sig")
+    m = re.search(r"^\ttype fullscreen_block_window = widget \{$", text, re.M)
+    if not m:
+        raise ValueError(f"{VANILLA_FRAMES.name}: no fullscreen_block_window")
+    depth, end = 0, None
+    for i in range(m.end() - 1, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        if depth == 0:
+            end = i
+            break
+    frame = text[m.start():end + 1]
+    for old, new in FRAME_CHANGES:
+        if frame.count(old) != 1:
+            raise ValueError(f"vanilla's fullscreen_block_window changed: {old!r} is there {frame.count(old)} times")
+        frame = frame.replace(old, new)
+    body = [ln[1:] if ln.startswith("\t") else ln for ln in frame.split("\n")]
+    return ["### The full-screen frame: vanilla's fullscreen_block_window (copied from",
+            "### test_fixtures/vanilla_gui/block_windows.gui), its type name, Back and Close",
+            "### changed. It fills the screen from its origin, as vanilla's full-screen",
+            "### panels do (ingame_hud.gui), its own top filler under the top bar."] + body
+
+
 # --- the file -----------------------------------------------------------------
 
 HEADER = [
@@ -410,7 +451,7 @@ def render() -> str:
               "### is on the strip and not shown; Nation's while another tab is.", ""]
     lines += templates()
     lines += ["types te_systems_window_generated_types", "{"]
-    for i, part in enumerate((strips_narrow(), tabs_narrow(), sr_milestones())):
+    for i, part in enumerate((fullscreen_frame(), strips_narrow(), tabs_narrow(), sr_milestones())):
         if i:
             lines.append("")
         lines += [f"\t{ln}" if ln else "" for ln in part]
