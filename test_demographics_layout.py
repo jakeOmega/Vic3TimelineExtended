@@ -15,6 +15,8 @@ import re
 import unittest
 from decimal import ROUND_HALF_UP, Decimal
 
+from gui_test_helpers import assert_wide_matches_narrow
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui")
 WIDGETS = os.path.join(GUI, "te_demographics_widgets.gui")
@@ -157,18 +159,11 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
     def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
-        body = _type_body(self.layout, BROWSER_COMPOSER)
-        inner = [b for b in _instances(body, "flowcontainer") if "visible" in b and "direction = horizontal" in b]
-        self.assertEqual(len(inner), 1, "one gated row of columns")
-        self.assertEqual(_children(inner[0][1:-1]), ["flowcontainer"] * 3)
-        columns = [b for b in _instances(inner[0][1:-1], "flowcontainer")]
+        """The tab's sections and gates on te_ui_columns_three (spec 2026-11-02-te-window-wide-mode §§ 9.4, 9.5): the
+        pending line above the columns, then the sections read down each column and then across."""
+        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"])
         self.assertEqual(len(columns), 3)
-        for column in columns:
-            with self.subTest(column=_children(column[1:-1])):
-                self.assertIn("minimumsize = { 520 -1 }", column)
-                self.assertIn("maximumsize = { 520 -1 }", column)
-        listed = [c for column in columns for c in _children(column[1:-1]) if c not in ("minimumsize", "maximumsize")]
-        self.assertEqual(listed, COUNTRY + [HOW["te_demog_tab_sections"]], "read down each column, then across")
+        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
 
     def test_the_layout_file_holds_only_the_composers_and_the_windows_body(self):
         self.assertEqual(sorted(_types(self.layout)),
