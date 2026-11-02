@@ -2116,6 +2116,10 @@ any_scope_state = {
 
 JEs get their display name from a localization key matching their ID (e.g., `je_banking_cycle:0 "Banking Cycle"`). Adding `title = je_banking_cycle` causes a parse error. Remove it.
 
+### A Journal Entry's Description Is `<key>_reason`; Nothing Reads `<key>_desc`
+
+The entry's page prints `[JournalEntry.GetReason]`, which reads `<key>_reason` unless the entry sets a `reason =` field. Vanilla has a `_reason` on all 419 of its entries. The status and progress lines fall back to `<key>_status` and `<key>_progress` the same way. No `JournalEntry` or `JournalEntryType` accessor reads `<key>_desc`, and no vanilla GUI does either. The hover in the journal list and the outliner (`FancyTooltip_JournalEntry`) is the status, then `JournalEntry.GetTooltip`. Vanilla writes a `_desc` for 1 of its 419 entries. The mod wrote one for every entry until 2026-11-02 (#1212, JE-8b), so a line meant for players, Human Augmentation's "Set the legal status of …", lived only in dead text. Put what the player needs in `_reason` or the status. `loc_coverage_audit` requires `_reason` and doesn't look for `_desc`. The evidence (engine data types, the type docs, vanilla's `journal.gui` and `custom_tooltip.gui`) is in `docs/audits/gui_audit/vanilla_panels_other_jes.md` § JE-8.
+
 ### Treaty Article Localization Keys
 
 Treaty articles need four keys, all engine autokeys off the article name and none referenced from script: `<article_id>:0 "Display Name"` (the picker row), `<article_id>_desc` (the closing line of the article tooltip), `<article_id>_effects_desc` (the tooltip's bullet list) and `<article_id>_article_short_desc` (the one-line summary on the treaty draft, the only one where `[SOURCE_COUNTRY…]` / `[TARGET_COUNTRY…]` resolve). A missing one renders as the raw key, with nothing in the logs: `nuclear_disarmament` and `nuclear_program_pause` sat in the treaty picker under their raw names, and thirteen more articles had no short desc, until 2026-09-24. `loc_coverage_audit` has checked all four for mod-introduced articles since then.
