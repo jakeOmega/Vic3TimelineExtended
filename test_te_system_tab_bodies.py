@@ -207,6 +207,70 @@ class BodyTest(unittest.TestCase):
                 self.assertNotIn("JournalEntry", part)
 
 
+# The vanilla panels' system tabs, each now on its body (plan Tasks C1–C6):
+# (host file, the host's outer flowcontainer, the tab's key, the body). The
+# host keeps that flowcontainer's name, IsTabSelected gate, fade, position and
+# margins, and anything that reads the host panel; the body holds the rest.
+HOST_MOUNTS = [
+    ("budget_panel.gui", "te_budget_banking_tab", "te_banking", "te_banking_tab_body"),
+    ("budget_panel.gui", "te_budget_tax_tab", "te_tax_code", "te_tax_tab_body"),
+]
+
+# The hosts' bodies, as the frame's blocks fill them: (body type, file, gate,
+# journal entry, layout block, composers in order, Open Journal Entry's
+# tooltip, its font). Headers vary (Banking has two) and are each system's
+# own test's to check; the hosts' headers carry no position template, as
+# before (no visible change in the hosts).
+HOST_BODIES = [
+    ("te_banking_tab_body", os.path.join(JE_WIDGETS, "banking_layout_widget.gui"),
+     "te_budget_banking_tab_sgui", "je_banking_cycle", "te_banking_tab_layout",
+     ["te_banking_overview_panel", "te_banking_status_sections", "te_banking_reference_sections"],
+     "te_budget_banking_open_journal_tt", "fontsize_large"),
+    ("te_tax_tab_body", os.path.join(JE_WIDGETS, "te_tax_layout_widget.gui"),
+     "te_budget_tax_tab_sgui", "je_tax_code", "te_tax_tab_layout",
+     ["te_tax_overview_panel", "te_tax_status_sections", "te_tax_reference_sections"],
+     "te_tax_open_journal_tt", "te_tax_fontsize_row"),
+]
+
+
+def _named_block(text, name):
+    """The block whose own `name = "<name>"` line it carries, its body only."""
+    at = text.index(f'name = "{name}"')
+    start = text.rindex("{", 0, at)
+    return text[start + 1:_close(text, start)]
+
+
+class HostBodyTest(unittest.TestCase):
+    def test_host_bodies(self):
+        for name, path, gate, entry, layout, composers, tooltip, font in HOST_BODIES:
+            with self.subTest(body=name):
+                text = _strip_comments(_read(path))
+                self.assertTrue(re.search(rf"^\ttype {name} = te_system_tab_frame \{{", text, re.M), f"no type {name}")
+                body = _type_body(text, name)
+                self.assertIsNotNone(_override(body, "tab_header"))
+                self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
+                self.assertEqual(_override(body, "tab_entry").strip(),
+                                 f"datacontext = \"[GetPlayerJournalEntry('{entry}')]\"")
+                self.assertIsNone(_override(body, "tab_open_journal"))    # the frame's link
+                self.assertEqual(_override(body, "tab_open_journal_tooltip").strip(), f'tooltip = "{tooltip}"')
+                self.assertEqual(_override(body, "tab_open_journal_font").strip(), f"using = {font}")
+                content = _override(body, "tab_content")
+                m = re.fullmatch(rf'\s*block "{layout}" \{{(.*)\}}\s*', content, re.S)
+                self.assertTrue(m, content)
+                self.assertEqual([c for c in _instances(m.group(1))], composers)
+
+    def test_each_host_tab_mounts_its_body(self):
+        for host, outer, key, body in HOST_MOUNTS:
+            with self.subTest(tab=key):
+                block = _named_block(_strip_comments(_read(os.path.join(REPO, "gui", host))), outer)
+                items = _children(block)
+                props = [(n, v) for kind, n, v in items if kind == "property"]
+                self.assertIn(("visible", f"\"[InformationPanel.IsTabSelected('{key}')]\""), props)
+                # the body is its only child (`te_x = {}` parses as a one-line value)
+                self.assertEqual([n for kind, n, _ in items if kind != "property" or n.startswith("te_")], [body])
+                self.assertNotIn("datacontext", [n for n, _ in props])
+
+
 # What only a tab's vanilla host has: its panel's own datacontext. A body is
 # shown by the window too, which has none of them, so none may read them; a
 # host's extras that do (the Market panel's map-mode reset, Global Warming's
@@ -230,7 +294,7 @@ class HostPanelTest(unittest.TestCase):
                     self.assertIsNone(hit, f"{name} reads {hit and hit.group(0)}")
                 checked.append(name)
         for name in ("te_system_tab_frame", "te_gm_tab_body", "te_ce_tab_body", "te_seabed_tab_body", "te_sr_tab_body",
-                     "te_systems_window_tabs_narrow", "te_sr_window_milestones"):
+                     "te_systems_window_tabs_narrow", "te_sr_window_milestones", *(b[0] for b in HOST_BODIES)):
             self.assertIn(name, checked)
 
 

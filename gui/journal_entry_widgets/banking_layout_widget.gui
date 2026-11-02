@@ -1,7 +1,7 @@
 ﻿### Banking — layout. The one place that sets the order of the banking
 ### sections, for both hosts: the journal entry (je_banking.txt attaches the
-### named roots at the foot of this file) and the Budget panel's Banking tab
-### (gui/budget_panel.gui instances the composers). The sections are types in
+### named roots at the foot of this file) and the Banking tab, in the Budget
+### panel and the Timeline Extended window (both mount te_banking_tab_body). The sections are types in
 ### banking_dashboard_widget.gui (the overview, Active Policies, Monetary
 ### Policy, Available Interventions), banking_history_widget.gui (the charts)
 ### and here (How Banking Works), in the shape of the UN's un_layout_widget.gui.
@@ -229,6 +229,88 @@ types banking_layout_widget_types
 
 		te_banking_history_panel = {}
 		te_banking_sec_how = {}
+	}
+
+	### The Banking tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Budget
+	### panel's Banking tab and the Timeline Extended window's. The entry's
+	### panels, the same composers the entry attaches, inside
+	### te_banking_tab_layout, which a wide mount overrides; then the frame's
+	### Open Journal Entry, in the tab's large font. The entry's scripted
+	### buttons are not drawn: they are the AI's (each is `is_ai = yes`), and
+	### the policy sections carry the same actions.
+	###
+	### A country with a monetary stance but no entry (#805,
+	### te_budget_banking_readout_sgui) gets the monetary readout instead,
+	### under a Monetary Policy header, with a note naming what opens the
+	### rest. The readout reads GetPlayer, so it needs no datacontext. Its
+	### gate and the entry's are never true together, so exactly one header
+	### shows.
+	type te_banking_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				blockoverride "text" {
+					text = "je_banking_cycle"
+				}
+			}
+
+			default_header = {
+				visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				blockoverride "text" {
+					text = "banking_dash_cat_monetary"
+				}
+			}
+		}
+
+		blockoverride "tab_before_gate" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = default_list_position
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+
+				te_banking_mon_readout = {}
+
+				# What opens the rest: the tab's own unlock checklist on hover,
+				# asked IsValid first like the tab's tooltip.
+				textbox = {
+					parentanchor = hcenter
+					autoresize = yes
+					multiline = yes
+					max_width = 480
+					align = center|nobaseline
+					using = fontsize_large
+					text = "banking_dash_ro_note"
+					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'banking_dash_ro_note_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_banking_tab_layout" {
+				te_banking_overview_panel = {}
+				te_banking_status_sections = {}
+				te_banking_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_font" {
+			using = fontsize_large
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_budget_banking_open_journal_tt"
+		}
 	}
 }
 

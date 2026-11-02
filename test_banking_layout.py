@@ -91,9 +91,10 @@ def _loc():
 
 
 def _tab_block():
-    text = _read(BUDGET)
-    start = text.index('name = "te_budget_banking_tab"')
-    return text[start:text.index("### END MOD ###", start)]
+    """The Banking tab's body (te_banking_tab_body), which the Budget panel's
+    tab and the Timeline Extended window's both mount
+    (test_te_system_tab_bodies.py checks the mounts)."""
+    return _type_body(_read(LAYOUT), "te_banking_tab_body")
 
 
 class OrderTest(unittest.TestCase):
@@ -134,11 +135,12 @@ class OrderTest(unittest.TestCase):
         Open Journal Entry link below everything."""
         tab = _tab_block()
         order = [m.group(1) for m in re.finditer(
-            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections"
-            r"|te_system_tab_open_journal)\b", tab)]
+            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections)\b", tab)]
         self.assertEqual(order, ["te_banking_overview_panel", "te_banking_status_sections",
-                                 "te_banking_reference_sections", "te_system_tab_open_journal"])
+                                 "te_banking_reference_sections"])
         self.assertIn("te_banking_reference_sections = {}", tab)
+        # the frame's link, below the content (te_system_tab_frame)
+        self.assertNotIn('blockoverride "tab_open_journal" ', tab)
 
     def test_history_is_open_in_both_hosts(self):
         """The owner's rule since play-test round 2: history charts start open,

@@ -280,9 +280,16 @@ class TabStripTest(unittest.TestCase):
 
 
 class TabContentTest(unittest.TestCase):
+    """Budget's Tax Code tab: its outer flowcontainer in the panel, mounting
+    te_tax_tab_body, which the Timeline Extended window's tab mounts too
+    (test_te_system_tab_bodies.py)."""
+
     @classmethod
     def setUpClass(cls):
-        cls.region = uncomment(mod_block(raw(BUDGET))[1])
+        cls.host = uncomment(mod_block(raw(BUDGET))[1])
+        text = raw(LAYOUT)
+        start = text.index("type te_tax_tab_body = te_system_tab_frame {")
+        cls.region = uncomment(text[start:close(text, text.index("{", start)) + 1])
 
     def test_content_follows_banking_inside_scrollarea_content(self):
         text = raw(BUDGET)
@@ -292,34 +299,27 @@ class TabContentTest(unittest.TestCase):
         self.assertLess(content, close(text, text.index("{", scroll)))
 
     def test_shown_only_on_its_tab(self):
-        head = self.region[self.region.index('name = "te_budget_tax_tab"'):]
+        head = self.host[self.host.index('name = "te_budget_tax_tab"'):]
+        self.assertIn("te_tax_tab_body = {}", head)
         self.assertRegex(head, rf"^name = \"te_budget_tax_tab\"\s*visible = \"\[InformationPanel\.IsTabSelected\('{TAB}'\)\]\"")
 
     def test_gate_is_a_parent_of_the_journal_entry_datacontext(self):
-        gate = self.region.index("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(")
-        context = self.region.index("datacontext = \"[GetPlayerJournalEntry('je_tax_code')]\"")
-        self.assertLess(gate, context)
-        gate_block = brace_block(self.region, self.region.rindex("flowcontainer = {", 0, gate))
-        self.assertIn("GetPlayerJournalEntry('je_tax_code')", gate_block)
-        # the gate's own properties: everything before its first child container
-        own = gate_block[:gate_block.index("flowcontainer = {")]
-        self.assertNotIn("datacontext", own, "the datacontext sits on the gate itself")
+        """The frame's blocks: the gate on the parent, the datacontext on the
+        column (te_system_tab_frame; test_te_system_tab_bodies.py)."""
+        gate = brace_block(self.region, self.region.index('blockoverride "tab_gate"'))
+        self.assertIn("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(", gate)
+        self.assertNotIn("datacontext", gate, "the datacontext sits on the gate itself")
+        entry = brace_block(self.region, self.region.index('blockoverride "tab_entry"'))
+        self.assertIn("datacontext = \"[GetPlayerJournalEntry('je_tax_code')]\"", entry)
 
     def test_composes_overview_status_reference_then_the_link(self):
-        order = re.findall(r"\b(te_tax_overview_panel|te_tax_status_sections|te_tax_reference_sections"
-                           r"|te_system_tab_open_journal)\b", self.region)
-        self.assertEqual(order, ["te_tax_overview_panel", "te_tax_status_sections",
-                                 "te_tax_reference_sections", "te_system_tab_open_journal"])
-        button = brace_block(self.region, self.region.rindex("button = {", 0,
-                                                             self.region.index("te_system_tab_open_journal")))
-        self.assertIn('visible = "[JournalEntry.IsActive]"', button)
-        self.assertIn("InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)", button)
-        self.assertIn('tooltip = "te_tax_open_journal_tt"', button)
-
-    def test_the_column_has_a_fixed_width(self):
-        context = brace_block(self.region, self.region.rindex(
-            "flowcontainer = {", 0, self.region.index("GetPlayerJournalEntry('je_tax_code')")))
-        self.assertIn("minimumsize = { 520 -1 }", context)
+        order = re.findall(r"\b(te_tax_overview_panel|te_tax_status_sections|te_tax_reference_sections)\b",
+                           self.region)
+        self.assertEqual(order, ["te_tax_overview_panel", "te_tax_status_sections", "te_tax_reference_sections"])
+        # the frame's link, below the content, in the tab's row font
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.region)
+        self.assertRegex(self.region, r'blockoverride "tab_open_journal_tooltip" \{\s*tooltip = "te_tax_open_journal_tt"')
+        self.assertRegex(self.region, r'blockoverride "tab_open_journal_font" \{\s*using = te_tax_fontsize_row')
 
     def test_the_summary_moves_to_the_footer(self):
         """The tab draws the draft summary in fixed_bottom, so the live sections
