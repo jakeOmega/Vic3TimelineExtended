@@ -1,27 +1,38 @@
-﻿### Timeline Extended: the mod's own window, for the systems with no vanilla
-### home (docs/systems/system_panels_feasibility.md §9, item 3). One strip of
-### five tabs: Nation (what the country carries for good, always open;
+﻿### Timeline Extended: the mod's own window, first for the systems with no
+### vanilla home (docs/systems/system_panels_feasibility.md §9, item 3), and
+### since 2026-11-02 for every system (style guide rule 9). Three strips of
+### five: Nation (what the country carries for good, always open;
 ### gui/te_nation_tab.gui), the Space Race, Grand Monuments, the Colonial
-### Empire and the Seabed (Global Commons). Additive: a
-### scripted widget (gui/scripted_widgets/te_systems_window.txt registers the
-### two roots at the foot of this file), so no vanilla file is replaced.
+### Empire and the Seabed (Global Commons); then the tabs that also live in
+### the Budget and Market panels (Banking, Tax Code, Budget Breakdown,
+### Strategic Reserve, Global Warming); then those of the Population, Society,
+### Diplomacy and Military panels (Demographics, Cultural Hegemony, United
+### Nations, Nuclear Weapons, Covert Warfare), each the same body type as its
+### host's. Additive: a scripted widget
+### (gui/scripted_widgets/te_systems_window.txt registers the two roots at the
+### foot of this file), so no vanilla file is replaced.
 ###
 ### WHAT LIVES WHERE (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
-### § 9.3). This file keeps the frame (te_systems_window_panel), the launcher
-### and the root. The strips, the selection templates and each tab's mount
+### § 9.3). This file keeps the two frames (te_systems_window_panel, the side
+### panel, and te_systems_window_panel_wide, the full screen), the width
+### toggle, Tax Code's footer, the launcher and the root. The strips, the
+### selection templates and each tab's mount
 ### are generated into gui/te_systems_window_generated.gui from the TABS
 ### registry in scripts/generators/gen_te_systems_window.py: never edit that
 ### file, edit the registry and run the script. Each tab's content is a body
 ### type in its system's file (te_<system>_tab_body, on te_system_tab_frame in
-### gui/te_system_tab_widgets.gui; Nation's is te_nation_tab_sections). To add
+### gui/te_system_tab_widgets.gui; Nation's is te_nation_tab_sections, Budget
+### Breakdown's te_budget_breakdown_panel, Demographics' te_demog_window_body),
+### the one a vanilla host's tab mounts too. To add
 ### a tab: its body type, a Tab line in the registry, its loc, then run the
 ### generator.
 ###
 ### te_systems_window_launcher  a small button under the sidebar's Map List,
 ###                             built as vanilla builds Map List
 ###                             (information_panel_bar.gui)
-### te_systems_window           the window, vanilla's default_block_window
-###                             where vanilla's side panels sit
+### te_systems_window           the window: vanilla's default_block_window
+###                             where vanilla's side panels sit, or its
+###                             fullscreen_block_window copy at the origin
 ###
 ### STATE. All three are client-side GetVariableSystem values (never saved):
 ###   com_open_window = te_systems_window   the window is open. The key is the
@@ -31,8 +42,8 @@
 ###   te_systems_window_wide = yes   the window is full screen (the toggle in
 ###       each frame's fixed_top); unset, it is a side panel. A separate key,
 ###       so the chosen tab survives the switch.
-###   te_systems_window_tab = nation | space_race | grand_monuments
-###       | colonial_empire | seabed
+###   te_systems_window_tab = the TABS registry's keys (nation, space_race, …,
+###       covert_warfare)
 ###       the tab the player last chose. The tab shown is that one while it is
 ###       open, otherwise Nation, which always is (the generated
 ###       te_systems_window_*_selected templates; the rule is in the generator's
@@ -56,7 +67,8 @@
 ###   then per system the scope-free gate on a parent and the
 ###   GetPlayerJournalEntry datacontext on a child (gotchas #22 and #29 in
 ###   docs/guides/gui_modding_guide.md). Gates: te_window_* in
-###   common/scripted_guis/te_system_tab_sguis.txt.
+###   common/scripted_guis/te_system_tab_sguis.txt for the window's own
+###   systems, the host tabs' own (te_budget_*, te_market_*, …) for the rest.
 ###
 ### The launcher's icon: docs/systems/te_systems_window_gui_icons.md. The tabs
 ### carry none.
