@@ -18,7 +18,9 @@ import glob
 import os
 import re
 import sys
+import tempfile
 import unittest
+from unittest import mock
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, REPO)
@@ -426,12 +428,17 @@ class SelectionTest(unittest.TestCase):
                                 shown |= _atoms(_tab(k).open_)
                             if on_strip:
                                 shown |= _atoms(_tab(k).strip)
+                        # each state is the one enumerated, compound gates too
+                        for k, (opened, on_strip) in states.items():
+                            for gate, want in ((_tab(k).open_, opened), (_tab(k).strip, on_strip)):
+                                if gate is not None:
+                                    self.assertEqual(_evaluate(gate, shown, stored), want, (k, gate))
                         yield states, stored, shown, probe
 
     def _expected(self, stored, shown, probe):
         if stored == "tax_probes" and probe:
             return "tax_probes"
-        if stored in self.tabs[1:] and _evaluate(_tab(stored).open_, shown, stored):
+        if stored in self.tabs[1:] and (_tab(stored).open_ is None or _evaluate(_tab(stored).open_, shown, stored)):
             return stored
         return "nation"
 
@@ -468,6 +475,11 @@ class SelectionTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 expr = self.sel[t.key] + self.unsel[t.key]
                 self.assertLessEqual(_atoms(expr), _atoms(t.open_) | _atoms(t.strip) | probe)
+                # each gate as written, so a dropped term of a compound gate shows
+                if t.open_ is not None:
+                    self.assertIn(t.open_, self.sel[t.key])
+                if t.strip is not None:
+                    self.assertIn(t.strip, self.unsel[t.key])
                 self.assertLessEqual(_stored_reads(expr), {t.key, "tax_probes"})
         for half in (self.sel["nation"], self.unsel["nation"]):
             guarded = set()
@@ -476,7 +488,7 @@ class SelectionTest(unittest.TestCase):
                     continue
                 args = _call_args(half, m.start())
                 self.assertEqual(len(args), 2)
-                self.assertEqual(_atoms(args[1]), _atoms(_tab(m.group(1)).open_), m.group(1))
+                self.assertEqual(args[1], _tab(m.group(1)).open_, m.group(1))
                 guarded |= _atoms(args[1])
             self.assertEqual(_atoms(half) - probe, guarded)
             self.assertEqual(_stored_reads(half), {t.key for t in gen.TABS[1:]} | {"tax_probes"})
@@ -864,10 +876,55 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(len({t.key for t in gen.TABS}), len(gen.TABS))
         self.assertNotIn("tax_probes", {t.key for t in gen.TABS})
 
+    def test_an_always_open_tab_reads_only_its_stored_value(self):
+        """A tab with no open gate (PR C's Budget Breakdown) is shown whenever
+        it was last chosen, and Nation's fallback reads it so."""
+        extra = gen.Tab("always_open", 2, label="te_x", tooltip="te_x_tt", body="te_x_body")
+        with mock.patch.object(gen, "TABS", gen.TABS + [extra]):
+            text = gen.render()
+        self.assertNotIn("None", text)
+        stored = "GetVariableSystem.HasValue('te_systems_window_tab', 'always_open')"
+        self.assertEqual(_template(text, "te_systems_window_always_open_selected"),
+                         f"And( Not( {gen.TAX_PROBES} ), {stored} )")
+        for half in ("selected", "unselected"):
+            nation = _template(text, f"te_systems_window_nation_{half}")
+            self.assertIn(stored, nation)
+            self.assertNotIn(f"And( {stored}", nation)
+        self.assertIn('tooltip = "te_x_tt"', text)
+
+    def test_a_gated_tab_needs_its_checklist(self):
+        """A tab with an open gate shows a checklist while grayed, so it names
+        the scripted GUI and the locked line, unless it brings its own tooltip."""
+        bad = gen.Tab("no_checklist", 2, label="te_x", tooltip="te_x_tt", body="te_x_body", open_=gen.shown("te_x_sgui"))
+        with mock.patch.object(gen, "TABS", gen.TABS + [bad]):
+            with self.assertRaisesRegex(ValueError, "no_checklist"):
+                gen.render()
+        own = gen.Tab("own_tooltip", 2, label="te_x", tooltip="te_x_tt", body="te_x_body",
+                      open_=gen.shown("te_x_sgui"), tooltip_expr="Localize( 'te_x_tt' )")
+        with mock.patch.object(gen, "TABS", gen.TABS + [own]):
+            self.assertIn("tooltip = \"[Localize( 'te_x_tt' )]\"", gen.render())
+
+    def test_a_system_tab_can_sit_on_any_strip(self):
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout", row=3).row, 3)
+        self.assertEqual(gen._system("x", "te_x_tab_body", "te_x_tab_layout").row, 1)
+
+    def test_check_fails_on_a_file_without_its_bom(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = gen.Path(tmp) / "generated.gui"
+            with mock.patch.object(gen, "GUI_OUT", path):
+                path.write_bytes(gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+                path.write_bytes(b"\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 0)
+                path.write_bytes(b"\xef\xbb\xbf\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+
     def test_templates_are_binary(self):
         """And and Or take exactly two arguments (gui_modding_guide.md)."""
         text = _strip_comments(_read(GENERATED))
-        for expr in re.findall(r'visible = "\[(.*?)\]"', text):
+        exprs = re.findall(r'"\[(.*?)\]"', text)
+        self.assertGreater(len(exprs), 2 * len(gen.TABS))
+        for expr in exprs:
             for m in re.finditer(r"\b(And|Or)\( ", expr):
                 depth, args, i = 1, 1, m.end()
                 while depth:
@@ -890,6 +947,7 @@ class LocTest(unittest.TestCase):
             text = _read(path)
             bodies += [_type_body(text, t.body) for t in gen.TABS if f"type {t.body} = " in text]
         self.assertEqual(len(bodies), len(gen.TABS))
+        bodies.append(_type_body(_read(os.path.join(REPO, "gui", "te_system_tab_widgets.gui")), "te_system_tab_frame"))
         gui = _strip_comments("\n".join([_read(GUI), _read(GENERATED)] + bodies))
         keys = set(re.findall(r'\b(?:text|tooltip) = "([A-Za-z]\w*)"', gui))
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", gui))
@@ -915,9 +973,10 @@ class LocTest(unittest.TestCase):
         loc = _all_loc()
         per_char = TAB_UNITS_PER_CHAR * 1.1 * TAB_FONT_MIN / TAB_FONT
         vanilla_word = max(len(w) for w in VANILLA_FIVE_SLOT_NAME.split())
+        self.assertEqual(set(FULL_NAMES), {t.key for t in gen.TABS})
         for tab, full in FULL_NAMES.items():
             with self.subTest(tab=tab):
-                name = loc[f"te_window_tab_{tab}"]
+                name = loc[_tab(tab).label]
                 self.assertEqual(name, full)
                 words = name.split()
                 self.assertLessEqual(len(words), 2, name)

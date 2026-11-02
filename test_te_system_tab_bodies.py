@@ -95,6 +95,16 @@ class FrameTest(unittest.TestCase):
                          ["tab_entry", "tab_content", "tab_open_journal"])
         self.assertIn(("property", "minimumsize", "{ 520 -1 }"), column)
         self.assertNotIn("visible", [name for kind, name, _ in column if kind == "property"])
+        # the layout the window's tabs had inline (no visible change): spacing
+        # between the header and the gate, none in the gate, the column's own
+        props = lambda items: {(name, text) for kind, name, text in items if kind == "property"}  # noqa: E731
+        self.assertLessEqual({("direction", "vertical"), ("parentanchor", "hcenter"), ("ignoreinvisible", "yes"),
+                              ("spacing", "10")}, props(top))
+        self.assertLessEqual({("direction", "vertical"), ("parentanchor", "hcenter"), ("ignoreinvisible", "yes")},
+                             props(gate))
+        self.assertNotIn("spacing", {name for name, _ in props(gate)})
+        self.assertLessEqual({("direction", "vertical"), ("parentanchor", "hcenter"), ("ignoreinvisible", "yes"),
+                              ("spacing", "10")}, props(column))
         link = [text for kind, name, text in column if kind == "block" and name == "tab_open_journal"][0]
         self.assertEqual([name for kind, name, _ in _children(link)], ["button"])
 

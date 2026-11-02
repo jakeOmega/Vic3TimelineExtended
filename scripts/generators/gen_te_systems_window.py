@@ -52,6 +52,7 @@ ROOT = Path(__file__).resolve().parents[2]
 GUI_OUT = ROOT / "gui" / "te_systems_window_generated.gui"
 
 STORED = "te_systems_window_tab"
+BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
 
 
@@ -136,11 +137,11 @@ class Tab:
     tooltip_expr: str | None = None
 
 
-def _system(key: str, body: str, layout: str, **kw) -> Tab:
+def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
     """A tab of the window's own systems: te_window_<key>_tab_sgui opens it and
     te_window_<key>_tab_unlock_sgui puts it on the strip and gives the
     checklist (common/scripted_guis/te_system_tab_sguis.txt)."""
-    return Tab(key, 1, label=f"te_window_tab_{key}", tooltip=f"te_window_tab_{key}_tt",
+    return Tab(key, row, label=f"te_window_tab_{key}", tooltip=f"te_window_tab_{key}_tt",
                locked=f"te_window_tab_{key}_locked_tt",
                open_=shown(f"te_window_{key}_tab_sgui"), strip=shown(f"te_window_{key}_tab_unlock_sgui"),
                unlock=f"te_window_{key}_tab_unlock_sgui", body=body, layout=layout, **kw)
@@ -185,7 +186,7 @@ def unselected(tab: Tab) -> str:
 
 
 def _any_system_shown() -> str:
-    return or_all([and_(stored(t.key), t.open_) for t in TABS[1:]])
+    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), t.open_) for t in TABS[1:]])
 
 
 def _template(name: str, expr: str) -> list[str]:
@@ -390,9 +391,19 @@ HEADER = [
 ]
 
 
+def _validate() -> None:
+    if not (TABS[0].key == "nation" and TABS[0].open_ is None and TABS[0].strip is None):
+        raise ValueError("Nation is the first tab and the fallback: always open, always on the strip")
+    if len({t.key for t in TABS}) != len(TABS) or "tax_probes" in {t.key for t in TABS}:
+        raise ValueError("tab keys are unique and never the developer tab's")
+    for t in TABS:
+        if t.open_ is not None and t.tooltip_expr is None and not (t.unlock and t.locked):
+            raise ValueError(f"{t.key}: a tab with an open gate shows a checklist while grayed: "
+                             "give it unlock and locked, or a tooltip_expr")
+
+
 def render() -> str:
-    assert TABS[0].key == "nation" and TABS[0].open_ is None and TABS[0].strip is None, \
-        "Nation is the first tab and the fallback: always open, always on the strip"
+    _validate()
     lines = list(HEADER)
     lines += ["### Which tab is shown: the last one chosen while it is open, otherwise",
               "### Nation, which always is. A system tab's unselected half shows while it",
@@ -409,14 +420,13 @@ def render() -> str:
 
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
-    text = render()
+    data = BOM + render().encode("utf-8")
     if "--check" in argv:
-        current = GUI_OUT.read_text(encoding="utf-8-sig") if GUI_OUT.exists() else None
-        if current != text:
-            print(f"stale: {GUI_OUT.relative_to(ROOT)} (run python3 scripts/generators/gen_te_systems_window.py)")
+        if not GUI_OUT.exists() or GUI_OUT.read_bytes() != data:
+            print(f"stale: {GUI_OUT} (run python3 scripts/generators/gen_te_systems_window.py)")
             return 1
         return 0
-    GUI_OUT.write_text("﻿" + text, encoding="utf-8", newline="\n")
+    GUI_OUT.write_bytes(data)
     return 0
 
 
