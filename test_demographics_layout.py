@@ -43,6 +43,10 @@ STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
 # The Census Data window's composer: the tab's sections for the window's country, in three columns.
 BROWSER_COMPOSER = "te_demog_browser_sections"
+# The Timeline Extended window's Demographics tab: the tab's sections less the
+# strata incomes, which read the Population panel, in the window's body.
+WINDOW_COMPOSER = "te_demog_window_sections"
+WINDOW_BODY = "te_demog_window_body"
 # A section placed as it is (`= {}`) or with blocks a host leaves out (`= { blockoverride ... }`): the Census Data window
 # blanks Wealth's strata incomes, which read the Population panel (2026-10-31).
 PLACED = r"\s*(?:\}|blockoverride )"
@@ -166,17 +170,38 @@ class OrderTest(unittest.TestCase):
         listed = [c for column in columns for c in _children(column[1:-1]) if c not in ("minimumsize", "maximumsize")]
         self.assertEqual(listed, COUNTRY + [HOW["te_demog_tab_sections"]], "read down each column, then across")
 
-    def test_the_layout_file_holds_only_the_three_composers(self):
+    def test_the_layout_file_holds_only_the_composers_and_the_windows_body(self):
         self.assertEqual(sorted(_types(self.layout)),
-                         sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER]))
-        for composer in list(HOW) + [BROWSER_COMPOSER]:
+                         sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER, WINDOW_COMPOSER,
+                                 WINDOW_BODY]))
+        for composer in list(HOW) + [BROWSER_COMPOSER, WINDOW_COMPOSER, WINDOW_BODY]:
             self.assertNotIn(f"type {composer} =", self.widgets)
+
+    def test_the_window_takes_the_tabs_order_less_the_strata_incomes(self):
+        """te_demog_window_sections: te_demog_tab_sections' sections and
+        pending line at its fixed 520, with the Census Data window's wealth
+        override (the strata incomes read PopsOverviewPanel, which the
+        Timeline Extended window lacks)."""
+        listed, outer = self.sections(WINDOW_COMPOSER)
+        self.assertEqual(listed, COUNTRY)
+        self.assertEqual(outer[-1], HOW["te_demog_tab_sections"], "How Demographics Works at the foot")
+        body = _type_body(self.layout, WINDOW_COMPOSER)
+        tab = _type_body(self.layout, "te_demog_tab_sections")
+        for line in ("minimumsize = { 520 -1 }", "maximumsize = { 520 -1 }", 'text = "te_demog_pending"'):
+            self.assertIn(line, body)
+        self.assertRegex(body, r'te_demog_sec_wealth = \{\s*blockoverride "te_demog_wealth_strata_incomes" \{\s*\}\s*\}')
+        # but for the override, the tab's composer line for line
+        self.assertEqual(re.sub(r'te_demog_sec_wealth = \{\s*blockoverride "te_demog_wealth_strata_incomes" \{\s*\}\s*\}',
+                                "te_demog_sec_wealth = {}", re.sub(r"(?m)^\s*#.*\n", "", body)),
+                         re.sub(r"(?m)^\s*#.*\n", "", tab))
+        self.assertEqual(_type_body(self.layout, WINDOW_BODY).count(f"{WINDOW_COMPOSER} = {{}}"), 1)
 
     def test_every_section_is_a_type_and_each_is_placed_once(self):
         defined = set(_types(self.widgets))
         placed = COUNTRY + STATE + list(HOW.values())
         hosts = {"te_demog_tab_sections": COUNTRY + [HOW["te_demog_tab_sections"]],
                  BROWSER_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
+                 WINDOW_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
                  "te_state_demog_content": STATE + [HOW["te_state_demog_content"]]}
         for composer, sections in hosts.items():
             body = _type_body(self.layout, composer)
@@ -186,7 +211,7 @@ class OrderTest(unittest.TestCase):
                     self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", body)), 1)
         for section in placed:
             with self.subTest(section=section):
-                expected = 1 if section.startswith("te_state_demog_") else 2
+                expected = 1 if section.startswith("te_state_demog_") else 3
                 self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", self.layout)), expected)
         sections = {t for t in defined if t.startswith("te_demog_sec_") or t == "te_demog_overview"}
         sections |= {t for t in defined if t.startswith("te_state_demog_") and not t.endswith("_row")}

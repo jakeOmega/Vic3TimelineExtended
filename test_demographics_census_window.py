@@ -305,6 +305,9 @@ class BrowserContextTest(unittest.TestCase):
         layout = type_bodies(read(LAYOUT))
         cls.browser = cls.host(widgets, code(layout["te_demog_browser_sections"]), "te_demog_browser_sections")
         cls.tab = cls.host(widgets, code(layout["te_demog_tab_sections"]), "te_demog_tab_sections")
+        # the Timeline Extended window's tab, which has no Population panel either
+        cls.window = cls.host(widgets, code(layout["te_demog_window_sections"]), "te_demog_window_sections")
+        cls.window["te_demog_window_body"] = code(layout["te_demog_window_body"])
 
     @staticmethod
     def host(widgets, composer, name):
@@ -322,6 +325,14 @@ class BrowserContextTest(unittest.TestCase):
             with self.subTest(type=name):
                 self.assertNotIn(POPULATION_PANEL_ONLY, body)
         for key in sorted(self.reached(self.browser)):
+            with self.subTest(key=key):
+                self.assertNotIn(POPULATION_PANEL_ONLY, self.loc[key])
+
+    def test_the_te_window_draws_nothing_that_reads_the_population_panel(self):
+        for name, body in self.window.items():
+            with self.subTest(type=name):
+                self.assertNotIn(POPULATION_PANEL_ONLY, body)
+        for key in sorted(self.reached(self.window)):
             with self.subTest(key=key):
                 self.assertNotIn(POPULATION_PANEL_ONLY, self.loc[key])
 

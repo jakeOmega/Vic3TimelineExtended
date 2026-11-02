@@ -313,6 +313,24 @@ class HostBodyTest(unittest.TestCase):
                 self.assertNotIn("datacontext", [n for n, _ in props])
 
 
+class DemogWindowBodyTest(unittest.TestCase):
+    """The window's Demographics tab (plan C7): no entry, so the Country its
+    sections read is the player's (datacontext GetPlayer, as the Population
+    panel's window supplies it) and there is no link; the gate is the
+    Population panel tab's."""
+
+    def test_the_demographics_window_body(self):
+        text = _strip_comments(_read(os.path.join(REPO, "gui", "te_demographics_layout.gui")))
+        self.assertTrue(re.search(r"^\ttype te_demog_window_body = te_system_tab_frame \{", text, re.M))
+        body = _type_body(text, "te_demog_window_body")
+        self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate("te_pops_demog_tab_sgui")}]"')
+        self.assertEqual(_override(body, "tab_entry").strip(), 'datacontext = "[GetPlayer]"')
+        self.assertEqual(_override(body, "tab_open_journal").strip(), "")
+        self.assertRegex(_override(body, "tab_content"),
+                         r'^\s*block "te_demog_tab_layout" \{\s*te_demog_window_sections = \{\}\s*\}\s*$')
+        self.assertNotIn("JournalEntry", body)
+
+
 # What only a tab's vanilla host has: its panel's own datacontext. A body is
 # shown by the window too, which has none of them, so none may read them; a
 # host's extras that do (the Market panel's map-mode reset, Global Warming's
