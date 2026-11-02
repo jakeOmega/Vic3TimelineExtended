@@ -303,7 +303,8 @@ class DemogWindowBodyTest(unittest.TestCase):
 # shown by the window too, which has none of them, so none may read them; a
 # host's extras that do (the Market panel's map-mode reset, Global Warming's
 # other-market view) stay in the host (spec § 3, plan Review Focus 2).
-HOST_PANELS = re.compile(r"\bInformationPanel\.|\b(?:MarketPanel|PopsOverviewPanel|BudgetPanel|SocietyPanel|MilitaryPanel)\b")
+HOST_PANELS = re.compile(r"\bInformationPanel\.|\b(?:MarketPanel|PopsOverviewPanel|PopBrowserPanel|BudgetPanel|"
+                         r"SocietyPanel|MilitaryPanel)\b")
 
 
 class HostPanelTest(unittest.TestCase):
@@ -326,9 +327,11 @@ class HostPanelTest(unittest.TestCase):
             self.assertIn(name, checked)
 
     def test_no_window_tab_reads_a_host_panel(self):
-        """What each of the window's tabs mounts (the registry's bodies,
-        whatever their names), and the types each instances one level down
-        (its composers), read none of the hosts' panels."""
+        """What each of the window's tabs mounts (the registry's bodies and
+        wide layouts, whatever their names), and the types each instances one
+        level down (its composers and sections), read none of the hosts'
+        panels. The Census Data window's own panel (PopBrowserPanel) counts:
+        Demographics' wide layout is that window's composer."""
         from scripts.generators import gen_te_systems_window as gen
         types = {}
         for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
@@ -338,7 +341,8 @@ class HostPanelTest(unittest.TestCase):
         for t in gen.TABS:
             with self.subTest(tab=t.key):
                 self.assertIn(t.body, types)
-                for name in [t.body] + [c for c in _instances(types[t.body]) if c in types]:
+                self.assertIn(t.wide, types)
+                for name in [n for top in (t.body, t.wide) for n in [top] + [c for c in _instances(types[top]) if c in types]]:
                     hit = HOST_PANELS.search(types[name])
                     self.assertIsNone(hit, f"{t.key}: {name} reads {hit and hit.group(0)}")
 

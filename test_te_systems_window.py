@@ -1055,10 +1055,9 @@ class WideTest(unittest.TestCase):
 
     def test_the_wide_column(self):
         """The full-screen frame's column: three 520 columns' width, centered,
-        each tab's mount as narrow, holding its body until a wide layout is
-        registered (PR D). Then the mount holds the wide layout: in place of
-        the body for a tab with no layout block, else the body with its
-        layout block overridden by the wide layout."""
+        each tab's mount as narrow, holding its wide layout: every tab has one
+        (spec § 7). It sits in place of the body for a tab with no layout
+        block, else in the body with its layout block overridden."""
         column = _type_body(self.generated, "te_systems_window_tabs_wide")
         head = column.split("\n\n")[0]
         for line in ('name = "te_systems_window_content_wide"', "minimumsize = { 1620 -1 }", "parentanchor = hcenter"):
@@ -1071,9 +1070,8 @@ class WideTest(unittest.TestCase):
                 # the mount's properties, a blank line, then its content (the generator's _mount)
                 self.assertIn("\n\n", mount)
                 content = mount.split("\n\n", 1)[1]
-                if t.wide is None:
-                    self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.body])
-                elif t.layout is None:
+                self.assertIsNotNone(t.wide, f"{t.key} has no full-screen layout (spec § 7)")
+                if t.layout is None:
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide])
                     self.assertNotIn(t.body, content)
                 else:
