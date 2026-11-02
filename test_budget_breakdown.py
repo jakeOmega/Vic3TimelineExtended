@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import unittest
 
+from gui_test_helpers import _children, _strip_comments, _type_body
 from paradox_file_parser import ParadoxFileParser
 from scripts.generators import gen_budget_breakdown as gen
 from test_cultural_hegemony_share import entries
@@ -646,8 +647,24 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         expected = [k for sub, _, note, _ in gen.HOW_TOPICS for k in (sub, note)]
         self.assertEqual(drawn, expected)
         self.assertNotIn("te_budget_chart_how_text", gui)
-        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_breakdown_panel"))
+        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_sec_how"))
         self.assertRegex(gui[first:first + 200], r'blockoverride "subheader_margin" \{\}')
+
+    def test_the_panel_is_its_three_sections(self):
+        """The panel instances Income, Expenses and How the Breakdown Works, in
+        that order and nothing else, so the full-screen layout can place each
+        (spec 2026-11-02-te-window-wide-mode § 7). How keeps the panel's 8
+        between its header and its topics, and collapses on its flag."""
+        gui = _strip_comments(LAYOUT.read_text(encoding="utf-8-sig"))
+        panel = _children(_type_body(gui, "te_budget_breakdown_panel"))
+        self.assertEqual([name for kind, name, _ in panel if kind != "property"],
+                         ["te_budget_income_section", "te_budget_expense_section", "te_budget_sec_how"])
+        how = _children(_type_body(gui, "te_budget_sec_how"))
+        props = {name: value for kind, name, value in how if kind == "property"}
+        self.assertEqual((props["spacing"], props["ignoreinvisible"]), ("8", "yes"))
+        self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button", "flowcontainer"])
+        self.assertIn("GetVariableSystem.Toggle('te_budget_chart_how_open')", how[-2][2])
+        self.assertIn("visible = \"[GetVariableSystem.Exists('te_budget_chart_how_open')]\"", how[-1][2])
 
     def test_no_ui_help(self):
         text = " ".join(note for _, _, _, note in gen.HOW_TOPICS)
