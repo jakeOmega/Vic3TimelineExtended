@@ -216,6 +216,7 @@ HOST_MOUNTS = [
     ("budget_panel.gui", "te_budget_tax_tab", "te_tax_code", "te_tax_tab_body"),
     ("market_panel.gui", "te_market_global_warming_tab", "te_global_warming", "te_gw_tab_body"),
     ("market_panel.gui", "te_market_strategic_reserve_tab", "te_strategic_reserve", "te_st_res_tab_body"),
+    ("culture_panel.gui", "te_society_ch_tab", "te_ch", "te_ch_tab_body"),
 ]
 
 # The hosts' bodies, as the frame's blocks fill them: (body type, file, gate,
@@ -242,6 +243,10 @@ HOST_BODIES = [
      "te_market_strategic_reserve_tab_sgui", "je_strategic_reserve", "te_st_res_tab_layout",
      ["te_st_res_overview_panel", "te_st_res_status_sections", "te_st_res_reference_sections"],
      "te_market_strategic_reserve_open_journal_tt", None),
+    ("te_ch_tab_body", os.path.join(JE_WIDGETS, "cultural_hegemony_widget.gui"),
+     "te_society_ch_tab_sgui", "je_cultural_hegemony", "te_ch_tab_layout",
+     ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"],
+     "te_society_ch_open_journal_tt", None),
 ]
 
 

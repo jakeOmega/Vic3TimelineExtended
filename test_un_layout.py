@@ -605,8 +605,9 @@ class TabUnlockTooltipTest(unittest.TestCase):
         # then says te_system_tab_met_tt.
         pat = re.compile(r"GetScriptedGui\('([a-z_]+_tab_unlock_sgui)'\)\.IsValidTooltip\(")
         found = 0
+        # the hosts, and the Banking tab's body, which holds the readout note
         for name in ("budget_panel.gui", "culture_panel.gui", "diplomatic_overview.gui", "panel_military.gui",
-                     "pops_overview.gui"):
+                     "pops_overview.gui", os.path.join("journal_entry_widgets", "banking_layout_widget.gui")):
             text = _read(os.path.join(REPO, "gui", name))
             for line in text.splitlines():
                 for sgui in pat.findall(line):
