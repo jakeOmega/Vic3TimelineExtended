@@ -31,7 +31,10 @@ types te_tax_layout_widget_types
 	### opened). Each monitoring section hides itself when its record is
 	### closed, so a quiet code still opens on the Enacted Code. The summary
 	### sits in the "draft_summary" block so the Budget tab, which draws it in
-	### its fixed_bottom, can leave this copy out.
+	### its fixed_bottom, can leave this copy out. The light code's section
+	### comes first: it and the legislated code's never draw together, and
+	### placed first it shares the wide layout's first column with the
+	### overview (te_tax_wide_sections).
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -39,6 +42,8 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		# The light code's rates (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_section = {}
 		# The legislated code's sections, hidden under the light setting.
 		flowcontainer = {
 			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
@@ -57,8 +62,6 @@ types te_tax_layout_widget_types
 			}
 			te_tax_review_section = {}
 		}
-		# The light code's rates (te_tax_light_widget.gui; it gates itself).
-		te_tax_light_section = {}
 	}
 
 	### "How Tax Legislation Works": every explanation, collapsed by default,
@@ -195,7 +198,9 @@ types te_tax_layout_widget_types
 	}
 
 	### The record, then how it all works: the history, collapsed (a list of
-	### past items), and How Tax Legislation Works, collapsed, last.
+	### past items), and How Tax Legislation Works, collapsed, last. The light
+	### code's How comes first, as its section does in te_tax_status_sections,
+	### so the wide layout's second column ends on it.
 	type te_tax_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -203,6 +208,8 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[JournalEntry.IsActive]"
 
+		# How the Light Tax Code Works (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_how_section = {}
 		# The legislated code's history and explanation, hidden under the light
 		# setting, which keeps no history.
 		flowcontainer = {
@@ -215,7 +222,6 @@ types te_tax_layout_widget_types
 			te_tax_history_section = {}
 			te_tax_how_section = {}
 		}
-		te_tax_light_how_section = {}
 	}
 
 	### The Tax Code tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
