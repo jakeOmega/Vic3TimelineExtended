@@ -1,32 +1,36 @@
-﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6).
+﻿# Local Climate: comfort (docs/superpowers/specs/2026-11-01-local-climate-design.md § 5, § 6, § 11).
 # State scope throughout. Each state region's climate record (local_climate_generated.txt), the four
 # technology-carried reliefs (local_climate_modifier_types.txt, te_local_climate_tech_injections.txt)
 # and the world's felt warming become four penalty terms, kept separate for the state panel, and
-# their sum, te_climate_penalty: attraction points a migrant counts against the state (1 point of
-# standard of living = 2). It is never negative, so comfort is a penalty, never a bonus, and a
-# region with no row costs nothing. The constants are the calibration's (§ 5.3);
-# scripts/analysis/local_climate_calibration.py mirrors this file and prints its anchor table, and
-# test_local_climate_comfort.py pins the anchors' targets. Change a constant here and rerun both.
+# their sum, te_climate_penalty: the percent of its migration attraction a state loses
+# (local_climate_discomfort, state_migration_pull_mult). It is never negative, so comfort is a
+# penalty, never a bonus, and a region with no row costs nothing. The constants are the
+# calibration's (§ 11.4); scripts/analysis/local_climate_calibration.py mirrors this file and prints
+# its anchor table, and test_local_climate_comfort.py pins the anchors' targets. Change a constant
+# here and rerun both.
 #
-#   warming = (world's anomaly - the anomaly the record's normals hold at) x amplification(latitude)
-#   heat    = max(0, summer + warming - H0) x (1 + k_hum x humidity) x heat weight x (1 - heat relief)
-#   cold    = max(0, C0 - winter - warming) x cold weight x (1 - cold relief)
+#   summer warming = world's anomaly - the anomaly the record's normals hold at
+#   winter warming = summer warming x amplification(latitude)
+#   x       = max(0, heat index + summer warming x index per degree - H0)
+#   heat    = (a x + b x^2) x (1 - heat relief)
+#   cold    = max(0, C0 - winter - winter warming) x cold weight x (1 - cold relief)
 #   dry     = W x aridity x (1 - water relief)
 #   disease = D x malaria x (1 - disease relief)
 #   penalty = min(P_max, heat + cold + dry + disease)
 
-# Tuning constants (§ 5, § 5.3).
-te_climate_heat_start = 22 # H0: the warmest month's mean, °C, above which heat costs (22 with 1836 a degree colder
-# than the record's normals keeps § 5.3's 1836 targets; 23 was calibrated against the normals themselves)
-te_climate_humidity_factor = 0.33 # k_hum: each dew-point class adds a third to the heat cost
-te_climate_heat_weight = 1
+# Tuning constants (§ 11.4), in percent of migration attraction.
+te_climate_heat_start = 26 # H0: the heat index (0.7 x wet-bulb + 0.3 x air, on a typical year's worst day, °C) above which heat costs
+te_climate_heat_linear = 4.1 # a: percent per degree of heat index at H0
+te_climate_heat_quadratic = 0.36 # b: the curve, so the 8th degree costs a little over twice the 1st
+te_climate_index_per_degree = 0.8 # the heat index's rise per degree of warming, with relative humidity about steady
 te_climate_cold_start = 0 # C0: the coldest month's mean, °C, below which cold costs
-te_climate_cold_weight = 0.8
-te_climate_dry_per_class = 8 # W: per aridity class (1 limited water, 2 scarce)
-te_climate_malaria_per_class = 2.5 # D: per malaria class (1 seasonal or local, 2 endemic)
-te_climate_penalty_max = 40 # P_max: climate alone never outweighs a full jobs bonus plus a good standard of living
-# Warming's amplification by latitude (§ 6): 1 up to the low latitude, rising in a straight line to
-# the maximum at the Arctic (or Antarctic) Circle and beyond, as observed warming runs.
+te_climate_cold_weight = 1.6
+te_climate_dry_per_class = 16 # W: per aridity class (1 limited water, 2 scarce)
+te_climate_malaria_per_class = 5 # D: per malaria class (1 seasonal or local, 2 endemic)
+te_climate_penalty_max = 80 # P_max: climate alone never takes all of a state's pull; a boom's jobs can still draw people
+# Winter warming's amplification by latitude (§ 6, § 11.3): 1 up to the low latitude, rising in a straight
+# line to the maximum at the Arctic (or Antarctic) Circle and beyond, as observed warming runs. Arctic
+# amplification is a cold-season effect, so the hot days take the world's warming as it is.
 te_climate_amp_low_lat = 30
 te_climate_amp_high_lat = 66.5
 te_climate_amp_max = 2.5
@@ -61,24 +65,30 @@ te_climate_amplification = {
 	add = 1
 }
 
-# The warming this region feels against the record's normals, °C: the felt anomaly less the anomaly
-# the normals hold at, times the latitude's amplification. The felt anomaly, because an aerosol haze
-# cools the air people live in (§ 6). Negative until the world reaches today's warming, and below that again if carbon removal
-# takes the world past it. It reads the global anomaly and the region's latitude, both at state scope.
-te_climate_warming = {
+# The warming this region's hot days feel against the record's normals, °C: the felt anomaly less the
+# anomaly the normals hold at. The felt anomaly, because an aerosol haze cools the air people live in
+# (§ 6). Negative until the world reaches today's warming, and below that again if carbon removal takes
+# the world past it. It reads the global anomaly, which works at state scope.
+te_climate_summer_warming = {
+	value = temperature_anomaly_display
+	subtract = te_climate_normals_warming
+}
+# The same for its winters, times the latitude's amplification.
+te_climate_winter_warming = {
 	value = temperature_anomaly_display
 	subtract = te_climate_normals_warming
 	multiply = te_climate_amplification
 }
 
-# The record's seasons with warming added: warming raises the heat term and eases the cold one.
-te_climate_summer_eff = {
-	value = te_climate_summer_mean
-	add = te_climate_warming
+# The record's hottest day and coldest month with warming added: warming raises the heat term and eases the
+# cold one. The tile shows both.
+te_climate_hot_day_eff = {
+	value = te_climate_hot_day
+	add = te_climate_summer_warming
 }
 te_climate_winter_eff = {
 	value = te_climate_winter_mean
-	add = te_climate_warming
+	add = te_climate_winter_warming
 }
 
 # Relief, 0 to 1 (§ 5.2): the sum of the carriers the owner holds, clamped, since carriers or a later
@@ -107,17 +117,28 @@ te_climate_relief_disease = {
 	max = 1
 }
 
-# Each term before relief, in attraction points.
-te_climate_heat_raw = {
-	value = te_climate_summer_eff
+# Heat stress on a typical year's worst day with warming added. Air temperature rises with warming and
+# relative humidity holds about steady, so the wet-bulb part rises a little slower than the air.
+te_climate_heat_index_eff = {
+	value = te_climate_heat_index
+	add = {
+		value = te_climate_summer_warming
+		multiply = te_climate_index_per_degree
+	}
+}
+# Degrees of heat index above the point where heat starts to cost.
+te_climate_heat_excess = {
+	value = te_climate_heat_index_eff
 	subtract = te_climate_heat_start
 	min = 0
-	multiply = {
-		value = te_climate_summer_humidity
-		multiply = te_climate_humidity_factor
-		add = 1
-	}
-	multiply = te_climate_heat_weight
+}
+
+# Each term before relief, in percent. Heat is (b x + a) x x = a x + b x^2.
+te_climate_heat_raw = {
+	value = te_climate_heat_excess
+	multiply = te_climate_heat_quadratic
+	add = te_climate_heat_linear
+	multiply = te_climate_heat_excess
 }
 te_climate_cold_raw = {
 	value = te_climate_cold_start

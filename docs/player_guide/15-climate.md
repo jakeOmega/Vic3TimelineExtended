@@ -186,8 +186,8 @@ the top of the entry shows today's standard of living and mortality lines; hover
 it for every line and the multiplier.
 
 Warming also moves every state's [local climate](08-states.md#local-climate):
-summers and winters rise, most near the poles, so hot states lose more
-migration pull to heat and cold states less to cold.
+hot days and winters rise, winters most near the poles, so hot states lose
+more migration pull to heat and cold states less to cold.
 
 ## The climate dashboard
 
