@@ -36,7 +36,9 @@
 #   country un_msn_service_cached (the weekly cost of the missions it serves
 #           in at will: un_mission_service_cost's multiplier),
 #           un_msn_electoral_power (the strength of the electoral mission it
-#           hosts: un_electoral_observers_modifier's multiplier)
+#           hosts: un_electoral_observers_modifier's multiplier);
+#           players only: un_msn_cap_<slot>_<n> and un_msn_cap_count_<slot>
+#           (the chamber rows' contributor flags: un_mission_mirror_flags)
 #
 # WHO WRITES WHAT
 #   un_mission_open / un_mission_join_host   the openers (un_vote.2, un_events.4 A,
@@ -57,6 +59,11 @@
 #                                             (un_mission_slot_volunteer /
 #                                             _withdraw) and the AI
 #                                             (un_mission_ai_monthly)
+#   un_mission_mirror_flags                   the chamber rows' contributor
+#                                             flags, on every player
+#                                             (un_msn_cap_<slot>_<n>): rebuilt
+#                                             by every writer of a slot or a
+#                                             contributor list
 #   un_mission_service_refresh                the single refresh site for
 #                                             un_mission_service_cost (the JE's
 #                                             monthly pulse, and at once on
@@ -220,6 +227,7 @@ un_mission_add_contributor = {
 			set_variable = { name = un_msn_strength value = un_mission_strength_value }
 		}
 	}
+	un_mission_mirror_flags = yes
 }
 
 # A member pledging to a carried aid or peacekeeping request joins the mission
@@ -322,6 +330,115 @@ un_mission_assign_slot = {
 		else_if = {
 			limit = { NOT = { un_mission_slot_filled = { SLOT = 7 } } }
 			set_variable = { name = un_msn_slot value = 7 }
+		}
+		if = {
+			limit = { has_variable = un_msn_slot }
+			un_mission_mirror_flags = yes
+		}
+	}
+}
+
+# ---- The rows' contributor flags ----------------------------------------------------
+# A Missions in the Field row shows its contributors as flags, largest economy
+# first (the 2026-10-27 audit, UN-15). The GUI reaches a country only through
+# a stored state (gui_modding_guide.md gotcha #15), so every player holds, for
+# the mission in display slot S, its contributors' capitals in
+# un_msn_cap_<S>_<K> (K = 0-7), and un_msn_cap_count_<S> says how many from
+# the left have one, so the GUI never reads a capital that was not set
+# (gotcha #23). It is the Security Council seats' and the Delegations rows'
+# pattern (un_p5_seat_<N>, un_deleg_cap_<N>).
+#
+# The mirror is rebuilt whole, never patched, by every writer of a mission's
+# slot or contributors, at its end: un_mission_assign_slot (a slot taken),
+# un_mission_add_contributor, un_mission_withdraw, un_mission_close and
+# un_missions_dissolve (a slot freed), and un_missions_monthly_update after
+# the month's prunes, which also catches a contributor annexed or a capital
+# moved since. test_un_chamber_mission_slots.py fails if a writer leaves it
+# out. A contributor past the eighth is counted in the row's "+N"
+# (un_disp_msn_slot_<S>_more): the live count less the flags, so one the
+# mirror has not caught up with yet is counted there rather than left out.
+# Hidden: it is reached from options and scripted buttons, whose tooltips must
+# not change. Only players are written: nobody else looks.
+# Scope: any
+un_mission_mirror_flags = {
+	hidden_effect = {
+		every_country = {
+			limit = { is_player = yes }
+			set_variable = { name = un_msn_cap_count_0 value = 0 }
+			set_variable = { name = un_msn_cap_count_1 value = 0 }
+			set_variable = { name = un_msn_cap_count_2 value = 0 }
+			set_variable = { name = un_msn_cap_count_3 value = 0 }
+			set_variable = { name = un_msn_cap_count_4 value = 0 }
+			set_variable = { name = un_msn_cap_count_5 value = 0 }
+			set_variable = { name = un_msn_cap_count_6 value = 0 }
+			set_variable = { name = un_msn_cap_count_7 value = 0 }
+		}
+		if = {
+			limit = { has_global_variable_list = un_mission_registry }
+			un_mission_mirror_slot_flags = { SLOT = 0 }
+			un_mission_mirror_slot_flags = { SLOT = 1 }
+			un_mission_mirror_slot_flags = { SLOT = 2 }
+			un_mission_mirror_slot_flags = { SLOT = 3 }
+			un_mission_mirror_slot_flags = { SLOT = 4 }
+			un_mission_mirror_slot_flags = { SLOT = 5 }
+			un_mission_mirror_slot_flags = { SLOT = 6 }
+			un_mission_mirror_slot_flags = { SLOT = 7 }
+		}
+	}
+}
+
+# The flags of the mission in display slot $SLOT$, if one holds it. The
+# mission is entered directly, not through un_mission_slot_select, whose
+# scope:un_msn_new the writers that call this are still using.
+# Parameters: $SLOT$ = 0-7
+# Scope: any (the registry exists)
+un_mission_mirror_slot_flags = {
+	if = {
+		limit = { un_mission_slot_filled = { SLOT = $SLOT$ } }
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = $SLOT$ } }
+			order_by = un_mission_recency_order
+			max = 1
+			if = {
+				limit = { has_variable_list = un_msn_contributors }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 0 COUNT = 1 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 1 COUNT = 2 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 2 COUNT = 3 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 3 COUNT = 4 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 4 COUNT = 5 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 5 COUNT = 6 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 6 COUNT = 7 }
+				un_mission_mirror_flag = { SLOT = $SLOT$ POSITION = 7 COUNT = 8 }
+			}
+		}
+	}
+}
+
+# The contributor at $POSITION$ (0-based, largest economy first, as the
+# register's names are ordered), if the list has $COUNT$ ($POSITION$ + 1) that
+# still exist: its capital, to every player, and the slot's count then covers
+# it. The capital is saved and used in one block, so no position reads the one
+# before's (gotcha #25).
+# Parameters: $SLOT$, $POSITION$, $COUNT$
+# Scope: mission container
+un_mission_mirror_flag = {
+	if = {
+		limit = { any_in_list = { variable = un_msn_contributors count >= $COUNT$ exists = this } }
+		ordered_in_list = {
+			variable = un_msn_contributors
+			limit = { exists = this }
+			order_by = gdp
+			position = $POSITION$
+			check_range_bounds = no
+			capital ?= {
+				save_temporary_scope_as = un_msn_flag_cap
+				every_country = {
+					limit = { is_player = yes }
+					set_variable = { name = un_msn_cap_$SLOT$_$POSITION$ value = scope:un_msn_flag_cap }
+					set_variable = { name = un_msn_cap_count_$SLOT$ value = $COUNT$ }
+				}
+			}
 		}
 	}
 }
@@ -488,6 +605,7 @@ un_mission_withdraw = {
 			var:un_msn_host ?= { post_notification = un_mission_withdrawn_notice }
 		}
 		un_mission_service_refresh = yes
+		un_mission_mirror_flags = yes
 	}
 }
 
@@ -643,6 +761,8 @@ un_missions_monthly_update = {
 			un_mission_monthly = yes
 		}
 	}
+	# After the month's prunes (un_mission_prune_contributors): the rows' flags.
+	un_mission_mirror_flags = yes
 }
 
 # One active mission's month: the contributors still in it, its strength, its
@@ -857,6 +977,7 @@ un_mission_close = {
 		}
 	}
 	un_mission_outcome_$STATUS$ = yes
+	un_mission_mirror_flags = yes
 }
 
 # Success: the UN delivered. A delivery entry, standing and the host's thanks
@@ -1015,6 +1136,7 @@ un_missions_dissolve = {
 			}
 		}
 	}
+	un_mission_mirror_flags = yes
 }
 
 # ---- The state -----------------------------------------------------------------------------

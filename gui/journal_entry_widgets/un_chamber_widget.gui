@@ -404,6 +404,30 @@ types un_chamber_widget_types
 			block "progress" {}
 		}
 
+		# Who serves in it: a flag a contributor, largest economy first, and
+		# "+N" for any past the eighth (the 2026-10-27 audit, UN-15). Each
+		# flag names its country on hover. The instance fills it from its
+		# slot's mirror (un_mission_mirror_flags, un_mission_effects.txt):
+		# its visible in "contributors_shown", the flags and "+N" in
+		# "contributors". At 17, 122 + 4 + 8 x (28 + 4) + 37 = 419 of the 472.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			block "contributors_shown" {}
+
+			textbox = {
+				autoresize = yes
+				parentanchor = vcenter
+				align = left|nobaseline
+				using = un_fontsize_row
+				text = "je_un_chamber_mission_contributors_word"
+			}
+
+			block "contributors" {}
+		}
+
 		button = {
 			using = default_button_action
 			size = { 236 30 }
@@ -2631,6 +2655,92 @@ types un_chamber_widget_types
 						text = "je_un_chamber_mission_slot_0_figures"
 					}
 				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_0_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_0_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_0_more"
+						tooltip = "je_un_chamber_mission_more_tt"
+					}
+				}
 				blockoverride "join_action" {
 					visible = "[And( And( GetScriptedGui('un_chamber_mission_volunteer_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_mission_joinable_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ), Not( GetScriptedGui('un_chamber_mission_withdraw_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 					enabled = "[GetScriptedGui('un_chamber_mission_join_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
@@ -2665,6 +2775,92 @@ types un_chamber_widget_types
 						align = left|nobaseline
 						using = un_fontsize_row
 						text = "je_un_chamber_mission_slot_1_figures"
+					}
+				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_1_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_1_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_1_more"
+						tooltip = "je_un_chamber_mission_more_tt"
 					}
 				}
 				blockoverride "join_action" {
@@ -2703,6 +2899,92 @@ types un_chamber_widget_types
 						text = "je_un_chamber_mission_slot_2_figures"
 					}
 				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_2_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_2_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_2_more"
+						tooltip = "je_un_chamber_mission_more_tt"
+					}
+				}
 				blockoverride "join_action" {
 					visible = "[And( And( GetScriptedGui('un_chamber_mission_volunteer_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_mission_joinable_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ), Not( GetScriptedGui('un_chamber_mission_withdraw_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 					enabled = "[GetScriptedGui('un_chamber_mission_join_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
@@ -2737,6 +3019,92 @@ types un_chamber_widget_types
 						align = left|nobaseline
 						using = un_fontsize_row
 						text = "je_un_chamber_mission_slot_3_figures"
+					}
+				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_3_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_3_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_3_more"
+						tooltip = "je_un_chamber_mission_more_tt"
 					}
 				}
 				blockoverride "join_action" {
@@ -2775,6 +3143,92 @@ types un_chamber_widget_types
 						text = "je_un_chamber_mission_slot_4_figures"
 					}
 				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_4_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_4_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_4_more"
+						tooltip = "je_un_chamber_mission_more_tt"
+					}
+				}
 				blockoverride "join_action" {
 					visible = "[And( And( GetScriptedGui('un_chamber_mission_volunteer_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_mission_joinable_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ), Not( GetScriptedGui('un_chamber_mission_withdraw_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 					enabled = "[GetScriptedGui('un_chamber_mission_join_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
@@ -2809,6 +3263,92 @@ types un_chamber_widget_types
 						align = left|nobaseline
 						using = un_fontsize_row
 						text = "je_un_chamber_mission_slot_5_figures"
+					}
+				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_5_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_5_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_5_more"
+						tooltip = "je_un_chamber_mission_more_tt"
 					}
 				}
 				blockoverride "join_action" {
@@ -2847,6 +3387,92 @@ types un_chamber_widget_types
 						text = "je_un_chamber_mission_slot_6_figures"
 					}
 				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_6_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_6_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_6_more"
+						tooltip = "je_un_chamber_mission_more_tt"
+					}
+				}
 				blockoverride "join_action" {
 					visible = "[And( And( GetScriptedGui('un_chamber_mission_volunteer_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_mission_joinable_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ), Not( GetScriptedGui('un_chamber_mission_withdraw_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 					enabled = "[GetScriptedGui('un_chamber_mission_join_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
@@ -2881,6 +3507,92 @@ types un_chamber_widget_types
 						align = left|nobaseline
 						using = un_fontsize_row
 						text = "je_un_chamber_mission_slot_7_figures"
+					}
+				}
+				blockoverride "contributors_shown" {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_contributors'), '(CFixedPoint)0' )]"
+				}
+				blockoverride "contributors" {
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)0' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_0').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)1' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_1').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)2' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_2').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)3' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_3').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)4' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_4').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)5' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_5').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)6' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_6').GetState.GetCountry]"
+						}
+					}
+					widget = {
+						size = { 28 24 }
+						parentanchor = vcenter
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_flags'), '(CFixedPoint)7' )]"
+						tiny_flag = {
+							parentanchor = center
+							datacontext = "[JournalEntry.GetCountry.MakeScope.Var('un_msn_cap_7_7').GetState.GetCountry]"
+						}
+					}
+					textbox = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_msn_slot_7_more'), '(CFixedPoint)0' )]"
+						autoresize = yes
+						parentanchor = vcenter
+						align = left|nobaseline
+						using = un_fontsize_row
+						text = "je_un_chamber_mission_slot_7_more"
+						tooltip = "je_un_chamber_mission_more_tt"
 					}
 				}
 				blockoverride "join_action" {

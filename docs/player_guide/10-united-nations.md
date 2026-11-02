@@ -989,7 +989,8 @@ delivery away. The state panel shows a UN Mission tile, and contributors build
 covert networks in the host faster.
 
 Each row in Missions in the Field shows the mission's progress as a bar, with
-its month and strength beside it. Any major-power member not under sanctions
+its month and strength beside it, and its contributors' flags, the largest
+economies first. Any major-power member not under sanctions
 can press Send a Contingent on a mission's row, if it is not the host, not at
 war with it and has not left that mission before; a country that can send none
 anywhere sees one line saying why, and electoral missions take no contingents.
@@ -1127,7 +1128,7 @@ collapsed when they are reference:
 |---|---|---|
 | General Assembly | Open | The resolution in session: a tally bar (green for, gray not yet voted, red against, with a line at two thirds for the topics that need it) and how many of its twelve months have run, then your vote or the vote buttons and your lean (hover it for its terms), then the topic, the parties, what it does if it carries and the grounds. Delegations and Recorded Ballot sit under it while a resolution is in session; Propose a Resolution takes their place when none is. |
 | Why UN Authority Is Moving | Open | A bar for each pillar, with its trend since last month (hover a pillar for how it is computed), then your weight, the tier and the authority cap, the champions and underminers with Champion the Order or Undermine the Order, and the newest ledger entries (collapsed). |
-| Missions in the Field | Open | A row for each mission, with its progress bar and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
+| Missions in the Field | Open | A row for each mission, with its progress bar, its contributors' flags and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
 | Programs and Conventions | Open | How many countries take part in each program and convention, whether you do, with Join or Leave for a program, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take, with Propose the Mandate. |
 | Our Obligations | Open | Your dues, with Withhold Our Dues or Pay Our Dues, beside the budget as a table (all members' dues and what the Standing UN Force, the World Development Fund and the lending facility take), your pledge to the World Food Reserve with Pledge Grain or Withdraw Our Pledge, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |

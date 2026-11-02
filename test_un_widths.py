@@ -287,6 +287,18 @@ class WidthTest(unittest.TestCase):
         self.assertEqual(re.findall(r"\bwidget = \{\s*size = \{ (\d+) 30 \}", block), ["236", "236"])
         self.assertIn("je_un_chamber_vote_veto_cancel_label", block)
 
+    def test_the_mission_flag_row(self):
+        """A mission row's contributors (the 2026-10-27 audit, UN-15): the
+        word, eight 28-wide flags and the "+N", 4 apart, in the 472 row."""
+        body = _type(self.chamber, "un_chamber_mission_row")
+        self.assertIn('text = "je_un_chamber_mission_contributors_word"', body)
+        word = len(self.shown("je_un_chamber_mission_contributors_word")) * UNITS["row"] * MARGIN
+        more = len(self.shown("je_un_chamber_mission_slot_0_more")) * UNITS["row"] * MARGIN
+        self.assertLessEqual(word + 4 + 8 * (28 + 4) + more, 472)
+        for inst in _instances(self.chamber, "un_chamber_mission_row"):
+            flags = _block(inst, inst.index('blockoverride "contributors" {') + len('blockoverride "contributors" '))
+            self.assertEqual(re.findall(r"widget = \{\s*size = \{ (\d+) 24 \}", flags), ["28"] * 8)
+
     def test_the_delegation_words(self):
         for key, width in (("je_un_chamber_deleg_lobby_word", 56), ("je_un_chamber_deleg_pledge_word", 64)):
             with self.subTest(key=key):

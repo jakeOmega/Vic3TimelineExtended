@@ -26,7 +26,7 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 |---|---|---|---|---|---|
 | Banking, Budget Breakdown, top bar | [`banking_budget.md`](gui_audit/banking_budget.md) | 21 | 14 | 19 done, 2 needed no more | #1203 |
 | Legislated Tax Code | [`tax_code.md`](gui_audit/tax_code.md) | 26 | 30 | 23 done, TAX-21 in part, 2 needed no more | #1204 |
-| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | 25 done, UN-15 in part | #1205 |
+| United Nations | [`un.md`](gui_audit/un.md) | 26 | 18 | all done | #1205 |
 | Cultural Hegemony, Covert Warfare | [`hegemony_covert.md`](gui_audit/hegemony_covert.md) | 29 | 39 | all done | #1206 |
 | Global Warming, Strategic Reserve, Market panel | [`climate_reserve_market.md`](gui_audit/climate_reserve_market.md) | 32 | 40 | all done (GW-12 on placeholder art) | #1207 |
 | Nuclear Weapons | [`nuclear.md`](gui_audit/nuclear.md) | 21 | 17 | 20 done, 1 needed no more | #1208 |
@@ -39,7 +39,6 @@ It covers 248 findings in ten slices. This PR applies about 330 loc-only fixes a
 
 After the owner answered the [decisions](#decisions-for-the-owner), one agent per slice implemented that slice's open findings, quick, medium and large, and a twelfth built the four audits of #1213. The work tables below and each detail file give every finding's status. What is still open:
 
-- **UN-15:** mission contributors as flag rows. It needs a second copy of the mission register, kept in step on every mission path, and a list read not yet proven in game, for at most eight names. The owner wanted it only if it was straightforward, so it waits.
 - **TAX-21:** history rows show the code version and the promise's group, but not what each entry changed, which would need more stored fields.
 - **JE-8 (b):** whether a journal entry's `_desc` renders anywhere needs the game (its play-test list, item 14).
 - **Art:** placeholders stand in for a credibility icon (Nuclear), two Global Warming policy icons, a warship icon and the Defense and Modules cells' icons (Space). The player guide's screenshots of the Nuclear, UN, Cultural Hegemony, Covert, Global Warming, Strategic Reserve and solar-colonization panels show the old layouts.
@@ -289,7 +288,7 @@ Top priorities: an overview of what needs us, and our own vote under the tally (
 | UN-12 | The UN's own core terms have no concept: International Standing, case strength, lean, docket **Done.** | over-explaining / style | medium |
 | UN-13 | Our Obligations' budget line is a seven-figure sentence that repeats the Development Fund section **Done.** | spread-out/redundant / list | medium |
 | UN-14 | Delegations: the same estimate caveat on all 24 rows, and the summary hidden by the collapse **Done.** | over-explaining / hidden info / list | quick–large |
-| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names **Partly done:** contributors as flag rows (datamodel) deferred. | list / style | medium–large |
+| UN-15 | Missions: progress as a sentence, country-wide refusals on every row, contributors as indented names **Done.** The contributors became flags after the wave, through fixed per-player capital mirrors rather than a datamodel. | list / style | medium–large |
 | UN-16 | The archive prints 5–7 lines per resolution, and detail mode repeats the ballot caveat on every row **Done.** | list | quick–large |
 | UN-17 | The authority reading appears three times in a row, its tooltip adds nothing, and the target tick is the eye marker **Done.** | spread-out/redundant / style | medium |
 | UN-18 | The font sizes are off the house ladder: rows at 20 or 14, buttons and overview labels at 12, three sizes inside one table **Done.** | style | medium |
