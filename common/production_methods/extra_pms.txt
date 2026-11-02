@@ -4262,7 +4262,7 @@ pm_military_research = {
 }
 
 pm_automated_labs = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_labs.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -4909,7 +4909,7 @@ pm_internet_communications = {
 }
 
 pm_ai_governance = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_governance.dds"
 	unlocking_technologies = {
 		artificial_intelligence
 	}
@@ -5843,7 +5843,7 @@ pm_chromium_substitution = {
 }
 
 pm_microgravity_alloying = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_microgravity_alloying.dds"
 
 	unlocking_technologies = {
 		orbital_manufacturing
@@ -5969,7 +5969,7 @@ pm_bespoke_alloys = {
 }
 
 pm_basic_am_fabrication = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_basic_am_fabrication.dds"
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -6002,7 +6002,7 @@ pm_basic_am_fabrication = {
 }
 
 pm_advanced_am_fabrication = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_am_fabrication.dds"
 
 	unlocking_technologies = {
 		advanced_nanofabrication
@@ -6156,7 +6156,7 @@ pm_synthetic_bacteria_am_fabrication = {
 }
 
 pm_automated_am_fabrication = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_am_fabrication.dds"
 
 
 	unlocking_technologies = {
@@ -6188,7 +6188,7 @@ pm_automated_am_fabrication = {
 }
 
 pm_orbital_fabrication = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_orbital_fabrication.dds"
 
 
 	unlocking_technologies = {
@@ -6681,7 +6681,7 @@ pm_biotech_dyes = {
 }
 
 pm_quantum_dot_pigments = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_quantum_dot_pigments.dds"
 
 	unlocking_technologies = {
 		quantum_materials
@@ -8014,7 +8014,7 @@ pm_distributed_control_systems = {
 }
 
 pm_ai_managed_chemical_plant = {
-	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_chemical_plant.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -8067,7 +8067,7 @@ pm_ai_managed_chemical_plant = {
 }
 
 pm_ai_managed_explosives_factory = {
-	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_explosives_factory.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -8371,7 +8371,7 @@ pm_integrated_optical_chip_networks = {
 }
 
 pm_superconducting_networks = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_superconducting_networks.dds"
 
 	unlocking_technologies = {
 		quantum_materials
@@ -8412,7 +8412,7 @@ pm_superconducting_networks = {
 }
 
 pm_neural_lace_communications = {
-	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_neural_lace_communications.dds"
 
 	unlocking_technologies = {
 		neural_lace
@@ -9155,7 +9155,7 @@ pm_neuromorphic_computing = {
 }
 
 pm_orbital_nanolithography = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_orbital_nanolithography.dds"
 	unlocking_technologies = {
 		orbital_manufacturing
 	}
@@ -10625,7 +10625,7 @@ pm_intelligent_manufacturing_systems = {
 }
 
 pm_self_optimizing_production  = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_self_optimizing_production.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -10786,7 +10786,7 @@ pm_aeroplane_production_3 = {
 }
 
 pm_airport = {
-	texture = "gfx/interface/icons/production_method_icons/cat_plane_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_airport.dds"
 
 	state_modifiers = {
 		workforce_scaled = {
@@ -10829,7 +10829,7 @@ pm_airport = {
 }
 
 pm_spaceport = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_spaceport.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors
@@ -11428,7 +11428,7 @@ pm_base_building_inertial_fusion_power = {
 }
 
 pm_base_building_compact_modular_fusion_power = {
-	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_base_building_compact_modular_fusion_power.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors
@@ -12270,7 +12270,7 @@ pm_influencers_and_content_creators = {
 }
 
 pm_artificial_personalities = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_blue_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_artificial_personalities.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -12844,7 +12844,7 @@ pm_robotic_assembly_lines_building_motor_industry = {
 }
 
 pm_ai_managed_building_furniture_manufactory = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_furniture_manufactory.dds"
 
 
 	unlocking_technologies = {
@@ -12897,7 +12897,7 @@ pm_ai_managed_building_tooling_workshop = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_tooling_workshop.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -12959,7 +12959,7 @@ pm_ai_managed_building_tooling_workshop_handling = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_factory_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_tooling_workshop.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -13016,7 +13016,7 @@ pm_ai_managed_building_tooling_workshop_handling = {
 }
 
 pm_ai_managed_building_motor_industry = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_motor_industry.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -13072,7 +13072,7 @@ pm_ai_managed_building_motor_industry = {
 }
 
 pm_ai_managed_building_motor_industry_turbine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_car_green_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_motor_industry.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -13133,7 +13133,7 @@ pm_ai_managed_building_arms_industry = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_arms_industry.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -13196,7 +13196,7 @@ pm_ai_managed_building_artillery_foundry = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_artillery_foundry.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -13261,7 +13261,7 @@ pm_ai_managed_building_munition_plant = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_munition_plant.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -13326,7 +13326,7 @@ pm_ai_managed_building_munition_plant_shells = {
 		}
 	}
 
-	texture = "gfx/interface/icons/production_method_icons/cat_shield_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_building_munition_plant.dds"
 	is_hidden_when_unavailable = yes
 
 
@@ -13492,7 +13492,7 @@ pm_textile_finishing_machinery = {
 }
 
 pm_ai_managed_textile_factory = {
-	texture = "gfx/interface/icons/production_method_icons/cat_cloth_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_textile_factory.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -13628,7 +13628,7 @@ pm_cleanroom_fabs = {
 }
 
 pm_ai_managed_fab = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_green_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_managed_fab.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -15562,7 +15562,7 @@ pm_extreme_bandwidth = {
 }
 
 pm_semiinfinite_bandwidth = {
-	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p6.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_semiinfinite_bandwidth.dds"
 	unlocking_technologies = {
 		quantum_materials
 	}
@@ -15801,7 +15801,7 @@ pm_machine_learning_assisted_code_generation = {
 }
 
 pm_self_improving_AI_systems = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_self_improving_AI_systems.dds"
 	unlocking_technologies = {
 		artificial_intelligence
 	}
@@ -16082,7 +16082,7 @@ pm_ablative_rockets = {
 }
 
 pm_fusion_ssto_craft = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_ssto_craft.dds"
 	unlocking_technologies = {
 		compact_fusion_reactors
 	}
@@ -16419,7 +16419,7 @@ pm_robotic_assembly_handling = {
 }
 
 pm_ai_optimized_operations = {
-	texture = "gfx/interface/icons/production_method_icons/cat_chip_green_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ai_optimized_operations.dds"
 
 	unlocking_technologies = {
 		artificial_intelligence
@@ -16691,7 +16691,7 @@ pm_self_replicating_miners = {
 # (te_global_commons_logistics_pms.txt), or Self-Replicating Miners (era 13) with or
 # without them. test_deep_sea_rebalance.py holds both orderings at base prices.
 pm_ocean_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	building_modifiers = {
@@ -16730,7 +16730,7 @@ pm_ocean_mine = {
 }
 
 pm_advanced_ocean_mine  = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -16773,7 +16773,7 @@ pm_advanced_ocean_mine  = {
 }
 
 pm_automated_ocean_mine  = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -16822,7 +16822,7 @@ pm_automated_ocean_mine  = {
 # the two families with disable_pm_ flags (extra_game_rules.txt), so a building
 # shows one family only. pm_costs.py owns the cost comments.
 pm_ocean_mine_uncapped = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	building_modifiers = {
@@ -16861,7 +16861,7 @@ pm_ocean_mine_uncapped = {
 }
 
 pm_advanced_ocean_mine_uncapped = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -16904,7 +16904,7 @@ pm_advanced_ocean_mine_uncapped = {
 }
 
 pm_automated_ocean_mine_uncapped = {
-	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -17274,7 +17274,7 @@ pm_advanced_construction = {
 }
 
 pm_nanomaterial_buildings = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_nanomaterial_buildings.dds"
 
 	unlocking_technologies = {
 		advanced_nanofabrication
@@ -18647,7 +18647,7 @@ pm_solar_colonization = {
 }
 
 pm_deep_space_exploration = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_deep_space_exploration.dds"
 
 	unlocking_technologies = {
 		space_colonization
@@ -19764,7 +19764,7 @@ pm_modern_tourism = {
 }
 
 pm_space_tourism = {
-	texture = "gfx/interface/icons/production_method_icons/cat_suitcase_gold_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_space_tourism.dds"
 
 	unlocking_technologies = {
 		space_colonization
@@ -21065,7 +21065,7 @@ pm_solar_collector = {
 
 # Solar receiver - ground station converting beamed power to electricity
 pm_solar_receiver = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_solar_receiver.dds"
 
 	country_modifiers = {
 		level_scaled = {

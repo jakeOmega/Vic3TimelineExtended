@@ -103,7 +103,7 @@ pm_sr_space_command_fusion_yards = {
 }
 
 pm_sr_space_command_torch_yards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_space_command_torch_yards.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors

@@ -41,12 +41,12 @@ pm_tethered_launch_building_space_mine = {
 # --- Transport in space ---
 
 pm_chemical_tugs_building_space_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_ship_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_chemical_tugs_building_space_mine.dds"
 	is_default = yes
 }
 
 pm_fusion_tugs_building_space_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_atom_purple_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_fusion_tugs_building_space_mine.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors

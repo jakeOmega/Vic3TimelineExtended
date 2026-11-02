@@ -321,7 +321,7 @@ pm_te_direct_construction_advanced = {
 
 # pm_nanomaterial_buildings: 16 construction per level
 pm_te_direct_construction_nanomaterial = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_nanomaterial_buildings.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
