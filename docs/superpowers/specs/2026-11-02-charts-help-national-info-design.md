@@ -4,7 +4,9 @@
 > wide-mode work ([spec](2026-11-02-te-window-wide-mode-design.md), #1320, built in
 > #1327–#1337). Counts below come from regex sweeps of `gui/` and `localization/` on
 > 2026-11-02: they size the work, and are not exact. Several pieces rest on what only the
-> game can show (§ 9).
+> game can show (§ 9). The implementation plan is
+> [plans/2026-11-02-charts-help-national-info.md](../plans/2026-11-02-charts-help-national-info.md);
+> writing it changed §§ 4.3, 5.2, 6.6, 7.1 and 10, as its self-review lists.
 
 ## 1. The request
 
@@ -151,8 +153,9 @@ The owner, 2026-11-02, extending the wide-mode work:
   years, giving 12 / 60 / 240 px).
   - Bars about 336 px tall (4×).
   - The two hand-placed zero lines are recomputed for the new height.
-  - The popup comes to about 1,300 px wide, which fits 1600 × 900 and up at UI scale 1, but
-    not 1280-wide screens (open question 7).
+  - The popup comes to about 1,320 px wide (1,360 for the annual charts, whose axis labels
+    take 48 more), which fits 1600 × 900 and up at UI scale 1, but not 1280-wide screens
+    (open question 7).
 - **Which charts.** The 33 history charts. Pies, dials and the population pyramid stay as
   they are: they read at their size, and none is a time series.
 - **Later, not now:** year ticks along the bottom at the large size. Each sample stores
@@ -167,16 +170,21 @@ a second time, at the viewer's size.
   chart's plot blocks in a type derived from `te_history_plot` drew nothing and logged
   nothing. Whether a type derived from `te_history_chart` itself draws is unknown.
 - **Recommendation: a chart registry and a generator.**
-  - **The generator.** `scripts/generators/gen_te_history_charts.py` holds each chart once
-    (system, id, metric, title, legend, bar body, ranges). It writes each system's history
-    section type and the viewer's bodies, with the chart inline at both sizes, as the
-    instances that draw today are written.
+  - **The generator.** `scripts/generators/gen_te_history_charts.py` holds each chart once,
+    as its instance's text with each size a placeholder. It writes two wrapper types per
+    chart, `te_hist_<id>` and `te_hist_<id>_large`: a plain `flowcontainer` holding the
+    chart inline. That is the shape that draws today, since every history section is a type
+    holding its charts inline. The sections stay hand-written and instance the small one.
   - **Kept manual.** It stays out of `POST_LOAD_REGENERATORS`, like `gen_te_systems_window.py`,
     with a `--check` its test runs.
   - **The cost.** The 33 hand-written instances move into the registry: the largest piece of
     the chart work, with no visible change.
-  - **Worth one diagnostic first.** A play-test can try one chart as a derived type. If it
-    draws, named types replace the generator, which is cheaper.
+  - **No diagnostic needed** (this paragraph once proposed trying a derived type in game).
+    A wrapper is not a type derived from `te_history_chart`; it holds an instance, as the
+    sections do.
+- **Sizes are in axis units too.** The bars' thin caps and floors are written in the
+  chart's units (`banking_history_widget.gui:354`, `:359`), so the large size scales them by
+  the height ratio, or a cap 3 px tall today draws 13 px tall.
 
 ### 4.4 Where it opens, for whose country
 
@@ -211,25 +219,31 @@ a second time, at the viewer's size.
 
 ### 5.2 The Help popup
 
-- **What moves.** Each "How X Works" section becomes a help body type,
-  `te_<system>_help_body`: the section's content without its collapsible header. Its topics
-  and subheadings are kept as they are.
-- **The popup.** A `te_ui_popup` in `te_popups`, about 760 × 820, the text in a 680 column
-  that scrolls, titled with the section's own name ("How Banking Works"). It shows on
-  `te_popup = help_<system>`.
-- **Data.** None, apart from the tuning constants and topic gates of § 3.2. They read the
-  player (`GetPlayer`, or `GetPlayerJournalEntry` as the popups' bodies already do), so a
-  Help page opened from another country's panel describes the rules as they stand for the
-  player. That is what a rule explanation should say.
+- **What moves.** Each "How X Works" section's content becomes a help body type,
+  `te_<system>_help_body`. Its topics and subheadings are kept as they are. The 18 sections
+  make 15 pages (below), and the Fossil Transition's inline How joins Global Warming's.
+- **What stays: the section, as a link.** `te_<system>_sec_how` keeps its name and its
+  place in every composer, shrunk to its header, which opens the page instead of
+  expanding. So the composers, the wide layouts and their order tests are unchanged, and
+  every host keeps it where it was: the journal entry, the state subtab, and the tabs with
+  no header (Nation, Budget Breakdown).
+- **The popup.** A `te_ui_popup` in `te_popups`, 640 × 820, titled with the section's own
+  name ("How Banking Works"). It shows on `te_popup = help_<system>`. The text keeps the
+  sections' own widths (480 to 520); a wider column would mean rewidening every textbox, so
+  it waits for the play-test.
+- **Data.** None, apart from the tuning constants and topic gates of § 3.2. A help body reads
+  `GetPlayer` only, never `JournalEntry`, so a page needs no entry and opens whether or not
+  the player holds one. A Help page opened from another country's panel describes the rules
+  as they stand for the player. That is what a rule explanation should say.
 - **The "?" button.**
-  - **Where.** Right-aligned in the tab's header row. It goes in one place,
-    `te_system_tab_frame` (a `tab_help` block that the registry fills with the system's
-    key), so every frame-based host gets it, and by hand on the headers that have no frame:
-    - the Nation tab and Budget Breakdown;
-    - Demographics on the Population panel, the Census window and the state subtab;
-    - the journal entries' reference widgets, where the section sits today.
-  - **Art.** A placeholder texture to begin with (style guide rule 10), listed in the icons
-    docs.
+  - **Where.** Right-aligned in each frame-based tab's header: a `te_help_button` added as a
+    child of the body's `default_header`, vanilla's own shape for a button in a header
+    (`states_panel_buildings.gui:180`). The Space Race milestones' headers get it through
+    the window's generator. Hosts without a header have the link.
+  - **Art.** A placeholder texture to begin with (style guide rule 10), vanilla's Vickypedia
+    button, listed in the icons docs.
+- **The names keep a `help` token,** so `gui_tree.how_named` still exempts their text from
+  `long_tooltip_audit`'s 500-character cap.
 - **What stays in the panels:**
   - the live explanations of § 3.2 (Where These Come From, Why Authority Is Moving, Why
     Stability Is Moving);
@@ -330,7 +344,7 @@ This is the main cost of the feature, and any host needs it.
     and works from a foreign `Country`.
 - **`GetPlayer` reads**, in hand-written GUI and generated files alike. The generated ones
   change in their generators:
-  - Tax Code: about 560, plus about 3,300 in `te_tax_generated_rows.gui`;
+  - Tax Code: about 560, plus about 3,500 in `te_tax_generated_rows.gui`;
   - Seabed: 111;
   - Nation: 31, plus 142 generated;
   - Budget Breakdown: 65, generated.
@@ -347,7 +361,7 @@ This is the main cost of the feature, and any host needs it.
 | Tab | `JournalEntry.GetCountry` | `GetPlayer` | Controls (Execute) | Notes |
 |---|---|---|---|---|
 | Nation | 0 | 31 + 142 gen | 0 | the modifier list reads `GetPlayer.GetTimedModifiers` (`te_nation_tab.gui:164`) |
-| Space Race | 363 + about 12,000 gen | 17 | 19 + about 1,470 gen | the generated colony, site and fleet rows (their generators); the rival estimates are worked out from the viewer's side |
+| Space Race | 363 + about 22,000 gen | 17 | 19 + about 4,800 gen | the generated site and fleet rows (`gen_solar_sites.py`, `gen_space_fleets.py`); the rival estimates are worked out from the viewer's side |
 | Grand Monuments | 149 | 35 | 16 | |
 | Colonial Empire | 142 | 8 | 11 | the stability bar (above) |
 | Seabed | 0 | 111 | 2 types, many rows | the claimant rankings are player-only lists; the own row's `flag_context` is already a block |
@@ -411,16 +425,21 @@ place of exact progress, and Nuclear Weapons' estimate in place of the true coun
   - A minor's are empty. The empty state says why ("No history is kept below major power"),
     as the Demographics charts already do, rather than "nothing recorded yet".
   - Cultural Hegemony's chart is global, so it is the same for every country.
-- **The chart type defaults to the entry.** `te_history_chart`'s `sample_datamodel` and
-  `empty_visible` blocks default to `JournalEntry.GetCountry`
-  (`te_history_chart.gui:253`, `:423`). Their defaults become `Country`.
-- **Found in passing: a stopped history becomes visible.** When a country falls below major
-  power, its store stops recording and keeps the order it froze in: the newest months
-  first, then the oldest, if it had reached the cap.
+- **The chart type defaults to the entry.** `te_history_chart`'s `sample_datamodel`,
+  `sample_visible` and `empty_visible` blocks read `JournalEntry.GetCountry`
+  (`te_history_chart.gui:253`, `:270`, `:423`). The list reads become `Country`.
+  `sample_visible` reads the month index, the same for every country, so it reads the
+  player.
+- **Found in passing: a scrambled history becomes visible.** A store that stops recording
+  is already sorted, since every eviction re-sorts (`te_history_effects.txt:125`). The
+  stores out of order are ones scrambled before that sort existed and untouched since: the
+  newest months first, then the oldest.
   - `history_charts.md` calls that unreachable rather than broken, since "the charts live on
     that country's own journal entry". Another country's view makes it reachable.
-  - The fix: sort a store once when its country stops being tracked. It is small, and
-    `check_save_history_order.py` then fails on a `frozen` store rather than labeling it.
+  - The fix: an old-save repair that sorts each store once
+    (`common/on_actions/te_old_save_repairs.txt`). `check_save_history_order.py` then fails
+    on a `frozen` store out of order rather than labeling it, and scans Demographics'
+    `te_dg_hist`, which it skips today.
 
 ### 6.7 Display data only players get
 
@@ -455,8 +474,8 @@ call per list.
 
 One rule for every body: `Country` is the shown country. `JournalEntry` and `GetPlayer`
 appear only inside `te_own_country_only`, or under a comment naming a world list (§ 6.7). It
-is a test in `test_te_system_tab_bodies.py`, run over each body's type closure, plus a
-`check_gui_lint.py` warning.
+is a test in `test_te_system_tab_bodies.py`, run over each body's type closure. CI runs it,
+so a `check_gui_lint.py` warning would only repeat it.
 
 ### 7.2 One own-country guard: **do it**
 
@@ -481,7 +500,8 @@ The chart registry and generator, unless the diagnostic shows a derived type dra
 ### 7.5 One help body per system: **do it** (§ 5.2)
 
 `te_<system>_help_body`, instanced only by its popup. The `*_how_open` flags retire. A test
-holds that every system with a tab has a help page and a "?".
+holds that every system with a tab has a help page, its link, and a "?" in each header it
+has.
 
 ### 7.6 Sort a stopped history once: **do it** (§ 6.6)
 
@@ -525,17 +545,19 @@ holds that every system with a tab has a help page and a "?".
     another country's view shows); a line on the chart viewer.
   - **`gui_modding_guide.md`:** the window section and the popups section. It is a CRLF
     file, so keep its line endings.
-  - **`history_charts.md`:** the history fix, the viewer, and two stale lines a sweep found:
-    the bar width is fixed, not `{0 84}` expanding, and the banking gate is
-    `te_banking_cycle_running`.
+  - **`history_charts.md`:** the history fix, the viewer, and the stale lines two sweeps
+    found: the bar width is fixed, not `{0 84}` expanding; the banking gate is
+    `te_banking_cycle_running`; Banking has eight charts, on container 3, not three on
+    container 2; the plot is a flowcontainer of fixed widths, not an `hbox`; the charts open
+    by default; the cap is 240 containers, not 120.
   - **`system_panels_feasibility.md`.**
   - **The icons docs:** the "?" and "⤢" placeholders.
   - **A play-test list,** `docs/testing/charts-help-national-info-playtest.md` (§ 9).
   - **The player guide:**
     - `01-introduction.md` (the window, National Info);
     - `08-states.md` (the Census Data window);
-    - the chapters that send players to a "How X Works" section: `04`, `05`, `08`, `11`,
-      `15`, `16`;
+    - the chapters that send players to a "How X Works" section: `01`, `02`, `03`, `04`,
+      `05`, `08`, `10`, `11`, `12`, `14`, `15`, `16`;
     - `17-reference.md`;
     - then a PDF rebuild.
 
@@ -576,8 +598,8 @@ None gates a merge (`CLAUDE.md`). They go on the play-test list:
 | C1 | The chart registry and generator, writing today's history sections (no visible change) | medium–large | — |
 | C2 | The chart viewer for the player's country, and the "⤢" buttons | medium | C1 |
 | F0 | The binding rule: mounts supply `Country`, `te_own_country_only`, the chart defaults, the gates' root as a parameter, the tests of §§ 7.1–7.2 (no visible change) | medium | H2, so the How sections are moved, not rebound; C1, so the charts are rebound once, in the registry |
-| F1 | National Info: the rename, the strip and mounts from the registry (Pops and Demographics at first), the Information tab's goto, the foreign chart viewer, the history fix and empty state | medium | F0, C2 |
-| F2–F4 | Each system bound and made public, the owner's six first (Banking; Tax Code with its generator; Grand Monuments; Colonial Empire; Seabed; Nation with its UN lines), then Cultural Hegemony, the Space Race (its generators and band) and Nuclear Weapons (the estimate), a few per PR, in parallel | medium–large each | F1 |
+| F1 | National Info: the rename, the strip and mounts from the registry (Pops and Demographics at first), the foreign chart viewer, the history fix and empty state | medium | F0, C2 |
+| F2–F5 | Each system bound and made public, in parallel: F2 Nation (with its UN lines and the Information tab's goto, which opens it), Banking, Tax Code (with its generator); F3 Grand Monuments, Colonial Empire, Seabed; F4 Cultural Hegemony, Nuclear Weapons (the estimate); F5 the Space Race (its two generators and the band) | medium–large each | F1 |
 
 - **Independent work.** H and C are independent and can run in parallel.
 - **Self-contained PRs.** Each PR carries its own docs, play-test items and player guide
