@@ -70,4 +70,4 @@ columns. The Census Data window's Demographics tab is the first layout on them; 
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **1. The Census Data window.** Open Population, then Census Data, then its Demographics tab, before and after the first census. | Before: the pending line alone. After: the tab's sections in three columns of 520, 30 apart, centered, as before 2026-11-02. | No columns or a different layout: a blockoverride inside the type's nested columns didn't reach them; put the three flowcontainers back in `te_demog_browser_sections` (`git show 8c8ad6f1a:gui/te_demographics_layout.gui`). |
+| **1. The Census Data window.** Open Population, then Census Data, then its Demographics tab, before and after the first census. | Before: the pending line alone. After: the tab's sections in three columns of 520, 30 apart, centered, as before 2026-11-02. | No columns or a different layout: a blockoverride inside the type's nested columns didn't reach them; put the three flowcontainers back in `te_demog_browser_sections` (`git show 3d01f0d09:gui/te_demographics_layout.gui`). |
