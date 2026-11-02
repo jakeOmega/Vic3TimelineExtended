@@ -2459,7 +2459,7 @@ ICONS: dict[str, dict[str, dict]] = {
     "state_status": {
         "local_climate": {"subject": "a fat glass thermometer with a big round red bulb, a small bright yellow sun beside "
                                      "its top and a small pale blue snowflake beside its bottom",
-                          "seed": None, "now": f"{_GI}/state_trait_icons/tropical_climate.dds"},
+                          "seed": 3, "solid": True, "now": f"{_GI}/state_trait_icons/tropical_climate.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
