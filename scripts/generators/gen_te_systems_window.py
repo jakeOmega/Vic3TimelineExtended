@@ -170,13 +170,14 @@ TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
     Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
-        body="te_nation_tab_sections"),
-    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout"),
-    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout"),
-    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout"),
+        body="te_nation_tab_sections", wide="te_nation_wide_sections"),
+    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections"),
+    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections"),
+    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
-    _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt"),
+    _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
+            wide="te_seabed_wide_sections"),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -193,7 +194,7 @@ TABS: list[Tab] = [
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
             wide="te_tax_wide_sections"),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
-        body="te_budget_breakdown_panel"),
+        body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.
     _mirror("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_st_res_tab_body", "te_st_res_tab_layout",
             "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui",
@@ -210,13 +211,13 @@ TABS: list[Tab] = [
             open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui")),
             wide="te_demog_browser_sections"),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
-            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui"),
+            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections"),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
-            "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui"),
+            "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
-            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui"),
+            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections"),
     _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
-            "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui"),
+            "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
 
 # The Space Race's nine entries, in je_space_race.txt's order. Each has its

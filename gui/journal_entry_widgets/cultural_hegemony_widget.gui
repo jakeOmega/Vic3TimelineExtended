@@ -2976,6 +2976,7 @@ types cultural_hegemony_widget_types
 	type te_ch_tab_body = te_system_tab_frame {
 		blockoverride "tab_header" {
 			default_header = {
+				using = default_list_position
 				blockoverride "text" {
 					text = "je_cultural_hegemony"
 				}
@@ -3000,6 +3001,46 @@ types cultural_hegemony_widget_types
 
 		blockoverride "tab_open_journal_tooltip" {
 			tooltip = "te_society_ch_open_journal_tt"
+		}
+	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_ch_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The window's wide mount puts it in place of
+	### te_ch_tab_layout; the Society panel and the side panel keep the one
+	### column. test_cultural_hegemony_layout.py holds the columns.
+	type te_ch_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_ch_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ch_sec_board = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ch_sec_programmes = {}
+				te_ch_sec_breakdown = {}
+				te_ch_sec_models = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_ch_reference_sections = {}
 		}
 	}
 }

@@ -7,6 +7,9 @@ import re
 import subprocess
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "colonial_empire_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_colonial_empire.txt")
@@ -1816,6 +1819,23 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
         self.assertEqual(self.pick.count("exists = scope:$CULTURE_SCOPE$"), 1, "the steps read local_var, not exists")
         self.assertLess(clear.start(), self.pick.index("every_scope_culture"))
         self.assertIn("local_var:decol_release_culture_best <= 0", self.pick)
+
+class WideLayoutTest(unittest.TestCase):
+    """te_ce_wide_sections, the window's full-screen Colonial Empire (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns,
+    read down each and then across, under the narrow layout's gates."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_ce_wide_sections", layout=("te_ce_tab_body", "te_ce_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_ce_overview_panel", "te_ce_sec_holdings", "te_ce_sec_stability"],
+            ["te_ce_sec_pressure", "te_ce_sec_programmes"],
+            ["te_ce_sec_history", "te_ce_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "colonial_empire")
+        self.assertEqual((tab.layout, tab.wide), ("te_ce_tab_layout", "te_ce_wide_sections"))
+
 
 if __name__ == "__main__":
     unittest.main()

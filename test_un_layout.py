@@ -4,6 +4,9 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "un_layout_widget.gui")
@@ -14,6 +17,13 @@ UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
           "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure"]
 REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7). The
+# Assembly is by far the largest section, so column 1 holds it under only the
+# overview and the Status line (shown at a founding or a dissolution).
+WIDE_COLUMNS = [["te_un_overview_panel", "te_un_sec_status", "te_un_sec_assembly"],
+                ["te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes", "te_un_sec_mandates"],
+                ["te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure",
+                 "te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
@@ -114,12 +124,21 @@ class PillarBarTest(unittest.TestCase):
 class TabStatusTest(unittest.TestCase):
     def test_the_tab_keeps_the_entrys_status_text_open(self):
         """Open by default (owner, 2026-09-28): the flag is the CLOSED flag. In
-        the tab's body, which the Diplomacy panel and the Timeline Extended
-        window both mount."""
-        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
+        te_un_sec_status, the section the tab's body places after the
+        overview, which the Diplomacy panel, the Timeline Extended window and
+        its full-screen columns all mount."""
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", status, re.S)
         self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
+
+    def test_the_tab_places_the_status_section_bare_after_the_overview(self):
+        """The section's gate is its type's root visible, so the instance
+        carries none (gotcha #17), and the layout draws nothing inline."""
+        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
+        self.assertRegex(tab, r"te_un_overview_panel = \{\}\s*(?:#[^\n]*\n\s*)*te_un_sec_status = \{\}")
+        self.assertNotIn("un_chamber_section_header", tab)
+        self.assertNotIn("te_je_status_desc", tab)
 
 CHAMBER = os.path.join(W, "un_chamber_widget.gui")
 # Explanations that live in "How the UN works", and the live sections they left.
@@ -710,8 +729,9 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertIn("$je_un_conv_name_decolonization$", _loc("je_un_chamber_regime_colonial_pressure"))
 
     def test_the_tab_status_hides_with_nothing_to_say(self):
-        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
-        self.assertIn("GetScriptedGui('un_status_text_sgui').IsShown", tab)
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        root = status.split("un_chamber_section_header")[0]
+        self.assertIn("visible = \"[GetScriptedGui('un_status_text_sgui').IsShown", root)
         for key in ("je_un_status_conference", "je_un_status_dissolved"):
             self.assertFalse(_loc(key).endswith("\\n"), key)
 
@@ -725,6 +745,32 @@ class ReviewRound2Test(unittest.TestCase):
 
     def test_the_refugee_target_line_ends_its_sentence(self):
         self.assertTrue(_loc("je_un_chamber_propose_target_refugee").endswith("nobody."))
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_un_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_un_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_un_wide_sections",
+                                             layout=("te_un_tab_body", "te_un_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["united_nations"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_un_tab_body", "te_un_tab_layout", "te_un_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(LAYOUT)), "te_un_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -856,4 +856,30 @@ types te_nation_widget_types
 		te_nation_sources_panel = {}
 		te_nation_how_panel = {}
 	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
+	### read down each and then across, so the order is the tab's: the overview
+	### and governance, the economy and what science and the world give, then
+	### Where These Come From and How the Nation Works. The window mounts it in
+	### place of te_nation_tab_sections, which carries no gate or context; its
+	### spacing of 10 is the columns' own.
+	type te_nation_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_nation_overview_panel = {}
+			te_nation_section_governance = {}
+			te_nation_section_society = {}
+		}
+
+		blockoverride "column_2" {
+			te_nation_section_economy = {}
+			te_nation_section_science_and_space = {}
+			te_nation_section_international = {}
+		}
+
+		blockoverride "column_3" {
+			te_nation_sources_panel = {}
+			te_nation_how_panel = {}
+		}
+	}
 }

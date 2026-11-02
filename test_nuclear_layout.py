@@ -6,6 +6,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
@@ -22,6 +24,14 @@ STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_worl
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
+# bar stays under The Programme, in its own gated wrapper.
+WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_je_goal_bar",
+                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
+                ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
+                 "te_nuclear_sec_reputation"],
+                ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers",
+                 "te_nuclear_sec_how"]]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
          ("widget_je_nuclear_programme", "custom_widget_container_3", "te_nuclear_sec_programme"),
@@ -1052,6 +1062,22 @@ class TestSurvivorsRow(unittest.TestCase):
         self.assertIn("nd_has_main_rival_sgui", row)
         self.assertIn('text = "nd_w_survivors_value"', row)
         self.assertIn('tooltip = "nd_w_survivors_tt"', row)
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_nuclear_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_nuclear_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_nuclear_wide_sections",
+                                             layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["nuclear_weapons"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_nuclear_tab_body", "te_nuclear_tab_layout", "te_nuclear_wide_sections"))
 
 
 if __name__ == "__main__":

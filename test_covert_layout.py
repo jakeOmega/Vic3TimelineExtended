@@ -13,6 +13,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
 
@@ -30,6 +32,10 @@ SGUIS_FILE = os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis
 STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
           "te_covert_sec_counterintel", "te_covert_sec_known"]
 REFERENCE = ["te_covert_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_covert_overview_panel", "te_covert_sec_operations"],
+                ["te_covert_sec_funding", "te_covert_sec_networks", "te_covert_sec_counterintel"],
+                ["te_covert_sec_known", "te_covert_sec_how"]]
 # root name -> (container, what it wraps)
 ROOTS = {
     "widget_je_covert_overview": ("custom_widget_container_1", "te_covert_overview_panel"),
@@ -1291,6 +1297,22 @@ class MilitaryCovertTabTest(unittest.TestCase):
                 for _ in range(line.count("}")):
                     if len(stack) > 1:
                         stack.pop()
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_covert_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_covert_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_covert_wide_sections",
+                                             layout=("te_covert_tab_body", "te_covert_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["covert_warfare"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_covert_tab_body", "te_covert_tab_layout", "te_covert_wide_sections"))
 
 
 if __name__ == "__main__":

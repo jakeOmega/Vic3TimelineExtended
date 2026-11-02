@@ -1254,7 +1254,7 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_nation_tab_sections = {}
+			te_nation_wide_sections = {}
 		}
 
 		flowcontainer = {
@@ -1267,7 +1267,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_sr_tab_body = {}
+			te_sr_tab_body = {
+				blockoverride "te_sr_tab_layout" {
+					te_sr_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1280,7 +1284,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_gm_tab_body = {}
+			te_gm_tab_body = {
+				blockoverride "te_gm_tab_layout" {
+					te_gm_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1293,7 +1301,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_ce_tab_body = {}
+			te_ce_tab_body = {
+				blockoverride "te_ce_tab_layout" {
+					te_ce_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1306,7 +1318,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_seabed_tab_body = {}
+			te_seabed_tab_body = {
+				blockoverride "te_seabed_tab_layout" {
+					te_seabed_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1353,7 +1369,7 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_budget_breakdown_panel = {}
+			te_budget_breakdown_wide_sections = {}
 		}
 
 		flowcontainer = {
@@ -1417,7 +1433,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_ch_tab_body = {}
+			te_ch_tab_body = {
+				blockoverride "te_ch_tab_layout" {
+					te_ch_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1430,7 +1450,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_un_tab_body = {}
+			te_un_tab_body = {
+				blockoverride "te_un_tab_layout" {
+					te_un_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1443,7 +1467,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_nuclear_tab_body = {}
+			te_nuclear_tab_body = {
+				blockoverride "te_nuclear_tab_layout" {
+					te_nuclear_wide_sections = {}
+				}
+			}
 		}
 
 		flowcontainer = {
@@ -1456,7 +1484,11 @@ types te_systems_window_generated_types
 			margin_top = 10
 			margin_bottom = 15
 
-			te_covert_tab_body = {}
+			te_covert_tab_body = {
+				blockoverride "te_covert_tab_layout" {
+					te_covert_wide_sections = {}
+				}
+			}
 		}
 	}
 

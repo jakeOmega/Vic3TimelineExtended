@@ -20,6 +20,8 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
+from gui_test_helpers import assert_wide_matches_narrow  # noqa: E402
+from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
 SGUIS = os.path.join(REPO, "common", "scripted_guis", "space_race_sguis.txt")
@@ -1451,6 +1453,24 @@ class EarthAlertCellTest(unittest.TestCase):
         self.assertIn('text = "je_space_race_widget_ovc_earth_fig"', cell)
         loc = "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))
         self.assertRegex(loc, r'(?m)^ je_space_race_widget_ovc_earth_word_loud:0 "#R ')
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_sr_wide_sections, the window's full-screen Space Race (spec
+    2026-11-02-te-window-wide-mode § 7): the milestones under way, then Space
+    Powers and Orbit, then How the Space Race Works, each column under the
+    gate its narrow run carries."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_sr_window_milestones"],
+            ["te_sr_sec_powers", "te_sr_sec_orbit"],
+            ["te_sr_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "space_race")
+        self.assertEqual((tab.layout, tab.wide), ("te_sr_tab_layout", "te_sr_wide_sections"))
 
 
 if __name__ == "__main__":
