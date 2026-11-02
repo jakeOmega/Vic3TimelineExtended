@@ -151,6 +151,20 @@ def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
                unlock=f"te_window_{key}_tab_unlock_sgui", body=body, layout=layout, **kw)
 
 
+def _mirror(key: str, row: int, tooltip: str, body: str, layout: str | None, tab_sgui: str, unlock: str,
+            locked: str | None = None, open_: str | None = None, **kw) -> Tab:
+    """A tab mirrored from a vanilla panel's (spec § 6): the host tab's own
+    gates (common/scripted_guis/te_system_tab_sguis.txt), its tooltip where
+    the text fits the window (§ 9.6), and the window's own name. The grayed
+    line is the window's (te_window_tab_<key>_locked_tt) unless the host's
+    names the tab as the window does."""
+    return Tab(key, row, label=f"te_window_tab_{key}", tooltip=tooltip,
+               locked=locked or f"te_window_tab_{key}_locked_tt",
+               open_=open_ or shown(tab_sgui), strip=shown(unlock), unlock=unlock, body=body, layout=layout, **kw)
+
+
+BANKING_OPEN = or_(shown("te_budget_banking_tab_sgui"), shown("te_budget_banking_readout_sgui"))
+
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
@@ -162,6 +176,40 @@ TABS: list[Tab] = [
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt"),
+
+    # The Budget and Market panels' tabs (strip 2). Banking opens with its
+    # entry or, for a country with a monetary stance and no entry, its #805
+    # readout, and keeps the Budget tab's two-branch tooltip, which has no
+    # checklist. Budget Breakdown has no entry and no rule: always open.
+    _mirror("banking", 2, "te_budget_tab_banking_tt", "te_banking_tab_body", "te_banking_tab_layout",
+            "te_budget_banking_tab_sgui", "te_budget_banking_tab_unlock_sgui",
+            locked="te_budget_tab_banking_locked_tt", open_=BANKING_OPEN,
+            tooltip_expr=f"SelectLocalization( {shown('te_budget_banking_tab_sgui')}, 'te_budget_tab_banking_tt', "
+                         f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
+                         "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )"),
+    _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
+            "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt"),
+    Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
+        body="te_budget_breakdown_panel"),
+    # The Market tabs' own tooltips speak of another market: the window's own.
+    _mirror("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_st_res_tab_body", "te_st_res_tab_layout",
+            "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui"),
+    _mirror("global_warming", 2, "te_window_tab_global_warming_tt", "te_gw_tab_body", "te_gw_tab_layout",
+            "te_market_global_warming_tab_sgui", "te_market_global_warming_tab_unlock_sgui"),
+
+    # The Population, Society, Diplomacy and Military panels' tabs (strip 3).
+    # Demographics opens with its first census, as on the Population panel.
+    _mirror("demographics", 3, "te_pops_tab_demog_tt", "te_demog_window_body", "te_demog_tab_layout",
+            "te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui", locked="te_pops_tab_demog_locked_tt",
+            open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui"))),
+    _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
+            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui"),
+    _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
+            "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui"),
+    _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
+            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui"),
+    _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
+            "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui"),
 ]
 
 # The Space Race's nine entries, in je_space_race.txt's order. Each has its

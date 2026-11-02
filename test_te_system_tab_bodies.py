@@ -357,6 +357,23 @@ class HostPanelTest(unittest.TestCase):
                      "te_systems_window_tabs_narrow", "te_sr_window_milestones", *(b[0] for b in HOST_BODIES)):
             self.assertIn(name, checked)
 
+    def test_no_window_tab_reads_a_host_panel(self):
+        """What each of the window's tabs mounts (the registry's bodies,
+        whatever their names), and the types each instances one level down
+        (its composers), read none of the hosts' panels."""
+        from scripts.generators import gen_te_systems_window as gen
+        types = {}
+        for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+            text = _strip_comments(_read(path))
+            for name in re.findall(r"^\ttype (\w+) = \w+ \{", text, re.M):
+                types[name] = _type_body(text, name)
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                self.assertIn(t.body, types)
+                for name in [t.body] + [c for c in _instances(types[t.body]) if c in types]:
+                    hit = HOST_PANELS.search(types[name])
+                    self.assertIsNone(hit, f"{t.key}: {name} reads {hit and hit.group(0)}")
+
 
 if __name__ == "__main__":
     unittest.main()
