@@ -513,7 +513,7 @@ class JournalEntryTest(unittest.TestCase):
 
     def test_names_and_icon(self):
         table = loc()
-        for key in ("je_tax_code", "je_tax_code_desc", "je_tax_code_reason"):
+        for key in ("je_tax_code", "je_tax_code_reason"):
             with self.subTest(key=key):
                 self.assertTrue(table.get(key))
         self.assertIn('icon = "gfx/interface/icons/event_icons/je_tax_code.dds"', self.body)
@@ -1287,7 +1287,7 @@ class LocTest(unittest.TestCase):
     def test_new_keys_live_in_the_tax_file(self):
         """organize_loc files je_tax_code* with the te_tax_ family (TAX)."""
         keys = tax_loc()
-        for key in ("je_tax_code", "je_tax_code_desc", "je_tax_code_reason", "je_tax_code_status_none",
+        for key in ("je_tax_code", "je_tax_code_reason", "je_tax_code_status_none",
                     "te_tax_tab", "te_tax_tab_tt", "te_tax_tab_locked_tt", "te_tax_open_journal_tt",
                     "te_tax_open_budget", "te_tax_open_budget_tt", "te_tax_how_header"):
             with self.subTest(key=key):

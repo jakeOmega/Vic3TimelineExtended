@@ -455,7 +455,10 @@ below 50, Wavering from 50, Yielding from 70 and Breaking from 85.
 - Pressure on the target (0–100) is what makes an AI target concede. The issuer's credibility, the danger, a threat that can be carried out, and the issuer's exercises and alerts raise it. The target's ability to answer in kind (up to −25, for three warheads that would survive the issuer's whole arsenal) and an armed protector behind it lower it, as does a threat from an issuer the armed target could disarm first (up to −15). So do the demands at stake: an annexation −30, a subjugation −20, each goal that takes a state or a subject −10 and each lesser goal −4, at most −40; the AI won't back with a nuclear threat a demand so large that it alone keeps an AI target from conceding. The course of the war, the target ruler's temperament and the nuclear taboo shift it either way: up to +8 where the taboo is near 0 and threats are believed, down to −8 near 100 where nobody believes them, with the doubt halved for a public ultimatum. When first threatened, an AI target concedes only rarely below 40. Pressed again later, it never concedes below 50, does so about half the time from 70, and two times in three from 85.
 
 From Confrontation on, the target is pressed every six weeks unless talks are
-open.
+open. Talks are open while a proposal to stand down or to trade awaits an
+answer, and for six weeks after one side answers The Exercise They Mistook by
+sharing its schedule (the threatening side accepting, if the other shared it).
+Either side can still make a proposal during those six weeks.
 
 <!-- screenshot: the Nuclear Crisis section during a Confrontation, with the pressure breakdown tooltip open -->
 

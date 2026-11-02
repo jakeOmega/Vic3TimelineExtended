@@ -798,7 +798,7 @@ What each part does:
 
 ## File 11: `common/journal_entries/je_strategic_reserve.txt`
 
-**Nothing to add per good.** The journal entry no longer declares per-good progress bars, buttons or status lines — the widget covers all of it. Only update `je_strategic_reserve_desc` (below) so the good is named in the prose list.
+**Nothing to add per good.** The journal entry no longer declares per-good progress bars, buttons or status lines — the widget covers all of it.
 
 ---
 
@@ -817,11 +817,7 @@ What each part does:
 
 ### te_journal_entries_l_english.yml
 
-No per-good key any more. Just update the prose list:
-
-```
- je_strategic_reserve_desc:0 "Manage the national stockpile of grain, ammunition, oil, …, and <GOOD_DISPLAY lower>. …"
-```
+Nothing per good. The entry's reason doesn't list the goods, and the `je_strategic_reserve_desc` that did is gone: nothing rendered it (#1212).
 
 ### te_miscellaneous_l_english.yml (widget row cells + flow modifier names)
 

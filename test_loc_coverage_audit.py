@@ -278,17 +278,40 @@ class AuditTests(unittest.TestCase):
         result = audit(ms, mod_path=tmp)
         self.assertEqual(result.flags, [])
 
-    def test_journal_entry_missing_desc_flagged(self):
+    def test_journal_entry_missing_reason_flagged(self):
+        # The page renders GetReason, which falls back to <key>_reason.
         tmp = tempfile.mkdtemp()
         _write(tmp, "common/journal_entries/x.txt", "je_test = {\n}\n")
         ms = FakeMS(
             mod_data={"Journal Entries": {"je_test": {}}},
             base_data={"Journal Entries": {}},
-            loc_keys={"je_test"},  # title present, desc missing
+            loc_keys={"je_test"},  # title present, reason missing
         )
         result = audit(ms, mod_path=tmp)
         self.assertEqual(len(result.flags), 1)
-        self.assertEqual(result.flags[0].missing_keys, ["je_test_desc"])
+        self.assertEqual(result.flags[0].missing_keys, ["je_test_reason"])
+
+    def test_journal_entry_desc_not_required(self):
+        # No accessor reads a journal entry's <key>_desc (#1212, JE-8b).
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/journal_entries/x.txt", "je_test = {\n}\n")
+        ms = FakeMS(
+            mod_data={"Journal Entries": {"je_test": {}}},
+            base_data={"Journal Entries": {}},
+            loc_keys={"je_test", "je_test_reason"},
+        )
+        self.assertEqual(audit(ms, mod_path=tmp).flags, [])
+
+    def test_journal_entry_reason_field_needs_no_reason_key(self):
+        # A `reason =` field replaces the <key>_reason fallback.
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/journal_entries/x.txt", "je_test = {\n\treason = je_test_why\n}\n")
+        ms = FakeMS(
+            mod_data={"Journal Entries": {"je_test": {"reason": ("=", "je_test_why")}}},
+            base_data={"Journal Entries": {}},
+            loc_keys={"je_test"},
+        )
+        self.assertEqual(audit(ms, mod_path=tmp).flags, [])
 
     def test_optional_desc_not_required(self):
         # Character traits: name required, desc optional. Missing desc alone
