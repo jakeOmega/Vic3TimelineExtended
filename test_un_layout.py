@@ -114,12 +114,21 @@ class PillarBarTest(unittest.TestCase):
 class TabStatusTest(unittest.TestCase):
     def test_the_tab_keeps_the_entrys_status_text_open(self):
         """Open by default (owner, 2026-09-28): the flag is the CLOSED flag. In
-        the tab's body, which the Diplomacy panel and the Timeline Extended
-        window both mount."""
-        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
+        te_un_sec_status, the section the tab's body places after the
+        overview, which the Diplomacy panel, the Timeline Extended window and
+        its full-screen columns all mount."""
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", status, re.S)
         self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
+
+    def test_the_tab_places_the_status_section_bare_after_the_overview(self):
+        """The section's gate is its type's root visible, so the instance
+        carries none (gotcha #17), and the layout draws nothing inline."""
+        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
+        self.assertRegex(tab, r"te_un_overview_panel = \{\}\s*(?:#[^\n]*\n\s*)*te_un_sec_status = \{\}")
+        self.assertNotIn("un_chamber_section_header", tab)
+        self.assertNotIn("te_je_status_desc", tab)
 
 CHAMBER = os.path.join(W, "un_chamber_widget.gui")
 # Explanations that live in "How the UN works", and the live sections they left.
@@ -710,8 +719,9 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertIn("$je_un_conv_name_decolonization$", _loc("je_un_chamber_regime_colonial_pressure"))
 
     def test_the_tab_status_hides_with_nothing_to_say(self):
-        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
-        self.assertIn("GetScriptedGui('un_status_text_sgui').IsShown", tab)
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        root = status.split("un_chamber_section_header")[0]
+        self.assertIn("visible = \"[GetScriptedGui('un_status_text_sgui').IsShown", root)
         for key in ("je_un_status_conference", "je_un_status_dissolved"):
             self.assertFalse(_loc(key).endswith("\\n"), key)
 
