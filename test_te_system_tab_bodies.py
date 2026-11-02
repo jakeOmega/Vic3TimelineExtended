@@ -8,6 +8,7 @@ GetPlayerJournalEntry datacontext (gotcha #29), a fixed 520 column, the
 content, and Open Journal Entry. Each body type derives from the frame and
 fills its blocks, so two hosts of one tab can't drift apart.
 """
+import glob
 import os
 import re
 import unittest
@@ -194,6 +195,33 @@ class BodyTest(unittest.TestCase):
                 self.assertEqual([n for kind, n, _ in _children(part) if kind != "property" or n.startswith("te_")],
                                  sections)
                 self.assertNotIn("JournalEntry", part)
+
+
+# What only a tab's vanilla host has: its panel's own datacontext. A body is
+# shown by the window too, which has none of them, so none may read them; a
+# host's extras that do (the Market panel's map-mode reset, Global Warming's
+# other-market view) stay in the host (spec § 3, plan Review Focus 2).
+HOST_PANELS = re.compile(r"\bInformationPanel\.|\b(?:MarketPanel|PopsOverviewPanel|BudgetPanel|SocietyPanel|MilitaryPanel)\b")
+
+
+class HostPanelTest(unittest.TestCase):
+    def test_no_body_reads_a_host_panel(self):
+        """Every te_*_tab_body type, the frame, and what the window's
+        generated file draws."""
+        checked = []
+        for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+            text = _strip_comments(_read(path))
+            names = re.findall(r"^\ttype (te_\w+_tab_body|te_system_tab_frame) = ", text, re.M)
+            if path.endswith("te_systems_window_generated.gui"):
+                names += re.findall(r"^\ttype (\w+) = ", text, re.M)
+            for name in names:
+                with self.subTest(type=name):
+                    hit = HOST_PANELS.search(_type_body(text, name))
+                    self.assertIsNone(hit, f"{name} reads {hit and hit.group(0)}")
+                checked.append(name)
+        for name in ("te_system_tab_frame", "te_gm_tab_body", "te_ce_tab_body", "te_seabed_tab_body", "te_sr_tab_body",
+                     "te_systems_window_tabs_narrow", "te_sr_window_milestones"):
+            self.assertIn(name, checked)
 
 
 if __name__ == "__main__":

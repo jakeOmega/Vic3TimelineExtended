@@ -411,7 +411,8 @@ class TabLayoutTest(unittest.TestCase):
         cls.generated = _read(gen.GUI_OUT)
 
     def test_the_window_mounts_the_tab(self):
-        window = _read(ROOT / "gui" / "te_systems_window.gui")
+        # the window's tab mounts are generated (scripts/generators/gen_te_systems_window.py)
+        window = _read(ROOT / "gui" / "te_systems_window_generated.gui")
         self.assertIn("te_nation_tab_sections = {}", window)
         self.assertTrue(self.TAB.read_bytes().startswith(b"\xef\xbb\xbf"))
 
