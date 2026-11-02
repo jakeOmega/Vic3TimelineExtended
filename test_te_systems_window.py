@@ -25,6 +25,7 @@ from unittest import mock
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, REPO)
 from scripts.generators import gen_te_systems_window as gen  # noqa: E402
+from gui_test_helpers import _block_at, _close, _read, _strip_comments, _type_body  # noqa: E402,F401 (re-exported)
 
 GENERATED = os.path.join(REPO, "gui", "te_systems_window_generated.gui")
 GUI = os.path.join(REPO, "gui", "te_systems_window.gui")
@@ -123,43 +124,6 @@ PLAYED = "GetMetaPlayer.GetPlayedOrObservedCountry.IsValid"
 NOT_OBSERVER = "Not( GetMetaPlayer.IsObserver )"
 
 
-def _read(path):
-    with open(path, encoding="utf-8-sig") as f:
-        return f.read()
-
-
-def _strip_comments(text):
-    out = []
-    for line in text.split("\n"):
-        quoted = False
-        for i, ch in enumerate(line):
-            if ch == '"':
-                quoted = not quoted
-            elif ch == "#" and not quoted:
-                line = line[:i]
-                break
-        out.append(line)
-    return "\n".join(out)
-
-
-def _close(text, open_brace):
-    depth = 0
-    for i in range(open_brace, len(text)):
-        if text[i] == "{":
-            depth += 1
-        elif text[i] == "}":
-            depth -= 1
-            if depth == 0:
-                return i
-    raise AssertionError("unclosed block")
-
-
-def _block_at(text, start):
-    """The block whose opening brace is the first after `start`, braces included."""
-    brace = text.index("{", start)
-    return text[start:_close(text, brace) + 1]
-
-
 def _named(text, name):
     """The widget carrying `name = "<name>"`, from its opening line."""
     m = re.search(rf'^(\t*)name = "{name}"$', text, re.M)
@@ -176,12 +140,6 @@ def _top_level(text, name):
         if re.search(rf'^\tname = "{name}"$', block, re.M):
             return block
     raise AssertionError(f"no top-level widget {name}")
-
-
-def _type_body(text, name):
-    m = re.search(rf"type {name} = \w+ \{{", text)
-    assert m, f"no type {name}"
-    return text[m.end():_close(text, m.end() - 1)]
 
 
 def _txt_block(text, name):

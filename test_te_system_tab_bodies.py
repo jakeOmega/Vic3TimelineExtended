@@ -13,39 +13,13 @@ import os
 import re
 import unittest
 
-from test_te_systems_window import _close, _read, _strip_comments, _type_body
+from gui_test_helpers import _children, _close, _instances, _read, _strip_comments, _type_body
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
 JE_WIDGETS = os.path.join(REPO, "gui", "journal_entry_widgets")
 
 OPEN_JOURNAL = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-
-
-def _children(body):
-    """The top-level items of a block's body, in order: (kind, name, text).
-    kind is "block" for `block "x" {…}`, "widget" for `name = {…}`, and
-    "property" for a one-line `key = value`."""
-    items = []
-    i = 0
-    while i < len(body):
-        m = re.compile(r'\s*(?:block "(\w+)" \{|(\w+) = \{|(\w+) = ([^\n{]+))').match(body, i)
-        if not m or m.end() == i:
-            rest = body[i:].strip()
-            assert not rest, f"unparsed: {rest[:60]}"
-            break
-        if m.group(1) or m.group(2):
-            end = _close(body, m.end() - 1)
-            inner = body[m.end():end]
-            if m.group(2) and "\n" not in inner:    # a one-line value: size = { 480 32 }
-                items.append(("property", m.group(2), "{" + inner + "}"))
-            else:
-                items.append(("block" if m.group(1) else "widget", m.group(1) or m.group(2), inner))
-            i = end + 1
-        else:
-            items.append(("property", m.group(3), m.group(4).strip()))
-            i = m.end()
-    return items
 
 
 def _gate(sgui):
@@ -56,11 +30,6 @@ def _override(body, name):
     """A blockoverride's contents in a type body, or None when it has none."""
     m = re.search(rf'blockoverride "{name}" \{{', body)
     return None if m is None else body[m.end():_close(body, m.end() - 1)]
-
-
-def _instances(text):
-    """The te_* types a block instances, in order (one level or deeper)."""
-    return re.findall(r"^\t+(te_\w+) = \{", text, re.M)
 
 
 class FrameTest(unittest.TestCase):
@@ -192,7 +161,7 @@ class BodyTest(unittest.TestCase):
         layout = [text for kind, _, text in top if kind == "block"][0]
         parts = _children(layout)
         self.assertEqual([name for _, name, _ in parts], ["te_sr_window_milestones", "flowcontainer", "flowcontainer"])
-        self.assertEqual(parts[0], ("property", "te_sr_window_milestones", "{}"))
+        self.assertEqual(parts[0], ("widget", "te_sr_window_milestones", ""))
         for (_, _, part), name, spacing, sections in (
                 (parts[1], "te_systems_window_space_race_summary", "4", ["te_sr_sec_powers", "te_sr_sec_orbit"]),
                 (parts[2], "te_systems_window_space_race_reference", None, ["te_sr_sec_how"])):
@@ -307,7 +276,6 @@ class HostBodyTest(unittest.TestCase):
                 props = [(n, v) for kind, n, v in items if kind == "property"]
                 self.assertIn(("visible", f"\"[InformationPanel.IsTabSelected('{key}')]\""), props)
                 # the body is its only child but for a state the host keeps
-                # (`te_x = {}` parses as a one-line value)
                 self.assertEqual([n for kind, n, _ in items
                                   if (kind != "property" or n.startswith("te_")) and n != "state"], [body])
                 self.assertNotIn("datacontext", [n for n, _ in props])

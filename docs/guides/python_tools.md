@@ -200,6 +200,13 @@ Import a `TestCase` class through its module (`import test_demographics_registry
 file (phase 2 step 3b's family-census tests ran 92 tests where 30 were its own). Plain helpers (`_Engine`, `_block`)
 import by name safely.
 
+GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it): `_read`, `_strip_comments`, `_close`,
+`_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
+composer on `te_ui_columns_three` or `te_ui_columns_two` against the narrow layout it widens: the same sections in
+order, read down each column, each under exactly the narrow layout's gates. It fails on any widget a layout draws inline
+other than a plain container or a `te_*` section, and on an instance's `visible` over its type's own (gotcha #17). A
+test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
+
 ## Formatting & Maintenance
 
 | Script | Purpose | Run |

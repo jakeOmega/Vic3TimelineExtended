@@ -64,9 +64,9 @@ types te_demographics_layout
 	}
 
 	### The Census Data window, a fullscreen one: the tab's sections in three columns of a fixed 520 (rule 8), 30 apart,
-	### read down each column and then across, so the order is the tab's: the people's health, then the levers and the
-	### record, then the per-state detail with How Demographics Works at the foot. Until the country's first census the
-	### pending line alone, at the column's width.
+	### on te_ui_columns_three (gui/te_widget_library.gui), read down each column and then across, so the order is the
+	### tab's: the people's health, then the levers and the record, then the per-state detail with How Demographics Works at
+	### the foot. Until the country's first census the pending line alone, at the column's width.
 	type te_demog_browser_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -80,32 +80,16 @@ types te_demographics_layout
 			}
 		}
 
-		flowcontainer = {
+		te_ui_columns_three = {
 			visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-			direction = horizontal
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 30
 
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 10
-				minimumsize = { 520 -1 }
-				maximumsize = { 520 -1 }
-
+			blockoverride "column_1" {
 				te_demog_overview = {}
 				te_demog_sec_causes = {}
 				te_demog_sec_pyramid = {}
 			}
 
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 10
-				minimumsize = { 520 -1 }
-				maximumsize = { 520 -1 }
-
+			blockoverride "column_2" {
 				te_demog_sec_work = {}
 				### phase 3: shown once the country's late figures exist
 				te_demog_sec_longevity = {}
@@ -113,13 +97,7 @@ types te_demographics_layout
 				te_demog_sec_history = {}
 			}
 
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 10
-				minimumsize = { 520 -1 }
-				maximumsize = { 520 -1 }
-
+			blockoverride "column_3" {
 				### less the strata's incomes: vanilla's keys read the Population panel (PopsOverviewPanel), which this
 				### window doesn't have, and logged nine lines a frame here (2026-10-31)
 				te_demog_sec_wealth = {
