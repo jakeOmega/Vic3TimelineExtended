@@ -761,18 +761,21 @@ nuclear_incident.10 = {
 			change_relations = { country = ROOT value = 10 }
 		}
 		# Our own record, if the crisis is ours; theirs is theirs to open (.12).
+		# The talks last nd_crisis_notice_talks_weeks_value weeks, counted down
+		# by the weekly tick, and are no proposal: either side may still offer
+		# a stand-down or a trade meanwhile (#1230).
 		if = {
 			limit = { nd_is_crisis_owner = yes }
 			custom_tooltip = nd_tt_exercise_notified
 			hidden_effect = {
-				set_variable = { name = nd_crisis_talks value = 1 }
+				set_variable = { name = nd_crisis_talks_weeks value = nd_crisis_notice_talks_weeks_value }
 			}
 		}
 		else_if = {
 			limit = {
 				scope:nd_issuer ?= {
 					has_variable = nd_crisis_talks
-					var:nd_crisis_talks = 0
+					nd_crisis_talks_open = no
 				}
 			}
 			custom_tooltip = nd_tt_exercise_invited
@@ -951,8 +954,9 @@ nuclear_incident.11 = {
 # ---- .12 They Showed Us the Timetable ------------------------------------------
 # To the crisis ISSUER, when its target answered .10 by sending the exercise
 # schedule and inviting observers. Opening talks is the issuer's call: it
-# pauses its pressure on the target and eases the danger (nd_crisis_talks on
-# its own record) until one side refuses a stand-down.
+# pauses its pressure on the target and eases the danger (nd_crisis_talks_weeks
+# on its own record) for nd_crisis_notice_talks_weeks_value weeks, or until one
+# side refuses a proposal (#1230).
 nuclear_incident.12 = {
 	type = country_event
 	placement = root
@@ -985,7 +989,7 @@ nuclear_incident.12 = {
 			limit = { nd_crisis_event_matches = yes }
 			custom_tooltip = nd_tt_exercise_invitation_accepted
 			hidden_effect = {
-				set_variable = { name = nd_crisis_talks value = 1 }
+				set_variable = { name = nd_crisis_talks_weeks value = nd_crisis_notice_talks_weeks_value }
 			}
 		}
 		else = {
