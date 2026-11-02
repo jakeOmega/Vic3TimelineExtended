@@ -242,7 +242,7 @@ class TabStripTest(unittest.TestCase):
         selected = self._override("fifth_button_visibility")
         self.assertIn(f"InformationPanel.IsTabSelected('{TAB}')", selected)
         self.assertIn(gate, selected)
-        self.assertNotIn("Not(", selected)
+        self.assertNotIn("Not( InformationPanel", selected)
         unselected = self._override("fifth_button_visibility_checked")
         self.assertIn(f"Not( InformationPanel.IsTabSelected('{TAB}') )", unselected)
         self.assertIn(gate, unselected)

@@ -186,6 +186,9 @@ types diplomatic_panel
 				# greyed until the entry runs (te_diplomacy_un_tab_sgui); the greyed
 				# tab's tooltip lists the unlock conditions with ticks. Gates:
 				# common/scripted_guis/te_system_tab_sguis.txt. The slot has no hotkey.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "sixth_button" {
 					text = "te_diplomacy_tab_un"
 				}
@@ -197,10 +200,10 @@ types diplomatic_panel
 					onclick = "[InformationPanel.SelectTab('te_un')]"
 				}
 				blockoverride "sixth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_un'), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_un'), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "sixth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_un') ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_un') ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "sixth_button_selected" {
 					text = "te_diplomacy_tab_un"

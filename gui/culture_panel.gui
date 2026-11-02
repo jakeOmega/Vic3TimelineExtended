@@ -142,6 +142,9 @@ types society_panel
 				# (te_society_ch_tab_unlock_sgui), greyed until the entry runs
 				# (te_society_ch_tab_sgui); the greyed tab's tooltip lists the unlock
 				# conditions with ticks. Gates: common/scripted_guis/te_system_tab_sguis.txt.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fifth_button" {
 					text = "te_society_tab_ch"
 				}
@@ -153,10 +156,10 @@ types society_panel
 					onclick = "[InformationPanel.SelectTab('te_ch')]"
 				}
 				blockoverride "fifth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_ch'), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_ch'), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_ch') ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_ch') ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_society_tab_ch"
