@@ -243,7 +243,8 @@ class LocalizationTest(unittest.TestCase):
         for key in wanted:
             with self.subTest(key=key):
                 self.assertIn(key, keys)
-                if not key.startswith("je_morphological_freedom_"):
+                # A journal entry's text is its _reason; nothing reads a _desc (#1212).
+                if not key.startswith("je_morphological_freedom"):
                     self.assertIn(f"{key}_desc", keys)
 
 

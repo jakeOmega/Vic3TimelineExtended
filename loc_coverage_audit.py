@@ -94,10 +94,19 @@ def _name_and_desc(name: str, body) -> list[tuple[str, bool, str]]:
 
 
 def _je_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Journal entries are read through `<key>` (the name) and `<key>_reason`.
+
+    The entry's page renders `[JournalEntry.GetReason]`, which falls back to
+    `<key>_reason` when the entry sets no `reason =` field (the journal entry
+    type docs), so without either the page shows the raw key. Vanilla has a
+    `_reason` on all 419 of its entries. No accessor or GUI reads a
+    `<key>_desc` (#1212, JE-8b: vanilla has one, on 1 of 419 entries), so it
+    is not checked.
+    """
+    reason_required = not (isinstance(body, dict) and "reason" in body)
     return [
         (name, True, "title"),
-        (f"{name}_desc", True, "desc"),
-        (f"{name}_reason", False, "reason"),
+        (f"{name}_reason", reason_required, "reason"),
     ]
 
 

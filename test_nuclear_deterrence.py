@@ -255,8 +255,7 @@ class TestLocalization(unittest.TestCase):
 
     def test_journal_entry_keys(self):
         # Posture and crises share je_nuclear_program since 2026-09-25.
-        self.assert_keys({"je_nuclear_program", "je_nuclear_program_desc",
-                          "je_nuclear_program_reason",
+        self.assert_keys({"je_nuclear_program", "je_nuclear_program_reason",
                           "je_nuclear_program_status_line"}, JE.name)
 
 
