@@ -71,3 +71,19 @@ columns. The Census Data window's Demographics tab is the first layout on them; 
 | Check | Expect | If it fails |
 |---|---|---|
 | **1. The Census Data window.** Open Population, then Census Data, then its Demographics tab, before and after the first census. | Before: the pending line alone. After: the tab's sections in three columns of 520, 30 apart, centered, as before 2026-11-02. | No columns or a different layout: a blockoverride inside the type's nested columns didn't reach them; put the three flowcontainers back in `te_demog_browser_sections` (`git show 3d01f0d09:gui/te_demographics_layout.gui`). |
+
+## The wide layouts: PR D1 (2026-11-02)
+
+Six tabs now lay out in columns of a fixed 520, 30 apart, centered, in the full-screen frame (spec § 7): Nation, Space
+Race, Grand Monuments, Colonial Empire, Seabed and Budget Breakdown. The side panel and the Budget panel's Breakdown tab
+are unchanged. The columns were balanced by GUI line count, a poor proxy for height, so this play-test settles them. If
+every tab shows three empty columns, the overrides didn't reach the column blocks: start from PR D0's check 1.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Nation.** Open the tab in full screen. | The columns read in the spec's order: the overview, Governance and Society; Economy, Science and Space and International; Where These Come From and How the Nation Works. Nothing is cut off. | A column far taller than the others, or a section cut off: move a section to another column in `te_nation_wide_sections` (`gui/te_nation_tab.gui`), keeping the order; `test_nation_tab.py` pins it. |
+| **2. Space Race.** Open the tab in full screen with a milestone running, then between milestones. | The milestones under way (or the idle note) in the first column, Space Powers and Orbit in the second, How the Space Race Works in the third. Nothing is cut off. | As above, in `te_sr_wide_sections` (`space_race_widget.gui`); `test_space_race_layout.py` pins it. |
+| **3. Grand Monuments.** Open the tab in full screen. | The overview, Opportunity, Awaiting a Decision and Awaiting Dedication; Archaeological Expeditions, National Effects and Our Monuments; Trophies, Held Abroad and How Grand Monuments Work. Nothing is cut off. | As above, in `te_gm_wide_sections` (`grand_monuments_widget.gui`); `test_grand_monuments_layout.py` pins it. |
+| **4. Colonial Empire.** Open the tab in full screen. | The overview, Colonial Holdings and Why Stability Is Moving; International Pressure and Colonial Programs; History and How the Colonial Empire Works. Nothing is cut off. | As above, in `te_ce_wide_sections` (`colonial_empire_widget.gui`); `test_colonial_empire_layout.py` pins it. |
+| **5. Seabed.** Open the tab in full screen. | The overview and the policy buttons; the Ocean Basins table; How Seabed Licenses Work. Nothing is cut off, with a basin opened onto its claimants. | As above, in `te_seabed_wide_sections` (`te_seabed_widgets.gui`); `test_seabed_layout.py` pins it. |
+| **6. Budget Breakdown.** Open the tab in full screen, then the Budget panel's Breakdown tab. | Weekly Income, Weekly Expenses and How the Breakdown Works side by side; in the Budget panel, the three one under another as before (How is its own section type now). Nothing is cut off. | As above, in `te_budget_breakdown_wide_sections` (`te_budget_breakdown.gui`); `test_budget_breakdown.py` pins it. A gap changed in the Budget panel: `te_budget_sec_how`'s spacing should be the panel's 8. |
