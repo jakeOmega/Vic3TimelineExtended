@@ -159,6 +159,9 @@ types budget
 				# EXCEPTION (#805): a country with a monetary stance but no entry
 				# (te_budget_banking_readout_sgui) gets the tab enabled, read-only,
 				# with the monetary readout.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fourth_button"
 				{
 					text = "te_budget_tab_banking"
@@ -173,11 +176,11 @@ types budget
 				}
 				blockoverride "fourth_button_visibility"
 				{
-					visible = "[And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_visibility_checked"
 				{
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_selected"
 				{
@@ -194,6 +197,8 @@ types budget
 				# guide rule 9). Both halves of an unused slot default to
 				# `visible = no`, so each visibility block tests the gate as well
 				# as the tab.
+				# Not( GetMetaPlayer.IsObserver ) first in each visibility block, as
+				# for Banking: an observer has no GetPlayer.
 				blockoverride "fifth_button"
 				{
 					text = "te_tax_tab"
@@ -208,11 +213,11 @@ types budget
 				}
 				blockoverride "fifth_button_visibility"
 				{
-					visible = "[And( InformationPanel.IsTabSelected('te_tax_code'), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_tax_code'), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked"
 				{
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_tax_code') ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_tax_code') ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected"
 				{
