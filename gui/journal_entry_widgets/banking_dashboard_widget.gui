@@ -247,10 +247,10 @@ types banking_dashboard_widget_types
 		using = banking_dash_fontsize_row
 		size = { 90 28 }
 		parentanchor = vcenter
-		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 	}
 
 	### A monetary-policy control button. Deliberately carries NO `visible` of
@@ -562,37 +562,37 @@ types banking_dashboard_widget_types
 
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_panic.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_downturn.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_stagnation.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_stable.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_expansion.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_boom.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			texture = "gfx/interface/icons/banking_icons/phase_frenzy.dds"
 		}
 	}
@@ -607,37 +607,37 @@ types banking_dashboard_widget_types
 
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)1' )]"
 			texture = "gfx/interface/icons/banking_icons/momentum_freefall.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)2' )]"
 			texture = "gfx/interface/icons/generic_icons/down_down.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)3' )]"
 			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)4' )]"
 			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)5' )]"
 			texture = "gfx/interface/icons/generic_icons/trend_up.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)6' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)6' )]"
 			texture = "gfx/interface/icons/generic_icons/trend_upup.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)7' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_band_code'), '(CFixedPoint)7' )]"
 			texture = "gfx/interface/icons/banking_icons/momentum_overheating.dds"
 		}
 	}
@@ -648,27 +648,27 @@ types banking_dashboard_widget_types
 
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)1' )]"
 			texture = "gfx/interface/icons/banking_icons/bubble_low.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)2' )]"
 			texture = "gfx/interface/icons/banking_icons/bubble_building.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)3' )]"
 			texture = "gfx/interface/icons/banking_icons/bubble_elevated.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)4' )]"
 			texture = "gfx/interface/icons/banking_icons/bubble_high.dds"
 		}
 		icon = {
 			size = { 100% 100% }
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_band_code'), '(CFixedPoint)5' )]"
 			texture = "gfx/interface/icons/banking_icons/bubble_severe.dds"
 		}
 	}
@@ -680,7 +680,7 @@ types banking_dashboard_widget_types
 	### the same state as a line of the phase's tooltip (banking_dash_top_phase_tt).
 	type te_banking_crash_risk_badge = icon {
 		size = { 16 16 }
-		visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('banking_dash_bubble_risk_high').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 		texture = "gfx/interface/icons/generic_icons/warning.dds"
 		tooltip = "banking_dash_ov_crash_risk_tt"
 	}
@@ -715,7 +715,7 @@ types banking_dashboard_widget_types
 		### entry that does. A dormant entry has no readings, so no bars: the
 		### gate is a wrapper, since the type carries a visible of its own.
 		flowcontainer = {
-			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			parentanchor = hcenter
 			ignoreinvisible = yes
 
@@ -743,13 +743,13 @@ types banking_dashboard_widget_types
 		### nothing once the test holds, so that month asks IsValid first, as the
 		### tab's tooltip does. Row 2 waits too: its budget is for the tools.
 		flowcontainer = {
-			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
 
 			te_banking_ov_cell = {
-				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				size = { 238 70 }
 				blockoverride "caption_width" {
 					max_width = 154
@@ -780,7 +780,7 @@ types banking_dashboard_widget_types
 
 		### Row 1: the cycle's phase and momentum.
 		flowcontainer = {
-			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -803,37 +803,37 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "word" {
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_panic').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_panic_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_downturn').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_downturn_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_stagnation').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_stagnation_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_stable').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_stable_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_expansion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_expansion_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_boom').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_boom_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
 					te_banking_ov_word = {
-						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_dash_phase_frenzy').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						text = "banking_dash_phase_frenzy_value"
 						tooltip = "banking_dash_phase_word_tt"
 					}
@@ -843,19 +843,19 @@ types banking_dashboard_widget_types
 						tooltip = "banking_dash_value_change_tt"
 						blockoverride "range" {
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)1' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)1' )]"
 								text = "banking_dash_value_change_range"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)2' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)2' )]"
 								text = "banking_dash_value_change_more"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)3' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)3' )]"
 								text = "banking_dash_value_change_less"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)4' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_value_change_shape'), '(CFixedPoint)4' )]"
 								text = "banking_dash_value_change_single"
 							}
 						}
@@ -889,19 +889,19 @@ types banking_dashboard_widget_types
 						tooltip = "banking_dash_momentum_change_tt"
 						blockoverride "range" {
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)1' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)1' )]"
 								text = "banking_dash_momentum_change_range"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)2' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)2' )]"
 								text = "banking_dash_momentum_change_more"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)3' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)3' )]"
 								text = "banking_dash_momentum_change_less"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)4' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_momentum_change_shape'), '(CFixedPoint)4' )]"
 								text = "banking_dash_momentum_change_single"
 							}
 						}
@@ -913,7 +913,7 @@ types banking_dashboard_widget_types
 		### Row 2: bubble pressure and the intervention budget, both shown
 		### whenever the cycle runs.
 		flowcontainer = {
-			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
@@ -950,11 +950,11 @@ types banking_dashboard_widget_types
 						tooltip = "banking_dash_bubble_change_tt"
 						blockoverride "range" {
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)1' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)1' )]"
 								text = "banking_dash_bubble_change_range"
 							}
 							te_banking_ov_change_text = {
-								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)4' )]"
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_bubble_change_shape'), '(CFixedPoint)4' )]"
 								text = "banking_dash_bubble_change_single"
 							}
 						}
@@ -1002,14 +1002,14 @@ types banking_dashboard_widget_types
 		### from its value keys. The row is hidden when neither is shown, so the
 		### overview does not end on a gap.
 		flowcontainer = {
-			visible = "[Or( And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ), And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+			visible = "[Or( And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 4
 
 			### Policy stance's band (banking_disp_stance_band_code).
 			te_banking_ov_cell = {
-				visible = "[And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				visible = "[And( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				tooltip = "banking_dash_mon_stance_tt"
 				size = { 238 70 }
 				blockoverride "caption_width" {
@@ -1021,27 +1021,27 @@ types banking_dashboard_widget_types
 				blockoverride "icons" {
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/banking_icons/stance_very_loose.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)2' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/banking_icons/stance_loose.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)3' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/banking_icons/stance_neutral.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)4' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/banking_icons/stance_tight.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)5' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_stance_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/banking_icons/stance_very_tight.dds"
 					}
 				}
@@ -1062,7 +1062,7 @@ types banking_dashboard_widget_types
 			### The price band (banking_disp_price_band_code): the six bands of the
 			### ladder, and the two states with none (dollarised; set by plan).
 			te_banking_ov_cell = {
-				visible = "[And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				visible = "[And( GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				tooltip = "banking_dash_mon_band_tt"
 				size = { 238 70 }
 				blockoverride "caption_width" {
@@ -1074,42 +1074,42 @@ types banking_dashboard_widget_types
 				blockoverride "icons" {
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)1' )]"
 						texture = "gfx/interface/icons/banking_icons/price_deflation.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)2' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)2' )]"
 						texture = "gfx/interface/icons/banking_icons/price_stable.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)3' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)3' )]"
 						texture = "gfx/interface/icons/banking_icons/price_elevated.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)4' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)4' )]"
 						texture = "gfx/interface/icons/banking_icons/price_high.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)5' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)5' )]"
 						texture = "gfx/interface/icons/banking_icons/price_very_high.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)6' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)6' )]"
 						texture = "gfx/interface/icons/banking_icons/price_hyper.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)7' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)7' )]"
 						texture = "gfx/interface/icons/banking_icons/price_dollarised.dds"
 					}
 					icon = {
 						size = { 100% 100% }
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)8' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('banking_disp_price_band_code'), '(CFixedPoint)8' )]"
 						texture = "gfx/interface/icons/banking_icons/price_planned.dds"
 					}
 				}
@@ -1227,7 +1227,7 @@ types banking_dashboard_widget_types
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
-		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		banking_dash_category_header = {
 			blockoverride "left_text" {
@@ -1253,7 +1253,7 @@ types banking_dashboard_widget_types
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_active_closed'))]"
 
 			textbox = {
-				visible = "[Not(GetScriptedGui('banking_dash_any_policy_active').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				visible = "[Not(GetScriptedGui('banking_dash_any_policy_active').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 				text = "banking_dash_no_active"
 				autoresize = yes
 				multiline = yes
@@ -1265,7 +1265,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_open_market_ops"
 				blockoverride "row_label" {
 					text = "CB_OPEN_MARKET_OPS"
@@ -1284,7 +1284,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_moral_suasion"
 				blockoverride "row_label" {
 					text = "CB_MORAL_SUASION"
@@ -1303,7 +1303,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_countercyclical_buffer"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cb_countercyclical_buffer"
@@ -1322,7 +1322,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_raise_margin_requirements"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_raise_margin_requirements"
@@ -1341,7 +1341,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_expand_deposit_guarantee"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_expand_deposit_guarantee"
@@ -1360,7 +1360,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_directed_credit_infrastructure"
@@ -1379,7 +1379,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_export_credit_facility"
 				blockoverride "row_label" {
 					text = "CB_EXPORT_CREDIT"
@@ -1398,7 +1398,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_restrict_inflows"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_restrict_inflows"
@@ -1417,7 +1417,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_sterilize_inflows"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_sterilize_inflows"
@@ -1436,7 +1436,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_foreign_borrowing_limits"
@@ -1455,7 +1455,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_fx_surrender').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_fx_surrender"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cb_fx_surrender"
@@ -1474,7 +1474,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_emergency_import_financing"
 				blockoverride "row_label" {
 					text = "CB_EMERGENCY_IMPORT_FINANCING"
@@ -1493,7 +1493,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_capital_controls_outflow"
 				blockoverride "row_label" {
 					text = "CB_CAPITAL_CONTROLS_OUT"
@@ -1512,7 +1512,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_emergency_liquidity_program"
 				blockoverride "row_label" {
 					text = "CB_EMERGENCY_LIQUIDITY"
@@ -1531,7 +1531,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_asset_relief_program"
 				blockoverride "row_label" {
 					text = "CB_ASSET_RELIEF"
@@ -1550,7 +1550,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_heavy_industry"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_directed_credit_heavy_industry"
@@ -1569,7 +1569,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_agriculture"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_directed_credit_agriculture"
@@ -1588,7 +1588,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_armaments"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_directed_credit_armaments"
@@ -1607,7 +1607,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_directed_credit_electrification"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_directed_credit_electrification"
@@ -1626,7 +1626,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_reserve_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_reserve_requirements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_reserve_requirements"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_reserve_requirements"
@@ -1645,7 +1645,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_bank_holiday').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_bank_holiday').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_bank_holiday"
 				blockoverride "row_label" {
 					text = "banking_dash_name_active_cb_bank_holiday"
@@ -1664,7 +1664,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cb_bail_in_regime').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cb_bail_in_regime').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cb_bail_in_regime"
 				blockoverride "row_label" {
 					text = "CB_BAIL_IN"
@@ -1683,7 +1683,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_plan_revision').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_plan_revision').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_plan_revision"
 				blockoverride "row_label" {
 					text = "CE_PLAN_REVISION"
@@ -1702,7 +1702,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_target_reduction').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_target_reduction').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_target_reduction"
 				blockoverride "row_label" {
 					text = "CE_TARGET_REDUCTION"
@@ -1721,7 +1721,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_consolidation_order').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_consolidation_order').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_consolidation_order"
 				blockoverride "row_label" {
 					text = "CE_CONSOLIDATION_ORDER"
@@ -1740,7 +1740,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_emergency_allocation"
 				blockoverride "row_label" {
 					text = "CE_EMERGENCY_ALLOCATION"
@@ -1759,7 +1759,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_strategic_stockpile"
 				blockoverride "row_label" {
 					text = "CE_STRATEGIC_STOCKPILE"
@@ -1778,7 +1778,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_distribution_upgrade"
 				blockoverride "row_label" {
 					text = "CE_DISTRIBUTION_UPGRADE"
@@ -1797,7 +1797,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_admin_campaign').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_admin_campaign"
 				blockoverride "row_label" {
 					text = "banking_dash_name_ce_admin_campaign"
@@ -1816,7 +1816,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_ce_coordination_protocol"
 				blockoverride "row_label" {
 					text = "banking_dash_name_ce_coordination_protocol"
@@ -1835,7 +1835,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_dividend_restraint"
 				blockoverride "row_label" {
 					text = "CW_DIVIDEND_RESTRAINT"
@@ -1854,7 +1854,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_mutual_aid_fund"
 				blockoverride "row_label" {
 					text = "CW_MUTUAL_AID_FUND"
@@ -1873,7 +1873,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_capital_plan').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_capital_plan"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cw_capital_plan"
@@ -1892,7 +1892,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_credit_expansion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_credit_expansion"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cw_credit_expansion"
@@ -1911,7 +1911,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_council_directive').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_council_directive"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cw_council_directive"
@@ -1930,7 +1930,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_consumption_ceiling"
 				blockoverride "row_label" {
 					text = "banking_dash_name_cw_consumption_ceiling"
@@ -1949,7 +1949,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_solidarity_campaign"
 				blockoverride "row_label" {
 					text = "CW_SOLIDARITY_CAMPAIGN"
@@ -1968,7 +1968,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_disable_cw_worker_buyout').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_disable_cw_worker_buyout').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_tt_cw_worker_buyout"
 				blockoverride "row_label" {
 					text = "CW_WORKER_BUYOUT"
@@ -2014,7 +2014,7 @@ types banking_dashboard_widget_types
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
-		visible = "[GetScriptedGui('banking_dash_monetary_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('banking_dash_monetary_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		banking_dash_category_header = {
 			blockoverride "left_text" {
@@ -2045,9 +2045,9 @@ types banking_dashboard_widget_types
 			### The reason is said once, here, above the rows (style guide rule 6),
 			### with the start test's checklist on hover.
 			textbox = {
-				visible = "[GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				text = "banking_dash_dormant_monetary_note"
-				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				autoresize = yes
 				multiline = yes
 				minimumsize = { 480 -1 }
@@ -2068,7 +2068,7 @@ types banking_dashboard_widget_types
 			### monetary layer that setting removes. Open-market operations, which
 			### that setting keeps, get a fallback row below the block instead.
 			flowcontainer = {
-				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				ignoreinvisible = yes
 				parentanchor = hcenter
@@ -2084,7 +2084,7 @@ types banking_dashboard_widget_types
 				### until a country's first pulse there is nothing to read and
 				### every `var:` would log "Failed to fetch variable" per frame.
 				textbox = {
-					visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 					text = "banking_dash_mon_not_ready"
 					autoresize = yes
 					multiline = yes
@@ -2098,12 +2098,12 @@ types banking_dashboard_widget_types
 					ignoreinvisible = yes
 					parentanchor = hcenter
 					spacing = 2
-					visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 					### Why there is no dial here — one line, cause-specific.
 					### Hidden for a country that holds one.
 					textbox = {
-						visible = "[Not( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+						visible = "[Not( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 						text = "banking_dash_mon_no_dial_line"
 						autoresize = yes
 						multiline = yes
@@ -2152,7 +2152,7 @@ types banking_dashboard_widget_types
 						}
 						blockoverride "pair_right" {
 							banking_dash_pair_right = {
-								visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 								tooltip = "banking_dash_mon_worldrate_tt"
 								blockoverride "pair_label" {
 									text = "banking_dash_mon_worldrate_label"
@@ -2189,7 +2189,7 @@ types banking_dashboard_widget_types
 								spacing = 2
 								tooltip = "banking_dash_mon_target_tt"
 								datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-								visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 								widget = {
 									size = { 70 26 }
@@ -2207,14 +2207,14 @@ types banking_dashboard_widget_types
 								button_icon_minus_action = {
 									size = { 26 26 }
 									parentanchor = vcenter
-									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 									### Click a point, ctrl-click a tenth, shift-click to the limit.
 									click_modifiers = {
-										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
-										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
 									}
-									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 								}
 
 								widget = {
@@ -2233,14 +2233,14 @@ types banking_dashboard_widget_types
 								button_icon_plus_action = {
 									size = { 26 26 }
 									parentanchor = vcenter
-									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 									### Click a point, ctrl-click a tenth, shift-click to the limit.
 									click_modifiers = {
-										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
-										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+										ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+										onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+										onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
 									}
-									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 								}
 							}
 						}
@@ -2257,7 +2257,7 @@ types banking_dashboard_widget_types
 						parentanchor = left
 						tooltip = "banking_dash_mon_delegation_tt"
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_label = {
 							blockoverride "mon_label_text" {
@@ -2272,18 +2272,18 @@ types banking_dashboard_widget_types
 						}
 
 						banking_dash_mon_button = {
-							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 							text = "banking_dash_mon_btn_delegate"
 						}
 
 						banking_dash_mon_button = {
-							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 							text = "banking_dash_mon_btn_take_control"
 						}
 					}
@@ -2297,7 +2297,7 @@ types banking_dashboard_widget_types
 						spacing = 4
 						parentanchor = left
 						tooltip = "banking_dash_mon_mandate_tt"
-						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_label = {
 							blockoverride "mon_label_text" {
@@ -2330,7 +2330,7 @@ types banking_dashboard_widget_types
 						spacing = 4
 						parentanchor = left
 						tooltip = "banking_dash_mon_act_tt"
-						visible = "[GetScriptedGui('banking_mon_mandate_by_law').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_law').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_label = {
 							blockoverride "mon_label_text" {
@@ -2361,7 +2361,7 @@ types banking_dashboard_widget_types
 						spacing = 4
 						parentanchor = left
 						tooltip = "banking_dash_mon_act_tt"
-						visible = "[GetScriptedGui('banking_mon_mandate_pending').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_mandate_pending').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_label = {
 							blockoverride "mon_label_text" {
@@ -2392,20 +2392,20 @@ types banking_dashboard_widget_types
 						parentanchor = hcenter
 						margin_bottom = 2
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
 							size = { 226 26 }
 							text = "banking_dash_mon_mandate_inflation"
 						}
 
 						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 							size = { 226 26 }
 							text = "banking_dash_mon_mandate_dual"
 						}
@@ -2419,21 +2419,21 @@ types banking_dashboard_widget_types
 						margin_bottom = 2
 						minimumsize = { 456 -1 }
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 							size = { 226 26 }
 							text = "banking_dash_mon_mandate_growth"
 						}
 
 						banking_dash_mon_button = {
-							visible = "[GetScriptedGui('banking_mon_is_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+							visible = "[GetScriptedGui('banking_mon_is_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 							size = { 226 26 }
 							text = "banking_dash_mon_mandate_peg"
 						}
@@ -2450,7 +2450,7 @@ types banking_dashboard_widget_types
 					### once enabled: the row type shows exactly one of its two
 					### buttons, so Enable becomes Disable in place.
 					banking_dash_policy_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_omo').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_omo').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_tt_cb_open_market_ops"
 						blockoverride "row_label" {
 							text = "CB_OPEN_MARKET_OPS"
@@ -2469,7 +2469,7 @@ types banking_dashboard_widget_types
 					}
 
 					banking_dash_subheader = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_gold"
 						}
@@ -2478,7 +2478,7 @@ types banking_dashboard_widget_types
 					### The bank's own vault (the hybrid model) — what the flows below
 					### move, as pounds and as a share of its limit. NOT the treasury.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_bankgold_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_bankgold_label"
@@ -2492,10 +2492,10 @@ types banking_dashboard_widget_types
 					}
 
 					banking_dash_mon_meter = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_bankgold_tt"
 						blockoverride "meter_value" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bank_gold_scaled') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_bank_gold_scaled') )]"
 						}
 					}
 
@@ -2508,7 +2508,7 @@ types banking_dashboard_widget_types
 					###
 					### Gap against the world rate — what moves the gold.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_goldgap_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_goldgap_label"
@@ -2525,7 +2525,7 @@ types banking_dashboard_widget_types
 					### player can see it; the tooltip carries the hot-money
 					### balance that says how much of the vault is borrowed.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_goldflow_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_goldflow_label"
@@ -2542,7 +2542,7 @@ types banking_dashboard_widget_types
 					### leaves first when it comes down, is not tooltip material. It
 					### shares the Gold Flow tooltip, which explains the mechanism.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_goldflow_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_hotmoney_label"
@@ -2557,7 +2557,7 @@ types banking_dashboard_widget_types
 					### Peg confidence, 0-100. §3 asks for a bar; a figure with a
 					### word beside it reads the same and costs no new widget.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_pegconf_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_pegconf_label"
@@ -2571,10 +2571,10 @@ types banking_dashboard_widget_types
 					}
 
 					banking_dash_mon_meter = {
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_pegconf_tt"
 						blockoverride "meter_value" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
 						}
 					}
 
@@ -2585,12 +2585,12 @@ types banking_dashboard_widget_types
 						ignoreinvisible = yes
 						parentanchor = hcenter
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
 							size = { 240 28 }
 							text = "banking_dash_mon_btn_recapitalise"
 						}
@@ -2644,14 +2644,14 @@ types banking_dashboard_widget_types
 					### anchor sits behind te_mon_is_anchored in customizable
 					### localization, so no absent scope variable is ever fetched.
 					banking_dash_subheader = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						blockoverride "subheader_text" {
 							text = "banking_dash_mon_sub_arrangements"
 						}
 					}
 
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_anchor_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_anchor_label"
@@ -2667,7 +2667,7 @@ types banking_dashboard_widget_types
 					### A treaty pegger's confidence — §12.3's gauge, read against
 					### overvaluation rather than a vault.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_anchorpeg_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_pegconf_label"
@@ -2680,15 +2680,15 @@ types banking_dashboard_widget_types
 					}
 
 					banking_dash_mon_meter = {
-						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_anchorpeg_tt"
 						blockoverride "meter_value" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
 						}
 					}
 
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_backstops_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_backstops_label"
@@ -2707,7 +2707,7 @@ types banking_dashboard_widget_types
 					### te_monetary_arrangement_effects.txt): a partner's capital, since
 					### a GUI reaches a country through its state.
 					flowcontainer = {
-						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						direction = vertical
 						ignoreinvisible = yes
 						spacing = 2
@@ -2716,7 +2716,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_swap_from')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_from')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2741,7 +2741,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_lolr_from')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_from')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2766,7 +2766,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_receiver_from')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_receiver_from')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2791,7 +2791,7 @@ types banking_dashboard_widget_types
 						### leader.
 						banking_dash_partner_row = {
 							visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
-							datacontext = "[JournalEntry.GetCountry.GetPowerBloc.GetLeader]"
+							datacontext = "[Country.GetPowerBloc.GetLeader]"
 							blockoverride "flag" {
 								tiny_flag = {
 									parentanchor = center
@@ -2809,7 +2809,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_swap_to')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_to')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2834,7 +2834,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_lolr_to')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_to')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2859,7 +2859,7 @@ types banking_dashboard_widget_types
 							direction = vertical
 							ignoreinvisible = yes
 							spacing = 2
-							datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_mon_bs_receivership_to')]"
+							datamodel = "[Country.MakeScope.GetList('te_mon_bs_receivership_to')]"
 
 							item = {
 								banking_dash_partner_row = {
@@ -2883,7 +2883,7 @@ types banking_dashboard_widget_types
 						### A leader's whole bloc, one row: its members are listed under
 						### Monetary Union, each with its share.
 						banking_dash_partner_row = {
-							visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
 							blockoverride "name" {
 								text = "banking_dash_mon_bs_bloc_name"
 							}
@@ -2896,7 +2896,7 @@ types banking_dashboard_widget_types
 					### [P5b] The bloc's common currency (§15A.3): one state row and the
 					### four actions, each its own scripted GUI.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_union_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_union_label"
@@ -2916,8 +2916,8 @@ types banking_dashboard_widget_types
 					flowcontainer = {
 						### In a bloc first, as vanilla gates a GetPowerBloc datacontext
 						### (00_te_country_panel_information.gui's power bloc entry).
-						visible = "[And( JournalEntry.GetCountry.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-						datacontext = "[JournalEntry.GetCountry.GetPowerBloc]"
+						visible = "[And( Country.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+						datacontext = "[Country.GetPowerBloc]"
 						datamodel = "[PowerBloc.GetMembers]"
 						direction = vertical
 						ignoreinvisible = yes
@@ -2949,44 +2949,44 @@ types banking_dashboard_widget_types
 						ignoreinvisible = yes
 						spacing = 2
 						parentanchor = hcenter
-						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
 							datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
-							visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 							size = { 240 28 }
 							text = "banking_dash_mon_btn_union_adopt"
 						}
 
 						banking_dash_mon_button = {
 							datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
-							visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 							size = { 240 28 }
 							text = "banking_dash_mon_btn_union_leave"
 						}
 
 						banking_dash_mon_button = {
 							datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
-							visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 							size = { 240 28 }
 							text = "banking_dash_mon_btn_union_press"
 						}
 
 						banking_dash_mon_button = {
 							datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
-							visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 							size = { 240 28 }
 							text = "banking_dash_mon_btn_union_press_off"
 						}
@@ -3124,7 +3124,7 @@ types banking_dashboard_widget_types
 					### (te_mon_pressure_anchoring). Only for a country that
 					### holds any.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_has_anchoring').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_has_anchoring').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_anchoring_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_anchoring_label"
@@ -3144,7 +3144,7 @@ types banking_dashboard_widget_types
 					### cannot absorb them, which means the Price Pressure row
 					### above cannot print them. Only while something is bought.
 					banking_dash_condition_row = {
-						visible = "[GetScriptedGui('banking_mon_has_purchases').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_has_purchases').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_purchases_tt"
 						blockoverride "condition_label" {
 							text = "banking_dash_mon_purchases_label"
@@ -3184,9 +3184,9 @@ types banking_dashboard_widget_types
 						button_icon_minus_action = {
 							size = { 26 26 }
 							parentanchor = vcenter
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 						}
 
 						widget = {
@@ -3205,9 +3205,9 @@ types banking_dashboard_widget_types
 						button_icon_plus_action = {
 							size = { 26 26 }
 							parentanchor = vcenter
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 						}
 					}
 
@@ -3224,10 +3224,10 @@ types banking_dashboard_widget_types
 				ignoreinvisible = yes
 				parentanchor = hcenter
 				spacing = 2
-				visible = "[GetScriptedGui('banking_dash_omo_fallback_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_omo_fallback_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_open_market_ops"
 					blockoverride "row_label" {
 						text = "CB_OPEN_MARKET_OPS"
@@ -3281,7 +3281,7 @@ types banking_dashboard_widget_types
 		### Before the first monthly update there is nothing to read, and a
 		### missing `var:` logs once a frame (banking_mon_display_ready).
 		textbox = {
-			visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 			text = "banking_dash_mon_not_ready"
 			autoresize = yes
 			multiline = yes
@@ -3294,7 +3294,7 @@ types banking_dashboard_widget_types
 			direction = vertical
 			ignoreinvisible = yes
 			spacing = 2
-			visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			### The rate, and the world rate it is measured against: what Peg
 			### Defence follows, and what a gold country's gold moves on.
@@ -3312,7 +3312,7 @@ types banking_dashboard_widget_types
 				}
 				blockoverride "pair_right" {
 					banking_dash_pair_right = {
-						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						tooltip = "banking_dash_mon_worldrate_tt"
 						blockoverride "pair_label" {
 							text = "banking_dash_mon_worldrate_label"
@@ -3325,7 +3325,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_condition_row = {
-				visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_mandate_tt"
 				blockoverride "condition_label" {
 					text = "banking_dash_mon_mandate_label"
@@ -3338,7 +3338,7 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_condition_row = {
-				visible = "[GetScriptedGui('banking_mon_is_anchored').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_is_anchored').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_anchor_tt"
 				blockoverride "condition_label" {
 					text = "banking_dash_mon_anchor_label"
@@ -3368,7 +3368,7 @@ types banking_dashboard_widget_types
 			### treaty pegger's (banking_mon_shows_anchor_peg). Never both: an
 			### anchored country has no dial.
 			banking_dash_condition_row = {
-				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_pegconf_tt"
 				blockoverride "condition_label" {
 					text = "banking_dash_mon_pegconf_label"
@@ -3382,15 +3382,15 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_mon_meter = {
-				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_pegconf_tt"
 				blockoverride "meter_value" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
 				}
 			}
 
 			banking_dash_condition_row = {
-				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_anchorpeg_tt"
 				blockoverride "condition_label" {
 					text = "banking_dash_mon_pegconf_label"
@@ -3403,10 +3403,10 @@ types banking_dashboard_widget_types
 			}
 
 			banking_dash_mon_meter = {
-				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				tooltip = "banking_dash_ro_anchorpeg_tt"
 				blockoverride "meter_value" {
-					value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
 				}
 			}
 		}
@@ -3442,9 +3442,9 @@ types banking_dashboard_widget_types
 		### of each banking_possible_* helper). The reason is said once, here
 		### (style guide rule 6), with the start test's checklist on hover.
 		textbox = {
-			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_cycle_dormant').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			text = "banking_dash_dormant_tools_note"
-			tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+			tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 			autoresize = yes
 			multiline = yes
 			minimumsize = { 480 -1 }
@@ -3460,7 +3460,7 @@ types banking_dashboard_widget_types
 		### the reason and what to do about it sit with the tools. Its hover is
 		### the overview's points-free breakdown.
 		textbox = {
-			visible = "[GetScriptedGui('banking_dash_no_points_free').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_no_points_free').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			text = "banking_dash_no_points_note"
 			tooltip = "banking_dash_budget_free_tt"
 			autoresize = yes
@@ -3479,7 +3479,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -3509,7 +3509,7 @@ types banking_dashboard_widget_types
 				### rules instead of words (banking_cycle_sim.py's LEANING_TOOLS),
 				### so it sits here rather than under Monetary Policy.
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_moral_suasion"
 					blockoverride "row_label" {
 						text = "CB_MORAL_SUASION"
@@ -3528,7 +3528,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_reserve_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_reserve_requirements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_reserve_requirements"
 					blockoverride "row_label" {
 						text = "CB_RESERVE_REQUIREMENTS"
@@ -3547,7 +3547,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_countercyclical_buffer"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_countercyclical_buffer"
@@ -3566,7 +3566,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_raise_margin_requirements').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_raise_margin_requirements"
 					blockoverride "row_label" {
 						text = "CB_RAISE_MARGIN_REQ"
@@ -3585,7 +3585,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_expand_deposit_guarantee').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_expand_deposit_guarantee"
 					blockoverride "row_label" {
 						text = "CB_EXPAND_DEPOSIT_GUARANTEE"
@@ -3612,7 +3612,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -3638,7 +3638,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_credit_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_infrastructure').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_infrastructure"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_directed_credit_infrastructure"
@@ -3657,7 +3657,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_heavy_industry').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_heavy_industry"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_directed_credit_heavy_industry"
@@ -3676,7 +3676,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_agriculture').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_agriculture"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_directed_credit_agriculture"
@@ -3695,7 +3695,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_armaments').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_armaments"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_directed_credit_armaments"
@@ -3714,7 +3714,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_directed_credit_electrification').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_directed_credit_electrification"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_directed_credit_electrification"
@@ -3741,7 +3741,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -3767,7 +3767,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_external_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_export_credit_facility').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_export_credit_facility"
 					blockoverride "row_label" {
 						text = "CB_EXPORT_CREDIT"
@@ -3786,7 +3786,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_restrict_inflows').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_restrict_inflows"
 					blockoverride "row_label" {
 						text = "CB_RESTRICT_INFLOWS"
@@ -3805,7 +3805,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_sterilize_inflows').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_sterilize_inflows"
 					blockoverride "row_label" {
 						text = "CB_STERILIZE_INFLOWS"
@@ -3824,7 +3824,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_foreign_borrowing_limits').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_foreign_borrowing_limits"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_foreign_borrowing_limits"
@@ -3843,7 +3843,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_fx_surrender').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_fx_surrender"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cb_fx_surrender"
@@ -3862,7 +3862,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_import_financing').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_emergency_import_financing"
 					blockoverride "row_label" {
 						text = "CB_EMERGENCY_IMPORT_FINANCING"
@@ -3881,7 +3881,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_capital_controls_outflow"
 					blockoverride "row_label" {
 						text = "CB_CAPITAL_CONTROLS_OUT"
@@ -3908,7 +3908,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -3934,7 +3934,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_crisis_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_bank_holiday').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_bank_holiday').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_bank_holiday"
 					blockoverride "row_label" {
 						text = "CB_BANK_HOLIDAY"
@@ -3953,7 +3953,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_emergency_liquidity_program').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_emergency_liquidity_program"
 					blockoverride "row_label" {
 						text = "CB_EMERGENCY_LIQUIDITY"
@@ -3972,7 +3972,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_asset_relief_program').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_asset_relief_program"
 					blockoverride "row_label" {
 						text = "CB_ASSET_RELIEF"
@@ -3991,7 +3991,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_bail_in_regime').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cb_bail_in_regime').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cb_bail_in_regime"
 					blockoverride "row_label" {
 						text = "CB_BAIL_IN"
@@ -4018,7 +4018,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4044,7 +4044,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_plan_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_plan_revision').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_plan_revision').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_plan_revision"
 					blockoverride "row_label" {
 						text = "CE_PLAN_REVISION"
@@ -4063,7 +4063,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_target_reduction').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_target_reduction').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_target_reduction"
 					blockoverride "row_label" {
 						text = "CE_TARGET_REDUCTION"
@@ -4082,7 +4082,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_consolidation_order').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_consolidation_order"
 					blockoverride "row_label" {
 						text = "CE_CONSOLIDATION_ORDER"
@@ -4109,7 +4109,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4135,7 +4135,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_allocation_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_emergency_allocation').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_emergency_allocation"
 					blockoverride "row_label" {
 						text = "CE_EMERGENCY_ALLOCATION"
@@ -4154,7 +4154,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_strategic_stockpile').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_strategic_stockpile"
 					blockoverride "row_label" {
 						text = "CE_STRATEGIC_STOCKPILE"
@@ -4173,7 +4173,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_distribution_upgrade').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_distribution_upgrade"
 					blockoverride "row_label" {
 						text = "CE_DISTRIBUTION_UPGRADE"
@@ -4200,7 +4200,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4226,7 +4226,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_admin_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_admin_campaign').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_admin_campaign"
 					blockoverride "row_label" {
 						text = "banking_dash_name_ce_admin_campaign"
@@ -4245,7 +4245,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_coordination_protocol').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_coordination_protocol"
 					blockoverride "row_label" {
 						text = "banking_dash_name_ce_coordination_protocol"
@@ -4272,7 +4272,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_command').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4298,7 +4298,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_pool_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_inject').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_invest_pool_inject"
 					blockoverride "row_label" {
 						text = "CE_INVEST_POOL_INJECT"
@@ -4318,7 +4318,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_ce_invest_pool_withdraw').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_ce_invest_pool_withdraw"
 					blockoverride "row_label" {
 						text = "CE_INVEST_POOL_WITHDRAW"
@@ -4346,7 +4346,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4372,7 +4372,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_surplus_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_dividend_restraint').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_dividend_restraint"
 					blockoverride "row_label" {
 						text = "CW_DIVIDEND_RESTRAINT"
@@ -4391,7 +4391,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_mutual_aid_fund').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_mutual_aid_fund"
 					blockoverride "row_label" {
 						text = "CW_MUTUAL_AID_FUND"
@@ -4418,7 +4418,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4444,7 +4444,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_investment_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_capital_plan').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_capital_plan').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_capital_plan"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cw_capital_plan"
@@ -4463,7 +4463,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_credit_expansion').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_credit_expansion"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cw_credit_expansion"
@@ -4490,7 +4490,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4516,7 +4516,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_council_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_council_directive').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_council_directive').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_council_directive"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cw_council_directive"
@@ -4535,7 +4535,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_consumption_ceiling').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_consumption_ceiling"
 					blockoverride "row_label" {
 						text = "banking_dash_name_cw_consumption_ceiling"
@@ -4562,7 +4562,7 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			parentanchor = hcenter
 			spacing = 2
-			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_dash_system_coop').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 			banking_dash_category_header = {
 				blockoverride "left_text" {
@@ -4588,7 +4588,7 @@ types banking_dashboard_widget_types
 				visible = "[Not(GetVariableSystem.Exists('banking_dash_membership_closed'))]"
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_solidarity_campaign').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_solidarity_campaign"
 					blockoverride "row_label" {
 						text = "CW_SOLIDARITY_CAMPAIGN"
@@ -4607,7 +4607,7 @@ types banking_dashboard_widget_types
 				}
 
 				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('banking_dash_enable_cw_worker_buyout').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					tooltip = "banking_dash_tt_cw_worker_buyout"
 					blockoverride "row_label" {
 						text = "CW_WORKER_BUYOUT"

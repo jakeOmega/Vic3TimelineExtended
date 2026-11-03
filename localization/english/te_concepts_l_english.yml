@@ -2970,7 +2970,7 @@
  te_ea_ir_election_meddling_modifier_desc:0 "Diplomatic capital is going into a disinformation campaign in a rival's election."
  te_ea_ir_military_buildup_modifier_desc:0 "We are expanding our armed forces to outmatch a rival power, and paying for every division of it."
  te_ea_ir_propaganda_offensive_modifier_desc:0 "Our broadcasters and friendly foreign papers are running a coordinated campaign against a rival power's institutions."
- te_hist_since:0 "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
+ te_hist_since:0 "#lore History available since [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  te_jud_act_upheld_desc:0 "The courts found the act we forced through lawful, and it carries their approval."
  te_jud_algorithmic_capture_desc:0 "The system that drafts our laws also judges them, so no court stands in the way of a law the government wants."
  te_jud_bench_restored_desc:0 "We sent the judges we added home, and the courts sit as they did before."
