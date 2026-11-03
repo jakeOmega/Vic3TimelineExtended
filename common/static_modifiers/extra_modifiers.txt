@@ -2561,7 +2561,16 @@ colonial_stability_negative_event = {
 	country_colonial_stability_drift_add = -1.0
 }
 
-# Great power colonial policy stance modifiers (applied when GP chooses a stance)
+# A great power's stance on colonialism (decolonization_stance_effects.txt):
+# held, with no duration, while the stance counts (the stance's variable and
+# great-power rank), and only then. A stance a country holds below great-power
+# rank lies dormant: no modifier, no cost, no weight on anyone's bar.
+# Each costs decol_stance_influence_cost (colonial_empire_values.txt) in
+# influence while held, as the UN's stances do (owner, 2026-11-03: a cooldown,
+# and influence for either side); test_decolonization_stance.py pins the
+# figure here to that value. Until 2026-11 both were three-year decaying
+# modifiers from The Colonial Question, the anti-colonial one giving +25
+# influence and the pro-colonial one taking 10.
 # The colonial-stability penalties are the hypocrite tax: an anti-colonial GP
 # still holding colonies sees the ideological dissonance translate into bar
 # drift (always-on while the stance is active) and reduced effectiveness on
@@ -2571,7 +2580,7 @@ colonial_stability_negative_event = {
 gp_anti_colonial_policy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = 0.05
-	country_influence_add = 25
+	country_influence_cost_add = 150
 	country_colonial_stability_drift_add = -0.2
 	country_colonial_garrison_effectiveness_add = -0.15
 	country_colonial_invest_effectiveness_add = -0.15
@@ -2581,7 +2590,7 @@ gp_anti_colonial_policy_modifier = {
 gp_pro_colonial_policy_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.02
-	country_influence_add = -10
+	country_influence_cost_add = 150
 }
 
 neocolonial_economic_extraction_modifier = {

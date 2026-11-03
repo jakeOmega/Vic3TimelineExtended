@@ -60,8 +60,12 @@ it collapsed less than ten years ago, or you hold no colony or colonial subject.
 
 The same panels appear on the Colonial Empire tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
-in one shows in the other. The tab is grayed until the journal entry is active; hover
-it for what is still missing. It ends with an Open Journal Entry button.
+in one shows in the other. It ends with an Open Journal Entry button. The tab
+opens once you have researched Decolonization, whether or not the journal entry
+runs. Without the entry it shows only Our Stance on Colonialism and The
+Colonial Powers, under a line saying why the entry isn't running; hover that
+line for what would start it. So the tab stays open after your empire is
+secured, collapses or lets its last colony go.
 
 <!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings open with its territories, their Release buttons and a colonial subject's Release and Dominion buttons -->
 
@@ -98,6 +102,8 @@ Works, opens the Help page, as the "?" at the right of the tab's header does:
 | Why Stability Is Moving | Open | A bar for each term that moves the bar: red to the left of the center line for a drain, green to the right for a gain, each on its own scale. Then Base decline, Monthly limit and Projected change. Hover a row for what it holds and its bar's scale. |
 | International Pressure | Open | Every great power that condemns or supports you, with its prestige and what it does to your stability a month, then any escalation in force. |
 | Colonial Programs | Open | The three programs, each with its level out of 3, what it adds a month, and a minus and a plus button to lower or raise it. Hover a row for its costs. |
+| Our Stance on Colonialism | Open | Your [stance](#great-power-stances-on-colonialism), whether it is in force, when it can next change, and the Condemn, Stay Neutral and Support buttons. |
+| The Colonial Powers | Open | The eight countries with the most people in their colonies and colonial subjects, yours among them if you are one: their people, their status and their stability (see below). |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
 | How the Colonial Empire Works | A link | Opens the Help page, which explains the system. |
 
@@ -178,18 +184,36 @@ hurt.
 
 ### Great power stances on colonialism
 
-Each great power can hold an anti-colonial stance, a pro-colonial stance, or
-none. Every great power that has researched Decolonization is asked to declare
-in the event The Colonial Question, at most once every three years, while any
-other country holds an overseas colony. That includes powers with no colonies
-of their own and powers whose own Colonial Empire entry has ended. It can
-condemn colonialism, stay neutral, or back the colonial powers. Condemning
-brings influence and prestige but, for a power that holds colonies, also drains
-its own bar and weakens its programs. An AI power without colonies nearly always
-condemns; one with colonies leans toward backing them. When a Decolonization
-Resolution passes at the United Nations, every great power that voted for it, or
-voted against it and then accepted it, takes the anti-colonial stance
-automatically.
+Each country can hold an anti-colonial stance, a pro-colonial stance, or none,
+but only a great power's stance weighs on the colonial empires. The first time
+you are a great power that has researched Decolonization while another country
+holds an overseas colony, the event The Colonial Question asks you to declare
+one. That includes a power with no colonies of its own and one whose own
+Colonial Empire entry has ended. After that you change it from Our Stance on
+Colonialism, on the Colonial Empire tab, which stays open once your own entry
+ends:
+
+| Stance | While you are a great power | Button |
+|---|---|---|
+| Condemns colonialism | Anti-Colonial Policy: +5% prestige, 150 influence. If you hold colonies yourself, −0.2 stability a month and weaker programs. | Condemn |
+| Neutral | Nothing, and no cost. | Stay Neutral |
+| Backs the colonial powers | Pro-Colonial Policy: +2% prestige, 150 influence. | Support |
+
+A stance can change once every 24 months, whichever way it changes. Taking a
+side needs 150 influence available, unless you already pay for the other side.
+Condemning pleases the Intelligentsia and Trade Unions and angers the Landowners
+and Industrialists; backing the colonial powers does the reverse and radicalizes
+some academics. Below great-power rank a stance lies dormant: it costs nothing
+and moves no one until you are a great power again. Stay Neutral needs no rank,
+so you can always drop a dormant stance.
+
+The AI is asked in The Colonial Question every three years instead. An AI power
+without colonies nearly always condemns; one with colonies leans toward backing
+them. It takes a side only with 150 influence and 100 more to spare, and drops
+its stance when its influence runs negative. When a Decolonization Resolution
+passes at the United Nations, every great power that voted for it, or voted
+against it and then accepted it, takes the anti-colonial stance automatically,
+and can't change it for 24 months.
 
 Each condemning great power costs you about 0.6 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
@@ -202,6 +226,15 @@ fall. A dominant empire is hard to isolate; a small one reaches both thresholds
 as soon as a few large powers turn on it. The International Pressure section
 lists who condemns and who supports you, and what each one costs or gives you a
 month.
+
+The Colonial Powers lists the eight countries with the most people in their
+colonies and colonial subjects, largest first, read each month and again when
+you change your stance. Each row gives the people of its colonies and
+subjects, its status and its stability to the nearest 5 while its entry runs.
+The status is Not begun before its Colonial Empire entry starts, its
+[band](#colonial-stability-bands) while the entry runs, Secured once it has won,
+and Collapsed for ten years after its colonial system falls apart. Hover a row
+for what your stance does to its stability a month.
 
 ## Colonial programs and decolonization decisions
 

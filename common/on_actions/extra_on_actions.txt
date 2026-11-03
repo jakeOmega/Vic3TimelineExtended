@@ -1995,6 +1995,32 @@ international_relations_events_on_action = {
 # ============================================================================
 decolonization_events_on_action = {
 	effect = {
+		# A stance on colonialism (decolonization_stance_effects.txt): the
+		# cooldown's month, the AI's drop of a stance it cannot pay for, and
+		# each stance's modifier while it counts, whatever the era or the
+		# entry, since a stance outlives both.
+		if = {
+			limit = {
+				OR = {
+					has_variable = gp_anti_colonial_stance
+					has_variable = gp_pro_colonial_stance
+					has_variable = decol_stance_months_left
+					has_modifier = gp_anti_colonial_policy_modifier
+					has_modifier = gp_pro_colonial_policy_modifier
+				}
+			}
+			decol_stance_monthly = yes
+		}
+		# The Colonial Empire tab's list of the colonial powers, for a player
+		# whose tab is open (ce_tab_unlocked), with the entry or without it.
+		if = {
+			limit = {
+				is_player = yes
+				has_game_rule = decolonization_enabled
+				ce_tab_unlocked = yes
+			}
+			decol_world_refresh_display = yes
+		}
 		# Wars of independence (decolonization_war_effects.txt): the monthly
 		# settle, before the pool and whatever the entry's state, since a war can
 		# outlast a failed entry. A colonial subject at war with us for its
@@ -2260,11 +2286,13 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.13 }
 				}
-				# Great Power Colonial Policy Review (fires for GPs)
+				# Great Power Colonial Policy Review (fires for GPs; a player's
+				# once, decol_stance_question_due)
 				15 = {
 					trigger = {
 						country_rank >= rank_value:great_power
 						NOT = { has_variable = gp_colonial_policy_cooldown }
+						decol_stance_question_due = yes
 						any_country = {
 							NOT = { this = root }
 							any_scope_state = {

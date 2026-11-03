@@ -1017,6 +1017,10 @@ decol_sync_programmes = {
 decol_repair_after_civil_war = {
 	decol_sync_permanent_modifiers = yes
 	decol_sync_programmes = yes
+	# The stance on colonialism: the winner inherits its variables and its
+	# cooldown, and gets the policy modifier back here (the monthly pass would,
+	# a month later).
+	decol_stance_refresh = yes
 	# Wars of independence: the home front's modifier, from the records.
 	decol_iw_repair_after_civil_war = yes
 }

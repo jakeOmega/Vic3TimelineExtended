@@ -1,0 +1,129 @@
+﻿# ============================================================================
+# DECOLONIZATION — A COUNTRY'S STANCE ON COLONIALISM: the tests
+#
+# A stance is two variables, gp_anti_colonial_stance and gp_pro_colonial_stance
+# (neither is neutral), which every reader keys on: the colonial empires' bar
+# (colonial_gp_condemnation_weight and the rest in colonial_empire_values.txt,
+# great powers only), the wars of independence's notices, the pool's events.
+# decolonization_stance_effects.txt is the only place that sets them, apart
+# from the debug harness. Scope: country.
+# ============================================================================
+
+# The stance counts: held by a great power, the only rank whose stance any
+# colonial empire's bar weighs. While it counts the country holds the stance's
+# policy modifier and pays its influence (decol_stance_refresh); below
+# great-power rank the stance lies dormant.
+decol_stance_anti_counts = {
+	has_variable = gp_anti_colonial_stance
+	country_rank >= rank_value:great_power
+}
+
+decol_stance_pro_counts = {
+	has_variable = gp_pro_colonial_stance
+	country_rank >= rank_value:great_power
+}
+
+# The country pays for a stance now, so moving to the other side costs it
+# nothing more.
+decol_stance_paid = {
+	OR = {
+		decol_stance_anti_counts = yes
+		decol_stance_pro_counts = yes
+	}
+}
+
+# Influence for a stance: already paying for one, or as much available
+# influence as one costs (the `influence` trigger reads what is unspent). The
+# Colonial Question's two sides and the panel's Condemn and Support.
+decol_stance_affordable = {
+	custom_tooltip = {
+		text = decol_stance_influence_tt
+		OR = {
+			decol_stance_paid = yes
+			influence >= decol_stance_influence_cost
+		}
+	}
+}
+
+# The AI's start line (decolonization_events.14's weights): a stance it already
+# pays for, while its influence is not in deficit, or the cost with a spare in
+# hand. decol_stance_monthly drops a paid stance whose influence goes negative.
+decol_stance_ai_can_hold = {
+	OR = {
+		AND = {
+			decol_stance_paid = yes
+			influence >= 0
+		}
+		influence >= decol_stance_ai_start_influence
+	}
+}
+
+# The panel's three buttons (colonial_empire_stance_sgui), each greyed with
+# the failing line on hover. Shared lines first: not the stance held already,
+# and not changed in the last decol_stance_cooldown_months.
+decol_stance_not_cooling_down = {
+	custom_tooltip = {
+		text = decol_stance_cooldown_tt
+		NOT = { has_variable = decol_stance_months_left }
+	}
+}
+
+decol_stance_possible_anti = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		NOT = { has_variable = gp_anti_colonial_stance }
+	}
+	decol_stance_not_cooling_down = yes
+	custom_tooltip = {
+		text = decol_stance_great_power_tt
+		country_rank >= rank_value:great_power
+	}
+	decol_stance_affordable = yes
+}
+
+decol_stance_possible_pro = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		NOT = { has_variable = gp_pro_colonial_stance }
+	}
+	decol_stance_not_cooling_down = yes
+	custom_tooltip = {
+		text = decol_stance_great_power_tt
+		country_rank >= rank_value:great_power
+	}
+	decol_stance_affordable = yes
+}
+
+# Stepping back to neutral needs no rank and no influence: a country can always
+# drop a stance, a dormant one included.
+decol_stance_possible_neutral = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		OR = {
+			has_variable = gp_anti_colonial_stance
+			has_variable = gp_pro_colonial_stance
+		}
+	}
+	decol_stance_not_cooling_down = yes
+}
+
+# The Colonial Question (decolonization_events.14) is due: an AI is asked every
+# three years (the event's own gp_colonial_policy_cooldown), a player once
+# (decol_stance_asked, set in the event's `immediate`), since the tab's buttons
+# change the stance after that. The event's trigger and its pool entry
+# (decolonization_events_on_action) both read it.
+decol_stance_question_due = {
+	OR = {
+		is_ai = yes
+		NOT = { has_variable = decol_stance_asked }
+	}
+}
+
+# The Colonial Empire tab of the Timeline Extended window opens with this
+# (te_window_colonial_empire_tab_unlock_sgui's is_valid, the greyed tab's
+# checklist): Our Stance on Colonialism and The Colonial Powers need nothing
+# else, and the entry's own panels join them while it runs (ce_entry_unlocked,
+# colonial_empire_triggers.txt). The Colonial Question asks the same research.
+ce_tab_unlocked = {
+	has_technology_researched = decolonization
+}

@@ -998,7 +998,7 @@
  decolonization_events.14.a:0 "The age of empires is over."
  decolonization_events.14.b:0 "We shall remain above the fray."
  decolonization_events.14.c:0 "Stability demands order."
- decolonization_events.14.d:0 "The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course."
+ decolonization_events.14.d:0 "The question of colonialism dominates debate in international forums. As a [concept_great_power], [ROOT.GetCountry.GetName] must declare a position - whether to condemn the continuation of colonial empires, defend the right of nations to maintain overseas territories, or chart a cautious middle course.\n\nOur choice holds until we change it, which we may do every two years from the Colonial Empire tab of the Timeline Extended window. A stance on either side costs [concept_influence] while we are a great power."
  decolonization_events.14.f:0 "\"Every nation in this chamber has an opinion on colonialism,\" the foreign minister observed drily. \"Strangely, the opinion always seems to align perfectly with whether they possess colonies or covet them.\"\n\nLaughter rippled through the delegation.\n\n\"The question before us is not what is right. It is what is useful.\""
  decolonization_events.14.t:0 "The Colonial Question"
  decolonization_events.15.a:0 "Seize everything. This land and its wealth belong to us."

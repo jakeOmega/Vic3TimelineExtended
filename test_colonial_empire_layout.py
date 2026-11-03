@@ -19,7 +19,10 @@ DECOLONIZATION = os.path.join(REPO, "common", "scripted_effects", "decolonizatio
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
-STATUS = ["te_ce_sec_holdings", "te_ce_sec_stability", "te_ce_sec_pressure", "te_ce_sec_programmes"]
+# The entry's live sections, then the two that outlive it (our stance and the
+# colonial powers, owner 2026-11-03), which the tab shows alone without it.
+STATUS = ["te_ce_sec_holdings", "te_ce_sec_stability", "te_ce_sec_pressure", "te_ce_sec_programmes",
+          "te_ce_sec_stance", "te_ce_sec_powers"]
 REFERENCE = ["te_ce_sec_history", "te_ce_sec_how"]
 ROOTS = {   # root name -> (what it instances, the journal container it is attached to)
     "widget_je_colonial_empire_overview": ("te_ce_overview_panel", "custom_widget_container_1"),
@@ -36,11 +39,12 @@ PROGRAMMES = ("invest", "garrison", "assimilation")
 # The explanations "How the Colonial Empire Works" holds, and the live
 # sections they must not reappear in.
 HOW_KEYS = ["je_colonial_empire_how_bar_1", "je_colonial_empire_how_bar_2", "je_colonial_empire_how_bar_3",
-            "je_colonial_empire_how_moves", "je_colonial_empire_how_pressure",
+            "je_colonial_empire_how_moves", "je_colonial_empire_how_pressure", "je_colonial_empire_how_stance",
             "je_colonial_empire_how_programmes", "je_colonial_empire_how_decolonization"]
 # Its topics, in order: the subheadings over those explanations.
 HOW_SUBS = ["je_colonial_empire_how_sub_bar", "je_colonial_empire_how_sub_moves", "je_colonial_empire_how_sub_pressure",
-            "je_colonial_empire_how_sub_programmes", "je_colonial_empire_how_sub_decolonization"]
+            "je_colonial_empire_how_sub_stance", "je_colonial_empire_how_sub_programmes",
+            "je_colonial_empire_how_sub_decolonization"]
 RETIRED_KEYS = ["je_colonial_empire_status_summary", "je_colonial_empire_ov_pie_label",
                 "je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
                 "je_colonial_empire_conditions_body", "je_colonial_empire_phase_row",
@@ -236,7 +240,7 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(len(flags), 5)
+        self.assertEqual(len(flags), 7)
         for f in flags:
             self.assertRegex(f, r"^colonial_empire_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -253,7 +257,9 @@ class FlagTest(unittest.TestCase):
                           ("te_ce_sec_pressure", "colonial_empire_pressure_closed"),
                           ("te_ce_sec_programmes", "colonial_empire_programmes_closed"),
                           ("te_ce_sec_holdings", "colonial_empire_holdings_closed"),
-                          ("te_ce_sec_history", "colonial_empire_history_closed")):
+                          ("te_ce_sec_history", "colonial_empire_history_closed"),
+                          ("te_ce_sec_stance", "colonial_empire_stance_closed"),
+                          ("te_ce_sec_powers", "colonial_empire_powers_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
 
     def test_how_it_works_is_a_link(self):
@@ -478,7 +484,8 @@ class StabilityTableTest(unittest.TestCase):
                         self.assertIn(f"ScriptContainer.HasVariable('{var}')", gates, value)
                 else:
                     self.assertIn(READY, gates, value)
-        self.assertEqual(checked, 3 + 2)   # three war rows; a great power's flag and name
+        # three war rows; a great power's flag and name; a colonial power's
+        self.assertEqual(checked, 3 + 2 + 2)
         for row in self._rows():
             self.assertNotIn(".Var(", row, "the drift rows read the guarded disp values")
 
@@ -1848,7 +1855,7 @@ class WideLayoutTest(unittest.TestCase):
         columns = assert_wide_matches_narrow(self, "te_ce_wide_sections", layout=("te_ce_tab_body", "te_ce_tab_layout"))
         self.assertEqual(columns, [
             ["te_ce_overview_panel", "te_ce_sec_holdings", "te_ce_sec_stability"],
-            ["te_ce_sec_pressure", "te_ce_sec_programmes"],
+            ["te_ce_sec_pressure", "te_ce_sec_programmes", "te_ce_sec_stance", "te_ce_sec_powers"],
             ["te_ce_sec_history", "te_ce_sec_how"]])
 
     def test_the_window_mounts_it_full_screen(self):
