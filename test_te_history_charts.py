@@ -295,6 +295,25 @@ class RegistryTest(unittest.TestCase):
         for path in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True):
             self.assertIsNone(re.search(r"\btype \w+ = te_history_(plot|chart)\b", _read(path)), path)
 
+    def test_every_chart_is_generated(self):
+        """No hand-written te_history_chart instance is left in gui/: each
+        chart's section instances its small wrapper, once, and no hand-written
+        file instances a large one (the viewer's are generated with them)."""
+        generated = os.path.normpath(GENERATED)
+        hand = {os.path.relpath(p, REPO): _strip_comments(_read(p))
+                for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)
+                if os.path.normpath(p) != generated}
+        self.assertGreater(len(hand), 50)
+        placed = {}
+        for path, text in hand.items():
+            self.assertNotIn("te_history_chart = {", text, path)
+            for name in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", text):
+                placed.setdefault(name, []).append(path)
+        self.assertFalse([n for n in placed if n.endswith("_large")], "a large wrapper instanced by hand")
+        for chart in gen.CHARTS:
+            with self.subTest(chart=chart.id):
+                self.assertEqual(placed.get(gen.wrapper_name(chart, gen.SMALL)), [SECTIONS[chart.system]])
+
     def test_the_registry_names_what_the_viewer_reads(self):
         """Each chart's tab, entry, gate and range, for the viewer (C2): the
         gate is the tab's scripted GUI, scope-free, and holds the entry the

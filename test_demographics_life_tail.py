@@ -19,6 +19,7 @@ import demographics_params as P  # noqa: E402
 from test_demographics_registry import (  # noqa: E402
     EFFECTS, GENERATED_EFFECTS, GENERATED_VALUES, HISTORY_EFFECTS, LX_EFFECTS, LX_GEN_EFFECTS, _block, _Engine,
     _parse_script, _text)
+from gui_test_helpers import history_charts  # noqa: E402
 
 GUI = ROOT / "gui" / "te_demographics_widgets.gui"
 LOC = ROOT / "localization" / "english" / "te_miscellaneous_l_english.yml"
@@ -195,9 +196,9 @@ class TestE0ChartAxis(unittest.TestCase):
     """The Life Expectancy chart: its axis te_dg_h_e0_max (100 to 10,000, the largest sample), a bar stopping at 10,000."""
 
     def test_the_bars_read_the_axis_and_stop_at_the_cap(self):
-        gui = _text(GUI)
-        start = gui.index('text = "te_demog_hist_e0_title"')
-        chart = gui[start:gui.index('blockoverride "plot_size"', start)]
+        # the chart is its generated wrapper's (gen_te_history_charts.py)
+        (chart,) = [c for c in history_charts(_text(GUI)) if 'text = "te_demog_hist_e0_title"' in c]
+        chart = chart[chart.index('text = "te_demog_hist_e0_title"'):chart.index('blockoverride "plot_size"')]
         axis = "Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown')"
         self.assertEqual(chart.count(f'max = "[FixedPointToFloat( {axis} )]"'), 2)
         self.assertEqual(chart.count(axis), 4)
