@@ -435,8 +435,12 @@ class OtherTabsTest(unittest.TestCase):
                       tool.render(s))
 
     def test_the_repo_names_a_key_two_tabs_render(self):
-        s = tool.survey_tab("banking")
-        self.assertIn("colonial_empire", s.loc["te_hist_since"].also)
+        """te_hist_since, the history charts' line, is in both panels' keys: the
+        map survey_tab names other tabs from. (A bound key leaves the survey, so
+        this reads the map: the Colonial Empire's PR bound te_hist_since.)"""
+        self.assertLessEqual({"banking", "colonial_empire"}, set(tool.candidate_tabs()))
+        for key in ("banking", "colonial_empire"):
+            self.assertIn("te_hist_since", tool._tab_keys(key), key)
 
     def test_isactive_becomes_the_entrys_gate_not_the_readouts(self):
         """Banking and the Colonial Empire open on a readout without the entry
@@ -447,7 +451,11 @@ class OtherTabsTest(unittest.TestCase):
                 s = tool.survey_tab(key)
                 self.assertEqual(s.gate, f"GetScriptedGui('{entry}').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
                 self.assertNotIn("readout", s.gate)
-                self.assertIn(f"the entry's gate on Country: [{s.gate}]", tool.render(s))
+                # printed with each IsActive read left: a bound tab has none
+                if any(r.finding.what == "JournalEntry.IsActive" for r in s.markup):
+                    self.assertIn(f"the entry's gate on Country: [{s.gate}]", tool.render(s))
+                else:
+                    self.assertNotIn("JournalEntry.IsActive", tool.render(s))
         from scripts.generators import gen_te_systems_window as gen
         nation = next(t for t in gen.TABS if t.key == "nation")
         self.assertIsNone(tool.entry_gate(nation))  # always open, no gate

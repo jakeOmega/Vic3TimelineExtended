@@ -185,11 +185,22 @@ def _assert_rooted_at_the_player(case, row_type):
             case.assertNotIn("JournalEntry", reads)
 
 
+_OURS = re.compile(r"^\[SelectLocalization\( Country\.IsLocalPlayer, '([\w.\-]+)', '([\w.\-]+)' \)\]$")
+
+
 def _loc():
+    """Every loc key's text. A key that chooses between the player's text and
+    another country's on Country.IsLocalPlayer (spec § 6.8) reads as the
+    player's, which is the panel's text as it was (another country's branch
+    is test_te_system_tab_bodies.py's to check)."""
     keys = {}
     for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
         for m in re.finditer(r'(?m)^ ([\w.\-]+):\d* "(.*)"\s*$', _read(path)):
             keys[m.group(1)] = m.group(2)
+    for key, value in list(keys.items()):
+        m = _OURS.match(value)
+        if m and m.group(1) in keys:
+            keys[key] = keys[m.group(1)]
     return keys
 
 
@@ -201,9 +212,15 @@ class OrderTest(unittest.TestCase):
             self.assertEqual(found, expected, composer)
 
     def test_composers_and_overview_are_gated_on_the_entry(self):
+        """The entry's gate on the shown Country (National Info, spec
+        2026-11-02-charts-help-national-info § 6.3): for the player it is the
+        entry being active, and another country has no JournalEntry here."""
         gui = _read(GUI)
+        gate = ("visible = \"[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( "
+                "GuiScope.SetRoot( Country.MakeScope ).End )]\"")
         for name in ("te_ce_status_sections", "te_ce_reference_sections", "te_ce_overview_panel"):
-            self.assertIn('visible = "[JournalEntry.IsActive]"', _own_properties(_type_body(gui, name)), name)
+            self.assertIn(gate, _own_properties(_type_body(gui, name)), name)
+            self.assertNotIn("JournalEntry", _own_properties(_type_body(gui, name)), name)
 
 
 class RootsTest(unittest.TestCase):
@@ -312,15 +329,32 @@ class OverviewTest(unittest.TestCase):
                                        rf'tooltip = "je_colonial_empire_ov_{p}_off_tt"')
 
     def test_the_bar_row(self):
-        m = re.search(r'datamodel = "\[JournalEntry\.GetScriptedProgressBars\]"\s*item = \{', self.body)
-        self.assertTrue(m, "the bar is not read through the entry's own datamodel")
+        """The row is te_ce_ov_bar_row. The player's is an item of the entry's
+        own datamodel, under te_own_country_only: gotcha #24, a tooltip inside
+        a datamodel item has no JournalEntry and no Country, so the row's is the
+        engine's breakdown and the two of our own read GetPlayer. Another
+        country's (National Info, no entry in context) is the row alone, on
+        its defaults: the value from colonial_empire_live_bar, the hovers on
+        Country, no hover of the row's own."""
+        m = re.search(r'using = te_own_country_only\s*datamodel = "\[JournalEntry\.GetScriptedProgressBars\]"\s*'
+                      r'item = \{', self.body)
+        self.assertTrue(m, "the player's bar is not read through the entry's own datamodel")
         a, b = _span(self.body, m.end() - 1)
         item = self.body[a:b]
-        # Gotcha #24: a tooltip inside a datamodel item has no JournalEntry, so
-        # the row's is the engine's breakdown and the two of our own read GetPlayer.
+        self.assertIn("te_ce_ov_bar_row = {", item)
         self.assertEqual(re.findall(r'tooltip = "([^"]*)"', item),
                          ["[ScriptedProgressBar.GetPeriodicProgressBreakdown]",
                           "je_colonial_empire_ov_tick_tt", "je_colonial_empire_ov_heading_tt"])
+        self.assertIn('text = "je_colonial_empire_ov_stability_value"', item)
+        self.assertRegex(self.body, r'te_ce_ov_bar_row = \{\s*parentanchor = hcenter\s*'
+                                    r'visible = "\[Not\( Country\.IsLocalPlayer \)\]"\s*\}')
+        row = _type_body(_read(GUI), "te_ce_ov_bar_row")
+        self.assertRegex(row, r'block "bar_row_tooltip" \{\}')
+        self.assertRegex(row, r'block "bar_tick_tooltip" \{\s*tooltip = "je_colonial_empire_ov_tick_ni_tt"\s*\}')
+        self.assertRegex(row, r'block "bar_value" \{\s*text = "je_colonial_empire_ov_stability_value_ni"\s*'
+                              r'tooltip = "je_colonial_empire_ov_heading_ni_tt"\s*\}')
+        self.assertNotIn("JournalEntry", row)
+        self.assertNotIn("GetPlayer", row)
         loc = _loc()
         for key in ("je_colonial_empire_ov_tick_tt", "je_colonial_empire_ov_tick_eta",
                     "je_colonial_empire_ov_tick_no_eta", "je_colonial_empire_ov_heading_tt"):
@@ -328,12 +362,19 @@ class OverviewTest(unittest.TestCase):
                 self.assertNotIn("JournalEntry", loc[key])
                 self.assertNotIn("ROOT", loc[key])
         self.assertIn("GetPlayer.", loc["je_colonial_empire_ov_heading_tt"])
-        self.assertNotIn("progressbar_marker.dds", item, "the eye marker is gone (play-test round 3)")
+        # another country's copies: the same text, on Country
+        for key in ("je_colonial_empire_ov_tick_tt", "je_colonial_empire_ov_tick_eta",
+                    "je_colonial_empire_ov_heading_tt"):
+            ni = key[:-3] + "_ni_tt" if key.endswith("_tt") else key + "_ni"
+            with self.subTest(key=ni):
+                self.assertEqual(loc[ni].replace("Country.", "GetPlayer.").replace("_eta_ni'", "_eta'"), loc[key])
+        self.assertIn("ScriptValue('colonial_empire_live_bar')", loc["je_colonial_empire_ov_stability_value_ni"])
+        self.assertNotIn("progressbar_marker.dds", row, "the eye marker is gone (play-test round 3)")
         codes = {int(n) for n in re.findall(
-            r"ScriptValue\('colonial_empire_disp_trend'\), '\(CFixedPoint\)(-?\d+)'", item)}
+            r"ScriptValue\('colonial_empire_disp_trend'\), '\(CFixedPoint\)(-?\d+)'", row)}
         self.assertEqual(codes, {-1, 0, 1})
         for arrow in ("trend_up", "trend_down", "trend_nochange"):
-            self.assertIn(f"generic_icons/{arrow}.dds", item)
+            self.assertIn(f"generic_icons/{arrow}.dds", row)
 
     def test_pressure_pie_and_alerts(self):
         pie = _type_body(_read(GUI), "te_ce_ov_pie")
@@ -606,7 +647,7 @@ class HoldingsTest(unittest.TestCase):
         """CE-1 (2026-10-27): every colonial subject has its row and its buttons, a
         datamodel over the stored capitals (eight fixed rows and a "+N more"
         hover before)."""
-        m = re.search(r'datamodel = "\[JournalEntry\.GetCountry\.MakeScope\.GetList\(\'colonial_empire_subject_capitals\'\)\]"'
+        m = re.search(r'datamodel = "\[Country\.MakeScope\.GetList\(\'colonial_empire_subject_capitals\'\)\]"'
                       r'\s*item = \{\s*te_ce_subject_row = \{\s*datacontext = "\[Scope\.GetState\]"', self.body)
         self.assertTrue(m, "the subject rows are not a datamodel over the stored capitals")
         self.assertEqual(self.body.count("te_ce_subject_row = {"), 1)
@@ -856,7 +897,7 @@ class ColonialIconsTest(unittest.TestCase):
 
     def _coded(self, value):
         """{code: texture} for the icons gated on ScriptValue(value) == code."""
-        gate = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+        gate = (rf"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('{value}'\), "
                 rf"'\(CFixedPoint\)(\d+)' \)\]\"")
         found = {}
         for m in re.finditer(r"\bicon = \{", self.overview):
@@ -1042,7 +1083,7 @@ class CompletionClocksTest(unittest.TestCase):
         a, b = _span(self.body, m.end())
         block = self.body[a:b]
         self.assertIn(
-            "visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), "
+            "visible = \"[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), "
             "'(CFixedPoint)5' )]\"", self.body[m.end():a + 400])
         for frac in ("colonial_empire_disp_at_100_frac", "colonial_empire_disp_solidified_frac"):
             self.assertIn(f"ScriptValue('{frac}')", block, frac)
@@ -1109,7 +1150,7 @@ class TerritoryListTest(unittest.TestCase):
     def test_one_row_per_bloc(self):
         """CE-1 (2026-10-27): every release bloc has its row and its Release
         button, a datamodel over the stored seeds (eight fixed rows before)."""
-        m = re.search(r'datamodel = "\[JournalEntry\.GetCountry\.MakeScope\.GetList\(\'colonial_empire_blocs\'\)\]"'
+        m = re.search(r'datamodel = "\[Country\.MakeScope\.GetList\(\'colonial_empire_blocs\'\)\]"'
                       r'\s*item = \{\s*te_ce_territory_row = \{\s*datacontext = "\[Scope\.GetState\]"', self.body)
         self.assertTrue(m, "the territory rows are not a datamodel over the stored seeds")
         self.assertEqual(self.body.count("te_ce_territory_row = {"), 1)
@@ -1296,14 +1337,14 @@ class ProjectionBarTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        body = _type_body(_read(GUI), "te_ce_overview_panel")
+        body = _type_body(_read(GUI), "te_ce_ov_bar_row")
         m = re.search(r"widget = \{\s*size = \{ 180 18 \}", body)
         assert m, "no 180 x 18 bar cell"
         a, b = _span(body, m.start())
         cls.bar = body[a + 1:b]
         cls.values = _read(VALUES)
 
-    LAYER = r"(?m)^\t{8}(?!size\b)(\w+) = \{"
+    LAYER = r"(?m)^\t{3}(?!size\b)(\w+) = \{"
 
     def _layers(self):
         return [self.bar[slice(*_span(self.bar, m.start()))] for m in re.finditer(self.LAYER, self.bar)]
@@ -1334,7 +1375,8 @@ class ProjectionBarTest(unittest.TestCase):
         self.assertRegex(tick, r"marker = \{\s*icon = \{\s*size = \{ 3 24 \}")
         self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', tick)
         self.assertIn("color = { 0.96 0.90 0.72 0.95 }", tick)
-        self.assertIn('tooltip = "je_colonial_empire_ov_tick_tt"', tick)
+        # another country's hover by default; the player's datamodel item gives its own (OverviewTest)
+        self.assertRegex(tick, r'block "bar_tick_tooltip" \{\s*tooltip = "je_colonial_empire_ov_tick_ni_tt"\s*\}')
 
     def test_low_and_high_are_today_and_the_projection(self):
         low = _block(self.values, "colonial_empire_disp_bar_low_frac")
@@ -1449,7 +1491,8 @@ class WidthBudgetTest(unittest.TestCase):
         cls.name_cell = int(re.search(r'max_width = (\d+)[^}]*?text = "\[State\.GetName\]"', row, re.S).group(1))
         ov = _type_body(g, "te_ce_overview_panel")
         cls.ov = ov
-        cls.ov_cells = _cells(ov, "je_colonial_empire_ov_", keys=("stability_label", "stability_value"))
+        cls.ov_cells = _cells(_type_body(g, "te_ce_ov_bar_row"), "je_colonial_empire_ov_",
+                              keys=("stability_label", "stability_value_ni"))
         cls.policy = _type_body(g, "colonial_empire_policy_row")
         cls.escalation = _type_body(g, "te_ce_escalation_row")
 
@@ -1528,7 +1571,7 @@ class WidthBudgetTest(unittest.TestCase):
             self.assertEqual(self.territory_row[cell], self.territory_row[f"{cell}_bad"])
         self.assertEqual(set(self.subject_row), {"name", "ld", "gdp"})
         pillar_value = int(re.findall(r"maximumsize = \{ (\d+) -1 \}", self.pillar)[1])
-        ov_value = self.ov_cells["stability_value"]
+        ov_value = self.ov_cells["stability_value_ni"]
         ov_label = self.ov_cells["stability_label"]
         legend = _cells(_type_body(self.gui, "te_ce_ov_legend_row").replace('block "legend_text" {}',
                                                                             'text = "je_colonial_empire_x"'),
@@ -1628,9 +1671,9 @@ class PressureTableTest(unittest.TestCase):
         cls.values = _read(VALUES)
 
     def test_a_row_per_container(self):
-        self.assertRegex(self.section, r'datamodel = "\[JournalEntry\.GetCountry\.MakeScope\.GetList\(\'colonial_empire_gp_rows\'\)\]"'
+        self.assertRegex(self.section, r'datamodel = "\[Country\.MakeScope\.GetList\(\'colonial_empire_gp_rows\'\)\]"'
                                        r'\s*item = \{\s*te_ce_gp_row = \{\s*datacontext = "\[Scope\.GetScriptContainer\]"')
-        self.assertIn("IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows') )", self.section)
+        self.assertIn("IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') )", self.section)
         self.assertIn('text = "je_colonial_empire_pressure_none"', self.section)
         self.assertNotIn("ExecuteTooltip", self.section, "no script-built text")
         row = _type_body(self.gui, "te_ce_gp_row")

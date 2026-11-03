@@ -577,7 +577,6 @@ UNBOUND = set([
 
     "grand_monuments",
 
-    "colonial_empire",
 
     "seabed",
 
