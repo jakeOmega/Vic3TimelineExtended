@@ -599,12 +599,12 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### INTERNATIONAL: the type rows only (standing abroad, covert defence,
-	### war support, nuclear, commitments). Drawn only with something to show
-	### (rule 8).
+	### INTERNATIONAL: the United Nations once one exists, then the type rows
+	### (standing abroad, covert defence, war support, nuclear, commitments).
+	### Drawn only with something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_international = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' )]"
+		visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -615,6 +615,37 @@ types te_nation_widget_types
 			}
 		}
 		te_nation_panel = {
+			### The United Nations (spec 2026-11-02-charts-help-national-info
+			### § 6.4: Nation with the UN lines is public, the UN's own tab
+			### private): the country's seat, its standing, and its dues with any
+			### arrears, once a UN exists. Each reads the UN overview's own code
+			### (common/script_values/un_overview_display_values.txt), which asks
+			### the entry's modifiers through je: in script, so it reads any
+			### country, and says it in the overview's words.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_nation_row = {
+					text = "te_nation_un_member_row"
+					tooltip = "te_nation_un_member_row_tt"
+				}
+				### Once the country has a score: a member's, or one that left
+				### (frozen until it rejoins).
+				te_nation_row = {
+					visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)-1' ) )]"
+					text = "te_nation_un_standing_row"
+					tooltip = "te_nation_un_standing_row_tt"
+				}
+				### While it is a member.
+				te_nation_row = {
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)0' )]"
+					text = "te_nation_un_dues_row"
+					tooltip = "te_nation_un_dues_row_tt"
+				}
+			}
 			te_nation_types_international = {}
 		}
 	}

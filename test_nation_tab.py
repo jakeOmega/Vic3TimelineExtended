@@ -527,6 +527,59 @@ class TabLayoutTest(unittest.TestCase):
         self.assertEqual(overview.count("te_nation_ov_cell = {"), 5)
         self.assertIn('text = "te_nation_ov_jud_cap"', overview)
 
+    # The UN lines' rows, each with the UN display code it reads and the UN
+    # overview's words for that code (gui/journal_entry_widgets/un_overview_widget.gui).
+    UN_ROWS = (
+        ("te_nation_un_member_row", "un_disp_member_code", [f"je_un_ov_member_{i}" for i in range(1, 7)]),
+        ("te_nation_un_standing_row", "un_disp_standing_code", [f"je_un_ov_standing_{i}" for i in range(0, 7)]),
+        ("te_nation_un_dues_row", "un_disp_dues_code", [f"je_un_ov_dues_{i}" for i in range(1, 6)]),
+    )
+
+    def test_the_un_lines(self):
+        """The United Nations in International (spec
+        2026-11-02-charts-help-national-info § 6.4; the owner put Nation with
+        the UN lines on the public list, the UN's own tab private): the
+        country's seat, its standing and its dues, with any arrears, once a UN
+        exists. They read the UN's own display codes, the overview's
+        (common/script_values/un_overview_display_values.txt), which ask the
+        entry's modifiers through je: in script and so read any country, and
+        they say what the overview says. The section shows while they do, or
+        while its type rows do."""
+        un_on = "GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )"
+        types_on = ("GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), "
+                    "'(CFixedPoint)0' )")
+        body = self._type("te_nation_section_international")
+        self.assertEqual(body.split("\n")[1].strip(), f'visible = "[Or( {un_on}, {types_on} )]"')
+        at = body.index('text = "te_nation_un_member_row"')
+        block = body[body.rindex("flowcontainer = {", 0, at):body.index("te_nation_types_international = {}")]
+        self.assertEqual(block.split("\n")[1].strip(), f'visible = "[{un_on}]"')
+        self.assertEqual(re.findall(r'text = "(te_nation_un_\w+)"', block), [row for row, _, _ in self.UN_ROWS])
+        # standing once the country has a score (a member, or one that left);
+        # dues while it is a member
+        rows = block.split("te_nation_row = {")[1:]
+        self.assertNotIn("visible", rows[0])
+        self.assertIn("visible = \"[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_standing_code'), "
+                      "'(CFixedPoint)-1' ) )]\"", rows[1])
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_dues_code'), "
+                      "'(CFixedPoint)0' )]\"", rows[2])
+        loc = _loc()
+        for row, code, words in self.UN_ROWS:
+            with self.subTest(row=row):
+                self.assertIn(f'tooltip = "{row}_tt"', block)
+                self.assertIn(f"{row}_tt", loc)
+                text = loc[row]
+                self.assertEqual(re.findall(r"'(je_un_ov_\w+)'", text), words)
+                self.assertNotIn("JournalEntry", text)
+                self.assertIn(f"Country.MakeScope.ScriptValue('{code}')", text)
+                self.assertTrue(text.startswith("[concept_"), "Label: value, the label a concept (rule 3)")
+        values = "".join(_read(ROOT / "common" / "script_values" / name)
+                         for name in ("un_overview_display_values.txt", "un_dues_values.txt"))
+        defined = set(re.findall(r"^(\w+) = \{", values, re.M))
+        text = block + "\n".join(v for k, v in loc.items() if k.startswith("te_nation_un_"))
+        used = set(re.findall(r"ScriptValue\('(un_\w+)'\)", text))
+        self.assertGreaterEqual(len(used), 6)
+        self.assertLessEqual(used, defined)
+
     def test_the_construction_hover_gives_the_curve(self):
         # Spec § 2.2: GDP per capita against the curve's floor and ceiling; since #1034's follow-up
         # also the slack part, and the cost as factors (the owner's breakdown, 2026-10-18).
@@ -642,10 +695,12 @@ class TabLayoutTest(unittest.TestCase):
         self.assertNotIn("Population", other)
 
     def test_formatters_are_the_mods_proven_ones(self):
+        # D: money, as the UN overview's Dues figure prints what is owed
+        # (je_un_ov_dues_fig_4), which the UN lines' arrears hover repeats.
         for key, value in self._nation_loc().items():
             for fmt in re.findall(r"\|([^\]]*)\]", value):
                 with self.subTest(key=key, fmt=fmt):
-                    self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0"))
+                    self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0", "D"))
 
     def test_names_are_spliced_not_spelled(self):
         # Single-source names: a name another key owns is spliced ($key$).
@@ -658,6 +713,29 @@ class TabLayoutTest(unittest.TestCase):
             for name in names:
                 with self.subTest(key=key, name=name):
                     self.assertNotIn(name, value)
+
+
+class ForeignViewTest(unittest.TestCase):
+    """Another country's Nation tab, in National Info (spec
+    2026-11-02-charts-help-national-info § 6.4: Nation shows another country
+    everything; its Hidden column is empty). test_te_system_tab_bodies.py's
+    BindingTest holds its reads to the shown Country and GuardTest its
+    controls to te_own_country_only; this holds the tab to having nothing to
+    hide and nothing that acts."""
+
+    def test_nothing_is_hidden_and_nothing_acts(self):
+        from gui_test_helpers import CONTROL, GUARD, mod_types, type_closure
+        tab = next(t for t in window_gen.TABS if t.key == "nation")
+        self.assertTrue(tab.public)
+        types = mod_types()
+        closure = type_closure({tab.wide}, types)
+        self.assertGreater(len(closure), 15)
+        for name in sorted(closure):
+            body = types[name].body
+            with self.subTest(type=name):
+                self.assertNotIn(GUARD, body, "nothing on the Nation tab is private (spec § 6.4)")
+                self.assertIsNone(CONTROL.search(body), "the Nation tab has no control: one goes under "
+                                                        "te_own_country_only (GuardTest), and this test changes")
 
 
 class NoUnderlineTest(unittest.TestCase):
