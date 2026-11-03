@@ -360,6 +360,16 @@ class RegistryTest(unittest.TestCase):
                     self.assertIn(f"has_journal_entry = {chart.entry}", body)
                 self.assertIn(chart.range, gen.RANGES)
 
+    def test_each_section_places_its_charts_in_registry_order(self):
+        """Each section instances its charts in CHARTS order, so two charts
+        swapped in a section (or in the registry) fail here."""
+        for system, path in SECTIONS.items():
+            text = _strip_comments(_read(os.path.join(REPO, path)))
+            names = {gen.wrapper_name(c, gen.SMALL): c.id for c in gen.CHARTS}
+            placed = [names[n] for n in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", text) if n in names]
+            with self.subTest(system=system):
+                self.assertEqual(placed, [c.id for c in gen.CHARTS if c.system == system])
+
     def test_the_sections_carry_each_charts_own_visible(self):
         """A chart drawn only for some countries (Chart.shown: Banking's
         policy-rate pair, inflation and the exchange rate) keeps that visible
