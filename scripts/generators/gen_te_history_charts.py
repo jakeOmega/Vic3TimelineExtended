@@ -19,10 +19,11 @@ THE SHAPE. Each chart is two wrapper types:
 
 each a plain flowcontainer holding one te_history_chart instance with its
 blockoverrides inline. That is the shape that draws: gotcha #37 was a type
-derived from te_history_plot, which this is not. The wrapper mirrors the
-chart's own parentanchor and adds nothing else, so the panel lays out as
-before. A chart shown only for some countries keeps its own visible on the
-section's instance of the wrapper, so a hidden chart leaves no spacing
+derived from te_history_plot, which this is not. The wrapper is a column,
+centered, at the chart's fixed width (Dims.width; THE WIDTH IS FIXED below),
+so every chart in a section shares one left edge, as before the registry. A
+chart shown only for some countries keeps its own visible on the section's
+instance of the wrapper, so a hidden chart leaves no spacing
 behind; Chart.shown records it (test_te_history_charts.py holds the section
 to it). The viewer leaves it out: see THE GATE AND NOTHING ELSE below.
 
@@ -46,8 +47,9 @@ adds the blockoverrides a fragment doesn't carry where the size differs from
 te_history_chart's own defaults (which are SMALL's monthly): at LARGE, a
 monthly chart's frame, bars and widths, an annual chart's widths. At SMALL it
 adds only the open button beside the title (chart_open, which opens the
-chart's viewer) and the title's width beside it (open_overrides), so the
-panel's charts are otherwise the fragments' text. The large wrapper leaves out
+chart's viewer) and the title's width beside it (open_overrides), and an
+annual chart's width (chart_width, its text being wider than its frame), so
+the panel's charts are otherwise the fragments' text. The large wrapper leaves out
 the fragment's whole-line comments, which describe the panel's size, but a
 `# world:` line (WORLD), which marks the read under it.
 
@@ -87,6 +89,8 @@ class Dims:
     title_w  the title's max_width (chart_title_width): on the panel, the
              legend's less the open button and its gap beside the title
     empty_w  the empty state's max_width (empty_width)
+    width    (derived) the chart's fixed width (chart_width), and its
+             wrapper's: the frame or the text over it, whichever is wider
     """
     plot: int
     left: int
@@ -96,6 +100,10 @@ class Dims:
     title_w: int
     empty_w: int
     box_h: int | None = None
+
+    @property
+    def width(self) -> int:
+        return max(self.frame[0], TEXT_MARGIN + self.text_w)
 
 
 @dataclass(frozen=True)
@@ -113,6 +121,14 @@ class Size:
 OPEN_BUTTON = 24
 OPEN_GAP = 4
 TITLE_W = 484   # te_history_chart's chart_title_width default
+TEXT_MARGIN = 4   # the margin_left of te_history_chart's title and legend column
+
+# THE WIDTH IS FIXED (Dims.width), on the chart (block "chart_width") and on its
+# wrapper. C1's wrapper, sized by its content, was centered in its column at the
+# width of the chart's text alone, the plot left out, so each chart sat half its
+# plot's excess over its text right of where it belonged, and the short-titled
+# ones ran out of the panel (gui_modding_guide.md gotcha #46). Only the wrapper
+# centers: the chart (te_history_chart) has no anchor and sits at its left.
 
 # The panel's size: today's literals. The monthly row is te_history_chart's own
 # defaults (test_te_history_charts.py holds the type to it), but for the title,
@@ -349,6 +365,12 @@ def _override(name: str, lines: list[str]) -> list[str]:
     return [f'blockoverride "{name}" {{'] + [f"\t{ln}" if ln else "" for ln in lines] + ["}"]
 
 
+def fixed_width(width: int) -> list[str]:
+    """A flowcontainer's width, fixed whatever its content (vanilla's
+    culture_panel.gui list): the chart's and its wrapper's (Dims.width)."""
+    return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
+
+
 def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     """The three plots of te_history_chart's default plot_layouts at other bar
     sizes: one a range, the full range's shown while neither shorter one is set."""
@@ -395,8 +417,8 @@ def open_overrides(chart: Chart) -> list[str]:
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
     """The blockoverrides the chart needs at the size beyond its fragment: each
     the fragment doesn't carry whose value differs from te_history_chart's
-    defaults (SMALL's monthly row, and TITLE_W), and at SMALL the open button
-    beside the title."""
+    defaults (SMALL's monthly row, and TITLE_W), the chart's width among them,
+    and at SMALL the open button beside the title."""
     dims, default = size[chart.kind], SMALL["monthly"]
     carried = set(re.findall(r'blockoverride "(\w+)"', text))
     out: list[str] = []
@@ -408,6 +430,10 @@ def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
         out += _override("chart_text_width", [f"max_width = {dims.text_w}"])
     if "empty_width" not in carried and dims.empty_w != default.empty_w:
         out += _override("empty_width", [f"max_width = {dims.empty_w}"])
+    if "chart_width" in carried:
+        raise ValueError(f"{chart.id}: a fragment leaves chart_width to the generator")
+    if dims.width != default.width:
+        out += _override("chart_width", fixed_width(dims.width))
     if size is SMALL:
         if {"chart_title_width", "chart_open"} & carried:
             raise ValueError(f"{chart.id}: a fragment leaves chart_title_width and chart_open to the generator")
@@ -437,8 +463,11 @@ def render_chart(chart: Chart, size: Size) -> str:
 
 
 def wrapper(chart: Chart, size: Size) -> list[str]:
+    """The chart in a column, as before the registry, at its fixed width (see
+    THE WIDTH IS FIXED): never centred on a width its content gives it."""
     body = render_chart(chart, size).split("\n")
-    return ([f"type {wrapper_name(chart, size)} = flowcontainer {{", "\tparentanchor = hcenter", ""]
+    head = ["direction = vertical", "parentanchor = hcenter"] + fixed_width(size[chart.kind].width)
+    return ([f"type {wrapper_name(chart, size)} = flowcontainer {{"] + [f"\t{ln}" for ln in head] + [""]
             + [f"\t{ln}" if ln else "" for ln in body] + ["}"])
 
 
@@ -477,7 +506,9 @@ def wrapper(chart: Chart, size: Size) -> list[str]:
 # range buttons, so the two never drift (by system), with the height the popup
 # allows it.
 KEYS = {
-    "banking": ("te_banking_hist_marker_key", 44),          # two lines of fontsize_medium
+    "banking": ("te_banking_hist_marker_key", 88),          # four lines of fontsize_medium: the
+                                                            # marker's, wrapped to two, and the crash's,
+                                                            # one in English, two in German
     "demographics": ("te_demog_hist_pip_legend", 26),       # one line
     "cultural_hegemony": ("te_ch_hist_model_key", 184),     # eight rows of ch_fontsize_row (17)
 }
@@ -630,6 +661,11 @@ def _validate() -> None:
         unused = set(fragments(s)) - used[s]
         if unused:
             raise ValueError(f"{s}.gui.in: fragments no chart uses: {sorted(unused)}")
+    for size in SIZES:
+        for kind, dims in size.kinds.items():
+            title_row = dims.title_w + (OPEN_GAP + OPEN_BUTTON if size is SMALL else 0)
+            if TEXT_MARGIN + max(title_row, dims.text_w) > dims.width or dims.empty_w > dims.frame[0]:
+                raise ValueError(f"{size.name} {kind}: the text is wider than the chart's {dims.width} px")
     if set(KEYS) - set(SYSTEMS) or set(POPUP_TITLES) - set(BY_ID):
         raise ValueError("KEYS names a system, and POPUP_TITLES a chart, that CHARTS doesn't")
     for c in CHARTS:

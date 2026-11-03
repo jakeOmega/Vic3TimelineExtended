@@ -827,17 +827,17 @@ class DisplayTest(unittest.TestCase):
         self.assertIn("te_tax_obligations_section = {}", read(LAYOUT, strip_comments=False))
         for n in SLOTS:
             with self.subTest(slot=n):
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_obl_state_{n}')", politics)
-                self.assertIn(f"[GetPlayer.GetCustom('te_tax_obl_mode_{n}')] [GetPlayer.GetCustom('te_tax_obl_what_{n}')]",
+                self.assertIn(f"Country.GetCustom('te_tax_obl_state_{n}')", politics)
+                self.assertIn(f"[Country.GetCustom('te_tax_obl_mode_{n}')] [Country.GetCustom('te_tax_obl_what_{n}')]",
                               politics)
                 # Renegotiate only once the promise is in force (state 2 or 3).
-                self.assertIn(f"visible = \"[Or( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                self.assertIn(f"visible = \"[Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
                               f"'te_tax_view_o{n}_state'), '(CFixedPoint)2' ), EqualTo_CFixedPoint( "
-                              f"GetPlayer.MakeScope.ScriptValue('te_tax_view_o{n}_state'), '(CFixedPoint)3' ) )]\"",
+                              f"Country.MakeScope.ScriptValue('te_tax_view_o{n}_state'), '(CFixedPoint)3' ) )]\"",
                               politics)
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_obl_ig_{n}')", politics)
+                self.assertIn(f"Country.GetCustom('te_tax_obl_ig_{n}')", politics)
                 self.assertIn(f"GetScriptedGui('te_tax_cmd_obl_renegotiate_sgui').Execute( GuiScope.SetRoot( "
-                              f"GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )",
+                              f"Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )",
                               politics)
         overview = read(OVERVIEW, strip_comments=False)
         self.assertIn("te_tax_show_obligations_sgui", overview)

@@ -191,6 +191,11 @@ Bills and your Promises, each shown only while it has something in it. Then:
   header does. It repeats the rules of this chapter with the exact figures your
   game uses; under the Light code it explains the Light code instead.
 
+Another country's National Info window has its Tax Code tab too: its enacted
+code, its passed bills, the bill it is debating with its support bar, and its
+history. Its draft, its promises, each interest group's stance and offers, and
+every button stay hidden.
+
 ## Drafting a tax reform
 
 A reform starts as a draft, and a draft changes nothing. Draft a Reform opens
