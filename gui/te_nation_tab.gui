@@ -774,9 +774,9 @@ types te_nation_widget_types
 	### How the Nation Works: a link at the foot of the tab to the Help page
 	### (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its
 	### header alone, which opens te_nation_help_popup (te_popup = help_nation)
+	### instead of expanding; it keeps its name and its place in both layouts.
 	### The tab has no header in the TE window, so no "?" there (National Info's
 	### mount for another country gives it a header and a "?").
-	### The tab has no header, so no "?".
 	### ----------------------------------------------------------------------
 	type te_nation_how_panel = flowcontainer {
 		direction = vertical
