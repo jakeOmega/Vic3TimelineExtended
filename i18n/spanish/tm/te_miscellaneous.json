@@ -280,8 +280,8 @@
   "es": "Crédito dirigido a las [concept_infrastructure|l]"
  },
  "CB_DIRECTED_CREDIT_INFRA_DESC": {
-  "en": "By mandating that credit flow toward national [concept_infrastructure] and manufacturing, we can force industrialization even when the private market is hesitant. The Industrialists may chafe at the loss of control, but the State's goals must come first.",
-  "es": "Al ordenar que el crédito fluya hacia las [concept_infrastructure|l] nacionales y la manufactura, podemos forzar la industrialización incluso cuando el mercado privado vacila. Los Industrialistas pueden irritarse por la pérdida de control, pero los objetivos del Estado deben ser lo primero."
+  "en": "By mandating that credit flow toward national [concept_infrastructure] and manufacturing, the state can force industrialization even when the private market is hesitant. The Industrialists may chafe at the loss of control, but the State's goals must come first.",
+  "es": "Al ordenar que el crédito fluya hacia las [concept_infrastructure|l] nacionales y la manufactura, el Estado puede forzar la industrialización incluso cuando el mercado privado vacila. Los Industrialistas pueden irritarse por la pérdida de control, pero los objetivos del Estado deben ser lo primero."
  },
  "CB_DISABLE_ASSET_RELIEF": {
   "en": "End Asset Relief Program",
@@ -5136,8 +5136,8 @@
   "es": "caja de conversión ligada a #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — tipo #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [Country.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"
  },
  "banking_dash_mon_anchor_state_none": {
-  "en": "none — your money is your own",
-  "es": "ninguna — tu moneda es solo tuya"
+  "en": "none — its money is its own",
+  "es": "ninguna — su moneda es solo suya"
  },
  "banking_dash_mon_anchor_state_peg": {
   "en": "pegged to #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [Country.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!",
@@ -5148,8 +5148,8 @@
   "es": "en paridad con #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! #R por imposición#! — tipo #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#! + #v [Country.MakeScope.ScriptValue('te_mon_anchor_spread_display')|2]#!"
  },
  "banking_dash_mon_anchor_state_reserve": {
-  "en": "others hold your currency",
-  "es": "otros mantienen tu moneda"
+  "en": "others hold its currency",
+  "es": "otros mantienen su moneda"
  },
  "banking_dash_mon_anchor_state_union": {
   "en": "common currency of #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#! — rate #v [Country.MakeScope.ScriptValue('te_mon_anchor_rate_display')|2]%#!",
@@ -5192,8 +5192,8 @@
   "es": "#header Banda de precios#!\\nEn cuál de las seis bandas cae tu inflación. La banda es un modificador de tu país, así que lo que cuesta figura en tu lista de modificadores junto con todo lo demás; esta fila solo sirve para enterarte de que está ahí.\\n$TOOLTIP_DELIMITER$\\n#title La escala:#!\\n$banking_dash_price_band_deflation$ por debajo del #v [Country.MakeScope.ScriptValue('te_mon_band_edge_deflation')|0]%#!, $banking_dash_price_band_comfort$ hasta el #v [Country.MakeScope.ScriptValue('te_mon_band_edge_elevated')|0]%#!, $banking_dash_price_band_elevated$ hasta el #v [Country.MakeScope.ScriptValue('te_mon_band_edge_high')|0]%#!, $banking_dash_price_band_high$ hasta el #v [Country.MakeScope.ScriptValue('te_mon_band_edge_very_high')|0]%#!, $banking_dash_price_band_very_high$ hasta el #v [Country.MakeScope.ScriptValue('te_mon_band_edge_hyper')|0]%#!, $banking_dash_price_band_hyper$ por encima de eso\\nLos límites se adhieren: permaneces en la banda en la que estás hasta que los precios superan el límite en #v [Country.MakeScope.ScriptValue('te_mon_band_hysteresis')|2]%#!, de modo que una cifra que descansa sobre un límite no te cambia de banda una y otra vez mes tras mes.\\n$TOOLTIP_DELIMITER$\\n#title [Country.GetCustom('te_mon_inflation_band_name')]#!\\n[Country.GetCustom('te_mon_inflation_band_cost')]"
  },
  "banking_dash_mon_band_word_tt": {
-  "en": "#header Inflation: [Country.GetCustom('te_mon_inflation_band_name')]#!\\n[Country.GetCustom('te_mon_inflation_band_cost')]\\n$TOOLTIP_DELIMITER$\\n#title Modifiers on your country:#!\\n[Country.GetCustom('banking_dash_price_band_effects')]",
-  "es": "#header Inflación: [Country.GetCustom('te_mon_inflation_band_name')]#!\\n[Country.GetCustom('te_mon_inflation_band_cost')]\\n$TOOLTIP_DELIMITER$\\n#title Modificadores de tu país:#!\\n[Country.GetCustom('banking_dash_price_band_effects')]"
+  "en": "#header Inflation: [Country.GetCustom('te_mon_inflation_band_name')]#!\\n[Country.GetCustom('te_mon_inflation_band_cost')]\\n$TOOLTIP_DELIMITER$\\n#title Modifiers on the country:#!\\n[Country.GetCustom('banking_dash_price_band_effects')]",
+  "es": "#header Inflación: [Country.GetCustom('te_mon_inflation_band_name')]#!\\n[Country.GetCustom('te_mon_inflation_band_cost')]\\n$TOOLTIP_DELIMITER$\\n#title Modificadores del país:#!\\n[Country.GetCustom('banking_dash_price_band_effects')]"
  },
  "banking_dash_mon_bankgold_tt": {
   "en": "#header Bank's Gold Reserve#!\\nThe gold your central bank holds against its notes. It is #b the bank's, not the treasury's#!: the government cannot spend it, and nothing that happens to it shows in your budget. It is what a gold standard actually rests on — when the world wants gold for your paper, this is what pays.\\n$TOOLTIP_DELIMITER$\\nIts limit grows with your economy, so a vault nobody tops up thins out by itself over the decades.\\nBelow #v 50%#! a bank on #v $banking_dash_mon_mandate_peg$#! starts holding its rate above the world's to draw gold in. Below #v 10%#! it can no longer pay out, and #v $banking_dash_mon_pegconf_label$#! starts to fall instead.\\n$TOOLTIP_DELIMITER$\\nTwo things fill it: a rate above the world rate, which #b borrows#! gold from abroad, and #v $banking_dash_mon_btn_recapitalise$#!, which buys it with the treasury's own money. Nothing takes it back out for the government's use.",
@@ -5202,6 +5202,10 @@
  "banking_dash_mon_bankgold_value": {
   "en": "@money!#v [Country.MakeScope.Var('te_bank_gold').GetValue|D]#! — #v [Country.MakeScope.ScriptValue('te_mon_bank_gold_pct')|0]%#! of its limit",
   "es": "@money!#v [Country.MakeScope.Var('te_bank_gold').GetValue|D]#! — #v [Country.MakeScope.ScriptValue('te_mon_bank_gold_pct')|0]%#! de su límite"
+ },
+ "banking_dash_mon_bs_receiver_from": {
+  "en": "Under receivership: #G −[Country.MakeScope.ScriptValue('te_mon_bs_receivership_received_display')|2]#!",
+  "es": "Bajo intervención de la deuda: #G −[Country.MakeScope.ScriptValue('te_mon_bs_receivership_received_display')|2]#!"
  },
  "banking_dash_mon_btn_delegate": {
   "en": "Delegate",
@@ -5335,9 +5339,13 @@
   "en": "#header Mandate#!\\nThe rule a delegated or independent bank follows when it sets the target each month. It does nothing at all while you are holding the dial yourself.\\n$TOOLTIP_DELIMITER$\\n#title $banking_dash_mon_mandate_inflation$#! answers for prices alone. For every point prices run above its target it puts the rate up by more than a point, and it leaves the financial cycle to them: it tightens into a boom only as prices rise, and cuts in a slump only as they fall, so booms run further and slumps go deeper before it acts. Lenders believe it more than any other rule, which holds expected inflation closer to the target, but they take two years to come round.\\n#title $banking_dash_mon_mandate_dual$#! answers for jobs as well as prices. It reacts to inflation as hard as $banking_dash_mon_mandate_inflation$ does, and leans against the financial cycle with its full weight on top: tightening into a boom, hard into a frenzy, and cutting hard in a panic. It judges the cycle by where it is heading rather than where it stands, so it stops leaning on a boom that is already turning and starts easing before a slump arrives. Every bank starts on it.\\n#title $banking_dash_mon_mandate_growth$#! runs about a point looser and reacts only half as hard to the cycle, and it ignores inflation altogether until it passes about four percent. Above that it leans on prices as hard as the other mandates do, because inflation left to run past eight percent sets off a wage spiral that no rate may be able to catch. Cheaper credit, more momentum, faster bubbles and more crashes: that is the trade, not an oversight.\\n#lore Growth will never set a tighter rate than the $banking_dash_mon_mandate_dual$ would, so its looseness is only worth something while there is inflation to ignore. When inflation is low, and through a downturn or a panic where the Dual Mandate is already cutting harder than Growth would, the two ask for exactly the same rate.#!\\n#title $banking_dash_mon_mandate_peg$#! holds the world rate, to the tenth of a point (up to a point above it while the vault is short of gold), so that gold does not drain away, and ignores your domestic cycle entirely. Only a convertible gold standard can run it.\\n$TOOLTIP_DELIMITER$\\n#title Changing it#! takes effect at the next monthly update, and the mandate is then fixed for a year. Lenders price a looser rule at once. Inflation Targeting, the Dual Mandate and Growth run from tightest to loosest. For each step looser, expected inflation rises by #v 0.5#! points and the risk premium by #v 0.5#! points, fading over two years. A tighter rule earns nothing at once.\\n#title By law#! under $law_central_bank_independence$, the mandate is not a button but an act: the $amendment_cb_inflation_targeting$ or the $amendment_cb_dual_mandate$. The bank moves to the act's mandate #b 12 months#! after it passes. To change it, repeal the act in the law panel, and you are asked to pass another. On a convertible gold standard an independent bank defends the peg whatever its act says.\\n#title Out of room#!: a bank whose rate is on its floor can cut no further. When its rule asks for a lower rate anyway, the bank buys assets on its own account instead: #b one point#! of upward pressure on prices for every point it would have cut below the floor, at most #b five#!. The purchases grow and shrink no faster than the rate itself would move, and they have stopped by the time the rate rises off the floor. $banking_dash_mon_mandate_inflation$ and the $banking_dash_mon_mandate_dual$ buy only while prices are under their target; $banking_dash_mon_mandate_growth$ also buys through a slump with prices on target. This is the bank's own doing and costs you nothing; it needs a fiat or digital currency, and it does not apply to a dial you are steering by hand.",
   "es": "#header Mandato#!\\nLa regla que sigue un banco delegado o independiente cuando fija el objetivo cada mes. No hace nada en absoluto mientras llevas tú mismo el mando.\\n$TOOLTIP_DELIMITER$\\n#title $banking_dash_mon_mandate_inflation$#! responde solo de los precios. Por cada punto que los precios superan su objetivo, sube el tipo en más de un punto, y deja el ciclo financiero en manos de los precios: endurece frente a un auge solo cuando los precios suben y recorta en una recesión solo cuando bajan, de modo que los auges llegan más lejos y las recesiones se hacen más profundas antes de que actúe. Los prestamistas creen en él más que en cualquier otra regla, lo que mantiene la inflación esperada más cerca del objetivo, pero tardan dos años en convencerse.\\n#title $banking_dash_mon_mandate_dual$#! responde del empleo además de los precios. Reacciona a la inflación tan fuerte como el $banking_dash_mon_mandate_inflation$ y, además, se opone al ciclo financiero con todo su peso: endurece frente a un auge, con fuerza frente a un frenesí, y recorta con fuerza en un pánico. Juzga el ciclo por hacia dónde va y no por dónde está, así que deja de presionar sobre un auge que ya se está dando la vuelta y empieza a aflojar antes de que llegue una recesión. Todos los bancos empiezan con él.\\n#title $banking_dash_mon_mandate_growth$#! funciona con un tipo en torno a un punto más laxo y reacciona solo la mitad de fuerte al ciclo, y no hace caso de la inflación hasta que supera más o menos el cuatro por ciento. Por encima de eso presiona sobre los precios tan fuerte como los otros mandatos, porque una inflación que se deja correr más allá del ocho por ciento desata una espiral salarial que ningún tipo quizá pueda frenar. Crédito más barato, más impulso, burbujas más rápidas y más colapsos: ese es el trato, no un descuido.\\n#lore Crecimiento nunca fijará un tipo más alto que el que fijaría el $banking_dash_mon_mandate_dual$, así que su laxitud solo vale algo mientras haya inflación que ignorar. Cuando la inflación es baja, y durante una contracción o un pánico en que el Mandato dual ya recorta más fuerte que Crecimiento, los dos piden exactamente el mismo tipo.#!\\n#title $banking_dash_mon_mandate_peg$#! mantiene el tipo mundial, con una décima de punto de margen (hasta un punto por encima mientras la bóveda anda escasa de oro), para que el oro no se drene, e ignora por completo tu ciclo interno. Solo puede aplicarlo un patrón oro convertible.\\n$TOOLTIP_DELIMITER$\\n#title Cambiarlo#! surte efecto en la próxima actualización mensual, y el mandato queda entonces fijo durante un año. Los prestamistas valoran de inmediato una regla más laxa. Objetivo de inflación, Mandato dual y Crecimiento van de la más restrictiva a la más laxa. Por cada escalón más laxo, la inflación esperada sube #v 0,5#! puntos y la prima de riesgo #v 0,5#! puntos, y se disipa a lo largo de dos años. Una regla más restrictiva no gana nada de inmediato.\\n#title Por ley#! con $law_central_bank_independence$, el mandato no es un botón sino una norma: la $amendment_cb_inflation_targeting$ o la $amendment_cb_dual_mandate$. El banco pasa al mandato de la norma #b 12 meses#! después de que se apruebe. Para cambiarlo, deroga la norma en el panel de leyes y se te pedirá que apruebes otra. Con un patrón oro convertible, un banco independiente defiende la paridad diga lo que diga su norma.\\n#title Sin margen#!: un banco cuyo tipo está en su suelo no puede recortar más. Cuando su regla pide un tipo más bajo de todos modos, el banco compra activos por cuenta propia: #b un punto#! de presión al alza sobre los precios por cada punto que habría recortado por debajo del suelo, como máximo #b cinco#!. Las compras crecen y disminuyen a un ritmo no más rápido que el que tendría el propio tipo, y han cesado cuando el tipo sale del suelo. $banking_dash_mon_mandate_inflation$ y el $banking_dash_mon_mandate_dual$ compran solo mientras los precios están por debajo de su objetivo; $banking_dash_mon_mandate_growth$ compra también durante una recesión con los precios en el objetivo. Esto es obra del propio banco y no te cuesta nada; requiere una moneda fiduciaria o digital, y no se aplica a un mando que diriges a mano."
  },
+ "banking_dash_mon_monetise_buttons": {
+  "en": " The buttons say which is missing.",
+  "es": " Los botones indican cuál falta."
+ },
  "banking_dash_mon_monetise_tt": {
-  "en": "#header Monetising the Deficit#!\\nHow much of your spending your bank simply creates the money for, instead of your government borrowing it. It is the oldest way to pay for a war, and the reason wars end in inflation.\\n$TOOLTIP_DELIMITER$\\nThe press belongs to the treasury rather than to the bank, so using it takes a currency your state can create, a national bank to create it through, and a bank that still takes your government's instructions. The buttons say what a step is worth and, where you cannot use it, which of those is missing.\\n#lore A change takes effect at the next monthly update.#!",
-  "es": "#header Monetización del déficit#!\\nCuánto de tu gasto lo cubre tu banco creando el dinero sin más, en lugar de que lo pida prestado tu gobierno. Es la forma más antigua de pagar una guerra y la razón de que las guerras acaben en inflación.\\n$TOOLTIP_DELIMITER$\\nLa imprenta pertenece a la tesorería y no al banco, así que usarla exige una moneda que tu Estado pueda crear, un banco nacional por el que crearla y un banco que aún acepte las instrucciones de tu gobierno. Los botones indican lo que vale cada paso y, cuando no puedes usarlo, cuál de esas condiciones falta.\\n#lore Un cambio surte efecto en la próxima actualización mensual.#!"
+  "en": "#header Monetizing the Deficit#!\\nIt needs a currency the state can create, a national bank to create it through, and a bank that still takes the government's instructions.[SelectLocalization( Country.IsLocalPlayer, 'banking_dash_mon_monetise_buttons', 'banking_dash_empty' )]\\n$TOOLTIP_DELIMITER$\\n#title Each step, while it runs:#!\\n[GetStaticModifier('te_mon_monetisation_step').GetDesc]",
+  "es": "#header Monetización del déficit#!\\nExige una moneda que el Estado pueda crear, un banco nacional por el que crearla y un banco que aún acepte las instrucciones del gobierno.[SelectLocalization( Country.IsLocalPlayer, 'banking_dash_mon_monetise_buttons', 'banking_dash_empty' )]\\n$TOOLTIP_DELIMITER$\\n#title Cada paso, mientras dura:#!\\n[GetStaticModifier('te_mon_monetisation_step').GetDesc]"
  },
  "banking_dash_mon_monetise_value": {
   "en": "#v [Country.MakeScope.Var('te_monetisation_level').GetValue|0]#! of #v [Country.MakeScope.ScriptValue('te_mon_monetisation_max')|0]#!",
@@ -5524,8 +5532,8 @@
   "es": "tu moneda — #v [Country.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! reticentes (#v [Country.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! se negarían)"
  },
  "banking_dash_mon_union_state_leader_coop": {
-  "en": "you lead — monetary cooperation only",
-  "es": "diriges tú — solo cooperación monetaria"
+  "en": "leader — monetary cooperation only",
+  "es": "líder — solo cooperación monetaria"
  },
  "banking_dash_mon_union_state_leader_pressing": {
   "en": "your currency — #R pressing#! #v [Country.MakeScope.ScriptValue('te_mon_union_holdouts_display')|0]#! holdouts (#v [Country.MakeScope.ScriptValue('te_mon_union_refusers_display')|0]#! would refuse)",
@@ -5908,8 +5916,8 @@
   "es": "moneda común de #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!"
  },
  "banking_dash_ro_anchor_tt": {
-  "en": "#header Monetary Anchor#!\\nYour money is tied to another country's. You take its policy rate, plus any spread, and its exchange rate, and you cannot print your way out of trouble. Your inflation and your economy stay your own, so the borrowed rate is the wrong one whenever the two economies part ways.",
-  "es": "#header Ancla monetaria#!\\nTu moneda está atada a la de otro país. Adoptas su tipo de interés oficial, más cualquier diferencial, y su tipo de cambio, y no puedes salir de los apuros imprimiendo dinero. Tu inflación y tu economía siguen siendo tuyas, así que el tipo prestado es el equivocado siempre que las dos economías divergen."
+  "en": "#header Monetary Anchor#!\\nThe country's money is tied to another country's. It takes that country's policy rate, plus any spread, and its exchange rate, and it cannot print its way out of trouble. Its inflation and its economy stay its own, so the borrowed rate is the wrong one whenever the two economies part ways.",
+  "es": "#header Ancla monetaria#!\\nLa moneda del país está atada a la de otro país. Adopta su tipo de interés oficial, más cualquier diferencial, y su tipo de cambio, y no puede salir de los apuros imprimiendo dinero. Su inflación y su economía siguen siendo suyas, así que el tipo prestado es el equivocado siempre que las dos economías divergen."
  },
  "banking_dash_ro_anchorpeg_tt": {
   "en": "#header Peg Confidence#!\\nHow far the world believes you will hold your parity with #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!. You have no rate of your own to defend it with, so it moves on #b overvaluation#!: how far their exchange rate sits above where your own currency would float. Overvalued by #v [Country.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#! now.\\n$TOOLTIP_DELIMITER$\\nAt #v [Country.MakeScope.ScriptValue('te_mon_peg_crisis_threshold')|0]#! the markets force the question: shut the door, break the peg, or re-peg lower.",
@@ -7316,8 +7324,8 @@
   "es": "Presión inflacionista"
  },
  "concept_banking_rate_paid": {
-  "en": "Rate You Pay",
-  "es": "Tipo que pagas"
+  "en": "Rate Paid",
+  "es": "Tipo pagado"
  },
  "concept_banking_rate_target": {
   "en": "Rate Target",
