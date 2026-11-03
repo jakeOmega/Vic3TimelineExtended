@@ -559,10 +559,13 @@ types un_layout_widget_types
 		te_un_sec_exposure = {}
 	}
 
-	### "How the UN Works": every explanation, gathered out of the live sections
-	### (owner, 2026-09-28) into one section, collapsed by default, one heading
-	### per topic. The live sections above say what is happening; this says how
-	### it works.
+	### "How the UN Works": a link at the foot of the panel to the Help page
+	### (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2), which
+	### holds every explanation gathered out of the live sections (owner,
+	### 2026-09-28). Its header alone, which opens te_united_nations_help_popup
+	### (te_popup = help_united_nations) instead of expanding; it keeps its name
+	### and its place in the composer. The "?" in the tab's header opens the
+	### same page.
 	type te_un_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -570,77 +573,100 @@ types un_layout_widget_types
 		spacing = 4
 
 		un_chamber_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_un_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_how_open')]"
+				visible = no
 			}
 		}
+	}
 
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. Its authority and standing topics are the UN's own help
+	### types, te_un_help_authority (un_authority_widget.gui) and
+	### te_un_help_standing (un_chamber_widget.gui). It reads GetPlayer only,
+	### never the entry, so it opens from any host (test_te_help_pages.py).
+	### Instanced only by te_united_nations_help_popup.
+	type te_united_nations_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			un_chamber_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_authority"
-				}
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_authority"
 			}
-			te_un_help_authority = {}
-			un_chamber_note = {
-				text = "je_un_auth_log_intro"
+		}
+		te_un_help_authority = {}
+		un_chamber_note = {
+			text = "je_un_auth_log_intro"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_standing"
 			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_standing"
-				}
+		}
+		te_un_help_standing = {}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_missions"
 			}
-			te_un_help_standing = {}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_missions"
-				}
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_help"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_delegations"
 			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_deleg_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_reasons_intro"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_dues"
 			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_help"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_obligations_help"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_record"
 			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_delegations"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_deleg_intro"
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_reasons_intro"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_dues"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_obligations_help"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_record"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_exposure_help"
-			}
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_exposure_help"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_united_nations_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_united_nations')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_un_how_header"
+		}
+		blockoverride "popup_list" {
+			te_united_nations_help_body = {}
 		}
 	}
 
@@ -675,6 +701,9 @@ types un_layout_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_united_nations"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
 				}
 			}
 		}

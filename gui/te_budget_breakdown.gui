@@ -96,10 +96,12 @@ types te_budget_breakdown {
 		default_format = "#lore"
 	}
 
-	### How the Breakdown Works, collapsed (style guide rule 1): its header and
-	### its topics. Lifted out of te_budget_breakdown_panel so the full-screen
-	### layout can place it (spec 2026-11-02-te-window-wide-mode § 7). Its
-	### spacing is the panel's, the gap the header had over the topics.
+	### How the Breakdown Works: a link at the foot of the tab to the Help page
+	### (style guide rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
+	### Its header alone, which opens te_budget_breakdown_help_popup (te_popup =
+	### help_budget_breakdown) instead of expanding. Lifted out of
+	### te_budget_breakdown_panel so the full-screen layout can place it (spec
+	### 2026-11-02-te-window-wide-mode § 7). The tab has no header, so no "?".
 	type te_budget_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -109,69 +111,87 @@ types te_budget_breakdown {
 		ignoreinvisible = yes
 
 		section_header_button = {
+			tooltip = "te_help_link_tt"
 			blockoverride "layout" { parentanchor = hcenter size = { 520 38 } }
 			blockoverride "left_text" { text = "te_budget_chart_how" }
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_budget_chart_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_budget_breakdown')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_budget_chart_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
+				visible = no
 			}
 		}
+	}
+
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads no country at all, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by
+	### te_budget_breakdown_help_popup. Its loc is gen_budget_breakdown.py's
+	### HOW_TOPICS.
+	type te_budget_breakdown_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
 		### One subheading per topic (GUI audit BNK-20): the topics are the
 		### generator's HOW_TOPICS, in its order.
-		flowcontainer = {
-			visible = "[GetVariableSystem.Exists('te_budget_chart_how_open')]"
-			direction = vertical
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 2
+		te_budget_how_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "te_budget_chart_how_sub_admin"
+			}
+		}
+		te_budget_how_note = {
+			text = "te_budget_chart_how_admin"
+		}
+		te_budget_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_budget_chart_how_sub_civil"
+			}
+		}
+		te_budget_how_note = {
+			text = "te_budget_chart_how_civil"
+		}
+		te_budget_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_budget_chart_how_sub_military"
+			}
+		}
+		te_budget_how_note = {
+			text = "te_budget_chart_how_military"
+		}
+		te_budget_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_budget_chart_how_sub_journal"
+			}
+		}
+		te_budget_how_note = {
+			text = "te_budget_chart_how_journal"
+		}
+		te_budget_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_budget_chart_how_sub_charts"
+			}
+		}
+		te_budget_how_note = {
+			text = "te_budget_chart_how_charts"
+		}
+	}
 
-			te_budget_how_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "te_budget_chart_how_sub_admin"
-				}
-			}
-			te_budget_how_note = {
-				text = "te_budget_chart_how_admin"
-			}
-			te_budget_how_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_budget_chart_how_sub_civil"
-				}
-			}
-			te_budget_how_note = {
-				text = "te_budget_chart_how_civil"
-			}
-			te_budget_how_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_budget_chart_how_sub_military"
-				}
-			}
-			te_budget_how_note = {
-				text = "te_budget_chart_how_military"
-			}
-			te_budget_how_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_budget_chart_how_sub_journal"
-				}
-			}
-			te_budget_how_note = {
-				text = "te_budget_chart_how_journal"
-			}
-			te_budget_how_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_budget_chart_how_sub_charts"
-				}
-			}
-			te_budget_how_note = {
-				text = "te_budget_chart_how_charts"
-			}
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_budget_breakdown_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_budget_breakdown')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_budget_chart_how"
+		}
+		blockoverride "popup_list" {
+			te_budget_breakdown_help_body = {}
 		}
 	}
 

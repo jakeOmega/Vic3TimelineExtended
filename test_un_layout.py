@@ -153,12 +153,19 @@ LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_un_works(self):
-        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        """On the Help page (te_united_nations_help_body), the UN's two help
+        types with it; the section is its header alone, which opens the page
+        (test_te_help_pages.py)."""
+        how = _type_body(_read(LAYOUT), "te_united_nations_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sub in ("te_un_help_authority", "te_un_help_standing"):
             self.assertIn(f"{sub} = {{", how, sub)
-        self.assertIn("GetVariableSystem.Toggle('un_how_open')", how)
+        link = _type_body(_read(LAYOUT), "te_un_sec_how")
+        self.assertIn('text = "je_un_how_header"', link)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_united_nations')]\"", link)
+        self.assertNotIn("un_chamber_note", link)
+        self.assertNotIn("un_how_open", _read(LAYOUT))
 
     def test_live_sections_carry_no_explanations(self):
         for path, sec in LIVE_SECTIONS:
@@ -535,7 +542,7 @@ class HowStyleTest(unittest.TestCase):
     subheadings (owner, 2026-09-28)."""
 
     def test_every_text_is_a_note(self):
-        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        how = _type_body(_read(LAYOUT), "te_united_nations_help_body")
         helps = _type_body(_read(AUTHORITY), "te_un_help_authority") + _type_body(_read(CHAMBER), "te_un_help_standing")
         for body in (how, helps):
             self.assertNotIn("ExecuteTooltip", body)

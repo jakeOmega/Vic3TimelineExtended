@@ -66,6 +66,13 @@ PAGES = [
          ("te_seabed_how_open",), ("te_seabed_tab_body",)),
     Page("covert_warfare", ("te_covert_sec_how",), "je_iw_how_header",
          ("covert_how_open",), ("te_covert_tab_body",)),
+    # no header on these two tabs, so the link alone
+    Page("nation", ("te_nation_how_panel",), "te_nation_how_header",
+         ("te_nation_how_open",), ()),
+    Page("budget_breakdown", ("te_budget_sec_how",), "te_budget_chart_how",
+         ("te_budget_chart_how_open",), ()),
+    Page("united_nations", ("te_un_sec_how",), "je_un_how_header",
+         ("un_how_open",), ("te_un_tab_body",)),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State
