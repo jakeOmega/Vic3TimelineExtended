@@ -16,7 +16,10 @@ types te_history_charts_generated_types
 {
 	### bank_value: banking, monthly
 	type te_hist_bank_value = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -67,7 +70,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_bank_value_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -125,12 +131,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### bank_momentum: banking, monthly
 	type te_hist_bank_momentum = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -202,7 +215,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_bank_momentum_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -286,12 +302,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### bank_bubble: banking, monthly
 	type te_hist_bank_bubble = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -344,7 +367,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_bank_bubble_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -409,12 +435,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### mon_policy: banking, monthly
 	type te_hist_mon_policy = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -467,7 +500,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_mon_policy_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -532,12 +568,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### mon_policy_digital: banking, monthly
 	type te_hist_mon_policy_digital = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -603,7 +646,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_mon_policy_digital_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -681,12 +727,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### mon_rate_paid: banking, monthly
 	type te_hist_mon_rate_paid = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -739,7 +792,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_mon_rate_paid_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -804,12 +860,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### mon_inflation: banking, monthly
 	type te_hist_mon_inflation = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -875,7 +938,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_mon_inflation_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -953,12 +1019,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### mon_fx: banking, monthly
 	type te_hist_mon_fx = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -1023,7 +1096,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_mon_fx_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -1100,12 +1176,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_grain: strategic_reserve, monthly
 	type te_hist_st_res_grain = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1150,7 +1233,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_grain_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1207,12 +1293,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_ammunition: strategic_reserve, monthly
 	type te_hist_st_res_ammunition = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1257,7 +1350,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_ammunition_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1314,12 +1410,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_oil: strategic_reserve, monthly
 	type te_hist_st_res_oil = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1364,7 +1467,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_oil_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1421,12 +1527,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_small_arms: strategic_reserve, monthly
 	type te_hist_st_res_small_arms = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1471,7 +1584,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_small_arms_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1528,12 +1644,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_artillery: strategic_reserve, monthly
 	type te_hist_st_res_artillery = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1578,7 +1701,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_artillery_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1635,12 +1761,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_aeroplanes: strategic_reserve, monthly
 	type te_hist_st_res_aeroplanes = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1685,7 +1818,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_aeroplanes_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1742,12 +1878,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_tanks: strategic_reserve, monthly
 	type te_hist_st_res_tanks = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1792,7 +1935,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_tanks_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1849,12 +1995,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### st_res_fertilizer: strategic_reserve, monthly
 	type te_hist_st_res_fertilizer = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1899,7 +2052,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_st_res_fertilizer_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -1956,12 +2112,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### demog_births_deaths: demographics, annual_pips
 	type te_hist_demog_births_deaths = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2080,6 +2243,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -2097,7 +2264,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_births_deaths_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2221,12 +2391,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_migration: demographics, annual_pips
 	type te_hist_demog_migration = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2352,6 +2529,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -2369,7 +2550,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_migration_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2499,12 +2683,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_e0: demographics, annual_pips
 	type te_hist_demog_e0 = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2600,6 +2791,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -2617,7 +2812,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_e0_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2716,12 +2914,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_tfr: demographics, annual_pips
 	type te_hist_demog_tfr = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2815,6 +3020,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -2832,7 +3041,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_tfr_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -2931,12 +3143,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_median: demographics, annual_pips
 	type te_hist_demog_median = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3030,6 +3249,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -3047,7 +3270,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_median_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3146,12 +3372,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_causes: demographics, annual_pips
 	type te_hist_demog_causes = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3338,6 +3571,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -3355,7 +3592,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_causes_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3547,12 +3787,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_gini: demographics, annual_pips
 	type te_hist_demog_gini = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3646,6 +3893,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -3663,7 +3914,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_gini_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3762,12 +4016,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### demog_wc: demographics, annual_pips
 	type te_hist_demog_wc = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3861,6 +4122,10 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -3878,7 +4143,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_demog_wc_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title_font" {
@@ -3977,12 +4245,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### ch_models: cultural_hegemony, annual
 	type te_hist_ch_models = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 488 -1 }
+		maximumsize = { 488 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" { text = "ch_model_hist_title" }
@@ -4234,6 +4509,10 @@ types te_history_charts_generated_types
 				visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 			}
 			blockoverride "empty_text" { text = "ch_model_hist_empty" }
+			blockoverride "chart_width" {
+				minimumsize = { 488 -1 }
+				maximumsize = { 488 -1 }
+			}
 			blockoverride "chart_title_width" {
 				max_width = 456
 			}
@@ -4251,7 +4530,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_ch_models_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1256 -1 }
+		maximumsize = { 1256 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" { text = "ch_model_hist_title" }
@@ -4498,12 +4780,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1256 -1 }
+				maximumsize = { 1256 -1 }
+			}
 		}
 	}
 
 	### nd_taboo: nuclear_weapons, monthly
 	type te_hist_nd_taboo = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4552,7 +4841,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_nd_taboo_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4612,12 +4904,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### nd_taboo_tgt: nuclear_weapons, monthly
 	type te_hist_nd_taboo_tgt = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4666,7 +4965,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_nd_taboo_tgt_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4726,12 +5028,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### un_auth: united_nations, monthly
 	type te_hist_un_auth = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4781,7 +5090,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_un_auth_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4841,12 +5153,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### un_target: united_nations, monthly
 	type te_hist_un_target = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4896,7 +5215,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_un_target_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -4956,12 +5278,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### gw_temp: global_warming, monthly
 	type te_hist_gw_temp = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5011,7 +5340,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_gw_temp_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5071,12 +5403,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### gw_share: global_warming, monthly
 	type te_hist_gw_share = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5126,7 +5465,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_gw_share_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5186,12 +5528,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### ce_stability: colonial_empire, monthly
 	type te_hist_ce_stability = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5241,7 +5590,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_ce_stability_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5301,12 +5653,19 @@ types te_history_charts_generated_types
 			blockoverride "empty_width" {
 				max_width = 1000
 			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
+			}
 		}
 	}
 
 	### ce_drift: colonial_empire, monthly
 	type te_hist_ce_drift = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5375,7 +5734,10 @@ types te_history_charts_generated_types
 	}
 
 	type te_hist_ce_drift_large = flowcontainer {
+		direction = vertical
 		parentanchor = hcenter
+		minimumsize = { 1216 -1 }
+		maximumsize = { 1216 -1 }
 
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -5453,6 +5815,10 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_width" {
 				max_width = 1000
+			}
+			blockoverride "chart_width" {
+				minimumsize = { 1216 -1 }
+				maximumsize = { 1216 -1 }
 			}
 		}
 	}
@@ -5605,7 +5971,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_value_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5647,7 +6013,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_momentum_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5689,7 +6055,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_bubble_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5731,7 +6097,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5773,7 +6139,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5815,7 +6181,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_rate_paid_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5857,7 +6223,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_inflation_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5899,7 +6265,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_fx_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -6962,7 +7328,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_value_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -6988,7 +7354,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_momentum_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7014,7 +7380,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_bubble_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7040,7 +7406,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7066,7 +7432,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7092,7 +7458,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_rate_paid_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7118,7 +7484,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_inflation_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -7144,7 +7510,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_fx_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 620 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
