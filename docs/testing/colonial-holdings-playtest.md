@@ -165,19 +165,37 @@ state passes the rest of the colony test needs its pops, which the probe does no
 ## The AI's stance on colonialism (2026-11-03, issue #1370)
 
 The AI no longer condemns the colonialism it practices: The Colonial Question (`decolonization_events.14`) never gives
-an empire Condemn, halves Condemn's weight for a regressive power and for a partner of an empire, and the monthly pass
-(`decol_stance_monthly`) drops Condemn from an AI empire once its 24-month cooldown is over. Design:
+an empire Condemn, halves Condemn's weight for a regressive power (again for a slaveholding one) and for a partner of an
+empire, and the monthly pass (`decol_stance_monthly`) drops Condemn from an AI empire once its 24-month cooldown is
+over. Design:
 `docs/systems/mod_systems/decolonization.md` § The AI's Stance on Colonialism. **What right looks like** is the
 system's design target (that doc's Overview): "most colonial powers except the top 2-3 GPs will lose most of their
 colonies". Quick setup: the owner's 1910 save (`new york_1910_05_13.v3`, where twelve great powers condemned and none
 supported), or an observer game from 1836 to the 1950s. Read stances in the save (`gp_anti_colonial_stance`,
 `gp_pro_colonial_stance`) or on each power's Colonial Empire tab through National Info, and the bars on the Colonial
-Powers list.
+Powers list. Search `debug.log` for `ai_condemn_factor_order`.
+
+**Who condemns less.** Racialized Citizenship and the slavery laws count as regressive, and they are common starts:
+vanilla starts the USA, Brazil and Belgium on Racialized Citizenship and Brazil and the Ottoman Empire (TUR) on the
+Slave Trade. In the 1910 save the regressive great powers without an empire are the USA and Brazil (Racialized
+Citizenship), TUR (Slave Trade) and India (BHA, Debt Slavery). A regressive power condemns at 62-80% instead of 87-98%
+(Condemn 13-19.5 : Neutral 5 : Support 0-3, against 26-39 : 1 : 0-3), and at 33-49% when it is also allied with an
+empire; slavery halves Condemn again (owner, 2026-11-03), so TUR and India condemn at 45-66%, or 20-33% beside an
+empire. This is intended: a segregated or slaveholding power is a less convincing anti-colonial champion until it
+reforms.
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ai_condemn_factor_order` | `ai_chance` applies its modifiers in order, so the `factor = 0` placed after Condemn's adds holds an empire's weight at 0 (at least 11 before it). No vanilla script shows that order matters. Once a game each: BROKEN when an AI that holds a colony, a colonial subject or the entry takes Condemn in `.14`; OK when such an AI takes Neutral or Support while it had the influence for Condemn. One OK is weak evidence, because a wrong order still leaves Support a share; read the verdict as no BROKEN line over a full observer run. Lines carry `country=` and `date=`. | `decol_selfcheck_empire_condemned` / `_declined`, `decolonization_stance_effects.txt`, called first in each of `.14`'s options | Make Condemn's weight one script value that order can't change: `decol_ai_condemn_weight` in `decolonization_stance_values.txt`, a `value` with `if` blocks that adds the terms, multiplies by the two halves and sets 0 for an empire or without the influence; then `.14`'s option a reads `ai_chance = { base = 0 modifier = { add = decol_ai_condemn_weight } }`, or the engine's equivalent. |
+
+### Checks
 
 | Check | Expect | If it fails |
 |---|---|---|
 | **Old condemnations go.** Load the 1910 save and play a month. | Every AI that holds a colony or a colonial subject, or runs the entry (Britain, France and Spain, if their collapses left them colonies), drops Condemn at the first monthly pulse, or when its 24-month cooldown from its last change runs out. A power whose collapse left it no colonies keeps Condemn, by design (owner, 2026-09-26). The influence breakdown loses the 150 cost. | Still condemning after the cooldown: `decol_holds_colonial_empire` was false for it (check its Colonial Holdings counts), or `decol_stance_monthly` did not run. |
-| **No empire takes Condemn again.** Play on to each empire's next Colonial Question (every three years for the AI). | It picks Support or Neutral, never Condemn. | A Condemn: the factor 0 did not apply (a modifier after it lifted it), or a UN Decolonization Resolution set it (issue #1373; it goes after 24 months). |
+| **No empire takes Condemn again.** Play on to each empire's next Colonial Question (every three years for the AI). | It picks Support or Neutral, never Condemn; `TE_SELF_CHECK OK ai_condemn_factor_order` once. | A Condemn, with `TE_SELF_CHECK BROKEN ai_condemn_factor_order`: the factor 0 did not hold (take the self-check's fallback). A Condemn with no BROKEN line came from a UN Decolonization Resolution (issue #1373; it goes after 24 months). |
 | **The bars leave the drift cap.** Watch the colonial great powers' stability through a few years (the Colonial Powers list, or the entry's history chart). | No longer −1.667 a month from the first month: the great-power pressure row is smaller and the bars fall more slowly, if at all. | Still at the cap: the condemners left are enough on their own; look at the International Pressure table for who condemns. |
-| **The balance target.** An observer run into the 1950s-60s. | The top two or three colonial great powers keep most of their colonies; the smaller colonial powers lose most of theirs. Non-empire great powers (the USA, Russia, China) still mostly condemn; regressive ones and allies of an empire more often stay neutral or support. | Every empire holds on: the empires now back one another and too few powers condemn. Lower Support's +5 for an empire, or raise Condemn's factor for a regressive power or a partner (`decolonization_events.14`). Still collapsing within 30 months: look for condemners that hold an empire (the review should have cleared them). |
-| **The debug harness keeps its condemners.** `event te_debug_colonial_empire.2`, option a, then a month. | The International Pressure table keeps every condemner, the colonial great powers included (the harness starts their cooldown). | Condemners with colonies vanish: `decol_stance_start_cooldown` did not run in the harness. |
+| **The balance target.** An observer run into the 1950s-60s. | The top two or three colonial great powers keep most of their colonies; the smaller colonial powers lose most of theirs. Great powers without colonies and without a regressive law (Russia, China, a reformed USA) still mostly condemn; the regressive ones (the USA and Brazil while on Racialized Citizenship; TUR and India, holding slaves, least of all) and allies of an empire more often stay neutral or support. | Every empire holds on: the empires now back one another and too few powers condemn. Lower Support's +5 for an empire, or raise Condemn's factor for a regressive or slaveholding power or a partner (`decolonization_events.14`). Still collapsing within 30 months: look for condemners that hold an empire (the review should have cleared them). |
+| **The debug harness keeps its condemners.** `event te_debug_colonial_empire.2`, option a, then a month. | The International Pressure table keeps every condemner, the colonial great powers included: the harness sets the stance on every other great power, those already condemning too, and starts each one's 24-month cooldown. | A colonial great power's condemnation vanishes a month later: either the harness did not start its cooldown (`decol_stance_start_cooldown`; before this fix it skipped a power already condemning, such as Britain or Spain in the 1910 save, which the review then dropped), or the AI's influence went negative, a drop that ignores the cooldown (`decol_stance_monthly`'s first branch). Check the power's influence before blaming the review. |
