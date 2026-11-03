@@ -752,7 +752,10 @@ shows, and any boon it carries, have run out.
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active, and it
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Grand Monuments tab with that country's monuments, national effects, trophies,
+works abroad and digs; the buttons, an open opportunity and Interest Group
+Approval are only on your own.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
