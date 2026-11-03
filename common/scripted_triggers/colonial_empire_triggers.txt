@@ -580,6 +580,12 @@ ce_entry_unlocked = {
 		text = ce_unlock_no_collapse_tt
 		NOT = { has_variable = colonial_empire_collapsed_recently }
 	}
+	# Not in the entry's possible: the re-entry pass's guard after a voluntary
+	# end (ce_reentry_due), listed so the checklist is true during that year.
+	custom_tooltip = {
+		text = ce_unlock_no_recent_end_tt
+		NOT = { has_variable = ce_reentry_voluntary_hold }
+	}
 }
 
 # Country scope. Is this country due its Colonial Empire entry back? The
@@ -598,7 +604,14 @@ ce_entry_unlocked = {
 #     (te_banking_entry_expected leaves them out for the same reason);
 #   - no entry running;
 #   - the separation cache: the colony test reads it (the entry's voluntary
-#     end waits for it for the same reason).
+#     end waits for it for the same reason);
+#   - a year since a voluntary end (ce_reentry_voluntary_hold, set by on_fail's
+#     voluntary branch). Not a cooldown: possible does not read it, and the
+#     owner's rule is that a voluntary end sets none. It is a guard against a
+#     flickering colony test: fail checks the live test every 4 days, so a
+#     country whose one colony passes it on two monthly passes and fails it a
+#     few days later would otherwise loop through .206 and a fresh entry every
+#     two months.
 # Cheap tests first; the colony test walks the states last.
 ce_reentry_due = {
 	# je_colonial_empire's is_shown_when_inactive
@@ -609,6 +622,7 @@ ce_reentry_due = {
 	is_revolutionary = no
 	NOT = { has_journal_entry = je_colonial_empire }
 	has_variable = ce_separation_cached
+	NOT = { has_variable = ce_reentry_voluntary_hold }
 	# je_colonial_empire's possible
 	OR = {
 		any_scope_state = {

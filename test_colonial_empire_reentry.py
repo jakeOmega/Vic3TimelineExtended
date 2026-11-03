@@ -5,20 +5,27 @@ The engine deletes a finished journal-entry record, failed or completed, and
 never activates the type again: the owner's 1910 save held no je_colonial_empire
 record at all for Britain, France, Spain, the Netherlands or the USA, while 211
 other countries held an inactive one. So the entry's re-entry rules (a secured
-empire never returns, a collapse waits ten years, a voluntary end not at all)
-are made real by a monthly pass, ce_reentry_monthly
+empire never returns, a collapse waits ten years, a voluntary end sets no
+cooldown) are made real by a monthly pass, ce_reentry_monthly
 (common/scripted_effects/decolonization.txt), which adds the entry back with
 add_journal_entry once a country has been due it (ce_reentry_due,
 common/scripted_triggers/colonial_empire_triggers.txt) for a whole month.
 
-Pinned here: ce_reentry_due restates the entry's is_shown_when_inactive and
-possible word for word (add_journal_entry skips both) and adds the
-decentralized, revolutionary, running-entry and separation-cache guards; the
-pass waits a month, adds, clears its mark when the country stops being due,
-and runs monthly straight after the separation cache's step; the once-a-game
-self-check has both verdicts, reads only a marker naming the country itself,
-gives BROKEN only for a country still due the entry, and is in the play-test
-list with its fallback.
+Pinned here:
+- ce_reentry_due restates the entry's is_shown_when_inactive and possible word
+  for word (add_journal_entry skips both) and adds the decentralized,
+  revolutionary, running-entry, separation-cache and voluntary-hold guards;
+- the pass runs for players and AI alike, monthly, straight after the
+  separation cache's step; it waits a month, adds, and clears its mark when the
+  country stops being due;
+- its self-check reads last month's add before it can add again, logs one line
+  per add with both verdicts and ended_before=yes|unknown, reads only a marker
+  naming the country itself, gives BROKEN only for a country still due the
+  entry, and is in the play-test list with its fallback;
+- a second ending is reachable, so every modifier an ending adds is removed
+  before it is added (a same-name add_modifier stacks);
+- a voluntary end holds the pass off for a year, a guard against a flickering
+  colony test that possible itself does not read.
 """
 
 import os
@@ -61,6 +68,19 @@ def _norm(text):
     return " ".join(text.split())
 
 
+def _enclosing(text, pos):
+    """Index just after the `{` of the innermost block still open at `pos`."""
+    depth = 0
+    for i in range(pos - 1, -1, -1):
+        if text[i] == "}":
+            depth += 1
+        elif text[i] == "{":
+            if depth == 0:
+                return i + 1
+            depth -= 1
+    return 0
+
+
 JE = _read("common", "journal_entries", "je_colonial_empire.txt")
 ENTRY = _block(JE, "je_colonial_empire")
 TRIGGERS = _read("common", "scripted_triggers", "colonial_empire_triggers.txt")
@@ -68,7 +88,11 @@ DUE = _block(TRIGGERS, "ce_reentry_due")
 EFFECTS = _read("common", "scripted_effects", "decolonization.txt")
 PASS = _block(EFFECTS, "ce_reentry_monthly")
 GEO_ON_ACTIONS = _read("common", "on_actions", "colonial_geography_on_actions.txt")
+EVENTS = _read("events", "decolonization_events.txt")
 PLAYTEST = _raw("docs", "testing", "colonial-holdings-playtest.md")
+
+# The entry's endings: on_complete's six events and on_fail's three.
+END_EVENTS = ["decolonization_events.%d" % n for n in (200, 201, 202, 203, 204, 205, 206, 300, 301)]
 
 
 def _branch(text, opener, kind="if"):
@@ -99,7 +123,8 @@ class DueTests(unittest.TestCase):
         due = _norm(DUE)
         for cond in ("NOT = { is_country_type = decentralized }", "is_revolutionary = no",
                      "NOT = { has_journal_entry = je_colonial_empire }",
-                     "has_variable = ce_separation_cached"):
+                     "has_variable = ce_separation_cached",
+                     "NOT = { has_variable = ce_reentry_voluntary_hold }"):
             self.assertIn(cond, due)
 
     def test_cheap_tests_before_the_state_walk(self):
@@ -116,6 +141,15 @@ class PassTests(unittest.TestCase):
         monthly = _norm(_block(GEO_ON_ACTIONS, "colonial_geography_on_action"))
         self.assertIn("ce_separation_step = yes ce_reentry_monthly = yes", monthly)
         self.assertNotIn("ce_reentry_monthly", _block(GEO_ON_ACTIONS, "colonial_geography_game_start_on_action"))
+
+    def test_for_players_and_ai_alike(self):
+        # The AI must get its entry back too: no player or AI gate anywhere on
+        # the way from the pulse to the add.
+        hook = _block(GEO_ON_ACTIONS, "colonial_geography_on_action")
+        self.assertNotIn("trigger", hook)
+        for name, text in (("on_action", hook), ("pass", PASS), ("due", DUE)):
+            for gate in ("is_ai", "is_player", "is_local_player"):
+                self.assertNotIn(gate, text, f"{gate} in the {name}")
 
     def test_adds_only_after_a_whole_month(self):
         due = _branch(PASS, "ce_reentry_due = yes")
@@ -147,33 +181,118 @@ class SelfCheckTests(unittest.TestCase):
     def setUp(self):
         self.check = _branch(PASS, "has_variable = ce_reentry_added")
 
-    def test_both_verdicts_once_a_game(self):
-        self.assertEqual(len(re.findall(r'"TE_SELF_CHECK OK ce_reentry ', self.check)), 1)
-        self.assertEqual(len(re.findall(r'"TE_SELF_CHECK BROKEN ce_reentry ', self.check)), 1)
-        self.assertEqual(self.check.count("set_global_variable = ce_reentry_selfcheck_done"), 2)
-        self.assertIn("NOT = { has_global_variable = ce_reentry_selfcheck_done }", self.check)
+    def test_last_months_add_is_read_before_this_months(self):
+        # Read after the add, the marker would be this month's own and the
+        # verdict would come in the same pass as the add.
+        first = re.search(r"(?<![\w.:$])if\s*=\s*\{", PASS)
+        self.assertIn(self.check, PASS[first.end():_close(PASS, first.end() - 1)])
+        read = PASS.index("limit = { has_variable = ce_reentry_added }")
+        add = re.search(r"add_journal_entry\s*=\s*\{", PASS)
+        self.assertLess(read, add.start())
+        self.assertLess(read, PASS.index("set_variable = { name = ce_reentry_added"))
+        self.assertNotRegex(self.check, r"add_journal_entry\s*=\s*\{")
+
+    def test_both_verdicts_on_every_add(self):
+        lines = re.findall(r'debug_log = "(TE_SELF_CHECK [^"]*)"', self.check)
+        self.assertEqual(sorted(re.match(r"TE_SELF_CHECK (\w+) ce_reentry .*ended_before=(\w+)", line).groups()
+                                for line in lines),
+                         [("BROKEN", "unknown"), ("BROKEN", "yes"), ("OK", "unknown"), ("OK", "yes")])
+        # One line per add, not once a game.
+        self.assertNotIn("global_variable", PASS)
         for line in re.findall(r'debug_log = "([^"]*)"', PASS):
             self.assertNotIn("$", line)
             self.assertIn("[TimeKeeper.GetCurrentDate.GetString]", line)
-            self.assertIn("[THIS.GetCountry.GetNameNoFormatting]", line)
+            self.assertIn("[THIS.GetCountry.GetTagName]", line)
+            self.assertNotIn("GetTag]", line)
+
+    def test_ended_before_is_taken_at_the_add(self):
+        # colonial_empire_has_ended is set at every ending; an entry the pass
+        # added that ended within the month must not read as ended before.
+        cleanup = _block(EFFECTS, "colonial_empire_je_cleanup_effect")
+        self.assertIn("set_variable = colonial_empire_has_ended", cleanup)
+        waited = _branch(_branch(PASS, "ce_reentry_due = yes"), "var:ce_reentry_waiting ?= scope:ce_reentry_country")
+        noted = _branch(waited, "has_variable = colonial_empire_has_ended")
+        self.assertIn("set_variable = ce_reentry_ended_before", noted)
+        self.assertLess(waited.index("colonial_empire_has_ended"), waited.index("add_journal_entry"))
+        self.assertNotIn("colonial_empire_has_ended", self.check)
+        verdicts = _branch(self.check, "var:ce_reentry_added ?= scope:ce_reentry_country")
+        self.assertIn("ended_before=yes", _branch(verdicts, "has_journal_entry = je_colonial_empire "
+                                                            "has_variable = ce_reentry_ended_before"))
 
     def test_only_a_country_the_pass_added(self):
         # A revolution's winner inherits the loser's marker, which names the loser.
-        self.assertIn("var:ce_reentry_added ?= scope:ce_reentry_country", self.check)
         verdicts = _branch(self.check, "var:ce_reentry_added ?= scope:ce_reentry_country")
         ok = _branch(verdicts, "has_journal_entry = je_colonial_empire")
         self.assertIn("TE_SELF_CHECK OK", ok)
-        broken = _branch(verdicts, "ce_reentry_due = yes", kind="else_if")
-        self.assertIn("TE_SELF_CHECK BROKEN", broken)
-        self.assertNotIn("TE_SELF_CHECK OK", broken)
+        for broken in (_branch(verdicts, "ce_reentry_due = yes has_variable = ce_reentry_ended_before",
+                               kind="else_if"),
+                       _branch(verdicts, "ce_reentry_due = yes", kind="else_if")):
+            self.assertIn("TE_SELF_CHECK BROKEN", broken)
+            self.assertNotIn("TE_SELF_CHECK OK", broken)
         # Read once, then gone, whatever the verdict.
-        self.assertRegex(self.check, r"\}\s*remove_variable = ce_reentry_added\s*$")
+        after = self.check[self.check.index(verdicts) + len(verdicts):]
+        self.assertIn("remove_variable = ce_reentry_added", after)
+        self.assertIn("remove_variable = ce_reentry_ended_before", after)
 
     def test_in_the_playtest_list_with_its_fallback(self):
         rows = [line for line in PLAYTEST.splitlines() if line.startswith("| `ce_reentry` |")]
         self.assertEqual(len(rows), 1)
         self.assertIn("dormant", rows[0])
         self.assertIn("`fail`", rows[0])
+        self.assertIn("ended_before=yes", rows[0])
+
+
+class SecondEndingTests(unittest.TestCase):
+    """A second run means a second ending, and a same-name add_modifier stacks."""
+
+    def _blocks(self):
+        yield "on_fail", _block(ENTRY, "on_fail")
+        yield "on_complete", _block(ENTRY, "on_complete")
+        for event in END_EVENTS:
+            yield event, _block(EVENTS, event)
+        yield "decol_grant_permanent_modifier", _block(EFFECTS, "decol_grant_permanent_modifier")
+
+    def test_every_ending_modifier_is_removed_before_it_is_added(self):
+        found = set()
+        for where, text in self._blocks():
+            for m in re.finditer(r"add_modifier\s*=\s*\{\s*name\s*=\s*([\w$]+)", text):
+                name = m.group(1)
+                found.add(name)
+                with self.subTest(where=where, modifier=name):
+                    before = text[_enclosing(text, m.start()):m.start()]
+                    self.assertIn(f"remove_modifier_if_exists_effect = {{ MODIFIER = {name} }}", before)
+        # Not vacuous: the four the collapse and the voluntary end add, and the
+        # permanent rewards' helper.
+        self.assertTrue({"colonial_collapse_subject_unrest_modifier", "colonial_empire_collapsed_modifier",
+                         "negotiated_withdrawal_modifier", "post_imperial_modifier", "$MODIFIER$"} <= found, found)
+
+    def test_the_endings_grant_rewards_only_through_the_helper(self):
+        for where, text in self._blocks():
+            if where == "decol_grant_permanent_modifier":
+                continue
+            with self.subTest(where=where):
+                self.assertNotRegex(text, r"days\s*=\s*-1")
+
+
+class VoluntaryHoldTests(unittest.TestCase):
+    def setUp(self):
+        self.on_fail = _block(ENTRY, "on_fail")
+        self.voluntary = _branch(self.on_fail, 'scope:journal_entry = { '
+                                               '"scripted_bar_progress(colonial_stability_bar)" > 0 }')
+
+    def test_a_voluntary_end_sets_a_years_hold(self):
+        self.assertIn("decolonization_events.206", self.voluntary)
+        self.assertIn("set_variable = { name = ce_reentry_voluntary_hold value = yes days = 365 }", self.voluntary)
+        # Only there: a collapse has its own ten-year cooldown.
+        self.assertEqual(self.on_fail.count("ce_reentry_voluntary_hold"), 1)
+
+    def test_the_pass_waits_for_it_but_possible_does_not(self):
+        self.assertIn("NOT = { has_variable = ce_reentry_voluntary_hold }", DUE)
+        self.assertNotIn("ce_reentry_voluntary_hold", _block(ENTRY, "possible"))
+
+    def test_the_readout_checklist_lists_it(self):
+        checklist = _block(TRIGGERS, "ce_entry_unlocked")
+        self.assertIn("NOT = { has_variable = ce_reentry_voluntary_hold }", checklist)
 
 
 if __name__ == "__main__":

@@ -276,6 +276,14 @@
 			# legacy (apply_decolonization_path) reads these counters; the
 			# wave clears them after its last answer (decol_wave_end).
 			colonial_empire_clear_path_months = yes
+			# Not a cooldown: the owner's rule is that a voluntary end sets
+			# none, and possible does not read this. It is a guard against a
+			# flickering colony test. The re-entry pass (ce_reentry_due) waits
+			# for it, so a country whose one colony passes the test on two
+			# monthly passes and fails it a few days later (this fail is
+			# checked every 4 days) does not loop through .206, a fresh entry
+			# and .206 again every two months.
+			set_variable = { name = ce_reentry_voluntary_hold value = yes days = 365 }
 		}
 		else_if = {
 			limit = {
@@ -310,8 +318,14 @@
 		# negotiate releases or weather the LD-driven independence pressure.
 		# Direct-state release (where applicable) happens through the wave of
 		# declarations .204 / .201 start (decol_wave_start, .77 -> .70).
+		# Removed first: the entry can now run again after a collapse (the
+		# re-entry pass), a second collapse comes about 12.7 years after the
+		# first (ten years, up to two months, some 30 months at the drift
+		# cap), and a same-name add_modifier stacks, so a subject through two
+		# collapses would carry the 20-year aftershock twice.
 		every_subject_or_below = {
 			limit = { is_qualifying_colonial_subject = yes }
+			remove_modifier_if_exists_effect = { MODIFIER = colonial_collapse_subject_unrest_modifier }
 			add_modifier = {
 				name = colonial_collapse_subject_unrest_modifier
 				days = very_long_modifier_time
