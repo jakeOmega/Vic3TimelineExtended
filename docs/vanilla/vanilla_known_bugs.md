@@ -108,6 +108,17 @@ Error: Event target link 'region_state' returned an unset scope
 
 The Hokkaido JE's `possible` block reaches `s:STATE_HOKKAIDO.region_state:JAP` without checking whether `c:JAP` exists or owns any part of Hokkaido. When JAP isn't on the map (released, replaced by another tag, or absent in scenario start), the trigger fails. Vanilla bug.
 
+### `common/journal_entries/00_congo_free_state.txt:121, 127, 133` — the Free State's status line reads its opinion before the entry starts
+- stack: vanilla only
+
+```
+Failed to fetch variable for 'free_state_international_opinion' due to not being set
+Event target link 'var' returned an unset scope
+Invalid left side during comparison 'var'
+```
+
+`je_free_state` is shown while inactive (`is_shown_when_inactive`: a monarchy, `scramble_for_africa_complete`, no `free_state_created`), and its `status_desc` compares `var:free_state_international_opinion` with 90 and 45, a variable only the entry's own activation sets. So every frame the journal draws the inactive entry logs these three lines at each of the three `triggered_desc`s. In the owner's 1910 game (2026-11-03) it was 13,720 lines in 18 seconds with the journal open, enough to rotate all six error.log generations. The mod doesn't override the file. Vanilla bug; cosmetic, apart from the log volume.
+
 ### `common/journal_entries/00_communism.txt`, `events/communism.txt`, `events/election_events/*.txt`, `common/political_movements/02_cultural_movement.txt` — `leader = { ... }` without `has_leader` guard
 - stack: vanilla only
 

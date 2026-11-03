@@ -203,7 +203,9 @@ types te_systems_window_types
 		}
 
 		blockoverride "fixed_bottom" {
-			te_systems_window_tax_footer = {}
+			te_systems_window_tax_footer = {
+				blockoverride "footer_anchor" {}
+			}
 		}
 	}
 
@@ -223,7 +225,12 @@ types te_systems_window_types
 	type te_systems_window_tax_footer = flowcontainer {
 		using = te_systems_window_tax_code_selected
 		direction = vertical
-		parentanchor = hcenter
+		### The full-screen frame's fixed_bottom is a vbox child, where a
+		### position is ignored and logs "Widget cannot have a position in a
+		### layout" every frame; its instance empties this block.
+		block "footer_anchor" {
+			parentanchor = hcenter
+		}
 		ignoreinvisible = yes
 
 		flowcontainer = {
