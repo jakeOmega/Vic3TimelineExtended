@@ -1,0 +1,51 @@
+﻿### Timeline Extended: vanilla's three HUD visibility templates
+### (game/gui/block_windows.gui:984-1000, vanilla 1.14.5), redefined so the
+### HUD hides under the Timeline Extended window's Full Screen as it does under
+### vanilla's full-screen panels: the outliner, the wars list, the lens
+### toolbar and the notifications beside the outliner (half_and_fullscreen_hide),
+### the "Paused" frame, the construction box and the backgrounds of the time
+### controls and the top bar (fullscreen_hide), and the compact notifications
+### in their place (half_and_fullscreen_show). The Side Panel keeps the HUD.
+###
+### WHY A 00_ FILE. A template's name is global, and the engine keeps the
+### first definition it reads, in file-name order across vanilla and the mods,
+### and logs each later one in gui.log as "Template 'X' already registered at
+### '<file>'" (gotcha #30 in docs/guides/gui_modding_guide.md). This name
+### sorts before block_windows.gui, so these win and vanilla's whole file stays
+### vanilla's.
+###
+### EACH TEMPLATE is vanilla's expression, its Or chain verbatim, ORed with two
+### more terms (one line each, as vanilla writes them):
+###   - the Community Mod Framework's full-screen key, com_fullscreen. CMF
+###     (Workshop 3385002128) redefines these three in 00_com_fullscreen_hide.gui
+###     with that key added; whichever file loads first wins, so with this term
+###     CMF's full screens keep hiding the HUD if this one does. Nothing sets
+###     the key without CMF.
+###   - the Timeline Extended window's Full Screen: the window root's visible
+###     AND the full-screen frame's (gui/te_systems_window.gui), so the HUD
+###     hides exactly while the frame draws. Every route that closes the window
+###     clears com_open_window, so the HUD comes back by each, though
+###     te_systems_window_wide is remembered for the session.
+### Vanilla leaves the treaty draft out of fullscreen_hide, a half-screen
+### panel that keeps the time controls; the window's Full Screen covers the
+### screen as the Politics panel does, so it is in all three.
+###
+### test_te_fullscreen_hud.py holds each to vanilla's (the fixture
+### test_fixtures/vanilla_gui/block_windows.gui) plus these two terms, the
+### window's term to the root and the frame, And and Or to two arguments each.
+### A vanilla patch that changes the three: change them here.
+
+### If the widget should NOT be visible in fullscreens, not taking the Treaty Draft panel into account.
+template fullscreen_hide {
+	visible = "[Not( Or( Or( Or(Or(Or(Or(InformationPanelBar.IsPanelOpen('politics'), InformationPanelBar.IsPanelOpen('politics_panel_change_law')), InformationPanelBar.IsPanelOpen('tech_tree')), InformationPanelBar.IsPanelOpen('pop_browser')), InformationPanelBar.IsPanelOpen('building_browser')), GetVariableSystem.Exists('com_fullscreen') ), And( And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.HasValue('com_open_window', 'te_systems_window') ), GetVariableSystem.Exists('te_systems_window_wide') ) ) )]"
+}
+
+### If the widget should be visible when ANY fullscreen is open, including the Treaty Draft panel.
+template half_and_fullscreen_show {
+	visible = "[Or( Or( Or(Or(Or(Or(Or(InformationPanelBar.IsPanelOpen('politics'), InformationPanelBar.IsPanelOpen('politics_panel_change_law')), InformationPanelBar.IsPanelOpen('tech_tree')), InformationPanelBar.IsPanelOpen('pop_browser')), InformationPanelBar.IsPanelOpen('building_browser')), InformationPanelBar.IsPanelOpen('treaty_draft_panel')), GetVariableSystem.Exists('com_fullscreen') ), And( And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.HasValue('com_open_window', 'te_systems_window') ), GetVariableSystem.Exists('te_systems_window_wide') ) )]"
+}
+
+### If the widget should NOT be visible when ANY fullscreen is open, including the Treaty Draft panel.
+template half_and_fullscreen_hide {
+	visible = "[Not( Or( Or( Or(Or(Or(Or(Or(InformationPanelBar.IsPanelOpen('politics'), InformationPanelBar.IsPanelOpen('politics_panel_change_law')), InformationPanelBar.IsPanelOpen('tech_tree')), InformationPanelBar.IsPanelOpen('pop_browser')), InformationPanelBar.IsPanelOpen('building_browser')), InformationPanelBar.IsPanelOpen('treaty_draft_panel')), GetVariableSystem.Exists('com_fullscreen') ), And( And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.HasValue('com_open_window', 'te_systems_window') ), GetVariableSystem.Exists('te_systems_window_wide') ) ) )]"
+}

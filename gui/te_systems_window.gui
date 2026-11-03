@@ -254,10 +254,11 @@ types te_systems_window_types
 	### At the row's right by default (the side panel). The full-screen frame
 	### moves it to the left ("toggle_lead" empty, "toggle_trail" the expand):
 	### vanilla's outliner sits on the HUD layer, above this window, over the
-	### screen's right 360 px from y = 155 (ingame_hud.gui), and hides only for
-	### vanilla's own full screens (half_and_fullscreen_hide reads
-	### InformationPanelBar.IsPanelOpen). The width is kept for the session, so
-	### a covered Side Panel would leave the window full screen until reload.
+	### screen's right 360 px from y = 155 (ingame_hud.gui), and a covered Side
+	### Panel would have left the window full screen for the session. Since
+	### 2026-11-02 the outliner hides while the full-screen frame draws, as
+	### under vanilla's full screens (gui/00_te_fullscreen_hide.gui); the
+	### toggle stays at the left all the same.
 	type te_systems_window_toggle = hbox {
 		layoutpolicy_horizontal = expanding
 		layoutpolicy_vertical = fixed
@@ -513,8 +514,12 @@ widget = {
 	### vanilla's full-screen panels sit in ingame_hud.gui. The frame draws its
 	### own top filler, which the top bar draws over, and starts its content
 	### below it (margin_top = 100), so no inset. The HUD's layer is above this
-	### one, so the top bar, the sidebar and the outliner draw over the frame
-	### (docs/testing/te-window-wide-playtest.md, item 1).
+	### one, so the top bar and the sidebar draw over the frame
+	### (docs/testing/te-window-wide-playtest.md, item 1). What vanilla hides
+	### under its own full screens (the outliner, the "Paused" frame, the lens
+	### toolbar, the construction box) hides under this one too: the three
+	### templates in gui/00_te_fullscreen_hide.gui read this visible and the
+	### root's (test_te_fullscreen_hud.py), so change them with either.
 	te_systems_window_panel_wide = {
 		visible = "[GetVariableSystem.Exists('te_systems_window_wide')]"
 	}
