@@ -215,18 +215,18 @@ and moves no one until you are a great power again. Stay Neutral needs no rank,
 so you can always drop a dormant stance.
 
 The AI is asked in The Colonial Question every three years instead. An AI power
-with colonies or colonial subjects of its own never condemns colonialism and
-leans toward backing the colonial powers; if it already condemns, it drops the
-stance as soon as the stance can change. An AI power without colonies usually
-condemns, but less often if it is regressive (Colonial Exploitation, Ancestral
-or Racialized Citizenship, legal slavery, a Jingoist ruler or a Colonialist
-interest group in government), and less often again if an ally, defensive-pact
-or power bloc partner, subject or overlord holds colonies. It takes a side only
-with 150 influence and 100 more to spare, and drops its stance when its
-influence runs negative. When a Decolonization Resolution passes at the United
-Nations, every great power that voted for it, or voted against it and then
-accepted it, takes the anti-colonial stance automatically, and can't change it
-for 24 months.
+with colonies or colonial subjects of its own never chooses to condemn
+colonialism and leans toward backing the colonial powers; if it condemns anyway,
+after a vote at the United Nations for instance, it drops the stance as soon as
+the stance can change. An AI power without colonies usually condemns, but less
+often if it is regressive (Colonial Exploitation, Ancestral or Racialized
+Citizenship, legal slavery, a Jingoist ruler or a Colonialist interest group in
+government), and less often again if an ally, defensive-pact or power bloc
+partner, subject or overlord holds colonies. It takes a side only with 150
+influence and 100 more to spare, and drops its stance when its influence runs
+negative. When a Decolonization Resolution passes at the United Nations, every
+great power that voted for it, or voted against it and then accepted it, takes
+the anti-colonial stance automatically, and can't change it for 24 months.
 
 Each condemning great power costs you about 0.6 a month and each supporter adds
 about 0.3, scaled by its prestige against yours: from a quarter as much, for a
