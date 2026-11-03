@@ -108,6 +108,26 @@ country, and their range filters read the date on `Country` too (`te_history_mon
 | **5. The log.** After 1 to 4, search `debug.log` for `te_hist`, `wanted context of type 'Country'`, `No context supplied` and `New data types does not contain a 'Country'`. | No new lines. | Each line names the expression and its file:line: the widget there read `Country` with none in its context. |
 | **6. Observer.** As an observer, open an observed country's Banking or Strategic Reserve journal entry and set a chart to 1y, then 5y. | The chart draws its range, and `error.log` gains no null-country lines. The range filter reads the date on `Country`, which the entry's widget root supplies, not on `GetPlayer`, which is no country for an observer. The window's tabs and the vanilla panels' tabs aren't open to an observer. Hovering a bar's markers may still log one line: `te_hist_tt_markers` roots its scripted GUI on `GetPlayer`, as before F0. | A null-country line per bar names `te_history_chart.gui`'s `sample_visible`: its read went back to `GetPlayer`. |
 
+## Seabed in National Info (PR F3, Seabed, 2026-11-02)
+
+The Seabed tab reads the shown `Country`, so National Info can show it for any country: the overview's six boxes,
+the Ocean Basins table (Free, Pool, Weight, +1 license) and every hover, for that country. Hidden for another
+country, under `te_own_country_only`: the policy panel (its three buttons are all it holds; the overview's Policy box
+still shows the policy and its lock), and each basin's claimants with Relinquish and Claim Again, with the chevron that
+opens them. The claimant list is the viewer's own (`te_seabed_rank_listed` leaves the viewer out and the tab draws the
+viewer's row apart), so read for another country it would show that country twice and leave the player out. The Free
+figure's hover is printed by a scripted GUI's effect, so its lines read the root it is given
+(`SCOPE.GetRootScope.ScriptValue`) rather than `GetPlayer`. Needs PR F1's National Info, which shows the tab while its
+`public` flag is set.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Another country's figures.** Pick a claimant that appears in one of your basins' claimant lists. Note its Mines, Claims and Weight there, then open its National Info on the Seabed tab. | That basin's Free is its Claims and Weight its Weight; the pool bar's hover gives its own mines and queued levels, which add up to its Mines figure but for what it built or queued since the last sharing, and its own unused claims; the overview's boxes are its own (`tag` into it from the console to compare with its own tab). | The player's figures: a read is still `GetPlayer` (`test_te_system_tab_bodies.py`'s `BindingTest` should have caught it), or the window doesn't supply that country's `Country`. |
+| **2. The Free hover.** On the same country, hover a basin's Free figure. | Its unused claims in the basin, then its own coastal states there (or "No coast here"). | The player's count over the other country's states: `te_seabed_build_in_*` don't read the scripted GUI's root; `ROOT.GetCountry.MakeScope.ScriptValue` is the other form. |
+| **3. Nothing to press.** Same country. | No Seabed Policy panel, no chevrons, no claimant lists, no Relinquish or Claim Again. The basin names sit where they were, beside an empty slot. The Policy box's hover gives its policy, the influence it holds and when it can next change. | A control shows: it isn't under `te_own_country_only` (`GuardTest`, and `test_seabed_layout.py`'s `PrivateTest`). |
+| **4. Your own tab.** Your own Seabed tab, in the window and in National Info for your own country. | As before, with the policy buttons, the chevrons, the claimants and Relinquish or Claim Again. The words that changed: Licenses (was Our licenses), own mines and own claims in the legend, and the hovers' "Coast here", "Claim weight in the …", "Own mines", "no coast here". | — |
+| **5. The log and an observer.** After 1 to 4, and as an observer opening any coastal country's Seabed tab in National Info, search `debug.log` for `wanted context of type`, `Failed to fetch variable`, `Promote 'SCOPE' returned nullptr` and null-country lines. | None new. | Each line names its expression: a `SCOPE` line names a Free hover key (check 2's fallback); the rest, a read still on `GetPlayer` outside `te_own_country_only`. |
+
 ## Grand Monuments for another country (PR F3, Grand Monuments, 2026-11-02)
 
 The Grand Monuments tab is public: its sections read `Country`, and the composers' and wide columns' gate is the

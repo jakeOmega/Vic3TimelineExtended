@@ -4480,7 +4480,7 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = biotechnology
+				has_technology_researched = gene_splicing
 			}
 			activate_law = law_type:law_corporate_genetic_licensing
 		}
@@ -4492,7 +4492,7 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = synthetic_biology
+				has_technology_researched = gene_splicing
 			}
 			activate_law = law_type:law_open_source_genetics
 		}
