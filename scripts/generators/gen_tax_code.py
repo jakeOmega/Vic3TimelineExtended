@@ -1382,8 +1382,8 @@ def custom_localization():
     lines = [
         HEADER,
         "# The history rows' text (gui/journal_entry_widgets/te_tax_overview_widget.gui,",
-        "# te_tax_history_section): one customizable localization per row, newest first, read as",
-        "# GetPlayer.GetCustom('te_tax_hist_event_<i>'). Each picks the line for the entry's kind",
+        "# te_tax_history_section): one customizable localization per row, newest first, read on the",
+        "# shown country as Country.GetCustom('te_tax_hist_event_<i>'). Each picks the line for the entry's kind",
         "# (te_tax_view_hist_<i>_kind) and, for a sunset, its instrument (_inst). The triggers read",
         "# only the guarded views, never a variable.",
     ]
@@ -1421,7 +1421,7 @@ def custom_localization():
 def _next_change_custom_loc():
     """What happens at the code's next change (GUI audit TAX-1, the overview's Code cell): a
     passed bill taking effect, or which tax's temporary rate expires, read as
-    GetPlayer.GetCustom('te_tax_ov_next_what'). The triggers read only guarded views."""
+    Country.GetCustom('te_tax_ov_next_what') on the shown country. The triggers read only guarded views."""
     entries = [(f"te_tax_view_p{slot}_state = {STATE_AWAITING} te_tax_view_p{slot}_due >= 0 "
                 f"te_tax_view_p{slot}_due = te_tax_view_next_month", "te_tax_ov_next_what_bill") for slot in SLOTS]
     entries += [(f"te_tax_view_en_{i.key}_exp >= 0 te_tax_view_en_{i.key}_exp = te_tax_view_next_month",
@@ -1478,7 +1478,7 @@ def _obligation_custom_loc():
         "",
         "# The promise rows (plan Task 12; te_tax_obligations_section): per obligation slot <n>,",
         "# the beneficiary group's name, the promise and its state, read as",
-        "# GetPlayer.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded",
+        "# Country.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded",
         "# te_tax_view_o<n>_* views, which are 0 while the slot is free.",
     ]
     for n in OBLIGATION_SLOTS:
@@ -5279,9 +5279,9 @@ def light_sguis():
 def light_custom_localization():
     lines = [
         HEADER,
-        "# The light code's panel text (gui/journal_entry_widgets/te_tax_light_widget.gui), read as",
-        "# GetPlayer.GetCustom('<name>'). The level names are the base game's own (tax_level_<level>,",
-        "# interfaces_l_english.yml), and the law names its law keys.",
+        "# The light code's panel text (gui/journal_entry_widgets/te_tax_light_widget.gui), read on",
+        "# the shown country as Country.GetCustom('<name>'). The level names are the base game's own",
+        "# (tax_level_<level>, interfaces_l_english.yml), and the law names its law keys.",
     ]
 
     def entry(name, branches, fallback):
