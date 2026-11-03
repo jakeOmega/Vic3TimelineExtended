@@ -8,6 +8,8 @@ free_port_concession = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/free_port_concession.dds"
 	kind = directed
 	cost = 75
+	max_target_involvement = 1000
+	target_involvement_applies_to = source_country
 
 	flags = {
 		can_be_enforced

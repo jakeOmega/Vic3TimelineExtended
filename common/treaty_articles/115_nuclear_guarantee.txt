@@ -32,6 +32,8 @@ nuclear_guarantee = {
 	cost = 100
 	relations_progress_per_day = 1
 	relations_improvement_max = 60
+	max_target_involvement = 1000
+	target_involvement_applies_to = target_country
 
 	flags = { can_be_renegotiated giftable friendly }
 
