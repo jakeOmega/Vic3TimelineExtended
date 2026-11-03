@@ -252,8 +252,12 @@ class PageTest(unittest.TestCase):
                     overrides = {name: inner.strip() for kind, name, inner in header if kind == "blockoverride"}
                     self.assertIn(f'text = "{page.title}"', overrides["left_text"])
                     self.assertEqual(overrides["onclick"], f'onclick = "{_open(page.key)}"')
-                    self.assertEqual(overrides["onclick_showmore"], "visible = no")
-                    self.assertEqual(overrides["onclick_showless"], "visible = no")
+                    # no arrow: its container hidden, not the onclick_show* blocks, one of which
+                    # is also the expand_button widget whose visibility picks the click sound
+                    # (vanilla section_header_button), so a click plays "increment"
+                    self.assertEqual(overrides["arrow_visible"], "visible = no")
+                    self.assertNotIn("onclick_showmore", overrides)
+                    self.assertNotIn("onclick_showless", overrides)
                     self.assertNotIn("GetVariableSystem.Exists", body)
                     self.assertNotIn("GetVariableSystem.Toggle", body)
 

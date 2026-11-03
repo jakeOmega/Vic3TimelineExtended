@@ -224,6 +224,8 @@ class FlagTest(unittest.TestCase):
         how = _type_body(_strip_comments(_read(LAYOUT)), "te_banking_sec_how")
         self.assertIn('text = "banking_dash_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_banking')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
         self.assertNotIn("banking_dash_how_open", self.text)
         self.assertNotIn("banking_dash_note", how)
 
