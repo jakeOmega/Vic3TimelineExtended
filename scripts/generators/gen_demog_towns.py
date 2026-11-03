@@ -18,7 +18,8 @@ orders a state's towns by the people at work in each kind of building and splits
 - `gui/te_demographics_towns_generated.gui`: `te_demog_town_rows`, the ten slots the country census fills
   (`te_dg_tw_l<i>`, one state each, with `te_dg_tw<i>_c`, its town's kind, and `te_dg_tw<i>_p`, its people), three
   shown and the rest under Show All. A town isn't a scope, so a list of states can't say which of a state's towns a row
-  is: each slot is its own list, and its row reads its own variables through the state's owner.
+  is: each slot is its own list, and its row reads its own variables on the country shown (`Country`), not through
+  the state's owner, which differs once the state changes hands before the next census.
 
 Reads `vanilla_parsed/` (buildings, building groups, localization) and the mod's `common/buildings/`,
 `common/building_groups/`, `map_data/state_regions/` and `localization/english/`, so it needs no game install. Not a
@@ -208,8 +209,8 @@ def _lines(lines, depth):
 
 def _row(slot, code, name_text, tooltip):
     """One of a slot's six rows: shown while the slot's town is of its kind."""
-    kind = f"State.GetOwner.MakeScope.Var('te_dg_tw{slot}_c').GetValue"
-    people = f"State.GetOwner.MakeScope.Var('te_dg_tw{slot}_p').GetValue|K"
+    kind = f"Country.MakeScope.Var('te_dg_tw{slot}_c').GetValue"
+    people = f"Country.MakeScope.Var('te_dg_tw{slot}_p').GetValue|K"
     return [
         "te_demog_town_row = {",
         f"\tblockoverride \"town_shown\" {{ visible = \"[EqualTo_CFixedPoint( {kind}, '(CFixedPoint){code}' )]\" }}",
@@ -269,8 +270,8 @@ def render_gui() -> str:
         "# the country census fills (te_demog_town_country, te_demog_place_effects.txt), largest first. Each slot is a\n"
         "# one-state list, so an empty slot draws nothing; its row is one of six, by the town's kind (te_dg_tw<i>_c: 1\n"
         "# the capital, 2 the port, 3 the mining, 4 the farming, 5 the logging town, 0 the state's own name), read\n"
-        "# through the state's owner, the country shown. The first three always; the rest under Show All\n"
-        "# (te_demog_towns_all_open).\n"
+        "# on the country shown, which wrote the slot (a state that changed hands since has another owner). The first\n"
+        "# three always; the rest under Show All (te_demog_towns_all_open).\n"
         "types te_demog_towns_generated\n"
         "{\n"
         + _lines(body, 1)

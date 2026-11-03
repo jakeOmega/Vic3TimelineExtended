@@ -3,11 +3,12 @@
 - The generator (scripts/generators/gen_demog_towns.py) is fresh, and its classes and names match the data read
   independently here: vanilla's city_type, the mod's meshless mines, subsistence, the map's hubs and their loc keys.
 - A state's towns in order (te_demog_town_walk_store), run on the census interpreter of test_demographics_registry.py:
-  farm, mine and logging work at a quarter, a hub with no name left out, ties to the earlier kind, a state with no named
-  hub one town under its own name.
+  farm, mine and logging work at a quarter, a hub with no name or no work of its kind left out (the capital always
+  counts), ties to the earlier kind, a state with no named hub one town under its own name.
 - The country's ten largest (te_demog_town_country): a k-way merge, so a big state's second town outranks a small
-  state's first; X(1 - X)^(k-1) of the urban people; a state with no metropolitan share or census left out; a refill.
-- The rows: slot i reads slot i's variables only, six rows a slot, the rest under Show All.
+  state's first; X(1 - X)^(k-1) of the urban people, X the share's target before the state has a share; a state under
+  5,000 urban people or with no census left out; a refill.
+- The rows: slot i reads slot i's variables only, on the country shown, six rows a slot, the rest under Show All.
 """
 import json
 import re
@@ -63,7 +64,10 @@ class GeneratorTest(unittest.TestCase):
         """The mod's discoverable mines say city_type = city with levels_per_mesh = -1: they take their group's kind.
         The ocean mine says port, which it keeps; a railway (no city_type) counts for the capital."""
         mines = _trigger_types(self.triggers, "te_demog_town_mine_work")
-        for key in ("building_copper_mine", "building_lithium_mine", "building_rare_earth_metals_mine", "building_coal_mine"):
+        vanilla = json.loads((ROOT / "vanilla_parsed" / "common" / "buildings.json").read_text(encoding="utf-8"))
+        for key in ("building_copper_mine", "building_lithium_mine", "building_rare_earth_metals_mine",
+                    "building_bauxite_mine"):
+            self.assertNotIn(key, vanilla, "a mod mine")
             self.assertIn(key, mines)
         self.assertIn("building_ocean_mine", _trigger_types(self.triggers, "te_demog_town_port_work"))
         listed = set(re.findall(r"is_building_type = (\w+)", self.triggers))
@@ -130,22 +134,31 @@ class StateOrderTest(unittest.TestCase):
         self.assertEqual(_store((200, 0, 1000, 0, 0))[0][:2], [3, 1])
 
     def test_a_hub_with_no_name_is_no_town(self):
-        towns, _ = _store((100, 500, 0, 0, 0), {"te_demog_town_named_port": False})
-        self.assertEqual(towns, [1, 3, 4, 5])
+        # 100, port unnamed, 40/4 = 10, 80/4 = 20, 400/4 = 100: the capital ties the logging town and leads
+        towns, _ = _store((100, 500, 40, 80, 400), {"te_demog_town_named_port": False})
+        self.assertEqual(towns, [1, 5, 4, 3])
 
-    def test_a_town_with_no_work_of_its_kind_still_counts_and_ties_go_to_the_earlier_kind(self):
-        self.assertEqual(_store((0, 0, 0, 0, 0))[0], [1, 2, 3, 4, 5])
-        self.assertEqual(_store((40, 0, 160, 0, 0))[0], [1, 3, 2, 4, 5])
+    def test_a_town_with_no_work_of_its_kind_is_no_town_but_the_capital_always_is(self):
+        self.assertEqual(_store((0, 0, 0, 0, 0))[0], [1])
+        self.assertEqual(_store((0, 0, 0, 40, 0))[0], [4, 1])
+        self.assertEqual(_store((100, 0, 400, 0, 0))[0], [1, 3])
+
+    def test_ties_go_to_the_earlier_kind(self):
+        self.assertEqual(_store((40, 10, 160, 0, 0))[0], [1, 3, 2])
+        self.assertEqual(_store((10, 40, 160, 160, 160))[0], [2, 3, 4, 5, 1])
 
     def test_a_state_with_no_named_hub_is_one_town_under_its_own_name(self):
         towns, _ = _store((100, 10, 0, 0, 0), {k: False for k in NAMED})
         self.assertEqual(towns, [0])
 
     def test_a_census_with_fewer_towns_drops_the_rest(self):
-        _, kept = _store((100, 0, 0, 0, 0), {"te_demog_town_named_port": False},
+        _, kept = _store((100, 0, 10, 10, 10), {"te_demog_town_named_port": False},
                          before={"te_dg_tw_n": 5.0, "te_dg_tw_5": 5.0})
         self.assertEqual(kept["te_dg_tw_n"], 4.0)
         self.assertNotIn("te_dg_tw_5", kept)
+        _, kept = _store((100, 0, 0, 0, 0), before={"te_dg_tw_n": 5.0, "te_dg_tw_2": 2.0, "te_dg_tw_5": 5.0})
+        self.assertEqual(kept["te_dg_tw_n"], 1.0)
+        self.assertFalse({"te_dg_tw_2", "te_dg_tw_5"} & set(kept))
 
 
 def _state(urban, mt, towns, census=True):
@@ -159,8 +172,8 @@ def _state(urban, mt, towns, census=True):
 
 
 class CountryListTest(unittest.TestCase):
-    def merge(self, states):
-        eng = _CountryEngine(states=states, fixtures={}, triggers={"te_demog_cohorts_run": True})
+    def merge(self, states, fixtures=None):
+        eng = _CountryEngine(states=states, fixtures=fixtures or {}, triggers={"te_demog_cohorts_run": True})
         eng.call("te_demog_town_country")
         slots = []
         for i in range(1, gen.SLOTS + 1):
@@ -176,7 +189,7 @@ class CountryListTest(unittest.TestCase):
         """A's second town (250K) outranks B's capital (120K): the list merges each state's towns by size."""
         a = _state(1_000_000, 50, [1, 2, 3, 4])
         b = _state(300_000, 40, [4, 1, 3, 5])
-        small = _state(100_000, None, [1])            # under 5,000 urban people: no metropolitan share
+        small = _state(4_000, None, [1])              # under 5,000 urban people: no metropolitan share
         uncounted = _state(9_000_000, 60, [1], census=False)
         eng, slots = self.merge([a, b, small, uncounted])
         self.assertEqual([(s, c) for s, c, _ in slots],
@@ -185,6 +198,16 @@ class CountryListTest(unittest.TestCase):
             self.assertAlmostEqual(people, want, places=3)
         for st in (a, b, small, uncounted):
             self.assertNotIn("te_dg_tw_cur", st, "the cursors go once the list is built")
+
+    def test_before_its_first_share_a_state_takes_the_shares_target(self):
+        """te_dg_mt is seeded on the state's own yearly pulse, so a new game's census and a state's first year have
+        none: the towns take the target it will be seeded at (te_demog_mt_target), under 5,000 urban people none."""
+        new = _state(200_000, None, [1, 2])
+        small = _state(4_000, None, [1])
+        _, slots = self.merge([new, small], fixtures={"te_demog_mt_target": 50.0})
+        self.assertEqual([(s, c) for s, c, _ in slots], [(0, 1), (0, 2)])
+        for (_, _, people), want in zip(slots, (100_000, 50_000)):
+            self.assertAlmostEqual(people, want, places=3)
 
     def test_ten_at_most_and_a_refill(self):
         states = [_state(100_000 * (i + 1), 30, [1, 2, 3]) for i in range(5)]
@@ -233,6 +256,10 @@ class RowsTest(unittest.TestCase):
             with self.subTest(slot=i):
                 self.assertEqual(set(re.findall(r"GetList\('(\w+)'\)", slot)), {f"te_dg_tw_l{i}"})
                 self.assertEqual(set(re.findall(r"Var\('(\w+)'\)", slot)), {f"te_dg_tw{i}_c", f"te_dg_tw{i}_p"})
+                # on the country shown, which wrote the slot: a listed state that has changed hands since the
+                # census has an owner with other slots, or none
+                self.assertEqual(set(re.findall(r"([\w.]+)\.Var\('", slot)), {"Country.MakeScope"})
+                self.assertNotIn("GetOwner", slot)
                 codes = re.findall(r"\(CFixedPoint\)(\d)", slot)
                 self.assertEqual(sorted(codes), ["0", "1", "2", "3", "4", "5"])
                 for code, kind, accessor in gen.KINDS:

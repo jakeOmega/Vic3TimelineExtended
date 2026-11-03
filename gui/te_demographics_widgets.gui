@@ -25,8 +25,8 @@
 ###   te_demog_sec_wealth       open: the Gini beside the strata's incomes (the Census Data window leaves the incomes
 ###                             out), Wealth Concentration as a bar heading for its target, the target's nine terms,
 ###                             the most and least concentrated states
-###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the three
-###                             largest cities
+###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the largest
+###                             cities by name (three, ten under Show All), the three largest urban states
 ###   te_demog_sec_states       open: the ten largest states, a row each that opens the state, and Show All for the 40
 ### The state's, from the same building blocks with the state's own figures (State.MakeScope.Var(...), never the
 ### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth and _modifiers.
@@ -654,7 +654,7 @@ types te_demographics_widgets
 	### state's name on the left and one figure on the right. Fixed cells, 4 + 184 + 284 and a 4 px gap = 476 inside
 	### the 480 row: "100% aged 20–29, strength 100%", 30 characters, is the widest figure, and the name shrinks to 12
 	### before it would elide, as the States table's does. The instance sets "link_tooltip" and "link_value". The
-	### largest cities, the Youth row's states and the Metropolises use it.
+	### Largest Urban States, the Youth row's states and the Metropolises use it.
 	type te_demog_state_link_row = button {
 		using = default_button
 		size = { 480 28 }

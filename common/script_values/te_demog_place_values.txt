@@ -213,16 +213,25 @@ te_demog_pc_ai_authority = {
 # their town holds only the traders and services they keep (owner's choice).
 te_demog_k_town_rural_weight = { value = 0.25 }
 
-# State scope: the share of its urban people in its largest town, 0-1 (its metropolitan share; 0 with none).
+# State scope: the share of its urban people in its largest town, 0-1: its metropolitan share, or before its first
+# (te_dg_mt is seeded on the state's own yearly pulse, so a new game's census and a state's first year have none) the
+# target the share is seeded at; 0 under te_demog_k_mt_min_urban urban people, where the state keeps no share.
 te_demog_town_x = {
 	value = 0
 	if = {
 		limit = { has_variable = te_dg_mt }
 		value = var:te_dg_mt
-		divide = 100
-		min = 0
-		max = 1
 	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_urban
+			var:te_dg_urban >= te_demog_k_mt_min_urban
+		}
+		value = te_demog_mt_target
+	}
+	divide = 100
+	min = 0
+	max = 1
 }
 te_demog_town_rest = {
 	value = 1
@@ -230,15 +239,14 @@ te_demog_town_rest = {
 }
 
 # State scope, in te_demog_town_country: the people of its next town (te_dg_tw_cur), the largest holding X of its
-# urban people and each next X of the rest, X(1 - X)^(k-1); 0 once it has none left, or with no metropolitan share
-# (fewer than te_demog_k_mt_min_urban urban people).
+# urban people and each next X of the rest, X(1 - X)^(k-1); 0 once it has none left, or with no share (fewer than
+# te_demog_k_mt_min_urban urban people).
 te_demog_town_next_pop = {
 	value = 0
 	if = {
 		limit = {
 			has_variable = te_dg_tw_cur
 			has_variable = te_dg_tw_n
-			has_variable = te_dg_mt
 			has_variable = te_dg_urban
 			var:te_dg_tw_cur <= var:te_dg_tw_n
 		}

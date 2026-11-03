@@ -1653,8 +1653,9 @@ prints a name. Offline: `test_demographics_towns.py` (the generator, each state'
 and the GUI lint, which warns that four of the five accessors are unproven in a `.gui`. The names are GUI reads with no
 engine fact a script can check, so there is no self-check.
 
-1. **Every kind of town prints a name (Full or Display only).** After the first census, in a country with many states
-   (the USA, Russia), open the Population panel's Demographics tab and press Show the 10 Largest. Each row shows a town
+1. **Every kind of town prints a name (Full or Display only).** From the game's start (the start's census fills the
+   list, before any state has a settlement share, from the share's target), in a country with many states (the USA,
+   Russia), open the Population panel's Demographics tab and press Show More. Each row shows a town
    name, the state's name and a figure, and the hover names the town again with its kind ("the port town of …"). Look
    for at least one capital, one port and one mining town; a state with a large mining or farming workforce is where a
    mining or farming town leads. No row shows `HUB_NAME_`, an empty name or a raw `[State...]`. If one does, note the
@@ -1663,10 +1664,14 @@ engine fact a script can check, so there is no self-check.
 2. **The figures look plausible.** In 1836 the capital of each state should lead its towns (Helsingfors in Uusimaa,
    Stockholm in Svealand) except in a state of mines, farms or forests with few urban jobs. Ten rows of a large country
    should mix capitals and second towns: a big state's port can outrank a small state's capital. Compare a row's people
-   with the state's urban people and its Settlement share on its subtab: the largest town holds that share of them.
+   with the state's urban people and its Settlement share on its subtab: the largest town holds that share of them
+   (in the first year, the share's target, the figure the tooltip says it is heading for). A state with no mines lists
+   no mining town.
 3. **Show All.** The button shows once a fourth town is listed, opens the list to ten and closes it to three, and the
    Population panel's tab and the National Info window share the setting.
 4. **Another country.** National Info's Demographics tab for a foreign country lists its own towns, and clicking a row
-   opens that state.
+   opens that state. Then take or release a state the list names: until the next census the row keeps its town and
+   figure from the old owner's count, and `error.log` shows no failed `Var` read (the rows read the list's country,
+   not the state's owner).
 5. **Known, not a bug.** A town keeps the map's name after a player renames it, as every hub accessor does. A state
    split between two countries gives both owners its hub names.

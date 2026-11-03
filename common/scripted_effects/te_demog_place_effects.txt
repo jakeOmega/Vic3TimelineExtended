@@ -358,7 +358,8 @@ te_demog_town_walk_pop = {
 }
 
 # THIS = a state, from te_demog_work_walk_store (under the cohorts only): its towns in order. A town with no name is
-# out (-1); one with no work of its kind still counts, at 0, after the rest.
+# out (-1), and so is a port, mining, farming or logging town with no work of its kind (a state with no mines has no
+# mining town); the capital always counts.
 te_demog_town_walk_store = {
 	set_local_variable = { name = te_dg_tw_s1 value = local_var:te_dg_tw_w1 }
 	set_local_variable = { name = te_dg_tw_s2 value = local_var:te_dg_tw_w2 }
@@ -370,19 +371,39 @@ te_demog_town_walk_store = {
 		set_local_variable = { name = te_dg_tw_s1 value = -1 }
 	}
 	if = {
-		limit = { NOT = { te_demog_town_named_port = yes } }
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_port = yes }
+				NOT = { local_var:te_dg_tw_w2 > 0 }
+			}
+		}
 		set_local_variable = { name = te_dg_tw_s2 value = -1 }
 	}
 	if = {
-		limit = { NOT = { te_demog_town_named_mine = yes } }
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_mine = yes }
+				NOT = { local_var:te_dg_tw_w3 > 0 }
+			}
+		}
 		set_local_variable = { name = te_dg_tw_s3 value = -1 }
 	}
 	if = {
-		limit = { NOT = { te_demog_town_named_farm = yes } }
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_farm = yes }
+				NOT = { local_var:te_dg_tw_w4 > 0 }
+			}
+		}
 		set_local_variable = { name = te_dg_tw_s4 value = -1 }
 	}
 	if = {
-		limit = { NOT = { te_demog_town_named_wood = yes } }
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_wood = yes }
+				NOT = { local_var:te_dg_tw_w5 > 0 }
+			}
+		}
 		set_local_variable = { name = te_dg_tw_s5 value = -1 }
 	}
 	set_variable = { name = te_dg_tw_n value = 0 }

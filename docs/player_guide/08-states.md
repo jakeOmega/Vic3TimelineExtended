@@ -657,9 +657,9 @@ the pace, to nearly twice their size at the highest shares. Below 20% its towns
 give up to 20% less infrastructure. Where People Live counts your Metropolises.
 
 Its Largest Cities list names real towns, an estimate rather than a count. A
-state's towns are its capital and its port, mining, farming and logging towns,
-as the map names them, ordered by the people at work in each kind of building,
-with farm, mine and logging work counted at a quarter. The largest holds the
+state's towns are its capital and whichever of its port, mining, farming and
+logging towns have work of their kind, as the map names them, ordered by the
+people at that work, with farm, mine and logging work counted at a quarter. The largest holds the
 state's metropolitan share of its urban people, and each next town that share of
 what is left. A town you renamed keeps the map's name there.
 
