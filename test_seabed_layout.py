@@ -12,6 +12,8 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
 from test_banking_layout import MARGIN, _all_loc, _block_from, _custom_options, _read, _type_body
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -168,6 +170,19 @@ class SeabedPanelTest(unittest.TestCase):
         at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins", "how")]
         self.assertEqual(at, sorted(at))
 
+    def test_how_it_works_is_a_link(self):
+        """How Seabed Licences Work is its header alone, which opens the Help
+        page (te_seabed_help_popup, on te_popup = help_seabed); its collapse
+        flag retired with its content (test_te_help_pages.py)."""
+        how = _type_body(self.gui, "te_seabed_how_panel")
+        self.assertIn('text = "te_seabed_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_seabed')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
+        self.assertNotIn("te_seabed_how_open", self.gui)
+        self.assertNotIn("te_seabed_note", how)
+        self.assertIn('text = "te_seabed_how_sub_pools"', _type_body(self.gui, "te_seabed_help_body"))
+
     def test_every_basin_lists_its_claimants(self):
         """Audit SEA-3's later step: each basin's rivals are one datamodel of
         the player's list of capitals, each item reading its own basin's
@@ -191,7 +206,7 @@ class SeabedPanelTest(unittest.TestCase):
     def test_rivals_collapse_flags_are_open_named(self):
         """Rule 7: a section that starts collapsed names its flag _open."""
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.gui))
-        self.assertEqual(flags, {"te_seabed_how_open"} | {f"te_seabed_rivals_{b}_open" for b in BASINS})
+        self.assertEqual(flags, {f"te_seabed_rivals_{b}_open" for b in BASINS})
 
     def test_type_sizes_are_the_templates(self):
         self.assertEqual(_SIZES, {"row": 17, "heading": 20, "overview": 16})
@@ -208,6 +223,23 @@ class SeabedPanelTest(unittest.TestCase):
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
         keys |= set(re.findall(r", '(te_seabed_\w+)'", self.gui))
         self.assertEqual(sorted(k for k in keys if k not in loc and not k.endswith("_sgui")), [])
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_seabed_wide_sections, the window's full-screen Seabed tab (spec
+    2026-11-02-te-window-wide-mode § 7): the overview and policy, the basins,
+    then How Seabed Licenses Work."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_seabed_wide_sections", layout=("te_seabed_tab_body", "te_seabed_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_seabed_overview_panel", "te_seabed_policy_panel"],
+            ["te_seabed_basins_panel"],
+            ["te_seabed_how_panel"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "seabed")
+        self.assertEqual((tab.layout, tab.wide), ("te_seabed_tab_layout", "te_seabed_wide_sections"))
 
 
 if __name__ == "__main__":

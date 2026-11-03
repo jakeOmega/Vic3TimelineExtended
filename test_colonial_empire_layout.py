@@ -7,6 +7,9 @@ import re
 import subprocess
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "colonial_empire_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_colonial_empire.txt")
@@ -25,7 +28,9 @@ ROOTS = {   # root name -> (what it instances, the journal container it is attac
 }
 OLD_ROOTS = ["widget_je_colonial_empire", "widget_je_colonial_empire_history"]
 OLD_FLAGS = ["colonial_empire_history_open", "colonial_empire_pressure_open",
-             "colonial_empire_decisions_closed", "colonial_empire_territories_open"]
+             "colonial_empire_decisions_closed", "colonial_empire_territories_open",
+             # How the Colonial Empire Works, now a Help page (test_te_help_pages.py)
+             "colonial_empire_how_open"]
 PROGRAMMES = ("invest", "garrison", "assimilation")
 
 # The explanations "How the Colonial Empire Works" holds, and the live
@@ -33,6 +38,9 @@ PROGRAMMES = ("invest", "garrison", "assimilation")
 HOW_KEYS = ["je_colonial_empire_how_bar_1", "je_colonial_empire_how_bar_2", "je_colonial_empire_how_bar_3",
             "je_colonial_empire_how_moves", "je_colonial_empire_how_pressure",
             "je_colonial_empire_how_programmes", "je_colonial_empire_how_decolonization"]
+# Its topics, in order: the subheadings over those explanations.
+HOW_SUBS = ["je_colonial_empire_how_sub_bar", "je_colonial_empire_how_sub_moves", "je_colonial_empire_how_sub_pressure",
+            "je_colonial_empire_how_sub_programmes", "je_colonial_empire_how_sub_decolonization"]
 RETIRED_KEYS = ["je_colonial_empire_status_summary", "je_colonial_empire_ov_pie_label",
                 "je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
                 "je_colonial_empire_conditions_body", "je_colonial_empire_phase_row",
@@ -228,7 +236,7 @@ class FlagTest(unittest.TestCase):
 
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
-        self.assertEqual(len(flags), 6)
+        self.assertEqual(len(flags), 5)
         for f in flags:
             self.assertRegex(f, r"^colonial_empire_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -240,14 +248,25 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(negated, 1, f)
                 self.assertGreaterEqual(bare, 2, f)
 
-    def test_live_sections_open_and_explanations_collapsed(self):
+    def test_live_sections_open(self):
         for sec, flag in (("te_ce_sec_stability", "colonial_empire_stability_closed"),
                           ("te_ce_sec_pressure", "colonial_empire_pressure_closed"),
                           ("te_ce_sec_programmes", "colonial_empire_programmes_closed"),
                           ("te_ce_sec_holdings", "colonial_empire_holdings_closed"),
-                          ("te_ce_sec_history", "colonial_empire_history_closed"),
-                          ("te_ce_sec_how", "colonial_empire_how_open")):
+                          ("te_ce_sec_history", "colonial_empire_history_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_colonial_empire_help_popup, on te_popup = help_colonial_empire);
+        its collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _strip_comments(_type_body(self.text, "te_ce_sec_how"))
+        self.assertIn('text = "je_colonial_empire_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
+        self.assertNotIn("colonial_empire_how_open", self.text)
+        self.assertNotIn("colonial_empire_note", how)
 
     def test_no_section_is_an_exception(self):
         """Live lists stay open (owner, play-test round 2): International
@@ -739,9 +758,12 @@ class HowItWorksTest(unittest.TestCase):
         cls.loc = _loc()
 
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(self.gui, "te_ce_sec_how")
+        how = _type_body(self.gui, "te_colonial_empire_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'text = "{key}"', how, key)
+        self.assertEqual(re.findall(r'text = "(je_colonial_empire_how_sub_\w+)"', _strip_comments(how)), HOW_SUBS)
+        for key in HOW_SUBS:
+            self.assertIn(key, self.loc)
         self.assertNotIn("ExecuteTooltip", how)
         self.assertNotRegex(how, r"\bcolonial_empire_text = \{")
 
@@ -1816,6 +1838,23 @@ class DecolonizedCultureScopeTest(unittest.TestCase):
         self.assertEqual(self.pick.count("exists = scope:$CULTURE_SCOPE$"), 1, "the steps read local_var, not exists")
         self.assertLess(clear.start(), self.pick.index("every_scope_culture"))
         self.assertIn("local_var:decol_release_culture_best <= 0", self.pick)
+
+class WideLayoutTest(unittest.TestCase):
+    """te_ce_wide_sections, the window's full-screen Colonial Empire (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns,
+    read down each and then across, under the narrow layout's gates."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_ce_wide_sections", layout=("te_ce_tab_body", "te_ce_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_ce_overview_panel", "te_ce_sec_holdings", "te_ce_sec_stability"],
+            ["te_ce_sec_pressure", "te_ce_sec_programmes"],
+            ["te_ce_sec_history", "te_ce_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "colonial_empire")
+        self.assertEqual((tab.layout, tab.wide), ("te_ce_tab_layout", "te_ce_wide_sections"))
+
 
 if __name__ == "__main__":
     unittest.main()
