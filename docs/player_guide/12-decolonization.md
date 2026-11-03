@@ -234,7 +234,8 @@ often until they reform it. An AI power is more likely to back the colonial
 powers when it holds colonies, when a partner does, when it has Colonial
 Resettlement or Colonial Exploitation, and when it is illiberal: an Autocracy,
 Oligarchy, Elder Council, Technocracy or Single-Party State, or a country with
-Outlawed Dissent. An illiberal AI power without colonies supports about as
+Outlawed Dissent, though a Council Republic never counts as illiberal. An
+illiberal AI power without colonies supports about as
 often as it condemns once it also has Colonial Exploitation or an ally that
 holds colonies. An AI takes a side only with 150 influence and 100
 more to spare, and drops its stance when its influence runs negative. When a

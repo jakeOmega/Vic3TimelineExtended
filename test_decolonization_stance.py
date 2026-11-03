@@ -403,18 +403,21 @@ class AiStanceTest(unittest.TestCase):
         # Every unelected Distribution of Power law and Outlawed Dissent, each
         # with its variants (has_law_or_variant); not Censorship, most
         # countries' starting law.
-        illiberal = re.findall(r"has_law_or_variant = law_type:(law_\w+)", body)
+        illiberal = re.findall(r"has_law_or_variant = law_type:(law_\w+)", _block(body, "OR", prefix=r""))
         self.assertEqual(sorted(illiberal), sorted([
             "law_autocracy", "law_oligarchy", "law_elder_council", "law_technocracy", "law_single_party_state",
             "law_algorithmic_governance", "law_outlawed_dissent"]))
         self.assertNotIn("has_law =", body + laws, "a bare has_law would miss a variant")
+        # A Council Republic is never illiberal here (owner, 2026-11-03), so a
+        # Soviet-style single-party state gains no Support from it.
+        self.assertRegex(body.strip(), r"^NOT = \{ has_law_or_variant = law_type:law_council_republic \}\s*OR = \{")
         import json
         with open(VANILLA_LAWS, encoding="utf-8") as f:
             vanilla = json.load(f)
         known = set(vanilla)
         for path in glob.glob(_path("common", "laws", "*.txt")):
             known |= set(re.findall(r"^(law_\w+) = \{", _read(path), re.M))
-        for law in illiberal + ["law_colonial_exploitation", "law_colonial_resettlement"]:
+        for law in illiberal + ["law_colonial_exploitation", "law_colonial_resettlement", "law_council_republic"]:
             self.assertIn(law, known)
             # Each named law is a parent, not itself a variant.
             self.assertNotIn("parent", vanilla.get(law, ["=", {}])[1], law)

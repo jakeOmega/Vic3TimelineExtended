@@ -1848,7 +1848,8 @@ decolonization_events.14 = {
 				add = 8
 			}
 			# And so does an illiberal one: an unelected government, or one
-			# that outlaws dissent, has little use for self-determination
+			# that outlaws dissent, has little use for self-determination (a
+			# Council Republic never counts: decol_ai_illiberal)
 			modifier = {
 				trigger = { decol_ai_illiberal = yes }
 				add = 8

@@ -166,8 +166,13 @@ decol_ai_colonial_laws = {
 # ("criticizing the government is considered treasonous"). Censorship is left
 # out: it is most countries' starting law. has_law_or_variant takes each law's
 # variants as well (Bakufu and Neo-Absolutism of Autocracy, Organic Regulation
-# of Oligarchy, and any a later patch adds). Scope: country.
+# of Oligarchy, and any a later patch adds). A Council Republic ("workers elect
+# delegates to local councils") is never illiberal here, whatever its other
+# laws (owner, 2026-11-03): the Soviet-style single-party council states were
+# colonialism's loudest critics, so none gains Support from this test, and
+# Condemn's +3 for a left-leaning law still applies. Scope: country.
 decol_ai_illiberal = {
+	NOT = { has_law_or_variant = law_type:law_council_republic }
 	OR = {
 		has_law_or_variant = law_type:law_autocracy
 		has_law_or_variant = law_type:law_oligarchy
