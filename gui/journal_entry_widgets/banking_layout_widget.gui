@@ -20,7 +20,7 @@ types banking_layout_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_banking_sec_active = {}
 		te_banking_sec_monetary = {}
@@ -241,7 +241,7 @@ types banking_layout_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_banking_history_panel = {}
 		te_banking_sec_how = {}
@@ -260,9 +260,9 @@ types banking_layout_widget_types
 	### A country with a monetary stance but no entry (#805,
 	### te_budget_banking_readout_sgui) gets the monetary readout instead,
 	### under a Monetary Policy header, with a note naming what opens the
-	### rest. The readout reads GetPlayer, so it needs no datacontext. Its
-	### gate and the entry's are never true together, so exactly one header
-	### shows.
+	### rest. The readout reads Country, the frame's root, so it needs no
+	### datacontext. Its gate and the entry's are never true together, so
+	### exactly one header shows.
 	type te_banking_tab_body = te_system_tab_frame {
 		blockoverride "tab_header" {
 			default_header = {
@@ -352,7 +352,7 @@ types banking_layout_widget_types
 			te_banking_overview_panel = {}
 
 			flowcontainer = {
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -364,7 +364,7 @@ types banking_layout_widget_types
 
 		blockoverride "column_2" {
 			flowcontainer = {
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -382,8 +382,9 @@ types banking_layout_widget_types
 }
 
 ### ==========================================================================
-### JOURNAL ENTRY ROOTS (je_banking.txt). Bare wrappers that repeat the
-### composers' IsActive gate: je_banking_cycle has is_shown_when_inactive, so
+### JOURNAL ENTRY ROOTS (je_banking.txt). Bare wrappers that ask the entry
+### what the composers ask its country (te_budget_banking_tab_sgui on
+### Country, the entry held): je_banking_cycle has is_shown_when_inactive, so
 ### the panel can open for a country whose entry has not activated yet, and an
 ### inactive entry's containers must collapse. An active entry may still be
 ### dormant, its financial cycle not started: the sections that read the cycle

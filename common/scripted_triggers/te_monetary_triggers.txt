@@ -547,7 +547,7 @@ te_mon_monetise_can_step_up = {
 # and because it is the first thing step 0 writes, so a country that has it has
 # run a pulse.
 #
-# THE LAST FOUR ARE PHASE 2. The Rate You Pay tooltip breaks the figure down as
+# THE LAST FOUR ARE PHASE 2. The Rate Paid tooltip breaks the figure down as
 # market yield + premium - inflation (§10), the block's own Inflation and
 # Expected Inflation rows print two of those, and the monetisation stepper
 # prints its level. A save made under phase 1 has every variable above this line

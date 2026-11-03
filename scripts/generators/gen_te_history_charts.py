@@ -233,8 +233,8 @@ def _monthly(system: str, entry: str, gate: str, ids: list[str], shown: dict[str
 # Banking's charts drawn only for some countries: one policy-rate chart a
 # currency (a digital one's axis reaches below 0), and no inflation or exchange
 # rate under banking_system_simplified (te_monetary_sguis.txt).
-_DIGITAL = "GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
-_MONETARY = "GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+_DIGITAL = "GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+_MONETARY = "GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 BANKING_SHOWN = {"mon_policy": f"Not( {_DIGITAL} )", "mon_policy_digital": _DIGITAL,
                  "mon_inflation": _MONETARY, "mon_fx": _MONETARY}
 

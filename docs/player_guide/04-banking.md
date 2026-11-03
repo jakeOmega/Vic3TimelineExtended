@@ -28,7 +28,7 @@ Every country has the entry from the start of the game, but its financial
 cycle starts only once you have researched Stock Exchange and own an Urban
 Center of level 5 or higher. Until then the entry shows the cycle as Not
 Started, with the two conditions on hover. You see your Monetary Policy
-readings, Credit Standing and Rate You Pay among them, but the banking tools
+readings, Credit Standing and Rate Paid among them, but the banking tools
 and the central bank's controls stay grayed, and nothing in the cycle happens:
 no crashes, banking events or contagion. When you meet both conditions during
 the game, a notice tells you the cycle has begun. It starts at Stable with no momentum or bubble,
@@ -42,6 +42,11 @@ The same panels appear as a Banking tab in the Budget panel, and a change made
 in one shows in the other. The tab ends with an Open Journal Entry button,
 which opens the entry with its description. [The banking
 panels](#the-banking-panels) describes what they show.
+
+Another country's Banking tab, in National Info ([Introduction](01-introduction.md)),
+shows its phase, momentum and bubble pressure, the four bars, its Monetary
+Policy readings, the policies it has in force and its history. It has none of
+the buttons and no Available Interventions.
 
 ![The Banking tab of the Budget panel: the four bars, the overview's icons, Active Policies and the start of Monetary Policy.](images/banking_tab.png)
 
@@ -696,7 +701,7 @@ fade after a return to Neutral.
 
 ### What your government pays to borrow
 
-Rate You Pay shows the yearly interest on your debt. It adds up the market yield
+Rate Paid shows the yearly interest on your debt. It adds up the market yield
 (the higher of your policy rate and the Reference Rate plus expected
 inflation), your credit standing and your risk premium, less the inflation that
 actually happened, and never falls below 0.5%.
