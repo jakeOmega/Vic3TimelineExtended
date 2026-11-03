@@ -676,21 +676,20 @@ class BindingTest(unittest.TestCase):
     def test_every_world_line_marks_a_player_read(self):
         """A `# world:` line sits directly over a line that reads the player,
         and never over an entry read, which another country's panel can't
-        reach: a stale marker can't hide a read that moved."""
-        found = 0
+        reach: a stale marker can't hide a read that moved. None is left on
+        main since the charts' date reads moved to Country (GetPlayer is no
+        country for an observer); MutationTest holds the rule on a fixture."""
         for path in mod_gui_paths():
             lines = _read(os.path.join(REPO, path)).split("\n")
             for i, line in enumerate(lines):
                 if not WORLD.match(line):
                     continue
-                found += 1
                 below = _strip_comments(lines[i + 1]) if i + 1 < len(lines) else ""
                 reads = READ.findall(below)
                 with self.subTest(at=f"{path}:{i + 1}"):
                     self.assertTrue(reads, f"{path}:{i + 1}: a world marker over a line that reads no player")
                     self.assertFalse([r for r in reads if is_entry_read(r)],
                                      f"{path}:{i + 1}: an entry read is never a world read")
-        self.assertGreater(found, 0)
 
     def test_world_loc_is_live(self):
         index = loc_index()

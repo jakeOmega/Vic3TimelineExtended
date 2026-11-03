@@ -300,8 +300,7 @@ types te_history_chart_types
 				### The sample's age in months is "now" minus the month
 				### index stored on the container.
 				block "sample_visible" {
-					# world: the month index is the date's, the same for every country
-					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
 				}
 
 				block "bar_tooltip" {}
