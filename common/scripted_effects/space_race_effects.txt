@@ -1313,6 +1313,19 @@ sr_power_fuzz_base = {
 	}
 }
 
+# A power's first offset for $MILESTONE$, as it starts it (each milestone
+# entry's immediate, and sr_resume_solar_colonization): drawn only if it has
+# none, so another country's estimate (sr_disp_rival_est_<m>) is off the exact
+# figure from the first day, not from the next monthly pulse, and a re-run of
+# the immediate (a revolution's inheritance) keeps the offset it has.
+# sr_power_fuzz_base draws it again a year on. Scope: the power.
+sr_power_fuzz_first = {
+	if = {
+		limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
+		sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
+	}
+}
+
 # The snapshot: the list and the count, and the eight slots that held it
 # before audit SPC-9 (2026-10-27), so an older save drops them at its first
 # refresh. From the refresh, and for a country that no longer views it (no
