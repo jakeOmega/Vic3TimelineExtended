@@ -348,8 +348,10 @@ class PanelTest(unittest.TestCase):
         # The bars, row 1 (phase, momentum) and row 2 (bubble, budget).
         self.assertEqual(overview.count(RUNNING_SGUI), 3)
         self.assertEqual(overview.count(DORMANT_SGUI), 1)
-        bars = overview.index("te_banking_bars = {}")
-        self.assertLess(overview.rindex(RUNNING_SGUI, 0, bars), bars)
+        # The player's own bars are the entry's; another country's, te_banking_bars
+        # (National Info). Both wait for the cycle.
+        for bars in (overview.index("te_je_scripted_bars = {}"), overview.index("te_banking_bars = {")):
+            self.assertLess(overview.rindex(RUNNING_SGUI, 0, bars), bars)
 
     def test_is_active_gates_only_the_containers(self):
         # JournalEntry.IsActive is true for a dormant entry, so it may gate only

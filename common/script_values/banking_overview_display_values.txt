@@ -591,11 +591,12 @@ banking_bank_holiday_days_left_display = {
 }
 
 # ----------------------------------------------------------------------------
-# The overview's four bars (te_banking_bars), each 0 to 1 along its bar. The
-# entry's scripted bars are set from these same variables
-# (banking_cycle_update_progress_bars, banking_cycle_post_event_refresh), so
-# the panel reads the variables, as another country's panel must: it has no
-# journal entry (charts-help-national-info spec § 6.3). Each runs from its
+# Another country's four bars (te_banking_bars, in National Info), each 0 to 1
+# along its bar; the player's own panel draws the entry's scripted bars. Those
+# are set from these same variables (banking_cycle_update_progress_bars,
+# banking_cycle_post_event_refresh), so another country's panel, which has no
+# journal entry (charts-help-national-info spec § 6.3), reads the variables,
+# and test_banking_layout.BarsTest holds each to its bar. Each runs from its
 # bar's min_value to its max_value (extra_progress_bars.txt) and clamps as
 # set_bar_progress does; a variable not written yet sits where the entry's
 # bar starts (start_value).

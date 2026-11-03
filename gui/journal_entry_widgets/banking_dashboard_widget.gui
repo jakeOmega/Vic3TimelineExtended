@@ -709,10 +709,11 @@ types banking_dashboard_widget_types
 		tooltip = "banking_dash_ov_crash_risk_tt"
 	}
 
-	### The entry's four bars, drawn from the country variables the entry's
-	### scripted bars are set from (banking_cycle_update_progress_bars), so they
-	### draw for any country: another country's panel has no journal entry
-	### (charts-help-national-info spec § 6.3; National Info). The markup is
+	### The entry's four bars for another country's panel, which has no
+	### journal entry (charts-help-national-info spec § 6.3; National Info):
+	### drawn from the country variables the entry's scripted bars are set from
+	### (banking_cycle_update_progress_bars). The player's own panel draws the
+	### entry's bars themselves (te_banking_overview_panel). The markup is
 	### te_je_scripted_bars' (gui/te_system_tab_widgets.gui), one bar each in the
 	### entry's order and variant: the cycle value (default_green), momentum and
 	### the policy stance (double_sided_gold), bubble pressure (default_bad).
@@ -912,11 +913,13 @@ types banking_dashboard_widget_types
 
 		### THE JOURNAL ENTRY'S FOUR BARS, AT THE TOP. Cycle value, momentum,
 		### policy stance, bubble pressure — the bars vanilla's panel draws at the
-		### very bottom, drawn here by te_banking_bars from the country variables
-		### the entry's bars are set from, so another country's panel, which has
-		### no entry, draws them too (until 2026-11-02 te_je_scripted_bars, the
-		### entry's own datamodel). They are NOT drawn twice: je_banking.txt puts
-		### a marker widget in custom_widget_container_7, and the mod's
+		### very bottom. The player's own panel draws the entry's own
+		### (te_je_scripted_bars, the entry's datamodel): every mount of it has
+		### the entry in context. Another country's (National Info) has no entry,
+		### so it draws te_banking_bars, the same markup from the country
+		### variables the entry's bars are set from (the Colonial Empire's
+		### pattern, te_ce_ov_bar_row). They are NOT drawn twice: je_banking.txt
+		### puts a marker widget in custom_widget_container_7, and the mod's
 		### journal_entry.gui override hides its own bar block for any entry that
 		### does. A dormant entry has no readings, so no bars.
 		flowcontainer = {
@@ -924,7 +927,16 @@ types banking_dashboard_widget_types
 			parentanchor = hcenter
 			ignoreinvisible = yes
 
-			te_banking_bars = {}
+			### The player's own country: the entry's own bars, as before (their
+			### breakdown tooltip and the entry's update timing).
+			flowcontainer = {
+				using = te_own_country_only
+				te_je_scripted_bars = {}
+			}
+			### Another country's: no entry in context (National Info).
+			te_banking_bars = {
+				visible = "[Not( Country.IsLocalPlayer )]"
+			}
 		}
 
 		### Three rows of two cells, each a box 238 wide (238 + 4 + 238 = 480,
@@ -2255,9 +2267,12 @@ types banking_dashboard_widget_types
 			### with the start test's checklist on hover. It speaks of the
 			### player's controls, so it is the player's own country's only: the
 			### note's gate on a wrapper, the guard on one inside it, so the
-			### player's panel lays out as before.
+			### player's panel lays out as before. The gate asks
+			### Country.IsLocalPlayer too, as the mandate grid's, Recapitalize's and
+			### the union buttons' wrappers do, so another country's panel gives no
+			### spacing to an empty wrapper.
 			flowcontainer = {
-				visible = "[GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				ignoreinvisible = yes
 
 				flowcontainer = {
@@ -2635,7 +2650,7 @@ types banking_dashboard_widget_types
 						ignoreinvisible = yes
 						spacing = 2
 						parentanchor = hcenter
-						visible = "[GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_mandate_by_choice').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 						### The player's own country only: another country sees the Mandate row
 						### above, not the buttons that change it.
@@ -2846,7 +2861,7 @@ types banking_dashboard_widget_types
 						ignoreinvisible = yes
 						parentanchor = hcenter
 						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
-						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 						banking_dash_mon_button = {
 							using = te_own_country_only
@@ -3216,7 +3231,7 @@ types banking_dashboard_widget_types
 						ignoreinvisible = yes
 						spacing = 2
 						parentanchor = hcenter
-						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 						### The player's own country only: another country sees the Monetary
 						### Union row above, not the buttons that change it.
