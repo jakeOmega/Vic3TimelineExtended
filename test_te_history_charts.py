@@ -130,6 +130,8 @@ class OpenButtonTest(unittest.TestCase):
                          % (gen.OPEN_BUTTON, gen.OPEN_BUTTON))
         self.assertEqual(gen.OPEN_BUTTON, 24)
         self.assertNotIn("onclick", self.button, "each wrapper sets its own")
+        # centred on the title's line, as the row is max(title, 24) tall
+        self.assertEqual(re.findall(r"^\t\tparentanchor = (\S+)$", self.button, re.M), ["vcenter"])
         # one visible per widget: the Demographics wrappers put theirs on the instance
         self.assertNotIn("visible", self.button)
         self.assertEqual(sorted(c.system for c in gen.CHARTS if c.entry is None), ["demographics"] * 8)
@@ -537,6 +539,13 @@ class RegistryTest(unittest.TestCase):
                 gen.render()
 
 
+# The keys' heights, from their rows: Banking's two lines of fontsize_medium
+# (18 px) 1 apart in a 2 px margin, Demographics' one line in a 2 px margin,
+# Cultural Hegemony's eight rows of ch_fontsize_row (17 px type, a 22 px line)
+# 1 apart.
+KEY_HEIGHTS = {"banking": 2 * 18 + 1 + 2 * 2, "demographics": 18 + 2 * 2, "cultural_hegemony": 8 * 22 + 7}
+
+
 def _loc_values():
     out = {}
     for path in glob.glob(os.path.join(REPO, "localization", "english", "**", "*.yml"), recursive=True):
@@ -610,7 +619,16 @@ class ViewerTest(unittest.TestCase):
                 self.assertEqual(_override_bodies(self.popup(chart), "popup_size")[0].strip(),
                                  f"size = {{ {width} {height} }}")
                 self.assertGreaterEqual(width, frame[0] + 2 * 35 + 2 * 10 + 8)
-                self.assertGreater(height, frame[1] + 56 + 18 + 20)
+                # every row, summed here from the layout itself, so the popup
+                # needs no scrollbar: the shell (header_pattern's 56,
+                # Window_Margins' 18 and 20, the list's 2 x 6), the range row
+                # (a 26 px button, the row's 2 x 4), the chart's text (its 2 x 4
+                # margin, a 28 px title, two 18 px legend lines, 2 x 2 spacing),
+                # the frame, and the key
+                rows = [56 + 18 + 20 + 2 * 6, 26 + 2 * 4, 2 * 4 + 28 + 2 * 18 + 2 * 2, frame[1]]
+                if chart.system in KEY_HEIGHTS:
+                    rows.append(KEY_HEIGHTS[chart.system])
+                self.assertGreaterEqual(height, sum(rows) + 4 * (len(rows) - 3))   # 4 px between the list's rows
                 self.assertLessEqual((width, height), gen.SCREEN)
                 self.assertLessEqual(height, gen.SCREEN[1])
             sizes.setdefault(chart.kind, set()).add(width)
