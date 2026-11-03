@@ -20,12 +20,12 @@
 # --- Launch to orbit ---
 
 pm_chemical_launch_building_space_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_purple_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_chemical_launch_building_space_mine.dds"
 	is_default = yes
 }
 
 pm_tethered_launch_building_space_mine = {
-	texture = "gfx/interface/icons/production_method_icons/cat_star_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_tethered_launch_building_space_mine.dds"
 
 	unlocking_technologies = {
 		space_elevator

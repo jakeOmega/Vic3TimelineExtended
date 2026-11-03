@@ -140,7 +140,7 @@ pm_sr_space_command_torch_yards = {
 }
 
 pm_sr_space_command_antimatter_yards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_space_command_antimatter_yards.dds"
 
 	unlocking_technologies = {
 		antimatter_production
