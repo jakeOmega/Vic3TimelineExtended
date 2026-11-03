@@ -6972,8 +6972,8 @@
   "de": "5 Jahre"
  },
  "ch_model_hist_since": {
-  "en": "Recorded years: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_last_year')|0]",
-  "de": "Erfasste Jahre: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_last_year')|0]"
+  "en": "Recorded years: [Country.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[Country.MakeScope.ScriptValue('ch_model_hist_last_year')|0]",
+  "de": "Erfasste Jahre: [Country.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[Country.MakeScope.ScriptValue('ch_model_hist_last_year')|0]"
  },
  "ch_model_hist_title": {
   "en": "Political Models over Time",
@@ -7062,6 +7062,10 @@
  "ch_policy_funding_step_tt": {
   "en": "Each funding step adds:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nand costs, per step, @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week. At its current level the programme costs @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/week.\\n#lore The cost scales with our GDP.#!",
   "de": "Jede Finanzierungsstufe fügt hinzu:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nund kostet pro Stufe @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/Woche. Auf der aktuellen Stufe kostet das Programm @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/Woche.\\n#lore Die Kosten skalieren mit unserem BIP.#!"
+ },
+ "ch_policy_funding_step_tt_ni": {
+  "en": "Each funding step adds:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nand costs, per step, @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week. At its current level the programme costs @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/week.\\n#lore The cost scales with our GDP.#!",
+  "de": "Jede Finanzierungsstufe fügt hinzu:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nund kostet pro Stufe @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/Woche. Auf der aktuellen Stufe kostet das Programm @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/Woche.\\n#lore Die Kosten skalieren mit unserem BIP.#!"
  },
  "ch_policy_institutes_off": {
   "en": "Defund",
