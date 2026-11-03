@@ -119,7 +119,9 @@ LARGE = Size("large", "_large", {
 })
 
 SIZES = (SMALL, LARGE)
-PIP_LANE = 36   # annual_pips: the frame's height over the bars' box
+PIP_LANE = 36   # annual_pips: the frame's height over the bars' box. te_demog_hist_pips places its pips
+                # at fixed offsets above the bars' top (te_demographics_widgets.gui), which land in the lane
+                # only while it is 36 px and the bars 6 px clear of their box, at both sizes
 
 
 # --- the ranges -----------------------------------------------------------------
