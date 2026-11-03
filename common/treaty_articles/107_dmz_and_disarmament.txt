@@ -6,7 +6,7 @@
 # Historical: Rhineland DMZ, Korean DMZ, Sinai after Camp David,
 # Åland Islands, Black Sea limitations (Treaty of Paris 1856).
 # =================================================================
-demilitarized_zone = {
+demilitarized_zone = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/demilitarized_zone.dds"
 	kind = directed
 	cost = 75
@@ -305,7 +305,7 @@ demilitarized_zone = {
 # Historical: Treaty of Versailles military limitations on Germany,
 # Japanese post-WWII demilitarization.
 # =================================================================
-forced_disarmament = {
+forced_disarmament = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/forced_disarmament.dds"
 	kind = directed
 	cost = 150

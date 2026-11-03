@@ -20,6 +20,8 @@ archaeological_concession = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/archaeological_concession.dds"
 	kind = directed
 	cost = 75
+	max_target_involvement = 500
+	target_involvement_applies_to = source_country
 
 	flags = {
 		can_be_enforced

@@ -10,7 +10,7 @@
 # monument_trophy_events.13, outside the treaty designer's preview pass,
 # which runs this hook every frame with scope:article_options unbound.
 # =================================================================
-return_cultural_property = {
+return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, like vanilla's state, ship and money transfers, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/return_cultural_property.dds"
 	kind = directed
 	cost = 50

@@ -23,6 +23,8 @@ grid_interconnection_agreement = {
 
 	relations_progress_per_day = 0.25
 	relations_improvement_max = 20
+	max_target_involvement = 1000
+	target_involvement_applies_to = mutual
 
 	flags = {
 		can_be_renegotiated
