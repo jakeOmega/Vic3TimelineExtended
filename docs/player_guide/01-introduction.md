@@ -170,7 +170,9 @@ option open to you, which also depends on the authority you produce.
 Below them are five sections: Governance, Society, Economy, Science and Space,
 and International. Each starts with its scores, if it has any. Legislative
 Override Capacity's figure names every source on hover, and the lines on its bar
-mark where Forceful Legislation's options open, at 0, 2 and 4.
+mark where Forceful Legislation's options open, at 0, 2 and 4. Once a United
+Nations exists, International starts with your seat in it, your International
+Standing and your UN Dues, with any months in arrears.
 
 Under the scores, each section has a row for each kind of effect the mod's
 permanent effects give your country, grouped under small headings: "Arable
@@ -190,8 +192,10 @@ how many there are. Hover one to see what it does at its current size.
 
 The Modifiers list in the country panel's Information tab leaves these effects
 out, and a line under it gives how many it left out. On your own country an
-arrow beside that line opens the Nation tab. The list keeps the timed effects,
-such as what an event has just done to you, and a few others: Nuclear Power,
+arrow beside that line opens the Nation tab; on another country's it opens
+that country's Nation tab in National Info, which shows all of it: the scores,
+the rows, the permanent effects and the UN lines. The list keeps the timed
+effects, such as what an event has just done to you, and a few others: Nuclear Power,
 and what a foreign operation is doing to you. A system's weekly costs are in the
 Budget panel's Breakdown tab. Tooltips that break down a figure, such as
 legitimacy, still name every source.
