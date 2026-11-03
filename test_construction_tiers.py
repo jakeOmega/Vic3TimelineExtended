@@ -155,5 +155,112 @@ class ConstructionTiers(unittest.TestCase):
         self.assertEqual(count(r"TIER = \d+ PM ="), 4 * len(self.tiers) - 2)
 
 
+def _value(value):
+    while isinstance(value, (list, tuple)) and len(value) == 2 and value[0] in ("=", "?="):
+        value = value[1]
+    return value
+
+
+def _names(value):
+    value = _value(value)
+    if value is None:
+        return []
+    if isinstance(value, dict):
+        return list(value)
+    if isinstance(value, (list, tuple)):
+        return [str(_value(v)) for v in value]
+    return [str(value)]
+
+
+class TierInputsExistByTheirEra(unittest.TestCase):
+    """No Construction Sector tier, automation method or Construction Site twin takes a
+    good that only a later era can make. Advanced Construction (prefabricated_construction,
+    era 7) took 20 Software until 2026-11-03, and nothing makes Software before the Software
+    Industry (computer_networks, era 8).
+
+    A good's era is the earliest era a regular building makes it in: the latest era among
+    the technologies its method and its building need. Company buildings, buildings with a
+    `potential` (wonders built from their own construction site, such as the Mind Upload
+    Nexus) and law-gated methods don't count. A same-era producer passes, since a tier can't
+    know which of its era's other technologies come first."""
+
+    GROUPS = (
+        (SECTOR_GROUP, "building_construction_sector"),
+        ("pmg_construction_automation", "building_construction_sector"),
+        (SITE_GROUP, "te_construction_market_site"),
+    )
+    COMPANY_GROUP = "bg_company_buildings"
+
+    @classmethod
+    def setUpClass(cls):
+        import vanilla_parsed
+        from mod_state import ModState
+
+        types = {"Buildings": "buildings", "PM Groups": "production_method_groups",
+                 "PMs": "production_methods", "Technologies": "technology/technologies"}
+        snapshot = vanilla_parsed.load(os.path.join(REPO, "vanilla_parsed"))
+        vanilla = {k: v for k, v in snapshot.data.items() if k in types}
+        state = ModState({k: "" for k in types}, {k: os.path.join(REPO, "common", d) for k, d in types.items()},
+                         vanilla_data=vanilla)
+        cls.buildings, cls.groups, cls.pms, cls.techs = (
+            {name: _value(body) for name, body in state.get_data(k).items()} for k in types)
+        buildings_of = {}
+        for building, body in cls.buildings.items():
+            for group in _names(body.get("production_method_groups")):
+                for pm in _names(cls.groups.get(group, {}).get("production_methods")):
+                    buildings_of.setdefault(pm, set()).add(building)
+        cls.first_era = {}
+        for pm, body in cls.pms.items():
+            if not isinstance(body, dict) or body.get("unlocking_laws"):
+                continue
+            for building in buildings_of.get(pm, ()):
+                b = cls.buildings[building]
+                if _value(b.get("building_group")) == cls.COMPANY_GROUP or "potential" in b:
+                    continue
+                era = cls.gate_era(pm, building)
+                for good in cls.goods(pm, "output"):
+                    cls.first_era[good] = min(era, cls.first_era.get(good, era))
+
+    @classmethod
+    def era_of(cls, tech):
+        return int(str(_value(cls.techs[tech].get("era"))).rsplit("_", 1)[1])
+
+    @classmethod
+    def gate_era(cls, pm, building):
+        techs = _names(cls.pms[pm].get("unlocking_technologies"))
+        techs += _names(cls.buildings[building].get("unlocking_technologies"))
+        return max((cls.era_of(t) for t in techs), default=1)
+
+    @classmethod
+    def goods(cls, pm, kind):
+        pattern = re.compile(rf"goods_{kind}_(\w+)_add")
+        found = set()
+        for block in (_value(cls.pms[pm].get("building_modifiers")) or {}).values():
+            for key in _value(block) or {}:
+                match = pattern.fullmatch(key)
+                if match:
+                    found.add(match.group(1))
+        return found
+
+    def test_no_tier_takes_a_good_only_a_later_era_makes(self):
+        checked = 0
+        for group, building in self.GROUPS:
+            for pm in _names(self.groups[group].get("production_methods")):
+                era = self.gate_era(pm, building)
+                for good in sorted(self.goods(pm, "input")):
+                    checked += 1
+                    with self.subTest(method=pm, good=good):
+                        self.assertIn(good, self.first_era, f"no regular building makes {good}")
+                        self.assertLessEqual(self.first_era[good], era,
+                                             f"{pm} unlocks in era {era}, but {good} is first made in era "
+                                             f"{self.first_era[good]}")
+        self.assertGreater(checked, 50)
+
+    def test_software_first_comes_with_the_software_industry(self):
+        """Guards the producer index: company headquarters and the Mind Upload Nexus make
+        Software with no technology, so counting them would pass every tier."""
+        self.assertEqual(self.first_era["digital_assets"], self.era_of("computer_networks"))
+
+
 if __name__ == "__main__":
     unittest.main()
