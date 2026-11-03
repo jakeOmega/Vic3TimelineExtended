@@ -953,8 +953,12 @@ types banking_dashboard_widget_types
 			ignoreinvisible = yes
 			spacing = 4
 
+			### The player's hover is the start test's checklist
+			### (banking_dash_not_started_own_tt); another country's says the cycle
+			### has not started, without it, since the checklist's lines are the
+			### greyed tab's, written to the player.
 			te_banking_ov_cell = {
-				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'banking_dash_not_started_own_tt', 'banking_dash_not_started_other_tt' )]"
 				size = { 238 70 }
 				blockoverride "caption_width" {
 					max_width = 154
@@ -2248,18 +2252,30 @@ types banking_dashboard_widget_types
 			### 2026-10-17): every control below is greyed, its tooltip's first
 			### line the cycle's (banking_mon_control_sgui, banking_possible_*).
 			### The reason is said once, here, above the rows (style guide rule 6),
-			### with the start test's checklist on hover.
-			textbox = {
+			### with the start test's checklist on hover. It speaks of the
+			### player's controls, so it is the player's own country's only: the
+			### note's gate on a wrapper, the guard on one inside it, so the
+			### player's panel lays out as before.
+			flowcontainer = {
 				visible = "[GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-				text = "banking_dash_dormant_monetary_note"
-				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-				autoresize = yes
-				multiline = yes
-				minimumsize = { 480 -1 }
-				maximumsize = { 480 -1 }
-				align = left|nobaseline
-				using = banking_dash_fontsize_row
-				margin = { 6 4 }
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					using = te_own_country_only
+					ignoreinvisible = yes
+
+					textbox = {
+						text = "banking_dash_dormant_monetary_note"
+						tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+						autoresize = yes
+						multiline = yes
+						minimumsize = { 480 -1 }
+						maximumsize = { 480 -1 }
+						align = left|nobaseline
+						using = banking_dash_fontsize_row
+						margin = { 6 4 }
+					}
+				}
 			}
 
 			### ---- The policy dial (monetary_policy_design.md §3) ----------

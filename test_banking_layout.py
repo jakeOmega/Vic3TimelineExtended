@@ -1149,5 +1149,98 @@ class BudgetPointsTest(unittest.TestCase):
         self.assertGreaterEqual(len(grants), 9)
         self.assertEqual(listed, grants)
 
+
+# What another country's Banking tab leaves out (spec 2026-11-02-charts-help-
+# national-info § 6.4, Hidden): every control; r* and the estimation error,
+# which no country is shown; and, by this PR's call, Available Interventions
+# and the notes that tell the player how to start the cycle.
+_SCRIPT_CLICK = re.compile(r"\b(?:onclick|ondefault|onctrl|onshift|onrightclick)\s*=\s*\"\[[^\"]*\.Execute\(")
+_CONTROL_TYPES = re.compile(r"\b(?:banking_dash_action_button|banking_dash_mon_button|"
+                            r"button_icon_minus_action|button_icon_plus_action)\s*=\s*\{")
+_HIDDEN_VARS = re.compile(r"(?:\bvar:|\bVar\(\s*')(?:te_neutral_rate|te_neutral_error|te_mon_stance_gap)\b")
+_SV_DIR = os.path.join(REPO, "common", "script_values")
+
+
+class PrivateTest(unittest.TestCase):
+    """National Info's Hidden items for Banking. Each sits under
+    te_own_country_only, which draws only for the local player, so another
+    country's tab shows the readings and none of these. GuardTest
+    (test_te_system_tab_bodies.py) checks every control tab-wide; this pins
+    the sections, and the parts that aren't controls."""
+
+    def setUp(self):
+        self.dash = _strip_comments(_read(DASH))
+
+    def _unguarded(self, body, pattern):
+        from gui_test_helpers import guard_spans, in_spans
+        spans = guard_spans(body)
+        found = list(pattern.finditer(body))
+        # An instance's position is its opening brace, so a guard it carries
+        # itself counts.
+        return found, [body[m.start():m.start() + 90] for m in found if not in_spans(m.end() - 1, spans)]
+
+    def test_each_control_is_the_players(self):
+        """A click that runs a scripted GUI, and each control type's instance:
+        the Monetary Policy tools, and Enable and Disable on every policy row
+        (Active Policies keeps its rows, their slot empty). Available
+        Interventions is all policy rows, under its own guard besides."""
+        cases = [("te_banking_sec_monetary", _SCRIPT_CLICK, 15), ("te_banking_sec_monetary", _CONTROL_TYPES, 15),
+                 ("banking_dash_policy_row", _CONTROL_TYPES, 2)]
+        for name, pattern, least in cases:
+            with self.subTest(type=name, pattern=pattern.pattern[:30]):
+                found, loose = self._unguarded(_type_body(self.dash, name), pattern)
+                self.assertGreaterEqual(len(found), least, "is the section still built this way?")
+                self.assertEqual(loose, [], "a control another country would see")
+
+    def test_available_interventions_is_the_players(self):
+        """The whole section, guarded on its root; an instance that set its own
+        visible would lose the guard (gotcha #17)."""
+        from gui_test_helpers import GUARD, own_props
+        body = _type_body(self.dash, "te_banking_sec_interventions")
+        self.assertRegex(own_props(body), rf"\busing\s*=\s*{GUARD}\b")
+        layout = _strip_comments(_read(LAYOUT))
+        instances = [m.start() for m in re.finditer(r"\bte_banking_sec_interventions\s*=\s*\{", layout)]
+        self.assertEqual(len(instances), 2, "the narrow composer and the wide column")
+        for at in instances:
+            self.assertNotIn("visible", _block_from(layout, at))
+
+    def test_the_start_notes_are_the_players(self):
+        """The notes under Monetary Policy and Available Interventions say
+        what starts the cycle, with the player's checklist on hover."""
+        for name, key in (("te_banking_sec_monetary", "banking_dash_dormant_monetary_note"),
+                          ("te_banking_sec_interventions", "banking_dash_dormant_tools_note")):
+            with self.subTest(note=key):
+                body = _type_body(self.dash, name)
+                found, loose = self._unguarded(body, re.compile(rf"text\s*=\s*\"{key}\""))
+                self.assertEqual(len(found), 1)
+                self.assertEqual(loose, [])
+
+    def test_nothing_draws_r_star_or_the_error(self):
+        """The neutral rate, its estimation error and the gap between them
+        (monetary_policy_design.md § 8): no Banking GUI, no loc key it names
+        (splices followed) and no script value reads one, whoever's tab it is.
+        Testing that a variable exists reads nothing."""
+        loc = _loc()
+        sv_text = "\n".join(_strip_comments(_read(os.path.join(_SV_DIR, f))) for f in sorted(os.listdir(_SV_DIR))
+                            if f.endswith(".txt"))
+        values = {m.group(1): m.start() for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{", sv_text)}
+        gui = "".join(_strip_comments(_read(p)) for p in (DASH, LAYOUT, HIST))
+        self.assertIsNone(_HIDDEN_VARS.search(gui))
+        words, keys, svs = re.findall(r"\w+", gui), set(), set()
+        while words:
+            w = words.pop()
+            if w in loc and w not in keys:
+                keys.add(w)
+                self.assertIsNone(_HIDDEN_VARS.search(loc[w]), w)
+                words += re.findall(r"\w+", loc[w])
+            elif w in values and w not in svs:
+                svs.add(w)
+                block = _block_from(sv_text, values[w])
+                self.assertIsNone(_HIDDEN_VARS.search(block), w)
+                words += re.findall(r"\w+", block)
+        self.assertGreater(len(keys), 300)
+        self.assertGreater(len(svs), 50)
+
+
 if __name__ == "__main__":
     unittest.main()
