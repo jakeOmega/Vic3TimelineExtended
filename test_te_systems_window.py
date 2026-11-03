@@ -50,6 +50,12 @@ ALL_TABS = [(t.key, RULES[t.key], SLOTS[[u.key for u in gen.TABS if u.row == t.r
             for t in gen.TABS[1:] if t.key in RULES]
 
 
+# The window's own tabs that open without their entry too (owner, 2026-11-03:
+# the Colonial Empire tab's stance and colonial powers outlive the entry), and
+# the gate of that state, as Banking's #805 readout.
+READOUT_TABS = {"colonial_empire": "te_window_colonial_empire_readout_sgui"}
+
+
 def _shown(sgui):
     return f"GetScriptedGui('{sgui}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
 
@@ -538,7 +544,11 @@ class StripTest(unittest.TestCase):
             with self.subTest(tab=tab):
                 within = self._strip(_tab(tab).row)
                 click = self._override(f"{slot}_button_click", within)
-                self.assertIn(f'enabled = "[{_gate(f"te_window_{tab}_tab_sgui")}]"', click)
+                gate = _gate(f"te_window_{tab}_tab_sgui")
+                if tab in READOUT_TABS:
+                    # open with the entry, or without it on the readout
+                    gate = f"Or( {gate}, {_gate(READOUT_TABS[tab])} )"
+                self.assertIn(f'enabled = "[{gate}]"', click)
                 self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_systems_window_tab', '{tab}')]\"", click)
                 self.assertIn(f"using = te_systems_window_{tab}_selected",
                               self._override(f"{slot}_button_visibility", within))
@@ -629,6 +639,24 @@ class StripTest(unittest.TestCase):
                 with self.subTest(tab=key):
                     self.assertEqual(loc[locked], f"#b $te_window_tab_{key}$#!\\nNot open yet. It opens once:\\n")
 
+    def test_colonial_empire_opens_with_the_research(self):
+        """The entry's gate or, once the country has researched Decolonization,
+        the readout's opens the Colonial Empire tab (owner, 2026-11-03); its
+        tooltip has a line for each, then the research checklist."""
+        ce = _tab("colonial_empire")
+        tab, readout, unlock = ("te_window_colonial_empire_tab_sgui", "te_window_colonial_empire_readout_sgui",
+                                "te_window_colonial_empire_tab_unlock_sgui")
+        for shown, want in (({tab, unlock}, True), ({readout, unlock}, True), ({unlock}, False), (set(), False)):
+            with self.subTest(shown=sorted(shown)):
+                self.assertEqual(_evaluate(ce.open_, shown, "colonial_empire"), want)
+        self.assertIn("NOT = { has_journal_entry = je_colonial_empire }", _txt_block(self.sguis, readout))
+        self.assertEqual(ce.tooltip_expr, (
+            f"SelectLocalization( {_shown(tab)}, 'te_window_tab_colonial_empire_tt', "
+            f"SelectLocalization( {_shown(readout)}, 'te_window_tab_colonial_empire_readout_tt', "
+            f"SelectLocalization( {_valid(unlock)}, 'te_system_tab_met_tt', "
+            f"Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), "
+            f"GetScriptedGui('{unlock}').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )"))
+
     def test_banking_opens_on_either_branch_and_never_off_the_strip(self):
         """The entry's gate or the #805 readout's opens Banking. The readout
         needs the full banking rule, which puts the tab on the strip, so an
@@ -687,10 +715,15 @@ class StripTest(unittest.TestCase):
             self.assertIn(f"has_journal_entry = je_space_race_{m}\n", gate)
 
     def test_the_checklists_are_the_entries_own_tests(self):
-        unlocks = {"space_race": "sr_entry_unlocked", "colonial_empire": "ce_entry_unlocked",
+        # The Colonial Empire tab opens with the research alone (its stance
+        # and colonial powers outlive the entry, owner 2026-11-03); the
+        # entry's own test is the readout note's checklist.
+        unlocks = {"space_race": "sr_entry_unlocked", "colonial_empire": "ce_tab_unlocked",
                    "grand_monuments": "gm_entry_unlocked", "seabed": "te_seabed_tab_unlocked"}
         for tab, trigger in unlocks.items():
             self.assertIn(f"is_valid = {{ {trigger} = yes }}", _txt_block(self.sguis, f"te_window_{tab}_tab_unlock_sgui"))
+        self.assertIn("is_valid = { ce_entry_unlocked = yes }",
+                      _txt_block(self.sguis, "te_window_colonial_empire_entry_unlock_sgui"))
         # Suborbital Flight's `possible`, less its completion guard.
         sr = _txt_block(_read(os.path.join(TRIGGERS, "space_race_triggers.txt")), "sr_entry_unlocked")
         possible = _txt_block(_read(os.path.join(JE_DIR, "je_space_race.txt")).replace("\n\t", "\n"), "je_space_race_suborbital")

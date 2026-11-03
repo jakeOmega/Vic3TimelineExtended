@@ -49,7 +49,7 @@ line below, its loc (label, tooltip, locked line), then run this script.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 import re
 import sys
@@ -193,6 +193,19 @@ def _mirror(key: str, row: int, tooltip: str, body: str, layout: str | None, tab
 
 BANKING_OPEN = or_(shown("te_budget_banking_tab_sgui"), shown("te_budget_banking_readout_sgui"))
 
+# The Colonial Empire tab opens with its entry or, once the country has
+# researched Decolonization, without it: the stance on colonialism and the
+# colonial powers, which outlive the entry (owner, 2026-11-03;
+# te_window_colonial_empire_readout_sgui). Its tooltip has a line for each,
+# then the greyed tab's checklist, the research.
+CE_OPEN = or_(shown("te_window_colonial_empire_tab_sgui"), shown("te_window_colonial_empire_readout_sgui"))
+CE_TOOLTIP = (f"SelectLocalization( {shown('te_window_colonial_empire_tab_sgui')}, 'te_window_tab_colonial_empire_tt', "
+              f"SelectLocalization( {shown('te_window_colonial_empire_readout_sgui')}, "
+              "'te_window_tab_colonial_empire_readout_tt', "
+              f"SelectLocalization( {valid('te_window_colonial_empire_tab_unlock_sgui')}, 'te_system_tab_met_tt', "
+              "Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), "
+              f"{valid_tooltip('te_window_colonial_empire_tab_unlock_sgui')} ) ) ) )")
+
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
@@ -206,7 +219,8 @@ TABS: list[Tab] = [
             public=False),
     _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
             public=False),
-    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
+    replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
+            open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
             public=False),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.

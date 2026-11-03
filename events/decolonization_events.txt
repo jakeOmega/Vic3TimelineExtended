@@ -1653,6 +1653,11 @@ decolonization_events.14 = {
 		NOR = {
 			has_variable = gp_colonial_policy_cooldown
 		}
+		# A player is asked once; after that the stance changes from the
+		# Colonial Empire tab of the Timeline Extended window (owner,
+		# 2026-11-03: the tab, not a recurring event). The AI is asked every
+		# three years, as before.
+		decol_stance_question_due = yes
 		any_country = {
 			NOT = { this = root }
 			any_scope_state = {
@@ -1663,7 +1668,13 @@ decolonization_events.14 = {
 
 	immediate = {
 		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
+		set_variable = decol_stance_asked
 	}
+
+	# Each option is the panel's button of the same stance
+	# (decolonization_stance_effects.txt): the stance, held while we are a great
+	# power at its influence cost, the 24-month wait before the next change and
+	# the reactions at home. Re-choosing the stance we hold costs nothing more.
 
 	# Option A: Condemn colonialism
 	# Retuned for proposal #9: non-overlord GPs (USSR, USA, post-1945 China)
@@ -1671,7 +1682,8 @@ decolonization_events.14 = {
 	# face a steady stream of GP condemnation pressure even early.
 	option = {
 		name = decolonization_events.14.a
-		default_option = yes
+		trigger = { decol_stance_affordable = yes }
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 8
 			# Big bonus for non-overlords — the geopolitical leverage play
@@ -1727,49 +1739,31 @@ decolonization_events.14 = {
 				}
 				add = 3
 			}
+			# A stance costs influence: start one only with the cost and a
+			# spare in hand (decol_stance_ai_can_hold).
+			modifier = {
+				trigger = { NOT = { decol_stance_ai_can_hold = yes } }
+				factor = 0
+			}
 		}
-		set_variable = gp_anti_colonial_stance
-		if = {
-			limit = { has_variable = gp_pro_colonial_stance }
-			remove_variable = gp_pro_colonial_stance
-		}
-		add_modifier = {
-			name = gp_anti_colonial_policy_modifier
-			days = 1095
-			is_decaying = yes
-		}
-		# Intelligentsia and trade unions approve - progressive stance
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Landowners and industrialists lose colonial markets
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+		decol_stance_take_anti = yes
 	}
 
 	# Option B: Remain neutral
 	option = {
 		name = decolonization_events.14.b
+		default_option = yes
 		ai_chance = {
 			base = 1
 		}
-		custom_tooltip = {
-			text = GP_NEUTRAL_STANCE_TT
-			if = {
-				limit = { has_variable = gp_anti_colonial_stance }
-				remove_variable = gp_anti_colonial_stance
-			}
-			if = {
-				limit = { has_variable = gp_pro_colonial_stance }
-				remove_variable = gp_pro_colonial_stance
-			}
-		}
-		# Cautious approach - no strong reactions either way
-		add_loyalists = { value = very_small_radicals }
+		decol_stance_take_neutral = yes
 	}
 
 	# Option C: Support colonial interests - increasingly unpopular
 	option = {
 		name = decolonization_events.14.c
+		trigger = { decol_stance_affordable = yes }
+		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 0
 			modifier = {
@@ -1792,24 +1786,12 @@ decolonization_events.14 = {
 				}
 				add = 3
 			}
+			modifier = {
+				trigger = { NOT = { decol_stance_ai_can_hold = yes } }
+				factor = 0
+			}
 		}
-		set_variable = gp_pro_colonial_stance
-		if = {
-			limit = { has_variable = gp_anti_colonial_stance }
-			remove_variable = gp_anti_colonial_stance
-		}
-		add_modifier = {
-			name = gp_pro_colonial_policy_modifier
-			days = 1095
-			is_decaying = yes
-		}
-		# Landowners and industrialists approve - colonial markets
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Intelligentsia and trade unions dismayed
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		add_radicals = { value = small_radicals pop_type = academics }
+		decol_stance_take_pro = yes
 	}
 }
 

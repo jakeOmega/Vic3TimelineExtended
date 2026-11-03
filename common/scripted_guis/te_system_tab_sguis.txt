@@ -459,7 +459,16 @@ te_window_space_race_solar_colonization_sgui = {
 }
 
 # ---------------------------------------------------------------------------
-# Colonial Empire: je_colonial_empire.
+# Colonial Empire: je_colonial_empire. The second exception to "greyed until
+# the entry runs" (owner, 2026-11-03), after Banking's readout: a country's
+# stance on colonialism and the list of the colonial powers outlive the entry
+# (decolonization_stance_effects.txt), so the tab opens once the country has
+# researched Decolonization. Without the entry it shows those two sections
+# alone (te_window_colonial_empire_readout_sgui); the entry adds its own
+# panels while it runs (te_window_colonial_empire_tab_sgui). The two are never
+# true together. The greyed tab's checklist is the research
+# (ce_tab_unlocked); what opens the entry is ce_entry_unlocked, which the
+# readout's note shows on hover (te_window_colonial_empire_entry_unlock_sgui).
 # ---------------------------------------------------------------------------
 te_window_colonial_empire_tab_sgui = {
 	scope = country
@@ -472,7 +481,27 @@ te_window_colonial_empire_tab_sgui = {
 	effect = { }
 }
 
+te_window_colonial_empire_readout_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = decolonization_enabled
+		NOT = { has_journal_entry = je_colonial_empire }
+		ce_tab_unlocked = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 te_window_colonial_empire_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = decolonization_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ce_tab_unlocked = yes }
+	effect = { }
+}
+
+te_window_colonial_empire_entry_unlock_sgui = {
 	scope = country
 	is_shown = { has_game_rule = decolonization_enabled }
 	ai_is_valid = { always = no }

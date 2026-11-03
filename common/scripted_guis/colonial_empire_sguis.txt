@@ -34,6 +34,13 @@
 # docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
 # three in step.
 #
+# OP TABLE — colonial_empire_stance_sgui (saved_scopes = { op }), the three
+# buttons of Our Stance on Colonialism (decolonization_stance_effects.txt):
+#   0  condemn colonialism      1  stand aside (neutral)      2  back the
+#                                                                colonial powers
+# The table is repeated in the .gui header and in
+# docs/systems/journal_entry_systems.md § Colonial Stability Widget.
+#
 # PER-TARGET BUTTONS (the Colonial Holdings section): one handler per action,
 # each taking its one target as its only saved scope, the shape gm_sguis.txt's
 # monument rows use (AddScope( 'gm_state', State.MakeScope )):
@@ -426,4 +433,70 @@ colonial_empire_selfcheck_subject_sgui = {
 			}
 		}
 	}
+}
+
+
+# ---------------------------------------------------------------------------
+# OUR STANCE ON COLONIALISM (te_ce_sec_stance): the three buttons, op-coded as
+# the programme steps are. Each is always drawn and greys out through IsValid
+# with the failing line on hover: the stance held already, the cooldown,
+# great-power rank and influence for a side (decol_stance_possible_*). The
+# effect is The Colonial Question's option of the same stance
+# (decol_stance_take_*), then the colonial powers' rows again, so the weights
+# our stance gives them show at once. Rooted at GetPlayer: the section shows
+# with the entry and without it, so nothing here reads the journal entry.
+# ---------------------------------------------------------------------------
+colonial_empire_stance_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			decol_stance_possible_anti = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			decol_stance_possible_neutral = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			decol_stance_possible_pro = yes
+		}
+		trigger_else = { always = no }
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			decol_stance_take_anti = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			decol_stance_take_neutral = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			decol_stance_take_pro = yes
+		}
+		decol_world_refresh_display = yes
+	}
+}
+
+# Read-only: has the colonial powers' list been built yet
+# (decol_world_refresh_display, monthly)? Gates The Colonial Powers' rows, so a
+# country that has just researched Decolonization reads a note until the next
+# month, not an empty table.
+decol_world_display_ready = {
+	scope = country
+	is_shown = {
+		has_variable = decol_world_rows_built
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
