@@ -11,7 +11,8 @@ import re
 import unittest
 
 import gui_tree
-from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from gui_test_helpers import (_block_at, _strip_comments, assert_wide_matches_narrow, load_loc, markup_reads,
+                              mod_types, panel_loc_keys, panel_view, unguarded)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -1063,6 +1064,156 @@ class WideTest(unittest.TestCase):
         header = _block_at(body, body.index('blockoverride "tab_header"'))
         self.assertGreater(header.count("default_header = {"), 0)
         self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
+
+# ---- Another country's panel (charts-help-national-info plan, PR F4) ------------
+WIDE = {"te_ch_wide_sections"}
+# A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
+# print, which neither BindingTest nor te_rebind_country.py follows.
+SGUI_TOOLTIP = re.compile(r"\b(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's National Info shows of Cultural Hegemony (spec
+    § 6.4 of docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md):
+    its score, rank, programs and where its pull comes from, and the board,
+    the models and the history, the same world for every country; never a
+    control. Read as that panel draws te_ch_wide_sections
+    (gui_test_helpers.panel_view: guarded parts and overridden block defaults
+    left out) and the loc it renders. Both ways: the hidden parts are gone,
+    and the shown ones are still drawn, so over-guarding fails too."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(WIDE, cls.types)
+        cls.loc = load_loc()
+        cls.keys = panel_loc_keys(WIDE, cls.types, cls.loc)
+
+    def _drawn(self, name):
+        """A type's body as another country's panel draws it, its guarded parts blanked."""
+        self.assertIn(name, self.view.open, f"{name}: another country's panel draws it")
+        return " ".join(unguarded(self.types[name].body, self.view.skip[name]).split())
+
+    # -- hidden: the controls ------------------------------------------------------
+    def test_no_control(self):
+        progs = self._drawn("te_ch_sec_programmes")
+        for gone in ("ScriptedGui.Execute(", "ScriptedGui.IsValid(", "button_icon_minus_action",
+                     "button_icon_plus_action", "ch_action_button", 'text = "ch_policy_'):
+            self.assertNotIn(gone, progs, gone)
+        self.assertNotIn("ch_action_button", self.view.open)
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            for side in ("on", "off"):
+                self.assertNotIn(f"ch_policy_{op}_{side}", self.keys)
+        # the funding step's hover is the panel's copy; the effects' own stays the player's
+        self.assertNotIn("ch_policy_funding_step_tt", self.keys)
+        self.assertIn("ch_policy_funding_step_tt_ni", self.keys)
+        # the player's panel keeps them all
+        own = self.types["te_ch_sec_programmes"].body
+        self.assertEqual(own.count("ScriptedGui.Execute("), 10)
+        self.assertEqual(own.count("using = te_own_country_only"), 5)
+
+    def test_the_controls_keep_their_slot_for_the_player(self):
+        """One 112 x 28 slot per row, under the guard, which one of its two
+        buttons always fills: the row is as wide as before (style rule 8)."""
+        progs = _strip_comments(_type_body(_read(WIDGET), "te_ch_sec_programmes"))
+        slots = re.findall(r'blockoverride "programme_controls" \{\s*widget = \{\s*size = \{ 112 28 \}\s*'
+                           r"parentanchor = vcenter\s*using = te_own_country_only\s*"
+                           r"ch_action_button = \{[^{}]*\}\s*ch_action_button = \{[^{}]*\}\s*\}\s*\}", progs)
+        self.assertEqual(len(slots), 4)
+        stepper = progs[progs.index('text = "je_ch_widget_funding_value"'):progs.index("button_icon_minus_action")]
+        self.assertRegex(stepper, r"widget = \{\s*size = \{ 112 28 \}\s*parentanchor = vcenter\s*"
+                                  r"using = te_own_country_only\s*flowcontainer = \{")
+        row = _strip_comments(_type_body(_read(WIDGET), "ch_programme_row"))
+        self.assertIn('block "programme_controls" {}', row)
+        self.assertNotIn("ch_action_button", row)
+
+    def test_no_scripted_gui_text_is_printed(self):
+        """The text a scripted GUI's ExecuteTooltip or IsValidTooltip prints
+        (custom_tooltip keys in ch_possible_* and ch_effect_*) reads ROOT and
+        the player, and no gate follows it. The panel prints it only on the
+        guarded buttons; a public hover that did would need its keys checked."""
+        for name in sorted(self.view.open):
+            with self.subTest(type=name):
+                self.assertIsNone(SGUI_TOOLTIP.search(unguarded(self.types[name].body, self.view.skip[name])))
+        for key in sorted(self.keys):
+            with self.subTest(key=key):
+                self.assertIsNone(SGUI_TOOLTIP.search(self.loc[key]))
+
+    # -- shown: the country's standing, its programs, its pull; the world's board,
+    #    models and history ---------------------------------------------------------
+    def test_the_overview_is_shown(self):
+        ov = self._drawn("te_ch_overview_panel")
+        for read in ("ScriptValue('ch_disp_tier_code')", "ScriptValue('ch_rank_self_display')",
+                     "ScriptValue('ch_disp_model_code')", "GetScriptedGui('ch_benchmark_sgui')",
+                     "ScriptValue('ch_disp_share_frac')", "ScriptValue('ch_disp_share_trend')",
+                     "GetScriptedGui('ch_ministry_missing_sgui')", "te_banking_ov_cell"):
+            self.assertIn(read, ov, read)
+        for key in ("je_ch_ov_tier_tt", "je_ch_ov_rank_value", "je_ch_widget_rank_tt", "je_ch_ov_model_tt",
+                    "je_ch_ov_benchmark_tt", "je_ch_ov_share_label", "je_ch_ov_share_tt", "je_ch_ov_leaders_label",
+                    "je_ch_ov_prog_running", "je_ch_ov_prog_funding", "je_ch_ov_prog_tt_list",
+                    "ch_tier_blurb_hegemon", "ch_model_owner_us", "ch_model_owner_them"):
+            self.assertIn(key, self.keys, key)
+
+    def test_the_leader_flags_are_the_worlds(self):
+        """The three leading powers: the player's copy, drawn for every country
+        on six `# world:` lines (spec § 6.7)."""
+        ov = self._drawn("te_ch_overview_panel")
+        self.assertEqual(ov.count("flag = {"), 3)
+        world = [f for f in markup_reads(WIDE, self.types) if f.world]
+        self.assertEqual(sorted((f.where, f.what) for f in world), [("te_ch_overview_panel", "GetPlayer")] * 6)
+        self.assertEqual(sum("ch_disp_leader_count" in f.text for f in world), 3)
+        self.assertEqual(sorted(re.search(r"ch_leader_seat_\d", f.text).group(0) for f in world
+                                if "ch_leader_seat_" in f.text), ["ch_leader_seat_1", "ch_leader_seat_2",
+                                                                  "ch_leader_seat_3"])
+
+    def test_the_programs_are_shown(self):
+        """Each program's Running or Idle, from the country's own entry's
+        modifiers (ch_active_<programme>: je:je_cultural_hegemony), and the
+        funding level against its cap."""
+        progs = self._drawn("te_ch_sec_programmes")
+        self.assertIn('text = "je_ch_widget_funding_value"', progs)
+        self.assertIn('tooltip = "je_ch_widget_funding_value_tt"', progs)
+        self.assertIn('tooltip = "ch_policy_funding_step_tt_ni"', progs)
+        self.assertEqual(progs.count("ch_programme_row = {"), 4)
+        self.assertIn("ch_programme_row", self.view.open)
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            self.assertIn(f"je_ch_widget_prog_{op}_status", self.keys, op)
+            self.assertIn(f"je_ch_widget_prog_{op}", self.keys, op)
+        for key in ("ch_policy_status_active", "ch_policy_status_idle", "je_ch_prog_needs_ministry",
+                    "je_ch_widget_funding_value", "je_ch_widget_funding_value_tt"):
+            self.assertIn(key, self.keys, key)
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "cultural_hegemony_triggers.txt"))
+        for prog in ("world_exposition", "cultural_institutes", "global_media_campaign", "cultural_protectionism"):
+            self.assertIn("je:je_cultural_hegemony ?= { has_modifier", _block(triggers, f"ch_active_{prog}"), prog)
+
+    def test_the_breakdown_is_shown(self):
+        bd = self._drawn("te_ch_sec_breakdown")
+        self.assertEqual(bd.count("ch_bar_row = {"), 12)
+        for name in ("ch_bar_row", "ch_bar_subrow", "ch_pull_bar"):
+            self.assertIn(name, self.view.open)
+        for part in ("art", "art_dr", "prestige", "sol", "tech", "monuments", "megaprojects", "modifiers", "infamy",
+                     "instability", "mult", "raw"):
+            self.assertIn(f"je_ch_widget_bd_{part}_tt", self.keys, part)
+        self.assertIn("je_ch_widget_breakdown_header_theirs", self.keys)
+
+    def test_the_board_models_and_history_are_shown(self):
+        board = self._drawn("te_ch_sec_board")
+        self.assertIn("GetGlobalVariable('ch_board_store').GetList('ch_board')", board)
+        for name in ("ch_board_head", "ch_board_row", "te_ch_sec_models", "ch_model_legend_row",
+                     "te_ch_sec_history", "te_hist_ch_models", "te_ch_hist_model_key", "te_ch_sec_how"):
+            self.assertIn(name, self.view.open, name)
+        self.assertIn("EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), "
+                      "Country.MakeScope.ScriptValue('ch_rank_self_display') )", self._drawn("ch_board_row"),
+                      "the arrow marks the shown country's row")
+        self.assertEqual(self._drawn("te_ch_sec_models").count("ch_model_legend_row = {"), 15)
+        for key in ("je_ch_widget_board_us_theirs", "ch_board_row_tt", "ch_model_hist_since",
+                    "je_ch_widget_models_pie_tt", "je_ch_widget_models_share_liberal", "ch_model_hist_title"):
+            self.assertIn(key, self.keys, key)
+
+    def test_the_players_own_labels_are_left_out(self):
+        for key in ("je_ch_widget_board_us_ours", "je_ch_widget_breakdown_header_ours"):
+            self.assertNotIn(key, self.keys, f"{key}: the player's own")
 
 
 if __name__ == "__main__":
