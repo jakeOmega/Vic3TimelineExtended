@@ -6,6 +6,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
@@ -22,6 +24,14 @@ STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_worl
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
+# bar stays under The Programme, in its own gated wrapper.
+WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_je_goal_bar",
+                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
+                ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
+                 "te_nuclear_sec_reputation"],
+                ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers",
+                 "te_nuclear_sec_how"]]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
          ("widget_je_nuclear_programme", "custom_widget_container_3", "te_nuclear_sec_programme"),
@@ -247,12 +257,23 @@ class FlagTest(unittest.TestCase):
                   "te_nuclear_sec_reputation": "nd_reputation_closed",
                   "te_nuclear_sec_taboo": "nd_taboo_panel_closed",
                   "te_nuclear_sec_delivery": "nuclear_program_odds_closed",
-                  "te_nuclear_sec_powers": "nuclear_program_powers_closed",
-                  "te_nuclear_sec_how": "nuclear_how_open"}
+                  "te_nuclear_sec_powers": "nuclear_program_powers_closed"}
         for sec, flag in opened.items():
             body = _type_body(ALL_GUI, sec)
             toggles = re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", body)
             self.assertEqual(toggles[0], flag, sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_nuclear_weapons_help_popup, on te_popup = help_nuclear_weapons); its collapse flag retired with its
+        content (test_te_help_pages.py)."""
+        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        self.assertIn('text = "je_nuclear_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
+        self.assertNotIn("nuclear_how_open", ALL_GUI)
+        self.assertNotIn("nd_note", how)
 
     def test_subsections_are_nested(self):
         """The taboo's chart is a nested subsection, open (owner, 2026-09-29:
@@ -336,7 +357,7 @@ HOW_KEYS = ["nd_w_home_legend", "nd_w_reputation_legend", "nd_w_crisis_actions_l
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        how = _type_body(_read(LAYOUT), "te_nuclear_weapons_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         self.assertEqual(how.count("nd_subheader = {"), how.count("nd_note = {"))
@@ -348,7 +369,7 @@ class HowItWorksTest(unittest.TestCase):
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
 
     def test_the_first_heading_has_no_top_margin(self):
-        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        how = _type_body(_read(LAYOUT), "te_nuclear_weapons_help_body")
         first = how[how.index("nd_subheader = {"):]
         first = first[:first.index("nd_note = {")]
         self.assertIn('blockoverride "subheader_margin" {}', first)
@@ -948,15 +969,22 @@ class MilitaryTabTest(unittest.TestCase):
         cls.military = _read(MILITARY)
         cls.blocks = _mod_blocks(cls.military)
 
-    def _content(self):
+    def _host(self):
         body = self.blocks[1]
         self.assertIn('name = "te_military_nuclear_tab"', body)
         return body
 
+    def _content(self):
+        """The tab's body (te_nuclear_tab_body), which the Military panel's tab
+        and the Timeline Extended window's both mount
+        (test_te_system_tab_bodies.py checks the mounts)."""
+        self.assertIn("te_nuclear_tab_body = {}", self._host())
+        return _type_body(_read(LAYOUT), "te_nuclear_tab_body")
+
     def test_two_marked_blocks_the_button_and_the_content(self):
         self.assertEqual(len(self.blocks), 2)
         self.assertIn('blockoverride "fourth_button"', self.blocks[0])
-        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_nuclear')]\"", self._content())
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_nuclear')]\"", self._host())
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
@@ -964,23 +992,21 @@ class MilitaryTabTest(unittest.TestCase):
         roots = [wrapped for _, _, wrapped in ROOTS]
         # The journal's roots, with the entry's own bar under The Programme, as in the journal.
         self.assertEqual(found, roots[:2] + ["te_je_goal_bar"] + roots[2:])
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_nuclear_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
         body = self._content()
         dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_nuclear_program')]\"")
         self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
+        # Never on the widget that carries the datacontext itself (the
+        # frame's tab_entry block holds it alone).
+        self.assertNotIn("visible", body[body.index('blockoverride "tab_entry"'):dc])
 
     def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self._content()
-        dc = body.index("GetPlayerJournalEntry('je_nuclear_program')")
-        self.assertIn("minimumsize = { 520 -1 }", body[dc:body.index("te_nuclear_overview_panel", dc)])
-        self.assertIn("parentanchor = hcenter", body[dc:body.index("te_nuclear_overview_panel", dc)])
+        """The frame's column, a fixed 520 (test_te_system_tab_bodies.py)."""
+        self._content()
+        self.assertRegex(_read(LAYOUT), r"type te_nuclear_tab_body = te_system_tab_frame \{")
 
     def test_the_bar_shows_with_a_programme_only(self):
         body = self._content()
@@ -1047,6 +1073,22 @@ class TestSurvivorsRow(unittest.TestCase):
         self.assertIn("nd_has_main_rival_sgui", row)
         self.assertIn('text = "nd_w_survivors_value"', row)
         self.assertIn('tooltip = "nd_w_survivors_tt"', row)
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_nuclear_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_nuclear_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_nuclear_wide_sections",
+                                             layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["nuclear_weapons"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_nuclear_tab_body", "te_nuclear_tab_layout", "te_nuclear_wide_sections"))
 
 
 if __name__ == "__main__":

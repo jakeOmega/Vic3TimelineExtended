@@ -2373,8 +2373,9 @@ types un_chamber_widget_types
 		}
 	}
 
-	### How international standing works: the text only, for "How the UN Works"
-	### (te_un_sec_how, un_layout_widget.gui), which carries the heading. The
+	### How international standing works: the text only, for the UN's Help page
+	### (te_united_nations_help_body, un_layout_widget.gui), which carries the
+	### heading and is the only type that instances it. The
 	### score, its tier and this year's accrual are the overview's standing
 	### meter and its tooltip (un_chamber_standing_sgui).
 	type te_un_help_standing = flowcontainer {
@@ -2592,8 +2593,8 @@ types un_chamber_widget_types
 		# ---- Missions in the field (redesign phase 6) ----
 		# The mission register: where the UN is, for whom, how far along, and
 		# who serves in each mission. Open by default; the ended missions are a
-		# collapsed subsection, and how missions work is in "How the UN Works"
-		# (te_un_sec_how, un_layout_widget.gui).
+		# collapsed subsection, and how missions work is on the UN's Help page
+		# (te_united_nations_help_body, un_layout_widget.gui).
 		un_chamber_section_header = {
 			blockoverride "left_text" {
 				text = "je_un_chamber_missions_header"

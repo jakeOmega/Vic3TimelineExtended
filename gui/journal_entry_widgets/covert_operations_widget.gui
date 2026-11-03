@@ -19,8 +19,8 @@
 ###     run, from the defender's `iw_known_ops` list; hidden while it is
 ###     empty; each row has an Expose button).
 ###   widget_je_covert_reference  custom_widget_container_3  te_covert_reference_sections
-###     "How Covert Warfare Works", collapsed: every explanation, one heading
-###     per topic.
+###     "How Covert Warfare Works", a link to the Help page that holds every
+###     explanation (te_covert_warfare_help_popup, in gui/te_popups.gui).
 ### The journal entry has no status text of its own any more: the standing
 ### verdict it printed is the standing icon's tooltip, and the pointer to the
 ### diplomatic actions is the Operations section's empty state.
@@ -2501,9 +2501,11 @@ types covert_operations_widget_types
 		}
 	}
 
-	### "How Covert Warfare Works": every explanation, gathered out of the live
-	### sections into one section, collapsed by default, one heading per topic
-	### (style rule 1; the UN's te_un_sec_how).
+	### "How Covert Warfare Works": a link at the foot of the panel to the Help
+	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
+	### Its header alone, which opens te_covert_warfare_help_popup (te_popup =
+	### help_covert_warfare) instead of expanding; it keeps its name and its
+	### place in the composer. The "?" in the tab's header opens the same page.
 	type te_covert_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2511,88 +2513,112 @@ types covert_operations_widget_types
 		spacing = 4
 
 		covert_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_iw_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('covert_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('covert_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('covert_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		covert_panel = {
-			visible = "[GetVariableSystem.Exists('covert_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. The tuning figures its notes quote (tradecraft's gains,
+	### losses and tiers, the priority slots, a network's head start and what
+	### burning it costs) read GetPlayer.MakeScope.ScriptValue, never the entry,
+	### so it opens from any host (test_te_help_pages.py). Instanced only by
+	### te_covert_warfare_help_popup.
+	type te_covert_warfare_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			covert_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_ops"
-				}
+		covert_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_ops"
 			}
-			covert_note = {
-				text = "je_iw_how_ops"
+		}
+		covert_note = {
+			text = "je_iw_how_ops"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_funding"
 			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_funding"
-				}
+		}
+		covert_note = {
+			text = "je_iw_how_funding"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_detection"
 			}
-			covert_note = {
-				text = "je_iw_how_funding"
+		}
+		covert_note = {
+			text = "je_iw_how_detection"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_networks"
 			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_detection"
-				}
+		}
+		covert_note = {
+			text = "je_iw_net_header_tooltip"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_tradecraft"
 			}
-			covert_note = {
-				text = "je_iw_how_detection"
+		}
+		covert_note = {
+			text = "je_iw_how_tradecraft"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_ci"
 			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_networks"
-				}
+		}
+		covert_note = {
+			text = "je_iw_how_ci"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_watching"
 			}
-			covert_note = {
-				text = "je_iw_net_header_tooltip"
+		}
+		covert_note = {
+			text = "je_iw_how_watching"
+		}
+		covert_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_iw_how_sub_standing"
 			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_tradecraft"
-				}
-			}
-			covert_note = {
-				text = "je_iw_how_tradecraft"
-			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_ci"
-				}
-			}
-			covert_note = {
-				text = "je_iw_how_ci"
-			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_watching"
-				}
-			}
-			covert_note = {
-				text = "je_iw_how_watching"
-			}
-			covert_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_iw_how_sub_standing"
-				}
-			}
-			covert_note = {
-				text = "je_iw_how_standing"
-			}
+		}
+		covert_note = {
+			text = "je_iw_how_standing"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_covert_warfare_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_covert_warfare')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_iw_how_header"
+		}
+		blockoverride "popup_list" {
+			te_covert_warfare_help_body = {}
 		}
 	}
 
@@ -2615,7 +2641,7 @@ types covert_operations_widget_types
 		te_covert_sec_known = {}
 	}
 
-	### How it all works, collapsed.
+	### How it all works: the link to the Help page.
 	type te_covert_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2624,6 +2650,100 @@ types covert_operations_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_covert_sec_how = {}
+	}
+
+	### The tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Military
+	### panel's Covert tab and the Timeline Extended window's Covert Warfare
+	### tab. The same types the entry's three roots wrap, in the entry's order:
+	### the overview, the live sections, then How Covert Warfare Works, inside
+	### te_covert_tab_layout, which a wide mount overrides; then the frame's
+	### Open Journal Entry. Nothing else to draw: the entry has no goal bar, no
+	### scripted bars and no status description, and its two scripted buttons
+	### are the AI's (the Funding stepper carries the same actions for a
+	### human).
+	type te_covert_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_covert_warfare"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_covert_warfare')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_covert_tab_layout" {
+				te_covert_overview_panel = {}
+				te_covert_status_sections = {}
+				te_covert_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_military_covert_open_journal_tt"
+		}
+	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_covert_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The window's wide mount puts it in place of
+	### te_covert_tab_layout; the Military panel and the side panel keep the one
+	### column. test_covert_layout.py holds the columns.
+	type te_covert_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_covert_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_operations = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_funding = {}
+				te_covert_sec_networks = {}
+				te_covert_sec_counterintel = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_covert_sec_known = {}
+			}
+
+			te_covert_reference_sections = {}
+		}
 	}
 }
 

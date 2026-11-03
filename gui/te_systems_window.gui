@@ -1,28 +1,53 @@
-﻿### Timeline Extended: the mod's own window, for the systems with no vanilla
-### home (docs/systems/system_panels_feasibility.md §9, item 3). One strip of
-### five tabs: Nation (what the country carries for good, always open;
+﻿### Timeline Extended: the mod's own window, first for the systems with no
+### vanilla home (docs/systems/system_panels_feasibility.md §9, item 3), and
+### since 2026-11-02 for every system (style guide rule 9). Three strips of
+### five: Nation (what the country carries for good, always open;
 ### gui/te_nation_tab.gui), the Space Race, Grand Monuments, the Colonial
-### Empire and the Seabed (Global Commons). Additive: a
-### scripted widget (gui/scripted_widgets/te_systems_window.txt registers the
-### two roots at the foot of this file), so no vanilla file is replaced.
+### Empire and the Seabed (Global Commons); then the tabs that also live in
+### the Budget and Market panels (Banking, Tax Code, Budget Breakdown,
+### Strategic Reserve, Global Warming); then those of the Population, Society,
+### Diplomacy and Military panels (Demographics, Cultural Hegemony, United
+### Nations, Nuclear Weapons, Covert Warfare), each the same body type as its
+### host's. Additive: a scripted widget
+### (gui/scripted_widgets/te_systems_window.txt registers the two roots at the
+### foot of this file), so no vanilla file is replaced.
+###
+### WHAT LIVES WHERE (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+### § 9.3). This file keeps the two frames (te_systems_window_panel, the side
+### panel, and te_systems_window_panel_wide, the full screen), the width
+### toggle, Tax Code's footer, the launcher and the root. The strips, the
+### selection templates and each tab's mount
+### are generated into gui/te_systems_window_generated.gui from the TABS
+### registry in scripts/generators/gen_te_systems_window.py: never edit that
+### file, edit the registry and run the script. Each tab's content is a body
+### type in its system's file (te_<system>_tab_body, on te_system_tab_frame in
+### gui/te_system_tab_widgets.gui; Nation's is te_nation_tab_sections, Budget
+### Breakdown's te_budget_breakdown_panel, Demographics' te_demog_window_body),
+### the one a vanilla host's tab mounts too. To add
+### a tab: its body type, a Tab line in the registry, its loc, then run the
+### generator.
 ###
 ### te_systems_window_launcher  a small button under the sidebar's Map List,
 ###                             built as vanilla builds Map List
 ###                             (information_panel_bar.gui)
-### te_systems_window           the window, vanilla's default_block_window
-###                             where vanilla's side panels sit
+### te_systems_window           the window: vanilla's default_block_window
+###                             where vanilla's side panels sit, or its
+###                             fullscreen_block_window copy at the origin
 ###
-### STATE. Both are client-side GetVariableSystem values (never saved):
+### STATE. All three are client-side GetVariableSystem values (never saved):
 ###   com_open_window = te_systems_window   the window is open. The key is the
 ###       Community Mod Framework's (system_panels_feasibility.md §7.5, item 3):
 ###       with CMF enabled, its own clearing closes this window along with its
 ###       own; without CMF nothing else reads the key.
-###   te_systems_window_tab = nation | space_race | grand_monuments
-###       | colonial_empire | seabed
+###   te_systems_window_wide = yes   the window is full screen (the toggle in
+###       each frame's fixed_top); unset, it is a side panel. A separate key,
+###       so the chosen tab survives the switch.
+###   te_systems_window_tab = the TABS registry's keys (nation, space_race, …,
+###       covert_warfare)
 ###       the tab the player last chose. The tab shown is that one while it is
-###       open, otherwise Nation, which always is (the te_systems_window_*_selected
-###       templates below; test_te_systems_window.py checks them against every
-###       case).
+###       open, otherwise Nation, which always is (the generated
+###       te_systems_window_*_selected templates; the rule is in the generator's
+###       docstring, and test_te_systems_window.py checks them per stored value).
 ### Set from outside this file too: the state view's Grand Monument card
 ### (te_state_gm_card in te_state_panel_widgets.gui) sets the tab to
 ### grand_monuments, then opens the window. Renaming either value breaks it
@@ -42,67 +67,16 @@
 ###   then per system the scope-free gate on a parent and the
 ###   GetPlayerJournalEntry datacontext on a child (gotchas #22 and #29 in
 ###   docs/guides/gui_modding_guide.md). Gates: te_window_* in
-###   common/scripted_guis/te_system_tab_sguis.txt.
+###   common/scripted_guis/te_system_tab_sguis.txt for the window's own
+###   systems, the host tabs' own (te_budget_*, te_market_*, …) for the rest.
 ###
 ### The launcher's icon: docs/systems/te_systems_window_gui_icons.md. The tabs
 ### carry none.
 
-### Which tab is shown. U = the tab is open (te_window_<system>_tab_sgui: its
-### rule on and an entry running; the Space Race's stays open once the country
-### is in the race, sr_in_space_race), R = the tab is on the strip
-### (te_window_<system>_tab_unlock_sgui: its rule on), S = the player last chose
-### it (te_systems_window_tab), T = the developer tax tab is chosen and armed.
-### With V = "a system tab last chosen is open" (S and U for one of the four):
-###   Nation       not T and not V
-###   a system t   not T and S_t and U_t
-### so exactly one tab is shown: Nation unless an open system tab was the last
-### choice. A system tab's unselected half shows while it is on the strip and
-### not shown, Nation's while another tab is. The Seabed tab has no journal
-### entry: it is open (te_window_seabed_tab_sgui) once the country has taken
-### part in a seabed sharing.
-template te_systems_window_nation_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Not( Or( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) ) )]"
-}
-
-template te_systems_window_nation_unselected {
-	visible = "[Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), Or( Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), Or( And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
-}
-
-template te_systems_window_space_race_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
-}
-
-template te_systems_window_space_race_unselected {
-	visible = "[And( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'space_race'), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
-}
-
-template te_systems_window_grand_monuments_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
-}
-
-template te_systems_window_grand_monuments_unselected {
-	visible = "[And( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments'), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
-}
-
-template te_systems_window_colonial_empire_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
-}
-
-template te_systems_window_colonial_empire_unselected {
-	visible = "[And( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'colonial_empire'), GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
-}
-
-template te_systems_window_seabed_selected {
-	visible = "[And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
-}
-
-template te_systems_window_seabed_unselected {
-	visible = "[And( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
-}
-
-template te_systems_window_tax_probes_selected {
-	visible = "[And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-}
+### The tabs' selection templates, strips and mounts are generated:
+### gui/te_systems_window_generated.gui, from the TABS registry in
+### scripts/generators/gen_te_systems_window.py, whose docstring has the rule
+### for which tab is shown.
 
 types te_systems_window_types
 {
@@ -132,807 +106,174 @@ types te_systems_window_types
 			onclick = "[GetVariableSystem.Clear('com_open_window')]"
 		}
 
+		### The strips (te_systems_window_strips_narrow, generated): vanilla's
+		### strip, as the Military panel uses it (panel_military.gui).
+		### Each tab is on the strip while its system's rule is on, greyed
+		### until one of its entries runs; the greyed tab's tooltip lists the
+		### unlock conditions with a tick or a cross. When they all pass but the
+		### entry is not running (in a save whose entry had run its course, the
+		### checklist came out empty: play-test 2026-09-30), the tooltip says so
+		### instead (te_system_tab_met_tt). tab_buttons defaults both
+		### halves of a slot to `visible = no`, so each visibility block says
+		### when its half shows: the generated templates.
+		###
+		### No tab carries an icon, as vanilla's tabs and the mod's other tabs
+		### don't (owner, 2026-09-30), so each tab shows the system's full name.
+		### Each strip holds five, as vanilla's Diplomacy panel puts its five
+		### (diplomatic_overview.gui: Overview, Subjects, Release Subject, Nation
+		### Formation, Countries) on plain tab_buttons in this same 540 window,
+		### with no size or height override. A slot is 104.8 wide ((540 - 2 x 3
+		### margin - 2 x 5 dividers) / 5), so a name gets 84.8 inside its 10 px
+		### margins. "Colonial Empire" and "Grand Monuments" are wider than that
+		### on one line at EB Garamond 17, as vanilla's "Release Subject" and
+		### "Nation Formation" are; vanilla's tab_text_properties wraps a name
+		### (multiline) and shrinks it down to fontsize_min = 12, so the two
+		### words stack. "Monuments" is no longer than vanilla's "Formation".
+		### Until 2026-10-17 the Colonial Empire and the Seabed sat on a second
+		### strip so the names kept one line (owner: two levels for five tabs
+		### was a bit silly when the other windows hold up to six on one).
 		blockoverride "fixed_top" {
-			# tab_buttons derives from hbox; a flowcontainer cannot own box layouts.
 			vbox = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = fixed
 				ignoreinvisible = yes
-				### Vanilla's strip, as the Military panel uses it (panel_military.gui).
-				### Each tab is on the strip while its system's rule is on, greyed
-				### until one of its entries runs; the greyed tab's tooltip lists the
-				### unlock conditions with a tick or a cross. When they all pass but the
-				### entry is not running (in a save whose entry had run its course, the
-				### checklist came out empty: play-test 2026-09-30), the tooltip says so
-				### instead (te_system_tab_met_tt). tab_buttons defaults both
-				### halves of a slot to `visible = no`, so each visibility block says
-				### when its half shows: the templates above.
-				###
-				### No tab carries an icon, as vanilla's tabs and the mod's other tabs
-				### don't (owner, 2026-09-30), so each tab shows the system's full name.
-				### All five share one strip, as vanilla's Diplomacy panel puts its five
-				### (diplomatic_overview.gui: Overview, Subjects, Release Subject, Nation
-				### Formation, Countries) on plain tab_buttons in this same 540 window,
-				### with no size or height override. A slot is 104.8 wide ((540 - 2 x 3
-				### margin - 2 x 5 dividers) / 5), so a name gets 84.8 inside its 10 px
-				### margins. "Colonial Empire" and "Grand Monuments" are wider than that
-				### on one line at EB Garamond 17, as vanilla's "Release Subject" and
-				### "Nation Formation" are; vanilla's tab_text_properties wraps a name
-				### (multiline) and shrinks it down to fontsize_min = 12, so the two
-				### words stack. "Monuments" is no longer than vanilla's "Formation".
-				### Until 2026-10-17 the Colonial Empire and the Seabed sat on a second
-				### strip so the names kept one line (owner: two levels for five tabs
-				### was a bit silly when the other windows hold up to six on one).
-				tab_buttons = {
-					### Nation: always open (no journal entry, no game rule), so never
-					### greyed and never a checklist (style rule 9's exception).
-					blockoverride "first_button" {
-						text = "te_window_tab_nation"
-					}
-					blockoverride "first_button_tooltip" {
-						tooltip = "te_window_tab_nation_tt"
-					}
-					blockoverride "first_button_click" {
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
-					}
-					blockoverride "first_button_visibility" {
-						using = te_systems_window_nation_selected
-					}
-					blockoverride "first_button_visibility_checked" {
-						using = te_systems_window_nation_unselected
-					}
-					blockoverride "first_button_selected" {
-						text = "te_window_tab_nation"
-					}
 
-					### Space Race
-					blockoverride "second_button" {
-						text = "te_window_tab_space_race"
-					}
-					blockoverride "second_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
-					}
-					blockoverride "second_button_click" {
-						enabled = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'space_race')]"
-					}
-					blockoverride "second_button_visibility" {
-						using = te_systems_window_space_race_selected
-					}
-					blockoverride "second_button_visibility_checked" {
-						using = te_systems_window_space_race_unselected
-					}
-					blockoverride "second_button_selected" {
-						text = "te_window_tab_space_race"
-					}
-
-					### Grand Monuments
-					blockoverride "third_button" {
-						text = "te_window_tab_grand_monuments"
-					}
-					blockoverride "third_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
-					}
-					blockoverride "third_button_click" {
-						enabled = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]"
-					}
-					blockoverride "third_button_visibility" {
-						using = te_systems_window_grand_monuments_selected
-					}
-					blockoverride "third_button_visibility_checked" {
-						using = te_systems_window_grand_monuments_unselected
-					}
-					blockoverride "third_button_selected" {
-						text = "te_window_tab_grand_monuments"
-					}
-
-					### Colonial Empire
-					blockoverride "fourth_button" {
-						text = "te_window_tab_colonial_empire"
-					}
-					blockoverride "fourth_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
-					}
-					blockoverride "fourth_button_click" {
-						enabled = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'colonial_empire')]"
-					}
-					blockoverride "fourth_button_visibility" {
-						using = te_systems_window_colonial_empire_selected
-					}
-					blockoverride "fourth_button_visibility_checked" {
-						using = te_systems_window_colonial_empire_unselected
-					}
-					blockoverride "fourth_button_selected" {
-						text = "te_window_tab_colonial_empire"
-					}
-
-					### Seabed
-					blockoverride "fifth_button" {
-						text = "te_window_tab_seabed"
-					}
-					blockoverride "fifth_button_tooltip" {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
-					}
-					blockoverride "fifth_button_click" {
-						enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'seabed')]"
-					}
-					blockoverride "fifth_button_visibility" {
-						using = te_systems_window_seabed_selected
-					}
-					blockoverride "fifth_button_visibility_checked" {
-						using = te_systems_window_seabed_unselected
-					}
-					blockoverride "fifth_button_selected" {
-						text = "te_window_tab_seabed"
+				te_systems_window_toggle = {
+					blockoverride "toggle" {
+						text = "te_systems_window_wide_on"
+						tooltip = "te_systems_window_wide_on_tt"
+						onclick = "[GetVariableSystem.Set('te_systems_window_wide', 'yes')]"
 					}
 				}
+				te_systems_window_strips_narrow = {}
+			}
+		}
 
-				# TEMPORARY: a strip of its own (the second) for the developer tax-probes tab, so
-				# arming the probes never shrinks the five system tabs.
-				tab_buttons = {
-					visible = "[GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "first_button" { text = "te_tp_tab" }
-					blockoverride "first_button_selected" { text = "te_tp_tab" }
-					blockoverride "first_button_tooltip" { tooltip = "te_tp_tab_tt" }
-					blockoverride "first_button_click" { onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'tax_probes')]" }
-					blockoverride "first_button_visibility" { using = te_systems_window_tax_probes_selected }
-					blockoverride "first_button_visibility_checked" { visible = "[Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]" }
+		### One fixed-width column (style guide rule 8), holding each tab's
+		### mount in the strip's order, each up only while its tab is shown.
+		### Each tab's content is a body type in its system's file
+		### (te_<system>_tab_body, on te_system_tab_frame in
+		### te_system_tab_widgets.gui; Nation's is te_nation_tab_sections).
+		blockoverride "scrollarea_content" {
+			te_systems_window_tabs_narrow = {}
+		}
+
+		blockoverride "fixed_bottom" {
+			te_systems_window_tax_footer = {}
+		}
+	}
+
+	### The full-screen frame (spec 2026-11-02-te-window-wide-mode § 4):
+	### te_fullscreen_block_window, vanilla's fullscreen_block_window with Back
+	### and Close clearing com_open_window (generated from vanilla's file; see
+	### test_te_fullscreen_frame.py), titled as the side panel is. Its fixed_top
+	### holds the same toggle, at the left (clear of the outliner, see the
+	### toggle's type), then the strips side by side; its column holds each
+	### tab's wide mount.
+	type te_systems_window_panel_wide = te_fullscreen_block_window {
+		name = "te_systems_window_panel_wide"
+
+		blockoverride "window_header_name" {
+			text = "te_systems_window_title"
+		}
+
+		blockoverride "fixed_top" {
+			vbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = fixed
+				ignoreinvisible = yes
+
+				te_systems_window_toggle = {
+					blockoverride "toggle_lead" {}
+					blockoverride "toggle_trail" {
+						expand = {}
+					}
+					blockoverride "toggle" {
+						text = "te_systems_window_wide_off"
+						tooltip = "te_systems_window_wide_off_tt"
+						onclick = "[GetVariableSystem.Clear('te_systems_window_wide')]"
+					}
 				}
+				te_systems_window_strips_wide = {}
 			}
 		}
 
 		blockoverride "scrollarea_content" {
-			### One fixed-width column (style guide rule 8), so switching tabs
-			### never moves the content sideways.
-			flowcontainer = {
-				name = "te_systems_window_content"
-				using = default_list_position
-				direction = vertical
-				ignoreinvisible = yes
-				minimumsize = { 540 -1 }
-
-				te_tp_panel = {
-					using = te_systems_window_tax_probes_selected
-				}
-
-				### The tabs' content, in the strip's order. Each is up only while
-				### its tab is shown (the *_selected templates), so a closed tab's
-				### panels are never built.
-
-				### ------------------------------------------------------------------
-				### TAB: NATION (spec 2026-10-17-national-modifiers-tab-design.md; the
-				### types are in gui/te_nation_tab.gui). No journal entry and no gate: the
-				### sections read the player's country through GetPlayer, each gated on
-				### its own data.
-				flowcontainer = {
-					name = "te_systems_window_nation_tab"
-					using = te_systems_window_nation_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					ignoreinvisible = yes
-					margin_top = 10
-					margin_bottom = 15
-
-					te_nation_tab_sections = {}
-				}
-
-				### ------------------------------------------------------------------
-				### TAB: SPACE RACE (the nine je_space_race_* entries;
-				### gui/journal_entry_widgets/space_race_widget.gui). Open from the
-				### first milestone on, with or without one running
-				### (te_window_space_race_tab_sgui, sr_in_space_race). First the
-				### entries (owner, 2026-10-27): GetPlayerJournalEntry takes one literal key, so
-				### each entry has its own block, in je_space_race.txt's order, each
-				### shown only while the player holds that entry active
-				### (te_window_space_race_<m>_sgui, on a parent of the datacontext),
-				### and a note in their place while none is
-				### (te_window_space_race_idle_sgui). Several can run at once, so each
-				### block has its own header, the entry's name, then the types its
-				### journal roots wrap (the milestone's overview and live sections, or
-				### the waiting entry's transit; the debris row overridden out, as
-				### Orbit has it), then Open Journal Entry for that entry. Then the
-				### tab's own sections, which read no entry: Space Powers (our
-				### program and every other power's) and Orbit (debris, satellites,
-				### strikes). How the Space Race Works, the reference all nine
-				### entries share, comes once, at the end.
-				###
-				### Not drawn, as in the journal: the goal bar (every entry mounts the
-				### bars-on-top marker, and the overview draws the progress), the
-				### status line (only for an inactive entry) and the 32 scripted
-				### buttons (the AI's: each `visible` carries is_ai = yes; Mission
-				### Control carries the same actions for a human).
-				flowcontainer = {
-					name = "te_systems_window_space_race_tab"
-					using = te_systems_window_space_race_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					ignoreinvisible = yes
-					spacing = 10
-					margin_top = 10
-					margin_bottom = 15
-
-					### No milestone running: one note in the entries' place, so the
-					### tab never ends on the reference alone.
-					flowcontainer = {
-						name = "te_systems_window_space_race_idle"
-						visible = "[GetScriptedGui('te_window_space_race_idle_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-						minimumsize = { 520 -1 }
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "te_window_space_race_idle_header"
-							}
-						}
-						te_sr_panel = {
-							te_sr_text = {
-								text = "te_window_space_race_idle_note"
-							}
-						}
-					}
-
-					### suborbital
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_suborbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_suborbital"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_suborbital')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_suborbital_overview = {}
-							te_sr_suborbital_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### orbital
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_orbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_orbital"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_orbital')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_orbital_overview = {}
-							te_sr_orbital_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### moon_landing
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_moon_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_moon_landing"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_moon_landing')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_moon_landing_overview = {}
-							te_sr_moon_landing_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### probe
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_probe"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_probe')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_probe_overview = {}
-							te_sr_probe_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### moon_base
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_moon_base_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_moon_base"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_moon_base')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_moon_base_overview = {}
-							te_sr_moon_base_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### mars_landing
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_mars_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_mars_landing"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_mars_landing')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_mars_landing_overview = {}
-							te_sr_mars_landing_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### interstellar_probe
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_interstellar_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_interstellar_probe"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_probe')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_interstellar_probe_overview = {}
-							te_sr_interstellar_probe_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### interstellar_results
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_interstellar_results_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_interstellar_results"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_results')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_overview_transit = {}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### solar_colonization
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						default_header = {
-							using = default_list_position
-							blockoverride "text" {
-								text = "je_space_race_solar_colonization"
-							}
-						}
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_sr_solar_colonization_overview = {}
-							te_sr_solar_colonization_status = {
-								blockoverride "sr_debris" {}
-							}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_space_race_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-
-					### Space Powers and Orbit (space_race_widget.gui), after the
-					### milestones' blocks (owner, 2026-10-27: the milestone we run is
-					### the summary a player acts on), under the tab's own gate: they
-					### read the player and the powers' capitals, never an entry, so
-					### they show between milestones too. Orbit holds the debris row.
-					flowcontainer = {
-						name = "te_systems_window_space_race_summary"
-						visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 4
-						minimumsize = { 520 -1 }
-
-						te_sr_sec_powers = {}
-						te_sr_sec_orbit = {}
-					}
-
-					### How the Space Race Works, once for every entry. The journal wraps
-					### it in te_sr_reference_sections, whose IsActive gate needs one
-					### entry's datacontext; the tab has the section itself, under the
-					### tab's own gate, in the same fixed 520 column.
-					flowcontainer = {
-						name = "te_systems_window_space_race_reference"
-						visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						minimumsize = { 520 -1 }
-
-						te_sr_sec_how = {}
-					}
-				}
-
-				### ------------------------------------------------------------------
-				### TAB: GRAND MONUMENTS (je_grand_monuments;
-				### gui/journal_entry_widgets/grand_monuments_widget.gui). The three
-				### composers the entry's roots wrap, in its order: the overview, the
-				### live sections (National Effects, Our Monuments), How Grand
-				### Monuments Work. Then Open Journal Entry, below everything else.
-				### Nothing else to draw: the entry has no status line, no bar and no
-				### scripted buttons.
-				###
-				### As the Military panel's Nuclear tab: the header sits outside the
-				### gate, so it shows whenever the tab does; the gate
-				### (te_window_grand_monuments_tab_sgui) sits on a parent of the
-				### GetPlayerJournalEntry datacontext, never on the widget carrying it;
-				### the column is a fixed 520, the journal roots' width, centred. The
-				### header is the tab's own name, as every other tab's is; the entry
-				### keeps its short "Monuments" in the journal (2026-10-27 audit, WIN-4).
-				flowcontainer = {
-					name = "te_systems_window_grand_monuments_tab"
-					using = te_systems_window_grand_monuments_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					spacing = 10
-					margin_top = 10
-					margin_bottom = 15
-
-					default_header = {
-						using = default_list_position
-						blockoverride "text" {
-							text = "te_window_tab_grand_monuments"
-						}
-					}
-
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_gm_overview_panel = {}
-							te_gm_status_sections = {}
-							te_gm_reference_sections = {}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_grand_monuments_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-				}
-
-				### ------------------------------------------------------------------
-				### TAB: COLONIAL EMPIRE (je_colonial_empire;
-				### gui/journal_entry_widgets/colonial_empire_widget.gui). The three
-				### composers the entry's roots wrap, in its order: the overview (which
-				### draws the stability bar, so the entry mounts the bars-on-top marker
-				### and nothing here draws a bar), the live sections (why stability is
-				### moving, international pressure, the programmes, the decisions), the
-				### history charts and How the Colonial Empire Works. Then Open Journal
-				### Entry. Not drawn: the status line (empty while the entry runs: the
-				### overview says it) and the nine scripted buttons (the AI's: every
-				### one's `visible` carries is_ai = yes; the programme and decision rows
-				### carry the same actions for a human).
-				flowcontainer = {
-					name = "te_systems_window_colonial_empire_tab"
-					using = te_systems_window_colonial_empire_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					spacing = 10
-					margin_top = 10
-					margin_bottom = 15
-
-					default_header = {
-						using = default_list_position
-						blockoverride "text" {
-							text = "je_colonial_empire"
-						}
-					}
-
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-
-						flowcontainer = {
-							datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
-							parentanchor = hcenter
-							direction = vertical
-							ignoreinvisible = yes
-							spacing = 10
-							minimumsize = { 520 -1 }
-
-							te_ce_overview_panel = {}
-							te_ce_status_sections = {}
-							te_ce_reference_sections = {}
-
-							button = {
-								visible = "[JournalEntry.IsActive]"
-								using = default_button
-								parentanchor = hcenter
-								size = { 480 32 }
-								text = "te_system_tab_open_journal"
-								tooltip = "te_window_colonial_empire_open_journal_tt"
-								onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-							}
-						}
-					}
-				}
-
-				### ------------------------------------------------------------------
-				### TAB: SEABED (Global Commons, spec § 2.7; the types are in
-				### gui/te_seabed_widgets.gui). No journal entry: the sections read the
-				### player's country through GetPlayer, under the tab's gate
-				### (te_window_seabed_tab_sgui) on a parent, the header outside it.
-				flowcontainer = {
-					name = "te_systems_window_seabed_tab"
-					using = te_systems_window_seabed_selected
-					using = default_fade_in_out
-					parentanchor = hcenter
-					direction = vertical
-					spacing = 10
-					margin_top = 10
-					margin_bottom = 15
-
-					default_header = {
-						using = default_list_position
-						blockoverride "text" {
-							text = "te_seabed_tab_header"
-						}
-					}
-
-					flowcontainer = {
-						visible = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-						parentanchor = hcenter
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-						minimumsize = { 520 -1 }
-
-						te_seabed_overview_panel = {}
-						te_seabed_policy_panel = {}
-						te_seabed_basins_panel = {}
-						te_seabed_how_panel = {}
-					}
-				}
-			}
+			te_systems_window_tabs_wide = {}
 		}
+
+		blockoverride "fixed_bottom" {
+			te_systems_window_tax_footer = {}
+		}
+	}
+
+	### Tax Code's footer, in both frames' fixed_bottom (plan C9): the Budget
+	### panel's (gui/budget_panel.gui), the draft summary (te_tax_draft_summary,
+	### te_tax_workbench_widget.gui) or, with no draft open, the bill under
+	### debate's (te_tax_bill_summary, te_tax_politics_widget.gui: its support,
+	### its debate, Pass, Force Through and Withdraw), below the scrolling
+	### content so their buttons stay on screen while the player works through
+	### the workbench. Each summary gates itself. Only on the Tax Code tab (its
+	### selected template, which carries the tab's open gate) and only while a
+	### draft or a bill is; the tab's body leaves the draft's own copy out
+	### (te_tax_tab_body's "draft_summary"). The summaries read GetPlayer only.
+	### Budget's band at Budget's width in both frames: a flowcontainer can't
+	### stretch to the full-screen frame, and a fixed 1,620 would overflow a
+	### 1600 wide screen.
+	type te_systems_window_tax_footer = flowcontainer {
+		using = te_systems_window_tax_code_selected
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			visible = "[Or( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			parentanchor = hcenter
+			margin_bottom = 4
+			ignoreinvisible = yes
+
+			divider_clean = {
+				size = { 554 4 }
+			}
+
+			background = {
+				using = dark_area
+			}
+
+			te_tax_draft_summary = {}
+			te_tax_bill_summary = {}
+		}
+	}
+
+	### The width toggle (spec § 4.2): a slim row first in each frame's
+	### fixed_top, a small text button. The frames expose no header slot for
+	### it. It writes only te_systems_window_wide, so the chosen tab survives
+	### the switch. An icon can replace the text later (style guide rule 10).
+	###
+	### At the row's right by default (the side panel). The full-screen frame
+	### moves it to the left ("toggle_lead" empty, "toggle_trail" the expand):
+	### vanilla's outliner sits on the HUD layer, above this window, over the
+	### screen's right 360 px from y = 155 (ingame_hud.gui), and hides only for
+	### vanilla's own full screens (half_and_fullscreen_hide reads
+	### InformationPanelBar.IsPanelOpen). The width is kept for the session, so
+	### a covered Side Panel would leave the window full screen until reload.
+	type te_systems_window_toggle = hbox {
+		layoutpolicy_horizontal = expanding
+		layoutpolicy_vertical = fixed
+		margin = { 10 0 }
+
+		block "toggle_lead" {
+			expand = {}
+		}
+
+		button = {
+			using = default_button
+			size = { 140 26 }
+			block "toggle" {}
+		}
+
+		block "toggle_trail" {}
 	}
 }
 
@@ -1141,23 +482,40 @@ widget = {
 		on_start = "[MapListPanelManager.CloseCurrentPanel]"
 	}
 
-	vbox = {
-		parentanchor = top|left
-		layoutpolicy_horizontal = expanding
-		layoutpolicy_vertical = expanding
-		margin_top = 85
+	### The side panel: where vanilla's side panels sit, while
+	### te_systems_window_wide is unset (the toggle; client-side, never saved).
+	widget = {
+		size = { 100% 100% }
+		visible = "[Not( GetVariableSystem.Exists('te_systems_window_wide') )]"
 
-		widget = {
+		vbox = {
+			parentanchor = top|left
 			layoutpolicy_horizontal = expanding
 			layoutpolicy_vertical = expanding
+			margin_top = 85
 
-			hbox = {
+			widget = {
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
-				te_systems_window_panel = {}
-				expand = {}
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+
+					te_systems_window_panel = {}
+					expand = {}
+				}
 			}
 		}
+	}
+
+	### The full screen, while it is set: at the root's origin, full size, as
+	### vanilla's full-screen panels sit in ingame_hud.gui. The frame draws its
+	### own top filler, which the top bar draws over, and starts its content
+	### below it (margin_top = 100), so no inset. The HUD's layer is above this
+	### one, so the top bar, the sidebar and the outliner draw over the frame
+	### (docs/testing/te-window-wide-playtest.md, item 1).
+	te_systems_window_panel_wide = {
+		visible = "[GetVariableSystem.Exists('te_systems_window_wide')]"
 	}
 }

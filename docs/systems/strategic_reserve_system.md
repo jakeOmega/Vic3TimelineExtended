@@ -377,7 +377,7 @@ Besides choosing Manual (in a good's Policy Settings, or **All: Manual** for eve
 |---|---|---|---|
 | 1, above the status text | `widget_je_strategic_reserve_overview` | The overview | Always shown |
 | 2, under the status text | `widget_je_strategic_reserve_inventory` | Reserve Inventory | Open (`st_res_inventory_closed`) |
-| 3, under the (empty, for a player) scripted-button grid | `widget_je_strategic_reserve_reference` | How the Strategic Reserve Works | Collapsed (`st_res_how_open`) |
+| 3, under the (empty, for a player) scripted-button grid | `widget_je_strategic_reserve_reference` | How the Strategic Reserve Works | A link to the Help page (`te_strategic_reserve_help_popup`), no flag; the "?" in the tab's header opens it too |
 
 Collapse flags say their default: `_closed` is open until closed, `_open` collapsed until opened. Text is set through the panel's two font templates, `st_res_fontsize_row` (17: rows, values, buttons and notes) and `st_res_fontsize_heading` (20: subheadings), and the overview through Banking's cell at 16 (SR-10, 2026-10-27). Every label in a fixed-width cell fits it by the width budget (10 units a character at 20, scaled to the size, plus 10%), so nothing ends in "...". `test_strategic_reserve_layout.py` holds the order, the flags, the rows and the budget.
 
@@ -424,7 +424,7 @@ Collapse flags say their default: `_closed` is open until closed, `_open` collap
   | All: Manual | all eight | Manual | unchanged, and each rate stays where it is (Reset Reserve Rates is the button that also zeroes rates) |
 
   "Military" is the six goods the AI also stockpiles (§7); oil is in because armies and fleets run on it. They are scripted GUIs only, `st_res_all_stabilize_sgui`, `st_res_military_stockpile_sgui` and `st_res_all_manual_sgui`, greyed without a hub like the rest: the entry binds `scripted_button`s at activation (below), so a running entry would never show new ones, and the Market panel's Reserve tab, which reuses `te_st_res_sec_inventory`, shows them without a change of its own.
-- **How the Strategic Reserve Works** holds every explanation, one heading per topic: the hub and silos, rates, status, decay, reserve policies, presets and settings, sales income, and fill history. The live sections carry none.
+- **How the Strategic Reserve Works** (`te_st_res_sec_how`) is, since 2026-11-02, a link to the Help page, whose body `te_strategic_reserve_help_body` holds every explanation, one heading per topic: the hub and silos, rates, status, decay, reserve policies, presets and settings, sales income, and fill history. The live sections carry none.
 - **Concepts:** Rate Setting, Active, Flow Cap, Adjustment Step and Reserve Policy (`concept_st_res_*` in `common/game_concepts/extra_concepts.txt`).
 - **No `invalid`:** once active, the entry stays open with or without a hub (§6).
 - **No hub:** the overview's hub cell reads **No Hub** (`st_res_disp_hub_exists`, a live building test), every row reads Blocked, no hub, every control is greyed, and the status line offers a new hub: build one, or take **Establish a Strategic Reserve**. The fill bars are capped at 100%, because the capacity then counts only the silos while the stock may be larger.
