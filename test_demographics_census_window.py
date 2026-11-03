@@ -56,6 +56,8 @@ KEPT_GETPLAYER = "GetPlayer.MakeScope.ScriptValue('te_history_current_year')"
 # 2026-11-02-charts-help-national-info § 5.2), and read only a constant (te_demog_k_conscription_ref).
 HELP_PAGE_GETPLAYER = {"te_demog_fam_rule"}
 # The Help page's types (te_demographics_help_body, _popup): not a section of the panel, so not read for its country.
+# Its keys are left out of the pronoun rule (test_the_text_is_not_the_players) on purpose: the page explains the
+# player's own rules and never shows another country (Covert Warfare's page says "our" too).
 HELP_PAGE = re.compile(r"^te_demographics_help_")
 PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
 # The Population panel's own data: its window holds it and the Census Data window doesn't, so a key that reads it (as

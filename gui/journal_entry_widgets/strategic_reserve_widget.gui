@@ -2451,7 +2451,7 @@ types strategic_reserve_widget_types
 		te_st_res_sec_inventory = {}
 	}
 
-	### How it all works, collapsed.
+	### How it all works: a link to the Help page (te_st_res_sec_how).
 	type te_st_res_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
