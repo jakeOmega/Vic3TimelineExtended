@@ -152,8 +152,8 @@ class OverrideTest(unittest.TestCase):
                 regions.append((opened, i))
                 opened = None
         self.assertIsNone(opened, "unclosed MOD block")
-        self.assertEqual(len(regions), 6, "the header, the show state's clear, the strip, two vanilla rows' gates "
-                                          "and the tabs' column")
+        self.assertEqual(len(regions), 7, "the header, the show state's clear, the strip, two vanilla rows' gates, "
+                                          "the tabs' column and the chart viewers")
         # Without its MOD blocks the override is vanilla's file, line for line (blank lines aside): nothing changed,
         # nothing removed, nothing added outside a block.
         inside = {i for a, b in regions for i in range(a, b + 1)}

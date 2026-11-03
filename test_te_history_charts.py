@@ -158,15 +158,16 @@ class OpenButtonTest(unittest.TestCase):
             with self.subTest(chart=chart.id):
                 opens = _override_bodies(small, "chart_open")
                 self.assertEqual(len(opens), 1)
-                self.assertIn("te_chart_open_button = {", opens[0])
+                # Two buttons in one slot (F1.4, spec § 4.4): for the player's
+                # own country the player's viewer (te_popup), for another the
+                # viewer National Info holds (te_ni_chart). Outside National
+                # Info Country is the player, so only the first shows.
+                self.assertEqual(opens[0].count("te_chart_open_button = {"), 2)
                 self.assertEqual(re.findall(r'onclick = "(.*)"', opens[0]),
-                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]"])
-                # A chart that reads its host's Country (Demographics', drawn for
-                # any country in the Census Data window) opens the player's
-                # viewer, so its button shows only for the player's own country:
-                # the first half of F1.4's two-button slot.
+                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]",
+                                  f"[GetVariableSystem.Set('te_ni_chart', '{chart.id}')]"])
                 self.assertEqual(re.findall(r'visible = "(.*)"', opens[0]),
-                                 ["[Country.IsLocalPlayer]"] if chart.entry is None else [])
+                                 ["[Country.IsLocalPlayer]", "[Not( Country.IsLocalPlayer )]"])
                 self.assertEqual([b.strip() for b in _override_bodies(small, "chart_title_width")],
                                  [f"max_width = {484 - gen.OPEN_BUTTON - gen.OPEN_GAP}"])
                 self.assertEqual(_override_bodies(large, "chart_open"), [])
@@ -408,10 +409,11 @@ class RegistryTest(unittest.TestCase):
         types = [(n, b) for n, b in every if n.startswith("te_hist_")]
         self.assertEqual([n for n, _ in types],
                          [gen.wrapper_name(c, s) for c in gen.CHARTS for s in gen.SIZES])
-        # then the viewer's (charts PR C2): the range rows, the popups and their holder
+        # then the viewer's (charts PR C2): the range rows, the popups and their holder; then another country's
+        # (National Info, PR F1.4): its popups and their holder
         self.assertEqual([n for n, _ in every[len(types):]],
                          [gen.range_row_name(v) for v in gen.RANGES] + [gen.popup_name(c) for c in gen.CHARTS]
-                         + ["te_chart_popups"])
+                         + ["te_chart_popups"] + [gen.ni_popup_name(c) for c in gen.CHARTS] + ["te_ni_chart_viewers"])
         self.assertEqual({base for _, base in types}, {"flowcontainer"})
         for name, _ in types:
             body = _type_body(text, name)

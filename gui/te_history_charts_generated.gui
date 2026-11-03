@@ -8,7 +8,9 @@
 ### docstring and docs/systems/mod_systems/history_charts.md.
 ### Then the viewer (charts PR C2): each range variable's buttons (te_chart_range_row_<var>),
 ### each chart's popup (te_chart_<id>_popup, on te_popup = chart_<id>) and te_chart_popups,
-### which gui/te_popups.gui instances.
+### which gui/te_popups.gui instances. Then another country's viewer (National Info, PR F1):
+### each chart's popup (te_ni_chart_<id>_popup, on te_ni_chart = <id>) and te_ni_chart_viewers,
+### which gui/pop_browser_panel.gui instances.
 
 types te_history_charts_generated_types
 {
@@ -53,7 +55,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_value')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'bank_value')]"
 				}
 			}
 		}
@@ -183,7 +190,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_momentum')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'bank_momentum')]"
 				}
 			}
 		}
@@ -320,7 +332,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_bubble')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'bank_bubble')]"
 				}
 			}
 		}
@@ -438,7 +455,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'mon_policy')]"
 				}
 			}
 		}
@@ -569,7 +591,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy_digital')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'mon_policy_digital')]"
 				}
 			}
 		}
@@ -700,7 +727,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_rate_paid')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'mon_rate_paid')]"
 				}
 			}
 		}
@@ -831,7 +863,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_inflation')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'mon_inflation')]"
 				}
 			}
 		}
@@ -974,7 +1011,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_fx')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'mon_fx')]"
 				}
 			}
 		}
@@ -1096,7 +1138,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_grain')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_grain')]"
 				}
 			}
 		}
@@ -1198,7 +1245,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_ammunition')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_ammunition')]"
 				}
 			}
 		}
@@ -1300,7 +1352,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_oil')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_oil')]"
 				}
 			}
 		}
@@ -1402,7 +1459,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_small_arms')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_small_arms')]"
 				}
 			}
 		}
@@ -1504,7 +1566,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_artillery')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_artillery')]"
 				}
 			}
 		}
@@ -1606,7 +1673,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_aeroplanes')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_aeroplanes')]"
 				}
 			}
 		}
@@ -1708,7 +1780,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_tanks')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_tanks')]"
 				}
 			}
 		}
@@ -1810,7 +1887,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_fertilizer')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'st_res_fertilizer')]"
 				}
 			}
 		}
@@ -2005,6 +2087,10 @@ types te_history_charts_generated_types
 				te_chart_open_button = {
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_births_deaths')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_births_deaths')]"
 				}
 			}
 		}
@@ -2274,6 +2360,10 @@ types te_history_charts_generated_types
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_migration')]"
 				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_migration')]"
+				}
 			}
 		}
 	}
@@ -2518,6 +2608,10 @@ types te_history_charts_generated_types
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_e0')]"
 				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_e0')]"
+				}
 			}
 		}
 	}
@@ -2729,6 +2823,10 @@ types te_history_charts_generated_types
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_tfr')]"
 				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_tfr')]"
+				}
 			}
 		}
 	}
@@ -2939,6 +3037,10 @@ types te_history_charts_generated_types
 				te_chart_open_button = {
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_median')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_median')]"
 				}
 			}
 		}
@@ -3244,6 +3346,10 @@ types te_history_charts_generated_types
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_causes')]"
 				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_causes')]"
+				}
 			}
 		}
 	}
@@ -3548,6 +3654,10 @@ types te_history_charts_generated_types
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_gini')]"
 				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_gini')]"
+				}
 			}
 		}
 	}
@@ -3758,6 +3868,10 @@ types te_history_charts_generated_types
 				te_chart_open_button = {
 					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_wc')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'demog_wc')]"
 				}
 			}
 		}
@@ -4125,7 +4239,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ch_models')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'ch_models')]"
 				}
 			}
 		}
@@ -4421,7 +4540,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'nd_taboo')]"
 				}
 			}
 		}
@@ -4530,7 +4654,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo_tgt')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'nd_taboo_tgt')]"
 				}
 			}
 		}
@@ -4640,7 +4769,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_auth')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'un_auth')]"
 				}
 			}
 		}
@@ -4750,7 +4884,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_target')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'un_target')]"
 				}
 			}
 		}
@@ -4860,7 +4999,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_temp')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'gw_temp')]"
 				}
 			}
 		}
@@ -4970,7 +5114,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_share')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'gw_share')]"
 				}
 			}
 		}
@@ -5080,7 +5229,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_stability')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'ce_stability')]"
 				}
 			}
 		}
@@ -5209,7 +5363,12 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_drift')]"
+				}
+				te_chart_open_button = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					onclick = "[GetVariableSystem.Set('te_ni_chart', 'ce_drift')]"
 				}
 			}
 		}
@@ -6789,5 +6948,887 @@ types te_history_charts_generated_types
 		te_chart_gw_share_popup = {}
 		te_chart_ce_stability_popup = {}
 		te_chart_ce_drift_popup = {}
+	}
+
+	### Another country's viewer (National Info): each chart's popup
+	type te_ni_chart_bank_value_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'bank_value')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_value_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_bank_value_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_bank_momentum_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'bank_momentum')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_momentum_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_bank_momentum_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_bank_bubble_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'bank_bubble')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_bubble_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_bank_bubble_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_mon_policy_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'mon_policy')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_policy_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_mon_policy_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_mon_policy_digital_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'mon_policy_digital')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_policy_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_mon_policy_digital_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_mon_rate_paid_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'mon_rate_paid')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_rate_paid_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_mon_rate_paid_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_mon_inflation_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'mon_inflation')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_inflation_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_mon_inflation_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_mon_fx_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'mon_fx')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_fx_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_mon_fx_large = {}
+				te_banking_hist_marker_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_grain_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_grain')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_grain_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_grain_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_ammunition_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_ammunition')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_ammunition_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_ammunition_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_oil_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_oil')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_oil_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_oil_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_small_arms_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_small_arms')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_small_arms_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_small_arms_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_artillery_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_artillery')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_artillery_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_artillery_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_aeroplanes_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_aeroplanes')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_aeroplanes_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_aeroplanes_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_tanks_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_tanks')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_tanks_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_tanks_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_st_res_fertilizer_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'st_res_fertilizer')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_fertilizer_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_st_res_fertilizer_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_births_deaths_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_births_deaths')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_bd_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_births_deaths_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_migration_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_migration')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_mig_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_migration_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_e0_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_e0')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_e0_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_e0_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_tfr_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_tfr')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_tfr_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_tfr_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_median_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_median')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_median_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_median_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_causes_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_causes')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_causes_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_causes_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_gini_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_gini')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_gini_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_gini_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_demog_wc_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'demog_wc')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_wc_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_wc_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+		}
+	}
+
+	type te_ni_chart_ch_models_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'ch_models')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "ch_model_hist_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 760 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_ch_model_hist_range = {}
+				te_hist_ch_models_large = {}
+				te_ch_hist_model_key = {}
+			}
+		}
+	}
+
+	type te_ni_chart_nd_taboo_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'nd_taboo')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "nd_taboo_hist_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_nd_taboo_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_nd_taboo_tgt_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'nd_taboo_tgt')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "nd_taboo_hist_target_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_nd_taboo_tgt_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_un_auth_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'un_auth')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "un_hist_chart_auth_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_un_auth_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_un_target_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'un_target')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "un_hist_chart_target_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_un_target_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_gw_temp_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'gw_temp')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "gw_hist_chart_temp_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_gw_temp_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_gw_share_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'gw_share')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "gw_hist_chart_share_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_gw_share_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_ce_stability_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'ce_stability')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_colonial_stability_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_ce_stability_large = {}
+			}
+		}
+	}
+
+	type te_ni_chart_ce_drift_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_ni_chart', 'ce_drift')]"
+		}
+		blockoverride "popup_close" {
+			onclick = "[GetVariableSystem.Clear('te_ni_chart')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_colonial_drift_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_hist_range = {}
+				te_hist_ce_drift_large = {}
+			}
+		}
+	}
+
+	### Another country's viewer: every popup, for National Info (gui/pop_browser_panel.gui)
+	type te_ni_chart_viewers = widget {
+		size = { 100% 100% }
+
+		te_ni_chart_bank_value_popup = {}
+		te_ni_chart_bank_momentum_popup = {}
+		te_ni_chart_bank_bubble_popup = {}
+		te_ni_chart_mon_policy_popup = {}
+		te_ni_chart_mon_policy_digital_popup = {}
+		te_ni_chart_mon_rate_paid_popup = {}
+		te_ni_chart_mon_inflation_popup = {}
+		te_ni_chart_mon_fx_popup = {}
+		te_ni_chart_st_res_grain_popup = {}
+		te_ni_chart_st_res_ammunition_popup = {}
+		te_ni_chart_st_res_oil_popup = {}
+		te_ni_chart_st_res_small_arms_popup = {}
+		te_ni_chart_st_res_artillery_popup = {}
+		te_ni_chart_st_res_aeroplanes_popup = {}
+		te_ni_chart_st_res_tanks_popup = {}
+		te_ni_chart_st_res_fertilizer_popup = {}
+		te_ni_chart_demog_births_deaths_popup = {}
+		te_ni_chart_demog_migration_popup = {}
+		te_ni_chart_demog_e0_popup = {}
+		te_ni_chart_demog_tfr_popup = {}
+		te_ni_chart_demog_median_popup = {}
+		te_ni_chart_demog_causes_popup = {}
+		te_ni_chart_demog_gini_popup = {}
+		te_ni_chart_demog_wc_popup = {}
+		te_ni_chart_ch_models_popup = {}
+		te_ni_chart_nd_taboo_popup = {}
+		te_ni_chart_nd_taboo_tgt_popup = {}
+		te_ni_chart_un_auth_popup = {}
+		te_ni_chart_un_target_popup = {}
+		te_ni_chart_gw_temp_popup = {}
+		te_ni_chart_gw_share_popup = {}
+		te_ni_chart_ce_stability_popup = {}
+		te_ni_chart_ce_drift_popup = {}
 	}
 }

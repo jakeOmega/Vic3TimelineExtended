@@ -2205,6 +2205,13 @@ types pop_browser_panel_types
 				### END MOD ###
 			}
 		}
+
+		### MOD: National Info ###
+		# Another country's chart viewers (generated, gen_te_history_charts.py): at window level, over everything the
+		# window draws and outside its scroll area, under the window's Country. Each shows on its te_ni_chart value,
+		# which a chart's open button sets for another country (the player's own opens te_popups' viewer).
+		te_ni_chart_viewers = {}
+		### END MOD ###
 	}
 
 	type filtered_pop_type_pol_str_piechart = browser_chart {
