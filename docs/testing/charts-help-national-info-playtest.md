@@ -33,3 +33,15 @@ H1, `te_popups` held only the Space Race's pickers, and none of its popups has b
 | **9. The Colonial Empire's figures.** Open How the Colonial Empire Works, with and without the entry running (a country with no colony). | The monthly limit (±1.67: `colonial_stability_drift_cap` is 1.667, shown to two decimals), the projection's months (12) and the Round Table's authority (200) show as numbers, not blanks or `[…]`. | Blank: the three keys read `GetPlayer.MakeScope.ScriptValue(…)`; check the script values (`colonial_stability_drift_cap`, `colonial_empire_projection_months`, `colonial_round_table_authority`) evaluate on a country with no entry. |
 | **10. A long page.** Open How Banking Works with the full system on. | All ten topics scroll in the popup, the text at its 460 column, nothing clipped at the right. | Clipped: widen the popup in `te_ui_help_popup` (`popup_size`). Reads badly as one page: the topic list of spec § 5.3. |
 | **11. A large UI scale.** On a 1080p screen, set the UI scale to about 1.25 to 1.3 and open How Banking Works. | The popup, 820 tall, fits: its header, title and close button stay on screen. | Off the top: Escape and a click outside still close it. Lower the height in `te_ui_help_popup` (`popup_size`), to about 700, or make it a share of the screen. |
+
+## The panel's charts look as before (PR C1, the chart registry, 2026-11-02)
+
+The 33 history charts are generated now: each section instances its chart's wrapper, `te_hist_<id>` in
+`gui/te_history_charts_generated.gui`, where the chart was. Offline, every chart rendered byte for byte as its section's
+instance had it, so nothing should look different. Logs: read `debug.log` and search it for `te_hist_` and
+`te_history_chart`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Each history section, both widths.** Banking (the Budget tab and the journal entry), the Strategic Reserve (expand a good's row), Demographics, Cultural Hegemony, Nuclear Weapons (the taboo's history), the United Nations, Global Warming and the Colonial Empire, in the side panel and in full screen. | As before: the same charts in the same order with the same gaps, each centered in its section, its bars, hovers and range buttons working. | A shift or a new gap: the wrapper carries only `parentanchor = hcenter` around the chart. Compare the section with its text before C1 (`git show 855689f14:<file>`). |
+| **Banking's paired and hidden charts.** A country on a digital currency and one not; then a game with `banking_system_simplified`. | One policy-rate chart at a time, with no empty gap where the other was; under the simplified system, no inflation or exchange-rate chart and no gap. | A gap: the chart's `visible` must sit on the section's wrapper instance (`te_hist_mon_policy = { visible = … }`), not inside it. |

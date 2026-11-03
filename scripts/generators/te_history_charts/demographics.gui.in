@@ -1,0 +1,917 @@
+# History chart fragments: demographics (scripts/generators/gen_te_history_charts.py).
+# Each "@fragment <name>" opens one chart's te_history_chart instance as its section
+# had it, dedented, each size a placeholder (the generator's docstring lists them).
+# Edit a chart here, then run the generator; its section instances the chart's
+# te_hist_<id> wrapper.
+
+@fragment demog_births_deaths
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_bd_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_bd_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_bd_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		widget = {
+			size = { 100% 100% }
+			visible = "[ScriptContainer.HasVariable('te_dg_h_cbr')]"
+
+			widget = {
+				size = { 50% 100% }
+				parentanchor = left
+
+				progressbar = {
+					size = { 100% 100% }
+					direction = vertical
+					progresstexture = "gfx/interface/backgrounds/white.dds"
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.42 0.70 0.48 1.0 }
+					value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:0.6}', ScriptContainer.GetVariableValue('te_dg_h_cbr') ) )]"
+					min = 0
+					max = 60
+				}
+			}
+			widget = {
+				size = { 50% 100% }
+				parentanchor = right
+
+				progressbar = {
+					size = { 100% 100% }
+					direction = vertical
+					progresstexture = "gfx/interface/backgrounds/white.dds"
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					texture_density = 2
+					skip_initial_animation = yes
+					alwaystransparent = yes
+					color = { 0.82 0.40 0.36 1.0 }
+					value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:0.6}', ScriptContainer.GetVariableValue('te_dg_h_cdr') ) )]"
+					min = 0
+					max = 60
+				}
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "60"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_migration
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_mig_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_mig_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_mig_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "zero_axis" {
+		### Centred on the bars, not on the frame, which the pips' lane makes taller.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+			alwaystransparent = yes
+
+			widget = {
+				size = { 100% 2 }
+				parentanchor = vcenter
+				alwaystransparent = yes
+
+				background = {
+					using = dark_area
+					alpha = 0.7
+				}
+			}
+		}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_signed = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_mig')]"
+			blockoverride "positive_values" {
+				min = 0
+				max = 20
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
+			}
+			blockoverride "positive_cover_values" {
+				min = 0
+				max = 20
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)${thin:1}' ) ) )]"
+			}
+			blockoverride "positive_color" {
+				color = { 0.42 0.62 0.85 1.0 }
+			}
+			blockoverride "negative_values" {
+				min = -20
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue('te_dg_h_mig') ) )]"
+			}
+			blockoverride "negative_cover_values" {
+				min = -20
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_mig'), '(CFixedPoint)${thin:1}' ) ) )]"
+			}
+			blockoverride "negative_color" {
+				color = { 0.82 0.52 0.48 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "+20"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "-20"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_e0
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_e0_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_e0_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_e0_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_e0')]"
+			### the axis runs to the largest figure the samples hold, 100 to 10,000 (te_demog_hist_e0_axis_shown), and a bar
+			### stops at 10,000; the cap is 4% of the axis, as 4 was of 100
+			blockoverride "values" {
+				min = 0
+				max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown') )]"
+				value = "[FixedPointToFloat( Max_CFixedPoint( Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown'), '(CFixedPoint)${thin:0.02}' ), Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)10000' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown') )]"
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( Min_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_e0'), '(CFixedPoint)10000' ), Multiply_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_hist_e0_axis_shown'), '(CFixedPoint)${thin:0.04}' ) ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.42 0.70 0.48 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "100"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_tfr
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_tfr_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_tfr_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_tfr_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_tfr')]"
+			blockoverride "values" {
+				min = 0
+				max = 8
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:0.16}', ScriptContainer.GetVariableValue('te_dg_h_tfr') ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 8
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_tfr'), '(CFixedPoint)${thin:0.32}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.82 0.52 0.48 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "8"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_median
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_median_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_median_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_median_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_median')]"
+			blockoverride "values" {
+				min = 0
+				max = 60
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:1.2}', ScriptContainer.GetVariableValue('te_dg_h_median') ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 60
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_median'), '(CFixedPoint)${thin:2.4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.55 0.62 0.78 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "60"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_causes
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_causes_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_causes_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_causes_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		widget = {
+			size = { 100% 100% }
+			visible = "[ScriptContainer.HasVariable('te_dg_h_c1')]"
+
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.902 0.404 0.404 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c8') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.565 0.522 0.914 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c7') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.0 0.514 0.0 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c6') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.835 0.318 0.506 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c5') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.788 0.522 0.0 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c4') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.098 0.620 0.439 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c3') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.851 0.349 0.149 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c2') )]"
+				min = 0
+				max = 1
+			}
+			progressbar = {
+				size = { 100% 100% }
+				direction = vertical
+				progresstexture = "gfx/interface/backgrounds/white.dds"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				texture_density = 2
+				skip_initial_animation = yes
+				alwaystransparent = yes
+				color = { 0.224 0.529 0.898 1.0 }
+				value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c1') )]"
+				min = 0
+				max = 1
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "100%"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_gini
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_gini_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_gini_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_gini_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_gini')]"
+			blockoverride "values" {
+				min = 0
+				max = 1
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:0.02}', ScriptContainer.GetVariableValue('te_dg_h_gini') ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 1
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_gini'), '(CFixedPoint)${thin:0.04}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.78 0.68 0.46 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "1"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}
+
+@fragment demog_wc
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = te_demog_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_demog_hist_wc_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_demog_hist_wc_legend"
+	}
+	blockoverride "sample_datamodel" {
+		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+	}
+	blockoverride "sample_visible" {
+		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_demog_hist_wc_tt"
+	}
+	blockoverride "marker_pips" {
+		te_demog_hist_pips = {}
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable('te_dg_h_wc')]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue('te_dg_h_wc') ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue('te_dg_h_wc'), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.66 0.58 0.80 1.0 }
+			}
+		}
+	}
+	blockoverride "plot_size" {
+		size = { ${frame} }
+	}
+	blockoverride "plot_layouts" {
+		### The bars' 96 px at the frame's foot, as te_history_chart has them; the 36 px above are the pips' lane.
+		widget = {
+			size = { 100% ${box_h} }
+			parentanchor = bottom
+
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
+				blockoverride "bar_size" {
+					size = { ${bars_5} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
+				blockoverride "bar_size" {
+					size = { ${bars_20} ${bar_h} }
+				}
+			}
+			te_history_plot = {
+				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
+				blockoverride "bar_size" {
+					size = { ${bars_100} ${bar_h} }
+				}
+			}
+			textbox = {
+				parentanchor = left|top
+				position = { 8 6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "100"
+			}
+			textbox = {
+				parentanchor = left|bottom
+				position = { 8 -6 }
+				autoresize = yes
+				using = fontsize_medium
+				raw_text = "0"
+			}
+		}
+	}
+	blockoverride "empty_visible" {
+		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+	}
+	blockoverride "empty_text" {
+		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+	}
+}

@@ -7,6 +7,8 @@ Existing tests move onto it only when they are next touched, not in a sweep.
 - _read, _strip_comments, _close, _block_at, _type_body, _children and
   _instances read Paradox GUI markup.
 - assert_wide_matches_narrow checks a wide composer against its narrow ones.
+- history_charts gives the history charts a section instances, from the
+  generated wrappers (scripts/generators/gen_te_history_charts.py).
 """
 import functools
 import glob
@@ -342,3 +344,25 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     stale = set(added_gates) - further
     test.assertFalse(stale, f"{wide_type}: added_gates names {sorted(stale)}, which the wide layout gates no further")
     return [c for c in wide.columns if c is not None]
+
+
+# --- History charts (charts PR C1) ------------------------------------------------
+# A history section instances each chart as its te_hist_<id> wrapper, generated
+# into gui/te_history_charts_generated.gui; the chart's text is the wrapper's.
+
+HISTORY_CHARTS = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
+
+
+def history_charts(section):
+    """The history charts a section's text instances, in order: each one's
+    te_history_chart instance at the panel's size (its te_hist_<id> wrapper's
+    child), braces included, as an inline instance used to read."""
+    text = _read(HISTORY_CHARTS)
+    names = set(re.findall(r"^\ttype (te_hist_\w+) = flowcontainer \{", text, re.M))
+    out = []
+    for name in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", section):
+        if name in names and not name.endswith("_large"):
+            body = _type_body(text, name)
+            start = body.index("te_history_chart = {")
+            out.append(body[start:_close(body, body.index("{", start)) + 1])
+    return out

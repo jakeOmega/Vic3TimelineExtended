@@ -2610,6 +2610,8 @@ types colonial_empire_widget_types
 	### file are global once loaded, so they are instanced here without
 	### including it. `te_hist_range` is a single global GUI variable shared with
 	### every other history chart: changing the range here changes it there too.
+	### Each chart is its te_hist_<id> wrapper, generated from its fragment in
+	### scripts/generators/te_history_charts/colonial_empire.gui.in.
 	type te_ce_sec_history = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2690,95 +2692,14 @@ types colonial_empire_widget_types
 			# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
 			# is trigger-only, so a comparison ladder is the only read). The legend
 			# says so.
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_colonial_stability_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_colonial_stability_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_colonial_stability"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_stability' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.45 0.68 0.45 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_ce_stability = {}
 
 			# ---- Projected monthly drift, signed ----
 			# Exact: colonial_stability_drift_total, the same capped sum of leaf
 			# script values the bar applies. The scale is +/-2 because that sum is
 			# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
 			# 0.17, the same 1/12 of the half-height the other signed charts use.
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_colonial_drift_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_colonial_drift_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_colonial_drift"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_signed = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
-						blockoverride "positive_values" {
-							min = 0
-							max = 2
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
-						}
-						blockoverride "positive_cover_values" {
-							min = 0
-							max = 2
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
-						}
-						blockoverride "negative_values" {
-							min = -2
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
-						}
-						blockoverride "negative_cover_values" {
-							min = -2
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
-						}
-					}
-				}
-			}
+			te_hist_ce_drift = {}
 		}
 	}
 
