@@ -186,7 +186,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"covert_ops_closed", "covert_nets_closed", "covert_funding_closed",
-                                 "covert_counterintel_closed", "covert_known_closed", "covert_how_open"})
+                                 "covert_counterintel_closed", "covert_known_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -198,15 +198,24 @@ class FlagTest(unittest.TestCase):
                 self.assertGreaterEqual(bare, 2, f)
 
     def test_each_section_has_its_own_flag(self):
-        for sec in STATUS + REFERENCE:
+        for sec in STATUS:
             body = _type_body(self.text, sec)
             self.assertEqual(len(re.findall(r"GetVariableSystem\.Toggle\('", body)), 1, sec)
 
-    def test_only_how_it_works_starts_collapsed(self):
-        how = _type_body(self.text, "te_covert_sec_how")
-        self.assertIn("GetVariableSystem.Toggle('covert_how_open')", how)
+    def test_every_live_section_starts_open(self):
         for sec in STATUS:
             self.assertRegex(_type_body(self.text, sec), r"Toggle\('covert_\w+_closed'\)", sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_covert_warfare_help_popup, on te_popup = help_covert_warfare); its
+        collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _type_body(self.text, "te_covert_sec_how")
+        self.assertIn('text = "je_iw_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]\"", how)
+        self.assertNotIn("Toggle", how)
+        self.assertNotIn("covert_how_open", self.text)
+        self.assertNotIn("covert_note", how)
 
 
 class StateGateTest(unittest.TestCase):
@@ -704,7 +713,7 @@ class KnownSectionTest(unittest.TestCase):
             self.assertIn(key, self.loc, key)
 
     def test_how_it_works_explains_watching(self):
-        how = _type_body(self.gui, "te_covert_sec_how")
+        how = _type_body(self.gui, "te_covert_warfare_help_body")
         self.assertIn('text = "je_iw_how_sub_watching"', how)
         self.assertLess(how.index("je_iw_how_ci"), how.index("je_iw_how_sub_watching"))
         self.assertLess(how.index("je_iw_how_sub_watching"), how.index("je_iw_how_sub_standing"))
@@ -957,7 +966,7 @@ class WidthBudgetTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
         gui = _read(GUI)
-        how = _type_body(gui, "te_covert_sec_how")
+        how = _type_body(gui, "te_covert_warfare_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sec in STATUS + ["te_covert_overview_panel", "widget_je_covert_operation_row",
@@ -967,7 +976,7 @@ class HowItWorksTest(unittest.TestCase):
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
 
     def test_every_topic_has_a_heading(self):
-        how = _type_body(_read(GUI), "te_covert_sec_how")
+        how = _type_body(_read(GUI), "te_covert_warfare_help_body")
         self.assertEqual(how.count("covert_subheader = {"), len(HOW_KEYS))
         self.assertEqual(how.count("covert_note = {"), len(HOW_KEYS))
 

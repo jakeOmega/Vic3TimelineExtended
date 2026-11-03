@@ -64,6 +64,8 @@ PAGES = [
          ("st_res_how_open",), ("te_st_res_tab_body",)),
     Page("seabed", ("te_seabed_how_panel",), "te_seabed_how_header",
          ("te_seabed_how_open",), ("te_seabed_tab_body",)),
+    Page("covert_warfare", ("te_covert_sec_how",), "je_iw_how_header",
+         ("covert_how_open",), ("te_covert_tab_body",)),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State
