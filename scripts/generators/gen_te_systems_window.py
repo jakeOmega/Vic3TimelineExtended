@@ -243,7 +243,7 @@ TABS: list[Tab] = [
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
             wide="te_tax_wide_sections",
-            public=False),
+            public=True),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
         body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.

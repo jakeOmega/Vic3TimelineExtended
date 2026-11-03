@@ -625,7 +625,7 @@ class WorkbenchTest(unittest.TestCase):
                                   f"te_tax_can_draft_relief = {{ KEY = {key} DIR = {op} }}", handler)
 
     def test_candidates_are_a_datamodel_over_the_built_list(self):
-        self.assertIn("datamodel = \"[GetPlayer.MakeScope.GetList('te_tax_dr_relief_candidates')]\"", self.workbench)
+        self.assertIn("datamodel = \"[Country.MakeScope.GetList('te_tax_dr_relief_candidates')]\"", self.workbench)
         self.assertIn("datacontext = \"[Scope.GetState]\"", self.workbench)
         self.assertIn("AddScope( 'te_tax_st', State.MakeScope )", self.workbench)
         # Fix round 1 minor 3: the draft's own rows are the draft's by construction.
