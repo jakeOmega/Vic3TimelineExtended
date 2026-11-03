@@ -75,8 +75,9 @@ Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
-Drugs](#pharmaceutical-industries-and-drugs)). Containerization,
-Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
+Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
+Genetic Modification, Corporate Genetic Licensing and Open-Source Genetics laws.
+Containerization, Fiber Optics, Cellular Networks, Microprocessor, Stealth
 Technology and Video Games are also here.
 
 Era 9 is the internet age. World Wide Web opens the internet laws, Clean Energy
@@ -573,7 +574,7 @@ need a large enough building of their industry.
 Biotechnology companies, the generic one and ten flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
 ([Economic law groups](06-politics.md#economic-law-groups)), which
-Biotechnology unlocks. Three of them come from fiction and unlock late: the
+Gene Splicing unlocks, a technology earlier than Biotechnology. Three of them come from fiction and unlock late: the
 Rosen Association's androids with Genetic Engineering, InGen's resurrected
 species with Synthetic Biology, and RejoovenEsense's longevity treatments with
 Rejuvenation Therapies.
