@@ -32,8 +32,8 @@
 ###                      Pages: banking, grand_monuments, colonial_empire,
 ###                      cultural_hegemony, nuclear_weapons,
 ###                      strategic_reserve, seabed, covert_warfare, nation,
-###                      budget_breakdown, united_nations, demographics
-###                      (test_te_help_pages.py's PAGES).
+###                      budget_breakdown, united_nations, demographics,
+###                      tax_code (test_te_help_pages.py's PAGES).
 ### --- end Help pages ------------------------------------------------------
 ###
 ### A popup has no journal entry of its own, so each body sits under the entry's
@@ -65,5 +65,6 @@ widget = {
 	te_budget_breakdown_help_popup = {}
 	te_united_nations_help_popup = {}
 	te_demographics_help_popup = {}
+	te_tax_code_help_popup = {}
 	### --- end Help pages ---------------------------------------------------
 }

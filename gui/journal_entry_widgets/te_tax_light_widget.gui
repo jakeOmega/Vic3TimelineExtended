@@ -10,7 +10,8 @@
 ###   te_tax_light_section        open: one row per tax the law levies, its
 ###                               range, its rate, − and + (applied at once),
 ###                               and the step it sits on
-###   te_tax_light_how_section    collapsed: How the Light Tax Code Works
+###   te_tax_light_how_section    How the Light Tax Code Works, a link to the
+###                               Help page (te_tax_code_help_popup)
 ###
 ### Every number is a guarded view of the player's code,
 ### GetPlayer.MakeScope.ScriptValue('te_tax_view_light_*' / 'te_tax_view_en_*'),
@@ -270,8 +271,12 @@ types te_tax_light_widget_types
 		}
 	}
 
-	### "How the Light Tax Code Works": every explanation, collapsed by default,
-	### one heading per topic (style guide rule 1).
+	### "How the Light Tax Code Works": a link to the Help page (style guide
+	### rule 1; spec 2026-11-02-charts-help-national-info § 5.2), which shows
+	### the Light code's explanations while it is in force
+	### (te_tax_code_help_body, te_tax_layout_widget.gui). Its header alone,
+	### which opens te_tax_code_help_popup (te_popup = help_tax_code), under the
+	### section's own gate.
 	type te_tax_light_how_section = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -280,67 +285,18 @@ types te_tax_light_widget_types
 		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
 		te_tax_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "te_tax_lt_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_tax_light_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_tax_light_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_tax_light_how_open')]"
-			}
-		}
-
-		te_tax_panel = {
-			visible = "[GetVariableSystem.Exists('te_tax_light_how_open')]"
-
-			te_tax_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "te_tax_lt_how_sub_rates"
-				}
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_rates"
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_law"
-			}
-
-			te_tax_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_tax_lt_how_sub_level"
-				}
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_level"
-			}
-
-			te_tax_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_tax_lt_how_sub_groups"
-				}
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_groups"
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_relief"
-			}
-
-			te_tax_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_tax_lt_how_sub_native"
-				}
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_native"
-			}
-			te_tax_note = {
-				text = "te_tax_lt_how_ai"
+				visible = no
 			}
 		}
 	}

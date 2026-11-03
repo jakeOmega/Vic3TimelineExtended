@@ -69,11 +69,11 @@ TAB = "te_tax_code"
 STATUS = ["te_tax_politics_section", "te_tax_pending_section", "te_tax_obligations_section",
           "te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section"]
 # Collapse flags, each named for its default (style guide rule 7).
-FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
+FLAGS = {"te_tax_enacted_closed", "te_tax_history_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed", "te_tax_wb_customs_open",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
-         "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed", "te_tax_light_how_open"}
+         "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
@@ -1043,15 +1043,37 @@ class FlagTest(unittest.TestCase):
                     self.assertEqual(negated, 1)
                     self.assertGreaterEqual(bare, 2)
 
-    def test_live_open_past_and_explanations_collapsed(self):
+    def test_live_open_and_past_collapsed(self):
         overview = gui(OVERVIEW)
-        layout = gui(LAYOUT)
         self.assertIn("Toggle('te_tax_enacted_closed')", type_body(overview, "te_tax_enacted_table"))
         self.assertIn("Toggle('te_tax_history_open')", type_body(overview, "te_tax_history_section"))
-        self.assertIn("Toggle('te_tax_how_open')", type_body(layout, "te_tax_how_section"))
+
+    def test_both_hows_are_links_to_one_page(self):
+        """How Tax Legislation Works and How the Light Tax Code Works are each
+        their header alone, under their own gates, and both open the Help page
+        (te_tax_code_help_popup, on te_popup = help_tax_code). The page shows
+        the Light code's text while it is in force and the full code's
+        otherwise, titled to match (test_te_help_pages.py)."""
+        for path, section, title in ((LAYOUT, "te_tax_how_section", "te_tax_how_header"),
+                                     (LIGHT_GUI, "te_tax_light_how_section", "te_tax_lt_how_header")):
+            body = type_body(gui(path), section)
+            with self.subTest(section=section):
+                self.assertIn(f'text = "{title}"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_tax_code')]\"", body)
+                self.assertNotIn("te_tax_note", body)
+        self.assertIn(f'visible = "[{LIGHT_SHOWN}]"', type_body(gui(LIGHT_GUI), "te_tax_light_how_section").split("\n\n")[0])
+        page = type_body(gui(LAYOUT), "te_tax_code_help_body")
+        light = page.index(f'visible = "[{LIGHT_SHOWN}]"')
+        full = page.index(f'visible = "[Not( {LIGHT_SHOWN} )]"')
+        self.assertLess(light, page.index('text = "te_tax_lt_how_sub_rates"'))
+        self.assertLess(page.index('text = "te_tax_lt_how_ai"'), full)
+        self.assertLess(full, page.index('text = "te_tax_how_sub_drafting"'))
+        title = type_body(gui(LAYOUT), "te_tax_code_help_popup")
+        self.assertIn(f"text = \"[SelectLocalization( {LIGHT_SHOWN}, 'te_tax_lt_how_header', 'te_tax_how_header' )]\"",
+                      title)
 
     def test_how_section_subheadings(self):
-        body = type_body(gui(LAYOUT), "te_tax_how_section")
+        body = type_body(gui(LAYOUT), "te_tax_code_help_body")
         subs = re.findall(r'text = "(te_tax_how_sub_\w+)"', body)
         self.assertEqual(subs, ["te_tax_how_sub_drafting", "te_tax_how_sub_passage",
                                 "te_tax_how_sub_commencement", "te_tax_how_sub_promises", "te_tax_how_sub_replaces",
@@ -1069,7 +1091,7 @@ class FlagTest(unittest.TestCase):
     def test_customs_is_explained_only_under_the_customs_option(self):
         # Final review B-I1: under the customs option the monthly sync sets tariffs too, so
         # the line that says it does not is swapped, and a Customs topic shows.
-        body = type_body(gui(LAYOUT), "te_tax_how_section")
+        body = type_body(gui(LAYOUT), "te_tax_code_help_body")
         gate = "GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
         self.assertIn(f"text = \"[SelectLocalization( {gate}, 'te_tax_how_replaces_monthly_customs', "
                       "'te_tax_how_replaces_monthly' )]\"", body)

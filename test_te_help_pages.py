@@ -76,6 +76,11 @@ PAGES = [
     # the tab's and the state subtab's sections, one page; no host has a header
     Page("demographics", ("te_demog_sec_how", "te_state_demog_how"), "te_demog_sec_how",
          ("te_demog_how_open", "te_demog_st_how_open"), ()),
+    # the full code's link and the Light code's, one page, titled for the code in force
+    Page("tax_code", ("te_tax_how_section", ("te_tax_light_how_section", "te_tax_lt_how_header")), "te_tax_how_header",
+         ("te_tax_how_open", "te_tax_light_how_open"), ("te_tax_tab_body",),
+         popup_title="text = \"[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( "
+                     "GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]\""),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State

@@ -6,7 +6,8 @@
 ### overview, the enacted code, the history), te_tax_workbench_widget.gui
 ### (the workbench and the draft summary), te_tax_review_widget.gui (the
 ### review), te_tax_politics_widget.gui (passage and passed bills) and here
-### (How Tax Legislation Works), in the shape of banking_layout_widget.gui.
+### (How Tax Legislation Works, and the Help page both codes' links open), in
+### the shape of banking_layout_widget.gui.
 ###
 ### The journal entry, top to bottom (gui/journal_entry.gui draws container_1,
 ### the status desc, container_2, the button grid, container_3):
@@ -16,7 +17,8 @@
 ###                line for the inactive entry, which draws nothing else
 ###   container_2  widget_je_tax_code_status     the live sections, open
 ###   container_3  widget_je_tax_code_reference  the history and How Tax
-###                Legislation Works, collapsed
+###                Legislation Works, a link to the Help page
+###                (te_tax_code_help_popup, in gui/te_popups.gui)
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_tax_code_layout.py).
@@ -64,20 +66,13 @@ types te_tax_layout_widget_types
 		}
 	}
 
-	### "How Tax Legislation Works": every explanation, collapsed by default,
-	### one heading per topic (style guide rule 1). The live sections say what
-	### is in force; this says how it got there and how it changes. The passage
-	### rule's numbers (share, legitimacy, debate days, thresholds, due-month
-	### range, reschedule delay) are read from its own script values
-	### (te_tax_support_values.txt), so those follow the rule. The Customs
-	### topic and the customs half of the monthly line show only under the
-	### customs option (te_tax_show_customs_option_sgui). Three facts are
-	### written out in both the loc and the script and CAN drift: the sunset
-	### offsets 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes,
-	### two steps" (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and
-	### regional relief's "at most three" states (the schema's cap, which Task
-	### 11's state selection enforces; the Enacted Code's relief hover says it
-	### too). Change the loc with them.
+	### "How Tax Legislation Works": a link at the foot of the panel to the Help
+	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_tax_code_help_popup (te_popup =
+	### help_tax_code) instead of expanding; it keeps its name and its place in
+	### the composers, under their Not(light) wrappers. The Light code's own
+	### link, te_tax_light_how_section, opens the same page, and so does the
+	### "?" in the tab's header.
 	type te_tax_how_section = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -85,22 +80,104 @@ types te_tax_layout_widget_types
 		spacing = 2
 
 		te_tax_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "te_tax_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_tax_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_tax_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+				visible = no
+			}
+		}
+	}
+
+	### The Help page, one for both codes: How the Light Tax Code Works while the
+	### Light code is in force (te_tax_show_light_sgui), How Tax Legislation Works
+	### otherwise, each one heading per topic; the popup's title follows the same
+	### gate. The live sections say what is in force; this says how it got there
+	### and how it changes. The passage rule's numbers (share, legitimacy, debate
+	### days, thresholds, due-month range, reschedule delay) are read from its own
+	### script values (te_tax_support_values.txt), so those follow the rule. The
+	### Customs topic and the customs half of the monthly line show only under the
+	### customs option (te_tax_show_customs_option_sgui). Three facts are written
+	### out in both the loc and the script and CAN drift: the sunset offsets
+	### 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes, two steps"
+	### (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and regional relief's
+	### "at most three" states (the schema's cap, which Task 11's state selection
+	### enforces; the Enacted Code's relief hover says it too). Change the loc
+	### with them.
+	### It reads GetPlayer only, as the section did, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_tax_code_help_popup.
+	type te_tax_code_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		### Under the Light code: How the Light Tax Code Works.
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_tax_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_rates"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_rates"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_law"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_level"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_level"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_groups"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_groups"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_relief"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_native"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_native"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_ai"
 			}
 		}
 
-		te_tax_panel = {
-			visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+		### Otherwise: How Tax Legislation Works.
+		flowcontainer = {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
 
 			te_tax_subheader = {
 				blockoverride "subheader_margin" {}
@@ -197,8 +274,21 @@ types te_tax_layout_widget_types
 		}
 	}
 
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_tax_code_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_tax_code')]"
+		}
+		blockoverride "popup_title" {
+			text = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]"
+		}
+		blockoverride "popup_list" {
+			te_tax_code_help_body = {}
+		}
+	}
+
 	### The record, then how it all works: the history, collapsed (a list of
-	### past items), and How Tax Legislation Works, collapsed, last. The light
+	### past items), and How Tax Legislation Works, the link, last. The light
 	### code's How comes first, as its section does in te_tax_status_sections,
 	### so the wide layout's second column ends on it.
 	type te_tax_reference_sections = flowcontainer {
@@ -239,6 +329,9 @@ types te_tax_layout_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_tax_code"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
 				}
 			}
 		}
