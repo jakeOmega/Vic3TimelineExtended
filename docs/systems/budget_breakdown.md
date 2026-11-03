@@ -80,8 +80,9 @@ group says it includes the rows below, and an institution gives its level and
 share of the institution pool, whose figures are on the Administration group's
 row once. The rules are stated once, as subheaded notes (`HOW_TOPICS`, drawn by
 `te_budget_breakdown_help_body` in `gui/te_budget_breakdown.gui`) on the Help
-page that How the Breakdown Works opens (`te_budget_breakdown_help_popup`,
-2026-11-02; the tab has no header, so no "?"). The tab's rows
+page (`te_budget_breakdown_help_popup`, 2026-11-02), which the "?" in the
+tab's header opens: the tab mounts `te_budget_breakdown_tab_body`, a frame with
+a header, since the link at its foot went (2026-11-03). The tab's rows
 and notes are 17 and its subheadings 20 (`te_budget_fontsize_row` /
 `_heading`), with a 291 label column that wraps rather than elides
 (`test_budget_breakdown.BreakdownWidthBudgetTest`).
