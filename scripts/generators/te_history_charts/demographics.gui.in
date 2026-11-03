@@ -120,7 +120,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -247,7 +247,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -344,7 +344,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -439,7 +439,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -534,7 +534,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -722,7 +722,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -817,7 +817,7 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
 
@@ -912,6 +912,6 @@ te_history_chart = {
 		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
 	}
 	blockoverride "empty_text" {
-		text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
 	}
 }
