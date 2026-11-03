@@ -6,6 +6,9 @@
 ### te_history_chart instance inline (gotcha #37). The large one leaves out the chart's
 ### comments, which describe the panel's size. How to add a chart: the generator's
 ### docstring and docs/systems/mod_systems/history_charts.md.
+### Then the viewer (charts PR C2): each range variable's buttons (te_chart_range_row_<var>),
+### each chart's popup (te_chart_<id>_popup, on te_popup = chart_<id>) and te_chart_popups,
+### which gui/te_popups.gui instances.
 
 types te_history_charts_generated_types
 {
@@ -43,6 +46,14 @@ types te_history_charts_generated_types
 					blockoverride "phase_cover_value" {
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_value')]"
 				}
 			}
 		}
@@ -165,6 +176,14 @@ types te_history_charts_generated_types
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_momentum')]"
 				}
 			}
 		}
@@ -296,6 +315,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_bubble')]"
+				}
+			}
 		}
 	}
 
@@ -404,6 +431,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.50 0.58 0.80 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy')]"
 				}
 			}
 		}
@@ -529,6 +564,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy_digital')]"
+				}
+			}
 		}
 	}
 
@@ -652,6 +695,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_rate_paid')]"
+				}
+			}
 		}
 	}
 
@@ -773,6 +824,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.80 0.45 0.32 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_inflation')]"
 				}
 			}
 		}
@@ -910,6 +969,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_fx')]"
+				}
+			}
 		}
 	}
 
@@ -1024,6 +1091,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_grain')]"
+				}
+			}
 		}
 	}
 
@@ -1116,6 +1191,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_ammunition')]"
 				}
 			}
 		}
@@ -1212,6 +1295,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_oil')]"
+				}
+			}
 		}
 	}
 
@@ -1304,6 +1395,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_small_arms')]"
 				}
 			}
 		}
@@ -1400,6 +1499,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_artillery')]"
+				}
+			}
 		}
 	}
 
@@ -1492,6 +1599,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_aeroplanes')]"
 				}
 			}
 		}
@@ -1588,6 +1703,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_tanks')]"
+				}
+			}
 		}
 	}
 
@@ -1680,6 +1803,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_fertilizer')]"
 				}
 			}
 		}
@@ -1866,6 +1997,15 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_births_deaths')]"
+				}
 			}
 		}
 	}
@@ -2126,6 +2266,15 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_migration')]"
+				}
+			}
 		}
 	}
 
@@ -2361,6 +2510,15 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_e0')]"
+				}
+			}
 		}
 	}
 
@@ -2563,6 +2721,15 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_tfr')]"
+				}
+			}
 		}
 	}
 
@@ -2764,6 +2931,15 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_median')]"
+				}
 			}
 		}
 	}
@@ -3060,6 +3236,15 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_causes')]"
+				}
+			}
 		}
 	}
 
@@ -3355,6 +3540,15 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_gini')]"
+				}
+			}
 		}
 	}
 
@@ -3556,6 +3750,15 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_wc')]"
+				}
 			}
 		}
 	}
@@ -3917,6 +4120,14 @@ types te_history_charts_generated_types
 				visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 			}
 			blockoverride "empty_text" { text = "ch_model_hist_empty" }
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ch_models')]"
+				}
+			}
 		}
 	}
 
@@ -4205,6 +4416,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo')]"
+				}
+			}
 		}
 	}
 
@@ -4304,6 +4523,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.55 0.55 0.70 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo_tgt')]"
 				}
 			}
 		}
@@ -4408,6 +4635,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_auth')]"
+				}
+			}
 		}
 	}
 
@@ -4508,6 +4743,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.55 0.55 0.70 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_target')]"
 				}
 			}
 		}
@@ -4612,6 +4855,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_temp')]"
+				}
+			}
 		}
 	}
 
@@ -4714,6 +4965,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_share')]"
+				}
+			}
 		}
 	}
 
@@ -4814,6 +5073,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.45 0.68 0.45 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_stability')]"
 				}
 			}
 		}
@@ -4937,6 +5204,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_drift')]"
+				}
+			}
 		}
 	}
 
@@ -5021,5 +5296,1498 @@ types te_history_charts_generated_types
 				max_width = 1000
 			}
 		}
+	}
+
+	### The viewer: the range buttons, a range variable a row
+	type te_chart_range_row_te_hist_range = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 4
+		margin = { 4 4 }
+
+		te_history_range_button = {
+			blockoverride "range_text" {
+				text = "te_hist_range_1y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'te_hist_range', '1' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+			}
+		}
+
+		te_history_range_button = {
+			blockoverride "range_text" {
+				text = "te_hist_range_5y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+			}
+		}
+
+		te_history_range_button = {
+			blockoverride "range_text" {
+				text = "te_hist_range_20y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+			}
+		}
+	}
+
+	type te_chart_range_row_te_demog_hist_range = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 4
+		margin = { 4 4 }
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "te_hist_range_5y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_demog_hist_range', '5' )]"
+			}
+		}
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "te_hist_range_20y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_demog_hist_range', '20' )]"
+			}
+		}
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "te_demog_hist_range_100y"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Or( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'te_demog_hist_range', '100' )]"
+			}
+		}
+	}
+
+	type te_chart_range_row_ch_model_hist_range = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		spacing = 4
+		margin = { 4 4 }
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "ch_model_hist_range_5"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'ch_model_hist_range', '5' )]"
+			}
+		}
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "ch_model_hist_range_20"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Not( GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'ch_model_hist_range', '20' )]"
+			}
+		}
+
+		te_history_range_button = {
+			size = { 96 26 }
+			blockoverride "range_text" {
+				text = "ch_model_hist_range_100"
+			}
+			blockoverride "range_enabled" {
+				enabled = "[Or( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ), GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ) )]"
+			}
+			blockoverride "range_onclick" {
+				onclick = "[GetVariableSystem.Set( 'ch_model_hist_range', '100' )]"
+			}
+		}
+	}
+
+	### The viewer: each chart's popup
+	type te_chart_bank_value_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_bank_value')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_value_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_bank_value_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_bank_momentum_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_bank_momentum')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_momentum_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_bank_momentum_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_bank_bubble_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_bank_bubble')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_bank_bubble_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_bank_bubble_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_mon_policy_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_mon_policy')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_policy_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_mon_policy_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_mon_policy_digital_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_mon_policy_digital')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_policy_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_mon_policy_digital_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_mon_rate_paid_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_mon_rate_paid')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_rate_paid_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_mon_rate_paid_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_mon_inflation_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_mon_inflation')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_inflation_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_mon_inflation_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_mon_fx_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_mon_fx')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_mon_fx_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 620 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_mon_fx_large = {}
+					te_banking_hist_marker_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_grain_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_grain')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_grain_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_grain_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_ammunition_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_ammunition')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_ammunition_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_ammunition_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_oil_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_oil')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_oil_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_oil_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_small_arms_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_small_arms')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_small_arms_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_small_arms_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_artillery_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_artillery')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_artillery_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_artillery_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_aeroplanes_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_aeroplanes')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_aeroplanes_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_aeroplanes_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_tanks_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_tanks')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_tanks_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_tanks_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_st_res_fertilizer_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_st_res_fertilizer')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_chart_st_res_fertilizer_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_strategic_reserve')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_st_res_fertilizer_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_births_deaths_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_births_deaths')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_bd_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_births_deaths_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_migration_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_migration')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_mig_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_migration_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_e0_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_e0')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_e0_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_e0_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_tfr_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_tfr')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_tfr_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_tfr_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_median_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_median')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_median_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_median_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_causes_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_causes')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_causes_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_causes_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_gini_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_gini')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_gini_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_gini_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_demog_wc_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_demog_wc')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_hist_wc_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 640 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_chart_range_row_te_demog_hist_range = {}
+				te_hist_demog_wc_large = {}
+				te_demog_hist_pip_legend = {}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_ch_models_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_ch_models')]"
+		}
+		blockoverride "popup_title" {
+			text = "ch_model_hist_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1360 760 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_cultural_hegemony')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_ch_model_hist_range = {}
+					te_hist_ch_models_large = {}
+					te_ch_hist_model_key = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1244
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_nd_taboo_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_nd_taboo')]"
+		}
+		blockoverride "popup_title" {
+			text = "nd_taboo_hist_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_nuclear_program')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_nd_taboo_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_nd_taboo_tgt_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_nd_taboo_tgt')]"
+		}
+		blockoverride "popup_title" {
+			text = "nd_taboo_hist_target_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_nuclear_program')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_nd_taboo_tgt_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_un_auth_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_un_auth')]"
+		}
+		blockoverride "popup_title" {
+			text = "un_hist_chart_auth_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_un_auth_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_un_target_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_un_target')]"
+		}
+		blockoverride "popup_title" {
+			text = "un_hist_chart_target_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_un_target_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_gw_temp_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_gw_temp')]"
+		}
+		blockoverride "popup_title" {
+			text = "gw_hist_chart_temp_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_global_warming')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_gw_temp_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_gw_share_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_gw_share')]"
+		}
+		blockoverride "popup_title" {
+			text = "gw_hist_chart_share_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_global_warming')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_gw_share_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_ce_stability_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_ce_stability')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_colonial_stability_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_ce_stability_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	type te_chart_ce_drift_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'chart_ce_drift')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_hist_chart_colonial_drift_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1320 580 }
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				datacontext = "[GetPlayer]"
+				visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_chart_range_row_te_hist_range = {}
+					te_hist_ce_drift_large = {}
+				}
+			}
+			textbox = {
+				visible = "[Not( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				parentanchor = hcenter
+				autoresize = yes
+				multiline = yes
+				max_width = 1204
+				align = hcenter|nobaseline
+				using = fontsize_large
+				text = "te_chart_gone"
+			}
+		}
+	}
+
+	### The viewer: every popup, for te_popups (gui/te_popups.gui)
+	type te_chart_popups = widget {
+		size = { 100% 100% }
+
+		te_chart_bank_value_popup = {}
+		te_chart_bank_momentum_popup = {}
+		te_chart_bank_bubble_popup = {}
+		te_chart_mon_policy_popup = {}
+		te_chart_mon_policy_digital_popup = {}
+		te_chart_mon_rate_paid_popup = {}
+		te_chart_mon_inflation_popup = {}
+		te_chart_mon_fx_popup = {}
+		te_chart_st_res_grain_popup = {}
+		te_chart_st_res_ammunition_popup = {}
+		te_chart_st_res_oil_popup = {}
+		te_chart_st_res_small_arms_popup = {}
+		te_chart_st_res_artillery_popup = {}
+		te_chart_st_res_aeroplanes_popup = {}
+		te_chart_st_res_tanks_popup = {}
+		te_chart_st_res_fertilizer_popup = {}
+		te_chart_demog_births_deaths_popup = {}
+		te_chart_demog_migration_popup = {}
+		te_chart_demog_e0_popup = {}
+		te_chart_demog_tfr_popup = {}
+		te_chart_demog_median_popup = {}
+		te_chart_demog_causes_popup = {}
+		te_chart_demog_gini_popup = {}
+		te_chart_demog_wc_popup = {}
+		te_chart_ch_models_popup = {}
+		te_chart_nd_taboo_popup = {}
+		te_chart_nd_taboo_tgt_popup = {}
+		te_chart_un_auth_popup = {}
+		te_chart_un_target_popup = {}
+		te_chart_gw_temp_popup = {}
+		te_chart_gw_share_popup = {}
+		te_chart_ce_stability_popup = {}
+		te_chart_ce_drift_popup = {}
 	}
 }

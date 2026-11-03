@@ -46,6 +46,10 @@ game's tooltips show the exact values for your country, and many of the mod's
 journal entries and panels break their numbers down line by line when you hover
 over them.
 
+Many panels chart a system's history month by month or year by year. The round
+button beside a chart's title opens that chart alone, across most of the screen,
+with the same range buttons and hovers. Escape or a click outside closes it.
+
 The Markdown source of this guide is kept in the mod's repository, and the
 [chapters](https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide)
 can be read there as web pages.

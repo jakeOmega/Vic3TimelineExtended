@@ -841,6 +841,14 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
 
 A bar tooltip renders with only the month's `ScriptContainer` as its context, so these must not read `JournalEntry` (gui_modding_guide.md gotcha #24). The chart's title and legend (`st_res_hist_title`, `st_res_hist_legend`) are shared.
 
+### te_miscellaneous_l_english.yml — the chart viewer's header (one more key)
+
+```yaml
+ te_chart_st_res_<GOOD>_title:0 "$je_strategic_reserve$: $<GOOD>$"
+```
+
+The header of the good's full-screen chart viewer (`te_chart_st_res_<GOOD>_popup`, which `gen_te_history_charts.py` writes once the good is in `ST_RES_GOODS`; its `POPUP_TITLES` names this key). The chart's own title is the shared "Fill by Month", so the header names the good, spliced from the good's own name. `test_te_history_charts.py`'s `ViewerTest` fails without it.
+
 Everything else the policy panel shows — policy names, preset names, settings labels, all the tooltips and all ten explanations — is shared across goods and already exists.
 
 ---

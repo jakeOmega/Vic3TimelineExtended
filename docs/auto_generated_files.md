@@ -108,13 +108,14 @@ never rewrites the window.
 Run `python3 scripts/generators/gen_te_history_charts.py` after changing a
 chart's fragment in `scripts/generators/te_history_charts/<system>.gui.in`
 (the chart's instance text, each size a placeholder), its `CHARTS` registry
-line, or the `SMALL` / `LARGE` size tables; `--check` writes nothing and exits
+line, the `SMALL` / `LARGE` size tables, or the viewer's `KEYS`, `POPUP_TITLES`
+or popup sizes; `--check` writes nothing and exits
 1 when the file is stale. `test_te_history_charts.py` fails while it is. It
 writes:
 
 | File | Owner script | Input |
 |---|---|---|
-| `gui/te_history_charts_generated.gui` | `scripts/generators/gen_te_history_charts.py` | `CHARTS`, `SMALL`, `LARGE` and the fragments in `scripts/generators/te_history_charts/`: each of the 33 history charts as two wrapper types, `te_hist_<id>` at the panel's size, which the chart's section (still hand-written) instances where the chart sits, and `te_hist_<id>_large` at the full-screen viewer's. Each is a plain flowcontainer holding the chart's `te_history_chart` instance inline |
+| `gui/te_history_charts_generated.gui` | `scripts/generators/gen_te_history_charts.py` | `CHARTS`, `SMALL`, `LARGE` and the fragments in `scripts/generators/te_history_charts/`: each of the 33 history charts as two wrapper types, `te_hist_<id>` at the panel's size, which the chart's section (still hand-written) instances where the chart sits, and `te_hist_<id>_large` at the full-screen viewer's. Each is a plain flowcontainer holding the chart's `te_history_chart` instance inline. Then the viewer (charts PR C2): each range variable's buttons (`te_chart_range_row_<var>`), each chart's popup (`te_chart_<id>_popup`) and `te_chart_popups`, which the hand-written popups root, `te_popups`, instances |
 
 This generator runs explicitly; it is not a post-load regenerator, so a reload
 never rewrites the charts.

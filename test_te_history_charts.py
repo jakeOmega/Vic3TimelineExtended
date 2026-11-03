@@ -28,6 +28,9 @@ CHART_GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "te_history_chart
 GENERATED = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
 SGUIS = os.path.join(REPO, "common", "scripted_guis")
 JE_DIR = os.path.join(REPO, "common", "journal_entries")
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md")
+# The open button's placeholder art: vanilla's (style guide rule 10).
+OPEN_ICON = "gfx/interface/buttons/button_icons/areacharts.dds"
 # The sections that hold the charts, and so their range buttons.
 SECTIONS = {
     "banking": "gui/journal_entry_widgets/banking_history_widget.gui",
@@ -47,6 +50,11 @@ FIXED = {"size = { 100% 2 }", "position = { 8 6 }", "position = { 8 -6 }"}
 def _block_bodies(text, name):
     """The body of each `block "name" { … }` in text, in order."""
     return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(rf'block "{name}" \{{', text)]
+
+
+def _override_bodies(text, name):
+    """The body of each `blockoverride "name" { … }` in text, in order."""
+    return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(rf'blockoverride "{name}" \{{', text)]
 
 
 def _unblocked(text, pattern):
@@ -71,12 +79,27 @@ class ChartTypeTest(unittest.TestCase):
     def setUpClass(cls):
         cls.chart = _type_body(_read(CHART_GUI), "te_history_chart")
 
-    def test_the_text_width_is_a_block_on_the_title_and_the_legend(self):
-        self.assertEqual([b.strip() for b in _block_bodies(self.chart, "chart_text_width")],
-                         ["max_width = 484", "max_width = 484"])
-        for font in ("chart_title_font", "chart_legend_font"):
-            box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index(f'block "{font}"')):]
-            self.assertIn('block "chart_text_width"', box[:box.index(f'block "{font}"')], font)
+    def test_the_title_and_the_legend_each_have_a_width_block(self):
+        """The title's width (chart_title_width) and the legend's
+        (chart_text_width) are separate blocks, both today's 484 by default:
+        the panel's wrapper narrows only the title, beside its open button."""
+        for block, font in (("chart_title_width", "chart_title_font"), ("chart_text_width", "chart_legend_font")):
+            with self.subTest(block=block):
+                self.assertEqual([b.strip() for b in _block_bodies(self.chart, block)], ["max_width = 484"])
+                box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index(f'block "{font}"')):]
+                self.assertIn(f'block "{block}"', box[:box.index(f'block "{font}"')], font)
+
+    def test_the_title_shares_a_row_with_the_open_button(self):
+        """The title and block "chart_open" sit in one horizontal flowcontainer
+        (charts PR C2); the legend stays below it, at the full width."""
+        i = self.chart.index('block "chart_open" {}')
+        row = self.chart[self.chart.rindex("flowcontainer = {", 0, self.chart.index('block "chart_title_font"')):]
+        row = row[:_close(row, row.index("{")) + 1]
+        self.assertIn("direction = horizontal", row.split("textbox = {")[0])
+        self.assertIn('block "chart_open" {}', row)
+        self.assertNotIn('block "chart_legend"', row)
+        self.assertEqual(self.chart.count('block "chart_open"'), 1)
+        self.assertLess(i, self.chart.index('block "chart_legend"'))
 
     def test_the_empty_states_width_is_a_block(self):
         self.assertEqual([b.strip() for b in _block_bodies(self.chart, "empty_width")], ["max_width = 420"])
@@ -90,6 +113,66 @@ class ChartTypeTest(unittest.TestCase):
         self.assertEqual(_unblocked(self.chart, r"\b(max_width|size) = \{?\s*\d"), [])
         self.assertTrue(_block_bodies(self.chart, "plot_size"))
         self.assertTrue(_block_bodies(self.chart, "plot_layouts"))
+
+
+class OpenButtonTest(unittest.TestCase):
+    """The open button beside each panel chart's title (charts PR C2, spec
+    § 4.2): it opens the chart's full-screen viewer, te_popup = chart_<id>."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.button = _type_body(_read(CHART_GUI), "te_chart_open_button")
+
+    def test_the_type(self):
+        self.assertRegex(_read(CHART_GUI), r"\btype te_chart_open_button = button_icon_round \{")
+        self.assertIn('tooltip = "te_chart_open_tt"', self.button)
+        self.assertRegex(self.button, r'blockoverride "size" \{\s*size = \{ %d %d \}\s*\}'
+                         % (gen.OPEN_BUTTON, gen.OPEN_BUTTON))
+        self.assertEqual(gen.OPEN_BUTTON, 24)
+        self.assertNotIn("onclick", self.button, "each wrapper sets its own")
+        # centred on the title's line, as the row is max(title, 24) tall
+        self.assertEqual(re.findall(r"^\t\tparentanchor = (\S+)$", self.button, re.M), ["vcenter"])
+        # one visible per widget: the Demographics wrappers put theirs on the instance
+        self.assertNotIn("visible", self.button)
+        self.assertEqual(sorted(c.system for c in gen.CHARTS if c.entry is None), ["demographics"] * 8)
+
+    def test_its_placeholder_art_is_listed(self):
+        """Style guide rule 10: the placeholder (vanilla's area-charts icon)
+        is listed in the icons doc with the final art's subject."""
+        textures = re.findall(r'texture = "([^"]+)"', self.button)
+        self.assertEqual(textures, [OPEN_ICON])
+        doc = _read(ICONS_DOC)
+        row = next((ln for ln in doc.splitlines() if ln.startswith("| ") and "`te_chart_open_button`" in ln), None)
+        self.assertIsNotNone(row, "no row for te_chart_open_button in the icons doc")
+        self.assertIn(f"`{OPEN_ICON}`", row)
+        self.assertIn("two arrows pointing out from a corner", row.lower())
+
+    def test_every_small_wrapper_opens_its_viewer(self):
+        """Each panel chart's wrapper fills chart_open with the button, on its
+        own te_popup value, and narrows the title by the button and its gap;
+        the viewer's wrapper has neither."""
+        text = _read(GENERATED)
+        for chart in gen.CHARTS:
+            small = _type_body(text, gen.wrapper_name(chart, gen.SMALL))
+            large = _type_body(text, gen.wrapper_name(chart, gen.LARGE))
+            with self.subTest(chart=chart.id):
+                opens = _override_bodies(small, "chart_open")
+                self.assertEqual(len(opens), 1)
+                self.assertIn("te_chart_open_button = {", opens[0])
+                self.assertEqual(re.findall(r'onclick = "(.*)"', opens[0]),
+                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]"])
+                # A chart that reads its host's Country (Demographics', drawn for
+                # any country in the Census Data window) opens the player's
+                # viewer, so its button shows only for the player's own country:
+                # the first half of F1.4's two-button slot.
+                self.assertEqual(re.findall(r'visible = "(.*)"', opens[0]),
+                                 ["[Country.IsLocalPlayer]"] if chart.entry is None else [])
+                self.assertEqual([b.strip() for b in _override_bodies(small, "chart_title_width")],
+                                 [f"max_width = {484 - gen.OPEN_BUTTON - gen.OPEN_GAP}"])
+                self.assertEqual(_override_bodies(large, "chart_open"), [])
+                self.assertEqual(_override_bodies(large, "chart_title_width"), [])
+                self.assertNotIn("te_chart_open_button", large)
+        self.assertEqual(484 - gen.OPEN_BUTTON - gen.OPEN_GAP, 456)
 
 
 def _code_lines(text):
@@ -144,8 +227,11 @@ class RegistryTest(unittest.TestCase):
         digital = gen.BY_ID["mon_policy_digital"]
         self.assertEqual(gen.substitute("${zero_y:0.2}", digital, gen.SMALL), "-23")     # 6 + 0.2 x 84
         self.assertEqual(gen.substitute("${zero_y:0.25}", digital, gen.SMALL), "-27")    # 6 + 0.25 x 84
+        # the title, beside the open button: 484 less the button and its gap (charts PR C2)
+        self.assertEqual({gen.SMALL[k].title_w for k in gen.KINDS}, {456})
         # the chart type's defaults
         chart = _type_body(_read(CHART_GUI), "te_history_chart")
+        self.assertEqual(re.findall(r'block "chart_title_width" \{\s*max_width = (\d+)', chart), ["484"])
         plot = _type_body(_read(CHART_GUI), "te_history_plot")
         self.assertEqual(re.findall(r'block "plot_size" \{\s*size = \{ (\d+) (\d+) \}', chart), [("496", "96")])
         self.assertEqual(re.findall(r'block "bar_size" \{\s*size = \{ (\d+) (\d+) \}', plot), [("2", "84")])
@@ -158,13 +244,20 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
 
     def test_the_small_wrapper_is_its_fragment(self):
-        """At SMALL the generator substitutes and adds nothing, so the panel's
-        charts are their fragments' text, as their sections had it."""
+        """At SMALL the generator substitutes and adds nothing but the open
+        button and the title's width beside it (charts PR C2), so the panel's
+        charts are otherwise their fragments' text, as their sections had it."""
         for chart in gen.CHARTS:
             with self.subTest(chart=chart.id):
                 text = gen.substitute(gen.fragment(chart), chart, gen.SMALL)
-                self.assertEqual(gen.size_overrides(chart, gen.SMALL, text), [])
-                self.assertEqual(gen.render_chart(chart, gen.SMALL), text)
+                added = gen.size_overrides(chart, gen.SMALL, text)
+                self.assertEqual(added, gen.open_overrides(chart))
+                self.assertEqual(re.findall(r'^blockoverride "(\w+)"', "\n".join(added), re.M),
+                                 ["chart_title_width", "chart_open"])
+                rendered = gen.render_chart(chart, gen.SMALL).split("\n")
+                tail = [f"\t{ln}" for ln in added]
+                self.assertEqual(rendered[-1 - len(tail):-1], tail)
+                self.assertEqual("\n".join(rendered[:-1 - len(tail)] + rendered[-1:]), text)
 
     def test_no_size_literal_in_a_fragment(self):
         """Every size a fragment draws at is a placeholder: no number left in a
@@ -225,10 +318,12 @@ class RegistryTest(unittest.TestCase):
                     self.assertEqual(box, dims.bar_h + 12)
                     self.assertEqual(dims.frame[1], box + (gen.PIP_LANE if chart.kind == "annual_pips" else 0))
                     self.assertEqual(dims.text_w, dims.frame[0] - 12 if size is gen.LARGE else 484)
+                    # the title: beside the open button on the panel, the type's 484 in the viewer
+                    self.assertEqual(dims.title_w, 484 - gen.OPEN_BUTTON - gen.OPEN_GAP if size is gen.SMALL else 484)
         self.assertIn("margin_right = 8", _type_body(_read(CHART_GUI), "te_history_plot"))
         self.assertEqual({gen.LARGE[k].plot for k in gen.KINDS}, {1200})   # owner call 7
         with self.assertRaisesRegex(ValueError, "don't divide"):
-            gen.bars(gen.Dims(plot=500, left=8, frame=(516, 96), bar_h=84, text_w=0, empty_w=0),
+            gen.bars(gen.Dims(plot=500, left=8, frame=(516, 96), bar_h=84, text_w=0, title_w=0, empty_w=0),
                      gen.RANGES["te_hist_range"])
 
     def test_the_large_caps_scale(self):
@@ -305,9 +400,14 @@ class RegistryTest(unittest.TestCase):
         the chart's own parentanchor (gotcha #37: never a type derived from
         te_history_plot or te_history_chart), so the panel lays out as before."""
         text = _read(GENERATED)
-        types = re.findall(r"^\ttype (\w+) = (\w+) \{", text, re.M)
+        every = re.findall(r"^\ttype (\w+) = (\w+) \{", text, re.M)
+        types = [(n, b) for n, b in every if n.startswith("te_hist_")]
         self.assertEqual([n for n, _ in types],
                          [gen.wrapper_name(c, s) for c in gen.CHARTS for s in gen.SIZES])
+        # then the viewer's (charts PR C2): the range rows, the popups and their holder
+        self.assertEqual([n for n, _ in every[len(types):]],
+                         [gen.range_row_name(v) for v in gen.RANGES] + [gen.popup_name(c) for c in gen.CHARTS]
+                         + ["te_chart_popups"])
         self.assertEqual({base for _, base in types}, {"flowcontainer"})
         for name, _ in types:
             body = _type_body(text, name)
@@ -437,6 +537,163 @@ class RegistryTest(unittest.TestCase):
         with mock.patch.object(gen, "CHARTS", orphan), mock.patch.object(gen, "BY_ID", {c.id: c for c in orphan}):
             with self.assertRaisesRegex(ValueError, "no chart uses"):
                 gen.render()
+
+
+# The keys' heights, from their rows: Banking's two lines of fontsize_medium
+# (18 px) 1 apart in a 2 px margin, Demographics' one line in a 2 px margin,
+# Cultural Hegemony's eight rows of ch_fontsize_row (17 px type, a 22 px line)
+# 1 apart.
+KEY_HEIGHTS = {"banking": 2 * 18 + 1 + 2 * 2, "demographics": 18 + 2 * 2, "cultural_hegemony": 8 * 22 + 7}
+
+
+def _loc_values():
+    out = {}
+    for path in glob.glob(os.path.join(REPO, "localization", "english", "**", "*.yml"), recursive=True):
+        for m in re.finditer(r'^ (\w+):\d* "(.*)"\s*$', _read(path), re.M):
+            out[m.group(1)] = m.group(2)
+    return out
+
+
+class ViewerTest(unittest.TestCase):
+    """Each chart's full-screen viewer (charts PR C2, spec § 4.2): a popup the
+    generator writes beside the chart's wrappers, holding the range buttons,
+    the large chart and its section's key (the popups' shape and gate:
+    test_te_popups.py's ChartPopupTest)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(GENERATED))
+
+    def popup(self, chart):
+        return _type_body(self.text, gen.popup_name(chart))
+
+    def test_one_popup_per_chart(self):
+        holder = _type_body(self.text, "te_chart_popups")
+        self.assertEqual(re.findall(r"^\s*(\w+) = \{\}$", holder, re.M), [gen.popup_name(c) for c in gen.CHARTS])
+        self.assertRegex(holder, r"^\s*size = \{ 100% 100% \}")
+        for chart in gen.CHARTS:
+            body = self.popup(chart)
+            with self.subTest(chart=chart.id):
+                self.assertRegex(self.text, rf"\btype {gen.popup_name(chart)} = te_ui_popup \{{")
+                self.assertEqual(_override_bodies(body, "popup_visible")[0].strip(),
+                                 f"visible = \"[GetVariableSystem.HasValue('te_popup', 'chart_{chart.id}')]\"")
+                self.assertEqual(gen.popup_key(chart), f"chart_{chart.id}")
+                # the range row, the large chart, then the section's key, once each
+                names = re.findall(r"^\t*(te_\w+) = \{\}$", _override_bodies(body, "popup_list")[0], re.M)
+                key = [gen.KEYS[chart.system][0]] if chart.system in gen.KEYS else []
+                self.assertEqual(names, [gen.range_row_name(chart.range), gen.wrapper_name(chart, gen.LARGE)] + key)
+
+    def test_the_title(self):
+        """The header is the chart's own title, static text (it sits outside
+        the popup's datacontexts; a concept link reads nothing), but for the Strategic Reserve's eight,
+        whose shared "Fill by Month" would not say which good: theirs names
+        it, spliced from the good's own name."""
+        loc = _loc_values()
+        for chart in gen.CHARTS:
+            key = gen.popup_title(chart)
+            with self.subTest(chart=chart.id):
+                self.assertEqual(_override_bodies(self.popup(chart), "popup_title")[0].strip(), f'text = "{key}"')
+                self.assertIn(key, loc)
+                # a concept link reads nothing; any other [ ] would read data
+                self.assertNotIn("[", re.sub(r"\[concept_\w+\]", "", loc[key]), "the header reads no data")
+                if chart.system == "strategic_reserve":
+                    good = dict(chart.params)["good"]
+                    self.assertEqual(loc[key], f"$je_strategic_reserve$: ${good}$")
+                else:
+                    self.assertIn(f'blockoverride "chart_title" {{ text = "{key}" }}'
+                                  if chart.system == "cultural_hegemony" else f'text = "{key}"',
+                                  gen.fragment(chart))
+        self.assertEqual(sorted(gen.POPUP_TITLES), sorted(f"st_res_{g}" for g in gen.ST_RES_GOODS))
+        self.assertEqual(loc["te_chart_gone"], "This chart's system is no longer running.")
+        self.assertEqual(loc["te_chart_open_tt"], "See this chart at full size.")
+
+    def test_the_size_fits_the_chart_and_the_screen(self):
+        """The large frame plus the shell's margins, a scrollbar and the list's
+        margin: 1320 wide for a monthly chart, 1360 for an annual one, as tall
+        as its rows, and every popup within a 1600 x 900 screen at UI scale 1."""
+        sizes = {}
+        for chart in gen.CHARTS:
+            width, height = gen.popup_size(chart)
+            frame = gen.LARGE[chart.kind].frame
+            with self.subTest(chart=chart.id):
+                self.assertEqual(_override_bodies(self.popup(chart), "popup_size")[0].strip(),
+                                 f"size = {{ {width} {height} }}")
+                self.assertGreaterEqual(width, frame[0] + 2 * 35 + 2 * 10 + 8)
+                # every row, summed here from the layout itself, so the popup
+                # needs no scrollbar: the shell (header_pattern's 56,
+                # Window_Margins' 18 and 20, the list's 2 x 6), the range row
+                # (a 26 px button, the row's 2 x 4), the chart's text (its 2 x 4
+                # margin, a 28 px title, two 18 px legend lines, 2 x 2 spacing),
+                # the frame, and the key
+                rows = [56 + 18 + 20 + 2 * 6, 26 + 2 * 4, 2 * 4 + 28 + 2 * 18 + 2 * 2, frame[1]]
+                if chart.system in KEY_HEIGHTS:
+                    rows.append(KEY_HEIGHTS[chart.system])
+                self.assertGreaterEqual(height, sum(rows) + 4 * (len(rows) - 3))   # 4 px between the list's rows
+                self.assertLessEqual((width, height), gen.SCREEN)
+                self.assertLessEqual(height, gen.SCREEN[1])
+            sizes.setdefault(chart.kind, set()).add(width)
+        self.assertEqual(sizes, {"monthly": {1320}, "annual": {1360}, "annual_pips": {1360}})
+        self.assertEqual(gen.SCREEN, (1600, 900))
+
+    def test_the_range_rows_are_the_sections_buttons(self):
+        """Each row sets the variable, the values and the labels the sections'
+        buttons do, at their width, greyed on the same conditions, so the
+        viewer opens at the panel's range and changing it changes both."""
+        def buttons(text):
+            out = []
+            for m in re.finditer(r"te_history_range_button = \{", text):
+                button = text[m.end():_close(text, m.end() - 1)]
+                var, value = re.search(r"GetVariableSystem\.Set\(\s*'(\w+)',\s*'(\w+)'\s*\)", button).groups()
+                width = re.search(r"\bsize = \{ (\d+) 26 \}", button)
+                enabled = re.sub(r"\s+", "", re.search(r'enabled = "(.*)"', button).group(1))
+                out.append((var, value, re.search(r'text = "(\w+)"', button).group(1),
+                            int(width.group(1)) if width else 72, enabled))
+            return out
+        rows = {}
+        for var in gen.RANGES:
+            rows[var] = buttons(_type_body(self.text, gen.range_row_name(var)))
+            self.assertEqual([b[1] for b in rows[var]], list(gen.RANGES[var].values))
+            self.assertEqual({b[0] for b in rows[var]}, {var})
+        checked = 0
+        for system, path in SECTIONS.items():
+            found = buttons(_strip_comments(_read(os.path.join(REPO, path))))
+            for i in range(0, len(found), 3):
+                with self.subTest(system=system, row=i // 3):
+                    self.assertEqual(found[i:i + 3], rows[found[i][0]])
+                    checked += 1
+        self.assertEqual(checked, len(SECTIONS), "a row a section (the Reserve's in te_st_res_good_row)")
+
+    def test_the_keys_are_the_sections(self):
+        """The key under a large chart is the type its section shows, so the
+        two can't drift: each defined in the section's file and instanced
+        there once."""
+        self.assertEqual(sorted(gen.KEYS), ["banking", "cultural_hegemony", "demographics"])
+        for system, (name, _height) in gen.KEYS.items():
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[system])))
+            with self.subTest(system=system):
+                self.assertRegex(text, rf"(?m)^\ttype {name} = flowcontainer \{{")
+                self.assertEqual(len(re.findall(rf"(?<![\w.]){name} = \{{\}}", text)), 1)
+                self.assertNotIn(f"{name} = {{\n", text, "the instance adds nothing: the type is the key")
+        bank = _type_body(_strip_comments(_read(os.path.join(REPO, SECTIONS["banking"]))), "te_banking_hist_marker_key")
+        self.assertIn("te_history_marker_legend = {", bank)
+        self.assertEqual(bank.count("using = fontsize_medium"), 2)
+
+    def test_a_key_waits_for_the_first_sample(self):
+        """Banking's and Demographics' keys hide until the store holds a
+        sample, as their sections' instances did before the keys became types
+        (the visible moved into the type); Cultural Hegemony's always shows."""
+        lists = {"banking": "JournalEntry.GetCountry.MakeScope.GetList('te_hist')",
+                 "demographics": "Country.MakeScope.GetList('te_dg_hist')"}
+        for system, (name, _height) in gen.KEYS.items():
+            body = _type_body(_strip_comments(_read(os.path.join(REPO, SECTIONS[system]))), name)
+            own = [ln.strip() for ln in body.split("\n") if re.match(r"^\t\t\w", ln)]   # the type's own lines
+            with self.subTest(system=system):
+                visibles = [ln for ln in own if ln.startswith("visible = ")]
+                if system in lists:
+                    self.assertEqual(visibles, [f'visible = "[Not( IsDataModelEmpty( {lists[system]} ) )]"'])
+                else:
+                    self.assertEqual(visibles, [])
+                    self.assertNotIn("visible", body)
 
 
 class GeneratorTest(unittest.TestCase):

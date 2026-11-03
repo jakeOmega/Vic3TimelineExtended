@@ -180,6 +180,30 @@ types te_history_chart_types
 		block "range_onclick" {}
 	}
 
+	### The open button beside a panel chart's title (charts PR C2, spec
+	### docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
+	### § 4.2): it opens the chart alone at full size, a popup in te_popups
+	### (gui/te_popups.gui). Each chart's panel wrapper instances it in its
+	### "chart_open" block with its own onclick, te_popup = chart_<id>; a
+	### Demographics chart's only for the player's own country (the Census Data
+	### window draws them for any; OWN_COUNTRY_ONLY in the generator). The
+	### icon is a placeholder, vanilla's area-charts toggle (style guide rule
+	### 10; docs/systems/te_systems_window_gui_icons.md).
+	type te_chart_open_button = button_icon_round {
+		parentanchor = vcenter
+		tooltip = "te_chart_open_tt"
+
+		blockoverride "size" {
+			size = { 24 24 }
+		}
+		blockoverride "icon_size" {
+			size = { 80% 80% }
+		}
+		blockoverride "icon" {
+			texture = "gfx/interface/buttons/button_icons/areacharts.dds"
+		}
+	}
+
 	### Key for the two marker pips a chart can draw on a bar. Same textures at
 	### the same sizes as the pips themselves, so the row reads as a key and not
 	### as a second set of markers.
@@ -313,9 +337,11 @@ types te_history_chart_types
 	### "marker_pips" (override to nothing for a series with no markers) and
 	### "plot_size" (the frame, for a chart whose bars are not 480px wide or
 	### 84px tall, with "plot_layouts" carrying the matching bar sizes),
-	### "chart_text_width" (the title's and the legend's max_width) and
-	### "empty_width" (the empty state's), so one chart draws at another size:
-	### the full-screen viewer's (gen_te_history_charts.py sets all four).
+	### "chart_title_width" (the title's max_width), "chart_text_width" (the
+	### legend's) and "empty_width" (the empty state's), so one chart draws at
+	### another size: the full-screen viewer's (gen_te_history_charts.py sets
+	### them), and "chart_open", beside the title, which the panel's wrapper
+	### fills with te_chart_open_button.
 	### Override them here, on the chart instance; a custom "plot_layouts" holds
 	### plain te_history_plot instances. A type derived from te_history_plot
 	### that carries these blocks drew nothing in game (gui_modding_guide.md
@@ -363,18 +389,33 @@ types te_history_chart_types
 			### The fonts are blocks so a system can scale its charts: the banking
 			### charts override both one step up (a Steam Workshop player found
 			### the panel's text too small, 2026-10-13); the others keep these.
-			textbox = {
-				autoresize = yes
-				block "chart_text_width" {
-					max_width = 484
+			###
+			### THE TITLE AND THE OPEN BUTTON share a row (charts PR C2): the
+			### panel's wrapper (gen_te_history_charts.py) fills "chart_open"
+			### with te_chart_open_button and narrows "chart_title_width" by the
+			### button and its gap; the full-screen viewer's leaves both. The
+			### legend keeps its own width, "chart_text_width".
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					block "chart_title_width" {
+						max_width = 484
+					}
+					elide = right
+					align = nobaseline
+					block "chart_title_font" {
+						using = fontsize_large
+					}
+					default_format = "#title"
+					block "chart_title" {}
 				}
-				elide = right
-				align = nobaseline
-				block "chart_title_font" {
-					using = fontsize_large
-				}
-				default_format = "#title"
-				block "chart_title" {}
+
+				block "chart_open" {}
 			}
 
 			textbox = {

@@ -269,11 +269,14 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
             for actual, target in zip(rgb, want):
                 self.assertAlmostEqual(float(actual), target, places=6)
         # The legend names each model as the models legend does, the short name
-        # with the full one and its laws on hover (CH-12).
-        self.assertEqual(re.findall(r'text = "je_ch_ov_model_(\w+)"', history), MODELS)
-        self.assertEqual(re.findall(r'tooltip = "ch_model_((?!hist_)\w+)_tt"', history), MODELS)
-        self.assertNotIn("te_hist_mk", plot + history)
-        self.assertNotIn("'te_hist_range'", plot + history)
+        # with the full one and its laws on hover (CH-12). It is a type of its
+        # own, te_ch_hist_model_key, the section's and the chart viewer's.
+        self.assertEqual(history.count("te_ch_hist_model_key = {}"), 1)
+        key = _type_body(gui, "te_ch_hist_model_key")
+        self.assertEqual(re.findall(r'text = "je_ch_ov_model_(\w+)"', key), MODELS)
+        self.assertEqual(re.findall(r'tooltip = "ch_model_((?!hist_)\w+)_tt"', key), MODELS)
+        self.assertNotIn("te_hist_mk", plot + history + key)
+        self.assertNotIn("'te_hist_range'", plot + history + key)
         loc = _load_loc()
         for key in _closure("ch_model_hist_tt", loc):
             self.assertLessEqual(_data_roots(loc[key]), {"ScriptContainer"})
