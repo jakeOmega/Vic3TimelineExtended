@@ -12,8 +12,9 @@
 ### The order: the people's health (the overview, Causes of Death, the pyramid), then the levers (Work and Retirement,
 ### Longevity, Family Policy), then the record (History), with the per-state detail last (Wealth, Where People Live,
 ### States). The explanations are on the Help page (te_demographics_help_popup, in gui/te_popups.gui), which a "?" at the
-### top of every host opens: the header's on the window's tab and National Info's, te_help_row's on the Population panel's
-### tab and the state subtab, which have no header. The Census Data window takes the tab's order in three columns. The
+### top of every host opens: te_demog_window_body's header on the Population panel's tab and the window's, National
+### Info's header for another country, and te_help_row on the state subtab, which has no header. The Census Data window
+### takes the tab's order in three columns. The
 ### state subtab takes the same order, less the sections a state has no figures for (Family Policy, History, Where People
 ### Live, States), and with one of its own after Wealth: the state's Modifiers, the nine standing
 ### modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds the orders, the
@@ -34,14 +35,6 @@ types te_demographics_layout
 		spacing = 10
 		minimumsize = { 520 -1 }
 		maximumsize = { 520 -1 }
-
-		### The tab has no header: the "?" to the Help page in a row at its top (te_help_row), outside the census
-		### gate, so the pending line has it too.
-		te_help_row = {
-			blockoverride "help_onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
-			}
-		}
 
 		te_demog_panel = {
 			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
@@ -163,10 +156,11 @@ types te_demographics_layout
 		}
 	}
 
-	### The window's tab body: te_system_tab_frame with the Population panel tab's gate. No entry: the Country the
-	### sections read is the player's (the Population panel's window supplies AccessPlayer), and there is no Open
-	### Journal Entry. Its header, as every other tab's in the window, carries the "?" to the Help page, hidden for an
-	### observer. te_demog_tab_layout is what a wide mount overrides.
+	### The tab body: te_system_tab_frame with the Population panel tab's gate. No entry: the Country the sections read is
+	### the player's (the Population panel's window supplies AccessPlayer), and there is no Open Journal Entry. Its
+	### header, as every other tab's in the window and the panels, carries the "?" to the Help page, hidden for an
+	### observer. The window mounts it, and the Population panel's tab with te_demog_tab_sections in its layout block;
+	### te_demog_tab_layout is what a wide mount overrides.
 	type te_demog_window_body = te_system_tab_frame {
 		blockoverride "tab_header" {
 			default_header = {

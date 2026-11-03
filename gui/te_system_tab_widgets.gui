@@ -734,11 +734,10 @@ types te_system_tab_widgets
 	### its overview root (each widget_je_*_overview in
 	### custom_widget_container_1), outside te_je_country and so outside the
 	### composer the entry shares with its tab, whose header has its own "?"; and
-	### the Population panel's Demographics tab and the state panel's
-	### Demographics subtab, which have no header either. Hidden for an
-	### observer, for whom te_popups never opens; on the row, not the button, so
-	### the hidden row collapses in its host (each is ignoreinvisible) instead of
-	### leaving 29 px. An instance names its page:
+	### the state panel's Demographics subtab, which has no header either. Hidden
+	### for an observer, for whom te_popups never opens; on the row, not the
+	### button, so the hidden row collapses in its host (each is ignoreinvisible)
+	### instead of leaving 29 px. An instance names its page:
 	###   te_help_row = {
 	###   	blockoverride "help_onclick" {
 	###   		onclick = "[GetVariableSystem.Set('te_popup', 'help_<key>')]"
