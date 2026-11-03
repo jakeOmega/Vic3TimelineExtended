@@ -364,8 +364,10 @@ te_nation_source_flags_on_action = {
 	}
 }
 
-# The same for every country once, after the lobby, so a new game's lists
-# don't wait for each country's first 30-day pulse (#1372 review).
+# The same for every country once, two days after the lobby, so a new game's
+# lists don't wait for each country's first 30-day pulse (#1372 review). Two
+# days, not the first: te_tax.3's migration adds the Tax Code's interest-group
+# views a day later (te_tax.4, days = 1). The event is events/te_nation_events.txt.
 on_game_started_after_lobby = {
 	on_actions = {
 		te_nation_source_flags_seed_on_action
@@ -375,7 +377,7 @@ on_game_started_after_lobby = {
 te_nation_source_flags_seed_on_action = {
 	effect = {
 		every_country = {
-			te_nation_refresh_source_flags = yes
+			trigger_event = { id = te_nation.1 days = 2 }
 		}
 	}
 }

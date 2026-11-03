@@ -822,6 +822,7 @@ def flag_count(group):
 EFFECT = "te_nation_refresh_source_flags"
 PULSE = "te_nation_source_flags_on_action"
 SEED = "te_nation_source_flags_seed_on_action"
+SEED_EVENT = "te_nation.1"  # events/te_nation_events.txt, raised by SEED two days after the lobby
 
 
 def sentinel(groups):
@@ -1159,9 +1160,9 @@ def generated_effects(lists):
     lines = [
         f"# {HEADER}",
         "# Country scope, every country (National Info shows AI countries' Nation tab too),",
-        f"# from the monthly country pulse ({PULSE}) and once at game",
-        f"# start ({SEED}, both in",
-        "# common/on_actions/extra_on_actions.txt): how many of each group's modifiers the",
+        f"# from the monthly country pulse ({PULSE}, in common/on_actions/extra_on_actions.txt)",
+        f"# and once two days after the lobby ({SEED_EVENT}, events/te_nation_events.txt,",
+        f"# raised by {SEED}): how many of each group's modifiers the",
         "# country holds (SOURCE_GROUPS). A section's list in Where These Come From compares",
         "# a row's name only with groups whose flag is above 0 (gui/te_nation_generated.gui),",
         "# and its count reads the same flags (common/script_values/te_nation_generated_values.txt).",

@@ -24,6 +24,7 @@ What the engine would never report:
 
 No game install needed; the fixture check skips without one.
 """
+import functools
 import json
 import os
 import re
@@ -59,6 +60,27 @@ def _all_loc():
     keys = json.loads(VANILLA_LOC.read_text(encoding="utf-8"))
     keys.update(_loc())
     return keys
+
+
+# English, and each language the mod ships translations for (a translation
+# memory under i18n/<language>/tm/).
+LANGUAGES = ["english"] + sorted(path.parent.name for path in (ROOT / "i18n").glob("*/tm"))
+
+
+@functools.lru_cache(maxsize=None)
+def _shipped(language):
+    """The mod's loc as a player in `language` reads it: the deploy's overlay
+    (scripts/i18n/translate_loc.py), the translation while it is current and
+    the English otherwise. A list matches the text the player's game renders,
+    so two names can read the same in one language only (#1372 review: the
+    Spanish for a Demographics measure and a timed modifier)."""
+    loc = _loc()
+    if language == "english":
+        return loc
+    sys.path.insert(0, str(ROOT / "scripts" / "i18n"))
+    import translate_loc
+    overlay = translate_loc.load_overlay(language)
+    return {key: overlay.value(key, value) for key, value in loc.items()}
 
 
 def _blocks(values):
@@ -231,26 +253,30 @@ class RegistryTest(unittest.TestCase):
         """A modifier the tab's lists don't show must not share a listed one's
         display name: the mod's static modifiers that can sit on the country
         (timed ones, the overrides, the budget carriers) against every name a
-        section or a row lists."""
-        loc = _loc()
+        section or a row lists, in every language the mod ships."""
         statics = gen.static_modifiers()
         lists, rows, _ = gen.resolve(self.candidates)
         shown = set(gen.listed(lists)) | {name for names in rows.values() for name in names}
         elsewhere = {name for name, lines in self.placed.items() if lines and lines[0][1] == "elsewhere"}
         others = set(statics) - shown - elsewhere - set(gen.SAME_NAME)
-        texts = {}
-        for name in others:
-            texts.setdefault(loc.get(name, name), set()).add(name)
-        clashes = {name: sorted(texts[loc.get(name, name)]) for name in sorted(shown)
-                   if loc.get(name, name) in texts}
-        self.assertFalse(clashes, f"listed modifiers whose display name an unlisted one shares (a list would show "
-                                  f"both: SAME_NAME counts a twin with it): {clashes}")
-        # each twin shares its listed twin's name, and no list places it
-        for twin, of in gen.SAME_NAME.items():
-            with self.subTest(twin=twin):
-                self.assertEqual(loc[twin], loc[of])
-                self.assertIn(of, set(gen.listed(lists)))
-                self.assertNotIn(twin, shown)
+        self.assertGreater(len(LANGUAGES), 1)
+        for language in LANGUAGES:
+            loc = _shipped(language)
+            texts = {}
+            for name in others:
+                texts.setdefault(loc.get(name, name), set()).add(name)
+            clashes = {name: sorted(texts[loc.get(name, name)]) for name in sorted(shown)
+                       if loc.get(name, name) in texts}
+            with self.subTest(language=language):
+                self.assertFalse(clashes, f"listed modifiers whose display name an unlisted one shares (a list would "
+                                          f"show both: SAME_NAME counts a twin with it; for a translation, correct one "
+                                          f"in i18n/{language}/tm/): {clashes}")
+            # each twin shares its listed twin's name, and no list places it
+            for twin, of in gen.SAME_NAME.items():
+                with self.subTest(language=language, twin=twin):
+                    self.assertEqual(loc[twin], loc[of])
+                    self.assertIn(of, set(gen.listed(lists)))
+                    self.assertNotIn(twin, shown)
 
 
 class GeneratedTest(unittest.TestCase):
@@ -384,7 +410,10 @@ class SourceGroupsTest(unittest.TestCase):
         """From extra_on_actions.txt's on_monthly_pulse_country, which has no
         rule gate, through a wrapper with none either, and once for every
         country after the lobby (#1372 review: a new game's lists would wait
-        for each country's first 30-day pulse). Nothing else calls it."""
+        for each country's first 30-day pulse), through a hidden event raised
+        later than any te_tax.4 (the Tax Code's migration adds the interest
+        groups' views a day after te_tax.3, so a same-day seed missed them).
+        Nothing else calls it."""
         text = _read(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
         hosts = re.findall(r"^on_monthly_pulse_country = \{\n\ton_actions = \{\n(.*?)\t\}\n\}", text, re.S | re.M)
         self.assertEqual(sum(f"\t\t{gen.PULSE}\n" in host for host in hosts), 1)
@@ -393,30 +422,44 @@ class SourceGroupsTest(unittest.TestCase):
         starts = re.findall(r"^on_game_started_after_lobby = \{\n\ton_actions = \{\n(.*?)\t\}\n\}", text, re.S | re.M)
         self.assertEqual(sum(f"\t\t{gen.SEED}\n" in host for host in starts), 1)
         seed = re.search(rf"^{gen.SEED} = \{{\n(.*?)^\}}", text, re.S | re.M).group(1)
-        self.assertEqual(seed, f"\teffect = {{\n\t\tevery_country = {{\n\t\t\t{gen.EFFECT} = yes\n\t\t}}\n\t}}\n")
-        self.assertEqual(text.count(f"{gen.EFFECT} = yes"), 2)
+        delay = re.fullmatch(r"\teffect = \{\n\t\tevery_country = \{\n\t\t\ttrigger_event = \{ id = "
+                             + re.escape(gen.SEED_EVENT) + r" days = (\d+) \}\n\t\t\}\n\t\}\n", seed)
+        self.assertIsNotNone(delay, seed)
+        tax_delays = [int(days) for path in sorted((ROOT / "common").rglob("*.txt"))
+                      for days in re.findall(r"trigger_event = \{ id = te_tax\.4 days = (\d+) \}", _read(path))]
+        self.assertTrue(tax_delays)
+        self.assertGreater(int(delay.group(1)), max(tax_delays))
+        events = _read(ROOT / "events" / "te_nation_events.txt")
+        event = re.search(rf"^{re.escape(gen.SEED_EVENT)} = \{{\n(.*?)^\}}", events, re.S | re.M).group(1)
+        self.assertEqual(event, f"\ttype = country_event\n\thidden = yes\n\n\timmediate = {{\n\t\t{gen.EFFECT} = yes\n\t}}\n")
+        self.assertEqual(text.count(f"{gen.EFFECT} = yes"), 1)
+        self.assertEqual(events.count(f"{gen.EFFECT} = yes"), 1)
         callers = []
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 body = _read(path)
-                if any(f"{name} = yes" in body or f"\t\t{name}\n" in body for name in (gen.EFFECT, gen.PULSE, gen.SEED)):
+                if any(f"{name} = yes" in body or f"\t\t{name}\n" in body for name in (gen.EFFECT, gen.PULSE, gen.SEED)) \
+                        or f"id = {gen.SEED_EVENT} " in body:
                     callers.append(path.relative_to(ROOT).as_posix())
-        self.assertEqual(callers, ["common/on_actions/extra_on_actions.txt"])
+        self.assertEqual(callers, ["common/on_actions/extra_on_actions.txt", "events/te_nation_events.txt"])
 
     def test_names_that_read_the_same_share_a_group(self):
         """#1372 review: a list matches a row by its text, a count by its key.
         Two listed names that read the same in different groups would let a
         row show under the other group's flag while neither count has it (the
         Tax Code's views read the same for all eight interest groups). Read in
-        English, the mod's loc over vanilla's."""
-        loc = _all_loc()
+        every language the mod ships, the mod's loc over vanilla's."""
+        vanilla = _all_loc()
         group_of = {name: group for group, names in self.groups.items() for name in names}
-        by_text = {}
-        for name in self.listed:
-            by_text.setdefault(loc.get(name, name), set()).add(name)
-        split = {text: sorted(names) for text, names in by_text.items()
-                 if len({group_of[name] for name in names}) > 1}
-        self.assertFalse(split, f"listed names that read the same in two SOURCE_GROUPS groups: {split}")
+        for language in LANGUAGES:
+            loc = {**vanilla, **_shipped(language)}
+            by_text = {}
+            for name in self.listed:
+                by_text.setdefault(loc.get(name, name), set()).add(name)
+            split = {text: sorted(names) for text, names in by_text.items()
+                     if len({group_of[name] for name in names}) > 1}
+            with self.subTest(language=language):
+                self.assertFalse(split, f"listed names that read the same in two SOURCE_GROUPS groups: {split}")
         views = [name for name in self.listed if name.startswith("te_tax_ig_view_")]
         self.assertEqual(len(views), 32)
         self.assertEqual({group_of[name] for name in views}, {"tax_views"})

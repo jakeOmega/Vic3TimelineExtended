@@ -3,8 +3,8 @@
 ### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
 ### score rows and then its type rows (#1030); Where These Come From,
-### collapsed, and How the Nation Works, a link to the Help page
-### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
+### collapsed; All Modifiers, collapsed; and How the Nation Works, a link to the
+### Help page (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry and no gate: everything reads the shown country,
 ### Country, which each mount supplies (the window's, the player's; National
@@ -18,8 +18,10 @@
 ### own timed modifiers filtered by name (te_nation_list_<section> in Where
 ### These Come From, and te_nation_row_<row> under a score row, both
 ### generated), each with its own tooltip, so the engine renders the effects
-### at their current scale. The country panel's list hides the same names
-### (gui/00_te_country_panel_information.gui).
+### at their current scale. All Modifiers (te_nation_all_panel) is the same
+### datamodel unfiltered, every modifier the country holds: the country panel's
+### Information tab lists none, only how many, with a goto here
+### (gui/00_te_country_panel_information.gui; owner, 2026-11-03).
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_nation_fontsize_*; rule 3).
