@@ -524,7 +524,14 @@ class _Engine:
                                  "is_homeland_of_country_cultures": True,
                                  # phase 2 step 2's AI pension pulse (te_demog_pension_ai) runs at every country's
                                  # yearly census: a player's unless a test says
-                                 "is_ai": False, **(triggers or {})}
+                                 "is_ai": False,
+                                 # Largest Cities (te_demog_town_triggers_generated.txt, from the map's and the buildings'
+                                 # data, which the interpreter doesn't load): every hub named and every workplace the
+                                 # capital's, unless a test says (test_demographics_towns.py)
+                                 **{f"te_demog_town_named_{k}": True for k in ("city", "port", "mine", "farm", "wood")},
+                                 **{f"te_demog_town_{k}_work": False
+                                    for k in ("port", "mine", "farm", "wood", "subsistence")},
+                                 **(triggers or {})}
         self.fixtures = {**WORK_DEFAULTS, **FAMILY_DEFAULTS, **LX_DEFAULTS, **PHASE3_DEFAULTS, **PANEL_DEFAULTS,
                          **WEALTH_LINE_DEFAULTS, **CAUSE_TAG_DEFAULTS, **POP_LINE_DEFAULTS, **TERRITORY_DEFAULTS,
                          **fixtures}

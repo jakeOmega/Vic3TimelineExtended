@@ -463,7 +463,7 @@ them, and some break the figure down for your capital.
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
 | History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
-| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
+| Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, your largest cities (three, and up to ten under Show All), each a town named on the map with the people it is estimated to hold, and your three largest urban states. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
 
 The "?" at the right of the tab's header opens the Help page, How Demographics
@@ -655,6 +655,13 @@ its Urban Center works at 10% more throughput, turmoil penalties rise 10% and
 families are a little smaller. Past 60% all but the crowding keep growing at half
 the pace, to nearly twice their size at the highest shares. Below 20% its towns
 give up to 20% less infrastructure. Where People Live counts your Metropolises.
+
+Its Largest Cities list names real towns, an estimate rather than a count. A
+state's towns are its capital and whichever of its port, mining, farming and
+logging towns have work of their kind, as the map names them, ordered by the
+people at that work, with farm, mine and logging work counted at a quarter. The largest holds the
+state's metropolitan share of its urban people, and each next town that share of
+what is left. A town you renamed keeps the map's name there.
 
 The decision Plan a New Capital, also under Full, moves your seat of government
 away from your largest city. It appears once you research Modern Sewerage and

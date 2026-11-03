@@ -108,6 +108,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/te_demog_resettle_generated_values.txt",
     "common/scripted_effects/te_demog_um_generated_effects.txt",
     "common/script_values/te_demog_um_generated_values.txt",
+    "common/scripted_triggers/te_demog_town_triggers_generated.txt",
+    "gui/te_demographics_towns_generated.gui",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "common/power_bloc_names/te_capital_power_bloc_names_generated.txt",
     "common/amendments/te_tax_amendments_generated.txt",
