@@ -28,6 +28,8 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "banking_
 DISP = os.path.join(REPO, "common", "script_values", "banking_overview_display_values.txt")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "banking_gui_icons.md")
 BANKING_GUI = [DASH, HIST, LAYOUT, BUDGET]
+# The entry's gate on the shown country: te_budget_banking_tab_sgui tests has_journal_entry.
+ENTRY_GATE = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 STATUS = ["te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions"]
 REFERENCE = ["te_banking_history_panel", "te_banking_sec_how"]
@@ -116,10 +118,14 @@ class OrderTest(unittest.TestCase):
         self.assertNotIn("block ", body)
 
     def test_composers_and_roots_are_gated_on_an_active_entry(self):
+        # The composers read the shown country (another country's panel has no
+        # entry, charts-help-national-info spec § 6.3), so they ask whether it
+        # holds the entry; the journal entry's own roots still ask the entry.
         layout = _read(LAYOUT)
         for composer in ("te_banking_status_sections", "te_banking_reference_sections"):
-            self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(layout, composer), composer)
-        self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(_read(DASH), "te_banking_overview_panel"))
+            self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(layout, composer), composer)
+        self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(_read(DASH), "te_banking_overview_panel"))
+        self.assertEqual(_type_body(layout, "te_banking_wide_sections").count(f'visible = "{ENTRY_GATE}"'), 2)
         roots = re.findall(r'name = "(widget_je_banking_\w+)"\s*visible = "\[JournalEntry\.IsActive\]"', layout)
         self.assertEqual(roots, ["widget_je_banking_overview", "widget_je_banking_status",
                                  "widget_je_banking_reference"])
@@ -509,9 +515,14 @@ class MandateGridTest(unittest.TestCase):
     width of two buttons whichever show (gui_modding_guide.md gotcha #43)."""
 
     def test_the_mandate_rows_keep_their_width(self):
+        # One wrapper takes the rows' gate (the mandate by choice) and, inside
+        # it, one the own-country guard, so the two rows are its grandchildren.
         tree = gui_tree.parse(_read(DASH))
-        rows = [n for n in tree.walk() if n.kind == "flowcontainer" and n.prop("visible")
-                and "banking_mon_mandate_by_choice" in n.prop("visible").value]
+        (gate,) = [n for n in tree.walk() if n.kind == "flowcontainer" and n.prop("visible")
+                   and "banking_mon_mandate_by_choice" in n.prop("visible").value]
+        (guard,) = gui_tree.widgets(gate)
+        self.assertIn(("using", "te_own_country_only"), [(p.key, p.value) for p in guard.props])
+        rows = gui_tree.widgets(guard)
         self.assertEqual(len(rows), 2)
         for row, ops in zip(rows, (["14", "4"], ["5", "6"]), strict=True):
             with self.subTest(ops=ops):
@@ -814,7 +825,9 @@ class ShortPanelTest(unittest.TestCase):
         self.assertLessEqual(mon_label + 4 + mon_value + 4 + button, 460)  # the Delegation row
         body = _type_body(dash, "te_banking_sec_monetary")
         target = _block_from(body, body.index("flowcontainer = {", body.index('blockoverride "pair_right" {')))
-        parts = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", target)]
+        # The row's own cells: each stepper button sits in a slot of its size,
+        # guarded inside it (another country's panel, te_own_country_only).
+        parts = [gui_tree.size(c)[0] for c in gui_tree.widgets(gui_tree.parse("flowcontainer = " + target).children[0])]
         self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), right_label + 4 + right_value, parts)
 
     def test_status_text_is_empty_while_active(self):

@@ -589,3 +589,64 @@ banking_bank_holiday_days_left_display = {
 		value = var:banking_bank_holiday_days_left
 	}
 }
+
+# ----------------------------------------------------------------------------
+# The overview's four bars (te_banking_bars), each 0 to 1 along its bar. The
+# entry's scripted bars are set from these same variables
+# (banking_cycle_update_progress_bars, banking_cycle_post_event_refresh), so
+# the panel reads the variables, as another country's panel must: it has no
+# journal entry (charts-help-national-info spec § 6.3). Each runs from its
+# bar's min_value to its max_value (extra_progress_bars.txt) and clamps as
+# set_bar_progress does; a variable not written yet sits where the entry's
+# bar starts (start_value).
+# ----------------------------------------------------------------------------
+
+# banking_cycle_value_bar: 0 to 100.
+banking_disp_bar_value = {
+	value = 0.5
+	if = {
+		limit = { has_variable = finance_cycle_value }
+		value = var:finance_cycle_value
+		divide = 100
+	}
+	min = 0
+	max = 1
+}
+
+# banking_cycle_momentum_bar: -5 to +5, the figure clamped to the bar's ends.
+banking_disp_bar_momentum = {
+	value = 0.5
+	if = {
+		limit = { has_variable = finance_cycle_momentum }
+		value = var:finance_cycle_momentum
+		add = 5
+		divide = 10
+	}
+	min = 0
+	max = 1
+}
+
+# banking_policy_stance_bar: -2 (very tight, left) to +2 (very loose, right).
+banking_disp_bar_stance = {
+	value = 0.5
+	if = {
+		limit = { has_variable = te_mon_stance_bar_pos }
+		value = var:te_mon_stance_bar_pos
+		add = 2
+		divide = 4
+	}
+	min = 0
+	max = 1
+}
+
+# banking_bubble_pressure_bar: 0 to 100.
+banking_disp_bar_bubble = {
+	value = 0
+	if = {
+		limit = { has_variable = bubble_pressure }
+		value = var:bubble_pressure
+		divide = 100
+	}
+	min = 0
+	max = 1
+}

@@ -164,7 +164,9 @@ class GateTest(unittest.TestCase):
 
 class ReadsThePlayerTest(unittest.TestCase):
     """Drawn where there is no entry, so nothing in it may read JournalEntry,
-    however many keys or custom localizations away."""
+    however many keys or custom localizations away. It reads the shown country,
+    Country (the tab's frame supplies the player's; National Info another's),
+    since PR F2's binding: test_te_system_tab_bodies.py holds it to that."""
 
     @classmethod
     def setUpClass(cls):
@@ -190,7 +192,8 @@ class ReadsThePlayerTest(unittest.TestCase):
         self.assertNotIn("JournalEntry", self.body)
         for expr in re.findall(r'"(\[[^"]*\])"', self.body):
             if "GetScriptedGui" in expr or "ScriptValue" in expr:
-                self.assertIn("GetPlayer.MakeScope", expr)
+                self.assertIn("Country.MakeScope", expr)
+                self.assertNotIn("GetPlayer", expr)
 
     def test_every_key_exists_and_reads_no_journal_entry(self):
         tab = _tab_content()
