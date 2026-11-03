@@ -130,6 +130,9 @@ class OpenButtonTest(unittest.TestCase):
                          % (gen.OPEN_BUTTON, gen.OPEN_BUTTON))
         self.assertEqual(gen.OPEN_BUTTON, 24)
         self.assertNotIn("onclick", self.button, "each wrapper sets its own")
+        # one visible per widget: the Demographics wrappers put theirs on the instance
+        self.assertNotIn("visible", self.button)
+        self.assertEqual(sorted(c.system for c in gen.CHARTS if c.entry is None), ["demographics"] * 8)
 
     def test_its_placeholder_art_is_listed(self):
         """Style guide rule 10: the placeholder (vanilla's area-charts icon)
@@ -156,6 +159,12 @@ class OpenButtonTest(unittest.TestCase):
                 self.assertIn("te_chart_open_button = {", opens[0])
                 self.assertEqual(re.findall(r'onclick = "(.*)"', opens[0]),
                                  [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]"])
+                # A chart that reads its host's Country (Demographics', drawn for
+                # any country in the Census Data window) opens the player's
+                # viewer, so its button shows only for the player's own country:
+                # the first half of F1.4's two-button slot.
+                self.assertEqual(re.findall(r'visible = "(.*)"', opens[0]),
+                                 ["[Country.IsLocalPlayer]"] if chart.entry is None else [])
                 self.assertEqual([b.strip() for b in _override_bodies(small, "chart_title_width")],
                                  [f"max_width = {484 - gen.OPEN_BUTTON - gen.OPEN_GAP}"])
                 self.assertEqual(_override_bodies(large, "chart_open"), [])

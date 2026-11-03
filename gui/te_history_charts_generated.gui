@@ -2003,6 +2003,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_births_deaths')]"
 				}
 			}
@@ -2270,6 +2271,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_migration')]"
 				}
 			}
@@ -2513,6 +2515,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_e0')]"
 				}
 			}
@@ -2723,6 +2726,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_tfr')]"
 				}
 			}
@@ -2933,6 +2937,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_median')]"
 				}
 			}
@@ -3236,6 +3241,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_causes')]"
 				}
 			}
@@ -3539,6 +3545,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_gini')]"
 				}
 			}
@@ -3749,6 +3756,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "chart_open" {
 				te_chart_open_button = {
+					visible = "[Country.IsLocalPlayer]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_wc')]"
 				}
 			}

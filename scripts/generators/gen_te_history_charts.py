@@ -366,14 +366,29 @@ def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     return out
 
 
+# The open button's own visible, for a chart that reads the Country its host
+# supplies rather than the player's entry: Demographics' (entry None). The
+# Census Data window draws them for any country (pop_browser_panel.gui's
+# PopBrowserPanel.GetCountry), and the viewer reads GetPlayer, so another
+# country's chart shows no button. This is the first half of F1.4's two-button
+# slot (spec § 4.4): F1 adds its other half, the button that opens the foreign
+# viewer (te_ni_chart) for any other country. Every Demographics host supplies a
+# Country: the Population panel (AccessPlayer), the Timeline Extended window's
+# mount (GetPlayer) and the Census Data window.
+OWN_COUNTRY_ONLY = "[Country.IsLocalPlayer]"
+
+
 def open_overrides(chart: Chart) -> list[str]:
     """What the panel's wrapper adds to its fragment (charts PR C2): the title
     narrowed beside the open button, and the button, which opens the chart's
-    viewer."""
+    viewer; on a chart that reads its host's Country, only for the player's
+    own (OWN_COUNTRY_ONLY)."""
+    button = ["te_chart_open_button = {"]
+    if chart.entry is None:
+        button.append(f'\tvisible = "{OWN_COUNTRY_ONLY}"')
+    button += [f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"", "}"]
     return (_override("chart_title_width", [f"max_width = {SMALL[chart.kind].title_w}"])
-            + _override("chart_open", ["te_chart_open_button = {",
-                                       f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"",
-                                       "}"]))
+            + _override("chart_open", button))
 
 
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
