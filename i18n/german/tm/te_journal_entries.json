@@ -528,8 +528,8 @@
   "de": "Monatliche Obergrenze"
  },
  "je_colonial_empire_drift_cap_tt": {
-  "en": "Stability moves at most ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way. This is what the limit takes off the rows above.",
-  "de": "Die Stabilität ändert sich pro Monat um höchstens ±[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] in jede Richtung. Das ist es, was die Obergrenze von den Zeilen darüber abschneidet."
+  "en": "Stability moves at most ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way. This is what the limit takes off the rows above.",
+  "de": "Die Stabilität ändert sich pro Monat um höchstens ±[Country.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] in jede Richtung. Das ist es, was die Obergrenze von den Zeilen darüber abschneidet."
  },
  "je_colonial_empire_drift_domestic": {
   "en": "War and [concept_turmoil]",
@@ -544,8 +544,12 @@
   "de": "[concept_great_power|E]druck"
  },
  "je_colonial_empire_drift_gp_tt": {
-  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against ours; International Pressure lists them. Updated monthly.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; the figure beside it is exact.#!",
-  "de": "Verurteilung und Unterstützung durch Großmächte, jeweils gewichtet nach ihrem [concept_prestige] im Vergleich zu unserem; Internationaler Druck listet sie auf. Monatlich aktualisiert.\\n#lore Der Balken reicht von [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] bis [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; die Zahl daneben ist exakt.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_gp_tt_ours', 'je_colonial_empire_drift_gp_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_gp_tt_ours', 'je_colonial_empire_drift_gp_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_gp_tt_ours": {
+  "en": "Condemnation and support from great powers, each weighed by its [concept_prestige] against ours; International Pressure lists them. Updated monthly.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; the figure beside it is exact.#!",
+  "de": "Verurteilung und Unterstützung durch Großmächte, jeweils gewichtet nach ihrem [concept_prestige] im Vergleich zu unserem; Internationaler Druck listet sie auf. Monatlich aktualisiert.\\n#lore Der Balken reicht von [Country.MakeScope.ScriptValue('colonial_pillar_gp_min')|1] bis [Country.MakeScope.ScriptValue('colonial_pillar_gp_max')|1]; die Zahl daneben ist exakt.#!"
  },
  "je_colonial_empire_drift_igs_tt": {
   "en": "Powerful Landowners and Armed Forces steady the empire; powerful Intelligentsia and Trade Unions erode it.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_igs_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_igs_max')|1]; the figure beside it is exact.#!",
@@ -556,8 +560,12 @@
   "de": "Gesetze und Ereignisse"
  },
  "je_colonial_empire_drift_laws_tt": {
-  "en": "#header Laws, technologies and events#!\\nWhat our laws, some technologies and the modifiers recent events left behind add or take away. Hover the stability bar for each source.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; the figure beside it is exact.#!",
-  "de": "#header Gesetze, Technologien und Ereignisse#!\\nWas unsere Gesetze, einige Technologien und die von jüngsten Ereignissen hinterlassenen Modifikatoren hinzufügen oder wegnehmen. Der Mauszeiger über dem Stabilitätsbalken zeigt jede Quelle.\\n#lore Der Balken reicht von [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] bis [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; die Zahl daneben ist exakt.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_laws_tt_ours', 'je_colonial_empire_drift_laws_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_laws_tt_ours', 'je_colonial_empire_drift_laws_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_laws_tt_ours": {
+  "en": "#header Laws, technologies and events#!\\nWhat our laws, some technologies and the modifiers recent events left behind add or take away. Hover the stability bar for each source.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; the figure beside it is exact.#!",
+  "de": "#header Gesetze, Technologien und Ereignisse#!\\nWas unsere Gesetze, einige Technologien und die von jüngsten Ereignissen hinterlassenen Modifikatoren hinzufügen oder wegnehmen. Der Mauszeiger über dem Stabilitätsbalken zeigt jede Quelle.\\n#lore Der Balken reicht von [Country.MakeScope.ScriptValue('colonial_pillar_laws_min')|1] bis [Country.MakeScope.ScriptValue('colonial_pillar_laws_max')|1]; die Zahl daneben ist exakt.#!"
  },
  "je_colonial_empire_drift_overreach_tt": {
   "en": "Holding more colonies than the metropole can support. Updated monthly.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_overreach_max')|1]; the figure beside it is exact.#!",
@@ -568,8 +576,12 @@
   "de": "Programme"
  },
  "je_colonial_empire_drift_policies_tt": {
-  "en": "What our running programmes add, each shown on its row under Colonial Programmes.\\n#lore The bar spans [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] to [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; the figure beside it is exact.#!",
-  "de": "Was unsere laufenden Programme beitragen, jedes in seiner Zeile unter Kolonialprogramme angezeigt.\\n#lore Der Balken reicht von [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] bis [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; die Zahl daneben ist exakt.#!"
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_policies_tt_ours', 'je_colonial_empire_drift_policies_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_drift_policies_tt_ours', 'je_colonial_empire_drift_policies_tt_theirs' )]"
+ },
+ "je_colonial_empire_drift_policies_tt_ours": {
+  "en": "What our running programmes add, each shown on its row under Colonial Programmes.\\n#lore The bar spans [Country.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] to [Country.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; the figure beside it is exact.#!",
+  "de": "Was unsere laufenden Programme beitragen, jedes in seiner Zeile unter Kolonialprogramme angezeigt.\\n#lore Der Balken reicht von [Country.MakeScope.ScriptValue('colonial_pillar_policies_min')|1] bis [Country.MakeScope.ScriptValue('colonial_pillar_policies_max')|1]; die Zahl daneben ist exakt.#!"
  },
  "je_colonial_empire_drift_rank": {
   "en": "Rank",
@@ -600,26 +612,38 @@
   "de": "Kolonialbesitz"
  },
  "je_colonial_empire_holdings_subjects": {
-  "en": "Colonial Subjects: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
-  "de": "Koloniale Klientelländer: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
+  "en": "Colonial Subjects: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!",
+  "de": "Koloniale Klientelländer: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
  },
  "je_colonial_empire_holdings_subjects_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_subjects_tt_ours', 'je_colonial_empire_holdings_subjects_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_subjects_tt_ours', 'je_colonial_empire_holdings_subjects_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_subjects_tt_ours": {
   "en": "#header Colonial subjects#!\\nOur subjects, and their own subjects, that count as colonial: every colony and chartered company, and a protectorate separated from our capital by sea whose people share no [concept_heritage_trait] with ours. Any one of them keeps this entry running. They do not move the stability bar themselves, but in the Strained band and below their [concept_liberty_desire] rises every month. Updated monthly.",
   "de": "#header Koloniale Klientelländer#!\\nUnsere Klientelländer und deren eigene Klientelländer, die als kolonial gelten: jede Kolonie und jede Handelsgesellschaft sowie ein Protektorat, das auf dem Seeweg von unserer Hauptstadt getrennt ist und dessen Volk mit uns kein [concept_heritage_trait] teilt. Jedes davon hält diesen Eintrag am Laufen. Sie bewegen den Stabilitätsbalken nicht selbst, aber im Band „Angespannt“ und darunter steigt ihr [concept_liberty_desire] jeden Monat. Monatlich aktualisiert."
  },
  "je_colonial_empire_holdings_territories": {
-  "en": "Territories: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
-  "de": "Gebiete: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, davon Kolonien: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
+  "en": "Territories: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, of which colonies: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!",
+  "de": "Gebiete: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible')|0]#!, davon Kolonien: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!"
  },
  "je_colonial_empire_holdings_territories_tt": {
-  "en": "#header Our territories#!\\nEvery state we hold that is separated from our capital by sea (not joined to it over land through our own states), is not a [concept_homeland] of our cultures, has at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and is not settled land: no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. Each can be released from its row, and Planned Full Decolonization releases them all. A territory shares its row with the states one release would take with it.\\nThe ones with the colony icon lit are or hold colonies: they meet the indigenous, the living-standards or the unincorporated test, and any one of them keeps this entry running. The others count only for release. Updated monthly.",
-  "de": "#header Unsere Gebiete#!\\nJeder Staat in unserem Besitz, der auf dem Seeweg von unserer Hauptstadt getrennt ist (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), kein [concept_homeland] unserer Kulturen ist, mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohner hat, von denen mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! zu einem Volk gehören, das mit uns kein [concept_heritage_trait] teilt, und kein Siedlungsland ist: Höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! seiner Bevölkerung gehören zu unseren primären Kulturen. Jeder kann in seiner Zeile entlassen werden, und Geplante vollständige Dekolonisierung entlässt alle. Ein Gebiet teilt sich seine Zeile mit den Staaten, die eine Entlassung mit sich nähme.\\nDie mit leuchtendem Kolonie-Symbol sind Kolonien oder umfassen welche: Sie erfüllen den Indigenen-, den Lebensstandard- oder den Eingliederungstest, und jeder einzelne von ihnen hält diesen Eintrag am Laufen. Die übrigen zählen nur für die Entlassung. Monatlich aktualisiert."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_territories_tt_ours', 'je_colonial_empire_holdings_territories_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_territories_tt_ours', 'je_colonial_empire_holdings_territories_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_territories_tt_ours": {
+  "en": "#header Our territories#!\\nEvery state we hold that is separated from our capital by sea (not joined to it over land through our own states), is not a [concept_homeland] of our cultures, has at least #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, more than #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of them a people sharing no [concept_heritage_trait] with ours, and is not settled land: no more than #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of its people are of our primary cultures. Each can be released from its row, and Planned Full Decolonization releases them all. A territory shares its row with the states one release would take with it.\\nThe ones with the colony icon lit are or hold colonies: they meet the indigenous, the living-standards or the unincorporated test, and any one of them keeps this entry running. The others count only for release. Updated monthly.",
+  "de": "#header Unsere Gebiete#!\\nJeder Staat in unserem Besitz, der auf dem Seeweg von unserer Hauptstadt getrennt ist (nicht über unsere eigenen Staaten auf dem Landweg mit ihr verbunden), kein [concept_homeland] unserer Kulturen ist, mindestens #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohner hat, von denen mehr als #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! zu einem Volk gehören, das mit uns kein [concept_heritage_trait] teilt, und kein Siedlungsland ist: Höchstens #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! seiner Bevölkerung gehören zu unseren primären Kulturen. Jeder kann in seiner Zeile entlassen werden, und Geplante vollständige Dekolonisierung entlässt alle. Ein Gebiet teilt sich seine Zeile mit den Staaten, die eine Entlassung mit sich nähme.\\nDie mit leuchtendem Kolonie-Symbol sind Kolonien oder umfassen welche: Sie erfüllen den Indigenen-, den Lebensstandard- oder den Eingliederungstest, und jeder einzelne von ihnen hält diesen Eintrag am Laufen. Die übrigen zählen nur für die Entlassung. Monatlich aktualisiert."
  },
  "je_colonial_empire_holdings_wars": {
-  "en": "Wars of Independence: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
-  "de": "Unabhängigkeitskriege: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
+  "en": "Wars of Independence: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!",
+  "de": "Unabhängigkeitskriege: #v [Country.MakeScope.ScriptValue('decol_iw_disp_wars')|0]#!"
  },
  "je_colonial_empire_holdings_wars_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_wars_tt_ours', 'je_colonial_empire_holdings_wars_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_holdings_wars_tt_ours', 'je_colonial_empire_holdings_wars_tt_theirs' )]"
+ },
+ "je_colonial_empire_holdings_wars_tt_ours": {
   "en": "#header Wars of independence#!\\nEvery war we are fighting to keep a colony: a territory whose declaration we chose to fight, a colonial subject at war for its independence, or a colony's secession. Each drains [concept_colonial_stability], and the years of all of them together cost [concept_legitimacy]. Updated monthly.",
   "de": "#header Unabhängigkeitskriege#!\\nJeder Krieg, den wir führen, um eine Kolonie zu halten: ein Gebiet, dessen Erklärung wir bekämpfen wollten, ein koloniales Klientelland im Krieg um seine Unabhängigkeit oder die Abspaltung einer Kolonie. Jeder zehrt an der [Concept('concept_colonial_stability', 'Kolonialen Stabilität')], und die Jahre aller zusammen kosten [concept_legitimacy]. Monatlich aktualisiert."
  },
@@ -684,24 +708,28 @@
   "de": "Bis zu drei koloniale Gebiete erklären im Abstand von zwei Monaten ihre Unabhängigkeit, die jeweils zugestanden, ausgehandelt oder bekämpft werden kann, und das Reich behält die Bindungen zu denen, die es ziehen lässt."
  },
  "je_colonial_empire_ov_act": {
-  "en": "Months Solidified: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
-  "de": "Monate gefestigt: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
+  "en": "Months Solidified: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]",
+  "de": "Monate gefestigt: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0]"
  },
  "je_colonial_empire_ov_act_tt": {
-  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies we own ourselves, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
-  "de": "Der Imperiale-Föderation-Akt und der Zivilisierungsmissionspakt, Entscheidungen, die diesen Eintrag sofort abschließen, erfordern [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_federation_months')|0] Monate in Folge im Band Gefestigt. Außerdem erfordern sie Großmachtrang, mindestens vier Kolonien in unserem eigenen Besitz, Koloniale Ausbeutung oder Koloniale Umsiedlung, eine passende Gesetzesauswahl und genug [concept_authority] und [concept_prestige]. Jeder Monat unterhalb von Gefestigt beginnt die Zählung von vorn."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_act_tt_ours', 'je_colonial_empire_ov_act_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_act_tt_ours', 'je_colonial_empire_ov_act_tt_theirs' )]"
+ },
+ "je_colonial_empire_ov_act_tt_ours": {
+  "en": "The Imperial Federation Act and the Civilizing Mission Compact, decisions that complete this entry at once, need [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] months in a row in the Solidified band. They also need great-power rank, at least four colonies we own ourselves, Colonial Exploitation or Colonial Resettlement, a matching set of laws, and enough [concept_authority] and [concept_prestige]. Any month below Solidified starts the count again.",
+  "de": "Der Imperiale-Föderation-Akt und der Zivilisierungsmissionspakt, Entscheidungen, die diesen Eintrag sofort abschließen, erfordern [Country.MakeScope.ScriptValue('colonial_empire_federation_months')|0] Monate in Folge im Band Gefestigt. Außerdem erfordern sie Großmachtrang, mindestens vier Kolonien in unserem eigenen Besitz, Koloniale Ausbeutung oder Koloniale Umsiedlung, eine passende Gesetzesauswahl und genug [concept_authority] und [concept_prestige]. Jeder Monat unterhalb von Gefestigt beginnt die Zählung von vorn."
  },
  "je_colonial_empire_ov_assimilation_off_tt": {
   "en": "#header $je_colonial_empire_row_assimilation$#!\\nNot running",
   "de": "#header $je_colonial_empire_row_assimilation$#!\\nLäuft nicht"
  },
  "je_colonial_empire_ov_assimilation_on_tt": {
-  "en": "#header $je_colonial_empire_row_assimilation$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3",
-  "de": "#header $je_colonial_empire_row_assimilation$#!\\n#G Läuft#! auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! von 3"
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3",
+  "de": "#header $je_colonial_empire_row_assimilation$#!\\n#G Läuft#! auf Stufe #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! von 3"
  },
  "je_colonial_empire_ov_band_tt": {
-  "en": "[Concept('concept_colonial_band','Band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')]\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title While in this band:#!\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]",
-  "de": "[Concept('concept_colonial_band', 'Band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_tier_name')]\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title Solange wir in diesem Band sind:#!\\n[JournalEntry.GetCountry.GetCustom('colonial_empire_phase_modifier')]"
+  "en": "[Concept('concept_colonial_band','Band')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title While in this band:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]",
+  "de": "[Concept('concept_colonial_band', 'Band')]: [Country.GetCustom('colonial_empire_tier_name')]\\n[Country.GetCustom('colonial_empire_status_custom')]\\n$TOOLTIP_DELIMITER$\\n#title Solange wir in diesem Band sind:#!\\n[Country.GetCustom('colonial_empire_phase_modifier')]"
  },
  "je_colonial_empire_ov_consensus": {
   "en": "#R Consensus#!",
@@ -716,8 +744,8 @@
   "de": "#header $je_colonial_empire_row_garrison$#!\\nLäuft nicht"
  },
  "je_colonial_empire_ov_garrison_on_tt": {
-  "en": "#header $je_colonial_empire_row_garrison$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3",
-  "de": "#header $je_colonial_empire_row_garrison$#!\\n#G Läuft#! auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! von 3"
+  "en": "#header $je_colonial_empire_row_garrison$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3",
+  "de": "#header $je_colonial_empire_row_garrison$#!\\n#G Läuft#! auf Stufe #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! von 3"
  },
  "je_colonial_empire_ov_heading_tt": {
   "en": "#header Where it is heading#!\\nIn [GetPlayer.MakeScope.ScriptValue('colonial_empire_projection_months')|0] months at this month's rate: #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_projected')|0]#!. The #G green#! stretch on the bar is the rise to come, the #R red#! stretch what would be lost. The rate is assessed again every month.",
@@ -728,24 +756,28 @@
   "de": "Kolonien: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies')|0]#!  ·  Koloniale Klientelländer: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects')|0]#!"
  },
  "je_colonial_empire_ov_held_tt": {
-  "en": "#header Why this entry runs#!\\nIt runs while we hold at least one colony or colonial subject, and ends without penalty once we hold neither.\\n• A colony is a territory overseas, not a [concept_homeland] of our cultures, with at least #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, no more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures, where another culture is more than #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and poorly accepted, or the [concept_sol] is below #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! of our average.\\n• A colonial subject is a colony or chartered company of ours or of our subjects, or a protectorate with land overseas whose people share no heritage with ours.\\nColonial Holdings, below, lists each one with its buttons.",
-  "de": "#header Warum dieser Eintrag läuft#!\\nEr läuft, solange wir mindestens eine Kolonie oder ein koloniales Klientelland halten, und endet ohne Strafe, sobald wir keines von beidem mehr halten.\\n• Eine Kolonie ist ein Gebiet in Übersee, das kein [concept_homeland] unserer Kulturen ist, mit mindestens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern, von denen höchstens #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! unseren primären Kulturen angehören, und zwar entweder, wenn eine andere Kultur mehr als #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! der Bevölkerung stellt und schlecht akzeptiert wird, oder wenn der [concept_sol] unter #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! unseres Durchschnitts liegt.\\n• Ein koloniales Klientelland ist eine Kolonie oder Handelsgesellschaft von uns oder unseren Klientelländern oder ein Protektorat mit Land in Übersee, dessen Volk mit uns kein gemeinsames Erbe teilt.\\nDer „Kolonialbesitz“ weiter unten führt jedes einzeln mit seinen Schaltflächen auf."
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_ov_held_tt_ours', 'je_colonial_empire_ov_held_tt_theirs' )]"
+ },
+ "je_colonial_empire_ov_held_tt_ours": {
+  "en": "#header Why this entry runs#!\\nIt runs while we hold at least one colony or colonial subject, and ends without penalty once we hold neither.\\n• A colony is a territory overseas, not a [concept_homeland] of our cultures, with at least #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! people, no more than #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! of them of our primary cultures, where another culture is more than #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! of the people and poorly accepted, or the [concept_sol] is below #v [Country.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! of our average.\\n• A colonial subject is a colony or chartered company of ours or of our subjects, or a protectorate with land overseas whose people share no heritage with ours.\\nColonial Holdings, below, lists each one with its buttons.",
+  "de": "#header Warum dieser Eintrag läuft#!\\nEr läuft, solange wir mindestens eine Kolonie oder ein koloniales Klientelland halten, und endet ohne Strafe, sobald wir keines von beidem mehr halten.\\n• Eine Kolonie ist ein Gebiet in Übersee, das kein [concept_homeland] unserer Kulturen ist, mit mindestens #v [Country.MakeScope.ScriptValue('colonial_territory_min_population')|D]#! Einwohnern, von denen höchstens #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! unseren primären Kulturen angehören, und zwar entweder, wenn eine andere Kultur mehr als #v [Country.MakeScope.ScriptValue('colonial_state_indigenous_min_share')|%0]#! der Bevölkerung stellt und schlecht akzeptiert wird, oder wenn der [concept_sol] unter #v [Country.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0]#! unseres Durchschnitts liegt.\\n• Ein koloniales Klientelland ist eine Kolonie oder Handelsgesellschaft von uns oder unseren Klientelländern oder ein Protektorat mit Land in Übersee, dessen Volk mit uns kein gemeinsames Erbe teilt.\\nDer „Kolonialbesitz“ weiter unten führt jedes einzeln mit seinen Schaltflächen auf."
  },
  "je_colonial_empire_ov_hold": {
-  "en": "Months at 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
-  "de": "Monate bei 100: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
+  "en": "Months at 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]",
+  "de": "Monate bei 100: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_months')|0]#! / [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0]"
  },
  "je_colonial_empire_ov_hold_tt": {
-  "en": "The entry is won when [concept_colonial_stability] holds at 100 for [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] months in a row. Any month below 100 starts the count again.",
-  "de": "Der Eintrag wird gewonnen, wenn die [concept_colonial_stability] [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_completion_months')|0] Monate in Folge bei 100 liegt. Jeder Monat unter 100 beginnt die Zählung von vorn."
+  "en": "The entry is won when [concept_colonial_stability] holds at 100 for [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] months in a row. Any month below 100 starts the count again.",
+  "de": "Der Eintrag wird gewonnen, wenn die [concept_colonial_stability] [Country.MakeScope.ScriptValue('colonial_empire_completion_months')|0] Monate in Folge bei 100 liegt. Jeder Monat unter 100 beginnt die Zählung von vorn."
  },
  "je_colonial_empire_ov_invest_off_tt": {
   "en": "#header $je_colonial_empire_row_invest$#!\\nNot running",
   "de": "#header $je_colonial_empire_row_invest$#!\\nLäuft nicht"
  },
  "je_colonial_empire_ov_invest_on_tt": {
-  "en": "#header $je_colonial_empire_row_invest$#!\\n#G Running#! at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3",
-  "de": "#header $je_colonial_empire_row_invest$#!\\n#G Läuft#! auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! von 3"
+  "en": "#header $je_colonial_empire_row_invest$#!\\n#G Running#! at level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3",
+  "de": "#header $je_colonial_empire_row_invest$#!\\n#G Läuft#! auf Stufe #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! von 3"
  },
  "je_colonial_empire_ov_isolation": {
   "en": "#O Isolated#!",
@@ -756,28 +788,28 @@
   "de": "#header Diplomatische Isolation#!\\nDie verurteilenden [Concept('concept_great_power', 'Großmächte')] halten ein Drittel des [Concept('concept_prestige', 'Prestiges')] aller Großmächte und unseres. Bis ihr Anteil sinkt, erleidet die [concept_colonial_stability] jeden Monat einen weiteren Verlust."
  },
  "je_colonial_empire_ov_legend_condemn": {
-  "en": "Condemning: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
-  "de": "Verurteilend: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
+  "en": "Condemning: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!",
+  "de": "Verurteilend: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share')|%0]#!"
  },
  "je_colonial_empire_ov_legend_note": {
   "en": "#lore Isolation and consensus count only the condemning share.#!",
   "de": "#lore Isolation und Konsens zählen nur den Anteil der Verurteilenden.#!"
  },
  "je_colonial_empire_ov_legend_support": {
-  "en": "Supporting: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
-  "de": "Unterstützend: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
+  "en": "Supporting: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!",
+  "de": "Unterstützend: #v [Country.MakeScope.ScriptValue('colonial_empire_disp_supporter_share')|%0]#!"
  },
  "je_colonial_empire_ov_next": {
-  "en": "Next [Concept('concept_colonial_band','band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!",
-  "de": "Nächstes [Concept('concept_colonial_band', 'Band')]: [JournalEntry.GetCountry.GetCustom('colonial_empire_next_band_name')] bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
+  "en": "Next [Concept('concept_colonial_band','band')]: [Country.GetCustom('colonial_empire_next_band_name')] at #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!",
+  "de": "Nächstes [Concept('concept_colonial_band', 'Band')]: [Country.GetCustom('colonial_empire_next_band_name')] bei #v [Country.MakeScope.ScriptValue('colonial_empire_live_next_boundary')|0]#!"
  },
  "je_colonial_empire_ov_programmes_label": {
   "en": "Programmes",
   "de": "Programme"
  },
  "je_colonial_empire_ov_stability_value": {
-  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
-  "de": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
+  "en": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/mo)",
+  "de": "#v [JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]#! ([Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]/Mo.)"
  },
  "je_colonial_empire_ov_tick_eta": {
   "en": "In about #v [GetPlayer.MakeScope.ScriptValue('colonial_empire_disp_months_to_next')|0]#! months at this month's rate.",
@@ -848,6 +880,10 @@
   "de": "Warum sich die Stabilität bewegt"
  },
  "je_colonial_empire_status_collapsing": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_collapsing_ours', 'je_colonial_empire_status_collapsing_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_collapsing_ours', 'je_colonial_empire_status_collapsing_theirs' )]"
+ },
+ "je_colonial_empire_status_collapsing_ours": {
   "en": "#R Colonial empire is on the verge of collapse!#! Immediate action is needed or we will lose everything.",
   "de": "#R Das Kolonialreich steht kurz vor dem Zusammenbruch!#! Sofortiges Handeln ist nötig, sonst verlieren wir alles."
  },
@@ -868,6 +904,10 @@
   "de": "Öffnet sich, solange wir eine Überseekolonie oder ein koloniales Klientelland halten."
  },
  "je_colonial_empire_status_pending": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_pending_ours', 'je_colonial_empire_status_pending_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_pending_ours', 'je_colonial_empire_status_pending_theirs' )]"
+ },
+ "je_colonial_empire_status_pending_ours": {
   "en": "Our officials are still taking stock of the empire.",
   "de": "Unsere Beamten machen sich noch ein Bild vom Reich."
  },
@@ -880,6 +920,10 @@
   "de": "#Y Die kolonialen Besitzungen sind stabil.#! Die Integration schreitet voran, auch wenn Herausforderungen bleiben."
  },
  "je_colonial_empire_status_strained": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]"
+ },
+ "je_colonial_empire_status_strained_ours": {
   "en": "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
   "de": "#O Das Kolonialreich steht unter Druck.#! Wachsende Spannungen und internationaler Druck bedrohen unsere Kontrolle."
  },
@@ -952,6 +996,10 @@
   "de": "#header Alle kolonialen Klientelländer, größtes BIP zuerst#!"
  },
  "je_colonial_empire_subjects_none": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_subjects_none_ours', 'je_colonial_empire_subjects_none_theirs' )]"
+ },
+ "je_colonial_empire_subjects_none_ours": {
   "en": "#lore We hold no colonial subject.#!",
   "de": "#lore Wir haben kein koloniales Klientelland.#!"
  },
@@ -1008,8 +1056,8 @@
   "de": "Primär"
  },
  "je_colonial_empire_territory_head_primary_tt": {
-  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
-  "de": "Der Anteil seiner Bevölkerung, der unseren primären Kulturen angehört, über alle Staaten, die gemeinsam gingen. #R Rot#!, wenn der Indigenen-Test einen davon zur Kolonie macht. Über #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! ist ein Gebiet Siedlungsland, keine Kolonie, und wird nicht aufgeführt."
+  "en": "The share of its people of our primary cultures, across the states that would leave together. #R Red#! when the indigenous test makes one of them a colony. Above #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! a territory is settled land, not a colony, and is not listed.",
+  "de": "Der Anteil seiner Bevölkerung, der unseren primären Kulturen angehört, über alle Staaten, die gemeinsam gingen. #R Rot#!, wenn der Indigenen-Test einen davon zur Kolonie macht. Über #v [Country.MakeScope.ScriptValue('colonial_settler_majority_share')|%0]#! ist ein Gebiet Siedlungsland, keine Kolonie, und wird nicht aufgeführt."
  },
  "je_colonial_empire_territory_head_sol": {
   "en": "SoL",
@@ -1040,16 +1088,16 @@
   "de": "Durchschnittlicher [concept_sol] #v [State.MakeScope.ScriptValue('colonial_bloc_disp_sol')|1]#!; die Linie liegt bei #v [State.MakeScope.ScriptValue('colonial_territory_disp_sol_floor')|1]#!, [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_state_sol_floor_share')|%0] unseres nationalen Durchschnitts.\\nDer Lebensstandard-Test in jedem seiner Staaten: unter der Linie, sofern dort Menschen leben, die nicht unseren primären Kulturen angehören. #G Nicht erfüllt.#!"
  },
  "je_colonial_empire_tt_assimilation": {
-  "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
-  "de": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Beitrag zur Leiste:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! im Monat auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! von 3. Jede Stufe fügt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#! hinzu; das volle Programm #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]",
+  "de": "#header $je_colonial_empire_row_assimilation$#!\\n$CE_CULTURAL_ASSIMILATION_BODY$\\n\\n#bold Beitrag zur Leiste:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_assim')|=+2]#! im Monat auf Stufe #v [Country.MakeScope.ScriptValue('colonial_assim_level_value')|0]#! von 3. Jede Stufe fügt #v [Country.MakeScope.ScriptValue('colonial_assim_step_term')|=+2]#! hinzu; das volle Programm #v [Country.MakeScope.ScriptValue('colonial_assim_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
  },
  "je_colonial_empire_tt_garrison": {
-  "en": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]",
-  "de": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Beitrag zur Leiste:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! im Monat auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! von 3. Jede Stufe fügt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#! hinzu; das volle Programm #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]",
+  "de": "#header $je_colonial_empire_row_garrison$#!\\n$CE_MILITARY_GARRISON_BODY$\\n\\n#bold Beitrag zur Leiste:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_garrison')|=+2]#! im Monat auf Stufe #v [Country.MakeScope.ScriptValue('colonial_garrison_level_value')|0]#! von 3. Jede Stufe fügt #v [Country.MakeScope.ScriptValue('colonial_garrison_step_term')|=+2]#! hinzu; das volle Programm #v [Country.MakeScope.ScriptValue('colonial_garrison_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
  },
  "je_colonial_empire_tt_invest": {
-  "en": "#header $je_colonial_empire_row_invest$#!\\n$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Bar contribution:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! a month at level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3. Each level adds #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; the full programme #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]",
-  "de": "#header $je_colonial_empire_row_invest$#!\\n$CE_INVEST_IN_DEVELOPMENT_BODY$\\n\\n#bold Beitrag zur Leiste:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! im Monat auf Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! von 3. Jede Stufe fügt #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#! hinzu; das volle Programm #v [JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]"
+  "en": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\n\\n#bold Bar contribution:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! a month at level #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! of 3. Each level adds #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#!; the full programme #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title The full programme, at level 3 (each level runs a third of it):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]",
+  "de": "#header $je_colonial_empire_row_invest$#!\\n[SelectLocalization( Country.IsLocalPlayer, 'CE_INVEST_IN_DEVELOPMENT_BODY', 'je_colonial_empire_invest_body_theirs' )]\\n\\n#bold Beitrag zur Leiste:#! #v [Country.MakeScope.ScriptValue('colonial_stability_term_invest')|=+2]#! im Monat auf Stufe #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! von 3. Jede Stufe fügt #v [Country.MakeScope.ScriptValue('colonial_invest_step_term')|=+2]#! hinzu; das volle Programm #v [Country.MakeScope.ScriptValue('colonial_invest_effectiveness_display')|=+2]#!.\\n$TOOLTIP_DELIMITER$\\n#title Das volle Programm auf Stufe 3 (jede Stufe leistet ein Drittel davon):#!\\n[GetStaticModifier('colonial_development_investment_modifier').GetDesc]"
  },
  "je_colonial_empire_voluntary_fail_tt": {
   "en": "Ends when all qualifying colonial territories have been voluntarily released — no overseas states or colonial subjects remain — while the Colonial Stability bar is still above zero.",
@@ -1072,26 +1120,50 @@
   "de": "Monate"
  },
  "je_colonial_empire_war_head_months_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_months_tt_ours', 'je_colonial_empire_war_head_months_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_months_tt_ours', 'je_colonial_empire_war_head_months_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_head_months_tt_ours": {
   "en": "Months at war. #R Red#! while our [concept_war_support] in it is at the red line, #v 25#! or below.",
   "de": "Monate im Krieg. #R Rot#!, solange unsere [concept_war_support] darin an der roten Linie liegt, bei #v 25#! oder darunter."
  },
  "je_colonial_empire_war_head_name": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_ours', 'je_colonial_empire_war_head_name_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_ours', 'je_colonial_empire_war_head_name_theirs' )]"
+ },
+ "je_colonial_empire_war_head_name_ours": {
   "en": "Fighting us",
   "de": "Kämpft gegen uns"
  },
  "je_colonial_empire_war_head_name_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_tt_ours', 'je_colonial_empire_war_head_name_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_head_name_tt_ours', 'je_colonial_empire_war_head_name_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_head_name_tt_ours": {
   "en": "The country at war with us for its independence, and on hover where it rose.",
   "de": "Das Land, das für seine Unabhängigkeit Krieg gegen uns führt, und beim Darüberfahren, wo es sich erhoben hat."
  },
  "je_colonial_empire_war_months_bad_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_bad_tt_ours', 'je_colonial_empire_war_months_bad_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_bad_tt_ours', 'je_colonial_empire_war_months_bad_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_months_bad_tt_ours": {
   "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is at the red line or below: a year of that, four years in, and the home front breaks.",
   "de": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monate im Krieg (letzter Monat). Unsere [concept_war_support] darin liegt an der roten Linie oder darunter: ein Jahr davon, vier Jahre nach Kriegsbeginn, und die Heimatfront bricht zusammen."
  },
  "je_colonial_empire_war_months_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_tt_ours', 'je_colonial_empire_war_months_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_months_tt_ours', 'je_colonial_empire_war_months_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_months_tt_ours": {
   "en": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months at war (last month). Our [concept_war_support] in it is above the red line.",
   "de": "#v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monate im Krieg (letzter Monat). Unsere [concept_war_support] darin liegt über der roten Linie."
  },
  "je_colonial_empire_war_name_tt": {
+  "en": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_name_tt_ours', 'je_colonial_empire_war_name_tt_theirs' )]",
+  "de": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_war_name_tt_ours', 'je_colonial_empire_war_name_tt_theirs' )]"
+ },
+ "je_colonial_empire_war_name_tt_ours": {
   "en": "#header [State.GetCountry.GetNameNoFormatting]#!\\nCapital: [State.GetName]\\nAt war with us for #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! months; #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! great powers arm them.",
   "de": "#header [State.GetCountry.GetNameNoFormatting]#!\\nHauptstadt: [State.GetName]\\nSeit #v [State.MakeScope.ScriptValue('decol_iw_disp_months')|0]#! Monaten im Krieg mit uns; bewaffnet von #v [State.MakeScope.ScriptValue('decol_iw_disp_backers')|0]#! Großmächten."
  },

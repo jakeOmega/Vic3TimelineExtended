@@ -256,7 +256,7 @@ TABS: list[Tab] = [
     replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
                     readout=CE_READOUT),
             open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
-            public=False),
+            public=True),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
