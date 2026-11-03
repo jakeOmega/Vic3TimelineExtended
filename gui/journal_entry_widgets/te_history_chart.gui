@@ -17,8 +17,13 @@
 ### HOW TO ADD A SERIES (see docs/systems/mod_systems/history_charts.md)
 ###   1. `te_history_record_sample = { METRIC = <m> VALUE = <v> }` from the
 ###      system's monthly pulse.
-###   2. Instantiate te_history_chart with blockoverrides for the title, the
-###      legend, and a bar body reading `te_hist_v_<m>`.
+###   2. Write a te_history_chart instance with blockoverrides for the title,
+###      the legend, and a bar body reading `te_hist_v_<m>`, as a fragment in
+###      scripts/generators/te_history_charts/<system>.gui.in, add its Chart
+###      line to scripts/generators/gen_te_history_charts.py and run it; the
+###      section instances the generated te_hist_<id>. No chart is written
+###      inline: the generator draws each at the panel's size and the
+###      full-screen viewer's.
 ###   3. Add the loc keys for the title, the legend and the bar tooltip.
 ### Nothing else — the store, the pruning, the ranges, the marker icons, the
 ### empty state and the "available since" line are all shared.
