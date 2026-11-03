@@ -955,12 +955,30 @@ def loc_reads(keys, index):
 
 PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
 
+_PERSONAL_REVIEWED = re.compile(r"#\s*REVIEWED\s+\d{4}-\d{2}-\d{2}\s*\(personal_text\)\s*:")
+
+
+@functools.lru_cache(maxsize=4)
+def _personal_reviewed(loc_dir):
+    """Loc keys whose line carries `# REVIEWED YYYY-MM-DD (personal_text): why`, a proper name that says "we" or "our" (a boon, a modifier) rather than the panel speaking as the player."""
+    from mod_state import split_loc_line
+    out = set()
+    for path in sorted(glob.glob(os.path.join(loc_dir, "**", "*.yml"), recursive=True)):
+        for line in _read(path).splitlines():
+            got = split_loc_line(line)
+            if got and _PERSONAL_REVIEWED.search(got[2]):
+                out.add(got[0])
+    return frozenset(out)
+
 
 def personal_text(keys, loc):
     """The keys whose text speaks as the player ("our", "you"), with the text:
     another country's panel shows them. Markup, splices and formatting left out."""
     out = {}
+    reviewed = _personal_reviewed(LOC_DIR)
     for key in sorted(keys):
+        if key in reviewed:
+            continue
         text = re.sub(r"\[[^\]]*\]|\$[\w.\-]+\$|#\w+|\\n", " ", loc[key])
         if PERSONAL.search(text):
             out[key] = text

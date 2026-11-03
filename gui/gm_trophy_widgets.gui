@@ -2173,16 +2173,26 @@ types gm_trophy_widget_types
 			}
 		}
 
-		gm_tr_button = {
-			blockoverride "tr_button" {
-				datacontext = "[GetScriptedGui('gm_tr_return_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
-				tooltip = "gm_button_tr_return_tooltip"
-			}
-			blockoverride "tr_button_text" {
-				text = "gm_button_tr_return"
+		# Return It: the player's own (te_own_country_only), at the row's 480
+		# so the button stays centred.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			ignoreinvisible = yes
+			minimumsize = { 480 -1 }
+			maximumsize = { 480 -1 }
+
+			gm_tr_button = {
+				blockoverride "tr_button" {
+					datacontext = "[GetScriptedGui('gm_tr_return_sgui')]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_tr', ScriptContainer.MakeScope ).End )]"
+					tooltip = "gm_button_tr_return_tooltip"
+				}
+				blockoverride "tr_button_text" {
+					text = "gm_button_tr_return"
+				}
 			}
 		}
 	}
@@ -2220,8 +2230,17 @@ types gm_trophy_widget_types
 				tooltip = "gm_tr_row_landmark_tt"
 				text = "gm_row_landmark"
 			}
+			### Its holder. The ways home on hover are the player's (at war or at
+			### peace with the holder, a tooltip that can read only the row's
+			### container: gotcha #24), so another country's National Info shows
+			### the line without them.
 			gm_tr_line = {
+				using = te_own_country_only
 				tooltip = "gm_tr_row_held_by_tt"
+				text = "gm_tr_row_held_by"
+			}
+			gm_tr_line = {
+				visible = "[Not( Country.IsLocalPlayer )]"
 				text = "gm_tr_row_held_by"
 			}
 		}
@@ -2339,7 +2358,7 @@ types gm_trophy_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_trophies_shown'), '(CFixedPoint)1' )]"
+		visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_trophies_shown'), '(CFixedPoint)1' )]"
 
 		gm_section_header = {
 			blockoverride "left_text" {
@@ -2361,12 +2380,12 @@ types gm_trophy_widget_types
 			spacing = 2
 
 			gm_text = {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_held_count'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_held_count'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tr_summary_tt"
 				text = "gm_je_tr_summary"
 			}
 			gm_value_row = {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_boon_homecoming'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_boon_homecoming'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_tt_boon_homecoming"
 				blockoverride "row_label" {
 					text = "gm_je_lbl_boon_homecoming"
@@ -2381,7 +2400,7 @@ types gm_trophy_widget_types
 				ignoreinvisible = yes
 				spacing = 10
 				margin_top = 4
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_trophies_held')]"
+				datamodel = "[Country.MakeScope.GetList('gm_trophies_held')]"
 
 				item = {
 					gm_tr_row_held = { datacontext = "[Scope.GetScriptContainer]" }
@@ -2397,7 +2416,7 @@ types gm_trophy_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_tr_disp_abroad_count'), '(CFixedPoint)0' )]"
+		visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count'), '(CFixedPoint)0' )]"
 
 		gm_section_header = {
 			blockoverride "left_text" {
@@ -2428,7 +2447,7 @@ types gm_trophy_widget_types
 				ignoreinvisible = yes
 				spacing = 10
 				margin_top = 4
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_trophies_abroad')]"
+				datamodel = "[Country.MakeScope.GetList('gm_trophies_abroad')]"
 
 				item = {
 					gm_tr_row_abroad = { datacontext = "[Scope.GetScriptContainer]" }
@@ -2644,8 +2663,8 @@ types gm_trophy_widget_types
 
 		block "choice_context" {}
 
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
-		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End )]"
 
 		block "choice_tooltip" {}
 
@@ -2729,9 +2748,15 @@ types gm_trophy_widget_types
 			}
 		}
 
-		gm_mon_take_button = {}
-		### Clear It Away, while six stand here and it is the least grand.
-		gm_mon_clear_button = {}
+		### Carry It Off, and Clear It Away while six stand here and it is the
+		### least grand. A block, so the journal entry's rows put them under
+		### te_own_country_only (another country's National Info shows the row
+		### without them) while the state card, which has no Country, keeps
+		### them as they are.
+		block "mon_controls" {
+			gm_mon_take_button = {}
+			gm_mon_clear_button = {}
+		}
 		### The journal entry's rows: a contested one's choices.
 		block "mon_choices" {}
 	}

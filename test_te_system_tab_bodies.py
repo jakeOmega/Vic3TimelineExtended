@@ -559,8 +559,9 @@ class MountContextTest(unittest.TestCase):
 # --- What another country's panel draws (spec §§ 6.3, 6.5, 7.1; plan Review Focus 3 and 4) --------------------------
 
 # The tabs another country's panel may show (National Info, PR F1): each Tab with public=True in
-# gen_te_systems_window.TABS. BindingTest and GuardTest run over each one's wide layout (Tab.wide), every type it
-# draws all the way down (gui_test_helpers.type_closure over the mod's own GUI files), and the loc that reaches.
+# gen_te_systems_window.TABS. BindingTest and GuardTest run over what National Info's mount for another country draws
+# (gen.ni_types: the wide layout, Tab.wide, and the readout a tab opens on without its entry, Tab.readout), every type
+# it draws all the way down (gui_test_helpers.type_closure over the mod's own GUI files), and the loc that reaches.
 PUBLIC = [t for t in gen.TABS if t.public]
 
 # The systems National Info is to show (spec § 6.4) whose panels aren't bound yet: off the binding tests until their
@@ -572,13 +573,10 @@ UNBOUND = set([
 
     "banking",
 
-    "tax_code",
 
-    "grand_monuments",
 
     "colonial_empire",
 
-    "seabed",
 
     "cultural_hegemony",
 
@@ -699,15 +697,17 @@ def _world_loc_headings():
 
 @functools.lru_cache(maxsize=None)
 def _panel(key):
-    """What tab `key`'s wide layout shows another country: its markup reads,
-    its loc reads, its controls and its loc keys."""
+    """What tab `key`'s panel shows another country (its wide layout, and its
+    readout where it has one): its markup reads, its loc reads, its controls
+    and its loc keys."""
     tab = next(t for t in gen.TABS if t.key == key)
     types, loc = mod_types(), load_loc()
-    keys = panel_loc_keys({tab.wide}, types, loc)
-    markup = [f for f in markup_reads({tab.wide}, types) if not f.world or is_entry_read(f.what)]
+    roots = gen.ni_types(tab)
+    keys = panel_loc_keys(roots, types, loc)
+    markup = [f for f in markup_reads(roots, types) if not f.world or is_entry_read(f.what)]
     reads = [f for f in loc_reads(keys, loc_index()) if f.where not in WORLD_LOC or is_entry_read(f.what)]
-    return {"markup": markup, "loc": reads, "controls": unguarded_controls({tab.wide}, types),
-            "text": personal_text(keys, loc), "keys": keys, "types": type_closure({tab.wide}, types)}
+    return {"markup": markup, "loc": reads, "controls": unguarded_controls(roots, types),
+            "text": personal_text(keys, loc), "keys": keys, "types": type_closure(roots, types)}
 
 
 class BindingTest(unittest.TestCase):
@@ -793,6 +793,16 @@ class BindingTest(unittest.TestCase):
                 if len(tabs) > 1:
                     self.assertTrue(heads[key].startswith("Shared"),
                                     f"{key}: {', '.join(tabs)} reach it, so it goes under Shared, not {heads[key]!r}")
+
+    def test_the_walk_reaches_a_readout(self):
+        """A tab that opens without its entry on a readout (Tab.readout) has
+        it walked too: National Info's mount for another country draws it
+        under the readout's gate, above the wide composer under the entry's
+        gate, as the body's frame does (test_national_info.py's MountTest)."""
+        for t in gen.TABS:
+            if t.readout and t.key in _candidates():
+                with self.subTest(tab=t.key):
+                    self.assertIn(t.readout.panel, _panel(t.key)["types"])
 
 
 class GuardTest(unittest.TestCase):

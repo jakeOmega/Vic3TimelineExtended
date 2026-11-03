@@ -22,6 +22,13 @@
 #
 # Adding a marker kind = one `te_history_record_marker = { MARK = x }` call
 # plus one branch below.
+#
+# te_history_tracked_sgui, at the end: whether the country keeps a history at
+# all (te_history_country_is_tracked: played or a major power), for the
+# charts' empty state (te_history_chart.gui's empty_text and the Demographics
+# charts'), which says which case it is in: nothing recorded yet, or no
+# history kept (spec 2026-11-02-charts-help-national-info § 6.6). Rooted at
+# the Country the chart's host supplies, so any country's in National Info.
 # ============================================================================
 
 te_history_marker_tooltip = {
@@ -439,4 +446,12 @@ te_history_marker_tooltip = {
 			}
 		}
 	}
+}
+
+te_history_tracked_sgui = {
+	scope = country
+	is_shown = { te_history_country_is_tracked = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }

@@ -1382,8 +1382,8 @@ def custom_localization():
     lines = [
         HEADER,
         "# The history rows' text (gui/journal_entry_widgets/te_tax_overview_widget.gui,",
-        "# te_tax_history_section): one customizable localization per row, newest first, read as",
-        "# GetPlayer.GetCustom('te_tax_hist_event_<i>'). Each picks the line for the entry's kind",
+        "# te_tax_history_section): one customizable localization per row, newest first, read on the",
+        "# shown country as Country.GetCustom('te_tax_hist_event_<i>'). Each picks the line for the entry's kind",
         "# (te_tax_view_hist_<i>_kind) and, for a sunset, its instrument (_inst). The triggers read",
         "# only the guarded views, never a variable.",
     ]
@@ -1421,7 +1421,7 @@ def custom_localization():
 def _next_change_custom_loc():
     """What happens at the code's next change (GUI audit TAX-1, the overview's Code cell): a
     passed bill taking effect, or which tax's temporary rate expires, read as
-    GetPlayer.GetCustom('te_tax_ov_next_what'). The triggers read only guarded views."""
+    Country.GetCustom('te_tax_ov_next_what') on the shown country. The triggers read only guarded views."""
     entries = [(f"te_tax_view_p{slot}_state = {STATE_AWAITING} te_tax_view_p{slot}_due >= 0 "
                 f"te_tax_view_p{slot}_due = te_tax_view_next_month", "te_tax_ov_next_what_bill") for slot in SLOTS]
     entries += [(f"te_tax_view_en_{i.key}_exp >= 0 te_tax_view_en_{i.key}_exp = te_tax_view_next_month",
@@ -1478,7 +1478,7 @@ def _obligation_custom_loc():
         "",
         "# The promise rows (plan Task 12; te_tax_obligations_section): per obligation slot <n>,",
         "# the beneficiary group's name, the promise and its state, read as",
-        "# GetPlayer.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded",
+        "# Country.GetCustom('te_tax_obl_<part>_<n>'). The triggers read only the guarded",
         "# te_tax_view_o<n>_* views, which are 0 while the slot is free.",
     ]
     for n in OBLIGATION_SLOTS:
@@ -4373,7 +4373,10 @@ def generated_sguis():
 
 
 def _gui_view(name, op, value):
-    return (f"{op}( GetPlayer.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
+    """A generated row's guarded view, read on the shown country (`Country`): every mount of the
+    panels supplies one, the player's in the journal entry and the tabs and another country's in
+    National Info (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 6.3)."""
+    return (f"{op}( Country.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
 
 
 GOODS_ICONS_PER_ROW = 14     # te_tax_good_icon is 26 wide with 4 between: 14 x 26 + 13 x 4 = 416 of the 480 column
@@ -4410,7 +4413,7 @@ def generated_rows():
         "### luxuries and military goods; GUI audit TAX-13), each with its icon. The row types,",
         "### te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
         "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
-        "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code. Each",
+        "### guarded view of the shown country's draft (te_tax_view_dr_g_<good>*, on Country), a 0/1 code. Each",
         "### good's name carries itself as a hover, in case a font draws it wider than its cell.",
         "### The enacted code's taxed goods and each passed bill's, as icons (GUI audit TAX-12;",
         "### te_tax_good_icon, te_tax_overview_widget.gui).",
@@ -5276,9 +5279,9 @@ def light_sguis():
 def light_custom_localization():
     lines = [
         HEADER,
-        "# The light code's panel text (gui/journal_entry_widgets/te_tax_light_widget.gui), read as",
-        "# GetPlayer.GetCustom('<name>'). The level names are the base game's own (tax_level_<level>,",
-        "# interfaces_l_english.yml), and the law names its law keys.",
+        "# The light code's panel text (gui/journal_entry_widgets/te_tax_light_widget.gui), read on",
+        "# the shown country as Country.GetCustom('<name>'). The level names are the base game's own",
+        "# (tax_level_<level>, interfaces_l_english.yml), and the law names its law keys.",
     ]
 
     def entry(name, branches, fallback):
