@@ -187,8 +187,9 @@ Bills and your Promises, each shown only while it has something in it. Then:
   The taxed goods show as icons, and regional relief lists its states.
 - History lists the last eight changes: bills passed and taking effect, rates
   expiring, promises kept or broken, held bills.
-- How Tax Legislation Works, collapsed by default, repeats the rules of this
-  chapter with the exact figures your game uses.
+- How Tax Legislation Works opens the Help page, as the "?" in the tab's
+  header does. It repeats the rules of this chapter with the exact figures your
+  game uses; under the Light code it explains the Light code instead.
 
 ## Drafting a tax reform
 

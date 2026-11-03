@@ -494,6 +494,9 @@ research:
   the Timeline Extended window does.
 - **Layout:** two columns (Mission Control and Fleets on the left, Colonies and
   Solar System on the right), with room for the schematic (§ 12).
+- **The frame** is now scoped for every tab of the Timeline Extended window, as a
+  full-screen toggle: [2026-11-02-te-window-wide-mode-design.md](2026-11-02-te-window-wide-mode-design.md)
+  § 4. This window's layout and schematic would live in it.
 
 Recommend building the tabs now and the window as its own project with the
 schematic, since most of the window's value is the schematic and the wider

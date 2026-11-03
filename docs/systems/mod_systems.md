@@ -17,7 +17,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 | [Game Rules](mod_systems/game_rules.md) | Every game rule, its flag and default, and how a disabled system is gated | Game Rules |
 | [AI Weights and Company AI](mod_systems/ai.md) | AI weight conventions for entries, buttons, actions and articles; how the AI picks companies | AI Weights Guidelines<br>Company AI |
 | [History Store and Charts](mod_systems/history_charts.md) | The save-persistent store of monthly samples and the reusable column chart | History Store and Charts |
-| [State Panel and Nation Tab](mod_systems/state_and_nation_panels.md) | The state panel's mod tiles and the Timeline Extended window's Nation tab | State Panel GUI Enhancements<br>Nation Tab |
+| [State Panel and Nation Tab](mod_systems/state_and_nation_panels.md) | The state panel's mod tiles, the Timeline Extended window's Nation tab and how the window's tabs are built | State Panel GUI Enhancements<br>Nation Tab<br>Timeline Extended Window Tabs |
 | [Legacy Narrative Events](mod_systems/legacy_narrative_events.md) | Older narrative events that now defer to, or feed, the banking, covert and space systems | Legacy narrative event integration |
 
 ## Economy, construction and infrastructure

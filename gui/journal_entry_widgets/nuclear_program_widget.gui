@@ -466,7 +466,9 @@ types nuclear_program_widget_types
 
 			### The taboo's history (a subsection, open: the owner's rule for history
 			### charts, 2026-09-29) — the shared chart types and range variable
-			### (te_history_chart.gui), as the UN chart uses.
+			### (te_history_chart.gui), as the UN chart uses. Each chart is its
+			### te_hist_<id> wrapper, generated from its fragment in
+			### scripts/generators/te_history_charts/nuclear_weapons.gui.in.
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
@@ -547,69 +549,9 @@ types nuclear_program_widget_types
 					text = "te_hist_since"
 				}
 
-				te_history_chart = {
-					blockoverride "chart_title" {
-						text = "nd_taboo_hist_title"
-					}
-					blockoverride "chart_legend" {
-						text = "nd_taboo_hist_legend"
-					}
-					# The store's marker pips belong to other systems.
-					blockoverride "marker_pips" {}
-					blockoverride "bar_tooltip" {
-						tooltip = "nd_taboo_hist_tt"
-					}
-					blockoverride "bar_body" {
-						te_history_bar_unsigned = {
-							visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo' )]"
-							blockoverride "values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ) ) )]"
-							}
-							blockoverride "cover_values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo' ), '(CFixedPoint)4' ) ) )]"
-							}
-							blockoverride "color" {
-								color = { 0.80 0.45 0.25 1.0 }
-							}
-						}
-					}
-				}
+				te_hist_nd_taboo = {}
 
-				te_history_chart = {
-					blockoverride "chart_title" {
-						text = "nd_taboo_hist_target_title"
-					}
-					blockoverride "chart_legend" {
-						text = "nd_taboo_hist_target_legend"
-					}
-					# The store's marker pips belong to other systems.
-					blockoverride "marker_pips" {}
-					blockoverride "bar_tooltip" {
-						tooltip = "nd_taboo_hist_target_tt"
-					}
-					blockoverride "bar_body" {
-						te_history_bar_unsigned = {
-							visible = "[ScriptContainer.HasVariable( 'te_hist_v_nd_taboo_tgt' )]"
-							blockoverride "values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ) ) )]"
-							}
-							blockoverride "cover_values" {
-								min = 0
-								max = 100
-								value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_nd_taboo_tgt' ), '(CFixedPoint)4' ) ) )]"
-							}
-							blockoverride "color" {
-								color = { 0.55 0.55 0.70 1.0 }
-							}
-						}
-					}
-				}
+				te_hist_nd_taboo_tgt = {}
 			}
 		}
 	}

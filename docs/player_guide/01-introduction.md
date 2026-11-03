@@ -12,7 +12,19 @@ most can be switched off with a game rule.
 The mod adds one button to the sidebar, under Map List, in every game. It opens
 the Timeline Extended window: first the [Nation tab](#the-nation-tab), then a
 tab each for the space race, your Grand Monuments and your colonial empire, the
-same panels as their journal entries, and one for the seabed.
+same panels as their journal entries, and one for the seabed. Two more rows of
+tabs hold the mod's tabs in the Budget, Market, Population, Society, Diplomacy
+and Military panels, the same as there, so every system is in one place. Full Screen, at
+the window's top right, spreads it across the screen, each tab in columns; Side Panel, at its top
+left there, brings it back to the width of the other panels. The tab you chose
+stays chosen when you switch.
+
+Each system has a Help page that explains how it works, with a heading for
+each topic. The "?" at the right of the tab's header opens it, and so does the
+last heading of the panel, such as How Banking Works, in the tab and in the
+journal entry. Nation, Budget Breakdown and Demographics have no header, so
+their last heading is the way in. Press Escape or click outside the page to
+close it.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -33,6 +45,10 @@ and caps. They are rounded, and they can change between versions of the mod. The
 game's tooltips show the exact values for your country, and many of the mod's
 journal entries and panels break their numbers down line by line when you hover
 over them.
+
+Many panels chart a system's history month by month or year by year. The round
+button beside a chart's title opens that chart alone, across most of the screen,
+with the same range buttons and hovers. Escape or a click outside closes it.
 
 The Markdown source of this guide is kept in the mod's repository, and the
 [chapters](https://github.com/jakeOmega/Vic3TimelineExtended/tree/main/docs/player_guide)
@@ -100,8 +116,9 @@ turn a default system off.
 
 ## Reading the Budget breakdown
 
-The Budget panel's Breakdown tab shows weekly income and expenses as pie charts
-and expandable lists. Groups start collapsed; click an arrow to see their
+The Budget panel's Breakdown tab, also the Timeline Extended window's Budget
+Breakdown tab, shows weekly income and expenses as pie charts and expandable
+lists. Groups start collapsed; click an arrow to see their
 components. Entries are ordered from largest to smallest amount at each level.
 The tab is available under every game-rule setting.
 Colors and percentages match across the pies and lists. Hover a tax, tariff,
@@ -136,8 +153,8 @@ central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
-refunds offset each other inside that group. Open
-How the Breakdown Works at the bottom for the accounting details.
+refunds offset each other inside that group. How the Breakdown Works, at the
+bottom, opens the Help page with the accounting details.
 
 ## The Nation tab
 
