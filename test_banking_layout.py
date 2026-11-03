@@ -1241,6 +1241,55 @@ class PrivateTest(unittest.TestCase):
         self.assertGreater(len(keys), 300)
         self.assertGreater(len(svs), 50)
 
+    # The other half (spec § 6.4, Shown): another country's tab still draws the
+    # cycle's phase, momentum and bubble, the four bars, Monetary Policy's
+    # readings, the interventions in force and the history, and the readout for
+    # a country without the entry (which National Info draws beside the wide
+    # sections). Over-guarding passes every test above.
+    SHOWN = ("te_banking_overview_panel", "te_banking_bars", "te_banking_phase_icons", "te_banking_momentum_icons",
+             "te_banking_bubble_icons", "te_banking_sec_active", "banking_dash_policy_row", "te_banking_sec_monetary",
+             "banking_dash_mon_value", "te_banking_history_panel", "te_banking_history_charts", "te_hist_bank_value",
+             "te_hist_bank_momentum", "te_hist_bank_bubble", "te_hist_mon_policy", "te_hist_mon_inflation",
+             "te_hist_mon_fx")
+    SHOWN_KEYS = ("banking_cycle_value_bar_name", "banking_cycle_momentum_bar_name", "banking_policy_stance_bar_name",
+                  "banking_bubble_pressure_bar_name", "banking_dash_phase_boom_value", "banking_dash_mon_rate_label",
+                  "banking_dash_mon_inflation_label", "banking_dash_mon_fx_label", "banking_dash_active_header",
+                  "banking_dash_name_active_cb_bank_holiday", "te_hist_chart_bank_value_title",
+                  "te_hist_chart_mon_policy_title", "banking_dash_not_started_other_tt")
+
+    def test_what_another_country_still_sees(self):
+        """The Shown types are drawn (panel_view, the walk BindingTest makes),
+        none guarded on its root; the four bars and every Active Policies row
+        outside any guard; the readings' keys in what the panel renders
+        (panel_loc_keys). Mutation-checked: a guard on te_banking_bars or
+        te_banking_sec_active fails this and nothing else."""
+        from gui_test_helpers import guard_spans, in_spans, load_loc, mod_types, panel_loc_keys, panel_view
+        types = mod_types()
+        view = panel_view({"te_banking_wide_sections"}, types)
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, view.open)
+                self.assertNotIn((0, len(types[name].body)), view.skip[name], "guarded on its root")
+        # every bar and every Active Policies row, not just their types
+        bars = types["te_banking_bars"].body
+        self.assertEqual(len(re.findall(r"ScriptValue\('banking_disp_bar_\w+'\)", bars)), 4)
+        self.assertEqual(view.skip["te_banking_bars"], [])
+        active = types["te_banking_sec_active"].body
+        rows = [m.end() - 1 for m in re.finditer(r"\bbanking_dash_policy_row\s*=\s*\{", active)]
+        self.assertGreater(len(rows), 30)
+        self.assertEqual([r for r in rows if in_spans(r, view.skip["te_banking_sec_active"])], [])
+        row = types["banking_dash_policy_row"].body
+        for part in ('block "row_label"', 'block "row_cost"'):
+            self.assertFalse(in_spans(row.index(part), guard_spans(row)), part)
+        loc = load_loc()
+        keys = panel_loc_keys({"te_banking_wide_sections"}, types, loc)
+        for key in self.SHOWN_KEYS:
+            with self.subTest(key=key):
+                self.assertIn(key, keys)
+        readout = panel_view({"te_banking_mon_readout"}, types)
+        self.assertNotIn((0, len(types["te_banking_mon_readout"].body)), readout.skip["te_banking_mon_readout"])
+        self.assertIn("banking_dash_ro_entry_name", panel_loc_keys({"te_banking_mon_readout"}, types, loc))
+
 
 if __name__ == "__main__":
     unittest.main()
