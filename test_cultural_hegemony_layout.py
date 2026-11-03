@@ -507,20 +507,26 @@ class LeaderFlagsTest(unittest.TestCase):
                 # only a player holds the seats (ch_leaders_display_write), so
                 # each read is a world read under its `# world:` line
                 # (test_te_system_tab_bodies.py; charts-help-national-info spec § 6.7).
+                # Both sit in a container an observer's view hides, since an
+                # observer has no GetPlayer (gotcha #42's proven form, not an And).
                 m = re.search(
-                    r"# world: [^\n]+\n\s*"
-                    r"visible = \"\[And\( Not\( GetMetaPlayer\.IsObserver \), GreaterThanOrEqualTo_CFixedPoint\( "
+                    r"widget = \{\s*size = \{ 70 48 \}\s*visible = \"\[Not\( GetMetaPlayer\.IsObserver \)\]\"\s*"
+                    r"widget = \{\s*size = \{ 70 48 \}\s*# world: [^\n]+\n\s*"
+                    r"visible = \"\[GreaterThanOrEqualTo_CFixedPoint\( "
                     r"GetPlayer\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
-                    rf"'\(CFixedPoint\){n}' \) \)\]\"\s*flag = \{{\s*parentanchor = center\s*# world: [^\n]+\n\s*"
+                    rf"'\(CFixedPoint\){n}' \)\]\"\s*flag = \{{\s*parentanchor = center\s*# world: [^\n]+\n\s*"
                     rf"datacontext = \"\[GetPlayer\.MakeScope\.Var\('ch_leader_seat_{n}'\)\.GetState\.GetCountry\]\"",
                     self.ov)
                 self.assertTrue(m, f"seat {n}")
         self.assertEqual(len(re.findall(r"\bflag = \{", self.ov)), 3)
 
     def test_the_slots_keep_their_width(self):
-        # each gated 70x48 widget sits in an ungated 70x48 slot
-        self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 70 48 \}\s*widget = \{\s*size = \{ 70 48 \}\s*"
-                                        r"(?:# world: [^\n]+\n\s*)?visible", self.ov)), 3)
+        # each gated 70x48 widget sits in a 70x48 observer container, in an
+        # ungated 70x48 slot
+        self.assertEqual(len(re.findall(
+            r"widget = \{\s*size = \{ 70 48 \}\s*(?:#[^\n]*\n\s*)*"
+            r"widget = \{\s*size = \{ 70 48 \}\s*visible = \"\[Not\( GetMetaPlayer\.IsObserver \)\]\"\s*"
+            r"widget = \{\s*size = \{ 70 48 \}\s*(?:# world: [^\n]+\n\s*)?visible", self.ov)), 3)
         # and the block holding them is never hidden, or row 2 is centred
         # without it and runs past the panel when it appears (gotcha #43)
         block = self.ov[:self.ov.index('text = "je_ch_ov_leaders_label"')]
