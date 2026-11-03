@@ -216,18 +216,22 @@ Monuments" (the section and the overview cell) and the empty-section line read n
 ## Nuclear Weapons in National Info (PR F4, Nuclear, 2026-11-03)
 
 The Nuclear tab reads the shown `Country`, so National Info can show it for any country, with what the world knows
-of it. Shown for another country: the overview's crisis box (its hover ends on World Crises, not on the player's
-moves), a row of its own in place of the player's Rows 2 to 4 (Warheads as the world estimates them,
-`nd_believed_stockpile`, "None known" until its first device; Guarantees, the nuclear guarantees it gives and holds)
-and the taboo bar; World Crises; the taboo section's score, band, last use and charts; Nuclear Powers; the How link.
-Hidden, each section's root collapsing on `Country.IsLocalPlayer` with its body under `te_own_country_only`: The
-Program and its progress bar, Nuclear Crisis (its breakdowns would give readiness and survivability away), Nuclear
-Posture, Forces, At Home, Reputation, Delivery and Defense, the overview's Rows 2 to 4, and the taboo section's
-costs and arsenal burden. The owner's rule: the true stockpile never shows for another country, in a figure, a hover
-or a chart. Nothing another country's view draws reads `nd_stockpile`, `nd_display_stockpile` or
-`nd_display_public_estimate`, which falls back to the true count (`test_nuclear_layout.py`'s `PrivateTest`). In the
-wide layout the second column is empty for another country, since everything in it is the player's own. Needs PR
-F1's National Info, which shows the tab while its `public` flag is set.
+of it. Another country's tab opens only once the world's first warhead has made the taboo
+(`te_ni_nuclear_tab_sgui`); before it, it is grayed for every country. Shown for another country: the overview's
+crisis box (its hover ends on World Crises, not on the player's moves), a row of its own in place of the player's
+Rows 2 to 4 (Warheads as the world estimates them, `nd_shown_public_estimate`, "None known" until its first device;
+Guarantees, the nuclear guarantees it gives and holds) and the taboo bar; World Crises; the taboo section's score,
+band, last use and charts; Nuclear Powers; the How link. Hidden, each section's root collapsing on
+`Country.IsLocalPlayer` with its body under `te_own_country_only`: The Program and its progress bar, Nuclear Crisis
+(its breakdowns would give readiness and survivability away), Nuclear Posture, Forces, At Home, Reputation, Delivery
+and Defense, the overview's Rows 2 to 4, and the taboo section's costs and arsenal burden. The owner's rule: the true
+stockpile never shows for another country, in a figure, a hover or a chart. The Warheads cell and Nuclear Powers'
+rows read `nd_shown_public_estimate`: the seeded estimate (`nd_public_estimate`, which `nd_init_posture` seeds from
+the entry's `immediate`, the first armed week and the monthly update), or 0 while it is unset, never the live count
+that `nd_display_public_estimate` falls back to. Nothing another country's view draws reads the true state, derived
+from its variables through every script value and trigger (`test_nuclear_layout.py`'s `PrivateTest`). In the wide
+layout another country's column 2 holds the taboo, Nuclear Powers and How, and its column 3 is empty, at the right
+edge.
 
 | Check | Expect | If it fails |
 |---|---|---|
@@ -235,6 +239,8 @@ F1's National Info, which shows the tab while its `public` flag is set.
 | **2. An unarmed country.** A country with no warheads, then one that has disarmed, if the game has one. | Warheads reads "None known", and the hover says the world believes it holds none. | A figure shows: `nd_believed_armed_sgui` isn't answering on the shown country (`GuiScope.SetRoot( Country.MakeScope )`), or `SelectLocalization` didn't take the scripted GUI's answer in loc. |
 | **3. Guarantees.** A country that signed a nuclear guarantee, a direct subject of an armed overlord, an armed overlord with subjects, and a country with neither. | Guaranteed / By treaty, Guaranteed / Under umbrella, Guarantor / Umbrella: N, and None / No treaty; the hover's first line says the same. | A wrong word: `nd_public_guarantee_word` / `_figure` / `_line` (`nuclear_deterrence_custom_loc.txt`) read on the wrong scope. |
 | **4. A crisis.** A country in a nuclear crisis that isn't yours. | Its crisis box, red as yours would be; the hover gives the stage and danger and ends on World Crises, not on your moves. World Crises tints its row. No Nuclear Crisis section. | Your moves in the hover: the box's `SelectLocalization( Country.IsLocalPlayer, … )` picked the player's key. |
-| **5. Nothing private, no gaps.** Same countries. | No program, posture, forces, at-home, reputation, delivery or Change buttons; the taboo section has its score, band, last use and charts but not what nuclear acts cost or the arsenal's burden. No empty gap where a section was, in the narrow tab or the wide layout's first column. | A section shows: it isn't under `te_own_country_only` (`GuardTest`, `PrivateTest`). A gap: a section's root kept its spacing (its `visible` must be `And( Country.IsLocalPlayer, … )`). |
-| **6. Your own tab.** Your own Nuclear tab, in the Military panel, the journal entry and National Info for your own country, armed and unarmed. | As before, with every section, the Change buttons and the progress bar under The Program. Words that changed: Nuclear Powers' hover says "the country's own included" (was "ours included"). The taboo target's hover lists the tradition of non-use with its cap ("full at N"). | The tradition cap is blank: `nd_taboo_bd_tradition` reads `SCOPE.GetRootScope`, which the taboo breakdown's scripted GUI must root on the shown country. |
+| **5. Nothing private, no gaps.** Same countries, then the full-screen window's National Info (wide). | No program, posture, forces, at-home, reputation, delivery or Change buttons; the taboo section has its score, band, last use and charts but not what nuclear acts cost or the arsenal's burden. No empty gap where a section was. Wide: the overview and World Crises in the first column, the taboo, Nuclear Powers and How in the second, nothing in the third. | A section shows: it isn't under `te_own_country_only` (`GuardTest`, `PrivateTest`). A gap: a section's root kept its spacing (its `visible` must be `And( Country.IsLocalPlayer, … )`). |
+| **6. Your own tab.** Your own Nuclear tab, in the Military panel, the journal entry and National Info for your own country, armed and unarmed. | As before, with every section, the Change buttons and the progress bar under The Program. Nuclear Powers' warheads hover still says "ours included" (another country's says "the country's own included"). The taboo target's hover lists the tradition of non-use with its cap ("full at N"). | The tradition cap is blank: `nd_taboo_bd_tradition` reads `SCOPE.GetRootScope`, which the taboo breakdown's scripted GUI must root on the shown country. |
+| **6b. Before the first warhead.** A new game, before anyone has a warhead: open National Info for a country researching or running a programme, then for one without. | Both show the Nuclear tab grayed, "Not running" on hover; your own tab opens as before if you run a programme. After the world's first warhead, every country holding the entry shows it open. | Another country's tab open before the first warhead: the slot's `enabled` or the selection template doesn't read `te_ni_nuclear_tab_sgui` (`test_national_info.py`'s `ForeignOpenTest`). |
+| **6c. An observer's journal entry.** As an observer, open an observed armed country's Nuclear journal entry. | The public view, as in National Info: an observer has no local country, so `Country.IsLocalPlayer` is false there; the private sections collapse and the overview's second row is the public one. | The private sections show: a section's root lost its `Country.IsLocalPlayer`. |
 | **7. The log and an observer.** After 1 to 6, and as an observer opening an armed country's Nuclear tab in National Info, search `debug.log` for `wanted context of type`, `Failed to fetch variable`, `Promote 'SCOPE' returned nullptr` and null-country lines. | None new, but for an observer hovering a taboo chart's marker: F0's check 6 line (`te_hist_tt_markers` roots on `GetPlayer`). | Each line names its expression: a `JournalEntry` line, a read left on the entry's country; a `SCOPE` line, the tradition cap (check 6). |

@@ -26,12 +26,12 @@ in one shows in the other. The tab is grayed until the journal entry is active;
 hover it for what is still missing. There, the progress bar shows only while you
 have a program, and the tab ends with an Open Journal Entry button.
 
-Another country's National Info has a Nuclear tab with what the world knows of
-it: its warheads as the world estimates them (none known before its first
-test), the nuclear guarantees it gives and holds, any crisis it is in, World
-Crises, the nuclear taboo's score and history, and Nuclear Powers. Its true
-count, program, posture, forces and reputation, and every button, are only on
-your own.
+From the world's first warhead, another country's National Info has a Nuclear
+tab with what the world knows of it: its warheads as the world estimates them
+(none known before its first test), the nuclear guarantees it gives and holds,
+any crisis it is in, World Crises, the nuclear taboo's score and history, and
+Nuclear Powers. Its true count, program, posture, forces and reputation, and
+every button, are only on your own.
 
 ![The Nuclear tab of the Military panel for a country holding 12 warheads: the overview (an Unfunded program, warheads, credibility, doctrine, readiness, launch authority and the taboo bar), The Program at funding step 0 with its progress bar, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
 
