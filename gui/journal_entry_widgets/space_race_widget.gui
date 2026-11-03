@@ -7924,11 +7924,13 @@ types space_race_widget_types
 	### sr_in_space_race). First the entries (owner, 2026-10-27):
 	### te_sr_window_milestones (generated, from the generator's SR_MILESTONES)
 	### holds a te_system_tab_frame per entry, since GetPlayerJournalEntry takes
-	### one literal key, each shown only while the player holds that entry
-	### active, and a note in their place while none is; each frame's header,
-	### and the note's, carries the "?" to the Help page. Then the tab's own
-	### sections, which read no entry: Space Powers (our program and every other
-	### power's) and Orbit (debris, satellites, strikes), after the milestones
+	### one literal key, each shown only while the shown Country holds that
+	### entry active (its live sections, which read the entry, the player's own:
+	### te_own_country_only), and a note in their place while none is; each
+	### frame's header, and the note's, carries the "?" to the Help page. Then
+	### the tab's own sections, which read no entry: Space Powers (the
+	### country's program, and for the player every other power's) and Orbit
+	### (debris, satellites, strikes), after the milestones
 	### (owner, 2026-10-27: the milestone we run is the summary a player acts
 	### on), under the tab's own gate, so they show between milestones too.
 	### Orbit holds the debris row. Then How the Space Race Works, once for
@@ -7953,7 +7955,7 @@ types space_race_widget_types
 
 			flowcontainer = {
 				name = "te_systems_window_space_race_summary"
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				parentanchor = hcenter
 				direction = vertical
 				ignoreinvisible = yes
@@ -7966,7 +7968,7 @@ types space_race_widget_types
 
 			flowcontainer = {
 				name = "te_systems_window_space_race_reference"
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				parentanchor = hcenter
 				direction = vertical
 				ignoreinvisible = yes
