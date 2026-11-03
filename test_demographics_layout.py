@@ -581,16 +581,20 @@ class WidthTest(unittest.TestCase):
         self.fits(self.markup(text), (width, "row"), "Show All")
 
     def test_the_chart_titles(self):
+        """Each title fits beside the chart's open button: the panel's wrapper
+        narrows chart_title_width (the type's 484) to 456 (charts PR C2)."""
         chart = _read(CHART)
         title = chart[chart.index("type te_history_chart"):]
-        width = int(re.search(r'block "chart_text_width" \{\s*max_width = (\d+)\s*\}\s*elide = right\s*align = nobaseline'
-                              r'\s*block "chart_title_font"', title).group(1))
+        self.assertTrue(re.search(r'block "chart_title_width" \{\s*max_width = 484\s*\}\s*elide = right'
+                                  r'\s*align = nobaseline\s*block "chart_title_font"', title))
         history = _type_body(self.widgets, "te_demog_sec_history")
-        titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
-                  for c in history_charts(history)]
-        self.assertEqual(len(titles), 8)
-        for key in titles:
+        charts = history_charts(history)
+        self.assertEqual(len(charts), 8)
+        for c in charts:
+            key = re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
+            width = int(re.search(r"max_width = (\d+)", _override(c, "chart_title_width")).group(1))
             with self.subTest(title=key):
+                self.assertEqual(width, 456)
                 self.fits(self.shown(key), (width, "heading"), key)
 
 

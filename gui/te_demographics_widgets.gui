@@ -3210,8 +3210,12 @@ types te_demographics_widgets
 		}
 	}
 
-	### The pips' key: the same textures at the same sizes, one line each.
+	### The pips' key: the same textures at the same sizes, one line each. Shown
+	### once the store holds a year, under History's range buttons and, in the
+	### charts' full-screen viewers (te_chart_<id>_popup, gen_te_history_charts.py),
+	### under the large chart.
 	type te_demog_hist_pip_legend = flowcontainer {
+		visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ) )]"
 		direction = horizontal
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -3369,9 +3373,7 @@ types te_demographics_widgets
 			}
 
 			### What the pips above a bar mean (the year's war dead, a famine, a demographic event)
-			te_demog_hist_pip_legend = {
-				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ) )]"
-			}
+			te_demog_hist_pip_legend = {}
 
 			### Births and deaths per 1,000, side by side: their gap is natural change
 			te_hist_demog_births_deaths = {}

@@ -678,7 +678,8 @@ STATIC_CELLS = (
        ("st_res_row_settings_header", 398, "heading", ()),
        ("je_strategic_reserve_inv_header", 480, "large", ()),
        ("je_strategic_reserve_how_header", 480, "large", ()),
-       ("st_res_hist_title", 484, "large", ())]
+       # the chart's title, beside its open button (gen_te_history_charts.SMALL's title_w)
+       ("st_res_hist_title", 456, "large", ())]
     + [(f"st_res_row_label_{k}", 170, "row", ()) for k in
        ("stored", "rate", "last", "decay", "price", "policy")]
     + [(f"st_res_policy_short_{k}", 138, "row", ()) for k in

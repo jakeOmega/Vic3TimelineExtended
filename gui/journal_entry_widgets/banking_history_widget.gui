@@ -192,7 +192,26 @@ types te_banking_history_types
 		}
 	}
 
-	### The charts themselves: the range selector and the six charts. Shown by
+	### What the two pips on a bar mean. Both halves apply here: the banking
+	### series is the only one that records crash markers. A type of its own
+	### because the charts' full-screen viewers (te_chart_<id>_popup,
+	### gen_te_history_charts.py) show it under the large chart too; a wrapper
+	### holding the legend, not a type derived from it (gotcha #37).
+	type te_banking_hist_marker_key = flowcontainer {
+		parentanchor = hcenter
+		visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+
+		te_history_marker_legend = {
+			blockoverride "marker_legend_font" {
+				using = fontsize_medium
+			}
+			blockoverride "crash_legend_font" {
+				using = fontsize_medium
+			}
+		}
+	}
+
+	### The charts themselves: the range selector and the eight charts. Shown by
 	### the two shells below, which differ only in the flag that opens them.
 	type te_banking_history_charts = flowcontainer {
 		direction = vertical
@@ -254,17 +273,8 @@ types te_banking_history_types
 			text = "te_hist_since"
 		}
 
-		### What the two pips on a bar mean. Both halves apply here: the banking
-		### series is the only one that records crash markers.
-		te_history_marker_legend = {
-			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
-			blockoverride "marker_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "crash_legend_font" {
-				using = fontsize_medium
-			}
-		}
+		### What the two pips on a bar mean (te_banking_hist_marker_key, above)
+		te_banking_hist_marker_key = {}
 
 		### ---- Cycle value (0-100 index) --------------------------------
 		te_hist_bank_value = {}

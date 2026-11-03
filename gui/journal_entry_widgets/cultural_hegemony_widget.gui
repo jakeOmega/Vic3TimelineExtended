@@ -2409,6 +2409,132 @@ types cultural_hegemony_widget_types
 	### REFERENCE SECTIONS
 	### ==========================================================================
 
+	### The key under the world models' chart: two columns of the models'
+	### short names, read down then across in the chart's order (republican
+	### at the bottom of each bar first), each one's full name and laws on
+	### hover. All fifteen models stay visible even if their present-day
+	### share is zero. A type of its own because the chart's full-screen
+	### viewer (te_chart_ch_models_popup, gen_te_history_charts.py) shows it
+	### under the large chart, as te_ch_sec_history does under the panel's.
+	type te_ch_hist_model_key = flowcontainer {
+		direction = horizontal
+		parentanchor = hcenter
+		spacing = 12
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_republican"
+					tooltip = "ch_model_republican_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_corporatist"
+					tooltip = "ch_model_corporatist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_anarchist"
+					tooltip = "ch_model_anarchist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_other"
+					tooltip = "ch_model_other_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_royalist_absolutist"
+					tooltip = "ch_model_royalist_absolutist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_technocratic"
+					tooltip = "ch_model_technocratic_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_religious"
+					tooltip = "ch_model_religious_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_socialist"
+					tooltip = "ch_model_socialist_tt"
+				}
+			}
+		}
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_military_junta"
+					tooltip = "ch_model_military_junta_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_royalist_constitutional"
+					tooltip = "ch_model_royalist_constitutional_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_communist"
+					tooltip = "ch_model_communist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_liberal"
+					tooltip = "ch_model_liberal_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_reactionary"
+					tooltip = "ch_model_reactionary_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_developmentalist_junta"
+					tooltip = "ch_model_developmentalist_junta_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_fascist"
+					tooltip = "ch_model_fascist_tt"
+				}
+			}
+		}
+	}
+
 	### World models, annually. Open by default. Independent range selection
 	### because a monthly banking range and this annual range have different units.
 	### The chart is te_hist_ch_models, generated from its fragment in
@@ -2474,128 +2600,9 @@ types cultural_hegemony_widget_types
 				text = "ch_model_hist_since"
 			}
 			te_hist_ch_models = {}
-			### Two columns of the models' short names, read down then across in
-			### the chart's order (republican at the bottom of each bar first),
-			### each one's full name and laws on hover. All fifteen models stay
-			### visible even if their present-day share is zero.
-			flowcontainer = {
-				direction = horizontal
-				parentanchor = hcenter
-				spacing = 12
-				flowcontainer = {
-					direction = vertical
-					spacing = 1
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_republican"
-							tooltip = "ch_model_republican_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_corporatist"
-							tooltip = "ch_model_corporatist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_anarchist"
-							tooltip = "ch_model_anarchist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_other"
-							tooltip = "ch_model_other_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_royalist_absolutist"
-							tooltip = "ch_model_royalist_absolutist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_technocratic"
-							tooltip = "ch_model_technocratic_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_religious"
-							tooltip = "ch_model_religious_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_socialist"
-							tooltip = "ch_model_socialist_tt"
-						}
-					}
-				}
-				flowcontainer = {
-					direction = vertical
-					spacing = 1
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_military_junta"
-							tooltip = "ch_model_military_junta_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_royalist_constitutional"
-							tooltip = "ch_model_royalist_constitutional_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_communist"
-							tooltip = "ch_model_communist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_liberal"
-							tooltip = "ch_model_liberal_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_reactionary"
-							tooltip = "ch_model_reactionary_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_developmentalist_junta"
-							tooltip = "ch_model_developmentalist_junta_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_fascist"
-							tooltip = "ch_model_fascist_tt"
-						}
-					}
-				}
-			}
+			### Two columns of the models' short names under the chart, te_ch_hist_model_key
+			### (above), which the chart's full-screen viewer shows too
+			te_ch_hist_model_key = {}
 		}
 	}
 
