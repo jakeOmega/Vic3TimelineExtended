@@ -327,6 +327,118 @@ class BlockDefaultTest(unittest.TestCase):
         self.assertIn(f"(drawn at {GUI}:3)", text)
 
 
+ITEMS = """\
+types te_fix_types {
+	type te_fix_wide = flowcontainer {
+		flowcontainer = {
+			datamodel = "[Country.MakeScope.GetList('rows')]"
+			item = {
+				widget = {
+					datacontext = "[Scope.GetScriptContainer]"
+					text = "[GetPlayer.GetName]"
+					tooltip = "[GetScriptedGui('x').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					button = {
+						tooltip = "[Concatenate( GetScriptedGui('x').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), '' )]"
+					}
+				}
+			}
+		}
+		textbox = {
+			tooltip = "[GetPlayer.GetName]"
+		}
+	}
+}
+"""
+
+CUSTOM = """\
+te_fix_custom = {
+	type = country
+	text = {
+		trigger = { always = yes }
+		localization_key = te_fix_picked
+	}
+}
+"""
+
+CUSTOM_LOC = """\
+l_english:
+ te_fix_mech: "[Country.GetCustom('te_fix_custom')]"
+ te_fix_picked: "[JournalEntry.GetCountry.GetName]"
+"""
+
+
+class ItemTooltipTest(unittest.TestCase):
+    """A tooltip inside a datamodel's item reads GetPlayer for a reason (gotcha
+    #24: it may have only the item's context), so --write leaves it in markup
+    as in loc. A text on the item, and a tooltip outside any item, are
+    mechanical."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = self.tmp.name
+        _put(self.root, GUI, ITEMS)
+        self.s = tool.survey("te_fix_wide", self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_classes(self):
+        got = sorted((r.finding.line, r.cls) for r in self.s.markup)
+        self.assertEqual(got, [(8, "mechanical"), (9, "item tooltip"), (11, "item tooltip"), (17, "mechanical")])
+        self.assertIn(f"{GUI}:4 datamodel", [r.why for r in self.s.markup if r.cls == "item tooltip"][0])
+
+    def test_write_leaves_them(self):
+        self.assertEqual(tool.write(self.s), {GUI: 2})
+        gui = _get(self.root, GUI)
+        self.assertEqual(gui.count("SetRoot( GetPlayer.MakeScope )"), 2, "both item tooltips are left")
+        self.assertIn('text = "[Country.GetName]"', gui)
+        self.assertIn('tooltip = "[Country.GetName]"', gui)
+
+
+class CustomLocTest(unittest.TestCase):
+    """A key that GetCustom renders is the caller's text: reached, rewritten
+    with it, and not shared with script."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = self.tmp.name
+        _put(self.root, GUI, WIDE)
+        _put(self.root, YML, CUSTOM_LOC)
+        _put(self.root, "common/customizable_localization/te_fix_custom.txt", CUSTOM)
+        self.s = tool.survey("te_fix_wide", self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_the_custom_key_is_reached_and_mechanical(self):
+        kr = self.s.loc["te_fix_picked"]
+        self.assertEqual(kr.notes, [], "a customizable localization entry is not script")
+        self.assertEqual([r.cls for r in kr.reads], ["mechanical"])
+
+    def test_write_rewrites_it(self):
+        tool.write(self.s)
+        self.assertIn('te_fix_picked: "[Country.GetName]"', _get(self.root, YML))
+
+
+class OtherTabsTest(unittest.TestCase):
+    """A key another tab's panel renders too says so, and where a world key
+    then goes (WORLD_LOC's Shared heading)."""
+
+    def test_the_note(self):
+        with tempfile.TemporaryDirectory() as root:
+            _put(root, GUI, WIDE)
+            _put(root, YML, LOC)
+            s = tool.survey("te_fix_wide", root, others={"banking": {"te_fix_mech"}, "seabed": set()})
+        self.assertEqual(s.loc["te_fix_mech"].also, ["banking"])
+        self.assertEqual(s.loc["te_fix_entry"].also, [])
+        self.assertIn("also rendered by banking: if it goes in WORLD_LOC, it goes once, under its Shared heading",
+                      tool.render(s))
+
+    def test_the_repo_names_a_key_two_tabs_render(self):
+        s = tool.survey_tab("banking")
+        self.assertIn("colonial_empire", s.loc["te_hist_since"].also)
+
+
 class OtherCountryTest(unittest.TestCase):
     def test_contexts(self):
         for expr, other in [
@@ -339,6 +451,7 @@ class OtherCountryTest(unittest.TestCase):
             ("Country.Self", False),
             ("JournalEntry.GetCountry.GetPowerBloc", False),
             ("Scope.GetScriptContainer", False),
+            ("GetPlayerJournalEntry('je_space_race')", False),
             ("GetScriptedGui('x')", False),
         ]:
             self.assertEqual(tool._other_country(expr), other, expr)

@@ -16,9 +16,12 @@ From Python, survey_tab(key) is the same listing as data (a Survey: markup and
 loc reads with their classes, the controls, the text), and write(survey) the
 rewrite.
 
-It walks what the tests walk: the tab's wide composer (gen_te_systems_window.TABS),
-every type it draws outside te_own_country_only, and every loc key their text renders
-(gui_test_helpers.open_types, markup_reads, panel_loc_keys). A read is one of:
+It walks what the tests walk (gui_test_helpers.panel_view, markup_reads,
+panel_loc_keys): the tab's wide composer (gen_te_systems_window.TABS), every type it
+draws outside te_own_country_only and outside a block default that every place
+drawing the type overrides, the templates they use, and every loc key their text
+renders, through splices and GetCustom (common/customizable_localization). A read is
+one of:
 
   mechanical    `JournalEntry.GetCountry.` or `GetPlayer.`, which becomes `Country.`.
                 --write rewrites these, and only these.
@@ -33,18 +36,26 @@ every type it draws outside te_own_country_only, and every loc key their text re
   shadowed      a mechanical read under a datacontext or datamodel that names some
                 other country (a row's Scope.GetCountry, a bloc's members), where
                 `Country` is that country. Read the shown Country from a block outside
-                the row's datacontext.
+                the row's datacontext. Found within one body: a datacontext a
+                blockoverride brings in doesn't cover the instance's other overrides.
   shared        (loc) a key something else renders where no Country is in context: a
                 journal entry's own text (its status_desc, desc or a scripted progress
                 bar), other script (a custom tooltip, an event), or a vanilla-copied
                 panel (the state panel). Split it: a `_ni` copy for the panel. It errs
                 wide: any script token that spells the key counts, so look before
-                splitting.
-  item tooltip  (loc) a key a tooltip inside a datamodel's item renders. Gotcha #24
-                found a chart bar's (the item's own widget) has only the item's
-                context; a tooltip deeper in an item is unverified, so it is left too.
-                A world read keeps the player's copy and goes in WORLD_LOC; bind the
+                splitting. A customizable localization entry's keys are not script's:
+                they render in the context of the text that calls GetCustom.
+  item tooltip  a tooltip inside a datamodel's item, in markup or the loc key it
+                renders. Gotcha #24 found a chart bar's (the item's own widget) has
+                only the item's context; a tooltip deeper in an item is unverified,
+                and the mod's own all root on GetPlayer, so it is left too. A world
+                read keeps the player's copy (in loc it goes in WORLD_LOC); bind the
                 rest by hand and check it in game, or guard the control it is on.
+
+A loc key another candidate tab's panel renders too (survey_tab's others: public
+tabs and test_te_system_tab_bodies.UNBOUND) says which: if it goes in WORLD_LOC, it
+goes once, under the Shared heading, or two systems' PRs would each add it. About
+5 s a tab (10 s for the Space Race), half of it naming those tabs.
 
 Reads in a generated file change in its generator, which the listing names; --write
 leaves them. After the reads come the controls to guard (GuardTest) and the text that
@@ -54,6 +65,7 @@ shared on that account. Only the vanilla-copied hosts lack one.
 """
 
 import argparse
+import bisect
 import collections
 import functools
 import glob
@@ -77,7 +89,7 @@ WRITABLE = {"mechanical"}
 # (or might: a leader can be a character, and is flagged all the same).
 _CONTEXT = re.compile(r'\b(datacontext|datamodel)\s*=\s*"\[(.*?)\]"')
 _OTHER = re.compile(r"^(?:Get|Access)?(?:Top)?(?:Country|Countries|Owner|Overlord|Leader|Members?|Subjects?"
-                    r"|Ally|Allies|Rivals?|Target|Player\w*|Hegemon)$", re.I)
+                    r"|Ally|Allies|Rivals?|Target|Player|Hegemon)$", re.I)  # not GetPlayerJournalEntry: an entry
 _SAME = {"JournalEntry.GetCountry", "Country", "Country.Self"}
 _DATAMODEL = re.compile(r"\bdatamodel\s*=")
 _TOOLTIP = re.compile(r'\btooltip\s*=\s*"([^"]*)"')
@@ -152,6 +164,7 @@ class KeyReport:
     notes: list = field(default_factory=list)
     reads: list = field(default_factory=list)
     generated: str = ""
+    also: list = field(default_factory=list)  # the other tabs whose panels render it
 
 
 @dataclass
@@ -172,7 +185,7 @@ class Survey:
     where: dict = field(default_factory=dict)
 
 
-def _walk(names, types):
+def _walk(names, types, view):
     """Each type another country's panel draws (open_types), with the first place
     it is drawn, why `Country` may be some other country in it (None: never), and
     the spans in its body where it is: (start, end, context start, context end,
@@ -190,7 +203,7 @@ def _walk(names, types):
         item[name] = item.get(name) or in_item
         td = types[name]
         body = td.body
-        guards = h.guard_spans(body)
+        guards = view.skip.get(name, h.guard_spans(body))
         if (0, len(body)) in guards:
             continue
         if name not in spans_of:
@@ -241,19 +254,19 @@ def _inner_blocks(body, a, b):
     return out
 
 
-def _keys_where(names, types, loc, pick):
+def _keys_where(names, types, loc, pick, view, custom):
     """{key: why} for the loc closure of the keys named in the parts of each type
     that `pick(name, body)` gives: a list of (start, end, why), or None."""
     roots = {}
     for name in sorted(names):
-        body = h.unguarded(types[name].body)
+        body = h.unguarded(types[name].body, view.skip.get(name))
         for a, b, why in pick(name, body) or ():
-            for key in _gui_keys(body[a:b + 1], loc):
+            for key in _gui_keys(body[a:b + 1], loc, custom):
                 roots.setdefault(key, why)
-    return _closure_with_source(roots, loc)
+    return _closure_with_source(roots, loc, custom)
 
 
-def _closure_with_source(roots, loc):
+def _closure_with_source(roots, loc, custom):
     """{key: source} for the roots and every key they reach (loc_closure, own=False),
     each with the source of the first root that reaches it."""
     out, todo = {}, collections.deque(roots.items())
@@ -265,27 +278,22 @@ def _closure_with_source(roots, loc):
         value = h._OWN_BRANCH.sub(r"\1''", loc[key])
         todo.extend((k, source) for k in re.findall(r"\$([\w.\-]+)\$", value))
         todo.extend((k, source) for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
+        todo.extend((k, source) for k in h.custom_keys(value, custom))
     return out
 
 
-_PROP_KEY = re.compile(r'(?:text|tooltip|raw_text)\s*=\s*"([\w.\-]+)"')
-_EXPR = re.compile(r'"\[(.*?)\]"')
-_QUOTED = re.compile(r"'([\w.\-]+)'")
+def _gui_keys(text, loc, custom):
+    """gui_keys(text, loc, own=False, custom=custom)."""
+    return h.gui_keys(text, loc, own=False, custom=custom)
 
 
-def _gui_keys(text, loc):
-    """gui_keys(text, loc, own=False), for many calls: membership in loc, not a set of it."""
-    text = h._OWN_BRANCH.sub(r"\1''", text)
-    out = {k for k in _PROP_KEY.findall(text) if k in loc}
-    for expr in _EXPR.findall(text):
-        out.update(k for k in _QUOTED.findall(expr) if k in loc)
-    return out
-
-
-def _script_keys(root, loc, types):
+def _script_keys(root, loc, types, custom):
     """Each loc key something other than a mod panel renders, with what renders it:
     a journal entry's own text, a scripted progress bar, other script, or a
-    vanilla-copied panel, reached through its splices."""
+    vanilla-copied panel, reached through its splices. A customizable
+    localization entry's keys are not script's: they render in the context of
+    the text that calls GetCustom."""
+    custom_dir = os.path.join(root, "common", "customizable_localization")
     roots = {}
 
     def name(key, source):
@@ -302,6 +310,8 @@ def _script_keys(root, loc, types):
                        ("common/scripted_progress_bars", "scripted progress bar"),
                        ("common", "script"), ("events", "event")):
         for path in sorted(glob.glob(os.path.join(root, sub, "**", "*.txt"), recursive=True)):
+            if os.path.dirname(path) == custom_dir:
+                continue
             rel = os.path.relpath(path, root)
             for n, line in enumerate(h._read(path).split("\n"), 1):
                 code = line.split("#", 1)[0]
@@ -317,7 +327,7 @@ def _script_keys(root, loc, types):
         lines = text.split("\n")
         for n, line in enumerate(lines, 1):
             if '"' in line:
-                for key in _gui_keys(line, loc):
+                for key in _gui_keys(line, loc, custom):
                     name(key, f"vanilla-copied panel ({rel}:{n})")
         for m in h._CHILD.finditer(text):
             host = m.group(1)
@@ -325,10 +335,10 @@ def _script_keys(root, loc, types):
                 n = text.count("\n", 0, m.start()) + 1
                 for t in h.type_closure({host}, types):
                     if t not in named:
-                        named[t] = _gui_keys(types[t].body, loc)
+                        named[t] = _gui_keys(types[t].body, loc, custom)
                     for key in named[t]:
                         name(key, f"vanilla-copied panel ({rel}:{n}, through {host})")
-    return _closure_with_source(roots, loc)
+    return _closure_with_source(roots, loc, custom)
 
 
 def _is_frame(name, types):
@@ -342,23 +352,59 @@ def _is_frame(name, types):
     return False
 
 
-def survey(target, root=REPO, world_loc=(), gate=None):
-    """Everything the tool reports for a wide composer (a tab's, or any type)."""
+@functools.lru_cache(maxsize=4096)
+def _tooltip_spans(body):
+    """A body's tooltip values (start, end) and bar_tooltip blockoverrides
+    (start, end, its opening), each in order."""
+    values = [(m.start(1), m.end(1)) for m in _TOOLTIP.finditer(body)]
+    bars = [(*h.enclosing_block(body, m.end()), m.start()) for m in _BAR_TOOLTIP.finditer(body)]
+    return values, bars
+
+
+def _in_sorted(pos, spans):
+    i = bisect.bisect_right(spans, (pos, float("inf"))) - 1
+    return i >= 0 and spans[i][0] <= pos < spans[i][1]
+
+
+def _item_tooltip(name, td, pos, item, items_of):
+    """Where a read at a body offset sits in a tooltip inside a datamodel's item
+    (a chart bar's bar_tooltip, or a tooltip = "..." in an item), or None."""
+    values, bars = _tooltip_spans(td.body)
+    for a, b, opening in bars:
+        if a < pos < b:
+            return f"{td.path}:{td.line + h._line_of(td, opening)} bar_tooltip"
+    if not _in_sorted(pos, values):
+        return None
+    if item.get(name):
+        return item[name]
+    for a, b, why in items_of.get(name, []):
+        if any(c < pos < d for c, d in _inner_blocks(td.body, a, b)):
+            return why
+    return None
+
+
+def survey(target, root=REPO, world_loc=(), gate=None, others=None):
+    """Everything the tool reports for a wide composer (a tab's, or any type).
+    others: {tab key: the loc keys its panel renders} for the other tabs a
+    country's panel shows, to name the ones that reach a key too."""
     types = h.mod_types(root)
+    templates = h.mod_templates(root)
+    custom = h.custom_loc(root)
     index = h.loc_index(os.path.join(root, "localization", "english"), root)
     loc = {k: v for k, (v, _, _) in index.items()}
     names = {target}
-    other, item, drawn_at, spans_of, items_of = _walk(names, types)
-    opened = h.open_types(names, types)
+    view = h.panel_view(names, types, templates)
+    other, item, drawn_at, spans_of, items_of = _walk(names, types, view)
+    opened = view.open
 
     markup, world_markup, generated = [], 0, {}
-    for f in h.markup_reads(names, types):
+    for f in h.markup_reads(names, types, templates):
         if f.world:
             world_markup += 1
             continue
         line = _file_lines(root, f.path)[f.line - 1]
         kind = _read_kind(f.what, line[f.col + len(f.what):f.col + len(f.what) + 1])
-        td = types[f.where]
+        td = types.get(f.where) or templates[f.where.split(" ", 1)[1]]
         # body offset of the read, from its line and column
         k = f.line - td.line
         pos = h._line_starts(td.body)[k] + f.col - (td.col if k == 0 else 0)
@@ -367,13 +413,18 @@ def survey(target, root=REPO, world_loc=(), gate=None):
             why = other.get(f.where) or _span_why(pos, spans_of.get(f.where, []), td.body) or ""
             if why:
                 kind = "shadowed"
+            else:
+                why = _item_tooltip(f.where, td, pos, item, items_of) or ""
+                if why:
+                    kind = "item tooltip"
         block = next((name for a, b, name in _block_spans(td.body) if a < pos < b), "")
         markup.append(Read(kind, f, why, block))
         generated.setdefault(f.path, generator_of(root, f.path))
 
-    keys = h.panel_loc_keys(names, types, loc)
+    keys = h.panel_loc_keys(names, types, loc, templates, custom)
     world_loc = set(world_loc)
-    shared = _script_keys(root, loc, types)
+    shared = _script_keys(root, loc, types, custom)
+
     def shadowed(n, b):
         if other.get(n):
             return [(0, len(b), other[n])]
@@ -391,8 +442,8 @@ def survey(target, root=REPO, world_loc=(), gate=None):
         return out + [(*h.enclosing_block(b, m.end()), f"{td.path}:{td.line + h._line_of(td, m.start())} bar_tooltip")
                       for m in _BAR_TOOLTIP.finditer(b)]
 
-    shadow_keys = _keys_where(opened, types, loc, shadowed)
-    item_keys = _keys_where(opened, types, loc, item_tooltips)
+    shadow_keys = _keys_where(opened, types, loc, shadowed, view, custom)
+    item_keys = _keys_where(opened, types, loc, item_tooltips, view, custom)
     report = {}
     for f in h.loc_reads(keys - world_loc, index):
         kr = report.get(f.where)
@@ -404,6 +455,7 @@ def survey(target, root=REPO, world_loc=(), gate=None):
                 kr.notes.append(("item tooltip", item_keys[f.where]))
             if f.where in shadow_keys:
                 kr.notes.append(("shadowed", shadow_keys[f.where]))
+            kr.also = sorted(t for t, ks in (others or {}).items() if f.where in ks)
         pos = f.text.find(f.what)
         kind = _read_kind(f.what, f.text[pos + len(f.what):pos + len(f.what) + 1])
         if kind == "mechanical" and kr.notes:
@@ -412,7 +464,7 @@ def survey(target, root=REPO, world_loc=(), gate=None):
 
     text = h.personal_text(keys, loc)
     return Survey(target, target, root, opened, drawn_at, generated, markup, world_markup, report,
-                  world_loc & keys, h.unguarded_controls(names, types), text, gate,
+                  world_loc & keys, h.unguarded_controls(names, types, templates), text, gate,
                   {k: index[k][1:] for k in text})
 
 
@@ -439,15 +491,17 @@ HINTS = {
     "shadowed": "Country here is another country: read the shown one from a block outside",
     "shared": "split it: a _ni copy for the panel, the original left as it is",
     "item tooltip": ("a chart bar's has only the item's context (gotcha #24); deeper in an item is unverified. "
-                     "A world read goes in WORLD_LOC; else bind it and check in game, or guard its control"),
+                     "A world read keeps GetPlayer (a loc key goes in WORLD_LOC); else bind it and check in game, "
+                     "or guard its control"),
 }
 
 
 def render(s, full=False, summary=False):
     out = []
     c = counts(s)
-    out.append(f"{s.target}: {len(s.types)} types and {sum(1 for _ in s.loc)} loc keys with reads, "
-               f"{len(s.controls)} controls to guard, {len(s.text)} keys speaking as the player")
+    with_reads = len({r.finding.where for r in s.markup})
+    out.append(f"{s.target}: {len(s.types)} types drawn, {with_reads} with reads; {len(s.loc)} loc keys with reads; "
+               f"{len(s.controls)} controls to guard; {len(s.text)} keys speaking as the player")
     for part in ("markup", "loc"):
         row = "  ".join(f"{cls} {c[(part, cls)]}" for cls in CLASSES if c[(part, cls)])
         out.append(f"  {part:7} {row or 'nothing to bind'}")
@@ -483,6 +537,8 @@ def render(s, full=False, summary=False):
             out.append(f"    {cls:13} :{line}  {what}{times}  | {r.finding.text.strip()[:110]}")
             if cls == "shadowed":
                 out.append(f"                  under {r.why}")
+            if cls == "item tooltip":
+                out.append(f"                  in {r.why}")
             if cls == "entry-only" and what == "JournalEntry.IsActive" and s.gate:
                 out.append(f"                  the tab's gate on Country: [{s.gate}]")
             if r.block and cls != "mechanical":
@@ -502,6 +558,9 @@ def render(s, full=False, summary=False):
         out.append(head)
         for cls, source in kr.notes:
             out.append(f"    {cls}: {source}  -> {HINTS[cls]}")
+        if kr.also:
+            out.append(f"    also rendered by {', '.join(kr.also)}: if it goes in WORLD_LOC, it goes once, under "
+                       f"its Shared heading")
     if s.controls:
         out += ["", "Controls to guard (GuardTest): put each under te_own_country_only, a wrapper where it has a visible"]
         out += [f"  {f}" for f in s.controls]
@@ -575,13 +634,33 @@ def world_loc_keys():
     return WORLD_LOC
 
 
+@functools.lru_cache(maxsize=None)
+def _tab_keys(key):
+    """The loc keys tab `key`'s panel renders (gui_test_helpers.panel_loc_keys)."""
+    tab, _ = _tab(key)
+    return frozenset(h.panel_loc_keys({tab.wide}, h.mod_types(), h.load_loc()))
+
+
+def candidate_tabs():
+    """The tabs another country's panel shows or will: public, and
+    test_te_system_tab_bodies.UNBOUND."""
+    from scripts.generators import gen_te_systems_window as gen
+    try:
+        from test_te_system_tab_bodies import UNBOUND
+    except ImportError:
+        UNBOUND = set()
+    return sorted({t.key for t in gen.TABS if t.public} | set(UNBOUND))
+
+
 def survey_tab(key, root=REPO):
     """survey() of a tab (gen_te_systems_window.TABS) as BindingTest sees it:
-    its wide composer, WORLD_LOC, and its gate on Country for IsActive reads."""
+    its wide composer, WORLD_LOC, its gate on Country for IsActive reads, and
+    the other candidate tabs that render each of its keys."""
     tab, gen = _tab(key)
     if tab is None:
         raise KeyError(f"{key}: no such tab in gen_te_systems_window.TABS")
-    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(tab.open_, gen.COUNTRY_ROOT))
+    others = {t: _tab_keys(t) for t in candidate_tabs() if t != key}
+    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(tab.open_, gen.COUNTRY_ROOT), others)
     s.target = f"{tab.key} ({tab.wide})"
     return s
 
