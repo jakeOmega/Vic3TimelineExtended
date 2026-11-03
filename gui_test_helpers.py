@@ -382,20 +382,20 @@ _LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s+"(.*)"\s*$')
 
 
 @functools.lru_cache(maxsize=4)
-def _loc_index(loc_dir):
+def _loc_index(loc_dir, root=REPO):
     out = {}
     for path in sorted(glob.glob(os.path.join(loc_dir, "**", "*.yml"), recursive=True)):
         for n, line in enumerate(_read(path).splitlines(), 1):
             m = _LOC_LINE.match(line)
             if m:
-                out[m.group(1)] = (m.group(2), os.path.relpath(path, REPO), n)
+                out[m.group(1)] = (m.group(2), os.path.relpath(path, root), n)
     return out
 
 
-def loc_index(loc_dir=LOC_DIR):
-    """Every English loc key: (value, file relative to the repo, line). A key
+def loc_index(loc_dir=LOC_DIR, root=REPO):
+    """Every English loc key: (value, file relative to root, line). A key
     defined twice takes the later file's text, in name order, as the game does."""
-    return dict(_loc_index(loc_dir))
+    return dict(_loc_index(loc_dir, root))
 
 
 def load_loc(loc_dir=LOC_DIR):
@@ -465,13 +465,15 @@ class TypeDef:
     """One type: its base, where it is (path relative to the repo, the line of
     its `type` line), and its body between its braces twice: `body` with the
     comments cut, `raw` as written. Both keep the lines, so body line i is
-    file line `line + i`."""
+    file line `line + i`, and a column on body line 0 is `col` further along
+    the file's line than on the others (body line 0 starts after the brace)."""
     name: str
     base: str
     path: str
     line: int
     body: str
     raw: str = ""
+    col: int = 0
 
 
 def mod_gui_paths(root=REPO):
@@ -504,7 +506,8 @@ def file_types(text, path=""):
         brace = m.end() - 1
         end = _close(code, brace)
         out[m.group(1)] = TypeDef(m.group(1), m.group(2), path, line_of(m.start(1)) + 1,
-                                  code[brace + 1:end], text[to_raw(brace) + 1:to_raw(end)])
+                                  code[brace + 1:end], text[to_raw(brace) + 1:to_raw(end)],
+                                  brace + 1 - code_starts[line_of(brace)])
     return out
 
 
@@ -543,23 +546,26 @@ GUARD = "te_own_country_only"
 _GUARD_USING = re.compile(rf"\busing\s*=\s*{GUARD}\b")
 
 
+def enclosing_block(body, pos):
+    """The block a body offset sits in, as (start, end) offsets of its braces;
+    (0, len(body)) at the type's root."""
+    depth, i = 0, pos - 1
+    while i >= 0:
+        if body[i] == "}":
+            depth += 1
+        elif body[i] == "{":
+            if depth == 0:
+                break
+            depth -= 1
+        i -= 1
+    return (0, len(body)) if i < 0 else (i, _close(body, i))
+
+
 def guard_spans(body):
     """The parts of a body under te_own_country_only: each widget that carries
     `using = te_own_country_only`, from its opening brace to its closing one,
     as (start, end) offsets; (0, len(body)) when the type's root carries it."""
-    spans = []
-    for m in _GUARD_USING.finditer(body):
-        depth, i = 0, m.start() - 1
-        while i >= 0:
-            if body[i] == "}":
-                depth += 1
-            elif body[i] == "{":
-                if depth == 0:
-                    break
-                depth -= 1
-            i -= 1
-        spans.append((0, len(body)) if i < 0 else (i, _close(body, i)))
-    return spans
+    return [enclosing_block(body, m.start()) for m in _GUARD_USING.finditer(body)]
 
 
 def in_spans(pos, spans):
@@ -623,13 +629,15 @@ def is_entry_read(read):
 class Finding:
     """One read or control another country's panel would draw: where (the type,
     or the loc key, its file and line), what (the read's text, or the control),
-    the line as written, and whether a `# world:` line marks it."""
+    the line as written, and whether a `# world:` line marks it. A markup
+    read's col is where it starts on its file line (-1 elsewhere)."""
     where: str
     path: str
     line: int
     what: str
     text: str
     world: bool = False
+    col: int = -1
 
     def __str__(self):
         return f"{self.path}:{self.line}  {self.where}  {self.what}  | {self.text.strip()[:120]}"
@@ -643,6 +651,12 @@ def _line_starts(body):
 def _line_of(td, pos):
     """The body line (0 = the type's own line) a body offset is on."""
     return bisect.bisect_right(_line_starts(td.body), pos) - 1
+
+
+def file_col(td, pos):
+    """The column on its file line of a body offset."""
+    k = _line_of(td, pos)
+    return pos - _line_starts(td.body)[k] + (td.col if k == 0 else 0)
 
 
 def markup_reads(names, types):
@@ -660,7 +674,7 @@ def markup_reads(names, types):
                 continue
             k = _line_of(td, m.start())
             world = k >= 1 and k - 1 < len(raw) and bool(WORLD.match(raw[k - 1]))
-            out.append(Finding(name, td.path, td.line + k, m.group(1), lines[k], world))
+            out.append(Finding(name, td.path, td.line + k, m.group(1), lines[k], world, file_col(td, m.start())))
     return out
 
 
