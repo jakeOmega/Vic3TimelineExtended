@@ -20,7 +20,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import assert_wide_matches_narrow  # noqa: E402
+from gui_test_helpers import _children, assert_wide_matches_narrow  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
@@ -684,6 +684,26 @@ class HowItWorksTest(unittest.TestCase):
             self.assertNotIn("te_sr_note", body, f"{sec} carries an explanation")
             for key in HOW_KEYS:
                 self.assertNotIn(key, body, sec)
+
+    def test_each_colony_topic_shows_under_its_rule(self):
+        """Each Solar Colonization topic's heading and note carry its own
+        colonies rule (or none), read on the player: swapping two topics'
+        gates keeps the counts above but fails here."""
+        rules = {"fleets": None, "windows": None, "settlers": "sr_disp_colonies_contested",
+                 "modules": "sr_disp_colonies_contested", "autonomy": "sr_disp_colonies_contested",
+                 "space_command": "sr_disp_colonies_full", "defences": "sr_disp_colonies_full"}
+        how = _strip_comments(_type_body(_read(GUI), "te_space_race_help_body"))
+        gates = {}
+        for kind, name, inner in _children(how):
+            m = re.search(r'text = "je_space_race_widget_howc_(\w+)"', inner) if kind == "widget" else None
+            if m and m.group(1) != "header":
+                gate = re.search(r'visible = "(.*)"', inner)
+                gates[m.group(1)] = gate.group(1) if gate else None
+        expected = {}
+        for topic, rule in rules.items():
+            shown = None if rule is None else f"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{rule}'), '(CFixedPoint)1' )]"
+            expected[f"sub_{topic}"] = expected[topic] = shown
+        self.assertEqual(gates, expected)
 
     def test_the_old_long_labels_are_gone(self):
         """The funding label's "(each level draws on innovation)" is in the concept
