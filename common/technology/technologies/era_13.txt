@@ -66,7 +66,7 @@ von_neumann_machines = {
 	# Construction Sectors (and its Construction Site twin in direct-construction games), Self-Replicating Miners
 	# PM for Extraplanetary Bases
 	era = era_13
-	texture = "gfx/interface/icons/invention_icons/molecular_assemblers.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/von_neumann_machines.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -89,7 +89,7 @@ aneutronic_fusion = {
 	# Interstellar Mission PM for Space Program (the Interstellar Probe milestone; moved from Compact
 	# Fusion Reactors in era 13 spec phase 3, 2026-10-31)
 	era = era_13
-	texture = "gfx/interface/icons/invention_icons/compact_fusion_reactors.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/aneutronic_fusion.dds"
 	category = military
 
 	unlocking_technologies = {
@@ -208,7 +208,7 @@ self_directed_evolution = {
 	# faster-growing colonies (the marker below). People alter their biology radically, beyond appearance: new senses,
 	# engineered metabolisms, bodies built for oceans, cold, vacuum or low gravity
 	era = era_13
-	texture = "gfx/interface/icons/invention_icons/synthetic_biology.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/self_directed_evolution.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -322,7 +322,7 @@ terraforming = {
 	# The Terraforming colony module on Mars, Venus, Titan, Ganymede and Callisto (era 13 spec § 7.11):
 	# its marker below, which the module's queue reads. Geoengineering is the same practice at home
 	era = era_13
-	texture = "gfx/interface/icons/invention_icons/space_colonization.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/terraforming.dds"
 	category = society
 
 	unlocking_technologies = {

@@ -1166,7 +1166,7 @@ types global_warming_widget_types
 			gw_policy_row = {
 				datacontext = "[GetScriptedGui('gw_active_aerosol_injection_sgui')]"
 				blockoverride "row_icon" {
-					texture = "gfx/interface/icons/un_icons/topic_climate.dds" # Placeholder Icon
+					texture = "gfx/interface/icons/gw_icons/policy_aerosol_injection.dds"
 				}
 				blockoverride "row_label" {
 					text = "GW_AEROSOL_INJECTION_ROW"

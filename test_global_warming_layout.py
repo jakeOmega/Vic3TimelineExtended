@@ -743,8 +743,9 @@ OLD_PLACEHOLDERS = {
 }
 # Policy rows still on a borrowed icon, marked `# Placeholder Icon` in the .gui
 # until the icon pipeline paints theirs (icon_prompts.py's `gw` category has
-# the subject; docs/systems/global_warming_gui_icons.md lists them).
-PLACEHOLDER_POLICY_ICONS = {"aerosol_injection": "gfx/interface/icons/un_icons/topic_climate.dds"}
+# the subject; docs/systems/global_warming_gui_icons.md lists them). None since
+# icon batch 9 painted Aerosol Injection's.
+PLACEHOLDER_POLICY_ICONS = {}
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
@@ -812,7 +813,7 @@ class GwIconsTest(unittest.TestCase):
             "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"} - set(
             PLACEHOLDER_POLICY_ICONS.values())
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
-        self.assertEqual(len(icons), 7 + 2 + 1 + 10 + 2)   # tiers, roles, penalty, policies, pies
+        self.assertEqual(len(icons), 7 + 2 + 1 + 11 + 2)   # tiers, roles, penalty, policies, pies
 
 
 class IconsDocTest(unittest.TestCase):

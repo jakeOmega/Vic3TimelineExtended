@@ -366,9 +366,9 @@ def medallion_object_target(folder: str, disc) -> dict:
             im = load_rgba(f)
         except Exception:
             continue
-        n = im.size[0]
-        yy, xx = np.mgrid[0:n, 0:n]
-        inside = np.hypot(xx - (n - 1) / 2, yy - (n - 1) / 2) < 0.4 * n
+        w, h = im.size   # two of vanilla's state status icons are not square (has_claims 129x122)
+        yy, xx = np.mgrid[0:h, 0:w]
+        inside = np.hypot(xx - (w - 1) / 2, yy - (h - 1) / 2) < 0.4 * min(w, h)
         m = inside & _object_mask(np.asarray(im, dtype=np.float32)[..., :3], disc)
         hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
         s.append(hsv[..., 1][m])

@@ -366,7 +366,7 @@ pm_te_direct_construction_nanomaterial = {
 
 # pm_self_replicating_construction: 24 construction per level
 pm_te_direct_construction_self_replicating = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_self_replicating_construction.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
