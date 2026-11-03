@@ -828,7 +828,11 @@ def sentinel(groups):
     """The variable the effect sets after every flag, its name from the group
     set: present, it says every current group's flag is set. A save from an
     older group set holds an older name, so it reads as not set until the
-    country's next pass, rather than as a promise about flags it never had."""
+    country's next pass, rather than as a promise about flags it never had.
+    The older variable stays on the country, unread; harmless. A revolution's
+    winner inherits the loser's flags and sentinel (variables carry over), so
+    its lists read the loser's groups until its own next pass, within 30
+    days, the same lag as a modifier gained mid-month."""
     return "te_nation_src_set_" + hashlib.sha1(",".join(groups).encode("utf-8")).hexdigest()[:8]
 
 
