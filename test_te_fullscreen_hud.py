@@ -213,7 +213,7 @@ class FileTest(unittest.TestCase):
                 text = _strip_comments(_read(path))
                 for name in TEMPLATES:
                     with self.subTest(file=fname, template=name):
-                        self.assertNotRegex(text, rf"(?m)^\s*template\s+{name}\b")
+                        self.assertNotRegex(text, rf"(?m)^\s*template\s*=?\s*{name}\b")
 
 
 class TemplateTest(unittest.TestCase):
