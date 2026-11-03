@@ -284,7 +284,7 @@
  country_rights_law_enactment_success_add:0 "Enactment Success of Rights Laws"
  country_rights_law_enactment_success_add_desc:0 "For laws on Rights of Women, Slavery, Minority Rights, LGBTQ+ Rights and Privacy Rights. Not while the courts can't challenge the government."
  country_risk_premium_add:0 "Risk Premium"
- country_risk_premium_add_desc:0 "The part of your government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! your credit standing, after the floor that standing cannot fall below — so a crisis always costs you, however sound your finances, and relief measures can pull the charge back down again."
+ country_risk_premium_add_desc:0 "The part of a government's borrowing rate that comes from what is #b happening#!: the state of the financial cycle, emergency interventions, the outcome of banking crises, the weight of debt already owed, and any default in living memory. It is charged #b on top of#! the country's credit standing, after the floor that standing cannot fall below — so a crisis always costs a country, however sound its finances, and relief measures can pull the charge back down again."
  country_seabed_claim_floor_add:0 "Unused Seabed Claims Kept Each January"
  country_seabed_claim_floor_add_desc:0 "The share of our unused [concept_seabed_claim]s in each basin that each January sharing leaves us, whatever our rivals' weight."
  country_seabed_claim_weight_mult:0 "Seabed Claim Weight"
