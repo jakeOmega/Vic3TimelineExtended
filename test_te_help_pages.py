@@ -515,7 +515,9 @@ class PageTest(unittest.TestCase):
 class SpaceRaceHeaderTest(unittest.TestCase):
     """The Space Race tab's body is no frame: its entries' frames, and the note
     in their place while none runs, are generated (gen_te_systems_window.py's
-    _milestone and sr_milestones). Every header there ends on the "?"."""
+    _milestone and sr_milestones). Every header there ends on the "?",
+    hidden for an observer, who reaches the frames through National Info and
+    for whom te_popups never opens."""
 
     def test_every_milestone_header_has_the_button(self):
         from scripts.generators import gen_te_systems_window as gen
@@ -527,7 +529,8 @@ class SpaceRaceHeaderTest(unittest.TestCase):
             with self.subTest(header=re.search(r'text = "(\w+)"', body[at:_close(body, at)]).group(1)):
                 self.assertEqual(items[-1][:2], ("widget", "te_help_button"))
                 self.assertEqual([name for _, name, _ in items].count("te_help_button"), 1)
-                self.assertEqual(items[-1][2].strip(), f'onclick = "{_open("space_race")}"')
+                button = [line.strip() for line in items[-1][2].strip().splitlines()]
+                self.assertEqual(button, [f'visible = "[{gen.NOT_OBSERVER}]"', f'onclick = "{_open("space_race")}"'])
 
 
 if __name__ == "__main__":

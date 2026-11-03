@@ -1556,6 +1556,7 @@ types te_systems_window_generated_types
 					text = "te_window_space_race_idle_header"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 				}
 			}
@@ -1577,6 +1578,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_suborbital"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1627,6 +1629,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_orbital"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1677,6 +1680,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_moon_landing"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1727,6 +1731,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_probe"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1777,6 +1782,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_moon_base"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1827,6 +1833,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_mars_landing"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1877,6 +1884,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_interstellar_probe"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1927,6 +1935,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_interstellar_results"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
@@ -1974,6 +1983,7 @@ types te_systems_window_generated_types
 						text = "je_space_race_solar_colonization"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}

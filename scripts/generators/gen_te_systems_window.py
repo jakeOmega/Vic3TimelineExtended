@@ -545,7 +545,10 @@ def tabs_wide() -> list[str]:
 # national-info-design.md § 5.2): the "?" (te_help_button, gui/te_system_tab_widgets.gui)
 # that every header of the tab's entries carries, its last child, as each other
 # tab's header does in its body type. Its lines, at a header's child depth.
+# Hidden for an observer, who reaches the frames through National Info and for
+# whom te_popups never opens (NOT_OBSERVER, ni_help_button).
 SR_HELP_BUTTON = ["te_help_button = {",
+                  "\tvisible = \"[Not( GetMetaPlayer.IsObserver )]\"",
                   "\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"",
                   "}"]
 
