@@ -289,7 +289,7 @@ types nuclear_program_widget_types
 			parentanchor = vcenter
 			elide = right
 			text = "je_nuclear_program_widget_powers_head_warheads"
-			tooltip = "je_nuclear_program_widget_powers_head_warheads_tt"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_nuclear_program_widget_powers_head_warheads_tt', 'je_nuclear_program_widget_powers_head_warheads_tt_theirs' )]"
 		}
 	}
 

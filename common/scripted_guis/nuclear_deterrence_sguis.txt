@@ -503,7 +503,7 @@ nd_armed_sgui = {
 
 # Does the world believe this country armed (it has tested: nd_believed_armed)?
 # Another country's panel reads this, never nd_armed_sgui, which reads the
-# true count: its overview cell gives the public estimate (nd_believed_stockpile)
+# true count: its overview cell gives the public estimate (nd_shown_public_estimate)
 # once there is one, and nothing before (spec
 # 2026-11-02-charts-help-national-info § 6.4).
 nd_believed_armed_sgui = {

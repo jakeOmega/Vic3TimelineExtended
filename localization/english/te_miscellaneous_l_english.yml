@@ -5978,7 +5978,7 @@
  nuclear_program_next_warhead_stalled:0 "#lore not progressing#!"
  nuclear_program_pause_source_eligible_tt:0 "The freezing country has researched $nuclear_weapons$, its program is not already frozen or dismantled, and it is not receiving $nuclear_program_aid$"
  nuclear_program_power_doctrine_tt:0 "#tooltip_header [State.GetOwner.GetCustom('nd_doctrine_name')]#!\n$TOOLTIP_DELIMITER$\nTheir public [concept_nuclear_doctrine]: every government knows it, and weighs their threats by it."
- nuclear_program_power_estimate:0 "#v [State.GetOwner.MakeScope.ScriptValue('nd_display_public_estimate')|0]#!"
+ nuclear_program_power_estimate:0 "#v [State.GetOwner.MakeScope.ScriptValue('nd_shown_public_estimate')|0]#!"
  nuclear_program_rate_note_held:0 "\n#v Development is held while we are at our arsenal ceiling, or taking the arsenal apart.#!"
  nuclear_program_rate_note_paused:0 "\n#R Development is frozen for as long as the program-pause treaty stands.#!"
  nuclear_program_rate_note_prototype:0 "\nThe first device carries the whole burden of the program's research; every warhead after it comes #G [Country.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0] times#! faster."

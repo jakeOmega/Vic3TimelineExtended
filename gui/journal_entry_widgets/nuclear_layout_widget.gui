@@ -269,6 +269,33 @@ types nuclear_layout_widget_types
 		}
 	}
 
+	### Another country's column 2 in the wide layout (National Info, spec
+	### 2026-11-02-charts-help-national-info § 6.4): column 3's world sections
+	### (the taboo, Nuclear Powers, How), spaced as column 3 spaces them. Its
+	### own column 2 (the posture, forces, at home, reputation) and column 3
+	### are the player's own, so without this its panel would have an empty
+	### 520 band in the middle. Never shown for the player, whose copy stays
+	### in column 3. test_nuclear_layout.WideTest holds it.
+	type te_nuclear_world_column = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 10
+		visible = "[And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_nuclear_sec_taboo = {}
+			te_nuclear_sec_powers = {}
+		}
+
+		te_nuclear_reference_sections = {}
+	}
+
 	### The tab in the Timeline Extended window's full screen (spec
 	### 2026-11-02-te-window-wide-mode § 7): te_nuclear_tab_layout's sections
 	### on te_ui_columns_three, read down each column and then across, each
@@ -297,34 +324,48 @@ types nuclear_layout_widget_types
 		}
 
 		blockoverride "column_2" {
+			### The player's own sections: hidden whole for another country,
+			### which gets column 3's world sections here instead
+			### (te_nuclear_world_column), so its panel has no empty middle.
 			flowcontainer = {
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 4
-				visible = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 				te_nuclear_sec_posture = {}
 				te_nuclear_sec_forces = {}
 				te_nuclear_sec_home = {}
 				te_nuclear_sec_reputation = {}
 			}
+
+			te_nuclear_world_column = {}
 		}
 
+		### The player's: another country's copy of the taboo, Nuclear Powers
+		### and How is in column 2 (te_nuclear_world_column).
 		blockoverride "column_3" {
 			flowcontainer = {
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 4
-				visible = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 				te_nuclear_sec_taboo = {}
 				te_nuclear_sec_delivery = {}
 				te_nuclear_sec_powers = {}
 			}
 
-			te_nuclear_reference_sections = {}
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				visible = "[Country.IsLocalPlayer]"
+
+				te_nuclear_reference_sections = {}
+			}
 		}
 	}
 }

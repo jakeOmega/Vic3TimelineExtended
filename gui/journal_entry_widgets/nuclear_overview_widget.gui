@@ -20,8 +20,8 @@
 ###
 ### ANOTHER COUNTRY (National Info; spec 2026-11-02-charts-help-national-info
 ### § 6.4) sees Rows 1 and 5 and, in place of Rows 2 to 4, its own Row 2: the
-### warheads as the world believes them (nd_believed_stockpile, nothing before
-### a test) and the nuclear guarantees it gives and holds. Rows 2 to 4 are the
+### warheads as the world believes them (nd_shown_public_estimate, nothing before
+### a test, never the live count) and the nuclear guarantees it gives and holds. Rows 2 to 4 are the
 ### player's own (te_own_country_only): the program, the true count, and the
 ### posture, which shows only while armed and so would tell whether an arsenal
 ### exists. Row 1's hover ends on the player's moves, or on World Crises.
@@ -135,9 +135,9 @@ types nuclear_overview_widget_types
 				### Row 2 for another country, in place of the player's Rows 2 to 4 (spec
 				### 2026-11-02-charts-help-national-info § 6.4): what the world knows of
 				### its arsenal, never the true count. The warheads as the world
-				### believes them (nd_believed_stockpile: the public estimate once the
-				### country has tested, nothing before, so an arsenal no test has shown
-				### stays unknown), and the nuclear guarantees it gives and holds, by
+				### believes them (nd_shown_public_estimate: the seeded estimate once
+				### the country has tested, 0 before and while it is unset, never the
+				### live count nd_display_public_estimate falls back to), and the nuclear guarantees it gives and holds, by
 				### treaty or umbrella (nd_public_guarantee_word). Not drawn for the
 				### player, whose Rows 2 to 4 say more.
 				flowcontainer = {

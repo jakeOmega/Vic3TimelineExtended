@@ -2359,6 +2359,23 @@ nd_believed_stockpile = {
 	}
 }
 
+# The public estimate as a panel shows it to the world: another country's
+# National Info cell and Nuclear Powers' rows. The estimate once the world has
+# one (nd_public_estimate, seeded by nd_init_posture), 0 before it is seeded and
+# while it is unset, and 0 for a country the world doesn't believe armed.
+# Display only: unlike nd_display_public_estimate and nd_believed_stockpile,
+# which script reads, it never falls back to the live count.
+nd_shown_public_estimate = {
+	value = 0
+	if = {
+		limit = {
+			nd_believed_armed = yes
+			has_variable = nd_public_estimate
+		}
+		value = var:nd_public_estimate
+	}
+}
+
 nd_display_estimate_year = {
 	value = 0
 	if = {
