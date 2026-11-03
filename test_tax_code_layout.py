@@ -1070,6 +1070,9 @@ class FlagTest(unittest.TestCase):
         self.assertLess(light, page.index('text = "te_tax_lt_how_sub_rates"'))
         self.assertLess(page.index('text = "te_tax_lt_how_ai"'), full)
         self.assertLess(full, page.index('text = "te_tax_how_sub_drafting"'))
+        # each code's text in its own box: no Light key after the full code's gate, no full key before it
+        self.assertNotIn("te_tax_lt_how_", page[full:])
+        self.assertNotRegex(page[light:full], r"[\"']te_tax_how_")
         title = type_body(gui(LAYOUT), "te_tax_code_help_popup")
         self.assertIn(f"text = \"[SelectLocalization( {LIGHT_SHOWN}, 'te_tax_lt_how_header', 'te_tax_how_header' )]\"",
                       title)
