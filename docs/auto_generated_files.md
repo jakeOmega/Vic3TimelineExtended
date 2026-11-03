@@ -74,21 +74,21 @@ organizer preserves its BUDGET family and output format.
 
 Run `python3 scripts/generators/gen_nation_tab.py` after changing its registry
 (`SECTIONS`, `ROWS`, `KEEP_IN_LIST`, `NOT_ON_COUNTRY`), its type registry
-(`TYPE_ROWS`, `STATUS_ROWS`, `NOT_A_ROW`), the hidden names' groups
-(`HIDDEN_GROUPS`), a static modifier the tab shows, the
-budget catalogue above (its sources are hidden from the country panel's list),
+(`TYPE_ROWS`, `STATUS_ROWS`, `NOT_A_ROW`), the listed names' groups
+(`SOURCE_GROUPS`), a static modifier the tab shows, the
+budget catalogue above (its sources are in no list and no row),
 or vanilla's `country_panel.gui` fixture. `test_nation_tab.py` fails while a
 permanent country modifier, or a modifier type one carries, has no registry
-line, a hidden name has no group, or a file below is stale (`--check` exits 1
+line, a listed name has no group, or a file below is stale (`--check` exits 1
 then). It writes:
 
 | File | Owner script | Input |
 |---|---|---|
-| `gui/te_nation_generated.gui` | `scripts/generators/gen_nation_tab.py` | The registry, resolved against every static modifier script adds without a duration: the country panel's filter and the tab's list and row filters; and the type registry, resolved against those modifiers' fields: each section's type rows (`te_nation_types_<section>`) |
-| `common/script_values/te_nation_generated_values.txt` | `scripts/generators/gen_nation_tab.py` | The same names, as `has_modifier` counts: each hidden group's (`te_nation_hid_<group>_count`), `te_nation_hid_ready` (every group's flag set), the counts the filters agree with, a group's names only while its flag is on (`gui_country_hidden_modifier_count`, `te_nation_list_<section>_count` and their sum `te_nation_lists_count`), and each type row's feeders (`te_nation_type_<type>_count`, `te_nation_group_<group>_count`, `te_nation_types_<section>_count`) |
-| `common/scripted_effects/te_nation_generated_effects.txt` | `scripts/generators/gen_nation_tab.py` | `HIDDEN_GROUPS`: `te_nation_refresh_hidden_flags`, which sets each group's flag `te_nation_hid_<group>` on the country to its count; called monthly for every country from `te_nation_hidden_flags_on_action` (in `extra_on_actions.txt`, hand-written) |
+| `gui/te_nation_generated.gui` | `scripts/generators/gen_nation_tab.py` | The registry, resolved against every static modifier script adds without a duration: the tab's list filters (gated by `SOURCE_GROUPS`) and row filters; and the type registry, resolved against those modifiers' fields: each section's type rows (`te_nation_types_<section>`) |
+| `common/script_values/te_nation_generated_values.txt` | `scripts/generators/gen_nation_tab.py` | The same names, as `has_modifier` counts: each group's (`te_nation_src_<group>_count`), the counts the lists agree with, 0 until the sentinel `te_nation_src_set_<hash>` is set and then a group's names only while its flag is on (`te_nation_list_<section>_count` and their sum `te_nation_lists_count`), and each type row's feeders (`te_nation_type_<type>_count`, `te_nation_group_<group>_count`, `te_nation_types_<section>_count`) |
+| `common/scripted_effects/te_nation_generated_effects.txt` | `scripts/generators/gen_nation_tab.py` | `SOURCE_GROUPS`: `te_nation_refresh_source_flags`, which sets each group's flag `te_nation_src_<group>` on the country to its count, then the sentinel `te_nation_src_set_<hash>`, named from the group set; called for every country monthly from `te_nation_source_flags_on_action` and once after the lobby from `te_nation_source_flags_seed_on_action` (both in `extra_on_actions.txt`, hand-written) |
 | `localization/english/te_nation_generated_l_english.yml` | `scripts/generators/gen_nation_tab.py` | The type rows' text and hovers (`te_nation_type_*`, `te_nation_status_*`), splicing each type's own name and `_desc`; `organize_loc.py` files the family as `NATION_GENERATED` and keeps the generator's format |
-| `gui/00_te_country_panel_information.gui` | `scripts/generators/gen_nation_tab.py` | `test_fixtures/vanilla_gui/country_panel.gui` (vanilla, byte for byte): its `country_panel_information_content` type with three `### MOD: Nation tab` blocks (the list's test, the item's filter, the line under the list) |
+| `gui/00_te_country_panel_information.gui` | `scripts/generators/gen_nation_tab.py` | `test_fixtures/vanilla_gui/country_panel.gui` (vanilla, byte for byte): its `country_panel_information_content` type with one `### MOD: Nation tab` block, which replaces the MODIFIERS list with a line counting the country's modifiers and a goto to the Nation tab's All Modifiers |
 
 This generator runs explicitly; it is not a post-load regenerator.
 

@@ -216,8 +216,8 @@ KEEP_IN_LIST = {
                               "All Modifiers",
 }
 
-# Where the rest land. Hiding them would cost the filter a comparison each and
-# change nothing.
+# Where the rest land. Listing them would cost a section's filter a comparison each and
+# show nothing.
 NOT_ON_COUNTRY = {
     "banking_*": "je_banking_cycle", "bubble_inertia_*": "je_banking_cycle",
     "financial_cycle_*": "je_banking_cycle", "cooperative_*": "je_banking_cycle",
