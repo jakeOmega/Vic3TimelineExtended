@@ -802,7 +802,10 @@ These sections follow:
 | Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
-| How Grand Monuments Work | A link | Opens the Help page, as does the "?" in the tab's header. It explains grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy, trophies and archaeology. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Grand Monuments Work. It explains grandeur and
+steps, what counts where, contested monuments, hard times, opportunities,
+unique dedications, names, the monument policy, trophies and archaeology.
 
 Every monument, whatever it honors, gives:
 

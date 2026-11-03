@@ -47,7 +47,12 @@
 ###              it). Blocks: column_1, column_2 and, on the three, column_3. An
 ###              empty column keeps its 520 and the 30 beside it, so two columns
 ###              of content take te_ui_columns_two, not the three with one left
-###              empty. An instance may gate the row with its own visible.
+###              empty. An instance may gate the row with its own visible. A
+###              column every section of which can hide (Banking's record while
+###              the cycle is dormant) takes their gate on the column itself,
+###              column_<n>_visible = { visible = "[...]" }, so the row closes
+###              up instead of keeping an empty 520 band
+###              (help-button-everywhere PR; gui_test_helpers checks it).
 
 types te_widget_library_types
 {
@@ -151,6 +156,7 @@ types te_widget_library_types
 			spacing = 10
 			minimumsize = { 520 -1 }
 			maximumsize = { 520 -1 }
+			block "column_1_visible" {}
 			block "column_1" {}
 		}
 
@@ -160,6 +166,7 @@ types te_widget_library_types
 			spacing = 10
 			minimumsize = { 520 -1 }
 			maximumsize = { 520 -1 }
+			block "column_2_visible" {}
 			block "column_2" {}
 		}
 
@@ -169,6 +176,7 @@ types te_widget_library_types
 			spacing = 10
 			minimumsize = { 520 -1 }
 			maximumsize = { 520 -1 }
+			block "column_3_visible" {}
 			block "column_3" {}
 		}
 	}
@@ -185,6 +193,7 @@ types te_widget_library_types
 			spacing = 10
 			minimumsize = { 520 -1 }
 			maximumsize = { 520 -1 }
+			block "column_1_visible" {}
 			block "column_1" {}
 		}
 
@@ -194,6 +203,7 @@ types te_widget_library_types
 			spacing = 10
 			minimumsize = { 520 -1 }
 			maximumsize = { 520 -1 }
+			block "column_2_visible" {}
 			block "column_2" {}
 		}
 	}

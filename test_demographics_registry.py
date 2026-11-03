@@ -7001,7 +7001,7 @@ class TestCausesSection(unittest.TestCase):
         order = re.findall(r"(te_state_demog_\w+) = \{\}", content)
         self.assertEqual(order, ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid",
                                  "te_state_demog_work", "te_state_demog_longevity", "te_state_demog_wealth",
-                                 "te_state_demog_modifiers", "te_state_demog_how"])
+                                 "te_state_demog_modifiers"])
 
     def test_open_by_default(self):
         # rule 7: a section that starts open names its flag _closed

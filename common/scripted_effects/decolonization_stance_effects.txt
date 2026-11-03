@@ -26,7 +26,8 @@
 #                              monthly and after a revolution: a winner inherits
 #                              the variables and no modifier.
 #   decol_stance_monthly       the cooldown's month, the AI's drop of a stance
-#                              it can no longer pay for, then the refresh.
+#                              it can no longer pay for or of a condemnation
+#                              while it runs an empire, then the refresh.
 #
 # The cores write each modifier explicitly rather than through the refresh,
 # whose limits read the variables: a tooltip evaluates a limit before the
@@ -197,8 +198,69 @@ decol_stance_monthly = {
 		}
 		decol_stance_core_neutral = yes
 	}
+	# An AI empire does not condemn the colonialism it practices (issue #1370,
+	# owner 2026-11-03): one that holds the stance, from before it had its
+	# empire, from an older save or from a Decolonization Resolution's vote,
+	# drops it once the stance can change, and The Colonial Question never
+	# gives it back (decolonization_events.14). A dormant stance goes too.
+	else_if = {
+		limit = {
+			is_ai = yes
+			has_variable = gp_anti_colonial_stance
+			NOT = { has_variable = decol_stance_months_left }
+			decol_holds_colonial_empire = yes
+		}
+		decol_stance_core_neutral = yes
+	}
 	else = {
 		decol_stance_refresh = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# SELF-CHECK ai_condemn_factor_order (issue #1370). The Colonial Question's
+# (decolonization_events.14) Condemn weight is 0 for an empire only if
+# ai_chance applies its modifiers in order: the adds (at least 11 for an
+# empire) and then the factor = 0 placed last. No vanilla script shows that
+# order matters, so each line is logged once a game:
+#   TE_SELF_CHECK BROKEN  an AI empire took Condemn (option a): the factor did
+#                         not hold the weight at 0.
+#   TE_SELF_CHECK OK      an AI empire took Neutral or Support (options b and
+#                         c) while it had the influence for Condemn, so Condemn
+#                         was open to it. One OK alone is weak evidence, since
+#                         a wrong order still leaves Support a share: the
+#                         verdict is no BROKEN line over the whole run.
+# Fallback: docs/testing/colonial-holdings-playtest.md § The AI's stance on
+# colonialism, Self-checks. Country scope; each option calls its check first,
+# before the take changes the stance. Hidden, so no tooltip shows it.
+# ---------------------------------------------------------------------------
+decol_selfcheck_empire_condemned = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				decol_holds_colonial_empire = yes
+				NOT = { has_global_variable = te_decol_cfo_broken_logged }
+			}
+			set_global_variable = te_decol_cfo_broken_logged
+			debug_log = "TE_SELF_CHECK BROKEN ai_condemn_factor_order country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (an AI that runs a colonial empire took Condemn in The Colonial Question: ai_chance did not keep factor = 0 after the adds; take the fallback in docs/testing/colonial-holdings-playtest.md, Condemn's weight as one script value)"
+		}
+	}
+}
+
+decol_selfcheck_empire_declined = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				decol_holds_colonial_empire = yes
+				decol_stance_affordable = yes
+				decol_stance_ai_can_hold = yes
+				NOT = { has_global_variable = te_decol_cfo_ok_logged }
+			}
+			set_global_variable = te_decol_cfo_ok_logged
+			debug_log = "TE_SELF_CHECK OK ai_condemn_factor_order country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (an AI that runs a colonial empire, with the influence to condemn, took Neutral or Support in The Colonial Question; one OK is weak evidence: the verdict is no BROKEN line for the rest of the run)"
+		}
 	}
 }
 

@@ -106,7 +106,7 @@ class FrameTest(unittest.TestCase):
 WINDOW_BODIES = [
     ("te_gm_tab_body", os.path.join(JE_WIDGETS, "grand_monuments_widget.gui"),
      "te_window_tab_grand_monuments", "te_window_grand_monuments_tab_sgui", "je_grand_monuments",
-     "te_gm_tab_layout", ["te_gm_overview_panel", "te_gm_status_sections", "te_gm_reference_sections"],
+     "te_gm_tab_layout", ["te_gm_overview_panel", "te_gm_status_sections"],
      "te_window_grand_monuments_open_journal_tt"),
     ("te_ce_tab_body", os.path.join(JE_WIDGETS, "colonial_empire_widget.gui"),
      "je_colonial_empire", "te_window_colonial_empire_tab_sgui", "je_colonial_empire",
@@ -114,8 +114,7 @@ WINDOW_BODIES = [
      "te_window_colonial_empire_open_journal_tt"),
     ("te_seabed_tab_body", os.path.join(REPO, "gui", "te_seabed_widgets.gui"),
      "te_seabed_tab_header", "te_window_seabed_tab_sgui", None,
-     "te_seabed_tab_layout", ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
-                              "te_seabed_how_panel"],
+     "te_seabed_tab_layout", ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel"],
      None),
 ]
 
@@ -157,7 +156,14 @@ class BodyTest(unittest.TestCase):
                 m = re.fullmatch(rf'\s*block "{layout}" \{{(.*)\}}\s*', content, re.S)
                 self.assertTrue(m, content)
                 self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}$", m.group(1), re.M), composers)
-                rest = body.replace(_override(body, "tab_gate"), "")
+                # the gate is the body's one visible, but for the "?"'s
+                # observer gate, once, on the button in the header
+                # (test_te_help_pages.py): any other visible, the header's
+                # included, still fails
+                observer = 'visible = "[Not( GetMetaPlayer.IsObserver )]"'
+                self.assertEqual(body.count(observer), head.count(observer), "the observer gate is the header's")
+                self.assertLessEqual(head.count(observer), 1)
+                rest = body.replace(_override(body, "tab_gate"), "").replace(observer, "", 1)
                 if name in READOUTS:
                     # the tab without the entry, before the gate: its own gate,
                     # never true with the entry's (Banking's #805 shape)
@@ -171,8 +177,9 @@ class BodyTest(unittest.TestCase):
 
     def test_the_space_race_body(self):
         """Nine entries, each its own frame (te_sr_window_milestones, generated),
-        then the tab's own sections, which read no entry, then How the Space
-        Race Works once, all in the layout block a wide mount overrides."""
+        then the tab's own sections, which read no entry, all in the layout
+        block a wide mount overrides. How the Space Race Works, once after
+        them, is the Help page each frame's header "?" opens."""
         text = _strip_comments(_read(os.path.join(JE_WIDGETS, "space_race_widget.gui")))
         self.assertTrue(re.search(r"type te_sr_tab_body = flowcontainer \{", text), "no type te_sr_tab_body")
         body = _type_body(text, "te_sr_tab_body")
@@ -185,11 +192,10 @@ class BodyTest(unittest.TestCase):
         self.assertEqual([(kind, name) for kind, name, _ in top if kind != "property"], [("block", "te_sr_tab_layout")])
         layout = [text for kind, _, text in top if kind == "block"][0]
         parts = _children(layout)
-        self.assertEqual([name for _, name, _ in parts], ["te_sr_window_milestones", "flowcontainer", "flowcontainer"])
+        self.assertEqual([name for _, name, _ in parts], ["te_sr_window_milestones", "flowcontainer"])
         self.assertEqual(parts[0], ("widget", "te_sr_window_milestones", ""))
         for (_, _, part), name, spacing, sections in (
-                (parts[1], "te_systems_window_space_race_summary", "4", ["te_sr_sec_powers", "te_sr_sec_orbit"]),
-                (parts[2], "te_systems_window_space_race_reference", None, ["te_sr_sec_how"])):
+                (parts[1], "te_systems_window_space_race_summary", "4", ["te_sr_sec_powers", "te_sr_sec_orbit"]),):
             with self.subTest(part=name):
                 own = dict((n, v) for kind, n, v in _children(part) if kind == "property")
                 self.assertEqual(own["name"], f'"{name}"')
@@ -238,7 +244,7 @@ HOST_BODIES = [
     # the host adds the own-market test to the gate (te_st_res_tab_gate)
     ("te_st_res_tab_body", os.path.join(JE_WIDGETS, "strategic_reserve_widget.gui"),
      "te_market_strategic_reserve_tab_sgui", "je_strategic_reserve", "te_st_res_tab_layout",
-     ["te_st_res_overview_panel", "te_st_res_status_sections", "te_st_res_reference_sections"],
+     ["te_st_res_overview_panel", "te_st_res_status_sections"],
      "te_market_strategic_reserve_open_journal_tt", None),
     ("te_ch_tab_body", os.path.join(JE_WIDGETS, "cultural_hegemony_widget.gui"),
      "te_society_ch_tab_sgui", "je_cultural_hegemony", "te_ch_tab_layout",
@@ -252,12 +258,11 @@ HOST_BODIES = [
     # the entry's goal bar under The Programme, while there is one
     ("te_nuclear_tab_body", os.path.join(JE_WIDGETS, "nuclear_layout_widget.gui"),
      "te_military_nuclear_tab_sgui", "je_nuclear_program", "te_nuclear_tab_layout",
-     ["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear_status_sections",
-      "te_nuclear_reference_sections"],
+     ["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear_status_sections"],
      "te_military_nuclear_open_journal_tt", None),
     ("te_covert_tab_body", os.path.join(JE_WIDGETS, "covert_operations_widget.gui"),
      "te_military_covert_tab_sgui", "je_covert_warfare", "te_covert_tab_layout",
-     ["te_covert_overview_panel", "te_covert_status_sections", "te_covert_reference_sections"],
+     ["te_covert_overview_panel", "te_covert_status_sections"],
      "te_military_covert_open_journal_tt", None),
 ]
 
@@ -534,15 +539,19 @@ class MountContextTest(unittest.TestCase):
         """Each root holds its te_* instances inside te_je_country, so the
         root's own visible keeps reading the entry. A non-te_ widget beside it
         (Tax Code's link to the Budget tab) reads no Country and stays out, so
-        the root's spacing between them is kept."""
+        the root's spacing between them is kept; so does an overview root's
+        "?" (te_help_row, first), which reads no Country either
+        (test_te_help_pages.py)."""
         types = mod_types()
         roots = _journal_roots()
         self.assertEqual(sorted({f for f, _, _, _ in roots}), JOURNAL_ROOT_FILES)
-        self.assertGreaterEqual(len(roots), 49)
+        self.assertGreaterEqual(len(roots), 44)
         for path, line, name, body in roots:
             with self.subTest(root=f"{path}:{line} {name}"):
                 items = _children(body)
                 direct = [k for kind, k, _ in items if kind == "widget" and k.startswith("te_")]
+                if direct[:1] == ["te_help_row"]:
+                    direct = direct[1:]
                 self.assertEqual(direct, ["te_je_country"], "the root's te_* instances sit in te_je_country")
                 inner = [text for kind, k, text in items if k == "te_je_country"][0]
                 wrapped = [(k, text) for kind, k, text in _children(inner)]

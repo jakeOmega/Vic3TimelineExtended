@@ -25,28 +25,28 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises", "te_nuclear_sec_posture",
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
-REFERENCE = ["te_nuclear_sec_how"]
 # Another country's copy of column 3's world sections, in its column 2, and
 # the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer.
 WORLD_COLUMN = "te_nuclear_world_column"
 WIDE_OWN = ("te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
-            "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers", "te_nuclear_sec_how")
+            "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers")
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
 # bar stays under The Programme, in its own gated wrapper.
 WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar",
                  "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
                 ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
                  "te_nuclear_sec_reputation"],
-                ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers",
-                 "te_nuclear_sec_how"]]
+                ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
          ("widget_je_nuclear_programme", "custom_widget_container_3", "te_nuclear_sec_programme"),
-         ("widget_je_nuclear_status", "custom_widget_container_4", "te_nuclear_status_sections"),
-         ("widget_je_nuclear_reference", "custom_widget_container_4", "te_nuclear_reference_sections")]
+         ("widget_je_nuclear_status", "custom_widget_container_4", "te_nuclear_status_sections")]
 OLD_FLAGS = ["nuclear_program_powers", "nuclear_program_odds", "nd_capabilities_open", "nd_home_open",
              "nd_reputation_open", "nuclear_program_powers_open", "nd_taboo_hist_open"]
-OLD_ROOTS = ["widget_je_nuclear_posture", "widget_je_nuclear_crisis", "widget_je_nuclear_balance"]
+# widget_je_nuclear_reference held How Nuclear Weapons Work, now the Help page
+# the overview's "?" opens (test_te_help_pages.py).
+OLD_ROOTS = ["widget_je_nuclear_posture", "widget_je_nuclear_crisis", "widget_je_nuclear_balance",
+             "widget_je_nuclear_reference"]
 
 
 def _read(path):
@@ -104,17 +104,16 @@ ALL_GUI = "\n".join(_read(p) for p in NUCLEAR_GUI)
 
 
 class OrderTest(unittest.TestCase):
-    def test_status_and_reference_order(self):
+    def test_status_order(self):
         layout = _read(LAYOUT)
-        for composer, expected in (("te_nuclear_status_sections", STATUS),
-                                   ("te_nuclear_reference_sections", REFERENCE)):
+        for composer, expected in (("te_nuclear_status_sections", STATUS),):
             body = _type_body(layout, composer)
             found = re.findall(r"^\t\t(te_nuclear_sec_\w+) = \{", body, re.M)
             self.assertEqual(found, expected, composer)
             self.assertIn(f'visible = "[{ENTRY_GATE}]"', body, composer)
 
     def test_every_section_is_a_type(self):
-        for sec in STATUS + REFERENCE + ["te_nuclear_sec_programme"]:
+        for sec in STATUS + ["te_nuclear_sec_programme"]:
             self.assertEqual(len(re.findall(rf"type {sec} = flowcontainer \{{", ALL_GUI)), 1, sec)
 
     def test_the_entry_attaches_the_layout_roots_in_order(self):
@@ -136,8 +135,10 @@ class OrderTest(unittest.TestCase):
             self.assertEqual(len(visible), 1, name)
             self.assertTrue(visible[0] == "JournalEntry.IsActive"
                             or visible[0].startswith("And( JournalEntry.IsActive, "), name)
-            # the section in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{\}?$", body, re.M), ["te_je_country"], name)
+            # the section in te_je_country, the entry's Country (test_te_system_tab_bodies.py),
+            # after the "?" on the overview (test_te_help_pages.py)
+            first = ["te_help_row"] if name == "widget_je_nuclear_overview" else []
+            self.assertEqual(re.findall(r"^\t(\w+) = \{\}?$", body, re.M), first + ["te_je_country"], name)
             self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{\}$", body, re.M), [wrapped], name)
 
     def test_roots_are_a_section_wide(self):
@@ -171,7 +172,6 @@ class GateTest(unittest.TestCase):
         "te_nuclear_sec_taboo": [_sgui("nd_taboo_exists_sgui")],
         "te_nuclear_sec_powers": [_sgui("nd_taboo_exists_sgui"), _sgui("nd_powers_listed_sgui")],
         "te_nuclear_sec_delivery": None,
-        "te_nuclear_sec_how": None,
     }
 
     def test_state_gated_sections_are_gated_on_their_root(self):
@@ -287,17 +287,15 @@ class FlagTest(unittest.TestCase):
             toggles = re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", body)
             self.assertEqual(toggles[0], flag, sec)
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_nuclear_weapons_help_popup, on te_popup = help_nuclear_weapons); its collapse flag retired with its
-        content (test_te_help_pages.py)."""
-        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
-        self.assertIn('text = "je_nuclear_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how, r'blockoverride "onclick_show')
-        self.assertNotIn("nuclear_how_open", ALL_GUI)
-        self.assertNotIn("nd_note", how)
+    def test_how_it_works_is_the_help_page(self):
+        """How Nuclear Weapons Work is the Help page alone
+        (te_nuclear_weapons_help_popup, on te_popup = help_nuclear_weapons),
+        which the "?" at the top of the entry and in the tab's header opens: the
+        link section is gone, and its reference composer and root with it
+        (test_te_help_pages.py)."""
+        for name in ("te_nuclear_sec_how", "te_nuclear_reference_sections", "nuclear_how_open"):
+            self.assertNotIn(name, ALL_GUI, name)
+        self.assertIn("type te_nuclear_weapons_help_body", _read(LAYOUT))
 
     def test_subsections_are_nested(self):
         """The taboo's chart is a nested subsection, open (owner, 2026-09-29:
@@ -1123,8 +1121,8 @@ class WideTest(unittest.TestCase):
 
     def test_another_country_gets_the_world_sections_in_column_2(self):
         """Another country's columns 2 and 3 are the player's own, so column 2
-        holds its copy of column 3's world sections instead: exactly the taboo,
-        Nuclear Powers and How, under Not( Country.IsLocalPlayer ) and the tab's
+        holds its copy of column 3's world sections instead: exactly the taboo
+        and Nuclear Powers, under Not( Country.IsLocalPlayer ) and the tab's
         gate, spaced as column 3 spaces them. The player's copies sit under
         Country.IsLocalPlayer, the one gate they gained."""
         text = gh._all_gui()
@@ -1132,7 +1130,7 @@ class WideTest(unittest.TestCase):
         body = gh._type_body(text, WORLD_COLUMN)
         self.assertEqual(_root_visible(body), f"And( Not( Country.IsLocalPlayer ), {gate} )")
         self.assertEqual(re.findall(r"\b(te_\w+) = \{\}", body),
-                         ["te_nuclear_sec_taboo", "te_nuclear_sec_powers", "te_nuclear_reference_sections"])
+                         ["te_nuclear_sec_taboo", "te_nuclear_sec_powers"])
         self.assertEqual(re.findall(r"spacing = (\d+)", body), ["10", "4"], "column 3's spacing, then its composer's")
         wide = gh._type_body(text, "te_nuclear_wide_sections")
         m = re.search(r'blockoverride "column_2" \{', wide)
@@ -1141,7 +1139,7 @@ class WideTest(unittest.TestCase):
         self.assertEqual(wide.count(f"{WORLD_COLUMN} = {{}}"), 1)
         visibles = re.findall(r'visible = "\[(.*)\]"', wide)
         self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 2, "columns 2 and 3's composers")
-        self.assertEqual(visibles.count("Country.IsLocalPlayer"), 1, "column 3's How")
+        self.assertNotIn("Country.IsLocalPlayer", visibles, "column 3's How wrapper is gone")
         self.assertEqual(visibles.count(gate), 1, "column 1's composer, open for both")
 
     def test_the_window_registers_it(self):
@@ -1312,7 +1310,7 @@ class PrivateTest(unittest.TestCase):
         and the world's own lists."""
         for name in ("te_nuclear_overview_panel", "te_banking_ov_cell", "te_nuclear_sec_world_crises",
                      "nd_world_crisis_row", "te_nuclear_sec_powers", "nuclear_program_power_row",
-                     "te_nuclear_sec_taboo", "te_hist_nd_taboo", "te_hist_nd_taboo_tgt", "te_nuclear_sec_how"):
+                     "te_nuclear_sec_taboo", "te_hist_nd_taboo", "te_hist_nd_taboo_tgt"):
             with self.subTest(type=name):
                 self.assertIn(name, self.view.open)
                 self.assertTrue(self.markup[name].strip(), f"{name} draws for another country")

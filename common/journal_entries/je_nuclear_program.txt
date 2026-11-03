@@ -34,7 +34,7 @@
 #   native bar   progress toward the next warhead
 #   container_4  the live sections (crisis, posture, forces, at home,
 #                reputation, the taboo, delivery and defence, the nuclear
-#                powers), then How Nuclear Weapons Work
+#                powers)
 # The status desc sits between container_1 and container_2, and is empty
 # while the entry is active (see status_desc below).
 #
@@ -84,12 +84,6 @@ je_nuclear_program = {
 	widget = {
 		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
 		name = "widget_je_nuclear_status"
-		container = "custom_widget_container_4"
-	}
-
-	widget = {
-		gui = "gui/journal_entry_widgets/nuclear_layout_widget.gui"
-		name = "widget_je_nuclear_reference"
 		container = "custom_widget_container_4"
 	}
 

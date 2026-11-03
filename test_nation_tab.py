@@ -35,7 +35,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from gui_test_helpers import _type_body, assert_wide_matches_narrow  # noqa: E402
+from gui_test_helpers import _type_body, assert_column_closes_with_its_sections, assert_wide_matches_narrow  # noqa: E402
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 
@@ -745,7 +745,7 @@ class TabLayoutTest(unittest.TestCase):
     def test_the_window_mounts_the_tab(self):
         # the window's tab mounts are generated (scripts/generators/gen_te_systems_window.py)
         window = _read(ROOT / "gui" / "te_systems_window_generated.gui")
-        self.assertIn("te_nation_tab_sections = {}", window)
+        self.assertIn("te_nation_tab_body = {}", window)
         self.assertTrue(self.TAB.read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def test_sections_in_order(self):
@@ -753,20 +753,30 @@ class TabLayoutTest(unittest.TestCase):
         order = re.findall(r"^\t\t(te_nation_\w+) = \{\}", body, re.M)
         self.assertEqual(order, ["te_nation_overview_panel"]
                          + [f"te_nation_section_{s}" for s in gen.SECTIONS]
-                         + ["te_nation_sources_panel", "te_nation_all_panel", "te_nation_how_panel"])
+                         + ["te_nation_sources_panel", "te_nation_all_panel"])
+        self.assertNotIn("te_nation_how_panel", self.gui)
 
     def test_the_full_screen_layout(self):
         """te_nation_wide_sections, the window's full-screen layout (spec
         2026-11-02-te-window-wide-mode § 7): the tab's sections in three
         columns, read down each and then across. The registry mounts it in
-        place of te_nation_tab_sections, which carries no gate or context."""
-        columns = assert_wide_matches_narrow(self, "te_nation_wide_sections", ["te_nation_tab_sections"])
+        te_nation_tab_body's layout block, in place of te_nation_tab_sections,
+        which carries no gate or context."""
+        columns = assert_wide_matches_narrow(self, "te_nation_wide_sections",
+                                             layout=("te_nation_tab_body", "te_nation_tab_layout"),
+                                             added_gates=("te_nation_sources_panel", "te_nation_all_panel"))
+        # Where These Come From shows only once a permanent effect is listed,
+        # All Modifiers while the country holds any modifier: column 3 closes
+        # up on their two gates only when both panels hide.
+        assert_column_closes_with_its_sections(self, "te_nation_wide_sections", 3,
+                                               ["te_nation_sources_panel", "te_nation_all_panel"])
         self.assertEqual(columns, [
             ["te_nation_overview_panel", "te_nation_section_governance", "te_nation_section_society"],
             ["te_nation_section_economy", "te_nation_section_science_and_space", "te_nation_section_international"],
-            ["te_nation_sources_panel", "te_nation_all_panel", "te_nation_how_panel"]])
+            ["te_nation_sources_panel", "te_nation_all_panel"]])
         tab = next(t for t in window_gen.TABS if t.key == "nation")
-        self.assertEqual((tab.layout, tab.wide), (None, "te_nation_wide_sections"))
+        self.assertEqual((tab.body, tab.layout, tab.wide),
+                         ("te_nation_tab_body", "te_nation_tab_layout", "te_nation_wide_sections"))
         self.assertNotRegex(_type_body(self.gui, "te_nation_tab_sections"), r"(?m)^\s*(visible|datacontext) =")
 
     def _type(self, name):

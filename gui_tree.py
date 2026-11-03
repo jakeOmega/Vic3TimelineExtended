@@ -250,13 +250,13 @@ _HOW_TOGGLE = re.compile(r"GetVariableSystem\.Exists\(\s*'([^']*)'\s*\)")
 
 
 def how_named(name: str) -> bool:
-    """A name with a `how` or `help` token: `te_un_sec_how`, `te_un_help_standing`."""
+    """A name with a `how` or `help` token: `te_budget_how_note`, `te_un_help_standing`."""
     return bool(_HOW_TOKEN.search(name or ""))
 
 
 def opens_how_section(node: Node) -> bool:
     """A node a How-it-works section is made of: named for one (`type
-    te_demog_sec_how`, an instance `te_un_help_standing = {}`), or shown only
+    te_budget_how_note`, an instance `te_un_help_standing = {}`), or shown only
     while a How toggle is open (`visible = "[GetVariableSystem.Exists(
     'te_cm_how_it_works_open')]"`). Every system's How section is on its Help
     page now (spec 2026-11-02-charts-help-national-info § 5.2): its content

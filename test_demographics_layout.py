@@ -34,7 +34,8 @@ DISPLAY = os.path.join(REPO, "common", "script_values", "te_demog_display_values
 PIE_GEN = os.path.join(REPO, "scripts", "image_pipeline", "gen_ch_model_pie_textures.py")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "demographics_gui_icons.md")
 
-# The issue's order: the people's health, the levers, the record, the per-state detail; How it works at the foot.
+# The issue's order: the people's health, the levers, the record, the per-state detail. How it works is the Help page,
+# which a "?" opens (test_te_help_pages.py): the link at the foot is gone (owner, 2026-11-03).
 COUNTRY = ["te_demog_overview", "te_demog_sec_causes", "te_demog_sec_pyramid", "te_demog_sec_work",
            "te_demog_sec_longevity", "te_demog_sec_family", "te_demog_sec_history", "te_demog_sec_wealth",
            "te_demog_sec_places", "te_demog_sec_states"]
@@ -43,7 +44,7 @@ COUNTRY = ["te_demog_overview", "te_demog_sec_causes", "te_demog_sec_pyramid", "
 STATE = ["te_state_demog_overview", "te_state_demog_causes", "te_state_demog_pyramid", "te_state_demog_work",
          "te_state_demog_longevity", "te_state_demog_wealth", "te_state_demog_modifiers"]
 STATE_ONLY = ["te_state_demog_modifiers"]
-HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
+HOSTS = ["te_demog_tab_sections", "te_state_demog_content"]
 # The Census Data window's composer: the tab's sections for the window's country, in three columns.
 BROWSER_COMPOSER = "te_demog_browser_sections"
 # The Timeline Extended window's Demographics tab: the tab's sections less the
@@ -149,32 +150,33 @@ class OrderTest(unittest.TestCase):
     def test_the_country_order(self):
         listed, outer = self.sections("te_demog_tab_sections")
         self.assertEqual(listed, COUNTRY)
-        self.assertEqual(outer[-1], HOW["te_demog_tab_sections"], "How Demographics Works at the foot")
+        # the pending line, then the sections; the tab's "?" is its frame's header's (te_demog_window_body)
+        self.assertEqual([c for c in outer if not c.endswith("size")], ["te_demog_panel", "flowcontainer"])
 
     def test_the_state_order_is_the_countrys_less_what_a_state_lacks(self):
         listed, outer = self.sections("te_state_demog_content")
         self.assertEqual(listed, STATE)
-        self.assertEqual(outer[-1], HOW["te_state_demog_content"])
+        # the "?" first (the subtab has no header), then "Census pending" and the sections
+        self.assertEqual([c for c in outer if not c.endswith("size")], ["te_help_row", "te_demog_panel", "flowcontainer"])
         as_country = [s.replace("te_state_demog_", "te_demog_sec_").replace("sec_overview", "overview")
                       for s in STATE if s not in STATE_ONLY]
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
     def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
         """The tab's sections and gates on te_ui_columns_three (spec 2026-11-02-te-window-wide-mode §§ 9.4, 9.5): the
-        pending line above the columns, then the sections read down each column and then across. How Demographics
-        Works waits for the first census here, as the columns do; on the tab it shows from the start."""
+        pending line above the columns, then the sections read down each column and then across."""
         columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"],
-                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
+                                             outside=("te_demog_panel",))
         self.assertEqual(len(columns), 3)
-        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
+        self.assertEqual([c for column in columns for c in column], COUNTRY)
 
     def test_the_te_windows_wide_tab_is_the_census_windows_layout(self):
         """The Timeline Extended window's full-screen Demographics tab (spec 2026-11-02-te-window-wide-mode § 7) mounts
         the Census Data window's composer in place of te_demog_window_sections: the same sections and pending line, less
         the strata incomes, read from the Country in context, the player's (te_demog_window_body's datacontext)."""
         columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, layout=(WINDOW_BODY, "te_demog_tab_layout"),
-                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
-        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
+                                             outside=("te_demog_panel",))
+        self.assertEqual([c for column in columns for c in column], COUNTRY)
         from scripts.generators import gen_te_systems_window as gen
         self.assertEqual(next(t for t in gen.TABS if t.key == "demographics").wide, BROWSER_COMPOSER)
 
@@ -182,7 +184,7 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(sorted(_types(self.layout)),
                          sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER, WINDOW_COMPOSER,
                                  WINDOW_BODY]))
-        for composer in list(HOW) + [BROWSER_COMPOSER, WINDOW_COMPOSER, WINDOW_BODY]:
+        for composer in HOSTS + [BROWSER_COMPOSER, WINDOW_COMPOSER, WINDOW_BODY]:
             self.assertNotIn(f"type {composer} =", self.widgets)
 
     def test_the_window_takes_the_tabs_order_less_the_strata_incomes(self):
@@ -192,7 +194,7 @@ class OrderTest(unittest.TestCase):
         Timeline Extended window lacks)."""
         listed, outer = self.sections(WINDOW_COMPOSER)
         self.assertEqual(listed, COUNTRY)
-        self.assertEqual(outer[-1], HOW["te_demog_tab_sections"], "How Demographics Works at the foot")
+        self.assertEqual([c for c in outer if not c.endswith("size")], ["te_demog_panel", "flowcontainer"])
         body = _type_body(self.layout, WINDOW_COMPOSER)
         tab = _type_body(self.layout, "te_demog_tab_sections")
         for line in ("minimumsize = { 520 -1 }", "maximumsize = { 520 -1 }", 'text = "te_demog_pending"'):
@@ -206,11 +208,9 @@ class OrderTest(unittest.TestCase):
 
     def test_every_section_is_a_type_and_each_is_placed_once(self):
         defined = set(_types(self.widgets))
-        placed = COUNTRY + STATE + list(HOW.values())
-        hosts = {"te_demog_tab_sections": COUNTRY + [HOW["te_demog_tab_sections"]],
-                 BROWSER_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
-                 WINDOW_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
-                 "te_state_demog_content": STATE + [HOW["te_state_demog_content"]]}
+        placed = COUNTRY + STATE
+        hosts = {"te_demog_tab_sections": COUNTRY, BROWSER_COMPOSER: COUNTRY, WINDOW_COMPOSER: COUNTRY,
+                 "te_state_demog_content": STATE}
         for composer, sections in hosts.items():
             body = _type_body(self.layout, composer)
             for section in sections:
@@ -229,7 +229,10 @@ class OrderTest(unittest.TestCase):
         self.assertFalse(set(_types(self.layout)) & set(_types(self.widgets)))
 
     def test_each_host_instances_its_composer_once(self):
+        # the Population panel's tab: in the tab body, for its header and "?" (test_te_help_pages.py)
         self.assertEqual(_read(POPS).count("te_demog_tab_sections = {}"), 1)
+        self.assertRegex(_read(POPS), r'te_demog_window_body = \{\s*blockoverride "te_demog_tab_layout" \{\s*'
+                                      r'te_demog_tab_sections = \{\}\s*\}\s*\}')
         # National Info (the Census Data window) instances it through its generated column: once in the player's own
         # country's mount, inside the window's body, and once in another country's (test_national_info.py)
         self.assertNotIn(BROWSER_COMPOSER, _read(BROWSER))
@@ -282,20 +285,14 @@ class FlagTest(unittest.TestCase):
                 flag, = _toggles(header[0])
                 self.assertTrue(flag.endswith("_closed"), flag)
 
-    def test_how_it_works_is_a_link_on_both_hosts(self):
-        """How Demographics Works is its header alone on the tab and on the state subtab, and both open the one Help
-        page (te_demographics_help_popup, on te_popup = help_demographics), whose state topics come last under their
-        own subheading; the two collapse flags retired with the content (test_te_help_pages.py)."""
-        for section in HOW.values():
-            body = _type_body(self.widgets, section)
-            with self.subTest(section=section):
-                self.assertEqual(len(_instances(body, "te_demog_section_header")), 1, "one header")
-                self.assertEqual(_toggles(body), [])
-                self.assertIn('text = "te_demog_sec_how"', body)
-                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_demographics')]\"", body)
-                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-                self.assertNotRegex(body, r'blockoverride "onclick_show')
-                self.assertNotIn("te_demog_note", body)
+    def test_how_it_works_is_the_help_page_on_both_hosts(self):
+        """How Demographics Works is the one Help page (te_demographics_help_popup, on te_popup = help_demographics)
+        for the tab and the state subtab, whose state topics come last under their own subheading; only the "?" opens
+        it, and the links that stood for it at both hosts' feet are gone, the two collapse flags with them
+        (test_te_help_pages.py)."""
+        for section in ("te_demog_sec_how", "te_state_demog_how"):
+            self.assertNotIn(f"type {section} =", self.widgets)
+            self.assertNotIn(f"{section} = {{", _read(LAYOUT))
         for flag in ("te_demog_how_open", "te_demog_st_how_open"):
             self.assertNotIn(flag, self.widgets)
         page = _type_body(self.widgets, "te_demographics_help_body")

@@ -378,7 +378,7 @@ class TestButtons(unittest.TestCase):
 
     def test_the_panel_draws_a_row_and_a_dimmed_row_a_measure(self):
         gui = _text(WIDGETS)
-        section = gui[gui.index("type te_demog_sec_family"):gui.index("type te_demog_sec_how")]
+        section = gui[gui.index("type te_demog_sec_family"):gui.index("type te_demographics_help_body")]
         for key in CATALOGUE:
             ctx = f"datacontext = \"[GetScriptedGui('te_demog_ms_{key}_sgui')]\""
             self.assertEqual(section.count(ctx), 2, key)

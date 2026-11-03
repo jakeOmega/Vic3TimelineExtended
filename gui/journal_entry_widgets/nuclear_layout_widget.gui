@@ -24,9 +24,10 @@
 ###                At Home (only while armed), Reputation (once there is a
 ###                record), The Nuclear Taboo (from the first warhead), Delivery
 ###                and Defence, Nuclear Powers (from the first warhead)
-###   container_4  widget_je_nuclear_reference  How Nuclear Weapons Work,
-###                a link to the Help page (te_nuclear_weapons_help_popup,
-###                in gui/te_popups.gui)
+###
+### Every explanation is on the Help page (te_nuclear_weapons_help_popup, in
+### gui/te_popups.gui), which the "?" at the top of the entry and in the tab's
+### header opens.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_nuclear_layout.py).
@@ -53,35 +54,6 @@ types nuclear_layout_widget_types
 		te_nuclear_sec_taboo = {}
 		te_nuclear_sec_delivery = {}
 		te_nuclear_sec_powers = {}
-	}
-
-	### "How Nuclear Weapons Work": a link at the foot of the panel to the Help
-	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
-	### Its header alone, which opens te_nuclear_weapons_help_popup (te_popup =
-	### help_nuclear_weapons) instead of expanding; it keeps its name and its
-	### place in the composer. The "?" in the tab's header opens the same page.
-	type te_nuclear_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		nd_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "je_nuclear_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
 	}
 
 	### The Help page: every explanation, gathered out of the live sections, one
@@ -182,18 +154,6 @@ types nuclear_layout_widget_types
 		}
 	}
 
-	### How it all works. (The leaderboard was here, collapsed, until the owner's
-	### rule of 2026-09-29 that live lists stay open.)
-	type te_nuclear_reference_sections = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-		visible = "[GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-
-		te_nuclear_sec_how = {}
-	}
-
 	### The entry's own bar, progress toward the next warhead, under The
 	### Programme as in the journal: both tab layouts draw it (the journal
 	### draws its native bar). Drawn only with a programme, beside the section
@@ -223,8 +183,8 @@ types nuclear_layout_widget_types
 	### te_system_tab_frame with its blocks filled, mounted by the Military
 	### panel's Nuclear tab and the Timeline Extended window's Nuclear Weapons
 	### tab. In the entry's order: the overview, The Programme with the entry's
-	### progress bar under it, the live sections, then How Nuclear Weapons Work,
-	### inside te_nuclear_tab_layout, which a wide mount overrides; then the
+	### progress bar under it, then the live sections, inside
+	### te_nuclear_tab_layout, which a wide mount overrides; then the
 	### frame's Open Journal Entry. Not drawn: the status description (empty
 	### while the entry is active: the overview says it) and the two scripted
 	### buttons (the AI's; the programme's funding stepper carries the same
@@ -237,6 +197,7 @@ types nuclear_layout_widget_types
 					text = "je_nuclear_program"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
 				}
 			}
@@ -260,7 +221,6 @@ types nuclear_layout_widget_types
 				te_nuclear_programme_bar = {}
 
 				te_nuclear_status_sections = {}
-				te_nuclear_reference_sections = {}
 			}
 		}
 
@@ -271,7 +231,7 @@ types nuclear_layout_widget_types
 
 	### Another country's column 2 in the wide layout (National Info, spec
 	### 2026-11-02-charts-help-national-info § 6.4): column 3's world sections
-	### (the taboo, Nuclear Powers, How), spaced as column 3 spaces them. Its
+	### (the taboo, Nuclear Powers), spaced as column 3 spaces them. Its
 	### own column 2 (the posture, forces, at home, reputation) and column 3
 	### are the player's own, so without this its panel would have an empty
 	### 520 band in the middle. Never shown for the player, whose copy stays
@@ -292,8 +252,6 @@ types nuclear_layout_widget_types
 			te_nuclear_sec_taboo = {}
 			te_nuclear_sec_powers = {}
 		}
-
-		te_nuclear_reference_sections = {}
 	}
 
 	### The tab in the Timeline Extended window's full screen (spec
@@ -343,8 +301,8 @@ types nuclear_layout_widget_types
 			te_nuclear_world_column = {}
 		}
 
-		### The player's: another country's copy of the taboo, Nuclear Powers
-		### and How is in column 2 (te_nuclear_world_column).
+		### The player's: another country's copy of the taboo and Nuclear
+		### Powers is in column 2 (te_nuclear_world_column).
 		blockoverride "column_3" {
 			flowcontainer = {
 				direction = vertical
@@ -356,15 +314,6 @@ types nuclear_layout_widget_types
 				te_nuclear_sec_taboo = {}
 				te_nuclear_sec_delivery = {}
 				te_nuclear_sec_powers = {}
-			}
-
-			flowcontainer = {
-				direction = vertical
-				parentanchor = hcenter
-				ignoreinvisible = yes
-				visible = "[Country.IsLocalPlayer]"
-
-				te_nuclear_reference_sections = {}
 			}
 		}
 	}
@@ -390,6 +339,13 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
+		}
+	}
 
 	te_je_country = {
 		te_nuclear_overview_panel = {}
@@ -422,18 +378,5 @@ flowcontainer = {
 
 	te_je_country = {
 		te_nuclear_status_sections = {}
-	}
-}
-
-flowcontainer = {
-	name = "widget_je_nuclear_reference"
-	visible = "[JournalEntry.IsActive]"
-	direction = vertical
-	parentanchor = hcenter
-	ignoreinvisible = yes
-	minimumsize = { 520 -1 }
-
-	te_je_country = {
-		te_nuclear_reference_sections = {}
 	}
 }

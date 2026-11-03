@@ -22,8 +22,9 @@ je_grand_monuments = {
 	icon = "gfx/interface/icons/event_icons/je_grand_monuments.dds"
 	group = je_group_internal_affairs
 
-	# The overview above the status description, the live sections below it,
-	# How Grand Monuments Work at the foot (grand_monuments_widget.gui).
+	# The overview above the status description, with the "?" to the Help
+	# page at its top, and the live sections below it
+	# (grand_monuments_widget.gui).
 	widget = {
 		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
 		name = "widget_je_gm_overview"
@@ -34,12 +35,6 @@ je_grand_monuments = {
 		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
 		name = "widget_je_gm_status"
 		container = "custom_widget_container_2"
-	}
-
-	widget = {
-		gui = "gui/journal_entry_widgets/grand_monuments_widget.gui"
-		name = "widget_je_gm_reference"
-		container = "custom_widget_container_3"
 	}
 
 	# A monument, or a commission on offer or open (v2 §2.7): a country with

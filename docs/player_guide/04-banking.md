@@ -258,9 +258,8 @@ weekly balance, once your cycle has started. Hover it for the phase's
 word and the same tooltip, with a crash-risk warning while that risk is high,
 and click it to open the Banking tab.
 
-Below the overview come five sections. Each heading opens or closes its
-section, except How Banking Works, whose heading opens Banking's Help page, as
-the "?" at the right of the tab's header does:
+Below the overview come four sections. Each heading opens or closes its
+section:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -268,7 +267,11 @@ the "?" at the right of the tab's header does:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | A link | The Help page explains the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens Banking's Help page, How Banking Works. It explains the cycle,
+crashes and the intervention budget, and under the full Banking System the
+policy rate and the stance, the mandates, gold and the peg, the exchange rate,
+international arrangements, what borrowing costs and prices.
 
 Hover a tool's name for what the tool does, its full name and what it
 requires. A grayed button means you cannot use the tool now, and

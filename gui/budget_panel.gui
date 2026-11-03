@@ -1611,12 +1611,17 @@ types budget
 				te_tax_tab_body = {}
 			}
 			### END MOD ###
+			### MOD: Breakdown tab (te_breakdown) ###
+			# te_budget_breakdown_tab_body (gui/te_budget_breakdown.gui), which the
+			# Timeline Extended window's Budget Breakdown tab mounts too: its header,
+			# with the "?" to the Help page, then the panel.
 			flowcontainer = {
 				visible = "[InformationPanel.IsTabSelected('te_breakdown')]"
 				using = default_content_fade
 				using = default_list_position
-				te_budget_breakdown_panel = {}
+				te_budget_breakdown_tab_body = {}
 			}
+			### END MOD ###
 		}
 
 		### MOD: Tax Code tab (te_tax_code) ###

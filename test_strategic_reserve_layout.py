@@ -25,10 +25,8 @@ CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 STATUS = ["te_st_res_sec_inventory"]
-REFERENCE = ["te_st_res_sec_how"]
 ROOTS = {"widget_je_strategic_reserve_overview": ("custom_widget_container_1", "te_st_res_overview_panel"),
-         "widget_je_strategic_reserve_inventory": ("custom_widget_container_2", "te_st_res_status_sections"),
-         "widget_je_strategic_reserve_reference": ("custom_widget_container_3", "te_st_res_reference_sections")}
+         "widget_je_strategic_reserve_inventory": ("custom_widget_container_2", "te_st_res_status_sections")}
 # The keys the panel used before the pass; a survivor means a half-renamed flag.
 OLD_FLAGS = ["st_res_row_expanded_", "st_res_policy_open_"]
 HOW_TOPICS = ["hub", "rates", "status", "decay", "policies", "presets", "income", "history"]
@@ -93,19 +91,23 @@ def _loc():
 class OrderTest(unittest.TestCase):
     def test_composers_order_the_sections(self):
         widget = _read(WIDGET)
-        for composer, expected in (("te_st_res_status_sections", STATUS),
-                                   ("te_st_res_reference_sections", REFERENCE)):
+        for composer, expected in (("te_st_res_status_sections", STATUS),):
             body = _type_body(widget, composer)
             self.assertEqual(re.findall(r"^\t\t(te_st_res_sec_\w+) = \{", body, re.M), expected, composer)
             self.assertIn('visible = "[JournalEntry.IsActive]"', body, composer)
 
-    def test_the_entry_attaches_three_gated_roots(self):
+    def test_the_entry_attaches_two_gated_roots(self):
+        """The overview and the inventory. How the Strategic Reserve Works,
+        once a third root, is the Help page the overview's "?" opens
+        (test_te_help_pages.py)."""
         je, widget = _read(JE), _read(WIDGET)
         for name, (container, composer) in ROOTS.items():
             self.assertRegex(je, rf'name = "{name}"\s*container = "{container}"', name)
             root = _body(widget, rf'flowcontainer = \{{\s*name = "{name}"')
             self.assertIn('visible = "[JournalEntry.IsActive]"', root, f"{name} lost its IsActive gate (gotcha #14)")
             self.assertIn(f"{composer} = {{}}", root, name)
+        for gone in ("widget_je_strategic_reserve_reference", "te_st_res_reference_sections"):
+            self.assertNotIn(gone, je + widget, gone)
 
     def test_the_overview_cannot_be_collapsed(self):
         overview = _type_body(_read(WIDGET), "te_st_res_overview_panel")
@@ -115,14 +117,14 @@ class OrderTest(unittest.TestCase):
 
 class WideTest(unittest.TestCase):
     """The Timeline Extended window's full-screen Strategic Reserve tab (spec
-    2026-11-02-te-window-wide-mode § 7): two columns of 520, the overview and
-    the inventory, then How the Strategic Reserve Works, under the gates the
-    narrow tab gives them."""
+    2026-11-02-te-window-wide-mode § 7): two columns of 520, the overview,
+    then the inventory, under the gates the narrow tab gives them (How the
+    Strategic Reserve Works, once the second column, is the Help page)."""
 
     def test_the_wide_layout_takes_the_tabs_order_in_two_columns(self):
         columns = assert_wide_matches_narrow(self, "te_st_res_wide_sections",
                                              layout=("te_st_res_tab_body", "te_st_res_tab_layout"))
-        self.assertEqual(columns, [["te_st_res_overview_panel"] + STATUS, REFERENCE])
+        self.assertEqual(columns, [["te_st_res_overview_panel"], STATUS])
         self.assertIn("type te_st_res_wide_sections = te_ui_columns_two {", _read(WIDGET))
 
     def test_the_registry_names_it(self):
@@ -158,17 +160,14 @@ class FlagTest(unittest.TestCase):
         self.assertIn("GetVariableSystem.Toggle('st_res_inventory_closed')", inventory)
         self.assertIn("visible = \"[Not(GetVariableSystem.Exists('st_res_inventory_closed'))]\"", inventory)
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_strategic_reserve_help_popup, on te_popup = help_strategic_reserve); its collapse flag retired with its
-        content (test_te_help_pages.py)."""
-        how = _strip_comments(_type_body(self.text, "te_st_res_sec_how"))
-        self.assertIn('text = "je_strategic_reserve_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how, r'blockoverride "onclick_show')
-        self.assertNotIn("st_res_how_open", self.text)
-        self.assertNotIn("st_res_note", how)
+    def test_how_it_works_is_the_help_page(self):
+        """How the Strategic Reserve Works is the Help page alone
+        (te_strategic_reserve_help_popup, on te_popup = help_strategic_reserve),
+        which the "?" at the top of the entry and in the tab's header opens:
+        the link section is gone (test_te_help_pages.py)."""
+        for gone in ("te_st_res_sec_how", "st_res_how_open"):
+            self.assertNotIn(gone, self.text, gone)
+        self.assertIn("type te_strategic_reserve_help_body", self.text)
 
     def test_rows_and_their_settings_start_collapsed(self):
         for g in _goods():

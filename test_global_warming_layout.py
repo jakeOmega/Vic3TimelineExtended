@@ -7,6 +7,7 @@ import os
 import re
 import unittest
 
+import gui_test_helpers as gh
 from gui_test_helpers import _children, _strip_comments, assert_wide_matches_narrow
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +23,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters", "te_gw_sec_transition"]
 # National, the player's own (#660): the Market tab shows it on our market only.
 OWN_MARKET_ONLY = {"te_gw_sec_transition"}
-REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
+REFERENCE = ["te_gw_sec_history"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
@@ -103,9 +104,15 @@ class OrderTest(unittest.TestCase):
             m = re.search(rf'(?m)^flowcontainer = \{{\s*name = "{name}"', gui)
             self.assertTrue(m, name)
             body = _block_from(gui, gui.index("{", m.start()) + 1)
-            self.assertIn('visible = "[JournalEntry.IsActive]"', body, name)
-            # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), ["te_je_country"], name)
+            # the record's root is climate only, as its composer, so with the rule off container_3 collapses
+            gate = ("[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( "
+                    "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+                    if name == "widget_je_gw_reference" else "[JournalEntry.IsActive]")
+            self.assertEqual(re.findall(r'^\tvisible = "(.*)"$', body, re.M), [gate], name)
+            # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py), under
+            # the "?" at the top of the entry (test_te_help_pages.py)
+            expected = ["te_help_row", "te_je_country"] if name == "widget_je_gw_overview" else ["te_je_country"]
+            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), expected, name)
             self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer], name)
 
     def test_the_bars_on_top_marker_is_attached(self):
@@ -129,8 +136,31 @@ class WideTest(unittest.TestCase):
     window wants."""
 
     def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        # With the Global Warming rule off columns 1 and 3 close up on the rule,
+        # which the overview carries on its root, the policies on their header
+        # and panel and the record on its composer: one more gate on the first
+        # two, the record's own.
         columns = assert_wide_matches_narrow(self, "te_gw_wide_sections",
-                                             layout=("te_gw_tab_body", "te_gw_tab_layout"))
+                                             layout=("te_gw_tab_body", "te_gw_tab_layout"),
+                                             added_gates=("te_gw_overview_panel", "te_gw_sec_policies"))
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+        wide = _strip_comments(_read(GUI))
+        wide = wide[wide.index("type te_gw_wide_sections"):]
+        for n in (1, 3):
+            self.assertRegex(wide, rf'blockoverride "column_{n}_visible" \{{\s*visible = "\[{re.escape(rule)}\]"\s*\}}')
+        self.assertNotIn("column_2_visible", wide.split("\n}\n")[0])
+        # what the column's gate stands for: the overview's own root, and the
+        # policies' header and panel, each on the rule
+        text = _strip_comments(_read(GUI))
+        overview = [v for kind, k, v in _children(gh._type_body(text, "te_gw_overview_panel")) if k == "visible"]
+        self.assertEqual(len(overview), 1)
+        self.assertIn(rule, overview[0])
+        # (the policies read Country, which the gw_market_country block sets to the entry's country here)
+        policies = [(k, inner) for kind, k, inner in _children(gh._type_body(text, "te_gw_sec_policies")) if kind == "widget"]
+        self.assertEqual([k for k, _ in policies], ["gw_section_header", "gw_panel"])
+        for k, inner in policies:
+            own = [v for kind, kk, v in _children(inner) if kind == "property" and kk == "visible"]
+            self.assertIn(rule.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope"), own[0], k)
         self.assertEqual(columns, [["te_gw_overview_panel", "te_gw_sec_policies"],
                                    ["te_gw_sec_emitters", "te_gw_sec_transition"],
                                    REFERENCE])
@@ -260,10 +290,10 @@ class PolicyRowTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_global_warming_works(self):
         """On the Help page (te_global_warming_help_body): the climate's
-        topics under the Global Warming rule, then the Fossil Transition's,
-        which its section's own link opens too (te_gw_transition_how_link: with
-        the rule off How Global Warming Works is hidden). Both links are their
-        header alone; the two flags retired (test_te_help_pages.py)."""
+        topics under the Global Warming rule, then the Fossil Transition's.
+        Only the "?" opens it: the two links that stood for it (How Global
+        Warming Works at the panel's foot, the Fossil Transition's nested one)
+        are gone, the two flags with them (test_te_help_pages.py)."""
         gui = _read(GUI)
         how = _type_body(gui, "te_global_warming_help_body")
         rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
@@ -274,15 +304,8 @@ class HowItWorksTest(unittest.TestCase):
         transition = how[how.index('text = "rt_how_header"'):]
         self.assertEqual(re.findall(r'gw_note = \{\s*text = "(\w+)"', transition),
                          ["rt_how_laws", "rt_how_programmes", "rt_how_emissions"])
-        for section, title in (("te_gw_sec_how", "gw_how_header"), ("te_gw_transition_how_link", "rt_how_header")):
-            body = _type_body(gui, section)
-            with self.subTest(section=section):
-                self.assertIn(f'text = "{title}"', body)
-                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_global_warming')]\"", body)
-                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-                self.assertNotRegex(body, r'blockoverride "onclick_show')
-                self.assertNotIn("gw_note", body)
-        self.assertEqual(_type_body(gui, "te_gw_sec_transition").count("te_gw_transition_how_link = {}"), 1)
+        for section in ("te_gw_sec_how", "te_gw_transition_how_link"):
+            self.assertNotIn(section, _strip_comments(gui))
         for flag in ("gw_how_open", "rt_how_open"):
             self.assertNotIn(flag, gui)
         for sec in ("te_gw_overview_panel", "te_gw_sec_policies", "te_gw_sec_history"):
@@ -293,7 +316,7 @@ class HowItWorksTest(unittest.TestCase):
     def test_the_transition_sits_outside_the_rule(self):
         """The Fossil Transition's topics are the body's own children, after the
         rule's box, never inside it: with the rule off the page still explains
-        the transition (its link and the Climate tab's "?" open it then). Its
+        the transition (the entry's and the Climate tab's "?" open it then). Its
         header hides with the rule off, when the popup's title names the
         transition instead (Tax Code's pattern), so the name isn't printed twice."""
         gui = _strip_comments(_read(GUI))
@@ -1123,7 +1146,7 @@ class MarketTabTest(unittest.TestCase):
             self.assertNotIn("JournalEntry", body, name)
         # The journal's roots instance both types bare, so the defaults hold there.
         root = gui.split('name = "widget_je_gw_overview"', 1)[1]
-        self.assertIn("te_gw_overview_panel = {}", root[:root.index("}") + 1])
+        self.assertIn("te_gw_overview_panel = {}", root[:root.index("\n}\n") + 1])
         self.assertIn("te_gw_sec_policies = {}", _type_body(gui, "te_gw_status_sections"))
 
     def test_the_market_parts_loc_reads_country(self):
@@ -1308,7 +1331,7 @@ class MarketTabTest(unittest.TestCase):
         self.assertEqual(ambient, [])
         # Country is only ever the section's own (a gw_market_country block's),
         # never the panel's: none in Top Emitters, History or How.
-        for name in ("te_gw_sec_emitters", "gw_emitter_row", "gw_emitter_header", "te_gw_sec_history", "te_gw_sec_how"):
+        for name in ("te_gw_sec_emitters", "gw_emitter_row", "gw_emitter_header", "te_gw_sec_history"):
             self.assertEqual(re.findall(r"(?<![\w.'])Country\.\w+", _type_body(_read(GUI), name)), [], name)
 
     def test_one_visible_per_widget(self):

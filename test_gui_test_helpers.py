@@ -125,6 +125,28 @@ class WideMatchesNarrowTest(unittest.TestCase):
         self.fails(r"te_x_sec_c shows in the narrow layout only while \['HasC'\]",
                    GOOD.replace('te_x_sec_c = { visible = "[HasC]" }', "te_x_sec_c = {}"))
 
+    # A column's own visible (column_<n>_visible, help-button-everywhere PR) closes up a column whose sections all
+    # hide, instead of leaving its 520: one more gate on each of its sections, held to the narrow ones.
+    COLUMN_2_SHOWN = 'blockoverride "column_2_visible" {\n\t\t\tvisible = "[Not( IsLight )]"\n\t\t}\n\t\tblockoverride "column_2" {'
+
+    def test_a_columns_visible_its_sections_already_carry_passes(self):
+        self.assertEqual(self.check(GOOD.replace('blockoverride "column_2" {', self.COLUMN_2_SHOWN)), COLUMNS)
+
+    def test_a_columns_visible_is_a_gate_on_each_of_its_sections(self):
+        wide = GOOD.replace('blockoverride "column_2" {', self.COLUMN_2_SHOWN.replace("Not( IsLight )", "Other"))
+        self.fails(r"te_x_sec_b shows in the wide layout only while \['Other'\]", wide)
+        self.assertEqual(self.check(wide, added_gates=("te_x_sec_b", "te_x_summary")), COLUMNS)
+
+    def test_a_columns_visible_holds_only_its_visible(self):
+        self.fails("column_2_visible holds a visible and nothing else",
+                   GOOD.replace('blockoverride "column_2" {',
+                                self.COLUMN_2_SHOWN.replace('visible = "[Not( IsLight )]"',
+                                                            'visible = "[Not( IsLight )]"\n\t\t\tspacing = 4')))
+
+    def test_no_visible_for_a_column_the_type_lacks(self):
+        self.fails("te_ui_columns_three has no such column visible",
+                   GOOD.replace('blockoverride "column_2" {', self.COLUMN_2_SHOWN.replace("column_2_visible", "column_4_visible")))
+
     def test_a_gate_may_sit_on_the_columns_instance_or_an_outer_wrapper(self):
         """No overview or How here, so IsActive can gate the whole row."""
         narrow = ["te_x_status_sections"]

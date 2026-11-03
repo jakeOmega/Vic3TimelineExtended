@@ -58,6 +58,84 @@ decol_stance_ai_can_hold = {
 	}
 }
 
+# ---- The AI's stance on colonialism (issue #1370, owner 2026-11-03) --------
+# The Colonial Question's weights (decolonization_events.14) and the AI's
+# monthly review (decol_stance_monthly). An AI that runs an empire never
+# condemns colonialism, and one with a stake in colonialism, at home or through
+# its partners, condemns it less often. Nothing here reads is_ai: the event
+# and the monthly review's own branch are the AI's paths.
+
+# The country runs a colonial empire: its Colonial Empire entry, or what the
+# entry's `possible` asks (a colony, is_overseas_colonial_state, or a colonial
+# subject, country_has_qualifying_colonial_subject). Cheapest first: the
+# colony test walks the pops. Scope: country.
+decol_holds_colonial_empire = {
+	OR = {
+		has_journal_entry = je_colonial_empire
+		country_has_qualifying_colonial_subject = yes
+		any_scope_state = { is_overseas_colonial_state = yes }
+	}
+}
+
+# The country is regressive on colonialism, by the game's own laws and rulers,
+# each read from its description: Colonial Exploitation ("colonies are
+# established to exploit the area for their natural resources and cheap
+# labor"); a citizenship law that ranks people by blood or race (law_ethnostate,
+# the mod's Ancestral Citizenship: "only those of the core ancestral lineage are
+# recognized as legal members of the nation"; law_racial_segregation,
+# Racialized Citizenship: "citizenship is stratified based on perceived racial
+# or ancestral proximity"); slavery in any form (every law but Slavery Banned,
+# "no human being may be owned by another"); a Jingoist ruler ("an aggressive
+# foreign policy, emphasizing readiness to go to war to advance its
+# ambitions", the leader ideology that strongly approves of Colonial
+# Exploitation); or a Colonialist group in government ("a colonial interest
+# reliant upon the continuous extraction of wealth from their territory").
+# law_national_supremacy (Cultural Citizenship, membership by "the language,
+# traditions, and heritage of the dominant culture") is left out: it is the
+# starting law of most European great powers, and it asks for a culture, not
+# a lineage. Scope: country.
+decol_ai_regressive = {
+	OR = {
+		has_law = law_type:law_colonial_exploitation
+		has_law = law_type:law_ethnostate
+		has_law = law_type:law_racial_segregation
+		decol_ai_slaveholding = yes
+		ruler ?= { has_ideology = ideology:ideology_jingoist_leader }
+		any_interest_group = {
+			is_in_government = yes
+			has_ideology = ideology:ideology_colonialist
+		}
+	}
+}
+
+# Slavery is legal: any slavery law but Slavery Banned. Part of the regressive
+# test, and on top of it a further halving of Condemn (owner, 2026-11-03:
+# "with slavery, I feel like it could be even lower"). Scope: country.
+decol_ai_slaveholding = {
+	NOT = { has_law = law_type:law_slavery_banned }
+}
+
+# A partner of the country runs a colonial empire: an ally or defensive-pact
+# partner, a member of its power bloc, its subject or its overlord
+# (decol_iw_can_intervene's set of countries a great power stands by). The
+# relation first: the empire test walks states. Scope: country.
+decol_ai_partner_holds_empire = {
+	save_temporary_scope_as = decol_ai_self
+	OR = {
+		overlord ?= { decol_holds_colonial_empire = yes }
+		any_country = {
+			NOT = { this = scope:decol_ai_self }
+			OR = {
+				has_treaty_alliance_with = { TARGET = scope:decol_ai_self }
+				has_treaty_defensive_pact_with = { TARGET = scope:decol_ai_self }
+				is_in_same_power_bloc = scope:decol_ai_self
+				is_subject_of = scope:decol_ai_self
+			}
+			decol_holds_colonial_empire = yes
+		}
+	}
+}
+
 # The panel's three buttons (colonial_empire_stance_sgui), each greyed with
 # the failing line on hover. Shared lines first: not the stance held already,
 # and not changed in the last decol_stance_cooldown_months.
