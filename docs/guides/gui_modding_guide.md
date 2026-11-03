@@ -1769,7 +1769,7 @@ my_dangerous_sgui = {
 
 ## This Mod's GUI Files
 
-Currently 53 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 25 additive files (marked below):
+Currently 54 GUI files at the top of `gui/`: 28 full-file replacements of vanilla panels plus 26 additive files (marked below):
 
 | File | Vanilla Panel | Purpose of Override |
 |---|---|---|
@@ -1813,6 +1813,7 @@ Currently 53 GUI files at the top of `gui/`: 28 full-file replacements of vanill
 | `te_history_charts_generated.gui` | (additive, generated type library) | The 33 history charts, each as two wrapper types: `te_hist_<id>` at the panel's size, which its system's history section instances where the chart sits, and `te_hist_<id>_large` at the full-screen viewer's, then the viewer itself: each chart's popup (`te_chart_<id>_popup`), the range rows they use and `te_chart_popups`, which `te_popups.gui` instances; written by `scripts/generators/gen_te_history_charts.py` from its `CHARTS` registry and the fragments in `scripts/generators/te_history_charts/`; never edit it by hand |
 | `te_nation_generated.gui` | (additive, generated templates and types) | The Nation tab's name filters: `te_nation_hidden_filter` for the country panel's list, `te_nation_list_<section>` and `te_nation_row_<row>` for the tab; and each section's type rows, `te_nation_types_<section>`; regenerate with `scripts/generators/gen_nation_tab.py` |
 | `te_nation_tab.gui` | (additive, type library) | The Nation tab of the Timeline Extended window: the overview, five sections (each its score rows, then its type rows), Where These Come From (the country's own permanent modifiers, collapsed) and How the Nation Works, instanced from `te_systems_window.gui` |
+| `te_national_info_generated.gui` | (additive, generated templates and types) | National Info's selection templates, strips (`te_ni_strips`) and column of mounts (`te_ni_tabs`): Pops, then each public tab, the player's own country's mount and another country's; written by `scripts/generators/gen_te_systems_window.py` from its `TABS` registry (`public`, `NI_ORDER`), and instanced by `pop_browser_panel.gui`; never edit it by hand |
 | `te_popups.gui` | (additive, scripted widget) | The mod's centred popups: one root, `te_popups`, on the popups layer, holding each picker's popup (the Space Race's colony target first) and each history chart's full-screen viewer (`te_chart_popups`, generated), shown on the client-side `te_popup` key. Registered in `gui/scripted_widgets/te_systems_window.txt`; see the popups paragraph under [Creating Standalone Panels](#creating-standalone-panels) |
 | `te_seabed_widgets.gui` | (additive, type library) | The Seabed tab's panels (Global Commons): the overview, the seabed policy buttons, the basins table and How Seabed Licences Work, and `te_seabed_tab_body`, the window's Seabed tab |
 | `te_state_panel_widgets.gui` | (additive, type library) | State-view types: aligned label/value rows, headroom bars, the tourism card, the Grand Monument card (only where one stands; it instances the journal entry's `gm_row_status`) |

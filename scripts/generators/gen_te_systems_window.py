@@ -152,6 +152,13 @@ class Tab:
                   which run over every public tab). Each system's binding PR
                   sets it, on its own line below, and takes the system off
                   that test's UNBOUND.
+    readout       (scripted GUI, type): what the tab shows without its entry
+                  (Banking's #805 readout, the Colonial Empire's stance and
+                  colonial powers), on that scripted GUI, in the body frame's
+                  tab_before_gate. National Info's mount for another country
+                  draws no frame, so it draws the readout itself, on the
+                  scripted GUI rooted on the shown Country, above the wide
+                  composer (ni_types; BindingTest and GuardTest walk it too).
     """
     key: str
     row: int
@@ -167,6 +174,7 @@ class Tab:
     wide: str | None = None
     tooltip_expr: str | None = None
     public: bool = False
+    readout: tuple[str, str] | None = None
 
 
 def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
@@ -192,6 +200,8 @@ def _mirror(key: str, row: int, tooltip: str, body: str, layout: str | None, tab
 
 
 BANKING_OPEN = or_(shown("te_budget_banking_tab_sgui"), shown("te_budget_banking_readout_sgui"))
+# What the Banking tab shows without its entry (#805): its monetary readings.
+BANKING_READOUT = ("te_budget_banking_readout_sgui", "te_banking_mon_readout")
 
 # The Colonial Empire tab opens with its entry or, once the country has
 # researched Decolonization, without it: the stance on colonialism and the
@@ -205,6 +215,7 @@ CE_TOOLTIP = (f"SelectLocalization( {shown('te_window_colonial_empire_tab_sgui')
               f"SelectLocalization( {valid('te_window_colonial_empire_tab_unlock_sgui')}, 'te_system_tab_met_tt', "
               "Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), "
               f"{valid_tooltip('te_window_colonial_empire_tab_unlock_sgui')} ) ) ) )")
+CE_READOUT = ("te_window_colonial_empire_readout_sgui", "te_ce_readout")
 
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
@@ -219,7 +230,8 @@ TABS: list[Tab] = [
             public=False),
     _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
             public=False),
-    replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
+    replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
+                    readout=CE_READOUT),
             open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
             public=False),
     # No journal entry: open once the country has taken part in a seabed
@@ -234,7 +246,7 @@ TABS: list[Tab] = [
     # checklist. Budget Breakdown has no entry and no rule: always open.
     _mirror("banking", 2, "te_budget_tab_banking_tt", "te_banking_tab_body", "te_banking_tab_layout",
             "te_budget_banking_tab_sgui", "te_budget_banking_tab_unlock_sgui",
-            locked="te_budget_tab_banking_locked_tt", open_=BANKING_OPEN,
+            locked="te_budget_tab_banking_locked_tt", open_=BANKING_OPEN, readout=BANKING_READOUT,
             tooltip_expr=f"SelectLocalization( {shown('te_budget_banking_tab_sgui')}, 'te_budget_tab_banking_tt', "
                          f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
                          "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )",
@@ -320,26 +332,38 @@ def templates() -> list[str]:
 
 # --- the strip ----------------------------------------------------------------
 
-def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
+def _tooltip_value(tab: Tab, root: str = PLAYER_ROOT) -> str:
+    """The tab's tooltip as a data-function argument: a quoted key for an
+    always-open tab, else the expression _tooltip writes."""
     if tab.tooltip_expr:
-        return f'tooltip = "[{rooted(tab.tooltip_expr, root)}]"'
+        return rooted(tab.tooltip_expr, root)
     if tab.open_ is None:
-        return f'tooltip = "{tab.tooltip}"'
+        return f"'{tab.tooltip}'"
     checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock, root)} )"
-    return (f"tooltip = \"[SelectLocalization( {rooted(tab.open_, root)}, '{tab.tooltip}', "
-            f"SelectLocalization( {valid(tab.unlock, root)}, '{tab.met}', {checklist} ) )]\"")
+    return (f"SelectLocalization( {rooted(tab.open_, root)}, '{tab.tooltip}', "
+            f"SelectLocalization( {valid(tab.unlock, root)}, '{tab.met}', {checklist} ) )")
 
 
-def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT) -> list[str]:
+def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
+    if tab.open_ is None and not tab.tooltip_expr:
+        return f'tooltip = "{tab.tooltip}"'
+    return f'tooltip = "[{_tooltip_value(tab, root)}]"'
+
+
+def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED,
+          prefix: str = "te_systems_window", tooltip: str | None = None) -> list[str]:
+    """One tab_buttons slot: the window's (te_systems_window_tab, its
+    templates, its tooltip), or with stored_key, prefix and tooltip given,
+    National Info's."""
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
     click = [] if tab.open_ is None else [f'enabled = "[{rooted(tab.open_, root)}]"']
-    click.append(f"onclick = \"[GetVariableSystem.Set('{STORED}', '{tab.key}')]\"")
+    click.append(f"onclick = \"[GetVariableSystem.Set('{stored_key}', '{tab.key}')]\"")
     return (override("button", f'text = "{tab.label}"')
-            + override("button_tooltip", _tooltip(tab, root))
+            + override("button_tooltip", tooltip or _tooltip(tab, root))
             + override("button_click", *click)
-            + override("button_visibility", f"using = te_systems_window_{tab.key}_selected")
-            + override("button_visibility_checked", f"using = te_systems_window_{tab.key}_unselected")
+            + override("button_visibility", f"using = {prefix}_{tab.key}_selected")
+            + override("button_visibility_checked", f"using = {prefix}_{tab.key}_unselected")
             + override("button_selected", f'text = "{tab.label}"'))
 
 
@@ -421,14 +445,19 @@ def strips_wide() -> list[str]:
 
 # --- the mounts ---------------------------------------------------------------
 
-def _mount(tab: Tab, wide: bool = False) -> list[str]:
+def _content(tab: Tab, wide: bool = False) -> list[str]:
+    """What a mount holds: the tab's body, or full screen its wide layout
+    (in the body's layout block, so with its gate, its entry and its
+    controls, or alone where the body declares none)."""
     if not wide or tab.wide is None:
-        content = [f"\t{tab.body} = {{}}"]
-    elif tab.layout is None:
-        content = [f"\t{tab.wide} = {{}}"]
-    else:
-        content = [f"\t{tab.body} = {{", f'\t\tblockoverride "{tab.layout}" {{', f"\t\t\t{tab.wide} = {{}}",
-                   "\t\t}", "\t}"]
+        return [f"{tab.body} = {{}}"]
+    if tab.layout is None:
+        return [f"{tab.wide} = {{}}"]
+    return [f"{tab.body} = {{", f'\tblockoverride "{tab.layout}" {{', f"\t\t{tab.wide} = {{}}", "\t}", "}"]
+
+
+def _mount(tab: Tab, wide: bool = False) -> list[str]:
+    content = [f"\t{ln}" for ln in _content(tab, wide)]
     return ["flowcontainer = {",
             f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
             '\tdatacontext = "[GetPlayer]"',
@@ -605,6 +634,285 @@ def fullscreen_frame() -> list[str]:
             "### panels do (ingame_hud.gui), its own top filler under the top bar."] + body
 
 
+# --- National Info (spec 2026-11-02-charts-help-national-info §§ 6.2, 7.3) -------
+#
+# The Census Data window (gui/pop_browser_panel.gui, vanilla's, overridden),
+# renamed National Info, shows the country it was opened for: vanilla's pops
+# (Pops), then each public tab (Tab.public), for that country, whoever it is.
+# This writes its strip, its selection templates and its mounts into a second
+# file, NI_OUT; the window instances them in its ### MOD: National Info blocks.
+# Driven by `public` alone: a system joins with its flag and a rerun.
+#
+# WHICH TAB IS SHOWN: the last one chosen (te_ni_tab, a client-side value)
+# while it is open for the window's country, otherwise Pops, which always is.
+# So switching countries never shows a tab that isn't running there. Every
+# gate is the registry's, rooted on the window's Country (COUNTRY_ROOT).
+#
+# TWO MOUNTS A TAB. For the player's own country, the window's full-screen
+# mount (the body with its layout override: its gate, its entry, its
+# controls). For another, the tab's header (its name and its "?"), its
+# readout if it has one, and its wide composer under the window's Country,
+# with no journal entry and no frame (the frame's tab_country is GetPlayer).
+
+NI_OUT = ROOT / "gui" / "te_national_info_generated.gui"
+NI_STORED = "te_ni_tab"
+NI_FALLBACK = "pops"
+NI_PREFIX = "te_ni"
+# The window's tabs in their order (spec § 6.2): Pops, then the systems, five
+# a strip. A public tab not listed here fails _validate_ni.
+NI_ORDER = ["pops", "demographics", "nation", "banking", "tax_code",
+            "grand_monuments", "colonial_empire", "seabed", "cultural_hegemony", "space_race",
+            "nuclear_weapons"]
+NI_PER_STRIP = len(SLOTS)
+# The Pops tab: vanilla's window, always open.
+NI_POPS_LABEL = "te_pop_browser_tab_pops"
+NI_POPS_TOOLTIP = "te_pop_browser_tab_pops_tt"
+# Another country's tooltips (spec § 6.2): open, what it shows the world; grayed,
+# one line (the player's checklist doesn't fit another country).
+NI_OTHER_TT = "te_ni_tab_other_tt"
+NI_NOT_RUNNING_TT = "te_ni_tab_not_running_tt"
+LOCAL = "Country.IsLocalPlayer"
+
+
+def ni_types(tab: Tab) -> set[str]:
+    """The types National Info's mount for another country draws for the tab,
+    beyond its header: the wide composer and the readout. BindingTest,
+    GuardTest and te_rebind_country.py walk these."""
+    return {tab.wide} | ({tab.readout[1]} if tab.readout else set())
+
+
+def ni_tabs() -> list[Tab]:
+    """The public tabs, in NI_ORDER."""
+    by_key = {t.key: t for t in TABS if t.public}
+    return [by_key[k] for k in NI_ORDER if k in by_key]
+
+
+def ni_stored(key: str) -> str:
+    return f"GetVariableSystem.HasValue('{NI_STORED}', '{key}')"
+
+
+def ni_selected(tab: Tab) -> str:
+    """The tab is shown: chosen last, and open for the window's country."""
+    return ni_stored(tab.key) if tab.open_ is None else and_(ni_stored(tab.key), rooted(tab.open_, COUNTRY_ROOT))
+
+
+def ni_unselected(tab: Tab) -> str:
+    """On the strip for the window's country and not shown."""
+    return (not_(ni_selected(tab)) if tab.strip is None
+            else and_(rooted(tab.strip, COUNTRY_ROOT), not_(ni_selected(tab))))
+
+
+def ni_any_shown() -> str | None:
+    """A public tab is shown (so not Pops), or None while none is public."""
+    tabs = ni_tabs()
+    return or_all([ni_selected(t) for t in tabs]) if tabs else None
+
+
+def ni_pops_selected() -> str:
+    shown_ = ni_any_shown()
+    return "yes" if shown_ is None else not_(shown_)
+
+
+def ni_strip_shown() -> str | None:
+    """The strip shows while a public tab could be on it: or_all of their
+    strip gates, or always (None) once one has none (Nation)."""
+    tabs = ni_tabs()
+    if not tabs:
+        return "no"
+    if any(t.strip is None for t in tabs):
+        return None
+    return or_all([rooted(t.strip, COUNTRY_ROOT) for t in tabs])
+
+
+def ni_tooltip(tab: Tab) -> str:
+    """Open for another country, what it shows the world; grayed, not running
+    there; for the player's own, the window's tooltip (its checklist too), on
+    the window's Country. SelectLocalization nests in its third argument
+    only, as the window's three-branch tooltips do."""
+    player = _tooltip_value(tab, COUNTRY_ROOT)
+    if tab.open_ is None:
+        return f"tooltip = \"[SelectLocalization( {LOCAL}, {player}, '{NI_OTHER_TT}' )]\""
+    other_open = and_(not_(LOCAL), rooted(tab.open_, COUNTRY_ROOT))
+    return (f"tooltip = \"[SelectLocalization( {other_open}, '{NI_OTHER_TT}', "
+            f"SelectLocalization( {not_(LOCAL)}, '{NI_NOT_RUNNING_TT}', {player} ) )]\"")
+
+
+def _ni_template(name: str, expr: str) -> list[str]:
+    if expr in ("yes", "no"):
+        return [f"template {name} {{", f"\tvisible = {expr}", "}", ""]
+    return _template(name, expr)
+
+
+def ni_templates() -> list[str]:
+    out = _ni_template(f"{NI_PREFIX}_pops_selected", ni_pops_selected())
+    out += _ni_template(f"{NI_PREFIX}_pops_unselected", ni_any_shown() or "no")
+    for tab in ni_tabs():
+        out += _ni_template(f"{NI_PREFIX}_{tab.key}_selected", ni_selected(tab))
+        out += _ni_template(f"{NI_PREFIX}_{tab.key}_unselected", ni_unselected(tab))
+    strip = ni_strip_shown()
+    out += _ni_template(f"{NI_PREFIX}_strip_shown", "yes" if strip is None else strip)
+    # the column's scroll area: up exactly while Pops isn't (the window's
+    # vanilla rows carry te_ni_pops_selected), so the same expression as the
+    # Pops tab's unselected half
+    out += _ni_template(f"{NI_PREFIX}_content_shown", ni_any_shown() or "no")
+    return out
+
+
+def _ni_pops_slot(slot: str) -> list[str]:
+    def override(name, *lines):
+        return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
+    return (override("button", f'text = "{NI_POPS_LABEL}"')
+            + override("button_tooltip", f'tooltip = "{NI_POPS_TOOLTIP}"')
+            + override("button_click", f"onclick = \"[GetVariableSystem.Set('{NI_STORED}', '{NI_FALLBACK}')]\"")
+            + override("button_visibility", f"using = {NI_PREFIX}_pops_selected")
+            + override("button_visibility_checked", f"using = {NI_PREFIX}_pops_unselected")
+            + override("button_selected", f'text = "{NI_POPS_LABEL}"'))
+
+
+def ni_strips() -> list[str]:
+    """te_ni_strips: the window's strips side by side in one centered row,
+    one vanilla tab_buttons per five tabs, each at the narrow width (540), as
+    the Timeline Extended window's full-screen frame has them."""
+    keys = [NI_FALLBACK] + [t.key for t in ni_tabs()]
+    by_key = {t.key: t for t in TABS}
+    out = ["### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by",
+           "### side and centered, each at the narrow strip width.",
+           "type te_ni_strips = hbox {",
+           "\tlayoutpolicy_horizontal = expanding",
+           "\tlayoutpolicy_vertical = fixed",
+           "",
+           "\texpand = {}"]
+    for i in range(0, len(keys), NI_PER_STRIP):
+        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in WIDE_STRIP] + [""]
+        for j, (slot, key) in enumerate(zip(SLOTS, keys[i:i + NI_PER_STRIP])):
+            if j:
+                out.append("")
+            out.append(f"\t\t### {key}")
+            lines = (_ni_pops_slot(slot) if key == NI_FALLBACK
+                     else _slot(slot, by_key[key], COUNTRY_ROOT, NI_STORED, NI_PREFIX, ni_tooltip(by_key[key])))
+            out += [f"\t\t{ln}" for ln in lines]
+        out.append("\t}")
+    return out + ["\texpand = {}", "}"]
+
+
+def ni_help_button(tab: Tab) -> list[str]:
+    """The header's "?": the system's Help page, which only reads."""
+    return ["te_help_button = {", f"\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_{tab.key}')]\"", "}"]
+
+
+def _ni_own(tab: Tab) -> list[str]:
+    return (["### The player's own country: the window's full-screen mount, with its gate,",
+             "### its entry and its controls.",
+             "flowcontainer = {",
+             f'\tname = "{NI_PREFIX}_{tab.key}_own"',
+             f'\tvisible = "[{LOCAL}]"',
+             "\tparentanchor = hcenter",
+             "\tdirection = vertical",
+             "\tignoreinvisible = yes",
+             ""]
+            + [f"\t{ln}" for ln in _content(tab, wide=True)] + ["}"])
+
+
+def _ni_other(tab: Tab) -> list[str]:
+    out = ["### Another country: the tab's header, its readout if it has one, then its",
+           "### sections under the window's Country, with no journal entry and no frame.",
+           "flowcontainer = {",
+           f'\tname = "{NI_PREFIX}_{tab.key}_other"',
+           f'\tvisible = "[{not_(LOCAL)}]"',
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tspacing = 10",
+           "",
+           "\tdefault_header = {",
+           "\t\tusing = default_list_position",
+           '\t\tblockoverride "text" {',
+           f'\t\t\ttext = "{tab.label}"',
+           "\t\t}"]
+    out += [f"\t\t{ln}" for ln in ni_help_button(tab)] + ["\t}"]
+    if tab.readout:
+        sgui, readout = tab.readout
+        out += ["",
+                "\t### What the tab shows without its entry, as the frame's tab_before_gate does.",
+                "\tflowcontainer = {",
+                f'\t\tvisible = "[{shown(sgui, COUNTRY_ROOT)}]"',
+                "\t\tusing = default_list_position",
+                "\t\tdirection = vertical",
+                "\t\tignoreinvisible = yes",
+                "",
+                f"\t\t{readout} = {{}}",
+                "\t}"]
+    return out + ["", f"\t{tab.wide} = {{}}", "}"]
+
+
+def ni_tabs_type() -> list[str]:
+    """te_ni_tabs: the window's column, one flowcontainer a public tab, up only
+    while its tab is shown, holding its two mounts."""
+    out = ["### The window's column, in its scroll area (te_ni_content): each public tab's",
+           "### pair of mounts, up only while its tab is shown.",
+           "type te_ni_tabs = flowcontainer {",
+           '\tname = "te_ni_tabs"',
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           "\tmargin_top = 10",
+           "\tmargin_bottom = 15"]
+    for tab in ni_tabs():
+        out += ["",
+                f"\t### {tab.key}",
+                "\tflowcontainer = {",
+                f'\t\tname = "{NI_PREFIX}_{tab.key}_tab"',
+                f"\t\tusing = {NI_PREFIX}_{tab.key}_selected",
+                "\t\tparentanchor = hcenter",
+                "\t\tdirection = vertical",
+                "\t\tignoreinvisible = yes",
+                ""]
+        out += [f"\t\t{ln}" if ln else "" for ln in _ni_own(tab)]
+        out.append("")
+        out += [f"\t\t{ln}" if ln else "" for ln in _ni_other(tab)]
+        out.append("\t}")
+    return out + ["}"]
+
+
+NI_HEADER = [
+    "### AUTO-GENERATED by scripts/generators/gen_te_systems_window.py from its TABS registry (the public",
+    "### tabs, in NI_ORDER). Do not edit.",
+    "### National Info, the Census Data window (gui/pop_browser_panel.gui): its selection templates,",
+    "### its strip (te_ni_strips) and its column of mounts (te_ni_tabs), which the window instances in",
+    "### its ### MOD: National Info blocks. The generator's National Info section has the rule.",
+    "",
+]
+
+
+def _validate_ni() -> None:
+    keys = {t.key for t in TABS}
+    if NI_ORDER[0] != NI_FALLBACK or len(set(NI_ORDER)) != len(NI_ORDER) or set(NI_ORDER[1:]) - keys:
+        raise ValueError("NI_ORDER: Pops first, then tab keys, each once")
+    for t in TABS:
+        if t.public and t.key not in NI_ORDER:
+            raise ValueError(f"{t.key} is public: give it a place in NI_ORDER")
+        if t.public and t.wide is None:
+            raise ValueError(f"{t.key} is public: National Info draws its wide layout")
+
+
+def render_ni() -> str:
+    _validate()
+    _validate_ni()
+    lines = list(NI_HEADER)
+    lines += ["### Which tab is shown: the last one chosen while it is open for the window's",
+              "### country, otherwise Pops. A tab's unselected half shows while it is on the",
+              "### strip for that country and not shown. Then the strip's gate and the",
+              "### column's (every tab but Pops).", ""]
+    lines += ni_templates()
+    lines += ["types te_national_info_generated_types", "{"]
+    for i, part in enumerate((ni_strips(), ni_tabs_type())):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in part]
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 # --- the file -----------------------------------------------------------------
 
 HEADER = [
@@ -646,13 +954,14 @@ def render() -> str:
 
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else argv
-    data = BOM + render().encode("utf-8")
+    outputs = [(GUI_OUT, BOM + render().encode("utf-8")), (NI_OUT, BOM + render_ni().encode("utf-8"))]
     if "--check" in argv:
-        if not GUI_OUT.exists() or GUI_OUT.read_bytes() != data:
-            print(f"stale: {GUI_OUT} (run python3 scripts/generators/gen_te_systems_window.py)")
-            return 1
-        return 0
-    GUI_OUT.write_bytes(data)
+        stale = [path for path, data in outputs if not path.exists() or path.read_bytes() != data]
+        for path in stale:
+            print(f"stale: {path} (run python3 scripts/generators/gen_te_systems_window.py)")
+        return 1 if stale else 0
+    for path, data in outputs:
+        path.write_bytes(data)
     return 0
 
 

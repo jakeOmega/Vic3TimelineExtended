@@ -8992,6 +8992,8 @@
  te_nation_wc_row_demog_tt:0 "$te_nation_wc_row_tt$ The target's terms, and the most and least concentrated states, are in the Demographics tab of the Population panel."
  te_nation_wc_row_tt:0 "The score moves toward its target each year."
  te_nation_wc_steady:0 "Steady"
+ te_ni_tab_not_running_tt:0 "Not running in [Country.GetName]."
+ te_ni_tab_other_tt:0 "What [Country.GetName] shows the world: its figures, without its controls."
  te_officer_academies_standing:0 "Academy Officer Corps"
  te_open_map_mode_survey:0 "Open Map-Mode Survey"
  te_orbit_moratorium_tt:0 "#header Moratorium on Destructive Anti-Satellite Tests#!\n[GetPlayer.GetCustom('te_asat_moratorium_detail')]"
