@@ -17227,6 +17227,13 @@ pm_reinforced_concrete_buildings = {
 	required_input_goods = electricity
 }
 
+# Advanced Construction unlocks in era 7 (prefabricated_construction), an era
+# before the Software Industry (computer_networks), so it takes no Software:
+# trucks (automobiles), cranes (engines) and the power of the factories that
+# make the panels stand in. Software joins construction through Computer-Aided
+# Design (pmg_construction_automation) and Nanomaterial Buildings.
+# test_construction_tiers.py fails on a tier that takes a good only a later
+# era can make.
 pm_advanced_construction = {
 	texture = "gfx/interface/icons/production_method_icons/pm_advanced_construction.dds"
 
@@ -17243,23 +17250,23 @@ pm_advanced_construction = {
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
-			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (14.78%)
-			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (9.46%)
-			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (5.91%)
-			goods_input_tools_add = 16                           # Price:   40, Total cost:   640.0 (9.46%)
-			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (8.87%)
-			goods_input_transportation_add = 41.5                # Price:   30, Total cost:  1245.0 (18.40%)
-			goods_input_engines_add = 4                          # Price:   60, Total cost:   240.0 (3.55%)
-			goods_input_digital_assets_add = 20                  # Price:  100, Total cost:  2000.0 (29.56%)
+			goods_input_steel_add = 20                           # Price:   50, Total cost:  1000.0 (14.61%)
+			goods_input_glass_add = 16                           # Price:   40, Total cost:   640.0 (9.35%)
+			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (5.84%)
+			goods_input_tools_add = 16                           # Price:   40, Total cost:   640.0 (9.35%)
+			goods_input_electricity_add = 40                     # Price:   30, Total cost:  1200.0 (17.53%)
+			goods_input_transportation_add = 41.5                # Price:   30, Total cost:  1245.0 (18.19%)
+			goods_input_engines_add = 12                         # Price:   60, Total cost:   720.0 (10.52%)
+			goods_input_automobiles_add = 10                     # Price:  100, Total cost:  1000.0 (14.61%)
 			# Output goods
 			goods_output_construction_add = 10                   # Price: 1000, Total cost: 10000.0 (100.00%)
-			# Total input cost: 6765.0
+			# Total input cost: 6845.0
 			# Total output cost: 10000.0
-			# Profit: 3235.0
-			# Profit margin: 47.82%
+			# Profit: 3155.0
+			# Profit margin: 46.09%
 			# Zero profit price multiplier: 0.68
 			# Employment: 5000
-			# Wage breakeven: 0.65
+			# Wage breakeven: 0.63
 		}
 
 		level_scaled = {

@@ -302,10 +302,10 @@ pm_te_direct_construction_advanced = {
 			goods_input_glass_add = 16
 			goods_input_explosives_add = 8
 			goods_input_tools_add = 16
-			goods_input_electricity_add = 20
+			goods_input_electricity_add = 40
 			goods_input_transportation_add = 41.5
-			goods_input_engines_add = 4
-			goods_input_digital_assets_add = 20
+			goods_input_engines_add = 12
+			goods_input_automobiles_add = 10
 		}
 
 		level_scaled = {
