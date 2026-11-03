@@ -1639,7 +1639,8 @@ class ProgrammeStepperTest(unittest.TestCase):
                     body = row[slice(*_span(row, row.index(f'blockoverride "{block}"')))]
                     ops = set(re.findall(r"\(CFixedPoint\)(\d+)", body))
                     self.assertEqual(ops, {str(op)}, block)
-                    self.assertNotIn("visible", body, "a stepper is always drawn")
+                    self.assertNotIn("visible", body, "a stepper is always drawn for the player (greyed, not hidden); "
+                                     "only te_own_country_only hides it, for another country")
                     for prop in ("enabled", "onclick", "tooltip"):
                         self.assertRegex(body, rf"\b{prop} = ")
 

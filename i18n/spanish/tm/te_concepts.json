@@ -11144,8 +11144,8 @@
   "es": "Nuestras emisoras y la prensa extranjera amiga llevan a cabo una campaña coordinada contra las instituciones de una potencia rival."
  },
  "te_hist_since": {
-  "en": "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!",
-  "es": "#lore Historia disponible desde [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
+  "en": "#lore History available since [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!",
+  "es": "#lore Historia disponible desde [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  },
  "te_jud_act_upheld_desc": {
   "en": "The courts found the act we forced through lawful, and it carries their approval.",

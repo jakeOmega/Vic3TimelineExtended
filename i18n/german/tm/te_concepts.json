@@ -11144,8 +11144,8 @@
   "de": "Unsere Sender und uns wohlgesinnte ausländische Zeitungen führen eine koordinierte Kampagne gegen die Institutionen einer rivalisierenden Macht."
  },
  "te_hist_since": {
-  "en": "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!",
-  "de": "#lore Geschichte verfügbar seit [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
+  "en": "#lore History available since [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!",
+  "de": "#lore Geschichte verfügbar seit [Country.MakeScope.ScriptValue('te_history_since_year')|0].[Country.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  },
  "te_jud_act_upheld_desc": {
   "en": "The courts found the act we forced through lawful, and it carries their approval.",
