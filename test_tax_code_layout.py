@@ -28,6 +28,7 @@ import unittest
 from pathlib import Path
 
 from gui_test_helpers import _block_at, _strip_comments, _type_body, assert_wide_matches_narrow
+from gui_test_helpers import GUARD, guard_spans, in_spans, mod_types, type_closure
 from gui_test_helpers import _read as _read_gui
 from test_tax_code_state import KEYS, block, close, gen, top_level_names
 
@@ -44,8 +45,14 @@ LIGHT_GUI = "gui/journal_entry_widgets/te_tax_light_widget.gui"
 NEW_GUI = (OVERVIEW, LAYOUT, WORKBENCH, REVIEW, POLITICS, GEN_ROWS, LIGHT_GUI)
 LIGHT_SGUIS = "common/scripted_guis/te_tax_light_sguis.txt"
 LIGHT_GEN_SGUIS = "common/scripted_guis/te_tax_light_generated_sguis.txt"
-# The light setting's display gate, as the composers test it.
-LIGHT_SHOWN = "GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+# The light setting's display gate, as the composers and sections test it: on the shown country, Country, which every
+# mount supplies (the player's, or another country's in National Info).
+LIGHT_SHOWN = "GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+# The Help page's and its title's: the popup has no Country, so on the player (test_te_help_pages.py).
+LIGHT_SHOWN_PLAYER = LIGHT_SHOWN.replace("Country.MakeScope", "GetPlayer.MakeScope")
+# The tab's own gate on Country (te_budget_tax_tab_sgui: the rule and an active entry), the composers' and the
+# overview's in place of JournalEntry.IsActive, which another country's mount lacks.
+TAB_SHOWN = "GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 JE = "common/journal_entries/je_tax_code.txt"
 TAB_SGUIS = "common/scripted_guis/te_system_tab_sguis.txt"
 TAX_SGUIS = "common/scripted_guis/te_tax_sguis.txt"
@@ -426,9 +433,18 @@ class LayoutTest(unittest.TestCase):
                 type_body(self.all, name)
 
     def test_composers_and_overview_are_gated_on_an_active_entry(self):
+        """On the tab's gate on Country, which tests the entry for any country:
+        another country's mount (National Info) has no JournalEntry. The journal
+        roots keep the entry's own IsActive (test_roots_are_gated_and_fixed_width)."""
         for name in ("te_tax_status_sections", "te_tax_reference_sections"):
-            self.assertIn('visible = "[JournalEntry.IsActive]"', type_body(self.layout, name), name)
-        self.assertIn('visible = "[JournalEntry.IsActive]"', type_body(self.overview, "te_tax_overview_panel"))
+            self.assertIn(f'visible = "[{TAB_SHOWN}]"', type_body(self.layout, name), name)
+        self.assertIn(f'visible = "[{TAB_SHOWN}]"', type_body(self.overview, "te_tax_overview_panel"))
+        for path in NEW_GUI:
+            with self.subTest(path=path):
+                text = gui(path)
+                if path == LAYOUT:   # the journal roots, outside every type
+                    text = text[:text.index('name = "widget_je_tax_code_overview"')]
+                self.assertNotIn("JournalEntry.IsActive", text)
 
     def test_roots_are_gated_and_fixed_width(self):
         roots = re.findall(r'^flowcontainer = \{\s*name = "(widget_je_tax_code_\w+)"\s*'
@@ -464,9 +480,11 @@ class LayoutTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('te_tax_show_bill_sgui').IsShown(", type_body(gui(POLITICS), "te_tax_politics_section"))
 
     def test_one_root_for_every_type_reader(self):
-        """Every number the shared types read comes from the player's country
-        (GetPlayer), never JournalEntry.GetCountry: the Budget tab and a
-        datamodel item's tooltip have no JournalEntry to start from."""
+        """Every number the shared types read comes from the shown country
+        (Country; GetPlayer in the Budget tab's footer summaries, the Help page
+        and a datamodel item's tooltip, gotcha #24), never
+        JournalEntry.GetCountry: the Budget tab and another country's mount
+        have no JournalEntry to start from."""
         self.assertNotIn("JournalEntry.GetCountry", self.all)
         self.assertNotIn("GetCountry", re.sub(r"GetPlayerJournalEntry", "", self.all))
 
@@ -500,6 +518,135 @@ class WideTest(unittest.TestCase):
         header = _block_at(body, body.index('blockoverride "tab_header"'))
         self.assertEqual(header.count("default_header = {"), 1)
         self.assertEqual(header.count("using = default_list_position"), 1)
+
+class PrivateTest(unittest.TestCase):
+    """Another country's Tax Code (National Info draws te_tax_wide_sections;
+    spec 2026-11-02-charts-help-national-info § 6.4, plan Review Focus 7):
+    the enacted code, the approved schedule (the passed bills), the bill under
+    debate and the history; no draft, offers, promises, workbench or
+    interest-group bargaining. Each of those sits under te_own_country_only
+    (Country.IsLocalPlayer), and where it is all a gated section or row holds,
+    that gate tests Country.IsLocalPlayer too, so the other country's panel
+    keeps no empty slot. GuardTest (test_te_system_tab_bodies.py) holds every
+    control to the same guard; this names the private parts one by one."""
+
+    OWN_GATE = "[And( Country.IsLocalPlayer, "
+
+    @classmethod
+    def setUpClass(cls):
+        cls.overview = type_body(gui(OVERVIEW), "te_tax_overview_panel")
+        cls.politics = type_body(gui(POLITICS), "te_tax_politics_section")
+        cls.wide = type_body(gui(LAYOUT), "te_tax_wide_sections")
+
+    def assert_guarded(self, body, needle, where):
+        spans = guard_spans(body)
+        found = [m.start() for m in re.finditer(re.escape(needle), body)]
+        self.assertTrue(found, f"{where}: no {needle}")
+        for pos in found:
+            self.assertTrue(in_spans(pos, spans), f"{where}: {needle} outside {GUARD}")
+
+    def assert_shown(self, body, needle, where):
+        spans = guard_spans(body)
+        found = [m.start() for m in re.finditer(re.escape(needle), body)]
+        self.assertTrue(found, f"{where}: no {needle}")
+        for pos in found:
+            self.assertFalse(in_spans(pos, spans), f"{where}: {needle} is another country's to see")
+
+    def own_section(self, path, name):
+        """A section another country never sees: its contents in one guarded
+        wrapper under a root gate that tests the local player too."""
+        body = type_body(gui(path), name)
+        root = re.search(r'(?m)^\t\tvisible = "([^"]*)"', body)
+        self.assertIsNotNone(root, f"{name} keeps its own gate")
+        self.assertTrue(root.group(1).startswith(self.OWN_GATE), f"{name}: {root.group(1)[:60]}")
+        self.assert_guarded(body, "te_tax_section_header = {", name)
+        self.assert_guarded(body, "te_tax_panel = {", name)
+
+    def test_the_wide_layout_draws_no_footer_summary(self):
+        """The draft's and the bill's summaries are the footers' (the Budget
+        tab's fixed_bottom and the window's), which read GetPlayer."""
+        drawn = type_closure({"te_tax_wide_sections"}, mod_types())
+        self.assertNotIn("te_tax_draft_summary", drawn)
+        self.assertNotIn("te_tax_bill_summary", drawn)
+
+    def test_the_workbench_is_the_players(self):
+        body = type_body(gui(WORKBENCH), "te_tax_workbench_section")
+        self.assertRegex(body.split("te_tax_section_header", 1)[0], rf"(?m)^\t\tusing = {GUARD}$")
+
+    def test_the_review_of_the_draft_is_the_players(self):
+        self.own_section(REVIEW, "te_tax_review_section")
+
+    def test_the_promises_are_the_players(self):
+        self.own_section(POLITICS, "te_tax_obligations_section")
+        self.assert_guarded(self.overview, 'text = "te_tax_ov_obligations"', "the overview's promises cell")
+        self.assertIn(f'visible = "{self.OWN_GATE}GetScriptedGui(\'te_tax_show_obligations_sgui\')', self.overview)
+
+    def test_the_draft_cell_is_the_players(self):
+        """The overview's three draft cells share one slot of their size."""
+        self.assertEqual(self.overview.count('text = "te_tax_ov_draft"'), 3)
+        self.assert_guarded(self.overview, 'text = "te_tax_ov_draft"', "the overview's draft cells")
+        self.assertRegex(self.overview, rf"widget = \{{\s*using = {GUARD}\s*size = \{{ 238 70 \}}")
+
+    def test_the_bill_cell_names_no_offers_for_another_country(self):
+        for key in ("'te_tax_ov_bill_offers'", "'te_tax_ov_bill_offers_tt'"):
+            with self.subTest(key=key):
+                pos = self.overview.index(key)
+                choice = self.overview[self.overview.rindex("SelectLocalization( ", 0, pos):pos]
+                self.assertTrue(choice.startswith("SelectLocalization( And( Country.IsLocalPlayer, "), choice[:80])
+
+    def test_the_bargaining_and_the_actions_are_the_players(self):
+        """The interest-group cards (stances, reasons, offers, Accept), their
+        heading and the estimate note, and every passage action."""
+        for needle in ("te_tax_ig_card = {}", 'text = "te_tax_pol_groups"', "AccessPlayer.AccessAllInterestGroups",
+                       "'te_tax_pol_est_note'", 'text = "te_tax_pol_pass"', 'text = "te_tax_pol_revise"',
+                       'text = "te_tax_pol_withdraw"', 'text = "te_tax_pol_force"', 'text = "te_tax_pol_reschedule"'):
+            with self.subTest(needle=needle):
+                self.assert_guarded(self.politics, needle, "te_tax_politics_section")
+
+    def test_the_held_bills_buttons_are_the_players(self):
+        body = type_body(gui(POLITICS), "te_tax_pending_section")
+        for needle in ('text = "te_tax_pk_reschedule"', 'text = "te_tax_pk_release"'):
+            with self.subTest(needle=needle):
+                self.assert_guarded(body, needle, "te_tax_pending_section")
+        self.assertEqual(body.count("visible = \"[And( Country.IsLocalPlayer, Or( EqualTo_CFixedPoint( "
+                                    "Country.MakeScope.ScriptValue('te_tax_view_p"), 2)
+
+    def test_the_light_codes_steppers_are_the_players(self):
+        """te_tax_instrument_row's - and + (the light code's public rows reuse
+        it) sit in fixed slots, guarded, and the intro that explains them too."""
+        row = type_body(gui(WORKBENCH), "te_tax_instrument_row")
+        for button in ("button_icon_minus_action", "button_icon_plus_action"):
+            with self.subTest(button=button):
+                self.assertRegex(row, rf"widget = \{{\s*size = \{{ 22 22 \}}\s*parentanchor = vcenter\s*"
+                                      rf"{button} = \{{\s*using = {GUARD}\b")
+        self.assert_guarded(type_body(gui(LIGHT_GUI), "te_tax_light_section"), 'text = "te_tax_lt_intro"',
+                            "te_tax_light_section")
+
+    def test_the_public_parts_stay_public(self):
+        """What another country sees (§ 6.4's Shown column) is under no guard:
+        the sections in the wide layout, the bill's conditions, the code cell
+        and the bill and passed-bill cells."""
+        for name in ("te_tax_overview_panel", "te_tax_light_section", "te_tax_politics_section",
+                     "te_tax_pending_section", "te_tax_enacted_table", "te_tax_workbench_section",
+                     "te_tax_review_section", "te_tax_history_section", "te_tax_how_section",
+                     "te_tax_light_how_section", "te_tax_obligations_section"):
+            with self.subTest(section=name):
+                self.assert_shown(self.wide, f"{name} = {{}}", "te_tax_wide_sections")
+        for key in ("te_tax_pol_support", "te_tax_pol_legitimacy", "te_tax_pol_debate", "te_tax_pol_due",
+                    "te_tax_pol_slot", "te_tax_pol_current"):
+            with self.subTest(condition=key):
+                self.assert_shown(self.politics, f'text = "{key}"', "te_tax_politics_section")
+        for key in ("te_tax_ov_code", "te_tax_ov_bill", "te_tax_ov_passed"):
+            with self.subTest(cell=key):
+                self.assert_shown(self.overview, f'text = "{key}"', "te_tax_overview_panel")
+        for name in ("te_tax_pending_section", "te_tax_politics_section"):
+            with self.subTest(root=name):
+                self.assertNotRegex(type_body(gui(POLITICS), name).split("te_tax_section_header", 1)[0],
+                                    rf"using = {GUARD}")
+        for name, path in (("te_tax_enacted_table", OVERVIEW), ("te_tax_history_section", OVERVIEW)):
+            with self.subTest(section=name):
+                self.assertNotIn(GUARD, type_body(gui(path), name))
+
 
 class JournalEntryTest(unittest.TestCase):
     @classmethod
@@ -898,13 +1045,15 @@ class WidthBudgetTest(unittest.TestCase):
             for key in keys:
                 with self.subTest(head=key):
                     self.fits(key, self.cell(body, f'"{key}"'))
-        # the heads sit over the rows' cells
+        # the heads sit over the rows' cells: the row's - and + each in a 22 slot (kept for another country,
+        # whose panel hides the buttons in them), the head's one cell over both
         row = type_body(self.files[WORKBENCH], "te_tax_instrument_row")
         widths = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", row)]
+        self.assertEqual(widths[4:6], [22, 22])
         for typ, path in (("te_tax_instrument_head", WORKBENCH), ("te_tax_light_head", LIGHT_GUI)):
             head = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\s*size = \{ (\d+) ", type_body(self.files[path], typ))]
             with self.subTest(head=typ):
-                self.assertEqual(head[:4] + head[5:], widths[:4] + widths[4:])
+                self.assertEqual(head[:4] + head[5:], widths[:4] + widths[6:])
                 self.assertEqual(head[4], 22 + 4 + 22)
 
     def test_goods_and_customs_names(self):
@@ -1065,8 +1214,8 @@ class FlagTest(unittest.TestCase):
                 self.assertNotIn("te_tax_note", body)
         self.assertIn(f'visible = "[{LIGHT_SHOWN}]"', type_body(gui(LIGHT_GUI), "te_tax_light_how_section").split("\n\n")[0])
         page = type_body(gui(LAYOUT), "te_tax_code_help_body")
-        light = page.index(f'visible = "[{LIGHT_SHOWN}]"')
-        full = page.index(f'visible = "[Not( {LIGHT_SHOWN} )]"')
+        light = page.index(f'visible = "[{LIGHT_SHOWN_PLAYER}]"')
+        full = page.index(f'visible = "[Not( {LIGHT_SHOWN_PLAYER} )]"')
         self.assertLess(light, page.index('text = "te_tax_lt_how_sub_rates"'))
         self.assertLess(page.index('text = "te_tax_lt_how_ai"'), full)
         self.assertLess(full, page.index('text = "te_tax_how_sub_drafting"'))
@@ -1074,7 +1223,7 @@ class FlagTest(unittest.TestCase):
         self.assertNotIn("te_tax_lt_how_", page[full:])
         self.assertNotRegex(page[light:full], r"[\"']te_tax_how_")
         title = type_body(gui(LAYOUT), "te_tax_code_help_popup")
-        self.assertIn(f"text = \"[SelectLocalization( {LIGHT_SHOWN}, 'te_tax_lt_how_header', 'te_tax_how_header' )]\"",
+        self.assertIn(f"text = \"[SelectLocalization( {LIGHT_SHOWN_PLAYER}, 'te_tax_lt_how_header', 'te_tax_how_header' )]\"",
                       title)
 
     def test_how_section_subheadings(self):
@@ -1152,7 +1301,7 @@ class DisplayValueTest(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertTrue(name.startswith("te_tax_disp_ig_"), name)
                 self.assert_guarded(name)
-        self.assertNotRegex(self.gui_text, r"(GetPlayer|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
+        self.assertNotRegex(self.gui_text, r"(GetPlayer|Country|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
         for name in names - group:
             with self.subTest(name=name):
                 self.assertTrue(name.startswith("te_tax_view_"), name)
@@ -1173,7 +1322,7 @@ class DisplayValueTest(unittest.TestCase):
         # an interest-group card's value is read only through the group
         for key in self.printed:
             with self.subTest(key=key):
-                self.assertNotRegex(self.loc[key], r"(GetPlayer|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
+                self.assertNotRegex(self.loc[key], r"(GetPlayer|Country|State)\.MakeScope\.ScriptValue\('te_tax_disp_ig_")
 
     def test_printed_loc_reads_the_player_never_the_entry(self):
         for key in self.printed:
@@ -1247,7 +1396,7 @@ class HistoryTest(unittest.TestCase):
             with self.subTest(position=i):
                 self.assertIn(f"te_tax_view_hist_{i}_kind", section)
                 self.assertIn(f'"te_tax_hist_date_{i}"', section)
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_hist_event_{i}')", section)
+                self.assertIn(f"Country.GetCustom('te_tax_hist_event_{i}')", section)
                 self.assertIn(f"te_tax_view_hist_{i}_month_y", table[f"te_tax_hist_date_{i}"])
                 self.assertIn(f"te_tax_view_hist_{i}_month_mo", table[f"te_tax_hist_date_{i}"])
 
