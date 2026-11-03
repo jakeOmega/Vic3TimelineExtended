@@ -432,7 +432,9 @@ class RegistryTest(unittest.TestCase):
                 self.assertEqual(body.rstrip()[-1], "}")
                 chart = body[body.index("te_history_chart = {"):]
                 self.assertEqual(_close(chart, chart.index("{")), len(chart.rstrip()) - 1, "one child")
-        self.assertIn("parentanchor = hcenter", _type_body(_read(CHART_GUI), "te_history_chart"))
+        # the chart itself is unanchored: its wrapper centers it (ChartWidthTest)
+        self.assertNotRegex(_type_body(_read(CHART_GUI), "te_history_chart").split("block \"chart_width\"")[0],
+                            r"\bparentanchor\b")
         for path in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True):
             self.assertIsNone(re.search(r"\btype \w+ = te_history_(plot|chart)\b", _read(path)), path)
 
@@ -719,6 +721,12 @@ def _fixed_width(node):
     return lo[0] if lo and hi and lo[0] == hi[0] else None
 
 
+def _value(node, key):
+    """A node's own property `key`, or None."""
+    prop = node.prop(key)
+    return prop.value if prop else None
+
+
 def _named(node, kind, name):
     return [c for c in node.children if c.kind == kind and c.name == name]
 
@@ -741,16 +749,20 @@ class ChartWidthTest(unittest.TestCase):
         cls.chart_type, cls.legend = types["te_history_chart"], types["te_history_marker_legend"]
 
     def each(self):
+        """(name, chart, size, wrapper) for every wrapper. Each test opens its
+        own subTest on the name: a subTest held open across a yield reports a
+        failure as GeneratorExit, at the first wrapper only."""
         for chart in gen.CHARTS:
             for size in gen.SIZES:
                 name = gen.wrapper_name(chart, size)
-                with self.subTest(wrapper=name):
-                    yield chart, size, self.wrappers[name]
+                yield name, chart, size, self.wrappers[name]
 
     def resolved(self, chart_node, name):
         """The chart instance's blockoverride `name`, else the type's block."""
-        return (_named(chart_node, "blockoverride", name) or _named(self.chart_type, "block", name)
-                or [n for n in self.chart_type.walk() if n.kind == "block" and n.name == name])[0]
+        found = (_named(chart_node, "blockoverride", name)
+                 or [n for n in self.chart_type.walk() if n.kind == "block" and n.name == name])
+        self.assertTrue(found, f'neither the chart nor te_history_chart has block "{name}"')
+        return found[0]
 
     def chart(self, wrapper):
         (node,) = [c for c in gui_tree.widgets(wrapper) if c.kind == "te_history_chart"]
@@ -758,39 +770,68 @@ class ChartWidthTest(unittest.TestCase):
 
     def test_each_wrapper_is_a_centered_column_of_fixed_width(self):
         """Never centered on a width its content gives it (gotcha #43, #46)."""
-        for chart, size, wrapper in self.each():
-            self.assertEqual(wrapper.prop("direction").value, "vertical")
-            self.assertEqual(wrapper.prop("parentanchor").value, "hcenter")
-            self.assertEqual(_fixed_width(wrapper), size[chart.kind].width)
+        for name, chart, size, wrapper in self.each():
+            with self.subTest(wrapper=name):
+                self.assertEqual(_value(wrapper, "direction"), "vertical")
+                self.assertEqual(_value(wrapper, "parentanchor"), "hcenter")
+                self.assertEqual(_fixed_width(wrapper), size[chart.kind].width)
 
     def test_the_chart_is_as_wide_as_its_wrapper(self):
-        """The chart inside is fixed at the same width (block "chart_width"), so
-        its own centering can't take a narrower one either."""
-        for _chart, _size, wrapper in self.each():
-            self.assertEqual(_fixed_width(self.resolved(self.chart(wrapper), "chart_width")), _fixed_width(wrapper))
+        """The chart inside is fixed at the same width (block "chart_width"), and
+        neither the chart nor its title and legend column is anchored: each sits
+        at the left of its parent, so no place in the chain depends on a width
+        measured from content (gotcha #43). The wrapper alone centers."""
+        for name, _chart, _size, wrapper in self.each():
+            with self.subTest(wrapper=name):
+                node = self.chart(wrapper)
+                self.assertEqual(_fixed_width(self.resolved(node, "chart_width")), _fixed_width(wrapper))
+                self.assertIsNone(node.prop("parentanchor"))
+        self.assertIsNone(self.chart_type.prop("parentanchor"))
+        (column,) = [n for n in gui_tree.widgets(self.chart_type) if n.kind == "flowcontainer"]
+        self.assertIsNotNone(column.prop("margin_left"), "the title and legend column")
+        self.assertIsNone(column.prop("parentanchor"))
+        self.assertIsNone(column.prop("widgetanchor"))
 
     def test_nothing_in_the_chart_is_wider_than_it(self):
         """The plot, and the title row and the legend in their column, fit the
         width: the plot is never wider than the wrapper, and no text widens it."""
         margin = int(next(n for n in self.chart_type.walk() if n.prop("margin_left")).prop("margin_left").value)
         self.assertEqual(margin, gen.TEXT_MARGIN)
-        for chart, size, wrapper in self.each():
-            node, width = self.chart(wrapper), _fixed_width(wrapper)
-            plot = gui_tree.size(self.resolved(node, "plot_size"))
-            self.assertEqual(plot, size[chart.kind].frame)
-            self.assertLessEqual(plot[0], width)
-            title = int(self.resolved(node, "chart_title_width").prop("max_width").value)
-            opens = [w for o in _named(node, "blockoverride", "chart_open") for w in gui_tree.widgets(o)]
-            title += sum(gen.OPEN_GAP + gen.OPEN_BUTTON for w in opens if w.kind == "te_chart_open_button")
-            legend = int(self.resolved(node, "chart_text_width").prop("max_width").value)
-            self.assertLessEqual(margin + max(title, legend), width)
-            self.assertLessEqual(int(self.resolved(node, "empty_width").prop("max_width").value), plot[0])
+        for name, chart, size, wrapper in self.each():
+            with self.subTest(wrapper=name):
+                node, width = self.chart(wrapper), size[chart.kind].width
+                plot = gui_tree.size(self.resolved(node, "plot_size"))
+                self.assertEqual(plot, size[chart.kind].frame)
+                self.assertLessEqual(plot[0], width)
+                title = int(self.resolved(node, "chart_title_width").prop("max_width").value)
+                # the open slot shows one button at a time (test_one_open_button_shows)
+                if any(w.kind == "te_chart_open_button" for w in self.open_slot(node)):
+                    title += gen.OPEN_GAP + gen.OPEN_BUTTON
+                legend = int(self.resolved(node, "chart_text_width").prop("max_width").value)
+                self.assertLessEqual(margin + max(title, legend), width)
+                self.assertLessEqual(int(self.resolved(node, "empty_width").prop("max_width").value), plot[0])
+
+    def open_slot(self, node):
+        """What the chart's "chart_open" slot, beside its title, holds."""
+        return [w for o in _named(node, "blockoverride", "chart_open") for w in gui_tree.widgets(o)]
+
+    def test_one_open_button_shows(self):
+        """The title's width leaves room for one open button. A slot may hold
+        more (F1's own-country and foreign viewers' pair) only if each carries
+        a visible, and at most one in a slot may show unconditionally, so the
+        row never draws two."""
+        for name, _chart, _size, wrapper in self.each():
+            with self.subTest(wrapper=name):
+                buttons = [w for w in self.open_slot(self.chart(wrapper)) if w.kind == "te_chart_open_button"]
+                if len(buttons) > 1:
+                    self.assertEqual([b.line for b in buttons if b.prop("visible") is None], [])
 
     def test_the_types_width_is_the_panels_monthly(self):
         """te_history_chart's own width is SMALL's monthly chart's, the 496 px
         frame, as its other defaults are; the generator overrides it elsewhere."""
-        (block,) = _named(self.chart_type, "block", "chart_width")
-        self.assertEqual(_fixed_width(block), gen.SMALL["monthly"].width)
+        blocks = _named(self.chart_type, "block", "chart_width")
+        self.assertEqual(len(blocks), 1, 'te_history_chart has one block "chart_width"')
+        self.assertEqual(_fixed_width(blocks[0]), gen.SMALL["monthly"].width)
         self.assertEqual(gen.SMALL["monthly"].width, 496)
         self.assertEqual({k: gen.SMALL[k].width for k in gen.KINDS},
                          {"monthly": 496, "annual": 488, "annual_pips": 488})
@@ -817,8 +858,8 @@ class ChartWidthTest(unittest.TestCase):
             with self.subTest(row=row.line):
                 (icon,) = [w for w in gui_tree.widgets(row) if w.kind == "icon"]
                 (box,) = [w for w in gui_tree.widgets(row) if w.kind == "textbox"]
-                self.assertEqual(box.prop("multiline").value, "yes")
-                self.assertEqual(box.prop("autoresize").value, "yes")
+                self.assertEqual(_value(box, "multiline"), "yes")
+                self.assertEqual(_value(box, "autoresize"), "yes")
                 used = gui_tree.size(icon)[0] + int(row.prop("spacing").value) + int(box.prop("max_width").value)
                 self.assertLessEqual(2 * margin + used, width)
 

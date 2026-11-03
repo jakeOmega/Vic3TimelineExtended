@@ -127,7 +127,8 @@ TEXT_MARGIN = 4   # the margin_left of te_history_chart's title and legend colum
 # wrapper. C1's wrapper, sized by its content, was centered in its column at the
 # width of the chart's text alone, the plot left out, so each chart sat half its
 # plot's excess over its text right of where it belonged, and the short-titled
-# ones ran out of the panel (gui_modding_guide.md gotcha #46).
+# ones ran out of the panel (gui_modding_guide.md gotcha #46). Only the wrapper
+# centers: the chart (te_history_chart) has no anchor and sits at its left.
 
 # The panel's size: today's literals. The monthly row is te_history_chart's own
 # defaults (test_te_history_charts.py holds the type to it), but for the title,
@@ -505,8 +506,9 @@ def wrapper(chart: Chart, size: Size) -> list[str]:
 # range buttons, so the two never drift (by system), with the height the popup
 # allows it.
 KEYS = {
-    "banking": ("te_banking_hist_marker_key", 66),          # three lines of fontsize_medium: the
-                                                            # marker's, wrapped to two, and the crash's
+    "banking": ("te_banking_hist_marker_key", 88),          # four lines of fontsize_medium: the
+                                                            # marker's, wrapped to two, and the crash's,
+                                                            # one in English, two in German
     "demographics": ("te_demog_hist_pip_legend", 26),       # one line
     "cultural_hegemony": ("te_ch_hist_model_key", 184),     # eight rows of ch_fontsize_row (17)
 }

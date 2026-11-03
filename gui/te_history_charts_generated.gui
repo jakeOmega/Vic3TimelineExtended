@@ -5812,7 +5812,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_value_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5854,7 +5854,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_momentum_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5896,7 +5896,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_bank_bubble_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5938,7 +5938,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -5980,7 +5980,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_policy_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -6022,7 +6022,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_rate_paid_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -6064,7 +6064,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_inflation_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -6106,7 +6106,7 @@ types te_history_charts_generated_types
 			text = "te_hist_chart_mon_fx_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1320 640 }
+			size = { 1320 660 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
