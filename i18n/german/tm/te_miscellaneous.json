@@ -17580,16 +17580,16 @@
   "de": "#v = [GetGlobalVariable('nd_taboo_target').GetValue|1]#!  Drift allein erreicht höchstens 55; darüber hinaus braucht es Zusammenarbeit"
  },
  "nd_taboo_bd_tradition": {
-  "en": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  The tradition of non-use: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! years' worth, full at #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_tradition_cap')|0]#!",
-  "de": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  Die Tradition des Nichteinsatzes: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! Jahre wert, voll bei #v [GetPlayer.MakeScope.ScriptValue('nd_taboo_tradition_cap')|0]#!"
+  "en": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  The tradition of non-use: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! years' worth, full at #v [SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')|0]#!",
+  "de": "#v [GetGlobalVariable('nd_tb_tradition').GetValue|+1]#!  Die Tradition des Nichteinsatzes: #v [GetGlobalVariable('nd_taboo_quiet_years').GetValue|0]#! Jahre wert, voll bei #v [SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')|0]#!"
  },
  "nd_taboo_bd_un": {
   "en": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  The United Nations: the Non-Proliferation Treaty, the Physical Protection convention and the Prohibition Treaty, as strong as the organisation's authority",
   "de": "#v [GetGlobalVariable('nd_tb_un').GetValue|+1]#!  Die Vereinten Nationen: der Atomwaffensperrvertrag, das Übereinkommen zum physischen Schutz und der Verbotsvertrag, so stark wie die Autorität der Organisation"
  },
  "nd_taboo_burden_hint_cut": {
-  "en": "\\n\\nOur restraint groups would ease at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! warheads or fewer.",
-  "de": "\\n\\nUnsere Zurückhaltungsgruppen würden sich bei #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! Sprengköpfen oder weniger beruhigen."
+  "en": "\\n\\nOur restraint groups would ease at #v [Country.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! warheads or fewer.",
+  "de": "\\n\\nUnsere Zurückhaltungsgruppen würden sich bei #v [Country.MakeScope.ScriptValue('nd_disp_taboo_step_down_warheads')|0]#! Sprengköpfen oder weniger beruhigen."
  },
  "nd_taboo_burden_hint_only_dismantling": {
   "en": "\\n\\nOnly giving up the arsenal would ease our restraint groups now.",
@@ -17600,8 +17600,8 @@
   "de": "#v Keine#!"
  },
  "nd_taboo_ceiling_set": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! Sprengköpfe"
+  "en": "#v [Country.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! warheads",
+  "de": "#v [Country.MakeScope.ScriptValue('nd_disp_warhead_ceiling')|0]#! Sprengköpfe"
  },
  "nd_taboo_civil_defence": {
   "en": "Civil Defence",
@@ -18932,8 +18932,8 @@
   "de": "Können wir es umsetzen?"
  },
  "nd_w_crisis_ft_tt": {
-  "en": "#tooltip_header Follow-through#!\\n$TOOLTIP_DELIMITER$\\n[JournalEntry.GetCountry.GetCustom('nd_crisis_ft_reason')]\\n\\nDoctrine is public: every government knows whether a threat can be carried out, and weighs it.",
-  "de": "#tooltip_header Umsetzung#!\\n$TOOLTIP_DELIMITER$\\n[JournalEntry.GetCountry.GetCustom('nd_crisis_ft_reason')]\\n\\nDie Doktrin ist öffentlich bekannt: Jede Regierung weiß, ob eine Drohung umgesetzt werden kann, und berücksichtigt das."
+  "en": "#tooltip_header Follow-through#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_ft_reason')]\\n\\nDoctrine is public: every government knows whether a threat can be carried out, and weighs it.",
+  "de": "#tooltip_header Umsetzung#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_crisis_ft_reason')]\\n\\nDie Doktrin ist öffentlich bekannt: Jede Regierung weiß, ob eine Drohung umgesetzt werden kann, und berücksichtigt das."
  },
  "nd_w_crisis_header": {
   "en": "Nuclear Crisis",
@@ -19056,8 +19056,8 @@
   "de": "#tooltip_header Härtung#!\\n$TOOLTIP_DELIMITER$\\nVerteilung, Silos, U-Boote auf See. Jede Stufe lässt die Überlebensfähigkeit schneller zu ihrer Obergrenze steigen; ohne sie schwindet die Überlebensfähigkeit langsam. Jede Stufe kostet jede Woche Geld."
  },
  "nd_w_hardening_value": {
-  "en": "Level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! a level",
-  "de": "Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! je Stufe"
+  "en": "Level #v [Country.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! a level",
+  "de": "Stufe #v [Country.MakeScope.ScriptValue('nd_display_hardening')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_hardening_step')|D]#! je Stufe"
  },
  "nd_w_hold_label": {
   "en": "Chance of a halt",
@@ -19088,8 +19088,8 @@
   "de": "#tooltip_header Unauffindbare Sprengköpfe#!\\n$TOOLTIP_DELIMITER$\\nSprengköpfe aus unserem Arsenal, die beim Besitzerwechsel abhandenkamen — in einem Bürgerkrieg oder als ein Arsenal an uns überging. Irgendwo hat sie jemand: Im Zeitalter des Terrorismus kann ein Komplott einen davon gegen eine Stadt richten, und Ermittler können die Spur zu uns zurückverfolgen.\\n\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_loose_warheads')|0]#! sind weltweit unauffindbar.\\n\\nSie können von Inspektoren, einer verdeckten Operation, einem Sicherheitsbeistandsabkommen oder dem Übereinkommen über den physischen Schutz gefunden und gesichert werden."
  },
  "nd_w_loose_value": {
-  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads",
-  "de": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#! Sprengköpfe"
+  "en": "#R [Country.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads",
+  "de": "#R [Country.MakeScope.ScriptValue('nd_display_our_loose')|0]#! Sprengköpfe"
  },
  "nd_w_pledge_label": {
   "en": "Pledges",
@@ -19180,8 +19180,8 @@
   "de": "#tooltip_header Sicherungen#!\\n$TOOLTIP_DELIMITER$\\nVier-Augen-Prinzip, Freigabecodes, Training, Inspektionen. Jede Stufe erhöht die Befehlszuverlässigkeit, macht das Stoppen eines delegierten Starts wahrscheinlicher und kostet jede Woche Geld."
  },
  "nd_w_safeguards_value": {
-  "en": "Level #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_safeguards')|0]#! · @money! #N [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! a level",
-  "de": "Stufe #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_safeguards')|0]#! · @money! #N [GetPlayer.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! je Stufe"
+  "en": "Level #v [Country.MakeScope.ScriptValue('nd_display_safeguards')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! a level",
+  "de": "Stufe #v [Country.MakeScope.ScriptValue('nd_display_safeguards')|0]#! · @money! #N [Country.MakeScope.ScriptValue('nd_upkeep_weekly_safeguards_step')|D]#! je Stufe"
  },
  "nd_w_strain_label": {
   "en": "Crew strain",
@@ -19216,8 +19216,8 @@
   "de": "#tooltip_header Nuklearer Schutzschirm#!\\n$TOOLTIP_DELIMITER$\\nUnsere unmittelbaren Klientelländer gelten ohne Vertrag als unter unserer nuklearen Garantie: Unser Arsenal nimmt ihrer Kriegsunterstützung den nuklearen Schatten, fällt in jeder Krise gegen sie ins Gewicht, und wir werden aufgefordert zu reagieren, wenn sie bedroht oder getroffen werden. Ein Nuklearschlag gegen eines von ihnen erlaubt uns Vergeltung nach jeder Doktrin.\\n\\nIhn aufzukündigen ist eine diplomatische Aktion gegenüber dem Klientelland: sofort #R +10#! Freiheitsdrang, und jede Woche mehr, solange er besteht."
  },
  "nd_w_umbrella_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
-  "de": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! Klientelländer"
+  "en": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
+  "de": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! Klientelländer"
  },
  "nd_w_upkeep_label": {
   "en": "Upkeep",
@@ -19228,8 +19228,8 @@
   "de": "#tooltip_header Unterhalt#!\\n$TOOLTIP_DELIMITER$\\nWas die Abschreckung jede Woche kostet, unabhängig davon, was das Waffenprogramm gerade tut: Verwahrung des Arsenals, Bereitschaft über Routine, Sicherungen und Härtung. Er skaliert mit unserem BIP und mit der Größe des Arsenals und ist auf etwa zwei Prozent des BIP im Jahr gedeckelt."
  },
  "nd_w_upkeep_value": {
-  "en": "@money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#!/week",
-  "de": "@money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#!/Woche"
+  "en": "@money!#R [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#!/week",
+  "de": "@money!#R [Country.MakeScope.ScriptValue('nd_display_upkeep_weekly')|D]#!/Woche"
  },
  "nd_w_world_crises_header": {
   "en": "World Crises",
@@ -19400,12 +19400,12 @@
   "de": "[SCOPE.sCountry('source_country').GetAltName('NOM')|U] und [SCOPE.sCountry('target_country').GetAltName('NOM')] haben ein [concept_alliance] oder einen [concept_defensive_pact], oder [SCOPE.sCountry('source_country').GetAltName('NOM')] gewährt [SCOPE.sCountry('target_country').GetAltName('DAT')] „$guarantee_independence$“, in Kraft oder in diesem Vertrag, oder sie gehören demselben [concept_power_bloc] an"
  },
  "nuclear_program_aid_note_active": {
-  "en": "\\n#G +[JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! from foreign nuclear assistance.",
-  "de": "\\n#G +[JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! durch ausländische nukleare Unterstützung."
+  "en": "\\n#G +[Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! from foreign nuclear assistance.",
+  "de": "\\n#G +[Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! durch ausländische nukleare Unterstützung."
  },
  "nuclear_program_aid_note_sabotaged": {
-  "en": "\\nForeign assistance and foreign sabotage together change the rate by [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%.",
-  "de": "\\nAusländische Unterstützung und ausländische Sabotage verändern die Rate zusammen um [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%."
+  "en": "\\nForeign assistance and foreign sabotage together change the rate by [Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%.",
+  "de": "\\nAusländische Unterstützung und ausländische Sabotage verändern die Rate zusammen um [Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%."
  },
  "nuclear_program_debug_pause": {
   "en": "Nuclear Programme Frozen (test)",
@@ -19420,8 +19420,8 @@
   "de": "#lore nicht erfasst#!"
  },
  "nuclear_program_next_warhead_estimate": {
-  "en": "#v about [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_months_to_next')|1]#! months",
-  "de": "#v etwa [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_months_to_next')|1]#! Monate"
+  "en": "#v about [Country.MakeScope.ScriptValue('nuclear_program_display_months_to_next')|1]#! months",
+  "de": "#v etwa [Country.MakeScope.ScriptValue('nuclear_program_display_months_to_next')|1]#! Monate"
  },
  "nuclear_program_next_warhead_stalled": {
   "en": "#lore not progressing#!",
@@ -19488,16 +19488,16 @@
   "de": "\\nDas erste Gerät trägt die gesamte Last der Programmforschung; jeder Sprengkopf danach kommt #G [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0]-mal#! schneller."
  },
  "nuclear_program_rate_note_series": {
-  "en": "\\n#G Series production#! — the design is proven, so progress runs [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0] times faster than it did before the first device.",
-  "de": "\\n#G Serienproduktion#! — das Design hat sich bewährt, sodass der Fortschritt [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0]-mal schneller verläuft als vor dem ersten Gerät."
+  "en": "\\n#G Series production#! — the design is proven, so progress runs [Country.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0] times faster than it did before the first device.",
+  "de": "\\n#G Serienproduktion#! — das Design hat sich bewährt, sodass der Fortschritt [Country.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0]-mal schneller verläuft als vor dem ersten Gerät."
  },
  "nuclear_program_rate_note_unfunded": {
   "en": "\\n#lore No funding is allocated, so nothing is being built.#!",
   "de": "\\n#lore Es sind keine Mittel bereitgestellt, daher wird nichts gebaut.#!"
  },
  "nuclear_program_sabotage_note": {
-  "en": "\\n#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! from foreign sabotage.",
-  "de": "\\n#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! durch ausländische Sabotage."
+  "en": "\\n#R [Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! from foreign sabotage.",
+  "de": "\\n#R [Country.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! durch ausländische Sabotage."
  },
  "nuclear_program_status_developing": {
   "en": "Our first nuclear device is under development.",

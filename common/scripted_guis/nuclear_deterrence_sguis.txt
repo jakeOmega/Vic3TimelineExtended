@@ -501,6 +501,21 @@ nd_armed_sgui = {
 	effect = { }
 }
 
+# Does the world believe this country armed (it has tested: nd_believed_armed)?
+# Another country's panel reads this, never nd_armed_sgui, which reads the
+# true count: its overview cell gives the public estimate (nd_believed_stockpile)
+# once there is one, and nothing before (spec
+# 2026-11-02-charts-help-national-info § 6.4).
+nd_believed_armed_sgui = {
+	scope = country
+	is_shown = {
+		nd_believed_armed = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 # Does anyone shelter under our umbrella? Draws the posture panel's umbrella
 # line (umbrella/recessed/dead-hand spec §1.6).
 nd_umbrella_sgui = {

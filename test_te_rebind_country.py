@@ -435,8 +435,11 @@ class OtherTabsTest(unittest.TestCase):
                       tool.render(s))
 
     def test_the_repo_names_a_key_two_tabs_render(self):
-        s = tool.survey_tab("banking")
-        self.assertIn("colonial_empire", s.loc["te_hist_since"].also)
+        """The charts' "since" line, te_hist_since, is a key the Banking and Colonial
+        Empire panels both render (Nuclear's too). Asked of the renders themselves
+        (survey_tab's others), since once a system's PR binds the key to Country it
+        has no read left for survey_tab to list."""
+        self.assertIn("te_hist_since", tool._tab_keys("banking") & tool._tab_keys("colonial_empire"))
 
     def test_isactive_becomes_the_entrys_gate_not_the_readouts(self):
         """Banking and the Colonial Empire open on a readout without the entry

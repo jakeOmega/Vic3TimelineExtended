@@ -822,7 +822,7 @@ types nuclear_deterrence_widget_types
 			size = { 100% 100% }
 			texture = "gfx/interface/backgrounds/white.dds"
 			color = { 0.9 0.75 0.35 0.2 }
-			visible = "[Or( ObjectsEqual( State.GetOwner, GetPlayer.Self ), ObjectsEqual( State.GetOwner.MakeScope.Var('nd_wc_target_cap').GetState.GetOwner, GetPlayer.Self ) )]"
+			visible = "[Or( ObjectsEqual( State.GetOwner, Country.Self ), ObjectsEqual( State.GetOwner.MakeScope.Var('nd_wc_target_cap').GetState.GetOwner, Country.Self ) )]"
 		}
 		flowcontainer = {
 			direction = horizontal
@@ -929,295 +929,306 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_in_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nd_in_crisis_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_crisis_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_crisis_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_crisis_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_crisis_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_crisis_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_crisis_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_crisis_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_crisis_closed'))]"
-			}
-		}
-
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_crisis_closed'))]"
-			spacing = 4
-
-			nd_script_line = {
-				datacontext = "[GetScriptedGui('nd_crisis_opponent_sgui')]"
-				blockoverride "line_tooltip" {
-					tooltip = "nd_w_crisis_headline_tt"
-				}
-				blockoverride "line_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				}
-			}
-
-			### The readings: 238 + 4 + 238 = 480, two to a row.
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = yes
 				spacing = 4
 
-				nd_crisis_cell = {
-					size = { 238 70 }
-					tooltip = "nd_w_crisis_stage_tt"
-					blockoverride "caption" {
-						text = "nd_w_crisis_stage_label"
+				nd_script_line = {
+					datacontext = "[GetScriptedGui('nd_crisis_opponent_sgui')]"
+					blockoverride "line_tooltip" {
+						tooltip = "nd_w_crisis_headline_tt"
 					}
-					blockoverride "word" {
-						text = "nd_w_crisis_stage_value"
+					blockoverride "line_text" {
+						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					}
-					blockoverride "figure" {
-						nd_crisis_cell_figure = {
-							text = "nd_w_crisis_stage_figure"
+				}
+
+				### The readings: 238 + 4 + 238 = 480, two to a row.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					nd_crisis_cell = {
+						size = { 238 70 }
+						tooltip = "nd_w_crisis_stage_tt"
+						blockoverride "caption" {
+							text = "nd_w_crisis_stage_label"
+						}
+						blockoverride "word" {
+							text = "nd_w_crisis_stage_value"
+						}
+						blockoverride "figure" {
+							nd_crisis_cell_figure = {
+								text = "nd_w_crisis_stage_figure"
+							}
+						}
+					}
+					nd_crisis_cell = {
+						size = { 238 70 }
+						tooltip = "nd_w_crisis_deadline_tt"
+						blockoverride "caption" {
+							text = "nd_w_crisis_deadline_label"
+						}
+						blockoverride "word" {
+							text = "nd_w_crisis_deadline_value"
+						}
+						blockoverride "figure" {
+							nd_crisis_cell_figure = {
+								text = "nd_w_crisis_deadline_figure"
+							}
 						}
 					}
 				}
-				nd_crisis_cell = {
-					size = { 238 70 }
-					tooltip = "nd_w_crisis_deadline_tt"
-					blockoverride "caption" {
-						text = "nd_w_crisis_deadline_label"
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					nd_crisis_cell = {
+						size = { 238 70 }
+						tooltip = "[Concatenate( Localize( 'nd_w_crisis_danger_tt' ), GetScriptedGui('nd_crisis_danger_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+						blockoverride "caption" {
+							text = "nd_w_crisis_danger_label"
+						}
+						blockoverride "word" {
+							text = "nd_w_crisis_danger_value"
+						}
+						blockoverride "figure" {
+							nd_crisis_cell_figure = {
+								text = "nd_w_crisis_danger_figure"
+							}
+						}
 					}
-					blockoverride "word" {
-						text = "nd_w_crisis_deadline_value"
-					}
-					blockoverride "figure" {
-						nd_crisis_cell_figure = {
-							text = "nd_w_crisis_deadline_figure"
+					nd_crisis_cell = {
+						size = { 238 70 }
+						tooltip = "[Concatenate( Localize( 'nd_w_crisis_pressure_tt' ), GetScriptedGui('nd_crisis_pressure_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+						blockoverride "caption" {
+							text = "nd_w_crisis_pressure_label_value"
+						}
+						blockoverride "word" {
+							text = "nd_w_crisis_pressure_value"
+						}
+						blockoverride "figure" {
+							nd_crisis_cell_figure = {
+								text = "nd_w_crisis_pressure_figure"
+							}
 						}
 					}
 				}
-			}
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = yes
-				spacing = 4
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
 
-				nd_crisis_cell = {
-					size = { 238 70 }
-					tooltip = "[Concatenate( Localize( 'nd_w_crisis_danger_tt' ), GetScriptedGui('nd_crisis_danger_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-					blockoverride "caption" {
-						text = "nd_w_crisis_danger_label"
+					nd_crisis_cell = {
+						size = { 238 48 }
+						tooltip = "nd_w_crisis_ft_tt"
+						blockoverride "caption" {
+							text = "nd_w_crisis_ft_label_value"
+						}
+						blockoverride "word" {
+							text = "nd_w_crisis_ft_value"
+						}
 					}
-					blockoverride "word" {
-						text = "nd_w_crisis_danger_value"
-					}
-					blockoverride "figure" {
-						nd_crisis_cell_figure = {
-							text = "nd_w_crisis_danger_figure"
+					nd_crisis_cell = {
+						size = { 238 48 }
+						tooltip = "nd_w_crisis_next_pressure_tt"
+						blockoverride "caption" {
+							text = "nd_w_crisis_next_pressure_label"
+						}
+						blockoverride "word" {
+							text = "[GetScriptedGui('nd_crisis_next_pressure_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
 						}
 					}
 				}
-				nd_crisis_cell = {
-					size = { 238 70 }
-					tooltip = "[Concatenate( Localize( 'nd_w_crisis_pressure_tt' ), GetScriptedGui('nd_crisis_pressure_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-					blockoverride "caption" {
-						text = "nd_w_crisis_pressure_label_value"
-					}
-					blockoverride "word" {
-						text = "nd_w_crisis_pressure_value"
-					}
-					blockoverride "figure" {
-						nd_crisis_cell_figure = {
-							text = "nd_w_crisis_pressure_figure"
-						}
-					}
-				}
-			}
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = yes
-				spacing = 4
 
-				nd_crisis_cell = {
-					size = { 238 48 }
-					tooltip = "nd_w_crisis_ft_tt"
-					blockoverride "caption" {
-						text = "nd_w_crisis_ft_label_value"
-					}
-					blockoverride "word" {
-						text = "nd_w_crisis_ft_value"
+				nd_subheader = {
+					blockoverride "subheader_text" {
+						text = "nd_w_crisis_moves_sub"
 					}
 				}
-				nd_crisis_cell = {
-					size = { 238 48 }
-					tooltip = "nd_w_crisis_next_pressure_tt"
-					blockoverride "caption" {
-						text = "nd_w_crisis_next_pressure_label"
+				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_crisis_private_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_public"
 					}
-					blockoverride "word" {
-						text = "[GetScriptedGui('nd_crisis_next_pressure_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_public_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 					}
 				}
-			}
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_talks"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_talks_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					}
+				}
+				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_trade"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_trade_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+					}
+				}
+				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_exercise"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_exercise_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					}
+				}
+				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_crisis_we_are_target_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_yield"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_yield_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+					}
+				}
+				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_crisis_we_issued_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_crisis_act_back_down"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_crisis_act_back_down_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+					}
+				}
 
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "nd_w_crisis_moves_sub"
+				### What each outcome brings (NUC-7, NUC-8): the concession, and what
+				### it does to our credibility, the better outcome first for both sides.
+				nd_subheader = {
+					blockoverride "subheader_text" {
+						text = "nd_w_crisis_outcomes_sub"
+					}
 				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_crisis_private_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_public"
+				nd_outcome_head = {}
+				nd_outcome_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_crisis_concession_tt"
+					}
+					blockoverride "outcome_label" {
+						text = "nd_w_crisis_concede_label_value"
+					}
+					blockoverride "outcome_effect" {
+						text = "nd_w_crisis_concession_value"
+					}
+					blockoverride "outcome_credibility" {
+						text = "nd_w_crisis_cred_concede"
+					}
 				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_public_btn"
+				nd_outcome_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_crisis_stakes_tt"
+					}
+					blockoverride "outcome_label" {
+						text = "nd_w_crisis_backdown_label_value"
+					}
+					blockoverride "outcome_effect" {
+						text = "nd_w_crisis_backdown_effect"
+					}
+					blockoverride "outcome_credibility" {
+						text = "nd_w_crisis_cred_backdown"
+					}
 				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				nd_outcome_row = {
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_crisis_standdown_tt"
+					}
+					blockoverride "outcome_label" {
+						text = "nd_w_crisis_standdown_label"
+					}
+					blockoverride "outcome_effect" {
+						text = "nd_w_crisis_standdown_effect"
+					}
+					blockoverride "outcome_credibility" {
+						text = "nd_w_crisis_cred_standdown"
+					}
 				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_talks"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_talks_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_trade"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_trade_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_exercise"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_exercise_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_crisis_we_are_target_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_yield"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_yield_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_crisis_we_issued_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_crisis_act_back_down"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_crisis_act_back_down_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
-				}
-			}
-
-			### What each outcome brings (NUC-7, NUC-8): the concession, and what
-			### it does to our credibility, the better outcome first for both sides.
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "nd_w_crisis_outcomes_sub"
-				}
-			}
-			nd_outcome_head = {}
-			nd_outcome_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_crisis_concession_tt"
-				}
-				blockoverride "outcome_label" {
-					text = "nd_w_crisis_concede_label_value"
-				}
-				blockoverride "outcome_effect" {
-					text = "nd_w_crisis_concession_value"
-				}
-				blockoverride "outcome_credibility" {
-					text = "nd_w_crisis_cred_concede"
-				}
-			}
-			nd_outcome_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_crisis_stakes_tt"
-				}
-				blockoverride "outcome_label" {
-					text = "nd_w_crisis_backdown_label_value"
-				}
-				blockoverride "outcome_effect" {
-					text = "nd_w_crisis_backdown_effect"
-				}
-				blockoverride "outcome_credibility" {
-					text = "nd_w_crisis_cred_backdown"
-				}
-			}
-			nd_outcome_row = {
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_crisis_standdown_tt"
-				}
-				blockoverride "outcome_label" {
-					text = "nd_w_crisis_standdown_label"
-				}
-				blockoverride "outcome_effect" {
-					text = "nd_w_crisis_standdown_effect"
-				}
-				blockoverride "outcome_credibility" {
-					text = "nd_w_crisis_cred_standdown"
-				}
-			}
-			nd_outcome_row = {
-				visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_crisis_trade_tt"
-				}
-				blockoverride "outcome_label" {
-					text = "nd_w_crisis_trade_label"
-				}
-				blockoverride "outcome_effect" {
-					text = "nd_w_crisis_trade_effect"
-				}
-				blockoverride "outcome_credibility" {
-					text = "nd_w_crisis_cred_trade"
+				nd_outcome_row = {
+					visible = "[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_crisis_trade_tt"
+					}
+					blockoverride "outcome_label" {
+						text = "nd_w_crisis_trade_label"
+					}
+					blockoverride "outcome_effect" {
+						text = "nd_w_crisis_trade_effect"
+					}
+					blockoverride "outcome_credibility" {
+						text = "nd_w_crisis_cred_trade"
+					}
 				}
 			}
 		}
@@ -1236,171 +1247,182 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_plan_shown_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nd_plan_shown_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_strike_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_strike_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_strike_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_strike_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_strike_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_strike_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_strike_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_strike_closed'))]"
-			}
-		}
+				spacing = 4
 
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_strike_closed'))]"
-			spacing = 4
+				nd_stepper_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					textbox = {
+						text = "nd_w_strike_target_label"
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+					}
+					button_icon_minus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End ) ) )]"
+					}
+					textbox = {
+						text = "[GetScriptedGui('nd_plan_enemy_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						tooltip = "nd_w_strike_target_tt"
+						size = { 246 24 }
+						align = center|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+					}
+					button_icon_plus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End ) ) )]"
+					}
+				}
 
-			nd_stepper_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					text = "nd_w_strike_target_label"
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
+				nd_subheader = {
+					blockoverride "subheader_text" {
+						text = "nd_w_strike_mission_sub"
+					}
 				}
-				button_icon_minus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)72' ) ).End ) ) )]"
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "row_current" {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "choice_name" {
+						text = "nd_w_strike_mission_1"
+						tooltip = "nd_w_strike_mission_1_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_btn_choose"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ) ) )]"
+					}
 				}
-				textbox = {
-					text = "[GetScriptedGui('nd_plan_enemy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "nd_w_strike_target_tt"
-					size = { 246 24 }
-					align = center|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "row_current" {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)2' )]"
+					}
+					blockoverride "choice_name" {
+						text = "nd_w_strike_mission_2"
+						tooltip = "nd_w_strike_mission_2_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_btn_choose"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ) ) )]"
+					}
 				}
-				button_icon_plus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)73' ) ).End ) ) )]"
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "row_current" {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)3' )]"
+					}
+					blockoverride "choice_name" {
+						text = "nd_w_strike_mission_3"
+						tooltip = "nd_w_strike_mission_3_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_btn_choose"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ) ) )]"
+					}
 				}
-			}
 
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "nd_w_strike_mission_sub"
+				nd_stepper_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					textbox = {
+						text = "nd_w_strike_size_label"
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+					}
+					button_icon_minus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End ) ) )]"
+					}
+					textbox = {
+						text = "nd_w_strike_size_value"
+						tooltip = "nd_w_strike_size_tt"
+						size = { 246 24 }
+						align = center|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+					}
+					button_icon_plus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End ) ) )]"
+					}
 				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "row_current" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)1' )]"
-				}
-				blockoverride "choice_name" {
-					text = "nd_w_strike_mission_1"
-					tooltip = "nd_w_strike_mission_1_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_btn_choose"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)74' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "row_current" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)2' )]"
-				}
-				blockoverride "choice_name" {
-					text = "nd_w_strike_mission_2"
-					tooltip = "nd_w_strike_mission_2_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_btn_choose"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)75' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "row_current" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_plan_mission'), '(CFixedPoint)3' )]"
-				}
-				blockoverride "choice_name" {
-					text = "nd_w_strike_mission_3"
-					tooltip = "nd_w_strike_mission_3_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_btn_choose"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)76' ) ).End ) ) )]"
-				}
-			}
 
-			nd_stepper_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					text = "nd_w_strike_size_label"
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
-				}
-				button_icon_minus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)77' ) ).End ) ) )]"
-				}
-				textbox = {
-					text = "nd_w_strike_size_value"
-					tooltip = "nd_w_strike_size_tt"
-					size = { 246 24 }
-					align = center|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-				}
-				button_icon_plus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)78' ) ).End ) ) )]"
-				}
-			}
-
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_strike_order"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_strike_order_btn"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End ) ) )]"
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_strike_order"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_strike_order_btn"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)79' ) ).End ) ) )]"
+					}
 				}
 			}
 		}
@@ -1419,7 +1441,7 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_world_crises_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('nd_world_crises_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		nd_section_header = {
 			blockoverride "left_text" {
@@ -1467,446 +1489,457 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_posture_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_posture_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_posture_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_posture_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_posture_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_posture_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_posture_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_posture_closed'))]"
-			}
-		}
 
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_posture_closed'))]"
+				### Doctrine, and its five choices.
+				nd_axis_row = {
+					blockoverride "axis_label" {
+						text = "nd_w_doctrine_label"
+					}
+					blockoverride "axis_value" {
+						text = "nd_w_doctrine_value"
+						tooltip = "nd_w_doctrine_tt"
+					}
+					blockoverride "axis_toggle" {
+						text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_doctrine_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
+						onclick = "[GetVariableSystem.Toggle('nd_doctrine_open')]"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					margin_bottom = 6
+					visible = "[GetVariableSystem.Exists('nd_doctrine_open')]"
 
-			### Doctrine, and its five choices.
-			nd_axis_row = {
-				blockoverride "axis_label" {
-					text = "nd_w_doctrine_label"
+					nd_text = {
+						text = "nd_w_doctrine_legend"
+						default_format = "#lore"
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_doctrine_choice_1"
+							tooltip = "nd_w_doctrine_choice_1_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_doctrine_choice_2"
+							tooltip = "nd_w_doctrine_choice_2_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_doctrine_choice_3"
+							tooltip = "nd_w_doctrine_choice_3_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_doctrine_choice_4"
+							tooltip = "nd_w_doctrine_choice_4_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_doctrine_choice_5"
+							tooltip = "nd_w_doctrine_choice_5_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
+						}
+					}
 				}
-				blockoverride "axis_value" {
-					text = "nd_w_doctrine_value"
-					tooltip = "nd_w_doctrine_tt"
-				}
-				blockoverride "axis_toggle" {
-					text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_doctrine_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
-					onclick = "[GetVariableSystem.Toggle('nd_doctrine_open')]"
-				}
-			}
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-				margin_bottom = 6
-				visible = "[GetVariableSystem.Exists('nd_doctrine_open')]"
 
-				nd_text = {
-					text = "nd_w_doctrine_legend"
-					default_format = "#lore"
+				### Readiness, and the four levels as a table.
+				nd_axis_row = {
+					blockoverride "axis_label" {
+						text = "nd_w_readiness_label"
+					}
+					blockoverride "axis_value" {
+						text = "nd_w_readiness_value"
+						tooltip = "nd_w_readiness_tt"
+					}
+					blockoverride "axis_toggle" {
+						text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_readiness_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
+						onclick = "[GetVariableSystem.Toggle('nd_readiness_open')]"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					margin_bottom = 6
+					visible = "[GetVariableSystem.Exists('nd_readiness_open')]"
+
+					nd_text = {
+						text = "nd_w_readiness_legend"
+						default_format = "#lore"
+					}
+					nd_readiness_head = {}
+					nd_readiness_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "level_name" {
+							text = "nd_w_readiness_choice_0"
+							tooltip = "nd_w_readiness_choice_0_tt"
+						}
+						blockoverride "level_upkeep" {
+							text = "nd_w_readiness_upkeep_0"
+						}
+						blockoverride "level_survivability" {
+							text = "nd_w_readiness_survivability_0"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_order"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
+						}
+					}
+					nd_readiness_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "level_name" {
+							text = "nd_w_readiness_choice_1"
+							tooltip = "nd_w_readiness_choice_1_tt"
+						}
+						blockoverride "level_upkeep" {
+							text = "nd_w_readiness_upkeep_1"
+						}
+						blockoverride "level_survivability" {
+							text = "nd_w_readiness_survivability_1"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_order"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End ) ) )]"
+						}
+					}
+					nd_readiness_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)2' )]"
+						}
+						blockoverride "level_name" {
+							text = "nd_w_readiness_choice_2"
+							tooltip = "nd_w_readiness_choice_2_tt"
+						}
+						blockoverride "level_upkeep" {
+							text = "nd_w_readiness_upkeep_2"
+						}
+						blockoverride "level_survivability" {
+							text = "nd_w_readiness_survivability_2"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_order"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End ) ) )]"
+						}
+					}
+					nd_readiness_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)3' )]"
+						}
+						blockoverride "level_name" {
+							text = "nd_w_readiness_choice_3"
+							tooltip = "nd_w_readiness_choice_3_tt"
+						}
+						blockoverride "level_upkeep" {
+							text = "nd_w_readiness_upkeep_3"
+						}
+						blockoverride "level_survivability" {
+							text = "nd_w_readiness_survivability_3"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_order"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End ) ) )]"
+						}
+					}
+				}
+
+				### Launch authority, and its four choices.
+				nd_axis_row = {
+					blockoverride "axis_label" {
+						text = "nd_w_authority_label"
+					}
+					blockoverride "axis_value" {
+						text = "nd_w_authority_value"
+						tooltip = "nd_w_authority_tt"
+					}
+					blockoverride "axis_toggle" {
+						text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_authority_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
+						onclick = "[GetVariableSystem.Toggle('nd_authority_open')]"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					margin_bottom = 6
+					visible = "[GetVariableSystem.Exists('nd_authority_open')]"
+
+					nd_text = {
+						text = "nd_w_authority_legend"
+						default_format = "#lore"
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_authority_choice_1"
+							tooltip = "nd_w_authority_choice_1_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_authority_choice_2"
+							tooltip = "nd_w_authority_choice_2_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_authority_choice_3"
+							tooltip = "nd_w_authority_choice_3_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End ) ) )]"
+						}
+					}
+					nd_choice_row = {
+						datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+						blockoverride "row_current" {
+							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
+						}
+						blockoverride "choice_name" {
+							text = "nd_w_authority_choice_4"
+							tooltip = "nd_w_authority_choice_4_tt"
+						}
+						blockoverride "button_text" {
+							text = "nd_w_btn_adopt"
+						}
+						blockoverride "button_binding" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ) ) )]"
+						}
+					}
+				}
+
+				### Disavow our strikes (rework spec §5.4; owner, 2026-10-28): while on,
+				### each deliberate first strike we order is claimed as unauthorized.
+				### One row each way; visibility from the scope-free nd_disavowing_sgui.
+				nd_choice_row = {
+					visible = "[And( GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_w_disavow_off_label"
+						tooltip = "nd_w_disavow_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_w_btn_disavow"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ) ) )]"
+					}
 				}
 				nd_choice_row = {
+					visible = "[GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)1' )]"
-					}
 					blockoverride "choice_name" {
-						text = "nd_w_doctrine_choice_1"
-						tooltip = "nd_w_doctrine_choice_1_tt"
+						text = "nd_w_disavow_on_label"
+						tooltip = "nd_w_disavow_tt"
 					}
 					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
+						text = "nd_w_btn_own_strikes"
 					}
 					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End ) ) )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ) ) )]"
 					}
 				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_doctrine_choice_2"
-						tooltip = "nd_w_doctrine_choice_2_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_doctrine_choice_3"
-						tooltip = "nd_w_doctrine_choice_3_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_doctrine_choice_4"
-						tooltip = "nd_w_doctrine_choice_4_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_doctrine_code'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_doctrine_choice_5"
-						tooltip = "nd_w_doctrine_choice_5_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End ) ) )]"
-					}
-				}
-			}
 
-			### Readiness, and the four levels as a table.
-			nd_axis_row = {
-				blockoverride "axis_label" {
-					text = "nd_w_readiness_label"
-				}
-				blockoverride "axis_value" {
-					text = "nd_w_readiness_value"
-					tooltip = "nd_w_readiness_tt"
-				}
-				blockoverride "axis_toggle" {
-					text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_readiness_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
-					onclick = "[GetVariableSystem.Toggle('nd_readiness_open')]"
-				}
-			}
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-				margin_bottom = 6
-				visible = "[GetVariableSystem.Exists('nd_readiness_open')]"
-
-				nd_text = {
-					text = "nd_w_readiness_legend"
-					default_format = "#lore"
-				}
-				nd_readiness_head = {}
-				nd_readiness_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)0' )]"
+				nd_row = {
+					visible = "[GetScriptedGui('nd_umbrella_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_umbrella_label"
 					}
-					blockoverride "level_name" {
-						text = "nd_w_readiness_choice_0"
-						tooltip = "nd_w_readiness_choice_0_tt"
+					blockoverride "row_value" {
+						text = "nd_w_umbrella_value"
 					}
-					blockoverride "level_upkeep" {
-						text = "nd_w_readiness_upkeep_0"
-					}
-					blockoverride "level_survivability" {
-						text = "nd_w_readiness_survivability_0"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_order"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_umbrella_tt"
 					}
 				}
-				nd_readiness_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)1' )]"
+				nd_row = {
+					visible = "[GetScriptedGui('nd_loose_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_loose_label"
 					}
-					blockoverride "level_name" {
-						text = "nd_w_readiness_choice_1"
-						tooltip = "nd_w_readiness_choice_1_tt"
+					blockoverride "row_value" {
+						text = "nd_w_loose_value"
 					}
-					blockoverride "level_upkeep" {
-						text = "nd_w_readiness_upkeep_1"
-					}
-					blockoverride "level_survivability" {
-						text = "nd_w_readiness_survivability_1"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_order"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End ) ) )]"
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_loose_tt"
 					}
 				}
-				nd_readiness_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)2' )]"
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_upkeep_label"
 					}
-					blockoverride "level_name" {
-						text = "nd_w_readiness_choice_2"
-						tooltip = "nd_w_readiness_choice_2_tt"
+					blockoverride "row_value" {
+						text = "nd_w_upkeep_value"
 					}
-					blockoverride "level_upkeep" {
-						text = "nd_w_readiness_upkeep_2"
-					}
-					blockoverride "level_survivability" {
-						text = "nd_w_readiness_survivability_2"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_order"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End ) ) )]"
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_upkeep_tt"
 					}
 				}
-				nd_readiness_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_readiness_target_code'), '(CFixedPoint)3' )]"
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_risk_label"
 					}
-					blockoverride "level_name" {
-						text = "nd_w_readiness_choice_3"
-						tooltip = "nd_w_readiness_choice_3_tt"
+					blockoverride "row_value" {
+						text = "nd_w_risk_value"
 					}
-					blockoverride "level_upkeep" {
-						text = "nd_w_readiness_upkeep_3"
+					blockoverride "row_tooltip" {
+						tooltip = "[Concatenate( Localize( 'nd_w_risk_tt' ), GetScriptedGui('nd_risk_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 					}
-					blockoverride "level_survivability" {
-						text = "nd_w_readiness_survivability_3"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_order"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End ) ) )]"
-					}
-				}
-			}
-
-			### Launch authority, and its four choices.
-			nd_axis_row = {
-				blockoverride "axis_label" {
-					text = "nd_w_authority_label"
-				}
-				blockoverride "axis_value" {
-					text = "nd_w_authority_value"
-					tooltip = "nd_w_authority_tt"
-				}
-				blockoverride "axis_toggle" {
-					text = "[SelectLocalization( Not( GetVariableSystem.Exists('nd_authority_open') ), 'nd_w_btn_change', 'nd_w_btn_hide' )]"
-					onclick = "[GetVariableSystem.Toggle('nd_authority_open')]"
-				}
-			}
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-				margin_bottom = 6
-				visible = "[GetVariableSystem.Exists('nd_authority_open')]"
-
-				nd_text = {
-					text = "nd_w_authority_legend"
-					default_format = "#lore"
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_authority_choice_1"
-						tooltip = "nd_w_authority_choice_1_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_authority_choice_2"
-						tooltip = "nd_w_authority_choice_2_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_authority_choice_3"
-						tooltip = "nd_w_authority_choice_3_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End ) ) )]"
-					}
-				}
-				nd_choice_row = {
-					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-					blockoverride "row_current" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_authority_code'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "choice_name" {
-						text = "nd_w_authority_choice_4"
-						tooltip = "nd_w_authority_choice_4_tt"
-					}
-					blockoverride "button_text" {
-						text = "nd_w_btn_adopt"
-					}
-					blockoverride "button_binding" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End ) ) )]"
-					}
-				}
-			}
-
-			### Disavow our strikes (rework spec §5.4; owner, 2026-10-28): while on,
-			### each deliberate first strike we order is claimed as unauthorized.
-			### One row each way; visibility from the scope-free nd_disavowing_sgui.
-			nd_choice_row = {
-				visible = "[And( GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_disavow_off_label"
-					tooltip = "nd_w_disavow_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_btn_disavow"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				visible = "[GetScriptedGui('nd_disavowing_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_w_disavow_on_label"
-					tooltip = "nd_w_disavow_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_w_btn_own_strikes"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End ) ) )]"
-				}
-			}
-
-			nd_row = {
-				visible = "[GetScriptedGui('nd_umbrella_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_label" {
-					text = "nd_w_umbrella_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_umbrella_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_umbrella_tt"
-				}
-			}
-			nd_row = {
-				visible = "[GetScriptedGui('nd_loose_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_label" {
-					text = "nd_w_loose_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_loose_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_loose_tt"
-				}
-			}
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_upkeep_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_upkeep_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_upkeep_tt"
-				}
-			}
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_risk_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_risk_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( Localize( 'nd_w_risk_tt' ), GetScriptedGui('nd_risk_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 				}
 			}
 		}
@@ -1921,388 +1954,399 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_capabilities_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_capabilities_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_capabilities_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_capabilities_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_capabilities_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_capabilities_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_capabilities_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_capabilities_closed'))]"
-			}
-		}
 
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_capabilities_closed'))]"
+				### Survivability, heading for the ceiling our technology sets while we
+				### pay for hardening and back toward the floor without it
+				### (nd_display_survivability_heading). Play-test round 3: the
+				### projection bar shared with Global Warming, in one fixed 200 x 14
+				### cell, bottom to top: background and frame; the change still to come,
+				### to the higher of today's value and where it is heading, green while
+				### rising and red while falling (a wrapper, alpha 0.5; more
+				### survivability is always good for us, owner 2026-09-30: red bad,
+				### green good); the solid fill to the lower of the two; and the ceiling
+				### as a 3 px cream line with its own hover. The row is an nd_row's width
+				### (170 + 200 + 94 and two 8 px gaps, in 6 px margins). Rising and
+				### falling compare the two values rather than a code: a (CFixedPoint)
+				### literal here, between two action rows, would read as an op code to
+				### test_nuclear_deterrence.gui_ops.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 8
+					margin = { 6 1 }
+					### A plain key, not Concatenate( Localize( ... ) ): Localize renders
+					### outside the journal entry, so nd_w_survivability_tt's
+					### JournalEntry.GetCountry figure came out blank ("wanted context of
+					### type 'JournalEntry' ... got context 'Container'", 2026-10-06).
+					tooltip = "nd_w_survivability_row_tt"
 
-			### Survivability, heading for the ceiling our technology sets while we
-			### pay for hardening and back toward the floor without it
-			### (nd_display_survivability_heading). Play-test round 3: the
-			### projection bar shared with Global Warming, in one fixed 200 x 14
-			### cell, bottom to top: background and frame; the change still to come,
-			### to the higher of today's value and where it is heading, green while
-			### rising and red while falling (a wrapper, alpha 0.5; more
-			### survivability is always good for us, owner 2026-09-30: red bad,
-			### green good); the solid fill to the lower of the two; and the ceiling
-			### as a 3 px cream line with its own hover. The row is an nd_row's width
-			### (170 + 200 + 94 and two 8 px gaps, in 6 px margins). Rising and
-			### falling compare the two values rather than a code: a (CFixedPoint)
-			### literal here, between two action rows, would read as an op code to
-			### test_nuclear_deterrence.gui_ops.
-			flowcontainer = {
-				direction = horizontal
-				ignoreinvisible = yes
-				spacing = 8
-				margin = { 6 1 }
-				### A plain key, not Concatenate( Localize( ... ) ): Localize renders
-				### outside the journal entry, so nd_w_survivability_tt's
-				### JournalEntry.GetCountry figure came out blank ("wanted context of
-				### type 'JournalEntry' ... got context 'Container'", 2026-10-06).
-				tooltip = "nd_w_survivability_row_tt"
-
-				textbox = {
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
-					text = "nd_w_survivability_label"
-				}
-				widget = {
-					size = { 200 14 }
-					parentanchor = vcenter
-
-					# 1. Background and frame.
-					default_progressbar_horizontal = {
-						size = { 100% 100% }
-						blockoverride "values" {
-							value = 0
-							min = 0
-							max = 100
-						}
+					textbox = {
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+						text = "nd_w_survivability_label"
 					}
-					# 2. Rising (good for us): green to where it is heading.
 					widget = {
-						size = { 100% 100% }
-						alpha = 0.5
-						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_heading'), JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability') )]"
+						size = { 200 14 }
+						parentanchor = vcenter
 
-						green_progressbar_horizontal = {
+						# 1. Background and frame.
+						default_progressbar_horizontal = {
 							size = { 100% 100% }
-							blockoverride "background" {}
-							blockoverride "frame" {}
 							blockoverride "values" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_bar_high') )]"
+								value = 0
 								min = 0
 								max = 100
 							}
 						}
-					}
-					# 3. Falling (bad for us): red from where it is heading up to today's value.
-					widget = {
-						size = { 100% 100% }
-						alpha = 0.5
-						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability'), JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_heading') )]"
+						# 2. Rising (good for us): green to where it is heading.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.5
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_survivability_heading'), Country.MakeScope.ScriptValue('nd_display_survivability') )]"
 
-						bad_progressbar_horizontal = {
+							green_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_bar_high') )]"
+									min = 0
+									max = 100
+								}
+							}
+						}
+						# 3. Falling (bad for us): red from where it is heading up to today's value.
+						widget = {
+							size = { 100% 100% }
+							alpha = 0.5
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_survivability'), Country.MakeScope.ScriptValue('nd_display_survivability_heading') )]"
+
+							bad_progressbar_horizontal = {
+								size = { 100% 100% }
+								blockoverride "background" {}
+								blockoverride "frame" {}
+								blockoverride "values" {
+									value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_bar_high') )]"
+									min = 0
+									max = 100
+								}
+							}
+						}
+						# 4. Solid: the lower of today's value and where it is heading.
+						default_progressbar_horizontal = {
 							size = { 100% 100% }
 							blockoverride "background" {}
 							blockoverride "frame" {}
 							blockoverride "values" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_bar_high') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_bar_low') )]"
 								min = 0
 								max = 100
 							}
 						}
-					}
-					# 4. Solid: the lower of today's value and where it is heading.
-					default_progressbar_horizontal = {
-						size = { 100% 100% }
-						blockoverride "background" {}
-						blockoverride "frame" {}
-						blockoverride "values" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_bar_low') )]"
+						# 5. The ceiling our technology sets: a thin line with its own hover.
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('nd_display_survivability_cap') )]"
 							min = 0
 							max = 100
-						}
-					}
-					# 5. The ceiling our technology sets: a thin line with its own hover.
-					progressbar = {
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						size = { 100% 100% }
-						skip_initial_animation = yes
-						direction = horizontal
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_cap') )]"
-						min = 0
-						max = 100
-						marker = {
-							icon = {
-								size = { 3 24 }
-								parentanchor = vcenter
-								widgetanchor = center
-								texture = "gfx/interface/backgrounds/white.dds"
-								color = { 0.96 0.90 0.72 0.95 }
-								tooltip = "nd_w_survivability_cap_tt"
+							marker = {
+								icon = {
+									size = { 3 24 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/backgrounds/white.dds"
+									color = { 0.96 0.90 0.72 0.95 }
+									tooltip = "nd_w_survivability_cap_tt"
+								}
 							}
 						}
 					}
+					textbox = {
+						size = { 94 24 }
+						align = right|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+						text = "nd_w_survivability_value"
+					}
 				}
-				textbox = {
-					size = { 94 24 }
-					align = right|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
-					text = "nd_w_survivability_value"
+				### Survivors against the main rival (rework spec §3.2, §10): how many
+				### warheads would be left after its whole arsenal, as we know it, is
+				### spent on ours. Shown while we have one.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_has_main_rival_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_survivors_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_survivors_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_survivors_tt"
+					}
 				}
-			}
-			### Survivors against the main rival (rework spec §3.2, §10): how many
-			### warheads would be left after its whole arsenal, as we know it, is
-			### spent on ours. Shown while we have one.
-			nd_row = {
-				visible = "[GetScriptedGui('nd_has_main_rival_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_label" {
-					text = "nd_w_survivors_label"
+				### Reach (rework spec §7, §10): without ICBMs, the countries our
+				### delivery reaches. Display only; the hover lists them, the hosts
+				### of our weapons marked.
+				nd_row = {
+					visible = "[GetScriptedGui('nd_reach_limited_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					blockoverride "row_label" {
+						text = "nd_w_reach_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_reach_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "[Concatenate( Localize( 'nd_w_reach_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('nd_reach_list_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+					}
 				}
-				blockoverride "row_value" {
-					text = "nd_w_survivors_value"
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_reliability_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_reliability_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_reliability_tt"
+					}
 				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_survivors_tt"
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_strain_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_strain_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_strain_tt"
+					}
 				}
-			}
-			### Reach (rework spec §7, §10): without ICBMs, the countries our
-			### delivery reaches. Display only; the hover lists them, the hosts
-			### of our weapons marked.
-			nd_row = {
-				visible = "[GetScriptedGui('nd_reach_limited_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				blockoverride "row_label" {
-					text = "nd_w_reach_label"
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_hold_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_hold_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_hold_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "nd_w_reach_value"
+				nd_subheader = {
+					blockoverride "subheader_text" {
+						text = "nd_w_investment_sub"
+					}
 				}
-				blockoverride "row_tooltip" {
-					tooltip = "[Concatenate( Localize( 'nd_w_reach_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('nd_reach_list_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				nd_stepper_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					textbox = {
+						text = "nd_w_safeguards_label"
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+					}
+					button_icon_minus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End ) ) )]"
+					}
+					textbox = {
+						text = "nd_w_safeguards_value"
+						tooltip = "nd_w_safeguards_tt"
+						size = { 246 24 }
+						align = center|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+					}
+					button_icon_plus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End ) ) )]"
+					}
 				}
-			}
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_reliability_label"
+				nd_stepper_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					textbox = {
+						text = "nd_w_hardening_label"
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+					}
+					button_icon_minus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End ) ) )]"
+					}
+					textbox = {
+						text = "nd_w_hardening_value"
+						tooltip = "nd_w_hardening_tt"
+						size = { 246 24 }
+						align = center|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+					}
+					button_icon_plus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ) ) )]"
+					}
 				}
-				blockoverride "row_value" {
-					text = "nd_w_reliability_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_reliability_tt"
-				}
-			}
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_strain_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_strain_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_strain_tt"
-				}
-			}
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_hold_label"
-				}
-				blockoverride "row_value" {
-					text = "nd_w_hold_value"
-				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_hold_tt"
-				}
-			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "nd_w_investment_sub"
-				}
-			}
-			nd_stepper_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					text = "nd_w_safeguards_label"
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
-				}
-				button_icon_minus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)40' ) ).End ) ) )]"
-				}
-				textbox = {
-					text = "nd_w_safeguards_value"
-					tooltip = "nd_w_safeguards_tt"
-					size = { 246 24 }
-					align = center|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-				}
-				button_icon_plus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End ) ) )]"
-				}
-			}
-			nd_stepper_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					text = "nd_w_hardening_label"
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
-				}
-				button_icon_minus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End ) ) )]"
-				}
-				textbox = {
-					text = "nd_w_hardening_value"
-					tooltip = "nd_w_hardening_tt"
-					size = { 246 24 }
-					align = center|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-				}
-				button_icon_plus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End ) ) )]"
-				}
-			}
 
-			### ---- The arsenal: a ceiling, or dismantling it (the nuclear taboo,
-			### nuclear_taboo_effects.txt) ----------------------------------------
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "nd_taboo_w_arsenal_sub"
+				### ---- The arsenal: a ceiling, or dismantling it (the nuclear taboo,
+				### nuclear_taboo_effects.txt) ----------------------------------------
+				nd_subheader = {
+					blockoverride "subheader_text" {
+						text = "nd_taboo_w_arsenal_sub"
+					}
 				}
-			}
-			### The count, beside what acts on it (NUC-12): our warheads, the
-			### world's estimate, and any ceiling a treaty or the UN ban sets or
-			### the dismantling under way (our own ceiling is the stepper below).
-			nd_row = {
-				blockoverride "row_label" {
-					text = "nd_w_arsenal_label"
+				### The count, beside what acts on it (NUC-12): our warheads, the
+				### world's estimate, and any ceiling a treaty or the UN ban sets or
+				### the dismantling under way (our own ceiling is the stepper below).
+				nd_row = {
+					blockoverride "row_label" {
+						text = "nd_w_arsenal_label"
+					}
+					blockoverride "row_value" {
+						text = "nd_w_arsenal_value"
+					}
+					blockoverride "row_tooltip" {
+						tooltip = "nd_w_arsenal_tt"
+					}
 				}
-				blockoverride "row_value" {
-					text = "nd_w_arsenal_value"
+				nd_stepper_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					textbox = {
+						text = "nd_taboo_w_ceiling_label"
+						size = { 170 24 }
+						align = left|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+						alwaystransparent = yes
+					}
+					button_icon_minus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ) ) )]"
+					}
+					textbox = {
+						text = "nd_taboo_w_ceiling_value"
+						tooltip = "nd_taboo_w_ceiling_tt"
+						size = { 246 24 }
+						align = center|nobaseline
+						using = te_nuclear_fontsize_row
+						parentanchor = vcenter
+						elide = right
+					}
+					button_icon_plus_action = {
+						size = { 24 24 }
+						parentanchor = vcenter
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ) ) )]"
+					}
 				}
-				blockoverride "row_tooltip" {
-					tooltip = "nd_w_arsenal_tt"
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_taboo_w_lift_label"
+						tooltip = "nd_taboo_w_lift_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_taboo_w_btn_lift"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ) ) )]"
+					}
 				}
-			}
-			nd_stepper_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				textbox = {
-					text = "nd_taboo_w_ceiling_label"
-					size = { 170 24 }
-					align = left|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-					alwaystransparent = yes
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_taboo_w_dismantle_label"
+						tooltip = "nd_taboo_w_dismantle_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_taboo_w_btn_dismantle"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ) ) )]"
+					}
 				}
-				button_icon_minus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)60' ) ).End ) ) )]"
-				}
-				textbox = {
-					text = "nd_taboo_w_ceiling_value"
-					tooltip = "nd_taboo_w_ceiling_tt"
-					size = { 246 24 }
-					align = center|nobaseline
-					using = te_nuclear_fontsize_row
-					parentanchor = vcenter
-					elide = right
-				}
-				button_icon_plus_action = {
-					size = { 24 24 }
-					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)61' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_taboo_w_lift_label"
-					tooltip = "nd_taboo_w_lift_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_taboo_w_btn_lift"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)62' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_taboo_w_dismantle_label"
-					tooltip = "nd_taboo_w_dismantle_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_taboo_w_btn_dismantle"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)63' ) ).End ) ) )]"
-				}
-			}
-			nd_choice_row = {
-				datacontext = "[GetScriptedGui('nd_posture_sgui')]"
-				blockoverride "choice_name" {
-					text = "nd_taboo_w_halt_label"
-					tooltip = "nd_taboo_w_halt_tt"
-				}
-				blockoverride "button_text" {
-					text = "nd_taboo_w_btn_halt"
-				}
-				blockoverride "button_binding" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ) ) )]"
+				nd_choice_row = {
+					datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+					blockoverride "choice_name" {
+						text = "nd_taboo_w_halt_label"
+						tooltip = "nd_taboo_w_halt_tt"
+					}
+					blockoverride "button_text" {
+						text = "nd_taboo_w_btn_halt"
+					}
+					blockoverride "button_binding" {
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End ) ) )]"
+					}
 				}
 			}
 		}
@@ -2315,54 +2359,65 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[And( Country.IsLocalPlayer, GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_home_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_home_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_home_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_home_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_home_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_home_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_home_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_home_closed'))]"
-			}
-		}
 
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_home_closed'))]"
-
-			### Only before the first review, or when no group holds a view.
-			nd_script_line = {
-				visible = "[GetScriptedGui('nd_home_list_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				datacontext = "[GetScriptedGui('nd_home_list_sgui')]"
-				blockoverride "line_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				### Only before the first review, or when no group holds a view.
+				nd_script_line = {
+					visible = "[GetScriptedGui('nd_home_list_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					datacontext = "[GetScriptedGui('nd_home_list_sgui')]"
+					blockoverride "line_text" {
+						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					}
 				}
-			}
 
-			### One table per interest group with a view. AccessPlayer, not
-			### JournalEntry.GetCountry: the journal is always the player's, and
-			### AccessPlayer.AccessAllInterestGroups is the vanilla politics
-			### panel's own datamodel (gui/politics_panel_overview.gui).
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 8
-				datamodel = "[AccessPlayer.AccessAllInterestGroups]"
+				### One table per interest group with a view. AccessPlayer, not
+				### JournalEntry.GetCountry: the journal is always the player's, and
+				### AccessPlayer.AccessAllInterestGroups is the vanilla politics
+				### panel's own datamodel (gui/politics_panel_overview.gui).
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 8
+					datamodel = "[AccessPlayer.AccessAllInterestGroups]"
 
-				item = {
-					nd_home_ig_table = {}
+					item = {
+						nd_home_ig_table = {}
+					}
 				}
-			}
 
-			nd_script_line = {
-				datacontext = "[GetScriptedGui('nd_home_footer_sgui')]"
-				blockoverride "line_text" {
-					text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				nd_script_line = {
+					datacontext = "[GetScriptedGui('nd_home_footer_sgui')]"
+					blockoverride "line_text" {
+						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					}
 				}
 			}
 		}
@@ -2375,66 +2430,77 @@ types nuclear_deterrence_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[Or( GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('nd_last_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+		visible = "[And( Country.IsLocalPlayer, Or( GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('nd_last_crisis_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
-		nd_section_header = {
-			blockoverride "left_text" {
-				text = "nd_w_reputation_header"
+		### The player's own (spec 2026-11-02-charts-help-national-info § 6.4):
+		### the root's And collapses the section for another country, and this
+		### wrapper is the guard (te_own_country_only) the binding tests read.
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
+
+			nd_section_header = {
+				blockoverride "left_text" {
+					text = "nd_w_reputation_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('nd_reputation_closed')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists('nd_reputation_closed')]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists('nd_reputation_closed'))]"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nd_reputation_closed')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[GetVariableSystem.Exists('nd_reputation_closed')]"
-			}
-			blockoverride "onclick_showless" {
+
+			### 512 whichever block shows: the pledges' nd_row (492) makes it 512,
+			### the last crisis's lines (480) alone 500, and a centred panel drawn
+			### at 500 drifts when the pledges appear (gotcha #43).
+			nd_panel = {
 				visible = "[Not(GetVariableSystem.Exists('nd_reputation_closed'))]"
-			}
-		}
+				minimumsize = { 512 -1 }
 
-		### 512 whichever block shows: the pledges' nd_row (492) makes it 512,
-		### the last crisis's lines (480) alone 500, and a centred panel drawn
-		### at 500 drifts when the pledges appear (gotcha #43).
-		nd_panel = {
-			visible = "[Not(GetVariableSystem.Exists('nd_reputation_closed'))]"
-			minimumsize = { 512 -1 }
+				### Between crises: the last one and how it ended.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					visible = "[GetScriptedGui('nd_last_crisis_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
-			### Between crises: the last one and how it ended.
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-				visible = "[GetScriptedGui('nd_last_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					nd_script_line = {
+						datacontext = "[GetScriptedGui('nd_last_crisis_sgui')]"
+						blockoverride "line_text" {
+							text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]"
+						}
+					}
 
-				nd_script_line = {
-					datacontext = "[GetScriptedGui('nd_last_crisis_sgui')]"
-					blockoverride "line_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					nd_text = {
+						text = "nd_w_last_outcome"
 					}
 				}
 
-				nd_text = {
-					text = "nd_w_last_outcome"
-				}
-			}
+				### The pledges, once there is a record (credibility is the overview's
+				### cell, NUC-13: it was shown here a second time).
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 1
+					visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
-			### The pledges, once there is a record (credibility is the overview's
-			### cell, NUC-13: it was shown here a second time).
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 1
-				visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-
-				nd_row = {
-					blockoverride "row_label" {
-						text = "nd_w_pledge_label"
-					}
-					blockoverride "row_value" {
-						text = "nd_w_pledge_value"
-					}
-					blockoverride "row_tooltip" {
-						tooltip = "nd_w_pledge_tt"
+					nd_row = {
+						blockoverride "row_label" {
+							text = "nd_w_pledge_label"
+						}
+						blockoverride "row_value" {
+							text = "nd_w_pledge_value"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "nd_w_pledge_tt"
+						}
 					}
 				}
 			}

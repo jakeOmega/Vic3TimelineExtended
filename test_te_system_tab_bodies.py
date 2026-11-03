@@ -252,7 +252,7 @@ HOST_BODIES = [
     # the entry's goal bar under The Programme, while there is one
     ("te_nuclear_tab_body", os.path.join(JE_WIDGETS, "nuclear_layout_widget.gui"),
      "te_military_nuclear_tab_sgui", "je_nuclear_program", "te_nuclear_tab_layout",
-     ["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_je_goal_bar", "te_nuclear_status_sections",
+     ["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear_status_sections",
       "te_nuclear_reference_sections"],
      "te_military_nuclear_open_journal_tt", None),
     ("te_covert_tab_body", os.path.join(JE_WIDGETS, "covert_operations_widget.gui"),
@@ -583,7 +583,6 @@ UNBOUND = set([
 
     "cultural_hegemony",
 
-    "nuclear_weapons",
 
     "space_race",
 ])
