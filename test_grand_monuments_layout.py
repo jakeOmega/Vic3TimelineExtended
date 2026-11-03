@@ -38,7 +38,7 @@ ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
 FLAGS = {"gm_commission_closed", "gm_decisions_closed", "gm_national_closed", "gm_awaiting_closed",
-         "gm_monuments_closed", "gm_how_open"}
+         "gm_monuments_closed"}
 LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_national",
                  "te_gm_sec_awaiting", "te_gm_sec_monuments", "gm_monument_row"]
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_national", "gm_je_how_counts",
@@ -46,6 +46,10 @@ HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
             "gm_je_how_names", "gm_je_how_policy", "gm_je_how_trophies", "gm_je_how_trophies_home",
             "gm_je_how_archaeology"]
+# The Help page's topics, in order: its subheadings.
+HOW_SUBS = ["gm_je_how_sub_grandeur", "gm_je_how_sub_counts", "gm_je_how_sub_signatures", "gm_je_how_sub_contested",
+            "gm_je_how_sub_hard_times", "gm_je_how_sub_commissions", "gm_je_how_sub_names", "gm_je_how_sub_policy",
+            "gm_je_how_sub_trophies", "gm_je_how_sub_archaeology"]
 # The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5).
 FADING = ("teardown", "vanity")
 # The opportunity boons under National Effects' Opportunities Seized
@@ -191,17 +195,29 @@ class FlagTest(unittest.TestCase):
         for sec, flag in (("te_gm_sec_national", "gm_national_closed"),
                           ("te_gm_sec_decisions", "gm_decisions_closed"),
                           ("te_gm_sec_awaiting", "gm_awaiting_closed"),
-                          ("te_gm_sec_monuments", "gm_monuments_closed"),
-                          ("te_gm_sec_how", "gm_how_open")):
+                          ("te_gm_sec_monuments", "gm_monuments_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(gui, sec), sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_grand_monuments_help_popup, on te_popup = help_grand_monuments);
+        its collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _strip_comments(_type_body(_gui(), "te_gm_sec_how"))
+        self.assertIn('text = "gm_je_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
+        self.assertNotIn("gm_how_open", _gui())
+        self.assertNotIn("gm_note", how)
 
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
         gui = _gui()
-        how = _type_body(gui, "te_gm_sec_how")
+        how = _type_body(gui, "te_grand_monuments_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
+        self.assertEqual(re.findall(r'text = "(gm_je_how_sub_\w+)"', _strip_comments(how)), HOW_SUBS)
         for sec in LIVE_SECTIONS:
             body = _type_body(gui, sec)
             self.assertNotIn("gm_je_how_", body, sec)
@@ -209,7 +225,7 @@ class HowItWorksTest(unittest.TestCase):
 
     def test_every_how_key_exists_and_reads_nothing(self):
         loc = _loc()
-        for key in HOW_KEYS:
+        for key in HOW_KEYS + HOW_SUBS:
             self.assertIn(key, loc)
             self.assertNotIn("ScriptValue", loc[key], key)
 
@@ -359,7 +375,7 @@ class StateGatedTest(unittest.TestCase):
         self.assertIn("ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)0' ) )]\" "
                       "text = \"gm_je_monuments_all_awaiting\" }", mon)
         # How it Works: the first heading drops its top margin.
-        how = _squash(_type_body(gui, "te_gm_sec_how").split("gm_panel = {", 1)[1])
+        how = _squash(_strip_comments(_type_body(gui, "te_grand_monuments_help_body")))
         self.assertIn('gm_subheader = { blockoverride "subheader_margin" {} blockoverride "subheader_text" '
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
 

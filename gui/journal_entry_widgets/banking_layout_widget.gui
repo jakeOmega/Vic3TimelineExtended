@@ -4,10 +4,12 @@
 ### panel and the Timeline Extended window (both mount te_banking_tab_body). The sections are types in
 ### banking_dashboard_widget.gui (the overview, Active Policies, Monetary
 ### Policy, Available Interventions), banking_history_widget.gui (the charts)
-### and here (How Banking Works), in the shape of the UN's un_layout_widget.gui.
+### and here (How Banking Works, a link to Banking's Help page, with the page's
+### body and popup), in the shape of the UN's un_layout_widget.gui.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
-### *_open ones collapsed until opened (test_banking_layout.py).
+### *_open ones collapsed until opened (test_banking_layout.py). How Banking
+### Works has none: it is a link to the Help page.
 
 types banking_layout_widget_types
 {
@@ -25,14 +27,11 @@ types banking_layout_widget_types
 		te_banking_sec_interventions = {}
 	}
 
-	### "How Banking Works": the explanations, collapsed by default, one heading
-	### per topic (style guide rule 1), for the player learning the system. The
-	### live sections carry none: a row's tooltip gives its reading and what
-	### moves it, each tool's its own, and the rules behind them are here (GUI
-	### audit BNK-1, 2026-10-27: the Monetary Policy rows had taught them, at up
-	### to 3,800 characters). The monetary topics follow the section's own
-	### subheadings, and are shown only while the monetary layer is on (not
-	### under banking_system_simplified), as the rows they explain are.
+	### "How Banking Works": a link at the foot of the panel to Banking's Help
+	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_banking_help_popup (te_popup =
+	### help_banking) instead of expanding; it keeps its name and its place in
+	### every composer. The "?" in the tab's header opens the same page.
 	type te_banking_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -40,186 +39,203 @@ types banking_layout_widget_types
 		spacing = 2
 
 		banking_dash_category_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "banking_dash_how_header"
 				using = elide_fontsize_min
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('banking_dash_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_banking')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('banking_dash_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('banking_dash_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
+	### Banking's Help page, the explanations, one heading per topic, for the
+	### player learning the system. The live sections carry none: a row's
+	### tooltip gives its reading and what moves it, each tool's its own, and
+	### the rules behind them are here (GUI audit BNK-1, 2026-10-27: the
+	### Monetary Policy rows had taught them, at up to 3,800 characters). The
+	### monetary topics follow that section's own subheadings, and are shown
+	### only while the player's monetary layer is on (not under
+	### banking_system_simplified), as the rows they explain are. It reads
+	### GetPlayer only, never the entry, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_banking_help_popup.
+	type te_banking_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		banking_dash_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "banking_dash_how_sub_cycle"
+			}
+		}
+		banking_dash_note = {
+			text = "banking_dash_how_cycle"
+		}
+		banking_dash_note = {
+			text = "banking_dash_how_cycle_moves"
+		}
+		banking_dash_note = {
+			text = "banking_dash_how_start"
+		}
+
+		banking_dash_subheader = {
+			blockoverride "subheader_text" {
+				text = "banking_dash_how_sub_crashes"
+			}
+		}
+		banking_dash_note = {
+			text = "banking_dash_how_crashes"
+		}
+
+		banking_dash_subheader = {
+			blockoverride "subheader_text" {
+				text = "banking_dash_how_sub_budget"
+			}
+		}
+		banking_dash_note = {
+			text = "banking_dash_how_budget"
+		}
+
+		### The monetary layer's topics (not under banking_system_simplified).
 		flowcontainer = {
-			visible = "[GetVariableSystem.Exists('banking_dash_how_open')]"
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			direction = vertical
-			parentanchor = hcenter
 			ignoreinvisible = yes
-			spacing = 2
-			margin = { 8 6 }
-
-			background = {
-				using = entry_bg_fancy_dark
-				alpha = 0.35
-			}
+			spacing = 4
 
 			banking_dash_subheader = {
-				blockoverride "subheader_margin" {}
 				blockoverride "subheader_text" {
-					text = "banking_dash_how_sub_cycle"
+					text = "banking_dash_how_sub_rate"
 				}
 			}
 			banking_dash_note = {
-				text = "banking_dash_how_cycle"
+				text = "banking_dash_how_rate"
 			}
 			banking_dash_note = {
-				text = "banking_dash_how_cycle_moves"
+				text = "banking_dash_how_rate_none"
 			}
 			banking_dash_note = {
-				text = "banking_dash_how_start"
+				text = "banking_dash_how_stance"
 			}
 
 			banking_dash_subheader = {
 				blockoverride "subheader_text" {
-					text = "banking_dash_how_sub_crashes"
+					text = "banking_dash_how_sub_mandates"
 				}
 			}
 			banking_dash_note = {
-				text = "banking_dash_how_crashes"
+				text = "banking_dash_how_mandates"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_mandates_change"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_mandates_floor"
 			}
 
 			banking_dash_subheader = {
 				blockoverride "subheader_text" {
-					text = "banking_dash_how_sub_budget"
+					text = "banking_dash_how_sub_gold"
 				}
 			}
 			banking_dash_note = {
-				text = "banking_dash_how_budget"
+				text = "banking_dash_how_gold"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_gold_flow"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_peg"
 			}
 
-			### The monetary layer's topics (not under banking_system_simplified).
-			flowcontainer = {
-				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				direction = vertical
-				ignoreinvisible = yes
-				spacing = 2
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_rate"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_rate"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_rate_none"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_stance"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_mandates"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_mandates"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_mandates_change"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_mandates_floor"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_gold"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_gold"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_gold_flow"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_peg"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_fx"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_fx"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_fx_effects"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_fx_fixed"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_arrangements"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_anchor"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_treaty_peg"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_backstops"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_union"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_union_terms"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_borrowing"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_borrowing"
-				}
-
-				banking_dash_subheader = {
-					blockoverride "subheader_text" {
-						text = "banking_dash_how_sub_prices"
-					}
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_prices"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_expected"
-				}
-				banking_dash_note = {
-					text = "banking_dash_how_printing"
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_fx"
 				}
 			}
+			banking_dash_note = {
+				text = "banking_dash_how_fx"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_fx_effects"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_fx_fixed"
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_arrangements"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_anchor"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_treaty_peg"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_backstops"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_union"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_union_terms"
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_borrowing"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_borrowing"
+			}
+
+			banking_dash_subheader = {
+				blockoverride "subheader_text" {
+					text = "banking_dash_how_sub_prices"
+				}
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_prices"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_expected"
+			}
+			banking_dash_note = {
+				text = "banking_dash_how_printing"
+			}
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_banking_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_banking')]"
+		}
+		blockoverride "popup_title" {
+			text = "banking_dash_how_header"
+		}
+		blockoverride "popup_list" {
+			te_banking_help_body = {}
 		}
 	}
 
 	### The record, then how it all works: the history charts, open by default
 	### in both hosts (one shell, closed flag banking_dash_history_closed), and
-	### How Banking Works, collapsed, last.
+	### How Banking Works, the link to the Help page, last.
 	type te_banking_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -233,7 +249,8 @@ types banking_layout_widget_types
 
 	### The Banking tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
 	### te_system_tab_frame with its blocks filled, mounted by the Budget
-	### panel's Banking tab and the Timeline Extended window's. The entry's
+	### panel's Banking tab and the Timeline Extended window's. Each header has
+	### the "?" that opens Banking's Help page (te_help_button). The entry's
 	### panels, the same composers the entry attaches, inside
 	### te_banking_tab_layout, which a wide mount overrides; then the frame's
 	### Open Journal Entry, in the tab's large font. The entry's scripted
@@ -254,6 +271,9 @@ types banking_layout_widget_types
 				blockoverride "text" {
 					text = "je_banking_cycle"
 				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_banking')]"
+				}
 			}
 
 			default_header = {
@@ -261,6 +281,9 @@ types banking_layout_widget_types
 				visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 				blockoverride "text" {
 					text = "banking_dash_cat_monetary"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_banking')]"
 				}
 			}
 		}

@@ -89,7 +89,8 @@ share in red, the supporters' share in green, the rest in gray. Only the
 condemning share counts toward the two escalations; hover each line of the
 legend for what its share does.
 
-Every section starts open except the explanations:
+Every section but the last starts open. The last, How the Colonial Empire
+Works, opens the Help page, as the "?" at the right of the tab's header does:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -98,7 +99,7 @@ Every section starts open except the explanations:
 | International Pressure | Open | Every great power that condemns or supports you, with its prestige and what it does to your stability a month, then any escalation in force. |
 | Colonial Programs | Open | The three programs, each with its level out of 3, what it adds a month, and a minus and a plus button to lower or raise it. Hover a row for its costs. |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
-| How the Colonial Empire Works | Collapsed | The explanations. |
+| How the Colonial Empire Works | A link | Opens the Help page, which explains the system. |
 
 Colonial Holdings shows what keeps the entry running and what you can let go.
 Its Territories list holds every territory you could

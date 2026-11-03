@@ -14,6 +14,19 @@ The Timeline Extended window (`gui/te_systems_window.gui`) draws one icon of its
 
 The brief asked for gold line art. Vanilla's sidebar buttons are painted objects on transparency (a book, a globe on its stand, a stack of coins), so the launcher is painted too, at their size: 76 px, the object about three quarters of the side. The rocket is small at 40 px; the hourglass and the globe carry the picture. It replaced vanilla's Journal button art, the same picture as the Journal button three slots above it.
 
+## Placeholders
+
+<!-- Help pages (charts-help-national-info plan, PR H1) -->
+The "?" that opens a system's Help page (style guide rule 1) sits at the right of each system tab's header, in this
+window and in the vanilla panels' tabs. Its art is a placeholder (style guide rule 10): vanilla's own gold question
+mark, which the base game ships in `button_icons/unused/` and draws nowhere. The plan named the encyclopedia button's
+book, but a book reads as opening the encyclopedia. `test_te_help_pages.py`'s `ShellTest` holds the path.
+
+| Where | Today | Final art (icon-pipeline subject) | Proposed path |
+|---|---|---|---|
+| The "?" in each system tab's header (`te_help_button`, `gui/te_system_tab_widgets.gui`) | `gfx/interface/buttons/button_icons/unused/help.dds`, vanilla's | A question mark on a parchment disc, in the gold line art of vanilla's round-button icons | `gfx/interface/buttons/button_icons/te_help.dds` |
+<!-- end Help pages -->
+
 ## Candidates for an icon later
 
 | Where | Today | Note |

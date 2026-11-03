@@ -258,9 +258,12 @@ def opens_how_section(node: Node) -> bool:
     """A node a How-it-works section is made of: named for one (`type
     te_demog_sec_how`, an instance `te_un_help_standing = {}`), or shown only
     while a How toggle is open (`visible = "[GetVariableSystem.Exists(
-    'un_how_open')]"`). Every How section in the mod has that toggle, named
-    `<system>_how_open` (style rule 7), so the toggle catches a topic whose
-    own names don't say How (the UN's `je_un_chamber_missions_help`)."""
+    'un_how_open')]"`). Every How section still in a panel has that toggle,
+    named `<system>_how_open` (style rule 7), so the toggle catches a topic
+    whose own names don't say How (the UN's `je_un_chamber_missions_help`).
+    A section moved to a Help page (spec 2026-11-02-charts-help-national-info
+    § 5.2) has no toggle: its content sits in `te_<key>_help_body`, shown by
+    `te_<key>_help_popup`, and both names carry the `help` token."""
     if how_named(node.name) or (node.kind not in ("", "block", "blockoverride") and how_named(node.kind)):
         return True
     visible = node.prop("visible")
