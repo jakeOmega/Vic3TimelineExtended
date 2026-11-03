@@ -387,6 +387,35 @@ class MountTest(unittest.TestCase):
                 self.assertIn(content.replace("\n", "\n\t\t\t"), window[wide.start():])
                 self.assertIn(content.split("\n")[0], own)
 
+    def test_the_players_mount_keeps_the_entry(self):
+        """Every tab National Info is to show, public or not: the player's
+        mount holds the body, whose frame sets the entry's datacontext
+        (tab_entry) on the widget around tab_content, where the layout block
+        the mount overrides sits, so the wide composer reads JournalEntry as
+        the window's does (a Colonial Empire row is a GetScriptedProgressBars
+        item). A tab with no layout block mounts its composer bare, so its
+        body must read no entry."""
+        types = mod_types()
+        frame = _strip_comments(types["te_system_tab_frame"].body)
+        entry = frame.index('block "tab_entry"')
+        holder = frame.rindex("flowcontainer = {", 0, entry)
+        self.assertIn('block "tab_content"', frame[holder:_close(frame, frame.index("{", holder))])
+        for t in gen.TABS:
+            if t.key not in gen.NI_ORDER or t.wide is None:
+                continue
+            with self.subTest(tab=t.key):
+                body = _strip_comments(types[t.body].body)
+                own = gen._content(t, wide=True)
+                if t.layout is None:
+                    self.assertNotIn("JournalEntry", body)
+                    continue
+                self.assertEqual(own[0], f"{t.body} = {{")
+                m = re.search(r'blockoverride "tab_entry" \{\s*datacontext = "\[GetPlayerJournalEntry', body)
+                if m:
+                    content = re.search(r'blockoverride "tab_content" \{', body)
+                    self.assertTrue(content, t.body)
+                    self.assertIn(f'block "{t.layout}"', body[content.end():_close(body, content.end() - 1)])
+
     def test_one_visible_per_widget(self):
         stack = [0]
         for line in self.text.splitlines():
