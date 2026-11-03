@@ -95,8 +95,10 @@ class PopupTypeTest(unittest.TestCase):
 
     def test_the_shell_dims_and_closes_on_a_click_outside(self):
         self.assertIn("using = Background_Full_Dim", self.shell)
-        # The full-size button behind the body comes first, so the body draws over it.
-        behind = re.search(r"button_normal = \{\s*size = \{ 100% 100% \}\s*" + re.escape(CLEAR), self.shell)
+        # The full-size button behind the body comes first, so the body draws over it. Its click is the
+        # popup_close block's default (National Info's viewers clear their own key: PR F1).
+        behind = re.search(r"button_normal = \{\s*size = \{ 100% 100% \}\s*block \"popup_close\" \{\s*"
+                           + re.escape(CLEAR) + r"\s*\}", self.shell)
         self.assertIsNotNone(behind, "no full-size close button behind the body")
         body = re.search(r"\twidget = \{\s*parentanchor = center", self.shell)
         self.assertIsNotNone(body, "no centred body")
@@ -120,6 +122,20 @@ class PopupTypeTest(unittest.TestCase):
         for name in ("popup_visible", "popup_title", "popup_size", "popup_list", "popup_footer"):
             with self.subTest(block=name):
                 self.assertEqual(self.shell.count(f'block "{name}"'), 1)
+
+    def test_both_close_buttons_take_one_block_whose_default_is_unchanged(self):
+        """popup_close (PR F1): one block name in both close buttons, so one
+        override sets both, as vanilla repeats a block name in one type
+        (country_panel.gui's overlord_datacontext). Its default clears te_popup,
+        as both buttons did before, so every te_popups popup closes as it did."""
+        closes = [m.start() for m in re.finditer(r'block "popup_close" \{', self.shell)]
+        self.assertEqual(len(closes), 2)
+        for at in closes:
+            block = _child(self.shell[at:], "{")
+            self.assertEqual(block.strip("{} \t\n"), CLEAR)
+        self.assertLess(closes[0], self.shell.index("header_pattern = {"))
+        self.assertGreater(closes[1], self.shell.index('blockoverride "button_close"'))
+        self.assertEqual(self.shell.count(CLEAR), 2, "no close outside the block")
         self.assertIn('block "popup_list"', _child(self.shell, "scrollarea = {"))
         self.assertNotIn('block "popup_footer"', _child(self.shell, "scrollarea = {"))
 
@@ -238,6 +254,55 @@ class PopupHostTest(unittest.TestCase):
                 # The gate's block holds the datacontext's.
                 gate_start = body.rindex("{", 0, gate)
                 self.assertGreater(_close(body, gate_start), _close(body, start))
+
+
+class ForeignChartViewerTest(unittest.TestCase):
+    """Another country's chart viewers (National Info, plan PR F1.4): one a
+    chart, generated beside the player's, held by te_ni_chart_viewers, which
+    National Info (gui/pop_browser_panel.gui) instances once, at window
+    level, under its own Country."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(CHARTS_GENERATED))
+        cls.popups = {m.group(1): _type_body(cls.text, m.group(1))
+                      for m in re.finditer(r"type (te_ni_chart_\w+_popup) = (\w+) \{", cls.text)}
+
+    def test_every_chart_has_a_foreign_viewer(self):
+        self.assertEqual(sorted(self.popups), sorted(charts.ni_popup_name(c) for c in charts.CHARTS))
+        self.assertEqual(set(re.findall(r"type te_ni_chart_\w+_popup = (\w+) \{", self.text)), {"te_ui_popup"})
+        holder = _type_body(self.text, "te_ni_chart_viewers")
+        self.assertEqual(sorted(re.findall(r"(te_ni_chart_\w+_popup) = \{\}", holder)), sorted(self.popups))
+        # up only while a viewer is open, as te_popups is only while te_popup exists
+        self.assertEqual(re.findall(r'\bvisible = "([^"]*)"', holder), ["[GetVariableSystem.Exists('te_ni_chart')]"])
+        for chart in charts.CHARTS:
+            body = self.popups[charts.ni_popup_name(chart)]
+            mine = _type_body(self.text, charts.popup_name(chart))
+            with self.subTest(chart=chart.id):
+                self.assertIn(f"visible = \"[GetVariableSystem.HasValue('te_ni_chart', '{chart.id}')]\"", body)
+                close = _child(body, 'blockoverride "popup_close" {')
+                self.assertIn("onclick = \"[GetVariableSystem.Clear('te_ni_chart')]\"", close)
+                # the player's viewer's title, size and content, under the window's Country: no gate, no player,
+                # no entry
+                for name in ("popup_title", "popup_size"):
+                    self.assertEqual(_child(body, f'blockoverride "{name}" {{'), _child(mine, f'blockoverride "{name}" {{'))
+                listed = _child(body, 'blockoverride "popup_list" {')
+                self.assertEqual(re.findall(r"(\w+) = \{\}", listed),
+                                 [n for n in re.findall(r"(\w+) = \{\}", _child(mine, 'blockoverride "popup_list" {'))])
+                for read in ("GetPlayer", "JournalEntry"):
+                    self.assertNotIn(read, listed)
+                self.assertIsNone(re.search(r"\bvisible\s*=", listed), "no gate: the button is on a drawn chart")
+
+    def test_national_info_holds_them_once_at_window_level(self):
+        window = _read(os.path.join(REPO, "gui", "pop_browser_panel.gui"))
+        self.assertEqual(window.count("te_ni_chart_viewers = {}"), 1)
+        at = window.index("te_ni_chart_viewers = {}")
+        self.assertLess(window.rindex("### MOD: National Info", 0, at), at)
+        self.assertGreater(window.index("### END MOD ###", at), at)
+        # a child of the window type itself, after its scroll area's blockoverride
+        self.assertRegex(window, r"\n\t\t### MOD: National Info ###\n(?:\t\t#[^\n]*\n)*\t\tte_ni_chart_viewers = \{\}\n")
+        self.assertGreater(at, window.index('blockoverride "scrollarea_content"'))
+        self.assertNotIn("te_ni_chart_viewers", _read(POPUPS))
 
 
 class ChartPopupTest(unittest.TestCase):

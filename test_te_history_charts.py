@@ -116,6 +116,79 @@ class ChartTypeTest(unittest.TestCase):
         self.assertTrue(_block_bodies(self.chart, "plot_layouts"))
 
 
+TRACKED = "GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+REPAIRS = os.path.join(REPO, "common", "on_actions", "te_old_save_repairs.txt")
+
+
+def _txt_block(text, name):
+    m = re.search(rf"^{name} = \{{", text, re.M)
+    assert m, f"no {name}"
+    return text[m.end():_close(text, m.end() - 1)]
+
+
+class HistoryForAnotherCountryTest(unittest.TestCase):
+    """History for another country (spec § 6.6, plan F1.5): National Info
+    shows any country's charts, so an empty chart says whether no history is
+    kept there (neither played nor a major power) or nothing is recorded
+    yet, and a store left out of order before the sort existed is sorted
+    once."""
+
+    def test_the_empty_state_says_which(self):
+        chart = _strip_comments(_read(CHART_GUI))
+        self.assertEqual([b.strip() for b in _block_bodies(chart, "empty_text")],
+                         [f"text = \"[SelectLocalization( {TRACKED}, 'te_hist_empty_state', 'te_history_untracked' )]\""])
+        loc = _loc_values()
+        self.assertIn("te_hist_empty_state", loc)
+        self.assertIn("major powers", loc["te_history_untracked"])
+        self.assertNotIn("te_demog_hist_untracked", loc, "Demographics' charts moved onto the shared key")
+
+    def test_the_gate_asks_whether_the_country_is_tracked(self):
+        sguis = _read(os.path.join(SGUIS, "te_history_scripted_gui.txt"))
+        body = _txt_block(sguis, "te_history_tracked_sgui")
+        self.assertIn("scope = country", body)
+        self.assertIn("is_shown = { te_history_country_is_tracked = yes }", body)
+        self.assertIn("is_valid = { always = no }", body)
+        for pattern in ("gui/**/*.gui", "common/**/*.txt", "scripts/generators/te_history_charts/*.in",
+                        "localization/**/*.yml"):
+            for path in glob.glob(os.path.join(REPO, pattern), recursive=True):
+                self.assertNotIn("te_demog_hist_tracked_sgui", _read(path), path)
+
+    def test_every_chart_on_the_default_or_the_shared_gate(self):
+        """Every chart's empty text is the type's (the shared gate), or for
+        Demographics the shared gate and key with its own "nothing yet", or
+        for Cultural Hegemony's world chart its own (the same for every
+        country)."""
+        for chart in gen.CHARTS:
+            m = [b.strip() for b in _override_bodies(gen.fragment(chart), "empty_text")]
+            with self.subTest(chart=chart.id):
+                if chart.system == "demographics":
+                    self.assertEqual(m, [f"text = \"[SelectLocalization( {TRACKED}, 'te_demog_hist_empty', "
+                                         "'te_history_untracked' )]\""])
+                elif chart.system == "cultural_hegemony":
+                    self.assertEqual(m, ['text = "ch_model_hist_empty"'])
+                else:
+                    self.assertEqual(m, [], "the type's default")
+
+    def test_the_old_save_repair_sorts_each_store_once(self):
+        text = _strip_comments(_read(REPAIRS))
+        pulse = _txt_block(text, "on_monthly_pulse")
+        self.assertIn("te_repair_history_order", pulse)
+        body = _txt_block(text, "te_repair_history_order")
+        self.assertRegex(body, r"if = \{\s*limit = \{ NOT = \{ has_global_variable = te_history_order_repaired \} \}"
+                               r"\s*set_global_variable = te_history_order_repaired\s*every_country = \{\s*"
+                               r"limit = \{ has_variable_list = te_hist \}\s*te_history_sort_samples = yes\s*\}\s*\}")
+        raw = _read(REPAIRS)
+        marker = raw[:raw.index("te_repair_history_order = {")].rsplit("# OLD-SAVE REPAIR", 1)[1].split("\n", 1)[0]
+        self.assertRegex(marker, r"^ \(#\d+\): remove after \d{4}-\d{2}-\d{2} or at vanilla \d+\.\d+, "
+                                 r"whichever comes first\.$")
+        # the sort it calls never clears a short list: its rebuild waits for a full copy (the cap, 240)
+        effects = _strip_comments(_read(os.path.join(REPO, "common", "scripted_effects", "te_history_effects.txt")))
+        sort = _txt_block(effects, "te_history_sort_samples")
+        clear = sort.index("clear_variable_list = te_hist\n")
+        gate = sort.rindex("count >= 240", 0, clear)
+        self.assertLess(sort.rindex("if = {", 0, clear), gate)
+
+
 class OpenButtonTest(unittest.TestCase):
     """The open button beside each panel chart's title (charts PR C2, spec
     § 4.2): it opens the chart's full-screen viewer, te_popup = chart_<id>."""
@@ -159,15 +232,16 @@ class OpenButtonTest(unittest.TestCase):
             with self.subTest(chart=chart.id):
                 opens = _override_bodies(small, "chart_open")
                 self.assertEqual(len(opens), 1)
-                self.assertIn("te_chart_open_button = {", opens[0])
+                # Two buttons in one slot (F1.4, spec § 4.4): for the player's
+                # own country the player's viewer (te_popup), for another the
+                # viewer National Info holds (te_ni_chart). Outside National
+                # Info Country is the player, so only the first shows.
+                self.assertEqual(opens[0].count("te_chart_open_button = {"), 2)
                 self.assertEqual(re.findall(r'onclick = "(.*)"', opens[0]),
-                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]"])
-                # A chart that reads its host's Country (Demographics', drawn for
-                # any country in the Census Data window) opens the player's
-                # viewer, so its button shows only for the player's own country:
-                # the first half of F1.4's two-button slot.
+                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]",
+                                  f"[GetVariableSystem.Set('te_ni_chart', '{chart.id}')]"])
                 self.assertEqual(re.findall(r'visible = "(.*)"', opens[0]),
-                                 ["[Country.IsLocalPlayer]"] if chart.entry is None else [])
+                                 ["[Country.IsLocalPlayer]", "[Not( Country.IsLocalPlayer )]"])
                 self.assertEqual([b.strip() for b in _override_bodies(small, "chart_title_width")],
                                  [f"max_width = {484 - gen.OPEN_BUTTON - gen.OPEN_GAP}"])
                 self.assertEqual(_override_bodies(large, "chart_open"), [])
@@ -414,10 +488,11 @@ class RegistryTest(unittest.TestCase):
         types = [(n, b) for n, b in every if n.startswith("te_hist_")]
         self.assertEqual([n for n, _ in types],
                          [gen.wrapper_name(c, s) for c in gen.CHARTS for s in gen.SIZES])
-        # then the viewer's (charts PR C2): the range rows, the popups and their holder
+        # then the viewer's (charts PR C2): the range rows, the popups and their holder; then another country's
+        # (National Info, PR F1.4): its popups and their holder
         self.assertEqual([n for n, _ in every[len(types):]],
                          [gen.range_row_name(v) for v in gen.RANGES] + [gen.popup_name(c) for c in gen.CHARTS]
-                         + ["te_chart_popups"])
+                         + ["te_chart_popups"] + [gen.ni_popup_name(c) for c in gen.CHARTS] + ["te_ni_chart_viewers"])
         self.assertEqual({base for _, base in types}, {"flowcontainer"})
         small = {gen.wrapper_name(c, gen.SMALL): c for c in gen.CHARTS}
         large = {gen.wrapper_name(c, gen.LARGE): c for c in gen.CHARTS}
