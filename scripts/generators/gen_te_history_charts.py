@@ -24,7 +24,7 @@ chart's own parentanchor and adds nothing else, so the panel lays out as
 before. A chart shown only for some countries keeps its own visible on the
 section's instance of the wrapper, so a hidden chart leaves no spacing
 behind; Chart.shown records it (test_te_history_charts.py holds the section
-to it), for the viewer to reuse.
+to it). The viewer leaves it out: see THE GATE AND NOTHING ELSE below.
 
 A FRAGMENT is one chart's te_history_chart instance as it stood in its section,
 dedented, with each size a placeholder. Fragments live one file a system,
