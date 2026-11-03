@@ -39,8 +39,9 @@ the reading in a word and one figure beneath it; hover a box for the detail.
 
 The Program sits directly above the entry's progress bar, which is progress
 toward your next warhead. The other sections follow below the bar. Every
-section starts open except How Nuclear Weapons Work, which holds the
-explanations, one heading per topic. Doctrine, readiness and launch authority
+section starts open. The last, How Nuclear Weapons Work, opens the Help page,
+as the "?" at the right of the tab's header does, with one heading per topic.
+Doctrine, readiness and launch authority
 each open their choices from a Change button beside their row, and Disavow our
 strikes is a switch of its own.
 
@@ -56,7 +57,7 @@ strikes is a switch of its own.
 | The Nuclear Taboo | From the world's first warhead | The score, where it is heading and its band, what nuclear acts cost now, your arsenal's burden, and The Taboo Over Time, its history in two charts |
 | Delivery and Defense | Always | Your delivery capability and home defense |
 | Nuclear Powers | From the world's first warhead | The ten largest arsenals as the world estimates them, each with its country's flag and public doctrine; your own row is tinted |
-| How Nuclear Weapons Work | Always | The explanations, collapsed |
+| How Nuclear Weapons Work | Always | A link to the Help page, which explains the system |
 
 An armed power that loses its rank stops building but keeps its warheads, its
 posture, its upkeep and its accidents.
