@@ -332,7 +332,8 @@ class TabTest(unittest.TestCase):
 
 VANILLA_LAWS = _path("vanilla_parsed", "common", "laws.json")
 VANILLA_IDEOLOGIES = _path("vanilla_parsed", "common", "ideologies.json")
-AI_TRIGGERS = ("decol_holds_colonial_empire", "decol_ai_regressive", "decol_ai_partner_holds_empire")
+AI_TRIGGERS = ("decol_holds_colonial_empire", "decol_ai_regressive", "decol_ai_slaveholding",
+               "decol_ai_partner_holds_empire")
 
 
 def _option(event, name):
@@ -383,9 +384,14 @@ class AiStanceTest(unittest.TestCase):
         self.assertEqual(self._row(self.support, "decol_holds_colonial_empire = yes", "add"), 5)
 
     def test_less_likely_for_a_stake_in_colonialism(self):
-        for trigger in ("decol_ai_regressive = yes", "decol_ai_partner_holds_empire = yes"):
+        for trigger in ("decol_ai_regressive = yes", "decol_ai_slaveholding = yes",
+                        "decol_ai_partner_holds_empire = yes"):
             with self.subTest(trigger=trigger):
-                self.assertLess(self._row(self.condemn, trigger, "factor"), 1)
+                self.assertEqual(self._row(self.condemn, trigger, "factor"), 0.5)
+        # Slavery is regressive and halves Condemn again (owner, 2026-11-03):
+        # a slaveholding power at a quarter.
+        self.assertIn("decol_ai_slaveholding = yes", _block(self.triggers, "decol_ai_regressive"))
+        self.assertIn("NOT = { has_law = law_type:law_slavery_banned }", _block(self.triggers, "decol_ai_slaveholding"))
         self.assertGreater(self._row(self.neutral, "decol_ai_regressive = yes", "add"), 0)
         self.assertGreater(self._row(self.support, "decol_ai_partner_holds_empire = yes", "add"), 0)
 
@@ -452,7 +458,7 @@ class AiStanceTest(unittest.TestCase):
             laws |= set(re.findall(r"^(law_\w+) = \{", _read(path), re.M))
         with open(VANILLA_IDEOLOGIES, encoding="utf-8") as f:
             ideologies = json.load(f)
-        regressive = _block(self.triggers, "decol_ai_regressive")
+        regressive = _block(self.triggers, "decol_ai_regressive") + _block(self.triggers, "decol_ai_slaveholding")
         named_laws = re.findall(r"law_type:(law_\w+)", regressive)
         self.assertGreaterEqual(len(named_laws), 4)
         for law in named_laws:
@@ -473,6 +479,43 @@ class AiStanceTest(unittest.TestCase):
                                   r"\s*else = \{\s*decol_stance_refresh = yes")
         # After the influence drop, which it must not shadow.
         self.assertLess(monthly.index("influence < 0"), monthly.index("decol_holds_colonial_empire"))
+
+    def test_the_factor_order_self_check(self):
+        """TE_SELF_CHECK ai_condemn_factor_order: BROKEN once a game when an AI
+        empire takes Condemn, OK once when one takes another side with Condemn
+        open to it; hidden, and logged with proven accessors only."""
+        raw = _raw(EFFECTS)
+        for name, verdict, flag in (("decol_selfcheck_empire_condemned", "BROKEN", "te_decol_cfo_broken_logged"),
+                                    ("decol_selfcheck_empire_declined", "OK", "te_decol_cfo_ok_logged")):
+            body = _block(raw, name, prefix=r"^")
+            with self.subTest(check=name):
+                self.assertRegex(body.strip(), r"^hidden_effect = \{")
+                limit = _block(body, "limit", prefix=r"")
+                for line in ("is_ai = yes", "decol_holds_colonial_empire = yes",
+                             f"NOT = {{ has_global_variable = {flag} }}"):
+                    self.assertIn(line, limit)
+                self.assertIn(f"set_global_variable = {flag}", body)
+                logs = re.findall(r'debug_log = "([^"]*)"', body)
+                self.assertEqual(len(logs), 1)
+                self.assertTrue(logs[0].startswith(f"TE_SELF_CHECK {verdict} ai_condemn_factor_order "), logs[0])
+                self.assertIn("country=[THIS.GetCountry.GetTagName]", logs[0])
+                self.assertIn("date=[TimeKeeper.GetCurrentDate.GetString]", logs[0])
+                self.assertEqual(re.findall(r"\[([^\]]*)\]", logs[0]),
+                                 ["THIS.GetCountry.GetTagName", "TimeKeeper.GetCurrentDate.GetString"])
+        # An OK needs Condemn to have been open: the influence for it.
+        declined = _block(_block(raw, "decol_selfcheck_empire_declined", prefix=r"^"), "limit", prefix=r"")
+        self.assertIn("decol_stance_affordable = yes", declined)
+        self.assertIn("decol_stance_ai_can_hold = yes", declined)
+        # Each option calls its check before its take changes the stance.
+        for side, check in (("a", "condemned"), ("b", "declined"), ("c", "declined")):
+            option = _option(self.event, f"decolonization_events.14.{side}")
+            with self.subTest(option=side):
+                self.assertEqual(option.count("decol_selfcheck_empire_"), 1)
+                self.assertLess(option.index(f"decol_selfcheck_empire_{check} = yes"),
+                                option.index("decol_stance_take_"))
+        # The play-test list names it, with a fallback.
+        playtest = _raw(_path("docs", "testing", "colonial-holdings-playtest.md"))
+        self.assertRegex(playtest, r"\| `ai_condemn_factor_order` \|[^\n]*\| [^\n]*decol_ai_condemn_weight[^\n]*\|\n")
 
 
 if __name__ == "__main__":

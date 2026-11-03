@@ -99,13 +99,20 @@ decol_ai_regressive = {
 		has_law = law_type:law_colonial_exploitation
 		has_law = law_type:law_ethnostate
 		has_law = law_type:law_racial_segregation
-		NOT = { has_law = law_type:law_slavery_banned }
+		decol_ai_slaveholding = yes
 		ruler ?= { has_ideology = ideology:ideology_jingoist_leader }
 		any_interest_group = {
 			is_in_government = yes
 			has_ideology = ideology:ideology_colonialist
 		}
 	}
+}
+
+# Slavery is legal: any slavery law but Slavery Banned. Part of the regressive
+# test, and on top of it a further halving of Condemn (owner, 2026-11-03:
+# "with slavery, I feel like it could be even lower"). Scope: country.
+decol_ai_slaveholding = {
+	NOT = { has_law = law_type:law_slavery_banned }
 }
 
 # A partner of the country runs a colonial empire: an ally or defensive-pact

@@ -1677,16 +1677,27 @@ decolonization_events.14 = {
 	# the reactions at home. Re-choosing the stance we hold costs nothing more.
 
 	# Option A: Condemn colonialism
-	# Retuned for proposal #9: non-overlord GPs (USSR, USA, post-1945 China)
-	# should pick anti-colonial stance with high reliability so AI overlords
-	# face a steady stream of GP condemnation pressure even early.
+	# Proposal #9: a great power without colonies condemns with high
+	# reliability, so AI empires face a steady stream of condemnation.
 	# Issue #1370 (owner, 2026-11-03): an empire never condemns the colonialism
 	# it practices, and a power with a stake in colonialism, at home or through
-	# a partner, condemns it less often. The adds come first and the factors
-	# last, so no add lifts a factor = 0 (the tests are in
-	# decolonization_stance_triggers.txt). A typical power without colonies:
-	# 26 here against Neutral's 1; regressive, 13 against 5; beside an empire,
-	# 13 against Support's 5-8; both, 6.5.
+	# a partner, condemns it less often. A segregated or slaveholding power is a
+	# less convincing anti-colonial champion until it reforms: the USA, Brazil
+	# and Belgium start on Racialized Citizenship (law_racial_segregation), and
+	# Brazil and the Ottoman Empire (TUR) on the Slave Trade, so each counts as
+	# regressive until it changes the law, and slavery halves Condemn again.
+	# The adds come first and the factors last, so no add lifts a factor = 0
+	# (the tests are in decolonization_stance_triggers.txt; self-check
+	# ai_condemn_factor_order). Condemn : Neutral : Support for a power without
+	# colonies (Condemn 26 to 39 with the adds; Support 3 beside a friendly
+	# colonial holder):
+	#   typical                   26-39     : 1 : 0-3   Condemn 87-98%
+	#   regressive                13-19.5   : 5 : 0-3   62-80%
+	#   slaveholding              6.5-9.75  : 5 : 0-3   45-66%
+	#   beside an empire          13-19.5   : 1 : 5-8   59-76%
+	#   regressive and beside     6.5-9.75  : 5 : 5-8   33-49%
+	#   slaveholding and beside   3.25-4.88 : 5 : 5-8   20-33%
+	# An empire: 0 : 1 (5 if regressive) : 5-13.
 	option = {
 		name = decolonization_events.14.a
 		trigger = { decol_stance_affordable = yes }
@@ -1740,6 +1751,12 @@ decolonization_events.14 = {
 				trigger = { decol_ai_regressive = yes }
 				factor = 0.5
 			}
+			# Slavery halves it again (owner, 2026-11-03): a slaveholding power
+			# at a quarter, another regressive one at a half.
+			modifier = {
+				trigger = { decol_ai_slaveholding = yes }
+				factor = 0.5
+			}
 			# Nor one whose ally, defensive-pact or bloc partner, subject or
 			# overlord runs an empire: half the weight (Support +5).
 			modifier = {
@@ -1760,6 +1777,8 @@ decolonization_events.14 = {
 				factor = 0
 			}
 		}
+		# Self-check ai_condemn_factor_order (decolonization_stance_effects.txt)
+		decol_selfcheck_empire_condemned = yes
 		decol_stance_take_anti = yes
 	}
 
@@ -1776,6 +1795,7 @@ decolonization_events.14 = {
 				add = 4
 			}
 		}
+		decol_selfcheck_empire_declined = yes
 		decol_stance_take_neutral = yes
 	}
 
@@ -1816,6 +1836,7 @@ decolonization_events.14 = {
 				factor = 0
 			}
 		}
+		decol_selfcheck_empire_declined = yes
 		decol_stance_take_pro = yes
 	}
 }
