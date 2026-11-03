@@ -26,6 +26,18 @@ journal entry. Nation, Budget Breakdown and Demographics have no header, so
 their last heading is the way in. Press Escape or click outside the page to
 close it.
 
+National Info, the base game's Census Data window under a new name, shows
+another country's panels. Open it from the foot of that country's Politics tab,
+or for your own country from the Population panel. A row of tabs over the
+window holds Pops, the base game's list, then a tab for each of the mod's
+systems a country shows the world; so far that is Demographics. For another
+country a tab shows its figures and none of its buttons; for your own it is the
+same tab as in the Timeline Extended window, buttons included. A tab is grayed
+where its system isn't running in that country, and the tab you chose stays
+chosen when you open another country's window, where it runs. Another country's
+charts open full size the same way, and an empty chart there says when the
+country keeps no history: only played countries and major powers do.
+
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
 diplomatic plays are not explained here except where the mod changes them.
@@ -107,7 +119,7 @@ turn a default system off.
 | Social Movements | Enabled | The six social-movement journal entries (civil rights, human augmentation, morphological freedom, digital rights, mental health and post-scarcity) and their events. Feminism, LGBTQ+, religious, anti-war, transhumanist and environmental events fire either way. | [Social movements](07-social-movements.md) |
 | Internal Resettlement | Enabled | *Enabled*: the Settlement Authority and government resettlement programs. *AI Voluntary Only*: AI countries run only voluntary programs. *Disabled*: no resettlement. | [States and population](08-states.md) |
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
-| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and the Census Data window and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Wealth Concentration keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
+| Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Wealth Concentration keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | World War | Disabled | A journal entry for great powers that tracks ideological tension into a world war and its aftermath. | [Military and war](13-military.md) |
 | Heir Education | Disabled | Educating your heir, and administrative, diplomatic and military aptitude traits for rulers and heirs. | [Government, laws and characters](06-politics.md) |
 | Universal Aptitude Traits | Disabled | Gives aptitude traits to every adult character, with or without Heir Education. | [Government, laws and characters](06-politics.md) |
