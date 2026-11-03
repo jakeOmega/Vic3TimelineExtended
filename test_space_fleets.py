@@ -1725,7 +1725,7 @@ class EarthAlertTest(unittest.TestCase):
         self.assertRegex(sgui, r"limit = \{ exists = scope:op scope:op = 3 \}\s*sr_ov_list_earth = yes")
         loc = _raw(ROOT / "localization/english/te_journal_entries_l_english.yml")
         tt = re.search(r"(?m)^ je_space_race_widget_ovc_earth_tt:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )", tt)
+        self.assertIn("ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )", tt)
         line = re.search(r"(?m)^ je_space_race_widget_ovc_earth_line:0 \"(.*)\"$", loc).group(1)
         self.assertIn("[THIS.GetCountry.GetName]", line)
         for name in ("count", "strength", "months"):
@@ -1836,7 +1836,7 @@ class ReadinessTest(unittest.TestCase):
         # The Earth alert prints ours at hull strength, so it says so while
         # grounded (review of #1287, M5): the popup and the Hostile Fleet hover.
         self.assertIn("half strength", re.search(r'(?m)^ sr_earth_alert_half_fire:0 "(.*)"$', loc).group(1))
-        for key, root in (("space_race_events.111.d", "ROOT.GetCountry"), ("je_space_race_widget_ovc_earth_tt", "JournalEntry.GetCountry")):
+        for key, root in (("space_race_events.111.d", "ROOT.GetCountry"), ("je_space_race_widget_ovc_earth_tt", "Country")):
             with self.subTest(key=key):
                 line = re.search(rf'(?m)^ {re.escape(key)}:0 "(.*)"$', loc).group(1)
                 self.assertIn(f"[AddLocalizationIf( EqualTo_CFixedPoint( {root}.MakeScope.ScriptValue('sr_disp_sc_operational'), "

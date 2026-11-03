@@ -20,7 +20,9 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import _children, assert_wide_matches_narrow  # noqa: E402
+from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, guard_spans, in_spans,  # noqa: E402
+                              load_loc, loc_closure, mod_types, panel_loc_keys, panel_view, type_closure,
+                              unguarded)
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
@@ -81,6 +83,10 @@ HOW_KEYS = ["je_space_race_widget_how_approach", "je_space_race_widget_how_fundi
             "je_space_race_widget_how_powers", "je_space_race_widget_how_orbit"]
 IS_SHOWN_OP0 = ("ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
                 ".AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )")
+# The overview reads the shown Country (National Info, spec
+# 2026-11-02-charts-help-national-info § 6.4); the entry's own sections still
+# read the entry.
+OV_SHOWN_OP0 = IS_SHOWN_OP0.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope")
 
 
 def _read(path):
@@ -302,9 +308,11 @@ class FlagTest(unittest.TestCase):
         # Autonomy and Colony Defences showed); the Space Race tab's Space
         # Powers and Orbit; and under Full Colonies Space Command, Space Fleets
         # and Locations (slice 6); and the colony target popup's "show all"
-        # (UI pass design § 5). How the Space Race Works and How Solar
-        # Colonization Works have none: they are links to the Help page.
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 10)
+        # (UI pass design § 5); and the colonies another country holds
+        # (National Info, te_sr_sec_colonies_brief). How the Space Race Works
+        # and How Solar Colonization Works have none: they are links to the
+        # Help page.
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -366,8 +374,9 @@ class GatingTest(unittest.TestCase):
     def test_overview_risk_and_progress_follow_the_scripted_gui(self):
         body = _type_body(self.gui, "te_sr_overview_milestone")
         # row 1 while running (the state cells and the risk cell) and the progress row
-        self.assertEqual(body.count(f'visible = "[{IS_SHOWN_OP0}]"'), 2)
-        self.assertEqual(body.count(f'visible = "[Not( {IS_SHOWN_OP0} )]"'), 1)  # row 1 while idle
+        self.assertEqual(body.count(f'visible = "[{OV_SHOWN_OP0}]"'), 2)
+        self.assertEqual(body.count(f'visible = "[Not( {OV_SHOWN_OP0} )]"'), 1)  # row 1 while idle
+        self.assertNotIn("JournalEntry", body)
 
     def test_row_1_is_two_rows_of_fixed_contents(self):
         # One row, 318 idle and 480 running, was centred at its first width and
@@ -380,7 +389,7 @@ class GatingTest(unittest.TestCase):
         panel = next(c for c in gui_tree.widgets(types["te_sr_overview_milestone"]) if c.kind == "te_sr_panel")
         running, idle = gui_tree.widgets(panel)[:2]
         gate = [(row.prop("visible") or gui_tree.Prop("visible", "", 0, True)).value for row in (running, idle)]
-        self.assertEqual(gate, [f"[{IS_SHOWN_OP0}]", f"[Not( {IS_SHOWN_OP0} )]"])
+        self.assertEqual(gate, [f"[{OV_SHOWN_OP0}]", f"[Not( {OV_SHOWN_OP0} )]"])
         for row in (running, idle):
             self.assertEqual((row.prop("direction").value, row.prop("parentanchor").value), ("horizontal", "hcenter"))
             self.assertEqual([(c.kind, c.name) for c in row.children if c.kind == "block"], [("block", "sr_third_cells")])
@@ -404,14 +413,14 @@ class GatingTest(unittest.TestCase):
         for m in CONTROLLED:
             root = _root(self.gui, f"widget_je_space_race_{m}_overview")
             sv = f"ScriptValue('sr_disp_status_{m}')"
-            self.assertIn(f"LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint)1' )", root)
+            self.assertIn(f"LessThanOrEqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint)1' )", root)
             for code in (2, 3):
-                self.assertIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint){code}' )", root)
+                self.assertIn(f"EqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint){code}' )", root)
             # Code 4, shielded, went with the post-setback cooldown (2026-10-31).
-            self.assertNotIn(f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{sv}, '(CFixedPoint)4' )", root)
+            self.assertNotIn(f"EqualTo_CFixedPoint( Country.MakeScope.{sv}, '(CFixedPoint)4' )", root)
             risk = f"ScriptValue('sr_risk_shown_{m}')"
-            self.assertIn(f"NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )", root)
-            self.assertIn(f"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
+            self.assertIn(f"NotEqualTo_CFixedPoint( Country.MakeScope.{risk}, '(CFixedPoint)0' )", root)
+            self.assertIn(f"[EqualTo_CFixedPoint( Country.MakeScope.{risk}, '(CFixedPoint)0' )]", root)
 
 
 def _colony_sites():
@@ -647,8 +656,8 @@ class ColoniesTest(unittest.TestCase):
         names the Moon, which needs no window, not 'stage 0 of 5'."""
         cell = _enclosing(self.gui, 'tooltip = "je_space_race_widget_ovc_window_tt"', "te_banking_ov_cell = {")
         third = cell[cell.index('blockoverride "third_line"'):]
-        stage = "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
-        waits = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
+        stage = "GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' )"
+        waits = "EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' )"
         # and, the Moon full without our Mars Landing, why the bar holds (design § 4)
         self.assertEqual(re.findall(r'visible = "\[(.*)\]"\n\s*text = "(\w+)"', third),
                          [(f"And( {stage}, Not( {waits} ) )", "je_space_race_widget_ovc_window_fig"),
@@ -799,7 +808,7 @@ class InterstellarCellTest(unittest.TestCase):
             with self.subTest(state=n):
                 visibles = re.findall(r'visible = "(.*)"', icon)
                 self.assertEqual(len(visibles), 1, "one visible per widget")
-                m = re.fullmatch(r"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\."
+                m = re.fullmatch(r"\[EqualTo_CFixedPoint\( Country\.MakeScope\."
                                  r"ScriptValue\('sr_disp_prog_interstellar'\), '\(CFixedPoint\)(\d)' \)\]",
                                  visibles[0])
                 self.assertIsNotNone(m, visibles[0])
@@ -861,8 +870,10 @@ class SpacePowersTest(unittest.TestCase):
     def test_our_row_then_the_list(self):
         rows = re.split(r"\bte_sr_power_row = \{", self.section)[1:]
         self.assertEqual(len(rows), 2)
-        self.assertIn('datacontext = "[GetPlayer.GetCapital]"', rows[0])
-        self.assertIn("te_sr_power_lead_own = {}", rows[0])
+        # The shown country's row reads Country (National Info); its exact
+        # progress column is the player's own.
+        self.assertIn('datacontext = "[Country.GetCapital]"', rows[0])
+        self.assertRegex(rows[0], r"te_sr_power_lead_own = \{\s*using = te_own_country_only\s*\}")
         self.assertRegex(self.section, r'datamodel = "\[GetPlayer\.MakeScope\.GetList\(\'sr_powers_list\'\)\]"\s*'
                                        r'item = \{\s*te_sr_power_row = \{\s*datacontext = "\[Scope\.GetState\]"')
         self.assertIn("te_sr_power_lead_band = {}", rows[1])
@@ -997,12 +1008,15 @@ class OrbitTest(unittest.TestCase):
 
     def test_the_debris_row_reads_the_player(self):
         """Mission Control's debris row is also the Orbit section's, outside
-        any journal entry: every key it renders roots on GetPlayer."""
+        any journal entry: every key it renders roots on the shown Country,
+        which every mount supplies (gotcha #45), so National Info shows another
+        country's."""
         for key in ("te_debris_row", "te_debris_row_tt", "te_debris_row_tt_cleaners",
                     "te_debris_row_tt_hazardous", "te_debris_row_tt_kessler"):
             with self.subTest(key=key):
                 self.assertNotIn("JournalEntry", _loc(key))
-                self.assertIn("GetPlayer", _loc(key))
+                self.assertNotIn("GetPlayer", _loc(key))
+                self.assertIn("Country.", _loc(key))
 
     def test_the_satellite_codes_match_the_hover(self):
         values = _read(os.path.join(REPO, "common", "script_values", "te_orbital_debris_values.txt"))
@@ -1263,13 +1277,13 @@ class PaceBreakdownTest(unittest.TestCase):
             with self.subTest(milestone=m):
                 text = _loc(f"je_space_race_widget_progress_{m}")
                 self.assertRegex(
-                    text, rf"\(\+\[JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo\)$")
+                    text, rf"\(\+\[Country\.MakeScope\.ScriptValue\('sr_pace_rate_{m}'\)\|1\]/mo\)$")
 
     def test_the_tooltip_breaks_down_both_figures_and_states_the_pace(self):
         tip = _loc("je_space_race_widget_pace_tt")
         for key in (self.ADD, self.MULT):
             self.assertIn(
-                f"[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('{key}')]", tip)
+                f"[Country.GetModifier.GetValueWithBreakdownFor('{key}')]", tip)
         self.assertLess(tip.index(self.ADD), tip.index(self.MULT))
         self.assertIn("ScriptValue('sr_progress')", tip)
 
@@ -1468,7 +1482,7 @@ class EarthAlertCellTest(unittest.TestCase):
         m = re.search(r'te_banking_ov_cell = \{\s*visible = "([^"]+)"\s*tooltip = "je_space_race_widget_ovc_earth_tt"', gui)
         self.assertIsNotNone(m, "no Hostile Fleet cell")
         shows = ("ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1'",
-                 "GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
+                 "GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), "
                  "'(CFixedPoint)1' )")
         # Shown by its own visible, and its row (shared with Base Room) shows
         # while either cell does.
@@ -1487,12 +1501,205 @@ class EarthAlertCellTest(unittest.TestCase):
                 break
             i += 1
         cell = gui[brace:i]
-        loud = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )"
+        loud = "EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )"
         self.assertRegex(cell, rf'visible = "\[{re.escape(loud)}\]"\s*text = "je_space_race_widget_ovc_earth_word_loud"')
         self.assertRegex(cell, rf'visible = "\[Not\( {re.escape(loud)} \)\]"\s*text = "je_space_race_widget_ovc_earth_word"')
         self.assertIn('text = "je_space_race_widget_ovc_earth_fig"', cell)
         loc = "\n".join(_read(p) for p in glob.glob(os.path.join(LOC_DIR, "*.yml")))
         self.assertRegex(loc, r'(?m)^ je_space_race_widget_ovc_earth_word_loud:0 "#R ')
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's Space Race tab leaves out, and what it keeps
+    (National Info; spec 2026-11-02-charts-help-national-info §§ 6.4, 6.7).
+    Left out, under te_own_country_only: each milestone's live sections
+    (Mission Control's approach, funding and setbacks, the Rivals, the colony
+    fleets and Space Command) and Open Journal Entry, which read the player's
+    entry; the overview's approach and setback-risk cells and its exact
+    progress bar; solar colonization's staging and "what needs us" cells; the
+    exact-progress column of the country's own Space Powers row; the other
+    powers' rows, which are the viewer's list and the viewer's estimates; and
+    the strike readiness row, the player's own case for a strike. What another
+    country's panel draws is the walk test_te_system_tab_bodies.py's
+    BindingTest makes (panel_view)."""
+
+    ROOT = {"te_sr_wide_sections"}
+    PRIVATE = ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_rival_row", "te_sr_status_sections",
+               "te_sr_power_lead_own", "te_sr_power_lead_band", "te_sr_ov_staged", "te_sr_sec_colonies",
+               "te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
+               "te_sr_sec_solar_system", "te_sr_action_button") + tuple(f"te_sr_{m}_status" for m in CONTROLLED)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(cls.ROOT, cls.types)
+        cls.loc = load_loc()
+        cls.keys = panel_loc_keys(cls.ROOT, cls.types, cls.loc)
+
+    def _hidden(self, type_name, anchor):
+        """Whether the anchor's end (inside a widget it opens) is left out."""
+        body = self.types[type_name].body
+        self.assertIn(anchor, body, type_name)
+        return in_spans(body.index(anchor) + len(anchor), self.view.skip[type_name])
+
+    def test_the_players_own_parts_are_left_out(self):
+        drawn = type_closure(self.ROOT, self.types)
+        for name in self.PRIVATE:
+            with self.subTest(type=name):
+                self.assertIn(name, drawn, "the player's own panel still draws it")
+                self.assertNotIn(name, self.view.open, f"another country's panel draws {name}")
+
+    def test_the_entrys_sections_and_link_are_the_players(self):
+        body = self.types["te_sr_window_milestones"].body
+        spans = self.view.skip["te_sr_window_milestones"]
+        self.assertEqual(spans, guard_spans(body))
+        frames = [m.start() for m in re.finditer(r"\bte_system_tab_frame = \{", body)] + [len(body)]
+        self.assertEqual(len(frames) - 1, len(ALL))
+        for m, start, end in zip(ALL, frames, frames[1:]):
+            with self.subTest(milestone=m):
+                frame = body[start:end]
+                self.assertIn('blockoverride "tab_country" {}', frame)
+                entry = start + frame.index(f"GetPlayerJournalEntry('je_space_race_{m}')")
+                self.assertTrue(in_spans(entry, spans), "the entry's datacontext outside the guard")
+                self.assertTrue(in_spans(start + frame.index("OpenJournalEntryPanel"), spans))
+                overview = "te_sr_overview_transit = {}" if m in window_gen.SR_TRANSIT else f"te_sr_{m}_overview = {{}}"
+                self.assertFalse(in_spans(start + frame.index(overview), spans), "the overview is the player's")
+
+    def test_the_overviews_private_cells_are_the_players(self):
+        for anchor in ('block "sr_status_standard"', 'block "sr_risk_lit"', "te_sr_ov_bar_row = {"):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden("te_sr_overview_milestone", anchor))
+        for anchor in ('block "sr_third_cells"', "te_sr_ov_band_row = {", "te_sr_ov_programme = {}"):
+            with self.subTest(anchor=anchor):
+                self.assertFalse(self._hidden("te_sr_overview_milestone", anchor))
+        # the band shows only for another country, the bar only for the player:
+        # one of the two whenever the row shows
+        body = self.types["te_sr_overview_milestone"].body
+        band = body[body.index("te_sr_ov_band_row = {"):]
+        self.assertEqual(re.search(r'visible = "(.*)"', band).group(1), "[Not( Country.IsLocalPlayer )]")
+        solar = "te_sr_solar_colonization_overview"
+        for anchor in ("te_sr_ov_staged = {", 'tooltip = "je_space_race_widget_ovc_colonies_tt"',
+                       'tooltip = "je_space_race_widget_ovc_earth_tt"'):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden(solar, anchor))
+        self.assertFalse(self._hidden(solar, "te_sr_ov_pie = {"))
+
+    def test_the_other_powers_are_the_players(self):
+        for anchor in ("GetList('sr_powers_list')", '"je_space_race_widget_powers_others"',
+                       "te_sr_power_lead_own = {"):
+            with self.subTest(anchor=anchor):
+                self.assertTrue(self._hidden("te_sr_sec_powers", anchor))
+        self.assertFalse(self._hidden("te_sr_sec_powers", 'datacontext = "[Country.GetCapital]"'))
+        self.assertTrue(self._hidden("te_sr_sec_orbit", 'tooltip = "te_orbit_strike_tt"'))
+        self.assertFalse(self._hidden("te_sr_sec_orbit", "te_sr_debris_row = {}"))
+
+    def test_no_empty_row_for_another_country(self):
+        """A guarded part whose own row has a visible sits in a wrapper that
+        also asks Country.IsLocalPlayer, so another country's column keeps no
+        empty row (spacing) where it would be."""
+        solar = self.types["te_sr_solar_colonization_overview"].body
+        for value, inner in (("sr_launch_staged_shown", "te_sr_ov_staged"),
+                             ("sr_disp_colonies_contested", "flowcontainer")):
+            with self.subTest(part=inner):
+                self.assertRegex(solar, rf'flowcontainer = \{{\s*visible = "\[And\( Country\.IsLocalPlayer, [^"]*'
+                                        rf"ScriptValue\('{value}'\)[^\"]*\]\"[^{{}}]*{inner} = \{{\s*"
+                                        r"using = te_own_country_only")
+
+    # The other half (spec § 6.4's Shown column: "milestones reached, program
+    # icons, colonies and a progress band"): what another country's panel
+    # still draws, so a guard that hides too much fails too. A type whose root
+    # carries the guard is in view.open but draws nothing, so each must also
+    # keep its root out of view.skip.
+    SHOWN = ("te_sr_window_milestones", "te_sr_overview_milestone", "te_sr_overview_transit", "te_sr_ov_first",
+             "te_sr_ov_icon_label", "te_sr_ov_band_row", "te_sr_ov_pie", "te_sr_ov_programme", "te_sr_ov_prog_cell",
+             "te_sr_ov_prog_cell_interstellar", "te_sr_sec_powers", "te_sr_power_row", "te_sr_power_cell",
+             "te_sr_power_cell_interstellar", "te_sr_sec_orbit", "te_sr_debris_row", "te_sr_sec_colonies_brief",
+             "te_sr_colony_brief_rows", "te_sr_colony_brief_row", "te_sr_value_row", "te_sr_panel") \
+        + tuple(f"te_sr_{m}_overview" for m in CONTROLLED)
+
+    def test_another_country_sees_its_milestones_program_colonies_and_band(self):
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, self.view.open, f"another country's panel doesn't draw {name}")
+                body = self.types[name].body
+                self.assertNotIn((0, len(body)), self.view.skip[name], f"{name}'s root is the player's own")
+        shown = [f"je_space_race_widget_band_{m}" for m in CONTROLLED] + ["je_space_race_widget_band_tt"]
+        shown += [f"je_space_race_widget_power_prog_{m}" for m in CONTROLLED if m != "interstellar_probe"]
+        shown += ["je_space_race_widget_power_prog_interstellar", "je_space_race_widget_ov_first_claimed",
+                  "je_space_race_widget_ov_first_open", "je_space_race_widget_ov_programme_tt",
+                  "je_space_race_widget_ov_idle", "je_space_race_widget_ov_stage",
+                  "je_space_race_widget_ov_worlds_tt_theirs", "te_window_space_race_idle_note_theirs",
+                  "je_space_race_widget_colonies_header", "je_space_race_widget_colonies_held_label",
+                  "je_space_race_widget_colonies_held_figure", "je_space_race_widget_colonies_brief_empty",
+                  "je_space_race_widget_orbit_satellites_label", "je_space_race_widget_orbit_strikes_label",
+                  "je_space_race_widget_orbit_moratorium_label", "te_debris_row", "te_orbit_satellites_tt",
+                  "te_orbit_strikes_tt", "te_orbit_moratorium_tt"]
+        shown += [f"je_space_race_widget_reward_{m}" for m in RACING]
+        self.assertEqual([k for k in shown if k not in self.keys], [], "another country's panel doesn't render these")
+        # and the player's own words, which it doesn't
+        for key in ("je_space_race_widget_ov_worlds_tt_ours", "te_window_space_race_idle_note_ours",
+                    "je_space_race_widget_ov_risk_tt", "je_space_race_widget_pace_tt",
+                    "je_space_race_widget_powers_others", "te_orbit_strike_tt"):
+            with self.subTest(key=key):
+                self.assertNotIn(key, self.keys)
+
+    def test_another_countrys_colonies_read_it(self):
+        """te_sr_colony_brief_rows (gen_solar_sites.py): one row per site,
+        shown while the country holds it, with its settlers under Simple and
+        Full Colonies, all read on Country."""
+        rows = self.types["te_sr_colony_brief_rows"].body
+        self.assertEqual(rows.count("te_sr_colony_brief_row = {"), len(gss.SITES))
+        for s in gss.SITES:
+            with self.subTest(site=s.key):
+                self.assertIn(f"[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_{s.key}'), "
+                              "'(CFixedPoint)1' )]", rows)
+                self.assertIn(f'text = "sr_site_name_{s.key}"', rows)
+        self.assertEqual(READ.findall(rows), [])
+        brief = self.types["te_sr_sec_colonies_brief"].body
+        self.assertIn('visible = "[Not( Country.IsLocalPlayer )]"', brief)
+        self.assertEqual(READ.findall(brief), [])
+
+
+class ScriptTooltipTest(unittest.TestCase):
+    """The text a read-only scripted GUI's tooltip prints for another
+    country's panel reads the shown country, not the player (spec
+    2026-11-02-charts-help-national-info § 6.4). Orbit's Strikes hover is
+    te_asat_record_sgui's ExecuteTooltip: its lines come from the effect's
+    custom_tooltip keys, which no panel's loc closure reaches, so BindingTest
+    can't see them. They read the scripted GUI's root (SCOPE.GetRootScope, the
+    form covert_last_exposed_sgui ships), or nothing at all."""
+
+    TOOLTIP = re.compile(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
+    PRINTS = re.compile(r"\bcustom_tooltip(?:_no_bullet)?\s*=\s*(?:\{[^{}]*?\btext\s*=\s*)?([\w.$\-]+)")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view(PrivateTest.ROOT, cls.types)
+        cls.loc = load_loc()
+        cls.sguis = {}
+        for path in sorted(glob.glob(os.path.join(REPO, "common", "scripted_guis", "*.txt"))):
+            text = _strip_comments(_read(path))
+            for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{", text):
+                cls.sguis[m.group(1)] = text[m.end():_close(text, m.end() - 1)]
+
+    def test_no_datacontext_tooltip_is_drawn_unguarded(self):
+        for name in self.view.open:
+            with self.subTest(type=name):
+                self.assertNotRegex(unguarded(self.types[name].body, self.view.skip[name]),
+                                    r"(?<![\w'])ScriptedGui\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)")
+
+    def test_the_printed_lines_read_the_shown_country(self):
+        found = set()
+        for name in self.view.open:
+            found |= set(self.TOOLTIP.findall(unguarded(self.types[name].body, self.view.skip[name])))
+        for key in panel_loc_keys(PrivateTest.ROOT, self.types, self.loc):
+            found |= set(self.TOOLTIP.findall(self.loc[key]))
+        self.assertEqual(found, {"te_asat_record_sgui"})
+        printed = set(self.PRINTS.findall(self.sguis["te_asat_record_sgui"]))
+        self.assertEqual(printed, {"te_asat_record_last", "te_asat_record_last_unnamed", "te_asat_record_none"})
+        reads = {k: READ.findall(self.loc[k]) for k in loc_closure(printed, self.loc, own=False)}
+        self.assertEqual({k: r for k, r in reads.items() if r}, {})
 
 
 class WideLayoutTest(unittest.TestCase):
