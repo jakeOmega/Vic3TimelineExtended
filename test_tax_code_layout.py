@@ -28,7 +28,8 @@ import unittest
 from pathlib import Path
 
 from gui_test_helpers import _block_at, _strip_comments, _type_body, assert_wide_matches_narrow
-from gui_test_helpers import GUARD, guard_spans, in_spans, mod_types, type_closure
+from gui_test_helpers import (GUARD, _drawn, custom_loc, guard_spans, in_spans, load_loc, mod_types, panel_loc_keys,
+                              panel_view, type_closure, unguarded)
 from gui_test_helpers import _read as _read_gui
 from test_tax_code_state import KEYS, block, close, gen, top_level_names
 
@@ -678,6 +679,84 @@ class PrivateTest(unittest.TestCase):
         for name, path in (("te_tax_enacted_table", OVERVIEW), ("te_tax_history_section", OVERVIEW)):
             with self.subTest(section=name):
                 self.assertNotIn(GUARD, type_body(gui(path), name))
+
+    # The other half, read off what another country's panel draws (the walk
+    # test_te_system_tab_bodies.py's BindingTest makes, panel_view) and the loc
+    # it renders (panel_loc_keys), not off the text: a guard that hides a part
+    # of § 6.4's Shown column fails here wherever it is put. A type whose root
+    # carries the guard is in view.open but draws nothing, so each must also
+    # keep its root out of view.skip.
+    SHOWN = ("te_tax_overview_panel", "te_tax_enacted_table", "te_tax_rate_row", "te_tax_en_goods_icons",
+             "te_tax_light_section", "te_tax_light_overview_rows", "te_tax_light_head", "te_tax_instrument_row",
+             "te_tax_politics_section", "te_tax_condition_row", "te_tax_pending_section", "te_tax_review_line",
+             "te_tax_pk_goods_icons_a", "te_tax_pk_goods_icons_b", "te_tax_history_section", "te_tax_history_row",
+             "te_tax_how_section", "te_tax_light_how_section", "te_tax_value_row", "te_tax_panel")
+    INSTRUMENTS = ("wage", "div", "land", "head", "cons")
+
+    def test_another_country_sees_its_code_bills_and_history(self):
+        types = mod_types()
+        view = panel_view({"te_tax_wide_sections"}, types)
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, view.open, f"another country's panel doesn't draw {name}")
+                self.assertNotIn((0, len(types[name].body)), view.skip[name], f"{name}'s root is the player's own")
+        # The light code's rows: their cells, and the range and step each fills in.
+        row = types["te_tax_instrument_row"].body
+        for cell in ("row_label", "row_law", "row_draft", "row_delta"):
+            with self.subTest(cell=cell):
+                self.assertFalse(in_spans(row.index(f'block "{cell}"'), view.skip["te_tax_instrument_row"]))
+        light = unguarded(types["te_tax_light_section"].body, view.skip["te_tax_light_section"])
+        for key in self.INSTRUMENTS:
+            for cell in ("range", "rung"):
+                with self.subTest(light=f"{cell}_{key}"):
+                    self.assertIn(f"Country.GetCustom('te_tax_lt_{cell}_{key}')", light)
+        loc = load_loc()
+        keys = panel_loc_keys({"te_tax_wide_sections"}, types, loc)
+        shown = ["te_tax_ov_code", "te_tax_ov_bill", "te_tax_ov_bill_share", "te_tax_ov_passed",
+                 "te_tax_pol_bar_tt", "te_tax_pol_bar_value", "te_tax_pol_threshold_tt",
+                 "te_tax_pol_legitimacy_value", "te_tax_pol_debate_value_ni", "te_tax_pol_debate_done",
+                 "te_tax_pol_due_value", "te_tax_pol_due_passed", "te_tax_pol_slot_free", "te_tax_pol_slot_full",
+                 "te_tax_pol_current_ok", "te_tax_pol_current_changed", "te_tax_pol_met", "te_tax_pol_unmet",
+                 "te_tax_en_goods_value", "te_tax_en_agrel_value", "te_tax_en_regrel_value", "te_tax_en_since_none",
+                 "te_tax_en_sunset_tt", "te_tax_hist_kind_approved", "te_tax_hist_kind_commenced"]
+        for c in ("support", "legitimacy", "debate", "due", "slot", "current"):
+            shown += [f"te_tax_pol_{c}", "te_tax_pol_debate_tt_ni" if c == "debate" else f"te_tax_pol_{c}_tt"]
+        shown += [f"te_tax_hist_date_{i}" for i in range(1, 9)]
+        for s in "ab":
+            shown += [f"te_tax_ov_package_{s}_{state}" for state in ("awaiting", "conflict", "missed")]
+            shown += [f"te_tax_pk_{s}_{part}" for part in ("goods", "agrel", "regrel", "customs")]
+            shown += [f"te_tax_pk_{s}_{key}{sun}" for key in self.INSTRUMENTS for sun in ("", "_sun")]
+        custom = custom_loc()
+        for key in self.INSTRUMENTS:
+            shown += [f"te_tax_en_rate_{key}", f"te_tax_en_since_{key}", f"te_tax_en_sunset_{key}"]
+            ranges = [k for k in custom[f"te_tax_lt_range_{key}"] if k != "te_tax_lt_not_levied"]
+            self.assertTrue(ranges, key)
+            shown += ranges
+        self.assertEqual([k for k in shown if k not in loc], [], "no such key")
+        self.assertEqual([k for k in shown if k not in keys], [], "another country's panel doesn't render these")
+
+    TOOLTIP = re.compile(r"\b(?:IsValidTooltip|ExecuteTooltip|IsShownTooltip)\(")
+
+    def test_no_public_hover_prints_a_scripted_guis_lines(self):
+        """A scripted GUI's tooltip prints its script's custom_tooltip keys,
+        which neither BindingTest nor te_rebind_country.py sees, and Tax
+        Code's read GetPlayer (te_tax_can_pass's te_tax_tt_pass_*). So in what
+        another country's panel draws, each one sits in a SelectLocalization's
+        own-country branch (own_branch), and no loc it renders calls one."""
+        types = mod_types()
+        hits = []
+        for where, td, spans in _drawn(["te_tax_wide_sections"], types):
+            drawn = unguarded(td.body, spans)
+            for m in self.TOOLTIP.finditer(drawn):
+                line = td.line + drawn.count("\n", 0, m.start())
+                hits.append(where)
+                with self.subTest(at=f"{td.path}:{line}"):
+                    self.assertTrue(self.own_branch(drawn, m.start()),
+                                    f"{where}: another country's hover prints {drawn[m.start() - 60:m.end()]}")
+        self.assertIn("te_tax_overview_panel", hits, "the walk reaches Pass's checklist in the bill cell")
+        loc = load_loc()
+        keys = panel_loc_keys({"te_tax_wide_sections"}, types, loc)
+        self.assertEqual(sorted(k for k in keys if self.TOOLTIP.search(loc[k])), [])
 
 
 class JournalEntryTest(unittest.TestCase):
