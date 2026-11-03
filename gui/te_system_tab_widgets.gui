@@ -7,6 +7,39 @@
 ### The te_je_* types read JournalEntry, so instance them under a JournalEntry
 ### datacontext: GetPlayerJournalEntry('<key>') on a child of a widget gated on
 ### the entry being active (gotcha #29 in docs/guides/gui_modding_guide.md).
+###
+### --- Other countries' panels (charts-help-national-info plan, PR F0) --------
+### A system's sections read the shown country as `Country`
+### (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
+### § 6.3), and every mount supplies it: te_system_tab_frame's root (block
+### "tab_country", the player), the Timeline Extended window's mounts (the
+### player), each journal root's te_je_country (the entry's country), the
+### Population panel (AccessPlayer) and the Census Data window
+### (PopBrowserPanel.GetCountry), which shows another country.
+###
+### te_own_country_only  the one own-country guard (spec § 6.5): a widget that
+###                      carries `using = te_own_country_only` shows only for
+###                      the player's own country, and so does everything
+###                      inside it. Put every control (a scripted GUI's
+###                      Execute), every opener of a popup that holds
+###                      controls, and every part that reads JournalEntry or
+###                      the player, under it:
+###                        - a widget with no `visible` of its own takes the
+###                          `using` itself;
+###                        - a widget with its own `visible`, or an instance of
+###                          a type whose root has one, gets a wrapper that
+###                          takes it (one visible per widget; an instance's
+###                          visible replaces its type's, gotcha #17). Give the
+###                          wrapper the slot's fixed size where the control
+###                          sits in a row (style guide rule 8).
+###                      Hidden, not grayed: another country sees no control.
+###                      test_te_system_tab_bodies.py's GuardTest and
+###                      BindingTest hold every public tab to it.
+### --- end other countries' panels --------------------------------------------
+
+template te_own_country_only {
+	visible = "[Country.IsLocalPlayer]"
+}
 
 types te_system_tab_widgets
 {

@@ -13,7 +13,8 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import _children, _close, _instances, _read, _strip_comments, _type_body
+from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body,
+                              mod_types, type_closure)
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
@@ -361,6 +362,88 @@ class HostPanelTest(unittest.TestCase):
                 # places whole
                 if t.key == "strategic_reserve":
                     self.assertIn("te_st_res_sec_inventory", reached)
+
+
+# --- Other countries' panels (charts-help-national-info plan, PR F0) ---------------------------------
+# docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md §§ 6.3, 6.5, 7.1, 7.2.
+
+
+def _templates():
+    """Every template in the mod's GUI, by name: its body, comments cut."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+        text = _strip_comments(_read(path))
+        for m in re.finditer(r"(?m)^\s*template (\w+) \{", text):
+            out[m.group(1)] = text[m.end():_close(text, m.end() - 1)]
+    return out
+
+
+def _enclosing_block(text, pos):
+    """The offset of the opening brace of the innermost block around pos, or -1."""
+    depth = 0
+    for i in range(pos - 1, -1, -1):
+        if text[i] == "}":
+            depth += 1
+        elif text[i] == "{":
+            if depth == 0:
+                return i
+            depth -= 1
+    return -1
+
+
+class GuardTemplateTest(unittest.TestCase):
+    """te_own_country_only, the one own-country guard (spec § 7.2), and the
+    closure the binding tests walk."""
+
+    def test_the_template(self):
+        raw = _read(WIDGETS)
+        self.assertIn(f'template {GUARD} {{\n\tvisible = "[Country.IsLocalPlayer]"\n}}', raw)
+        # a template sits outside the types block
+        self.assertLess(raw.index(f"template {GUARD}"), raw.index("types te_system_tab_widgets"))
+        self.assertEqual(_templates()[GUARD].strip(), 'visible = "[Country.IsLocalPlayer]"')
+
+    def test_the_closure_follows_every_mod_type(self):
+        """Grand Monuments' wide layout reaches its sections and their gm_* rows
+        (types the mod writes without te_), and nothing of another system's."""
+        types = mod_types()
+        reached = type_closure({"te_gm_wide_sections"}, types)
+        for name in ("te_gm_wide_sections", "te_gm_sec_commission", "te_gm_overview_panel", "te_ui_columns_three"):
+            self.assertIn(name, reached)
+        self.assertTrue(any(name.startswith("gm_") for name in reached), "the gm_* rows")
+        self.assertEqual([name for name in reached if name.startswith("te_ce_")], [])
+        # vanilla's types (a file that copies vanilla's markup) are vanilla's own reads
+        self.assertNotIn("FancyTooltip_Law", type_closure({"te_demog_browser_sections"}, types))
+
+    def test_the_guard_is_its_widgets_only_visible(self):
+        """A widget that takes the guard has no visible of its own, through
+        another template neither, and isn't an instance of a type whose root
+        has one: in game the instance's visible replaces the type's (gotcha
+        #17). Such a widget gets a wrapper that takes the guard."""
+        templates = {name for name, body in _templates().items() if re.search(r"^\s*visible\s*=", body, re.M)}
+        types = mod_types()
+        found = 0
+        for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+            text = _strip_comments(_read(path))
+            for m in re.finditer(rf"\busing\s*=\s*{GUARD}\b", text):
+                found += 1
+                where = f"{os.path.relpath(path, REPO)}:{text.count(chr(10), 0, m.start()) + 1}"
+                brace = _enclosing_block(text, m.start())
+                self.assertGreaterEqual(brace, 0, where)
+                own = _children(text[brace + 1:_close(text, brace)])
+                props = [(k, v) for kind, k, v in own if kind == "property"]
+                with self.subTest(at=where):
+                    self.assertNotIn("visible", [k for k, _ in props], f"{where}: a widget with its own visible "
+                                     f"takes the guard on a wrapper (one visible per widget)")
+                    others = [v for k, v in props if k == "using" and v in templates and v != GUARD]
+                    self.assertEqual(others, [], f"{where}: {others} sets a visible too; wrap one of them")
+                    opener = re.search(r"(\w+) = \{$", text[:brace + 1])
+                    instance = opener.group(1) if opener else ""
+                    if instance in types:
+                        root = [k for kind, k, _ in _children(types[instance].body) if kind == "property"]
+                        self.assertNotIn("visible", root, f"{where}: {instance}'s root has its own visible, which "
+                                                          f"the guard would replace (gotcha #17); wrap the instance")
+        self.assertGreater(found, 0, "the guard is used")
+
 
 if __name__ == "__main__":
     unittest.main()

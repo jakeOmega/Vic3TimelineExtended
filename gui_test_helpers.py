@@ -9,7 +9,13 @@ Existing tests move onto it only when they are next touched, not in a sweep.
 - assert_wide_matches_narrow checks a wide composer against its narrow ones.
 - history_charts gives the history charts a section instances, from the
   generated wrappers (scripts/generators/gen_te_history_charts.py).
+- load_loc, loc_index, gui_keys, loc_closure and type_bodies read the loc a
+  panel reaches (moved from test_demographics_census_window.py).
+- mod_types and type_closure give the types a panel draws, all the way down;
+  guard_spans and open_types the parts of them another country sees (charts-
+  help-national-info plan, PR F0; test_te_system_tab_bodies.py's BindingTest).
 """
+from dataclasses import dataclass
 import functools
 import glob
 import os
@@ -366,3 +372,202 @@ def history_charts(section):
             start = body.index("te_history_chart = {")
             out.append(body[start:_close(body, body.index("{", start)) + 1])
     return out
+
+
+# --- Loc a panel reaches (moved from test_demographics_census_window.py, PR F0) -------------------
+
+LOC_DIR = os.path.join(REPO, "localization", "english")
+_LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s+"(.*)"\s*$')
+
+
+@functools.lru_cache(maxsize=4)
+def _loc_index(loc_dir):
+    out = {}
+    for path in sorted(glob.glob(os.path.join(loc_dir, "**", "*.yml"), recursive=True)):
+        for n, line in enumerate(_read(path).splitlines(), 1):
+            m = _LOC_LINE.match(line)
+            if m:
+                out[m.group(1)] = (m.group(2), os.path.relpath(path, REPO), n)
+    return out
+
+
+def loc_index(loc_dir=LOC_DIR):
+    """Every English loc key: (value, file relative to the repo, line). A key
+    defined twice takes the later file's text, in name order, as the game does."""
+    return dict(_loc_index(loc_dir))
+
+
+def load_loc(loc_dir=LOC_DIR):
+    """Every English loc key and its value."""
+    return {k: v for k, (v, _, _) in _loc_index(loc_dir).items()}
+
+
+# A key shown only for the player's own country: the first branch of a
+# SelectLocalization on Country.IsLocalPlayer (Global Warming's wording), or
+# AddLocalizationIf's. own=False leaves these out of a text's keys.
+_OWN_BRANCH = re.compile(r"((?:SelectLocalization|AddLocalizationIf)\(\s*Country\.IsLocalPlayer\s*,\s*)'[\w.\-]+'")
+
+
+def gui_keys(text, loc, own=True):
+    """The loc keys a markup text names: a text, tooltip or raw_text, and a
+    quoted key inside an expression. own=False leaves out a key shown only for
+    the player's own country (_OWN_BRANCH)."""
+    if not own:
+        text = _OWN_BRANCH.sub(r"\1''", text)
+    out = set(re.findall(r'(?:text|tooltip|raw_text)\s*=\s*"([\w.\-]+)"', text))
+    for expr in re.findall(r'"\[(.*?)\]"', text):
+        out |= {k for k in re.findall(r"'([\w.\-]+)'", expr) if k in loc}
+    return out & set(loc)
+
+
+def loc_closure(keys, loc, own=True):
+    """The keys and every key their values splice ($key$) or name ('key'),
+    all the way down. own=False as gui_keys."""
+    seen, stack = set(), list(keys)
+    while stack:
+        key = stack.pop()
+        if key in seen or key not in loc:
+            continue
+        seen.add(key)
+        value = loc[key] if own else _OWN_BRANCH.sub(r"\1''", loc[key])
+        stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
+        stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
+    return seen
+
+
+def type_bodies(text):
+    """Each `type X = Y { ... }` in a types file, by name, braces included."""
+    out = {}
+    for m in re.finditer(r"(?m)^\ttype (\w+) = \w+ \{", text):
+        brace = m.end() - 1
+        out[m.group(1)] = text[brace:_close(text, brace) + 1]
+    return out
+
+
+# --- The types a panel draws, and what another country sees of them (PR F0) ------------------------
+
+# The mod's own GUI files. The other files under gui/ copy vanilla's markup (an
+# override of a vanilla file, or a 00_te_* file that redefines vanilla's types,
+# gotcha #30), and their types are vanilla's: a mod panel that draws one (a law's
+# FancyTooltip_Law) draws vanilla's own reads, which the binding rule leaves alone.
+# A new mod GUI file whose types a panel draws takes one of these names.
+MOD_GUI = ("gui/journal_entry_widgets/*.gui", "gui/te_*.gui", "gui/gm_*.gui", "gui/sr_*.gui")
+
+
+@dataclass(frozen=True)
+class TypeDef:
+    """One type: its base, where it is (path relative to the repo, the line of
+    its `type` line), and its body between its braces, comments cut but the
+    lines kept, so body line i is file line `line + i`."""
+    name: str
+    base: str
+    path: str
+    line: int
+    body: str
+
+
+def mod_gui_paths():
+    return sorted({os.path.relpath(p, REPO) for g in MOD_GUI for p in glob.glob(os.path.join(REPO, g))})
+
+
+@functools.lru_cache(maxsize=1)
+def _mod_types():
+    out = {}
+    for path in mod_gui_paths():
+        code = _strip_comments(_read(os.path.join(REPO, path)))
+        for m in re.finditer(r"(?m)^\s*type (\w+) = (\w+) \{", code):
+            brace = m.end() - 1
+            out[m.group(1)] = TypeDef(m.group(1), m.group(2), path, code.count("\n", 0, m.start()) + 1,
+                                      code[brace + 1:_close(code, brace)])
+    return out
+
+
+def mod_types():
+    """Every type in the mod's own GUI files (MOD_GUI), by name."""
+    return dict(_mod_types())
+
+
+@functools.lru_cache(maxsize=64)
+def raw_lines(path):
+    """A GUI file's lines, comments kept (a `# world:` marker is a comment)."""
+    return tuple(_read(os.path.join(REPO, path)).split("\n"))
+
+
+_CHILD = re.compile(r"(?<![\w.])(\w+) = \{")
+
+
+def type_closure(names, types):
+    """Every type the named types draw, all the way down, the named ones
+    included: each type a body instances (a child anywhere in it, a
+    blockoverride's contents and a block's default included) and each base
+    type, wherever `types` (name -> TypeDef, mod_types()) defines it."""
+    seen, todo = set(), [n for n in names if n in types]
+    while todo:
+        name = todo.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        todo += [c for c in _CHILD.findall(types[name].body) + [types[name].base] if c in types and c not in seen]
+    return seen
+
+
+GUARD = "te_own_country_only"
+_GUARD_USING = re.compile(rf"\busing\s*=\s*{GUARD}\b")
+
+
+def guard_spans(body):
+    """The parts of a body under te_own_country_only: each widget that carries
+    `using = te_own_country_only`, from its opening brace to its closing one,
+    as (start, end) offsets; (0, len(body)) when the type's root carries it."""
+    spans = []
+    for m in _GUARD_USING.finditer(body):
+        depth, i = 0, m.start() - 1
+        while i >= 0:
+            if body[i] == "}":
+                depth += 1
+            elif body[i] == "{":
+                if depth == 0:
+                    break
+                depth -= 1
+            i -= 1
+        spans.append((0, len(body)) if i < 0 else (i, _close(body, i)))
+    return spans
+
+
+def in_spans(pos, spans):
+    return any(a <= pos <= b for a, b in spans)
+
+
+def unguarded(body, spans=None):
+    """The body with its guarded parts blanked, its lines kept."""
+    spans = guard_spans(body) if spans is None else spans
+    chars = list(body)
+    for a, b in spans:
+        for i in range(a, b + 1):
+            if chars[i] != "\n":
+                chars[i] = " "
+    return "".join(chars)
+
+
+def open_types(names, types):
+    """The types of type_closure(names) another country's panel draws: each
+    reached by some path that passes no te_own_country_only. A child whose block
+    sits in a guarded part of its parent is the player's own, and so is
+    everything under it; a type whose root carries the guard draws nothing
+    else either, its base included."""
+    seen, todo = set(), [n for n in names if n in types]
+    while todo:
+        name = todo.pop()
+        if name in seen:
+            continue
+        seen.add(name)
+        body = types[name].body
+        spans = guard_spans(body)
+        if (0, len(body)) in spans:
+            continue
+        for m in _CHILD.finditer(body):
+            if m.group(1) in types and not in_spans(m.end() - 1, spans):
+                todo.append(m.group(1))
+        if types[name].base in types:
+            todo.append(types[name].base)
+    return seen

@@ -22,14 +22,13 @@ file holds:
   data (PopsOverviewPanel), which only that panel's window holds.
 """
 import difflib
-import glob
 import json
 import os
 import re
 import unittest
 from pathlib import Path
 
-from gui_test_helpers import history_charts
+from gui_test_helpers import gui_keys, history_charts, load_loc, loc_closure, type_bodies
 
 ROOT = Path(__file__).resolve().parent
 OVERRIDE = ROOT / "gui" / "pop_browser_panel.gui"
@@ -37,7 +36,6 @@ FIXTURE = ROOT / "test_fixtures" / "vanilla_gui" / "pop_browser_panel.gui"
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
-LOC_DIR = ROOT / "localization" / "english"
 VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
 
 MOD_OPEN = "### MOD: Demographics tab"
@@ -82,11 +80,6 @@ def block_from(text, start):
     raise AssertionError("unbalanced block")
 
 
-def type_bodies(text):
-    """Each `type X = Y { ... }` in a types file, by name."""
-    return {m.group(1): block_from(text, m.end() - 1)
-            for m in re.finditer(r"(?m)^\ttype (\w+) = \w+ \{", text)}
-
 
 def code(text):
     """The markup less its comments (no quoted value here holds a #)."""
@@ -94,34 +87,7 @@ def code(text):
                      for line in text.splitlines() if not line.lstrip().startswith("#"))
 
 
-def load_loc():
-    keys = {}
-    for path in sorted(glob.glob(str(LOC_DIR / "**" / "*.yml"), recursive=True)):
-        for line in read(path).splitlines():
-            m = re.match(r'^\s*([\w.\-]+):\d*\s+"(.*)"\s*$', line)
-            if m:
-                keys[m.group(1)] = m.group(2)
-    return keys
 
-
-def gui_keys(text, loc):
-    out = set(re.findall(r'(?:text|tooltip|raw_text)\s*=\s*"([\w.\-]+)"', text))
-    for expr in re.findall(r'"\[(.*?)\]"', text):
-        out |= {k for k in re.findall(r"'([\w.\-]+)'", expr) if k in loc}
-    return out & set(loc)
-
-
-def loc_closure(keys, loc):
-    seen, stack = set(), list(keys)
-    while stack:
-        key = stack.pop()
-        if key in seen or key not in loc:
-            continue
-        seen.add(key)
-        value = loc[key]
-        stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
-        stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
-    return seen
 
 
 def without_blocks(text, names):
@@ -372,7 +338,7 @@ class ControlsTest(unittest.TestCase):
     def test_the_measure_button_keeps_its_slot(self):
         row = self.widgets["te_demog_measure_row"]
         button = block_from(row, row.index("button = {"))
-        self.assertIn('visible = "[Country.IsLocalPlayer]"', button)
+        self.assertIn("using = te_own_country_only", button)
         slot = row[:row.index("button = {")].rsplit("widget = {", 1)[1]
         self.assertIn("size = { 72 24 }", slot, "an empty slot of the button's size for another country")
 
@@ -383,7 +349,7 @@ class ControlsTest(unittest.TestCase):
                 and "te_demog_figure_row" not in block_from(work, m.start())]
         self.assertEqual(len(rows), 2)
         for row in rows:
-            self.assertIn('visible = "[Country.IsLocalPlayer]"', row)
+            self.assertIn("using = te_own_country_only", row)
         for note in ("te_demog_wk_buttons_full_only", "te_demog_wk_buttons_term"):
             at = work.index(f'text = "{note}"')
             box = work[:at].rsplit("te_demog_text = {", 1)[1]
