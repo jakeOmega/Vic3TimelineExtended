@@ -411,7 +411,7 @@ class StripTest(unittest.TestCase):
                 is_open = t.open_ is None or _evaluate(gen.ni_open_gate(t), shown, None)
                 with self.subTest(tab=t.key, shown=sorted(shown)):
                     self.assertEqual(_pick(tooltip, shown, local=False),
-                                     gen.NI_OTHER_TT if is_open else gen.NI_NOT_RUNNING_TT)
+                                     gen.NI_OTHER_TT if is_open else gen.ni_closed_tt(t))
                     self.assertEqual(_pick(tooltip, shown, local=True), _pick(player, shown, local=True))
             # the player's branch is the window's tooltip, on the window's Country
             self.assertIn(player, tooltip)
@@ -425,10 +425,10 @@ class StripTest(unittest.TestCase):
     def test_the_new_keys_exist(self):
         from gui_test_helpers import load_loc
         loc = load_loc()
-        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_POPS_LABEL, gen.NI_POPS_TOOLTIP):
+        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_NOT_PUBLIC_TT, gen.NI_POPS_LABEL, gen.NI_POPS_TOOLTIP):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
-        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT):
+        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_NOT_PUBLIC_TT):
             self.assertIn("[Country.GetName]", loc[key])
             self.assertNotRegex(loc[key], r"\b(you|your|we|our)\b")
 
@@ -737,7 +737,7 @@ class ForeignOpenTest(unittest.TestCase):
                 self.assertEqual(_evaluate(gen.ni_open_gate(tab), shown, None, local), want, "the button's enabled")
                 if not local:
                     self.assertEqual(_pick(tooltip, shown, local),
-                                     gen.NI_OTHER_TT if want else gen.NI_NOT_RUNNING_TT)
+                                     gen.NI_OTHER_TT if want else gen.NI_NOT_PUBLIC_TT)
         self.assertIn(f'enabled = "[{gen.ni_open_gate(tab)}]"', text)
         # the window and the player's mount keep the tab's own gate
         window = _read(os.path.join(REPO, "gui", "te_systems_window_generated.gui"))

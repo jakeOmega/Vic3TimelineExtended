@@ -701,6 +701,9 @@ NI_POPS_TOOLTIP = "te_pop_browser_tab_pops_tt"
 # one line (the player's checklist doesn't fit another country).
 NI_OTHER_TT = "te_ni_tab_other_tt"
 NI_NOT_RUNNING_TT = "te_ni_tab_not_running_tt"
+# Grayed for another country on its ni_open gate: what the world doesn't
+# know yet, so never "not running" (Nuclear's programme before the first test).
+NI_NOT_PUBLIC_TT = "te_ni_tab_not_public_tt"
 LOCAL = "Country.IsLocalPlayer"
 
 
@@ -766,6 +769,12 @@ def ni_strip_shown() -> str | None:
     return or_all([rooted(t.strip, COUNTRY_ROOT) for t in tabs])
 
 
+def ni_closed_tt(tab: Tab) -> str:
+    """Another country's grayed tooltip: not running there, or, for a tab
+    that opens on ni_open, nothing shown yet."""
+    return NI_NOT_RUNNING_TT if tab.ni_open is None else NI_NOT_PUBLIC_TT
+
+
 def ni_tooltip(tab: Tab) -> str:
     """Open for another country, what it shows the world; grayed, not running
     there; for the player's own, the window's tooltip (its checklist too), on
@@ -777,7 +786,7 @@ def ni_tooltip(tab: Tab) -> str:
     other_open = and_(not_(LOCAL), rooted(tab.open_, COUNTRY_ROOT) if tab.ni_open is None
                       else shown(tab.ni_open, COUNTRY_ROOT))
     return (f"tooltip = \"[SelectLocalization( {other_open}, '{NI_OTHER_TT}', "
-            f"SelectLocalization( {not_(LOCAL)}, '{NI_NOT_RUNNING_TT}', {player} ) )]\"")
+            f"SelectLocalization( {not_(LOCAL)}, '{ni_closed_tt(tab)}', {player} ) )]\"")
 
 
 def _ni_template(name: str, expr: str) -> list[str]:
