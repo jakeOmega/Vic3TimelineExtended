@@ -92,9 +92,11 @@ PAGES = [
     Page("space_race", ("te_sr_sec_how", ("te_sr_sec_how_colonies", "je_space_race_widget_howc_header")),
          "je_space_race_widget_how_header", ("sr_panel_how_open", "sr_panel_how_colonies_open"), ()),
     # the panel's section and the Fossil Transition's nested one (the only one
-    # shown with the Global Warming rule off), one page
+    # shown with the Global Warming rule off), one page, titled for the
+    # transition alone with the rule off
     Page("global_warming", ("te_gw_sec_how", ("te_gw_transition_how_link", "rt_how_header")), "gw_how_header",
-         ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",)),
+         ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",),
+         popup_title="text = \"[SelectLocalization( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'gw_how_header', 'rt_how_header' )]\""),
 ]
 
 # H2's pages' topics, in order: the subheadings over their notes, as each

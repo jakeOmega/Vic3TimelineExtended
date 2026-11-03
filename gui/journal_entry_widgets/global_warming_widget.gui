@@ -1702,8 +1702,10 @@ types global_warming_widget_types
 
 	### The Fossil Transition's own link to the Help page, nested in its
 	### section (te_gw_sec_transition): its subsection header alone, which
-	### opens te_global_warming_help_popup (te_popup = help_global_warming) at
-	### the transition's topics' heading, as How Global Warming Works does.
+	### opens te_global_warming_help_popup (te_popup = help_global_warming),
+	### as How Global Warming Works does. The page opens at its top: the
+	### transition's topics follow the climate's, at the foot under the Global
+	### Warming rule, and are the whole page with the rule off.
 	type te_gw_transition_how_link = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -1807,8 +1809,11 @@ types global_warming_widget_types
 		}
 
 		### How the Fossil Transition Works, the transition section's own link's
-		### topics, under a header of that name.
+		### topics, under a header of that name while the climate's topics
+		### precede them. With the rule off they are the whole page, which the
+		### popup's title then names, so the header hides rather than repeat it.
 		default_header = {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 			blockoverride "size" {
 				size = { 480 38 }
 			}
@@ -1848,8 +1853,11 @@ types global_warming_widget_types
 		blockoverride "popup_visible" {
 			visible = "[GetVariableSystem.HasValue('te_popup', 'help_global_warming')]"
 		}
+		### Titled for what it shows: How Global Warming Works under the rule,
+		### How the Fossil Transition Works with the rule off, when the page holds
+		### the transition's topics alone (as Tax Code's title follows its code).
 		blockoverride "popup_title" {
-			text = "gw_how_header"
+			text = "[SelectLocalization( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'gw_how_header', 'rt_how_header' )]"
 		}
 		blockoverride "popup_list" {
 			te_global_warming_help_body = {}

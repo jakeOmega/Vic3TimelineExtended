@@ -7,7 +7,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import _children, _strip_comments, assert_wide_matches_narrow
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "global_warming_widget.gui")
@@ -287,6 +287,29 @@ class HowItWorksTest(unittest.TestCase):
             body = _type_body(gui, sec)
             self.assertNotIn("gw_note", body, sec)
             self.assertNotIn('"gw_how_', body, sec)
+
+    def test_the_transition_sits_outside_the_rule(self):
+        """The Fossil Transition's topics are the body's own children, after the
+        rule's box, never inside it: with the rule off the page still explains
+        the transition (its link and the Climate tab's "?" open it then). Its
+        header hides with the rule off, when the popup's title names the
+        transition instead (Tax Code's pattern), so the name isn't printed twice."""
+        gui = _strip_comments(_read(GUI))
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        items = [(kind, name, inner) for kind, name, inner in _children(_type_body(gui, "te_global_warming_help_body"))
+                 if kind != "property"]
+        kind, name, box = items[0]
+        self.assertEqual(name, "flowcontainer")
+        self.assertIn(f'visible = "[{rule}]"', box)
+        self.assertNotIn("rt_how_", box)
+        rest = [(name, re.findall(r'text = "(\w+)"', inner)) for _, name, inner in items[1:]]
+        self.assertEqual(rest, [("default_header", ["rt_how_header"]),
+                                ("gw_subheader", ["rt_how_laws_head"]), ("gw_note", ["rt_how_laws"]),
+                                ("gw_subheader", ["rt_how_programmes_head"]), ("gw_note", ["rt_how_programmes"]),
+                                ("gw_subheader", ["rt_how_emissions_head"]), ("gw_note", ["rt_how_emissions"])])
+        self.assertIn(f'visible = "[{rule}]"', items[1][2])
+        popup = _type_body(gui, "te_global_warming_help_popup")
+        self.assertIn(f"text = \"[SelectLocalization( {rule}, 'gw_how_header', 'rt_how_header' )]\"", popup)
 
     def test_retired_explanation_is_gone(self):
         self.assertNotIn("gw_policies_none_yet", _read(GUI))
@@ -689,7 +712,9 @@ class LocTest(unittest.TestCase):
         keys = _loc_keys()
         gui = _read(GUI)
         named = set(re.findall(r'\b(?:text|tooltip) = "([A-Za-z]\w*)"', gui))
-        named |= set(re.findall(r"(?:Localize|SelectLocalization)\([^\]]*?'(\w+)'", gui))
+        # a SelectLocalization's keys, not the scripted GUI its condition names
+        named |= set(re.findall(r"(?:Localize|SelectLocalization)\([^\]]*?'(\w+)'",
+                                re.sub(r"GetScriptedGui\('\w+'\)", "GetScriptedGui()", gui)))
         missing = sorted(k for k in named if "_" in k and k not in keys)
         self.assertEqual(missing, [])
 
@@ -1267,12 +1292,14 @@ class MarketTabTest(unittest.TestCase):
             self.assertIn("scope = state", _top_level(sguis, name), name)
         # the tab's body aside: its gate and datacontext are the tab's, read
         # through the player as in every host (test_te_system_tab_bodies.py);
-        # and the Help page's body, whose rule gate reads the player, as a
-        # popup must (test_te_help_pages.py)
+        # and the Help page's body and popup, whose rule gate and title read the
+        # player, as a popup must (test_te_help_pages.py)
         text = _read(GUI)
         text = text.replace("type te_gw_tab_body = te_system_tab_frame {" + _type_body(text, "te_gw_tab_body"), "")
         text = text.replace("type te_global_warming_help_body = flowcontainer {"
                             + _type_body(text, "te_global_warming_help_body"), "")
+        text = text.replace("type te_global_warming_help_popup = te_ui_help_popup {"
+                            + _type_body(text, "te_global_warming_help_popup"), "")
         code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
         ambient = re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
         self.assertEqual(ambient, [])
