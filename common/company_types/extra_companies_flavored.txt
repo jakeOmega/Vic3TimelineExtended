@@ -3125,7 +3125,7 @@ company_verizon = {
 		"goods_production_rank(g:telephones)" <= 5
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_network_infrastructure
+				is_building_type = building_electrics_industry # Network Infrastructure unlocks a tech after this company
 				level >= 10
 			}
 		}
@@ -3148,13 +3148,13 @@ company_verizon = {
 		has_technology_researched = cellular_networks
 	}
 	ai_construction_targets = {
-		building_network_infrastructure = {
+		building_electrics_industry = {
 			level = 10
 			state_trigger = {
 				OR = {
 					state_region = s:STATE_NEW_YORK
 					is_capital = yes
-					any_scope_building = { is_building_type = building_network_infrastructure }
+					any_scope_building = { is_building_type = building_electrics_industry }
 				}
 			}
 		}
@@ -3482,6 +3482,7 @@ company_blackberry = {
 	}
 	building_types = {
 		building_network_infrastructure
+		building_electrics_industry # Wired telecom (handsets)
 		building_software_industry
 		building_electrics_industry_appliances
 		building_blackberry_rim_campus
@@ -3500,7 +3501,7 @@ company_blackberry = {
 		"goods_production_rank(g:consumer_appliances)" <= 10
 		any_scope_state = {
 			any_scope_building = {
-				is_building_type = building_network_infrastructure
+				is_building_type = building_electrics_industry # Network Infrastructure unlocks a tech after this company
 				level >= 5
 			}
 		}
@@ -3522,13 +3523,13 @@ company_blackberry = {
 		has_technology_researched = cellular_networks
 	}
 	ai_construction_targets = {
-		building_network_infrastructure = {
+		building_electrics_industry = {
 			level = 10
 			state_trigger = {
 				OR = {
 					state_region = s:STATE_ONTARIO
 					is_capital = yes
-					any_scope_building = { is_building_type = building_network_infrastructure }
+					any_scope_building = { is_building_type = building_electrics_industry }
 				}
 			}
 		}
