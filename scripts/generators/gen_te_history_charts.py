@@ -43,8 +43,10 @@ At SMALL every placeholder gives back the literal it replaced. The generator
 adds the blockoverrides a fragment doesn't carry where the size differs from
 te_history_chart's own defaults (which are SMALL's monthly): at LARGE, a
 monthly chart's frame, bars and widths, an annual chart's widths. At SMALL it
-adds nothing, so the panel's charts are the fragments' text. The large wrapper
-leaves out the fragment's whole-line comments, which describe the panel's size.
+adds only the open button beside the title (chart_open, which opens the
+chart's viewer) and the title's width beside it (open_overrides), so the
+panel's charts are otherwise the fragments' text. The large wrapper leaves out
+the fragment's whole-line comments, which describe the panel's size.
 
 ADDING A CHART: record the series (history_charts.md), add its fragment to its
 system's file, a Chart line below, instance te_hist_<id> in its section, then
@@ -78,7 +80,9 @@ class Dims:
              height (the bars' box, plus the pip lane over it for annual_pips)
     bar_h    the bars' height, 6 px clear of their box's top and bottom
     box_h    annual_pips: the box the bars sit in, at the frame's foot
-    text_w   the title's and the legend's max_width (chart_text_width)
+    text_w   the legend's max_width (chart_text_width)
+    title_w  the title's max_width (chart_title_width): on the panel, the
+             legend's less the open button and its gap beside the title
     empty_w  the empty state's max_width (empty_width)
     """
     plot: int
@@ -86,6 +90,7 @@ class Dims:
     frame: tuple[int, int]
     bar_h: int
     text_w: int
+    title_w: int
     empty_w: int
     box_h: int | None = None
 
@@ -100,20 +105,30 @@ class Size:
         return self.kinds[kind]
 
 
+# The open button beside a panel chart's title (te_chart_open_button, charts PR
+# C2): its side, and the title row's spacing before it.
+OPEN_BUTTON = 24
+OPEN_GAP = 4
+TITLE_W = 484   # te_history_chart's chart_title_width default
+
 # The panel's size: today's literals. The monthly row is te_history_chart's own
-# defaults (test_te_history_charts.py holds the type to it).
+# defaults (test_te_history_charts.py holds the type to it), but for the title,
+# which the open button narrows from the type's 484 to 456.
 SMALL = Size("small", "", {
-    "monthly": Dims(plot=480, left=8, frame=(496, 96), bar_h=84, text_w=484, empty_w=420),
-    "annual": Dims(plot=400, left=48, frame=(456, 180), bar_h=168, text_w=484, empty_w=420),
-    "annual_pips": Dims(plot=400, left=48, frame=(456, 132), bar_h=84, text_w=484, empty_w=420, box_h=96),
+    "monthly": Dims(plot=480, left=8, frame=(496, 96), bar_h=84, text_w=484, title_w=456, empty_w=420),
+    "annual": Dims(plot=400, left=48, frame=(456, 180), bar_h=168, text_w=484, title_w=456, empty_w=420),
+    "annual_pips": Dims(plot=400, left=48, frame=(456, 132), bar_h=84, text_w=484, title_w=456, empty_w=420,
+                        box_h=96),
 })
 
 # The viewer's: one plot width for every chart, 1200, which divides 240 / 60 / 12
-# months and 100 / 20 / 5 years (owner call 7), the bars 336 tall.
+# months and 100 / 20 / 5 years (owner call 7), the bars 336 tall. The title
+# keeps the type's 484 (no button beside it, and no title comes near it).
 LARGE = Size("large", "_large", {
-    "monthly": Dims(plot=1200, left=8, frame=(1216, 348), bar_h=336, text_w=1204, empty_w=1000),
-    "annual": Dims(plot=1200, left=48, frame=(1256, 348), bar_h=336, text_w=1244, empty_w=1000),
-    "annual_pips": Dims(plot=1200, left=48, frame=(1256, 384), bar_h=336, text_w=1244, empty_w=1000, box_h=348),
+    "monthly": Dims(plot=1200, left=8, frame=(1216, 348), bar_h=336, text_w=1204, title_w=484, empty_w=1000),
+    "annual": Dims(plot=1200, left=48, frame=(1256, 348), bar_h=336, text_w=1244, title_w=484, empty_w=1000),
+    "annual_pips": Dims(plot=1200, left=48, frame=(1256, 384), bar_h=336, text_w=1244, title_w=484, empty_w=1000,
+                        box_h=348),
 })
 
 SIZES = (SMALL, LARGE)
@@ -215,6 +230,11 @@ SYSTEMS = list(dict.fromkeys(c.system for c in CHARTS))
 
 def wrapper_name(chart: Chart, size: Size) -> str:
     return f"te_hist_{chart.id}{size.suffix}"
+
+
+def popup_key(chart: Chart) -> str:
+    """The chart's te_popup value: its open button sets it, its viewer shows on it."""
+    return f"chart_{chart.id}"
 
 
 # --- fragments ------------------------------------------------------------------
@@ -328,10 +348,21 @@ def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     return out
 
 
+def open_overrides(chart: Chart) -> list[str]:
+    """What the panel's wrapper adds to its fragment (charts PR C2): the title
+    narrowed beside the open button, and the button, which opens the chart's
+    viewer."""
+    return (_override("chart_title_width", [f"max_width = {SMALL[chart.kind].title_w}"])
+            + _override("chart_open", ["te_chart_open_button = {",
+                                       f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"",
+                                       "}"]))
+
+
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
     """The blockoverrides the chart needs at the size beyond its fragment: each
     the fragment doesn't carry whose value differs from te_history_chart's
-    defaults (SMALL's monthly row)."""
+    defaults (SMALL's monthly row, and TITLE_W), and at SMALL the open button
+    beside the title."""
     dims, default = size[chart.kind], SMALL["monthly"]
     carried = set(re.findall(r'blockoverride "(\w+)"', text))
     out: list[str] = []
@@ -343,6 +374,12 @@ def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
         out += _override("chart_text_width", [f"max_width = {dims.text_w}"])
     if "empty_width" not in carried and dims.empty_w != default.empty_w:
         out += _override("empty_width", [f"max_width = {dims.empty_w}"])
+    if size is SMALL:
+        if {"chart_title_width", "chart_open"} & carried:
+            raise ValueError(f"{chart.id}: a fragment leaves chart_title_width and chart_open to the generator")
+        out += open_overrides(chart)
+    elif "chart_title_width" not in carried and dims.title_w != TITLE_W:
+        out += _override("chart_title_width", [f"max_width = {dims.title_w}"])
     return out
 
 

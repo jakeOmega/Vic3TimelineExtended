@@ -45,6 +45,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_value')]"
+				}
+			}
 		}
 	}
 
@@ -165,6 +173,14 @@ types te_history_charts_generated_types
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_momentum')]"
 				}
 			}
 		}
@@ -296,6 +312,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_bank_bubble')]"
+				}
+			}
 		}
 	}
 
@@ -404,6 +428,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.50 0.58 0.80 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy')]"
 				}
 			}
 		}
@@ -529,6 +561,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_policy_digital')]"
+				}
+			}
 		}
 	}
 
@@ -652,6 +692,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_rate_paid')]"
+				}
+			}
 		}
 	}
 
@@ -773,6 +821,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.80 0.45 0.32 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_inflation')]"
 				}
 			}
 		}
@@ -910,6 +966,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_mon_fx')]"
+				}
+			}
 		}
 	}
 
@@ -1024,6 +1088,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_grain')]"
+				}
+			}
 		}
 	}
 
@@ -1116,6 +1188,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_ammunition')]"
 				}
 			}
 		}
@@ -1212,6 +1292,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_oil')]"
+				}
+			}
 		}
 	}
 
@@ -1304,6 +1392,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_small_arms')]"
 				}
 			}
 		}
@@ -1400,6 +1496,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_artillery')]"
+				}
+			}
 		}
 	}
 
@@ -1492,6 +1596,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_aeroplanes')]"
 				}
 			}
 		}
@@ -1588,6 +1700,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_tanks')]"
+				}
+			}
 		}
 	}
 
@@ -1680,6 +1800,14 @@ types te_history_charts_generated_types
 						max = 100
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ), '(CFixedPoint)4' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_st_res_fertilizer')]"
 				}
 			}
 		}
@@ -1866,6 +1994,14 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_births_deaths')]"
+				}
 			}
 		}
 	}
@@ -2126,6 +2262,14 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_migration')]"
+				}
+			}
 		}
 	}
 
@@ -2361,6 +2505,14 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_e0')]"
+				}
+			}
 		}
 	}
 
@@ -2563,6 +2715,14 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_tfr')]"
+				}
+			}
 		}
 	}
 
@@ -2764,6 +2924,14 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_median')]"
+				}
 			}
 		}
 	}
@@ -3060,6 +3228,14 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_causes')]"
+				}
+			}
 		}
 	}
 
@@ -3355,6 +3531,14 @@ types te_history_charts_generated_types
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_gini')]"
+				}
+			}
 		}
 	}
 
@@ -3556,6 +3740,14 @@ types te_history_charts_generated_types
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_demog_hist_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_demog_hist_untracked' )]"
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_demog_wc')]"
+				}
 			}
 		}
 	}
@@ -3917,6 +4109,14 @@ types te_history_charts_generated_types
 				visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 			}
 			blockoverride "empty_text" { text = "ch_model_hist_empty" }
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ch_models')]"
+				}
+			}
 		}
 	}
 
@@ -4205,6 +4405,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo')]"
+				}
+			}
 		}
 	}
 
@@ -4304,6 +4512,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.55 0.55 0.70 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_nd_taboo_tgt')]"
 				}
 			}
 		}
@@ -4408,6 +4624,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_auth')]"
+				}
+			}
 		}
 	}
 
@@ -4508,6 +4732,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.55 0.55 0.70 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_un_target')]"
 				}
 			}
 		}
@@ -4612,6 +4844,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_temp')]"
+				}
+			}
 		}
 	}
 
@@ -4714,6 +4954,14 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_gw_share')]"
+				}
+			}
 		}
 	}
 
@@ -4814,6 +5062,14 @@ types te_history_charts_generated_types
 					blockoverride "color" {
 						color = { 0.45 0.68 0.45 1.0 }
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_stability')]"
 				}
 			}
 		}
@@ -4935,6 +5191,14 @@ types te_history_charts_generated_types
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
 					}
+				}
+			}
+			blockoverride "chart_title_width" {
+				max_width = 456
+			}
+			blockoverride "chart_open" {
+				te_chart_open_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'chart_ce_drift')]"
 				}
 			}
 		}

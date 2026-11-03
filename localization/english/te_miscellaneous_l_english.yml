@@ -7307,6 +7307,7 @@
  te_cede_colony_ai_worth_gained:0 "What the colony is worth to us"
  te_cede_colony_ai_worth_gained_idle:0 "What the colony is worth to us, without a space program"
  te_cede_colony_ai_worth_lost:0 "What the colony is worth to us"
+ te_chart_open_tt:0 "See this chart at full size."
  te_clade_law_parity_tt:0 "Heritage no longer divides our people: each month, [concept_acceptance] from a shared heritage trait, a shared heritage trait group and no shared heritage is raised to the highest of the three, so every [concept_pop] gets the same"
  te_clade_parity_group:0 "Clade Citizenship: Shared Heritage Group"
  te_clade_parity_none:0 "Clade Citizenship: No Shared Heritage"

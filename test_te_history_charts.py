@@ -28,6 +28,9 @@ CHART_GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "te_history_chart
 GENERATED = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
 SGUIS = os.path.join(REPO, "common", "scripted_guis")
 JE_DIR = os.path.join(REPO, "common", "journal_entries")
+ICONS_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md")
+# The open button's placeholder art: vanilla's (style guide rule 10).
+OPEN_ICON = "gfx/interface/buttons/button_icons/areacharts.dds"
 # The sections that hold the charts, and so their range buttons.
 SECTIONS = {
     "banking": "gui/journal_entry_widgets/banking_history_widget.gui",
@@ -47,6 +50,11 @@ FIXED = {"size = { 100% 2 }", "position = { 8 6 }", "position = { 8 -6 }"}
 def _block_bodies(text, name):
     """The body of each `block "name" { … }` in text, in order."""
     return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(rf'block "{name}" \{{', text)]
+
+
+def _override_bodies(text, name):
+    """The body of each `blockoverride "name" { … }` in text, in order."""
+    return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(rf'blockoverride "{name}" \{{', text)]
 
 
 def _unblocked(text, pattern):
@@ -71,12 +79,27 @@ class ChartTypeTest(unittest.TestCase):
     def setUpClass(cls):
         cls.chart = _type_body(_read(CHART_GUI), "te_history_chart")
 
-    def test_the_text_width_is_a_block_on_the_title_and_the_legend(self):
-        self.assertEqual([b.strip() for b in _block_bodies(self.chart, "chart_text_width")],
-                         ["max_width = 484", "max_width = 484"])
-        for font in ("chart_title_font", "chart_legend_font"):
-            box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index(f'block "{font}"')):]
-            self.assertIn('block "chart_text_width"', box[:box.index(f'block "{font}"')], font)
+    def test_the_title_and_the_legend_each_have_a_width_block(self):
+        """The title's width (chart_title_width) and the legend's
+        (chart_text_width) are separate blocks, both today's 484 by default:
+        the panel's wrapper narrows only the title, beside its open button."""
+        for block, font in (("chart_title_width", "chart_title_font"), ("chart_text_width", "chart_legend_font")):
+            with self.subTest(block=block):
+                self.assertEqual([b.strip() for b in _block_bodies(self.chart, block)], ["max_width = 484"])
+                box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index(f'block "{font}"')):]
+                self.assertIn(f'block "{block}"', box[:box.index(f'block "{font}"')], font)
+
+    def test_the_title_shares_a_row_with_the_open_button(self):
+        """The title and block "chart_open" sit in one horizontal flowcontainer
+        (charts PR C2); the legend stays below it, at the full width."""
+        i = self.chart.index('block "chart_open" {}')
+        row = self.chart[self.chart.rindex("flowcontainer = {", 0, self.chart.index('block "chart_title_font"')):]
+        row = row[:_close(row, row.index("{")) + 1]
+        self.assertIn("direction = horizontal", row.split("textbox = {")[0])
+        self.assertIn('block "chart_open" {}', row)
+        self.assertNotIn('block "chart_legend"', row)
+        self.assertEqual(self.chart.count('block "chart_open"'), 1)
+        self.assertLess(i, self.chart.index('block "chart_legend"'))
 
     def test_the_empty_states_width_is_a_block(self):
         self.assertEqual([b.strip() for b in _block_bodies(self.chart, "empty_width")], ["max_width = 420"])
@@ -90,6 +113,55 @@ class ChartTypeTest(unittest.TestCase):
         self.assertEqual(_unblocked(self.chart, r"\b(max_width|size) = \{?\s*\d"), [])
         self.assertTrue(_block_bodies(self.chart, "plot_size"))
         self.assertTrue(_block_bodies(self.chart, "plot_layouts"))
+
+
+class OpenButtonTest(unittest.TestCase):
+    """The open button beside each panel chart's title (charts PR C2, spec
+    § 4.2): it opens the chart's full-screen viewer, te_popup = chart_<id>."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.button = _type_body(_read(CHART_GUI), "te_chart_open_button")
+
+    def test_the_type(self):
+        self.assertRegex(_read(CHART_GUI), r"\btype te_chart_open_button = button_icon_round \{")
+        self.assertIn('tooltip = "te_chart_open_tt"', self.button)
+        self.assertRegex(self.button, r'blockoverride "size" \{\s*size = \{ %d %d \}\s*\}'
+                         % (gen.OPEN_BUTTON, gen.OPEN_BUTTON))
+        self.assertEqual(gen.OPEN_BUTTON, 24)
+        self.assertNotIn("onclick", self.button, "each wrapper sets its own")
+
+    def test_its_placeholder_art_is_listed(self):
+        """Style guide rule 10: the placeholder (vanilla's area-charts icon)
+        is listed in the icons doc with the final art's subject."""
+        textures = re.findall(r'texture = "([^"]+)"', self.button)
+        self.assertEqual(textures, [OPEN_ICON])
+        doc = _read(ICONS_DOC)
+        row = next((ln for ln in doc.splitlines() if ln.startswith("| ") and "`te_chart_open_button`" in ln), None)
+        self.assertIsNotNone(row, "no row for te_chart_open_button in the icons doc")
+        self.assertIn(f"`{OPEN_ICON}`", row)
+        self.assertIn("two arrows pointing out from a corner", row.lower())
+
+    def test_every_small_wrapper_opens_its_viewer(self):
+        """Each panel chart's wrapper fills chart_open with the button, on its
+        own te_popup value, and narrows the title by the button and its gap;
+        the viewer's wrapper has neither."""
+        text = _read(GENERATED)
+        for chart in gen.CHARTS:
+            small = _type_body(text, gen.wrapper_name(chart, gen.SMALL))
+            large = _type_body(text, gen.wrapper_name(chart, gen.LARGE))
+            with self.subTest(chart=chart.id):
+                opens = _override_bodies(small, "chart_open")
+                self.assertEqual(len(opens), 1)
+                self.assertIn("te_chart_open_button = {", opens[0])
+                self.assertEqual(re.findall(r'onclick = "(.*)"', opens[0]),
+                                 [f"[GetVariableSystem.Set('te_popup', 'chart_{chart.id}')]"])
+                self.assertEqual([b.strip() for b in _override_bodies(small, "chart_title_width")],
+                                 [f"max_width = {484 - gen.OPEN_BUTTON - gen.OPEN_GAP}"])
+                self.assertEqual(_override_bodies(large, "chart_open"), [])
+                self.assertEqual(_override_bodies(large, "chart_title_width"), [])
+                self.assertNotIn("te_chart_open_button", large)
+        self.assertEqual(484 - gen.OPEN_BUTTON - gen.OPEN_GAP, 456)
 
 
 def _code_lines(text):
@@ -144,8 +216,11 @@ class RegistryTest(unittest.TestCase):
         digital = gen.BY_ID["mon_policy_digital"]
         self.assertEqual(gen.substitute("${zero_y:0.2}", digital, gen.SMALL), "-23")     # 6 + 0.2 x 84
         self.assertEqual(gen.substitute("${zero_y:0.25}", digital, gen.SMALL), "-27")    # 6 + 0.25 x 84
+        # the title, beside the open button: 484 less the button and its gap (charts PR C2)
+        self.assertEqual({gen.SMALL[k].title_w for k in gen.KINDS}, {456})
         # the chart type's defaults
         chart = _type_body(_read(CHART_GUI), "te_history_chart")
+        self.assertEqual(re.findall(r'block "chart_title_width" \{\s*max_width = (\d+)', chart), ["484"])
         plot = _type_body(_read(CHART_GUI), "te_history_plot")
         self.assertEqual(re.findall(r'block "plot_size" \{\s*size = \{ (\d+) (\d+) \}', chart), [("496", "96")])
         self.assertEqual(re.findall(r'block "bar_size" \{\s*size = \{ (\d+) (\d+) \}', plot), [("2", "84")])
@@ -158,13 +233,20 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
 
     def test_the_small_wrapper_is_its_fragment(self):
-        """At SMALL the generator substitutes and adds nothing, so the panel's
-        charts are their fragments' text, as their sections had it."""
+        """At SMALL the generator substitutes and adds nothing but the open
+        button and the title's width beside it (charts PR C2), so the panel's
+        charts are otherwise their fragments' text, as their sections had it."""
         for chart in gen.CHARTS:
             with self.subTest(chart=chart.id):
                 text = gen.substitute(gen.fragment(chart), chart, gen.SMALL)
-                self.assertEqual(gen.size_overrides(chart, gen.SMALL, text), [])
-                self.assertEqual(gen.render_chart(chart, gen.SMALL), text)
+                added = gen.size_overrides(chart, gen.SMALL, text)
+                self.assertEqual(added, gen.open_overrides(chart))
+                self.assertEqual(re.findall(r'^blockoverride "(\w+)"', "\n".join(added), re.M),
+                                 ["chart_title_width", "chart_open"])
+                rendered = gen.render_chart(chart, gen.SMALL).split("\n")
+                tail = [f"\t{ln}" for ln in added]
+                self.assertEqual(rendered[-1 - len(tail):-1], tail)
+                self.assertEqual("\n".join(rendered[:-1 - len(tail)] + rendered[-1:]), text)
 
     def test_no_size_literal_in_a_fragment(self):
         """Every size a fragment draws at is a placeholder: no number left in a
@@ -225,10 +307,12 @@ class RegistryTest(unittest.TestCase):
                     self.assertEqual(box, dims.bar_h + 12)
                     self.assertEqual(dims.frame[1], box + (gen.PIP_LANE if chart.kind == "annual_pips" else 0))
                     self.assertEqual(dims.text_w, dims.frame[0] - 12 if size is gen.LARGE else 484)
+                    # the title: beside the open button on the panel, the type's 484 in the viewer
+                    self.assertEqual(dims.title_w, 484 - gen.OPEN_BUTTON - gen.OPEN_GAP if size is gen.SMALL else 484)
         self.assertIn("margin_right = 8", _type_body(_read(CHART_GUI), "te_history_plot"))
         self.assertEqual({gen.LARGE[k].plot for k in gen.KINDS}, {1200})   # owner call 7
         with self.assertRaisesRegex(ValueError, "don't divide"):
-            gen.bars(gen.Dims(plot=500, left=8, frame=(516, 96), bar_h=84, text_w=0, empty_w=0),
+            gen.bars(gen.Dims(plot=500, left=8, frame=(516, 96), bar_h=84, text_w=0, title_w=0, empty_w=0),
                      gen.RANGES["te_hist_range"])
 
     def test_the_large_caps_scale(self):

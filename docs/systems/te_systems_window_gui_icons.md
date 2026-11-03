@@ -21,3 +21,11 @@ The brief asked for gold line art. Vanilla's sidebar buttons are painted objects
 | The width toggle, at the top right of each frame (`te_systems_window_toggle`, 2026-11-02) | A text button: "Full Screen" in the side panel, "Side Panel" full screen | Text until there is art (style guide rule 10, placeholder art is fine). An icon would need two pictures, expand and collapse; the tooltips stay as they are. |
 
 The full-screen frame (`te_fullscreen_block_window`) draws vanilla's own art: its top filler, fades and borders, copied with the type from vanilla's `block_windows.gui`. They are vanilla files, so this page doesn't list them (`IconsTest` holds them to the vanilla type's).
+
+## Placeholders: the history charts' open button (charts PR C2, 2026-11-02)
+
+Every panel history chart has a round button beside its title that opens the chart alone at full size (`te_chart_open_button` in `gui/journal_entry_widgets/te_history_chart.gui`, filled into each chart's panel wrapper by `scripts/generators/gen_te_history_charts.py`). It shows in every host the chart does, the Timeline Extended window and the vanilla panels' tabs alike. Its art is a placeholder, a vanilla button icon (style guide rule 10). `OpenButtonTest` in `test_te_history_charts.py` holds the path in the type to this row.
+
+| Where | Placeholder | Final art (icon pipeline subject) | Proposed path |
+|---|---|---|---|
+| Beside each history chart's title (`te_chart_open_button`, 24 × 24, `button_icon_round`) | `gfx/interface/buttons/button_icons/areacharts.dds`, vanilla's area-chart toggle from the Population panel | Two arrows pointing out from a corner, one to the top right and one to the bottom left, over a faint small bar chart, in the gold line style of vanilla's round button icons | `gfx/interface/buttons/button_icons/te_chart_open.dds` |
