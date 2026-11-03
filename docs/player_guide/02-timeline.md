@@ -468,7 +468,9 @@ new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
 researched Abyssal Plain Mining, every other coastal state, whoever owns it,
 shows its basin in an Ocean Basin tile, so you can see which pool a port there
-would weigh in.
+would weigh in. Another country's National Info has a Seabed tab with that
+country's overview and Ocean Basins table; the policy buttons and the claimant
+lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
