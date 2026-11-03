@@ -3081,6 +3081,9 @@ decolonization_events.201 = {
 			text = je_colonial_empire_fail_tt
 			decol_wave_start = yes
 		}
+		# Refreshed, not stacked: the entry can run again (the re-entry pass,
+		# ce_reentry_monthly), and a same-name add_modifier stacks.
+		remove_modifier_if_exists_effect = { MODIFIER = colonial_empire_collapsed_modifier }
 		add_modifier = {
 			name = colonial_empire_collapsed_modifier
 			days = long_modifier_time
@@ -3207,6 +3210,10 @@ decolonization_events.204 = {
 			text = je_colonial_empire_negotiated_tt
 			decol_wave_start = yes
 		}
+		# Refreshed, not stacked: the entry can run again (the re-entry pass,
+		# ce_reentry_monthly), .206 grants the same modifier, and a same-name
+		# add_modifier stacks.
+		remove_modifier_if_exists_effect = { MODIFIER = negotiated_withdrawal_modifier }
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time
@@ -3327,6 +3334,8 @@ decolonization_events.206 = {
 		trigger = { has_variable = decol_chosen_releases }
 		default_option = yes
 		ai_chance = { base = 5 }
+		# Refreshed, not stacked (as in .204, which grants it too).
+		remove_modifier_if_exists_effect = { MODIFIER = negotiated_withdrawal_modifier }
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
 			days = long_modifier_time
@@ -3343,6 +3352,9 @@ decolonization_events.206 = {
 		trigger = { NOT = { has_variable = decol_chosen_releases } }
 		default_option = yes
 		ai_chance = { base = 5 }
+		# Refreshed, not stacked: a voluntary end can come again after the
+		# re-entry pass gives the entry back.
+		remove_modifier_if_exists_effect = { MODIFIER = post_imperial_modifier }
 		add_modifier = {
 			name = post_imperial_modifier
 			days = long_modifier_time

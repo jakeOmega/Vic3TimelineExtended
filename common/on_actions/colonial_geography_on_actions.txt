@@ -7,6 +7,12 @@
 # start for every country and refreshed on each country's monthly pulse,
 # whatever its technology: the naval laws' AI weights, the anti-colonialist
 # ideology and the UN votes read the colony test at any date.
+#
+# The monthly pass then runs the Colonial Empire's re-entry pass
+# (ce_reentry_monthly, common/scripted_effects/decolonization.txt), which gives
+# a country whose entry has ended the entry back once it qualifies again. It
+# runs here, after the step, so the colony test it asks reads this month's
+# cache; another file's on_action may run before this one.
 # ============================================================================
 
 on_game_started = {
@@ -32,5 +38,6 @@ colonial_geography_game_start_on_action = {
 colonial_geography_on_action = {
 	effect = {
 		ce_separation_step = yes
+		ce_reentry_monthly = yes
 	}
 }

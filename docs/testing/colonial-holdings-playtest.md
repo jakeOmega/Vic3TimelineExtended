@@ -123,6 +123,45 @@ for the readout, and Britain or France for the entry's view. Search `debug.log` 
 | **The Colonial Powers.** Open the section; wait a month. | Up to eight rows, largest first: flag (click opens the country), name, People, Status (Not begun, a band, Secured or Collapsed, each with its hover), Stability as "55%" or "—". The row's hover gives what our stance does to it a month; after pressing Condemn it changes at once. | Blank names or flags: the container's `Var('ce_pw_capital').GetState.GetCountry` chain (International Pressure's rows use the same). Every Stability "—": `colonial_je_total_months` or `colonial_empire_bar_bucket` missing on running empires. No rows at all: `ordered_country` found no colonial power; check `ce_power_colonial_population` (`scope:x.value` read in `decol_world_power_row`). |
 | **A great power that falls in rank.** Use the console to lower a great power holding a stance below the rank, then wait a month. | In force reads "Dormant: not a great power"; the influence cost and the policy modifier are gone; Stay Neutral is still enabled. | The modifier stays: `decol_stance_refresh` did not run. |
 
+## Starting again after it ends (2026-11-03)
+
+The owner's report: failing the entry did not let it come back, in a 1910 save. The engine deletes a finished
+`je_colonial_empire` record, failed or completed, and never activates the type again: that save holds no record of it,
+active or inactive, for Britain, France, Spain, the Netherlands or the USA, against an inactive one on 211 other
+countries. A monthly pass now adds the entry back (`ce_reentry_monthly`, `common/scripted_effects/decolonization.txt`,
+run from `colonial_geography_on_action` straight after the separation cache's step) once a country has been due it for a
+whole month (`ce_reentry_due`, `colonial_empire_triggers.txt`: the entry's research and `possible`, not decentralized,
+not a revolution's rebels, no entry running, and a year since a voluntary end). So a collapse waits ten years and a
+secured empire never returns, as the rules always said. A voluntary end sets no cooldown, but the pass waits a year after
+one (`ce_reentry_voluntary_hold`), a guard against a colony test that flickers. Every modifier an ending adds is now
+refreshed, not stacked, since a second ending is reachable. Search `debug.log` for `TE_CE_REENTRY` (one line per add)
+and `ce_reentry`.
+
+What the save shows (its history charts, read with `scripts/analysis/save_country_probe.py`): Britain's entry started
+about 1897.10 at 50, fell at the monthly cap of 1.67 to 0 by 1900.04 and collapsed, so its ten-year cooldown ran out a
+few weeks before the save. France (1898) and Spain (1898) collapsed the same way, and had been free of the cooldown for
+about two years without the entry. The USA's ended at 30 in 1897, a voluntary end, and it holds no separated state now,
+so it does not return. Britain holds 18 states the cache marks separated from London (Kenya, Tanganyika, Lindi, Rift
+Valley, Amhara, Ceylon, Fiji, the Solomon Islands and others), so it is very likely due the entry again; whether each
+state passes the rest of the colony test needs its pops, which the probe does not read.
+
+### Self-checks
+
+| Name | What it checks | Where | If BROKEN |
+|---|---|---|---|
+| `ce_reentry` | `add_journal_entry` brings back an entry type the country has finished (no vanilla precedent re-adds a finished type of its own). The pass marks each country it adds the entry to, naming the country, and notes whether its entry had run and ended (`colonial_empire_has_ended`, set at every ending since this change). The next monthly pass reads the mark before it can add again. One line per add: OK when the entry is running, BROKEN when it is not though the country is still due it, each with `ended_before=yes` or `ended_before=unknown`. Only `yes` answers the question: `unknown` is a country that may never have held a record (the engine leaves some out), or one whose entry ended before the variable existed (Britain in the 1910 save). A country no longer due it gives no verdict, nor does a revolution's winner holding the loser's mark. | `ce_reentry_monthly`, step 1 | BROKEN with `ended_before=yes`: the entry stays active through a failure, as a dormant phase in place of `fail`. A collapse or the last colony's loss runs its outcome and sets its cooldown as now, then leaves the entry dormant until the country is due it again. Until then every add is wasted: one `TE_CE_REENTRY` line per due country every two months. BROKEN with `ended_before=unknown` only: `add_journal_entry` gave a country no entry at all; read the `debug.log` lines around it. |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The owner's 1910 save.** Load `new york_1910_05_13.v3` (the owner's save folder) and run two months. | At the second monthly pulse after loading (by mid-July 1910) `debug.log` has `TE_CE_REENTRY: added je_colonial_empire to United Kingdom`, and the same for France and Spain if they still hold a colony. National Info, United Kingdom, Colonial Empire shows the entry's panels at stability 50, and The Colonial Powers' row for Britain reads a band, not Not begun. | No line for Britain: it is not due. Run `event te_debug_colonial_empire.4` as Britain (the colony test's census, `TE_CE_CENSUS`) to see whether any state passes. A line but no panels: see the self-check. |
+| **The self-check line.** Run a third month. | One `TE_SELF_CHECK OK ce_reentry country=GBR name=United Kingdom ended_before=unknown …` per add (Britain's entry ended before `colonial_empire_has_ended` existed). The `ended_before=yes` line that settles the question comes from an entry that ends after this change and returns: the voluntary end below. | BROKEN: take the fallback above. No verdict at all after an add line: the country stopped being due within the month (its colony test moved); wait for the next add. |
+| **One entry, not two.** As a country that has never run the entry, take its first colony after researching Decolonization. | The engine starts the entry within two weeks, as before; no `TE_CE_REENTRY` line for that country, and one Colonial Empire entry in the journal. | Two entries: the pass raced the engine's activation of the country's inactive record; wait two months instead of one (a second mark). An add line with one entry is not a race: the country held no record (the engine leaves some out, as Banking's self-check found), and the pass gave it the entry. |
+| **A voluntary end, then a colony again.** Release the last colony and colonial subject (the entry ends with The Last Flag Lowered), then take a colony back (a war, or the console). | The tab's readout says the entry starts again within two months of holding one, and no sooner than a year after it ended; its checklist shows the year's line unmet. A year after the end, within two months, it runs again: stability at 50, every program at level 0, Months Held at 0. The next pass logs `TE_SELF_CHECK OK ce_reentry … ended_before=yes`. A second voluntary end refreshes Post-Imperial Standing (or Negotiated Withdrawal) rather than adding a second copy. | It never returns: check `debug.log` for the add line and the self-check. Programs left running: `colonial_empire_je_cleanup_effect` did not clear the levels. Two copies of the modifier in the country's modifier list: the removal before the add did not run. |
+| **A collapse waits ten years.** After a collapse (`event te_debug_colonial_empire.1`, Collapsing, then let the bar reach 0), keep a colony. | No add line while the readout says the system collapsed; within two months of the cooldown's end, the entry runs again. | An add during the ten years: `ce_reentry_due` misses `colonial_empire_collapsed_recently`. |
+| **A second collapse.** Let the returned entry collapse too (`event te_debug_colonial_empire.1`, Collapsing). | A colonial subject that went through both collapses holds one Imperial Collapse Aftershock (`country_liberty_desire_add` +0.50, not +1.00), and the country one Colonial Empire Collapsed or Negotiated Withdrawal. | Two copies: `remove_modifier_if_exists_effect` did not run before the add in `on_fail`, `.201` or `.204`. |
+
 ## The AI's stance on colonialism (2026-11-03, issue #1370)
 
 The AI no longer condemns the colonialism it practices: The Colonial Question (`decolonization_events.14`) never gives
