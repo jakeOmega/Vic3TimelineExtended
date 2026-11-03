@@ -69,9 +69,9 @@ secured, collapses or lets its last colony go.
 
 National Info shows another country's Colonial Empire tab with its holdings,
 stability, programs, pressure, stance and history, and no buttons. It counts
-that country's territories, colonial subjects and the great powers pressing it
-but doesn't list them one by one, because the mod builds those lists only for
-the country you play. The Colonial Powers rows are the same as on your own tab,
+that country's territories and colonial subjects and shows how much the great
+powers move its stability, but doesn't list any of them one by one, because the
+mod builds those lists only for the country you play. The Colonial Powers rows are the same as on your own tab,
 without their hover.
 
 <!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings open with its territories, their Release buttons and a colonial subject's Release and Dominion buttons -->
