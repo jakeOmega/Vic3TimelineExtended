@@ -15,7 +15,7 @@
 ###                                 readings, for a country with a dial or an
 ###                                 anchor but no entry (#805)
 ### gui/journal_entry_widgets/banking_layout_widget.gui sets their order, with
-### the history charts (banking_history_widget.gui) and How Banking Works, for
+### the history charts (banking_history_widget.gui) and Banking's Help page, for
 ### the hosts: the journal entry (je_banking.txt attaches the named roots at
 ### the foot of that file), the Banking tab of the Budget panel
 ### (gui/budget_panel.gui) and of the Timeline Extended window, and National

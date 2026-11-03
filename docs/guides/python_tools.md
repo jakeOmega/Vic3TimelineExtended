@@ -207,7 +207,9 @@ order, read down each column, each under exactly the narrow layout's gates. It f
 other than a plain container or a `te_*` section, on an instance's `visible` over its type's own (gotcha #17), and on a
 wide wrapper that does more than gate and space its sections: one with `ignoreinvisible` unset, a horizontal
 flowcontainer, a property outside `WIDE_WRAPPER_PROPS` (a datacontext, a margin), or a `spacing` its narrow composer
-under the same gates doesn't use. A test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
+under the same gates doesn't use. A column's own `column_<n>_visible`, which closes up a column whose sections all
+hide, counts as one more gate on each of them; `assert_column_closes_with_its_sections` holds such a gate equal to
+the sections' own, joined. A test moves onto them when it is next touched, not in a sweep (wide-mode spec § 9.5).
 
 ## Formatting & Maintenance
 
