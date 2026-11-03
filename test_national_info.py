@@ -409,6 +409,26 @@ class MountTest(unittest.TestCase):
                 self.assertEqual(found, [], "\n".join(map(str, found[:10])))
 
 
+class ForeignViewerTest(unittest.TestCase):
+    """Another country's chart viewers (te_ni_chart_<id>_popup, which the
+    window holds at its own level, under its Country): for a public tab's
+    charts, the viewer reads no entry and no player. BindingTest walks the
+    panel's small wrappers; this walks the large ones the viewer draws, and
+    the key under them."""
+
+    def test_a_public_tabs_viewers_read_the_window_country(self):
+        from scripts.generators import gen_te_history_charts as charts
+        types = mod_types()
+        public = {t.key for t in gen.ni_tabs()}
+        shown = [c for c in charts.CHARTS if c.system in public]
+        self.assertEqual({c.system for c in shown}, public & {c.system for c in charts.CHARTS})
+        self.assertTrue(shown, "Demographics' eight at least")
+        for chart in shown:
+            with self.subTest(chart=chart.id):
+                found = [f for f in markup_reads({charts.ni_popup_name(chart)}, types) if not f.world]
+                self.assertEqual(found, [], "\n".join(map(str, found[:10])))
+
+
 class ReadoutTest(unittest.TestCase):
     """Tab.readout names what the body's frame shows without the entry, in its
     tab_before_gate, under that scripted GUI; National Info's foreign mount
