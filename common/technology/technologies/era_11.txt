@@ -153,7 +153,6 @@ synthetic_biology = {
 	# Oil-Producing Bacteria PM for Synthetic Oil Industries, Synthetic Bactieria
 	# Advanced Material Fabrication PM for Advanced Material Fabrecators
 	# Designed Crops PM for Agriculture, Self-Healing Packaging PM for Food Industries
-	# Open-Source Genetics law
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/synthetic_biology.dds"
 	category = production
