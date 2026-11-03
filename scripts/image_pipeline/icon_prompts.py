@@ -2625,7 +2625,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_global_ports": {"subject": "a row of three tall gantry cranes along a quay beside a huge container ship", "seed": 1},
         "pm_intelligent_manufacturing_systems": {"subject": "a car body on a conveyor line watched by a camera on a gantry, a computer screen beside it", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_internet_communications": {"subject": "a computer monitor showing a closed envelope, a small globe beside it", "seed": 1},
-        "pm_trade_center_trade_quantity_advanced_3": {"subject": "a boxy delivery truck beside a big stopwatch", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_trade_center_trade_quantity_advanced_3": {"subject": "a forklift truck lifting a pallet of cardboard boxes in front of a big round wall clock", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
         "pm_led_streetlights": {"subject": "a slim straight streetlight pole with a thin square glowing lamp panel at its top", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
         "pm_maglev_trains": {"subject": "a sleek maglev train hovering above a wide concrete guideway, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
         "pm_mars_mission": {"subject": "a small spacecraft with solar panels flying toward a big cratered planet", "seed": 2},
