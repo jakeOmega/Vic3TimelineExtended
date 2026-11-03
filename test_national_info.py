@@ -18,6 +18,7 @@ gui/te_national_info_generated.gui. These tests hold:
 * the registry's readouts, against the bodies' tab_before_gate;
 * the generated file.
 """
+import glob
 import os
 import re
 import unittest
@@ -124,6 +125,114 @@ def _cases(tabs):
                 yield stored, shown
 
 
+# --- "open implies on the strip": the scripted GUIs' is_shown, scripted triggers expanded --------------------
+
+_SHOWN = r"GetScriptedGui\('(\w+)'\)\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
+_TOKEN = re.compile(r'"[^"]*"|[{}]|[<>!?]?=|[<>]|[^\s{}=<>!?]+')
+
+
+def _definitions(folder):
+    """name -> the text of its { } body, for each top-level `name = {` in the
+    mod's .txt files in `folder`."""
+    out = {}
+    for path in sorted(glob.glob(os.path.join(REPO, "common", folder, "*.txt"))):
+        text = re.sub(r"#[^\n]*", "", open(path, encoding="utf-8-sig").read())
+        for m in re.finditer(r"^(\w+)\s*=\s*\{", text, re.M):
+            out.setdefault(m.group(1), text[m.end():_close(text, m.end() - 1)])
+    return out
+
+
+def _parse(text):
+    """A body's statements, (key, op, value), a block's value its statements."""
+    tokens, out, stack = _TOKEN.findall(text), [], []
+    i = 0
+    while i < len(tokens):
+        if tokens[i] == "}":
+            key, op, inner = stack.pop()
+            inner.append((key, op, out))
+            out = inner
+            i += 1
+        elif tokens[i + 2:i + 3] == ["{"]:
+            stack.append((tokens[i], tokens[i + 1], out))
+            out = []
+            i += 3
+        else:
+            out.append((tokens[i], tokens[i + 1], tokens[i + 2]))
+            i += 3
+    assert not stack, text[:80]
+    return out
+
+
+_SGUIS, _TRIGGERS = {}, {}
+
+
+def _norm(item):
+    key, op, value = item
+    return f"{key} {op} " + (value if isinstance(value, str) else "{ " + " ".join(map(_norm, value)) + " }")
+
+
+def _trigger(item):
+    key, op, value = item
+    if (op, value) == ("=", "yes"):
+        if not _TRIGGERS:
+            _TRIGGERS.update(_definitions("scripted_triggers"))
+        body = _TRIGGERS.get(key)
+        if body is not None and "$" not in body:
+            return _parse(body)
+    return None
+
+
+def _flat(items):
+    """The conditions a list of them asserts: AND blocks and scripted triggers
+    expanded, anything else as it is written."""
+    out = set()
+    for item in items:
+        body = _trigger(item)
+        if body is not None:
+            out |= {_norm(item)} | _flat(body)
+        elif item[0] == "AND" and not isinstance(item[2], str):
+            out |= _flat(item[2])
+        else:
+            out.add(_norm(item))
+    return out
+
+
+def _implied(conds, item):
+    if _norm(item) in conds:
+        return True
+    body = _trigger(item)
+    if body is not None:
+        return all(_implied(conds, x) for x in body)
+    key, _, value = item
+    if key == "AND" and not isinstance(value, str):
+        return all(_implied(conds, x) for x in value)
+    if key == "OR" and not isinstance(value, str):
+        return any(_implied(conds, x) for x in value)
+    return False
+
+
+def _is_shown(sgui):
+    if not _SGUIS:
+        _SGUIS.update(_definitions("scripted_guis"))
+    found = [v for k, _, v in _parse(_SGUIS[sgui]) if k == "is_shown"]
+    assert len(found) == 1, sgui
+    return found[0]
+
+
+def _expr_implies(expr, strip):
+    """Whether a gate expression (And/Or/Not of scripted GUIs on the player)
+    can be true only while `strip`'s is_shown is."""
+    expr = expr.strip()
+    for op, combine in (("And(", any), ("Or(", all)):
+        if expr.startswith(op):
+            return combine(_expr_implies(a, strip) for a in _split_args(expr[len(op):expr.rindex(")")]))
+    m = re.fullmatch(_SHOWN, expr)
+    if not m:
+        return False
+    conds = _flat(_is_shown(m.group(1)))
+    return all(_implied(conds, item) for item in _is_shown(strip))
+
+
 def _every_candidate_public():
     """TABS with every tab National Info is to show made public, as once each
     system's PR has landed."""
@@ -140,6 +249,7 @@ class SelectionTest(unittest.TestCase):
         unsel = {t.key: _template(text, f"te_ni_{t.key}_unselected") for t in tabs}
         pops, pops_un = _template(text, "te_ni_pops_selected"), _template(text, "te_ni_pops_unselected")
         content = _template(text, "te_ni_content_shown")
+        strip = _template(text, "te_ni_strip_shown")
         cases = 0
         for stored, shown in _cases(tabs):
             cases += 1
@@ -151,6 +261,9 @@ class SelectionTest(unittest.TestCase):
                 self.assertEqual(_evaluate(pops_un, shown, stored), want != gen.NI_FALLBACK)
                 self.assertEqual(_evaluate(content, shown, stored), want != gen.NI_FALLBACK,
                                  "the column is up exactly while Pops isn't")
+                self.assertEqual(_evaluate(strip, shown, stored),
+                                 any(t.strip is None or _evaluate(gen.rooted(t.strip, gen.COUNTRY_ROOT), shown, stored)
+                                     for t in tabs), "the strip is up while any tab is on it")
                 for t in tabs:
                     s, u = _evaluate(sel[t.key], shown, stored), _evaluate(unsel[t.key], shown, stored)
                     self.assertEqual(s, t.key == want)
@@ -163,7 +276,8 @@ class SelectionTest(unittest.TestCase):
 
     def test_the_public_tabs(self):
         tabs = gen.ni_tabs()
-        self.assertEqual([t.key for t in tabs], ["demographics"], "F1 ships Pops and Demographics")
+        self.assertIn("demographics", [t.key for t in tabs], "F1 ships Pops and Demographics")
+        self.assertEqual([t.key for t in tabs], [k for k in gen.NI_ORDER if k in {t.key for t in gen.TABS if t.public}])
         cases = self._check(_read(GENERATED), tabs)
         self.assertEqual(cases, 3 * 3 + len(tabs) * 9)
 
@@ -193,12 +307,29 @@ class SelectionTest(unittest.TestCase):
                 self.assertIn(gen.and_(gen.ni_stored(t.key), gen.rooted(t.open_, gen.COUNTRY_ROOT)), pops)
 
     def test_the_strip_shows_while_a_tab_could(self):
-        text = _read(GENERATED)
-        self.assertEqual(_template(text, "te_ni_strip_shown"),
-                         gen.rooted(gen.or_all([t.strip for t in gen.ni_tabs()]), gen.COUNTRY_ROOT))
-        # once a public tab has no strip gate (Nation, F2), always
+        """Its gate per case is _check's; here its form: the public tabs' strip
+        gates, or `yes` once one of them has none (Nation)."""
+        tabs = gen.ni_tabs()
+        want = ("yes" if any(t.strip is None for t in tabs)
+                else gen.rooted(gen.or_all([t.strip for t in tabs]), gen.COUNTRY_ROOT))
+        self.assertEqual(_template(_read(GENERATED), "te_ni_strip_shown"), want)
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             self.assertEqual(_template(gen.render_ni(), "te_ni_strip_shown"), "yes")
+
+    def test_a_tab_open_is_on_the_strip(self):
+        """Every tab National Info is to show: its open gate implies its strip
+        gate, or its column could show with the strip hidden and no way back
+        to Pops. Read from the scripted GUIs' is_shown, scripted triggers
+        expanded."""
+        for t in gen.TABS:
+            if t.key not in gen.NI_ORDER or t.strip is None:
+                continue
+            with self.subTest(tab=t.key):
+                strip = re.fullmatch(_SHOWN, t.strip)
+                self.assertTrue(strip, f"{t.key}: a strip gate of one scripted GUI")
+                self.assertIsNotNone(t.open_, f"{t.key}: always open, so always on the strip")
+                self.assertTrue(_expr_implies(t.open_, strip.group(1)),
+                                f"{t.key}: open without {strip.group(1)}")
 
 
 class StripTest(unittest.TestCase):
@@ -221,7 +352,9 @@ class StripTest(unittest.TestCase):
         return out
 
     def test_strips_of_five_in_order(self):
-        self.assertEqual(self._strip_keys(self.strips), [["pops", "demographics"]])
+        keys = [gen.NI_FALLBACK] + [t.key for t in gen.ni_tabs()]
+        self.assertEqual(self._strip_keys(self.strips),
+                         [keys[i:i + gen.NI_PER_STRIP] for i in range(0, len(keys), gen.NI_PER_STRIP)])
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
         keys = self._strip_keys(strips)
@@ -239,14 +372,21 @@ class StripTest(unittest.TestCase):
         self.assertIn("Country.MakeScope", self.strips)
 
     def test_each_tab_opens_on_its_gate_and_stores_the_choice(self):
-        for t in gen.ni_tabs():
-            with self.subTest(tab=t.key):
-                slot = re.search(rf"\t\t\t### {t.key}\n(.*?)(?=\n\t\t\t###|\n\t\t\}})", _read(GENERATED), re.S).group(1)
-                self.assertIn(f'enabled = "[{gen.rooted(t.open_, gen.COUNTRY_ROOT)}]"', slot)
-                self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_ni_tab', '{t.key}')]\"", slot)
-                self.assertIn(f"using = te_ni_{t.key}_selected", slot)
-                self.assertIn(f"using = te_ni_{t.key}_unselected", slot)
-                self.assertEqual(slot.count(f'text = "{t.label}"'), 2)
+        with mock.patch.object(gen, "TABS", _every_candidate_public()):
+            every = gen.render_ni()
+        for text, tabs in ((_read(GENERATED), gen.ni_tabs()), (every, [t for t in _every_candidate_public()
+                                                                         if t.key in gen.NI_ORDER])):
+            for t in tabs:
+                with self.subTest(tab=t.key):
+                    slot = re.search(rf"\t\t\t### {t.key}\n(.*?)(?=\n\t\t\t###|\n\t\t\}})", text, re.S).group(1)
+                    if t.open_ is None:
+                        self.assertNotIn("enabled", slot, "always open")
+                    else:
+                        self.assertIn(f'enabled = "[{gen.rooted(t.open_, gen.COUNTRY_ROOT)}]"', slot)
+                    self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_ni_tab', '{t.key}')]\"", slot)
+                    self.assertIn(f"using = te_ni_{t.key}_selected", slot)
+                    self.assertIn(f"using = te_ni_{t.key}_unselected", slot)
+                    self.assertEqual(slot.count(f'text = "{t.label}"'), 2)
         pops = re.search(r"\t\t\t### pops\n(.*?)(?=\n\t\t\t###|\n\t\t\})", _read(GENERATED), re.S).group(1)
         self.assertNotIn("enabled", pops, "Pops is always open")
         self.assertIn('tooltip = "te_pop_browser_tab_pops_tt"', pops)
@@ -254,20 +394,21 @@ class StripTest(unittest.TestCase):
 
     def test_the_tooltips(self):
         """Open: the window's tooltip for the player, what the country shows the
-        world for another. Grayed: the player's checklist, one line for another."""
+        world for another. Grayed: the player's checklist, one line for another.
+        Every combination of the tooltip's gates, tooltip_expr's tabs too."""
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             tabs = gen.ni_tabs()
         for t in tabs:
             tooltip = re.fullmatch(r'tooltip = "\[(.*)\]"', gen.ni_tooltip(t)).group(1)
             player = gen._tooltip_value(t, gen.COUNTRY_ROOT)
-            opened = _atoms(gen.rooted(t.open_, gen.COUNTRY_ROOT))
-            for is_open in ((True, False) if t.open_ else (True,)):
-                shown = opened if is_open else set()
-                with self.subTest(tab=t.key, open=is_open):
+            atoms = sorted(_atoms(tooltip) | _atoms(gen.rooted(t.open_, gen.COUNTRY_ROOT)))
+            for n in range(1 << len(atoms)):
+                shown = {a for i, a in enumerate(atoms) if n >> i & 1}
+                is_open = t.open_ is None or _evaluate(gen.rooted(t.open_, gen.COUNTRY_ROOT), shown, None)
+                with self.subTest(tab=t.key, shown=sorted(shown)):
                     self.assertEqual(_pick(tooltip, shown, local=False),
                                      gen.NI_OTHER_TT if is_open else gen.NI_NOT_RUNNING_TT)
-                    if t.tooltip_expr is None:
-                        self.assertEqual(_pick(tooltip, shown, local=True), _pick(player, shown, local=True))
+                    self.assertEqual(_pick(tooltip, shown, local=True), _pick(player, shown, local=True))
             # the player's branch is the window's tooltip, on the window's Country
             self.assertIn(player, tooltip)
             self.assertNotIn("GetPlayer", tooltip)
@@ -326,17 +467,20 @@ class MountTest(unittest.TestCase):
 
     def test_every_public_tab_has_two_mounts(self):
         self.assertEqual(len(re.findall(r'name = "te_ni_\w+_tab"', self.column)), len(gen.ni_tabs()))
-        for t in gen.ni_tabs():
-            with self.subTest(tab=t.key):
-                own, other = self._mounts(self.column, t)
-                own_props = dict((n, v) for k, n, v in _children(own) if k == "property")
-                self.assertEqual(own_props["visible"], f'"[{LOCAL}]"')
-                self.assertEqual(own_props["name"], f'"te_ni_{t.key}_own"')
-                self.assertEqual([n for k, n, _ in _children(own) if k == "widget"],
-                                 [gen._content(t, wide=True)[0].split(" = ")[0]])
-                other_props = dict((n, v) for k, n, v in _children(other) if k == "property")
-                self.assertEqual(other_props["visible"], f'"[Not( {LOCAL} )]"')
-                self.assertEqual(other_props["name"], f'"te_ni_{t.key}_other"')
+        with mock.patch.object(gen, "TABS", _every_candidate_public()):
+            every = (_type_body(_strip_comments(gen.render_ni()), "te_ni_tabs"), gen.ni_tabs())
+        for column, tabs in ((self.column, gen.ni_tabs()), every):
+            for t in tabs:
+                with self.subTest(tab=t.key):
+                    own, other = self._mounts(column, t)
+                    own_props = dict((n, v) for k, n, v in _children(own) if k == "property")
+                    self.assertEqual(own_props["visible"], f'"[{LOCAL}]"')
+                    self.assertEqual(own_props["name"], f'"te_ni_{t.key}_own"')
+                    self.assertEqual([n for k, n, _ in _children(own) if k == "widget"],
+                                     [gen._content(t, wide=True)[0].split(" = ")[0], *t.footer])
+                    other_props = dict((n, v) for k, n, v in _children(other) if k == "property")
+                    self.assertEqual(other_props["visible"], f'"[Not( {LOCAL} )]"')
+                    self.assertEqual(other_props["name"], f'"te_ni_{t.key}_other"')
 
     def _other(self, column, tab):
         return self._mounts(column, tab)[1]
@@ -351,19 +495,28 @@ class MountTest(unittest.TestCase):
                 other = self._other(column, t)
                 kids = [(kind, name) for kind, name, _ in _children(other) if kind == "widget"]
                 want = [("widget", "default_header")]
-                if t.readout:
-                    want.append(("widget", "flowcontainer"))
-                want.append(("widget", t.wide))
+                want += [("widget", "flowcontainer")] * 2 if t.readout else [("widget", t.wide)]
                 self.assertEqual(kids, want)
                 header = _children(other)[[n for _, n, _ in _children(other)].index("default_header")][2]
-                self.assertIn(f'text = "{t.label}"', header)
+                label = (f"SelectLocalization( {gen.shown(t.readout.sgui, gen.COUNTRY_ROOT)}, "
+                         f"'{t.readout.label}', '{t.label}' )" if t.readout and t.readout.label else None)
+                self.assertIn(f'text = "[{label}]"' if label else f'text = "{t.label}"', header)
                 self.assertIn(f"GetVariableSystem.Set('te_popup', 'help_{t.key}')", header)
                 self.assertIn(f"te_{t.key}_help_popup = {{}}", popups, "the \"?\" opens a page that exists")
+                # te_popups is down for an observer, so the "?" is too
+                self.assertIn(f'visible = "[{gen.NOT_OBSERVER}]"', header)
+                self.assertIn("Not( GetMetaPlayer.IsObserver )",
+                              re.search(r'name = "te_popups".*?visible = "([^"]*)"', popups, re.S).group(1))
                 if t.readout:
-                    sgui, readout = t.readout
-                    box = [text for kind, name, text in _children(other) if name == "flowcontainer"][0]
-                    self.assertIn(f'visible = "[{gen.shown(sgui, gen.COUNTRY_ROOT)}]"', box)
-                    self.assertIn(f"{readout} = {{}}", box)
+                    # as the frame: the readout under its gate (tab_before_gate), the
+                    # rest under the entry's (tab_gate), never both
+                    box, rest = [text for kind, name, text in _children(other) if name == "flowcontainer"]
+                    self.assertIn(f'visible = "[{gen.shown(t.readout.sgui, gen.COUNTRY_ROOT)}]"', box)
+                    self.assertEqual([n for k, n, _ in _children(box) if k == "widget"], [t.readout.panel])
+                    self.assertIn(f'visible = "[{gen.shown(t.readout.entry, gen.COUNTRY_ROOT)}]"', rest)
+                    self.assertEqual([n for k, n, _ in _children(rest) if k == "widget"], [t.wide])
+                for name in t.footer:
+                    self.assertNotIn(name, other, "the footer's controls are the player's")
                 # no entry, no player, no frame: another country has no journal entry
                 for read in ("GetPlayerJournalEntry", "JournalEntry", "GetPlayer", "AccessPlayer"):
                     self.assertNotIn(read, other)
@@ -416,6 +569,33 @@ class MountTest(unittest.TestCase):
                     self.assertTrue(content, t.body)
                     self.assertIn(f'block "{t.layout}"', body[content.end():_close(body, content.end() - 1)])
 
+    def test_the_players_mount_draws_the_windows_footer(self):
+        """What the window draws below a tab, in its frames' fixed_bottom
+        (te_systems_window_<key>_footer), the player's mount draws below the
+        body: Tax Code's draft and bill summaries, with Introduce, Discard and
+        Review (owner call 3: the same view, with its controls)."""
+        window = _strip_comments(_read(os.path.join(REPO, "gui", "te_systems_window.gui")))
+        footers = {}
+        for name in re.findall(r"\btype (te_systems_window_\w+_footer) = ", window):
+            body = _type_body(window, name)
+            # whose: the tab its selected template names
+            footers[re.search(r"using = te_systems_window_(\w+)_selected", body).group(1)] = body
+        self.assertIn("tax_code", footers)
+        tabs = {t.key: t for t in gen.TABS}
+        for key, body in footers.items():
+            with self.subTest(tab=key):
+                drawn = [n for n in re.findall(r"(?<![\w.])(\w+) = \{\}", body)
+                         if n not in ("divider_clean", "background")]
+                self.assertEqual(list(tabs[key].footer), drawn)
+        for t in gen.TABS:
+            if t.footer:
+                self.assertIn(t.key, footers, f"{t.key}: a footer the window doesn't draw")
+        with mock.patch.object(gen, "TABS", _every_candidate_public()):
+            column = _type_body(_strip_comments(gen.render_ni()), "te_ni_tabs")
+            own = self._mounts(column, next(t for t in gen.ni_tabs() if t.key == "tax_code"))[0]
+        widgets = [n for k, n, _ in _children(own) if k == "widget"]
+        self.assertEqual(widgets, ["te_tax_tab_body", "te_tax_draft_summary", "te_tax_bill_summary"])
+
     def test_one_visible_per_widget(self):
         stack = [0]
         for line in self.text.splitlines():
@@ -427,15 +607,6 @@ class MountTest(unittest.TestCase):
             for _ in range(line.count("}")):
                 if len(stack) > 1:
                     stack.pop()
-
-    def test_the_public_tabs_read_no_player_through_their_mounts(self):
-        """What the foreign mount draws for a public tab, its readout included,
-        reads no entry and no player: BindingTest walks gen.ni_types()."""
-        for t in gen.ni_tabs():
-            with self.subTest(tab=t.key):
-                self.assertLessEqual({t.wide}, gen.ni_types(t))
-                found = [f for f in markup_reads(gen.ni_types(t), self.types) if not f.world]
-                self.assertEqual(found, [], "\n".join(map(str, found[:10])))
 
 
 class ForeignViewerTest(unittest.TestCase):
@@ -458,26 +629,61 @@ class ForeignViewerTest(unittest.TestCase):
                 self.assertEqual(found, [], "\n".join(map(str, found[:10])))
 
 
+def _override(body, name):
+    m = re.search(rf'blockoverride "{name}" \{{', body)
+    return body[m.end():_close(body, m.end() - 1)] if m else ""
+
+
+def _tab_gate(body):
+    """The frame's tab_gate expression, as the body's override writes it."""
+    m = re.search(r'visible = "\[(.*)\]"', _override(body, "tab_gate"))
+    return m.group(1) if m else None
+
+
 class ReadoutTest(unittest.TestCase):
     """Tab.readout names what the body's frame shows without the entry, in its
     tab_before_gate, under that scripted GUI; National Info's foreign mount
     draws it (it draws no frame), and the binding tests walk it."""
 
     def test_each_readout_is_its_bodys(self):
+        """Each field of a Readout is what the body's frame has: the panel under
+        the readout's gate in tab_before_gate, the entry's gate in tab_gate,
+        and the header the frame swaps in under the readout's gate."""
         types = mod_types()
         named = [t for t in gen.TABS if t.readout]
         self.assertEqual({t.key for t in named}, {"banking", "colonial_empire"})
         for t in named:
-            sgui, readout = t.readout
+            r = t.readout
             with self.subTest(tab=t.key):
                 body = _strip_comments(types[t.body].body)
-                m = re.search(r'blockoverride "tab_before_gate" \{', body)
-                self.assertTrue(m, f"{t.body} has no tab_before_gate")
-                before = body[m.end():_close(body, m.end() - 1)]
-                self.assertIn(f'visible = "[{gen.shown(sgui)}]"', before)
-                self.assertRegex(before, rf"(?<![\w.]){readout} = \{{")
-                self.assertIn(readout, gen.ni_types(t))
-                self.assertIn(gen.shown(sgui), t.open_, "the readout opens the tab")
+                before = _override(body, "tab_before_gate")
+                self.assertIn(f'visible = "[{gen.shown(r.sgui)}]"', before)
+                self.assertRegex(before, rf"(?<![\w.]){r.panel} = \{{")
+                self.assertIn(r.panel, gen.ni_types(t))
+                self.assertIn(gen.shown(r.sgui), t.open_, "the readout opens the tab")
+                self.assertEqual(_tab_gate(body), gen.shown(r.entry), "the entry's gate is the frame's tab_gate")
+                self.assertEqual(t.open_, gen.or_(gen.shown(r.entry), gen.shown(r.sgui)), "open: one or the other")
+                headers = {}
+                for m in re.finditer(r"\bdefault_header = \{", _override(body, "tab_header")):
+                    h = _block_at(_override(body, "tab_header"), m.start())
+                    gate = re.search(r'^\t*visible = "\[(.*)\]"', h, re.M)
+                    headers[gate.group(1) if gate else None] = re.search(r'text = "(\w+)"', h).group(1)
+                self.assertEqual(r.label, headers.get(gen.shown(r.sgui)), "the header over the readout")
+
+    def test_without_a_readout_the_open_gate_is_the_frames(self):
+        """A tab with no readout opens only while its frame's tab_gate is
+        true (the gate itself, or one term of an And), so its foreign mount
+        can draw the composer under the tab's own selected template."""
+        types = mod_types()
+        for t in gen.TABS:
+            if t.key not in gen.NI_ORDER or t.readout or t.body not in types:
+                continue
+            with self.subTest(tab=t.key):
+                gate = _tab_gate(_strip_comments(types[t.body].body))
+                if gate is None:
+                    continue
+                terms = _split_args(t.open_[len("And("):t.open_.rindex(")")]) if t.open_.startswith("And(") else [t.open_]
+                self.assertIn(gate, [x.strip() for x in terms])
 
     def test_a_tab_with_a_tab_before_gate_names_its_readout(self):
         types = mod_types()

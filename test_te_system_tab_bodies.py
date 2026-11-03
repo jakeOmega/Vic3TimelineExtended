@@ -772,11 +772,12 @@ class BindingTest(unittest.TestCase):
     def test_the_walk_reaches_a_readout(self):
         """A tab that opens without its entry on a readout (Tab.readout) has
         it walked too: National Info's mount for another country draws it
-        above the wide composer, which the entry's gate hides there."""
+        under the readout's gate, above the wide composer under the entry's
+        gate, as the body's frame does (test_national_info.py's MountTest)."""
         for t in gen.TABS:
             if t.readout and t.key in _candidates():
                 with self.subTest(tab=t.key):
-                    self.assertIn(t.readout[1], _panel(t.key)["types"])
+                    self.assertIn(t.readout.panel, _panel(t.key)["types"])
 
 
 class GuardTest(unittest.TestCase):

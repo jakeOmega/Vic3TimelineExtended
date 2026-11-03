@@ -169,6 +169,7 @@ types te_national_info_generated_types
 						text = "te_window_tab_demographics"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
 					}
 				}
@@ -217,6 +218,7 @@ types te_national_info_generated_types
 						text = "te_window_tab_seabed"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
 					}
 				}

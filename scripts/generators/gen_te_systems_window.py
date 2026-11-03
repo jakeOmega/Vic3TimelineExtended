@@ -50,6 +50,7 @@ line below, its loc (label, tooltip, locked line), then run this script.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from typing import NamedTuple
 from pathlib import Path
 import re
 import sys
@@ -124,6 +125,19 @@ def or_all(terms: list[str]) -> str:
 
 # --- the registry -------------------------------------------------------------
 
+class Readout(NamedTuple):
+    """What a tab shows without its entry (Banking's #805 readout, the
+    Colonial Empire's stance and colonial powers). The body frame shows the
+    panel under `sgui` in its tab_before_gate and the rest under `entry` in
+    its tab_gate, never both, with `label`'s header over the readout where
+    the frame swaps it (test_national_info.py's ReadoutTest reads each from
+    the body)."""
+    sgui: str                  # the readout's scripted GUI
+    panel: str                 # the readout's type
+    entry: str                 # the frame's tab_gate scripted GUI: the entry's
+    label: str | None = None   # the header over the readout, where not the tab's
+
+
 @dataclass(frozen=True)
 class Tab:
     """One tab of the window.
@@ -152,13 +166,15 @@ class Tab:
                   which run over every public tab). Each system's binding PR
                   sets it, on its own line below, and takes the system off
                   that test's UNBOUND.
-    readout       (scripted GUI, type): what the tab shows without its entry
-                  (Banking's #805 readout, the Colonial Empire's stance and
-                  colonial powers), on that scripted GUI, in the body frame's
-                  tab_before_gate. National Info's mount for another country
-                  draws no frame, so it draws the readout itself, on the
-                  scripted GUI rooted on the shown Country, above the wide
-                  composer (ni_types; BindingTest and GuardTest walk it too).
+    readout       a Readout: what the tab shows without its entry. National
+                  Info's mount for another country draws no frame, so it
+                  draws the readout and gates the composer itself, as the
+                  frame does (ni_types; BindingTest and GuardTest walk it).
+    footer        the types the window draws below the tab, in its frames'
+                  fixed_bottom (Tax Code's draft and bill summaries, with
+                  Introduce, Discard and Review: te_systems_window_tax_footer).
+                  National Info's mount for the player's own country draws
+                  them below the body; the mount for another country never.
     """
     key: str
     row: int
@@ -174,7 +190,8 @@ class Tab:
     wide: str | None = None
     tooltip_expr: str | None = None
     public: bool = False
-    readout: tuple[str, str] | None = None
+    readout: Readout | None = None
+    footer: tuple[str, ...] = ()
 
 
 def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
@@ -200,8 +217,10 @@ def _mirror(key: str, row: int, tooltip: str, body: str, layout: str | None, tab
 
 
 BANKING_OPEN = or_(shown("te_budget_banking_tab_sgui"), shown("te_budget_banking_readout_sgui"))
-# What the Banking tab shows without its entry (#805): its monetary readings.
-BANKING_READOUT = ("te_budget_banking_readout_sgui", "te_banking_mon_readout")
+# What the Banking tab shows without its entry (#805): its monetary readings,
+# under a Monetary Policy header.
+BANKING_READOUT = Readout("te_budget_banking_readout_sgui", "te_banking_mon_readout",
+                          entry="te_budget_banking_tab_sgui", label="banking_dash_cat_monetary")
 
 # The Colonial Empire tab opens with its entry or, once the country has
 # researched Decolonization, without it: the stance on colonialism and the
@@ -215,7 +234,11 @@ CE_TOOLTIP = (f"SelectLocalization( {shown('te_window_colonial_empire_tab_sgui')
               f"SelectLocalization( {valid('te_window_colonial_empire_tab_unlock_sgui')}, 'te_system_tab_met_tt', "
               "Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), "
               f"{valid_tooltip('te_window_colonial_empire_tab_unlock_sgui')} ) ) ) )")
-CE_READOUT = ("te_window_colonial_empire_readout_sgui", "te_ce_readout")
+CE_READOUT = Readout("te_window_colonial_empire_readout_sgui", "te_ce_readout",
+                     entry="te_window_colonial_empire_tab_sgui")
+# Tax Code's draft and bill summaries, which the window draws in its frames'
+# fixed_bottom (te_systems_window_tax_footer): Introduce, Discard, Review.
+TAX_FOOTER = ("te_tax_draft_summary", "te_tax_bill_summary")
 
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
@@ -253,7 +276,7 @@ TABS: list[Tab] = [
             wide="te_banking_wide_sections",
             public=False),
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
-            "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
+            "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt", footer=TAX_FOOTER,
             wide="te_tax_wide_sections",
             public=False),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
@@ -678,7 +701,7 @@ def ni_types(tab: Tab) -> set[str]:
     """The types National Info's mount for another country draws for the tab,
     beyond its header: the wide composer and the readout. BindingTest,
     GuardTest and te_rebind_country.py walk these."""
-    return {tab.wide} | ({tab.readout[1]} if tab.readout else set())
+    return {tab.wide} | ({tab.readout.panel} if tab.readout else set())
 
 
 def ni_tabs() -> list[Tab]:
@@ -795,25 +818,42 @@ def ni_strips() -> list[str]:
     return out + ["\texpand = {}", "}"]
 
 
+# The Help pages open in te_popups, which is down for an observer.
+NOT_OBSERVER = "Not( GetMetaPlayer.IsObserver )"
+
+
 def ni_help_button(tab: Tab) -> list[str]:
-    """The header's "?": the system's Help page, which only reads."""
-    return ["te_help_button = {", f"\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_{tab.key}')]\"", "}"]
+    """The header's "?": the system's Help page, which only reads. Hidden for
+    an observer, for whom te_popups never opens."""
+    return ["te_help_button = {", f'\tvisible = "[{NOT_OBSERVER}]"',
+            f"\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_{tab.key}')]\"", "}"]
 
 
 def _ni_own(tab: Tab) -> list[str]:
-    return (["### The player's own country: the window's full-screen mount, with its gate,",
-             "### its entry and its controls.",
-             "flowcontainer = {",
-             f'\tname = "{NI_PREFIX}_{tab.key}_own"',
-             f'\tvisible = "[{LOCAL}]"',
-             "\tparentanchor = hcenter",
-             "\tdirection = vertical",
-             "\tignoreinvisible = yes",
-             ""]
-            + [f"\t{ln}" for ln in _content(tab, wide=True)] + ["}"])
+    out = ["### The player's own country: the window's full-screen mount, with its gate,",
+           "### its entry and its controls.",
+           "flowcontainer = {",
+           f'\tname = "{NI_PREFIX}_{tab.key}_own"',
+           f'\tvisible = "[{LOCAL}]"',
+           "\tparentanchor = hcenter",
+           "\tdirection = vertical",
+           "\tignoreinvisible = yes",
+           ""]
+    out += [f"\t{ln}" for ln in _content(tab, wide=True)]
+    if tab.footer:
+        out += ["", "\t### What the window draws below the tab, in its frames' fixed_bottom: each gates itself."]
+        out += [f"\t{name} = {{}}" for name in tab.footer]
+    return out + ["}"]
 
 
 def _ni_other(tab: Tab) -> list[str]:
+    """Another country: what the body's frame shows, without the frame. A tab
+    with a readout shows it under its gate and the composer under the entry's,
+    as the frame's tab_before_gate and tab_gate do, with the readout's own
+    header where the frame swaps it."""
+    label = f'"{tab.label}"'
+    if tab.readout and tab.readout.label:
+        label = f"\"[SelectLocalization( {shown(tab.readout.sgui, COUNTRY_ROOT)}, '{tab.readout.label}', '{tab.label}' )]\""
     out = ["### Another country: the tab's header, its readout if it has one, then its",
            "### sections under the window's Country, with no journal entry and no frame.",
            "flowcontainer = {",
@@ -827,22 +867,32 @@ def _ni_other(tab: Tab) -> list[str]:
            "\tdefault_header = {",
            "\t\tusing = default_list_position",
            '\t\tblockoverride "text" {',
-           f'\t\t\ttext = "{tab.label}"',
+           f"\t\t\ttext = {label}",
            "\t\t}"]
     out += [f"\t\t{ln}" for ln in ni_help_button(tab)] + ["\t}"]
-    if tab.readout:
-        sgui, readout = tab.readout
-        out += ["",
-                "\t### What the tab shows without its entry, as the frame's tab_before_gate does.",
-                "\tflowcontainer = {",
-                f'\t\tvisible = "[{shown(sgui, COUNTRY_ROOT)}]"',
-                "\t\tusing = default_list_position",
-                "\t\tdirection = vertical",
-                "\t\tignoreinvisible = yes",
-                "",
-                f"\t\t{readout} = {{}}",
-                "\t}"]
-    return out + ["", f"\t{tab.wide} = {{}}", "}"]
+    if not tab.readout:
+        return out + ["", f"\t{tab.wide} = {{}}", "}"]
+    return out + ["",
+                  "\t### What the tab shows without its entry, as the frame's tab_before_gate does.",
+                  "\tflowcontainer = {",
+                  f'\t\tvisible = "[{shown(tab.readout.sgui, COUNTRY_ROOT)}]"',
+                  "\t\tusing = default_list_position",
+                  "\t\tdirection = vertical",
+                  "\t\tignoreinvisible = yes",
+                  "",
+                  f"\t\t{tab.readout.panel} = {{}}",
+                  "\t}",
+                  "",
+                  "\t### The rest, under the entry's gate, as the frame's tab_gate is.",
+                  "\tflowcontainer = {",
+                  f'\t\tvisible = "[{shown(tab.readout.entry, COUNTRY_ROOT)}]"',
+                  "\t\tparentanchor = hcenter",
+                  "\t\tdirection = vertical",
+                  "\t\tignoreinvisible = yes",
+                  "",
+                  f"\t\t{tab.wide} = {{}}",
+                  "\t}",
+                  "}"]
 
 
 def ni_tabs_type() -> list[str]:
