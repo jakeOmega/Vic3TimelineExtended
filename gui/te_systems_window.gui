@@ -223,7 +223,10 @@ types te_systems_window_types
 	type te_systems_window_tax_footer = flowcontainer {
 		using = te_systems_window_tax_code_selected
 		direction = vertical
-		parentanchor = hcenter
+		### No parentanchor: both frames' fixed_bottom is a vbox child, where a
+		### position is ignored and logs "Widget cannot have a position in a
+		### layout" each time the footer is laid out (gotcha #47). Budget's
+		### footer, on the same frame, has none either.
 		ignoreinvisible = yes
 
 		flowcontainer = {
