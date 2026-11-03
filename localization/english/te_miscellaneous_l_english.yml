@@ -8668,7 +8668,7 @@
  te_hist_legend_crash:0 "#lore a banking crash: the country's own, or one that reached it through contagion#!"
  te_hist_legend_marker:0 "#lore something was recorded this month — a policy, an action or a crash. Hover the bar.#!"
  te_hist_mk_action:0 "#Y Action taken this month:#!"
- te_hist_mk_crash_contagion_tt:0 "#R Financial contagion reached us this month#! from a crash abroad."
+ te_hist_mk_crash_contagion_tt:0 "#R Financial contagion reached the country this month#! from a crash abroad."
  te_hist_mk_crash_tt:0 "#R A banking crash broke this month.#! Severity was set by the bubble pressure at the moment it broke; the readings on this bar are the post-crash ones."
  te_hist_mk_disabled:0 "#R Policy withdrawn this month:#!"
  te_hist_mk_enabled:0 "#G Policy adopted this month:#!"

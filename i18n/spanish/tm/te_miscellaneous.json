@@ -27704,8 +27704,8 @@
   "es": "#Y Acción realizada este mes:#!"
  },
  "te_hist_mk_crash_contagion_tt": {
-  "en": "#R Financial contagion reached us this month#! from a crash abroad.",
-  "es": "#R El contagio financiero nos alcanzó este mes#! por un colapso en el extranjero."
+  "en": "#R Financial contagion reached the country this month#! from a crash abroad.",
+  "es": "#R El contagio financiero alcanzó al país este mes#! por un colapso en el extranjero."
  },
  "te_hist_mk_crash_tt": {
   "en": "#R A banking crash broke this month.#! Severity was set by the bubble pressure at the moment it broke; the readings on this bar are the post-crash ones.",
