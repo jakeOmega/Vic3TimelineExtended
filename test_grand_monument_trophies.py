@@ -1268,15 +1268,24 @@ class OurMonumentsListTests(unittest.TestCase):
             self.assertNotEqual(first, -1, sec_name)
             self.assertGreater(second, first, sec_name)
         rest = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_monuments = flowcontainer \{")))
+        # Carry It Off and Clear It Away are the player's own (te_own_country_only): the journal
+        # entry's rows put them in a guard through the row's mon_controls block; the state
+        # card, which has no Country, keeps the block's default.
+        guard = ("flowcontainer = { using = te_own_country_only direction = vertical ignoreinvisible = yes spacing = 2 "
+                 "minimumsize = { 480 -1 } maximumsize = { 480 -1 } gm_mon_take_button = {} gm_mon_clear_button = {}")
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
                       "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
-                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } }",
-                      rest)
+                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                      f"blockoverride \"mon_controls\" {{ {guard} }} }} }}", rest)
         decide = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_decisions = flowcontainer \{")))
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
                       "visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
                       "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
-                      "blockoverride \"mon_choices\" {", decide)
+                      f"blockoverride \"mon_controls\" {{}} blockoverride \"mon_choices\" {{ {guard} flowcontainer = {{",
+                      decide)
+        row = squash(strip_comments(raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_mon_row_site = flowcontainer \{")))
+        self.assertIn('block "mon_controls" { gm_mon_take_button = {} gm_mon_clear_button = {} } block "mon_choices" {}',
+                      row)
 
     def test_the_row_says_where_it_stands_only_where_asked(self):
         gui = strip_comments(read(TR_GUI))

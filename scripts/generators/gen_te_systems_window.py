@@ -218,7 +218,7 @@ TABS: list[Tab] = [
     _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections",
             public=False),
     _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
-            public=False),
+            public=True),
     replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
             open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
             public=False),

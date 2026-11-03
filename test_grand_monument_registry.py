@@ -38,6 +38,11 @@ JE = "common/journal_entries/je_grand_monuments.txt"
 CULTURAL = "common/script_values/cultural_hegemony_script_values.txt"
 CUSTOM_LOC = "common/customizable_localization/gm_custom_loc.txt"
 MESSAGES = "common/messages/extra_messages.txt"
+# Awaiting Dedication's row: the site, then Dedicate in a slot of its 200 under
+# te_own_country_only (another country's National Info shows the site alone).
+DEDICATE_SLOT = ("gm_site_row = {} flowcontainer = { using = te_own_country_only direction = vertical "
+                 "ignoreinvisible = yes parentanchor = hcenter minimumsize = { 200 -1 } maximumsize = { 200 -1 } "
+                 "gm_dedicate_button = {} }")
 SGUIS = "common/scripted_guis/gm_sguis.txt"
 WIDGET = "gui/journal_entry_widgets/grand_monuments_widget.gui"
 DEBUG_EVENTS = "events/te_debug_monuments_events.txt"
@@ -1806,7 +1811,7 @@ class WidgetTests(unittest.TestCase):
         # Every named root carries the gate itself, not only the composer it wraps.
         for name, _ in self.ROOTS:
             self.assertIn(f'name = "{name}" visible = "[JournalEntry.IsActive]"', g, name)
-        self.assertIn('datamodel = "[JournalEntry.GetCountry.MakeScope.GetList(\'gm_states\')]"', g)
+        self.assertIn('datamodel = "[Country.MakeScope.GetList(\'gm_states\')]"', g)
         # Our Monuments lists every finished monument but the contested, which
         # Awaiting a Decision lists (GM-3, owner 2026-10-27).
         self.assertIn('gm_monument_row = { datacontext = "[Scope.GetState]" visible = "[And( EqualTo_CFixedPoint( '
@@ -1899,7 +1904,7 @@ class LocFixTests(unittest.TestCase):
         self.assertNotIn("gm_je_tt_culture_cap", L)
         self.assertNotIn("gm_je_tt_culture_next", L)
         tt = L["gm_je_tt_culture"]
-        self.assertIn("Next step at #v [JournalEntry.GetCountry.MakeScope.ScriptValue('gm_display_n_culture')|0]#!", tt)
+        self.assertIn("Next step at #v [Country.MakeScope.ScriptValue('gm_display_n_culture')|0]#!", tt)
         self.assertNotIn("at most", tt)
         self.assertNotIn("+5", L["gm_je_how_grandeur"])
         self.assertIn('tooltip = "gm_je_tt_culture"', read(WIDGET))
@@ -6117,10 +6122,10 @@ class SignatureSpecialTests(unittest.TestCase):
             self.assertIn(f"gm_com_source_is = {{ SRC = {s.source} }} }} localization_key = gm_com_special_line_{s.key}",
                           line, s.key)
             self.assertIn(f"$gm_sig_{s.key}$", L[f"gm_com_special_line_{s.key}"])
-        for key, ctx in (("gm_com_accept_tt", "ROOT.GetCountry"), ("gm_je_com_reward_tt", "JournalEntry.GetCountry")):
+        for key, ctx in (("gm_com_accept_tt", "ROOT.GetCountry"), ("gm_je_com_reward_tt", "Country")):
             self.assertIn(f"[{ctx}.GetCustom('gm_com_special_line')]", L[key])
         for key, ctx in (("gm_com_decline_tt", "ROOT.GetCountry"),
-                         ("gm_button_com_let_pass_tooltip", "JournalEntry.GetCountry")):
+                         ("gm_button_com_let_pass_tooltip", "Country")):
             self.assertIn(f"[{ctx}.GetCustom('gm_com_special_pass_line')]", L[key])
         once = squash(block(read(SIG_CUSTOM_LOC), "gm_com_special_pass_line"))
         for s in SPECIAL_SIGS:
@@ -6992,7 +6997,7 @@ class SitePanelTests(unittest.TestCase):
             self.assertIn(key, loc(), key)
         sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
                                     .split("type te_gm_sec_monuments", 1)[0]))
-        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
+        self.assertIn(DEDICATE_SLOT, sec)
         mon = squash(strip_comments(read(WIDGET).split("type te_gm_sec_monuments = flowcontainer {", 1)[1]))
         self.assertIn("visible = \"[And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_listed'), "
                       "'(CFixedPoint)1' ), NotEqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), "
@@ -7454,12 +7459,12 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn("gm_dedicate_button = {}", card)
         sec = squash(strip_comments(read(WIDGET).split("type te_gm_sec_awaiting = flowcontainer {", 1)[1]
                                     .split("type te_gm_sec_monuments", 1)[0]))
-        self.assertIn("visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
                       "'gm_disp_count_awaiting'), '(CFixedPoint)0' )]\"", sec)
-        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gm_states')]\"", sec)
+        self.assertIn("datamodel = \"[Country.MakeScope.GetList('gm_states')]\"", sec)
         self.assertIn("datacontext = \"[Scope.GetState]\" visible = \"[EqualTo_CFixedPoint( State.MakeScope"
                       ".ScriptValue('gm_state_disp_awaiting'), '(CFixedPoint)1' )]\"", sec)
-        self.assertIn("gm_site_row = {} gm_dedicate_button = {}", sec)
+        self.assertIn(DEDICATE_SLOT, sec)
         # The section's gate and its rows read the same trigger.
         values = read(VALUES)
         self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_disp_count_awaiting")))

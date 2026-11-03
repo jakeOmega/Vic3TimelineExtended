@@ -575,7 +575,6 @@ UNBOUND = set([
 
     "tax_code",
 
-    "grand_monuments",
 
     "colonial_empire",
 

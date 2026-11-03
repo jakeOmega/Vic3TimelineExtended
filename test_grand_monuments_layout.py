@@ -8,7 +8,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import assert_wide_matches_narrow, load_loc, mod_types, panel_loc_keys, panel_view, unguarded
 from scripts.generators import gen_te_systems_window as window_gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -37,6 +37,9 @@ REFERENCE = ["te_gm_sec_how"]
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
+# The composers' gate: the tab's own, on the shown country (the journal entry's
+# roots keep [JournalEntry.IsActive]).
+TAB_GATE = "GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 FLAGS = {"gm_commission_closed", "gm_decisions_closed", "gm_national_closed", "gm_awaiting_closed",
          "gm_monuments_closed"}
 LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_national",
@@ -170,7 +173,10 @@ class OrderTest(unittest.TestCase):
             self.assertIn('visible = "[JournalEntry.IsActive]"', body, root)
             self.assertIn(f"{inner} = {{}}", body, root)
             self.assertIn(f'name = "{root}" container = "{container}"', je, root)
-            self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(gui, inner), inner)
+            # The composer reads the tab's own gate on the shown country, which
+            # another country's National Info has with no entry (charts-help-
+            # national-info spec § 6.3); the root keeps the entry's.
+            self.assertIn(f'visible = "[{TAB_GATE}]"', _type_body(gui, inner), inner)
         self.assertEqual(len(re.findall(r'(?m)^\tname = "', gui)), len(ROOTS))
 
 
@@ -285,7 +291,7 @@ class StateGatedTest(unittest.TestCase):
         where the overview flags something to act on): its icon lit, its red
         word and its remedy shown while it holds, the sentence on hover."""
         ov = _squash(_strip_comments(_type_body(_gui(), "te_gm_overview_panel")))
-        shown = "GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+        shown = "GetScriptedGui('gm_hard_times_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
         head = ('te_banking_ov_cell = { tooltip = "[SelectLocalization( ' + shown
                 + ", 'gm_je_ov_hard_times_tt', 'gm_je_ov_hard_times_none_tt' )]\"")
         self.assertIn(head, ov, "no Hard Times cell")
@@ -314,27 +320,31 @@ class StateGatedTest(unittest.TestCase):
         (owner, play-test round 2)."""
         nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
         for key in FRACS:
-            self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+            self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( Country.MakeScope"
                           f".ScriptValue('gm_display_{key}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_{key}\"",
                           nat, key)
         for ig in IGS:
-            self.assertIn(f"gm_value_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+            self.assertIn(f"gm_value_row = {{ visible = \"[NotEqualTo_CFixedPoint( Country.MakeScope"
                           f".ScriptValue('gm_display_ig_{ig}'), '(CFixedPoint)0' )]\"", nat, ig)
 
     def test_headings_over_groups_that_can_be_empty_carry_the_groups_gate(self):
         nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
-        self.assertIn("gm_subheader = { visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
-                      ".ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]\"", nat)
+        # The groups' ledgers are the player's own: the group's gate on a
+        # wrapper, the guard inside it, the heading first (owner call 5).
+        self.assertIn("flowcontainer = { visible = \"[EqualTo_CFixedPoint( Country.MakeScope"
+                      ".ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]\" direction = vertical ignoreinvisible = yes "
+                      "flowcontainer = { using = te_own_country_only direction = vertical ignoreinvisible = yes "
+                      "spacing = 2 gm_subheader = { blockoverride \"subheader_text\" { text = \"gm_je_sub_approval\"", nat)
         fading = re.search(r'gm_subheader = \{ visible = "\[Or\((.*?)\)\]" blockoverride "subheader_text" '
                            r'\{ text = "gm_je_sub_fading" \}', nat)
         self.assertTrue(fading)
         for ledger in FADING:
             self.assertIn(f"ScriptValue('gm_display_{ledger}')", fading.group(1))
-        self.assertIn("gm_subheader = { visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+        self.assertIn("gm_subheader = { visible = \"[EqualTo_CFixedPoint( Country.MakeScope"
                       ".ScriptValue('gm_disp_boon_any'), '(CFixedPoint)1' )]\" blockoverride \"subheader_text\" "
                       "{ text = \"gm_je_sub_boons\" }", nat)
         for boon in BOONS:
-            self.assertIn(f"gm_value_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+            self.assertIn(f"gm_value_row = {{ visible = \"[NotEqualTo_CFixedPoint( Country.MakeScope"
                           f".ScriptValue('gm_disp_boon_{boon}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_boon_{boon}\"",
                           nat, boon)
 
@@ -346,12 +356,16 @@ class StateGatedTest(unittest.TestCase):
         # first when nothing is in force (test_the_empty_state_covers_every_row
         # holds the gate).
         panel = _squash(_strip_comments(_type_body(gui, "te_gm_sec_national")).split("gm_panel = {", 1)[1])
+        # The heading and its buttons are the player's own, in one guard.
         self.assertTrue(panel.startswith('visible = "[Not(GetVariableSystem.Exists(\'gm_national_closed\'))]" '
-                                         'spacing = 2 gm_subheader = { blockoverride "subheader_margin" {} '
+                                         'spacing = 2 flowcontainer = { using = te_own_country_only '
+                                         'direction = vertical ignoreinvisible = yes spacing = 2 '
+                                         'minimumsize = { 480 -1 } maximumsize = { 480 -1 } '
+                                         'gm_subheader = { blockoverride "subheader_margin" {} '
                                          'blockoverride "subheader_text" { text = "gm_je_sub_policy" '
                                          'tooltip = "gm_je_sub_policy_tt" } }'), panel[:300])
         effects = panel.split('text = "gm_je_sub_in_force" } }', 1)[1]
-        self.assertTrue(effects.startswith(' gm_text = { visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry'
+        self.assertTrue(effects.startswith(' gm_text = { visible = "[EqualTo_CFixedPoint( Country'
                                            '.MakeScope.ScriptValue(\'gm_disp_national_any\'), \'(CFixedPoint)0\' )]" '
                                            'text = "gm_je_national_none" }'), effects[:300])
         # What a level is worth is said once, on the overview's last line
@@ -369,7 +383,7 @@ class StateGatedTest(unittest.TestCase):
         self.assertNotIn("gm_site_row_rate", _type_body(gui, "gm_site_row"))
         # Our Monuments: the empty-state line shows exactly when the list is empty.
         mon = _squash(_type_body(gui, "te_gm_sec_monuments"))
-        self.assertIn("gm_text = { visible = \"[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+        self.assertIn("gm_text = { visible = \"[EqualTo_CFixedPoint( Country.MakeScope"
                       ".ScriptValue('gm_display_count'), '(CFixedPoint)0' )]\" text = \"gm_je_monuments_none\" }", mon)
         # ... and when every monument is contested, in the section above.
         self.assertIn("ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)0' ) )]\" "
@@ -389,7 +403,7 @@ class DecisionSectionTest(unittest.TestCase):
     def test_gated_on_the_contested_count(self):
         sec = _squash(_strip_comments(_type_body(_gui(), "te_gm_sec_decisions")))
         self.assertTrue(sec.startswith("direction = vertical parentanchor = hcenter ignoreinvisible = yes spacing = 4 "
-                                       "visible = \"[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+                                       "visible = \"[GreaterThan_CFixedPoint( Country.MakeScope"
                                        ".ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' )]\""))
         self.assertIn('text = "gm_je_decisions_header"', sec)
         self.assertIn("gm_disp_count_contested", _squash(_block(_read(VALUES), "gm_disp_count_listed_rest")))
@@ -652,7 +666,7 @@ class IconsTest(unittest.TestCase):
         ov = _squash(_type_body(_gui(), "te_gm_overview_panel"))
         self.assertEqual(ov.count("te_banking_ov_cell = {"), 4)
         for value, code in CELLS.items():
-            gt = (f"GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('{value}'), "
+            gt = (f"GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('{value}'), "
                   f"'(CFixedPoint)0' )")
             cell = re.search(r'blockoverride "cell_texture" \{ texture = "([^"]+)" \} '
                              r'blockoverride "lit" \{ visible = "\[' + re.escape(gt) + r'\]" \} '
@@ -956,7 +970,7 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(font, "gm_fontsize_overview")
         # The 1836 figure prints whole (|0); the rate to three places.
         value = self.loc["gm_je_world_rate"].replace(
-            "[JournalEntry.GetCountry.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]", "5")
+            "[Country.MakeScope.ScriptValue('gm_level_grandeur_1836')|0]", "5")
         text = _rendered(value, self.loc, "5.000")
         self.assertEqual(text, "A level built now adds 5.000 Grandeur (5 in 1836)")
         need = len(text) * UNITS[font] * MARGIN
@@ -1298,7 +1312,7 @@ class SignatureRowsTest(unittest.TestCase):
         self.assertLess(nat.find('tooltip = "gm_je_tt_industrial"'), positions[0])
         self.assertLess(positions[-1], nat.find('text = "gm_je_sub_approval"'))
         for k in SIG_ROWS:
-            self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope"
+            self.assertIn(f"gm_step_row = {{ visible = \"[NotEqualTo_CFixedPoint( Country.MakeScope"
                           f".ScriptValue('gm_display_sig_{k}'), '(CFixedPoint)0' )]\" tooltip = \"gm_je_tt_sig_{k}\"",
                           nat, k)
             self.assertIn(f"ScriptValue('gm_disp_frac_sig_{k}')", nat, k)
@@ -1361,6 +1375,69 @@ class WideLayoutTest(unittest.TestCase):
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "grand_monuments")
         self.assertEqual((tab.layout, tab.wide), ("te_gm_tab_layout", "te_gm_wide_sections"))
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's National Info leaves out of Grand Monuments
+    (owner call 5 of docs/superpowers/plans/2026-11-02-charts-help-national-info.md;
+    spec § 6.4): the open opportunity and the interest groups' ledgers sit
+    under te_own_country_only. Read as that panel draws te_gm_wide_sections
+    (gui_test_helpers.panel_view: guarded parts and overridden block defaults
+    left out) and the loc it renders. The gates stay outside the guards, so the
+    player's own panel shows each part exactly when it did before."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view({"te_gm_wide_sections"}, cls.types)
+        cls.keys = panel_loc_keys({"te_gm_wide_sections"}, cls.types, load_loc())
+
+    def _drawn(self, name):
+        """A type's body as another country's panel draws it, its guarded parts blanked."""
+        self.assertIn(name, self.view.open, f"{name}: another country's panel draws it")
+        return _squash(unguarded(self.types[name].body, self.view.skip[name]))
+
+    def test_the_open_opportunity(self):
+        sec = self._drawn("te_gm_sec_commission")
+        self.assertIn("visible = \"[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_com_open'), "
+                      "'(CFixedPoint)1' )]\"", sec, "the gate stays on the root, read on the shown country")
+        for gone in ("gm_je_commission_header", "gm_je_com_", "gm_disp_com_frac", "gm_com_raise_sgui",
+                     "gm_com_let_pass_sgui"):
+            self.assertNotIn(gone, sec)
+        self.assertIn("gm_je_commission_header", self.types["te_gm_sec_commission"].body, "the player's has it")
+        # A monument's row says it counts toward the open opportunity: the player's own line.
+        row = self._drawn("gm_monument_row")
+        self.assertIn("ScriptValue('gm_state_disp_com_counts')", row, "the line's gate is the wrapper's")
+        self.assertNotIn("gm_row_com_counts", row)
+        self.assertFalse(sorted(k for k in self.keys if k.startswith(("gm_je_com_", "gm_button_com_", "gm_row_com_"))))
+
+    def test_the_interest_groups_ledgers(self):
+        nat = self._drawn("te_gm_sec_national")
+        self.assertIn("ScriptValue('gm_disp_ig_any')", nat, "the group's gate is the wrapper's")
+        for ig in IGS:
+            self.assertNotIn(f"gm_display_ig_{ig}", nat, ig)
+            self.assertNotIn(f"gm_je_tt_ig_{ig}", self.keys, ig)
+        for key in ("gm_je_sub_approval", "gm_je_tt_ig"):
+            self.assertNotIn(key, self.keys)
+        # The national effects, the fading legitimacy and the boons are the country's, and public.
+        for key in ("gm_je_tt_prestige", "gm_je_tt_legitimacy", "gm_je_tt_sig_antiquity", "gm_je_tt_teardown",
+                    "gm_je_tt_vanity", "gm_je_tt_boon_reign", "gm_je_tt_sig_held_olympic"):
+            self.assertIn(key, self.keys, key)
+
+    def test_the_rest_is_public(self):
+        """Monuments built and under way, the national effects, trophies,
+        works abroad and archaeology (spec § 6.4), without their controls
+        (test_te_system_tab_bodies.py's GuardTest)."""
+        for name in ("te_gm_overview_panel", "te_gm_sec_decisions", "te_gm_sec_awaiting", "te_gm_sec_archaeology",
+                     "te_gm_sec_national", "te_gm_sec_monuments", "te_gm_sec_trophies", "te_gm_sec_abroad",
+                     "gm_monument_row", "gm_site_row", "gm_mon_row_site", "gm_tr_row_held", "gm_tr_row_abroad",
+                     "gm_arch_row_digging", "gm_arch_row_open"):
+            self.assertIn(name, self.view.open, name)
+        for key in ("gm_je_monuments_header_theirs", "gm_je_ov_monuments_label_theirs", "gm_tr_row_held_by",
+                    "gm_je_tr_summary", "gm_je_abroad_summary", "gm_je_arch_summary", "gm_site_row_title"):
+            self.assertIn(key, self.keys, key)
+        for key in ("gm_je_monuments_header_ours", "gm_je_ov_monuments_label_ours", "gm_tr_row_held_by_tt"):
+            self.assertNotIn(key, self.keys, f"{key}: the player's own")
 
 
 if __name__ == "__main__":
