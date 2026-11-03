@@ -6752,16 +6752,16 @@
   "de": "Vorstoß zur Reform der Wahlkampffinanzierung"
  },
  "ce_unlock_colonies_tt": {
-  "en": "You hold an overseas colony or a colonial subject",
-  "de": "Sie besitzen eine Überseekolonie oder ein koloniales Klientelland"
+  "en": "Holds an overseas colony or a colonial subject",
+  "de": "Besitzt eine Überseekolonie oder ein koloniales Klientelland"
  },
  "ce_unlock_no_collapse_tt": {
-  "en": "Your colonial system has not collapsed in the last ten years",
-  "de": "Ihr Kolonialsystem ist in den letzten zehn Jahren nicht zusammengebrochen"
+  "en": "The colonial system has not collapsed in the last ten years",
+  "de": "Das Kolonialsystem ist in den letzten zehn Jahren nicht zusammengebrochen"
  },
  "ce_unlock_not_secured_tt": {
-  "en": "Your colonial empire has not been secured already: once it is, the entry does not return",
-  "de": "Ihr Kolonialreich wurde noch nicht gesichert: Ist es einmal gesichert, kehrt der Eintrag nicht zurück"
+  "en": "The colonial empire has not been secured already: once it is, the entry does not return",
+  "de": "Das Kolonialreich wurde noch nicht gesichert: Ist es einmal gesichert, kehrt der Eintrag nicht zurück"
  },
  "ch_board_detail_1": {
   "en": "#title [concept_cultural_pull_components]#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'ch_board_row_gone')]\\n  [concept_ch_art_production]: #v [GetGlobalVariable('ch_rank_1_art').GetValue|1]#!\\n  [concept_ch_prestige]: #v [GetGlobalVariable('ch_rank_1_prs').GetValue|1]#!\\n  [concept_ch_sol]: #v [GetGlobalVariable('ch_rank_1_sol').GetValue|1]#!\\n  [concept_ch_tech_leadership]: #v [GetGlobalVariable('ch_rank_1_tech').GetValue|1]#!\\n  [concept_cultural_pull_raw_score]: #v [GetGlobalVariable('ch_rank_1_raw').GetValue|1]#!\\n#lore As of the last yearly recount.#!",

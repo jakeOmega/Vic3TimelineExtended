@@ -343,19 +343,35 @@ class CountryPanelTest(unittest.TestCase):
 
     def test_a_line_says_where_the_hidden_ones_went(self):
         """2026-10-27 audit, NAT-1: under the list, while it leaves a modifier out, a line counts them; for the
-        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window)."""
+        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window). For
+        another country a goto opens National Info on its Nation tab (spec 2026-11-02-charts-help-national-info
+        § 6.2, way in 3): the window's tab first (te_ni_tab, PR F1's key), then vanilla's way into the window, as
+        the country's Politics tab opens it (country_politics_panel.gui)."""
         panel = _read(gen.PANEL_OUT)
         at = panel.index("### MOD: Nation tab: where the modifiers the list leaves out went")
         block = panel[at:panel.index(gen.MOD_CLOSE, at)]
         self.assertGreater(at, panel.index('datamodel = "[Country.GetTimedModifiers]"'))
         self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
                       "'gui_country_hidden_modifier_count'), '(CFixedPoint)0' )]\"", block)
-        goto = block[block.index("button_icon_goto = {"):]
-        self.assertIn('visible = "[Country.IsLocalPlayer]"', goto)
-        clicks = re.findall(r'onclick = "(.*)"', goto)
-        self.assertEqual(clicks, ["[GetVariableSystem.Set('te_systems_window_tab', 'nation')]",
-                                  "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"])
+        gotos = block.split("button_icon_goto = {")[1:]
+        self.assertEqual(len(gotos), 2)
+        own, other = (goto[:goto.index("\n\t\t\t}")] for goto in gotos)
+        self.assertIn('visible = "[Country.IsLocalPlayer]"', own)
+        self.assertIn('tooltip = "te_nation_panel_goto_tt"', own)
+        self.assertEqual(re.findall(r'onclick = "(.*)"', own),
+                         ["[GetVariableSystem.Set('te_systems_window_tab', 'nation')]",
+                          "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"])
+        self.assertIn('visible = "[Not( Country.IsLocalPlayer )]"', other)
+        self.assertIn('tooltip = "te_nation_panel_goto_other_tt"', other)
+        self.assertEqual(re.findall(r'onclick = "(.*)"', other),
+                         ["[GetVariableSystem.Set('te_ni_tab', 'nation')]",
+                          "[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]"])
         loc = _loc()
+        # the window by its own name, the country's adjective in front (POP_BROWSER)
+        for key in ("te_nation_panel_goto_other_tt", "te_nation_panel_line_other_tt"):
+            with self.subTest(key=key):
+                self.assertIn("$POP_BROWSER$", loc[key])
+                self.assertIn("$te_window_tab_nation$", loc[key])
         for key in re.findall(r"'?(te_nation_panel_\w+)'?", block):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
@@ -527,6 +543,107 @@ class TabLayoutTest(unittest.TestCase):
         self.assertEqual(overview.count("te_nation_ov_cell = {"), 5)
         self.assertIn('text = "te_nation_ov_jud_cap"', overview)
 
+    # The UN lines' rows, each with the UN display code it reads and the UN
+    # overview's words for that code (gui/journal_entry_widgets/un_overview_widget.gui).
+    # The UN lines' rows: the UN display code each reads, the UN overview's
+    # words for its values in order (gui/journal_entry_widgets/un_overview_widget.gui),
+    # and the one other value the row may read, its figure's condition.
+    UN_ROWS = (
+        ("te_nation_un_member_row", "un_disp_member_code", [f"je_un_ov_member_{i}" for i in range(1, 7)], None),
+        ("te_nation_un_standing_row", "un_disp_standing_code", [f"je_un_ov_standing_{i}" for i in range(0, 7)],
+         None),
+        ("te_nation_un_dues_row", "un_disp_dues_code", [f"je_un_ov_dues_{i}" for i in range(1, 6)],
+         "un_disp_arrears_months"),
+    )
+    # A branch of a code's SelectLocalization chain: the value tested and the
+    # key it picks, whose last _N must be that value.
+    UN_BRANCH = re.compile(r"EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('(\w+)'\), "
+                           r"'\(CFixedPoint\)(-?\d+)' \), '(\w+?_(-?\d+))'")
+
+    def _assert_chain(self, text, code, keys):
+        """text picks keys[i] for each value of code in order, the last one
+        the fallback: each branch's value is its key's suffix, and every
+        branch tests code."""
+        branches = self.UN_BRANCH.findall(text)
+        self.assertEqual([key for _, _, key, _ in branches], keys[:-1])
+        for tested, value, key, suffix in branches:
+            with self.subTest(key=key):
+                self.assertEqual(tested, code)
+                self.assertEqual(value, suffix)
+        self.assertIn(f"'{keys[-2]}', '{keys[-1]}' )", text)
+
+    def test_the_un_lines(self):
+        """The United Nations in International (spec
+        2026-11-02-charts-help-national-info § 6.4; the owner put Nation with
+        the UN lines on the public list, the UN's own tab private): the
+        country's seat, its standing and its dues, with any arrears, once a UN
+        exists. They read the UN's own display codes, the overview's
+        (common/script_values/un_overview_display_values.txt), which ask the
+        entry's modifiers through je: in script and so read any country, and
+        they say what the overview says. The section shows while they do, or
+        while its type rows do."""
+        un_on = "GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )"
+        types_on = ("GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), "
+                    "'(CFixedPoint)0' )")
+        body = self._type("te_nation_section_international")
+        self.assertEqual(body.split("\n")[1].strip(), f'visible = "[Or( {un_on}, {types_on} )]"')
+        at = body.index('text = "te_nation_un_member_row"')
+        block = body[body.rindex("flowcontainer = {", 0, at):body.index("te_nation_types_international = {}")]
+        self.assertEqual(block.split("\n")[1].strip(), f'visible = "[{un_on}]"')
+        self.assertEqual(re.findall(r'text = "(te_nation_un_\w+)"', block), [row for row, _, _, _ in self.UN_ROWS])
+        # standing once the country has a score (a member, or one that left);
+        # dues while it is a member
+        rows = block.split("te_nation_row = {")[1:]
+        self.assertNotIn("visible", rows[0])
+        self.assertIn("visible = \"[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_standing_code'), "
+                      "'(CFixedPoint)-1' ) )]\"", rows[1])
+        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_dues_code'), "
+                      "'(CFixedPoint)0' )]\"", rows[2])
+        loc = _loc()
+        for row, code, words, figure in self.UN_ROWS:
+            with self.subTest(row=row):
+                self.assertIn(f'tooltip = "{row}_tt"', block)
+                self.assertIn(f"{row}_tt", loc)
+                text = loc[row]
+                self.assertEqual(re.findall(r"'(je_un_ov_\w+)'", text), words)
+                self._assert_chain(text, code, words)
+                for word in words:
+                    self.assertIn(word, loc, "the overview's word: without it the row shows a raw key")
+                self.assertNotIn("JournalEntry", text)
+                self.assertLessEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", text)), {code, figure} - {None})
+                self.assertTrue(text.startswith("[concept_"), "Label: value, the label a concept (rule 3)")
+        # The figures: the score unless the country is not yet rated (code 1),
+        # the months in arrears while any are owed; each reads its own value.
+        self.assertIn("[AddLocalizationIf( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
+                      "'un_disp_standing_code'), '(CFixedPoint)1' ) ), 'te_nation_un_standing_fig' )]",
+                      loc["te_nation_un_standing_row"])
+        self.assertIn("[AddLocalizationIf( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
+                      "'un_disp_arrears_months'), '(CFixedPoint)0' ), 'te_nation_un_arrears' )]",
+                      loc["te_nation_un_dues_row"])
+        for key, value in (("te_nation_un_standing_fig", "un_disp_standing"),
+                           ("te_nation_un_arrears", "un_disp_arrears_months")):
+            with self.subTest(key=key):
+                self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", loc[key])), {value})
+        # The seat's hover says what each state means, Cannot Join and Not a
+        # Member included; the dues' says who pays where the overlord does.
+        self._assert_chain(loc["te_nation_un_member_row_tt"], "un_disp_member_code",
+                           [f"te_nation_un_member_tt_{i}" for i in range(1, 7)])
+        self._assert_chain(loc["te_nation_un_dues_basis_tt"], "un_disp_dues_code",
+                           ["te_nation_un_dues_tt_1", "te_nation_un_dues_rate_tt"])
+        for key in [f"te_nation_un_member_tt_{i}" for i in range(1, 7)] + ["te_nation_un_dues_tt_1"]:
+            with self.subTest(key=key):
+                self.assertIn(key, loc)
+        self.assertIn("$te_nation_un_dues_basis_tt$", loc["te_nation_un_dues_arrears_tt"])
+        self.assertIn("'te_nation_un_dues_arrears_tt', 'te_nation_un_dues_basis_tt' )",
+                      loc["te_nation_un_dues_row_tt"])
+        values = "".join(_read(ROOT / "common" / "script_values" / name)
+                         for name in ("un_overview_display_values.txt", "un_dues_values.txt"))
+        defined = set(re.findall(r"^(\w+) = \{", values, re.M))
+        text = block + "\n".join(v for k, v in loc.items() if k.startswith("te_nation_un_"))
+        used = set(re.findall(r"ScriptValue\('(un_\w+)'\)", text))
+        self.assertGreaterEqual(len(used), 6)
+        self.assertLessEqual(used, defined)
+
     def test_the_construction_hover_gives_the_curve(self):
         # Spec § 2.2: GDP per capita against the curve's floor and ceiling; since #1034's follow-up
         # also the slack part, and the cost as factors (the owner's breakdown, 2026-10-18).
@@ -546,7 +663,7 @@ class TabLayoutTest(unittest.TestCase):
         for key, modifier in (("te_nation_construction_breakdown", "goods_input_construction_mult"),
                               ("te_nation_construction_breakdown_direct", "country_construction_goods_cost_mult")):
             self.assertIn(f"'{key}'", tt)
-            self.assertIn(f"GetPlayer.GetModifier.GetValueWithBreakdownFor('{modifier}')", loc[key])
+            self.assertIn(f"Country.GetModifier.GetValueWithBreakdownFor('{modifier}')", loc[key])
 
     def _nation_loc(self):
         return {k: v for k, v in _loc().items() if k.startswith(("te_nation_", "te_window_tab_nation"))}
@@ -632,12 +749,22 @@ class TabLayoutTest(unittest.TestCase):
         # (demographics_rule): point to it only while it is there.
         self.assertNotIn("Demographics tab", _loc()["te_nation_wc_row_tt"])
         self.assertIn("te_pops_demog_tab_sgui", self.gui)
+        # Another country's (National Info, spec 2026-11-02-charts-help-national-info
+        # § 6.8): its Demographics tab is in the window it is shown in, not the
+        # player's Population panel.
+        self.assertIn("SelectLocalization( Country.IsLocalPlayer, 'te_nation_wc_row_demog_tt', "
+                      "'te_nation_wc_row_demog_other_tt' )", self.gui)
+        other = _loc()["te_nation_wc_row_demog_other_tt"]
+        self.assertIn("$POP_BROWSER$", other)
+        self.assertNotIn("Population", other)
 
     def test_formatters_are_the_mods_proven_ones(self):
+        # D: money, as the UN overview's Dues figure prints what is owed
+        # (je_un_ov_dues_fig_4), which the UN lines' arrears hover repeats.
         for key, value in self._nation_loc().items():
             for fmt in re.findall(r"\|([^\]]*)\]", value):
                 with self.subTest(key=key, fmt=fmt):
-                    self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0"))
+                    self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0", "D"))
 
     def test_names_are_spliced_not_spelled(self):
         # Single-source names: a name another key owns is spliced ($key$).
@@ -650,6 +777,29 @@ class TabLayoutTest(unittest.TestCase):
             for name in names:
                 with self.subTest(key=key, name=name):
                     self.assertNotIn(name, value)
+
+
+class ForeignViewTest(unittest.TestCase):
+    """Another country's Nation tab, in National Info (spec
+    2026-11-02-charts-help-national-info § 6.4: Nation shows another country
+    everything; its Hidden column is empty). test_te_system_tab_bodies.py's
+    BindingTest holds its reads to the shown Country and GuardTest its
+    controls to te_own_country_only; this holds the tab to having nothing to
+    hide and nothing that acts."""
+
+    def test_nothing_is_hidden_and_nothing_acts(self):
+        from gui_test_helpers import CONTROL, GUARD, mod_types, type_closure
+        tab = next(t for t in window_gen.TABS if t.key == "nation")
+        self.assertTrue(tab.public)
+        types = mod_types()
+        closure = type_closure({tab.wide}, types)
+        self.assertGreater(len(closure), 15)
+        for name in sorted(closure):
+            body = types[name].body
+            with self.subTest(type=name):
+                self.assertNotIn(GUARD, body, "nothing on the Nation tab is private (spec § 6.4)")
+                self.assertIsNone(CONTROL.search(body), "the Nation tab has no control: one goes under "
+                                                        "te_own_country_only (GuardTest), and this test changes")
 
 
 class NoUnderlineTest(unittest.TestCase):
