@@ -552,6 +552,11 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetNameNoFormatting": "value",
         "GetCityHubName": "value",
         "GetFarmHubName": "value",
+        # vanilla uses the next three rarely (Port, Forestry) or never (Mine), but all five hub accessors are in
+        # victoria3.exe (2026-11-03); the Demographics tab's Largest Cities names a state's towns with them
+        "GetPortHubName": "value",
+        "GetMineHubName": "value",
+        "GetForestryHubName": "value",
         "GetCountry": "country",
         "GetOwner": "country",
         # State value / state infamy "perspective" accessors both return the

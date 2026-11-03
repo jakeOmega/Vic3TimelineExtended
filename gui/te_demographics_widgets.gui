@@ -694,14 +694,70 @@ types te_demographics_widgets
 		}
 	}
 
-	### One of the three largest cities (te_dg_cities; datacontext State): the state, which counts as one city, and its
-	### urban people.
+	### One of the Largest Urban States (te_dg_cities; datacontext State): the state, which counts as one city in the
+	### urban pattern, and its urban people.
 	type te_demog_city_row = te_demog_state_link_row {
 		blockoverride "link_tooltip" {
 			tooltip = "te_demog_city_row_tt"
 		}
 		blockoverride "link_value" {
 			text = "te_demog_city_row_value"
+		}
+	}
+
+	### One of the Largest Cities (owner, 2026-11-03; datacontext State, the town's state): a button that opens the state
+	### on its Demographics subtab, as te_demog_state_link_row does, with the town's name, its state's and its people.
+	### gui/te_demographics_towns_generated.gui places six per slot, one for each kind of town, and sets "town_shown"
+	### (the slot's kind), "town_tooltip", "town_name" and "town_people" (the slot's figure). Fixed cells, 4 + 184 + 196
+	### + 84 and two 4 px gaps = 476 inside the 480 row; the state's name shrinks to 12 before it elides, as the States
+	### table's does, and the town's elides (only a state's name shrinks: test_demographics_layout.FontTest).
+	type te_demog_town_row = button {
+		using = default_button
+		size = { 480 28 }
+		block "town_shown" {}
+		block "town_tooltip" {}
+		onclick = "[InformationPanelBar.OpenStatePanel( State.AccessSelf )]"
+		onclick = "[GetVariableSystem.Set('population_subtab', 'te_demog')]"
+		onrightclick = "[RightClickMenuManager.ShowForState(State.AccessSelf)]"
+		onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+			position = { 4 0 }
+			parentanchor = vcenter
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 184 -1 }
+				maximumsize = { 184 -1 }
+				align = left|nobaseline
+				using = te_demog_fontsize_row
+				elide = right
+				block "town_name" {}
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 196 -1 }
+				maximumsize = { 196 -1 }
+				align = left|nobaseline
+				using = te_demog_fontsize_row
+				fontsize_min = 12
+				elide = right
+				default_format = "#weak"
+				text = "[State.GetNameNoFormatting]"
+			}
+			textbox = {
+				autoresize = yes
+				minimumsize = { 84 -1 }
+				maximumsize = { 84 -1 }
+				align = right|nobaseline
+				using = te_demog_fontsize_row
+				default_format = "#v"
+				block "town_people" {}
+			}
 		}
 	}
 
@@ -2965,8 +3021,9 @@ types te_demographics_widgets
 		}
 	}
 
-	### Where people live: the national urban pattern (spec §5.1), then the
-	### three largest cities, a state each, by the game's city ranking.
+	### Where people live: the national urban pattern (spec §5.1); then the Largest Cities, real towns by name (owner,
+	### 2026-11-03: te_demog_town_rows, three and the rest to ten under Show All); then the Largest Urban States, the
+	### three states the game's city ranking puts first, each counted as one city.
 	type te_demog_sec_places = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3070,6 +3127,36 @@ types te_demographics_widgets
 							text = "te_demog_mt_list_value"
 						}
 					}
+				}
+			}
+
+			te_demog_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_demog_towns_head"
+				}
+			}
+			te_demog_text = {
+				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_tw_l1') )]"
+				text = "te_demog_towns_none"
+			}
+			te_demog_town_rows = {}
+			### Show All under the rows (rule 6), while a fourth town is listed
+			button = {
+				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_tw_l4') ) )]"
+				using = default_button_action
+				size = { 240 28 }
+				parentanchor = hcenter
+				onclick = "[GetVariableSystem.Toggle('te_demog_towns_all_open')]"
+				tooltip = "te_demog_towns_show_tt"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 230
+					elide = right
+					using = te_demog_fontsize_row
+					text = "[SelectLocalization( Not( GetVariableSystem.Exists('te_demog_towns_all_open') ), 'te_demog_towns_show_all', 'te_demog_towns_show_top' )]"
 				}
 			}
 

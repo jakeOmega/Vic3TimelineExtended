@@ -23,6 +23,8 @@ WIDGETS = os.path.join(GUI, "te_demographics_widgets.gui")
 LAYOUT = os.path.join(GUI, "te_demographics_layout.gui")
 POPS = os.path.join(GUI, "pops_overview.gui")
 BROWSER = os.path.join(GUI, "pop_browser_panel.gui")
+# The Largest Cities' rows (scripts/generators/gen_demog_towns.py).
+TOWNS = os.path.join(GUI, "te_demographics_towns_generated.gui")
 NATIONAL_INFO = os.path.join(GUI, "te_national_info_generated.gui")
 STATES = os.path.join(GUI, "states_panel.gui")
 CHART = os.path.join(GUI, "journal_entry_widgets", "te_history_chart.gui")
@@ -264,16 +266,18 @@ class FlagTest(unittest.TestCase):
                 self.assertTrue(flag.startswith("te_demog_"), "the panel's own namespace")
 
     def test_closed_flags_start_open_and_open_flags_start_collapsed(self):
+        # the Largest Cities' Show All flag draws its set side in the generated rows (te_demog_town_rows)
+        flat = self.flat + _norm(_read(TOWNS))
         for flag in set(_toggles(self.widgets)):
             shown_when_unset = f"Not(GetVariableSystem.Exists('{flag}'))"
             with self.subTest(flag=flag):
                 if flag.endswith("_closed"):
-                    self.assertTrue(shown_when_unset in self.flat, "a _closed section shows while the flag is unset")
+                    self.assertTrue(shown_when_unset in flat, "a _closed section shows while the flag is unset")
                 else:
-                    shown_when_set = self.flat.count(f"GetVariableSystem.Exists('{flag}')")
-                    self.assertGreater(shown_when_set, self.flat.count(shown_when_unset), "an _open one while set")
-                    self.assertLessEqual(self.flat.count(shown_when_unset), 1,
-                                         "an _open flag's unset side is drawn once (its header's arrow)")
+                    shown_when_set = flat.count(f"GetVariableSystem.Exists('{flag}')")
+                    self.assertGreater(shown_when_set, flat.count(shown_when_unset), "an _open one while set")
+                    self.assertLessEqual(flat.count(shown_when_unset), 1,
+                                         "an _open flag's unset side is drawn once (its header's arrow, or its button)")
 
     def test_sections_open(self):
         """Rule 1: the live sections start open."""
