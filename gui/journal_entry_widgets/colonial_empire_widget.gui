@@ -1612,25 +1612,31 @@ types colonial_empire_widget_types
 				### number. No eye marker. The row is te_ce_ov_bar_row: for the player an
 				### item of the entry's datamodel, under te_own_country_only; for another
 				### country, which has no entry here (National Info), the row alone, on
-				### its defaults.
+				### its defaults. The guard sits on a wrapper whose only child holds the
+				### datamodel, so another country's panel, which has no JournalEntry,
+				### never evaluates it: a widget inside an invisible container is not
+				### evaluated (gotcha #42's proven form).
 				flowcontainer = {
-					direction = vertical
-					ignoreinvisible = yes
 					parentanchor = hcenter
 					using = te_own_country_only
-					datamodel = "[JournalEntry.GetScriptedProgressBars]"
 
-					item = {
-						te_ce_ov_bar_row = {
-							blockoverride "bar_row_tooltip" {
-								tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-							}
-							blockoverride "bar_tick_tooltip" {
-								tooltip = "je_colonial_empire_ov_tick_tt"
-							}
-							blockoverride "bar_value" {
-								text = "je_colonial_empire_ov_stability_value"
-								tooltip = "je_colonial_empire_ov_heading_tt"
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						datamodel = "[JournalEntry.GetScriptedProgressBars]"
+
+						item = {
+							te_ce_ov_bar_row = {
+								blockoverride "bar_row_tooltip" {
+									tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+								}
+								blockoverride "bar_tick_tooltip" {
+									tooltip = "je_colonial_empire_ov_tick_tt"
+								}
+								blockoverride "bar_value" {
+									text = "je_colonial_empire_ov_stability_value"
+									tooltip = "je_colonial_empire_ov_heading_tt"
+								}
 							}
 						}
 					}
@@ -3429,12 +3435,17 @@ types colonial_empire_widget_types
 	### The largest colonial powers (decol_world_refresh_display: the eight
 	### with the most people in their colonies and colonial subjects, monthly
 	### and after a change of stance), ours among them if it is one. A live
-	### list, so open by default (rule 1).
+	### list, so open by default (rule 1). Its list is the player's copy (the
+	### # world: reads below), and an observer has no GetPlayer, so the section
+	### is hidden for one: National Info draws it for any country, and each read
+	### would log a null-country line every frame (gui_modding_guide.md, An
+	### observer has no GetPlayer). Every instance is {} (gotcha #17).
 	type te_ce_sec_powers = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
 
 		colonial_empire_section_header = {
 			blockoverride "left_text" {

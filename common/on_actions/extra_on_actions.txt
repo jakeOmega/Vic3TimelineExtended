@@ -2011,13 +2011,14 @@ decolonization_events_on_action = {
 			}
 			decol_stance_monthly = yes
 		}
-		# The Colonial Empire tab's list of the colonial powers, for a player
-		# whose tab is open (ce_tab_unlocked), with the entry or without it.
+		# The Colonial Empire tab's list of the colonial powers, for every
+		# player, with the entry or without it, and whether or not their own tab
+		# is open: National Info shows another country's tab, The Colonial
+		# Powers among it, to a player who hasn't researched Decolonization.
 		if = {
 			limit = {
 				is_player = yes
 				has_game_rule = decolonization_enabled
-				ce_tab_unlocked = yes
 			}
 			decol_world_refresh_display = yes
 		}
