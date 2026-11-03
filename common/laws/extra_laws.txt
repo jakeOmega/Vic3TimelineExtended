@@ -3141,6 +3141,9 @@ law_traditional_heredity = {
 	# This is the default state before genetics are understood: once a law on
 	# genetic modification is in force there is no going back. State eugenics
 	# predates that understanding (era 5) and can be repealed back to here.
+	# All three genetic-modification laws open together with Gene Splicing (era 8):
+	# the legal question arrives with the first gene-splicing techniques, not with
+	# the later biotech industry (owner, 2026-11-03).
 	disallowing_laws = {
 		law_ban_on_genetic_modification
 		law_corporate_genetic_licensing
@@ -3167,7 +3170,7 @@ law_corporate_genetic_licensing = {
 	icon = "gfx/interface/icons/law_icons/law_corporate_genetic_licensing.dds"
 	progressiveness = 10
 
-	unlocking_technologies = { biotechnology }
+	unlocking_technologies = { gene_splicing }
 
 	modifier = {
 		country_company_throughput_bonus_add = 0.10
@@ -3180,7 +3183,7 @@ law_open_source_genetics = {
 	icon = "gfx/interface/icons/law_icons/law_open_source_genetics.dds"
 	progressiveness = 25
 
-	unlocking_technologies = { synthetic_biology }
+	unlocking_technologies = { gene_splicing }
 
 	modifier = {
 		building_group_bg_biotechnology_throughput_add = 0.25

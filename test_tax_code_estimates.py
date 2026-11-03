@@ -390,7 +390,7 @@ class EstimatePanelTest(unittest.TestCase):
         self.assertIn("'te_tax_est_static', 'te_tax_est_stale'", self.review)
         # before the first snapshot: no date (it would print -1.-1) and no base
         self.assertIn("ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', "
-                      "SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current')",
+                      "SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_current')",
                       self.review)
         self.assertIn("No economy snapshot yet", self.loc["te_tax_est_none"])
         self.assertNotIn("ScriptValue", self.loc["te_tax_est_none"])
@@ -400,7 +400,7 @@ class EstimatePanelTest(unittest.TestCase):
         note = re.search(r"te_tax_note = \{[^{}]*'te_tax_pol_est_note'[^{}]*\}", self.politics)
         self.assertIsNotNone(note)
         self.assertIn("ScriptValue('te_tax_view_snap_month'), '(CFixedPoint)-1' ), 'te_tax_est_none', "
-                      "SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_snap_current'), "
+                      "SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_snap_current'), "
                       "'(CFixedPoint)1' ), 'te_tax_pol_est_note', 'te_tax_pol_est_note_stale' )", note.group(0))
         self.assertIn('tooltip = "te_tax_pol_est_tt"', note.group(0))
         # The assumptions are one concept, written once (GUI audit TAX-19); each
@@ -421,14 +421,14 @@ class EstimatePanelTest(unittest.TestCase):
         for channel, (getter, keys) in CHANNELS.items():
             with self.subTest(channel=channel):
                 self.assertIn(f"ScriptValue('te_tax_view_est_{channel}_on')", self.review)
-                self.assertRegex(self.review, rf"SelectLocalization\( EqualTo_CFixedPoint\( GetPlayer\.MakeScope\."
+                self.assertRegex(self.review, rf"SelectLocalization\( EqualTo_CFixedPoint\( Country\.MakeScope\."
                                               rf"ScriptValue\('te_tax_view_est_{channel}_nobase'\), '\(CFixedPoint\)1' \), "
                                               rf"'te_tax_est_(?:nobase|dash)'")
                 forms = ("", "_range") if len(keys) > 1 else ("",)
                 for part in ("law", "bill", "delta"):
                     for form in forms:
                         text = self.loc[f"te_tax_est_{channel}_{part}{form}"]
-                        self.assertIn(f"Multiply_CFixedPoint( GetPlayer.{getter}, GetPlayer.MakeScope.ScriptValue(", text)
+                        self.assertIn(f"Multiply_CFixedPoint( Country.{getter}, Country.MakeScope.ScriptValue(", text)
                         for other in {g for g, _ in CHANNELS.values()} - {getter}:
                             self.assertNotIn(other, text)
                         # A two-tax line's single form prints the low bound, which equals
@@ -485,8 +485,8 @@ class EstimatePanelTest(unittest.TestCase):
             getter = CHANNELS[CHANNEL_OF[key]][0]
             text = self.loc[f"te_tax_ig_offer_est_{key}"]
             with self.subTest(key=key):
-                self.assertIn(f"Multiply_CFixedPoint( GetPlayer.{getter}, "
-                              f"GetPlayer.MakeScope.ScriptValue('te_tax_view_est_cut_{key}') )", text)
+                self.assertIn(f"Multiply_CFixedPoint( Country.{getter}, "
+                              f"Country.MakeScope.ScriptValue('te_tax_view_est_cut_{key}') )", text)
                 self.assertRegex(self.card, rf"ScriptValue\('te_tax_view_snap_{key}'\), '\(CFixedPoint\)0' \)( \))?, "
                                             rf"'te_tax_ig_offer_est_nobase'")
         for key in ("land", "head"):

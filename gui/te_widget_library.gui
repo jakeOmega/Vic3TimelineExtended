@@ -18,6 +18,11 @@
 ###                popup_size     the body's size, 640 × 620 by default
 ###                popup_list     the scrolled content
 ###                popup_footer   under the scrollarea, empty by default
+###                popup_close    both close buttons' onclick (the click
+###                               outside and the header's, with Escape):
+###                               clearing te_popup by default; National
+###                               Info's chart viewers clear te_ni_chart
+###                               (charts-help-national-info plan, PR F1)
 ###              Not yet seen in game (docs/testing/solar-colonies-playtest.md):
 ###              the layer over the journal panel and the Timeline Extended
 ###              window, Escape, and the panel behind still scrolling.
@@ -59,7 +64,11 @@ types te_widget_library_types
 		### A click outside the body: this button fills the screen behind it.
 		button_normal = {
 			size = { 100% 100% }
-			onclick = "[GetVariableSystem.Clear('te_popup')]"
+			### --- National Info's viewers close on their own key (PR F1) ---
+			block "popup_close" {
+				onclick = "[GetVariableSystem.Clear('te_popup')]"
+			}
+			### --- end National Info -----------------------------------------
 			using = close_button_sound
 		}
 
@@ -83,7 +92,11 @@ types te_widget_library_types
 						block "popup_title" {}
 					}
 					blockoverride "button_close" {
-						onclick = "[GetVariableSystem.Clear('te_popup')]"
+						### --- National Info's viewers close on their own key (PR F1)
+						block "popup_close" {
+							onclick = "[GetVariableSystem.Clear('te_popup')]"
+						}
+						### --- end National Info --------------------------------------
 					}
 				}
 

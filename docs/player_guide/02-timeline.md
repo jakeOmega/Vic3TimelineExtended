@@ -75,8 +75,9 @@ Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
-Drugs](#pharmaceutical-industries-and-drugs)). Containerization,
-Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
+Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
+Genetic Modification, Corporate Genetic Licensing and Open-Source Genetics laws.
+Containerization, Fiber Optics, Cellular Networks, Microprocessor, Stealth
 Technology and Video Games are also here.
 
 Era 9 is the internet age. World Wide Web opens the internet laws, Clean Energy
@@ -468,7 +469,9 @@ new level there would take at full throughput) and what the state adds to your
 claim weight there. The tile's tooltip has the national figures. Once you have
 researched Abyssal Plain Mining, every other coastal state, whoever owns it,
 shows its basin in an Ocean Basin tile, so you can see which pool a port there
-would weigh in.
+would weigh in. Another country's National Info has a Seabed tab with that
+country's overview and Ocean Basins table; the policy buttons and the claimant
+lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
@@ -573,7 +576,7 @@ need a large enough building of their industry.
 Biotechnology companies, the generic one and ten flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
 ([Economic law groups](06-politics.md#economic-law-groups)), which
-Biotechnology unlocks. Three of them come from fiction and unlock late: the
+Gene Splicing unlocks, a technology earlier than Biotechnology. Three of them come from fiction and unlock late: the
 Rosen Association's androids with Genetic Engineering, InGen's resurrected
 species with Synthetic Biology, and RejoovenEsense's longevity treatments with
 Rejuvenation Therapies.
@@ -752,7 +755,10 @@ shows, and any boon it carries, have run out.
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active, and it
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Grand Monuments tab with that country's monuments, national effects, trophies,
+works abroad and digs; the buttons, an open opportunity and Interest Group
+Approval are only on your own.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name

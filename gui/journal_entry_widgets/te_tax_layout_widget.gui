@@ -36,19 +36,23 @@ types te_tax_layout_widget_types
 	### its fixed_bottom, can leave this copy out. The light code's section
 	### comes first: it and the legislated code's never draw together, and
 	### placed first it shares the wide layout's first column with the
-	### overview (te_tax_wide_sections).
+	### overview (te_tax_wide_sections). The composers read the shown country,
+	### Country, which every mount supplies (the player's in the journal entry
+	### and the tabs, another country's in National Info), and are gated on the
+	### tab's own gate rooted on it (te_budget_tax_tab_sgui: the rule and an
+	### active entry), not on the entry, which another country's mount lacks.
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		# The light code's rates (te_tax_light_widget.gui; it gates itself).
 		te_tax_light_section = {}
 		# The legislated code's sections, hidden under the light setting.
 		flowcontainer = {
-			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
@@ -297,14 +301,14 @@ types te_tax_layout_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		# How the Light Tax Code Works (te_tax_light_widget.gui; it gates itself).
 		te_tax_light_how_section = {}
 		# The legislated code's history and explanation, hidden under the light
 		# setting, which keeps no history.
 		flowcontainer = {
-			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
@@ -320,8 +324,8 @@ types te_tax_layout_widget_types
 	### panel's Tax Code tab and the Timeline Extended window's. The overview
 	### and the two composers inside te_tax_tab_layout, which a wide mount
 	### overrides, then the frame's Open Journal Entry in the tab's row font.
-	### The types read the player's country (GetPlayer), so the datacontext
-	### serves only the IsActive gates and the link. Each frame draws the
+	### The types read the frame's Country, the player's, so the entry's
+	### datacontext serves only the link. Each frame draws the
 	### draft and bill summaries in its fixed_bottom, so the live sections
 	### leave their own copy out ("draft_summary").
 	type te_tax_tab_body = te_system_tab_frame {
@@ -379,12 +383,17 @@ types te_tax_layout_widget_types
 	### tab body leaves it out. The window's wide mount puts it in
 	### te_tax_tab_layout (gen_te_systems_window.py);
 	### test_tax_code_layout.WideTest checks it against the narrow layout.
+	### National Info draws it for another country (spec
+	### 2026-11-02-charts-help-national-info § 6.4): every section reads
+	### Country, and what is the player's own (the draft, the workbench and the
+	### review, the offers and promises, the interest groups' bargaining, every
+	### control) sits under te_own_country_only, test_tax_code_layout.PrivateTest.
 	type te_tax_wide_sections = te_ui_columns_three {
 		blockoverride "column_1" {
 			te_tax_overview_panel = {}
 
 			flowcontainer = {
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -392,7 +401,7 @@ types te_tax_layout_widget_types
 
 				te_tax_light_section = {}
 				flowcontainer = {
-					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 					direction = vertical
 					parentanchor = hcenter
 					ignoreinvisible = yes
@@ -407,7 +416,7 @@ types te_tax_layout_widget_types
 
 		blockoverride "column_2" {
 			flowcontainer = {
-				visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -419,7 +428,7 @@ types te_tax_layout_widget_types
 			}
 
 			flowcontainer = {
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -431,7 +440,7 @@ types te_tax_layout_widget_types
 
 		blockoverride "column_3" {
 			flowcontainer = {
-				visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				direction = vertical
 				parentanchor = hcenter
 				ignoreinvisible = yes
@@ -445,8 +454,9 @@ types te_tax_layout_widget_types
 }
 
 ### ==========================================================================
-### JOURNAL ENTRY ROOTS (je_tax_code.txt). Bare wrappers that repeat the
-### composers' IsActive gate: je_tax_code has is_shown_when_inactive, so the
+### JOURNAL ENTRY ROOTS (je_tax_code.txt). Bare wrappers gated on the
+### entry being active, as the composers are on the tab's gate (the same
+### test, on Country): je_tax_code has is_shown_when_inactive, so the
 ### panel can open for a country whose entry has not activated yet and so has
 ### none of the code's variables, and an inactive entry's containers must
 ### collapse (gotcha #14). Each root is exactly a section's width (520): a
