@@ -229,7 +229,7 @@ pm_te_direct_construction_arc_welded = {
 
 # pm_reinforced_concrete_buildings: 6 construction per level
 pm_te_direct_construction_reinforced_concrete = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_reinforced_concrete_buildings.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -277,7 +277,7 @@ pm_te_direct_construction_reinforced_concrete = {
 
 # pm_advanced_construction: 10 construction per level
 pm_te_direct_construction_advanced = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_advanced_construction.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -321,7 +321,7 @@ pm_te_direct_construction_advanced = {
 
 # pm_nanomaterial_buildings: 16 construction per level
 pm_te_direct_construction_nanomaterial = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_nanomaterial_buildings.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {
@@ -366,7 +366,7 @@ pm_te_direct_construction_nanomaterial = {
 
 # pm_self_replicating_construction: 24 construction per level
 pm_te_direct_construction_self_replicating = {
-	texture = "gfx/interface/icons/production_method_icons/cat_robot_gold_p3.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/production_method_icons/pm_self_replicating_construction.dds"
 	is_hidden_when_unavailable = yes
 
 	unlocking_technologies = {

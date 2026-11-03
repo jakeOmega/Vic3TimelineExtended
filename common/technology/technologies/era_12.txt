@@ -106,7 +106,7 @@ vactrains = {
 	# the transport technologies' Market Access Price Impact lines (+0.01 on five of them) already
 	# take a state to 100% at full technology (base 75%, vanilla's technologies +20%)
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/quantum_materials.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/vactrains.dds"
 	category = production
 
 	unlocking_technologies = {
@@ -266,7 +266,7 @@ rejuvenation_therapies = {
 	# Life extension short of its end (era 13 spec § 5.1): senolytics, partial reprogramming and organ renewal slow
 	# ageing for those in longevity care, while Biological Immortality (era 13) stops it. RejoovenEsense company
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/biological_immortality.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/rejuvenation_therapies.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -295,7 +295,7 @@ post_work_society = {
 	# Opens the Post-Scarcity Transition journal entry (era 13 spec § 5.3); Post-Scarcity Economy (era 13) requires it.
 	# Automation has made paid work optional for most: people turn to art, study, care and politics
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/universal_basic_income.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/post_work_society.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -318,7 +318,7 @@ morphological_freedom = {
 	# Morphological Freedom Debate journal entry (§ 7.2). Body modification for self-expression, not capability:
 	# appearance, sex characteristics, fur, tails. Clade Citizenship comes with Self-Directed Evolution (era 13)
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/genetic_engineering.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/morphological_freedom.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -339,7 +339,7 @@ liquid_democracy = {
 	# Liquid Democracy law, Distribution of Power (era 13 spec § 7.4); its Continuous Vote needs Neural Lace too
 	# Everyone may vote on every question or lend the vote to anyone they trust, and take it back at any time
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/universal_digital_identity.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/liquid_democracy.dds"
 	category = society
 
 	unlocking_technologies = {
@@ -361,7 +361,7 @@ geoengineering = {
 	# Society, not production: aircraft can already loft the aerosols, so what it stands for is the will
 	# to change the weather and the climate on purpose
 	era = era_12
-	texture = "gfx/interface/icons/invention_icons/environmental_movement.dds" # Placeholder Icon
+	texture = "gfx/interface/icons/invention_icons/geoengineering.dds"
 	category = society
 
 	unlocking_technologies = {

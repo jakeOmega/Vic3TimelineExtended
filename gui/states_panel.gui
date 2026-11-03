@@ -2322,7 +2322,7 @@ types state_panel_types
 				tooltip = "TE_STATE_CLIMATE_TT"
 
 				blockoverride "texture" {
-					texture = "gfx/interface/icons/state_trait_icons/tropical_climate.dds"
+					texture = "gfx/interface/icons/state_status_icons/local_climate.dds"
 				}
 
 				blockoverride "name" {

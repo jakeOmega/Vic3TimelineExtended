@@ -6,7 +6,7 @@
 # question unsettled. The engine has no "failed at the deadline" hook, so both
 # of those are the timeout's branches.
 je_morphological_freedom = {
-	icon = "gfx/interface/icons/event_icons/je_civil_rights.dds" # Placeholder Icon
+	icon = "gfx/interface/icons/event_icons/je_morphological_freedom.dds"
 	group = je_group_internal_affairs
 
 	modifiers_while_active = {

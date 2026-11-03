@@ -43,8 +43,9 @@
   Source capture contributes negative state industrial emissions, counted once
   in the location's market and mirrored as negative building emissions. Managed Fossil Phaseout now requires the era-10
   technology and disallows no capture/Tier I; the existing law-consistency walk
-  repairs a held phaseout law without its required technology. Three existing
-  shield icons distinguish tiers. Generated production regression remains pending.
+  repairs a held phaseout law without its required technology. Each tier and the
+  No step has its own icon (the `carbon_capture` category in
+  `scripts/image_pipeline/icon_prompts.py`). Generated production regression remains pending.
 - **Fuel netted out of output (2026-10-04):** a recipe-derived figure misses fuel
   that the recipe never lists. Vanilla's Coal Mine takes the coal its machinery
   burns off its *output* instead of listing it as an input, so its Atmospheric

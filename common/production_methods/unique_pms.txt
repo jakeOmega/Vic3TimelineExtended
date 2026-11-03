@@ -2343,7 +2343,7 @@ pm_un_headquarters = {
 }
 
 pm_hq_sovereign_empire = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_sovereign_empire.dds"
 
 	unlocking_identity = identity_sovereign_empire
 	is_hidden_when_unavailable = yes
@@ -2371,7 +2371,7 @@ pm_hq_sovereign_empire = {
 }
 
 pm_hq_military_treaty = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_military_treaty.dds"
 
 	unlocking_identity = identity_military_treaty_organization
 	is_hidden_when_unavailable = yes
@@ -2395,7 +2395,7 @@ pm_hq_military_treaty = {
 }
 
 pm_hq_trade_league = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p3.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_trade_league.dds"
 
 	unlocking_identity = identity_trade_league
 	is_hidden_when_unavailable = yes
@@ -2417,7 +2417,7 @@ pm_hq_trade_league = {
 }
 
 pm_hq_religious_convocation = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p4.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_religious_convocation.dds"
 
 	unlocking_identity = identity_religious
 	is_hidden_when_unavailable = yes
@@ -2444,7 +2444,7 @@ pm_hq_religious_convocation = {
 }
 
 pm_hq_ideological_union = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p5.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_ideological_union.dds"
 
 	unlocking_identity = identity_ideological_union
 	is_hidden_when_unavailable = yes
@@ -2469,7 +2469,7 @@ pm_hq_ideological_union = {
 }
 
 pm_hq_cultural_coalition = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p6.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_cultural_coalition.dds"
 
 	unlocking_identity = identity_cultural
 	is_hidden_when_unavailable = yes
@@ -2492,7 +2492,7 @@ pm_hq_cultural_coalition = {
 }
 
 pm_hq_diplomatic_framework = {
-	texture = "gfx/interface/icons/production_method_icons/cat_building_blue_p7.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_diplomatic_framework.dds"
 
 	unlocking_identity = identity_diplomatic
 	is_hidden_when_unavailable = yes

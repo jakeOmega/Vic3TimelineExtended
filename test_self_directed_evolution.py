@@ -115,11 +115,14 @@ class TechnologyTest(unittest.TestCase):
         for budget in ("country_weekly_innovation_max_add", "_max_investment_add", "mortality"):
             self.assertNotIn(budget, self.tech)
 
-    def test_placeholder_icon_is_tracked_and_queued(self):
+    def test_its_painted_icon_is_tracked(self):
+        """Painted in icon batch 9; it borrowed another technology's until then."""
         raw = _top_level(_read(ERA_13), "self_directed_evolution")
-        texture = re.search(r'texture = "([^"]+)" # Placeholder Icon', raw).group(1)
+        texture = re.search(r'texture = "([^"]+)"', raw).group(1)
+        self.assertEqual(texture, icon_prompts.icon_path("technology", "self_directed_evolution"))
+        self.assertNotIn("Placeholder Icon", raw)
         subprocess.run(["git", "ls-files", "--error-unmatch", texture], cwd=REPO, check=True, capture_output=True)
-        self.assertIsNone(icon_prompts.ICONS["technology"]["self_directed_evolution"]["seed"])
+        self.assertIsInstance(icon_prompts.ICONS["technology"]["self_directed_evolution"]["seed"], int)
 
 
 class LawTest(unittest.TestCase):
@@ -148,11 +151,14 @@ class LawTest(unittest.TestCase):
         self.assertIn("custom_tooltip = te_clade_law_parity_tt", on_enact)
         self.assertIn("te_clade_law_parity_tt", _loc_keys())
 
-    def test_placeholder_icon_is_tracked_and_queued(self):
+    def test_its_painted_icon_is_tracked(self):
+        """Painted in icon batch 9; it borrowed Unrestricted Augmentation's until then."""
         raw = _top_level(_read(LAWS), "law_clade_citizenship")
-        icon = re.search(r'icon = "([^"]+)" # Placeholder Icon', raw).group(1)
+        icon = re.search(r'icon = "([^"]+)"', raw).group(1)
+        self.assertEqual(icon, icon_prompts.icon_path("law", "law_clade_citizenship"))
+        self.assertNotIn("Placeholder Icon", raw)
         subprocess.run(["git", "ls-files", "--error-unmatch", icon], cwd=REPO, check=True, capture_output=True)
-        self.assertIsNone(icon_prompts.ICONS["law"]["law_clade_citizenship"]["seed"])
+        self.assertIsInstance(icon_prompts.ICONS["law"]["law_clade_citizenship"]["seed"], int)
 
 
 class StanceTest(unittest.TestCase):
