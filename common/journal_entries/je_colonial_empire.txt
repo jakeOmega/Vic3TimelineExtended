@@ -49,9 +49,9 @@
 
 	# --- Player-facing surface --------------------------------------------
 	# The panels (gui/journal_entry_widgets/colonial_empire_widget.gui, which
-	# sets the order of the sections): the overview above the status line,
-	# the live sections above the button grid, and the charts and "How the
-	# Colonial Empire Works" below it.
+	# sets the order of the sections): the "?" to the Help page and the
+	# overview above the status line, the live sections above the button grid,
+	# and the charts below it.
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
 		name = "widget_je_colonial_empire_overview"
@@ -73,7 +73,7 @@
 		name = "widget_je_colonial_empire_status"
 		container = "custom_widget_container_2"
 	}
-	# container_3: the history charts, then "How the Colonial Empire Works".
+	# container_3: the history charts.
 	widget = {
 		gui = "gui/journal_entry_widgets/colonial_empire_widget.gui"
 		name = "widget_je_colonial_empire_reference"

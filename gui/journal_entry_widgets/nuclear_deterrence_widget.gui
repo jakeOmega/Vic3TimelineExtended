@@ -36,7 +36,7 @@
 ###                             pledges once there is a record (open).
 ### The explanations these sections used to carry (the At Home legend, the
 ### crisis moves' note, the reputation note) are in "How Nuclear Weapons Work"
-### (te_nuclear_sec_how, nuclear_layout_widget.gui).
+### (the Help page, te_nuclear_weapons_help_body, nuclear_layout_widget.gui).
 ###
 ### Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped); the
 ### panel is described in docs/systems/journal_entry_systems.md, "Nuclear

@@ -21,9 +21,9 @@
 ###       and the largest colonial powers (te_ce_sec_stance, te_ce_sec_powers;
 ###       the tab shows them alone without the entry, te_ce_readout).
 ###   widget_je_colonial_empire_reference  custom_widget_container_3
-###       te_ce_reference_sections: the two history charts, then "How the
-###       Colonial Empire Works", a link to the Help page that holds the
-###       explanations (te_colonial_empire_help_popup, in gui/te_popups.gui).
+###       te_ce_reference_sections: the two history charts. The explanations
+###       are on the Help page (te_colonial_empire_help_popup, in
+###       gui/te_popups.gui), which the "?" at the top of the entry opens.
 ### The overview draws the stability bar, so the entry also attaches
 ### te_je_bars_on_top_marker to custom_widget_container_7 and the journal panel
 ### drops its own bar at the bottom (gui/journal_entry.gui; je_banking.txt).
@@ -196,7 +196,7 @@ types colonial_empire_widget_types
 		}
 	}
 
-	### Explanatory text under a subheading in "How the Colonial Empire Works":
+	### Explanatory text under a subheading on the Help page:
 	### how a part of the system works, rather than what it says now.
 	type colonial_empire_note = textbox {
 		autoresize = yes
@@ -2811,36 +2811,6 @@ types colonial_empire_widget_types
 		}
 	}
 
-	### "How the Colonial Empire Works": a link at the foot of the panel to the
-	### Help page (style rule 1; spec 2026-11-02-charts-help-national-info
-	### § 5.2). Its header alone, which opens te_colonial_empire_help_popup
-	### (te_popup = help_colonial_empire) instead of expanding; it keeps its
-	### name and its place in the composer. The "?" in the tab's header opens
-	### the same page.
-	type te_ce_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		colonial_empire_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "je_colonial_empire_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, gathered out of the live sections,
 	### one subheading per topic. The live sections say what is happening; this
 	### says how it works. Its three figures read GetPlayer (the monthly limit,
@@ -3582,7 +3552,7 @@ types colonial_empire_widget_types
 		te_ce_sec_powers = {}
 	}
 
-	### The charts, then how it all works.
+	### The charts.
 	type te_ce_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3591,7 +3561,6 @@ types colonial_empire_widget_types
 		visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_ce_sec_history = {}
-		te_ce_sec_how = {}
 	}
 
 	### The Colonial Empire tab of the Timeline Extended window
@@ -3620,6 +3589,7 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
 				}
 			}
@@ -3657,8 +3627,7 @@ types colonial_empire_widget_types
 	### the three composers' sections in three columns of a fixed 520, read
 	### down each and then across. The overview first, outside any composer as on the tab;
 	### each column's run of te_ce_status_sections on a wrapper with that
-	### composer's gate and spacing; the history charts and How the Colonial
-	### Empire Works in their composer.
+	### composer's gate and spacing; the history charts in their composer.
 	type te_ce_wide_sections = te_ui_columns_three {
 		blockoverride "column_1" {
 			te_ce_overview_panel = {}
@@ -3704,8 +3673,16 @@ types colonial_empire_widget_types
 flowcontainer = {
 	name = "widget_je_colonial_empire_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
+		}
+	}
 
 	te_je_country = {
 		te_ce_overview_panel = {}

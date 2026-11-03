@@ -100,8 +100,7 @@ share in red, the supporters' share in green, the rest in gray. Only the
 condemning share counts toward the two escalations; hover each line of the
 legend for what its share does.
 
-Every section but the last starts open. The last, How the Colonial Empire
-Works, opens the Help page, as the "?" at the right of the tab's header does:
+Every section starts open:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -112,7 +111,9 @@ Works, opens the Help page, as the "?" at the right of the tab's header does:
 | Our Stance on Colonialism | Open | Your [stance](#great-power-stances-on-colonialism), whether it is in force, when it can next change, and the Condemn, Stay Neutral and Support buttons. |
 | The Colonial Powers | Open | The eight countries with the most people in their colonies and colonial subjects, yours among them if you are one: their people, their status and their stability (see below). |
 | History | Open | Charts of Colonial Stability and the Monthly Stability Change. |
-| How the Colonial Empire Works | A link | Opens the Help page, which explains the system. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How the Colonial Empire Works, which explains the
+system.
 
 Colonial Holdings shows what keeps the entry running and what you can let go.
 Its Territories list holds every territory you could

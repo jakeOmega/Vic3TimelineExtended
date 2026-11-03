@@ -10,8 +10,8 @@
 ###   te_tax_light_section        open: one row per tax the law levies, its
 ###                               range, its rate, − and + (applied at once),
 ###                               and the step it sits on
-###   te_tax_light_how_section    How the Light Tax Code Works, a link to the
-###                               Help page (te_tax_code_help_popup)
+### How the Light Tax Code Works is the Tax Code's Help page while the light code
+### is in force (te_tax_code_help_popup), which the "?" opens.
 ###
 ### Every number is a guarded view of the shown country's code (Country, which
 ### every mount supplies: another country's in National Info),
@@ -271,37 +271,6 @@ types te_tax_light_widget_types
 						text = "[Country.GetCustom('te_tax_lt_rung_cons')]"
 					}
 				}
-			}
-		}
-	}
-
-	### "How the Light Tax Code Works": a link to the Help page (style guide
-	### rule 1; spec 2026-11-02-charts-help-national-info § 5.2), which shows
-	### the Light code's explanations while it is in force
-	### (te_tax_code_help_body, te_tax_layout_widget.gui). Its header alone,
-	### which opens te_tax_code_help_popup (te_popup = help_tax_code), under the
-	### section's own gate.
-	type te_tax_light_how_section = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-
-		te_tax_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "te_tax_lt_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
 			}
 		}
 	}

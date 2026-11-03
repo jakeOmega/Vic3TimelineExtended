@@ -33,8 +33,8 @@
 
 	# Policy dashboard: the overview (the bars and Current Conditions), the live
 	# sections (Active Policies, Monetary Policy, Available Interventions) and the
-	# reference sections (the history charts, collapsed here, and How Banking
-	# Works), in the order gui/journal_entry_widgets/banking_layout_widget.gui
+	# record (the history charts, once the cycle runs), under the "?" to Banking's
+	# Help page, in the order gui/journal_entry_widgets/banking_layout_widget.gui
 	# sets for this entry and the Budget panel's Banking tab alike. All of it is
 	# presentation only: every action runs through
 	# common/scripted_guis/banking_dashboard_scripted_gui.txt, which calls the same

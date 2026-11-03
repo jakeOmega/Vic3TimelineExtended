@@ -76,7 +76,7 @@ MIRRORED = [
      "te_budget_banking_tab_unlock_sgui", "te_banking_tab_body"),
     ("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_locked_tt", _shown("te_budget_tax_tab_sgui"),
      "te_budget_tax_tab_unlock_sgui", "te_tax_tab_body"),
-    ("budget_breakdown", 2, "te_budget_chart_tab_tt", None, None, None, "te_budget_breakdown_panel"),
+    ("budget_breakdown", 2, "te_budget_chart_tab_tt", None, None, None, "te_budget_breakdown_tab_body"),
     ("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_window_tab_strategic_reserve_locked_tt",
      _shown("te_market_strategic_reserve_tab_sgui"), "te_market_strategic_reserve_tab_unlock_sgui",
      "te_st_res_tab_body"),
@@ -855,7 +855,8 @@ class TabContentTest(unittest.TestCase):
 
     def test_space_race(self):
         """Nine entries, nine frames in the journal's order, each under its own
-        header and gated whole; the shared reference once, at the end."""
+        header (with the "?" to the Help page) and gated whole. How the Space
+        Race Works, once the shared reference at the end, is that Help page."""
         self.assertEqual(self._tab("space_race"), "te_sr_tab_body")
         milestones = _type_body(self.generated, "te_sr_window_milestones")
         frames = [_block_at(milestones, m.start()) for m in re.finditer(r"^\t+te_system_tab_frame = \{$", milestones, re.M)]
@@ -863,20 +864,13 @@ class TabContentTest(unittest.TestCase):
         for m, frame in zip(SR, frames):
             key = f"je_space_race_{m}"
             with self.subTest(entry=key):
-                self._check_sr_frame(frame, m, _journal_types(key, "je_space_race.txt", "space_race_widget.gui",
-                                                              skip=("widget_je_space_race_reference",)))
-        # How the Space Race Works: once, after every entry, the section the
-        # journal's shared reference root composes.
-        body = _type_body(self.sr, "te_sr_tab_body")
-        reference = _named(self.sr, "te_systems_window_space_race_reference")
-        self.assertGreater(body.index(reference), body.index("te_sr_window_milestones = {}"))
-        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", reference, re.M), ["te_sr_sec_how"])
-        self.assertIn("minimumsize = { 520 -1 }", reference)
-        self.assertIn(f'visible = "[{_country_gate("te_window_space_race_tab_sgui")}]"', reference)
-        self.assertEqual(re.findall(r"^\t\t(te_\w+) = \{\}", _type_body(self.sr, "te_sr_reference_sections"), re.M),
-                         ["te_sr_sec_how"])
-        self.assertEqual(body.count("te_sr_sec_how"), 1)
-        self.assertNotIn("te_sr_sec_how", milestones)
+                self._check_sr_frame(frame, m, _journal_types(key, "je_space_race.txt", "space_race_widget.gui"))
+                self.assertIn("GetVariableSystem.Set('te_popup', 'help_space_race')", frame)
+        # How the Space Race Works: the Help page alone, no reference root,
+        # composer or section left (test_te_help_pages.py)
+        for gone in ("te_systems_window_space_race_reference", "te_sr_reference_sections", "te_sr_sec_how",
+                     "widget_je_space_race_reference"):
+            self.assertNotIn(gone, self.sr + self.generated, gone)
         # every entry mounts the bars-on-top marker (its overview draws the
         # progress), shows its status line only while inactive, and every
         # scripted button is the AI's
@@ -892,7 +886,7 @@ class TabContentTest(unittest.TestCase):
 
     def test_space_powers_and_orbit_follow_the_entries_and_read_no_entry(self):
         """The tab's own sections, under its gate, below every entry's frame
-        and above How (owner, 2026-10-27: the milestones we run first): they
+        (owner, 2026-10-27: the milestones we run first): they
         read the shown Country, so they show between milestones too. Orbit
         carries the debris row, so every milestone's live sections drop theirs."""
         body = _type_body(self.sr, "te_sr_tab_body")
@@ -902,7 +896,6 @@ class TabContentTest(unittest.TestCase):
         self.assertIn("minimumsize = { 520 -1 }", summary)
         self.assertNotIn("GetPlayerJournalEntry", summary)
         self.assertGreater(body.index(summary), body.index("te_sr_window_milestones = {}"))
-        self.assertLess(body.index(summary), body.index(_named(self.sr, "te_systems_window_space_race_reference")))
         milestones = _type_body(self.generated, "te_sr_window_milestones")
         for m in SR:
             if m != "interstellar_results":
@@ -998,13 +991,12 @@ class SeabedTabTest(unittest.TestCase):
         self.assertIsNone(_override(body, "tab_entry"))
         self.assertEqual(_override(body, "tab_open_journal").strip(), "")
         self.assertEqual(re.findall(r"^\t+(te_seabed_\w+) = \{\}", _override(body, "tab_content"), re.M),
-                         ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
-                          "te_seabed_how_panel"])
-        for name in ("te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
-                     "te_seabed_how_panel"):
+                         ["te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel"])
+        for name in ("te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel"):
             self.assertIn(f"type {name} = ", widgets)
-        # the reference a link to the Help page (test_te_help_pages.py)
-        self.assertIn("GetVariableSystem.Set('te_popup', 'help_seabed')", _type_body(widgets, "te_seabed_how_panel"))
+        # the reference is the Help page, which the header's "?" opens (test_te_help_pages.py)
+        self.assertIn("GetVariableSystem.Set('te_popup', 'help_seabed')", _override(body, "tab_header"))
+        self.assertNotIn("te_seabed_how_panel", widgets)
         with open(os.path.join(REPO, "gui", "te_seabed_widgets.gui"), "rb") as f:
             self.assertEqual(f.read(3), b"\xef\xbb\xbf")
 
@@ -1014,7 +1006,7 @@ class SeabedTabTest(unittest.TestCase):
         self.assertEqual(at, sorted(at))
         nation = _named(generated, "te_systems_window_nation_tab")
         self.assertIn("using = te_systems_window_nation_selected", nation.split("\n\n")[0])
-        self.assertIn("te_nation_tab_sections = {}", nation)
+        self.assertIn("te_nation_tab_body = {}", nation)
 
 
 WIDE = "GetVariableSystem.Exists('te_systems_window_wide')"

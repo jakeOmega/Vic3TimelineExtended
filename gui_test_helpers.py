@@ -254,17 +254,53 @@ class _Walk:
         n = COLUMN_TYPES[column_type]
         items = _children(body)
         gates = gates + _own_gates(items)
-        filled = {name: inner for kind, name, inner in items if kind == "blockoverride"}
+        overrides = [(name, inner) for kind, name, inner in items if kind == "blockoverride"]
+        filled = {name: inner for name, inner in overrides if not name.endswith("_visible")}
+        shown = {name: inner for name, inner in overrides if name.endswith("_visible")}
         others = [name for kind, name, _ in items if kind != "blockoverride" and not (kind == "property" and name == "visible")]
         self.test.assertEqual(others, [], f"{self.where}: a {column_type} holds only its visible and its column blocks")
         self.test.assertEqual(sorted(filled), [f"column_{i}" for i in range(1, n + 1)],
                               f"{self.where}: {column_type} fills column_1 to column_{n}, each once")
+        self.test.assertEqual(len(shown), len([name for name, _ in overrides if name.endswith("_visible")]),
+                              f"{self.where}: a column's visible is given once")
+        self.test.assertFalse(sorted(set(shown) - {f"column_{i}_visible" for i in range(1, n + 1)}),
+                              f"{self.where}: {column_type} has no such column visible")
         for i in range(1, n + 1):
+            # A column may carry a visible of its own (column_<i>_visible),
+            # which collapses it when every section in it hides: one more gate
+            # on each of its sections, held to the narrow ones like any other.
+            column_gates = ()
+            if f"column_{i}_visible" in shown:
+                props = _children(shown[f"column_{i}_visible"])
+                self.test.assertEqual([(kind, k) for kind, k, _ in props], [("property", "visible")],
+                                      f"{self.where}: column_{i}_visible holds a visible and nothing else")
+                column_gates = _own_gates(props)
             self.columns.append([])
-            self.body(filled[f"column_{i}"], gates)
+            self.body(filled[f"column_{i}"], gates + column_gates)
             self.test.assertTrue(self.columns[-1], f"{self.where}: column_{i} is empty, but keeps its 520; "
                                                    f"two columns of content take te_ui_columns_two")
             self.columns.append(None)                 # a section after the columns sits in none
+
+
+def assert_column_closes_with_its_sections(test, wide_type, n, sections, text=None):
+    """A wide layout's column_<n>_visible is exactly its sections' own gates,
+    joined: the gate of the one section it holds, or Or( a, b ) of two. It
+    hides the column only when each of them hides itself, so it can't hide a
+    section that would show; the column then closes up instead of keeping an
+    empty 520. Those sections take the gate as one more (added_gates)."""
+    test.assertIn(len(sections), (1, 2), "the data system's Or takes two")
+    text = _all_gui() if text is None else _strip_comments(text)
+    shown = [inner for kind, name, inner in _children(_type_body(text, wide_type))
+             if kind == "blockoverride" and name == f"column_{n}_visible"]
+    test.assertEqual(len(shown), 1, f"{wide_type} has one column_{n}_visible")
+    props = [v for kind, k, v in _children(shown[0]) if kind == "property" and k == "visible"]
+    own = []
+    for section in sections:
+        gates = [v for kind, k, v in _children(_type_body(text, section)) if kind == "property" and k == "visible"]
+        test.assertEqual(len(gates), 1, f"{section} carries one visible of its own")
+        own.append(gates[0].strip('"')[1:-1])
+    want = own[0] if len(own) == 1 else f"Or( {', '.join(own)} )"
+    test.assertEqual(props, [f'"[{want}]"'], f"{wide_type}: column_{n}_visible is its sections' own gates")
 
 
 def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), outside=(),
@@ -291,7 +327,8 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     - Each section sits under exactly the gates the narrow layout gives it (a
       composer's or a wrapper's visible, or the instance's own; an And( a, b )
       counts as a and b), on the instance, a wrapper, the column type's
-      instance or the wide composer's root. A section named in `added_gates`
+      instance, the column's own visible (column_<n>_visible, which closes
+      up an empty column) or the wide composer's root. A section named in `added_gates`
       may carry more (the Census Data window's How waits for the first
       census). An instance's visible over a type's own fails either way: in
       game it replaces the type's (gotcha #17).

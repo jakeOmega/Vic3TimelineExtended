@@ -1,10 +1,9 @@
 ﻿### Strategic Reserve — the journal entry's panel.
 ###
-### je_strategic_reserve.txt attaches the three named roots at the foot of
+### je_strategic_reserve.txt attaches the two named roots at the foot of
 ### this file:
 ###   widget_je_strategic_reserve_overview   container 1   te_st_res_overview_panel
 ###   widget_je_strategic_reserve_inventory  container 2   te_st_res_status_sections
-###   widget_je_strategic_reserve_reference  container 3   te_st_res_reference_sections
 ### The entry's status text sits between the overview and the inventory, and
 ### Cycle Step Size and Reset Reserve Rates are buttons in the inventory,
 ### beside the adjustment step; the journal entry's scripted buttons that did
@@ -14,10 +13,10 @@
 ### entry binds scripted buttons when it activates.
 ###
 ### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
-### inventory is open until closed (st_res_inventory_closed). How the
-### Strategic Reserve Works is a link to the Help page
-### (te_strategic_reserve_help_popup, in gui/te_popups.gui). Each
-### section is a type, and the two composers set their order, so the Market
+### inventory is open until closed (st_res_inventory_closed). The
+### explanations are on the Help page (te_strategic_reserve_help_popup, in
+### gui/te_popups.gui), which the "?" at the top of the entry opens. Each
+### section is a type, and the composers set their order, so the Market
 ### panel's Reserve tab (gui/market_panel.gui) shows the same pieces. Nothing
 ### here may read the panel's ambient Market or Country (MarketTabTest).
 ### Collapse flags say their default: *_closed is open until closed, *_open
@@ -2315,36 +2314,6 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### "How the Strategic Reserve Works": a link at the foot of the panel to
-	### the Help page (style rule 1; spec 2026-11-02-charts-help-national-info
-	### § 5.2). Its header alone, which opens te_strategic_reserve_help_popup
-	### (te_popup = help_strategic_reserve) instead of expanding; it keeps its
-	### name and its place in the composer. The "?" in the tab's header opens
-	### the same page.
-	type te_st_res_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		st_res_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "je_strategic_reserve_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, gathered out of the live sections, one
 	### subheading per topic. The live sections say what is happening; this says
 	### how it works. It reads GetPlayer only, never the entry, so it opens from
@@ -2451,23 +2420,12 @@ types strategic_reserve_widget_types
 		te_st_res_sec_inventory = {}
 	}
 
-	### How it all works: a link to the Help page (te_st_res_sec_how).
-	type te_st_res_reference_sections = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-		visible = "[JournalEntry.IsActive]"
-
-		te_st_res_sec_how = {}
-	}
-
 	### ======================================================================
 	### THE TAB'S BODY (spec 2026-11-02-te-window-wide-mode § 9.1):
 	### te_system_tab_frame with its blocks filled, mounted by the Market
 	### panel's Reserve tab and the Timeline Extended window's Strategic
 	### Reserve tab. In the entry's order: the overview, the inventory, then
-	### How the Strategic Reserve Works, then the frame's Open Journal Entry.
+	### the frame's Open Journal Entry.
 	### Not drawn: the status description (the no-hub line, which prints only
 	### while the entry is inactive) and the two scripted buttons (the AI's;
 	### the inventory's Cycle Step Size and Reset Reserve Rates are the
@@ -2486,6 +2444,7 @@ types strategic_reserve_widget_types
 					text = "je_strategic_reserve"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
 				}
 			}
@@ -2509,7 +2468,6 @@ types strategic_reserve_widget_types
 			block "te_st_res_tab_layout" {
 				te_st_res_overview_panel = {}
 				te_st_res_status_sections = {}
-				te_st_res_reference_sections = {}
 			}
 		}
 
@@ -2520,19 +2478,18 @@ types strategic_reserve_widget_types
 
 	### The Timeline Extended window's full-screen Strategic Reserve tab (spec
 	### 2026-11-02-te-window-wide-mode § 7): the tab's layout in two columns of
-	### 520 (te_ui_columns_two), the overview and the inventory, then How the
-	### Strategic Reserve Works, each composer whole, so each section keeps its
-	### narrow gates. The window's wide mount puts it in te_st_res_tab_layout
-	### (gen_te_systems_window.py); test_strategic_reserve_layout.WideTest
-	### checks it against the narrow layout.
+	### 520 (te_ui_columns_two), the overview, then the inventory, each composer
+	### whole, so each section keeps its narrow gates. The window's wide mount
+	### puts it in te_st_res_tab_layout (gen_te_systems_window.py);
+	### test_strategic_reserve_layout.WideTest checks it against the narrow
+	### layout.
 	type te_st_res_wide_sections = te_ui_columns_two {
 		blockoverride "column_1" {
 			te_st_res_overview_panel = {}
-			te_st_res_status_sections = {}
 		}
 
 		blockoverride "column_2" {
-			te_st_res_reference_sections = {}
+			te_st_res_status_sections = {}
 		}
 	}
 }
@@ -2547,8 +2504,16 @@ types strategic_reserve_widget_types
 flowcontainer = {
 	name = "widget_je_strategic_reserve_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
+		}
+	}
 
 	te_je_country = {
 		te_st_res_overview_panel = {}
@@ -2563,16 +2528,5 @@ flowcontainer = {
 
 	te_je_country = {
 		te_st_res_status_sections = {}
-	}
-}
-
-flowcontainer = {
-	name = "widget_je_strategic_reserve_reference"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_je_country = {
-		te_st_res_reference_sections = {}
 	}
 }

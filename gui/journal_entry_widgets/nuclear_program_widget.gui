@@ -18,7 +18,7 @@
 ###                            world's first warhead).
 ### The notes these sections used to carry (how a strike's odds combine, what
 ### the leaderboard's estimates are) are in "How Nuclear Weapons Work"
-### (te_nuclear_sec_how, nuclear_layout_widget.gui).
+### (the Help page, te_nuclear_weapons_help_body, nuclear_layout_widget.gui).
 ###
 ### WHERE THE NUMBERS COME FROM. Nothing here computes anything. Every value is
 ### a display-only script value in common/script_values/extra_script_values.txt

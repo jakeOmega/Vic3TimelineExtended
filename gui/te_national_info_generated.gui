@@ -434,7 +434,11 @@ types te_national_info_generated_types
 				direction = vertical
 				ignoreinvisible = yes
 
-				te_nation_wide_sections = {}
+				te_nation_tab_body = {
+					blockoverride "te_nation_tab_layout" {
+						te_nation_wide_sections = {}
+					}
+				}
 			}
 
 			### Another country: the tab's header, its readout if it has one, then its

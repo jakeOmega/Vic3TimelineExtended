@@ -543,7 +543,9 @@ class BudgetWiringTests(unittest.TestCase):
         gui = (ROOT / "gui/budget_panel.gui").read_text(encoding="utf-8-sig")
         self.assertIn("te_tab_buttons_six = {", gui)
         self.assertIn("InformationPanel.SelectTab('te_breakdown')", gui)
-        self.assertIn("te_budget_breakdown_panel = {}", gui)
+        # the tab's body: its header with the "?", then the panel
+        self.assertIn("te_budget_breakdown_tab_body = {}", gui)
+        self.assertNotIn("te_budget_breakdown_panel = {}", gui)
 
     def test_nested_chart_math_uses_passed_values_without_building_scans(self):
         values = gen.generated_values()
@@ -651,25 +653,36 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_breakdown_help_body"))
         self.assertRegex(gui[first:first + 200], r'blockoverride "subheader_margin" \{\}')
 
-    def test_the_panel_is_its_three_sections(self):
-        """The panel instances Income, Expenses and How the Breakdown Works, in
-        that order and nothing else, so the full-screen layout can place each
-        (spec 2026-11-02-te-window-wide-mode § 7). How is its header alone,
-        which opens the Help page (te_budget_breakdown_help_popup, on te_popup
-        = help_budget_breakdown; test_te_help_pages.py), its topics there."""
+    def test_the_panel_is_its_two_sections(self):
+        """The panel instances Income and Expenses, in that order and nothing
+        else, so the full-screen layout can place each (spec
+        2026-11-02-te-window-wide-mode § 7). How the Breakdown Works is the
+        Help page (te_budget_breakdown_help_popup, on te_popup =
+        help_budget_breakdown), which the "?" in the tab's header opens
+        (te_budget_breakdown_tab_body; test_te_help_pages.py): the link that
+        stood for it at the panel's foot is gone."""
         gui = _strip_comments(LAYOUT.read_text(encoding="utf-8-sig"))
         panel = _children(_type_body(gui, "te_budget_breakdown_panel"))
         self.assertEqual([name for kind, name, _ in panel if kind != "property"],
-                         ["te_budget_income_section", "te_budget_expense_section", "te_budget_sec_how"])
-        how = _children(_type_body(gui, "te_budget_sec_how"))
-        props = {name: value for kind, name, value in how if kind == "property"}
-        self.assertEqual((props["spacing"], props["ignoreinvisible"]), ("8", "yes"))
-        self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button"])
-        self.assertIn("GetVariableSystem.Set('te_popup', 'help_budget_breakdown')", how[-1][2])
-        self.assertRegex(how[-1][2], r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how[-1][2], r'blockoverride "onclick_show')
+                         ["te_budget_income_section", "te_budget_expense_section"])
+        self.assertNotIn("te_budget_sec_how", gui)
         self.assertNotIn("te_budget_chart_how_open", gui)
         self.assertIn('text = "te_budget_chart_how_sub_admin"', _type_body(gui, "te_budget_breakdown_help_body"))
+
+    def test_the_tab_body(self):
+        """te_budget_breakdown_tab_body: the frame for the header (the tab's name
+        and the "?"), the panel in its layout block, no gate, no entry and no
+        Open Journal Entry. The Budget panel and the window mount it."""
+        gui = _strip_comments(LAYOUT.read_text(encoding="utf-8-sig"))
+        self.assertRegex(gui, r"(?m)^\ttype te_budget_breakdown_tab_body = te_system_tab_frame \{")
+        body = _children(_type_body(gui, "te_budget_breakdown_tab_body"))
+        overrides = {name: inner.strip() for kind, name, inner in body if kind == "blockoverride"}
+        self.assertEqual(sorted(overrides), ["tab_content", "tab_header", "tab_open_journal"])
+        self.assertEqual(overrides["tab_open_journal"], "")
+        self.assertIn('text = "te_window_tab_budget_breakdown"', overrides["tab_header"])
+        self.assertIn("GetVariableSystem.Set('te_popup', 'help_budget_breakdown')", overrides["tab_header"])
+        self.assertRegex(overrides["tab_content"],
+                         r'^block "te_budget_breakdown_tab_layout" \{\s*te_budget_breakdown_panel = \{\}\s*\}$')
 
     def test_no_ui_help(self):
         text = " ".join(note for _, _, _, note in gen.HOW_TOPICS)
@@ -741,21 +754,23 @@ class BreakdownWidthBudgetTest(unittest.TestCase):
 
 class WideLayoutTest(unittest.TestCase):
     """te_budget_breakdown_wide_sections, the window's full-screen Budget
-    Breakdown (spec 2026-11-02-te-window-wide-mode § 7): income, expenses and
-    How the Breakdown Works side by side. The tab has no layout block, so the
-    registry mounts it in place of the panel, whose root carries no gate."""
+    Breakdown (spec 2026-11-02-te-window-wide-mode § 7): income and expenses
+    side by side, on two columns. The registry mounts it in the tab body's
+    layout block, in place of the panel, whose root carries no gate."""
 
     def test_the_columns(self):
-        columns = assert_wide_matches_narrow(self, "te_budget_breakdown_wide_sections", ["te_budget_breakdown_panel"],
+        columns = assert_wide_matches_narrow(self, "te_budget_breakdown_wide_sections",
+                                             layout=("te_budget_breakdown_tab_body", "te_budget_breakdown_tab_layout"),
                                              composers={"te_budget_breakdown_panel"})
         self.assertEqual(columns, [
             ["te_budget_income_section"],
-            ["te_budget_expense_section"],
-            ["te_budget_sec_how"]])
+            ["te_budget_expense_section"]])
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "budget_breakdown")
-        self.assertEqual((tab.layout, tab.wide), (None, "te_budget_breakdown_wide_sections"))
+        self.assertEqual((tab.body, tab.layout, tab.wide),
+                         ("te_budget_breakdown_tab_body", "te_budget_breakdown_tab_layout",
+                          "te_budget_breakdown_wide_sections"))
         panel = _children(_strip_comments(_type_body(LAYOUT.read_text(encoding="utf-8-sig"),
                                                      "te_budget_breakdown_panel")))
         self.assertFalse([k for kind, k, _ in panel if kind == "property" and k in ("visible", "datacontext")])

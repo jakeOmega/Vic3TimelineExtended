@@ -1,10 +1,11 @@
 ﻿### The Nation tab of the Timeline Extended window (gui/te_systems_window.gui
-### instances te_nation_tab_sections): what the country carries for good, in
+### instances te_nation_tab_body, which holds te_nation_tab_sections under the
+### tab's header, with the "?" to the Help page): what the country carries for good, in
 ### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
 ### score rows and then its type rows (#1030); Where These Come From,
-### collapsed, and How the Nation Works, a link to the Help page
-### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
+### collapsed. The explanations are on the Help page (gui/te_popups.gui).
+### House style: docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry and no gate: everything reads the shown country,
 ### Country, which each mount supplies (the window's, the player's; National
@@ -58,7 +59,7 @@ types te_nation_widget_types
 		using = default_list_position
 	}
 
-	### A heading inside How the Nation Works, with a faint rule under it.
+	### A heading on the Help page, with a faint rule under it.
 	type te_nation_subheader = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -770,42 +771,6 @@ types te_nation_widget_types
 		}
 	}
 
-	### ----------------------------------------------------------------------
-	### How the Nation Works: a link at the foot of the tab to the Help page
-	### (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its
-	### header alone, which opens te_nation_help_popup (te_popup = help_nation)
-	### instead of expanding; it keeps its name and its place in both layouts.
-	### The tab has no header in the TE window, so no "?" there (National Info's
-	### mount for another country gives it a header and a "?").
-	### ----------------------------------------------------------------------
-	type te_nation_how_panel = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		section_header_button = {
-			tooltip = "te_help_link_tt"
-			blockoverride "layout" {
-				parentanchor = hcenter
-				size = { 520 38 }
-			}
-			blockoverride "left_text" {
-				text = "te_nation_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_nation')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, gathered out of the live sections, one
 	### subheading per topic. The live sections say what is happening; this says
 	### how it works. It reads no country at all, so it opens from any host
@@ -916,16 +881,15 @@ types te_nation_widget_types
 		te_nation_section_science_and_space = {}
 		te_nation_section_international = {}
 		te_nation_sources_panel = {}
-		te_nation_how_panel = {}
 	}
 
 	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
 	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
 	### read down each and then across, so the order is the tab's: the overview
 	### and governance, the economy and what science and the world give, then
-	### Where These Come From and How the Nation Works. The window mounts it in
-	### place of te_nation_tab_sections, which carries no gate or context; its
-	### spacing of 10 is the columns' own.
+	### Where These Come From. The window mounts it in te_nation_tab_body's
+	### te_nation_tab_layout, in place of te_nation_tab_sections, which carries
+	### no gate or context; its spacing of 10 is the columns' own.
 	type te_nation_wide_sections = te_ui_columns_three {
 		blockoverride "column_1" {
 			te_nation_overview_panel = {}
@@ -939,9 +903,47 @@ types te_nation_widget_types
 			te_nation_section_international = {}
 		}
 
+		### Where These Come From shows only once a permanent effect is listed,
+		### so the column takes its gate (column_3_visible) and closes up until
+		### then, rather than leave an empty 520 band (test_nation_tab.py holds
+		### them equal).
+		blockoverride "column_3_visible" {
+			visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+		}
+
 		blockoverride "column_3" {
 			te_nation_sources_panel = {}
-			te_nation_how_panel = {}
 		}
+	}
+
+	### The tab's body (help-button-everywhere PR): te_system_tab_frame, as
+	### every other tab of the window has, for its header: the tab's name and
+	### the "?" to the Help page, hidden for an observer. No gate (the tab is
+	### always open) and no entry, so no Open Journal Entry. The window mounts
+	### it narrow and, with te_nation_tab_layout overridden by
+	### te_nation_wide_sections, full screen and in National Info for the
+	### player's own country; National Info's mount for another country draws
+	### its own header over te_nation_wide_sections.
+	type te_nation_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_nation"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_nation')]"
+				}
+			}
+		}
+
+		blockoverride "tab_content" {
+			block "te_nation_tab_layout" {
+				te_nation_tab_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal" {}
 	}
 }

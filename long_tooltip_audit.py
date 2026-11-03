@@ -20,7 +20,7 @@ A key counts when the mod's English loc defines it (`localization/english/`,
 `replace/` included, `te_unused_l_english.yml` skipped) and at least one
 reference sits outside a How section. A reference is in a How section when it,
 or a block around it, is named for one (a `how` or `help` token: `type
-te_demog_sec_how`, `te_un_help_standing`, a system's Help page
+te_budget_how_note`, `te_un_help_standing`, a system's Help page
 `te_<key>_help_body`) or is shown only while a How toggle is open (`visible =
 "[GetVariableSystem.Exists('te_cm_how_it_works_open')]"`, the How sections
 left in a panel; `gui_tree.opens_how_section`). A key whose own name has a

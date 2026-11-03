@@ -1237,8 +1237,8 @@ types market_panel
 				# country and crashed the panel, and through Access* promotes it
 				# loaded but silently kept the player's entry (gotcha #35 in the
 				# GUI guide). The world's parts
-				# stay the player's entry: the temperature, Top Emitters, History
-				# and How Global Warming Works. Labels that say "our" switch on
+				# stay the player's entry: the temperature, Top Emitters and
+				# History. Labels that say "our" switch on
 				# Country.IsLocalPlayer, the test that greys the controls.
 				flowcontainer = {
 					name = "te_market_global_warming_tab"

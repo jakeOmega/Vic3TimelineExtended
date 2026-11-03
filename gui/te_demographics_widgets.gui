@@ -28,9 +28,8 @@
 ###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the three
 ###                             largest cities
 ###   te_demog_sec_states       open: the ten largest states, a row each that opens the state, and Show All for the 40
-###   te_demog_sec_how          collapsed: How Demographics Works
 ### The state's, from the same building blocks with the state's own figures (State.MakeScope.Var(...), never the
-### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth, _modifiers and _how.
+### player's): te_state_demog_overview, _causes, _pyramid (with the urban share), _work, _longevity, _wealth and _modifiers.
 ### The state's Wealth shows its target's nine terms: three its own, the law, tax, economic, public goods, slavery and r > g ones its
 ### owner's (State.GetOwner.MakeScope). Its Modifiers lists the nine standing modifiers the census gives it, which the
 ### state panel's modifier rows leave out (the country has none to list).
@@ -139,7 +138,7 @@ types te_demographics_widgets
 		}
 	}
 
-	### Explanatory text under a heading in How Demographics Works.
+	### Explanatory text under a heading on the Help page.
 	type te_demog_note = textbox {
 		autoresize = yes
 		multiline = yes
@@ -3913,35 +3912,6 @@ types te_demographics_widgets
 		}
 	}
 
-	### How Demographics Works: a link at the foot of the tab to the Help page
-	### (rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its header
-	### alone, which opens te_demographics_help_popup (te_popup =
-	### help_demographics) instead of expanding; it keeps its name and its place
-	### in every composer. No host of it has a tab header, so no "?".
-	type te_demog_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		te_demog_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "te_demog_sec_how"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, gathered out of the live sections, one
 	### subheading per topic. The live sections say what is happening; this says
 	### how it works. Both hosts' sections become this one page: the country
@@ -6875,34 +6845,6 @@ types te_demographics_widgets
 						}
 					}
 				}
-			}
-		}
-	}
-
-	### How Demographics Works on the state panel: a second link to the Help
-	### page (te_demographics_help_popup, on te_popup = help_demographics), whose
-	### last topic is the subtab's own, under its own subheading. Its header
-	### alone, in the subtab's place for it.
-	type te_state_demog_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		te_demog_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "te_demog_sec_how"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
 			}
 		}
 	}

@@ -602,9 +602,12 @@ types pops_overview
 
 			### MOD: Demographics tab (te_demog) ###
 			# The census: one instance of the sections' composer, in
-			# gui/te_demographics_layout.gui (gui_style_guide.md rule 9). The gate on
-			# the rule sits on a parent of the instance; inside it, the composer shows
-			# the sections once the country has a census, and a pending line before.
+			# gui/te_demographics_layout.gui (gui_style_guide.md rule 9), in the
+			# window's tab body (te_demog_window_body) for its header, the tab's name
+			# and the "?" to the Help page, as the mod's tabs in the other panels
+			# have. The gate on the rule sits on a parent of the instance, so the
+			# header goes with it; inside it, the composer shows the sections once
+			# the country has a census, and a pending line before.
 			flowcontainer = {
 				name = "te_pops_demog_tab"
 				visible = "[InformationPanel.IsTabSelected('te_demog')]"
@@ -619,7 +622,11 @@ types pops_overview
 					direction = vertical
 					ignoreinvisible = yes
 
-					te_demog_tab_sections = {}
+					te_demog_window_body = {
+						blockoverride "te_demog_tab_layout" {
+							te_demog_tab_sections = {}
+						}
+					}
 				}
 			}
 			### END MOD ###
