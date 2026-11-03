@@ -335,6 +335,27 @@ class RegistryTest(unittest.TestCase):
                     self.assertIn(f"has_journal_entry = {chart.entry}", body)
                 self.assertIn(chart.range, gen.RANGES)
 
+    def test_the_entry_and_gate_are_the_charts_own_tabs(self):
+        """A chart's gate and entry are its own system's: the gate is the first
+        scripted GUI its tab's open test (gen_te_systems_window.TABS) shows on,
+        and the entry is the journal entry its tab body mounts (tab_entry's
+        GetPlayerJournalEntry; Demographics' body mounts GetPlayer, so None).
+        A chart given another system's pair would open its viewer on that
+        system's tab and read that system's entry."""
+        texts = [_read(p) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)]
+        tabs = {t.key: t for t in window.TABS}
+        for chart in gen.CHARTS:
+            tab = tabs[chart.system]
+            with self.subTest(chart=chart.id):
+                self.assertEqual(chart.gate, re.findall(r"GetScriptedGui\('(\w+)'\)\.IsShown", tab.open_)[0])
+                (src,) = [x for x in texts if re.search(rf"type {tab.body} = \w+ \{{", x)]
+                mount = re.search(r'blockoverride "tab_entry" \{\s*datacontext = "\[(.*)\]"', _type_body(src, tab.body))
+                self.assertIsNotNone(mount, f"{tab.body} mounts no entry")
+                entry = re.fullmatch(r"GetPlayerJournalEntry\('(\w+)'\)", mount.group(1))
+                self.assertEqual(chart.entry, entry.group(1) if entry else None, mount.group(1))
+                if entry is None:
+                    self.assertEqual(mount.group(1), "GetPlayer")
+
     def test_the_ranges_are_the_sections_buttons(self):
         """RANGES holds each range variable's three buttons as the sections
         draw them (values, labels, width), so the viewer's row (C2) can be
