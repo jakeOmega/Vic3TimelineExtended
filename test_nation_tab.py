@@ -343,19 +343,35 @@ class CountryPanelTest(unittest.TestCase):
 
     def test_a_line_says_where_the_hidden_ones_went(self):
         """2026-10-27 audit, NAT-1: under the list, while it leaves a modifier out, a line counts them; for the
-        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window)."""
+        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window). For
+        another country a goto opens National Info on its Nation tab (spec 2026-11-02-charts-help-national-info
+        § 6.2, way in 3): the window's tab first (te_ni_tab, PR F1's key), then vanilla's way into the window, as
+        the country's Politics tab opens it (country_politics_panel.gui)."""
         panel = _read(gen.PANEL_OUT)
         at = panel.index("### MOD: Nation tab: where the modifiers the list leaves out went")
         block = panel[at:panel.index(gen.MOD_CLOSE, at)]
         self.assertGreater(at, panel.index('datamodel = "[Country.GetTimedModifiers]"'))
         self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
                       "'gui_country_hidden_modifier_count'), '(CFixedPoint)0' )]\"", block)
-        goto = block[block.index("button_icon_goto = {"):]
-        self.assertIn('visible = "[Country.IsLocalPlayer]"', goto)
-        clicks = re.findall(r'onclick = "(.*)"', goto)
-        self.assertEqual(clicks, ["[GetVariableSystem.Set('te_systems_window_tab', 'nation')]",
-                                  "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"])
+        gotos = block.split("button_icon_goto = {")[1:]
+        self.assertEqual(len(gotos), 2)
+        own, other = (goto[:goto.index("\n\t\t\t}")] for goto in gotos)
+        self.assertIn('visible = "[Country.IsLocalPlayer]"', own)
+        self.assertIn('tooltip = "te_nation_panel_goto_tt"', own)
+        self.assertEqual(re.findall(r'onclick = "(.*)"', own),
+                         ["[GetVariableSystem.Set('te_systems_window_tab', 'nation')]",
+                          "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"])
+        self.assertIn('visible = "[Not( Country.IsLocalPlayer )]"', other)
+        self.assertIn('tooltip = "te_nation_panel_goto_other_tt"', other)
+        self.assertEqual(re.findall(r'onclick = "(.*)"', other),
+                         ["[GetVariableSystem.Set('te_ni_tab', 'nation')]",
+                          "[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]"])
         loc = _loc()
+        # the window by its own name, the country's adjective in front (POP_BROWSER)
+        for key in ("te_nation_panel_goto_other_tt", "te_nation_panel_line_other_tt"):
+            with self.subTest(key=key):
+                self.assertIn("$POP_BROWSER$", loc[key])
+                self.assertIn("$te_window_tab_nation$", loc[key])
         for key in re.findall(r"'?(te_nation_panel_\w+)'?", block):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
