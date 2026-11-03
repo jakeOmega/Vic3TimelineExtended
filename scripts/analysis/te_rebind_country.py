@@ -12,6 +12,10 @@ each read, and --write does the mechanical part.
 
     python3 scripts/analysis/te_rebind_country.py <tab key | type> [--write] [--all] [--summary]
 
+From Python, survey_tab(key) is the same listing as data (a Survey: markup and
+loc reads with their classes, the controls, the text), and write(survey) the
+rewrite.
+
 It walks what the tests walk: the tab's wide composer (gen_te_systems_window.TABS),
 every type it draws outside te_own_country_only, and every loc key their text renders
 (gui_test_helpers.open_types, markup_reads, panel_loc_keys). A read is one of:
@@ -33,7 +37,9 @@ every type it draws outside te_own_country_only, and every loc key their text re
   shared        (loc) a key something else renders where no Country is in context: a
                 journal entry's own text (its status_desc, desc or a scripted progress
                 bar), other script (a custom tooltip, an event), or a vanilla-copied
-                panel (the state panel). Split it: a `_ni` copy for the panel.
+                panel (the state panel). Split it: a `_ni` copy for the panel. It errs
+                wide: any script token that spells the key counts, so look before
+                splitting.
   item tooltip  (loc) a key a tooltip inside a datamodel's item renders. Gotcha #24
                 found a chart bar's (the item's own widget) has only the item's
                 context; a tooltip deeper in an item is unverified, so it is left too.
@@ -121,9 +127,21 @@ def generator_of(root, path):
 
 @dataclass
 class Read:
+    """One read: its class, the Finding, why it is shadowed, and the block whose
+    default holds it (a shared type's `block "x"`), if any."""
     cls: str
     finding: h.Finding
     why: str = ""
+    block: str = ""
+
+
+_BLOCK = re.compile(r'\bblock\s+"(\w+)"\s*\{')
+
+
+@functools.lru_cache(maxsize=None)
+def _block_spans(body):
+    """Each `block "x" { ... }` default in a body: (start, end, name)."""
+    return [(m.end() - 1, h._close(body, m.end() - 1), m.group(1)) for m in _BLOCK.finditer(body)]
 
 
 @dataclass
@@ -340,18 +358,17 @@ def survey(target, root=REPO, world_loc=(), gate=None):
             continue
         line = _file_lines(root, f.path)[f.line - 1]
         kind = _read_kind(f.what, line[f.col + len(f.what):f.col + len(f.what) + 1])
+        td = types[f.where]
+        # body offset of the read, from its line and column
+        k = f.line - td.line
+        pos = h._line_starts(td.body)[k] + f.col - (td.col if k == 0 else 0)
         why = ""
         if kind == "mechanical":
-            td = types[f.where]
-            why = other.get(f.where) or ""
-            if not why:
-                # body offset of the read, from its line and column
-                k = f.line - td.line
-                pos = h._line_starts(td.body)[k] + f.col - (td.col if k == 0 else 0)
-                why = _span_why(pos, spans_of.get(f.where, []), td.body) or ""
+            why = other.get(f.where) or _span_why(pos, spans_of.get(f.where, []), td.body) or ""
             if why:
                 kind = "shadowed"
-        markup.append(Read(kind, f, why))
+        block = next((name for a, b, name in _block_spans(td.body) if a < pos < b), "")
+        markup.append(Read(kind, f, why, block))
         generated.setdefault(f.path, generator_of(root, f.path))
 
     keys = h.panel_loc_keys(names, types, loc)
@@ -468,6 +485,11 @@ def render(s, full=False, summary=False):
                 out.append(f"                  under {r.why}")
             if cls == "entry-only" and what == "JournalEntry.IsActive" and s.gate:
                 out.append(f"                  the tab's gate on Country: [{s.gate}]")
+            if r.block and cls != "mechanical":
+                where = f" (drawn at {s.drawn_at[name]})" if name in s.drawn_at else ""
+                out.append(f'                  the default of block "{r.block}" of {name}, which other panels '
+                           f'draw too: leave it, and give this panel a blockoverride "{r.block}" where it draws '
+                           f'{name}{where}')
     if s.loc:
         out += ["", "Loc, by key (file:line)"]
     for key in sorted(s.loc, key=lambda k: (s.loc[k].path, s.loc[k].line)):
@@ -544,6 +566,26 @@ def _tab(key):
     return next((t for t in gen.TABS if t.key == key), None), gen
 
 
+def world_loc_keys():
+    """test_te_system_tab_bodies.WORLD_LOC: the loc keys that are world reads."""
+    try:
+        from test_te_system_tab_bodies import WORLD_LOC
+    except ImportError:
+        return {}
+    return WORLD_LOC
+
+
+def survey_tab(key, root=REPO):
+    """survey() of a tab (gen_te_systems_window.TABS) as BindingTest sees it:
+    its wide composer, WORLD_LOC, and its gate on Country for IsActive reads."""
+    tab, gen = _tab(key)
+    if tab is None:
+        raise KeyError(f"{key}: no such tab in gen_te_systems_window.TABS")
+    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(tab.open_, gen.COUNTRY_ROOT))
+    s.target = f"{tab.key} ({tab.wide})"
+    return s
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     ap.add_argument("target", help="a tab key (gen_te_systems_window.TABS) or a type name")
@@ -553,27 +595,19 @@ def main(argv=None):
     ap.add_argument("--root", default=REPO, help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
 
-    tab, gen = _tab(args.target) if args.root == REPO else (None, None)
-    wide, gate, world = args.target, None, ()
-    if tab is not None:
-        wide = tab.wide
-        gate = gen.rooted(tab.open_, gen.COUNTRY_ROOT)
-        try:
-            from test_te_system_tab_bodies import WORLD_LOC
-            world = WORLD_LOC
-        except ImportError:
-            pass
-    if wide not in h.mod_types(args.root):
+    is_tab = args.root == REPO and _tab(args.target)[0] is not None
+    if not is_tab and args.target not in h.mod_types(args.root):
         ap.error(f"{args.target}: neither a tab key nor a type in the mod's GUI files")
-    s = survey(wide, args.root, world, gate)
-    if tab is not None:
-        s.target = f"{tab.key} ({wide})"
+
+    def run():
+        return survey_tab(args.target) if is_tab else survey(args.target, args.root)
+
+    s = run()
     if args.write:
         done = write(s)
         print(f"rewrote {sum(done.values())} reads in {len(done)} files" +
               "".join(f"\n  {p}: {n}" for p, n in done.items()))
-        s = survey(wide, args.root, world, gate)
-        s.target = f"{tab.key} ({wide})" if tab else wide
+        s = run()
         print("\nWhat is left:")
     print(render(s, full=args.all, summary=args.summary))
     return 0

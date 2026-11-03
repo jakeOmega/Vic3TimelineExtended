@@ -281,6 +281,52 @@ class LeftAloneTest(unittest.TestCase):
         self.assertEqual(_get(self.root, YML), before_loc)
 
 
+FRAME = """\
+types te_fix_types {
+	type te_fix_wide = flowcontainer {
+		te_fix_frame = {
+			blockoverride "body" {
+				textbox = {
+					text = "[GetPlayer.GetName]"
+				}
+			}
+		}
+	}
+
+	type te_fix_frame = flowcontainer {
+		block "tab_country" {
+			datacontext = "[GetPlayer]"
+		}
+		block "body" {}
+	}
+}
+"""
+
+
+class BlockDefaultTest(unittest.TestCase):
+    """A read in a shared type's block default (the frame's tab_country) is
+    changed by a blockoverride where this panel draws the type, never in place."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = self.tmp.name
+        _put(self.root, GUI, FRAME)
+        self.s = tool.survey("te_fix_wide", self.root)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_the_block_is_named(self):
+        got = sorted((r.finding.where, r.finding.line, r.cls, r.block) for r in self.s.markup)
+        self.assertEqual(got, [("te_fix_frame", 14, "bare", "tab_country"),
+                               ("te_fix_wide", 6, "mechanical", "")])
+
+    def test_the_listing_says_override_it(self):
+        text = tool.render(self.s)
+        self.assertIn('give this panel a blockoverride "tab_country" where it draws te_fix_frame', text)
+        self.assertIn(f"(drawn at {GUI}:3)", text)
+
+
 class OtherCountryTest(unittest.TestCase):
     def test_contexts(self):
         for expr, other in [
@@ -304,10 +350,29 @@ class RepoTest(unittest.TestCase):
     def test_public_tabs_have_nothing_to_bind(self):
         from scripts.generators import gen_te_systems_window as gen
         for tab in (t for t in gen.TABS if t.public):
-            s = tool.survey(tab.wide)
+            s = tool.survey_tab(tab.key)  # with WORLD_LOC, as BindingTest reads it
             self.assertEqual([str(r.finding) for r in s.markup], [], tab.key)
             self.assertEqual(sorted(s.loc), [], tab.key)
             self.assertEqual(s.controls, [], tab.key)
+
+    def test_survey_tab_takes_world_loc(self):
+        """survey_tab reads WORLD_LOC, as BindingTest does: a key listed there is
+        a world read, not one to bind."""
+        import gui_test_helpers as h
+        import test_te_system_tab_bodies as bodies
+        keys = h.panel_loc_keys({"te_demog_browser_sections"}, h.mod_types(), h.load_loc())
+        key = min(keys)
+        saved = dict(bodies.WORLD_LOC)
+        try:
+            bodies.WORLD_LOC[key] = "a fixture"
+            self.assertIn(key, tool.survey_tab("demographics").world_loc)
+        finally:
+            bodies.WORLD_LOC.clear()
+            bodies.WORLD_LOC.update(saved)
+
+    def test_survey_tab_names_an_unknown_tab(self):
+        with self.assertRaises(KeyError):
+            tool.survey_tab("no_such_tab")
 
 
 if __name__ == "__main__":
