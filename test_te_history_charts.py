@@ -255,7 +255,7 @@ class RegistryTest(unittest.TestCase):
                 text = gen.substitute(gen.fragment(chart), chart, gen.SMALL)
                 added = gen.size_overrides(chart, gen.SMALL, text)
                 width = gen.SMALL[chart.kind].width
-                own = [] if width == 496 else ['blockoverride "chart_width" {', f"\tminimumsize = {{ {width} -1 }}",
+                own = [] if width == gen.SMALL["monthly"].width else ['blockoverride "chart_width" {', f"\tminimumsize = {{ {width} -1 }}",
                                                f"\tmaximumsize = {{ {width} -1 }}", "}"]
                 self.assertEqual(added, own + gen.open_overrides(chart))
                 self.assertEqual(re.findall(r'^blockoverride "(\w+)"', "\n".join(added), re.M),
