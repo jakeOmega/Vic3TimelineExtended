@@ -43,7 +43,7 @@ instance had it, so nothing should look different. Logs: read `debug.log` and se
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **Each history section, both widths.** Banking (the Budget tab and the journal entry), the Strategic Reserve (expand a good's row), Demographics, Cultural Hegemony, Nuclear Weapons (the taboo's history), the United Nations, Global Warming and the Colonial Empire, in the side panel and in full screen. | As before: the same charts in the same order with the same gaps, each centered in its section, its bars, hovers and range buttons working. | A shift or a new gap: the wrapper carries only `parentanchor = hcenter` around the chart. Compare the section with its text before C1 (`git show 855689f14:<file>`). |
+| **Each history section, both widths.** Banking (the Budget tab and the journal entry), the Strategic Reserve (expand a good's row), Demographics, Cultural Hegemony, Nuclear Weapons (the taboo's history), the United Nations, Global Warming and the Colonial Empire, in the side panel and in full screen. | As before: the same charts in the same order with the same gaps, each centered in its section, its bars, hovers and range buttons working. | A shift or a new gap: the wrapper carries only `parentanchor = hcenter` around the chart. Compare the section with its text before C1 (`git show 855689f14:<file>`). Failed 2026-11-02: each chart sat at its own offset. See "Chart alignment fix" below. |
 | **Banking's paired and hidden charts.** A country on a digital currency and one not; then a game with `banking_system_simplified`. | One policy-rate chart at a time, with no empty gap where the other was; under the simplified system, no inflation or exchange-rate chart and no gap. | A gap: the chart's `visible` must sit on the section's wrapper instance (`te_hist_mon_policy = { visible = … }`), not inside it. |
 
 ## The chart viewer (PR C2, 2026-11-02)
@@ -107,6 +107,46 @@ country, and their range filters read the date on `Country` too (`te_history_mon
 | **4. Demographics' controls.** The measure buttons and the pension rows in the player's own Demographics tab, then another country's Census Data window. | Shown and working for the player; hidden for another country, as before. | `using = te_own_country_only` on the wrong widget: it must be the widget whose subtree holds the `Execute` (`GuardTest`). |
 | **5. The log.** After 1 to 4, search `debug.log` for `te_hist`, `wanted context of type 'Country'`, `No context supplied` and `New data types does not contain a 'Country'`. | No new lines. | Each line names the expression and its file:line: the widget there read `Country` with none in its context. |
 | **6. Observer.** As an observer, open an observed country's Banking or Strategic Reserve journal entry and set a chart to 1y, then 5y. | The chart draws its range, and `error.log` gains no null-country lines. The range filter reads the date on `Country`, which the entry's widget root supplies, not on `GetPlayer`, which is no country for an observer. The window's tabs and the vanilla panels' tabs aren't open to an observer. Hovering a bar's markers may still log one line: `te_hist_tt_markers` roots its scripted GUI on `GetPlayer`, as before F0. | A null-country line per bar names `te_history_chart.gui`'s `sample_visible`: its read went back to `GetPlayer`. |
+
+## Seabed in National Info (PR F3, Seabed, 2026-11-02)
+
+The Seabed tab reads the shown `Country`, so National Info can show it for any country: the overview's six boxes,
+the Ocean Basins table (Free, Pool, Weight, +1 license) and every hover, for that country. Hidden for another
+country, under `te_own_country_only`: the policy panel (its three buttons are all it holds; the overview's Policy box
+still shows the policy and its lock), and each basin's claimants with Relinquish and Claim Again, with the chevron that
+opens them. The claimant list is the viewer's own (`te_seabed_rank_listed` leaves the viewer out and the tab draws the
+viewer's row apart), so read for another country it would show that country twice and leave the player out. The Free
+figure's hover is printed by a scripted GUI's effect, so its lines read the root it is given
+(`SCOPE.GetRootScope.ScriptValue`) rather than `GetPlayer`. Needs PR F1's National Info, which shows the tab while its
+`public` flag is set.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Another country's figures.** Pick a claimant that appears in one of your basins' claimant lists. Note its Mines, Claims and Weight there, then open its National Info on the Seabed tab. | That basin's Free is its Claims and Weight its Weight; the pool bar's hover gives its own mines and queued levels, which add up to its Mines figure but for what it built or queued since the last sharing, and its own unused claims; the overview's boxes are its own (`tag` into it from the console to compare with its own tab). | The player's figures: a read is still `GetPlayer` (`test_te_system_tab_bodies.py`'s `BindingTest` should have caught it), or the window doesn't supply that country's `Country`. |
+| **2. The Free hover.** On the same country, hover a basin's Free figure. | Its unused claims in the basin, then its own coastal states there (or "No coast here"). | The player's count over the other country's states: `te_seabed_build_in_*` don't read the scripted GUI's root; `ROOT.GetCountry.MakeScope.ScriptValue` is the other form. |
+| **3. Nothing to press.** Same country. | No Seabed Policy panel, no chevrons, no claimant lists, no Relinquish or Claim Again. The basin names sit where they were, beside an empty slot. The Policy box's hover gives its policy, the influence it holds and when it can next change. | A control shows: it isn't under `te_own_country_only` (`GuardTest`, and `test_seabed_layout.py`'s `PrivateTest`). |
+| **4. Your own tab.** Your own Seabed tab, in the window and in National Info for your own country. | As before, with the policy buttons, the chevrons, the claimants and Relinquish or Claim Again. The words that changed: Licenses (was Our licenses), own mines and own claims in the legend, and the hovers' "Coast here", "Claim weight in the …", "Own mines", "no coast here". | — |
+| **5. The log and an observer.** After 1 to 4, and as an observer opening any coastal country's Seabed tab in National Info, search `debug.log` for `wanted context of type`, `Failed to fetch variable`, `Promote 'SCOPE' returned nullptr` and null-country lines. | None new. | Each line names its expression: a `SCOPE` line names a Free hover key (check 2's fallback); the rest, a read still on `GetPlayer` outside `te_own_country_only`. |
+
+## Chart alignment fix (2026-11-02)
+
+The owner's screenshots of 2026-11-02 (the Budget panel's Banking tab, and the Demographics charts) showed each history
+chart at its own horizontal offset: a chart with a short title and legend sat far right and its plot ran out of the
+panel, and Banking's pip key ran past the panel's edge. So C1's first check above failed. The cause was C1's wrapper
+(`te_hist_<id>`), a centered flowcontainer sized by its content, which the engine centered at the width of the chart's
+text alone, without its plot (`gui_modding_guide.md` gotcha #46). Now each wrapper is a vertical column of a fixed
+width, with the chart inside fixed at the same width: 496 px for a monthly chart and 488 for an annual one on the panel,
+1,216 and 1,256 in the viewer. Only the wrapper centers: the chart, and its title and legend column, sit at the left of
+their parents. The pip key is 496 px wide and its lines wrap. The screenshots were taken with C1 and C2 in place, so
+blaming C1's wrapper is an inference from the arithmetic. Logs: search `debug.log` for `te_hist_`, `te_history_chart`
+and `minimumsize`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. One left edge, Banking.** Open the Budget panel's Banking tab with History open, then the Banking Cycle journal entry, then the Timeline Extended window's Banking tab in the side panel and in full screen. | Every chart's frame starts at the same x and ends inside the panel, and every title starts just inside the frames' left edge. The pip key's icons line up with the titles. No plot is cut at the right. | Charts still at different offsets, each further right the shorter its text: the chart's first child (the title and legend column) still sets the width the engine centers on, despite `minimumsize`. Give that column the chart's width too: a block in `te_history_chart` that the generator sets, or a 0 px high spacer widget of that width at the column's top. |
+| **2. The pip key.** Same places. | "something was recorded this month … Hover the bar." on two lines and the crash line on one, all inside the panel, each icon beside its text. | Still one line running out: `multiline = yes` didn't take on `te_history_marker_legend`'s textboxes. The key off the charts' left edge: its wrapper, `te_banking_hist_marker_key` (`banking_history_widget.gui`), still has C1's shape, a centered horizontal flowcontainer sized by its content. Give it `direction = vertical` and `minimumsize`/`maximumsize` of 496, as the chart wrappers have (left alone here because the Banking binding PR, #1360, edits that type). Icons 4 px left of the titles: `minimumsize` doesn't count the key's side margins. |
+| **3. Every other system's charts.** The Strategic Reserve (expand a good's row), Demographics (the Population panel's tab, the Timeline Extended window, the Census Data window), Cultural Hegemony, Nuclear Weapons (the taboo's history), the United Nations, Global Warming and the Colonial Empire, each in its journal entry, its vanilla panel's tab where it has one, and the Timeline Extended window's side panel and full screen. | Monthly charts share one left edge, the titles just inside it. Annual charts (Demographics, Cultural Hegemony) share one frame edge, and their titles share another, 12 px left of the frames. That is a visible change for the short-text annual charts (Children per Woman, Median Age and the like), whose titles used to sit 4 px inside the frame; the long-legend ones (Net Migration, Cultural Hegemony's) already had it, give or take the 7 px by which Net Migration's title sat left of Life Expectancy's. Nothing is cut at the right, and the charts keep their vertical gaps. | As 1. A chart wider than its host's column: the host is narrower than the chart was before C1 (496 or 488 px), which nothing here changed. |
+| **4. The viewer.** Open a short-titled chart (Bubble Pressure, Children per Woman) at full size. | The large chart centered in the popup, nothing cut at the right. Banking's popups are now 1,320 × 660 (C2's check 4 says 620), with the key whole and no scrollbar: three lines in English, room for four (German's crash line wraps). In the viewer the 496 px key sits centered under the wider chart, not at its titles' edge. | Shifted right: as 1. A scrollbar on Banking's: raise `KEYS["banking"]` in `gen_te_history_charts.py`. |
 
 ## Banking in National Info (PR F2, Banking, 2026-11-02)
 
