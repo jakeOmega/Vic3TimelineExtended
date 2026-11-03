@@ -6,9 +6,12 @@ Run: python3 -m unittest test_grand_monuments_layout -v
 """
 import os
 import re
+import tempfile
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow, load_loc, mod_types, panel_loc_keys, panel_view, unguarded
+from gui_test_helpers import (LOC_DIR, _block_at, _children, _personal_reviewed, assert_wide_matches_narrow, gui_keys,
+                               load_loc, loc_closure, mod_types, panel_loc_keys, panel_view, personal_text,
+                               type_closure, unguarded)
 from scripts.generators import gen_te_systems_window as window_gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -331,8 +334,8 @@ class StateGatedTest(unittest.TestCase):
         nat = _squash(_type_body(_gui(), "te_gm_sec_national"))
         # The groups' ledgers are the player's own: the group's gate on a
         # wrapper, the guard inside it, the heading first (owner call 5).
-        self.assertIn("flowcontainer = { visible = \"[EqualTo_CFixedPoint( Country.MakeScope"
-                      ".ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]\" direction = vertical ignoreinvisible = yes "
+        self.assertIn("flowcontainer = { visible = \"[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( Country.MakeScope"
+                      ".ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' ) )]\" direction = vertical ignoreinvisible = yes "
                       "flowcontainer = { using = te_own_country_only direction = vertical ignoreinvisible = yes "
                       "spacing = 2 gm_subheader = { blockoverride \"subheader_text\" { text = \"gm_je_sub_approval\"", nat)
         fading = re.search(r'gm_subheader = \{ visible = "\[Or\((.*?)\)\]" blockoverride "subheader_text" '
@@ -1438,6 +1441,200 @@ class PrivateTest(unittest.TestCase):
             self.assertIn(key, self.keys, key)
         for key in ("gm_je_monuments_header_ours", "gm_je_ov_monuments_label_ours", "gm_tr_row_held_by_tt"):
             self.assertNotIn(key, self.keys, f"{key}: the player's own")
+
+
+_BARE_SGUI = re.compile(r"(?<![\w.'])ScriptedGui\.")
+
+
+def _controls_gate(guarded, types):
+    """The gate of the wrapper round a guarded wrapper: the player's own
+    (Country.IsLocalPlayer) and any of its controls shown. Each control's own
+    visible as written (a type instance's from its type's root), a bare
+    `ScriptedGui.` read through the control's own datacontext, and GetPlayer
+    on Country, the same country under that first test. Or nests in pairs."""
+    terms = []
+    for kind, name, inner in _children(guarded):
+        if kind != "widget":
+            continue
+        own = {k: v for got, k, v in _children(inner) if got == "property"}
+        if "visible" not in own and name in types:
+            own = {k: v for got, k, v in _children(types[name].body) if got == "property"}
+        assert "visible" in own, f"{name}: a control shown always, so the gate would be too"
+        expr = own["visible"].strip('"')
+        assert expr.startswith("[") and expr.endswith("]"), expr
+        expr = expr[1:-1].strip()
+        if _BARE_SGUI.search(expr):
+            sgui = re.fullmatch(r'"\[(GetScriptedGui\( *\'\w+\' *\))\]"', own["datacontext"]).group(1)
+            expr = _BARE_SGUI.sub(sgui + ".", expr)
+        terms.append(expr.replace("GetPlayer.", "Country."))
+    gate = terms[-1]
+    for term in reversed(terms[:-1]):
+        gate = f"Or( {term}, {gate} )"
+    return f"[And( Country.IsLocalPlayer, {gate} )]"
+
+
+def _gated_guard(block):
+    """The one widget in `block` and its visible, and the te_own_country_only
+    wrapper that is that widget's one widget."""
+    outer = [(name, inner) for kind, name, inner in _children(block) if kind == "widget"]
+    assert len(outer) == 1, [name for name, _ in outer]
+    props = {k: v for kind, k, v in _children(outer[0][1]) if kind == "property"}
+    inner = [(name, body) for kind, name, body in _children(outer[0][1]) if kind == "widget"]
+    assert len(inner) == 1, [name for name, _ in inner]
+    guarded = {k: v for kind, k, v in _children(inner[0][1]) if kind == "property"}
+    assert guarded.get("using") == "te_own_country_only", guarded
+    assert "using" not in props and "visible" not in guarded, (props, guarded)
+    return props.get("visible", ""), inner[0][1]
+
+
+class ControlsGateTest(unittest.TestCase):
+    """A wrapper that stands empty still takes its parent's spacing, so the
+    wrapper round a row's guarded controls is gated on the player's own country
+    and on its controls' own visibles (review of PR #1355, I2): the row is as
+    tall as before for the player, and for another country it ends at its
+    last line. The gate is pinned to the controls, so the two can't drift."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+
+    def test_a_monuments_rows_controls(self):
+        row = self.types["gm_monument_row"].body
+        widgets = [(name, inner) for kind, name, inner in _children(row) if kind == "widget"]
+        self.assertEqual(len(widgets), 2, "the header and the controls")
+        gate, guarded = _gated_guard("flowcontainer = {" + widgets[1][1] + "}")
+        self.assertEqual(_squash(gate.strip('"')), _squash(_controls_gate(guarded, self.types)))
+        names = [name for kind, name, _ in _children(guarded) if kind == "widget"]
+        self.assertEqual(names[-3:], ["flowcontainer", "gm_tr_take_button", "gm_clear_button"])
+        self.assertIn("gm_naming_line", names)
+
+    def test_our_monuments_beside_rows_controls(self):
+        sec = self.types["te_gm_sec_monuments"].body
+        m = re.search(r'blockoverride "mon_controls" \{', sec)
+        self.assertTrue(m)
+        block = _block_at(sec, m.start())
+        gate, guarded = _gated_guard(block[block.index("{") + 1:-1])
+        self.assertEqual(_squash(gate.strip('"')), _squash(_controls_gate(guarded, self.types)))
+        self.assertEqual([name for kind, name, _ in _children(guarded) if kind == "widget"],
+                         ["gm_mon_take_button", "gm_mon_clear_button"])
+        # The type keeps its default, which the state card draws.
+        self.assertIn('block "mon_controls" { gm_mon_take_button = {} gm_mon_clear_button = {} }',
+                      _squash(self.types["gm_mon_row_site"].body))
+
+    def test_the_gate_reads_each_controls_own_visible(self):
+        guarded = ('flowcontainer = { visible = "[A( GetPlayer.Self )]" }\n'
+                   "gm_tr_take_button = {}\n")
+        gate = _controls_gate(guarded, self.types)
+        self.assertTrue(gate.startswith("[And( Country.IsLocalPlayer, Or( A( Country.Self ), "
+                                        "And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('gm_tr_take_sgui')"
+                                        ".IsShown( GuiScope.SetRoot( Country.MakeScope )"), gate)
+
+    def test_another_countrys_empty_wrappers_hide(self):
+        """The two gates kept outside a guard (a row's counts-toward line, the
+        groups' ledgers) also test the player's own country, so another
+        country's panel has no empty wrapper there (review M3)."""
+        row = _squash(self.types["gm_monument_row"].body)
+        self.assertIn("flowcontainer = { visible = \"[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( State.MakeScope"
+                      ".ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' ) )]\" direction = vertical "
+                      "ignoreinvisible = yes flowcontainer = { using = te_own_country_only", row)
+        nat = _squash(self.types["te_gm_sec_national"].body)
+        self.assertIn("flowcontainer = { visible = \"[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( Country"
+                      ".MakeScope.ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' ) )]\" direction = vertical "
+                      "ignoreinvisible = yes flowcontainer = { using = te_own_country_only", nat)
+
+
+class HeldByLineTest(unittest.TestCase):
+    """Works Abroad's holder line, twice (review of PR #1355, M1): the player's
+    with the ways home on hover, under the guard, and another country's without
+    them, shown only there. One line either way."""
+
+    def test_the_pair(self):
+        def lines(body):
+            for kind, name, inner in _children(body):
+                if kind not in ("widget", "block", "blockoverride"):
+                    continue
+                if any(got == "property" and k == "text" and v == '"gm_tr_row_held_by"'
+                       for got, k, v in _children(inner)):
+                    yield inner
+                else:
+                    yield from lines(inner)
+
+        lines = list(lines(mod_types()["gm_tr_row_abroad"].body))
+        self.assertEqual(len(lines), 2)
+        props = [{k: v for kind, k, v in _children(inner) if kind == "property"} for inner in lines]
+        self.assertEqual(props[0], {"using": "te_own_country_only", "tooltip": '"gm_tr_row_held_by_tt"',
+                                    "text": '"gm_tr_row_held_by"'})
+        self.assertEqual(props[1], {"visible": '"[Not( Country.IsLocalPlayer )]"', "text": '"gm_tr_row_held_by"'})
+
+
+class StateCardCountryTest(unittest.TestCase):
+    """The state panel's Grand Monument cards have a State and no Country
+    (states_panel.gui:1458-1459, te_state_gm_card and te_state_gm_site_card set
+    none; review of PR #1355, I3). So nothing they draw reads Country: no type's
+    markup, no te_own_country_only (it reads Country.IsLocalPlayer), no key they
+    render or splice. The five buttons they share with the panel keep GetPlayer;
+    in the panel they sit under its guard, where the player is the shown country."""
+
+    CARDS = {"te_state_gm_card", "te_state_gm_site_card"}
+    BUTTONS = {"gm_dedicate_button": "gm_button_dedicate_tooltip", "gm_tr_take_button": "gm_button_tr_take_tooltip",
+               "gm_mon_take_button": "gm_mon_take_button_tooltip", "gm_clear_button": "gm_button_clear_tooltip",
+               "gm_mon_clear_button": "gm_mon_clear_button_tooltip"}
+    COUNTRY = re.compile(r"(?<![\w.])Country\.|\busing\s*=\s*te_own_country_only\b")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.loc = load_loc()
+        cls.drawn = type_closure(cls.CARDS, cls.types)
+
+    def _keys(self, names):
+        keys = set()
+        for name in names:
+            keys |= gui_keys(self.types[name].body, self.loc, own=False)
+        return loc_closure(keys, self.loc, own=False)
+
+    def test_the_cards_draw_the_five_buttons(self):
+        self.assertLessEqual(set(self.BUTTONS), self.drawn)
+        for button, key in self.BUTTONS.items():
+            self.assertIn(f'tooltip = "{key}"', self.types[button].body, button)
+
+    def test_nothing_the_cards_draw_reads_country(self):
+        markup = [(name, self.types[name].body[m.start():m.start() + 60]) for name in sorted(self.drawn)
+                  for m in self.COUNTRY.finditer(self.types[name].body)]
+        self.assertEqual(markup, [])
+        keys = self._keys(self.drawn)
+        self.assertLessEqual(set(self.BUTTONS.values()), keys)
+        self.assertEqual(sorted(k for k in keys if self.COUNTRY.search(self.loc[k])), [])
+
+    def test_the_five_buttons_read_the_player(self):
+        for button, key in self.BUTTONS.items():
+            body = self.types[button].body
+            self.assertIn("GetPlayer.MakeScope", body, button)
+            self.assertIsNone(self.COUNTRY.search(body), button)
+            self.assertEqual(sorted(k for k in self._keys({button}) if self.COUNTRY.search(self.loc[k])), [], key)
+
+
+class ReviewedPersonalTextTest(unittest.TestCase):
+    """A loc line tagged `# REVIEWED YYYY-MM-DD (personal_text): why` holds a
+    proper name, not the panel speaking as the player
+    (gui_test_helpers._personal_reviewed): personal_text leaves it out, and the
+    same text untagged still counts. The boon "Lest We Forget" is one."""
+
+    def test_the_tag_is_read_from_the_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "fx_l_english.yml"), "w", encoding="utf-8-sig") as f:
+                f.write("l_english:\n"
+                        ' fx_tagged:0 "Lest We Forget" # REVIEWED 2026-11-03 (personal_text): a proper name\n'
+                        ' fx_other:0 "We Stand" # REVIEWED 2026-11-03 (event_context): another audit\'s\n'
+                        ' fx_plain:0 "We Stand"\n'
+                        ' fx_in_text:0 "# REVIEWED 2026-11-03 (personal_text): in the value"\n')
+            self.assertEqual(_personal_reviewed(tmp), frozenset({"fx_tagged"}))
+
+    def test_a_tagged_key_passes_and_an_untagged_one_fails(self):
+        self.assertIn("gm_boon_defeat", _personal_reviewed(LOC_DIR))
+        self.assertEqual(load_loc()["gm_boon_defeat"], "Lest We Forget")
+        texts = {"gm_boon_defeat": "Lest We Forget", "fx_untagged": "Lest We Forget"}
+        self.assertEqual(personal_text(set(texts), texts), {"fx_untagged": "Lest We Forget"})
 
 
 if __name__ == "__main__":

@@ -1825,10 +1825,11 @@ types grand_monuments_widget_types
 					text = "gm_row_frozen"
 				}
 				# It counts toward the open opportunity (usability §4), which is the
-				# player's own (te_own_country_only): the gate on the wrapper, so an
-				# empty guard never takes the column's spacing.
+				# player's own (te_own_country_only): the gate on the wrapper, with the
+				# player's own country, so an empty guard never takes the column's
+				# spacing, for the player or for another country.
 				flowcontainer = {
-					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]"
+					visible = "[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' ) )]"
 					direction = vertical
 					ignoreinvisible = yes
 
@@ -1857,96 +1858,108 @@ types grand_monuments_widget_types
 		# The row's controls, the player's own only (te_own_country_only: another
 		# country's National Info shows the monument without them; charts-help-
 		# national-info spec § 6.5). One wrapper at the row's 480, so its centred
-		# buttons stay centred and none of them moves (style guide rule 8).
+		# buttons stay centred and none of them moves (style guide rule 8). The
+		# wrapper round it is shown only while one of them is, for the player:
+		# one standing empty would still take the row's spacing. Its gate is
+		# each control's own visible on Country, the same country under
+		# IsLocalPlayer (test_grand_monuments_layout.ControlsGateTest).
 		flowcontainer = {
-			using = te_own_country_only
+			visible = "[And( Country.IsLocalPlayer, Or( And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' ) ), Or( And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' ) ), Or( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)1' ), Or( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' ), Or( And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('gm_tr_take_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_state', State.MakeScope ).End ) ), And( ObjectsEqual( State.GetOwner, Country.Self ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_disp_clearable'), '(CFixedPoint)1' ) ) ) ) ) ) ) )]"
 			direction = vertical
 			ignoreinvisible = yes
-			spacing = 4
 			minimumsize = { 480 -1 }
 			maximumsize = { 480 -1 }
 
-			# Rename (v2 §3.3): an upheld monument's form and namesake again, at
-			# no cost; Name It types a name of our own (§3.5), Clear Name drops it,
-			# shown only while there is one to drop (GM-8: greyed on most rows, it
-			# only took room). A contested or heritage monument keeps its name.
-			# Hidden while this monument is being named: the naming line below
-			# replaces it. Two rows, two buttons or three, so neither changes
-			# width: one row that grew a button would stay centred at its first
-			# width and run past the panel (gui_modding_guide.md gotcha #43).
-			# 156 + 4 + 156 = 316.
 			flowcontainer = {
-				direction = horizontal
+				using = te_own_country_only
+				direction = vertical
+				ignoreinvisible = yes
 				spacing = 4
-				parentanchor = hcenter
-				visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' ) )]"
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
 
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_rename" }
+				# Rename (v2 §3.3): an upheld monument's form and namesake again, at
+				# no cost; Name It types a name of our own (§3.5), Clear Name drops it,
+				# shown only while there is one to drop (GM-8: greyed on most rows, it
+				# only took room). A contested or heritage monument keeps its name.
+				# Hidden while this monument is being named: the naming line below
+				# replaces it. Two rows, two buttons or three, so neither changes
+				# width: one row that grew a button would stay centred at its first
+				# width and run past the panel (gui_modding_guide.md gotcha #43).
+				# 156 + 4 + 156 = 316.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = hcenter
+					visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)0' ) )]"
+
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_rename" }
+					}
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_name_start" }
+					}
 				}
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_name_start" }
+				# 156 + 4 + 156 + 4 + 156 = 476.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = hcenter
+					visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' ) )]"
+
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_rename" }
+					}
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_name_start" }
+					}
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_clear_name_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_clear_name_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_clear_name" }
+					}
 				}
+
+				gm_naming_line = {}
+
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+					parentanchor = hcenter
+					visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
+
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_tear_down_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_tear_down_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_tear_down" }
+					}
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rededicate_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_rededicate_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_rededicate" }
+					}
+					gm_choice_button = {
+						blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_preserve_sgui')]" }
+						blockoverride "choice_tooltip" { tooltip = "gm_button_preserve_tooltip" }
+						blockoverride "choice_text" { text = "gm_button_preserve" }
+					}
+				}
+
+				# Carry It Off (trophies spec §2.2): a monument we did not raise, in a
+				# state we have not incorporated (gui/gm_trophy_widgets.gui).
+				gm_tr_take_button = {}
+				# Clear It Away (owner, 2026-10-31): six stand in the state and this is
+				# the least grand (gui/gm_trophy_widgets.gui).
+				gm_clear_button = {}
 			}
-			# 156 + 4 + 156 + 4 + 156 = 476.
-			flowcontainer = {
-				direction = horizontal
-				spacing = 4
-				parentanchor = hcenter
-				visible = "[And( And( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_can_rename'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_is_being_named'), '(CFixedPoint)0' ) ), EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_state_has_typed_name'), '(CFixedPoint)1' ) )]"
-
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rename_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_rename_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_rename" }
-				}
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_name_start_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_name_start_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_name_start" }
-				}
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_clear_name_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_clear_name_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_clear_name" }
-				}
-			}
-
-			gm_naming_line = {}
-
-			flowcontainer = {
-				direction = horizontal
-				spacing = 4
-				parentanchor = hcenter
-				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_status_code'), '(CFixedPoint)4' )]"
-
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_tear_down_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_tear_down_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_tear_down" }
-				}
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_rededicate_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_rededicate_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_rededicate" }
-				}
-				gm_choice_button = {
-					blockoverride "choice_context" { datacontext = "[GetScriptedGui('gm_preserve_sgui')]" }
-					blockoverride "choice_tooltip" { tooltip = "gm_button_preserve_tooltip" }
-					blockoverride "choice_text" { text = "gm_button_preserve" }
-				}
-			}
-
-			# Carry It Off (trophies spec §2.2): a monument we did not raise, in a
-			# state we have not incorporated (gui/gm_trophy_widgets.gui).
-			gm_tr_take_button = {}
-			# Clear It Away (owner, 2026-10-31): six stand in the state and this is
-			# the least grand (gui/gm_trophy_widgets.gui).
-			gm_clear_button = {}
 		}
 	}
 
@@ -2722,9 +2735,10 @@ types grand_monuments_widget_types
 			# hover gives where its own total comes from (GM-13).
 			# The groups' ledgers are the player's own (te_own_country_only; owner
 			# call 5 of the charts-help-national-info plan). The heading's gate is the
-			# wrapper's, so an empty guard never takes the panel's spacing.
+			# wrapper's, with the player's own country, so an empty guard never takes
+			# the panel's spacing, for the player or for another country.
 			flowcontainer = {
-				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' )]"
+				visible = "[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_disp_ig_any'), '(CFixedPoint)1' ) )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -3297,18 +3311,28 @@ types grand_monuments_widget_types
 						}
 						### Carry It Off and Clear It Away: the player's own
 						### (te_own_country_only), at the row's 480 so they stay
-						### centred.
+						### centred. The wrapper round it is shown only while one
+						### of them is, for the player, as a monument row's controls
+						### are (test_grand_monuments_layout.ControlsGateTest).
 						blockoverride "mon_controls" {
 							flowcontainer = {
-								using = te_own_country_only
+								visible = "[And( Country.IsLocalPlayer, Or( And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('gm_mon_take_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_mon', ScriptContainer.MakeScope ).End ) ), And( ObjectsEqual( ScriptContainer.MakeScope.Var('gm_tr_origin').GetState.GetOwner, Country.Self ), EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_disp_clearable'), '(CFixedPoint)1' ) ) ) )]"
 								direction = vertical
 								ignoreinvisible = yes
-								spacing = 2
 								minimumsize = { 480 -1 }
 								maximumsize = { 480 -1 }
 
-								gm_mon_take_button = {}
-								gm_mon_clear_button = {}
+								flowcontainer = {
+									using = te_own_country_only
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									minimumsize = { 480 -1 }
+									maximumsize = { 480 -1 }
+
+									gm_mon_take_button = {}
+									gm_mon_clear_button = {}
+								}
 							}
 						}
 					}

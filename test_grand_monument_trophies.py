@@ -1273,10 +1273,14 @@ class OurMonumentsListTests(unittest.TestCase):
         # card, which has no Country, keeps the block's default.
         guard = ("flowcontainer = { using = te_own_country_only direction = vertical ignoreinvisible = yes spacing = 2 "
                  "minimumsize = { 480 -1 } maximumsize = { 480 -1 } gm_mon_take_button = {} gm_mon_clear_button = {}")
-        self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
-                      "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
-                      "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
-                      f"blockoverride \"mon_controls\" {{ {guard} }} }} }}", rest)
+        # Our Monuments' row: the guard in a wrapper shown only while a button is
+        # (test_grand_monuments_layout.ControlsGateTest pins its gate).
+        self.assertRegex(rest, re.escape("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
+                         "visible = \"[NotEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "
+                         "'(CFixedPoint)4' )]\" blockoverride \"mon_where\" { gm_tr_line = { text = \"gm_mon_row_where\" } } "
+                         "blockoverride \"mon_controls\" { flowcontainer = { visible = \"[And( Country.IsLocalPlayer, ")
+                         + r"[^\"]*" + re.escape("\" direction = vertical ignoreinvisible = yes minimumsize = { 480 -1 } "
+                                                  f"maximumsize = {{ 480 -1 }} {guard} }} }} }} }} }}"))
         decide = squash(strip_comments(raw_block_at(widget, r"(?m)^\ttype te_gm_sec_decisions = flowcontainer \{")))
         self.assertIn("gm_mon_row_site = { datacontext = \"[Scope.GetScriptContainer]\" "
                       "visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_mon_status_code'), "

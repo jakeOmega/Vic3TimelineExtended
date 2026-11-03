@@ -17,6 +17,8 @@ import unittest
 from collections import namedtuple
 from pathlib import Path
 
+from mod_state import split_loc_line
+
 ROOT = Path(__file__).resolve().parent
 
 RULES = "common/game_rules/extra_game_rules.txt"
@@ -198,10 +200,12 @@ def _load_loc():
     if _LOC is None:
         _LOC = {}
         for path in sorted((ROOT / "localization/english").glob("*.yml")):
+            # mod_state.split_loc_line: a line may end in a trailing comment
+            # (gm_boon_defeat's `# REVIEWED ... (personal_text)`).
             for line in path.read_text(encoding="utf-8-sig").splitlines():
-                m = re.match(r'\s*([\w.$\'-]+):\d*\s+"(.*)"\s*$', line)
-                if m:
-                    _LOC[m.group(1)] = (m.group(2), path.name)
+                got = split_loc_line(line)
+                if got:
+                    _LOC[got[0]] = (got[1], path.name)
     return _LOC
 
 
@@ -2702,7 +2706,9 @@ class UsabilityTests(unittest.TestCase):
         self.assertIn("'gm_je_com_where_line_fixed', 'gm_je_com_where_line_any'", L["gm_je_com_where_line"])
         for rel in (WIDGET, "gui/te_state_panel_widgets.gui"):
             gui = squash(read(rel))
-            self.assertIn("ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )]", gui, rel)
+            # The panel's row also tests the player's own country (the line is
+            # the player's: test_grand_monuments_layout.ControlsGateTest).
+            self.assertIn("ScriptValue('gm_state_disp_com_counts'), '(CFixedPoint)1' )", gui, rel)
             self.assertIn('text = "gm_row_com_counts"', gui, rel)
         counts = squash(block(read(COM_VALUES), "gm_state_disp_com_counts"))
         self.assertIn("gm_state_com_counts = yes", counts)
