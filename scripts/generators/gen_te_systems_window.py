@@ -257,7 +257,7 @@ TABS: list[Tab] = [
         body="te_nation_tab_sections", wide="te_nation_wide_sections",
         public=True),
     _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections",
-            public=False),
+            public=True),
     _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
             public=True),
     replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
@@ -322,6 +322,11 @@ TABS: list[Tab] = [
 SR_MILESTONES = ["suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
                  "interstellar_probe", "interstellar_results", "solar_colonization"]
 SR_TRANSIT = {"interstellar_results"}
+# What a milestone's frame shows another country in place of its live sections
+# (National Info, spec 2026-11-02-charts-help-national-info § 6.4), under the
+# overview: solar colonization's colonies, to read (te_sr_sec_colonies_brief,
+# which shows only for another country).
+SR_FOREIGN = {"solar_colonization": "te_sr_sec_colonies_brief"}
 
 TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
@@ -547,50 +552,95 @@ def tabs_wide() -> list[str]:
 # national-info-design.md § 5.2): the "?" (te_help_button, gui/te_system_tab_widgets.gui)
 # that every header of the tab's entries carries, its last child, as each other
 # tab's header does in its body type. Its lines, at a header's child depth.
+# Hidden for an observer, who reaches the frames through National Info and for
+# whom te_popups never opens (NOT_OBSERVER, ni_help_button).
 SR_HELP_BUTTON = ["te_help_button = {",
+                  "\tvisible = \"[Not( GetMetaPlayer.IsObserver )]\"",
                   "\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"",
                   "}"]
 
 
+# Open Journal Entry, the frame's own link (te_system_tab_frame's
+# tab_open_journal default), at its size and with the tab's tooltip; a
+# milestone frame draws it inside the player's own part, under the entry.
+SR_OPEN_JOURNAL = ["button = {",
+                   '\tvisible = "[JournalEntry.IsActive]"',
+                   "\tusing = default_button",
+                   "\tparentanchor = hcenter",
+                   "\tsize = { 480 32 }",
+                   '\ttext = "te_system_tab_open_journal"',
+                   '\ttooltip = "te_window_space_race_open_journal_tt"',
+                   '\tonclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"',
+                   "}"]
+
+
 def _milestone(m: str) -> list[str]:
+    """One entry's frame (spec 2026-11-02-charts-help-national-info § 6.4).
+    It reads the Country its mount supplies (tab_country overridden empty, so
+    the frame sets none of its own), and shows while that country holds the
+    entry. The overview, which reads Country, is for any country; the live
+    sections and Open Journal Entry read the entry, which only the player's
+    own country has here (GetPlayerJournalEntry), so they sit under
+    te_own_country_only with the entry's datacontext on a child of the guard
+    (gotcha #29). The column's spacing is the frame's, so the player's
+    column is as before: overview, live sections, link, 10 apart."""
+    entry = f"je_space_race_{m}"
     if m in SR_TRANSIT:
-        content = ["te_sr_overview_transit = {}"]
+        overview, status = "te_sr_overview_transit = {}", []
     else:
-        content = [f"te_sr_{m}_overview = {{}}", f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
+        overview = f"te_sr_{m}_overview = {{}}"
+        status = [f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
+    own = (["flowcontainer = {",
+            "\tusing = te_own_country_only",
+            "\tparentanchor = hcenter",
+            "\tdirection = vertical",
+            "\tignoreinvisible = yes",
+            "",
+            "\tflowcontainer = {",
+            f"\t\tdatacontext = \"[GetPlayerJournalEntry('{entry}')]\"",
+            "\t\tparentanchor = hcenter",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 10",
+            ""]
+           + [f"\t\t{ln}" for ln in status + SR_OPEN_JOURNAL]
+           + ["\t}", "}"])
     return ([f"### {m}",
              "te_system_tab_frame = {",
-             f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui")}]"',
+             '\tblockoverride "tab_country" {}',
+             f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui", COUNTRY_ROOT)}]"',
              '\tblockoverride "tab_header" {',
              "\t\tdefault_header = {",
              "\t\t\tusing = default_list_position",
              '\t\t\tblockoverride "text" {',
-             f'\t\t\t\ttext = "je_space_race_{m}"',
+             f'\t\t\t\ttext = "{entry}"',
              "\t\t\t}"]
             + [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
             + ["\t\t}",
-             "\t}",
-             '\tblockoverride "tab_entry" {',
-             f"\t\tdatacontext = \"[GetPlayerJournalEntry('je_space_race_{m}')]\"",
-             "\t}",
-             '\tblockoverride "tab_content" {']
-            + [f"\t\t{ln}" for ln in content]
-            + ["\t}",
-               '\tblockoverride "tab_open_journal_tooltip" {',
-               '\t\ttooltip = "te_window_space_race_open_journal_tt"',
                "\t}",
+               '\tblockoverride "tab_content" {',
+               f"\t\t{overview}"]
+            + ([f"\t\t{SR_FOREIGN[m]} = {{}}"] if m in SR_FOREIGN else [])
+            + ["",
+               "\t\t### The player's own: the live sections and the link, under the entry."]
+            + [f"\t\t{ln}" if ln else "" for ln in own]
+            + ["\t}",
+               '\tblockoverride "tab_open_journal" {}',
                "}"])
 
 
 def sr_milestones() -> list[str]:
     out = ["### The Space Race body's entries (te_sr_tab_body, space_race_widget.gui):",
            "### GetPlayerJournalEntry takes one literal key, so each entry has its own",
-           "### frame, in je_space_race.txt's order, shown only while the player holds",
-           "### it (te_window_space_race_<m>_sgui, on the frame's root, so its header",
-           "### goes with it), and a note in their place while none runs",
-           "### (te_window_space_race_idle_sgui). Several can run at once. Each shows",
-           "### the types its journal roots wrap, the debris row overridden out (Orbit",
-           "### shows it once), then Open Journal Entry for that entry. Every header",
-           "### here, the note's too, ends on the \"?\" that opens the Help page.",
+           "### frame, in je_space_race.txt's order, shown only while the shown",
+           "### Country holds it (te_window_space_race_<m>_sgui on Country, on the",
+           "### frame's root, so its header goes with it), and a note in their place",
+           "### while none runs (te_window_space_race_idle_sgui). Several can run at",
+           "### once. Each shows the types its journal roots wrap, the debris row",
+           "### overridden out (Orbit shows it once), then Open Journal Entry for that",
+           "### entry: the overview for any country, the live sections and the link",
+           "### the player's own (National Info). Every header here, the note's too,",
+           "### ends on the \"?\" that opens the Help page.",
            "type te_sr_window_milestones = flowcontainer {",
            "\tparentanchor = hcenter",
            "\tdirection = vertical",
@@ -601,7 +651,7 @@ def sr_milestones() -> list[str]:
            "\t### never ends on the reference alone.",
            "\tflowcontainer = {",
            '\t\tname = "te_systems_window_space_race_idle"',
-           f'\t\tvisible = "[{shown("te_window_space_race_idle_sgui")}]"',
+           f'\t\tvisible = "[{shown("te_window_space_race_idle_sgui", COUNTRY_ROOT)}]"',
            "\t\tparentanchor = hcenter",
            "\t\tdirection = vertical",
            "\t\tignoreinvisible = yes",
@@ -623,7 +673,7 @@ def sr_milestones() -> list[str]:
             "\t}"]
     for m in SR_MILESTONES:
         out.append("")
-        out += [f"\t{ln}" for ln in _milestone(m)]
+        out += [f"\t{ln}" if ln else "" for ln in _milestone(m)]
     return out + ["}"]
 
 

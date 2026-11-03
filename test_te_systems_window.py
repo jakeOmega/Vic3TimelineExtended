@@ -172,6 +172,11 @@ def _gate(sgui):
     return f"GetScriptedGui('{sgui}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
 
 
+def _country_gate(sgui):
+    """A public tab's gate, on the Country its mount supplies (National Info)."""
+    return f"GetScriptedGui('{sgui}').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+
+
 # --- a small evaluator for the selection templates ----------------------------------
 
 _ATOM = re.compile(r"GetScriptedGui\('(\w+)'\)\.(IsShown|IsValid)\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)"
@@ -809,6 +814,45 @@ class TabContentTest(unittest.TestCase):
         # nothing the journal hides behind the bars-on-top marker comes back
         self.assertNotIn("te_je_goal_bar", frame)
 
+    def _check_sr_frame(self, frame, m, types):
+        """A Space Race entry's frame (public: National Info, spec
+        2026-11-02-charts-help-national-info § 6.4). It sets no Country of its
+        own (the mount's), shows whole while that Country holds the entry, and
+        draws the overview for any country; the live sections and Open Journal
+        Entry read the entry, so they sit under te_own_country_only, the
+        entry's datacontext on a child of the guard (gotcha #29), with the
+        frame's spacing, so the player's column is as before."""
+        key = f"je_space_race_{m}"
+        head = frame[:frame.index('blockoverride "tab_header"')]
+        self.assertIn('blockoverride "tab_country" {}', head)
+        self.assertIn(f'visible = "[{_country_gate(f"te_window_space_race_{m}_sgui")}]"', head)
+        for name in ("tab_gate", "tab_entry", "tab_before_gate", "tab_open_journal_tooltip"):
+            self.assertIsNone(_override(frame, name), name)
+        self.assertEqual(_override(frame, "tab_open_journal").strip(), "")
+        self.assertRegex(_override(frame, "tab_header"), re.compile(rf'default_header = \{{.*?text = "{key}"', re.S))
+        content = _override(frame, "tab_content")
+        guard = content.index("using = te_own_country_only")
+        shown = re.findall(r"^\t+(te_\w+) = \{\}$", content[:guard], re.M)
+        start = content.rindex("flowcontainer = {", 0, guard)
+        own = content[start:_close(content, content.index("{", start)) + 1]  # the guard's wrapper, no further
+        self.assertEqual(content[start + len(own):].strip(), "", "the guard's wrapper ends the tab's content")
+        self.assertRegex(own, rf'^flowcontainer = \{{\s*using = te_own_country_only\s*parentanchor = hcenter\s*'
+                              rf'direction = vertical\s*ignoreinvisible = yes\s*flowcontainer = \{{\s*'
+                              rf'datacontext = "\[GetPlayerJournalEntry\(\'{key}\'\)\]"\s*parentanchor = hcenter\s*'
+                              rf'direction = vertical\s*ignoreinvisible = yes\s*spacing = 10\s')
+        live = re.findall(r'^\t+(te_\w+) = \{\n\t+blockoverride "sr_debris" \{\}\n\t+\}$', own, re.M)
+        # The overview first, for any country (and solar colonization's
+        # colonies list for another country); the live sections the player's.
+        self.assertEqual(shown[:1] + live, types)
+        self.assertEqual(shown[1:], ["te_sr_sec_colonies_brief"] if m == "solar_colonization" else [])
+        self.assertNotIn("JournalEntry", content[:guard])
+        button = own[own.index("button = {"):]
+        for line in ('visible = "[JournalEntry.IsActive]"', "size = { 480 32 }", 'text = "te_system_tab_open_journal"',
+                     'tooltip = "te_window_space_race_open_journal_tt"',
+                     'onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"'):
+            self.assertIn(line, button)
+        self.assertNotIn("te_je_goal_bar", frame)
+
     def test_space_race(self):
         """Nine entries, nine frames in the journal's order, each under its own
         header and gated whole; the shared reference once, at the end."""
@@ -819,10 +863,8 @@ class TabContentTest(unittest.TestCase):
         for m, frame in zip(SR, frames):
             key = f"je_space_race_{m}"
             with self.subTest(entry=key):
-                self._check_frame(frame, key, f"te_window_space_race_{m}_sgui", key,
-                                  _journal_types(key, "je_space_race.txt", "space_race_widget.gui",
-                                                 skip=("widget_je_space_race_reference",)),
-                                  "te_window_space_race_open_journal_tt", gate_on_root=True)
+                self._check_sr_frame(frame, m, _journal_types(key, "je_space_race.txt", "space_race_widget.gui",
+                                                              skip=("widget_je_space_race_reference",)))
         # How the Space Race Works: once, after every entry, the section the
         # journal's shared reference root composes.
         body = _type_body(self.sr, "te_sr_tab_body")
@@ -830,7 +872,7 @@ class TabContentTest(unittest.TestCase):
         self.assertGreater(body.index(reference), body.index("te_sr_window_milestones = {}"))
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", reference, re.M), ["te_sr_sec_how"])
         self.assertIn("minimumsize = { 520 -1 }", reference)
-        self.assertIn(f'visible = "[{_gate("te_window_space_race_tab_sgui")}]"', reference)
+        self.assertIn(f'visible = "[{_country_gate("te_window_space_race_tab_sgui")}]"', reference)
         self.assertEqual(re.findall(r"^\t\t(te_\w+) = \{\}", _type_body(self.sr, "te_sr_reference_sections"), re.M),
                          ["te_sr_sec_how"])
         self.assertEqual(body.count("te_sr_sec_how"), 1)
@@ -851,11 +893,11 @@ class TabContentTest(unittest.TestCase):
     def test_space_powers_and_orbit_follow_the_entries_and_read_no_entry(self):
         """The tab's own sections, under its gate, below every entry's frame
         and above How (owner, 2026-10-27: the milestones we run first): they
-        read the player, so they show between milestones too. Orbit carries the
-        debris row, so every milestone's live sections drop theirs."""
+        read the shown Country, so they show between milestones too. Orbit
+        carries the debris row, so every milestone's live sections drop theirs."""
         body = _type_body(self.sr, "te_sr_tab_body")
         summary = _named(self.sr, "te_systems_window_space_race_summary")
-        self.assertIn(f'visible = "[{_gate("te_window_space_race_tab_sgui")}]"', summary)
+        self.assertIn(f'visible = "[{_country_gate("te_window_space_race_tab_sgui")}]"', summary)
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", summary, re.M), ["te_sr_sec_powers", "te_sr_sec_orbit"])
         self.assertIn("minimumsize = { 520 -1 }", summary)
         self.assertNotIn("GetPlayerJournalEntry", summary)
@@ -867,7 +909,7 @@ class TabContentTest(unittest.TestCase):
                 self.assertRegex(milestones, rf'te_sr_{m}_status = \{{\n\t+blockoverride "sr_debris" \{{\}}', m)
         # one note in the entries' place while none runs
         idle = _named(self.generated, "te_systems_window_space_race_idle")
-        self.assertIn(f'visible = "[{_gate("te_window_space_race_idle_sgui")}]"', idle)
+        self.assertIn(f'visible = "[{_country_gate("te_window_space_race_idle_sgui")}]"', idle)
         self.assertLess(milestones.index(idle), milestones.index("te_system_tab_frame = {"))
         self.assertIn('text = "te_window_space_race_idle_note"', idle)
         for name in ("te_sr_sec_powers", "te_sr_sec_orbit"):

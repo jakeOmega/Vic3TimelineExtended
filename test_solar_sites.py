@@ -1177,7 +1177,8 @@ class MoonStageTest(unittest.TestCase):
         loc = "".join(_raw("localization", "english", f)
                       for f in sorted(os.listdir(os.path.join(REPO, "localization", "english"))) if f.endswith(".yml"))
         for key in ("je_space_race_widget_colonies_held_figure", "je_space_race_widget_ov_worlds",
-                    "je_space_race_widget_ov_worlds_tt", "je_space_race_widget_ovc_colonies_fig_calm",
+                    "je_space_race_widget_ov_worlds_tt_ours", "je_space_race_widget_ov_worlds_tt_theirs",
+                    "je_space_race_widget_ovc_colonies_fig_calm",
                     "je_space_race_widget_ss_all", "je_space_race_widget_ss_filtered"):
             with self.subTest(key=key):
                 text = re.search(rf'(?m)^ {key}:\d* "(.*)"$', loc).group(1)
@@ -2003,7 +2004,7 @@ class EbaseCellTest(unittest.TestCase):
         # The row it shares with the Hostile Fleet cell shows while either does;
         # the cell itself only with the technology.
         self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
-        self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
+        self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
         self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
         for word in ("word", "word_past", "fig", "fig_plus"):
             with self.subTest(word=word):

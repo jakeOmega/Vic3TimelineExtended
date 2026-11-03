@@ -1524,13 +1524,15 @@ types te_systems_window_generated_types
 
 	### The Space Race body's entries (te_sr_tab_body, space_race_widget.gui):
 	### GetPlayerJournalEntry takes one literal key, so each entry has its own
-	### frame, in je_space_race.txt's order, shown only while the player holds
-	### it (te_window_space_race_<m>_sgui, on the frame's root, so its header
-	### goes with it), and a note in their place while none runs
-	### (te_window_space_race_idle_sgui). Several can run at once. Each shows
-	### the types its journal roots wrap, the debris row overridden out (Orbit
-	### shows it once), then Open Journal Entry for that entry. Every header
-	### here, the note's too, ends on the "?" that opens the Help page.
+	### frame, in je_space_race.txt's order, shown only while the shown
+	### Country holds it (te_window_space_race_<m>_sgui on Country, on the
+	### frame's root, so its header goes with it), and a note in their place
+	### while none runs (te_window_space_race_idle_sgui). Several can run at
+	### once. Each shows the types its journal roots wrap, the debris row
+	### overridden out (Orbit shows it once), then Open Journal Entry for that
+	### entry: the overview for any country, the live sections and the link
+	### the player's own (National Info). Every header here, the note's too,
+	### ends on the "?" that opens the Help page.
 	type te_sr_window_milestones = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
@@ -1541,7 +1543,7 @@ types te_systems_window_generated_types
 		### never ends on the reference alone.
 		flowcontainer = {
 			name = "te_systems_window_space_race_idle"
-			visible = "[GetScriptedGui('te_window_space_race_idle_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			visible = "[GetScriptedGui('te_window_space_race_idle_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			parentanchor = hcenter
 			direction = vertical
 			ignoreinvisible = yes
@@ -1554,6 +1556,7 @@ types te_systems_window_generated_types
 					text = "te_window_space_race_idle_header"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 				}
 			}
@@ -1566,7 +1569,8 @@ types te_systems_window_generated_types
 
 		### suborbital
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_suborbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_suborbital_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1574,27 +1578,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_suborbital"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_suborbital')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_suborbital_overview = {}
-				te_sr_suborbital_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_suborbital')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_suborbital_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### orbital
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_orbital_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_orbital_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1602,27 +1629,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_orbital"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_orbital')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_orbital_overview = {}
-				te_sr_orbital_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_orbital')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_orbital_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### moon_landing
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_moon_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_moon_landing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1630,27 +1680,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_moon_landing"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_moon_landing')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_moon_landing_overview = {}
-				te_sr_moon_landing_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_moon_landing')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_moon_landing_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### probe
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_probe_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1658,27 +1731,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_probe"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_probe')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_probe_overview = {}
-				te_sr_probe_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_probe')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_probe_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### moon_base
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_moon_base_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_moon_base_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1686,27 +1782,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_moon_base"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_moon_base')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_moon_base_overview = {}
-				te_sr_moon_base_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_moon_base')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_moon_base_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### mars_landing
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_mars_landing_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_mars_landing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1714,27 +1833,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_mars_landing"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_mars_landing')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_mars_landing_overview = {}
-				te_sr_mars_landing_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_mars_landing')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_mars_landing_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### interstellar_probe
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_interstellar_probe_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_interstellar_probe_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1742,27 +1884,50 @@ types te_systems_window_generated_types
 						text = "je_space_race_interstellar_probe"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_probe')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_interstellar_probe_overview = {}
-				te_sr_interstellar_probe_status = {
-					blockoverride "sr_debris" {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_probe')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_interstellar_probe_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### interstellar_results
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_interstellar_results_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_interstellar_results_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1770,24 +1935,47 @@ types te_systems_window_generated_types
 						text = "je_space_race_interstellar_results"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_results')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_overview_transit = {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_interstellar_results')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
+				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 
 		### solar_colonization
 		te_system_tab_frame = {
-			visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "tab_country" {}
+			visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			blockoverride "tab_header" {
 				default_header = {
 					using = default_list_position
@@ -1795,22 +1983,45 @@ types te_systems_window_generated_types
 						text = "je_space_race_solar_colonization"
 					}
 					te_help_button = {
+						visible = "[Not( GetMetaPlayer.IsObserver )]"
 						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
-			blockoverride "tab_entry" {
-				datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
-			}
 			blockoverride "tab_content" {
 				te_sr_solar_colonization_overview = {}
-				te_sr_solar_colonization_status = {
-					blockoverride "sr_debris" {}
+				te_sr_sec_colonies_brief = {}
+
+				### The player's own: the live sections and the link, under the entry.
+				flowcontainer = {
+					using = te_own_country_only
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+
+					flowcontainer = {
+						datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+						parentanchor = hcenter
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 10
+
+						te_sr_solar_colonization_status = {
+							blockoverride "sr_debris" {}
+						}
+						button = {
+							visible = "[JournalEntry.IsActive]"
+							using = default_button
+							parentanchor = hcenter
+							size = { 480 32 }
+							text = "te_system_tab_open_journal"
+							tooltip = "te_window_space_race_open_journal_tt"
+							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+						}
+					}
 				}
 			}
-			blockoverride "tab_open_journal_tooltip" {
-				tooltip = "te_window_space_race_open_journal_tt"
-			}
+			blockoverride "tab_open_journal" {}
 		}
 	}
 }

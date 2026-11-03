@@ -282,6 +282,11 @@ Orbit gathers what anti-satellite strikes and debris mean for you now:
 | Anti-Satellite Moratorium | Not Adopted, Bound or Not Bound (see [The anti-satellite moratorium](10-united-nations.md#the-anti-satellite-moratorium)). |
 | Our Anti-Satellite Strike | Ready once you have Guided Missiles and a Space Program. Hover it for what is missing, or for the countries at war with you that have something in orbit to strike, each marked if it was struck in the last 12 months. |
 
+Another country's National Info shows its Space Race tab too, less its
+approach, setback risk, Mission Control, Rivals and strike row. Its progress
+there is an estimate band, a quarter of the goal either side, that your agent
+networks don't narrow.
+
 ### Standard, Safe and Ambitious approaches
 
 The approach decides how fast a milestone moves, how often it goes wrong and what

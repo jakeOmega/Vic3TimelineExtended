@@ -4084,6 +4084,32 @@ def _op_scope(op: int) -> str:
             f"'(CFixedPoint){op}' ) ).End")
 
 
+# Another country's colonies (National Info, spec docs/superpowers/specs/
+# 2026-11-02-charts-help-national-info-design.md § 6.4): every world the shown
+# Country holds, read on Country, with nothing to press. The player's own
+# Colonies section (te_sr_colony_rows, under the entry) stays the player's.
+def _country_sv(name: str) -> str:
+    return f"Country.MakeScope.ScriptValue('{name}')"
+
+
+def _brief_row(site: Site) -> list[str]:
+    """One colony in another country's Colonies (te_sr_colony_brief_row):
+    shown while the shown country holds it (sr_disp_site_<key> 1), its icon,
+    its name with the colonies' hover, and under Simple and Full Colonies its
+    people against its room."""
+    k = site.key
+    held = f"EqualTo_CFixedPoint( {_country_sv(f'sr_disp_site_{k}')}, '(CFixedPoint)1' )"
+    contested = f"EqualTo_CFixedPoint( {_country_sv('sr_disp_colonies_contested')}, '(CFixedPoint)1' )"
+    out = ["\t\tte_sr_colony_brief_row = {"]
+    out += _override("brief_visible", f'visible = "[{held}]"')
+    out += _override("brief_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("brief_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_colony_site_tt_{k}"')
+    out += _override("brief_people", f'visible = "[{contested}]"',
+                     f"raw_text = \"#v [{_country_sv(f'sr_disp_site_pop_{k}')}|K]#! / "
+                     f"[{_country_sv(f'sr_site_room_{k}')}|K]\"")
+    return out + ["\t\t}"]
+
+
 def _queue_row(n: int) -> list[str]:
     op = _op_scope(n)
     out = ["\t\tte_sr_mq_row = {"]
@@ -4186,6 +4212,9 @@ def render_gui() -> str:
            "### right_click_menu.gui. te_sr_target_picker_rows is the colony target popup's",
            "### list (UI pass design § 5): every world by location, with its launch window",
            "### and Target button, filtered to the worlds we can target by default.",
+           "### te_sr_colony_brief_rows is another country's Colonies (National Info):",
+           "### every world, shown while the shown Country holds it, read on Country,",
+           "### with nothing to press (te_sr_colony_brief_row).",
            "",
            "types sr_sites_generated_rows_types",
            "{",
@@ -4253,6 +4282,13 @@ def render_gui() -> str:
             "\t\tspacing = 2"]
     for site in panel_order():
         out += [""] + _free_row(site)
+    out += ["\t}", "",
+            "\ttype te_sr_colony_brief_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for site in panel_order():
+        out += [""] + _brief_row(site)
     out += ["\t}"]
     for name, source in CEDE_SOURCES:
         out += [""] + _cede_list(name, source)

@@ -96,3 +96,24 @@ te_asat_moratorium_detail = {
 		localization_key = te_asat_moratorium_detail_not_bound
 	}
 }
+
+# The same, in the third person, for another country's Orbit section
+# (National Info; te_orbit_moratorium_tt_ni). The player's hover keeps
+# te_asat_moratorium_detail and its words.
+te_asat_moratorium_detail_ni = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_global_variable = un_agency_unoda } }
+		localization_key = te_asat_moratorium_detail_not_adopted
+	}
+	text = {
+		trigger = { te_asat_moratorium_party = yes }
+		localization_key = te_asat_moratorium_detail_bound_ni
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = te_asat_moratorium_detail_not_bound_ni
+	}
+}

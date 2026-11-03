@@ -193,7 +193,7 @@ class BodyTest(unittest.TestCase):
             with self.subTest(part=name):
                 own = dict((n, v) for kind, n, v in _children(part) if kind == "property")
                 self.assertEqual(own["name"], f'"{name}"')
-                self.assertEqual(own["visible"], f'"[{_gate("te_window_space_race_tab_sgui")}]"')
+                self.assertEqual(own["visible"], f'"[{_gate("te_window_space_race_tab_sgui").replace("GetPlayer.MakeScope", "Country.MakeScope")}]"')
                 self.assertEqual(own["minimumsize"], "{ 520 -1 }")
                 self.assertEqual(own.get("spacing"), spacing)
                 self.assertEqual([n for kind, n, _ in _children(part) if kind != "property" or n.startswith("te_")],
@@ -578,7 +578,6 @@ UNBOUND = set([
 
 
 
-    "space_race",
 ])
 
 # The systems National Info doesn't show in this work (spec § 6.4): never public.

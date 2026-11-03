@@ -316,7 +316,7 @@ def _render(value):
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
-MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_empty|solar_system_note"
+MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro)")
 CELLS = {
@@ -334,6 +334,14 @@ CELLS = {
     "progress headline (te_sr_ov_bar_row)": (
         ("te_sr_ov_bar_row", 'block "bar_text"'),
         r"je_space_race_widget_progress_\w+"),
+    # Another country's estimate in the bar's place (National Info, spec
+    # 2026-11-02-charts-help-national-info § 6.4), at the bar row's widths.
+    "progress label (te_sr_ov_band_row)": (
+        ("te_sr_ov_band_row", 'block "band_label"'),
+        r"je_space_race_widget_(ov_progress_label|ov_colony_label)"),
+    "progress band in words (te_sr_ov_band_row)": (
+        ("te_sr_ov_band_row", 'block "band_text"'),
+        r"je_space_race_widget_band_(?!tt$)\w+"),
     "value-row label (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_label"'),
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"

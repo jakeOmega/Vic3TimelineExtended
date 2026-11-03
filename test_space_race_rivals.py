@@ -110,6 +110,44 @@ class RefreshTest(unittest.TestCase):
         self.assertRegex(body, r"else_if = \{\s*limit = \{ var:sr_fuzz_until_\$MILESTONE\$ <= te_history_month_index \}\s*"
                                r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
 
+    def test_each_country_running_a_milestone_draws_its_own_offset(self):
+        """Another country's National Info draws its band around progress +
+        offset x band (spec 2026-11-02-charts-help-national-info § 6.4), and a
+        player who doesn't race that milestone draws no rival's offset, so each
+        country running one draws its own, monthly, in every participant's
+        pulse (AI too), with Space Powers' own draw (sr_power_fuzz_base)."""
+        body = _body(self.effects, "sr_own_fuzz_refresh")
+        self.assertEqual(re.findall(r"sr_power_fuzz_base = \{ MILESTONE = (\w+)", body), list(MILESTONES))
+        base = _body(self.effects, "sr_power_fuzz_base")
+        self.assertRegex(base, r"^\s*if = \{\s*limit = \{ has_variable = sr_active_\$MILESTONE\$ \}")
+        self.assertRegex(base, r"limit = \{ NOT = \{ has_variable = sr_fuzz_until_\$MILESTONE\$ \} \}\s*"
+                               r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
+        self.assertRegex(base, r"else_if = \{\s*limit = \{ var:sr_fuzz_until_\$MILESTONE\$ <= te_history_month_index \}\s*"
+                               r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
+        pulse = _body(_read(ON_ACTIONS), "space_race_on_action")
+        self.assertRegex(pulse, r"limit = \{ sr_space_race_participant = yes \}(?:(?!is_player)[\s\S])*?"
+                                r"sr_own_fuzz_refresh = yes")
+
+    def test_a_milestone_draws_its_offset_as_it_starts(self):
+        """Review of #1367, M1: the band is drawn around progress + offset x
+        band, so with no offset yet it would sit centered on the exact figure
+        until the next monthly pulse. Each place a milestone starts draws its
+        first offset there, if it has none, so a re-run of the immediate (a
+        revolution's inheritance) keeps the one it has."""
+        first = _body(self.effects, "sr_power_fuzz_first")
+        self.assertRegex(first, r"^\s*if = \{\s*limit = \{ NOT = \{ has_variable = sr_fuzz_until_\$MILESTONE\$ \} \}\s*"
+                                r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}\s*\}\s*$")
+        starts = []
+        for path in ("common/journal_entries/je_space_race.txt", "common/scripted_effects/sr_site_effects.txt"):
+            text = _read(os.path.join(REPO, path))
+            for m in re.finditer(r"set_variable = \{ name = sr_active_(\w+) value = yes \}\n(.*)\n(.*)\n", text):
+                if m.group(1) == "interstellar_results":  # the wait for data: no band
+                    continue
+                starts.append(m.group(1))
+                with self.subTest(path=path, milestone=m.group(1)):
+                    self.assertEqual(m.group(3).strip(), f"sr_power_fuzz_first = {{ MILESTONE = {m.group(1)} }}")
+        self.assertEqual(sorted(starts), sorted(MILESTONES + ("solar_colonization",)))
+
     def test_the_draw(self):
         roll = _body(self.effects, "sr_roll_rival_fuzz")
         branches = re.findall(r"(\d+) = \{ set_variable = \{ name = sr_fuzz_\$MILESTONE\$ value = (-?[\d.]+) \} \}", roll)

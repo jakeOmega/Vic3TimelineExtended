@@ -16,6 +16,9 @@
 ### right_click_menu.gui. te_sr_target_picker_rows is the colony target popup's
 ### list (UI pass design § 5): every world by location, with its launch window
 ### and Target button, filtered to the worlds we can target by default.
+### te_sr_colony_brief_rows is another country's Colonies (National Info):
+### every world, shown while the shown Country holds it, read on Country,
+### with nothing to press (te_sr_colony_brief_row).
 
 types sr_sites_generated_rows_types
 {
@@ -28446,6 +28449,692 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "free_stop_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_free_supplied_sedna'), '(CFixedPoint)1' )]"
+			}
+		}
+	}
+
+	type te_sr_colony_brief_rows = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_shackleton'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_shackleton"
+				tooltip = "je_space_race_widget_colony_site_tt_shackleton"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_shackleton')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_shackleton')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_peary'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_peary"
+				tooltip = "je_space_race_widget_colony_site_tt_peary"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_peary')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_peary')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_tranquility'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_tranquility"
+				tooltip = "je_space_race_widget_colony_site_tt_tranquility"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_tranquility')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_tranquility')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_marius_hills'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_marius_hills"
+				tooltip = "je_space_race_widget_colony_site_tt_marius_hills"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_marius_hills')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_marius_hills')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_daedalus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_daedalus"
+				tooltip = "je_space_race_widget_colony_site_tt_daedalus"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_daedalus')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_daedalus')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_imbrium'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_moon.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_imbrium"
+				tooltip = "je_space_race_widget_colony_site_tt_imbrium"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_imbrium')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_imbrium')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_venus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_venus"
+				tooltip = "je_space_race_widget_colony_site_tt_venus"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_venus')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_venus')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_mercury'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mercury.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_mercury"
+				tooltip = "je_space_race_widget_colony_site_tt_mercury"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_mercury')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_mercury')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_valles_marineris'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_valles_marineris"
+				tooltip = "je_space_race_widget_colony_site_tt_valles_marineris"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_valles_marineris')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_valles_marineris')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_olympus_mons'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_olympus_mons"
+				tooltip = "je_space_race_widget_colony_site_tt_olympus_mons"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_olympus_mons')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_olympus_mons')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_hellas_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_hellas_planitia"
+				tooltip = "je_space_race_widget_colony_site_tt_hellas_planitia"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_hellas_planitia')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_hellas_planitia')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_utopia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_utopia_planitia"
+				tooltip = "je_space_race_widget_colony_site_tt_utopia_planitia"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_utopia_planitia')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_utopia_planitia')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_arcadia_planitia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_arcadia_planitia"
+				tooltip = "je_space_race_widget_colony_site_tt_arcadia_planitia"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_arcadia_planitia')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_arcadia_planitia')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_ceres'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_ceres"
+				tooltip = "je_space_race_widget_colony_site_tt_ceres"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_ceres')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_ceres')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_vesta'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_vesta"
+				tooltip = "je_space_race_widget_colony_site_tt_vesta"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_vesta')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_vesta')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_psyche'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_psyche"
+				tooltip = "je_space_race_widget_colony_site_tt_psyche"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_psyche')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_psyche')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_pallas'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_pallas"
+				tooltip = "je_space_race_widget_colony_site_tt_pallas"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_pallas')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_pallas')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_hygiea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_hygiea"
+				tooltip = "je_space_race_widget_colony_site_tt_hygiea"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_hygiea')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_hygiea')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_io'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_io"
+				tooltip = "je_space_race_widget_colony_site_tt_io"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_io')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_io')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_europa'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_europa"
+				tooltip = "je_space_race_widget_colony_site_tt_europa"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_europa')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_europa')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_ganymede'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_ganymede"
+				tooltip = "je_space_race_widget_colony_site_tt_ganymede"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_ganymede')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_ganymede')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_callisto'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_callisto"
+				tooltip = "je_space_race_widget_colony_site_tt_callisto"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_callisto')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_callisto')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_himalia'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_himalia"
+				tooltip = "je_space_race_widget_colony_site_tt_himalia"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_himalia')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_himalia')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_amalthea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_amalthea"
+				tooltip = "je_space_race_widget_colony_site_tt_amalthea"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_amalthea')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_amalthea')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_titan'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_titan"
+				tooltip = "je_space_race_widget_colony_site_tt_titan"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_titan')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_titan')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_enceladus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_enceladus"
+				tooltip = "je_space_race_widget_colony_site_tt_enceladus"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_enceladus')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_enceladus')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_rhea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_rhea"
+				tooltip = "je_space_race_widget_colony_site_tt_rhea"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_rhea')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_rhea')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_mimas'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_mimas"
+				tooltip = "je_space_race_widget_colony_site_tt_mimas"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_mimas')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_mimas')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_iapetus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_iapetus"
+				tooltip = "je_space_race_widget_colony_site_tt_iapetus"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_iapetus')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_iapetus')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_titania'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_titania"
+				tooltip = "je_space_race_widget_colony_site_tt_titania"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_titania')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_titania')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_oberon'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_oberon"
+				tooltip = "je_space_race_widget_colony_site_tt_oberon"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_oberon')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_oberon')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_miranda'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_miranda"
+				tooltip = "je_space_race_widget_colony_site_tt_miranda"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_miranda')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_miranda')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_ariel'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_ariel"
+				tooltip = "je_space_race_widget_colony_site_tt_ariel"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_ariel')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_ariel')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_triton'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_triton"
+				tooltip = "je_space_race_widget_colony_site_tt_triton"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_triton')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_triton')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_proteus'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_proteus"
+				tooltip = "je_space_race_widget_colony_site_tt_proteus"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_proteus')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_proteus')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_pluto'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_pluto"
+				tooltip = "je_space_race_widget_colony_site_tt_pluto"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_pluto')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_pluto')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_eris'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_eris"
+				tooltip = "je_space_race_widget_colony_site_tt_eris"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_eris')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_eris')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_makemake'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_makemake"
+				tooltip = "je_space_race_widget_colony_site_tt_makemake"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_makemake')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_makemake')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_haumea'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_haumea"
+				tooltip = "je_space_race_widget_colony_site_tt_haumea"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_haumea')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_haumea')|K]"
+			}
+		}
+
+		te_sr_colony_brief_row = {
+			blockoverride "brief_visible" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_site_sedna'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "brief_icon" {
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+			}
+			blockoverride "brief_name" {
+				text = "sr_site_name_sedna"
+				tooltip = "je_space_race_widget_colony_site_tt_sedna"
+			}
+			blockoverride "brief_people" {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+				raw_text = "#v [Country.MakeScope.ScriptValue('sr_disp_site_pop_sedna')|K]#! / [Country.MakeScope.ScriptValue('sr_site_room_sedna')|K]"
 			}
 		}
 	}

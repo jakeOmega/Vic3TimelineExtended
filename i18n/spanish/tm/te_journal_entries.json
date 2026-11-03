@@ -3232,24 +3232,24 @@
   "es": "#tooltippable En espera en órbita#!"
  },
  "je_space_race_widget_ov_staged_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! flotas"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! fleets",
+  "es": "#v [Country.MakeScope.ScriptValue('sr_launch_staged_fleets')|1]#! flotas"
  },
  "je_space_race_widget_ov_transit_label": {
   "en": "Transit",
   "es": "Tránsito"
  },
  "je_space_race_widget_ov_transit_tt": {
-  "en": "#bold To go:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$",
-  "es": "#bold Falta:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$"
+  "en": "#bold To go:#! [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$",
+  "es": "#bold Falta:#! [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses\\n\\n$je_space_race_widget_reward_interstellar_results$\\n\\n$je_space_race_widget_pace_interstellar_results$"
  },
  "je_space_race_widget_ov_worlds": {
   "en": "Worlds: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34",
   "es": "Mundos: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] / 34"
  },
- "je_space_race_widget_ov_worlds_tt": {
-  "en": "#bold Ours:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Claimed worldwide:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] of 34\\nOurs run clockwise from twelve o'clock, then other powers' claims, then the worlds no one holds. Each world can be claimed once, by anyone.",
-  "es": "#bold Nuestros:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Reclamados en todo el mundo:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_total_global_colonies')|0] de 34\\nLos nuestros van en sentido horario desde las doce en punto, luego las reclamaciones de otras potencias y luego los mundos que nadie tiene. Cada mundo puede reclamarse una vez, por cualquiera."
+ "je_space_race_widget_ov_worlds_tt_ours": {
+  "en": "#bold Ours:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Claimed worldwide:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] of 34\\nOurs run clockwise from twelve o'clock, then other powers' claims, then the worlds no one holds. Each world can be claimed once, by anyone.",
+  "es": "#bold Nuestros:#! [Country.MakeScope.ScriptValue('sr_colony_count_value')|0]\\n#bold Reclamados en todo el mundo:#! [Country.MakeScope.ScriptValue('sr_total_global_colonies')|0] de 34\\nLos nuestros van en sentido horario desde las doce en punto, luego las reclamaciones de otras potencias y luego los mundos que nadie tiene. Cada mundo puede reclamarse una vez, por cualquiera."
  },
  "je_space_race_widget_pace_interstellar_results": {
   "en": "Nothing can be done to hurry this. The probe is coasting, and the signal it sends will take another 4.37 years to cross back to Earth after it arrives.",
@@ -3400,48 +3400,48 @@
   "es": "Perfil de la misión"
  },
  "je_space_race_widget_prog_interstellar_0": {
-  "en": "#bold Interstellar Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]",
-  "es": "#bold Sonda interestelar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_interstellar_probe')]"
+  "en": "#bold Interstellar Probe#! — [Country.GetCustom('sr_prog_interstellar_probe')]",
+  "es": "#bold Sonda interestelar#! — [Country.GetCustom('sr_prog_interstellar_probe')]"
  },
  "je_space_race_widget_prog_interstellar_1": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_running$\\nOnce launched, the probe coasts for 132 months before its data reaches us.",
   "es": "#bold Sonda interestelar#! — $sr_prog_state_running$\\nUna vez lanzada, la sonda va a la deriva durante 132 meses antes de que sus datos nos lleguen."
  },
  "je_space_race_widget_prog_interstellar_2": {
-  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data reaches us in [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos nos llegan en [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
+  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos nos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
  },
  "je_space_race_widget_prog_interstellar_3": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
   "es": "#bold Sonda interestelar#! — $sr_prog_state_signal_received$"
  },
  "je_space_race_widget_prog_mars_landing": {
-  "en": "#bold Mars Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]",
-  "es": "#bold Aterrizaje en Marte#! — [JournalEntry.GetCountry.GetCustom('sr_prog_mars_landing')]"
+  "en": "#bold Mars Landing#! — [Country.GetCustom('sr_prog_mars_landing')]",
+  "es": "#bold Aterrizaje en Marte#! — [Country.GetCustom('sr_prog_mars_landing')]"
  },
  "je_space_race_widget_prog_moon_base": {
   "en": "#bold Moon Base#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]",
   "es": "#bold Base lunar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_base')]"
  },
  "je_space_race_widget_prog_moon_landing": {
-  "en": "#bold Moon Landing#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]",
-  "es": "#bold Alunizaje#! — [JournalEntry.GetCountry.GetCustom('sr_prog_moon_landing')]"
+  "en": "#bold Moon Landing#! — [Country.GetCustom('sr_prog_moon_landing')]",
+  "es": "#bold Alunizaje#! — [Country.GetCustom('sr_prog_moon_landing')]"
  },
  "je_space_race_widget_prog_orbital": {
-  "en": "#bold Orbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]",
-  "es": "#bold Vuelo orbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_orbital')]"
+  "en": "#bold Orbital Flight#! — [Country.GetCustom('sr_prog_orbital')]",
+  "es": "#bold Vuelo orbital#! — [Country.GetCustom('sr_prog_orbital')]"
  },
  "je_space_race_widget_prog_probe": {
-  "en": "#bold Deep-Space Probe#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]",
-  "es": "#bold Sonda de espacio profundo#! — [JournalEntry.GetCountry.GetCustom('sr_prog_probe')]"
+  "en": "#bold Deep-Space Probe#! — [Country.GetCustom('sr_prog_probe')]",
+  "es": "#bold Sonda de espacio profundo#! — [Country.GetCustom('sr_prog_probe')]"
  },
  "je_space_race_widget_prog_solar_colonization": {
-  "en": "#bold Solar System Colonization#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]",
-  "es": "#bold Colonización del sistema solar#! — [JournalEntry.GetCountry.GetCustom('sr_prog_solar_colonization')]"
+  "en": "#bold Solar System Colonization#! — [Country.GetCustom('sr_prog_solar_colonization')]",
+  "es": "#bold Colonización del sistema solar#! — [Country.GetCustom('sr_prog_solar_colonization')]"
  },
  "je_space_race_widget_prog_suborbital": {
-  "en": "#bold Suborbital Flight#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]",
-  "es": "#bold Vuelo suborbital#! — [JournalEntry.GetCountry.GetCustom('sr_prog_suborbital')]"
+  "en": "#bold Suborbital Flight#! — [Country.GetCustom('sr_prog_suborbital')]",
+  "es": "#bold Vuelo suborbital#! — [Country.GetCustom('sr_prog_suborbital')]"
  },
  "je_space_race_widget_programme_header": {
   "en": "Programme",
@@ -3452,8 +3452,8 @@
   "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_interstellar_probe_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_probe_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_interstellar_probe')|1]/mes#!)"
  },
  "je_space_race_widget_progress_interstellar_results": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 meses"
+  "en": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 months",
+  "es": "#v [Country.MakeScope.ScriptValue('sr_interstellar_transit_value')|0]#! / 132 meses"
  },
  "je_space_race_widget_progress_mars_landing": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_progress_mars_landing_value')|0]#! / [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mars_landing_goal')|0] (#tooltippable +[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_pace_rate_mars_landing')|1]/mo#!)",
@@ -3520,36 +3520,36 @@
   "es": "#header Vuelo suborbital#!\\n#bold Si somos la primera nación en lograrlo:#!\\n[GetStaticModifier('sr_first_suborbital').GetDesc]\\n#bold Si otra potencia llega antes:#!\\n[GetStaticModifier('sr_suborbital').GetDesc]"
  },
  "je_space_race_widget_risk_interstellar_probe": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe')|0]%/mes"
  },
  "je_space_race_widget_risk_mars_landing": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing')|0]%/mes"
  },
  "je_space_race_widget_risk_moon_base": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_base')|0]%/mes"
  },
  "je_space_race_widget_risk_moon_landing": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing')|0]%/mes"
  },
  "je_space_race_widget_risk_orbital": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_orbital')|0]%/mes"
  },
  "je_space_race_widget_risk_probe": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_probe')|0]%/mes"
  },
  "je_space_race_widget_risk_solar_colonization": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization')|0]%/mes"
  },
  "je_space_race_widget_risk_suborbital": {
-  "en": "Risk: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
-  "es": "Riesgo: [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
+  "en": "Risk: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mo",
+  "es": "Riesgo: [Country.MakeScope.ScriptValue('sr_risk_shown_suborbital')|0]%/mes"
  },
  "je_space_race_widget_rival_more_interstellar_probe": {
   "en": "+[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_more_interstellar_probe')|0] more",
