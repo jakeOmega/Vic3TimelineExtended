@@ -56,7 +56,7 @@ pm_sr_fabrication_orbital_assembly = {
 }
 
 pm_sr_fabrication_lunar_foundries = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_fabrication_lunar_foundries.dds"
 
 	unlocking_technologies = {
 		space_colonization
@@ -82,7 +82,7 @@ pm_sr_fabrication_lunar_foundries = {
 }
 
 pm_sr_fabrication_fusion_shipyards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p2.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_fabrication_fusion_shipyards.dds"
 
 	unlocking_technologies = {
 		compact_fusion_reactors
