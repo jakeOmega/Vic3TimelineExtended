@@ -1,17 +1,19 @@
-﻿### MOD: Demographics tab (te_demog) ###
-### Vanilla's Census Data window (gui/pop_browser_panel.gui, 1.14.5), the pops of the country it was opened for, with
-### one addition: a strip of two tabs over the window, vanilla's pops (Pops) and the Demographics census of that same
-### country (Demographics), whichever country it is. Otherwise vanilla, changed only inside `### MOD: Demographics tab`
-### blocks that add lines and remove none; test_fixtures/vanilla_gui/pop_browser_panel.gui is vanilla's file, for the
-### next patch's merge (gui_modding_guide.md, "Updating overrides after a vanilla patch"), and
-### test_demographics_census_window.py holds the override to it.
+﻿### MOD: National Info ###
+### Vanilla's Census Data window (gui/pop_browser_panel.gui, 1.14.5), renamed National Info (POP_BROWSER, in the
+### replace loc: "French National Info" for France), for the country it was opened for: vanilla's pops (the Pops tab)
+### and a tab for each system another country's panel may show (spec
+### docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 6.2). Otherwise vanilla, changed only
+### inside `### MOD: National Info` blocks that add lines and remove none; test_fixtures/vanilla_gui/pop_browser_panel.gui
+### is vanilla's file, for the next patch's merge (gui_modding_guide.md, "Updating overrides after a vanilla patch"),
+### and test_demographics_census_window.py holds the override to it.
 ###
-### The strip shows while the Demographics rule runs the census (te_pops_demog_tab_sgui), so with the rule off the window
-### is vanilla's. The Demographics tab is greyed until the country's first census (te_pops_demog_tab_unlock_sgui), as
-### the Population panel's is. Which tab shows is a client-side flag, te_pop_browser_demog (GetVariableSystem, never
-### saved): set, the census shows in place of the filters, charts and table; clear, vanilla's window. The census is
-### gui/te_demographics_layout.gui's te_demog_browser_sections, rooted at the window's Country
-### (PopBrowserPanel.GetCountry), so a foreign country shows its own figures and none of the player's buttons.
+### The strip, its selection templates and the tabs' column are generated (gui/te_national_info_generated.gui, by
+### scripts/generators/gen_te_systems_window.py from its TABS registry: Pops, then the public tabs; never edit it).
+### The strip shows while a public tab could be on it (te_ni_strip_shown), so with their rules off the window is
+### vanilla's. The tab shown is a client-side value, te_ni_tab (GetVariableSystem, never saved): the last one chosen
+### while it is open for the window's country, otherwise Pops, in place of the filters, charts and table. Every tab
+### reads the window's Country (PopBrowserPanel.GetCountry): the player's own shows its controls, another country
+### its figures and none of the player's controls. The _show state clears te_ni_chart, another country's chart viewer.
 ### END MOD ###
 # The spreadsheet cells are a fixed size in order to be optimized
 @spreadsheet_width = 1381
@@ -30,6 +32,10 @@ types pop_browser_panel_types
 		blockoverride "animation_state_block" {
 			state = {
 				name = _show
+				### MOD: National Info ###
+				# A chart viewer left open for another country (te_ni_chart) never reopens with the window.
+				on_start = "[GetVariableSystem.Clear('te_ni_chart')]"
+				### END MOD ###
 				start_sound = {
 					soundeffect = "event:/SFX/UI/Population/population_census_data"
 				}
@@ -48,68 +54,21 @@ types pop_browser_panel_types
 				layoutpolicy_vertical = expanding
 				layoutpolicy_horizontal = expanding
 
-				### MOD: Demographics tab (te_demog) ###
-				# The strip: Pops (vanilla's window) and Demographics, centred at a side panel's width, as the
-				# Population panel's tabs are. tab_buttons' unset slots stay hidden.
+				### MOD: National Info ###
+				# The strip (generated): Pops, then the public tabs, five a strip at a side panel's width, centred.
 				hbox = {
-					visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+					using = te_ni_strip_shown
 					layoutpolicy_vertical = preferred
 					layoutpolicy_horizontal = expanding
 					margin_bottom = 6
 
-					expand = {}
-
-					tab_buttons = {
-						minimumsize = { 540 -1 }
-						maximumsize = { 540 -1 }
-
-						blockoverride "first_button" {
-							text = "te_pop_browser_tab_pops"
-						}
-						blockoverride "first_button_tooltip" {
-							tooltip = "te_pop_browser_tab_pops_tt"
-						}
-						blockoverride "first_button_click" {
-							onclick = "[GetVariableSystem.Clear('te_pop_browser_demog')]"
-						}
-						blockoverride "first_button_visibility" {
-							visible = "[Not( GetVariableSystem.Exists('te_pop_browser_demog') )]"
-						}
-						blockoverride "first_button_visibility_checked" {
-							visible = "[GetVariableSystem.Exists('te_pop_browser_demog')]"
-						}
-						blockoverride "first_button_selected" {
-							text = "te_pop_browser_tab_pops"
-						}
-
-						blockoverride "second_button" {
-							text = "te_pops_tab_demog"
-						}
-						blockoverride "second_button_tooltip" {
-							tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_pop_browser_tab_demog_tt', 'te_pop_browser_tab_demog_pending_tt' )]"
-						}
-						blockoverride "second_button_click" {
-							enabled = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-							onclick = "[GetVariableSystem.Set('te_pop_browser_demog', 'yes')]"
-						}
-						blockoverride "second_button_visibility" {
-							visible = "[GetVariableSystem.Exists('te_pop_browser_demog')]"
-						}
-						blockoverride "second_button_visibility_checked" {
-							visible = "[Not( GetVariableSystem.Exists('te_pop_browser_demog') )]"
-						}
-						blockoverride "second_button_selected" {
-							text = "te_pops_tab_demog"
-						}
-					}
-
-					expand = {}
+					te_ni_strips = {}
 				}
 				### END MOD ###
 
 				hbox = {
-					### MOD: Demographics tab (te_demog) ###
-					visible = "[Not( And( GetVariableSystem.Exists('te_pop_browser_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+					### MOD: National Info ###
+					using = te_ni_pops_selected
 					### END MOD ###
 					layoutpolicy_vertical = preferred
 					layoutpolicy_horizontal = expanding
@@ -210,8 +169,8 @@ types pop_browser_panel_types
 				}
 
 				hbox = {
-					### MOD: Demographics tab (te_demog) ###
-					visible = "[Not( And( GetVariableSystem.Exists('te_pop_browser_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+					### MOD: National Info ###
+					using = te_ni_pops_selected
 					### END MOD ###
 					layoutpolicy_vertical = expanding
 					layoutpolicy_horizontal = expanding
@@ -2222,11 +2181,12 @@ types pop_browser_panel_types
 					}
 				}
 
-				### MOD: Demographics tab (te_demog) ###
-				# The census of the window's country, in its own scroll area where the filters, charts and table were.
+				### MOD: National Info ###
+				# The tab shown, for the window's country, in its own scroll area where the filters, charts and table were:
+				# each public tab's pair of mounts (generated), the player's own country's and another's.
 				scrollarea = {
-					name = "te_pop_browser_demog_tab"
-					visible = "[And( GetVariableSystem.Exists('te_pop_browser_demog'), GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+					name = "te_ni_content"
+					using = te_ni_content_shown
 					layoutpolicy_vertical = expanding
 					layoutpolicy_horizontal = expanding
 
@@ -2239,14 +2199,7 @@ types pop_browser_panel_types
 					}
 
 					scrollwidget = {
-						flowcontainer = {
-							parentanchor = hcenter
-							direction = vertical
-							margin_top = 10
-							margin_bottom = 15
-
-							te_demog_browser_sections = {}
-						}
+						te_ni_tabs = {}
 					}
 				}
 				### END MOD ###
