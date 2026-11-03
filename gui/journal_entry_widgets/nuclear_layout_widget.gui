@@ -232,7 +232,7 @@ types nuclear_layout_widget_types
 	### Another country's column 2 in the wide layout (National Info, spec
 	### 2026-11-02-charts-help-national-info § 6.4): column 3's world sections
 	### (the taboo, Nuclear Powers), spaced as column 3 spaces them. Its
-	### own column 2 (the posture, forces, at home, reputation) and column 3
+	### own column 2 (the forces, at home, reputation) and column 3
 	### are the player's own, so without this its panel would have an empty
 	### 520 band in the middle. Never shown for the player, whose copy stays
 	### in column 3. test_nuclear_layout.WideTest holds it.
@@ -257,7 +257,8 @@ types nuclear_layout_widget_types
 	### The tab in the Timeline Extended window's full screen (spec
 	### 2026-11-02-te-window-wide-mode § 7): te_nuclear_tab_layout's sections
 	### on te_ui_columns_three, read down each column and then across, each
-	### under its composer's gate. The goal bar keeps its wrapper and gate,
+	### under its composer's gate. The owner moved Nuclear Posture to the foot
+	### of column 1 (2026-11-03), which keeps the narrow order. The goal bar keeps its wrapper and gate,
 	### under The Programme. The window's wide mount puts it in place of
 	### te_nuclear_tab_layout; the Military panel and the side panel keep the
 	### one column. test_nuclear_layout.py holds the columns.
@@ -278,6 +279,11 @@ types nuclear_layout_widget_types
 				te_nuclear_sec_crisis = {}
 				te_nuclear_sec_strike = {}
 				te_nuclear_sec_world_crises = {}
+				### Nuclear Posture at the column's foot (owner, 2026-11-03), at
+				### the composer's spacing: the player's own, by its type's own
+				### And( Country.IsLocalPlayer, nd_armed ), so another country's
+				### copy of this wrapper never draws it.
+				te_nuclear_sec_posture = {}
 			}
 		}
 
@@ -292,7 +298,6 @@ types nuclear_layout_widget_types
 				spacing = 4
 				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
-				te_nuclear_sec_posture = {}
 				te_nuclear_sec_forces = {}
 				te_nuclear_sec_home = {}
 				te_nuclear_sec_reputation = {}

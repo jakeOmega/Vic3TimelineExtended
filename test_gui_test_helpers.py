@@ -2,8 +2,9 @@
 docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 9.5).
 
 A wide composer must place exactly the narrow layout's sections, in their
-order read down each column and then across, on te_ui_columns_three or
-te_ui_columns_two, each under exactly the gates the narrow layout gives it.
+order read down each column and then across (or, with columns=, in the columns
+the owner set), on te_ui_columns_three or te_ui_columns_two, each under exactly
+the gates the narrow layout gives it.
 The real calls are in each system's layout test (test_demographics_layout.py
 for the Census Data window). Each failing case names the message it expects,
 so a case can't pass on some other failure.
@@ -112,6 +113,35 @@ class WideMatchesNarrowTest(unittest.TestCase):
         moved = GOOD.replace('blockoverride "column_1"', 'blockoverride "column_tmp"')
         moved = moved.replace('blockoverride "column_3"', 'blockoverride "column_1"')
         self.fails("the narrow layout's sections", moved.replace('blockoverride "column_tmp"', 'blockoverride "column_3"'))
+
+    # columns= (owner, 2026-11-03): a layout balanced by hand may read in another order than the narrow one, but must
+    # place each narrow section once, under the same gates, in exactly the columns named.
+    REORDERED = GOOD.replace("\t\t\tte_x_overview = {}\n", "\t\t\tte_x_sec_how = {}\n", 1).replace(
+        "\t\t\tte_x_sec_how = {}\n\t\t}\n\t}", "\t\t\tte_x_overview = {}\n\t\t}\n\t}", 1)
+    REORDERED_COLUMNS = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c", "te_x_overview"]]
+
+    def test_columns_let_a_layout_leave_the_narrow_order(self):
+        self.assertNotEqual(self.REORDERED, GOOD)
+        self.fails("the narrow layout's sections", self.REORDERED)
+        self.assertEqual(self.check(self.REORDERED, columns=self.REORDERED_COLUMNS), self.REORDERED_COLUMNS)
+
+    def test_columns_must_be_the_layouts(self):
+        self.fails("the columns the owner set", self.REORDERED, columns=COLUMNS)
+
+    def test_columns_still_want_every_section_once(self):
+        left_out = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c"]]
+        self.fails("each once, in any order",
+                   self.REORDERED.replace("\t\t\tte_x_overview = {}\n", ""), columns=left_out)
+        twice = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"],
+                 ["te_x_sec_c", "te_x_overview", "te_x_sec_how"]]
+        self.fails("each once, in any order",
+                   self.REORDERED.replace("\t\t\tte_x_overview = {}\n", "\t\t\tte_x_overview = {}\n"
+                                          "\t\t\tte_x_sec_how = {}\n"), columns=twice)
+
+    def test_columns_compare_gates_section_by_section(self):
+        self.fails(r"te_x_sec_c shows in the narrow layout only while \['HasC'\]",
+                   self.REORDERED.replace('te_x_sec_c = { visible = "[HasC]" }', "te_x_sec_c = {}"),
+                   columns=self.REORDERED_COLUMNS)
 
     def test_a_composers_gate_dropped(self):
         self.fails(r"te_x_sec_a shows in the narrow layout only while \['JournalEntry.IsActive'\]",
@@ -242,6 +272,18 @@ class WideMatchesNarrowTest(unittest.TestCase):
         wide = wide.replace("\t\t\tte_x_overview = {}\n", "").rstrip() + "\n\t}\n"
         self.fails(r"places \['te_x_overview'\] outside its columns", wide)
         self.assertEqual(self.check(wide, outside=("te_x_overview",))[0], ["te_x_sec_a"])
+
+    def test_columns_keep_an_outside_section_where_it_draws(self):
+        """With columns=, the pending line may not move below the columns: it still draws where the narrow layout has
+        it, first."""
+        above = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
+                             "type te_x_wide_sections = flowcontainer {\n\t\tte_x_overview = {}\n\t\tte_ui_columns_three = {")
+        above = above.replace("\t\t\tte_x_overview = {}\n", "").rstrip() + "\n\t}\n"
+        columns = [["te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c", "te_x_sec_how"]]
+        self.assertEqual(self.check(above, outside=("te_x_overview",), columns=columns), columns)
+        below = above.replace("\n\t\tte_x_overview = {}\n\t\tte_ui_columns_three = {", "\n\t\tte_ui_columns_three = {")
+        below = below.rstrip()[:-1].rstrip() + "\n\t\tte_x_overview = {}\n\t}\n"
+        self.fails("draws outside the columns at another place", below, outside=("te_x_overview",), columns=columns)
 
     def test_an_outside_the_layout_no_longer_has(self):
         self.fails(r"outside names \['te_x_gone'\], which it doesn't place outside its columns", GOOD, outside=("te_x_gone",))

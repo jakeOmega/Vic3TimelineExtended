@@ -26,16 +26,18 @@ STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_worl
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 # Another country's copy of column 3's world sections, in its column 2, and
-# the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer.
+# the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer
+# (column 1's Nuclear Posture carries it on its own type's root).
 WORLD_COLUMN = "te_nuclear_world_column"
-WIDE_OWN = ("te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
+WIDE_OWN = ("te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
             "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers")
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
-# bar stays under The Programme, in its own gated wrapper.
+# bar stays under The Programme, in its own gated wrapper; Nuclear Posture at
+# the foot of column 1 (owner, 2026-11-03), the narrow order kept.
 WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar",
-                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
-                ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
-                 "te_nuclear_sec_reputation"],
+                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises",
+                 "te_nuclear_sec_posture"],
+                ["te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation"],
                 ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
@@ -1111,13 +1113,18 @@ class WideTest(unittest.TestCase):
 
     def test_the_wide_layout_is_the_tabs_in_three_columns(self):
         """For the player: columns 2 and 3 carry Country.IsLocalPlayer on top of
-        the tab's gate, which is always true there; another country's copy of
+        the tab's gate, which is always true there (column 1's Nuclear Posture
+        carries it on its type's own root); another country's copy of
         column 3's world sections (te_nuclear_world_column) is skipped here and
         held by the next test."""
         columns = assert_wide_matches_narrow(self, "te_nuclear_wide_sections",
                                              layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"),
                                              extra=(WORLD_COLUMN,), added_gates=WIDE_OWN)
         self.assertEqual(columns, WIDE_COLUMNS)
+        # Nuclear Posture shares column 1's wrapper, which shows for another country too: its own root keeps it the
+        # player's (owner, 2026-11-03)
+        posture = gh._type_body(gh._all_gui(), "te_nuclear_sec_posture")
+        self.assertTrue(_root_visible(posture).startswith("And( Country.IsLocalPlayer, "), _root_visible(posture))
 
     def test_another_country_gets_the_world_sections_in_column_2(self):
         """Another country's columns 2 and 3 are the player's own, so column 2
