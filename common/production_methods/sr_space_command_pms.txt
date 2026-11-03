@@ -31,7 +31,7 @@
 # ============================================================================
 
 pm_sr_space_command_orbital_shipyards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p0.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_space_command_orbital_shipyards.dds"
 
 	unlocking_technologies = {
 		space_militarization
@@ -67,7 +67,7 @@ pm_sr_space_command_orbital_shipyards = {
 }
 
 pm_sr_space_command_fusion_yards = {
-	texture = "gfx/interface/icons/production_method_icons/cat_rocket_gold_p1.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_sr_space_command_fusion_yards.dds"
 
 	unlocking_technologies = {
 		fusion_power
