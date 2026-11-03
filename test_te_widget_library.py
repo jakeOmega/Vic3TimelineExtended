@@ -4,9 +4,10 @@ spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 9.4).
 te_ui_columns_three and te_ui_columns_two: a horizontal row of fixed 520
 columns, 30 apart, read down each column and then across, as the Census Data
 window's Demographics tab lays them out (te_demog_browser_sections). Each
-column is a block (column_1 … column_3) that a wide composer fills. The
-properties are the Census window's, so rebasing it onto the type keeps its
-widget tree.
+column is a block (column_1 … column_3) that a wide composer fills, after a
+block (column_1_visible …) where it may gate the column, so a column whose
+sections all hide closes up and the rest recentre. The properties are the
+Census window's, so rebasing it onto the type keeps its widget tree.
 """
 import os
 import unittest
@@ -38,8 +39,9 @@ class ColumnsTest(unittest.TestCase):
             with self.subTest(type=name, column=i):
                 items = _children(column)
                 self.assertEqual({(k, v) for kind, k, v in items if kind == "property"}, COLUMN)
+                # the gate's block first, so a visible lands on the column itself
                 self.assertEqual([(kind, k) for kind, k, _ in items if kind != "property"],
-                                 [("block", f"column_{i}")])
+                                 [("block", f"column_{i}_visible"), ("block", f"column_{i}")])
 
     def test_three_columns(self):
         self._check("te_ui_columns_three", 3)
