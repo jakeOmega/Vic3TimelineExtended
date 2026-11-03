@@ -304,7 +304,7 @@ class CountryContextTest(unittest.TestCase):
                 self.assertNotRegex(body, r"(?<![\w.])Country\.")
 
     def test_the_new_keys_exist(self):
-        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_demog_hist_untracked",
+        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_history_untracked",
                     "te_demog_pyr_outline_next",
                     "te_demog_pyr_outline_played"):
             with self.subTest(key=key):
@@ -413,12 +413,16 @@ class GatesTest(unittest.TestCase):
         self.assertIn("has_variable = te_dg_pjf0", body)
 
     def test_the_history_gate_asks_whether_the_country_is_tracked(self):
-        body = block_from(self.sguis, self.sguis.index("te_demog_hist_tracked_sgui = {"))
+        # the shared gate and key every chart's empty state uses (te_history_chart.gui, plan F1.5)
+        sguis = read(ROOT / "common" / "scripted_guis" / "te_history_scripted_gui.txt")
+        body = block_from(sguis, sguis.index("te_history_tracked_sgui = {"))
         self.assertIn("te_history_country_is_tracked = yes", body)
+        self.assertNotIn("te_demog_hist_tracked_sgui", self.sguis)
         charts = history_charts(type_bodies(read(WIDGETS))["te_demog_sec_history"])
         self.assertEqual(len(charts), 8)
         for chart in charts:
-            self.assertEqual(chart.count("'te_demog_hist_empty', 'te_demog_hist_untracked'"), 1)
+            self.assertEqual(chart.count("GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( "
+                                         "Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked'"), 1)
 
 
 if __name__ == "__main__":

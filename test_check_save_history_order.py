@@ -7,11 +7,13 @@ the whole file resolve to "0 sample containers" and the check passes vacuously,
 which is exactly how the first draft failed. These tests pin them by building a
 synthetic `.v3` byte for byte and asserting the values come back out.
 
-They also pin the classification the checker exists to make: a store that is out
-of order but has stopped recording is `frozen` (reported, exit 0), while one that
-is out of order and still live means the re-sort is not working (exit 1). The
-boundary is deliberate — one month of slack, because a store can miss the current
-month depending on where its pulse sits relative to the save.
+They also pin what fails: a store out of order, live or `frozen` (stopped
+recording). A frozen one used to pass, being unreachable; National Info shows
+another country's charts, so it fails now, and the old-save repair
+te_repair_history_order sorts every store once. `frozen` is still printed, one
+month (or, for Demographics' yearly te_dg_hist, one year) of slack, because a
+store can miss the current step depending on where its pulse sits relative to
+the save. te_dg_hist is checked too, on its own clock.
 
 Run: .venv/bin/python test_check_save_history_order.py
 """
@@ -68,9 +70,9 @@ def _container(container_id, month_index):
     )
 
 
-def _sample_list(container_ids):
-    """One `te_hist` variable list, in the given order."""
-    out = _string('te_hist')
+def _sample_list(container_ids, name='te_hist'):
+    """One `name` variable list, in the given order."""
+    out = _string(name)
     for container_id in container_ids:
         out += (
             LIST_ITEM + EQUALS + OPEN
@@ -81,17 +83,19 @@ def _sample_list(container_ids):
     return out + CLOSE
 
 
-def _save(stores):
+def _save(stores, dg_stores=()):
     """Write a synthetic .v3: 24-byte header, then a zip holding `gamestate`.
 
-    `stores` is a list of [(container_id, month_index), ...] in list order.
+    `stores` is a list of [(container_id, month_index), ...] in list order;
+    `dg_stores` the same for Demographics' `te_dg_hist`, a year in te_hist_i.
     """
     containers = b''
     lists = b''
-    for store in stores:
-        for container_id, month_index in store:
-            containers += _container(container_id, month_index)
-        lists += _sample_list([container_id for container_id, _ in store])
+    for name, group in (('te_hist', stores), ('te_dg_hist', dg_stores)):
+        for store in group:
+            for container_id, month_index in store:
+                containers += _container(container_id, month_index)
+            lists += _sample_list([container_id for container_id, _ in store], name)
 
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -103,9 +107,9 @@ def _save(stores):
     return handle.name
 
 
-def _run(stores):
-    """Return (live_out_of_order_count, printed_output)."""
-    path = _save(stores)
+def _run(stores, dg_stores=()):
+    """Return (out_of_order_count, printed_output)."""
+    path = _save(stores, dg_stores)
     out = io.StringIO()
     with redirect_stdout(out):
         broken = csho.check_save(path)
@@ -157,7 +161,7 @@ class BinaryDecodingTests(unittest.TestCase):
 
 
 class ClassificationTests(unittest.TestCase):
-    """Frozen is reported; only a live store out of order is a failure."""
+    """Any store out of order fails; a frozen one is labelled as such."""
 
     def test_ordered_stores_pass(self):
         broken, out = _run([_ordered(1, NOW), _ordered(50, NOW)])
@@ -171,29 +175,72 @@ class ClassificationTests(unittest.TestCase):
         self.assertIn('break@', out)
         self.assertNotIn('frozen', out)
 
-    def test_frozen_store_out_of_order_is_reported_but_does_not_fail(self):
+    def test_frozen_store_out_of_order_fails(self):
         # 100 months behind the newest month anywhere in the save: a country
-        # that stopped recording, so it can never evict and never re-sorts.
+        # that stopped recording, so it never evicts and never re-sorts. National
+        # Info shows its charts, so it fails, labelled frozen.
         broken, out = _run([_ordered(1, NOW), _rotated(50, NOW - 100)])
-        self.assertEqual(broken, 0)
+        self.assertEqual(broken, 1)
         self.assertIn('frozen', out)
         self.assertIn('break@', out)
+        self.assertIn('te_repair_history_order', out)
 
-    def test_one_month_behind_still_counts_as_live(self):
-        # The slack is exactly one month — a store that missed only the current
-        # month is still being written to, so a break in it is a real failure.
-        broken, _ = _run([_ordered(1, NOW), _rotated(50, NOW - 1)])
+    def test_a_frozen_store_in_order_passes(self):
+        broken, out = _run([_ordered(1, NOW), _ordered(50, NOW - 100)])
+        self.assertEqual(broken, 0)
+        self.assertNotIn('frozen', out)
+
+    def test_one_month_behind_is_live(self):
+        # The slack is exactly one month: a store that missed only the current
+        # month is still being written to.
+        broken, out = _run([_ordered(1, NOW), _rotated(50, NOW - 1)])
         self.assertEqual(broken, 1)
+        self.assertNotIn('frozen since', out)
 
     def test_two_months_behind_is_frozen(self):
-        broken, _ = _run([_ordered(1, NOW), _rotated(50, NOW - 2)])
-        self.assertEqual(broken, 0)
+        broken, out = _run([_ordered(1, NOW), _rotated(50, NOW - 2)])
+        self.assertEqual(broken, 1)
+        self.assertIn('frozen since', out)
 
     def test_the_save_clock_comes_from_the_newest_store_not_each_store(self):
-        # A lone out-of-order store defines its own newest month, so it must not
-        # class itself as frozen and excuse its own break.
-        broken, _ = _run([_rotated(1, NOW)])
+        # A lone out-of-order store defines its own newest month, so it is live.
+        broken, out = _run([_rotated(1, NOW)])
         self.assertEqual(broken, 1)
+        self.assertNotIn('frozen since', out)
+
+
+YEAR = 1868
+
+
+class DemographicsStoreTests(unittest.TestCase):
+    """te_dg_hist, one sample a census year, read by the same patterns on its
+    own clock (a year, not a month index)."""
+
+    def test_its_lists_are_found_apart_from_the_monthly_ones(self):
+        blob = csho.read_gamestate(_save([_ordered(1, NOW)], [_ordered(100, YEAR)]))
+        self.assertEqual(len(csho.sample_lists(blob)), 1)
+        self.assertEqual(len(csho.sample_lists(blob, 'te_dg_hist')), 1)
+        _, ids = csho.sample_lists(blob, 'te_dg_hist')[0]
+        self.assertEqual(ids, list(range(100, 110)))
+
+    def test_an_ordered_store_passes_beside_the_monthly_ones(self):
+        # its years are far below the monthly store's month indices: its own clock, so not frozen
+        broken, out = _run([_ordered(1, NOW)], [_ordered(100, YEAR)])
+        self.assertEqual(broken, 0)
+        self.assertIn('te_dg_hist', out)
+        self.assertNotIn('frozen', out)
+
+    def test_one_out_of_order_fails(self):
+        broken, out = _run([_ordered(1, NOW)], [_ordered(100, YEAR), _rotated(200, YEAR)])
+        self.assertEqual(broken, 1)
+        self.assertIn('te_dg_hist', out)
+        self.assertIn('break@', out)
+        self.assertIn(f'break@4: {YEAR} -> {YEAR - 9}', out, 'years, not months')
+
+    def test_its_frozen_store_out_of_order_fails(self):
+        broken, out = _run([_ordered(1, NOW)], [_ordered(100, YEAR), _rotated(200, YEAR - 20)])
+        self.assertEqual(broken, 1)
+        self.assertIn('frozen since', out)
 
 
 class MonthFormattingTests(unittest.TestCase):

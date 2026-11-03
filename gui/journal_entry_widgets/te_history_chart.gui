@@ -474,7 +474,10 @@ types te_history_chart_types
 			}
 
 			### Empty state — nothing recorded yet, e.g. an existing save that
-			### has not reached its first monthly pulse since the update.
+			### has not reached its first monthly pulse since the update; or, for
+			### a country that keeps no history (neither played nor a major
+			### power: te_history_tracked_sgui, on the host's Country, so any
+			### country's in National Info), that none is kept.
 			textbox = {
 				block "empty_visible" {
 					visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_hist') )]"
@@ -487,7 +490,7 @@ types te_history_chart_types
 				}
 				align = hcenter|nobaseline
 				block "empty_text" {
-					text = "te_hist_empty_state"
+					text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_hist_empty_state', 'te_history_untracked' )]"
 				}
 			}
 		}

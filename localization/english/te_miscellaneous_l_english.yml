@@ -7570,7 +7570,6 @@
  te_demog_hist_tfr_title:0 "Children per Woman"
  te_demog_hist_tfr_tt:0 "#title [ScriptContainer.GetVariableValue('te_hist_i')|0]#!$te_demog_hist_marks$\nChildren per woman: #v [ScriptContainer.GetVariableValue('te_dg_h_tfr')|2]#!"
  te_demog_hist_um_note:0 " Deaths are true deaths: people who uploaded to a Mind Upload Nexus count as living."
- te_demog_hist_untracked:0 "#lore The census keeps a yearly record only for played countries and major powers.#!"
  te_demog_hist_wc_legend:0 "#lore The national score, 0 to 100, one bar a census.#!"
  te_demog_hist_wc_on:0 "[concept_inheritance_concentration]: #v [ScriptContainer.GetVariableValue('te_dg_h_wc')|0]#!"
  te_demog_hist_wc_title:0 "[concept_inheritance_concentration]"
