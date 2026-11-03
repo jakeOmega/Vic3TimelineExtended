@@ -2657,7 +2657,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_modern_tourism": {"subject": "a tall modern hotel tower beside a swimming pool and a sun lounger", "seed": 0},
         "pm_sr_fabrication_orbital_assembly": {"subject": "a space station truss with a long robot arm assembling a big spacecraft module", "seed": 3},
         "pm_reusable_rockets": {"subject": "a rocket booster landing upright on four splayed legs with a short flame under it", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
-        "pm_robots": {"subject": "a boxy humanoid robot with round eyes and claw hands", "seed": 2},
+        "pm_robots": {"subject": "two jointed industrial robot arms on square bases facing each other", "seed": 1},
         "pm_smart_robots": {"subject": "a sleek humanoid robot with a smooth round head and jointed hands", "seed": 0},
         "pm_secular_society": {"subject": "a classical public library building with columns and a big open book above its door", "seed": 0, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
         "pm_smart_miners_building_coal_mine": {"subject": "a tracked mining machine with a drum cutter, a small antenna and a camera on its roof, seen from the side", "seed": 1},
