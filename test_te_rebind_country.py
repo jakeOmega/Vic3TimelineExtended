@@ -438,6 +438,20 @@ class OtherTabsTest(unittest.TestCase):
         s = tool.survey_tab("banking")
         self.assertIn("colonial_empire", s.loc["te_hist_since"].also)
 
+    def test_isactive_becomes_the_entrys_gate_not_the_readouts(self):
+        """Banking and the Colonial Empire open on a readout without the entry
+        (their open gate is an Or); a composer's IsActive is the entry's gate."""
+        for key, entry in [("banking", "te_budget_banking_tab_sgui"),
+                           ("colonial_empire", "te_window_colonial_empire_tab_sgui")]:
+            with self.subTest(key):
+                s = tool.survey_tab(key)
+                self.assertEqual(s.gate, f"GetScriptedGui('{entry}').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
+                self.assertNotIn("readout", s.gate)
+                self.assertIn(f"the entry's gate on Country: [{s.gate}]", tool.render(s))
+        from scripts.generators import gen_te_systems_window as gen
+        nation = next(t for t in gen.TABS if t.key == "nation")
+        self.assertIsNone(tool.entry_gate(nation))  # always open, no gate
+
 
 class OtherCountryTest(unittest.TestCase):
     def test_contexts(self):

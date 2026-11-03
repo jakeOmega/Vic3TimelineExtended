@@ -28,7 +28,9 @@ one of:
   entry-only    another JournalEntry read (IsActive, the scripted bars, the goal, the
                 Open Journal Entry button) or GetPlayerJournalEntry: another country
                 has no entry. Guard it, or read the variable behind it. A composer's
-                IsActive becomes the tab's own gate on Country (printed with it).
+                IsActive becomes the entry's gate on Country (printed with it): the
+                body's tab_gate, not the tab's open gate, which for Banking and the
+                Colonial Empire also opens on a readout without the entry.
   bare          `GetPlayer` or `JournalEntry.GetCountry` with nothing read from it (a
                 datacontext, an argument): drop it, or pass Country.Self.
   player-other  AccessPlayer, GetPlayer<X>: Country's own function by hand, or a guard
@@ -540,7 +542,7 @@ def render(s, full=False, summary=False):
             if cls == "item tooltip":
                 out.append(f"                  in {r.why}")
             if cls == "entry-only" and what == "JournalEntry.IsActive" and s.gate:
-                out.append(f"                  the tab's gate on Country: [{s.gate}]")
+                out.append(f"                  the entry's gate on Country: [{s.gate}]")
             if r.block and cls != "mechanical":
                 where = f" (drawn at {s.drawn_at[name]})" if name in s.drawn_at else ""
                 out.append(f'                  the default of block "{r.block}" of {name}, which other panels '
@@ -625,6 +627,20 @@ def _tab(key):
     return next((t for t in gen.TABS if t.key == key), None), gen
 
 
+_TAB_GATE = re.compile(r'blockoverride "tab_gate" \{\s*visible = "\[(.*?)\]"\s*\}', re.S)
+
+
+def entry_gate(tab, types=None):
+    """What a composer's JournalEntry.IsActive becomes, written on the player:
+    the gate on the frame's entry (its body's tab_gate), else the tab's open
+    gate. Not the open gate where both exist: Banking's and the Colonial
+    Empire's open on a readout without the entry too, where the entry's
+    sections stay hidden."""
+    td = (types or h.mod_types()).get(tab.body) if tab.body else None
+    m = td and _TAB_GATE.search(td.body)
+    return m.group(1) if m else tab.open_
+
+
 def world_loc_keys():
     """test_te_system_tab_bodies.WORLD_LOC: the loc keys that are world reads."""
     try:
@@ -654,13 +670,13 @@ def candidate_tabs():
 
 def survey_tab(key, root=REPO):
     """survey() of a tab (gen_te_systems_window.TABS) as BindingTest sees it:
-    its wide composer, WORLD_LOC, its gate on Country for IsActive reads, and
+    its wide composer, WORLD_LOC, its entry's gate on Country for IsActive reads, and
     the other candidate tabs that render each of its keys."""
     tab, gen = _tab(key)
     if tab is None:
         raise KeyError(f"{key}: no such tab in gen_te_systems_window.TABS")
     others = {t: _tab_keys(t) for t in candidate_tabs() if t != key}
-    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(tab.open_, gen.COUNTRY_ROOT), others)
+    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(entry_gate(tab), gen.COUNTRY_ROOT), others)
     s.target = f"{tab.key} ({tab.wide})"
     return s
 
