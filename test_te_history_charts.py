@@ -340,6 +340,31 @@ class RegistryTest(unittest.TestCase):
         self.assertIn("'(CFixedPoint)0.5', ScriptContainer", large)    # the floor: 2 of 100 at 84 px
         self.assertIn("'(CFixedPoint)1' )", large)                     # the cap: 4
 
+    def test_the_cycle_chart_thins_its_floor_and_cap(self):
+        """te_history_bar_cycle_phase holds its bars' floor and cap as blocks
+        (phase_value on all six bars, phase_cover_value on the cover). A chart
+        drawing it overrides both with ${thin:...}, or its large size would
+        keep a 13 px cap, and the type's seven defaults are those overrides at
+        SMALL, so the panel draws as the defaults would."""
+        phase = _type_body(_read(os.path.join(REPO, SECTIONS["banking"])), "te_history_bar_cycle_phase")
+        defaults = {name: [b.strip() for b in _block_bodies(phase, name)] for name in ("phase_value", "phase_cover_value")}
+        self.assertEqual([len(defaults["phase_value"]), len(defaults["phase_cover_value"])], [6, 1])
+        users = [c for c in gen.CHARTS if "te_history_bar_cycle_phase = {" in gen.fragment(c)]
+        self.assertEqual([c.id for c in users], ["bank_value"])
+        for chart in users:
+            text = gen.fragment(chart)
+            start = text.index("te_history_bar_cycle_phase = {")
+            bar = text[start:_close(text, text.index("{", start)) + 1]
+            for name, values in defaults.items():
+                with self.subTest(chart=chart.id, block=name):
+                    m = re.search(rf'blockoverride "{name}" \{{', bar)
+                    self.assertIsNotNone(m, f"the fragment leaves {name} to the type's default")
+                    body = bar[m.end():_close(bar, m.end() - 1)]
+                    self.assertIn("${thin:", body)
+                    small = gen.substitute(body, chart, gen.SMALL).strip()
+                    self.assertEqual(set(values), {small}, "the type's defaults are the override at SMALL")
+                    self.assertNotEqual(gen.substitute(body, chart, gen.LARGE).strip(), small)
+
     def test_the_large_wrapper_sets_every_size(self):
         """The large wrapper draws at the viewer's size: a monthly chart gains
         the frame, the bars and both widths, an annual one both widths (its
@@ -423,6 +448,53 @@ class RegistryTest(unittest.TestCase):
                     self.assertRegex(entries, rf"(?m)^{chart.entry} = \{{")
                     self.assertIn(f"has_journal_entry = {chart.entry}", body)
                 self.assertIn(chart.range, gen.RANGES)
+
+    def test_each_section_places_its_charts_in_registry_order(self):
+        """Each section instances its charts in CHARTS order, so two charts
+        swapped in a section (or in the registry) fail here."""
+        for system, path in SECTIONS.items():
+            text = _strip_comments(_read(os.path.join(REPO, path)))
+            names = {gen.wrapper_name(c, gen.SMALL): c.id for c in gen.CHARTS}
+            placed = [names[n] for n in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", text) if n in names]
+            with self.subTest(system=system):
+                self.assertEqual(placed, [c.id for c in gen.CHARTS if c.system == system])
+
+    def test_the_sections_carry_each_charts_own_visible(self):
+        """A chart drawn only for some countries (Chart.shown: Banking's
+        policy-rate pair, inflation and the exchange rate) keeps that visible
+        on its section's instance of the wrapper, exactly; every other
+        instance is a bare te_hist_<id> = {}. A visible dropped in a rebinding
+        would draw both policy-rate charts, or empty monetary charts under
+        banking_system_simplified."""
+        self.assertEqual({c.id for c in gen.CHARTS if c.shown},
+                         {"mon_policy", "mon_policy_digital", "mon_inflation", "mon_fx"})
+        for chart in gen.CHARTS:
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[chart.system])))
+            m = re.search(rf"(?<![\w.]){gen.wrapper_name(chart, gen.SMALL)} = \{{", text)
+            body = text[m.end():_close(text, m.end() - 1)].strip()
+            with self.subTest(chart=chart.id):
+                self.assertEqual(body, f'visible = "[{chart.shown}]"' if chart.shown else "")
+
+    def test_the_entry_and_gate_are_the_charts_own_tabs(self):
+        """A chart's gate and entry are its own system's: the gate is the first
+        scripted GUI its tab's open test (gen_te_systems_window.TABS) shows on,
+        and the entry is the journal entry its tab body mounts (tab_entry's
+        GetPlayerJournalEntry; Demographics' body mounts GetPlayer, so None).
+        A chart given another system's pair would open its viewer on that
+        system's tab and read that system's entry."""
+        texts = [_read(p) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)]
+        tabs = {t.key: t for t in window.TABS}
+        for chart in gen.CHARTS:
+            tab = tabs[chart.system]
+            with self.subTest(chart=chart.id):
+                self.assertEqual(chart.gate, re.findall(r"GetScriptedGui\('(\w+)'\)\.IsShown", tab.open_)[0])
+                (src,) = [x for x in texts if re.search(rf"type {tab.body} = \w+ \{{", x)]
+                mount = re.search(r'blockoverride "tab_entry" \{\s*datacontext = "\[(.*)\]"', _type_body(src, tab.body))
+                self.assertIsNotNone(mount, f"{tab.body} mounts no entry")
+                entry = re.fullmatch(r"GetPlayerJournalEntry\('(\w+)'\)", mount.group(1))
+                self.assertEqual(chart.entry, entry.group(1) if entry else None, mount.group(1))
+                if entry is None:
+                    self.assertEqual(mount.group(1), "GetPlayer")
 
     def test_the_ranges_are_the_sections_buttons(self):
         """RANGES holds each range variable's three buttons as the sections

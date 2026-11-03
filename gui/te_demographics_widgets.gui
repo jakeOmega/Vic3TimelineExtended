@@ -3177,6 +3177,9 @@ types te_demographics_widgets
 	### event (te_dg_h_mk_event; te_demog_history_effects.txt). They sit in the 36 px lane each chart keeps over its bars
 	### (its frame is 132 tall, the bars' 96 at its foot), at negative positions from the column's top, so they never
 	### cover the top of a bar (owner, 2026-10-22). Mouse-through: the bar's tooltip names them.
+	### The offsets (-38, -26, -14 from the column's top) hold at both chart sizes only because the lane is 36 px at both
+	### (PIP_LANE in scripts/generators/gen_te_history_charts.py) and the bars sit 6 px clear of their box: a pip's top is
+	### 36 + 6 + its offset from the frame's top. Change the lane or the margin and move these with it.
 	type te_demog_hist_pips = widget {
 		size = { 100% 100% }
 		alwaystransparent = yes
