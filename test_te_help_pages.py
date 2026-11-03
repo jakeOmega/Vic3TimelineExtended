@@ -11,12 +11,14 @@ its header: a link that opens the page. Each tab's header carries a "?", a
 te_help_button with the same onclick.
 
 A help body reads only GetPlayer, never JournalEntry, so a page opens from any
-host, whether or not the player holds the entry.
+host, whether or not the player holds the entry. That holds for the loc it
+shows too, in English and in the translation memories deploy ships.
 
 To move another section, add its row to PAGES.
 """
 import collections
 import glob
+import json
 import os
 import re
 import unittest
@@ -29,6 +31,9 @@ LIBRARY = os.path.join(GUI_DIR, "te_widget_library.gui")
 TAB_WIDGETS = os.path.join(GUI_DIR, "te_system_tab_widgets.gui")
 POPUPS = os.path.join(GUI_DIR, "te_popups.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
+# The translation memories: deploy ships their German and Spanish lines into the
+# same popups (scripts/generators/gen_non_english_loc.py, i18n/README.md).
+I18N_DIR = os.path.join(REPO, "i18n")
 
 # Vanilla's gold question mark, shipped unused: a placeholder (style guide rule 10).
 HELP_ICON = "gfx/interface/buttons/button_icons/unused/help.dds"
@@ -96,6 +101,22 @@ def _loc():
     return keys
 
 
+def _translations():
+    """Every translation memory's text, key -> [(file, field, text)]: each
+    record's English and its translation (a stale record ships its old
+    translation, binding and all)."""
+    out = collections.defaultdict(list)
+    for path in sorted(glob.glob(os.path.join(I18N_DIR, "*", "tm", "**", "*.json"), recursive=True)):
+        with open(path, encoding="utf-8") as f:
+            records = json.load(f)
+        rel = os.path.relpath(path, REPO)
+        for key, record in records.items():
+            for field, value in record.items():
+                if isinstance(value, str) and field != "base":
+                    out[key].append((rel, field, value))
+    return out
+
+
 def _keys_reached(text, loc):
     """The loc keys a GUI text names (a quoted key, a quoted argument), and
     every key those splice in ($key$), recursively."""
@@ -148,6 +169,7 @@ class PageTest(unittest.TestCase):
         cls.types = _all_types()
         cls.gui = "\n".join(_strip_comments(_read(p)) for p in _gui_paths())
         cls.loc = _loc()
+        cls.translations = _translations()
 
     def test_each_page_has_its_popup(self):
         for page in PAGES:
@@ -227,6 +249,9 @@ class PageTest(unittest.TestCase):
                 self.assertIn(page.title, keys)
                 for key in sorted(keys):
                     self.assertNotIn("JournalEntry", self.loc[key], key)
+                    # and in German and Spanish, which ship into the same popup
+                    for rel, field, value in self.translations.get(key, ()):
+                        self.assertNotIn("JournalEntry", value, f"{rel}: {key} ({field})")
 
     def test_each_header_has_its_button(self):
         """Every default_header in a tab body's tab_header holds one "?" that
