@@ -139,3 +139,8 @@
  # 'GetPrice'". It shows for Grid Power (fixed_price, power_grid) and gold. A fixed
  # price is the base price.
  GOODS_PRICE_DESC_FIXED:0 "[GOODS.GetName] has a fixed price of @money![GOODS.GetBasePrice|1v] that will never change."
+ # National Info (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 6.2): the Census Data
+ # window, which the mod gives a tab per system another country may show, renamed. This one key is the window's
+ # title, the Population panel's button and the one at the foot of another country's Politics tab; vanilla's
+ # adjective for another country is kept ("French National Info").
+ POP_BROWSER:0 "[AddLocalizationIf(Not(Country.IsLocalPlayer), Concatenate(Country.GetAdjective, ' '))]National Info"

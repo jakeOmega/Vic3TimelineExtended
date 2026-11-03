@@ -505,6 +505,22 @@ class RepoTest(unittest.TestCase):
             bodies.WORLD_LOC.clear()
             bodies.WORLD_LOC.update(saved)
 
+    def test_survey_tab_walks_the_readout(self):
+        """A tab that opens on a readout without its entry (Tab.readout) is
+        surveyed with it, as BindingTest walks it: the readout's types, its
+        name in the target, and its loc keys among the tab's."""
+        import gui_test_helpers as h
+        from scripts.generators import gen_te_systems_window as gen
+        banking = next(t for t in gen.TABS if t.key == "banking")
+        readout = banking.readout.panel
+        s = tool.survey_tab("banking")
+        self.assertIn(readout, s.types)
+        self.assertIn(readout, s.target)
+        types, loc = h.mod_types(), h.load_loc()
+        only = h.panel_loc_keys({readout}, types, loc) - h.panel_loc_keys({banking.wide}, types, loc)
+        self.assertTrue(only, "the readout renders keys the composer doesn't")
+        self.assertLessEqual(only, tool._tab_keys("banking"))
+
     def test_survey_tab_names_an_unknown_tab(self):
         with self.assertRaises(KeyError):
             tool.survey_tab("no_such_tab")

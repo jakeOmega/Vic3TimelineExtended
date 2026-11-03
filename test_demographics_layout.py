@@ -23,6 +23,7 @@ WIDGETS = os.path.join(GUI, "te_demographics_widgets.gui")
 LAYOUT = os.path.join(GUI, "te_demographics_layout.gui")
 POPS = os.path.join(GUI, "pops_overview.gui")
 BROWSER = os.path.join(GUI, "pop_browser_panel.gui")
+NATIONAL_INFO = os.path.join(GUI, "te_national_info_generated.gui")
 STATES = os.path.join(GUI, "states_panel.gui")
 CHART = os.path.join(GUI, "journal_entry_widgets", "te_history_chart.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -229,7 +230,11 @@ class OrderTest(unittest.TestCase):
 
     def test_each_host_instances_its_composer_once(self):
         self.assertEqual(_read(POPS).count("te_demog_tab_sections = {}"), 1)
-        self.assertEqual(_read(BROWSER).count(f"{BROWSER_COMPOSER} = {{}}"), 1)
+        # National Info (the Census Data window) instances it through its generated column: once in the player's own
+        # country's mount, inside the window's body, and once in another country's (test_national_info.py)
+        self.assertNotIn(BROWSER_COMPOSER, _read(BROWSER))
+        self.assertIn("te_ni_tabs = {}", _read(BROWSER))
+        self.assertEqual(_read(NATIONAL_INFO).count(f"{BROWSER_COMPOSER} = {{}}"), 2)
         self.assertEqual(_read(STATES).count("te_state_demog_content = {}"), 1)
 
 

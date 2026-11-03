@@ -389,29 +389,31 @@ def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     return out
 
 
-# The open button's own visible, for a chart that reads the Country its host
-# supplies rather than the player's entry: Demographics' (entry None). The
-# Census Data window draws them for any country (pop_browser_panel.gui's
-# PopBrowserPanel.GetCountry), and the viewer reads GetPlayer, so another
-# country's chart shows no button. This is the first half of F1.4's two-button
-# slot (spec § 4.4): F1 adds its other half, the button that opens the foreign
-# viewer (te_ni_chart) for any other country. Every Demographics host supplies a
-# Country: the Population panel (AccessPlayer), the Timeline Extended window's
-# mount (GetPlayer) and the Census Data window.
+# The open button is two buttons in one slot (spec § 4.4), so no section needs
+# to know which window it is in. Every chart host supplies a Country (PR F0):
+# the player's, but in National Info (the Census Data window,
+# PopBrowserPanel.GetCountry), which shows any country. For the player's own
+# country (OWN_COUNTRY_ONLY) the button opens the player's viewer, in te_popups
+# on te_popup, which reads GetPlayer; for another (OTHER_COUNTRY) it opens that
+# country's viewer, which National Info instances at window level under its own
+# Country, on te_ni_chart (NI_KEY, te_ni_chart_viewers). Outside National Info
+# Country is always the player, so only the first ever shows there.
 OWN_COUNTRY_ONLY = "[Country.IsLocalPlayer]"
+OTHER_COUNTRY = "[Not( Country.IsLocalPlayer )]"
+NI_KEY = "te_ni_chart"
 
 
 def open_overrides(chart: Chart) -> list[str]:
     """What the panel's wrapper adds to its fragment (charts PR C2): the title
-    narrowed beside the open button, and the button, which opens the chart's
-    viewer; on a chart that reads its host's Country, only for the player's
-    own (OWN_COUNTRY_ONLY)."""
-    button = ["te_chart_open_button = {"]
-    if chart.entry is None:
-        button.append(f'\tvisible = "{OWN_COUNTRY_ONLY}"')
-    button += [f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"", "}"]
+    narrowed beside the open button, and the slot's two buttons, which open
+    the chart's viewer: the player's (te_popup) for the player's own country,
+    another country's (te_ni_chart) for any other (F1.4)."""
+    own = ["te_chart_open_button = {", f'\tvisible = "{OWN_COUNTRY_ONLY}"',
+           f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"", "}"]
+    other = ["te_chart_open_button = {", f'\tvisible = "{OTHER_COUNTRY}"',
+             f"\tonclick = \"[GetVariableSystem.Set('{NI_KEY}', '{chart.id}')]\"", "}"]
     return (_override("chart_title_width", [f"max_width = {SMALL[chart.kind].title_w}"])
-            + _override("chart_open", button))
+            + _override("chart_open", own + other))
 
 
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
@@ -625,6 +627,51 @@ def popups() -> list[str]:
             + [f"\t{popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
 
 
+# --- another country's viewer (National Info, plan PR F1.4) ------------------------
+#
+# National Info (the Census Data window, gui/pop_browser_panel.gui) shows any
+# country, and te_popups reads the player, so another country's chart opens in
+# a viewer the window instances itself, at window level, outside its scroll
+# area: te_ni_chart_<id>_popup, shown on te_ni_chart = <id>, which the open
+# slot's second button sets. Its datacontext is the window's own Country, so it
+# has no GetPlayer and no entry: the same range buttons, large chart and key as
+# the player's viewer, without the gate (the button lives on a chart the panel
+# draws only while its tab is open for that country). Its close buttons clear
+# te_ni_chart (te_ui_popup's popup_close), and the window's _show state clears
+# it too, so a viewer left open never reopens with the window. One a chart, for
+# every chart, so a system joins National Info with no change here.
+
+def ni_popup_name(chart: Chart) -> str:
+    return f"te_ni_chart_{chart.id}_popup"
+
+
+def ni_popup(chart: Chart) -> list[str]:
+    """te_ni_chart_<id>_popup: the chart alone at the viewer's size, for the
+    country National Info shows."""
+    width, height = popup_size(chart)
+    content = [f"{range_row_name(chart.range)} = {{}}", f"{wrapper_name(chart, LARGE)} = {{}}"]
+    if chart.system in KEYS:
+        content.append(f"{KEYS[chart.system][0]} = {{}}")
+    out = [f"type {ni_popup_name(chart)} = te_ui_popup {{"]
+    out += [f"\t{ln}" for ln in _override(
+        "popup_visible", [f"visible = \"[GetVariableSystem.HasValue('{NI_KEY}', '{chart.id}')]\""])]
+    out += [f"\t{ln}" for ln in _override("popup_close", [f"onclick = \"[GetVariableSystem.Clear('{NI_KEY}')]\""])]
+    out += [f"\t{ln}" for ln in _override("popup_title", [f'text = "{popup_title(chart)}"'])]
+    out += [f"\t{ln}" for ln in _override("popup_size", [f"size = {{ {width} {height} }}"])]
+    out += [f"\t{ln}" if ln else "" for ln in _override("popup_list", _container(content, []))]
+    return out + ["}"]
+
+
+def ni_popups() -> list[str]:
+    """te_ni_chart_viewers: every chart's viewer for another country, for
+    National Info to instance once. Up only while one is open, as te_popups is
+    only while te_popup exists: no full-window widget lies over the Pops rows,
+    and the 33 viewers are built only then."""
+    return (["type te_ni_chart_viewers = widget {", "\tsize = { 100% 100% }",
+             f"\tvisible = \"[GetVariableSystem.Exists('{NI_KEY}')]\"", ""]
+            + [f"\t{ni_popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
+
+
 # --- the file -------------------------------------------------------------------
 
 HEADER = [
@@ -638,7 +685,9 @@ HEADER = [
     "### docstring and docs/systems/mod_systems/history_charts.md.",
     "### Then the viewer (charts PR C2): each range variable's buttons (te_chart_range_row_<var>),",
     "### each chart's popup (te_chart_<id>_popup, on te_popup = chart_<id>) and te_chart_popups,",
-    "### which gui/te_popups.gui instances.",
+    "### which gui/te_popups.gui instances. Then another country's viewer (National Info, PR F1):",
+    "### each chart's popup (te_ni_chart_<id>_popup, on te_ni_chart = <id>) and te_ni_chart_viewers,",
+    "### which gui/pop_browser_panel.gui instances.",
     "",
 ]
 
@@ -696,6 +745,13 @@ def render() -> str:
         lines += [f"\t{ln}" if ln else "" for ln in popup(chart)]
     lines += ["", "\t### The viewer: every popup, for te_popups (gui/te_popups.gui)"]
     lines += [f"\t{ln}" if ln else "" for ln in popups()]
+    lines += ["", "\t### Another country's viewer (National Info): each chart's popup"]
+    for i, chart in enumerate(CHARTS):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in ni_popup(chart)]
+    lines += ["", "\t### Another country's viewer: every popup, for National Info (gui/pop_browser_panel.gui)"]
+    lines += [f"\t{ln}" if ln else "" for ln in ni_popups()]
     lines.append("}")
     return "\n".join(lines) + "\n"
 
