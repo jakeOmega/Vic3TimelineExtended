@@ -7,6 +7,7 @@ import re
 import subprocess
 import unittest
 
+import gui_test_helpers
 from gui_test_helpers import assert_wide_matches_narrow
 from scripts.generators import gen_te_systems_window as window_gen
 
@@ -1906,6 +1907,84 @@ class WideLayoutTest(unittest.TestCase):
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "colonial_empire")
         self.assertEqual((tab.layout, tab.wide), ("te_ce_tab_layout", "te_ce_wide_sections"))
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's Colonial Empire shows (National Info, spec
+    2026-11-02-charts-help-national-info § 6.4): its holdings, stability,
+    programmes, pressure, stance and history, and no control. Each part only
+    the player's own panel draws sits under te_own_country_only: every control,
+    the rows script builds for a played country alone, the entry's own bar,
+    and the hover of the player's stance on The Colonial Powers. Another
+    country's panel says why a list has no rows. GuardTest
+    (test_te_system_tab_bodies.py) finds any control left unguarded; this
+    names the parts, so a guard can't move off one unnoticed."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gui_test_helpers.mod_types()
+
+    def _guarded(self, type_name, needle, count=1):
+        """Each place `needle` sits in the type's body, under the guard."""
+        body = self.types[type_name].body
+        spans = gui_test_helpers.guard_spans(body)
+        places = [m.start() for m in re.finditer(re.escape(needle), body)]
+        self.assertEqual(len(places), count, f"{type_name}: {needle}")
+        for pos in places:
+            self.assertTrue(gui_test_helpers.in_spans(pos, spans), f"{type_name}: {needle} is not the player's own")
+
+    def test_every_control_is_the_players(self):
+        for name in ("te_ce_wide_sections", "te_ce_readout"):
+            with self.subTest(panel=name):
+                self.assertEqual(gui_test_helpers.unguarded_controls({name}, self.types), [])
+
+    def test_the_controls(self):
+        self._guarded("te_ce_sec_stance", "GetScriptedGui('colonial_empire_stance_sgui')")
+        self._guarded("te_ce_sec_stance", "ScriptedGui.Execute(", 3)
+        self._guarded("te_ce_sec_programmes", "ScriptedGui.Execute(", 6)
+        self._guarded("te_ce_sec_holdings", "ScriptedGui.Execute(", 1)   # Planned Full Decolonization
+        self._guarded("te_ce_sec_holdings", 'text = "je_colonial_empire_holdings_whole"')
+        self._guarded("te_ce_war_row", "ScriptedGui.Execute(", 1)        # Open Talks
+
+    def test_the_rows_only_a_played_country_has(self):
+        """colonial_empire_refresh_display builds these for a played country
+        alone, so another country's would be empty (and its "none" line false)."""
+        self._guarded("te_ce_sec_holdings", "GetList('colonial_empire_blocs')")
+        self._guarded("te_ce_sec_holdings", "GetList('colonial_empire_subject_capitals')")
+        # an AI's territories never have rows, so their pending line would stand for good
+        self._guarded("te_ce_sec_holdings", "ScriptValue('colonial_empire_disp_territories_pending')")
+        self._guarded("te_ce_sec_pressure", "GetList('colonial_empire_gp_rows')", 3)
+        self._guarded("te_ce_sec_pressure", 'text = "je_colonial_empire_pressure_none"')
+        self._guarded("te_ce_overview_panel", "JournalEntry.GetScriptedProgressBars")
+
+    def test_another_countrys_notes(self):
+        for name, key, count in (("te_ce_sec_holdings", "je_colonial_empire_rows_own_only_ni", 2),
+                                 ("te_ce_sec_pressure", "je_colonial_empire_pressure_own_only_ni", 1)):
+            body = self.types[name].body
+            with self.subTest(note=key):
+                found = re.findall(rf'visible = "\[([^"]*)\]"\s*text = "{key}"', body)
+                self.assertEqual(len(found), count)
+                for gate in found:
+                    self.assertTrue(gate.startswith("Not( Country.IsLocalPlayer )")
+                                    or gate.startswith("And( Not( Country.IsLocalPlayer ),"), gate)
+        self.assertIn("Listed one by one only on a country's own panel.", _loc()["je_colonial_empire_rows_own_only_ni"])
+
+    def test_the_powers_hover_is_the_players(self):
+        """The Colonial Powers are the world's (the player's copy, on # world:
+        lines), but a row's hover is what the player's stance does to it."""
+        body = self.types["te_ce_sec_powers"].body
+        spans = gui_test_helpers.guard_spans(body)
+        lists = [m.start() for m in re.finditer(r"datamodel = \"\[GetPlayer\.MakeScope\.GetList\('decol_world_rows'\)\]\"",
+                                                body)]
+        self.assertEqual(len(lists), 2)
+        rows = [body[slice(*_span(body, body.index("te_ce_power_row = {", pos)))] for pos in lists]
+        guarded = [gui_test_helpers.in_spans(pos, spans) for pos in lists]
+        self.assertEqual(guarded, [True, False])
+        self.assertNotIn("row_tooltip", rows[0])
+        self.assertIn('blockoverride "row_tooltip" {}', rows[1])
+        row = self.types["te_ce_power_row"].body
+        self.assertRegex(row, r'block "row_tooltip" \{\s*tooltip = "\[SelectLocalization\( Not\( EqualTo_CFixedPoint\( '
+                              r"ScriptContainer\.MakeScope\.ScriptValue\('ce_pw_row_disp_weight'\)")
 
 
 if __name__ == "__main__":
