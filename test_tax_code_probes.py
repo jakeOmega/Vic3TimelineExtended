@@ -46,7 +46,7 @@ class TaxProbeSafetyTest(unittest.TestCase):
                 self.assertIn("onclick =", line)
 
     def test_tab_selection_is_exclusive_and_stale_debug_choice_falls_back(self):
-        gui = read("gui/te_systems_window.gui")
+        gui = read("gui/te_systems_window_generated.gui")
         normal = ["space_race", "colonial_empire", "grand_monuments"]
         names = ["nation"] + normal + ["tax_probes"]
         expressions = {n: _template(gui, f"te_systems_window_{n}_selected") for n in names}
@@ -65,7 +65,7 @@ class TaxProbeSafetyTest(unittest.TestCase):
                 self.assertEqual(selected, expected, (mask, stored))
 
     def test_normal_tabs_remain_clickable_while_debug_tab_is_selected(self):
-        gui = read("gui/te_systems_window.gui")
+        gui = read("gui/te_systems_window_generated.gui")
         for tab in ["space_race", "colonial_empire", "grand_monuments"]:
             expr = _template(gui, f"te_systems_window_{tab}_unselected")
             shown = {"te_tp_tab_sgui", f"te_window_{tab}_tab_sgui", f"te_window_{tab}_tab_unlock_sgui"}
@@ -77,7 +77,7 @@ class TaxProbeSafetyTest(unittest.TestCase):
         # Engine error pdx_gui_container.cpp:145 on PR 585's initial load.
         # Vanilla tab_buttons is an hbox even though its instance has another name.
         texts = [read(path) for path in (
-            "gui/te_systems_window.gui", "gui/te_debug_tax_widgets.gui")]
+            "gui/te_systems_window.gui", "gui/te_systems_window_generated.gui", "gui/te_debug_tax_widgets.gui")]
         bases = {"tab_buttons": "hbox"}
         for text in texts:
             bases.update(re.findall(r"\btype\s+(\w+)\s*=\s*(\w+)", _strip_comments(text)))

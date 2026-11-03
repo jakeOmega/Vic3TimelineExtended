@@ -592,8 +592,8 @@ down by source.
 
 ### The Strategic Reserve panel
 
-The journal entry's panel has an overview, the Reserve Inventory and a
-collapsed How the Strategic Reserve Works. Before you have a hub the entry
+The journal entry's panel has an overview, the Reserve Inventory and How the
+Strategic Reserve Works, which opens the Help page. Before you have a hub the entry
 shows only a line telling you how to get one. Once the hub stands there is no
 status line, because the overview shows how the hub is doing.
 
@@ -644,9 +644,10 @@ Year, 5 Years and 20 Years ranges. Each bar is a share of capacity, so building
 Silos lowers the bars of an unchanged stock. Policy Settings comes last,
 collapsed until you open it or click the policy icon.
 
-How the Strategic Reserve Works sits at the foot of the entry, collapsed. It
-explains the hub and silos, rates, status, decay, reserve policies, presets and
-settings, sales income and the fill history.
+How the Strategic Reserve Works sits at the foot of the entry and opens the
+Help page, as the "?" in the tab's header does. The page explains the hub and
+silos, rates, status, decay, reserve policies, presets and settings, sales
+income and the fill history.
 
 ### Storing and releasing reserve goods
 

@@ -19,7 +19,8 @@
 ###       us), the three colonial programmes.
 ###   widget_je_colonial_empire_reference  custom_widget_container_3
 ###       te_ce_reference_sections: the two history charts, then "How the
-###       Colonial Empire Works", the one collapsed section of explanations.
+###       Colonial Empire Works", a link to the Help page that holds the
+###       explanations (te_colonial_empire_help_popup, in gui/te_popups.gui).
 ### The overview draws the stability bar, so the entry also attaches
 ### te_je_bars_on_top_marker to custom_widget_container_7 and the journal panel
 ### drops its own bar at the bottom (gui/journal_entry.gui; je_banking.txt).
@@ -2609,6 +2610,8 @@ types colonial_empire_widget_types
 	### file are global once loaded, so they are instanced here without
 	### including it. `te_hist_range` is a single global GUI variable shared with
 	### every other history chart: changing the range here changes it there too.
+	### Each chart is its te_hist_<id> wrapper, generated from its fragment in
+	### scripts/generators/te_history_charts/colonial_empire.gui.in.
 	type te_ce_sec_history = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2689,102 +2692,23 @@ types colonial_empire_widget_types
 			# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
 			# is trigger-only, so a comparison ladder is the only read). The legend
 			# says so.
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_colonial_stability_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_colonial_stability_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_colonial_stability"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_stability' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.45 0.68 0.45 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_ce_stability = {}
 
 			# ---- Projected monthly drift, signed ----
 			# Exact: colonial_stability_drift_total, the same capped sum of leaf
 			# script values the bar applies. The scale is +/-2 because that sum is
 			# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
 			# 0.17, the same 1/12 of the half-height the other signed charts use.
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "te_hist_chart_colonial_drift_title"
-				}
-				blockoverride "chart_legend" {
-					text = "te_hist_chart_colonial_drift_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "zero_axis" {
-					widget = {
-						size = { 100% 2 }
-						parentanchor = vcenter
-						alwaystransparent = yes
-
-						background = {
-							using = dark_area
-							alpha = 0.7
-						}
-					}
-				}
-				blockoverride "bar_tooltip" {
-					tooltip = "te_hist_tt_colonial_drift"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_signed = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
-						blockoverride "positive_values" {
-							min = 0
-							max = 2
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
-						}
-						blockoverride "positive_cover_values" {
-							min = 0
-							max = 2
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
-						}
-						blockoverride "negative_values" {
-							min = -2
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
-						}
-						blockoverride "negative_cover_values" {
-							min = -2
-							max = 0
-							value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
-						}
-					}
-				}
-			}
+			te_hist_ce_drift = {}
 		}
 	}
 
-	### "How the Colonial Empire Works": every explanation, gathered out of the
-	### live sections into one section at the foot, collapsed by default, one
-	### subheading per topic (style rule 1). The live sections say what is
-	### happening; this says how it works.
+	### "How the Colonial Empire Works": a link at the foot of the panel to the
+	### Help page (style rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_colonial_empire_help_popup
+	### (te_popup = help_colonial_empire) instead of expanding; it keeps its
+	### name and its place in the composer. The "?" in the tab's header opens
+	### the same page.
 	type te_ce_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2792,70 +2716,93 @@ types colonial_empire_widget_types
 		spacing = 4
 
 		colonial_empire_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_colonial_empire_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('colonial_empire_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('colonial_empire_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('colonial_empire_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		colonial_empire_panel = {
-			visible = "[GetVariableSystem.Exists('colonial_empire_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections,
+	### one subheading per topic. The live sections say what is happening; this
+	### says how it works. Its three figures read GetPlayer (the monthly limit,
+	### the projection's months, the Round Table's authority), never the entry,
+	### so it opens from any host (test_te_help_pages.py). Instanced only by
+	### te_colonial_empire_help_popup.
+	type te_colonial_empire_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			colonial_empire_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_colonial_empire_how_sub_bar"
-				}
+		colonial_empire_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_bar"
 			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_bar_1"
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_bar_1"
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_bar_2"
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_bar_3"
+		}
+		colonial_empire_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_moves"
 			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_bar_2"
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_moves"
+		}
+		colonial_empire_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_pressure"
 			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_bar_3"
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_pressure"
+		}
+		colonial_empire_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_programmes"
 			}
-			colonial_empire_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_colonial_empire_how_sub_moves"
-				}
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_programmes"
+		}
+		colonial_empire_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_decolonization"
 			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_moves"
-			}
-			colonial_empire_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_colonial_empire_how_sub_pressure"
-				}
-			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_pressure"
-			}
-			colonial_empire_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_colonial_empire_how_sub_programmes"
-				}
-			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_programmes"
-			}
-			colonial_empire_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_colonial_empire_how_sub_decolonization"
-				}
-			}
-			colonial_empire_note = {
-				text = "je_colonial_empire_how_decolonization"
-			}
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_decolonization"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_colonial_empire_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_colonial_empire')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_colonial_empire_how_header"
+		}
+		blockoverride "popup_list" {
+			te_colonial_empire_help_body = {}
 		}
 	}
 
@@ -2887,6 +2834,89 @@ types colonial_empire_widget_types
 
 		te_ce_sec_history = {}
 		te_ce_sec_how = {}
+	}
+
+	### The Colonial Empire tab of the Timeline Extended window
+	### (te_system_tab_frame, gui/te_system_tab_widgets.gui; the window mounts it
+	### from gui/te_systems_window_generated.gui). The three composers the
+	### entry's roots wrap, in its order: the overview (which draws the
+	### stability bar, so the entry mounts the bars-on-top marker and nothing
+	### here draws a bar), the live sections, the history charts and How the
+	### Colonial Empire Works. Then Open Journal Entry. Not drawn: the status
+	### line (empty while the entry runs: the overview says it) and the nine
+	### scripted buttons (the AI's: every one's `visible` carries is_ai = yes;
+	### the programme and decision rows carry the same actions for a human).
+	### The header's "?" opens the Help page (te_help_button).
+	### te_ce_tab_layout is the block a wide mount overrides.
+	type te_ce_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_colonial_empire"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_colonial_empire')]"
+		}
+		blockoverride "tab_content" {
+			block "te_ce_tab_layout" {
+				te_ce_overview_panel = {}
+				te_ce_status_sections = {}
+				te_ce_reference_sections = {}
+			}
+		}
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_window_colonial_empire_open_journal_tt"
+		}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_ce_tab_layout's override in the window's full-screen frame:
+	### the three composers' sections in three columns of a fixed 520, read
+	### down each and then across. The overview first, outside any composer as on the tab;
+	### each column's run of te_ce_status_sections on a wrapper with that
+	### composer's gate and spacing; the history charts and How the Colonial
+	### Empire Works in their composer.
+	type te_ce_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_ce_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ce_sec_holdings = {}
+				te_ce_sec_stability = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ce_sec_pressure = {}
+				te_ce_sec_programmes = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_ce_reference_sections = {}
+		}
 	}
 }
 

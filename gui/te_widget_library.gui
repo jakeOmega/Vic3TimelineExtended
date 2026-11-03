@@ -21,6 +21,28 @@
 ###              Not yet seen in game (docs/testing/solar-colonies-playtest.md):
 ###              the layer over the journal panel and the Timeline Extended
 ###              window, Escape, and the panel behind still scrolling.
+###
+### --- Help pages (charts-help-national-info plan, PR H1) -----------------
+### te_ui_help_popup  a system's Help page (spec 2026-11-02-charts-help-
+###              national-info § 5.2): te_ui_popup at 640 × 820, the sections'
+###              480 to 520 of text plus the window's margins (2 × 35), the
+###              list's (2 × 10) and a scrollbar. A page is
+###              `type te_<key>_help_popup = te_ui_help_popup`, filling
+###              popup_visible (te_popup = help_<key>), popup_title (the
+###              section's own header key, "How Banking Works") and popup_list
+###              (te_<key>_help_body = {}, the section's content, which reads
+###              GetPlayer only). Instanced in te_popups; test_te_help_pages.py.
+### --- end Help pages ------------------------------------------------------
+###
+### te_ui_columns_three, te_ui_columns_two  a row of columns of a fixed 520, 30
+###              apart (style guide rule 8), centred, for the full-screen layouts
+###              (spec 2026-11-02-te-window-wide-mode § 9.4). Content reads down
+###              each column and then across, as in the Census Data window's
+###              Demographics tab (te_demog_browser_sections, the first one on
+###              it). Blocks: column_1, column_2 and, on the three, column_3. An
+###              empty column keeps its 520 and the 30 beside it, so two columns
+###              of content take te_ui_columns_two, not the three with one left
+###              empty. An instance may gate the row with its own visible.
 
 types te_widget_library_types
 {
@@ -91,6 +113,75 @@ types te_widget_library_types
 
 				block "popup_footer" {}
 			}
+		}
+	}
+
+	### --- Help pages (charts-help-national-info plan, PR H1) -------------
+	### A system's Help page: the shell above, sized for the How sections'
+	### text (see the header). A page derives from it and fills the rest.
+	type te_ui_help_popup = te_ui_popup {
+		blockoverride "popup_size" {
+			size = { 640 820 }
+		}
+	}
+	### --- end Help pages ---------------------------------------------------
+
+	type te_ui_columns_three = flowcontainer {
+		direction = horizontal
+		spacing = 30
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
+			block "column_1" {}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
+			block "column_2" {}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
+			block "column_3" {}
+		}
+	}
+
+	type te_ui_columns_two = flowcontainer {
+		direction = horizontal
+		spacing = 30
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
+			block "column_1" {}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
+			block "column_2" {}
 		}
 	}
 }

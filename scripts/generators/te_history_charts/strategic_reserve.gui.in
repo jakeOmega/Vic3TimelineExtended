@@ -1,0 +1,34 @@
+# History chart fragments: strategic_reserve (scripts/generators/gen_te_history_charts.py).
+# Each "@fragment <name>" opens one chart's te_history_chart instance as its section
+# had it, dedented, each size a placeholder (the generator's docstring lists them).
+# Edit a chart here, then run the generator; its section instances the chart's
+# te_hist_<id> wrapper.
+
+@fragment st_res
+te_history_chart = {
+	blockoverride "chart_title" {
+		text = "st_res_hist_title"
+	}
+	blockoverride "chart_legend" {
+		text = "st_res_hist_legend"
+	}
+	blockoverride "marker_pips" {}
+	blockoverride "bar_tooltip" {
+		tooltip = "st_res_hist_tt_${good}"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_${good}' )]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_${good}' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_${good}' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+		}
+	}
+}
