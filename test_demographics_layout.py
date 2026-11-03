@@ -49,6 +49,11 @@ STATE_ONLY = ["te_state_demog_modifiers"]
 HOSTS = ["te_demog_tab_sections", "te_state_demog_content"]
 # The Census Data window's composer: the tab's sections for the window's country, in three columns.
 BROWSER_COMPOSER = "te_demog_browser_sections"
+# Its columns, as the owner balanced them (2026-11-03): the census with Work and Retirement, Longevity (where the tab
+# has it, after Work) and Wealth; the pyramid and History; Causes of Death, Family Policy and the per-state detail.
+BROWSER_COLUMNS = [["te_demog_overview", "te_demog_sec_work", "te_demog_sec_longevity", "te_demog_sec_wealth"],
+                   ["te_demog_sec_pyramid", "te_demog_sec_history"],
+                   ["te_demog_sec_causes", "te_demog_sec_family", "te_demog_sec_places", "te_demog_sec_states"]]
 # The Timeline Extended window's Demographics tab: the tab's sections less the
 # strata incomes, which read the Population panel, in the window's body.
 WINDOW_COMPOSER = "te_demog_window_sections"
@@ -164,21 +169,18 @@ class OrderTest(unittest.TestCase):
                       for s in STATE if s not in STATE_ONLY]
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
-    def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
+    def test_the_census_window_takes_the_tabs_sections_in_the_owners_columns(self):
         """The tab's sections and gates on te_ui_columns_three (spec 2026-11-02-te-window-wide-mode §§ 9.4, 9.5): the
-        pending line above the columns, then the sections read down each column and then across."""
-        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"],
-                                             outside=("te_demog_panel",))
-        self.assertEqual(len(columns), 3)
-        self.assertEqual([c for column in columns for c in column], COUNTRY)
+        pending line above the columns, then the sections in the columns the owner set (2026-11-03)."""
+        assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"], outside=("te_demog_panel",),
+                                   columns=BROWSER_COLUMNS)
 
     def test_the_te_windows_wide_tab_is_the_census_windows_layout(self):
         """The Timeline Extended window's full-screen Demographics tab (spec 2026-11-02-te-window-wide-mode § 7) mounts
         the Census Data window's composer in place of te_demog_window_sections: the same sections and pending line, less
         the strata incomes, read from the Country in context, the player's (te_demog_window_body's datacontext)."""
-        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, layout=(WINDOW_BODY, "te_demog_tab_layout"),
-                                             outside=("te_demog_panel",))
-        self.assertEqual([c for column in columns for c in column], COUNTRY)
+        assert_wide_matches_narrow(self, BROWSER_COMPOSER, layout=(WINDOW_BODY, "te_demog_tab_layout"),
+                                   outside=("te_demog_panel",), columns=BROWSER_COLUMNS)
         from scripts.generators import gen_te_systems_window as gen
         self.assertEqual(next(t for t in gen.TABS if t.key == "demographics").wide, BROWSER_COMPOSER)
 

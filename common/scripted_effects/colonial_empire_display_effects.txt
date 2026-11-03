@@ -452,13 +452,17 @@ colonial_bloc_add_member = {
 # One script container per great power with a stance (gp_anti_colonial_stance
 # or gp_pro_colonial_stance, never the empire itself): its capital (the panel
 # reaches the country through it, gotcha #11), its stance (-1 condemning, 1
-# supporting), its prestige and its signed monthly weight on stability, the
-# one term of colonial_stability_term_gp_condemnation or _support that power
-# makes (its prestige over ours, clamped to 0.25-2, times
+# supporting), its prestige, its share of the empire's prestige pool
+# (colonial_gp_prestige_pool: every great power and the empire), and its
+# signed monthly weight on stability, the one term of
+# colonial_stability_term_gp_condemnation or _support that power makes (its
+# prestige over ours, clamped to 0.25-2, times
 # colonial_gp_condemnation_per_power or colonial_gp_support_per_power). The
-# weight is relative to our prestige, so it is the empire's to store, not the
-# power's. Condemners first, each group by prestige, largest first; the
-# panel's datamodel draws colonial_empire_gp_rows in that order.
+# condemners' shares add up to the overview pie's red slice, the number the
+# escalations fire on, and the supporters' to its green one. The weight and
+# the share are relative to the empire, so they are the empire's to store,
+# not the power's. Condemners first, each group by prestige, largest first;
+# the panel's datamodel draws colonial_empire_gp_rows in that order.
 #
 # The rows are a month's snapshot, as the drift groups are: a capital that
 # changes hands between assessments shows its new owner until the next one
@@ -466,36 +470,39 @@ colonial_bloc_add_member = {
 #
 # Last month's containers are destroyed first, from a temporary copy (never
 # mutate a persistent list while iterating it), and the entry's cleanup does
-# the same (colonial_empire_clear_gp_rows). Players only: no AI reads a panel.
-# Scope: country (the empire), inside colonial_empire_refresh_display.
+# the same (colonial_empire_clear_gp_rows). Every empire with the entry, AI
+# ones included (owner, 2026-11-03), so National Info lists who presses
+# another country: two walks over the countries and a container per great
+# power with a stance, a dozen at most, cheap beside the territory rows'
+# bloc walk, which stays the player's alone. Scope: country (the empire),
+# inside colonial_empire_refresh_display.
 # ---------------------------------------------------------------------------
 colonial_empire_refresh_gp_rows = {
 	colonial_empire_clear_gp_rows = yes
-	if = {
-		limit = { is_player = yes }
-		save_scope_as = ce_gp_empire
-		ordered_country = {
-			limit = {
-				NOT = { this = scope:ce_gp_empire }
-				country_rank >= rank_value:great_power
-				has_variable = gp_anti_colonial_stance
-			}
-			order_by = prestige
-			max = 1000
-			check_range_bounds = no
-			colonial_empire_gp_row = { STANCE = -1 PER = colonial_gp_condemnation_per_power }
+	# The pool every row's share divides by, walked once.
+	set_variable = { name = colonial_empire_gp_pool value = colonial_gp_prestige_pool }
+	save_scope_as = ce_gp_empire
+	ordered_country = {
+		limit = {
+			NOT = { this = scope:ce_gp_empire }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
 		}
-		ordered_country = {
-			limit = {
-				NOT = { this = scope:ce_gp_empire }
-				country_rank >= rank_value:great_power
-				has_variable = gp_pro_colonial_stance
-			}
-			order_by = prestige
-			max = 1000
-			check_range_bounds = no
-			colonial_empire_gp_row = { STANCE = 1 PER = colonial_gp_support_per_power }
+		order_by = prestige
+		max = 1000
+		check_range_bounds = no
+		colonial_empire_gp_row = { STANCE = -1 PER = colonial_gp_condemnation_per_power }
+	}
+	ordered_country = {
+		limit = {
+			NOT = { this = scope:ce_gp_empire }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
 		}
+		order_by = prestige
+		max = 1000
+		check_range_bounds = no
+		colonial_empire_gp_row = { STANCE = 1 PER = colonial_gp_support_per_power }
 	}
 }
 
@@ -504,6 +511,10 @@ colonial_empire_refresh_gp_rows = {
 # the panel renders those as tooltips.
 colonial_empire_clear_gp_rows = {
 	hidden_effect = {
+		if = {
+			limit = { has_variable = colonial_empire_gp_pool }
+			remove_variable = colonial_empire_gp_pool
+		}
 		if = {
 			limit = { has_variable_list = colonial_empire_gp_rows }
 			every_in_list = {
@@ -538,6 +549,13 @@ colonial_empire_gp_row = {
 				set_variable = { name = ce_gp_capital value = scope:ce_gp_capital }
 				set_variable = { name = ce_gp_stance value = $STANCE$ }
 				set_variable = { name = ce_gp_prestige value = scope:ce_gp_power.prestige }
+				set_variable = {
+					name = ce_gp_share
+					value = {
+						value = scope:ce_gp_power.prestige
+						divide = { value = scope:ce_gp_empire.var:colonial_empire_gp_pool min = 1 }
+					}
+				}
 				set_variable = {
 					name = ce_gp_weight
 					value = {

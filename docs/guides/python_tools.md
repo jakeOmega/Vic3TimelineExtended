@@ -203,7 +203,9 @@ import by name safely.
 GUI tests share `gui_test_helpers.py` (not a test file, so nothing collects it): `_read`, `_strip_comments`, `_close`,
 `_block_at`, `_type_body`, `_children` and `_instances` read markup, and `assert_wide_matches_narrow` checks a wide
 composer on `te_ui_columns_three` or `te_ui_columns_two` against the narrow layout it widens: the same sections in
-order, read down each column, each under exactly the narrow layout's gates. It fails on any widget a layout draws inline
+order, read down each column, each under exactly the narrow layout's gates. For a layout the owner balanced by hand
+(Banking, Grand Monuments, Demographics), `columns=` names its columns instead: each narrow section once in any order,
+the gates compared by name, and a section `outside` the columns where the narrow layout has it. It fails on any widget a layout draws inline
 other than a plain container or a `te_*` section, on an instance's `visible` over its type's own (gotcha #17), and on a
 wide wrapper that does more than gate and space its sections: one with `ignoreinvisible` unset, a horizontal
 flowcontainer, a property outside `WIDE_WRAPPER_PROPS` (a datacontext, a margin), or a `spacing` its narrow composer

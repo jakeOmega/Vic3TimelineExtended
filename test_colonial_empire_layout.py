@@ -451,7 +451,7 @@ class DisplayScriptTest(unittest.TestCase):
     def test_display_values_guard_every_variable(self):
         values = _read(VALUES)
         names = re.findall(r"(?m)^(colonial_empire_disp_\w+) = \{", values)
-        self.assertEqual(len(names), 43)
+        self.assertEqual(len(names), 44)
         panel = _read(GUI) + "\n".join(v for k, v in _loc().items() if k.startswith("je_colonial_empire_"))
         for name in names:
             with self.subTest(value=name):
@@ -1528,7 +1528,7 @@ class WidthBudgetTest(unittest.TestCase):
         self.assertEqual(set(self.territory_head), {"name", "primary", "sol", "gdp"})
         self.assertEqual(set(self.subject_head), {"name", "kind", "gdp"})
         self.assertEqual(set(self.war_head), {"name", "months", "backers"})
-        self.assertEqual(set(self.gp_head), {"name", "stance", "prestige", "effect"})
+        self.assertEqual(set(self.gp_head), {"name", "stance", "share", "effect"})
         for prefix, cells in (("territory_head", self.territory_head), ("subject_head", self.subject_head),
                               ("war_head", self.war_head), ("gp_head", self.gp_head), ("btn", self.buttons)):
             for k, (w, font) in cells.items():
@@ -1586,8 +1586,8 @@ class WidthBudgetTest(unittest.TestCase):
                         "je_colonial_empire_")["x"]
         level = int(re.search(r'max_width = (\d+)[^}]*?block "row_level"', self.policy, re.S).group(1))
         term = int(re.search(r'max_width = (\d+)[^}]*?block "row_term"', self.policy, re.S).group(1))
-        gp_prestige = int(re.search(r"max_width = (\d+)[^}]*?colonial_gp_row_disp_prestige", _type_body(self.gui, "te_ce_gp_row"),
-                                    re.S).group(1))
+        gp_share = int(re.search(r"max_width = (\d+)[^}]*?colonial_gp_row_disp_share", _type_body(self.gui, "te_ce_gp_row"),
+                                 re.S).group(1))
         esc_value = int(re.findall(r"maximumsize = \{ (\d+) -1 \}", self.escalation)[1])
         cases = [
             (LONGEST_STATE, "row", self.name_cell, "a territory's name"),
@@ -1600,10 +1600,10 @@ class WidthBudgetTest(unittest.TestCase):
             ("120", *self.war_row["months"][::-1], "months at war"),
             ("3", *self.war_row["backers"][::-1], "backers"),
             ("-1.20/mo", *self.gp_row["effect"][::-1], "a great power's weight"),
-            ("9999", "row", gp_prestige, "a great power's prestige"),
+            ("100%", "row", gp_share, "a great power's share of prestige"),
             ("-2.00/mo", "row", esc_value, "an escalation's loss"),
             ("Stability", ov_label[1], ov_label[0], "the bar's label"),
-            ("100% (-1.67/mo)", ov_value[1], ov_value[0], "the overview's value"),
+            ("100% (-1.50/mo)", ov_value[1], ov_value[0], "the overview's value"),
             ("-10.00", "row", pillar_value, "a term's value"),
             ("Supporting: 100%", legend[1], legend[0], "the pie's legend"),
             ("3 / 3", "row", level, "a programme's level"),
@@ -1688,8 +1688,15 @@ class PressureTableTest(unittest.TestCase):
         row = _type_body(self.gui, "te_ce_gp_row")
         # The covert rows' proven chain to a country (gotcha #15).
         self.assertIn('datacontext = "[ScriptContainer.MakeScope.Var(\'ce_gp_capital\').GetState.GetCountry]"', row)
-        for value in ("colonial_gp_row_disp_stance", "colonial_gp_row_disp_prestige"):
+        for value in ("colonial_gp_row_disp_stance", "colonial_gp_row_disp_share"):
             self.assertIn(f"ScriptValue('{value}')", row)
+        # The prestige moved to the hover (2026-11-03), which reads the
+        # container alone and speaks of the empire, not of us (gotcha #24).
+        tt = _loc()["je_colonial_empire_gp_row_tt"]
+        for value in ("colonial_gp_row_disp_prestige", "colonial_gp_row_disp_share"):
+            self.assertIn(value, tt)
+        self.assertNotRegex(tt, r"(?<![\w.])Country\.")
+        self.assertNotRegex(tt, r"\b(ours|our|us)\b")
         self.assertIn("colonial_gp_row_disp_weight", _loc()["je_colonial_empire_gp_effect"])
         _assert_rooted_at_the_player(self, row)
 
@@ -1716,7 +1723,15 @@ class PressureTableTest(unittest.TestCase):
 
     def test_the_rows_are_rebuilt_not_stacked(self):
         refresh = _block(self.display, "colonial_empire_refresh_gp_rows")
-        self.assertLess(refresh.index("colonial_empire_clear_gp_rows = yes"), refresh.index("is_player = yes"))
+        self.assertLess(refresh.index("colonial_empire_clear_gp_rows = yes"), refresh.index("ordered_country"))
+        # Every empire's, the AI's too (owner, 2026-11-03): National Info lists
+        # who presses another country.
+        self.assertNotIn("is_player", refresh)
+        # The pool every row's share divides by, walked once, before the rows.
+        self.assertLess(refresh.index("set_variable = { name = colonial_empire_gp_pool value = colonial_gp_prestige_pool }"),
+                        refresh.index("ordered_country"))
+        self.assertIn("scope:ce_gp_empire.var:colonial_empire_gp_pool", _block(self.display, "colonial_empire_gp_row"))
+        self.assertIn("remove_variable = colonial_empire_gp_pool", _block(self.display, "colonial_empire_clear_gp_rows"))
         clear = _block(self.display, "colonial_empire_clear_gp_rows")
         self.assertIn("hidden_effect = {", clear)
         self.assertLess(clear.index("add_to_temporary_list = ce_gp_old_rows"), clear.index("clear_variable_list = colonial_empire_gp_rows"))
@@ -1961,13 +1976,10 @@ class PrivateTest(unittest.TestCase):
         self._guarded("te_ce_sec_holdings", "GetList('colonial_empire_subject_capitals')")
         # an AI's territories never have rows, so their pending line would stand for good
         self._guarded("te_ce_sec_holdings", "ScriptValue('colonial_empire_disp_territories_pending')")
-        self._guarded("te_ce_sec_pressure", "GetList('colonial_empire_gp_rows')", 3)
-        self._guarded("te_ce_sec_pressure", 'text = "je_colonial_empire_pressure_none"')
         self._guarded("te_ce_overview_panel", "JournalEntry.GetScriptedProgressBars")
 
     def test_another_countrys_notes(self):
-        for name, key, count in (("te_ce_sec_holdings", "je_colonial_empire_rows_own_only_ni", 2),
-                                 ("te_ce_sec_pressure", "je_colonial_empire_pressure_own_only_ni", 1)):
+        for name, key, count in (("te_ce_sec_holdings", "je_colonial_empire_rows_own_only_ni", 2),):
             body = self.types[name].body
             with self.subTest(note=key):
                 found = re.findall(rf'visible = "\[([^"]*)\]"\s*text = "{key}"', body)
@@ -2010,7 +2022,9 @@ class PrivateTest(unittest.TestCase):
         ("te_ce_sec_stability", "colonial_empire_pillar_row = {", 11),
         ("te_ce_sec_pressure", "te_ce_escalation_row = {", 2),
         ("te_ce_sec_programmes", "colonial_empire_policy_row = {", 3),
-        ("te_ce_sec_stance", "te_ce_stance_line = {", 3),
+        ("te_ce_sec_stance", "te_ce_stance_line = {", 4),
+        ("te_ce_sec_pressure", "te_ce_gp_head = {", 1),
+        ("te_ce_sec_pressure", "te_ce_gp_row = {", 1),
         ("te_ce_sec_powers", "te_ce_power_row = {", 1),             # the copy with no hover
         ("te_ce_sec_history", "te_hist_ce_stability = {", 1),
         ("te_ce_sec_history", "te_hist_ce_drift = {", 1),
@@ -2028,14 +2042,17 @@ class PrivateTest(unittest.TestCase):
             "rows_own_only_ni",
             "drift_base", "drift_laws", "drift_igs", "drift_rank", "drift_policies", "drift_domestic",
             "drift_overreach", "drift_gp", "drift_acceptance", "drift_cap", "drift_total",
-            "pressure_header", "pressure_isolation", "pressure_consensus", "pressure_own_only_ni",
+            "pressure_header", "pressure_isolation", "pressure_consensus", "pressure_none", "pressure_none_theirs",
+            "gp_head_share", "gp_head_share_tt_theirs", "gp_head_stance_tt_theirs",
             "programmes_header", "term_invest", "term_garrison", "term_assimilation", "level_invest",
             "level_garrison", "level_assimilation",
             "stance_header_theirs", "stance_label", "stance_anti", "stance_neutral", "stance_pro",
-            "stance_force_label", "stance_next_label", "powers_header", "history_header")] + ["te_hist_since"],
+            "stance_force_label", "stance_share_label", "stance_share", "stance_share_tt_theirs", "stance_share_none",
+            "stance_next_label", "powers_header", "history_header")] + ["te_hist_since"],
         "te_ce_readout": [f"je_colonial_empire_{k}" for k in (
             "stance_header_theirs", "stance_label", "stance_anti", "stance_neutral", "stance_pro",
-            "stance_force_label", "stance_next_label", "powers_header")],
+            "stance_force_label", "stance_share_label", "stance_share", "stance_share_tt_theirs", "stance_share_none",
+            "stance_next_label", "powers_header")],
     }
 
     def test_another_country_sees_its_sections(self):
@@ -2101,18 +2118,20 @@ class PrivateTest(unittest.TestCase):
                     mine, theirs = spacing.search(own), spacing.search(parent)
                     self.assertEqual(mine and mine.group(1), theirs and theirs.group(1))
                     self.assertRegex(parent, r"\bignoreinvisible\s*=\s*yes\b", "the hidden wrapper takes no gap")
-        self.assertEqual(found, 5, "territories, subjects, the whole empire, the great powers, the powers list")
+        self.assertEqual(found, 4, "territories, subjects, the whole empire, the powers list")
 
-    def test_no_public_text_counts_the_great_powers(self):
+    def test_another_countrys_text_counts_the_great_powers(self):
         """colonial_empire_disp_gp_condemners and _supporters count the rows of
-        colonial_empire_gp_rows, which script builds for a played country only:
-        another country's would always read 0. Only the player's text counts them."""
+        colonial_empire_gp_rows, which script builds for every empire with the
+        entry since 2026-11-03 (a played country only before, when another
+        country's text could not count them), so both hovers do."""
         loc = gui_test_helpers.load_loc()
-        for panel in self.PANELS:
-            keys = gui_test_helpers.panel_loc_keys({panel}, self.types, loc)
-            with self.subTest(panel=panel):
-                self.assertEqual(sorted(k for k in keys if "colonial_empire_disp_gp_" in loc[k]), [])
-        self.assertIn("colonial_empire_disp_gp_condemners", loc["je_colonial_empire_ov_gp_tt_ours"])
+        for key in ("je_colonial_empire_ov_gp_tt_ours", "je_colonial_empire_ov_gp_tt_theirs"):
+            with self.subTest(key=key):
+                self.assertIn("colonial_empire_disp_gp_condemners", loc[key])
+                self.assertIn("colonial_empire_disp_gp_supporters", loc[key])
+        keys = gui_test_helpers.panel_loc_keys({"te_ce_wide_sections"}, self.types, loc)
+        self.assertIn("je_colonial_empire_ov_gp_tt_theirs", keys)
 
 
 class ObserverTest(unittest.TestCase):

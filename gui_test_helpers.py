@@ -304,7 +304,7 @@ def assert_column_closes_with_its_sections(test, wide_type, n, sections, text=No
 
 
 def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), outside=(),
-                               added_gates=(), composers=None, text=None):
+                               added_gates=(), composers=None, text=None, columns=None):
     """Check a wide composer against the narrow layout it widens, and return
     its columns (a list of section-name lists, read down each column).
 
@@ -339,6 +339,12 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       spaces its sections as that one does.
     - A name in `extra`, `outside` or `added_gates` that no longer applies
       fails, so a stale one can't hide a change.
+    - `columns`, for a layout the owner balanced by hand (Banking, Grand
+      Monuments, Demographics: 2026-11-03): its columns, a list of
+      section-name lists read down each. The wide composer must lay them out
+      exactly so, and place the narrow sections each exactly once in any
+      order; the gates are then compared section by section, by name. Without
+      it, the wide order must be the narrow one.
 
     `text` is the markup to read the types from: by default every mod .gui.
     """
@@ -367,8 +373,25 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     stale = set(extra) - wide.skipped
     test.assertFalse(stale, f"{wide_type}: extra names {sorted(stale)}, which it doesn't place")
 
-    test.assertEqual([s for s, _, _ in wide.sections], [s for s, _, _ in narrow.sections],
-                     f"{wide_type}: the narrow layout's sections, read down each column and then across")
+    wide_names = [s for s, _, _ in wide.sections]
+    narrow_names = [s for s, _, _ in narrow.sections]
+    if columns is None:
+        test.assertEqual(wide_names, narrow_names,
+                         f"{wide_type}: the narrow layout's sections, read down each column and then across")
+        pairs = list(zip(narrow.sections, wide.sections))
+    else:
+        test.assertEqual([c for c in wide.columns if c is not None], [list(c) for c in columns],
+                         f"{wide_type}: the columns the owner set")
+        test.assertEqual(len(set(narrow_names)), len(narrow_names), f"{wide_type}: the narrow layout names a section twice")
+        test.assertEqual(sorted(wide_names), sorted(narrow_names),
+                         f"{wide_type}: the narrow layout's sections, each once, in any order")
+        # a section outside the columns still draws where the narrow layout has it (the pending line first)
+        for section in outside:
+            if section in wide_names and section in narrow_names:
+                test.assertEqual(wide_names.index(section), narrow_names.index(section),
+                                 f"{wide_type}: {section} draws outside the columns at another place than the narrow one")
+        by_name = {s: (s, gates, in_column) for s, gates, in_column in wide.sections}
+        pairs = [(entry, by_name[entry[0]]) for entry in narrow.sections]
     out = [s for s, _, in_column in wide.sections if not in_column]
     test.assertFalse(sorted(set(out) - set(outside)),
                      f"{wide_type} places {sorted(set(out) - set(outside))} outside its columns; name each in outside")
@@ -376,7 +399,7 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     test.assertFalse(stale, f"{wide_type}: outside names {sorted(stale)}, which it doesn't place outside its columns")
 
     further = set()
-    for (section, narrow_gates, _), (_, wide_gates, _) in zip(narrow.sections, wide.sections):
+    for (section, narrow_gates, _), (_, wide_gates, _) in pairs:
         missing = sorted(set(narrow_gates) - set(wide_gates))
         test.assertFalse(missing, f"{wide_type}: {section} shows in the narrow layout only while {missing}, "
                                   f"but in the wide one without it")
