@@ -26,9 +26,10 @@ STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_worl
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 # Another country's copy of column 3's world sections, in its column 2, and
-# the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer.
+# the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer
+# (column 1's Nuclear Posture carries it on its own type's root).
 WORLD_COLUMN = "te_nuclear_world_column"
-WIDE_OWN = ("te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
+WIDE_OWN = ("te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
             "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers")
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
 # bar stays under The Programme, in its own gated wrapper; Nuclear Posture at
@@ -1112,13 +1113,18 @@ class WideTest(unittest.TestCase):
 
     def test_the_wide_layout_is_the_tabs_in_three_columns(self):
         """For the player: columns 2 and 3 carry Country.IsLocalPlayer on top of
-        the tab's gate, which is always true there; another country's copy of
+        the tab's gate, which is always true there (column 1's Nuclear Posture
+        carries it on its type's own root); another country's copy of
         column 3's world sections (te_nuclear_world_column) is skipped here and
         held by the next test."""
         columns = assert_wide_matches_narrow(self, "te_nuclear_wide_sections",
                                              layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"),
                                              extra=(WORLD_COLUMN,), added_gates=WIDE_OWN)
         self.assertEqual(columns, WIDE_COLUMNS)
+        # Nuclear Posture shares column 1's wrapper, which shows for another country too: its own root keeps it the
+        # player's (owner, 2026-11-03)
+        posture = gh._type_body(gh._all_gui(), "te_nuclear_sec_posture")
+        self.assertTrue(_root_visible(posture).startswith("And( Country.IsLocalPlayer, "), _root_visible(posture))
 
     def test_another_country_gets_the_world_sections_in_column_2(self):
         """Another country's columns 2 and 3 are the player's own, so column 2
@@ -1139,8 +1145,7 @@ class WideTest(unittest.TestCase):
         self.assertTrue(col2.rstrip().endswith(f"{WORLD_COLUMN} = {{}}"), "the copy closes column 2")
         self.assertEqual(wide.count(f"{WORLD_COLUMN} = {{}}"), 1)
         visibles = re.findall(r'visible = "\[(.*)\]"', wide)
-        self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 3,
-                         "column 1's Nuclear Posture, columns 2 and 3's composers")
+        self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 2, "columns 2 and 3's composers")
         self.assertNotIn("Country.IsLocalPlayer", visibles, "column 3's How wrapper is gone")
         self.assertEqual(visibles.count(gate), 1, "column 1's composer, open for both")
 

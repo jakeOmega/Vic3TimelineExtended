@@ -336,6 +336,13 @@ types banking_layout_widget_types
 			}
 		}
 
+		### Monetary Policy alone: it hides under the simplified rule outside a
+		### market economy (banking_dash_monetary_shown), so the column closes
+		### up on its gate (column_2_visible) rather than leave an empty band.
+		blockoverride "column_2_visible" {
+			visible = "[GetScriptedGui('banking_dash_monetary_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		}
+
 		blockoverride "column_2" {
 			flowcontainer = {
 				visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"

@@ -382,9 +382,14 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     else:
         test.assertEqual([c for c in wide.columns if c is not None], [list(c) for c in columns],
                          f"{wide_type}: the columns the owner set")
-        test.assertEqual(len(set(narrow_names)), len(narrow_names), f"{wide_type}: a section placed twice")
+        test.assertEqual(len(set(narrow_names)), len(narrow_names), f"{wide_type}: the narrow layout names a section twice")
         test.assertEqual(sorted(wide_names), sorted(narrow_names),
                          f"{wide_type}: the narrow layout's sections, each once, in any order")
+        # a section outside the columns still draws where the narrow layout has it (the pending line first)
+        for section in outside:
+            if section in wide_names and section in narrow_names:
+                test.assertEqual(wide_names.index(section), narrow_names.index(section),
+                                 f"{wide_type}: {section} draws outside the columns at another place than the narrow one")
         by_name = {s: (s, gates, in_column) for s, gates, in_column in wide.sections}
         pairs = [(entry, by_name[entry[0]]) for entry in narrow.sections]
     out = [s for s, _, in_column in wide.sections if not in_column]

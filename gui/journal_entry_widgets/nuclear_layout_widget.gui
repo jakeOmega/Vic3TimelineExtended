@@ -279,18 +279,10 @@ types nuclear_layout_widget_types
 				te_nuclear_sec_crisis = {}
 				te_nuclear_sec_strike = {}
 				te_nuclear_sec_world_crises = {}
-			}
-
-			### Nuclear Posture at the column's foot (owner, 2026-11-03): the
-			### player's own, so it keeps column 2's Country.IsLocalPlayer in a
-			### wrapper of its own; the one above shows for another country too.
-			flowcontainer = {
-				direction = vertical
-				parentanchor = hcenter
-				ignoreinvisible = yes
-				spacing = 4
-				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-
+				### Nuclear Posture at the column's foot (owner, 2026-11-03), at
+				### the composer's spacing: the player's own, by its type's own
+				### And( Country.IsLocalPlayer, nd_armed ), so another country's
+				### copy of this wrapper never draws it.
 				te_nuclear_sec_posture = {}
 			}
 		}

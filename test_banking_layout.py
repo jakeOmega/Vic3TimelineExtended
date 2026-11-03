@@ -12,7 +12,7 @@ import re
 import unittest
 
 import gui_tree
-from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from gui_test_helpers import _block_at, _strip_comments, assert_column_closes_with_its_sections, assert_wide_matches_narrow
 from gui_test_helpers import _read as _read_gui
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -199,10 +199,16 @@ class WideTest(unittest.TestCase):
         middle, the record last."""
         assert_wide_matches_narrow(self, "te_banking_wide_sections",
                                    layout=("te_banking_tab_body", "te_banking_tab_layout"),
+                                   added_gates=("te_banking_sec_monetary",),
                                    columns=[["te_banking_overview_panel", "te_banking_sec_active",
                                              "te_banking_sec_interventions"],
                                             ["te_banking_sec_monetary"],
                                             REFERENCE])
+
+    def test_the_monetary_column_closes_up_while_its_section_hides(self):
+        """Monetary Policy alone in column 2 hides under the simplified rule outside a market economy, while the tab
+        still shows: the column takes its gate (column_2_visible), so no empty 520 band sits between the others."""
+        assert_column_closes_with_its_sections(self, "te_banking_wide_sections", 2, ["te_banking_sec_monetary"])
 
     def test_the_registry_names_it(self):
         from scripts.generators import gen_te_systems_window as gen

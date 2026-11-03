@@ -2,8 +2,9 @@
 docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 9.5).
 
 A wide composer must place exactly the narrow layout's sections, in their
-order read down each column and then across, on te_ui_columns_three or
-te_ui_columns_two, each under exactly the gates the narrow layout gives it.
+order read down each column and then across (or, with columns=, in the columns
+the owner set), on te_ui_columns_three or te_ui_columns_two, each under exactly
+the gates the narrow layout gives it.
 The real calls are in each system's layout test (test_demographics_layout.py
 for the Census Data window). Each failing case names the message it expects,
 so a case can't pass on some other failure.
@@ -271,6 +272,18 @@ class WideMatchesNarrowTest(unittest.TestCase):
         wide = wide.replace("\t\t\tte_x_overview = {}\n", "").rstrip() + "\n\t}\n"
         self.fails(r"places \['te_x_overview'\] outside its columns", wide)
         self.assertEqual(self.check(wide, outside=("te_x_overview",))[0], ["te_x_sec_a"])
+
+    def test_columns_keep_an_outside_section_where_it_draws(self):
+        """With columns=, the pending line may not move below the columns: it still draws where the narrow layout has
+        it, first."""
+        above = GOOD.replace("type te_x_wide_sections = te_ui_columns_three {",
+                             "type te_x_wide_sections = flowcontainer {\n\t\tte_x_overview = {}\n\t\tte_ui_columns_three = {")
+        above = above.replace("\t\t\tte_x_overview = {}\n", "").rstrip() + "\n\t}\n"
+        columns = [["te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c", "te_x_sec_how"]]
+        self.assertEqual(self.check(above, outside=("te_x_overview",), columns=columns), columns)
+        below = above.replace("\n\t\tte_x_overview = {}\n\t\tte_ui_columns_three = {", "\n\t\tte_ui_columns_three = {")
+        below = below.rstrip()[:-1].rstrip() + "\n\t\tte_x_overview = {}\n\t}\n"
+        self.fails("draws outside the columns at another place", below, outside=("te_x_overview",), columns=columns)
 
     def test_an_outside_the_layout_no_longer_has(self):
         self.fails(r"outside names \['te_x_gone'\], which it doesn't place outside its columns", GOOD, outside=("te_x_gone",))
