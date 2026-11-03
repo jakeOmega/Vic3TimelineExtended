@@ -579,7 +579,6 @@ UNBOUND = set([
 
     "colonial_empire",
 
-    "seabed",
 
 
     "nuclear_weapons",

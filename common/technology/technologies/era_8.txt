@@ -318,7 +318,7 @@ microprocessor = {
 }
 
 gene_splicing = {
-	# Ban on Genetic Modification law
+	# Ban on Genetic Modification, Corporate Genetic Licensing and Open-Source Genetics laws
 	era = era_8
 	texture = "gfx/interface/icons/invention_icons/gene_splicing.dds"
 	category = production
