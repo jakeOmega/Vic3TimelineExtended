@@ -1,0 +1,356 @@
+# History chart fragments: banking (scripts/generators/gen_te_history_charts.py).
+# Each "@fragment <name>" opens one chart's te_history_chart instance as its section
+# had it, dedented, each size a placeholder (the generator's docstring lists them).
+# Edit a chart here, then run the generator; its section instances the chart's
+# te_hist_<id> wrapper.
+
+@fragment bank_value
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_bank_value_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_bank_value_legend"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_bank_value"
+	}
+	### The one chart here that does NOT use te_history_bar_unsigned:
+	### its colour is the phase the month's reading falls in, so the
+	### series reads as a run of Stable years broken by a red Panic
+	### without anyone having to check the axis. Type and bands:
+	### te_history_bar_cycle_phase at the top of this file.
+	blockoverride "bar_body" {
+		te_history_bar_cycle_phase = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
+			blockoverride "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
+			blockoverride "phase_cover_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+		}
+	}
+}
+
+@fragment bank_momentum
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_bank_momentum_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_bank_momentum_legend"
+	}
+	blockoverride "zero_axis" {
+		widget = {
+			size = { 100% 2 }
+			parentanchor = vcenter
+			alwaystransparent = yes
+
+			background = {
+				using = dark_area
+				alpha = 0.7
+			}
+		}
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_bank_momentum"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_signed = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_momentum' )]"
+			blockoverride "positive_values" {
+				min = 0
+				max = 6
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
+			}
+			blockoverride "positive_cover_values" {
+				min = 0
+				max = 6
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)${thin:0.5}' ) ) )]"
+			}
+			blockoverride "negative_values" {
+				min = -6
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
+			}
+			blockoverride "negative_cover_values" {
+				min = -6
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)${thin:0.5}' ) ) )]"
+			}
+		}
+	}
+}
+
+@fragment bank_bubble
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_bank_bubble_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_bank_bubble_legend"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_bank_bubble"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_bubble' )]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.85 0.55 0.28 1.0 }
+			}
+		}
+	}
+}
+
+@fragment mon_policy
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_mon_policy_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_mon_policy_legend"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_mon_policy"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+			blockoverride "values" {
+				min = 0
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)${thin:0.5}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.50 0.58 0.80 1.0 }
+			}
+		}
+	}
+}
+
+@fragment mon_policy_digital
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_mon_policy_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_mon_policy_legend_neg"
+	}
+	blockoverride "zero_axis" {
+		widget = {
+			size = { 100% 2 }
+			parentanchor = bottom
+			position = { 0 ${zero_y:0.2} }
+			alwaystransparent = yes
+
+			background = {
+				using = dark_area
+				alpha = 0.7
+			}
+		}
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_mon_policy"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+			blockoverride "values" {
+				min = -3
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = -3
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)${thin:0.5}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.50 0.58 0.80 1.0 }
+			}
+		}
+	}
+}
+
+@fragment mon_rate_paid
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_mon_rate_paid_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_mon_rate_paid_legend"
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_mon_rate_paid"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_rate_paid' )]"
+			blockoverride "values" {
+				min = 0
+				max = 20
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 20
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ), '(CFixedPoint)${thin:0.8}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.80 0.66 0.34 1.0 }
+			}
+		}
+	}
+}
+
+@fragment mon_inflation
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_mon_inflation_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_mon_inflation_legend"
+	}
+	blockoverride "zero_axis" {
+		widget = {
+			size = { 100% 2 }
+			parentanchor = bottom
+			position = { 0 ${zero_y:0.25} }
+			alwaystransparent = yes
+
+			background = {
+				using = dark_area
+				alpha = 0.7
+			}
+		}
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_mon_inflation"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_inflation' )]"
+			blockoverride "values" {
+				min = -4
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:-4+0.3}', ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = -4
+				max = 12
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-4', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ), '(CFixedPoint)${thin:0.65}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.80 0.45 0.32 1.0 }
+			}
+		}
+	}
+}
+
+@fragment mon_fx
+te_history_chart = {
+	blockoverride "chart_title_font" {
+		using = banking_dash_fontsize_heading
+	}
+	blockoverride "chart_legend_font" {
+		using = fontsize_medium
+	}
+	blockoverride "chart_title" {
+		text = "te_hist_chart_mon_fx_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_mon_fx_legend"
+	}
+	blockoverride "zero_axis" {
+		widget = {
+			size = { 100% 2 }
+			parentanchor = vcenter
+			alwaystransparent = yes
+
+			background = {
+				using = dark_area
+				alpha = 0.7
+			}
+		}
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_mon_fx"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_fx' )]"
+			blockoverride "values" {
+				min = 50
+				max = 150
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:50+1.5}', ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 50
+				max = 150
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)50', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.36 0.56 0.78 1.0 }
+			}
+		}
+	}
+}

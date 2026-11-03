@@ -2,7 +2,9 @@
 # SYSTEM TABS IN VANILLA PANELS — gates
 # ============================================================================
 # A system's journal-entry panels are also shown as a tab in a vanilla panel
-# (docs/systems/system_panels_feasibility.md). Each tab has two handlers here,
+# (docs/systems/system_panels_feasibility.md), and the Timeline Extended window
+# mirrors that tab under the same two gates (gen_te_systems_window.py), so a
+# gate's name records the tab's first host. Each tab has two handlers here,
 # and both read nothing but the root, so they are safe as `visible` / `enabled`
 # gates (gotcha #22 in docs/guides/gui_modding_guide.md):
 #

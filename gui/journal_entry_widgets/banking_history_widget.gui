@@ -15,7 +15,9 @@
 ### one of the pair is ever visible.
 ### Every bar reads a `te_hist_v_*` variable recorded by
 ### common/scripted_effects/te_history_banking_effects.txt; the reusable
-### chart type lives in te_history_chart.gui.
+### chart type lives in te_history_chart.gui. Each chart is its te_hist_<id>
+### wrapper, generated (gui/te_history_charts_generated.gui) from its fragment
+### in scripts/generators/te_history_charts/banking.gui.in: edit it there.
 ###
 ### The section is open by default in both hosts (the owner's rule since
 ### play-test round 2). Until then the journal kept it collapsed, so a player
@@ -52,6 +54,13 @@ types te_banking_history_types
 	### in the overview's Cycle Phase cell (banking_dash_phase_*_value).
 	### Panic and Frenzy share red, which is why six bars cover seven phases. If either the ladder or a phase
 	### colour moves, move it here too.
+	###
+	### THE FLOOR AND THE CAP ARE BLOCKS. A bar's floor (2) and its cap (4) are in
+	### the axis's units, so a chart drawn taller (the full-screen viewer) thins
+	### them by the height ratio. "phase_value" (all six bars: one blockoverride
+	### fills every block of its name, as vanilla's game_rules.gui ai_icon_size)
+	### and "phase_cover_value" keep today's as defaults; the chart's instance
+	### sets both (scripts/generators/te_history_charts/banking.gui.in).
 	type te_history_bar_cycle_phase = widget {
 		size = { 100% 100% }
 
@@ -68,7 +77,9 @@ types te_banking_history_types
 			color = { 0.88 0.34 0.34 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Downturn (10-24) — gold.
@@ -84,7 +95,9 @@ types te_banking_history_types
 			color = { 1.0 0.674 0.454 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Stagnation (25-39) — yellow.
@@ -100,7 +113,9 @@ types te_banking_history_types
 			color = { 1.0 0.97 0.66 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Stable (40-59) — white, the phase with nothing to say about it.
@@ -116,7 +131,9 @@ types te_banking_history_types
 			color = { 0.94 0.95 0.88 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Expansion (60-74) — green.
@@ -132,7 +149,9 @@ types te_banking_history_types
 			color = { 0.39 0.67 0.33 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### Boom (75-87) — blue.
@@ -148,7 +167,9 @@ types te_banking_history_types
 			color = { 0.41 0.67 0.74 1.0 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			block "phase_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+			}
 		}
 
 		### The shared cover, declared last so it draws over whichever colour
@@ -165,11 +186,32 @@ types te_banking_history_types
 			color = { 0.05 0.06 0.08 0.78 }
 			min = 0
 			max = 100
-			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+			block "phase_cover_value" {
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+			}
 		}
 	}
 
-	### The charts themselves: the range selector and the six charts. Shown by
+	### What the two pips on a bar mean. Both halves apply here: the banking
+	### series is the only one that records crash markers. A type of its own
+	### because the charts' full-screen viewers (te_chart_<id>_popup,
+	### gen_te_history_charts.py) show it under the large chart too; a wrapper
+	### holding the legend, not a type derived from it (gotcha #37).
+	type te_banking_hist_marker_key = flowcontainer {
+		parentanchor = hcenter
+		visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+
+		te_history_marker_legend = {
+			blockoverride "marker_legend_font" {
+				using = fontsize_medium
+			}
+			blockoverride "crash_legend_font" {
+				using = fontsize_medium
+			}
+		}
+	}
+
+	### The charts themselves: the range selector and the eight charts. Shown by
 	### the two shells below, which differ only in the flag that opens them.
 	type te_banking_history_charts = flowcontainer {
 		direction = vertical
@@ -231,139 +273,17 @@ types te_banking_history_types
 			text = "te_hist_since"
 		}
 
-		### What the two pips on a bar mean. Both halves apply here: the banking
-		### series is the only one that records crash markers.
-		te_history_marker_legend = {
-			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
-			blockoverride "marker_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "crash_legend_font" {
-				using = fontsize_medium
-			}
-		}
+		### What the two pips on a bar mean (te_banking_hist_marker_key, above)
+		te_banking_hist_marker_key = {}
 
 		### ---- Cycle value (0-100 index) --------------------------------
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "chart_title" {
-				text = "te_hist_chart_bank_value_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_bank_value_legend"
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_bank_value"
-			}
-			### The one chart here that does NOT use te_history_bar_unsigned:
-			### its colour is the phase the month's reading falls in, so the
-			### series reads as a run of Stable years broken by a red Panic
-			### without anyone having to check the axis. Type and bands:
-			### te_history_bar_cycle_phase at the top of this file.
-			blockoverride "bar_body" {
-				te_history_bar_cycle_phase = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
-				}
-			}
-		}
+		te_hist_bank_value = {}
 
 		### ---- Momentum (signed monthly delta) --------------------------
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "chart_title" {
-				text = "te_hist_chart_bank_momentum_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_bank_momentum_legend"
-			}
-			blockoverride "zero_axis" {
-				widget = {
-					size = { 100% 2 }
-					parentanchor = vcenter
-					alwaystransparent = yes
-
-					background = {
-						using = dark_area
-						alpha = 0.7
-					}
-				}
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_bank_momentum"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_signed = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_momentum' )]"
-					blockoverride "positive_values" {
-						min = 0
-						max = 6
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
-					}
-					blockoverride "positive_cover_values" {
-						min = 0
-						max = 6
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
-					}
-					blockoverride "negative_values" {
-						min = -6
-						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ) ) )]"
-					}
-					blockoverride "negative_cover_values" {
-						min = -6
-						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_momentum' ), '(CFixedPoint)0.5' ) ) )]"
-					}
-				}
-			}
-		}
+		te_hist_bank_momentum = {}
 
 		### ---- Bubble pressure (0-100 index) ----------------------------
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "chart_title" {
-				text = "te_hist_chart_bank_bubble_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_bank_bubble_legend"
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_bank_bubble"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_bubble' )]"
-					blockoverride "values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_bubble' ), '(CFixedPoint)4' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.85 0.55 0.28 1.0 }
-					}
-				}
-			}
-		}
+		te_hist_bank_bubble = {}
 
 		### ---- Policy rate (percentage points) --------------------------
 		### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
@@ -387,41 +307,8 @@ types te_banking_history_types
 		### figure in the tooltip, as before.
 
 		### Everyone except a digital currency: the axis starts at 0.
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
+		te_hist_mon_policy = {
 			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-			blockoverride "chart_title" {
-				text = "te_hist_chart_mon_policy_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_mon_policy_legend"
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_mon_policy"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
-					blockoverride "values" {
-						min = 0
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.50 0.58 0.80 1.0 }
-					}
-				}
-			}
 		}
 
 		### Digital currency: the axis reaches down to the -3 floor, and the
@@ -430,54 +317,8 @@ types te_banking_history_types
 		### (the 84px bar band is centred in it, so its own floor sits 6px up,
 		### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
 		### number here that cannot be checked from the files.
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
+		te_hist_mon_policy_digital = {
 			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			blockoverride "chart_title" {
-				text = "te_hist_chart_mon_policy_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_mon_policy_legend_neg"
-			}
-			blockoverride "zero_axis" {
-				widget = {
-					size = { 100% 2 }
-					parentanchor = bottom
-					position = { 0 -23 }
-					alwaystransparent = yes
-
-					background = {
-						using = dark_area
-						alpha = 0.7
-					}
-				}
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_mon_policy"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
-					blockoverride "values" {
-						min = -3
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = -3
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.50 0.58 0.80 1.0 }
-					}
-				}
-			}
 		}
 
 		### ---- Rate the government pays (percentage points) --------------
@@ -494,41 +335,7 @@ types te_banking_history_types
 		### axis would cost the rate chart nearly half its resolution in the
 		### band a normal campaign lives in, which is the problem that
 		### started this.
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
-			blockoverride "chart_title" {
-				text = "te_hist_chart_mon_rate_paid_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_mon_rate_paid_legend"
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_mon_rate_paid"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_rate_paid' )]"
-					blockoverride "values" {
-						min = 0
-						max = 20
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 20
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ), '(CFixedPoint)0.8' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.80 0.66 0.34 1.0 }
-					}
-				}
-			}
-		}
+		te_hist_mon_rate_paid = {}
 
 		### ---- Headline inflation (percentage points) -------------------
 		### ONE CHART, NOT A PAIR. The policy rate needed two instances
@@ -564,54 +371,8 @@ types te_banking_history_types
 		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
 		### the two charts that read them are hidden rather than drawn empty; the
 		### samples are not taken either (te_history_banking_effects.txt).
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
+		te_hist_mon_inflation = {
 			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			blockoverride "chart_title" {
-				text = "te_hist_chart_mon_inflation_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_mon_inflation_legend"
-			}
-			blockoverride "zero_axis" {
-				widget = {
-					size = { 100% 2 }
-					parentanchor = bottom
-					position = { 0 -27 }
-					alwaystransparent = yes
-
-					background = {
-						using = dark_area
-						alpha = 0.7
-					}
-				}
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_mon_inflation"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_inflation' )]"
-					blockoverride "values" {
-						min = -4
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3.7', ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = -4
-						max = 12
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-4', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ), '(CFixedPoint)0.65' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.80 0.45 0.32 1.0 }
-					}
-				}
-			}
 		}
 
 		### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
@@ -627,53 +388,8 @@ types te_banking_history_types
 		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
 		### the two charts that read them are hidden rather than drawn empty; the
 		### samples are not taken either (te_history_banking_effects.txt).
-		te_history_chart = {
-			blockoverride "chart_title_font" {
-				using = banking_dash_fontsize_heading
-			}
-			blockoverride "chart_legend_font" {
-				using = fontsize_medium
-			}
+		te_hist_mon_fx = {
 			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-			blockoverride "chart_title" {
-				text = "te_hist_chart_mon_fx_title"
-			}
-			blockoverride "chart_legend" {
-				text = "te_hist_chart_mon_fx_legend"
-			}
-			blockoverride "zero_axis" {
-				widget = {
-					size = { 100% 2 }
-					parentanchor = vcenter
-					alwaystransparent = yes
-
-					background = {
-						using = dark_area
-						alpha = 0.7
-					}
-				}
-			}
-			blockoverride "bar_tooltip" {
-				tooltip = "te_hist_tt_mon_fx"
-			}
-			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_fx' )]"
-					blockoverride "values" {
-						min = 50
-						max = 150
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)51.5', ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = 50
-						max = 150
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)50', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ), '(CFixedPoint)4' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.36 0.56 0.78 1.0 }
-					}
-				}
-			}
 		}
 	}
 

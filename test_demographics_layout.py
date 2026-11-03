@@ -15,6 +15,8 @@ import re
 import unittest
 from decimal import ROUND_HALF_UP, Decimal
 
+from gui_test_helpers import HISTORY_CHARTS, assert_wide_matches_narrow, history_charts
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui")
 WIDGETS = os.path.join(GUI, "te_demographics_widgets.gui")
@@ -43,6 +45,10 @@ STATE_ONLY = ["te_state_demog_modifiers"]
 HOW = {"te_demog_tab_sections": "te_demog_sec_how", "te_state_demog_content": "te_state_demog_how"}
 # The Census Data window's composer: the tab's sections for the window's country, in three columns.
 BROWSER_COMPOSER = "te_demog_browser_sections"
+# The Timeline Extended window's Demographics tab: the tab's sections less the
+# strata incomes, which read the Population panel, in the window's body.
+WINDOW_COMPOSER = "te_demog_window_sections"
+WINDOW_BODY = "te_demog_window_body"
 # A section placed as it is (`= {}`) or with blocks a host leaves out (`= { blockoverride ... }`): the Census Data window
 # blanks Wealth's strata incomes, which read the Population panel (2026-10-31).
 PLACED = r"\s*(?:\}|blockoverride )"
@@ -153,30 +159,56 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(as_country, [s for s in COUNTRY if s in as_country], "the state keeps the country's order")
 
     def test_the_census_window_takes_the_tabs_order_in_three_columns(self):
-        body = _type_body(self.layout, BROWSER_COMPOSER)
-        inner = [b for b in _instances(body, "flowcontainer") if "visible" in b and "direction = horizontal" in b]
-        self.assertEqual(len(inner), 1, "one gated row of columns")
-        self.assertEqual(_children(inner[0][1:-1]), ["flowcontainer"] * 3)
-        columns = [b for b in _instances(inner[0][1:-1], "flowcontainer")]
+        """The tab's sections and gates on te_ui_columns_three (spec 2026-11-02-te-window-wide-mode §§ 9.4, 9.5): the
+        pending line above the columns, then the sections read down each column and then across. How Demographics
+        Works waits for the first census here, as the columns do; on the tab it shows from the start."""
+        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, ["te_demog_tab_sections"],
+                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
         self.assertEqual(len(columns), 3)
-        for column in columns:
-            with self.subTest(column=_children(column[1:-1])):
-                self.assertIn("minimumsize = { 520 -1 }", column)
-                self.assertIn("maximumsize = { 520 -1 }", column)
-        listed = [c for column in columns for c in _children(column[1:-1]) if c not in ("minimumsize", "maximumsize")]
-        self.assertEqual(listed, COUNTRY + [HOW["te_demog_tab_sections"]], "read down each column, then across")
+        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
 
-    def test_the_layout_file_holds_only_the_three_composers(self):
+    def test_the_te_windows_wide_tab_is_the_census_windows_layout(self):
+        """The Timeline Extended window's full-screen Demographics tab (spec 2026-11-02-te-window-wide-mode § 7) mounts
+        the Census Data window's composer in place of te_demog_window_sections: the same sections and pending line, less
+        the strata incomes, read from the Country in context, the player's (te_demog_window_body's datacontext)."""
+        columns = assert_wide_matches_narrow(self, BROWSER_COMPOSER, layout=(WINDOW_BODY, "te_demog_tab_layout"),
+                                             outside=("te_demog_panel",), added_gates=("te_demog_sec_how",))
+        self.assertEqual([c for column in columns for c in column], COUNTRY + [HOW["te_demog_tab_sections"]])
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "demographics").wide, BROWSER_COMPOSER)
+
+    def test_the_layout_file_holds_only_the_composers_and_the_windows_body(self):
         self.assertEqual(sorted(_types(self.layout)),
-                         sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER]))
-        for composer in list(HOW) + [BROWSER_COMPOSER]:
+                         sorted(["te_demog_tab_sections", "te_state_demog_content", BROWSER_COMPOSER, WINDOW_COMPOSER,
+                                 WINDOW_BODY]))
+        for composer in list(HOW) + [BROWSER_COMPOSER, WINDOW_COMPOSER, WINDOW_BODY]:
             self.assertNotIn(f"type {composer} =", self.widgets)
+
+    def test_the_window_takes_the_tabs_order_less_the_strata_incomes(self):
+        """te_demog_window_sections: te_demog_tab_sections' sections and
+        pending line at its fixed 520, with the Census Data window's wealth
+        override (the strata incomes read PopsOverviewPanel, which the
+        Timeline Extended window lacks)."""
+        listed, outer = self.sections(WINDOW_COMPOSER)
+        self.assertEqual(listed, COUNTRY)
+        self.assertEqual(outer[-1], HOW["te_demog_tab_sections"], "How Demographics Works at the foot")
+        body = _type_body(self.layout, WINDOW_COMPOSER)
+        tab = _type_body(self.layout, "te_demog_tab_sections")
+        for line in ("minimumsize = { 520 -1 }", "maximumsize = { 520 -1 }", 'text = "te_demog_pending"'):
+            self.assertIn(line, body)
+        self.assertRegex(body, r'te_demog_sec_wealth = \{\s*blockoverride "te_demog_wealth_strata_incomes" \{\s*\}\s*\}')
+        # but for the override, the tab's composer line for line
+        self.assertEqual(re.sub(r'te_demog_sec_wealth = \{\s*blockoverride "te_demog_wealth_strata_incomes" \{\s*\}\s*\}',
+                                "te_demog_sec_wealth = {}", re.sub(r"(?m)^\s*#.*\n", "", body)),
+                         re.sub(r"(?m)^\s*#.*\n", "", tab))
+        self.assertEqual(_type_body(self.layout, WINDOW_BODY).count(f"{WINDOW_COMPOSER} = {{}}"), 1)
 
     def test_every_section_is_a_type_and_each_is_placed_once(self):
         defined = set(_types(self.widgets))
         placed = COUNTRY + STATE + list(HOW.values())
         hosts = {"te_demog_tab_sections": COUNTRY + [HOW["te_demog_tab_sections"]],
                  BROWSER_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
+                 WINDOW_COMPOSER: COUNTRY + [HOW["te_demog_tab_sections"]],
                  "te_state_demog_content": STATE + [HOW["te_state_demog_content"]]}
         for composer, sections in hosts.items():
             body = _type_body(self.layout, composer)
@@ -186,7 +218,7 @@ class OrderTest(unittest.TestCase):
                     self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", body)), 1)
         for section in placed:
             with self.subTest(section=section):
-                expected = 1 if section.startswith("te_state_demog_") else 2
+                expected = 1 if section.startswith("te_state_demog_") else 3
                 self.assertEqual(len(re.findall(rf"\b{section} = \{{{PLACED}", self.layout)), expected)
         sections = {t for t in defined if t.startswith("te_demog_sec_") or t == "te_demog_overview"}
         sections |= {t for t in defined if t.startswith("te_state_demog_") and not t.endswith("_row")}
@@ -235,22 +267,44 @@ class FlagTest(unittest.TestCase):
                     self.assertLessEqual(self.flat.count(shown_when_unset), 1,
                                          "an _open flag's unset side is drawn once (its header's arrow)")
 
-    def test_sections_open_and_how_it_works_collapsed(self):
-        """Rule 1: the live sections start open; How Demographics Works starts collapsed (rule 7)."""
-        for section in COUNTRY[1:] + STATE[1:] + list(HOW.values()):
+    def test_sections_open(self):
+        """Rule 1: the live sections start open."""
+        for section in COUNTRY[1:] + STATE[1:]:
             body = _type_body(self.widgets, section)
             header = _instances(body, "te_demog_section_header")
             with self.subTest(section=section):
                 self.assertEqual(len(header), 1, "one header")
                 flag, = _toggles(header[0])
-                self.assertTrue(flag.endswith("_open" if section in HOW.values() else "_closed"), flag)
+                self.assertTrue(flag.endswith("_closed"), flag)
+
+    def test_how_it_works_is_a_link_on_both_hosts(self):
+        """How Demographics Works is its header alone on the tab and on the state subtab, and both open the one Help
+        page (te_demographics_help_popup, on te_popup = help_demographics), whose state topics come last under their
+        own subheading; the two collapse flags retired with the content (test_te_help_pages.py)."""
+        for section in HOW.values():
+            body = _type_body(self.widgets, section)
+            with self.subTest(section=section):
+                self.assertEqual(len(_instances(body, "te_demog_section_header")), 1, "one header")
+                self.assertEqual(_toggles(body), [])
+                self.assertIn('text = "te_demog_sec_how"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_demographics')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
+                self.assertNotIn("te_demog_note", body)
+        for flag in ("te_demog_how_open", "te_demog_st_how_open"):
+            self.assertNotIn(flag, self.widgets)
+        page = _type_body(self.widgets, "te_demographics_help_body")
+        state = page.index('text = "te_demog_how_sub_state"')
+        for key in ("te_demog_how_gini_state", "te_demog_how_modifiers"):
+            self.assertGreater(page.index(f'"{key}"'), state, key)
+        self.assertEqual(page.count('text = "te_demog_how_sources"'), 1)
 
     def test_the_hosts_keep_their_own_flags(self):
         country = set()
-        for section in COUNTRY + [HOW["te_demog_tab_sections"]]:
+        for section in COUNTRY:
             country |= set(_toggles(_type_body(self.widgets, section)))
         state = set()
-        for section in STATE + [HOW["te_state_demog_content"]]:
+        for section in STATE:
             state |= set(_toggles(_type_body(self.widgets, section)))
         self.assertFalse(country & state, "collapsing a section on one host leaves the other alone")
         for flag in state:
@@ -305,6 +359,9 @@ class FontTest(unittest.TestCase):
     def test_every_textbox_takes_a_template(self):
         medium_ok = {"te_demog_sec_history", "te_demog_hist_pip_legend"}
         found = _textboxes(self.widgets) + _textboxes(_read(LAYOUT))
+        # the history charts' axis labels, in their generated wrappers
+        found += [("te_demog_sec_history", box) for chart in history_charts(_type_body(self.widgets, "te_demog_sec_history"))
+                  for _, box in _textboxes(chart)]
         self.assertGreater(len(found), 60)
         for owner, block in found:
             fonts = [u for u in re.findall(r"using = (\w+)", _own(block)) if "font" in u]
@@ -323,7 +380,8 @@ class FontTest(unittest.TestCase):
 
     def test_the_charts_titles_are_headings(self):
         history = _type_body(self.widgets, "te_demog_sec_history")
-        charts = _instances(history, "te_history_chart")
+        charts = history_charts(history)
+        self.assertEqual(len(charts), 8)
         for chart in charts:
             self.assertIn("using = te_demog_fontsize_heading", _override(chart, "chart_title_font"))
             self.assertIn("using = fontsize_medium", _override(chart, "chart_legend_font"))
@@ -523,16 +581,20 @@ class WidthTest(unittest.TestCase):
         self.fits(self.markup(text), (width, "row"), "Show All")
 
     def test_the_chart_titles(self):
+        """Each title fits beside the chart's open button: the panel's wrapper
+        narrows chart_title_width (the type's 484) to 456 (charts PR C2)."""
         chart = _read(CHART)
         title = chart[chart.index("type te_history_chart"):]
-        width = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = nobaseline\s*block "chart_title_font"',
-                              title).group(1))
+        self.assertTrue(re.search(r'block "chart_title_width" \{\s*max_width = 484\s*\}\s*elide = right'
+                                  r'\s*align = nobaseline\s*block "chart_title_font"', title))
         history = _type_body(self.widgets, "te_demog_sec_history")
-        titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
-                  for c in _instances(history, "te_history_chart")]
-        self.assertEqual(len(titles), 8)
-        for key in titles:
+        charts = history_charts(history)
+        self.assertEqual(len(charts), 8)
+        for c in charts:
+            key = re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
+            width = int(re.search(r"max_width = (\d+)", _override(c, "chart_title_width")).group(1))
             with self.subTest(title=key):
+                self.assertEqual(width, 456)
                 self.fits(self.shown(key), (width, "heading"), key)
 
 
@@ -684,7 +746,7 @@ class PieTest(unittest.TestCase):
 
     def test_the_history_chart_uses_the_pies_colours(self):
         history = _type_body(self.widgets, "te_demog_sec_history")
-        chart = next(c for c in _instances(history, "te_history_chart")
+        chart = next(c for c in history_charts(history)
                      if "te_demog_hist_causes_title" in _override(c, "chart_title"))
         layers = re.findall(r"color = \{ ([\d.]+) ([\d.]+) ([\d.]+) 1\.0 \}\s*value = \"\[FixedPointToFloat\( "
                             r"ScriptContainer\.GetVariableValue\('te_dg_h_c(\d)'\) \)\]\"", _override(chart, "bar_body"))
@@ -707,7 +769,7 @@ class HistoryTest(unittest.TestCase):
     def setUpClass(cls):
         cls.widgets = _read(WIDGETS)
         cls.history = _type_body(cls.widgets, "te_demog_sec_history")
-        cls.charts = _instances(cls.history, "te_history_chart")
+        cls.charts = history_charts(cls.history)
 
     def test_the_eight_charts(self):
         titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1) for c in self.charts]
@@ -742,7 +804,7 @@ class HistoryTest(unittest.TestCase):
         recorded |= {f"te_dg_h_s{k}" for k in range(1, 9)} if "name = te_dg_h_s$K$" in _read(HISTORY) else set()
         reads = set()
         loc = "\n".join(_read(os.path.join(LOC_DIR, n)) for n in os.listdir(LOC_DIR) if n.endswith(".yml"))
-        for text in (self.widgets, loc):
+        for text in (self.widgets, _read(HISTORY_CHARTS), loc):
             reads |= set(re.findall(r"(?:GetVariableValue|HasVariable)\(\s*'(te_dg_h_\w+)'", text))
         self.assertGreaterEqual(len(reads), 20)
         self.assertEqual(reads - recorded, set(), "read but never recorded")
