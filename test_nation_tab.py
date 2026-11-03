@@ -1,29 +1,30 @@
-"""The Nation tab: its registry, the generated filters and counts, and the
-country panel's filtered modifier list (spec
-docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md §§ 2-4).
+"""The Nation tab: its registry, the generated filters and counts, its All
+Modifiers section, and the country panel's Information tab, whose modifier
+list moved there (spec
+docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md §§ 2-4;
+the owner, 2026-11-03).
 
 What the engine would never report:
 
-- A permanent modifier the registry doesn't place: the country's list keeps it
-  and the tab doesn't show it. Every static modifier script adds without a
+- A permanent modifier the registry doesn't place: the tab doesn't show it,
+  and nobody decided that. Every static modifier script adds without a
   duration must match exactly one registry line.
-- A generated file older than the registry: the filter hides a name the tab no
-  longer shows, or the tab shows one the list still carries.
-- A hidden modifier whose display name another modifier on the country shares:
-  the filter matches names (gotcha #40), so it would hide both.
-- A redefined vanilla type that differs from vanilla outside its marked blocks.
+- A generated file older than the registry: a list shows a name the registry
+  moved, or misses one it added.
+- A listed modifier whose display name another modifier on the country shares:
+  the lists match names (gotcha #40), so they would show both.
+- A redefined vanilla type that differs from vanilla outside its marked block.
 - A modifier type the tab's modifiers carry that no type registry line places
   (#1030): the type's row is missing, and a new field on a listed modifier
   would go unshown.
-- A hidden name in no group, or a count that reads other flags than the filter
-  (owner, 2026-11-03): the filter compares a row's name only with the groups
-  whose monthly flag is on, so an ungrouped name would stay in the list, and a
-  count that disagreed would hide the list or misstate the line under it.
+- A listed name in no group, or a count that reads other flags than its list
+  (owner, 2026-11-03): a list compares a row's name only with the groups whose
+  monthly flag is on, so an ungrouped name would never show, and a count that
+  disagreed would draw an empty section or hide a full one.
 
 No game install needed; the fixture check skips without one.
 """
 import json
-import difflib
 import os
 import re
 import sys
@@ -67,7 +68,7 @@ def _blocks(values):
 
 def _counts(values):
     """{script value: [the modifiers it counts]} from a generated values file,
-    through the values it adds (`add = te_nation_hid_<group>_count`)."""
+    through the values it adds (`add = te_nation_src_<group>_count`)."""
     blocks = _blocks(values)
 
     def names(name, seen):
@@ -117,22 +118,17 @@ def _or_leaves(expr):
     return [expr]
 
 
-READY_LEAF = "GreaterThan_CFixedPoint(Country.MakeScope.ScriptValue('te_nation_hid_ready'), '(CFixedPoint)0')"
-FLAG_LEAF = re.compile(r"GreaterThan_CFixedPoint\(Country\.MakeScope\.Var\('te_nation_hid_(\w+)'\)\.GetValue, "
+FLAG_LEAF = re.compile(r"GreaterThan_CFixedPoint\(Country\.MakeScope\.Var\('te_nation_src_(\w+)'\)\.GetValue, "
                        r"'\(CFixedPoint\)0'\)")
 NAME_LEAF = re.compile(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)")
 
 
 def _gated_groups(expression):
-    """{group: [names]} from a gated filter, And(ready, an Or tree of
-    And(<the group's flag>, an Or tree of its names)): each name under the
-    flag it sits behind. Raises if the filter has any other shape."""
-    call = _call(expression)
-    assert call and call[0] == "And" and len(call[1]) == 2, expression[:80]
-    ready, tree = call[1]
-    assert ready == READY_LEAF, ready
+    """{group: [names]} from a gated filter, an Or tree of And(<the group's
+    flag>, an Or tree of its names): each name under the flag it sits behind.
+    Raises if the filter has any other shape."""
     groups = {}
-    for part in _or_leaves(tree):
+    for part in _or_leaves(expression):
         call = _call(part)
         assert call and call[0] == "And" and len(call[1]) == 2, part[:80]
         flag_leaf, names = call[1]
@@ -146,17 +142,16 @@ def _gated_groups(expression):
 
 
 def _count_groups(values, name):
-    """(the flags its gate asks for, {group: [names]}) for a gated count:
-    `if = { limit = { has_variable = <every flag> } <per group: if = { limit =
+    """(the sentinel its gate asks for, {group: [names]}) for a gated count:
+    `if = { limit = { has_variable = <sentinel> } <per group: if = { limit =
     { var:<flag> > 0 } <its names> }> }`."""
     blocks, counts = _blocks(values), _counts(values)
     body = blocks[name]
-    gate = re.match(r"\tvalue = 0\n\tif = \{\n\t\tlimit = \{\n((?:\t\t\thas_variable = \w+\n)+)\t\t\}\n(.*)\t\}\n$",
-                    body, re.S)
+    gate = re.match(r"\tvalue = 0\n\tif = \{\n\t\tlimit = \{ has_variable = (\w+) \}\n(.*)\t\}\n$", body, re.S)
     assert gate, body[:200]
-    flags = re.findall(r"has_variable = te_nation_hid_(\w+)", gate.group(1))
+    flags = gate.group(1)
     groups = {}
-    for group, inner in re.findall(r"^\t\tif = \{\n\t\t\tlimit = \{ var:te_nation_hid_(\w+) > 0 \}\n(.*?)^\t\t\}\n",
+    for group, inner in re.findall(r"^\t\tif = \{\n\t\t\tlimit = \{ var:te_nation_src_(\w+) > 0 \}\n(.*?)^\t\t\}\n",
                                    gate.group(2), re.S | re.M):
         names = re.findall(r"has_modifier = (\w+)", inner)
         for ref in re.findall(r"\badd = (\w+)", inner):
@@ -164,6 +159,11 @@ def _count_groups(values, name):
                 names += counts[ref]
         groups[group] = names
     return flags, groups
+
+
+def _twins(names):
+    """`names` and the SAME_NAME twins a list showing them shows too."""
+    return sorted(set(names) | {twin for twin, of in gen.SAME_NAME.items() if of in names})
 
 
 def _names_in(expression):
@@ -212,11 +212,14 @@ class RegistryTest(unittest.TestCase):
         self.assertFalse(dead, f"registry lines that place no permanent modifier (renamed, timed now, "
                                f"or a budget source): {dead}")
 
-    def test_every_carrier_is_hidden(self):
+    def test_every_carrier_is_in_no_list(self):
+        # The Budget panel itemizes them, and All Modifiers shows them.
         carriers = gen.budget_carriers() & set(self.candidates)
         self.assertIn("te_demog_pension_bill", carriers)
-        _, _, hidden = gen.resolve(self.candidates)
-        self.assertLessEqual(carriers, set(hidden))
+        lists, rows, budget = gen.resolve(self.candidates)
+        self.assertEqual(carriers, set(budget))
+        self.assertFalse(carriers & set(gen.listed(lists)))
+        self.assertFalse(carriers & {name for names in rows.values() for name in names})
 
     def test_rows_and_lists_are_in_the_tabs_sections(self):
         self.assertEqual(list(gen.SECTIONS), ["governance", "society", "economy", "science_and_space",
@@ -224,22 +227,30 @@ class RegistryTest(unittest.TestCase):
         for row, (section, _) in gen.ROWS.items():
             self.assertIn(section, gen.SECTIONS, row)
 
-    def test_no_hidden_name_is_shared(self):
-        """A modifier the list keeps must not share a hidden one's display
-        name: the mod's static modifiers that can sit on the country (timed
-        ones, the overrides) against every hidden name."""
+    def test_no_listed_name_is_shared(self):
+        """A modifier the tab's lists don't show must not share a listed one's
+        display name: the mod's static modifiers that can sit on the country
+        (timed ones, the overrides, the budget carriers) against every name a
+        section or a row lists."""
         loc = _loc()
         statics = gen.static_modifiers()
-        _, _, hidden = gen.resolve(self.candidates)
-        hidden = set(hidden)
+        lists, rows, _ = gen.resolve(self.candidates)
+        shown = set(gen.listed(lists)) | {name for names in rows.values() for name in names}
         elsewhere = {name for name, lines in self.placed.items() if lines and lines[0][1] == "elsewhere"}
-        kept = set(statics) - hidden - elsewhere
+        others = set(statics) - shown - elsewhere - set(gen.SAME_NAME)
         texts = {}
-        for name in kept:
+        for name in others:
             texts.setdefault(loc.get(name, name), set()).add(name)
-        clashes = {name: sorted(texts[loc.get(name, name)]) for name in sorted(hidden)
+        clashes = {name: sorted(texts[loc.get(name, name)]) for name in sorted(shown)
                    if loc.get(name, name) in texts}
-        self.assertFalse(clashes, f"hidden modifiers whose display name a kept one shares: {clashes}")
+        self.assertFalse(clashes, f"listed modifiers whose display name an unlisted one shares (a list would show "
+                                  f"both: SAME_NAME counts a twin with it): {clashes}")
+        # each twin shares its listed twin's name, and no list places it
+        for twin, of in gen.SAME_NAME.items():
+            with self.subTest(twin=twin):
+                self.assertEqual(loc[twin], loc[of])
+                self.assertIn(of, set(gen.listed(lists)))
+                self.assertNotIn(twin, shown)
 
 
 class GeneratedTest(unittest.TestCase):
@@ -266,13 +277,25 @@ class GeneratedTest(unittest.TestCase):
     def test_the_filters_and_counts_name_the_same_modifiers(self):
         gui, values = self.outputs[:2]
         counts = _counts(values)
-        hidden = _names_in(_template(gui, "te_nation_hidden_filter"))
-        self.assertEqual(sorted(hidden), sorted(counts["gui_country_hidden_modifier_count"]))
+        lists, _, _ = gen.resolve(gen.candidates())
         for section in gen.SECTIONS:
             with self.subTest(section=section):
                 listed = _names_in(_template(gui, f"te_nation_list_{section}"))
-                self.assertEqual(sorted(listed), sorted(counts[f"te_nation_list_{section}_count"]))
-                self.assertLessEqual(set(listed), set(hidden))
+                self.assertEqual(_twins(listed), sorted(counts[f"te_nation_list_{section}_count"]))
+                self.assertEqual(sorted(listed), lists[section])
+
+    def test_nothing_filters_the_country_panel_any_more(self):
+        """The Information tab's list moved to All Modifiers (owner,
+        2026-11-03): its filter, its count and the readiness gate are gone,
+        and nothing reads them."""
+        gui, values = self.outputs[:2]
+        for name in ("te_nation_hidden_filter", "gui_country_hidden_modifier_count", "te_nation_hid_"):
+            with self.subTest(name=name):
+                self.assertNotIn(name, gui + values + _read(gen.EFFECTS_OUT))
+                for sub in ("gui", "common", "localization"):
+                    for path in sorted((ROOT / sub).rglob("*.*")):
+                        if path.suffix in (".gui", ".txt", ".yml"):
+                            self.assertNotIn(name, _read(path), path.relative_to(ROOT).as_posix())
 
     def test_the_filters_stay_shallow(self):
         # A balanced Or tree: depth grows with log2 of the names, not their count.
@@ -286,33 +309,32 @@ class GeneratedTest(unittest.TestCase):
             self.assertLessEqual(deepest, 16, line[:80])
 
 
-class HiddenGroupsTest(unittest.TestCase):
-    """The filters gated by group (owner, 2026-11-03: the Information tab
-    lagged at 260 name comparisons a row): every hidden name in one group of
-    HIDDEN_GROUPS, the filter comparing a row's name only with the groups
-    whose monthly flag is on, and every count reading the same flags, so the
-    list, its test and the line under it agree at every moment."""
+class SourceGroupsTest(unittest.TestCase):
+    """Where These Come From's lists gated by group (owner, 2026-11-03):
+    every listed name in one group of SOURCE_GROUPS, a list comparing a row's
+    name only with the groups whose monthly flag is on, and each count reading
+    the same flags, so a section and its list agree at every moment."""
 
     @classmethod
     def setUpClass(cls):
-        cls.lists, cls.rows, cls.hidden = gen.resolve(gen.candidates())
-        cls.groups = gen.hidden_groups(cls.hidden)
+        cls.lists, cls.rows, _ = gen.resolve(gen.candidates())
+        cls.listed = gen.listed(cls.lists)
+        cls.groups = gen.source_groups(cls.listed)
         cls.gui, cls.values = gen.outputs()[:2]
         cls.effects = _read(gen.EFFECTS_OUT)
 
-    def test_every_hidden_name_is_in_one_group(self):
-        placed = gen.classify_groups(self.hidden)
+    def test_every_listed_name_is_in_one_group(self):
+        placed = gen.classify_groups(self.listed)
         wrong = {name: [line[0] for line in lines] for name, lines in placed.items() if len(lines) != 1}
-        self.assertFalse(wrong, "hidden modifiers with no HIDDEN_GROUPS line, or two, in "
+        self.assertFalse(wrong, "listed modifiers with no SOURCE_GROUPS line, or two, in "
                                 f"scripts/generators/gen_nation_tab.py: {wrong}")
-        self.assertEqual(sorted(n for names in self.groups.values() for n in names), sorted(self.hidden))
-        self.assertEqual(len(self.hidden), len(set(self.hidden)))
+        self.assertEqual(sorted(n for names in self.groups.values() for n in names), self.listed)
 
     def test_every_group_line_places_a_name(self):
-        used = {line for lines in gen.classify_groups(self.hidden).values() for line in lines}
+        used = {line for lines in gen.classify_groups(self.listed).values() for line in lines}
         dead = [line for line in gen.group_lines() if line not in used]
-        self.assertFalse(dead, f"HIDDEN_GROUPS lines no hidden modifier matches: {dead}")
-        self.assertEqual(list(self.groups), list(gen.HIDDEN_GROUPS))
+        self.assertFalse(dead, f"SOURCE_GROUPS lines no listed modifier matches: {dead}")
+        self.assertEqual(list(self.groups), list(gen.SOURCE_GROUPS))
 
     def test_groups_are_small(self):
         # At most 32 names keeps each group's Or tree five deep (test_the_filters_stay_shallow).
@@ -323,9 +345,6 @@ class HiddenGroupsTest(unittest.TestCase):
         self.assertGreaterEqual(len(self.groups), 10)
 
     def test_each_groups_names_sit_under_its_flag(self):
-        hidden = _gated_groups(_template(self.gui, "te_nation_hidden_filter")[len("Not("):-1])
-        self.assertTrue(_template(self.gui, "te_nation_hidden_filter").startswith("Not(And("))
-        self.assertEqual(hidden, self.groups)
         for section, names in self.lists.items():
             with self.subTest(section=section):
                 listed = _gated_groups(_template(self.gui, f"te_nation_list_{section}"))
@@ -333,50 +352,74 @@ class HiddenGroupsTest(unittest.TestCase):
                 self.assertEqual(listed, {group: members for group, members in wanted.items() if members})
 
     def test_the_counts_read_the_same_flags(self):
-        """The hidden count and each section's: gated on every flag being set,
-        as the filter is on te_nation_hid_ready, and then a group's names
-        counted only while its flag is on, the names the filter puts under it."""
-        _, ready = re.search(rf"^({gen.READY}) = \{{\n(.*?)^\}}", self.values, re.S | re.M).groups()
-        self.assertEqual(re.findall(r"has_variable = te_nation_hid_(\w+)", ready), list(self.groups))
-        self.assertIn("\t\tvalue = 1\n", ready)
-        flags, counted = _count_groups(self.values, "gui_country_hidden_modifier_count")
-        self.assertEqual(flags, list(self.groups))
-        self.assertEqual({group: sorted(names) for group, names in counted.items()}, self.groups)
+        """Each section's count: 0 until every flag is set, then a group's
+        names counted only while its flag is on, the names the list puts under
+        it. The list reads its flags bare: it sits in a container shown only
+        while its count is above 0 (TabLayoutTest), so it never reads an unset
+        one (an invisible container's children aren't evaluated, gotcha #42)."""
         for section, names in self.lists.items():
             with self.subTest(section=section):
-                flags, counted = _count_groups(self.values, f"te_nation_list_{section}_count")
-                self.assertEqual(flags, list(self.groups))
+                ready, counted = _count_groups(self.values, f"te_nation_list_{section}_count")
+                self.assertEqual(ready, gen.sentinel(list(self.groups)))
                 self.assertEqual({group: sorted(members) for group, members in counted.items()},
-                                 _gated_groups(_template(self.gui, f"te_nation_list_{section}")))
+                                 {group: _twins(members) for group, members
+                                  in _gated_groups(_template(self.gui, f"te_nation_list_{section}")).items()})
 
     def test_the_effect_sets_every_flag(self):
         """Every group's flag, unconditionally (0 included), to the live count
-        of exactly the group's names."""
+        of exactly the group's names, and then the sentinel the counts' gate
+        asks for, its name from the group set (#1372 review: one has_variable,
+        and a save from an older group set reads as not set)."""
         body = re.search(rf"^{gen.EFFECT} = \{{\n(.*?)^\}}", self.effects, re.S | re.M).group(1)
-        lines = body.strip("\n").split("\n")
-        self.assertEqual(lines, [f"\tset_variable = {{ name = te_nation_hid_{g} value = te_nation_hid_{g}_count }}"
-                                 for g in self.groups])
+        lines = [line for line in body.strip("\n").split("\n") if not line.strip().startswith("#")]
+        self.assertEqual(lines, [f"\tset_variable = {{ name = te_nation_src_{g} value = te_nation_src_{g}_count }}"
+                                 for g in self.groups] + [f"\tset_variable = {gen.sentinel(list(self.groups))}"])
+        self.assertNotEqual(gen.sentinel(list(self.groups)), gen.sentinel(list(self.groups)[:-1]))
         counts = _counts(self.values)
         for group, names in self.groups.items():
             with self.subTest(group=group):
-                self.assertEqual(sorted(counts[gen.flag_count(group)]), names)
+                self.assertEqual(sorted(counts[gen.flag_count(group)]), _twins(names))
 
-    def test_the_monthly_pulse_calls_it_for_every_country(self):
+    def test_the_monthly_pulse_and_game_start_call_it_for_every_country(self):
         """From extra_on_actions.txt's on_monthly_pulse_country, which has no
-        rule gate, through a wrapper with none either; nothing else calls it,
-        so the flags have one refresh site."""
+        rule gate, through a wrapper with none either, and once for every
+        country after the lobby (#1372 review: a new game's lists would wait
+        for each country's first 30-day pulse). Nothing else calls it."""
         text = _read(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
         hosts = re.findall(r"^on_monthly_pulse_country = \{\n\ton_actions = \{\n(.*?)\t\}\n\}", text, re.S | re.M)
         self.assertEqual(sum(f"\t\t{gen.PULSE}\n" in host for host in hosts), 1)
         wrapper = re.search(rf"^{gen.PULSE} = \{{\n(.*?)^\}}", text, re.S | re.M).group(1)
         self.assertEqual(wrapper, f"\teffect = {{\n\t\t{gen.EFFECT} = yes\n\t}}\n")
+        starts = re.findall(r"^on_game_started_after_lobby = \{\n\ton_actions = \{\n(.*?)\t\}\n\}", text, re.S | re.M)
+        self.assertEqual(sum(f"\t\t{gen.SEED}\n" in host for host in starts), 1)
+        seed = re.search(rf"^{gen.SEED} = \{{\n(.*?)^\}}", text, re.S | re.M).group(1)
+        self.assertEqual(seed, f"\teffect = {{\n\t\tevery_country = {{\n\t\t\t{gen.EFFECT} = yes\n\t\t}}\n\t}}\n")
+        self.assertEqual(text.count(f"{gen.EFFECT} = yes"), 2)
         callers = []
         for sub in ("common", "events"):
             for path in sorted((ROOT / sub).rglob("*.txt")):
                 body = _read(path)
-                if f"{gen.EFFECT} = yes" in body or f"{gen.PULSE}\n" in body:
+                if any(f"{name} = yes" in body or f"\t\t{name}\n" in body for name in (gen.EFFECT, gen.PULSE, gen.SEED)):
                     callers.append(path.relative_to(ROOT).as_posix())
         self.assertEqual(callers, ["common/on_actions/extra_on_actions.txt"])
+
+    def test_names_that_read_the_same_share_a_group(self):
+        """#1372 review: a list matches a row by its text, a count by its key.
+        Two listed names that read the same in different groups would let a
+        row show under the other group's flag while neither count has it (the
+        Tax Code's views read the same for all eight interest groups). Read in
+        English, the mod's loc over vanilla's."""
+        loc = _all_loc()
+        group_of = {name: group for group, names in self.groups.items() for name in names}
+        by_text = {}
+        for name in self.listed:
+            by_text.setdefault(loc.get(name, name), set()).add(name)
+        split = {text: sorted(names) for text, names in by_text.items()
+                 if len({group_of[name] for name in names}) > 1}
+        self.assertFalse(split, f"listed names that read the same in two SOURCE_GROUPS groups: {split}")
+        views = [name for name in self.listed if name.startswith("te_tax_ig_view_")]
+        self.assertEqual(len(views), 32)
+        self.assertEqual({group_of[name] for name in views}, {"tax_views"})
 
     def test_the_rows_stay_ungated(self):
         # A score row's list is one to four names, near-universal ones: a flag
@@ -513,53 +556,70 @@ class TypeRowsTest(unittest.TestCase):
 
 class CountryPanelTest(unittest.TestCase):
     """gui/00_te_country_panel_information.gui: vanilla's Information tab type,
-    its modifier list filtered, every change in a `### MOD: Nation tab` block
-    that keeps the vanilla line it replaces."""
+    its modifier list replaced by a line leading to the Nation tab's All
+    Modifiers (owner, 2026-11-03), the change in one `### MOD: Nation tab`
+    block that keeps every vanilla line it replaces."""
+
+    @staticmethod
+    def _type_lines(text):
+        lines = text.splitlines()
+        start = next(i for i, line in enumerate(lines) if line.strip().startswith(f"type {gen.PANEL_TYPE} = "))
+        depth = 0
+        for i in range(start, len(lines)):
+            depth += lines[i].count("{") - lines[i].count("}")
+            if depth == 0:
+                return lines[start:i + 1]
+        raise AssertionError("the type never closes")
 
     def test_only_marked_blocks_differ_from_vanilla(self):
-        vanilla = _read(gen.VANILLA_PANEL).splitlines()
-        start = next(i for i, line in enumerate(vanilla) if line.strip().startswith(f"type {gen.PANEL_TYPE} = "))
-        mod = _read(gen.PANEL_OUT).splitlines()
-        mod_start = next(i for i, line in enumerate(mod) if line.strip().startswith(f"type {gen.PANEL_TYPE} = "))
-        mod = mod[mod_start:-1]
-        vanilla = vanilla[start:start + len(mod) + 20]
-        ops = difflib.SequenceMatcher(None, vanilla, mod, autojunk=False).get_opcodes()
-        hunks = [op for op in ops if op[0] != "equal"]
-        self.assertEqual(len(hunks), 3 + 1, hunks)    # three blocks, and the tail past the type
-        for tag, i1, i2, j1, j2 in hunks[:-1]:
-            with self.subTest(line=j1):
-                self.assertIn(tag, ("insert", "replace"))
-                block = [line.strip() for line in mod[j1:j2]]
-                self.assertTrue(block[0].startswith(gen.MOD_OPEN), block)
-                self.assertEqual(block[-1], gen.MOD_CLOSE)
-                for old in vanilla[i1:i2]:
-                    self.assertIn(gen.VANILLA_LINE + old.strip(), block)
-        self.assertEqual(hunks[-1][0], "delete")    # vanilla's lines after the type
+        """Undo each marked block (drop what it adds, put back the vanilla
+        lines it records) and the type is vanilla's, line for line."""
+        restored, blocks, inside = [], 0, False
+        for line in self._type_lines(_read(gen.PANEL_OUT)):
+            text = line.strip()
+            if text.startswith(gen.MOD_OPEN):
+                blocks, inside = blocks + 1, True
+            elif text == gen.MOD_CLOSE:
+                inside = False
+            elif not inside:
+                restored.append(text)
+            elif text.startswith(gen.VANILLA_LINE):
+                restored.append(text[len(gen.VANILLA_LINE):].strip())
+        self.assertEqual(blocks, 1)
+        self.assertFalse(inside)
+        vanilla = [line.strip() for line in self._type_lines(_read(gen.VANILLA_PANEL))]
+        self.assertEqual([line for line in restored if line], [line for line in vanilla if line])
 
-    def test_the_list_hides_by_name_and_counts_what_is_left(self):
+    def test_the_list_is_gone(self):
+        """No list, so nothing on the tab compares names or reads a script
+        value per row. The header keeps vanilla's test, and the line takes the
+        same one: both show whenever the country has a modifier."""
         panel = _read(gen.PANEL_OUT)
-        self.assertIn("using = te_nation_hidden_filter", panel)
-        self.assertIn("ignoreinvisible = yes", panel)
-        # the list's test and the line under it
-        self.assertEqual(panel.count("ScriptValue('gui_country_hidden_modifier_count')"), 2)
-        # the header keeps vanilla's: the list or the line shows whenever the country has a modifier
         live = "\n".join(line for line in panel.splitlines() if "# vanilla:" not in line)
-        self.assertEqual(live.count('visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'), 1)
-        self.assertLess(live.index("IsDataModelEmpty"), live.index('datamodel = "[Country.GetTimedModifiers]"'))
+        self.assertNotIn("using = te_nation_", live)
+        live = live[live.index("### TIMED MODIFIERS"):]
+        for gone in ("datamodel", "EqualTo_string", "TimedModifier.", "ScriptValue"):
+            with self.subTest(gone=gone):
+                self.assertNotIn(gone, live)
+        test = 'visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"'
+        self.assertEqual(live.count(test), 2)
+        self.assertLess(live.index('text = "MODIFIERS"'), live.index("### MOD: Nation tab"))
 
-    def test_a_line_says_where_the_hidden_ones_went(self):
-        """2026-10-27 audit, NAT-1: under the list, while it leaves a modifier out, a line counts them; for the
-        player's own country a goto opens the window on the Nation tab (rule 9: the tab, then the window). For
-        another country a goto opens National Info on its Nation tab (spec 2026-11-02-charts-help-national-info
-        § 6.2, way in 3): the window's tab first (te_ni_tab, PR F1's key), then vanilla's way into the window, as
-        the country's Politics tab opens it (country_politics_panel.gui)."""
+    def test_a_line_says_how_many_and_where_they_are(self):
+        """Under MODIFIERS a line counts the country's modifiers, with no
+        filter (GetDataModelSize), and says they are on the Nation tab. For the
+        player's own country a goto opens the window on the Nation tab (rule 9:
+        the tab, then the window). For another country a goto opens National
+        Info on its Nation tab (spec 2026-11-02-charts-help-national-info
+        § 6.2, way in 3): the window's tab first (te_ni_tab, PR F1's key), then
+        vanilla's way into the window, as the country's Politics tab opens it
+        (country_panel.gui's POP_BROWSER button)."""
         panel = _read(gen.PANEL_OUT)
-        at = panel.index("### MOD: Nation tab: where the modifiers the list leaves out went")
+        at = panel.index("### MOD: Nation tab: the list moved to the Nation tab's All Modifiers")
         block = panel[at:panel.index(gen.MOD_CLOSE, at)]
-        self.assertGreater(at, panel.index('datamodel = "[Country.GetTimedModifiers]"'))
-        self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
-                      "'gui_country_hidden_modifier_count'), '(CFixedPoint)0' )]\"", block)
-        gotos = block.split("button_icon_goto = {")[1:]
+        live = "\n".join(line for line in block.splitlines() if "# vanilla:" not in line)
+        self.assertIn('visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"', live)
+        gotos = live.split("button_icon_goto = {")[1:]
         self.assertEqual(len(gotos), 2)
         own, other = (goto[:goto.index("\n\t\t\t}")] for goto in gotos)
         self.assertIn('visible = "[Country.IsLocalPlayer]"', own)
@@ -578,10 +638,15 @@ class CountryPanelTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertIn("$POP_BROWSER$", loc[key])
                 self.assertIn("$te_window_tab_nation$", loc[key])
-        for key in re.findall(r"'?(te_nation_panel_\w+)'?", block):
+        for key in re.findall(r"'?(te_nation_panel_\w+)'?", live):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
-        self.assertIn("ScriptValue('gui_country_hidden_modifier_count')", loc["te_nation_panel_line"])
+        self.assertIn("[GetDataModelSize(Country.GetTimedModifiers)]", loc["te_nation_panel_line"])
+        # where they went, by the section's own name, and why (the mechanism)
+        for key in ("te_nation_panel_line_tt", "te_nation_panel_line_other_tt"):
+            with self.subTest(key=key):
+                self.assertIn("$te_nation_all_header$", loc[key])
+                self.assertIn("every frame", loc[key])
 
     def test_it_defines_the_constants_it_uses(self):
         panel = _read(gen.PANEL_OUT)
@@ -606,12 +671,12 @@ class PanelDriftTest(unittest.TestCase):
         self.assertEqual(self.vanilla.count(old), 1, old)
         return self.vanilla.replace(old, new)
 
-    def test_a_wrapped_list_item_raises(self):
-        # The filter must sit on the item's root: on an inner widget a hidden
-        # row would leave a blank item behind.
-        text = self._mutated("\t\t\titem = {\n\t\t\t\tcontainer = {\n",
-                             "\t\t\titem = {\n\t\t\t\twidget = {\n\t\t\t\tcontainer = {\n")
-        with self.assertRaisesRegex(ValueError, "item"):
+    def test_a_list_without_its_datamodel_raises(self):
+        # The block replaces the list the second test opens: a vanilla patch
+        # that moves the datamodel must stop the generator, not drop a widget.
+        text = self._mutated('\t\t\tdatamodel = "[Country.GetTimedModifiers]"\n',
+                             '\t\t\tdatamodel = "[Country.GetSomethingElse]"\n')
+        with self.assertRaisesRegex(ValueError, "datamodel"):
             gen.generated_panel(text)
 
     def test_a_missing_anchor_raises_value_error(self):
@@ -645,7 +710,7 @@ class TabLayoutTest(unittest.TestCase):
         order = re.findall(r"^\t\t(te_nation_\w+) = \{\}", body, re.M)
         self.assertEqual(order, ["te_nation_overview_panel"]
                          + [f"te_nation_section_{s}" for s in gen.SECTIONS]
-                         + ["te_nation_sources_panel", "te_nation_how_panel"])
+                         + ["te_nation_sources_panel", "te_nation_all_panel", "te_nation_how_panel"])
 
     def test_the_full_screen_layout(self):
         """te_nation_wide_sections, the window's full-screen layout (spec
@@ -656,7 +721,7 @@ class TabLayoutTest(unittest.TestCase):
         self.assertEqual(columns, [
             ["te_nation_overview_panel", "te_nation_section_governance", "te_nation_section_society"],
             ["te_nation_section_economy", "te_nation_section_science_and_space", "te_nation_section_international"],
-            ["te_nation_sources_panel", "te_nation_how_panel"]])
+            ["te_nation_sources_panel", "te_nation_all_panel", "te_nation_how_panel"]])
         tab = next(t for t in window_gen.TABS if t.key == "nation")
         self.assertEqual((tab.layout, tab.wide), (None, "te_nation_wide_sections"))
         self.assertNotRegex(_type_body(self.gui, "te_nation_tab_sections"), r"(?m)^\s*(visible|datacontext) =")
@@ -664,6 +729,36 @@ class TabLayoutTest(unittest.TestCase):
     def _type(self, name):
         body = self.gui[self.gui.index(f"type {name} = "):]
         return body[:body.index("\n\t}\n")]
+
+    def test_all_modifiers(self):
+        """All Modifiers (owner, 2026-11-03): every modifier the country holds
+        in vanilla's row (icon, name, time left, its own tooltip), with no
+        filter; collapsed by default (te_nation_all_open, set while open), and
+        its rows inside the panel that flag shows, so none is evaluated while
+        it is collapsed (gotcha #42). It reads the shown Country and is public:
+        no te_own_country_only (ForeignViewTest holds the closure)."""
+        body = _type_body(self.gui, "te_nation_all_panel")
+        self.assertEqual(body.split("\n")[1].strip(),
+                         'visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"')
+        self.assertIn("onclick = \"[GetVariableSystem.Toggle('te_nation_all_open')]\"", body)
+        self.assertIn('text = "te_nation_all_header_count"', body)
+        panel = body[body.index("te_nation_panel = {"):]
+        self.assertEqual(panel.split("\n")[1].strip(), "visible = \"[GetVariableSystem.Exists('te_nation_all_open')]\"")
+        self.assertEqual(body.count('datamodel = "[Country.GetTimedModifiers]"'), 1)
+        self.assertIn('datamodel = "[Country.GetTimedModifiers]"', panel)
+        item = panel[panel.index("item = {"):]
+        for part in ('tooltip = "[TimedModifier.GetTooltip]"', 'texture = "[TimedModifier.GetIcon]"',
+                     'text = "[TimedModifier.GetName]"', 'text = "[TimedModifier.GetRemainingDuration]"'):
+            with self.subTest(part=part):
+                self.assertIn(part, item)
+        for absent in ("visible", "using = te_nation_list_", "using = te_nation_row_", "te_own_country_only",
+                       "GetPlayer"):
+            with self.subTest(absent=absent):
+                self.assertNotIn(absent, item if absent == "visible" else body)
+        loc = _loc()
+        self.assertIn("[GetDataModelSize(Country.GetTimedModifiers)]", loc["te_nation_all_header_count"])
+        self.assertIn("$te_nation_all_header$", loc["te_nation_all_header_count"])
+        self.assertIn("te_nation_all_header_tt", body)
 
     def test_each_section_mounts_its_type_rows(self):
         # Score rows first, then the type rows (#1030); a section with no score

@@ -771,6 +771,92 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
+	### All Modifiers: collapsed (te_nation_all_open). Every modifier the country
+	### holds, timed and lasting, in vanilla's row (icon, name, time left, the
+	### modifier's own tooltip) with no filter, so it repeats what the sections
+	### above add up (the owner, 2026-11-03). The country panel's Information tab
+	### listed them until its name filter made it lag; its line now counts them
+	### and leads here. The rows sit inside the panel that the flag shows, so
+	### while it is collapsed none of them is evaluated (gotcha #42). Drawn while
+	### the country holds a modifier, as vanilla's header was.
+	### ----------------------------------------------------------------------
+	type te_nation_all_panel = flowcontainer {
+		visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			tooltip = "te_nation_all_header_tt"
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			### "Label: value": how many modifiers the country holds.
+			blockoverride "left_text" {
+				text = "te_nation_all_header_count"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_nation_all_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_nation_all_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
+			}
+		}
+
+		te_nation_panel = {
+			visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
+
+			### Vanilla's list (country_panel.gui's TIMED MODIFIERS) at the
+			### panel's 480: the name wraps short of the time left.
+			flowcontainer = {
+				datamodel = "[Country.GetTimedModifiers]"
+				direction = vertical
+				spacing = 5
+				minimumsize = { 480 -1 }
+
+				item = {
+					container = {
+						minimumsize = { 480 -1 }
+						tooltip = "[TimedModifier.GetTooltip]"
+
+						flowcontainer = {
+							spacing = 10
+
+							icon = {
+								texture = "[TimedModifier.GetIcon]"
+								size = { 25 25 }
+							}
+
+							textbox = {
+								text = "[TimedModifier.GetName]"
+								autoresize = yes
+								multiline = yes
+								maximumsize = { 340 -1 }
+								align = nobaseline
+								parentanchor = vcenter
+								using = te_nation_fontsize_row
+							}
+						}
+
+						textbox = {
+							text = "[TimedModifier.GetRemainingDuration]"
+							autoresize = yes
+							align = nobaseline
+							parentanchor = right|vcenter
+							using = te_nation_fontsize_row
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
 	### How the Nation Works: a link at the foot of the tab to the Help page
 	### (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its
 	### header alone, which opens te_nation_help_popup (te_popup = help_nation)
@@ -916,6 +1002,7 @@ types te_nation_widget_types
 		te_nation_section_science_and_space = {}
 		te_nation_section_international = {}
 		te_nation_sources_panel = {}
+		te_nation_all_panel = {}
 		te_nation_how_panel = {}
 	}
 
@@ -923,7 +1010,7 @@ types te_nation_widget_types
 	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
 	### read down each and then across, so the order is the tab's: the overview
 	### and governance, the economy and what science and the world give, then
-	### Where These Come From and How the Nation Works. The window mounts it in
+	### Where These Come From, All Modifiers and How the Nation Works. The window mounts it in
 	### place of te_nation_tab_sections, which carries no gate or context; its
 	### spacing of 10 is the columns' own.
 	type te_nation_wide_sections = te_ui_columns_three {
@@ -941,6 +1028,7 @@ types te_nation_widget_types
 
 		blockoverride "column_3" {
 			te_nation_sources_panel = {}
+			te_nation_all_panel = {}
 			te_nation_how_panel = {}
 		}
 	}

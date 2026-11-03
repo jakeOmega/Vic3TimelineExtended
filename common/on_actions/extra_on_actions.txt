@@ -347,20 +347,36 @@ on_monthly_pulse_country = {
 		aptitude_traits_cleanup_on_action
 		tech_marker_grants_on_action
 		te_barracks_doctrine_country_pulse
-		te_nation_hidden_flags_on_action
+		te_nation_source_flags_on_action
 	}
 }
 
-# NATION TAB'S HIDDEN GROUPS - every country, every month, no rule gate (the
-# country panel shows AI countries too): how many of each group's hidden
-# modifiers the country holds, 0 included (te_nation_hid_<group>). The country
-# panel's Information tab compares a modifier's name only with the groups whose
-# flag is on, and its count reads the same flags (owner, 2026-11-03: the tab
-# lagged at 260 name comparisons a row). Generated effect:
+# NATION TAB'S LIST GROUPS - every country, every month, no rule gate
+# (National Info shows an AI country's Nation tab too): how many of each
+# group's modifiers the country holds, 0 included (te_nation_src_<group>). The
+# tab's Where These Come From lists compare a modifier's name only with the
+# groups whose flag is on, and their counts read the same flags (owner,
+# 2026-11-03). Generated effect:
 # common/scripted_effects/te_nation_generated_effects.txt (gen_nation_tab.py).
-te_nation_hidden_flags_on_action = {
+te_nation_source_flags_on_action = {
 	effect = {
-		te_nation_refresh_hidden_flags = yes
+		te_nation_refresh_source_flags = yes
+	}
+}
+
+# The same for every country once, after the lobby, so a new game's lists
+# don't wait for each country's first 30-day pulse (#1372 review).
+on_game_started_after_lobby = {
+	on_actions = {
+		te_nation_source_flags_seed_on_action
+	}
+}
+
+te_nation_source_flags_seed_on_action = {
+	effect = {
+		every_country = {
+			te_nation_refresh_source_flags = yes
+		}
 	}
 }
 
