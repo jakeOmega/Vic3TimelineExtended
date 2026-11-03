@@ -1072,8 +1072,10 @@ WIDE = {"te_ch_wide_sections"}
 # A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
 # print, which neither BindingTest nor te_rebind_country.py follows.
 # What gates a world read for an observer (who has no GetPlayer): the observer
-# test first in the widget's `visible`.
-OBSERVER_GATE = 'visible = "[And( Not( GetMetaPlayer.IsObserver ),'
+# test (or GetPlayer.IsValid) first in the widget's `visible`, alone or leading
+# an And; a wrapper widget gated on the test alone counts too.
+OBSERVER_GATE = re.compile(
+    r'visible = "\[(?:And\( )?(?:Not\( GetMetaPlayer\.IsObserver \)|GetPlayer\.IsValid\b)')
 SGUI_TOOLTIP = re.compile(r"\b(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
 
 
@@ -1184,13 +1186,13 @@ class PrivateTest(unittest.TestCase):
                 body = self.types[f.where].body
                 k = f.line - self.types[f.where].line
                 start = sum(len(line) + 1 for line in body.split("\n")[:k])
-                gated = OBSERVER_GATE in body.split("\n")[k]
+                gated = bool(OBSERVER_GATE.search(body.split("\n")[k]))
                 pos = start
                 while not gated:
                     a, b = enclosing_block(body, pos)
                     if (a, b) == (0, len(body)):
                         break
-                    gated = OBSERVER_GATE in own_props(body[a + 1:b])
+                    gated = bool(OBSERVER_GATE.search(own_props(body[a + 1:b])))
                     pos = a
                 self.assertTrue(gated, f"{f.text.strip()[:100]}: no observer gate over it")
 
