@@ -122,10 +122,12 @@ class BodyTest(unittest.TestCase):
                 text = _strip_comments(_read(path))
                 self.assertTrue(re.search(rf"type {name} = te_system_tab_frame \{{", text), f"no type {name}")
                 body = _type_body(text, name)
-                # the header outside the gate, as every tab's is
+                # the header outside the gate, as every tab's is, with the
+                # Help page's "?" once the system has one (test_te_help_pages.py)
                 head = _override(body, "tab_header")
                 self.assertRegex(head, rf'default_header = \{{\s*using = default_list_position\s*'
-                                       rf'blockoverride "text" \{{\s*text = "{header}"\s*\}}\s*\}}')
+                                       rf'blockoverride "text" \{{\s*text = "{header}"\s*\}}\s*'
+                                       rf'(?:te_help_button = \{{[^{{}}]*\}}\s*)?\}}')
                 self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
                 if entry:
                     self.assertEqual(_override(body, "tab_entry").strip(),
