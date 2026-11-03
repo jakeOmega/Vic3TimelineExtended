@@ -218,6 +218,11 @@ types te_history_chart_types
 		ignoreinvisible = yes
 		spacing = 1
 		margin = { 4 2 }
+		### The monthly chart's width, so the key shares the charts' left edge,
+		### and each line wraps inside it (at fontsize_medium, Banking's, the
+		### marker's runs to two lines).
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		flowcontainer = {
 			direction = horizontal
@@ -234,6 +239,7 @@ types te_history_chart_types
 			textbox = {
 				parentanchor = vcenter
 				autoresize = yes
+				multiline = yes
 				max_width = 460
 				align = nobaseline
 				block "marker_legend_font" {
@@ -259,6 +265,7 @@ types te_history_chart_types
 				textbox = {
 					parentanchor = vcenter
 					autoresize = yes
+					multiline = yes
 					max_width = 460
 					align = nobaseline
 					block "crash_legend_font" {
@@ -342,10 +349,11 @@ types te_history_chart_types
 	### "plot_size" (the frame, for a chart whose bars are not 480px wide or
 	### 84px tall, with "plot_layouts" carrying the matching bar sizes),
 	### "chart_title_width" (the title's max_width), "chart_text_width" (the
-	### legend's) and "empty_width" (the empty state's), so one chart draws at
-	### another size: the full-screen viewer's (gen_te_history_charts.py sets
-	### them), and "chart_open", beside the title, which the panel's wrapper
-	### fills with te_chart_open_button.
+	### legend's), "empty_width" (the empty state's) and "chart_width" (the
+	### chart's own, fixed), so one chart draws at another size: the
+	### full-screen viewer's (gen_te_history_charts.py sets them), and
+	### "chart_open", beside the title, which the panel's wrapper fills with
+	### te_chart_open_button.
 	### Override them here, on the chart instance; a custom "plot_layouts" holds
 	### plain te_history_plot instances. A type derived from te_history_plot
 	### that carries these blocks drew nothing in game (gui_modding_guide.md
@@ -373,10 +381,22 @@ types te_history_chart_types
 	### for SOME history lengths (121 samples leave a 117px remainder).
 	type te_history_chart = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 		margin = { 0 4 }
+		### A FIXED WIDTH, whatever the title and the legend say: the frame, or
+		### the text over it where that is wider (an annual chart's 488). Sized
+		### by its content, a chart was centered at its text's width alone, the
+		### plot left out (gui_modding_guide.md gotcha #46). The generator sets
+		### it on every chart and its wrapper (gen_te_history_charts.Dims.width).
+		### NO ANCHOR: the chart sits at the left of its wrapper, which is as
+		### wide as it and does the centering, so its place never depends on a
+		### width measured from its content (gotcha #43). Neither does the
+		### title and legend column below, which sits at x 4.
+		block "chart_width" {
+			minimumsize = { 496 -1 }
+			maximumsize = { 496 -1 }
+		}
 
 		### TITLE OVER LEGEND, not title beside legend. Beside the title a
 		### legend had about 230px, and the two monetary legends that have to
