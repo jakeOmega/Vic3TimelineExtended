@@ -80,17 +80,20 @@ decol_holds_colonial_empire = {
 # The country is regressive on colonialism, by the game's own laws and rulers,
 # each read from its description: Colonial Exploitation ("colonies are
 # established to exploit the area for their natural resources and cheap
-# labor"); a citizenship law that ranks peoples by ethnicity or race (Ethnostate:
-# "other ethnicities barred from citizenship"; Racial Segregation: "citizenship
-# rights tied to the concept of shared racial heritage"); slavery in any form
-# (every law but Slavery Banned, "no human being may be owned by another"); a
-# Jingoist ruler ("an aggressive foreign policy, emphasizing readiness to go to
-# war to advance its ambitions", the leader ideology that strongly approves of
-# Colonial Exploitation); or a Colonialist group in government ("a colonial
-# interest reliant upon the continuous extraction of wealth from their
-# territory"). National Supremacy is left out: it is the starting law of most
-# European great powers, and its text is a national identity's primacy, not a
-# ranking of peoples. Scope: country.
+# labor"); a citizenship law that ranks people by blood or race (law_ethnostate,
+# the mod's Ancestral Citizenship: "only those of the core ancestral lineage are
+# recognized as legal members of the nation"; law_racial_segregation,
+# Racialized Citizenship: "citizenship is stratified based on perceived racial
+# or ancestral proximity"); slavery in any form (every law but Slavery Banned,
+# "no human being may be owned by another"); a Jingoist ruler ("an aggressive
+# foreign policy, emphasizing readiness to go to war to advance its
+# ambitions", the leader ideology that strongly approves of Colonial
+# Exploitation); or a Colonialist group in government ("a colonial interest
+# reliant upon the continuous extraction of wealth from their territory").
+# law_national_supremacy (Cultural Citizenship, membership by "the language,
+# traditions, and heritage of the dominant culture") is left out: it is the
+# starting law of most European great powers, and it asks for a culture, not
+# a lineage. Scope: country.
 decol_ai_regressive = {
 	OR = {
 		has_law = law_type:law_colonial_exploitation

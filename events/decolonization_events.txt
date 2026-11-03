@@ -1735,13 +1735,13 @@ decolonization_events.14 = {
 			}
 			# A regressive regime (colonial exploitation, a hierarchy of
 			# peoples, slavery, a jingoist ruler, colonialists in government)
-			# is in no position to condemn it: half as likely (Neutral +4).
+			# is in no position to condemn it: half the weight (Neutral +4).
 			modifier = {
 				trigger = { decol_ai_regressive = yes }
 				factor = 0.5
 			}
 			# Nor one whose ally, defensive-pact or bloc partner, subject or
-			# overlord runs an empire: half as likely (Support +5).
+			# overlord runs an empire: half the weight (Support +5).
 			modifier = {
 				trigger = { decol_ai_partner_holds_empire = yes }
 				factor = 0.5
