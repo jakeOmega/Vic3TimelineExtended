@@ -27,6 +27,8 @@ import re
 import unittest
 from pathlib import Path
 
+from gui_test_helpers import _block_at, _strip_comments, _type_body, assert_wide_matches_narrow
+from gui_test_helpers import _read as _read_gui
 from test_tax_code_state import KEYS, block, close, gen, top_level_names
 
 ROOT = Path(__file__).resolve().parent
@@ -67,11 +69,11 @@ TAB = "te_tax_code"
 STATUS = ["te_tax_politics_section", "te_tax_pending_section", "te_tax_obligations_section",
           "te_tax_enacted_table", "te_tax_workbench_section", "te_tax_review_section"]
 # Collapse flags, each named for its default (style guide rule 7).
-FLAGS = {"te_tax_enacted_closed", "te_tax_history_open", "te_tax_how_open",
+FLAGS = {"te_tax_enacted_closed", "te_tax_history_open",
          "te_tax_workbench_closed", "te_tax_wb_income_closed", "te_tax_wb_land_closed",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed", "te_tax_wb_customs_open",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
-         "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed", "te_tax_light_how_open"}
+         "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed"}
 REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
@@ -242,7 +244,7 @@ class TabStripTest(unittest.TestCase):
         selected = self._override("fifth_button_visibility")
         self.assertIn(f"InformationPanel.IsTabSelected('{TAB}')", selected)
         self.assertIn(gate, selected)
-        self.assertNotIn("Not(", selected)
+        self.assertNotIn("Not( InformationPanel", selected)
         unselected = self._override("fifth_button_visibility_checked")
         self.assertIn(f"Not( InformationPanel.IsTabSelected('{TAB}') )", unselected)
         self.assertIn(gate, unselected)
@@ -280,9 +282,16 @@ class TabStripTest(unittest.TestCase):
 
 
 class TabContentTest(unittest.TestCase):
+    """Budget's Tax Code tab: its outer flowcontainer in the panel, mounting
+    te_tax_tab_body, which the Timeline Extended window's tab mounts too
+    (test_te_system_tab_bodies.py)."""
+
     @classmethod
     def setUpClass(cls):
-        cls.region = uncomment(mod_block(raw(BUDGET))[1])
+        cls.host = uncomment(mod_block(raw(BUDGET))[1])
+        text = raw(LAYOUT)
+        start = text.index("type te_tax_tab_body = te_system_tab_frame {")
+        cls.region = uncomment(text[start:close(text, text.index("{", start)) + 1])
 
     def test_content_follows_banking_inside_scrollarea_content(self):
         text = raw(BUDGET)
@@ -292,34 +301,27 @@ class TabContentTest(unittest.TestCase):
         self.assertLess(content, close(text, text.index("{", scroll)))
 
     def test_shown_only_on_its_tab(self):
-        head = self.region[self.region.index('name = "te_budget_tax_tab"'):]
+        head = self.host[self.host.index('name = "te_budget_tax_tab"'):]
+        self.assertIn("te_tax_tab_body = {}", head)
         self.assertRegex(head, rf"^name = \"te_budget_tax_tab\"\s*visible = \"\[InformationPanel\.IsTabSelected\('{TAB}'\)\]\"")
 
     def test_gate_is_a_parent_of_the_journal_entry_datacontext(self):
-        gate = self.region.index("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(")
-        context = self.region.index("datacontext = \"[GetPlayerJournalEntry('je_tax_code')]\"")
-        self.assertLess(gate, context)
-        gate_block = brace_block(self.region, self.region.rindex("flowcontainer = {", 0, gate))
-        self.assertIn("GetPlayerJournalEntry('je_tax_code')", gate_block)
-        # the gate's own properties: everything before its first child container
-        own = gate_block[:gate_block.index("flowcontainer = {")]
-        self.assertNotIn("datacontext", own, "the datacontext sits on the gate itself")
+        """The frame's blocks: the gate on the parent, the datacontext on the
+        column (te_system_tab_frame; test_te_system_tab_bodies.py)."""
+        gate = brace_block(self.region, self.region.index('blockoverride "tab_gate"'))
+        self.assertIn("GetScriptedGui('te_budget_tax_tab_sgui').IsShown(", gate)
+        self.assertNotIn("datacontext", gate, "the datacontext sits on the gate itself")
+        entry = brace_block(self.region, self.region.index('blockoverride "tab_entry"'))
+        self.assertIn("datacontext = \"[GetPlayerJournalEntry('je_tax_code')]\"", entry)
 
     def test_composes_overview_status_reference_then_the_link(self):
-        order = re.findall(r"\b(te_tax_overview_panel|te_tax_status_sections|te_tax_reference_sections"
-                           r"|te_system_tab_open_journal)\b", self.region)
-        self.assertEqual(order, ["te_tax_overview_panel", "te_tax_status_sections",
-                                 "te_tax_reference_sections", "te_system_tab_open_journal"])
-        button = brace_block(self.region, self.region.rindex("button = {", 0,
-                                                             self.region.index("te_system_tab_open_journal")))
-        self.assertIn('visible = "[JournalEntry.IsActive]"', button)
-        self.assertIn("InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)", button)
-        self.assertIn('tooltip = "te_tax_open_journal_tt"', button)
-
-    def test_the_column_has_a_fixed_width(self):
-        context = brace_block(self.region, self.region.rindex(
-            "flowcontainer = {", 0, self.region.index("GetPlayerJournalEntry('je_tax_code')")))
-        self.assertIn("minimumsize = { 520 -1 }", context)
+        order = re.findall(r"\b(te_tax_overview_panel|te_tax_status_sections|te_tax_reference_sections)\b",
+                           self.region)
+        self.assertEqual(order, ["te_tax_overview_panel", "te_tax_status_sections", "te_tax_reference_sections"])
+        # the frame's link, below the content, in the tab's row font
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.region)
+        self.assertRegex(self.region, r'blockoverride "tab_open_journal_tooltip" \{\s*tooltip = "te_tax_open_journal_tt"')
+        self.assertRegex(self.region, r'blockoverride "tab_open_journal_font" \{\s*using = te_tax_fontsize_row')
 
     def test_the_summary_moves_to_the_footer(self):
         """The tab draws the draft summary in fixed_bottom, so the live sections
@@ -390,8 +392,10 @@ class LayoutTest(unittest.TestCase):
         cls.all = "\n".join(gui(path) for path in NEW_GUI)
 
     def test_status_sections(self):
-        # The legislated code's sections in a wrapper hidden under the light
-        # setting, then the light code's own section, which gates itself.
+        # The light code's own section, which gates itself, then the legislated
+        # code's sections in a wrapper hidden under the light setting. The light
+        # section leads so one row of full-screen columns keeps the order
+        # (wide-mode PR D2); the two never draw together.
         body = type_body(self.layout, "te_tax_status_sections")
         self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), STATUS)
         self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), ["te_tax_light_section"])
@@ -466,6 +470,36 @@ class LayoutTest(unittest.TestCase):
         self.assertNotIn("JournalEntry.GetCountry", self.all)
         self.assertNotIn("GetCountry", re.sub(r"GetPlayerJournalEntry", "", self.all))
 
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Tax Code tab (spec
+    2026-11-02-te-window-wide-mode § 7): one row of three 520 columns, under
+    the gates the narrow tab gives each section. Under the full code it reads
+    the spec's columns; under the light code, the overview and the light
+    section, then the light How, then an empty column, as the full code's
+    sections hide. The draft summary is in the window's footer, so neither
+    layout places it."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_tax_wide_sections",
+                                             layout=("te_tax_tab_body", "te_tax_tab_layout"))
+        self.assertEqual(columns, [["te_tax_overview_panel", "te_tax_light_section"] + STATUS[:3],
+                                   STATUS[3:] + ["te_tax_light_how_section"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as window
+        self.assertEqual(next(t for t in window.TABS if t.key == "tax_code").wide, "te_tax_wide_sections")
+
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read_gui(LAYOUT)), "te_tax_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertEqual(header.count("default_header = {"), 1)
+        self.assertEqual(header.count("using = default_list_position"), 1)
 
 class JournalEntryTest(unittest.TestCase):
     @classmethod
@@ -1009,15 +1043,42 @@ class FlagTest(unittest.TestCase):
                     self.assertEqual(negated, 1)
                     self.assertGreaterEqual(bare, 2)
 
-    def test_live_open_past_and_explanations_collapsed(self):
+    def test_live_open_and_past_collapsed(self):
         overview = gui(OVERVIEW)
-        layout = gui(LAYOUT)
         self.assertIn("Toggle('te_tax_enacted_closed')", type_body(overview, "te_tax_enacted_table"))
         self.assertIn("Toggle('te_tax_history_open')", type_body(overview, "te_tax_history_section"))
-        self.assertIn("Toggle('te_tax_how_open')", type_body(layout, "te_tax_how_section"))
+
+    def test_both_hows_are_links_to_one_page(self):
+        """How Tax Legislation Works and How the Light Tax Code Works are each
+        their header alone, under their own gates, and both open the Help page
+        (te_tax_code_help_popup, on te_popup = help_tax_code). The page shows
+        the Light code's text while it is in force and the full code's
+        otherwise, titled to match (test_te_help_pages.py)."""
+        for path, section, title in ((LAYOUT, "te_tax_how_section", "te_tax_how_header"),
+                                     (LIGHT_GUI, "te_tax_light_how_section", "te_tax_lt_how_header")):
+            body = type_body(gui(path), section)
+            with self.subTest(section=section):
+                self.assertIn(f'text = "{title}"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_tax_code')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
+                self.assertNotIn("te_tax_note", body)
+        self.assertIn(f'visible = "[{LIGHT_SHOWN}]"', type_body(gui(LIGHT_GUI), "te_tax_light_how_section").split("\n\n")[0])
+        page = type_body(gui(LAYOUT), "te_tax_code_help_body")
+        light = page.index(f'visible = "[{LIGHT_SHOWN}]"')
+        full = page.index(f'visible = "[Not( {LIGHT_SHOWN} )]"')
+        self.assertLess(light, page.index('text = "te_tax_lt_how_sub_rates"'))
+        self.assertLess(page.index('text = "te_tax_lt_how_ai"'), full)
+        self.assertLess(full, page.index('text = "te_tax_how_sub_drafting"'))
+        # each code's text in its own box: no Light key after the full code's gate, no full key before it
+        self.assertNotIn("te_tax_lt_how_", page[full:])
+        self.assertNotRegex(page[light:full], r"[\"']te_tax_how_")
+        title = type_body(gui(LAYOUT), "te_tax_code_help_popup")
+        self.assertIn(f"text = \"[SelectLocalization( {LIGHT_SHOWN}, 'te_tax_lt_how_header', 'te_tax_how_header' )]\"",
+                      title)
 
     def test_how_section_subheadings(self):
-        body = type_body(gui(LAYOUT), "te_tax_how_section")
+        body = type_body(gui(LAYOUT), "te_tax_code_help_body")
         subs = re.findall(r'text = "(te_tax_how_sub_\w+)"', body)
         self.assertEqual(subs, ["te_tax_how_sub_drafting", "te_tax_how_sub_passage",
                                 "te_tax_how_sub_commencement", "te_tax_how_sub_promises", "te_tax_how_sub_replaces",
@@ -1035,7 +1096,7 @@ class FlagTest(unittest.TestCase):
     def test_customs_is_explained_only_under_the_customs_option(self):
         # Final review B-I1: under the customs option the monthly sync sets tariffs too, so
         # the line that says it does not is swapped, and a Customs topic shows.
-        body = type_body(gui(LAYOUT), "te_tax_how_section")
+        body = type_body(gui(LAYOUT), "te_tax_code_help_body")
         gate = "GetScriptedGui('te_tax_show_customs_option_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
         self.assertIn(f"text = \"[SelectLocalization( {gate}, 'te_tax_how_replaces_monthly_customs', "
                       "'te_tax_how_replaces_monthly' )]\"", body)

@@ -12,6 +12,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from gui_test_helpers import _read as _read_gui
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
@@ -47,6 +49,11 @@ MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_rate_none", "banking_
                 "banking_dash_how_prices", "banking_dash_how_expected", "banking_dash_how_printing"]
 GENERAL_HOW = ["banking_dash_how_cycle", "banking_dash_how_cycle_moves", "banking_dash_how_crashes",
                "banking_dash_how_budget"]
+# The Help page's topics, in order: the subheadings over the notes above.
+GENERAL_SUBS = ["banking_dash_how_sub_cycle", "banking_dash_how_sub_crashes", "banking_dash_how_sub_budget"]
+MONETARY_SUBS = ["banking_dash_how_sub_rate", "banking_dash_how_sub_mandates", "banking_dash_how_sub_gold",
+                 "banking_dash_how_sub_fx", "banking_dash_how_sub_arrangements", "banking_dash_how_sub_borrowing",
+                 "banking_dash_how_sub_prices"]
 
 
 def _read(path):
@@ -91,9 +98,10 @@ def _loc():
 
 
 def _tab_block():
-    text = _read(BUDGET)
-    start = text.index('name = "te_budget_banking_tab"')
-    return text[start:text.index("### END MOD ###", start)]
+    """The Banking tab's body (te_banking_tab_body), which the Budget panel's
+    tab and the Timeline Extended window's both mount
+    (test_te_system_tab_bodies.py checks the mounts)."""
+    return _type_body(_read(LAYOUT), "te_banking_tab_body")
 
 
 class OrderTest(unittest.TestCase):
@@ -134,11 +142,12 @@ class OrderTest(unittest.TestCase):
         Open Journal Entry link below everything."""
         tab = _tab_block()
         order = [m.group(1) for m in re.finditer(
-            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections"
-            r"|te_system_tab_open_journal)\b", tab)]
+            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections)\b", tab)]
         self.assertEqual(order, ["te_banking_overview_panel", "te_banking_status_sections",
-                                 "te_banking_reference_sections", "te_system_tab_open_journal"])
+                                 "te_banking_reference_sections"])
         self.assertIn("te_banking_reference_sections = {}", tab)
+        # the frame's link, below the content (te_system_tab_frame)
+        self.assertNotIn('blockoverride "tab_open_journal" ', tab)
 
     def test_history_is_open_in_both_hosts(self):
         """The owner's rule since play-test round 2: history charts start open,
@@ -157,6 +166,32 @@ class OrderTest(unittest.TestCase):
             self.assertNotIn(old, text, old)
 
 
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Banking tab (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns
+    of 520, under the gates the narrow tab gives them."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_banking_wide_sections",
+                                             layout=("te_banking_tab_body", "te_banking_tab_layout"))
+        self.assertEqual(columns, [["te_banking_overview_panel", "te_banking_sec_active"],
+                                   ["te_banking_sec_monetary", "te_banking_sec_interventions"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "banking").wide, "te_banking_wide_sections")
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read_gui(LAYOUT)), "te_banking_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertEqual(header.count("default_header = {"), 2)
+        self.assertEqual(header.count("using = default_list_position"), 2)
+
+
 class FlagTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -165,7 +200,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = {f for f in re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text)
                  if f.startswith(("banking_", "te_banking_", "te_hist_"))}
-        self.assertGreaterEqual(len(flags), 16)
+        self.assertGreaterEqual(len(flags), 15)
         for f in flags:
             self.assertRegex(f, r"_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -181,12 +216,23 @@ class FlagTest(unittest.TestCase):
     def test_no_old_flag_survives(self):
         self.assertNotIn("banking_dash_collapsed_", self.text)
 
-    def test_the_live_sections_start_open_and_how_it_works_collapsed(self):
+    def test_the_live_sections_start_open(self):
         dash = _read(DASH)
         for sec, flag in (("te_banking_sec_active", "banking_dash_active_closed"),
                           ("te_banking_sec_monetary", "banking_dash_monetary_closed")):
             self.assertIn(f"Toggle('{flag}')", _type_body(dash, sec), sec)
-        self.assertIn("Toggle('banking_dash_how_open')", _type_body(_read(LAYOUT), "te_banking_sec_how"))
+
+    def test_how_banking_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_banking_help_popup, on te_popup = help_banking); its collapse flag
+        retired with its content (test_te_help_pages.py)."""
+        how = _type_body(_strip_comments(_read(LAYOUT)), "te_banking_sec_how")
+        self.assertIn('text = "banking_dash_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_banking')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
+        self.assertNotIn("banking_dash_how_open", self.text)
+        self.assertNotIn("banking_dash_note", how)
 
 
 class GateTest(unittest.TestCase):
@@ -210,8 +256,11 @@ class GateTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('banking_dash_omo_fallback_shown').IsShown", body)
 
     def test_how_it_works_explains_the_monetary_layer_only_while_it_is_on(self):
-        body = _type_body(_read(LAYOUT), "te_banking_sec_how")
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)", body)
+        """The Help page's monetary topics, under the player's gate: a page
+        reads GetPlayer, never the entry (test_te_help_pages.py)."""
+        body = _type_body(_read(LAYOUT), "te_banking_help_body")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)"
+                      r"\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)\]\"", body)
         self.assertTrue(m, "no monetary block gated on banking_mon_system_shown")
         gated = _block_from(body, m.start())
         for key in MONETARY_HOW:
@@ -219,6 +268,10 @@ class GateTest(unittest.TestCase):
         for key in GENERAL_HOW:
             self.assertIn(f'text = "{key}"', body, key)
             self.assertNotIn(f'text = "{key}"', gated, key)
+        # the topics' subheadings, in order, each on its side of the gate
+        subs = re.compile(r'text = "(banking_dash_how_sub_\w+)"')
+        self.assertEqual(subs.findall(body.replace(gated, "")), GENERAL_SUBS)
+        self.assertEqual(subs.findall(gated), MONETARY_SUBS)
 
 
 class TidyTest(unittest.TestCase):
@@ -245,9 +298,10 @@ class TidyTest(unittest.TestCase):
     def test_no_block_opens_on_a_gap(self):
         """The first heading of the Monetary Policy block and of How Banking
         Works drops its top margin (style guide rule 8)."""
-        for path, key in ((DASH, "banking_dash_mon_sub_rates"), (LAYOUT, "banking_dash_how_sub_cycle")):
+        for path, typ, key in ((DASH, "type te_banking_sec_", "banking_dash_mon_sub_rates"),
+                               (LAYOUT, "type te_banking_help_body", "banking_dash_how_sub_cycle")):
             text = _read(path)
-            first = text.index("banking_dash_subheader = {", text.index("type te_banking_sec_"))
+            first = text.index("banking_dash_subheader = {", text.index(typ))
             self.assertRegex(_block_from(text, first),
                              rf'blockoverride "subheader_margin" \{{\}}\s*blockoverride "subheader_text" '
                              rf'\{{\s*text = "{key}"', path)

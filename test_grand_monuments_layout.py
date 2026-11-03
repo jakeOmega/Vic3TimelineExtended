@@ -8,6 +8,9 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as window_gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "grand_monuments_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_grand_monuments.txt")
@@ -35,7 +38,7 @@ ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_
          "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
          "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
 FLAGS = {"gm_commission_closed", "gm_decisions_closed", "gm_national_closed", "gm_awaiting_closed",
-         "gm_monuments_closed", "gm_how_open"}
+         "gm_monuments_closed"}
 LIVE_SECTIONS = ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_national",
                  "te_gm_sec_awaiting", "te_gm_sec_monuments", "gm_monument_row"]
 HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_national", "gm_je_how_counts",
@@ -43,6 +46,10 @@ HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
             "gm_je_how_names", "gm_je_how_policy", "gm_je_how_trophies", "gm_je_how_trophies_home",
             "gm_je_how_archaeology"]
+# The Help page's topics, in order: its subheadings.
+HOW_SUBS = ["gm_je_how_sub_grandeur", "gm_je_how_sub_counts", "gm_je_how_sub_signatures", "gm_je_how_sub_contested",
+            "gm_je_how_sub_hard_times", "gm_je_how_sub_commissions", "gm_je_how_sub_names", "gm_je_how_sub_policy",
+            "gm_je_how_sub_trophies", "gm_je_how_sub_archaeology"]
 # The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5).
 FADING = ("teardown", "vanity")
 # The opportunity boons under National Effects' Opportunities Seized
@@ -188,17 +195,29 @@ class FlagTest(unittest.TestCase):
         for sec, flag in (("te_gm_sec_national", "gm_national_closed"),
                           ("te_gm_sec_decisions", "gm_decisions_closed"),
                           ("te_gm_sec_awaiting", "gm_awaiting_closed"),
-                          ("te_gm_sec_monuments", "gm_monuments_closed"),
-                          ("te_gm_sec_how", "gm_how_open")):
+                          ("te_gm_sec_monuments", "gm_monuments_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(gui, sec), sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_grand_monuments_help_popup, on te_popup = help_grand_monuments);
+        its collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _strip_comments(_type_body(_gui(), "te_gm_sec_how"))
+        self.assertIn('text = "gm_je_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
+        self.assertNotIn("gm_how_open", _gui())
+        self.assertNotIn("gm_note", how)
 
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
         gui = _gui()
-        how = _type_body(gui, "te_gm_sec_how")
+        how = _type_body(gui, "te_grand_monuments_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
+        self.assertEqual(re.findall(r'text = "(gm_je_how_sub_\w+)"', _strip_comments(how)), HOW_SUBS)
         for sec in LIVE_SECTIONS:
             body = _type_body(gui, sec)
             self.assertNotIn("gm_je_how_", body, sec)
@@ -206,7 +225,7 @@ class HowItWorksTest(unittest.TestCase):
 
     def test_every_how_key_exists_and_reads_nothing(self):
         loc = _loc()
-        for key in HOW_KEYS:
+        for key in HOW_KEYS + HOW_SUBS:
             self.assertIn(key, loc)
             self.assertNotIn("ScriptValue", loc[key], key)
 
@@ -356,7 +375,7 @@ class StateGatedTest(unittest.TestCase):
         self.assertIn("ScriptValue('gm_disp_count_listed_rest'), '(CFixedPoint)0' ) )]\" "
                       "text = \"gm_je_monuments_all_awaiting\" }", mon)
         # How it Works: the first heading drops its top margin.
-        how = _squash(_type_body(gui, "te_gm_sec_how").split("gm_panel = {", 1)[1])
+        how = _squash(_strip_comments(_type_body(gui, "te_grand_monuments_help_body")))
         self.assertIn('gm_subheader = { blockoverride "subheader_margin" {} blockoverride "subheader_text" '
                       '{ text = "gm_je_how_sub_grandeur" } }', how.split("gm_note", 1)[0])
 
@@ -1015,6 +1034,8 @@ class LabelBudgetTest(unittest.TestCase):
 STATE_GUI = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 STATES_PANEL = os.path.join(REPO, "gui", "states_panel.gui")
 WINDOW = os.path.join(REPO, "gui", "te_systems_window.gui")
+# the window's strip, templates and tab mounts (scripts/generators/gen_te_systems_window.py)
+WINDOW_GENERATED = os.path.join(REPO, "gui", "te_systems_window_generated.gui")
 
 
 class StateCardTest(unittest.TestCase):
@@ -1093,13 +1114,18 @@ class StateCardTest(unittest.TestCase):
 
     def test_the_goto_sets_what_the_window_reads(self):
         """The goto's two values are the ones the window's Grand Monuments tab
-        sets and its root shows on, and its gate is the tab content's own."""
+        sets and its root shows on, and its gate is the tab content's own: the
+        gate of te_gm_tab_body, the body the tab's mount holds."""
         window = _squash(_read(WINDOW))
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]\"", window)
+        generated = _squash(_read(WINDOW_GENERATED))
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'grand_monuments')]\"", generated)
         self.assertIn("GetVariableSystem.HasValue('com_open_window', 'te_systems_window')", window)
-        self.assertIn("GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments')", window)
-        tab = re.search(r'name = "te_systems_window_grand_monuments_tab"(.*?)datacontext', window).group(1)
-        self.assertIn("GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown", tab)
+        self.assertIn("GetVariableSystem.HasValue('te_systems_window_tab', 'grand_monuments')", generated)
+        mount = re.search(r'name = "te_systems_window_grand_monuments_tab"(.*?)\}', generated).group(1)
+        self.assertIn("te_gm_tab_body = {", mount)
+        body = _type_body(_read(GUI), "te_gm_tab_body")
+        gate = re.search(r'blockoverride "tab_gate" \{(.*?)\}', body, re.S).group(1)
+        self.assertIn("GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown", gate)
 
     def test_every_rendered_key_exists(self):
         loc = _loc()
@@ -1318,6 +1344,23 @@ class SignatureRowsTest(unittest.TestCase):
             self.assertIn(f"te_state_gm_row = {{ visible = \"[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue("
                           f"'{value}'), '(CFixedPoint)0')]\" blockoverride \"row_tooltip\" {{ tooltip = \"{tip}\" }}",
                           card, value)
+
+
+class WideLayoutTest(unittest.TestCase):
+    """te_gm_wide_sections, the window's full-screen Grand Monuments (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns,
+    read down each and then across, under the narrow layout's gates."""
+
+    def test_the_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_gm_wide_sections", layout=("te_gm_tab_body", "te_gm_tab_layout"))
+        self.assertEqual(columns, [
+            ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_awaiting"],
+            ["te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments"],
+            ["te_gm_sec_trophies", "te_gm_sec_abroad", "te_gm_sec_how"]])
+
+    def test_the_window_mounts_it_full_screen(self):
+        tab = next(t for t in window_gen.TABS if t.key == "grand_monuments")
+        self.assertEqual((tab.layout, tab.wide), ("te_gm_tab_layout", "te_gm_wide_sections"))
 
 
 if __name__ == "__main__":

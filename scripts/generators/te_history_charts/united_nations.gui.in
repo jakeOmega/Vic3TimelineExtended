@@ -1,0 +1,73 @@
+# History chart fragments: united_nations (scripts/generators/gen_te_history_charts.py).
+# Each "@fragment <name>" opens one chart's te_history_chart instance as its section
+# had it, dedented, each size a placeholder (the generator's docstring lists them).
+# Edit a chart here, then run the generator; its section instances the chart's
+# te_hist_<id> wrapper.
+
+@fragment un_auth
+te_history_chart = {
+	blockoverride "chart_title" {
+		text = "un_hist_chart_auth_title"
+	}
+	blockoverride "chart_legend" {
+		text = "un_hist_chart_auth_legend"
+	}
+	# The store's marker pips belong to the banking system; the UN
+	# series has none of its own.
+	blockoverride "marker_pips" {}
+	blockoverride "bar_tooltip" {
+		tooltip = "un_hist_tt_auth"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_auth' )]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.36 0.60 0.85 1.0 }
+			}
+		}
+	}
+}
+
+@fragment un_target
+te_history_chart = {
+	blockoverride "chart_title" {
+		text = "un_hist_chart_target_title"
+	}
+	blockoverride "chart_legend" {
+		text = "un_hist_chart_target_legend"
+	}
+	# The store's marker pips belong to the banking system; the UN
+	# series has none of its own.
+	blockoverride "marker_pips" {}
+	blockoverride "bar_tooltip" {
+		tooltip = "un_hist_tt_target"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_target' )]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.55 0.55 0.70 1.0 }
+			}
+		}
+	}
+}

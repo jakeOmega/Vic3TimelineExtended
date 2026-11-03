@@ -253,8 +253,9 @@ weekly balance, once your cycle has started. Hover it for the phase's
 word and the same tooltip, with a crash-risk warning while that risk is high,
 and click it to open the Banking tab.
 
-Below the overview come five sections. All start open except the explanations,
-and each heading opens or closes its section:
+Below the overview come five sections. Each heading opens or closes its
+section, except How Banking Works, whose heading opens Banking's Help page, as
+the "?" at the right of the tab's header does:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -262,7 +263,7 @@ and each heading opens or closes its section:
 | Monetary Policy | Open | Under the full Banking System, the rate, gold, the exchange rate, what borrowing costs and prices (see [Monetary policy under the full Banking System](#monetary-policy-under-the-full-banking-system)). Under Simplified, only the Open-Market Operations row, in a market economy. |
 | Available Interventions | Open | Your economic system's other tools, in categories you can close one by one, each tool with its point cost and an Enable button. |
 | History | Open | The charts in [Banking history charts](#banking-history-charts). |
-| How Banking Works | Collapsed | The explanations: the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
+| How Banking Works | A link | The Help page explains the cycle, crashes and the intervention budget, and under the full Banking System the policy rate and the stance, the mandates, gold and the peg, the exchange rate, international arrangements, what borrowing costs and prices. |
 
 Hover a tool's name for what the tool does, its full name and what it
 requires. A grayed button means you cannot use the tool now, and
@@ -555,7 +556,7 @@ The Monetary Policy section's rows are grouped under The Rate, Gold and the Peg 
 Exchange Rate, International Arrangements (while you are anchored, party to a
 monetary treaty or in a bloc with a Monetary Union principle), What Borrowing
 Costs and Prices. Hover a row's label for what the term means and the row for
-its reading and what moves it; How Banking Works has the rules behind each
+its reading and what moves it; the Help page has the rules behind each
 group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 

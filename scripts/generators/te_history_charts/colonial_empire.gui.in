@@ -1,0 +1,92 @@
+# History chart fragments: colonial_empire (scripts/generators/gen_te_history_charts.py).
+# Each "@fragment <name>" opens one chart's te_history_chart instance as its section
+# had it, dedented, each size a placeholder (the generator's docstring lists them).
+# Edit a chart here, then run the generator; its section instances the chart's
+# te_hist_<id> wrapper.
+
+@fragment ce_stability
+te_history_chart = {
+	blockoverride "chart_title" {
+		text = "te_hist_chart_colonial_stability_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_colonial_stability_legend"
+	}
+	# This series records no markers; the store's pips belong to
+	# other systems (banking, cultural hegemony) and would go unexplained.
+	blockoverride "marker_pips" {}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_colonial_stability"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_unsigned = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_stability' )]"
+			blockoverride "values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)${thin:2}', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ) ) )]"
+			}
+			blockoverride "cover_values" {
+				min = 0
+				max = 100
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_stability' ), '(CFixedPoint)${thin:4}' ) ) )]"
+			}
+			blockoverride "color" {
+				color = { 0.45 0.68 0.45 1.0 }
+			}
+		}
+	}
+}
+
+@fragment ce_drift
+te_history_chart = {
+	blockoverride "chart_title" {
+		text = "te_hist_chart_colonial_drift_title"
+	}
+	blockoverride "chart_legend" {
+		text = "te_hist_chart_colonial_drift_legend"
+	}
+	# This series records no markers; the store's pips belong to
+	# other systems (banking, cultural hegemony) and would go unexplained.
+	blockoverride "marker_pips" {}
+	blockoverride "zero_axis" {
+		widget = {
+			size = { 100% 2 }
+			parentanchor = vcenter
+			alwaystransparent = yes
+
+			background = {
+				using = dark_area
+				alpha = 0.7
+			}
+		}
+	}
+	blockoverride "bar_tooltip" {
+		tooltip = "te_hist_tt_colonial_drift"
+	}
+	blockoverride "bar_body" {
+		te_history_bar_signed = {
+			visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
+			blockoverride "positive_values" {
+				min = 0
+				max = 2
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+			}
+			blockoverride "positive_cover_values" {
+				min = 0
+				max = 2
+				value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)${thin:0.17}' ) ) )]"
+			}
+			blockoverride "negative_values" {
+				min = -2
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
+			}
+			blockoverride "negative_cover_values" {
+				min = -2
+				max = 0
+				value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)${thin:0.17}' ) ) )]"
+			}
+		}
+	}
+}

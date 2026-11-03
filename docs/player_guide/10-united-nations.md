@@ -1136,7 +1136,7 @@ collapsed when they are reference:
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | A row for each closed resolution, its title and how it ended, with the rest of its card on hover; Voting Details adds how each member voted. |
-| How the UN Works | Collapsed | The explanations: authority, standing, missions, delegations, dues and the record. |
+| How the UN Works | A link | Opens the Help page, as does the "?" in the tab's header. It explains authority, standing, missions, delegations, dues and the record. |
 
 ## How the AI uses the UN
 

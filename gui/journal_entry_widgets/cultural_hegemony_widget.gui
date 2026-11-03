@@ -19,9 +19,10 @@
 ###     te_ch_sec_models          political models of the world, pie and legend
 ###   te_ch_reference_sections
 ###     te_ch_sec_history         the global model history chart, open (ch_hist_closed)
-###     te_ch_sec_how             "How Cultural Hegemony Works", collapsed
-###                               (ch_how_open): every explanation, one heading
-###                               per topic
+###     te_ch_sec_how             "How Cultural Hegemony Works", a link to the
+###                               Help page that holds every explanation
+###                               (te_cultural_hegemony_help_popup, in
+###                               gui/te_popups.gui)
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_cultural_hegemony_layout.py).
@@ -2408,8 +2409,136 @@ types cultural_hegemony_widget_types
 	### REFERENCE SECTIONS
 	### ==========================================================================
 
+	### The key under the world models' chart: two columns of the models'
+	### short names, read down then across in the chart's order (republican
+	### at the bottom of each bar first), each one's full name and laws on
+	### hover. All fifteen models stay visible even if their present-day
+	### share is zero. A type of its own because the chart's full-screen
+	### viewer (te_chart_ch_models_popup, gen_te_history_charts.py) shows it
+	### under the large chart, as te_ch_sec_history does under the panel's.
+	type te_ch_hist_model_key = flowcontainer {
+		direction = horizontal
+		parentanchor = hcenter
+		spacing = 12
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_republican"
+					tooltip = "ch_model_republican_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_corporatist"
+					tooltip = "ch_model_corporatist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_anarchist"
+					tooltip = "ch_model_anarchist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_other"
+					tooltip = "ch_model_other_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_royalist_absolutist"
+					tooltip = "ch_model_royalist_absolutist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_technocratic"
+					tooltip = "ch_model_technocratic_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_religious"
+					tooltip = "ch_model_religious_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_socialist"
+					tooltip = "ch_model_socialist_tt"
+				}
+			}
+		}
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_military_junta"
+					tooltip = "ch_model_military_junta_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_royalist_constitutional"
+					tooltip = "ch_model_royalist_constitutional_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_communist"
+					tooltip = "ch_model_communist_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_liberal"
+					tooltip = "ch_model_liberal_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_reactionary"
+					tooltip = "ch_model_reactionary_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_developmentalist_junta"
+					tooltip = "ch_model_developmentalist_junta_tt"
+				}
+			}
+			ch_model_hist_legend_row = {
+				blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
+				blockoverride "hist_label" {
+					text = "je_ch_ov_model_fascist"
+					tooltip = "ch_model_fascist_tt"
+				}
+			}
+		}
+	}
+
 	### World models, annually. Open by default. Independent range selection
 	### because a monthly banking range and this annual range have different units.
+	### The chart is te_hist_ch_models, generated from its fragment in
+	### scripts/generators/te_history_charts/cultural_hegemony.gui.in.
 	type te_ch_sec_history = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2470,385 +2599,19 @@ types cultural_hegemony_widget_types
 				align = hcenter|nobaseline
 				text = "ch_model_hist_since"
 			}
-			te_history_chart = {
-				blockoverride "chart_title" { text = "ch_model_hist_title" }
-				blockoverride "chart_legend" { text = "ch_model_hist_note" }
-				blockoverride "sample_datamodel" {
-					datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
-				}
-				blockoverride "sample_visible" {
-					visible = "[Or( Not( Or( GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('ch_model_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('ch_model_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)20' ) ) ) )]"
-				}
-				blockoverride "bar_tooltip" { tooltip = "ch_model_hist_tt" }
-				blockoverride "marker_pips" {} # world models have no policy/crash markers
-				blockoverride "bar_body" {
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_fascist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.556863 0.298039 0.172549 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_developmentalist_junta') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.305882 0.635294 0.325490 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_reactionary') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.141176 0.376471 0.658824 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_liberal') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.713725 0.545098 0.086275 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_communist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.768627 0.250980 0.223529 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_constitutional') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.572549 0.486275 0.803922 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_military_junta') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.333333 0.431373 0.109804 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_socialist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.831373 0.431373 0.501961 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_religious') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.537255 0.450980 0.066667 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_technocratic') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.000000 0.607843 0.584314 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_royalist_absolutist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.407843 0.286275 0.670588 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_other') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.486275 0.478431 0.454902 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_anarchist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.607843 0.219608 0.462745 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_corporatist') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.772549 0.423529 0.129412 1.0 }
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('ch_model_hist_cum_republican') )]"
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.294118 0.607843 0.811765 1.0 }
-					}
-				}
-				### The plot blocks (datamodel, range filter, tooltip, bars, markers) are
-				### overridden on this te_history_chart instance and reach the three plain
-				### te_history_plot layouts below, as in every other history chart. #633
-				### set them in a type derived from te_history_plot instead, and that type
-				### drew nothing, even on its own (gui_modding_guide.md gotcha #37).
-				### 5 / 20 / 100 years at 80 / 20 / 4px are 400px of bars. The
-				### frame is sized to them, not left at the monthly charts' 496px
-				### (which left ~90px empty on the left of a full 100 years):
-				### 48px for the axis labels + 400 + the plots' 8px right margin.
-				### Bars are 168px tall, 6px clear of the frame top and bottom,
-				### level with the two axis labels.
-				blockoverride "plot_size" { size = { 456 180 } }
-				blockoverride "plot_layouts" {
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
-						blockoverride "bar_size" { size = { 80 168 } }
-					}
-					te_history_plot = {
-						visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '20')]"
-						blockoverride "bar_size" { size = { 20 168 } }
-					}
-					te_history_plot = {
-						visible = "[Not(Or(GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20')))]"
-						blockoverride "bar_size" { size = { 4 168 } }
-					}
-					textbox = {
-						parentanchor = left|top
-						position = { 8 6 }
-						autoresize = yes
-						text = "ch_model_hist_axis_top"
-					}
-					textbox = {
-						parentanchor = left|bottom
-						position = { 8 -6 }
-						autoresize = yes
-						text = "ch_model_hist_axis_bottom"
-					}
-				}
-				blockoverride "empty_visible" {
-					visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
-				}
-				blockoverride "empty_text" { text = "ch_model_hist_empty" }
-			}
-			### Two columns of the models' short names, read down then across in
-			### the chart's order (republican at the bottom of each bar first),
-			### each one's full name and laws on hover. All fifteen models stay
-			### visible even if their present-day share is zero.
-			flowcontainer = {
-				direction = horizontal
-				parentanchor = hcenter
-				spacing = 12
-				flowcontainer = {
-					direction = vertical
-					spacing = 1
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_republican"
-							tooltip = "ch_model_republican_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_corporatist"
-							tooltip = "ch_model_corporatist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_anarchist"
-							tooltip = "ch_model_anarchist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_other"
-							tooltip = "ch_model_other_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_royalist_absolutist"
-							tooltip = "ch_model_royalist_absolutist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_technocratic"
-							tooltip = "ch_model_technocratic_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_religious"
-							tooltip = "ch_model_religious_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_socialist"
-							tooltip = "ch_model_socialist_tt"
-						}
-					}
-				}
-				flowcontainer = {
-					direction = vertical
-					spacing = 1
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_military_junta"
-							tooltip = "ch_model_military_junta_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_royalist_constitutional"
-							tooltip = "ch_model_royalist_constitutional_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_communist"
-							tooltip = "ch_model_communist_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_liberal"
-							tooltip = "ch_model_liberal_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_reactionary"
-							tooltip = "ch_model_reactionary_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_developmentalist_junta"
-							tooltip = "ch_model_developmentalist_junta_tt"
-						}
-					}
-					ch_model_hist_legend_row = {
-						blockoverride "hist_swatch" { texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds" }
-						blockoverride "hist_label" {
-							text = "je_ch_ov_model_fascist"
-							tooltip = "ch_model_fascist_tt"
-						}
-					}
-				}
-			}
+			te_hist_ch_models = {}
+			### Two columns of the models' short names under the chart, te_ch_hist_model_key
+			### (above), which the chart's full-screen viewer shows too
+			te_ch_hist_model_key = {}
 		}
 	}
 
-	### "How Cultural Hegemony Works": every explanation, gathered out of the
-	### live sections into one section, collapsed by default, one heading per
-	### topic. The live sections say what is happening; this says how it works.
+	### "How Cultural Hegemony Works": a link at the foot of the panel to the
+	### Help page (style rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_cultural_hegemony_help_popup
+	### (te_popup = help_cultural_hegemony) instead of expanding; it keeps its
+	### name and its place in the composer. The "?" in the tab's header opens
+	### the same page.
 	type te_ch_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2856,81 +2619,103 @@ types cultural_hegemony_widget_types
 		spacing = 2
 
 		ch_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_ch_how_header"
 				using = elide_fontsize_min
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('ch_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('ch_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('ch_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		ch_panel = {
-			visible = "[GetVariableSystem.Exists('ch_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads GetPlayer only, never the entry, so it opens from
+	### any host (test_te_help_pages.py). Instanced only by
+	### te_cultural_hegemony_help_popup.
+	type te_cultural_hegemony_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			ch_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_share"
-				}
+		ch_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_share"
 			}
-			ch_note = {
-				text = "je_ch_how_share"
+		}
+		ch_note = {
+			text = "je_ch_how_share"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_programmes"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_programmes"
-				}
+		}
+		ch_note = {
+			text = "je_ch_how_programmes"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_pull"
 			}
-			ch_note = {
-				text = "je_ch_how_programmes"
+		}
+		ch_note = {
+			text = "je_ch_how_pull"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_board"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_pull"
-				}
+		}
+		ch_note = {
+			text = "je_ch_how_board"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_models"
 			}
-			ch_note = {
-				text = "je_ch_how_pull"
+		}
+		ch_note = {
+			text = "je_ch_widget_models_legend"
+		}
+		ch_note = {
+			text = "je_ch_how_models"
+		}
+		### Which model a country that fits several counts as: once here, not
+		### on every legend swatch's hover.
+		ch_note = {
+			text = "ch_model_order_tt"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_benchmark"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_board"
-				}
-			}
-			ch_note = {
-				text = "je_ch_how_board"
-			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_models"
-				}
-			}
-			ch_note = {
-				text = "je_ch_widget_models_legend"
-			}
-			ch_note = {
-				text = "je_ch_how_models"
-			}
-			### Which model a country that fits several counts as: once here, not
-			### on every legend swatch's hover.
-			ch_note = {
-				text = "ch_model_order_tt"
-			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_benchmark"
-				}
-			}
-			ch_note = {
-				text = "je_ch_how_benchmark"
-			}
+		}
+		ch_note = {
+			text = "je_ch_how_benchmark"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_cultural_hegemony_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_cultural_hegemony')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_ch_how_header"
+		}
+		blockoverride "popup_list" {
+			te_cultural_hegemony_help_body = {}
 		}
 	}
 
@@ -2962,6 +2747,89 @@ types cultural_hegemony_widget_types
 
 		te_ch_sec_history = {}
 		te_ch_sec_how = {}
+	}
+
+	### The tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Society
+	### panel's Hegemony tab and the Timeline Extended window's Cultural
+	### Hegemony tab. The same three composers the entry attaches, in its
+	### order, inside te_ch_tab_layout, which a wide mount overrides; then the
+	### frame's Open Journal Entry. The entry's status description and
+	### scripted buttons are not drawn: the overview and the funding row carry
+	### the first, and the programmes section the same ten actions as the
+	### buttons, which stay in the journal as the AI's path.
+	type te_ch_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_cultural_hegemony"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_cultural_hegemony')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_ch_tab_layout" {
+				te_ch_overview_panel = {}
+				te_ch_status_sections = {}
+				te_ch_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_society_ch_open_journal_tt"
+		}
+	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_ch_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The window's wide mount puts it in place of
+	### te_ch_tab_layout; the Society panel and the side panel keep the one
+	### column. test_cultural_hegemony_layout.py holds the columns.
+	type te_ch_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_ch_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ch_sec_board = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_ch_sec_programmes = {}
+				te_ch_sec_breakdown = {}
+				te_ch_sec_models = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			te_ch_reference_sections = {}
+		}
 	}
 }
 

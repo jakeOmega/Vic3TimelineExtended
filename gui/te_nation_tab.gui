@@ -2,8 +2,9 @@
 ### instances te_nation_tab_sections): what the country carries for good, in
 ### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
-### score rows and then its type rows (#1030); Where These Come From and How
-### the Nation Works, collapsed. House style: docs/guides/gui_style_guide.md.
+### score rows and then its type rows (#1030); Where These Come From,
+### collapsed, and How the Nation Works, a link to the Help page
+### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry and no gate: everything reads the player's country
 ### through GetPlayer. The score rows read script values
@@ -735,7 +736,11 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### How the Nation Works: collapsed (te_nation_how_open).
+	### How the Nation Works: a link at the foot of the tab to the Help page
+	### (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its
+	### header alone, which opens te_nation_help_popup (te_popup = help_nation)
+	### instead of expanding; it keeps its name and its place in both layouts.
+	### The tab has no header, so no "?".
 	### ----------------------------------------------------------------------
 	type te_nation_how_panel = flowcontainer {
 		direction = vertical
@@ -744,6 +749,7 @@ types te_nation_widget_types
 		spacing = 4
 
 		section_header_button = {
+			tooltip = "te_help_link_tt"
 			blockoverride "layout" {
 				parentanchor = hcenter
 				size = { 520 38 }
@@ -752,91 +758,111 @@ types te_nation_widget_types
 				text = "te_nation_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_nation_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_nation')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_nation_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		te_nation_panel = {
-			visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads no country at all, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_nation_help_popup.
+	type te_nation_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_tab"
-				}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_tab"
 			}
-			te_nation_note = {
-				text = "te_nation_how_tab"
+		}
+		te_nation_note = {
+			text = "te_nation_how_tab"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_rows"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_rows"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_rows"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_override"
 			}
-			te_nation_note = {
-				text = "te_nation_how_rows"
+		}
+		te_nation_note = {
+			text = "te_nation_how_override"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_jud"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_override"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_jud"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_mandate"
 			}
-			te_nation_note = {
-				text = "te_nation_how_override"
+		}
+		te_nation_note = {
+			text = "te_nation_how_mandate"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_wc"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_jud"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_wc"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_construction"
 			}
-			te_nation_note = {
-				text = "te_nation_how_jud"
+		}
+		te_nation_note = {
+			text = "te_nation_how_construction"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_tech"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_mandate"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_tech"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_lists"
 			}
-			te_nation_note = {
-				text = "te_nation_how_mandate"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_wc"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_wc"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_construction"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_construction"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_tech"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_tech"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_lists"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_lists"
-			}
+		}
+		te_nation_note = {
+			text = "te_nation_how_lists"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_nation_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_nation')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_nation_how_header"
+		}
+		blockoverride "popup_list" {
+			te_nation_help_body = {}
 		}
 	}
 
@@ -855,5 +881,31 @@ types te_nation_widget_types
 		te_nation_section_international = {}
 		te_nation_sources_panel = {}
 		te_nation_how_panel = {}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
+	### read down each and then across, so the order is the tab's: the overview
+	### and governance, the economy and what science and the world give, then
+	### Where These Come From and How the Nation Works. The window mounts it in
+	### place of te_nation_tab_sections, which carries no gate or context; its
+	### spacing of 10 is the columns' own.
+	type te_nation_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_nation_overview_panel = {}
+			te_nation_section_governance = {}
+			te_nation_section_society = {}
+		}
+
+		blockoverride "column_2" {
+			te_nation_section_economy = {}
+			te_nation_section_science_and_space = {}
+			te_nation_section_international = {}
+		}
+
+		blockoverride "column_3" {
+			te_nation_sources_panel = {}
+			te_nation_how_panel = {}
+		}
 	}
 }

@@ -29,7 +29,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
+from gui_test_helpers import _type_body, assert_wide_matches_narrow  # noqa: E402
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
+from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 
 LOC_DIR = ROOT / "localization" / "english"
 VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
@@ -411,7 +413,8 @@ class TabLayoutTest(unittest.TestCase):
         cls.generated = _read(gen.GUI_OUT)
 
     def test_the_window_mounts_the_tab(self):
-        window = _read(ROOT / "gui" / "te_systems_window.gui")
+        # the window's tab mounts are generated (scripts/generators/gen_te_systems_window.py)
+        window = _read(ROOT / "gui" / "te_systems_window_generated.gui")
         self.assertIn("te_nation_tab_sections = {}", window)
         self.assertTrue(self.TAB.read_bytes().startswith(b"\xef\xbb\xbf"))
 
@@ -421,6 +424,20 @@ class TabLayoutTest(unittest.TestCase):
         self.assertEqual(order, ["te_nation_overview_panel"]
                          + [f"te_nation_section_{s}" for s in gen.SECTIONS]
                          + ["te_nation_sources_panel", "te_nation_how_panel"])
+
+    def test_the_full_screen_layout(self):
+        """te_nation_wide_sections, the window's full-screen layout (spec
+        2026-11-02-te-window-wide-mode § 7): the tab's sections in three
+        columns, read down each and then across. The registry mounts it in
+        place of te_nation_tab_sections, which carries no gate or context."""
+        columns = assert_wide_matches_narrow(self, "te_nation_wide_sections", ["te_nation_tab_sections"])
+        self.assertEqual(columns, [
+            ["te_nation_overview_panel", "te_nation_section_governance", "te_nation_section_society"],
+            ["te_nation_section_economy", "te_nation_section_science_and_space", "te_nation_section_international"],
+            ["te_nation_sources_panel", "te_nation_how_panel"]])
+        tab = next(t for t in window_gen.TABS if t.key == "nation")
+        self.assertEqual((tab.layout, tab.wide), (None, "te_nation_wide_sections"))
+        self.assertNotRegex(_type_body(self.gui, "te_nation_tab_sections"), r"(?m)^\s*(visible|datacontext) =")
 
     def _type(self, name):
         body = self.gui[self.gui.index(f"type {name} = "):]

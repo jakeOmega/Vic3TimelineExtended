@@ -28,7 +28,8 @@
 ###     Our Monuments (open): one row per other monument, from the country's
 ###     gm_states list (rebuilt by every gm_country_refresh).
 ###   widget_je_gm_reference  custom_widget_container_3
-###     How Grand Monuments Work (collapsed): every explanation.
+###     How Grand Monuments Work: a link to the Help page, which holds every
+###     explanation (te_grand_monuments_help_popup, in gui/te_popups.gui).
 ### The sections are types composed by te_gm_status_sections and
 ### te_gm_reference_sections, so a future tab can reuse them.
 ###
@@ -3203,9 +3204,12 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### "How Grand Monuments Work": every explanation, collapsed by default,
-	### one heading per topic. The live sections above say what is happening;
-	### this says how it works.
+	### "How Grand Monuments Work": a link at the foot of the panel to the Help
+	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_grand_monuments_help_popup
+	### (te_popup = help_grand_monuments) instead of expanding; it keeps its
+	### name and its place in the composer. The "?" in the tab's header opens
+	### the same page.
 	type te_gm_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3213,126 +3217,147 @@ types grand_monuments_widget_types
 		spacing = 4
 
 		gm_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "gm_je_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('gm_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('gm_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('gm_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		gm_panel = {
-			visible = "[GetVariableSystem.Exists('gm_how_open')]"
+	### The Help page: every explanation, one heading per topic. The live
+	### sections say what is happening; this says how it works. It reads
+	### nothing live, so it opens from any host (test_te_help_pages.py).
+	### Instanced only by te_grand_monuments_help_popup.
+	type te_grand_monuments_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			gm_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_grandeur"
-				}
+		gm_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_grandeur"
 			}
-			gm_note = {
-				text = "gm_je_how_grandeur"
+		}
+		gm_note = {
+			text = "gm_je_how_grandeur"
+		}
+		gm_note = {
+			text = "gm_je_how_grandeur_age"
+		}
+		gm_note = {
+			text = "gm_je_how_grandeur_national"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_counts"
 			}
-			gm_note = {
-				text = "gm_je_how_grandeur_age"
+		}
+		gm_note = {
+			text = "gm_je_how_counts"
+		}
+		gm_note = {
+			text = "gm_je_how_counts_other"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_signatures"
 			}
-			gm_note = {
-				text = "gm_je_how_grandeur_national"
+		}
+		gm_note = {
+			text = "gm_je_how_signatures"
+		}
+		gm_note = {
+			text = "gm_je_how_signatures_specials"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_contested"
 			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_counts"
-				}
+		}
+		gm_note = {
+			text = "gm_je_how_contested"
+		}
+		gm_note = {
+			text = "gm_je_how_choices"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_hard_times"
 			}
-			gm_note = {
-				text = "gm_je_how_counts"
+		}
+		gm_note = {
+			text = "gm_je_how_hard_times"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_commissions"
 			}
-			gm_note = {
-				text = "gm_je_how_counts_other"
+		}
+		gm_note = {
+			text = "gm_je_how_commissions"
+		}
+		gm_note = {
+			text = "gm_je_how_commissions_rewards"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_names"
 			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_signatures"
-				}
+		}
+		gm_note = {
+			text = "gm_je_how_names"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_policy"
 			}
-			gm_note = {
-				text = "gm_je_how_signatures"
+		}
+		gm_note = {
+			text = "gm_je_how_policy"
+		}
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_trophies"
 			}
-			gm_note = {
-				text = "gm_je_how_signatures_specials"
+		}
+		gm_note = {
+			text = "gm_je_how_trophies"
+		}
+		gm_note = {
+			text = "gm_je_how_trophies_home"
+		}
+		# Archaeological Expeditions' rules (GM-14), out of its live hover.
+		gm_subheader = {
+			blockoverride "subheader_text" {
+				text = "gm_je_how_sub_archaeology"
 			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_contested"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_contested"
-			}
-			gm_note = {
-				text = "gm_je_how_choices"
-			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_hard_times"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_hard_times"
-			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_commissions"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_commissions"
-			}
-			gm_note = {
-				text = "gm_je_how_commissions_rewards"
-			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_names"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_names"
-			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_policy"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_policy"
-			}
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_trophies"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_trophies"
-			}
-			gm_note = {
-				text = "gm_je_how_trophies_home"
-			}
-			# Archaeological Expeditions' rules (GM-14), out of its live hover.
-			gm_subheader = {
-				blockoverride "subheader_text" {
-					text = "gm_je_how_sub_archaeology"
-				}
-			}
-			gm_note = {
-				text = "gm_je_how_archaeology"
-			}
+		}
+		gm_note = {
+			text = "gm_je_how_archaeology"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_grand_monuments_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_grand_monuments')]"
+		}
+		blockoverride "popup_title" {
+			text = "gm_je_how_header"
+		}
+		blockoverride "popup_list" {
+			te_grand_monuments_help_body = {}
 		}
 	}
 
@@ -3365,7 +3390,7 @@ types grand_monuments_widget_types
 		te_gm_sec_abroad = {}
 	}
 
-	### How it all works, collapsed.
+	### How it all works: the link to the Help page.
 	type te_gm_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3374,6 +3399,98 @@ types grand_monuments_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_gm_sec_how = {}
+	}
+
+	### The Grand Monuments tab of the Timeline Extended window
+	### (te_system_tab_frame, gui/te_system_tab_widgets.gui; the window mounts it
+	### from gui/te_systems_window_generated.gui). The three composers the
+	### entry's roots wrap, in its order, then Open Journal Entry. Nothing else
+	### to draw: the entry has no status line, no bar and no scripted buttons.
+	### The header is the tab's own name, as every other tab's is; the entry
+	### keeps its short "Monuments" in the journal (2026-10-27 audit, WIN-4).
+	### Its "?" opens the Help page (te_help_button).
+	### te_gm_tab_layout is the block a wide mount overrides.
+	type te_gm_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_grand_monuments"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_grand_monuments')]"
+		}
+		blockoverride "tab_content" {
+			block "te_gm_tab_layout" {
+				te_gm_overview_panel = {}
+				te_gm_status_sections = {}
+				te_gm_reference_sections = {}
+			}
+		}
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_window_grand_monuments_open_journal_tt"
+		}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_gm_tab_layout's override in the window's full-screen frame:
+	### the three composers' sections in three columns of a fixed 520, read
+	### down each and then across. The overview first, outside any composer as on the tab;
+	### each column's run of te_gm_status_sections on a wrapper with that
+	### composer's gate and spacing; How Grand Monuments Work in its composer.
+	type te_gm_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_gm_overview_panel = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_commission = {}
+				te_gm_sec_decisions = {}
+				te_gm_sec_awaiting = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_archaeology = {}
+				te_gm_sec_national = {}
+				te_gm_sec_monuments = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_gm_sec_trophies = {}
+				te_gm_sec_abroad = {}
+			}
+
+			te_gm_reference_sections = {}
+		}
 	}
 }
 

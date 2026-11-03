@@ -11,6 +11,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "cultural_hegemony_widget.gui")
@@ -27,6 +29,10 @@ ICONS_DOC = os.path.join(REPO, "docs", "systems", "cultural_hegemony_gui_icons.m
 STATUS = ["te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"]   # board first (owner, 2026-09-29)
 REFERENCE = ["te_ch_sec_history", "te_ch_sec_how"]
 COMPOSERS = ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_ch_overview_panel", "te_ch_sec_board"],
+                ["te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"],
+                ["te_ch_sec_history", "te_ch_sec_how"]]
 ROOTS = {   # named root -> (container, composer)
     "widget_je_ch_overview": ("custom_widget_container_1", "te_ch_overview_panel"),
     "widget_je_ch_status": ("custom_widget_container_2", "te_ch_status_sections"),
@@ -124,16 +130,19 @@ class OrderTest(unittest.TestCase):
         self.assertEqual(je.count('gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"'), 3)
 
     def test_the_tab_composes_the_same_sections_then_the_link(self):
+        """The tab's body (te_ch_tab_body), which the Society panel's tab and
+        the Timeline Extended window's both mount (test_te_system_tab_bodies.py
+        checks the mounts and the frame's blocks: the gate on a parent of the
+        GetPlayerJournalEntry datacontext, the link after every section)."""
         tab = _read(TAB)
         start = tab.index('name = "te_society_ch_tab"')
-        body = tab[start:tab.index("### END MOD ###", start)]
+        self.assertIn("te_ch_tab_body = {}", tab[start:tab.index("### END MOD ###", start)])
+        body = _type_body(_read(WIDGET), "te_ch_tab_body")
         found = re.findall(r"^\t+(te_ch_\w+) = \{\}", body, re.M)
         self.assertEqual(found, COMPOSERS)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_ch_reference_sections"))
-        # The gate sits on a parent of the widget carrying the GetPlayerJournalEntry datacontext.
-        gate = body.index("GetScriptedGui('te_society_ch_tab_sgui').IsShown")
-        self.assertLess(gate, body.index("GetPlayerJournalEntry('je_cultural_hegemony')"))
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
+        self.assertIn("GetScriptedGui('te_society_ch_tab_sgui').IsShown", body)
+        self.assertIn("GetPlayerJournalEntry('je_cultural_hegemony')", body)
 
     def test_the_greyed_tab_keeps_its_unlock_checklist(self):
         tab = _read(TAB)
@@ -157,7 +166,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"ch_programmes_closed", "ch_breakdown_closed", "ch_board_closed",
-                                 "ch_models_closed", "ch_hist_closed", "ch_how_open"})
+                                 "ch_models_closed", "ch_hist_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -171,9 +180,21 @@ class FlagTest(unittest.TestCase):
     def test_each_section_owns_its_flag(self):
         for sec, flag in (("te_ch_sec_programmes", "ch_programmes_closed"), ("te_ch_sec_breakdown", "ch_breakdown_closed"),
                           ("te_ch_sec_board", "ch_board_closed"), ("te_ch_sec_models", "ch_models_closed"),
-                          ("te_ch_sec_history", "ch_hist_closed"), ("te_ch_sec_how", "ch_how_open")):
+                          ("te_ch_sec_history", "ch_hist_closed")):
             with self.subTest(section=sec):
                 self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec))
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_cultural_hegemony_help_popup, on te_popup = help_cultural_hegemony); its collapse flag retired with its
+        content (test_te_help_pages.py)."""
+        how = _type_body(self.text, "te_ch_sec_how")
+        self.assertIn('text = "je_ch_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
+        self.assertNotIn("ch_how_open", self.text)
+        self.assertNotIn("ch_note", how)
 
     def test_no_old_flag_survives(self):
         for path in (WIDGET, TAB):
@@ -187,7 +208,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.gui = _read(WIDGET)
 
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(self.gui, "te_ch_sec_how")
+        how = _type_body(self.gui, "te_cultural_hegemony_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         # It opens on a heading, not an empty line.
@@ -996,6 +1017,32 @@ class ProgramsCellTest(unittest.TestCase):
             self.assertIn(f"$je_ch_widget_prog_{p}_status$", listing)
         # Below the leaders: the owner's board-first order and leader flags stand.
         self.assertLess(ov.index("ch_leader_seat_3"), ov.index("te_banking_ov_cell = {"))
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_ch_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_ch_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_ch_wide_sections",
+                                             layout=("te_ch_tab_body", "te_ch_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["cultural_hegemony"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_ch_tab_body", "te_ch_tab_layout", "te_ch_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(WIDGET)), "te_ch_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
 
 if __name__ == "__main__":
     unittest.main()
