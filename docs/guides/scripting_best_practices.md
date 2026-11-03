@@ -4952,6 +4952,33 @@ on the strong side, which let a pegger accumulate leverage over its own anchor; 
 placement — "the anchor is the target, so it goes in `target_modifier`" is the reasoning that
 produced the bug.
 
+## A treaty article builds no Involvement unless it declares it
+
+Interest tiers come from Involvement, and treaties with local countries are one of its main
+sources, but only for an article that says so:
+
+```
+max_target_involvement = 1000
+target_involvement_applies_to = target_country   # source_country | target_country | mutual
+```
+
+Leave both out and the article builds none. Nothing reports it, and the tooltip just leaves the
+line out. None of the mod's 49 articles had them until 2026-11-03. The second field names the
+**local** side: the *other* party gains up to the figure in every strategic region where the
+named side is local, scaled by that side's locality (floor 10%). Every treaty and pact
+together are capped at 5,000 a region. Vanilla only reads sensibly this way: investment rights
+name the host, so the investor gains, and a guarantee names the guaranteed, so the guarantor
+gains. It is also the side that carries the leverage line (six of six vanilla articles with
+both), so on a directed article the leverage audit's reasoning fixes it: the leveraged side is
+the local one. A mutual article takes `mutual`. Without an explicit side the engine defaults
+to `source_country`. One-off transfers and imposed restrictions build none in vanilla (state,
+money and ship transfers; law commitment, no tariffs), and the mod's follow suit with a
+reviewed reason. `treaty_leverage_side_audit` checks all of it, tagged
+`# REVIEWED YYYY-MM-DD (involvement): why` (`--strict` in CI). Pacts (`diplomatic_actions`
+with a `pact = {}`) carry the same two fields but appear to read the side the other way round
+(a puppet pact's `source_country` 8,000 only makes sense with the overlord gaining), so don't
+carry this rule over to them unverified.
+
 ## An "at least tier N" trigger must list every higher tier — extending a ladder breaks the short ones
 
 Script often reads a tiered entity's level with an OR-list, because the engine has no

@@ -22,6 +22,22 @@ is paid for by the country making it, so Seize Company, Disband Company, Return
 Cultural Property, Surrender a Monument and the Lease Seabed Claims articles
 cost the conceding country no influence.
 
+Most articles that stay in force also build Involvement, as the base game's
+alliances, investment rights and embassies do. The side that gains a presence
+through the article (the donor of aid, the bloc leader extending its influence,
+the anchor of a currency peg, the power protecting a minority) gains up to a
+fixed amount of Involvement in every strategic region where the other country is
+local, scaled by how much of that region the other country holds. The mutual
+articles build it for both sides. Most give up to 1,000. Extend Influence,
+Request Influence, both currency pegs, Debt Receivership and Nuclear Basing give
+up to 2,000, and the two excavation articles 500. All treaties and pacts
+together add at most 5,000 in a region, the threshold of Pervasive. Articles
+that act once (Seize Company, Return Cultural Property, Population Transfer and
+the like), articles that only restrict the conceding country (Demilitarized
+Zone, Forced Disarmament, Nuclear Disarmament and the like), the seabed leases
+and Reduce Subject Liberty build none. The article's tooltip in the draft gives
+its figure.
+
 ### Choosing a company or state for an article
 
 Nine articles ask you to name something. Seize Company and Disband Company take a

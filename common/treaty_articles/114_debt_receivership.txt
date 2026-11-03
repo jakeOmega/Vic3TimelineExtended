@@ -44,6 +44,8 @@ debt_receivership = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/debt_receivership.dds"
 	kind = directed
 	cost = 150
+	max_target_involvement = 2000
+	target_involvement_applies_to = source_country
 
 	flags = {
 		can_be_enforced

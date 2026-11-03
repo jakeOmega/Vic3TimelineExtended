@@ -40,3 +40,24 @@ Key gotchas:
   - Diplomatic/Aid: `education_aid`, `healthcare_aid`, `request_influence`, `extend_influence`, `crisis_resolution`
 - **Loc variables:** `$SIGNING_LOCATION$`, `[FIRST_COUNTRY.GetAdjectiveNoFormatting]`, `[SECOND_COUNTRY.GetAdjectiveNoFormatting]`, `[FIRST_COUNTRY.GetNameNoFormatting]`.
 - **Files:** `common/dynamic_treaty_names/te_dynamic_treaty_names.txt`, localization in `te_miscellaneous_l_english.yml`.
+
+## Involvement
+
+Every mod treaty article either builds Involvement, the score behind a country's interest tier in a strategic region, or carries a reviewed reason it builds none (2026-11-03). Before then none did.
+
+- **Fields:** `max_target_involvement = N` and `target_involvement_applies_to`, after `cost` / `relations_*`. The side names the **local** party; the other gains up to N in every strategic region where it is local, scaled by its locality (floor 10%, `INTEREST_MIN_INVOLVEMENT_RATIO`). All treaties and pacts together are capped at 5,000 a region (`INTEREST_TREATY_PACT_INVOLVEMENT_CAP`), so no stack of aid articles takes a donor past Pervasive on treaties alone.
+- **Side rule:** a directed article names the side its leverage line sits on (the leveraged side is local), or with no leverage line the side that does not pay maintenance. A mutual article takes `mutual`.
+- **Values** (each the nearest vanilla analogue's):
+
+| Max | Local side | Articles | Analogue |
+|---|---|---|---|
+| 2,000 | target | `extend_influence`, `nuclear_basing` | bloc embassy; between military access and treaty port |
+| 2,000 | source | `request_influence`, `currency_peg`, `imposed_currency_peg`, `debt_receivership` | bloc embassy; investment rights |
+| 1,000 | target | `crisis_resolution`, `education_aid`, `healthcare_aid`, `security_aid`, `development_assistance`, `science_aid`, `science_aid_2`, `nuclear_program_aid`, `nuclear_security_assistance`, `nuclear_guarantee`, `swap_line`, `lender_of_last_resort` | military assistance; guarantee |
+| 1,000 | source | `corporate_concessions`, `free_port_concession`, `minority_protection`, `religious_mission_rights` | monopoly; trade privilege |
+| 1,000 | mutual | `cultural_exchange_program`, `intelligence_sharing_pact`, `joint_military_exercises`, `grid_interconnection_agreement` | transit rights; military assistance |
+| 500 | source | `archaeological_concession`, `excavation_permit` | vanilla's 500 tier |
+
+- **None (21), each tagged `# REVIEWED 2026-11-03 (involvement): why` on its opening line:** one-off concessions (`money_transfer`, `seize_company`, `disband_company`, `return_cultural_property`, `surrender_monument`, `te_cede_colony`, `population_transfer`), as vanilla's transfers build none; imposed restrictions (`enforce_privatization`, `demilitarized_zone`, `forced_disarmament`, `enforce_emissions_reduction`, `nuclear_disarmament`, `nuclear_program_pause`, `join_united_nations`, `nuclear_arms_limitation`), as vanilla's law commitment and no-tariffs articles build none; `suppress_subject_liberty`, whose overlord gains through the subject relation; and the five `te_seabed_lease_*`, whose claims lie in an ocean basin rather than the lessor's regions.
+- **Audit:** `treaty_leverage_side_audit` flags a missing maximum or side, a mutual/directed mismatch, the wrong side, a figure outside 1 to 5,000 and a stale tag (`--strict` in CI).
+- **Unverified in game:** the side reading. If a tooltip shows the wrong gainer, flip every directed side; play-test list `docs/testing/treaty-involvement-playtest.md`.
