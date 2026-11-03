@@ -277,6 +277,8 @@ class HowItWorksTest(unittest.TestCase):
             with self.subTest(section=section):
                 self.assertIn(f'text = "{title}"', body)
                 self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_global_warming')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
                 self.assertNotIn("gw_note", body)
         self.assertEqual(_type_body(gui, "te_gw_sec_transition").count("te_gw_transition_how_link = {}"), 1)
         for flag in ("gw_how_open", "rt_how_open"):

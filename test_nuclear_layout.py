@@ -270,6 +270,8 @@ class FlagTest(unittest.TestCase):
         how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
         self.assertIn('text = "je_nuclear_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
         self.assertNotIn("nuclear_how_open", ALL_GUI)
         self.assertNotIn("nd_note", how)
 

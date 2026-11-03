@@ -331,6 +331,8 @@ class FlagTest(unittest.TestCase):
             with self.subTest(section=section):
                 self.assertIn(f'text = "{title}"', body)
                 self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
                 self.assertNotIn("te_sr_note", body)
                 self.assertNotIn("Toggle", body)
         for flag in ("sr_panel_how_open", "sr_panel_how_colonies_open"):

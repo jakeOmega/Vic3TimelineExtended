@@ -177,6 +177,8 @@ class SeabedPanelTest(unittest.TestCase):
         how = _type_body(self.gui, "te_seabed_how_panel")
         self.assertIn('text = "te_seabed_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_seabed')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
         self.assertNotIn("te_seabed_how_open", self.gui)
         self.assertNotIn("te_seabed_note", how)
         self.assertIn('text = "te_seabed_how_sub_pools"', _type_body(self.gui, "te_seabed_help_body"))

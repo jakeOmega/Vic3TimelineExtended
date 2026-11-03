@@ -288,6 +288,8 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(_toggles(body), [])
                 self.assertIn('text = "te_demog_sec_how"', body)
                 self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_demographics')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
                 self.assertNotIn("te_demog_note", body)
         for flag in ("te_demog_how_open", "te_demog_st_how_open"):
             self.assertNotIn(flag, self.widgets)

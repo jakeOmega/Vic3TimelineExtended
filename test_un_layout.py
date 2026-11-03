@@ -164,6 +164,8 @@ class HowItWorksTest(unittest.TestCase):
         link = _type_body(_read(LAYOUT), "te_un_sec_how")
         self.assertIn('text = "je_un_how_header"', link)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_united_nations')]\"", link)
+        self.assertRegex(link, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(link, r'blockoverride "onclick_show')
         self.assertNotIn("un_chamber_note", link)
         self.assertNotIn("un_how_open", _read(LAYOUT))
 

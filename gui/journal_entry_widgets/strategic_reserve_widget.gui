@@ -2335,10 +2335,11 @@ types strategic_reserve_widget_types
 			blockoverride "onclick" {
 				onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = no
-			}
-			blockoverride "onclick_showless" {
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
 				visible = no
 			}
 		}

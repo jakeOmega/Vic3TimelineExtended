@@ -213,6 +213,8 @@ class FlagTest(unittest.TestCase):
         how = _type_body(self.text, "te_covert_sec_how")
         self.assertIn('text = "je_iw_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
         self.assertNotIn("Toggle", how)
         self.assertNotIn("covert_how_open", self.text)
         self.assertNotIn("covert_note", how)

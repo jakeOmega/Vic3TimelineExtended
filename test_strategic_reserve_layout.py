@@ -165,6 +165,8 @@ class FlagTest(unittest.TestCase):
         how = _strip_comments(_type_body(self.text, "te_st_res_sec_how"))
         self.assertIn('text = "je_strategic_reserve_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
         self.assertNotIn("st_res_how_open", self.text)
         self.assertNotIn("st_res_note", how)
 

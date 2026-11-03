@@ -1060,6 +1060,8 @@ class FlagTest(unittest.TestCase):
             with self.subTest(section=section):
                 self.assertIn(f'text = "{title}"', body)
                 self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_tax_code')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
                 self.assertNotIn("te_tax_note", body)
         self.assertIn(f'visible = "[{LIGHT_SHOWN}]"', type_body(gui(LIGHT_GUI), "te_tax_light_how_section").split("\n\n")[0])
         page = type_body(gui(LAYOUT), "te_tax_code_help_body")

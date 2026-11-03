@@ -666,6 +666,8 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         self.assertEqual((props["spacing"], props["ignoreinvisible"]), ("8", "yes"))
         self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button"])
         self.assertIn("GetVariableSystem.Set('te_popup', 'help_budget_breakdown')", how[-1][2])
+        self.assertRegex(how[-1][2], r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how[-1][2], r'blockoverride "onclick_show')
         self.assertNotIn("te_budget_chart_how_open", gui)
         self.assertIn('text = "te_budget_chart_how_sub_admin"', _type_body(gui, "te_budget_breakdown_help_body"))
 
