@@ -13,6 +13,15 @@
 ### STATE. te_popup is a client-side GetVariableSystem value (never saved): the
 ### open popup, one at a time. Set by the button that opens a popup, cleared by
 ### its close button, Escape and a click outside. Values:
+### --- History chart viewers (charts-help-national-info plan, PR C2) ------
+###   chart_<id>         a history chart alone at full size, te_chart_<id>_popup:
+###                      the round button beside the panel chart's title opens
+###                      it. The 33 popups, the range buttons they share with
+###                      the panels and te_chart_popups, which holds them, are
+###                      generated (gen_te_history_charts.py, into
+###                      gui/te_history_charts_generated.gui), each under the
+###                      gate and datacontext below; ids are its CHARTS'.
+### --- end history chart viewers ------------------------------------------
 ###   sr_target          Solar System Colonization's colony target
 ###                      (te_sr_target_popup, space_race_widget.gui)
 ###   sr_dest_<n>        fleet slot n's destination (te_sr_dest_popup,
@@ -34,6 +43,10 @@ widget = {
 	size = { 100% 100% }
 	layer = popups
 	visible = "[And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), GetVariableSystem.Exists('te_popup') )]"
+
+	### --- History chart viewers (charts-help-national-info plan, PR C2) --
+	te_chart_popups = {}
+	### --- end history chart viewers --------------------------------------
 
 	te_sr_target_popup = {}
 	te_sr_dest_popup = {}

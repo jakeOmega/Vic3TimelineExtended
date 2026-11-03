@@ -327,7 +327,7 @@ def substitute(text: str, chart: Chart, size: Size) -> str:
 
 
 def _override(name: str, lines: list[str]) -> list[str]:
-    return [f'blockoverride "{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
+    return [f'blockoverride "{name}" {{'] + [f"\t{ln}" if ln else "" for ln in lines] + ["}"]
 
 
 def plot_layouts(dims: Dims, rng: Range) -> list[str]:
@@ -401,6 +401,158 @@ def wrapper(chart: Chart, size: Size) -> list[str]:
             + [f"\t{ln}" if ln else "" for ln in body] + ["}"])
 
 
+# --- the viewer (charts PR C2) ---------------------------------------------------
+#
+# Each chart's full-screen viewer (spec § 4.2) is a popup in te_popups
+# (gui/te_popups.gui): te_chart_<id>_popup, deriving from the widget library's
+# shell, te_ui_popup, shown on te_popup = chart_<id>, which the open button
+# beside the panel chart's title sets. All of them sit in te_chart_popups, which
+# the root instances once. Each holds its range buttons, the large chart and the
+# key its section draws, in that order.
+#
+# WHOSE CHART. The popup reads the player: a GetPlayer datacontext, the Country
+# the Demographics charts read, carries the chart's scope-free gate (the tab's
+# scripted GUI, on a parent of the entry's datacontext: gotcha #29), and under
+# it a GetPlayerJournalEntry('<entry>') datacontext supplies the JournalEntry
+# the other charts read. With the gate shut, the entry gone under an open
+# viewer, one line says so (te_chart_gone), as the Space Race's popups do.
+#
+# THE GATE AND NOTHING ELSE. A panel also hides a chart, or its whole section,
+# on conditions of its own, and the viewer leaves those out:
+#   - Banking's section waits for the cycle to start (banking_dash_cycle_running)
+#     and the Nuclear Taboo's for the world's first warhead
+#     (nd_taboo_exists_sgui); the Strategic Reserve's row for its good's unlock
+#     (st_res_adjust_<good>_sgui); Demographics' tab for the first census
+#     (te_pops_demog_tab_unlock_sgui's is_valid). Each only ever turns on, and
+#     the open button lives on the chart, so no viewer opens before it does.
+#   - Chart.shown, a chart's own visible (four Banking charts): inflation's and
+#     the exchange rate's are a game rule, fixed for the game; the two policy-
+#     rate charts take turns on the Digital Currency law. A law that changes
+#     under an open viewer leaves its chart drawing, on the axis it was opened
+#     with, until the player opens the other from the panel.
+# test_te_popups.py's ChartPopupTest holds every popup to its gate alone.
+
+# The key under the large chart: the type the section itself shows under its
+# range buttons, so the two never drift (by system), with the height the popup
+# allows it.
+KEYS = {
+    "banking": ("te_banking_hist_marker_key", 44),          # two lines of fontsize_medium
+    "demographics": ("te_demog_hist_pip_legend", 26),       # one line
+    "cultural_hegemony": ("te_ch_hist_model_key", 184),     # eight rows of ch_fontsize_row (17)
+}
+
+# The popup's header: the chart's own title, but for the Strategic Reserve's,
+# whose "Fill by Month" sits in its good's row on the panel; the viewer's header
+# names the good ("Strategic Reserve: Grain").
+POPUP_TITLES = {f"st_res_{g}": f"te_chart_st_res_{g}_title" for g in ST_RES_GOODS}
+
+# The popup's size (te_ui_popup's popup_size): the large frame plus the shell's
+# frame around it, and every row's height, so no chart scrolls.
+POPUP_MARGIN_W = 2 * 35 + 2 * 10 + 8     # Window_Margins' sides, the list's margin, a vertical
+                                         # scrollbar (NGUI SCROLLBAR_WIDTH)
+POPUP_MARGIN_H = 56 + 18 + 20 + 2 * 6    # header_pattern, Window_Margins' top and bottom, the list's margin
+RANGE_ROW_H = 26 + 2 * 4                 # a te_history_range_button, the row's margin
+CHART_TEXT_H = 2 * 4 + 28 + 2 * 18 + 2 * 2   # the chart's margin, its title, two legend lines, their spacing
+POPUP_SPACING = 4                        # between the popup's rows
+SCREEN = (1600, 900)                     # the smallest screen it is for, at UI scale 1 (spec § 4.2)
+RANGE_BUTTON_W = 72                      # te_history_range_button's own width
+
+
+def popup_name(chart: Chart) -> str:
+    return f"te_chart_{chart.id}_popup"
+
+
+def range_row_name(var: str) -> str:
+    return f"te_chart_range_row_{var}"
+
+
+def popup_title(chart: Chart) -> str:
+    """The popup header's loc key: the chart's title, or POPUP_TITLES'."""
+    if chart.id in POPUP_TITLES:
+        return POPUP_TITLES[chart.id]
+    m = re.search(r'blockoverride "chart_title" \{\s*text = "(\w+)"', fragment(chart))
+    if not m:
+        raise ValueError(f"{chart.id}: no chart_title in its fragment")
+    return m.group(1)
+
+
+def _up(n: int, step: int) -> int:
+    return -(-n // step) * step
+
+
+def popup_size(chart: Chart) -> tuple[int, int]:
+    """The popup's width and height: the large frame and the rows around it,
+    rounded up to 10 and 20 px."""
+    frame = LARGE[chart.kind].frame
+    key = KEYS.get(chart.system)
+    height = (POPUP_MARGIN_H + RANGE_ROW_H + POPUP_SPACING + CHART_TEXT_H + frame[1]
+              + (POPUP_SPACING + key[1] if key else 0))
+    return _up(frame[0] + POPUP_MARGIN_W, 10), _up(height, 20)
+
+
+def gate_test(chart: Chart) -> str:
+    """The chart's scope-free gate: its tab's scripted GUI on the player."""
+    return f"GetScriptedGui('{chart.gate}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+
+
+def _has(var: str, value: str) -> str:
+    return f"GetVariableSystem.HasValue( '{var}', '{value}' )"
+
+
+def range_row(rng: Range) -> list[str]:
+    """The three range buttons the sections draw for the variable, so the
+    viewer and the panel share one range: each greyed while its range is
+    shown, the full range while neither shorter one is set."""
+    short, middle, full = rng.values
+    enabled = {short: f"Not( {_has(rng.var, short)} )", middle: f"Not( {_has(rng.var, middle)} )",
+               full: f"Or( {_has(rng.var, short)}, {_has(rng.var, middle)} )"}
+    out = [f"type {range_row_name(rng.var)} = flowcontainer {{", "\tdirection = horizontal", "\tignoreinvisible = yes",
+           "\tparentanchor = hcenter", "\tspacing = 4", "\tmargin = { 4 4 }"]
+    for value, label in zip(rng.values, rng.labels):
+        out += ["", "\tte_history_range_button = {"]
+        if rng.button_w != RANGE_BUTTON_W:
+            out.append(f"\t\tsize = {{ {rng.button_w} 26 }}")
+        out += [f"\t\t{ln}" for ln in _override("range_text", [f'text = "{label}"'])]
+        out += [f"\t\t{ln}" for ln in _override("range_enabled", [f'enabled = "[{enabled[value]}]"'])]
+        out += [f"\t\t{ln}" for ln in _override("range_onclick",
+                                                 [f"onclick = \"[GetVariableSystem.Set( '{rng.var}', '{value}' )]\""])]
+        out.append("\t}")
+    return out + ["}"]
+
+
+def _container(lines: list[str], head: list[str]) -> list[str]:
+    return (["flowcontainer = {"] + [f"\t{ln}" for ln in head]
+            + ["\tdirection = vertical", "\tignoreinvisible = yes", "\tspacing = 4", ""]
+            + [f"\t{ln}" if ln else "" for ln in lines] + ["}"])
+
+
+def popup(chart: Chart) -> list[str]:
+    """te_chart_<id>_popup: the chart alone, at the viewer's size."""
+    width, height = popup_size(chart)
+    content = [f"{range_row_name(chart.range)} = {{}}", f"{wrapper_name(chart, LARGE)} = {{}}"]
+    if chart.system in KEYS:
+        content.append(f"{KEYS[chart.system][0]} = {{}}")
+    if chart.entry is not None:
+        content = _container(content, [f"datacontext = \"[GetPlayerJournalEntry('{chart.entry}')]\""])
+    shown = _container(content, ['datacontext = "[GetPlayer]"', f'visible = "[{gate_test(chart)}]"'])
+    gone = ["textbox = {", f'\tvisible = "[Not( {gate_test(chart)} )]"', "\tparentanchor = hcenter",
+            "\tautoresize = yes", "\tmultiline = yes", f"\tmax_width = {LARGE[chart.kind].text_w}",
+            "\talign = hcenter|nobaseline", "\tusing = fontsize_large", '\ttext = "te_chart_gone"', "}"]
+    out = [f"type {popup_name(chart)} = te_ui_popup {{"]
+    out += [f"\t{ln}" for ln in _override(
+        "popup_visible", [f"visible = \"[GetVariableSystem.HasValue('te_popup', '{popup_key(chart)}')]\""])]
+    out += [f"\t{ln}" for ln in _override("popup_title", [f'text = "{popup_title(chart)}"'])]
+    out += [f"\t{ln}" for ln in _override("popup_size", [f"size = {{ {width} {height} }}"])]
+    out += [f"\t{ln}" if ln else "" for ln in _override("popup_list", shown + gone)]
+    return out + ["}"]
+
+
+def popups() -> list[str]:
+    """te_chart_popups: every chart's popup, for te_popups to instance once."""
+    return (["type te_chart_popups = widget {", "\tsize = { 100% 100% }", ""]
+            + [f"\t{popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
+
+
 # --- the file -------------------------------------------------------------------
 
 HEADER = [
@@ -412,6 +564,9 @@ HEADER = [
     "### te_history_chart instance inline (gotcha #37). The large one leaves out the chart's",
     "### comments, which describe the panel's size. How to add a chart: the generator's",
     "### docstring and docs/systems/mod_systems/history_charts.md.",
+    "### Then the viewer (charts PR C2): each range variable's buttons (te_chart_range_row_<var>),",
+    "### each chart's popup (te_chart_<id>_popup, on te_popup = chart_<id>) and te_chart_popups,",
+    "### which gui/te_popups.gui instances.",
     "",
 ]
 
@@ -434,6 +589,12 @@ def _validate() -> None:
         unused = set(fragments(s)) - used[s]
         if unused:
             raise ValueError(f"{s}.gui.in: fragments no chart uses: {sorted(unused)}")
+    if set(KEYS) - set(SYSTEMS) or set(POPUP_TITLES) - set(BY_ID):
+        raise ValueError("KEYS names a system, and POPUP_TITLES a chart, that CHARTS doesn't")
+    for c in CHARTS:
+        width, height = popup_size(c)
+        if width > SCREEN[0] or height > SCREEN[1]:
+            raise ValueError(f"{c.id}: a {width} x {height} popup doesn't fit a {SCREEN[0]} x {SCREEN[1]} screen")
 
 
 def render() -> str:
@@ -446,6 +607,18 @@ def render() -> str:
             if size is SMALL:
                 lines.append(f"\t### {chart.id}: {chart.system}, {chart.kind}")
             lines += [f"\t{ln}" if ln else "" for ln in wrapper(chart, size)]
+    lines += ["", "\t### The viewer: the range buttons, a range variable a row"]
+    for i, rng in enumerate(RANGES.values()):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in range_row(rng)]
+    lines += ["", "\t### The viewer: each chart's popup"]
+    for i, chart in enumerate(CHARTS):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in popup(chart)]
+    lines += ["", "\t### The viewer: every popup, for te_popups (gui/te_popups.gui)"]
+    lines += [f"\t{ln}" if ln else "" for ln in popups()]
     lines.append("}")
     return "\n".join(lines) + "\n"
 
