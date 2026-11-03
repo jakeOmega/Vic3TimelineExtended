@@ -277,10 +277,18 @@ Orbit gathers what anti-satellite strikes and debris mean for you now:
 | Row | Shows |
 |---|---|
 | Orbital Debris | The index and its tier, as in a journal entry's Mission Control, which on the tab leaves it to this row (see [Orbital debris](#orbital-debris)). |
-| Our Satellites | Intact, Disrupted or None in Orbit. Hover it for the months a disruption has left, or how long until anyone can strike you again. |
+| Satellites | Intact, Disrupted or None in Orbit. Hover it for the months a disruption has left, or how long until anyone can strike you again. |
 | Anti-Satellite Strikes So Far | The strikes since the game began. Hover it for who struck whom last, and when. |
 | Anti-Satellite Moratorium | Not Adopted, Bound or Not Bound (see [The anti-satellite moratorium](10-united-nations.md#the-anti-satellite-moratorium)). |
 | Our Anti-Satellite Strike | Ready once you have Guided Missiles and a Space Program. Hover it for what is missing, or for the countries at war with you that have something in orbit to strike, each marked if it was struck in the last 12 months. |
+
+Another country's National Info has a Space Race tab too: the overview of each
+milestone it has under way, with its first or its stage, its program's icons,
+the colonies it holds and its Orbit rows. Its progress is an estimate band, a
+quarter of the goal either side, that your agent networks don't narrow there;
+the Rivals rows in your own journal entries do. Its approach, setback risk,
+funding, Mission Control, Rivals and fleets, the list of other powers and the
+strike row are on your own tab only.
 
 ### Standard, Safe and Ambitious approaches
 
