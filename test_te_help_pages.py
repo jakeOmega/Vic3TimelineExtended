@@ -34,12 +34,19 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 HELP_ICON = "gfx/interface/buttons/button_icons/unused/help.dds"
 
 # One row a page.
-#   key       the page: te_popup = help_<key>, te_<key>_help_body, te_<key>_help_popup
-#   sections  the te_*_sec_how types that link to it (each keeps its place in the composers)
-#   title     the section's header key: the link's text and the popup's title
-#   flags     the collapse flags the move retired
-#   tabs      the tab body types (te_system_tab_frame) whose headers carry the "?"
-Page = collections.namedtuple("Page", "key sections title flags tabs")
+#   key          the page: te_popup = help_<key>, te_<key>_help_body, te_<key>_help_popup
+#   sections     the te_*_sec_how types that link to it (each keeps its place in the
+#                composers): a type, whose link reads the title, or (type, its own
+#                header key) for a second link with its own name (the Light code's,
+#                the colonies', the state subtab's)
+#   title        the section's header key: the link's text and the popup's title
+#   flags        the collapse flags the move retired
+#   tabs         the tab body types (te_system_tab_frame) whose headers carry the "?";
+#                none for a tab with no header (Nation, Budget Breakdown, Demographics),
+#                and the Space Race's milestones are SpaceRaceHeaderTest's
+#   popup_title  the popup's title block, when it isn't `text = "<title>"` (Tax
+#                Code's, which names the code in force)
+Page = collections.namedtuple("Page", "key sections title flags tabs popup_title", defaults=(None,))
 
 PAGES = [
     Page("banking", ("te_banking_sec_how",), "banking_dash_how_header",
@@ -48,7 +55,29 @@ PAGES = [
          ("gm_how_open",), ("te_gm_tab_body",)),
     Page("colonial_empire", ("te_ce_sec_how",), "je_colonial_empire_how_header",
          ("colonial_empire_how_open",), ("te_ce_tab_body",)),
+    # PR H2
+    Page("cultural_hegemony", ("te_ch_sec_how",), "je_ch_how_header",
+         ("ch_how_open",), ("te_ch_tab_body",)),
+    Page("nuclear_weapons", ("te_nuclear_sec_how",), "je_nuclear_how_header",
+         ("nuclear_how_open",), ("te_nuclear_tab_body",)),
+    Page("strategic_reserve", ("te_st_res_sec_how",), "je_strategic_reserve_how_header",
+         ("st_res_how_open",), ("te_st_res_tab_body",)),
+    Page("seabed", ("te_seabed_how_panel",), "te_seabed_how_header",
+         ("te_seabed_how_open",), ("te_seabed_tab_body",)),
 ]
+
+# What a help body may not read: a popup has no journal entry, Country, State
+# or panel in its context, so any of these renders nothing there.
+NOT_IN_A_POPUP = re.compile(r"\bJournalEntry\b|GetPlayerJournalEntry|\bCountry\.|\bState\.|"
+                            r"PopBrowserPanel|PopsOverviewPanel")
+# The same in loc: inside a bracketed expression, so prose ("the State.") passes.
+NOT_IN_A_POPUP_LOC = re.compile(r"\[[^\]]*(?:\bJournalEntry\b|\bCountry\.|\bState\.|PopBrowserPanel|PopsOverviewPanel)")
+
+
+def _links(page):
+    """Each section that opens the page, with its header key."""
+    for section in page.sections:
+        yield (section, page.title) if isinstance(section, str) else section
 
 def _open(key):
     return f"[GetVariableSystem.Set('te_popup', 'help_{key}')]"
@@ -158,7 +187,7 @@ class PageTest(unittest.TestCase):
                 self.assertEqual(sorted(name for _, name, _ in items), ["popup_list", "popup_title", "popup_visible"])
                 self.assertEqual(_override(body, "popup_visible").strip(),
                                  f"visible = \"[GetVariableSystem.HasValue('te_popup', 'help_{page.key}')]\"")
-                self.assertEqual(_override(body, "popup_title").strip(), f'text = "{page.title}"')
+                self.assertEqual(_override(body, "popup_title").strip(), page.popup_title or f'text = "{page.title}"')
                 self.assertEqual(_override(body, "popup_list").strip(), f"te_{page.key}_help_body = {{}}")
 
     def test_every_page_is_in_the_root(self):
@@ -188,7 +217,7 @@ class PageTest(unittest.TestCase):
         """The section keeps its name and its place, shrunk to its header,
         which opens the page instead of expanding."""
         for page in PAGES:
-            for section in page.sections:
+            for section, title in _links(page):
                 with self.subTest(section=section):
                     _, body = self.types[section]
                     widgets = [(name, inner) for kind, name, inner in _children(body) if kind != "property"]
@@ -198,7 +227,7 @@ class PageTest(unittest.TestCase):
                     self.assertEqual(props.get("tooltip"), '"te_help_link_tt"')
                     self.assertIn("te_help_link_tt", self.loc)
                     overrides = {name: inner.strip() for kind, name, inner in header if kind == "blockoverride"}
-                    self.assertIn(f'text = "{page.title}"', overrides["left_text"])
+                    self.assertIn(f'text = "{title}"', overrides["left_text"])
                     self.assertEqual(overrides["onclick"], f'onclick = "{_open(page.key)}"')
                     self.assertEqual(overrides["onclick_showmore"], "visible = no")
                     self.assertEqual(overrides["onclick_showless"], "visible = no")
@@ -215,18 +244,22 @@ class PageTest(unittest.TestCase):
 
     def test_the_body_reads_the_player(self):
         """No JournalEntry read in what the popup reaches, nor in the loc it
-        names: a page opens from any host, the entry held or not."""
+        names: a page opens from any host, the entry held or not. Nor a
+        Country, State or panel read, which the popup's context lacks too."""
         for page in PAGES:
             with self.subTest(page=page.key):
                 reached = _closure(self.types, f"te_{page.key}_help_popup")
                 self.assertIn(f"te_{page.key}_help_body", reached)
                 self.assertIn("te_ui_popup", reached)
                 text = "\n".join(self.types[name][1] for name in sorted(reached))
-                self.assertNotRegex(text, r"\bJournalEntry\b|GetPlayerJournalEntry")
+                self.assertNotRegex(text, NOT_IN_A_POPUP)
                 keys = _keys_reached(text, self.loc)
                 self.assertIn(page.title, keys)
+                for _, title in _links(page):
+                    self.assertIn(title, self.loc)
                 for key in sorted(keys):
                     self.assertNotIn("JournalEntry", self.loc[key], key)
+                    self.assertNotRegex(self.loc[key], NOT_IN_A_POPUP_LOC, key)
 
     def test_each_header_has_its_button(self):
         """Every default_header in a tab body's tab_header holds one "?" that

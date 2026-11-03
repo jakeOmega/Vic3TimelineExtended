@@ -19,9 +19,10 @@
 ###     te_ch_sec_models          political models of the world, pie and legend
 ###   te_ch_reference_sections
 ###     te_ch_sec_history         the global model history chart, open (ch_hist_closed)
-###     te_ch_sec_how             "How Cultural Hegemony Works", collapsed
-###                               (ch_how_open): every explanation, one heading
-###                               per topic
+###     te_ch_sec_how             "How Cultural Hegemony Works", a link to the
+###                               Help page that holds every explanation
+###                               (te_cultural_hegemony_help_popup, in
+###                               gui/te_popups.gui)
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_cultural_hegemony_layout.py).
@@ -2846,9 +2847,12 @@ types cultural_hegemony_widget_types
 		}
 	}
 
-	### "How Cultural Hegemony Works": every explanation, gathered out of the
-	### live sections into one section, collapsed by default, one heading per
-	### topic. The live sections say what is happening; this says how it works.
+	### "How Cultural Hegemony Works": a link at the foot of the panel to the
+	### Help page (style rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_cultural_hegemony_help_popup
+	### (te_popup = help_cultural_hegemony) instead of expanding; it keeps its
+	### name and its place in the composer. The "?" in the tab's header opens
+	### the same page.
 	type te_ch_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2856,81 +2860,102 @@ types cultural_hegemony_widget_types
 		spacing = 2
 
 		ch_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_ch_how_header"
 				using = elide_fontsize_min
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('ch_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('ch_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('ch_how_open')]"
+				visible = no
 			}
 		}
+	}
 
-		ch_panel = {
-			visible = "[GetVariableSystem.Exists('ch_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads GetPlayer only, never the entry, so it opens from
+	### any host (test_te_help_pages.py). Instanced only by
+	### te_cultural_hegemony_help_popup.
+	type te_cultural_hegemony_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			ch_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_share"
-				}
+		ch_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_share"
 			}
-			ch_note = {
-				text = "je_ch_how_share"
+		}
+		ch_note = {
+			text = "je_ch_how_share"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_programmes"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_programmes"
-				}
+		}
+		ch_note = {
+			text = "je_ch_how_programmes"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_pull"
 			}
-			ch_note = {
-				text = "je_ch_how_programmes"
+		}
+		ch_note = {
+			text = "je_ch_how_pull"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_board"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_pull"
-				}
+		}
+		ch_note = {
+			text = "je_ch_how_board"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_models"
 			}
-			ch_note = {
-				text = "je_ch_how_pull"
+		}
+		ch_note = {
+			text = "je_ch_widget_models_legend"
+		}
+		ch_note = {
+			text = "je_ch_how_models"
+		}
+		### Which model a country that fits several counts as: once here, not
+		### on every legend swatch's hover.
+		ch_note = {
+			text = "ch_model_order_tt"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_benchmark"
 			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_board"
-				}
-			}
-			ch_note = {
-				text = "je_ch_how_board"
-			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_models"
-				}
-			}
-			ch_note = {
-				text = "je_ch_widget_models_legend"
-			}
-			ch_note = {
-				text = "je_ch_how_models"
-			}
-			### Which model a country that fits several counts as: once here, not
-			### on every legend swatch's hover.
-			ch_note = {
-				text = "ch_model_order_tt"
-			}
-			ch_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_ch_how_sub_benchmark"
-				}
-			}
-			ch_note = {
-				text = "je_ch_how_benchmark"
-			}
+		}
+		ch_note = {
+			text = "je_ch_how_benchmark"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_cultural_hegemony_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_cultural_hegemony')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_ch_how_header"
+		}
+		blockoverride "popup_list" {
+			te_cultural_hegemony_help_body = {}
 		}
 	}
 
@@ -2979,6 +3004,9 @@ types cultural_hegemony_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_cultural_hegemony"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
 				}
 			}
 		}

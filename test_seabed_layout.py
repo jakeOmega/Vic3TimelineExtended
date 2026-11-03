@@ -170,6 +170,17 @@ class SeabedPanelTest(unittest.TestCase):
         at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins", "how")]
         self.assertEqual(at, sorted(at))
 
+    def test_how_it_works_is_a_link(self):
+        """How Seabed Licences Work is its header alone, which opens the Help
+        page (te_seabed_help_popup, on te_popup = help_seabed); its collapse
+        flag retired with its content (test_te_help_pages.py)."""
+        how = _type_body(self.gui, "te_seabed_how_panel")
+        self.assertIn('text = "te_seabed_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_seabed')]\"", how)
+        self.assertNotIn("te_seabed_how_open", self.gui)
+        self.assertNotIn("te_seabed_note", how)
+        self.assertIn('text = "te_seabed_how_sub_pools"', _type_body(self.gui, "te_seabed_help_body"))
+
     def test_every_basin_lists_its_claimants(self):
         """Audit SEA-3's later step: each basin's rivals are one datamodel of
         the player's list of capitals, each item reading its own basin's
@@ -193,7 +204,7 @@ class SeabedPanelTest(unittest.TestCase):
     def test_rivals_collapse_flags_are_open_named(self):
         """Rule 7: a section that starts collapsed names its flag _open."""
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.gui))
-        self.assertEqual(flags, {"te_seabed_how_open"} | {f"te_seabed_rivals_{b}_open" for b in BASINS})
+        self.assertEqual(flags, {f"te_seabed_rivals_{b}_open" for b in BASINS})
 
     def test_type_sizes_are_the_templates(self):
         self.assertEqual(_SIZES, {"row": 17, "heading": 20, "overview": 16})

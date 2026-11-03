@@ -153,13 +153,20 @@ class FlagTest(unittest.TestCase):
         for f in OLD_FLAGS:
             self.assertNotIn(f"'{f}", self.text, f)
 
-    def test_inventory_open_and_how_it_works_collapsed(self):
+    def test_inventory_open(self):
         inventory = _type_body(self.text, "te_st_res_sec_inventory")
         self.assertIn("GetVariableSystem.Toggle('st_res_inventory_closed')", inventory)
         self.assertIn("visible = \"[Not(GetVariableSystem.Exists('st_res_inventory_closed'))]\"", inventory)
-        how = _type_body(self.text, "te_st_res_sec_how")
-        self.assertIn("GetVariableSystem.Toggle('st_res_how_open')", how)
-        self.assertIn("visible = \"[GetVariableSystem.Exists('st_res_how_open')]\"", how)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_strategic_reserve_help_popup, on te_popup = help_strategic_reserve); its collapse flag retired with its
+        content (test_te_help_pages.py)."""
+        how = _strip_comments(_type_body(self.text, "te_st_res_sec_how"))
+        self.assertIn('text = "je_strategic_reserve_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]\"", how)
+        self.assertNotIn("st_res_how_open", self.text)
+        self.assertNotIn("st_res_note", how)
 
     def test_rows_and_their_settings_start_collapsed(self):
         for g in _goods():
@@ -271,7 +278,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.loc = _loc()
 
     def test_one_heading_and_note_per_topic(self):
-        how = _type_body(self.widget, "te_st_res_sec_how")
+        how = _type_body(self.widget, "te_strategic_reserve_help_body")
         self.assertEqual(re.findall(r'text = "je_strategic_reserve_how_sub_(\w+)"', how), HOW_TOPICS)
         self.assertEqual(re.findall(r'text = "je_strategic_reserve_how_(?!sub_|header)(\w+)"', how), HOW_TOPICS)
         for t in HOW_TOPICS:

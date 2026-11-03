@@ -925,8 +925,8 @@ class SeabedTabTest(unittest.TestCase):
         for name in ("te_seabed_overview_panel", "te_seabed_policy_panel", "te_seabed_basins_panel",
                      "te_seabed_how_panel"):
             self.assertIn(f"type {name} = ", widgets)
-        # the reference collapsed, named after its default (style guide rule 7)
-        self.assertIn("GetVariableSystem.Toggle('te_seabed_how_open')", widgets)
+        # the reference a link to the Help page (test_te_help_pages.py)
+        self.assertIn("GetVariableSystem.Set('te_popup', 'help_seabed')", _type_body(widgets, "te_seabed_how_panel"))
         with open(os.path.join(REPO, "gui", "te_seabed_widgets.gui"), "rb") as f:
             self.assertEqual(f.read(3), b"\xef\xbb\xbf")
 

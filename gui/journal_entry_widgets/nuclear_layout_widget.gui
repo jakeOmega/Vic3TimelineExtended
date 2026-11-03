@@ -25,7 +25,8 @@
 ###                record), The Nuclear Taboo (from the first warhead), Delivery
 ###                and Defence, Nuclear Powers (from the first warhead)
 ###   container_4  widget_je_nuclear_reference  How Nuclear Weapons Work,
-###                collapsed
+###                a link to the Help page (te_nuclear_weapons_help_popup,
+###                in gui/te_popups.gui)
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_nuclear_layout.py).
@@ -54,10 +55,11 @@ types nuclear_layout_widget_types
 		te_nuclear_sec_powers = {}
 	}
 
-	### "How Nuclear Weapons Work": the explanations gathered out of the live
-	### sections into one section, collapsed by default, one heading per topic
-	### in the panel's order. The live sections say what is happening; this
-	### says how it works.
+	### "How Nuclear Weapons Work": a link at the foot of the panel to the Help
+	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
+	### Its header alone, which opens te_nuclear_weapons_help_popup (te_popup =
+	### help_nuclear_weapons) instead of expanding; it keeps its name and its
+	### place in the composer. The "?" in the tab's header opens the same page.
 	type te_nuclear_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -65,96 +67,117 @@ types nuclear_layout_widget_types
 		spacing = 2
 
 		nd_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_nuclear_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('nuclear_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('nuclear_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('nuclear_how_open')]"
+				visible = no
 			}
 		}
+	}
 
-		nd_panel = {
-			visible = "[GetVariableSystem.Exists('nuclear_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads GetPlayer only, never the entry, so it opens from
+	### any host (test_te_help_pages.py). Instanced only by
+	### te_nuclear_weapons_help_popup.
+	type te_nuclear_weapons_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			nd_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_programme"
-				}
+		nd_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_programme"
 			}
-			nd_note = {
-				text = "je_nuclear_how_programme"
+		}
+		nd_note = {
+			text = "je_nuclear_how_programme"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_crisis"
 			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_crisis"
-				}
+		}
+		nd_note = {
+			text = "nd_w_crisis_actions_legend"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_strike"
 			}
-			nd_note = {
-				text = "nd_w_crisis_actions_legend"
+		}
+		nd_note = {
+			text = "je_nuclear_how_strike"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_posture"
 			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_strike"
-				}
+		}
+		nd_note = {
+			text = "je_nuclear_how_posture"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_home"
 			}
-			nd_note = {
-				text = "je_nuclear_how_strike"
+		}
+		nd_note = {
+			text = "nd_w_home_legend"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_reputation"
 			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_posture"
-				}
+		}
+		nd_note = {
+			text = "nd_w_reputation_legend"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_taboo"
 			}
-			nd_note = {
-				text = "je_nuclear_how_posture"
+		}
+		nd_note = {
+			text = "je_nuclear_how_taboo"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_delivery"
 			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_home"
-				}
+		}
+		nd_note = {
+			text = "je_nuclear_program_widget_odds_note"
+		}
+		nd_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_nuclear_how_sub_powers"
 			}
-			nd_note = {
-				text = "nd_w_home_legend"
-			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_reputation"
-				}
-			}
-			nd_note = {
-				text = "nd_w_reputation_legend"
-			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_taboo"
-				}
-			}
-			nd_note = {
-				text = "je_nuclear_how_taboo"
-			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_delivery"
-				}
-			}
-			nd_note = {
-				text = "je_nuclear_program_widget_odds_note"
-			}
-			nd_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_nuclear_how_sub_powers"
-				}
-			}
-			nd_note = {
-				text = "je_nuclear_program_widget_powers_legend"
-			}
+		}
+		nd_note = {
+			text = "je_nuclear_program_widget_powers_legend"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_nuclear_weapons_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_nuclear_weapons')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_nuclear_how_header"
+		}
+		blockoverride "popup_list" {
+			te_nuclear_weapons_help_body = {}
 		}
 	}
 
@@ -186,6 +209,9 @@ types nuclear_layout_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_nuclear_program"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
 				}
 			}
 		}

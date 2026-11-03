@@ -257,12 +257,21 @@ class FlagTest(unittest.TestCase):
                   "te_nuclear_sec_reputation": "nd_reputation_closed",
                   "te_nuclear_sec_taboo": "nd_taboo_panel_closed",
                   "te_nuclear_sec_delivery": "nuclear_program_odds_closed",
-                  "te_nuclear_sec_powers": "nuclear_program_powers_closed",
-                  "te_nuclear_sec_how": "nuclear_how_open"}
+                  "te_nuclear_sec_powers": "nuclear_program_powers_closed"}
         for sec, flag in opened.items():
             body = _type_body(ALL_GUI, sec)
             toggles = re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", body)
             self.assertEqual(toggles[0], flag, sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_nuclear_weapons_help_popup, on te_popup = help_nuclear_weapons); its collapse flag retired with its
+        content (test_te_help_pages.py)."""
+        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        self.assertIn('text = "je_nuclear_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]\"", how)
+        self.assertNotIn("nuclear_how_open", ALL_GUI)
+        self.assertNotIn("nd_note", how)
 
     def test_subsections_are_nested(self):
         """The taboo's chart is a nested subsection, open (owner, 2026-09-29:
@@ -346,7 +355,7 @@ HOW_KEYS = ["nd_w_home_legend", "nd_w_reputation_legend", "nd_w_crisis_actions_l
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        how = _type_body(_read(LAYOUT), "te_nuclear_weapons_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         self.assertEqual(how.count("nd_subheader = {"), how.count("nd_note = {"))
@@ -358,7 +367,7 @@ class HowItWorksTest(unittest.TestCase):
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
 
     def test_the_first_heading_has_no_top_margin(self):
-        how = _type_body(_read(LAYOUT), "te_nuclear_sec_how")
+        how = _type_body(_read(LAYOUT), "te_nuclear_weapons_help_body")
         first = how[how.index("nd_subheader = {"):]
         first = first[:first.index("nd_note = {")]
         self.assertIn('blockoverride "subheader_margin" {}', first)
