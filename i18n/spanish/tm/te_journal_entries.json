@@ -1968,8 +1968,8 @@
   "es": "La barra sólida llega hasta el valor más bajo entre la puntuación y su objetivo, y el tramo pálido hasta el más alto. El tramo pálido no es verde ni rojo en ningún caso, porque un tabú más fuerte tiene dos caras: pesa sobre un arsenal y sobre las amenazas, y protege a los países que no tienen uno. La flecha indica hacia dónde va."
  },
  "je_nuclear_ov_taboo_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mes)"
+  "en": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mo)",
+  "es": "#v [Country.MakeScope.ScriptValue('nd_disp_taboo')|0]#! → [Country.MakeScope.ScriptValue('nd_disp_taboo_target')|0] ([Country.MakeScope.ScriptValue('nd_disp_taboo_step')|+2]/mes)"
  },
  "je_nuclear_ov_warheads_label": {
   "en": "Warheads #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_stockpile')|0]#!",
@@ -2024,8 +2024,8 @@
   "es": "#tooltip_header Financiación del programa#!\\n$TOOLTIP_DELIMITER$\\nCada nivel de financiación compra una unidad más de avance de ojivas al mes, pagada con [concept_innovation|l] semanal. Un nivel vale:\\n[GetStaticModifier('nuclear_weapon_program_funding').GetDesc]"
  },
  "je_nuclear_program_widget_funding_value": {
-  "en": "Step #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
-  "es": "Escalón #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/semana"
+  "en": "Step #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/week",
+  "es": "Escalón #v [Country.MakeScope.ScriptValue('nuclear_program_display_funding')|0]#! · @innovation! #N [Country.MakeScope.ScriptValue('nuclear_program_display_weekly_cost')|0]#!/semana"
  },
  "je_nuclear_program_widget_next_label": {
   "en": "Next warhead in",
@@ -2064,8 +2064,8 @@
   "es": "#tooltip_header Producción de ojivas#!\\n$TOOLTIP_DELIMITER$\\nAvance hacia la siguiente ojiva, por mes; el pulso semanal aplica una cuarta parte.[JournalEntry.GetCountry.GetCustom('nuclear_program_rate_note')][JournalEntry.GetCountry.GetCustom('nuclear_program_aid_note')]"
  },
  "je_nuclear_program_widget_rate_value": {
-  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
-  "es": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / mes"
+  "en": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / month",
+  "es": "#v [Country.MakeScope.ScriptValue('nuclear_program_display_monthly_progress')|1]#! / mes"
  },
  "je_nuclear_program_widget_taboo_burden_label": {
   "en": "Burden of our arsenal",
@@ -2076,8 +2076,8 @@
   "es": "#tooltip_header La carga de la bomba#!\\n$TOOLTIP_DELIMITER$\\nEl mundo contempla las armas nucleares con horror y se lo reprocha a quienes las conservan: a partir de un tabú de 40, cuanto mayor es nuestro arsenal (hasta cincuenta ojivas), más pesada es la carga. Vuelve en nuestra contra el prestigio de la bomba, nos quita la potestad que nos aportó y pone a nuestros grupos de interés partidarios de la contención en contra del propio arsenal. Mantén el arsenal por debajo de un tope, o renuncia a él, para aligerarla. Ahora es del #v [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_burden_pct')|0]%#!."
  },
  "je_nuclear_program_widget_taboo_burden_value": {
-  "en": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
-  "es": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! de prestigio · #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! de potestad"
+  "en": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! prestige · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! leverage",
+  "es": "#R [Country.MakeScope.ScriptValue('nd_disp_taboo_prestige_cost_pct')|0]%#! de prestigio · #R [Country.MakeScope.ScriptValue('nd_disp_taboo_leverage_cost_pct')|0]%#! de potestad"
  },
  "je_nuclear_program_widget_taboo_costs_tt": {
   "en": "#tooltip_header What the Taboo Costs#!\\n$TOOLTIP_DELIMITER$\\nWhat a nuclear act costs us today. Every figure moves with the taboo: at zero, nothing; at its height, a first use makes a state a pariah. An answer to a strike on us, or on a country we protect, costs no infamy.",
@@ -2108,24 +2108,24 @@
   "es": "Primer uso contra una ciudad"
  },
  "je_nuclear_program_widget_taboo_strategic_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamy · relations #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamia · relaciones #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamy · relations #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_strategic')|0]#! infamia · relaciones #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_strategic')|0]#!"
  },
  "je_nuclear_program_widget_taboo_tactical_label": {
   "en": "First use in battle",
   "es": "Primer uso en combate"
  },
  "je_nuclear_program_widget_taboo_tactical_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamy · relations #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamia · relaciones #R [JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamy · relations #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_tactical')|0]#! infamia · relaciones #R [Country.MakeScope.ScriptValue('nd_taboo_world_relations_tactical')|0]#!"
  },
  "je_nuclear_program_widget_taboo_threat_label": {
   "en": "A public ultimatum",
   "es": "Un ultimátum público"
  },
  "je_nuclear_program_widget_taboo_threat_value": {
-  "en": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
-  "es": "#R +[JournalEntry.GetCountry.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! de infamia"
+  "en": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! infamy",
+  "es": "#R +[Country.MakeScope.ScriptValue('nd_taboo_infamy_threat')|0]#! de infamia"
  },
  "je_opium_international_opium_convention_tt": {
   "en": "The International Opium Convention has been signed (23 January 1912)",

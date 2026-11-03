@@ -400,7 +400,7 @@ def gui_instance(gui, type_name, block_name, key):
 
 
 class TestTradePanel(unittest.TestCase):
-    SHOWN = "visible = \"[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\""
+    SHOWN = "visible = \"[GetScriptedGui('nd_crisis_tradeable_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]\""
 
     def setUp(self):
         self.sguis = strip_comments(read(SGUIS))

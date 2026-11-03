@@ -34,6 +34,13 @@ Code: `nuclear_program_display_state` (`common/script_values/extra_script_values
 | Warheads | always | the warhead alone | `warheads.dds` |
 | Crisis | while in one | the warhead on a red disc, under vanilla's warning mark | `crisis.dds` |
 
+**Another country** (National Info) sees Row 1 and, in place of Rows 2 to 4, a row of its own: the warheads as the world believes them (`warheads.dds`, the same icon) and its nuclear guarantees, with the guarantee treaty article's icon (`gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds`).
+
+| Cell | Shown | Shows | File |
+|---|---|---|---|
+| Warheads (another country) | always | the warhead alone | `warheads.dds` |
+| Guarantees (another country) | always | the nuclear guarantee article's icon | `diplomatic_treaties_articles_icons/nuclear_guarantee.dds` |
+
 ## Row 4: credibility
 
 | Cell | Shown | Shows | File |

@@ -174,6 +174,30 @@ te_military_nuclear_tab_unlock_sgui = {
 	effect = { }
 }
 
+# National Info's open gate for another country's Nuclear tab (the generator's
+# Tab.ni_open): the tab's gate, once the world's first warhead has made the
+# nuclear taboo (nd_taboo_birth). Before it only a country with a programme
+# holds the entry, so the tab's state would tell whether another country runs
+# one. In play neither nd_believed_armed nor nd_in_crisis comes before the
+# taboo; they keep an armed country's tab open in a save from before the taboo,
+# for the month until nd_taboo_seed_existing_world births it. The player's own
+# tab opens on te_military_nuclear_tab_sgui as before.
+te_ni_nuclear_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
+		has_journal_entry = je_nuclear_program
+		OR = {
+			has_global_variable = nd_taboo
+			nd_believed_armed = yes
+			nd_in_crisis = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ---------------------------------------------------------------------------
 # Covert Warfare: Military panel (gui/panel_military.gui, the fifth slot),
 # je_covert_warfare. The entry is active once a country holds one operation
