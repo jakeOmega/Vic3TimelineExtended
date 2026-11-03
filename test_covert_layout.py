@@ -13,7 +13,7 @@ import re
 import unittest
 
 import gui_tree
-from gui_test_helpers import _strip_comments, assert_wide_matches_narrow
+from gui_test_helpers import _strip_comments, assert_column_closes_with_its_sections, assert_wide_matches_narrow
 from scripts.generators import gen_te_systems_window as gen
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
@@ -1316,8 +1316,12 @@ class WideTest(unittest.TestCase):
 
     def test_the_wide_layout_is_the_tabs_in_three_columns(self):
         columns = assert_wide_matches_narrow(self, "te_covert_wide_sections",
-                                             layout=("te_covert_tab_body", "te_covert_tab_layout"))
+                                             layout=("te_covert_tab_body", "te_covert_tab_layout"),
+                                             added_gates=("te_covert_sec_known",))
         self.assertEqual(columns, WIDE_COLUMNS)
+        # Known Foreign Operations shows only once one is known: column 3
+        # closes up on its gate until then.
+        assert_column_closes_with_its_sections(self, "te_covert_wide_sections", 3, ["te_covert_sec_known"])
 
     def test_the_window_registers_it(self):
         tab = {t.key: t for t in gen.TABS}["covert_warfare"]

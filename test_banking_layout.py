@@ -30,6 +30,8 @@ ICONS_DOC = os.path.join(REPO, "docs", "systems", "banking_gui_icons.md")
 BANKING_GUI = [DASH, HIST, LAYOUT, BUDGET]
 # The entry's gate on the shown country: te_budget_banking_tab_sgui tests has_journal_entry.
 ENTRY_GATE = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+# The cycle under way: every country holds the entry, dormant until then, and the record draws nothing before it.
+CYCLE = "GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( {root}.MakeScope ).End )"
 
 STATUS = ["te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions"]
 REFERENCE = ["te_banking_history_panel"]
@@ -122,13 +124,28 @@ class OrderTest(unittest.TestCase):
         # entry, charts-help-national-info spec § 6.3), so they ask whether it
         # holds the entry; the journal entry's own roots still ask the entry.
         layout = _read(LAYOUT)
-        for composer in ("te_banking_status_sections", "te_banking_reference_sections"):
-            self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(layout, composer), composer)
+        self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(layout, "te_banking_status_sections"))
         self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(_read(DASH), "te_banking_overview_panel"))
         self.assertEqual(_type_body(layout, "te_banking_wide_sections").count(f'visible = "{ENTRY_GATE}"'), 2)
         roots = re.findall(r'name = "(widget_je_banking_\w+)"\s*visible = "\[JournalEntry\.IsActive\]"', layout)
-        self.assertEqual(roots, ["widget_je_banking_overview", "widget_je_banking_status",
-                                 "widget_je_banking_reference"])
+        self.assertEqual(roots, ["widget_je_banking_overview", "widget_je_banking_status"])
+
+    def test_the_record_waits_for_the_cycle_in_every_host(self):
+        """The record (the history charts) draws nothing while the cycle is
+        dormant, which every country's entry is until its financial cycle
+        starts. Its composer, its journal root and its full-screen column carry
+        the cycle's gate too, so none is left empty: the composer would put a
+        gap above Open Journal Entry, the root one at the entry's foot, and the
+        column an empty 520 band (review of the help-button-everywhere PR)."""
+        layout = _read(LAYOUT)
+        country = CYCLE.format(root="Country")
+        self.assertIn(f'visible = "[{country}]"', _type_body(_read(HIST), "te_banking_history_panel"))
+        self.assertIn(f'visible = "[And( {ENTRY_GATE[1:-1]}, {country} )]"',
+                      _type_body(layout, "te_banking_reference_sections"))
+        self.assertIn(f'name = "widget_je_banking_reference"\n\tvisible = '
+                      f'"[And( JournalEntry.IsActive, {CYCLE.format(root="JournalEntry.GetCountry")} )]"', layout)
+        wide = _type_body(layout, "te_banking_wide_sections")
+        self.assertRegex(wide, r'blockoverride "column_3_visible" \{\s*visible = "\[' + re.escape(country) + r'\]"\s*\}')
 
     def test_the_journal_entry_attaches_overview_status_reference(self):
         widgets = re.findall(r'widget = \{\s*gui = "([^"]+)"\s*name = "(\w+)"\s*container = "(\w+)"',

@@ -417,13 +417,15 @@ class LayoutTest(unittest.TestCase):
         self.assertRegex(body, r'block "draft_summary" \{\s*te_tax_draft_summary = \{\}\s*\}')
 
     def test_reference_sections_the_history(self):
-        """The legislated code's history, under its gate; How Tax Legislation
-        Works and How the Light Tax Code Works, once beside it, are the Help
-        page the "?" opens (test_te_help_pages.py)."""
+        """The legislated code's history, under the composer's own gate, which
+        hides it whole under the light code, so no empty composer is left to
+        take its host's spacing; How Tax Legislation Works and How the Light
+        Tax Code Works, once beside it, are the Help page the "?" opens
+        (test_te_help_pages.py)."""
         body = type_body(self.layout, "te_tax_reference_sections")
-        self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), REFERENCE)
-        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), [])
-        self.assertIn(f'visible = "[Not( {LIGHT_SHOWN} )]"', body)
+        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), REFERENCE)
+        self.assertEqual(re.findall(r"^\t\t(\w+) = \{", body, re.M), REFERENCE, "no wrapper inside")
+        self.assertIn(f'visible = "[And( {TAB_SHOWN}, Not( {LIGHT_SHOWN} ) )]"', body)
 
     def test_the_brief_types_exist(self):
         for name in ("te_tax_overview_panel", "te_tax_enacted_table",
@@ -440,8 +442,8 @@ class LayoutTest(unittest.TestCase):
         """On the tab's gate on Country, which tests the entry for any country:
         another country's mount (National Info) has no JournalEntry. The journal
         roots keep the entry's own IsActive (test_roots_are_gated_and_fixed_width)."""
-        for name in ("te_tax_status_sections", "te_tax_reference_sections"):
-            self.assertIn(f'visible = "[{TAB_SHOWN}]"', type_body(self.layout, name), name)
+        self.assertIn(f'visible = "[{TAB_SHOWN}]"', type_body(self.layout, "te_tax_status_sections"))
+        self.assertIn(f'visible = "[And( {TAB_SHOWN}, ', type_body(self.layout, "te_tax_reference_sections"))
         self.assertIn(f'visible = "[{TAB_SHOWN}]"', type_body(self.overview, "te_tax_overview_panel"))
         for path in NEW_GUI:
             with self.subTest(path=path):
@@ -451,9 +453,16 @@ class LayoutTest(unittest.TestCase):
                 self.assertNotIn("JournalEntry.IsActive", text)
 
     def test_roots_are_gated_and_fixed_width(self):
+        """Each root on the entry's IsActive; the record's also on the full
+        code, as its composer is, so under the light code container_3
+        collapses instead of leaving the journal's spacing at the foot."""
         roots = re.findall(r'^flowcontainer = \{\s*name = "(widget_je_tax_code_\w+)"\s*'
-                           r'visible = "\[JournalEntry\.IsActive\]"', self.layout, re.M)
-        self.assertEqual(roots, [name for name, _ in ROOTS])
+                           r'visible = "\[(.*)\]"', self.layout, re.M)
+        light = LIGHT_SHOWN.replace("Country.MakeScope", "JournalEntry.GetCountry.MakeScope")
+        self.assertEqual(roots, [("widget_je_tax_code_overview", "JournalEntry.IsActive"),
+                                 ("widget_je_tax_code_status", "JournalEntry.IsActive"),
+                                 ("widget_je_tax_code_reference", f"And( JournalEntry.IsActive, Not( {light} ) )")])
+        self.assertEqual([name for name, _ in roots], [name for name, _ in ROOTS])
         for name, _ in ROOTS:
             root = brace_block(self.layout, self.layout.index(f'name = "{name}"') - len("flowcontainer = "))
             with self.subTest(root=name):
@@ -488,9 +497,14 @@ class LayoutTest(unittest.TestCase):
         (Country; GetPlayer in the Budget tab's footer summaries, the Help page
         and a datamodel item's tooltip, gotcha #24), never
         JournalEntry.GetCountry: the Budget tab and another country's mount
-        have no JournalEntry to start from."""
-        self.assertNotIn("JournalEntry.GetCountry", self.all)
-        self.assertNotIn("GetCountry", re.sub(r"GetPlayerJournalEntry", "", self.all))
+        have no JournalEntry to start from. The journal's own roots, which
+        only the journal mounts, may read the entry's country for their gate."""
+        types = self.all.replace(self.layout, self.layout[:self.layout.index('name = "widget_je_tax_code_overview"')])
+        self.assertNotEqual(types, self.all)
+        self.assertNotIn("JournalEntry.GetCountry", types)
+        self.assertNotIn("GetCountry", re.sub(r"GetPlayerJournalEntry", "", types))
+        roots = self.layout[self.layout.index('name = "widget_je_tax_code_overview"'):]
+        self.assertEqual(roots.count("JournalEntry.GetCountry"), 1, "the record root's light gate only")
 
 
 class WideTest(unittest.TestCase):
@@ -498,8 +512,9 @@ class WideTest(unittest.TestCase):
     2026-11-02-te-window-wide-mode § 7): one row of three 520 columns, under
     the gates the narrow tab gives each section. Under the full code it reads
     the spec's columns; under the light code, the overview and the light
-    section, then two empty columns, as the full code's sections hide (the
-    light How, once column 2's, is the Help page). The draft summary is in the window's footer, so neither
+    section alone: columns 2 and 3 close up on the full code's Not( light ),
+    the gate every section in them carries, rather than leave two empty 520
+    bands (the light How, once column 2's, is the Help page). The draft summary is in the window's footer, so neither
     layout places it."""
 
     def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
@@ -508,6 +523,11 @@ class WideTest(unittest.TestCase):
         self.assertEqual(columns, [["te_tax_overview_panel", "te_tax_light_section"] + STATUS[:3],
                                    STATUS[3:],
                                    REFERENCE])
+        wide = type_body(gui(LAYOUT), "te_tax_wide_sections")
+        for n in (2, 3):
+            self.assertRegex(wide, rf'blockoverride "column_{n}_visible" \{{\s*visible = "\[Not\( '
+                                   + re.escape(LIGHT_SHOWN) + r' \)\]"\s*\}')
+        self.assertNotIn("column_1_visible", wide)
 
     def test_the_registry_names_it(self):
         from scripts.generators import gen_te_systems_window as window

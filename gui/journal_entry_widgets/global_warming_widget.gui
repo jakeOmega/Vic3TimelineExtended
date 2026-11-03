@@ -2192,6 +2192,14 @@ types global_warming_widget_types
 	### test_global_warming_layout.WideTest checks it against the narrow
 	### layout.
 	type te_gw_wide_sections = te_ui_columns_three {
+		### The overview and Mitigation Policies are climate only too (the
+		### overview on its root, the policies on their header and panel): with
+		### the rule off column 1 closes up as column 3 does, leaving the Fossil
+		### Transition centered.
+		blockoverride "column_1_visible" {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+
 		blockoverride "column_1" {
 			te_gw_overview_panel = {}
 
@@ -2217,6 +2225,13 @@ types global_warming_widget_types
 				te_gw_sec_emitters = {}
 				te_gw_sec_transition = {}
 			}
+		}
+
+		### The record is climate only: with the Global Warming rule off the
+		### column closes up on the rule, its composer's gate, rather than keep
+		### an empty 520 band.
+		blockoverride "column_3_visible" {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		}
 
 		blockoverride "column_3" {
@@ -2266,9 +2281,11 @@ flowcontainer = {
 	}
 }
 
+### The record's root is climate only, as its composer is, so with the rule
+### off container_3 collapses instead of leaving the journal's 10 at the foot.
 flowcontainer = {
 	name = "widget_je_gw_reference"
-	visible = "[JournalEntry.IsActive]"
+	visible = "[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 	parentanchor = hcenter
 	ignoreinvisible = yes
 

@@ -204,13 +204,16 @@ types banking_layout_widget_types
 	}
 
 	### The record: the history charts, open by default in both hosts (one
-	### shell, closed flag banking_dash_history_closed).
+	### shell, closed flag banking_dash_history_closed). Gated on the cycle
+	### running as well as the entry, as the charts are: every country holds
+	### the entry, dormant until its cycle starts, and an empty composer would
+	### still take its host's spacing (a gap above Open Journal Entry).
 	type te_banking_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		visible = "[And( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 		te_banking_history_panel = {}
 	}
@@ -344,6 +347,13 @@ types banking_layout_widget_types
 			}
 		}
 
+		### The record, which waits for the cycle: until it runs the column
+		### closes up (column_3_visible), so the two columns of a dormant
+		### entry's sections sit centred rather than beside an empty band.
+		blockoverride "column_3_visible" {
+			visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		}
+
 		blockoverride "column_3" {
 			te_banking_reference_sections = {}
 		}
@@ -389,9 +399,11 @@ flowcontainer = {
 	}
 }
 
+### The record's root also waits for the cycle, as its composer does, so a
+### dormant entry's container_3 collapses instead of leaving the journal's 10.
 flowcontainer = {
 	name = "widget_je_banking_reference"
-	visible = "[JournalEntry.IsActive]"
+	visible = "[And( JournalEntry.IsActive, GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 	parentanchor = hcenter
 	ignoreinvisible = yes
 

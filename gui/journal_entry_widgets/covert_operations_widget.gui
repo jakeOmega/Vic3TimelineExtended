@@ -2691,6 +2691,13 @@ types covert_operations_widget_types
 			}
 		}
 
+		### Known Foreign Operations shows only once one is known, so the column
+		### takes its gate (column_3_visible) and closes up until then, rather
+		### than leave an empty 520 band (test_covert_layout.py holds them equal).
+		blockoverride "column_3_visible" {
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]"
+		}
+
 		blockoverride "column_3" {
 			flowcontainer = {
 				direction = vertical

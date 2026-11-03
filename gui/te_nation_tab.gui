@@ -903,6 +903,14 @@ types te_nation_widget_types
 			te_nation_section_international = {}
 		}
 
+		### Where These Come From shows only once a permanent effect is listed,
+		### so the column takes its gate (column_3_visible) and closes up until
+		### then, rather than leave an empty 520 band (test_nation_tab.py holds
+		### them equal).
+		blockoverride "column_3_visible" {
+			visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+		}
+
 		blockoverride "column_3" {
 			te_nation_sources_panel = {}
 		}

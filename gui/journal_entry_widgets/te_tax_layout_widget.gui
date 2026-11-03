@@ -261,25 +261,17 @@ types te_tax_layout_widget_types
 	}
 
 	### The record: the history, collapsed (a list of past items), which the
-	### light code keeps none of.
+	### light code keeps none of. The composer itself hides under the light
+	### code, so it leaves no empty composer and no gap above Open Journal
+	### Entry (review of the help-button-everywhere PR).
 	type te_tax_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
-		# The legislated code's history, hidden under the light setting, which
-		# keeps none.
-		flowcontainer = {
-			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-			direction = vertical
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
-
-			te_tax_history_section = {}
-		}
+		te_tax_history_section = {}
 	}
 
 	### The Tax Code tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
@@ -337,8 +329,9 @@ types te_tax_layout_widget_types
 	### row of three columns of 520 (te_ui_columns_three). Under the full
 	### code: the overview and the bills and promises to watch, then the code
 	### in force, the workbench and the review, then the history. Under the
-	### light code: the overview and the light section, and the second and
-	### third columns empty (each keeps its 520). Each section keeps its narrow gates, the wrappers repeating the
+	### light code: the overview and the light section alone, the second and
+	### third columns closing up (column_2_visible, column_3_visible: Not(
+	### light ), the gate every section in them carries). Each section keeps its narrow gates, the wrappers repeating the
 	### composers' and the full code's Not( light ), with their spacing; a run
 	### of the full code's sections alone takes both in one And, so under the
 	### light code its wrapper hides and leaves no gap. The
@@ -377,6 +370,10 @@ types te_tax_layout_widget_types
 			}
 		}
 
+		blockoverride "column_2_visible" {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+		}
+
 		blockoverride "column_2" {
 			flowcontainer = {
 				visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
@@ -389,6 +386,10 @@ types te_tax_layout_widget_types
 				te_tax_workbench_section = {}
 				te_tax_review_section = {}
 			}
+		}
+
+		blockoverride "column_3_visible" {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 		}
 
 		blockoverride "column_3" {
@@ -464,9 +465,11 @@ flowcontainer = {
 	}
 }
 
+### The record's root hides under the light code too, as its composer does,
+### so container_3 collapses instead of leaving the journal's 10 at the foot.
 flowcontainer = {
 	name = "widget_je_tax_code_reference"
-	visible = "[JournalEntry.IsActive]"
+	visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes

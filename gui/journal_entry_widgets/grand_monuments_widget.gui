@@ -3572,6 +3572,14 @@ types grand_monuments_widget_types
 			}
 		}
 
+		### Trophies and Held Abroad each show only while there is something in
+		### them, so the column closes up while neither does: their two gates,
+		### joined, on the column (column_3_visible), rather than an empty 520
+		### band (test_grand_monuments_layout.WideLayoutTest holds them equal).
+		blockoverride "column_3_visible" {
+			visible = "[Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_trophies_shown'), '(CFixedPoint)1' ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count'), '(CFixedPoint)0' ) )]"
+		}
+
 		blockoverride "column_3" {
 			flowcontainer = {
 				direction = vertical

@@ -7,6 +7,7 @@ import os
 import re
 import unittest
 
+import gui_test_helpers as gh
 from gui_test_helpers import _children, _strip_comments, assert_wide_matches_narrow
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -103,7 +104,11 @@ class OrderTest(unittest.TestCase):
             m = re.search(rf'(?m)^flowcontainer = \{{\s*name = "{name}"', gui)
             self.assertTrue(m, name)
             body = _block_from(gui, gui.index("{", m.start()) + 1)
-            self.assertIn('visible = "[JournalEntry.IsActive]"', body, name)
+            # the record's root is climate only, as its composer, so with the rule off container_3 collapses
+            gate = ("[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( "
+                    "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+                    if name == "widget_je_gw_reference" else "[JournalEntry.IsActive]")
+            self.assertEqual(re.findall(r'^\tvisible = "(.*)"$', body, re.M), [gate], name)
             # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py), under
             # the "?" at the top of the entry (test_te_help_pages.py)
             expected = ["te_help_row", "te_je_country"] if name == "widget_je_gw_overview" else ["te_je_country"]
@@ -131,8 +136,31 @@ class WideTest(unittest.TestCase):
     window wants."""
 
     def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        # With the Global Warming rule off columns 1 and 3 close up on the rule,
+        # which the overview carries on its root, the policies on their header
+        # and panel and the record on its composer: one more gate on the first
+        # two, the record's own.
         columns = assert_wide_matches_narrow(self, "te_gw_wide_sections",
-                                             layout=("te_gw_tab_body", "te_gw_tab_layout"))
+                                             layout=("te_gw_tab_body", "te_gw_tab_layout"),
+                                             added_gates=("te_gw_overview_panel", "te_gw_sec_policies"))
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+        wide = _strip_comments(_read(GUI))
+        wide = wide[wide.index("type te_gw_wide_sections"):]
+        for n in (1, 3):
+            self.assertRegex(wide, rf'blockoverride "column_{n}_visible" \{{\s*visible = "\[{re.escape(rule)}\]"\s*\}}')
+        self.assertNotIn("column_2_visible", wide.split("\n}\n")[0])
+        # what the column's gate stands for: the overview's own root, and the
+        # policies' header and panel, each on the rule
+        text = _strip_comments(_read(GUI))
+        overview = [v for kind, k, v in _children(gh._type_body(text, "te_gw_overview_panel")) if k == "visible"]
+        self.assertEqual(len(overview), 1)
+        self.assertIn(rule, overview[0])
+        # (the policies read Country, which the gw_market_country block sets to the entry's country here)
+        policies = [(k, inner) for kind, k, inner in _children(gh._type_body(text, "te_gw_sec_policies")) if kind == "widget"]
+        self.assertEqual([k for k, _ in policies], ["gw_section_header", "gw_panel"])
+        for k, inner in policies:
+            own = [v for kind, kk, v in _children(inner) if kind == "property" and kk == "visible"]
+            self.assertIn(rule.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope"), own[0], k)
         self.assertEqual(columns, [["te_gw_overview_panel", "te_gw_sec_policies"],
                                    ["te_gw_sec_emitters", "te_gw_sec_transition"],
                                    REFERENCE])

@@ -29,7 +29,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
-from gui_test_helpers import _type_body, assert_wide_matches_narrow  # noqa: E402
+from gui_test_helpers import _type_body, assert_column_closes_with_its_sections, assert_wide_matches_narrow  # noqa: E402
 from scripts.generators import gen_nation_tab as gen  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 
@@ -449,7 +449,11 @@ class TabLayoutTest(unittest.TestCase):
         te_nation_tab_body's layout block, in place of te_nation_tab_sections,
         which carries no gate or context."""
         columns = assert_wide_matches_narrow(self, "te_nation_wide_sections",
-                                             layout=("te_nation_tab_body", "te_nation_tab_layout"))
+                                             layout=("te_nation_tab_body", "te_nation_tab_layout"),
+                                             added_gates=("te_nation_sources_panel",))
+        # Where These Come From shows only once a permanent effect is listed:
+        # column 3 closes up on its gate until then.
+        assert_column_closes_with_its_sections(self, "te_nation_wide_sections", 3, ["te_nation_sources_panel"])
         self.assertEqual(columns, [
             ["te_nation_overview_panel", "te_nation_section_governance", "te_nation_section_society"],
             ["te_nation_section_economy", "te_nation_section_science_and_space", "te_nation_section_international"],
