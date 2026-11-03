@@ -177,7 +177,7 @@ Powers list. Search `debug.log` for `ai_condemn_factor_order`.
 
 **Who condemns less.** Racialized Citizenship and the slavery laws count as regressive, and they are common starts:
 vanilla starts the USA, Brazil and Belgium on Racialized Citizenship and Brazil and the Ottoman Empire (TUR) on the
-Slave Trade. In the 1910 save the regressive great powers without an empire are the USA and Brazil (Racialized
+Slave Trade. In the 1910 save the regressive condemners without an empire are the USA and Brazil (Racialized
 Citizenship), TUR (Slave Trade) and India (BHA, Debt Slavery). A regressive power condemns at 62-80% instead of 87-98%
 (Condemn 13-19.5 : Neutral 5 : Support 0-3, against 26-39 : 1 : 0-3), and at 33-49% when it is also allied with an
 empire; slavery halves Condemn again (owner, 2026-11-03), so TUR and India condemn at 45-66%, or 20-33% beside an
