@@ -4373,7 +4373,10 @@ def generated_sguis():
 
 
 def _gui_view(name, op, value):
-    return (f"{op}( GetPlayer.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
+    """A generated row's guarded view, read on the shown country (`Country`): every mount of the
+    panels supplies one, the player's in the journal entry and the tabs and another country's in
+    National Info (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 6.3)."""
+    return (f"{op}( Country.MakeScope.ScriptValue('{name}'), '(CFixedPoint){value}' )")
 
 
 GOODS_ICONS_PER_ROW = 14     # te_tax_good_icon is 26 wide with 4 between: 14 x 26 + 13 x 4 = 416 of the 480 column
@@ -4410,7 +4413,7 @@ def generated_rows():
         "### luxuries and military goods; GUI audit TAX-13), each with its icon. The row types,",
         "### te_tax_good_row and te_tax_review_good_line, are in te_tax_workbench_widget.gui",
         "### and te_tax_review_widget.gui; the goods' names are their own loc keys. Every value is a",
-        "### guarded view of the player's draft (te_tax_view_dr_g_<good>*), shown as a 0/1 code. Each",
+        "### guarded view of the shown country's draft (te_tax_view_dr_g_<good>*, on Country), a 0/1 code. Each",
         "### good's name carries itself as a hover, in case a font draws it wider than its cell.",
         "### The enacted code's taxed goods and each passed bill's, as icons (GUI audit TAX-12;",
         "### te_tax_good_icon, te_tax_overview_widget.gui).",
