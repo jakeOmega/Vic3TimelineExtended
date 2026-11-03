@@ -7796,6 +7796,7 @@ types te_history_charts_generated_types
 	### Another country's viewer: every popup, for National Info (gui/pop_browser_panel.gui)
 	type te_ni_chart_viewers = widget {
 		size = { 100% 100% }
+		visible = "[GetVariableSystem.Exists('te_ni_chart')]"
 
 		te_ni_chart_bank_value_popup = {}
 		te_ni_chart_bank_momentum_popup = {}

@@ -184,11 +184,12 @@ types te_history_chart_types
 	### docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
 	### § 4.2): it opens the chart alone at full size, a popup in te_popups
 	### (gui/te_popups.gui). Each chart's panel wrapper instances it in its
-	### "chart_open" block with its own onclick, te_popup = chart_<id>; a
-	### Demographics chart's only for the player's own country (the Census Data
-	### window draws them for any; OWN_COUNTRY_ONLY in the generator). The
-	### icon is a placeholder, vanilla's area-charts toggle (style guide rule
-	### 10; docs/systems/te_systems_window_gui_icons.md).
+	### "chart_open" block twice, one button showing at a time: for the player's
+	### own country (OWN_COUNTRY_ONLY in the generator) te_popup = chart_<id>,
+	### the player's viewer; for another (OTHER_COUNTRY, in National Info)
+	### te_ni_chart = <id>, the viewer the window holds, on its own Country
+	### (PR F1). The icon is a placeholder, vanilla's area-charts toggle (style
+	### guide rule 10; docs/systems/te_systems_window_gui_icons.md).
 	type te_chart_open_button = button_icon_round {
 		parentanchor = vcenter
 		tooltip = "te_chart_open_tt"

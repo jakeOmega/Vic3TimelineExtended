@@ -273,6 +273,8 @@ class ForeignChartViewerTest(unittest.TestCase):
         self.assertEqual(set(re.findall(r"type te_ni_chart_\w+_popup = (\w+) \{", self.text)), {"te_ui_popup"})
         holder = _type_body(self.text, "te_ni_chart_viewers")
         self.assertEqual(sorted(re.findall(r"(te_ni_chart_\w+_popup) = \{\}", holder)), sorted(self.popups))
+        # up only while a viewer is open, as te_popups is only while te_popup exists
+        self.assertEqual(re.findall(r'\bvisible = "([^"]*)"', holder), ["[GetVariableSystem.Exists('te_ni_chart')]"])
         for chart in charts.CHARTS:
             body = self.popups[charts.ni_popup_name(chart)]
             mine = _type_body(self.text, charts.popup_name(chart))

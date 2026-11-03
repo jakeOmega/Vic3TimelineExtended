@@ -633,8 +633,11 @@ def ni_popup(chart: Chart) -> list[str]:
 
 def ni_popups() -> list[str]:
     """te_ni_chart_viewers: every chart's viewer for another country, for
-    National Info to instance once."""
-    return (["type te_ni_chart_viewers = widget {", "\tsize = { 100% 100% }", ""]
+    National Info to instance once. Up only while one is open, as te_popups is
+    only while te_popup exists: no full-window widget lies over the Pops rows,
+    and the 33 viewers are built only then."""
+    return (["type te_ni_chart_viewers = widget {", "\tsize = { 100% 100% }",
+             f"\tvisible = \"[GetVariableSystem.Exists('{NI_KEY}')]\"", ""]
             + [f"\t{ni_popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
 
 
