@@ -97,6 +97,51 @@ PAGES = [
          ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",)),
 ]
 
+# H2's pages' topics, in order: the subheadings over their notes, as each
+# section had them (H1's three are pinned in their layout tests). A second
+# section's topics follow the first's: Tax Code's Light code before the full
+# code, each under its gate; Solar Colonization's (howc) after the Space
+# Race's; the Fossil Transition's (rt_how_*_head) after the climate's.
+SUBHEADINGS = {
+    "cultural_hegemony": ["je_ch_how_sub_share", "je_ch_how_sub_programmes", "je_ch_how_sub_pull", "je_ch_how_sub_board",
+                          "je_ch_how_sub_models", "je_ch_how_sub_benchmark"],
+    "nuclear_weapons": ["je_nuclear_how_sub_programme", "je_nuclear_how_sub_crisis", "je_nuclear_how_sub_strike",
+                        "je_nuclear_how_sub_posture", "je_nuclear_how_sub_home", "je_nuclear_how_sub_reputation",
+                        "je_nuclear_how_sub_taboo", "je_nuclear_how_sub_delivery", "je_nuclear_how_sub_powers"],
+    "strategic_reserve": ["je_strategic_reserve_how_sub_hub", "je_strategic_reserve_how_sub_rates",
+                          "je_strategic_reserve_how_sub_status", "je_strategic_reserve_how_sub_decay",
+                          "je_strategic_reserve_how_sub_policies", "je_strategic_reserve_how_sub_presets",
+                          "je_strategic_reserve_how_sub_income", "je_strategic_reserve_how_sub_history"],
+    "seabed": ["te_seabed_how_sub_pools", "te_seabed_how_sub_weight", "te_seabed_how_sub_licences", "te_seabed_how_sub_claims",
+               "te_seabed_how_sub_leases", "te_seabed_how_sub_policy"],
+    "covert_warfare": ["je_iw_how_sub_ops", "je_iw_how_sub_funding", "je_iw_how_sub_detection", "je_iw_how_sub_networks",
+                       "je_iw_how_sub_tradecraft", "je_iw_how_sub_ci", "je_iw_how_sub_watching", "je_iw_how_sub_standing"],
+    "nation": ["te_nation_how_sub_tab", "te_nation_how_sub_rows", "te_nation_how_sub_override", "te_nation_how_sub_jud",
+               "te_nation_how_sub_mandate", "te_nation_how_sub_wc", "te_nation_how_sub_construction", "te_nation_how_sub_tech",
+               "te_nation_how_sub_lists"],
+    "budget_breakdown": ["te_budget_chart_how_sub_admin", "te_budget_chart_how_sub_civil", "te_budget_chart_how_sub_military",
+                         "te_budget_chart_how_sub_journal", "te_budget_chart_how_sub_charts"],
+    "united_nations": ["je_un_how_sub_authority", "je_un_how_sub_standing", "je_un_how_sub_missions",
+                       "je_un_how_sub_delegations", "je_un_how_sub_dues", "je_un_how_sub_record"],
+    "demographics": ["te_demog_how_sub_census", "te_demog_how_sub_fertility", "te_demog_how_sub_mortality",
+                     "te_demog_how_sub_causes", "te_demog_how_sub_work", "te_demog_how_sub_longevity", "te_demog_how_sub_family",
+                     "te_demog_how_sub_outline", "te_demog_how_sub_migration", "te_demog_how_sub_wealth",
+                     "te_demog_how_sub_places", "te_demog_how_sub_state", "te_demog_how_sub_sources"],
+    "tax_code": ["te_tax_lt_how_sub_rates", "te_tax_lt_how_sub_level", "te_tax_lt_how_sub_groups", "te_tax_lt_how_sub_native",
+                 "te_tax_how_sub_drafting", "te_tax_how_sub_passage", "te_tax_how_sub_commencement", "te_tax_how_sub_promises",
+                 "te_tax_how_sub_replaces", "te_tax_how_sub_customs"],
+    "space_race": ["je_space_race_widget_how_sub_approach", "je_space_race_widget_how_sub_funding",
+                   "je_space_race_widget_how_sub_setbacks", "je_space_race_widget_how_sub_first",
+                   "je_space_race_widget_how_sub_rivals", "je_space_race_widget_how_sub_programme",
+                   "je_space_race_widget_how_sub_powers", "je_space_race_widget_how_sub_orbit",
+                   "je_space_race_widget_howc_sub_fleets", "je_space_race_widget_howc_sub_windows",
+                   "je_space_race_widget_howc_sub_settlers", "je_space_race_widget_howc_sub_modules",
+                   "je_space_race_widget_howc_sub_autonomy", "je_space_race_widget_howc_sub_space_command",
+                   "je_space_race_widget_howc_sub_defences"],
+    "global_warming": ["gw_how_sub_warming", "gw_how_sub_penalty", "gw_how_sub_emissions", "gw_how_sub_policies",
+                       "gw_how_sub_aerosols", "rt_how_laws_head", "rt_how_programmes_head", "rt_how_emissions_head"],
+}
+
 
 def _links(page):
     """Each section that opens the page, with its header key."""
@@ -349,6 +394,17 @@ class PageTest(unittest.TestCase):
                         self.assertNotIn("JournalEntry", value, f"{key}, {where}")
                         self.assertLessEqual(_chain_heads(value), GLOBAL_HEADS,
                                              f"{key}, {where}: reads a context a popup lacks")
+
+    def test_each_page_keeps_its_subheadings(self):
+        """H2's pages hold their topics' subheadings in order, each in the loc:
+        deleting or swapping a heading fails."""
+        self.assertLessEqual(set(SUBHEADINGS), {page.key for page in PAGES})
+        for key, subs in SUBHEADINGS.items():
+            with self.subTest(page=key):
+                body = self.types[f"te_{key}_help_body"][1]
+                self.assertEqual(re.findall(r'blockoverride "subheader_text" \{\s*text = "(\w+)"', body), subs)
+                for sub in subs:
+                    self.assertIn(sub, self.loc)
 
     def test_each_header_has_its_button(self):
         """Every default_header in a tab body's tab_header holds one "?" that
