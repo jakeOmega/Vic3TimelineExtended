@@ -21,8 +21,10 @@ each a plain flowcontainer holding one te_history_chart instance with its
 blockoverrides inline. That is the shape that draws: gotcha #37 was a type
 derived from te_history_plot, which this is not. The wrapper mirrors the
 chart's own parentanchor and adds nothing else, so the panel lays out as
-before; a chart's own visible sits on the section's instance of the wrapper,
-so a hidden chart leaves no spacing behind.
+before. A chart shown only for some countries keeps its own visible on the
+section's instance of the wrapper, so a hidden chart leaves no spacing
+behind; Chart.shown records it (test_te_history_charts.py holds the section
+to it), for the viewer to reuse.
 
 A FRAGMENT is one chart's te_history_chart instance as it stood in its section,
 dedented, with each size a placeholder. Fragments live one file a system,
@@ -174,6 +176,10 @@ class Chart:
               of the entry's datacontext (gotcha #29)
     range     its range variable (RANGES)
     params    the names the fragment substitutes, as (name, value) pairs
+    shown     the chart's own visible expression (no brackets), for a chart
+              drawn only for some countries, or None. The section's instance of
+              the wrapper carries it as visible = "[<shown>]"; the generator
+              doesn't emit it.
     """
     id: str
     system: str
@@ -183,10 +189,20 @@ class Chart:
     gate: str
     range: str
     params: tuple[tuple[str, str], ...] = ()
+    shown: str | None = None
 
 
-def _monthly(system: str, entry: str, gate: str, ids: list[str]) -> list[Chart]:
-    return [Chart(i, system, "monthly", i, entry, gate, "te_hist_range") for i in ids]
+def _monthly(system: str, entry: str, gate: str, ids: list[str], shown: dict[str, str] | None = None) -> list[Chart]:
+    return [Chart(i, system, "monthly", i, entry, gate, "te_hist_range", shown=(shown or {}).get(i)) for i in ids]
+
+
+# Banking's charts drawn only for some countries: one policy-rate chart a
+# currency (a digital one's axis reaches below 0), and no inflation or exchange
+# rate under banking_system_simplified (te_monetary_sguis.txt).
+_DIGITAL = "GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+_MONETARY = "GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+BANKING_SHOWN = {"mon_policy": f"Not( {_DIGITAL} )", "mon_policy_digital": _DIGITAL,
+                 "mon_inflation": _MONETARY, "mon_fx": _MONETARY}
 
 
 ST_RES_GOODS = ["grain", "ammunition", "oil", "small_arms", "artillery", "aeroplanes", "tanks", "fertilizer"]
@@ -194,7 +210,7 @@ ST_RES_GOODS = ["grain", "ammunition", "oil", "small_arms", "artillery", "aeropl
 CHARTS: list[Chart] = (
     _monthly("banking", "je_banking_cycle", "te_budget_banking_tab_sgui",
              ["bank_value", "bank_momentum", "bank_bubble", "mon_policy", "mon_policy_digital",
-              "mon_rate_paid", "mon_inflation", "mon_fx"])
+              "mon_rate_paid", "mon_inflation", "mon_fx"], BANKING_SHOWN)
     + [Chart(f"st_res_{g}", "strategic_reserve", "monthly", "st_res", "je_strategic_reserve",
              "te_market_strategic_reserve_tab_sgui", "te_hist_range", (("good", g),)) for g in ST_RES_GOODS]
     + [Chart(i, "demographics", "annual_pips", i, None, "te_pops_demog_tab_sgui", "te_demog_hist_range")

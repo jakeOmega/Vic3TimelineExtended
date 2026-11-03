@@ -335,6 +335,22 @@ class RegistryTest(unittest.TestCase):
                     self.assertIn(f"has_journal_entry = {chart.entry}", body)
                 self.assertIn(chart.range, gen.RANGES)
 
+    def test_the_sections_carry_each_charts_own_visible(self):
+        """A chart drawn only for some countries (Chart.shown: Banking's
+        policy-rate pair, inflation and the exchange rate) keeps that visible
+        on its section's instance of the wrapper, exactly; every other
+        instance is a bare te_hist_<id> = {}. A visible dropped in a rebinding
+        would draw both policy-rate charts, or empty monetary charts under
+        banking_system_simplified."""
+        self.assertEqual({c.id for c in gen.CHARTS if c.shown},
+                         {"mon_policy", "mon_policy_digital", "mon_inflation", "mon_fx"})
+        for chart in gen.CHARTS:
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[chart.system])))
+            m = re.search(rf"(?<![\w.]){gen.wrapper_name(chart, gen.SMALL)} = \{{", text)
+            body = text[m.end():_close(text, m.end() - 1)].strip()
+            with self.subTest(chart=chart.id):
+                self.assertEqual(body, f'visible = "[{chart.shown}]"' if chart.shown else "")
+
     def test_the_entry_and_gate_are_the_charts_own_tabs(self):
         """A chart's gate and entry are its own system's: the gate is the first
         scripted GUI its tab's open test (gen_te_systems_window.TABS) shows on,
