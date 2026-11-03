@@ -212,7 +212,9 @@ class SurfacesTest(unittest.TestCase):
     def test_the_monthly_pass_and_the_repair(self):
         pulse = _block(_read(ON_ACTIONS), "decolonization_events_on_action", prefix=r"^")
         self.assertIn("decol_stance_monthly = yes", pulse)
-        self.assertRegex(pulse, r"is_player = yes\s*has_game_rule = decolonization_enabled\s*ce_tab_unlocked = yes"
+        # every player, tab open or not: National Info shows another country's
+        # Colonial Powers to a player without Decolonization
+        self.assertRegex(pulse, r"is_player = yes\s*has_game_rule = decolonization_enabled"
                                 r"\s*\}\s*decol_world_refresh_display = yes")
         monthly = _block(_read(EFFECTS), "decol_stance_monthly")
         self.assertRegex(monthly, r"is_ai = yes\s*decol_stance_paid = yes\s*influence < 0\s*\}\s*decol_stance_core_neutral = yes")

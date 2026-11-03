@@ -512,8 +512,8 @@ types colonial_empire_widget_types
 					size = { 72 26 }
 					parentanchor = center
 					datacontext = "[GetScriptedGui('colonial_empire_release_state_sgui')]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
 
 					textbox = {
@@ -685,12 +685,13 @@ types colonial_empire_widget_types
 
 				button = {
 					using = default_button_action
+					using = te_own_country_only
 					size = { 136 26 }
 					parentanchor = center
 					datacontext = "[GetScriptedGui('colonial_empire_open_talks_sgui')]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_state', State.MakeScope ).End ) ) )]"
 
 					textbox = {
 						parentanchor = center
@@ -821,7 +822,7 @@ types colonial_empire_widget_types
 			visible = "[And( Not( GetVariableSystem.Exists('colonial_empire_selfcheck_subject') ), Not( EqualTo_string( State.GetCountry.GetNameNoFormatting, '' ) ) )]"
 			state = {
 				name = _show
-				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				on_start = "[GetVariableSystem.Set( 'colonial_empire_selfcheck_subject', '1' )]"
 			}
 		}
@@ -830,7 +831,7 @@ types colonial_empire_widget_types
 			visible = "[And( Not( GetVariableSystem.Exists('colonial_empire_selfcheck_subject') ), EqualTo_string( State.GetCountry.GetNameNoFormatting, '' ) )]"
 			state = {
 				name = _show
-				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				on_start = "[GetScriptedGui('colonial_empire_selfcheck_subject_sgui').Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).AddScope( 'ce_check', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 				on_start = "[GetVariableSystem.Set( 'colonial_empire_selfcheck_subject', '1' )]"
 			}
 		}
@@ -916,8 +917,8 @@ types colonial_empire_widget_types
 					size = { 72 26 }
 					parentanchor = center
 					datacontext = "[GetScriptedGui('colonial_empire_free_subject_sgui')]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ) ) )]"
 
 					textbox = {
@@ -940,8 +941,8 @@ types colonial_empire_widget_types
 					size = { 80 26 }
 					parentanchor = center
 					datacontext = "[GetScriptedGui('colonial_empire_dominion_subject_sgui')]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End )]"
 					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'ce_capital', State.MakeScope ).End ) ) )]"
 
 					textbox = {
@@ -1394,6 +1395,148 @@ types colonial_empire_widget_types
 		}
 	}
 
+	### The overview's stability row (te_ce_overview_panel): the bar's five
+	### layers, the value and its direction, all on the shown Country. Its
+	### defaults are another country's, with no journal entry in context: the
+	### value is colonial_empire_live_bar (the bar to the point), the hovers
+	### read Country, and the row has no hover of its own. The player's row is
+	### an item of the entry's own GetScriptedProgressBars, which fills the
+	### three blocks with the engine's breakdown, the exact value and the
+	### GetPlayer hovers an item tooltip must use (gotcha #24).
+	type te_ce_ov_bar_row = flowcontainer {
+		direction = horizontal
+		spacing = 8
+		ignoreinvisible = yes
+		block "bar_row_tooltip" {}
+
+		textbox = {
+			minimumsize = { 90 -1 }
+			maximumsize = { 90 -1 }
+			autoresize = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			elide = right
+			using = colonial_empire_fontsize_overview
+			text = "je_colonial_empire_ov_stability_label"
+		}
+		widget = {
+			size = { 180 18 }
+			parentanchor = vcenter
+
+			# 1. Background and frame.
+			default_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "values" {
+					value = 0
+					min = 0
+					max = 1
+				}
+			}
+			# 2. Rising, good: the green stretch to where it is heading.
+			widget = {
+				size = { 100% 100% }
+				alpha = 0.4
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)1' )]"
+
+				green_progressbar_horizontal = {
+					size = { 100% 100% }
+					blockoverride "background" {}
+					blockoverride "frame" {}
+					blockoverride "values" {
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_bar_high_frac') )]"
+						min = 0
+						max = 1
+					}
+				}
+			}
+			# 3. Falling, bad: the red stretch from where it is heading up to today.
+			widget = {
+				size = { 100% 100% }
+				alpha = 0.5
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)-1' )]"
+
+				bad_progressbar_horizontal = {
+					size = { 100% 100% }
+					blockoverride "background" {}
+					blockoverride "frame" {}
+					blockoverride "values" {
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_bar_high_frac') )]"
+						min = 0
+						max = 1
+					}
+				}
+			}
+			# 4. Solid: the lower of today and where it is heading.
+			default_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "background" {}
+				blockoverride "frame" {}
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_bar_low_frac') )]"
+					min = 0
+					max = 1
+				}
+			}
+			# 5. The next band's edge: a thin line with its own hover.
+			progressbar = {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
+				noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+				size = { 100% 100% }
+				skip_initial_animation = yes
+				direction = horizontal
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_next_boundary_frac') )]"
+				min = 0
+				max = 1
+				marker = {
+					icon = {
+						size = { 3 24 }
+						parentanchor = vcenter
+						widgetanchor = center
+						texture = "gfx/interface/backgrounds/white.dds"
+						color = { 0.96 0.90 0.72 0.95 }
+						block "bar_tick_tooltip" {
+							tooltip = "je_colonial_empire_ov_tick_ni_tt"
+						}
+					}
+				}
+			}
+		}
+		textbox = {
+			minimumsize = { 145 -1 }
+			maximumsize = { 145 -1 }
+			autoresize = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = colonial_empire_fontsize_overview
+			elide = right
+			block "bar_value" {
+				text = "je_colonial_empire_ov_stability_value_ni"
+				tooltip = "je_colonial_empire_ov_heading_ni_tt"
+			}
+		}
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
+
+			icon = {
+				size = { 24 24 }
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)1' )]"
+				texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+			}
+			icon = {
+				size = { 24 24 }
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)-1' )]"
+				texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+			}
+			icon = {
+				size = { 24 24 }
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)0' )]"
+				texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+			}
+		}
+	}
+
 	### What a returning player checks: where the bar is and which way it is
 	### moving; then four cells in Banking's pattern (te_banking_ov_cell, the
 	### owner's call of 2026-10-27, CE's overview in the GUI audit): the band
@@ -1407,7 +1550,7 @@ types colonial_empire_widget_types
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		colonial_empire_panel = {
 			### Pinned to the 480 column. A frame whose width comes from its content
@@ -1424,7 +1567,7 @@ types colonial_empire_widget_types
 				### Before the first monthly assessment (a save upgraded mid-entry):
 				### one line in place of the rows that read the snapshot.
 				colonial_empire_text = {
-					visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+					visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 					text = "je_colonial_empire_conditions_pending"
 				}
 
@@ -1466,144 +1609,42 @@ types colonial_empire_widget_types
 				### "Where it is heading" is stability in colonial_empire_projection_months
 				### (12) at this month's projected change (colonial_empire_disp_projected),
 				### and today's value is colonial_empire_live_bar, the bar read as a whole
-				### number. No eye marker.
+				### number. No eye marker. The row is te_ce_ov_bar_row: for the player an
+				### item of the entry's datamodel, under te_own_country_only; for another
+				### country, which has no entry here (National Info), the row alone, on
+				### its defaults. The guard sits on a wrapper whose only child holds the
+				### datamodel, so another country's panel, which has no JournalEntry,
+				### never evaluates it: a widget inside an invisible container is not
+				### evaluated (gotcha #42's proven form).
 				flowcontainer = {
-					direction = vertical
-					ignoreinvisible = yes
 					parentanchor = hcenter
-					datamodel = "[JournalEntry.GetScriptedProgressBars]"
+					using = te_own_country_only
 
-					item = {
-						flowcontainer = {
-							direction = horizontal
-							spacing = 8
-							ignoreinvisible = yes
-							tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						datamodel = "[JournalEntry.GetScriptedProgressBars]"
 
-							textbox = {
-								minimumsize = { 90 -1 }
-								maximumsize = { 90 -1 }
-								autoresize = yes
-								parentanchor = vcenter
-								align = left|nobaseline
-								elide = right
-								using = colonial_empire_fontsize_overview
-								text = "je_colonial_empire_ov_stability_label"
-							}
-							widget = {
-								size = { 180 18 }
-								parentanchor = vcenter
-
-								# 1. Background and frame.
-								default_progressbar_horizontal = {
-									size = { 100% 100% }
-									blockoverride "values" {
-										value = 0
-										min = 0
-										max = 1
-									}
+						item = {
+							te_ce_ov_bar_row = {
+								blockoverride "bar_row_tooltip" {
+									tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
 								}
-								# 2. Rising, good: the green stretch to where it is heading.
-								widget = {
-									size = { 100% 100% }
-									alpha = 0.4
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)1' )]"
-
-									green_progressbar_horizontal = {
-										size = { 100% 100% }
-										blockoverride "background" {}
-										blockoverride "frame" {}
-										blockoverride "values" {
-											value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_bar_high_frac') )]"
-											min = 0
-											max = 1
-										}
-									}
+								blockoverride "bar_tick_tooltip" {
+									tooltip = "je_colonial_empire_ov_tick_tt"
 								}
-								# 3. Falling, bad: the red stretch from where it is heading up to today.
-								widget = {
-									size = { 100% 100% }
-									alpha = 0.5
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)-1' )]"
-
-									bad_progressbar_horizontal = {
-										size = { 100% 100% }
-										blockoverride "background" {}
-										blockoverride "frame" {}
-										blockoverride "values" {
-											value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_bar_high_frac') )]"
-											min = 0
-											max = 1
-										}
-									}
-								}
-								# 4. Solid: the lower of today and where it is heading.
-								default_progressbar_horizontal = {
-									size = { 100% 100% }
-									blockoverride "background" {}
-									blockoverride "frame" {}
-									blockoverride "values" {
-										value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_bar_low_frac') )]"
-										min = 0
-										max = 1
-									}
-								}
-								# 5. The next band's edge: a thin line with its own hover.
-								progressbar = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
-									noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-									progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-									size = { 100% 100% }
-									skip_initial_animation = yes
-									direction = horizontal
-									value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_boundary_frac') )]"
-									min = 0
-									max = 1
-									marker = {
-										icon = {
-											size = { 3 24 }
-											parentanchor = vcenter
-											widgetanchor = center
-											texture = "gfx/interface/backgrounds/white.dds"
-											color = { 0.96 0.90 0.72 0.95 }
-											tooltip = "je_colonial_empire_ov_tick_tt"
-										}
-									}
-								}
-							}
-							textbox = {
-								minimumsize = { 145 -1 }
-								maximumsize = { 145 -1 }
-								autoresize = yes
-								parentanchor = vcenter
-								align = left|nobaseline
-								using = colonial_empire_fontsize_overview
-								elide = right
-								text = "je_colonial_empire_ov_stability_value"
-								tooltip = "je_colonial_empire_ov_heading_tt"
-							}
-							widget = {
-								size = { 24 24 }
-								parentanchor = vcenter
-
-								icon = {
-									size = { 24 24 }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)1' )]"
-									texture = "gfx/interface/icons/generic_icons/trend_up.dds"
-								}
-								icon = {
-									size = { 24 24 }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)-1' )]"
-									texture = "gfx/interface/icons/generic_icons/trend_down.dds"
-								}
-								icon = {
-									size = { 24 24 }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_trend'), '(CFixedPoint)0' )]"
-									texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+								blockoverride "bar_value" {
+									text = "je_colonial_empire_ov_stability_value"
+									tooltip = "je_colonial_empire_ov_heading_tt"
 								}
 							}
 						}
 					}
+				}
+				### Another country's: no entry in context, so the row on its own.
+				te_ce_ov_bar_row = {
+					parentanchor = hcenter
+					visible = "[Not( Country.IsLocalPlayer )]"
 				}
 
 				### Rows 2 and 3: the four cells, two to a row (238 + 4 + 238 = 480).
@@ -1612,7 +1653,7 @@ types colonial_empire_widget_types
 					spacing = 4
 					ignoreinvisible = yes
 					parentanchor = hcenter
-					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 					flowcontainer = {
 						direction = horizontal
@@ -1632,57 +1673,57 @@ types colonial_empire_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/band_solidified.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/band_stable.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/band_strained.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/band_crumbling.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/band_collapsing.dds"
 								}
 							}
 							blockoverride "word" {
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
 									text = "je_colonial_empire_band_solidified"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)4' )]"
 									text = "je_colonial_empire_band_stable"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)3' )]"
 									text = "je_colonial_empire_band_strained"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)2' )]"
 									text = "je_colonial_empire_band_crumbling"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)1' )]"
 									text = "je_colonial_empire_band_collapsing"
 								}
 							}
 							blockoverride "third_line" {
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_next_tick'), '(CFixedPoint)1' )]"
 									position = { 78 46 }
-									tooltip = "je_colonial_empire_ov_tick_tt"
+									tooltip = "je_colonial_empire_ov_tick_ni_tt"
 									text = "je_colonial_empire_ov_next"
 								}
 							}
@@ -1701,32 +1742,32 @@ types colonial_empire_widget_types
 								icon = {
 									size = { 100% 100% }
 									alpha = 0.25
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/alert_isolation.dds"
 								}
 								icon = {
 									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/alert_consensus.dds"
 								}
 							}
 							blockoverride "word" {
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)0' )]"
 									text = "je_colonial_empire_ov_gp_calm"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
 									tooltip = "je_colonial_empire_ov_isolation_tt"
 									text = "je_colonial_empire_ov_isolation"
 								}
 								te_ce_ov_line = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+									visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
 									tooltip = "je_colonial_empire_ov_consensus_tt"
 									text = "je_colonial_empire_ov_consensus"
 								}
@@ -1757,13 +1798,13 @@ types colonial_empire_widget_types
 							blockoverride "icons" {
 								icon = {
 									size = { 100% 100% }
-									visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' )]"
+									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 								}
 								icon = {
 									size = { 100% 100% }
 									alpha = 0.25
-									visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' ) )]"
+									visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_colonies'), '(CFixedPoint)0' ) )]"
 									texture = "gfx/interface/icons/colonial_empire_icons/territory_colony.dds"
 								}
 							}
@@ -1796,11 +1837,11 @@ types colonial_empire_widget_types
 										texture = "gfx/interface/icons/colonial_empire_icons/programme_invest.dds"
 									}
 									blockoverride "lit" {
-										visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										visible = "[GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 										tooltip = "je_colonial_empire_ov_invest_on_tt"
 									}
 									blockoverride "unlit" {
-										visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										visible = "[Not(GetScriptedGui('colonial_empire_active_invest_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 										tooltip = "je_colonial_empire_ov_invest_off_tt"
 									}
 								}
@@ -1810,11 +1851,11 @@ types colonial_empire_widget_types
 										texture = "gfx/interface/icons/colonial_empire_icons/programme_garrison.dds"
 									}
 									blockoverride "lit" {
-										visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										visible = "[GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 										tooltip = "je_colonial_empire_ov_garrison_on_tt"
 									}
 									blockoverride "unlit" {
-										visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										visible = "[Not(GetScriptedGui('colonial_empire_active_garrison_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 										tooltip = "je_colonial_empire_ov_garrison_off_tt"
 									}
 								}
@@ -1824,11 +1865,11 @@ types colonial_empire_widget_types
 										texture = "gfx/interface/icons/colonial_empire_icons/programme_assimilation.dds"
 									}
 									blockoverride "lit" {
-										visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+										visible = "[GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 										tooltip = "je_colonial_empire_ov_assimilation_on_tt"
 									}
 									blockoverride "unlit" {
-										visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+										visible = "[Not(GetScriptedGui('colonial_empire_active_assimilation_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 										tooltip = "je_colonial_empire_ov_assimilation_off_tt"
 									}
 								}
@@ -1858,7 +1899,7 @@ types colonial_empire_widget_types
 					spacing = 4
 					ignoreinvisible = yes
 					parentanchor = hcenter
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_tier'), '(CFixedPoint)5' )]"
 
 					flowcontainer = {
 						direction = vertical
@@ -1877,7 +1918,7 @@ types colonial_empire_widget_types
 							size = { 240 12 }
 							parentanchor = hcenter
 							blockoverride "values" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_at_100_frac') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_at_100_frac') )]"
 								min = 0
 								max = 1
 							}
@@ -1887,7 +1928,7 @@ types colonial_empire_widget_types
 						direction = vertical
 						spacing = 2
 						parentanchor = hcenter
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_act_in_reach'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_act_in_reach'), '(CFixedPoint)1' )]"
 						tooltip = "je_colonial_empire_ov_act_tt"
 
 						textbox = {
@@ -1901,7 +1942,7 @@ types colonial_empire_widget_types
 							size = { 240 12 }
 							parentanchor = hcenter
 							blockoverride "values" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_solidified_frac') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_solidified_frac') )]"
 								min = 0
 								max = 1
 							}
@@ -1920,16 +1961,16 @@ types colonial_empire_widget_types
 					spacing = 8
 					ignoreinvisible = yes
 					parentanchor = hcenter
-					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 					te_ce_ov_pie = {
 						parentanchor = vcenter
 						tooltip = "je_colonial_empire_ov_pie_tt"
 						blockoverride "pie_value_cum" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_cum') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_cum') )]"
 						}
 						blockoverride "pie_value" {
-							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_condemner_share') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_condemner_share') )]"
 						}
 					}
 					flowcontainer = {
@@ -2003,7 +2044,7 @@ types colonial_empire_widget_types
 
 			# Shown for a save upgraded mid-entry, until the first pulse.
 			colonial_empire_text = {
-				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 				text = "je_colonial_empire_conditions_pending"
 			}
 
@@ -2015,7 +2056,7 @@ types colonial_empire_widget_types
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
-				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 				# A constant, so no bar.
 				colonial_empire_pillar_row = {
@@ -2024,7 +2065,7 @@ types colonial_empire_widget_types
 						text = "je_colonial_empire_drift_base"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_base')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_base')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2036,15 +2077,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_laws_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_laws_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_laws_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_laws_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_laws')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_laws')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2056,15 +2097,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_igs_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_igs_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_igs_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_igs_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_igs')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_igs')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2076,15 +2117,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_rank_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_rank_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_rank_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_rank_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_rank')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_rank')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2096,15 +2137,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_policies_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_policies_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_policies_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_policies_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_policies')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2116,15 +2157,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_domestic_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_domestic_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_domestic_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_domestic_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_domestic')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_domestic')|=+2]"
 					}
 				}
 				# The three that iterate read this month's snapshot, through the guarded
@@ -2138,15 +2179,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_overreach_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_overreach_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_overreach_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_overreach_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_d_overreach')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_overreach')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2158,15 +2199,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_gp_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_gp_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_gp_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_gp_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_gp')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2178,15 +2219,15 @@ types colonial_empire_widget_types
 						double_direction_progressbar = {
 							size = { 190 14 }
 							blockoverride "value_left" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_acceptance_neg') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_acceptance_neg') )]"
 							}
 							blockoverride "value_right" {
-								value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pillar_acceptance_pos') )]"
+								value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('colonial_empire_disp_pillar_acceptance_pos') )]"
 							}
 						}
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_d_acceptance')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_empire_disp_d_acceptance')|=+2]"
 					}
 				}
 
@@ -2203,7 +2244,7 @@ types colonial_empire_widget_types
 						text = "je_colonial_empire_drift_cap"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap_display')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_cap_display')|=+2]"
 					}
 				}
 				colonial_empire_pillar_row = {
@@ -2212,7 +2253,7 @@ types colonial_empire_widget_types
 						text = "je_colonial_empire_drift_total"
 					}
 					blockoverride "row_value" {
-						text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]"
+						text = "[Country.MakeScope.ScriptValue('colonial_stability_drift_total_display')|=+2]"
 					}
 				}
 			}
@@ -2253,7 +2294,7 @@ types colonial_empire_widget_types
 
 			# Shown for a save upgraded mid-entry, until the first pulse.
 			colonial_empire_text = {
-				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 				text = "je_colonial_empire_conditions_pending"
 			}
 
@@ -2261,32 +2302,49 @@ types colonial_empire_widget_types
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
-				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
-				te_ce_gp_head = {
-					visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
-				}
+				# The rows, the player's own: colonial_empire_refresh_gp_rows
+				# builds them for a played country alone (each power weighed
+				# against that country's prestige), so another country's list
+				# would be empty and its "none" line false. Another country's
+				# panel has a note; the overview's cell and the escalations
+				# below give its pressure.
 				flowcontainer = {
+					using = te_own_country_only
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
-					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows')]"
 
-					item = {
-						te_ce_gp_row = {
-							datacontext = "[Scope.GetScriptContainer]"
+					te_ce_gp_head = {
+						visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[Country.MakeScope.GetList('colonial_empire_gp_rows')]"
+
+						item = {
+							te_ce_gp_row = {
+								datacontext = "[Scope.GetScriptContainer]"
+							}
 						}
+					}
+					colonial_empire_list_text = {
+						visible = "[IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') )]"
+						text = "je_colonial_empire_pressure_none"
 					}
 				}
 				colonial_empire_list_text = {
-					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_gp_rows') )]"
-					text = "je_colonial_empire_pressure_none"
+					visible = "[Not( Country.IsLocalPlayer )]"
+					text = "je_colonial_empire_pressure_own_only_ni"
 				}
 
 				# The escalations in force (colonial_empire_disp_pressure_level: 1
 				# diplomatic isolation, 2 both, as they stack).
 				te_ce_escalation_row = {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)1' )]"
 					tooltip = "je_colonial_empire_ov_isolation_tt"
 					blockoverride "escalation_label" {
 						text = "je_colonial_empire_pressure_isolation"
@@ -2296,7 +2354,7 @@ types colonial_empire_widget_types
 					}
 				}
 				te_ce_escalation_row = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_pressure_level'), '(CFixedPoint)2' )]"
 					tooltip = "je_colonial_empire_ov_consensus_tt"
 					blockoverride "escalation_label" {
 						text = "je_colonial_empire_pressure_consensus"
@@ -2349,14 +2407,16 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire_level_invest"
 				}
 				blockoverride "down_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 				}
 				blockoverride "up_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 				}
 			}
 
@@ -2373,14 +2433,16 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire_level_garrison"
 				}
 				blockoverride "down_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 				}
 				blockoverride "up_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 				}
 			}
 
@@ -2397,14 +2459,16 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire_level_assimilation"
 				}
 				blockoverride "down_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 				}
 				blockoverride "up_action" {
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+					using = te_own_country_only
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
 				}
 			}
 		}
@@ -2455,7 +2519,7 @@ types colonial_empire_widget_types
 
 			# Shown for a save upgraded mid-entry, until the first pulse.
 			colonial_empire_text = {
-				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ))]"
+				visible = "[Not(GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ))]"
 				text = "je_colonial_empire_conditions_pending"
 			}
 
@@ -2463,14 +2527,14 @@ types colonial_empire_widget_types
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
-				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 				# --- Wars of independence ------------------------------------
 				# A row per war we are fighting, while there is one: the
 				# records decol_iw_rebels_1..3 (decolonization_war_effects.txt),
 				# each row on its rebels' capital (decol_iw_state_N).
 				colonial_empire_subheader = {
-					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
 					blockoverride "subheader_margin" {
 						margin_top = 0
 					}
@@ -2480,30 +2544,30 @@ types colonial_empire_widget_types
 					}
 				}
 				te_ce_war_head = {
-					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('decol_iw_disp_wars'), '(CFixedPoint)0' )]"
 				}
 				te_ce_war_row = {
 					blockoverride "row_visible" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_1'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_iw_disp_slot_1'), '(CFixedPoint)1' )]"
 					}
 					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_1').GetState]"
-					}
-				}
-				te_ce_war_row = {
-					blockoverride "row_visible" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_2'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_2').GetState]"
+						datacontext = "[Country.MakeScope.Var('decol_iw_state_1').GetState]"
 					}
 				}
 				te_ce_war_row = {
 					blockoverride "row_visible" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('decol_iw_disp_slot_3'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_iw_disp_slot_2'), '(CFixedPoint)1' )]"
 					}
 					blockoverride "row_context" {
-						datacontext = "[JournalEntry.GetCountry.MakeScope.Var('decol_iw_state_3').GetState]"
+						datacontext = "[Country.MakeScope.Var('decol_iw_state_2').GetState]"
+					}
+				}
+				te_ce_war_row = {
+					blockoverride "row_visible" {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_iw_disp_slot_3'), '(CFixedPoint)1' )]"
+					}
+					blockoverride "row_context" {
+						datacontext = "[Country.MakeScope.Var('decol_iw_state_3').GetState]"
 					}
 				}
 
@@ -2524,31 +2588,52 @@ types colonial_empire_widget_types
 						tooltip = "je_colonial_empire_holdings_territories_tt"
 					}
 				}
-				te_ce_territory_head = {
-					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
-				}
+				# The rows, the player's own: colonial_empire_refresh_display
+				# builds the list for a played country alone, so another
+				# country's would be empty, and its pending line would stand
+				# for good. Another country's panel has the count above and a
+				# note.
 				flowcontainer = {
+					using = te_own_country_only
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
-					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_blocs')]"
 
-					item = {
-						te_ce_territory_row = {
-							datacontext = "[Scope.GetState]"
+					te_ce_territory_head = {
+						visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[Country.MakeScope.GetList('colonial_empire_blocs')]"
+
+						item = {
+							te_ce_territory_row = {
+								datacontext = "[Scope.GetState]"
+							}
 						}
 					}
+					# None eligible (a country held by its colonial subjects alone, say).
+					colonial_empire_list_text = {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_territories_none"
+					}
+					# Eligible territories but no stored rows yet: a save upgraded
+					# mid-entry, until the next monthly assessment.
+					colonial_empire_list_text = {
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_territories_pending'), '(CFixedPoint)1' )]"
+						text = "je_colonial_empire_conditions_pending"
+					}
 				}
-				# None eligible (a country held by its colonial subjects alone, say).
+				# Another country's: the subheader's count, then why no rows.
 				colonial_empire_list_text = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' )]"
+					visible = "[And( Not( Country.IsLocalPlayer ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' ) )]"
+					text = "je_colonial_empire_rows_own_only_ni"
+				}
+				colonial_empire_list_text = {
+					visible = "[And( Not( Country.IsLocalPlayer ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_territories_eligible'), '(CFixedPoint)0' ) )]"
 					text = "je_colonial_empire_territories_none"
-				}
-				# Eligible territories but no stored rows yet: a save upgraded
-				# mid-entry, until the next monthly assessment.
-				colonial_empire_list_text = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_territories_pending'), '(CFixedPoint)1' )]"
-					text = "je_colonial_empire_conditions_pending"
 				}
 
 				# --- Colonial subjects ---------------------------------------
@@ -2563,41 +2648,61 @@ types colonial_empire_widget_types
 						tooltip = "je_colonial_empire_holdings_subjects_tt"
 					}
 				}
-				te_ce_subject_head = {
-					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
-				}
+				# The rows, the player's own, as the territories' are.
 				flowcontainer = {
+					using = te_own_country_only
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
-					datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('colonial_empire_subject_capitals')]"
 
-					item = {
-						te_ce_subject_row = {
-							datacontext = "[Scope.GetState]"
+					te_ce_subject_head = {
+						visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[Country.MakeScope.GetList('colonial_empire_subject_capitals')]"
+
+						item = {
+							te_ce_subject_row = {
+								datacontext = "[Scope.GetState]"
+							}
 						}
 					}
 				}
 				colonial_empire_list_text = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
+					visible = "[And( Not( Country.IsLocalPlayer ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' ) )]"
+					text = "je_colonial_empire_rows_own_only_ni"
+				}
+				colonial_empire_list_text = {
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_subjects'), '(CFixedPoint)0' )]"
 					text = "je_colonial_empire_subjects_none"
 				}
 
 				# --- The whole empire ----------------------------------------
-				colonial_empire_subheader = {
-					blockoverride "subheader_text" {
-						text = "je_colonial_empire_holdings_whole"
+				# A decision and its button alone: the player's own.
+				flowcontainer = {
+					using = te_own_country_only
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+
+					colonial_empire_subheader = {
+						blockoverride "subheader_text" {
+							text = "je_colonial_empire_holdings_whole"
+						}
 					}
-				}
-				colonial_empire_decision_row = {
-					blockoverride "row_text" {
-						text = "je_colonial_empire_decision_planned"
-						tooltip = "je_colonial_empire_decision_planned_tt"
-					}
-					blockoverride "row_action" {
-						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					colonial_empire_decision_row = {
+						blockoverride "row_text" {
+							text = "je_colonial_empire_decision_planned"
+							tooltip = "je_colonial_empire_decision_planned_tt"
+						}
+						blockoverride "row_action" {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+						}
 					}
 				}
 			}
@@ -2682,7 +2787,7 @@ types colonial_empire_widget_types
 			}
 
 			textbox = {
-				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
 				parentanchor = hcenter
 				autoresize = yes
 				multiline = yes
@@ -2899,7 +3004,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)-1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)-1' )]"
 						text = "je_colonial_empire_stance_anti"
 						tooltip = "je_colonial_empire_stance_anti_tt"
 					}
@@ -2911,7 +3016,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)0' )]"
 						text = "je_colonial_empire_stance_neutral"
 						tooltip = "je_colonial_empire_stance_neutral_tt"
 					}
@@ -2923,7 +3028,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)1' )]"
 						text = "je_colonial_empire_stance_pro"
 						tooltip = "je_colonial_empire_stance_pro_tt"
 					}
@@ -2942,7 +3047,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)0' )]"
 						text = "je_colonial_empire_stance_force_none"
 						tooltip = "je_colonial_empire_stance_force_none_tt"
 					}
@@ -2954,7 +3059,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)1' )]"
 						text = "je_colonial_empire_stance_force_yes"
 						tooltip = "je_colonial_empire_stance_force_yes_tt"
 					}
@@ -2966,7 +3071,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)2' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)2' )]"
 						text = "je_colonial_empire_stance_force_dormant"
 						tooltip = "je_colonial_empire_stance_force_dormant_tt"
 					}
@@ -2985,7 +3090,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' ) )]"
+						visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' ) )]"
 						text = "je_colonial_empire_stance_next_now"
 						tooltip = "je_colonial_empire_stance_next_tt"
 					}
@@ -2997,7 +3102,7 @@ types colonial_empire_widget_types
 						align = right|nobaseline
 						elide = right
 						using = colonial_empire_fontsize_row
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' )]"
+						visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' )]"
 						text = "je_colonial_empire_stance_next_wait"
 						tooltip = "je_colonial_empire_stance_next_tt"
 					}
@@ -3012,15 +3117,16 @@ types colonial_empire_widget_types
 				margin_top = 6
 				minimumsize = { 476 -1 }
 				maximumsize = { 476 -1 }
+				using = te_own_country_only
 				datacontext = "[GetScriptedGui('colonial_empire_stance_sgui')]"
 
 				button = {
 					using = default_button_action
 					size = { 150 28 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 
 					textbox = {
 						parentanchor = center
@@ -3036,9 +3142,9 @@ types colonial_empire_widget_types
 					using = default_button_action
 					size = { 150 28 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 
 					textbox = {
 						parentanchor = center
@@ -3054,9 +3160,9 @@ types colonial_empire_widget_types
 					using = default_button_action
 					size = { 150 28 }
 					parentanchor = vcenter
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 
 					textbox = {
 						parentanchor = center
@@ -3150,7 +3256,12 @@ types colonial_empire_widget_types
 	### container and the player only (gotcha #24).
 	type te_ce_power_row = widget {
 		size = { 476 28 }
-		tooltip = "[SelectLocalization( Not( EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_weight'), '(CFixedPoint)0' ) ), 'je_colonial_empire_power_row_tt', 'je_colonial_empire_power_row_none_tt' )]"
+		### What the player's stance does to this power: viewer-relative
+		### (the list is the player's, ce_pw_weight its stance's weight), so
+		### another country's panel overrides it away (spec § 6.7).
+		block "row_tooltip" {
+			tooltip = "[SelectLocalization( Not( EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_weight'), '(CFixedPoint)0' ) ), 'je_colonial_empire_power_row_tt', 'je_colonial_empire_power_row_none_tt' )]"
+		}
 
 		flowcontainer = {
 			direction = horizontal
@@ -3324,12 +3435,17 @@ types colonial_empire_widget_types
 	### The largest colonial powers (decol_world_refresh_display: the eight
 	### with the most people in their colonies and colonial subjects, monthly
 	### and after a change of stance), ours among them if it is one. A live
-	### list, so open by default (rule 1).
+	### list, so open by default (rule 1). Its list is the player's copy (the
+	### # world: reads below), and an observer has no GetPlayer, so the section
+	### is hidden for one: National Info draws it for any country, and each read
+	### would log a null-country line every frame (gui_modding_guide.md, An
+	### observer has no GetPlayer). Every instance is {} (gotcha #17).
 	type te_ce_sec_powers = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
 
 		colonial_empire_section_header = {
 			blockoverride "left_text" {
@@ -3349,8 +3465,10 @@ types colonial_empire_widget_types
 		colonial_empire_panel = {
 			visible = "[Not(GetVariableSystem.Exists('colonial_empire_powers_closed'))]"
 
-			# Before the first monthly list, as on a newly opened tab.
+			# Before the first monthly list, as on a newly opened tab. The
+			# list is the world's, so every read of it is the player's copy.
 			colonial_empire_list_text = {
+				# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
 				visible = "[Not(GetScriptedGui('decol_world_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ))]"
 				text = "je_colonial_empire_powers_pending"
 			}
@@ -3359,15 +3477,20 @@ types colonial_empire_widget_types
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
+				# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
 				visible = "[GetScriptedGui('decol_world_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
 				te_ce_power_head = {
+					# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
 					visible = "[Not( IsDataModelEmpty( GetPlayer.MakeScope.GetList('decol_world_rows') ) )]"
 				}
+				# The player's: each row with what its stance does on hover.
 				flowcontainer = {
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
+					using = te_own_country_only
+					# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
 					datamodel = "[GetPlayer.MakeScope.GetList('decol_world_rows')]"
 
 					item = {
@@ -3376,7 +3499,25 @@ types colonial_empire_widget_types
 						}
 					}
 				}
+				# Another country's: the same rows, with no hover of the
+				# player's stance.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					visible = "[Not( Country.IsLocalPlayer )]"
+					# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
+					datamodel = "[GetPlayer.MakeScope.GetList('decol_world_rows')]"
+
+					item = {
+						te_ce_power_row = {
+							datacontext = "[Scope.GetScriptContainer]"
+							blockoverride "row_tooltip" {}
+						}
+					}
+				}
 				colonial_empire_list_text = {
+					# world: the eight largest colonial powers, the same list for every country; script builds it for players only (decol_world_refresh_display)
 					visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('decol_world_rows') )]"
 					text = "je_colonial_empire_powers_none"
 				}
@@ -3398,21 +3539,21 @@ types colonial_empire_widget_types
 			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
-			tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'ce_readout_entry_tt' ), GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+			tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'ce_readout_entry_tt' ), GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
 			colonial_empire_note = {
 				parentanchor = hcenter
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
 				text = "je_colonial_empire_readout_secured"
 			}
 			colonial_empire_note = {
 				parentanchor = hcenter
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)7' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)7' )]"
 				text = "je_colonial_empire_readout_collapsed"
 			}
 			colonial_empire_note = {
 				parentanchor = hcenter
-				visible = "[LessThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
+				visible = "[LessThan_CFixedPoint( Country.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
 				text = "je_colonial_empire_readout_none"
 			}
 		}
@@ -3431,7 +3572,7 @@ types colonial_empire_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_ce_sec_holdings = {}
 		te_ce_sec_stability = {}
@@ -3447,7 +3588,7 @@ types colonial_empire_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_ce_sec_history = {}
 		te_ce_sec_how = {}
@@ -3527,7 +3668,7 @@ types colonial_empire_widget_types
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 4
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 				te_ce_sec_holdings = {}
 				te_ce_sec_stability = {}
@@ -3540,7 +3681,7 @@ types colonial_empire_widget_types
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 4
-				visible = "[JournalEntry.IsActive]"
+				visible = "[GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 				te_ce_sec_pressure = {}
 				te_ce_sec_programmes = {}
