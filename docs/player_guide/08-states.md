@@ -465,7 +465,7 @@ them, and some break the figure down for your capital.
 | Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, and your three largest cities. Under Full, the urban pattern's tooltip shows its effects. |
 | States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
-| How Demographics Works | A collapsed section that explains the method, topic by topic, from the census to work and retirement and longevity. |
+| How Demographics Works | Opens the Help page, which explains the method, topic by topic, from the census to work and retirement and longevity. The state's Demographics subtab ends on the same link. |
 
 Every state the tab lists, in States, Where people live and Work and
 Retirement, opens on its Demographics subtab when you click it.

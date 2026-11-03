@@ -19,12 +19,12 @@ the window's top right, spreads it across the screen, each tab in columns; Side 
 left there, brings it back to the width of the other panels. The tab you chose
 stays chosen when you switch.
 
-Banking, Grand Monuments and the Colonial Empire each have a Help page that
-explains how the system works, with a heading for each topic. The "?" at the
-right of the tab's header opens it, and so does the last heading of the panel,
-such as How Banking Works, in the tab and in the journal entry. Press Escape or
-click outside the page to close it. The other systems keep their explanations
-in a collapsed section at the foot of their panel.
+Each system has a Help page that explains how it works, with a heading for
+each topic. The "?" at the right of the tab's header opens it, and so does the
+last heading of the panel, such as How Banking Works, in the tab and in the
+journal entry. Nation, Budget Breakdown and Demographics have no header, so
+their last heading is the way in. Press Escape or click outside the page to
+close it.
 
 This guide explains what each system does and how to play it. It assumes you
 know the base game: pops, interest groups, laws, markets, construction and
@@ -149,8 +149,8 @@ central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
-refunds offset each other inside that group. Open
-How the Breakdown Works at the bottom for the accounting details.
+refunds offset each other inside that group. How the Breakdown Works, at the
+bottom, opens the Help page with the accounting details.
 
 ## The Nation tab
 

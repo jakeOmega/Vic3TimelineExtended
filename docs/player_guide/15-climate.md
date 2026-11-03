@@ -148,7 +148,7 @@ the overview, the leader's role and any Enforce Emissions Reduction treaty that
 binds it, the market's emissions and carbon captured, and its share and
 emissions-cut pies; below, the leader's Mitigation Policies, with every Adopt and
 Repeal grayed, since only that leader can change them. The temperature, Top
-Emitters, the history charts and How Global Warming Works stay your own view.
+Emitters, the history charts and the Help page stay your own view.
 Use it to check what a market you want to bind with Enforce Emissions Reduction
 emits and which policies it already runs.
 
@@ -192,7 +192,8 @@ more migration pull to heat and cold states less to cold.
 ## The climate dashboard
 
 The journal entry opens with an overview that is always shown. The sections
-below it start open, except How Global Warming Works. While the entry is active
+below it start open. The last, How Global Warming Works, opens the Help page,
+as the "?" at the right of the tab's header does. While the entry is active
 it has no status line: the overview carries the tier and the readings.
 
 ![The Climate tab of the Market panel at 1.90 °C, tier Significant: the overview (tier, Market Leader, Penalty ×1.90, the Temperature bar and its threshold line, the emissions table and the two pies) and the start of Mitigation Policies.](images/global_warming_tab.png)
@@ -234,7 +235,7 @@ other source together; hover it for how many of the eleven policies you run. The
 | Top Emitters | Open | The five countries emitting most, largest first, including market members. Each row shows its flag, annual emissions, share of world emissions and national cumulative total. A treaty icon marks a bound country; your row says "Our country". Hover for its industrial reduction and market context, or "+N more countries" for the next 25. Figures update each January; rankings update monthly. |
 | Fossil Transition | Open | Your Resource Transition law, what is left of your coal mines, oil rigs and power plants with a retirement control for each, and what could replace them. See [The fossil transition](#the-fossil-transition). Shown on your own market only. |
 | History | Open | Charts of global temperature and of your market's share of world emissions. Both step once a year, when the emissions figures update. |
-| How Global Warming Works | Collapsed | The explanations: warming, the warming penalty, emissions, the mitigation policies and geoengineering. |
+| How Global Warming Works | A link | The Help page explains warming, the warming penalty, emissions, the mitigation policies and geoengineering, then the fossil transition. How the Fossil Transition Works, inside the Fossil Transition section, opens the same page, and is the way in with the Global Warming rule off, when the page explains the transition alone. |
 
 Top Emitters tells you whom to bind: every country controls its own industrial
 policies, whether it leads its market or belongs to another country's. A country
