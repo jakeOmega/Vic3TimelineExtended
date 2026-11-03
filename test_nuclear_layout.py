@@ -1,10 +1,12 @@
 """The Nuclear Weapons panel's section order, collapse defaults, state gates and
 overview (docs/guides/gui_style_guide.md; nuclear_layout_widget.gui)."""
+import functools
 import glob
 import os
 import re
 import unittest
 
+import gui_test_helpers as gh
 import gui_tree
 from gui_test_helpers import assert_wide_matches_narrow
 from scripts.generators import gen_te_systems_window as gen
@@ -24,9 +26,14 @@ STATUS = ["te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_worl
           "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
           "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]
 REFERENCE = ["te_nuclear_sec_how"]
+# Another country's copy of column 3's world sections, in its column 2, and
+# the sections the player's columns 2 and 3 gate on Country.IsLocalPlayer.
+WORLD_COLUMN = "te_nuclear_world_column"
+WIDE_OWN = ("te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
+            "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers", "te_nuclear_sec_how")
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
 # bar stays under The Programme, in its own gated wrapper.
-WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_je_goal_bar",
+WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar",
                  "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
                 ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
                  "te_nuclear_sec_reputation"],
@@ -74,8 +81,23 @@ def _loc(key):
     raise AssertionError(f"no loc {key}")
 
 
-def _sgui(name):
-    return f"GetScriptedGui('{name}').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+def _sgui(name, root="Country"):
+    """A display handler's IsShown on the panel's Country (spec
+    2026-11-02-charts-help-national-info § 6.3); the journal's roots, outside
+    te_je_country, read the entry's (root="JournalEntry.GetCountry")."""
+    return f"GetScriptedGui('{name}').IsShown( GuiScope.SetRoot( {root}.MakeScope ).End )"
+
+
+# The composers' gate: the tab's own, the entry, on the panel's Country (has_journal_entry
+# for any country; spec 2026-11-02-charts-help-national-info § 6.3). The journal's roots
+# keep JournalEntry.IsActive.
+ENTRY_GATE = _sgui("te_military_nuclear_tab_sgui")
+
+
+def _cell_tip(body):
+    """A cell's tooltip key: the plain key, or the player's branch of a
+    SelectLocalization( Country.IsLocalPlayer, ... )."""
+    return re.search(r"tooltip = \"(?:\[SelectLocalization\( Country\.IsLocalPlayer, ')?(\w+)", body).group(1)
 
 
 ALL_GUI = "\n".join(_read(p) for p in NUCLEAR_GUI)
@@ -89,7 +111,7 @@ class OrderTest(unittest.TestCase):
             body = _type_body(layout, composer)
             found = re.findall(r"^\t\t(te_nuclear_sec_\w+) = \{", body, re.M)
             self.assertEqual(found, expected, composer)
-            self.assertIn('visible = "[JournalEntry.IsActive]"', body, composer)
+            self.assertIn(f'visible = "[{ENTRY_GATE}]"', body, composer)
 
     def test_every_section_is_a_type(self):
         for sec in STATUS + REFERENCE + ["te_nuclear_sec_programme"]:
@@ -131,7 +153,7 @@ class OrderTest(unittest.TestCase):
         """As on main: the root is laid out only once the section has something in it."""
         layout = _read(LAYOUT)
         body = re.search(r'^flowcontainer = \{\n\tname = "widget_je_nuclear_programme"\n(.*?)^\}', layout, re.S | re.M).group(1)
-        self.assertIn(_sgui("nuclear_program_has_programme_sgui"), body)
+        self.assertIn(_sgui("nuclear_program_has_programme_sgui", root="JournalEntry.GetCountry"), body)
 
 
 class GateTest(unittest.TestCase):
@@ -228,7 +250,7 @@ class WidthTest(unittest.TestCase):
                     + gui_tree.size(next(c for c in types["nd_script_line"].children if c.kind == "textbox"),
                                     "minimumsize")[0])
         self.assertEqual((row, lines), (492, 480))
-        (panel,) = [c for c in types["te_nuclear_sec_reputation"].children if c.kind == "nd_panel"]
+        (panel,) = [c for c in types["te_nuclear_sec_reputation"].walk() if c.kind == "nd_panel"]
         self.assertEqual(gui_tree.size(panel, "minimumsize"), (2 * margin + row, -1))
 
 class FlagTest(unittest.TestCase):
@@ -380,7 +402,7 @@ class HowItWorksTest(unittest.TestCase):
 def _coded(text, value):
     """{code: [textures]} for the icons gated on ScriptValue(value) == code."""
     found = {}
-    pat = (rf"visible = \"\[EqualTo_CFixedPoint\( JournalEntry\.GetCountry\.MakeScope\.ScriptValue\('{value}'\), "
+    pat = (rf"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('{value}'\), "
            rf"'\(CFixedPoint\)(-?\d+)' \)\]\"(\s*)texture = \"([^\"]+)\"")
     for m in re.finditer(pat, text, re.S):
         found.setdefault(int(m.group(1)), []).append(m.group(3))
@@ -427,9 +449,9 @@ class OverviewTest(unittest.TestCase):
         """Banking's own cell, reused as it is: a size, a tooltip, the caption in
         the 154 column, an icon, the word and the figure."""
         cells = _cells(self.panel)
-        self.assertEqual(len(cells), 7)
+        self.assertEqual(len(cells), 9)   # 7 for the player, 2 for another country (Row 2's own)
         for body in cells:
-            tip = re.search(r'tooltip = "(\w+)"', body).group(1)
+            tip = _cell_tip(body)
             with self.subTest(cell=tip):
                 self.assertIn("size = { 238 70 }", body)
                 self.assertRegex(body, r'blockoverride "caption_width" \{\s*max_width = 154\s*\}')
@@ -442,7 +464,7 @@ class OverviewTest(unittest.TestCase):
             self.assertIn("using = te_nuclear_fontsize_overview", _type_body(self.ov, t), t)
 
     def test_what_needs_the_player_is_on_the_face(self):
-        figure = {re.search(r'tooltip = "(\w+)"', b).group(1): re.search(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', b).group(1)
+        figure = {_cell_tip(b): re.search(r'te_nuclear_ov_figure = \{\s*text = "(\w+)"', b).group(1)
                   for b in _cells(self.panel)}
         self.assertIn("nd_display_crisis_weeks_left", _loc(figure["je_nuclear_ov_crisis_tt"]))
         self.assertIn("je_nuclear_ov_crisis_deadline_soon", _loc(figure["je_nuclear_ov_crisis_tt"]))
@@ -455,8 +477,8 @@ class OverviewTest(unittest.TestCase):
 
     def test_the_rows_are_gated(self):
         body = self.panel
-        self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-        crisis = body.index('tooltip = "je_nuclear_ov_crisis_tt"')
+        self.assertIn(f'visible = "[{ENTRY_GATE}]"', body)
+        crisis = body.index("'je_nuclear_ov_crisis_tt'")
         self.assertIn(_sgui("nd_in_crisis_sgui"), body[:crisis])
         posture = body.index('tooltip = "nd_w_doctrine_tt"')
         self.assertIn(_sgui("nd_armed_sgui"), body[crisis:posture])
@@ -501,8 +523,8 @@ class OverviewTest(unittest.TestCase):
         body = _type_body(ALL_GUI, "te_nuclear_sec_forces")
         bar = self._bar(body, 'text = "nd_w_survivability_label"', 'text = "nd_w_survivability_value"')
         self.assertNotIn("progressbar_marker.dds", body)
-        cur = "JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability')"
-        head = "JournalEntry.GetCountry.MakeScope.ScriptValue('nd_display_survivability_heading')"
+        cur = "Country.MakeScope.ScriptValue('nd_display_survivability')"
+        head = "Country.MakeScope.ScriptValue('nd_display_survivability_heading')"
         green = bar[bar.index("green_progressbar_horizontal"):]
         red = bar[bar.index("bad_progressbar_horizontal"):]
         self.assertIn(f"GreaterThan_CFixedPoint( {head}, {cur} )", bar[:bar.index("green_progressbar_horizontal")])
@@ -529,12 +551,12 @@ class OverviewTest(unittest.TestCase):
         self.assertIn("margin = { 20 8 }", frame)
         self.assertIn("minimumsize = { 480 -1 }", self.panel)
         rows = [r for r in re.split(r"### Row \d", self.panel)[1:]]
-        self.assertEqual(len(rows), 5)
-        for row in rows[:4]:
+        self.assertEqual(len(rows), 6)   # Rows 1 to 5, and Row 2 for another country
+        for row in rows[:5]:
             n = row.count("te_banking_ov_cell = {")
             self.assertIn(n, (1, 2))
             self.assertLessEqual(n * 238 + (n - 1) * int(re.search(r"spacing = (\d+)", row).group(1)), 480)
-        taboo = rows[4]
+        taboo = rows[5]
         cells = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", taboo)]
         bar = int(re.search(r"widget = \{\s*size = \{ (\d+) 18 \}", taboo).group(1))
         self.assertEqual(len(cells), 2)
@@ -557,6 +579,9 @@ CODED_ICONS = {
 # Vanilla marks the overview uses as vanilla does: the taboo's trend arrows.
 VANILLA_KEPT = {"gfx/interface/icons/generic_icons/trend_up.dds", "gfx/interface/icons/generic_icons/trend_down.dds",
                 "gfx/interface/icons/generic_icons/trend_nochange.dds"}
+# The mod's own icons from elsewhere: another country's guarantees cell draws the
+# nuclear_guarantee treaty article's (115_nuclear_guarantee.txt).
+MOD_KEPT = {"gfx/interface/icons/diplomatic_treaties_articles_icons/nuclear_guarantee.dds"}
 # Placeholders until the art exists (style guide rule 10), each listed in
 # docs/systems/nuclear_gui_icons.md. None since icon batch 7 painted credibility's.
 PLACEHOLDERS = set()
@@ -584,13 +609,13 @@ class NuclearIconsTest(unittest.TestCase):
         for name, tooltip in (("warheads", "je_nuclear_ov_warheads_tt"), ("crisis", "je_nuclear_ov_crisis_tt"),
                               ("credibility", "nd_w_credibility_tt")):
             with self.subTest(cell=name):
-                m = re.search(rf'tooltip = "{tooltip}".*?texture = "([^"]+)"', self.ov, re.S)
+                m = re.search(rf'tooltip = "[^"]*\b{tooltip}\b[^"]*".*?texture = "([^"]+)"', self.ov, re.S)
                 self.assertEqual(m.group(1), f"{NUCLEAR_ICONS}{name}.dds")
 
     def test_no_placeholder_left(self):
         for path in re.findall(r'texture = "(gfx/interface/[^"]+)"', self.ov):
             with self.subTest(path=path):
-                self.assertTrue(path.startswith(NUCLEAR_ICONS) or path in VANILLA_KEPT | PLACEHOLDERS,
+                self.assertTrue(path.startswith(NUCLEAR_ICONS) or path in VANILLA_KEPT | MOD_KEPT | PLACEHOLDERS,
                                 f"placeholder left: {path}")
         for path in PLACEHOLDERS:
             self.assertIn(path, _read(ICON_DOC), path)
@@ -887,7 +912,7 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertRegex(dash, r"template banking_dash_fontsize_overview \{\s*fontsize = 16")
         panel = _type_body(ov, "te_nuclear_overview_panel")
         for body in _cells(panel):
-            tip = re.search(r'tooltip = "(\w+)"', body).group(1)
+            tip = _cell_tip(body)
             with self.subTest(cell=tip):
                 self._fits(_block_texts(body, "caption"), 154, OVERVIEW_UNIT, f"{tip} caption")
                 words = set(re.findall(r'te_nuclear_ov_word = \{\s*(?:visible = "[^"]*"\s*)?text = "(\w+)"', body))
@@ -993,7 +1018,7 @@ class MilitaryTabTest(unittest.TestCase):
         found = re.findall(r"^\t+(te_\w+) = \{\}", body, re.M)
         roots = [wrapped for _, _, wrapped in ROOTS]
         # The journal's roots, with the entry's own bar under The Programme, as in the journal.
-        self.assertEqual(found, roots[:2] + ["te_je_goal_bar"] + roots[2:])
+        self.assertEqual(found, roots[:2] + ["te_nuclear_programme_bar"] + roots[2:])
         # The link back to the entry is the frame's, after every section.
         self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
@@ -1011,10 +1036,13 @@ class MilitaryTabTest(unittest.TestCase):
         self.assertRegex(_read(LAYOUT), r"type te_nuclear_tab_body = te_system_tab_frame \{")
 
     def test_the_bar_shows_with_a_programme_only(self):
-        body = self._content()
-        bar = body.index("te_je_goal_bar = {}")
-        wrapper = body[body.rindex("flowcontainer = {", 0, bar):bar]
-        self.assertIn(_sgui("nuclear_program_has_programme_sgui"), wrapper)
+        """The bar's type, which both tab layouts draw: shown with a programme,
+        and the player's own (progress is hidden from another country)."""
+        self.assertIn("te_nuclear_programme_bar = {}", self._content())
+        bar = _type_body(_read(LAYOUT), "te_nuclear_programme_bar")
+        self.assertEqual(_root_visible(bar),
+                         f"And( Country.IsLocalPlayer, {_sgui('nuclear_program_has_programme_sgui')} )")
+        self.assertRegex(bar, r"flowcontainer = \{\s*using = te_own_country_only\b[^{}]*te_je_goal_bar = \{\}")
         self.assertIn("type te_je_goal_bar = flowcontainer", _read(TAB_WIDGETS))
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
@@ -1084,13 +1112,411 @@ class WideTest(unittest.TestCase):
     window's wide mount holds it in place of te_nuclear_tab_layout."""
 
     def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        """For the player: columns 2 and 3 carry Country.IsLocalPlayer on top of
+        the tab's gate, which is always true there; another country's copy of
+        column 3's world sections (te_nuclear_world_column) is skipped here and
+        held by the next test."""
         columns = assert_wide_matches_narrow(self, "te_nuclear_wide_sections",
-                                             layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"))
+                                             layout=("te_nuclear_tab_body", "te_nuclear_tab_layout"),
+                                             extra=(WORLD_COLUMN,), added_gates=WIDE_OWN)
         self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_another_country_gets_the_world_sections_in_column_2(self):
+        """Another country's columns 2 and 3 are the player's own, so column 2
+        holds its copy of column 3's world sections instead: exactly the taboo,
+        Nuclear Powers and How, under Not( Country.IsLocalPlayer ) and the tab's
+        gate, spaced as column 3 spaces them. The player's copies sit under
+        Country.IsLocalPlayer, the one gate they gained."""
+        text = gh._all_gui()
+        gate = "GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+        body = gh._type_body(text, WORLD_COLUMN)
+        self.assertEqual(_root_visible(body), f"And( Not( Country.IsLocalPlayer ), {gate} )")
+        self.assertEqual(re.findall(r"\b(te_\w+) = \{\}", body),
+                         ["te_nuclear_sec_taboo", "te_nuclear_sec_powers", "te_nuclear_reference_sections"])
+        self.assertEqual(re.findall(r"spacing = (\d+)", body), ["10", "4"], "column 3's spacing, then its composer's")
+        wide = gh._type_body(text, "te_nuclear_wide_sections")
+        m = re.search(r'blockoverride "column_2" \{', wide)
+        col2 = wide[m.end():gh._close(wide, m.end() - 1)]
+        self.assertTrue(col2.rstrip().endswith(f"{WORLD_COLUMN} = {{}}"), "the copy closes column 2")
+        self.assertEqual(wide.count(f"{WORLD_COLUMN} = {{}}"), 1)
+        visibles = re.findall(r'visible = "\[(.*)\]"', wide)
+        self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 2, "columns 2 and 3's composers")
+        self.assertEqual(visibles.count("Country.IsLocalPlayer"), 1, "column 3's How")
+        self.assertEqual(visibles.count(gate), 1, "column 1's composer, open for both")
 
     def test_the_window_registers_it(self):
         tab = {t.key: t for t in gen.TABS}["nuclear_weapons"]
         self.assertEqual((tab.body, tab.layout, tab.wide), ("te_nuclear_tab_body", "te_nuclear_tab_layout", "te_nuclear_wide_sections"))
+
+
+
+# ---- Another country's panel (National Info; spec 2026-11-02-charts-help-national-info § 6.4) --------
+# The owner's rule: Nuclear is public through the public estimate, and the true stockpile never
+# reaches another country's view, whether through markup, a tooltip, a loc splice or a chart.
+# Another country sees the public estimate (nd_believed_stockpile: the estimate once the country
+# has tested, nothing before), its crisis (stage, danger and deadline, as World Crises already
+# shows every government), the nuclear guarantees it gives and holds, and the world's own lists
+# (World Crises, Nuclear Powers, the taboo and its chart). Read as that panel draws
+# te_nuclear_wide_sections (gui_test_helpers.panel_view: te_own_country_only parts left out).
+
+WIDE = "te_nuclear_wide_sections"
+# A section whose root is And( Country.IsLocalPlayer, <its gate> ) collapses for another country,
+# and its children sit in a te_own_country_only wrapper: nothing of it is drawn there, and the
+# player's panel shows it exactly when it did before.
+COLLAPSED = ["te_nuclear_sec_programme", "te_nuclear_programme_bar", "te_nuclear_sec_crisis",
+             "te_nuclear_sec_strike", "te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
+             "te_nuclear_sec_reputation"]
+_COLLAPSE = re.compile(r'visible = "\[And\( Country\.IsLocalPlayer, .*\)\]"')
+# What says how many warheads a country truly holds, how close the next one is, its posture or its
+# custody, or whether it is armed at all (nd_armed_sgui reads the true count, nd_has_reputation_sgui
+# the posture's credibility, created with the first warhead), and the handlers whose hovers print
+# them. None may reach another country's panel. A listed base: _leaks() adds every script value,
+# scripted trigger and scripted GUI that reads the true state at any depth.
+LEAKS = re.compile(
+    r"\b(nd_display_stockpile|nuclear_weapon_stockpile|nd_stockpile|nd_display_public_estimate"
+    r"|nd_display_survivab\w*|nd_display_safeguards|nd_display_hardening|nd_display_readiness\w*"
+    r"|nd_display_reliability|nd_display_strain|nd_display_upkeep\w*|nd_display_authority\w*"
+    r"|nd_display_doctrine_months_left|nd_display_hold\w*|nd_display_loose\w*|nd_display_survivors\w*"
+    r"|nuclear_program_display_\w+|nuclear_weapons_program_funding|nuclear_weapon_program_progress"
+    r"|nd_disp_taboo_burden\w*|nd_disp_taboo_(?:prestige|leverage)_cost\w*|nd_ar_\w+|nd_custody\w*"
+    r"|nd_armed_sgui|nd_has_reputation_sgui|nuclear_program_has_programme_sgui|nd_plan_\w+_sgui"
+    r"|nd_loose_sgui|nd_disavowing_sgui|nd_home_\w+_sgui|nd_risk_breakdown_sgui|nd_crisis_\w+_breakdown_sgui"
+    r"|nd_crisis_next_pressure_sgui|nd_crisis_opponent_sgui|nd_last_crisis_sgui|nd_reach_\w+_sgui"
+    r"|nd_posture_sgui|nd_crisis_action_sgui|nuclear_program_funding_sgui|nd_has_main_rival_sgui)\b")
+# The true state's variables: the stockpile, the programme's progress and funding, readiness,
+# survivability, command (reliability, strain, launch authority), the upkeep cached from the arsenal,
+# the ceiling and dismantling, and custody (loose warheads, safeguards, hardening, the arsenal
+# records, the custody transfers). A script value or scripted trigger that reads one, or reads one
+# that does, is true state too (_true_state).
+TRUE_VARS = re.compile(
+    r"\b(nuclear_weapon_stockpile|nuclear_weapon_program_progress|nuclear_weapons_program_funding"
+    r"|nd_readiness\w*|nd_survivability|nd_reliability|nd_strain|nd_authority|nd_upkeep_weekly_cached"
+    r"|nd_warhead_ceiling|nd_dismantle_\w+|nd_safeguards|nd_hardening|nd_loose_\w+|nd_custody_\w+|nd_ar_\w+)\b")
+# A bare name in a script body: a script value, trigger or scripted GUI it may call (not var:x, x.y).
+_NAME_REF = re.compile(r"(?<![:.\w])([a-z_]\w*)\b")
+# A key another country's panel renders that may name one of the estimate's two script values, and
+# why it cannot leak. Both fall back to the live count while nd_public_estimate is unset, so a
+# display reads nd_shown_public_estimate instead, and none is allowed today.
+LEAK_SAFE = {}
+ESTIMATE_VALUES = {"nd_believed_stockpile", "nd_display_public_estimate"}
+
+
+@functools.lru_cache(maxsize=1)
+def _true_state():
+    """Every script value, scripted trigger and scripted GUI (by its
+    is_shown) that reads a TRUE_VARS variable, directly or through script
+    values and scripted triggers, at any depth."""
+    graph = {**_scripts("script_values"), **_scripts("scripted_triggers")}
+    for name, body in _scripts("scripted_guis").items():
+        m = re.search(r"\bis_shown = \{", body)
+        graph[name] = body[m.end():gh._close(body, m.end() - 1)] if m else ""
+    refs = {n: (set(_NAME_REF.findall(b)) & graph.keys()) - {n} for n, b in graph.items()}
+    out = {n for n, b in graph.items() if TRUE_VARS.search(b)}
+    grew = True
+    while grew:
+        grew = False
+        for n, r in refs.items():
+            if n not in out and r & out:
+                out.add(n)
+                grew = True
+    return frozenset(out)
+
+
+@functools.lru_cache(maxsize=1)
+def _leaks():
+    """LEAKS, TRUE_VARS and every name _true_state derives, as one pattern."""
+    derived = "|".join(sorted(map(re.escape, _true_state()), key=len, reverse=True))
+    return re.compile(rf"{LEAKS.pattern}|{TRUE_VARS.pattern}|\b({derived})\b")
+
+
+def _found(pattern, text):
+    return sorted({m.group(0) for m in pattern.finditer(text)})
+
+
+def _drawn(view, types, name):
+    """A type's body as another country's panel draws it: its guarded parts
+    blanked, and nothing at all for a root that collapses there."""
+    body = gh.unguarded(types[name].body, view.skip.get(name, []))
+    root_visible = [ln for ln in body.split("\n") if re.match(r'^\t\tvisible = ', ln)]
+    if root_visible and _COLLAPSE.search(root_visible[0]):
+        return ""
+    return body
+
+
+def _scripts(pattern):
+    out = {}
+    for path in glob.glob(os.path.join(REPO, "common", pattern, "*.txt")):
+        text = gh._strip_comments(_read(path))
+        for m in re.finditer(r"(?m)^(\w+) = \{", text):
+            out[m.group(1)] = text[m.end() - 1:gh._close(text, m.end() - 1) + 1]
+    return out
+
+
+class PrivateTest(unittest.TestCase):
+    """Both directions: what spec § 6.4 hides is under te_own_country_only, and
+    what it shows is still drawn for another country (an over-guarded panel
+    passes every binding test)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.view = gh.panel_view({WIDE}, cls.types)
+        cls.loc = gh.load_loc()
+        cls.keys = gh.panel_loc_keys({WIDE}, cls.types, cls.loc)
+        cls.markup = {n: _drawn(cls.view, cls.types, n) for n in cls.view.open}
+        cls.leaks = _leaks()
+
+    def test_the_hidden_sections_collapse(self):
+        """The program, the goal bar, the crisis's readings and moves, Strike,
+        Posture, Forces, At Home and Reputation: each root collapses for another
+        country, and everything under it is guarded."""
+        for name in COLLAPSED:
+            with self.subTest(section=name):
+                body = self.types[name].body
+                self.assertIsNotNone(_root_visible(body), name)
+                self.assertTrue(_COLLAPSE.search(f'visible = "[{_root_visible(body)}]"'),
+                                f"{name}: its root is And( Country.IsLocalPlayer, <gate> )")
+                drawn = gh.unguarded(body, self.view.skip[name])
+                self.assertNotIn("{", drawn, f"{name}: a child outside te_own_country_only")
+        # Delivery and Defence has no gate: its root takes the guard.
+        delivery = self.types["te_nuclear_sec_delivery"].body
+        self.assertIn("using = te_own_country_only", delivery)
+        self.assertEqual(gh.unguarded(delivery, self.view.skip["te_nuclear_sec_delivery"]).strip(), "")
+        for name in ("te_je_goal_bar", "nuclear_program_funding_row", "nd_choice_row", "nd_axis_row",
+                     "nd_readiness_row", "nd_stepper_row", "nd_home_ig_table", "nd_crisis_cell", "nd_outcome_row"):
+            self.assertNotIn(name, self.view.open, name)
+
+    def test_the_overview_shows_the_estimate_not_the_count(self):
+        ov = self.markup["te_nuclear_overview_panel"]
+        for key in ("je_nuclear_ov_public_word", "je_nuclear_ov_public_figure", "je_nuclear_ov_public_tt",
+                    "je_nuclear_ov_guarantees_word", "je_nuclear_ov_guarantees_figure",
+                    "je_nuclear_ov_guarantees_tt", "je_nuclear_ov_crisis_label", "je_nuclear_ov_crisis_figure",
+                    "je_nuclear_ov_crisis_tt_theirs", "je_nuclear_ov_taboo_value"):
+            self.assertIn(key, ov, key)
+        for key in ("je_nuclear_ov_warheads_label", "je_nuclear_ov_warheads_figure", "je_nuclear_ov_prog_tt",
+                    "nd_w_doctrine_tt", "nd_w_readiness_tt", "nd_w_authority_tt", "nd_w_credibility_tt"):
+            self.assertNotIn(key, ov, f"{key}: the player's own")
+        self.assertIn('visible = "[Not( Country.IsLocalPlayer )]"', ov, "another country's row is its own")
+        # The estimate is the seeded one, gated on a test: nothing before it, and never the live count.
+        for key in ("je_nuclear_ov_public_count", "je_nuclear_ov_public_tt_known"):
+            self.assertIn("ScriptValue('nd_shown_public_estimate')", self.loc[key], key)
+        self.assertIn("nd_believed_armed_sgui", self.loc["je_nuclear_ov_public_word"])
+        self.assertIn("nd_believed_armed = yes", _scripts("scripted_guis")["nd_believed_armed_sgui"])
+        shown = _value_body("nd_shown_public_estimate")
+        self.assertRegex(shown, r"value = 0\s+if = \{\s+limit = \{\s+nd_believed_armed = yes\s+"
+                                r"has_variable = nd_public_estimate\s+\}\s+value = var:nd_public_estimate\s+\}")
+        self.assertNotIn("nd_shown_public_estimate", _true_state())
+
+    def test_the_public_parts_are_drawn(self):
+        """Spec § 6.4's Shown column: the public estimate, crises, guarantees,
+        and the world's own lists."""
+        for name in ("te_nuclear_overview_panel", "te_banking_ov_cell", "te_nuclear_sec_world_crises",
+                     "nd_world_crisis_row", "te_nuclear_sec_powers", "nuclear_program_power_row",
+                     "te_nuclear_sec_taboo", "te_hist_nd_taboo", "te_hist_nd_taboo_tgt", "te_nuclear_sec_how"):
+            with self.subTest(type=name):
+                self.assertIn(name, self.view.open)
+                self.assertTrue(self.markup[name].strip(), f"{name} draws for another country")
+        for key in ("je_nuclear_ov_public_count", "je_nuclear_ov_public_none", "je_nuclear_ov_public_tt_known",
+                    "je_nuclear_ov_public_tt_none", "je_nuclear_ov_crisis_tt_theirs", "nd_crisis_stage_1",
+                    "nd_public_guarantee_word_both", "nd_public_guarantee_word_none", "nd_public_guarantee_line_gives",
+                    "nd_public_guarantee_line_holds", "je_nuclear_ov_guarantees_umbrella",
+                    "nd_public_guarantee_figure_under", "nd_public_guarantee_figure_treaty",
+                    "nd_w_world_crises_header", "nd_wc_item_stage", "nd_wc_item_danger",
+                    "je_nuclear_program_widget_powers_header", "nuclear_program_power_estimate",
+                    "je_nuclear_program_widget_taboo_score_value", "nd_taboo_hist_tt"):
+            self.assertIn(key, self.keys, key)
+        for key in ("je_nuclear_ov_crisis_tt", "je_nuclear_ov_warheads_tt", "nd_w_arsenal_value",
+                    "je_nuclear_program_widget_taboo_burden_value", "je_nuclear_program_widget_taboo_strategic_value",
+                    "nd_w_umbrella_value", "nd_w_loose_value"):
+            self.assertNotIn(key, self.keys, f"{key}: the player's own")
+
+    def test_nothing_drawn_reads_the_true_count(self):
+        """No markup another country's panel draws, and no key it renders, reads
+        the true stockpile, progress, funding, readiness or custody, or asks
+        whether the country is armed (spec § 6.4's Hidden column)."""
+        for name, text in sorted(self.markup.items()):
+            with self.subTest(type=name):
+                self.assertFalse(_found(self.leaks, text), "in another country's panel")
+        for key in sorted(self.keys):
+            with self.subTest(key=key):
+                found = _found(self.leaks, self.loc[key])
+                if key in LEAK_SAFE:
+                    found = [f for f in found if f not in ESTIMATE_VALUES]
+                self.assertFalse(found, "in another country's panel")
+        self.assertFalse(set(LEAK_SAFE) - self.keys, "LEAK_SAFE names a key another country's panel no longer renders")
+        # Nuclear Powers' rows show the seeded estimate, never the live count.
+        self.assertIn("ScriptValue('nd_shown_public_estimate')", self.loc["nuclear_program_power_estimate"])
+
+    def test_the_true_state_is_derived(self):
+        """_true_state follows script values and triggers: what the stockpile
+        feeds is true state, and what the world sees is not."""
+        derived = _true_state()
+        for name in ("nd_stockpile", "nd_stockpile_capped", "nd_public_estimate_observed", "nd_upkeep_size_factor",
+                     "nd_is_armed", "nd_armed_sgui", "nd_believed_stockpile", "nd_display_public_estimate"):
+            self.assertIn(name, derived, name)
+        for name in ("nd_believed_armed", "nd_under_an_umbrella", "nd_protects_anyone", "nd_is_guaranteed",
+                     "nd_believed_armed_sgui", "nd_shown_public_estimate", "nd_taboo_exists_sgui"):
+            self.assertNotIn(name, derived, name)
+
+    def test_no_custom_loc_asks_the_true_count(self):
+        """The GetCustom calls another country's panel makes (the guarantees'
+        word, figure and line; the crisis's stage and danger) pick their text
+        on triggers. None of them, or of the scripted triggers they call, reads
+        the true count or asks nd_is_armed: the umbrella asks nd_believed_armed,
+        and treaties are public."""
+        texts = list(self.markup.values()) + [self.loc[k] for k in self.keys]
+        names = {n for t in texts for n in re.findall(r"GetCustom\(\s*'(\w+)'\s*\)", t)}
+        self.assertTrue({"nd_public_guarantee_word", "nd_public_guarantee_figure", "nd_public_guarantee_line"} <= names)
+        custom = _scripts("customizable_localization")
+        calls = {**_scripts("scripted_triggers"), **_scripts("script_values")}
+        for name in sorted(names):
+            seen, todo = set(), [custom[name]]
+            while todo:
+                body = todo.pop()
+                with self.subTest(custom=name):
+                    self.assertFalse(_found(self.leaks, body))
+                for called in set(_NAME_REF.findall(body)) & calls.keys():
+                    if called not in seen:
+                        seen.add(called)
+                        todo.append(calls[called])
+        self.assertIn("nd_believed_armed = yes", calls["nd_under_an_umbrella"])
+
+    def test_no_chart_plots_a_stockpile(self):
+        """Nuclear's charts are the taboo and its target, the world's: none plots
+        an arsenal (scripts/generators/gen_te_history_charts.py's registry)."""
+        from scripts.generators import gen_te_history_charts as charts
+        self.assertEqual(sorted(c.id for c in charts.CHARTS if c.system == "nuclear_weapons"), ["nd_taboo", "nd_taboo_tgt"])
+        fragment = _read(os.path.join(REPO, "scripts", "generators", "te_history_charts", "nuclear_weapons.gui.in"))
+        self.assertEqual(set(re.findall(r"te_hist_v_\w+", fragment)), {"te_hist_v_nd_taboo", "te_hist_v_nd_taboo_tgt"})
+        self.assertFalse(_found(_leaks(), fragment))
+        self.assertEqual(sorted(n for n in self.view.open if n.startswith("te_hist_nd_")),
+                         ["te_hist_nd_taboo", "te_hist_nd_taboo_tgt"])
+
+
+class TooltipKeysTest(unittest.TestCase):
+    """The keys a scripted GUI's effect prints into a hover (custom_tooltip)
+    are invisible to test_te_system_tab_bodies.py's BindingTest and to the
+    rebinding tool. Every handler another country's panel asks for a tooltip
+    (ExecuteTooltip, IsValidTooltip, IsShownTooltip) prints keys that read no
+    entry and no player (the root is the shown country), and nothing of the
+    true count. The private sections' breakdowns are not asked there at all."""
+
+    PUBLIC = {"nd_taboo_breakdown_sgui", "nd_world_crisis_item_detail_sgui"}
+    PRIVATE = {"nd_risk_breakdown_sgui", "nd_crisis_pressure_breakdown_sgui", "nd_crisis_danger_breakdown_sgui",
+               "nd_crisis_next_pressure_sgui", "nd_reach_list_sgui", "nd_plan_enemy_sgui", "nd_crisis_opponent_sgui",
+               "nd_last_crisis_sgui", "nd_home_list_sgui", "nd_home_footer_sgui", "nd_posture_sgui",
+               "nd_crisis_action_sgui", "nuclear_program_funding_sgui"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.view = gh.panel_view({WIDE}, cls.types)
+        cls.loc = gh.load_loc()
+        keys = gh.panel_loc_keys({WIDE}, cls.types, cls.loc)
+        texts = [_drawn(cls.view, cls.types, n) for n in cls.view.open] + [cls.loc[k] for k in keys]
+        asked = set()
+        for text in texts:
+            asked |= set(re.findall(r"GetScriptedGui\('(\w+)'\)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)", text))
+            if re.search(r"ScriptedGui\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)", text):
+                asked |= set(re.findall(r"datacontext = \"\[GetScriptedGui\('(\w+)'\)\]\"", text))
+        cls.asked = asked
+        cls.sguis = _scripts("scripted_guis")
+        cls.calls = {**_scripts("scripted_triggers"), **_scripts("scripted_effects")}
+
+    def _printed(self, body, seen):
+        """The loc keys a block prints: custom_tooltip keys and any loc key
+        passed as a value (a helper's KEY = x), following the scripted effects
+        and triggers it calls."""
+        keys = {w for w in re.findall(r"=\s*(\w+)", body) if w in self.loc}
+        for name in re.findall(r"\b(\w+)\s*=\s*(?:yes|\{)", body):
+            if name in self.calls and name not in seen:
+                seen.add(name)
+                keys |= self._printed(self.calls[name], seen)
+        return keys
+
+    def test_the_handlers_another_country_asks(self):
+        nd = {n for n in self.asked if n.startswith(("nd_", "nuclear_"))}
+        self.assertEqual(nd, self.PUBLIC)
+        self.assertFalse(self.asked & self.PRIVATE)
+
+    def test_their_keys_read_no_entry_player_or_count(self):
+        for name in sorted(self.asked):
+            keys = gh.loc_closure(self._printed(self.sguis[name], set()), self.loc)
+            self.assertTrue(keys, name)
+            for key in sorted(keys):
+                with self.subTest(sgui=name, key=key):
+                    value = self.loc[key]
+                    self.assertNotRegex(value, r"\b(?:GetPlayer|AccessPlayer|JournalEntry)\b")
+                    self.assertFalse(_found(_leaks(), value))
+
+    def test_the_tradition_line_reads_the_root(self):
+        """nd_taboo_bd_tradition read GetPlayer for a constant: no country for an
+        observer. It reads the handler's root, as covert_last_exposed_sgui's lines do."""
+        self.assertIn("SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')", self.loc["nd_taboo_bd_tradition"])
+
+
+# An observer's gate: what a world read (`# world:`) needs, since an observer has no GetPlayer.
+OBSERVER_GATE = re.compile(r"Not\( GetMetaPlayer\.IsObserver \)|GetPlayer\.IsValid")
+
+
+def _observer_gated(body, pos):
+    """Whether a body offset sits under an observer gate: on its own line, or
+    on the `visible` of a block around it."""
+    line = body[body.rfind("\n", 0, pos) + 1:body.find("\n", pos)]
+    if OBSERVER_GATE.search(line):
+        return True
+    a, b = gh.enclosing_block(body, pos)
+    while True:
+        inside = body if (a, b) == (0, len(body)) else body[a + 1:b]
+        if any(OBSERVER_GATE.search(v) for v in re.findall(r'visible = "[^"]*"', gh.own_props(inside))):
+            return True
+        if a == 0:
+            return False
+        a, b = gh.enclosing_block(body, a)
+
+
+class ObserverTest(unittest.TestCase):
+    """National Info opens this panel for an observer too, for whom GetPlayer is
+    no country and Country.IsLocalPlayer is false for every country, so an
+    observer sees another country's panel. A player read there logs every
+    frame (gui_modding_guide.md, "An observer has no GetPlayer"). So nothing
+    another country's panel draws reads the player or the entry, in markup or
+    in a key it renders, but a world read (`# world:`), and a world read sits
+    under Not( GetMetaPlayer.IsObserver ) or behind GetPlayer.IsValid. Nuclear
+    has no world read: World Crises, Nuclear Powers and the taboo read global
+    lists and variables."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.templates = gh.mod_templates()
+        cls.reads = gh.markup_reads({WIDE}, cls.types, cls.templates)
+        loc = gh.load_loc()
+        cls.keys = gh.panel_loc_keys({WIDE}, cls.types, loc)
+        cls.index = gh.loc_index()
+
+    def test_every_world_read_is_gated(self):
+        for f in self.reads:
+            with self.subTest(read=str(f)):
+                self.assertTrue(f.world, "a player read another country's panel draws")
+                name = f.where.removeprefix("template ")
+                td = (self.templates if f.where.startswith("template ") else self.types)[name]
+                k = f.line - td.line
+                pos = gh._line_starts(td.body)[k] + f.col - (td.col if k == 0 else 0)
+                self.assertTrue(_observer_gated(td.body, pos), "a world read with no observer gate")
+
+    def test_no_key_another_country_renders_reads_the_player(self):
+        self.assertEqual([str(f) for f in gh.loc_reads(self.keys, self.index)], [])
+
+    def test_the_gate_check(self):
+        """_observer_gated finds a gate on the read's line or on a block around
+        it, and none elsewhere."""
+        gated = 'a = {\n\tvisible = "[Not( GetMetaPlayer.IsObserver )]"\n\tb = {\n\t\ttext = "[GetPlayer.GetName]"\n\t}\n}'
+        self.assertTrue(_observer_gated(gated, gated.index("GetPlayer.GetName")))
+        sibling = 'a = {\n\tb = {\n\t\tvisible = "[Not( GetMetaPlayer.IsObserver )]"\n\t}\n\tc = {\n\t\ttext = "[GetPlayer.GetName]"\n\t}\n}'
+        self.assertFalse(_observer_gated(sibling, sibling.index("GetPlayer.GetName")))
+        inline = 'a = {\n\ttext = "[GetPlayer.IsValid]"\n}'
+        self.assertTrue(_observer_gated(inline, inline.index("GetPlayer.IsValid")))
 
 
 if __name__ == "__main__":

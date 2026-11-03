@@ -1862,3 +1862,87 @@ nd_crisis_stage_next = {
 		localization_key = nd_stage_next_1
 	}
 }
+
+# The nuclear guarantees a country gives and holds, for another country's
+# National Info (the overview's guarantees cell; spec
+# 2026-11-02-charts-help-national-info § 6.4): public, since a guarantee is a
+# treaty article and an umbrella needs an overlord the world believes armed.
+# nd_protects_anyone: it covers someone, by treaty or umbrella;
+# nd_is_guaranteed: someone covers it. The cell's word, its hover's line, and
+# its figure: the umbrella it holds over its subjects (a count), the umbrella it
+# is under, a treaty, or none.
+nd_public_guarantee_word = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			nd_protects_anyone = yes
+			nd_is_guaranteed = yes
+		}
+		localization_key = nd_public_guarantee_word_both
+	}
+	text = {
+		trigger = { nd_protects_anyone = yes }
+		localization_key = nd_public_guarantee_word_gives
+	}
+	text = {
+		trigger = { nd_is_guaranteed = yes }
+		localization_key = nd_public_guarantee_word_holds
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_public_guarantee_word_none
+	}
+}
+
+nd_public_guarantee_line = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			nd_protects_anyone = yes
+			nd_is_guaranteed = yes
+		}
+		localization_key = nd_public_guarantee_line_both
+	}
+	text = {
+		trigger = { nd_protects_anyone = yes }
+		localization_key = nd_public_guarantee_line_gives
+	}
+	text = {
+		trigger = { nd_is_guaranteed = yes }
+		localization_key = nd_public_guarantee_line_holds
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_public_guarantee_line_none
+	}
+}
+
+nd_public_guarantee_figure = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			any_direct_subject = { nd_under_an_umbrella = yes }
+		}
+		localization_key = je_nuclear_ov_guarantees_umbrella
+	}
+	text = {
+		trigger = { nd_under_an_umbrella = yes }
+		localization_key = nd_public_guarantee_figure_under
+	}
+	text = {
+		trigger = {
+			OR = {
+				nd_protects_anyone = yes
+				nd_is_guaranteed = yes
+			}
+		}
+		localization_key = nd_public_guarantee_figure_treaty
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_public_guarantee_figure_none
+	}
+}

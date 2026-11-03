@@ -175,6 +175,12 @@ class Tab:
                   Introduce, Discard and Review: te_systems_window_tax_footer).
                   National Info's mount for the player's own country draws
                   them below the body; the mount for another country never.
+    ni_open       the scripted GUI National Info opens the tab on for another
+                  country, where the tab's own gate would tell what the world
+                  can't see (Nuclear: before the world's first warhead only a
+                  country with a programme holds the entry). None: the tab's
+                  own gate. The player's own country, its mount and the
+                  window keep open_ (ni_open_gate).
     """
     key: str
     row: int
@@ -192,6 +198,7 @@ class Tab:
     public: bool = False
     readout: Readout | None = None
     footer: tuple[str, ...] = ()
+    ni_open: str | None = None
 
 
 def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
@@ -304,7 +311,7 @@ TABS: list[Tab] = [
             "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
             "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections",
-            public=False),
+            public=True, ni_open="te_ni_nuclear_tab_sgui"),
     _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
             "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
@@ -379,13 +386,13 @@ def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
 
 
 def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED,
-          prefix: str = "te_systems_window", tooltip: str | None = None) -> list[str]:
+          prefix: str = "te_systems_window", tooltip: str | None = None, enabled: str | None = None) -> list[str]:
     """One tab_buttons slot: the window's (te_systems_window_tab, its
-    templates, its tooltip), or with stored_key, prefix and tooltip given,
-    National Info's."""
+    templates, its tooltip), or with stored_key, prefix, tooltip and enabled
+    (its open gate) given, National Info's."""
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
-    click = [] if tab.open_ is None else [f'enabled = "[{rooted(tab.open_, root)}]"']
+    click = [] if tab.open_ is None else [f'enabled = "[{enabled or rooted(tab.open_, root)}]"']
     click.append(f"onclick = \"[GetVariableSystem.Set('{stored_key}', '{tab.key}')]\"")
     return (override("button", f'text = "{tab.label}"')
             + override("button_tooltip", tooltip or _tooltip(tab, root))
@@ -744,6 +751,9 @@ NI_POPS_TOOLTIP = "te_pop_browser_tab_pops_tt"
 # one line (the player's checklist doesn't fit another country).
 NI_OTHER_TT = "te_ni_tab_other_tt"
 NI_NOT_RUNNING_TT = "te_ni_tab_not_running_tt"
+# Grayed for another country on its ni_open gate: what the world doesn't
+# know yet, so never "not running" (Nuclear's programme before the first test).
+NI_NOT_PUBLIC_TT = "te_ni_tab_not_public_tt"
 LOCAL = "Country.IsLocalPlayer"
 
 
@@ -764,9 +774,21 @@ def ni_stored(key: str) -> str:
     return f"GetVariableSystem.HasValue('{NI_STORED}', '{key}')"
 
 
+def ni_open_gate(tab: Tab) -> str | None:
+    """Open for the window's country: the tab's own gate, or None for always.
+    With ni_open, another country's opens on that scripted GUI instead, and
+    the player's own on the tab's gate as before."""
+    if tab.open_ is None:
+        return None
+    own = rooted(tab.open_, COUNTRY_ROOT)
+    if tab.ni_open is None:
+        return own
+    return or_(and_(LOCAL, own), and_(not_(LOCAL), shown(tab.ni_open, COUNTRY_ROOT)))
+
+
 def ni_selected(tab: Tab) -> str:
     """The tab is shown: chosen last, and open for the window's country."""
-    return ni_stored(tab.key) if tab.open_ is None else and_(ni_stored(tab.key), rooted(tab.open_, COUNTRY_ROOT))
+    return ni_stored(tab.key) if tab.open_ is None else and_(ni_stored(tab.key), ni_open_gate(tab))
 
 
 def ni_unselected(tab: Tab) -> str:
@@ -797,6 +819,12 @@ def ni_strip_shown() -> str | None:
     return or_all([rooted(t.strip, COUNTRY_ROOT) for t in tabs])
 
 
+def ni_closed_tt(tab: Tab) -> str:
+    """Another country's grayed tooltip: not running there, or, for a tab
+    that opens on ni_open, nothing shown yet."""
+    return NI_NOT_RUNNING_TT if tab.ni_open is None else NI_NOT_PUBLIC_TT
+
+
 def ni_tooltip(tab: Tab) -> str:
     """Open for another country, what it shows the world; grayed, not running
     there; for the player's own, the window's tooltip (its checklist too), on
@@ -805,9 +833,10 @@ def ni_tooltip(tab: Tab) -> str:
     player = _tooltip_value(tab, COUNTRY_ROOT)
     if tab.open_ is None:
         return f"tooltip = \"[SelectLocalization( {LOCAL}, {player}, '{NI_OTHER_TT}' )]\""
-    other_open = and_(not_(LOCAL), rooted(tab.open_, COUNTRY_ROOT))
+    other_open = and_(not_(LOCAL), rooted(tab.open_, COUNTRY_ROOT) if tab.ni_open is None
+                      else shown(tab.ni_open, COUNTRY_ROOT))
     return (f"tooltip = \"[SelectLocalization( {other_open}, '{NI_OTHER_TT}', "
-            f"SelectLocalization( {not_(LOCAL)}, '{NI_NOT_RUNNING_TT}', {player} ) )]\"")
+            f"SelectLocalization( {not_(LOCAL)}, '{ni_closed_tt(tab)}', {player} ) )]\"")
 
 
 def _ni_template(name: str, expr: str) -> list[str]:
@@ -862,7 +891,8 @@ def ni_strips() -> list[str]:
                 out.append("")
             out.append(f"\t\t### {key}")
             lines = (_ni_pops_slot(slot) if key == NI_FALLBACK
-                     else _slot(slot, by_key[key], COUNTRY_ROOT, NI_STORED, NI_PREFIX, ni_tooltip(by_key[key])))
+                     else _slot(slot, by_key[key], COUNTRY_ROOT, NI_STORED, NI_PREFIX, ni_tooltip(by_key[key]),
+                                ni_open_gate(by_key[key])))
             out += [f"\t\t{ln}" for ln in lines]
         out.append("\t}")
     return out + ["\texpand = {}", "}"]

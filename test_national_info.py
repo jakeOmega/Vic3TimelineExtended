@@ -113,15 +113,16 @@ def _cases(tabs):
                 for t in tabs:
                     opened, on_strip = own if t.key == stored else rest
                     if opened:
-                        shown |= _atoms(gen.rooted(t.open_, gen.COUNTRY_ROOT))
+                        shown |= _atoms(gen.ni_open_gate(t))
                     if on_strip:
                         shown |= _atoms(gen.rooted(t.strip, gen.COUNTRY_ROOT))
                 # the states enumerated are the gates' own, compound ones too
                 for t in tabs:
                     opened, on_strip = own if t.key == stored else rest
-                    for gate, want in ((t.open_, opened), (t.strip, on_strip)):
+                    for gate, want in ((gen.ni_open_gate(t), opened), (t.strip and gen.rooted(t.strip, gen.COUNTRY_ROOT),
+                                                                         on_strip)):
                         if gate is not None:
-                            assert _evaluate(gen.rooted(gate, gen.COUNTRY_ROOT), shown, stored) == want, (t.key, gate)
+                            assert _evaluate(gate, shown, stored) == want, (t.key, gate)
                 yield stored, shown
 
 
@@ -254,7 +255,7 @@ class SelectionTest(unittest.TestCase):
         for stored, shown in _cases(tabs):
             cases += 1
             want = next((t.key for t in tabs if t.key == stored
-                         and (t.open_ is None or _evaluate(gen.rooted(t.open_, gen.COUNTRY_ROOT), shown, stored))),
+                         and (t.open_ is None or _evaluate(gen.ni_open_gate(t), shown, stored))),
                         gen.NI_FALLBACK)
             with self.subTest(stored=stored, shown=sorted(shown)):
                 self.assertEqual(_evaluate(pops, shown, stored), want == gen.NI_FALLBACK)
@@ -298,13 +299,13 @@ class SelectionTest(unittest.TestCase):
         for t in tabs:
             with self.subTest(tab=t.key):
                 expr = _template(text, f"te_ni_{t.key}_selected") + _template(text, f"te_ni_{t.key}_unselected")
-                own = _atoms(gen.rooted(t.open_, gen.COUNTRY_ROOT)) | _atoms(gen.rooted(t.strip, gen.COUNTRY_ROOT))
+                own = _atoms(gen.ni_open_gate(t)) | _atoms(gen.rooted(t.strip, gen.COUNTRY_ROOT))
                 self.assertLessEqual(_atoms(expr), own)
                 self.assertEqual({m.group(4) for m in _ATOM.finditer(expr) if m.group(3)}, {t.key})
         pops = _template(text, "te_ni_pops_selected")
         for t in tabs:
             if t.open_ is not None:
-                self.assertIn(gen.and_(gen.ni_stored(t.key), gen.rooted(t.open_, gen.COUNTRY_ROOT)), pops)
+                self.assertIn(gen.and_(gen.ni_stored(t.key), gen.ni_open_gate(t)), pops)
 
     def test_the_strip_shows_while_a_tab_could(self):
         """Its gate per case is _check's; here its form: the public tabs' strip
@@ -330,6 +331,9 @@ class SelectionTest(unittest.TestCase):
                 self.assertIsNotNone(t.open_, f"{t.key}: always open, so always on the strip")
                 self.assertTrue(_expr_implies(t.open_, strip.group(1)),
                                 f"{t.key}: open without {strip.group(1)}")
+                if t.ni_open:
+                    self.assertTrue(_expr_implies(gen.shown(t.ni_open), strip.group(1)),
+                                    f"{t.key}: open for another country without {strip.group(1)}")
 
 
 class StripTest(unittest.TestCase):
@@ -382,7 +386,7 @@ class StripTest(unittest.TestCase):
                     if t.open_ is None:
                         self.assertNotIn("enabled", slot, "always open")
                     else:
-                        self.assertIn(f'enabled = "[{gen.rooted(t.open_, gen.COUNTRY_ROOT)}]"', slot)
+                        self.assertIn(f'enabled = "[{gen.ni_open_gate(t)}]"', slot)
                     self.assertIn(f"onclick = \"[GetVariableSystem.Set('te_ni_tab', '{t.key}')]\"", slot)
                     self.assertIn(f"using = te_ni_{t.key}_selected", slot)
                     self.assertIn(f"using = te_ni_{t.key}_unselected", slot)
@@ -401,13 +405,13 @@ class StripTest(unittest.TestCase):
         for t in tabs:
             tooltip = re.fullmatch(r'tooltip = "\[(.*)\]"', gen.ni_tooltip(t)).group(1)
             player = gen._tooltip_value(t, gen.COUNTRY_ROOT)
-            atoms = sorted(_atoms(tooltip) | _atoms(gen.rooted(t.open_, gen.COUNTRY_ROOT)))
+            atoms = sorted(_atoms(tooltip) | _atoms(gen.ni_open_gate(t) or "yes"))
             for n in range(1 << len(atoms)):
                 shown = {a for i, a in enumerate(atoms) if n >> i & 1}
-                is_open = t.open_ is None or _evaluate(gen.rooted(t.open_, gen.COUNTRY_ROOT), shown, None)
+                is_open = t.open_ is None or _evaluate(gen.ni_open_gate(t), shown, None)
                 with self.subTest(tab=t.key, shown=sorted(shown)):
                     self.assertEqual(_pick(tooltip, shown, local=False),
-                                     gen.NI_OTHER_TT if is_open else gen.NI_NOT_RUNNING_TT)
+                                     gen.NI_OTHER_TT if is_open else gen.ni_closed_tt(t))
                     self.assertEqual(_pick(tooltip, shown, local=True), _pick(player, shown, local=True))
             # the player's branch is the window's tooltip, on the window's Country
             self.assertIn(player, tooltip)
@@ -421,10 +425,10 @@ class StripTest(unittest.TestCase):
     def test_the_new_keys_exist(self):
         from gui_test_helpers import load_loc
         loc = load_loc()
-        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_POPS_LABEL, gen.NI_POPS_TOOLTIP):
+        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_NOT_PUBLIC_TT, gen.NI_POPS_LABEL, gen.NI_POPS_TOOLTIP):
             with self.subTest(key=key):
                 self.assertIn(key, loc)
-        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT):
+        for key in (gen.NI_OTHER_TT, gen.NI_NOT_RUNNING_TT, gen.NI_NOT_PUBLIC_TT):
             self.assertIn("[Country.GetName]", loc[key])
             self.assertNotRegex(loc[key], r"\b(you|your|we|our)\b")
 
@@ -695,6 +699,59 @@ class ReadoutTest(unittest.TestCase):
                 if t.key == "strategic_reserve":
                     continue   # its tab_before_gate is the other-market note, which needs the entry's market
                 self.assertIsNotNone(t.readout, f"{t.key}: its frame draws something before the gate")
+
+
+class ForeignOpenTest(unittest.TestCase):
+    """Tab.ni_open (Nuclear's: te_ni_nuclear_tab_sgui). Before the world's
+    first warhead only a country with a programme holds je_nuclear_program,
+    so another country's tab opens on the taboo's birth instead of the entry:
+    an open or grayed tab tells nothing then. The player's own opens on the
+    tab's gate as before, in National Info and in the window."""
+
+    def test_nuclear_opens_for_another_country_on_the_taboo(self):
+        tab = {t.key: t for t in gen.TABS}["nuclear_weapons"]
+        self.assertEqual(tab.ni_open, "te_ni_nuclear_tab_sgui")
+        body = _is_shown(tab.ni_open)
+        # the tab's own gate, and the taboo born (or, in a save from before it, a country believed armed or in crisis)
+        conds = _flat(body)
+        for item in _is_shown("te_military_nuclear_tab_sgui"):
+            self.assertIn(_norm(item), conds)
+        ors = [v for k, _, v in body if k == "OR"]
+        self.assertEqual(len(ors), 1)
+        self.assertEqual(sorted(_norm(x) for x in ors[0]),
+                         ["has_global_variable = nd_taboo", "nd_believed_armed = yes", "nd_in_crisis = yes"])
+
+    def test_the_gates_it_changes(self):
+        tab = {t.key: t for t in gen.TABS}["nuclear_weapons"]
+        text = _read(GENERATED)
+        sel = _template(text, "te_ni_nuclear_weapons_selected")
+        unsel = _template(text, "te_ni_nuclear_weapons_unselected")
+        tooltip = re.fullmatch(r'tooltip = "\[(.*)\]"', gen.ni_tooltip(tab)).group(1)
+        entry_only = {"te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui"}   # a programme, no taboo
+        with_taboo = entry_only | {"te_ni_nuclear_tab_sgui"}
+        for local, shown, want in ((True, entry_only, True), (False, entry_only, False), (False, with_taboo, True),
+                                   (True, with_taboo, True), (True, {"te_military_nuclear_tab_unlock_sgui"}, False)):
+            with self.subTest(local=local, shown=sorted(shown)):
+                self.assertEqual(_evaluate(sel, shown, "nuclear_weapons", local), want)
+                self.assertEqual(_evaluate(unsel, shown, "nuclear_weapons", local), not want)
+                self.assertEqual(_evaluate(gen.ni_open_gate(tab), shown, None, local), want, "the button's enabled")
+                if not local:
+                    self.assertEqual(_pick(tooltip, shown, local),
+                                     gen.NI_OTHER_TT if want else gen.NI_NOT_PUBLIC_TT)
+        self.assertIn(f'enabled = "[{gen.ni_open_gate(tab)}]"', text)
+        # the window and the player's mount keep the tab's own gate
+        window = _read(os.path.join(REPO, "gui", "te_systems_window_generated.gui"))
+        self.assertNotIn("te_ni_nuclear_tab_sgui", window)
+        # National Info reads it in its selection templates (top-level visibles), the button's enabled and its
+        # tooltip only: never in a mount
+        lines = [ln for ln in text.split("\n") if "te_ni_nuclear_tab_sgui" in ln]
+        self.assertEqual(sorted({ln.split(" =")[0].strip() for ln in lines}), ["enabled", "tooltip", "visible"])
+        self.assertTrue(all(ln.startswith("\tvisible = ") for ln in lines if "visible =" in ln))
+
+    def test_a_tab_without_it_keeps_its_gate(self):
+        for t in gen.TABS:
+            if t.ni_open is None and t.open_ is not None:
+                self.assertEqual(gen.ni_open_gate(t), gen.rooted(t.open_, gen.COUNTRY_ROOT), t.key)
 
 
 class GeneratorTest(unittest.TestCase):
