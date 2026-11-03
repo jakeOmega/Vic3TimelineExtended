@@ -1,17 +1,17 @@
 ﻿### Space Race JE widgets — the milestone panels, mounted on nine journal entries.
 ###
-### Every milestone entry attaches three named roots from this file, in the UN's
+### Every milestone entry attaches two named roots from this file, in the UN's
 ### shape (un_layout_widget.gui):
-###   custom_widget_container_1  widget_je_space_race_<m>_overview   the overview
+###   custom_widget_container_1  widget_je_space_race_<m>_overview   the "?", then the overview
 ###   custom_widget_container_2  widget_je_space_race_<m>            the live sections
-###   custom_widget_container_3  widget_je_space_race_reference      How the Space Race Works
 ### The overview sits above the entry's one-line status text, the live sections
 ### below it. The waiting entry (je_space_race_interstellar_results) has no
-### controls and no live sections: an overview and the reference only. The
-### reference root is one widget shared by all nine entries.
+### controls and no live sections: an overview only. Every explanation is on
+### the Help page (te_space_race_help_popup, in gui/te_popups.gui), which the
+### "?" at the top of each entry opens.
 ###
-### Each section is a type (te_sr_sec_*); te_sr_status_sections and
-### te_sr_reference_sections set their order, and te_sr_overview_milestone /
+### Each section is a type (te_sr_sec_*); te_sr_status_sections sets their
+### order, and te_sr_overview_milestone /
 ### te_sr_overview_transit compose the overview. What differs between
 ### milestones is only data (which scripted GUI the controls address, which
 ### script values and loc keys the panel reads), passed as sr_* blockoverrides
@@ -122,9 +122,7 @@
 ### sections are open until closed, *_open ones collapsed until opened. The live
 ### sections' flags are per milestone (`sr_panel_control_<m>_closed`,
 ### `sr_panel_rivals_<m>_closed`), because several milestone entries can be
-### active at once. The shared reference, How the Space Race Works, has none:
-### it is a link to the Help page (te_space_race_help_popup, in
-### gui/te_popups.gui). They live in GetVariableSystem, which is client-side,
+### active at once. They live in GetVariableSystem, which is client-side,
 ### never saved and invisible to script.
 
 ### TYPE SIZES (style guide rule 3, the owner 2026-10-17; audit SPC-11): rows,
@@ -6796,7 +6794,7 @@ types space_race_widget_types
 			visible = "[Not(GetVariableSystem.Exists('sr_panel_space_command_closed'))]"
 
 			### 6d: nothing leaves Earth (design § 15). State, so in the row style;
-			### the rules are in How Solar Colonization Works.
+			### the rules are on the Help page, under How Solar Colonization Works.
 			te_sr_text = {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_blockaded'), '(CFixedPoint)1' )]"
 				text = "je_space_race_widget_sc_blockaded_note"
@@ -7670,39 +7668,8 @@ types space_race_widget_types
 	}
 
 	### ======================================================================
-	### REFERENCE: the links to the Help page
+	### THE HELP PAGE
 	### ======================================================================
-
-	### "How the Space Race Works": a link at the foot of the panel to the Help
-	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2),
-	### the same on all nine entries. Its header alone, which opens
-	### te_space_race_help_popup (te_popup = help_space_race) instead of
-	### expanding; it keeps its name and its place in every composer. The "?"
-	### in each milestone's header in the Timeline Extended window opens the
-	### same page.
-	type te_sr_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		te_sr_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "je_space_race_widget_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
 
 	### The Help page: every explanation the live sections used to carry, one
 	### subheading per topic, then How Solar Colonization Works under its own
@@ -7781,9 +7748,8 @@ types space_race_widget_types
 			text = "je_space_race_widget_how_orbit"
 		}
 
-		### How Solar Colonization Works, the colonization panel's own link's
-		### topics (audit SPC-4): a heading over them, as the panel's section
-		### had. The topics for Simple or Full Colonies show only under that
+		### How Solar Colonization Works, the colonization panel's topics
+		### (audit SPC-4): a heading over them, as the panel's section had. The topics for Simple or Full Colonies show only under that
 		### rule, read on the player (sr_disp_colonies_*); the rest always. Most
 		### lean on the concepts (concept_sr_*), which carry the definitions.
 		default_header = {
@@ -7876,48 +7842,6 @@ types space_race_widget_types
 		}
 	}
 
-	### How Solar Colonization Works (audit SPC-4): after the colonization
-	### panel's live sections, a second link to the Space Race's Help page,
-	### whose last topics are the colonies' rules under this section's name. Its
-	### header alone, under the section's own gate (the entry running).
-	type te_sr_sec_how_colonies = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		minimumsize = { 520 -1 }
-		ignoreinvisible = yes
-		spacing = 2
-		visible = "[JournalEntry.IsActive]"
-
-		te_sr_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "je_space_race_widget_howc_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
-	### The reference, after the live sections.
-	type te_sr_reference_sections = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		minimumsize = { 520 -1 }
-		ignoreinvisible = yes
-		spacing = 4
-		visible = "[JournalEntry.IsActive]"
-
-		te_sr_sec_how = {}
-	}
-
 	### The Space Race tab of the Timeline Extended window (the window mounts
 	### it from gui/te_systems_window_generated.gui). Open from the first
 	### milestone on, with or without one running (te_window_space_race_tab_sgui,
@@ -7933,10 +7857,7 @@ types space_race_widget_types
 	### (debris, satellites, strikes), after the milestones
 	### (owner, 2026-10-27: the milestone we run is the summary a player acts
 	### on), under the tab's own gate, so they show between milestones too.
-	### Orbit holds the debris row. Then How the Space Race Works, once for
-	### every entry: the journal wraps it in te_sr_reference_sections, whose
-	### IsActive gate needs one entry's datacontext, so the tab has the section
-	### itself, under the tab's gate, in the same fixed 520 column.
+	### Orbit holds the debris row.
 	###
 	### Not drawn, as in the journal: the goal bar (every entry mounts the
 	### bars-on-top marker, and the overview draws the progress), the status
@@ -7965,28 +7886,16 @@ types space_race_widget_types
 				te_sr_sec_powers = {}
 				te_sr_sec_orbit = {}
 			}
-
-			flowcontainer = {
-				name = "te_systems_window_space_race_reference"
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-				parentanchor = hcenter
-				direction = vertical
-				ignoreinvisible = yes
-				minimumsize = { 520 -1 }
-
-				te_sr_sec_how = {}
-			}
 		}
 	}
 
 	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
 	### § 7), te_sr_tab_layout's override in the window's full-screen frame:
-	### the milestones under way, then Space Powers and Orbit, then How the
-	### Space Race Works, in three columns of a fixed 520, read down each and
-	### then across. The summary and the reference keep the tab's gate, each on
-	### its own wrapper, as in te_sr_tab_body (the names stay there: the window's
-	### tests find each wrapper by its name).
-	type te_sr_wide_sections = te_ui_columns_three {
+	### the milestones under way, then Space Powers and Orbit, in two columns
+	### of a fixed 520 (te_ui_columns_two), read down each and then across. The
+	### summary keeps the tab's gate on its own wrapper, as in te_sr_tab_body
+	### (the name stays there: the window's tests find the wrapper by it).
+	type te_sr_wide_sections = te_ui_columns_two {
 		blockoverride "column_1" {
 			te_sr_window_milestones = {}
 		}
@@ -8002,18 +7911,6 @@ types space_race_widget_types
 
 				te_sr_sec_powers = {}
 				te_sr_sec_orbit = {}
-			}
-		}
-
-		blockoverride "column_3" {
-			flowcontainer = {
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-				parentanchor = hcenter
-				direction = vertical
-				ignoreinvisible = yes
-				minimumsize = { 520 -1 }
-
-				te_sr_sec_how = {}
 			}
 		}
 	}
@@ -9595,7 +9492,7 @@ types space_race_widget_types
 			te_sr_sec_colonies = {}
 		}
 
-		# Solar System: the worlds, then How Solar Colonization Works.
+		# Solar System: the worlds.
 		flowcontainer = {
 			visible = "[GetVariableSystem.HasValue('sr_tab', 'system')]"
 			direction = vertical
@@ -9605,7 +9502,6 @@ types space_race_widget_types
 			spacing = 4
 
 			te_sr_sec_solar_system = {}
-			te_sr_sec_how_colonies = {}
 		}
 	}
 
@@ -9617,8 +9513,7 @@ types space_race_widget_types
 ### the milestone's own types above (te_sr_<m>_overview, te_sr_<m>_status),
 ### which set its scripted GUI as the datacontext and pass its data. Per
 ### milestone: the overview (custom_widget_container_1) and the live sections
-### (custom_widget_container_2); the waiting entry has an overview only. One
-### reference root serves all nine (custom_widget_container_3).
+### (custom_widget_container_2); the waiting entry has an overview only.
 ### ==========================================================================
 
 ### suborbital
@@ -9912,18 +9807,5 @@ flowcontainer = {
 
 	te_je_country = {
 		te_sr_overview_transit = {}
-	}
-}
-
-### How the Space Race Works, on all nine entries.
-flowcontainer = {
-	name = "widget_je_space_race_reference"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	minimumsize = { 520 -1 }
-	ignoreinvisible = yes
-
-	te_je_country = {
-		te_sr_reference_sections = {}
 	}
 }

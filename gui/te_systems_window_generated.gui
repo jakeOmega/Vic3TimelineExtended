@@ -1538,7 +1538,7 @@ types te_systems_window_generated_types
 	### while none runs (te_window_space_race_idle_sgui). Several can run at
 	### once. Each shows the types its journal roots wrap, the debris row
 	### overridden out (Orbit shows it once), then Open Journal Entry for that
-	### entry: the overview for any country, the live sections and the link
+	### entry: the overview for any country, the live sections and the button
 	### the player's own (National Info). Every header here, the note's too,
 	### ends on the "?" that opens the Help page.
 	type te_sr_window_milestones = flowcontainer {
@@ -1547,8 +1547,8 @@ types te_systems_window_generated_types
 		ignoreinvisible = yes
 		spacing = 10
 
-		### No milestone running: one note in the entries' place, so the tab
-		### never ends on the reference alone.
+		### No milestone running: one note in the entries' place, under a header
+		### with the "?", so the tab never starts on Space Powers alone.
 		flowcontainer = {
 			name = "te_systems_window_space_race_idle"
 			visible = "[GetScriptedGui('te_window_space_race_idle_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
@@ -1594,7 +1594,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_suborbital_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1645,7 +1645,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_orbital_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1696,7 +1696,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_moon_landing_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1747,7 +1747,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_probe_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1798,7 +1798,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_moon_base_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1849,7 +1849,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_mars_landing_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1900,7 +1900,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_interstellar_probe_overview = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -1951,7 +1951,7 @@ types te_systems_window_generated_types
 			blockoverride "tab_content" {
 				te_sr_overview_transit = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter
@@ -2000,7 +2000,7 @@ types te_systems_window_generated_types
 				te_sr_solar_colonization_overview = {}
 				te_sr_sec_colonies_brief = {}
 
-				### The player's own: the live sections and the link, under the entry.
+				### The player's own: the live sections and Open Journal Entry, under the entry.
 				flowcontainer = {
 					using = te_own_country_only
 					parentanchor = hcenter

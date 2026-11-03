@@ -20,9 +20,9 @@
 ###       Resource Transition law, retirement programmes, readiness). Open.
 ###       With the Global Warming game rule off only Fossil Transition shows.
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
-###       te_gw_reference_sections: History (the two charts, open) and How
-###       Global Warming Works, a link to the Help page that holds every
-###       explanation (te_global_warming_help_popup, in gui/te_popups.gui).
+###       te_gw_reference_sections: History (the two charts, open). Every
+###       explanation is on the Help page (te_global_warming_help_popup, in
+###       gui/te_popups.gui), which the "?" at the top of the entry opens.
 ### Each section is a type, so the Market panel's Climate tab
 ### (gui/market_panel.gui) composes the same pieces (style rule 9); the roots
 ### are thin wrappers that repeat the composers' [JournalEntry.IsActive] gate.
@@ -162,7 +162,7 @@ types global_warming_widget_types
 		}
 	}
 
-	### Explanatory text under a heading, for How Global Warming Works only.
+	### Explanatory text under a heading, for the Help page only.
 	### Static keys: the datacontext is the journal entry.
 	type gw_note = textbox {
 		autoresize = yes
@@ -1670,70 +1670,10 @@ types global_warming_widget_types
 		}
 	}
 
-	### "How Global Warming Works": a link at the foot of the panel to the Help
-	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
-	### Its header alone, which opens te_global_warming_help_popup (te_popup =
-	### help_global_warming) instead of expanding; it keeps its name and its
-	### place in the composer, under the composer's rule gate. The "?" in the
-	### tab's header and the Fossil Transition's own link open the same page.
-	type te_gw_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		gw_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "gw_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
-	### The Fossil Transition's own link to the Help page, nested in its
-	### section (te_gw_sec_transition): its subsection header alone, which
-	### opens te_global_warming_help_popup (te_popup = help_global_warming),
-	### as How Global Warming Works does. The page opens at its top: the
-	### transition's topics follow the climate's, at the foot under the Global
-	### Warming rule, and are the whole page with the rule off.
-	type te_gw_transition_how_link = flowcontainer {
-		direction = vertical
-		ignoreinvisible = yes
-		margin_left = 20
-		margin_top = 6
-
-		gw_subsection_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "rt_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, gathered out of the live sections, one
 	### subheading per topic. The live sections say what is happening; this says
 	### how it works. The climate's topics, then How the Fossil Transition
-	### Works, which the transition section's link opens too. It reads
+	### Works. It reads
 	### GetPlayer only, never the entry, so it opens from any host
 	### (test_te_help_pages.py). Instanced only by te_global_warming_help_popup.
 	type te_global_warming_help_body = flowcontainer {
@@ -1808,8 +1748,8 @@ types global_warming_widget_types
 			}
 		}
 
-		### How the Fossil Transition Works, the transition section's own link's
-		### topics, under a header of that name while the climate's topics
+		### How the Fossil Transition Works, the transition section's topics,
+		### under a header of that name while the climate's topics
 		### precede them. With the rule off they are the whole page, which the
 		### popup's title then names, so the header hides rather than repeat it.
 		default_header = {
@@ -2148,13 +2088,6 @@ types global_warming_widget_types
 					text = "gw_emis_market_value"
 				}
 			}
-
-			### ---- How the Fossil Transition Works: a nested link to Global
-			### Warming's Help page, whose last topics are the transition's (style
-			### rule 1). With the rule off this section is the entry's only one and
-			### How Global Warming Works is hidden, so the journal entry needs a
-			### way in of its own (te_gw_transition_how_link).
-			te_gw_transition_how_link = {}
 		}
 	}
 
@@ -2175,18 +2108,17 @@ types global_warming_widget_types
 		te_gw_sec_transition = {}
 	}
 
-	### The charts, then how it all works.
+	### The charts.
 	type te_gw_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		# Climate only (#660): the Fossil Transition section carries its own
-		# explanation, so nothing here shows with the Global Warming rule off.
+		# Climate only (#660): nothing here shows with the Global Warming rule
+		# off.
 		visible = "[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 
 		te_gw_sec_history = {}
-		te_gw_sec_how = {}
 	}
 
 	### ======================================================================
@@ -2249,8 +2181,8 @@ types global_warming_widget_types
 	### The Timeline Extended window's full-screen Global Warming tab (spec
 	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down three
 	### columns of 520 (te_ui_columns_three), the overview and Mitigation
-	### Policies, then Top Emitters and the Fossil Transition, then History and
-	### How Global Warming Works. Each section keeps its narrow gates: the
+	### Policies, then Top Emitters and the Fossil Transition, then History.
+	### Each section keeps its narrow gates: the
 	### overview its own, the live sections their composer's, whose spacing
 	### the wrappers repeat, and the reference composer whole. It replaces the
 	### whole te_gw_tab_layout, so it shows the player's own market, the

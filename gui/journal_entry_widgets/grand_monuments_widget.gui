@@ -27,11 +27,11 @@
 ###     and the opportunity boons in force (with their months left).
 ###     Our Monuments (open): one row per other monument, from the country's
 ###     gm_states list (rebuilt by every gm_country_refresh).
-###   widget_je_gm_reference  custom_widget_container_3
-###     How Grand Monuments Work: a link to the Help page, which holds every
-###     explanation (te_grand_monuments_help_popup, in gui/te_popups.gui).
-### The sections are types composed by te_gm_status_sections and
-### te_gm_reference_sections, so a future tab can reuse them.
+### Every explanation is on the Help page (te_grand_monuments_help_popup, in
+### gui/te_popups.gui), which the "?" at the top of the entry (te_help_row in
+### the overview root) and in the tab's header opens.
+### The sections are types composed by te_gm_status_sections, so a future tab
+### can reuse them.
 ###
 ### EDITING RULES
 ### * Numbers come from Country.MakeScope.ScriptValue (the guarded
@@ -128,7 +128,7 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### Explanatory text under a heading in How Grand Monuments Work.
+	### Explanatory text under a heading on the Help page.
 	type gm_note = textbox {
 		autoresize = yes
 		multiline = yes
@@ -1964,8 +1964,7 @@ types grand_monuments_widget_types
 	}
 
 	### ======================================================================
-	### SECTIONS. Composed, in order, by te_gm_status_sections and
-	### te_gm_reference_sections below.
+	### SECTIONS. Composed, in order, by te_gm_status_sections below.
 	### ======================================================================
 
 	### The overview, always shown (owner, 2026-10-27: Banking's cells where the
@@ -3341,36 +3340,6 @@ types grand_monuments_widget_types
 		}
 	}
 
-	### "How Grand Monuments Work": a link at the foot of the panel to the Help
-	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
-	### § 5.2). Its header alone, which opens te_grand_monuments_help_popup
-	### (te_popup = help_grand_monuments) instead of expanding; it keeps its
-	### name and its place in the composer. The "?" in the tab's header opens
-	### the same page.
-	type te_gm_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-
-		gm_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "gm_je_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
-	}
-
 	### The Help page: every explanation, one heading per topic. The live
 	### sections say what is happening; this says how it works. It reads
 	### nothing live, so it opens from any host (test_te_help_pages.py).
@@ -3527,20 +3496,9 @@ types grand_monuments_widget_types
 		te_gm_sec_abroad = {}
 	}
 
-	### How it all works: the link to the Help page.
-	type te_gm_reference_sections = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 4
-		visible = "[GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-
-		te_gm_sec_how = {}
-	}
-
 	### The Grand Monuments tab of the Timeline Extended window
 	### (te_system_tab_frame, gui/te_system_tab_widgets.gui; the window mounts it
-	### from gui/te_systems_window_generated.gui). The three composers the
+	### from gui/te_systems_window_generated.gui). The two composers the
 	### entry's roots wrap, in its order, then Open Journal Entry. Nothing else
 	### to draw: the entry has no status line, no bar and no scripted buttons.
 	### The header is the tab's own name, as every other tab's is; the entry
@@ -3570,7 +3528,6 @@ types grand_monuments_widget_types
 			block "te_gm_tab_layout" {
 				te_gm_overview_panel = {}
 				te_gm_status_sections = {}
-				te_gm_reference_sections = {}
 			}
 		}
 		blockoverride "tab_open_journal_tooltip" {
@@ -3580,10 +3537,10 @@ types grand_monuments_widget_types
 
 	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
 	### § 7), te_gm_tab_layout's override in the window's full-screen frame:
-	### the three composers' sections in three columns of a fixed 520, read
+	### the two composers' sections in three columns of a fixed 520, read
 	### down each and then across. The overview first, outside any composer as on the tab;
 	### each column's run of te_gm_status_sections on a wrapper with that
-	### composer's gate and spacing; How Grand Monuments Work in its composer.
+	### composer's gate and spacing.
 	type te_gm_wide_sections = te_ui_columns_three {
 		blockoverride "column_1" {
 			te_gm_overview_panel = {}
@@ -3626,8 +3583,6 @@ types grand_monuments_widget_types
 				te_gm_sec_trophies = {}
 				te_gm_sec_abroad = {}
 			}
-
-			te_gm_reference_sections = {}
 		}
 	}
 }
@@ -3663,16 +3618,5 @@ flowcontainer = {
 
 	te_je_country = {
 		te_gm_status_sections = {}
-	}
-}
-
-flowcontainer = {
-	name = "widget_je_gm_reference"
-	visible = "[JournalEntry.IsActive]"
-	parentanchor = hcenter
-	ignoreinvisible = yes
-
-	te_je_country = {
-		te_gm_reference_sections = {}
 	}
 }

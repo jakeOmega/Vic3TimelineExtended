@@ -4,12 +4,12 @@
 ### panel and the Timeline Extended window (both mount te_banking_tab_body). The sections are types in
 ### banking_dashboard_widget.gui (the overview, Active Policies, Monetary
 ### Policy, Available Interventions), banking_history_widget.gui (the charts)
-### and here (How Banking Works, a link to Banking's Help page, with the page's
-### body and popup), in the shape of the UN's un_layout_widget.gui.
+### and here (Banking's Help page, its body and popup, which the "?" in the
+### tab's header and at the top of the entry opens), in the shape of the UN's
+### un_layout_widget.gui.
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
-### *_open ones collapsed until opened (test_banking_layout.py). How Banking
-### Works has none: it is a link to the Help page.
+### *_open ones collapsed until opened (test_banking_layout.py).
 
 types banking_layout_widget_types
 {
@@ -25,36 +25,6 @@ types banking_layout_widget_types
 		te_banking_sec_active = {}
 		te_banking_sec_monetary = {}
 		te_banking_sec_interventions = {}
-	}
-
-	### "How Banking Works": a link at the foot of the panel to Banking's Help
-	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
-	### § 5.2). Its header alone, which opens te_banking_help_popup (te_popup =
-	### help_banking) instead of expanding; it keeps its name and its place in
-	### every composer. The "?" in the tab's header opens the same page.
-	type te_banking_sec_how = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		banking_dash_category_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "banking_dash_how_header"
-				using = elide_fontsize_min
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_banking')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
-		}
 	}
 
 	### Banking's Help page, the explanations, one heading per topic, for the
@@ -233,9 +203,8 @@ types banking_layout_widget_types
 		}
 	}
 
-	### The record, then how it all works: the history charts, open by default
-	### in both hosts (one shell, closed flag banking_dash_history_closed), and
-	### How Banking Works, the link to the Help page, last.
+	### The record: the history charts, open by default in both hosts (one
+	### shell, closed flag banking_dash_history_closed).
 	type te_banking_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -244,7 +213,6 @@ types banking_layout_widget_types
 		visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_banking_history_panel = {}
-		te_banking_sec_how = {}
 	}
 
 	### The Banking tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
@@ -343,8 +311,7 @@ types banking_layout_widget_types
 	### The Timeline Extended window's full-screen Banking tab (spec
 	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down three
 	### columns of 520 (te_ui_columns_three), the overview and what is in
-	### force, then the dial and the tools, then the record and How Banking
-	### Works. Each section keeps its narrow gates: the overview its own, the
+	### force, then the dial and the tools, then the record. Each section keeps its narrow gates: the overview its own, the
 	### rest their composer's, whose spacing the wrappers repeat. The
 	### window's wide mount puts it in te_banking_tab_layout
 	### (gen_te_systems_window.py); test_banking_layout.WideTest checks it

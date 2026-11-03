@@ -51,11 +51,6 @@ je_space_race_suborbital = {
 		name = "widget_je_space_race_suborbital"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -216,11 +211,6 @@ je_space_race_orbital = {
 		name = "widget_je_space_race_orbital"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -374,11 +364,6 @@ je_space_race_moon_landing = {
 		name = "widget_je_space_race_moon_landing"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -531,11 +516,6 @@ je_space_race_probe = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_probe"
 		container = "custom_widget_container_2"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
 	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
@@ -699,11 +679,6 @@ je_space_race_moon_base = {
 		name = "widget_je_space_race_moon_base"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -855,11 +830,6 @@ je_space_race_mars_landing = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_mars_landing"
 		container = "custom_widget_container_2"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
 	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
@@ -1016,11 +986,6 @@ je_space_race_interstellar_probe = {
 		name = "widget_je_space_race_interstellar_probe"
 		container = "custom_widget_container_2"
 	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
-	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
 	# of the panel, because the overview above draws the same progress.
@@ -1159,17 +1124,12 @@ je_space_race_interstellar_results = {
 	group = je_group_foreign_affairs
 
 	# The panel (gui/journal_entry_widgets/space_race_widget.gui): the transit
-	# and the programme above the status line, How the Space Race Works last.
+	# and the programme above the status line, under the "?" to the Help page.
 	# There is nothing to adjust while the probe coasts, so no live sections.
 	widget = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_interstellar_results_overview"
 		container = "custom_widget_container_1"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
 	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot
@@ -1293,11 +1253,6 @@ je_space_race_solar_colonization = {
 		gui = "gui/journal_entry_widgets/space_race_widget.gui"
 		name = "widget_je_space_race_solar_colonization"
 		container = "custom_widget_container_2"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/space_race_widget.gui"
-		name = "widget_je_space_race_reference"
-		container = "custom_widget_container_3"
 	}
 	# MARKER, not content (gui/journal_entry_widgets/te_je_bars_on_top_marker.gui):
 	# the mod's gui/journal_entry.gui hides the entry's own goal bar at the foot

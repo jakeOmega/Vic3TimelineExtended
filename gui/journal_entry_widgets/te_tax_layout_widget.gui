@@ -2,12 +2,13 @@
 ### order of the tax code's sections, for both hosts: je_tax_code attaches the
 ### named roots at the foot of this file, and the Tax Code tab, in the Budget
 ### panel (tab te_tax_code) and the Timeline Extended window, mounts
-### te_tax_tab_body, which instances the overview and the two composers. The sections are types in te_tax_overview_widget.gui (the
+### te_tax_tab_body, which instances the overview and the two composers. The
+### sections are types in te_tax_overview_widget.gui (the
 ### overview, the enacted code, the history), te_tax_workbench_widget.gui
 ### (the workbench and the draft summary), te_tax_review_widget.gui (the
 ### review), te_tax_politics_widget.gui (passage and passed bills) and here
-### (How Tax Legislation Works, and the Help page both codes' links open), in
-### the shape of banking_layout_widget.gui.
+### (the Help page for both codes, which the "?" in the tab's header and at
+### the top of the entry opens), in the shape of banking_layout_widget.gui.
 ###
 ### The journal entry, top to bottom (gui/journal_entry.gui draws container_1,
 ### the status desc, container_2, the button grid, container_3):
@@ -16,9 +17,7 @@
 ###   status desc  empty while the entry runs (the overview says it all); one
 ###                line for the inactive entry, which draws nothing else
 ###   container_2  widget_je_tax_code_status     the live sections, open
-###   container_3  widget_je_tax_code_reference  the history and How Tax
-###                Legislation Works, a link to the Help page
-###                (te_tax_code_help_popup, in gui/te_popups.gui)
+###   container_3  widget_je_tax_code_reference  the history
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_tax_code_layout.py).
@@ -67,37 +66,6 @@ types te_tax_layout_widget_types
 				te_tax_draft_summary = {}
 			}
 			te_tax_review_section = {}
-		}
-	}
-
-	### "How Tax Legislation Works": a link at the foot of the panel to the Help
-	### page (style guide rule 1; spec 2026-11-02-charts-help-national-info
-	### § 5.2). Its header alone, which opens te_tax_code_help_popup (te_popup =
-	### help_tax_code) instead of expanding; it keeps its name and its place in
-	### the composers, under their Not(light) wrappers. The Light code's own
-	### link, te_tax_light_how_section, opens the same page, and so does the
-	### "?" in the tab's header.
-	type te_tax_how_section = flowcontainer {
-		direction = vertical
-		parentanchor = hcenter
-		ignoreinvisible = yes
-		spacing = 2
-
-		te_tax_section_header = {
-			tooltip = "te_help_link_tt"
-			blockoverride "left_text" {
-				text = "te_tax_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
-			}
-			### No arrow: the link opens a page. Hide the arrows' container,
-			### not the onclick_show* blocks: one of those also sits on the
-			### header's expand_button widget, whose visibility picks the click
-			### sound (vanilla section_header_button), so this keeps "increment".
-			blockoverride "arrow_visible" {
-				visible = no
-			}
 		}
 	}
 
@@ -292,10 +260,8 @@ types te_tax_layout_widget_types
 		}
 	}
 
-	### The record, then how it all works: the history, collapsed (a list of
-	### past items), and How Tax Legislation Works, the link, last. The light
-	### code's How comes first, as its section does in te_tax_status_sections,
-	### so the wide layout's second column ends on it.
+	### The record: the history, collapsed (a list of past items), which the
+	### light code keeps none of.
 	type te_tax_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -303,10 +269,8 @@ types te_tax_layout_widget_types
 		spacing = 4
 		visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
-		# How the Light Tax Code Works (te_tax_light_widget.gui; it gates itself).
-		te_tax_light_how_section = {}
-		# The legislated code's history and explanation, hidden under the light
-		# setting, which keeps no history.
+		# The legislated code's history, hidden under the light setting, which
+		# keeps none.
 		flowcontainer = {
 			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 			direction = vertical
@@ -315,7 +279,6 @@ types te_tax_layout_widget_types
 			spacing = 4
 
 			te_tax_history_section = {}
-			te_tax_how_section = {}
 		}
 	}
 
@@ -325,7 +288,7 @@ types te_tax_layout_widget_types
 	### and the two composers inside te_tax_tab_layout, which a wide mount
 	### overrides, then the frame's Open Journal Entry in the tab's row font.
 	### The types read the frame's Country, the player's, so the entry's
-	### datacontext serves only the link. Each frame draws the
+	### datacontext serves only Open Journal Entry. Each frame draws the
 	### draft and bill summaries in its fixed_bottom, so the live sections
 	### leave their own copy out ("draft_summary").
 	type te_tax_tab_body = te_system_tab_frame {
@@ -373,13 +336,12 @@ types te_tax_layout_widget_types
 	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down one
 	### row of three columns of 520 (te_ui_columns_three). Under the full
 	### code: the overview and the bills and promises to watch, then the code
-	### in force, the workbench and the review, then the history and How Tax
-	### Legislation Works. Under the light code: the overview and the light
-	### section, then the light How, and the third column empty (it keeps its
-	### 520). Each section keeps its narrow gates, the wrappers repeating the
+	### in force, the workbench and the review, then the history. Under the
+	### light code: the overview and the light section, and the second and
+	### third columns empty (each keeps its 520). Each section keeps its narrow gates, the wrappers repeating the
 	### composers' and the full code's Not( light ), with their spacing; a run
 	### of the full code's sections alone takes both in one And, so under the
-	### light code its wrapper hides and leaves no gap above the light How. The
+	### light code its wrapper hides and leaves no gap. The
 	### draft summary is in the window's footer, so it is left out here as the
 	### tab body leaves it out. The window's wide mount puts it in
 	### te_tax_tab_layout (gen_te_systems_window.py);
@@ -427,16 +389,6 @@ types te_tax_layout_widget_types
 				te_tax_workbench_section = {}
 				te_tax_review_section = {}
 			}
-
-			flowcontainer = {
-				visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-				direction = vertical
-				parentanchor = hcenter
-				ignoreinvisible = yes
-				spacing = 4
-
-				te_tax_light_how_section = {}
-			}
 		}
 
 		blockoverride "column_3" {
@@ -448,7 +400,6 @@ types te_tax_layout_widget_types
 				spacing = 4
 
 				te_tax_history_section = {}
-				te_tax_how_section = {}
 			}
 		}
 	}
