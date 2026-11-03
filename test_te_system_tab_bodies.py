@@ -45,7 +45,8 @@ class FrameTest(unittest.TestCase):
         top = _children(self.body)
         # the header, then what goes before the gate (Banking's readout), then the gate
         blocks = [name for kind, name, _ in top if kind == "block"]
-        self.assertEqual(blocks, ["tab_header", "tab_before_gate"])
+        # the Country the sections read (MountContextTest), then the header
+        self.assertEqual(blocks, ["tab_country", "tab_header", "tab_before_gate"])
         widgets = [(name, text) for kind, name, text in top if kind == "widget"]
         self.assertEqual([name for name, _ in widgets], ["flowcontainer"])
         names = [name for _, name, _ in top]
@@ -443,6 +444,94 @@ class GuardTemplateTest(unittest.TestCase):
                         self.assertNotIn("visible", root, f"{where}: {instance}'s root has its own visible, which "
                                                           f"the guard would replace (gotcha #17); wrap the instance")
         self.assertGreater(found, 0, "the guard is used")
+
+
+
+# Every file with journal-entry roots, the private systems' included: the chart
+# type reads Country (F0.3), and Global Warming, the UN and the Strategic Reserve
+# draw charts in their entries.
+JOURNAL_ROOT_FILES = ["banking_layout_widget.gui", "colonial_empire_widget.gui", "covert_operations_widget.gui",
+                      "cultural_hegemony_widget.gui", "global_warming_widget.gui", "grand_monuments_widget.gui",
+                      "nuclear_layout_widget.gui", "space_race_widget.gui", "strategic_reserve_widget.gui",
+                      "te_tax_layout_widget.gui", "un_layout_widget.gui"]
+JE_COUNTRY = {"datacontext": '"[JournalEntry.GetCountry]"', "parentanchor": "hcenter", "direction": "vertical",
+              "ignoreinvisible": "yes"}
+
+
+def _journal_roots():
+    """Every journal-entry root: (file, line, name, body), the top-level
+    widgets named widget_je_* in gui/journal_entry_widgets/."""
+    out = []
+    for path in sorted(glob.glob(os.path.join(JE_WIDGETS, "*.gui"))):
+        text = _strip_comments(_read(path))
+        for m in re.finditer(r"(?m)^(\w+) = \{", text):
+            body = text[m.end():_close(text, m.end() - 1)]
+            name = re.search(r'^\tname = "(widget_je_\w+)"', body, re.M)
+            if name:
+                out.append((os.path.basename(path), text.count("\n", 0, m.start()) + 1, name.group(1), body))
+    return out
+
+
+class MountContextTest(unittest.TestCase):
+    """Every mount supplies the Country its sections read (spec § 6.3), the
+    player's in every host before another country's panels (F1), so nothing
+    changes in game (plan Review Focus 5)."""
+
+    def test_the_frame_supplies_the_player(self):
+        body = _strip_comments(_type_body(_read(WIDGETS), "te_system_tab_frame"))
+        top = _children(body)
+        names = [name for _, name, _ in top]
+        self.assertIn("tab_country", names)
+        self.assertLess(names.index("tab_country"), names.index("tab_header"),
+                        "the header and Banking's readout (tab_before_gate) read it too")
+        country = [text for kind, name, text in top if kind == "block" and name == "tab_country"]
+        self.assertEqual([c.strip() for c in country], ['datacontext = "[GetPlayer]"'])
+        self.assertNotIn("datacontext", [name for kind, name, _ in top if kind == "property"])
+
+    def test_every_window_mount_supplies_the_player(self):
+        from scripts.generators import gen_te_systems_window as gen
+        generated = _strip_comments(_read(os.path.join(REPO, "gui", "te_systems_window_generated.gui")))
+        for t in gen.TABS:
+            for name in (f"te_systems_window_{t.key}_tab", f"te_systems_window_{t.key}_tab_wide"):
+                with self.subTest(mount=name):
+                    at = generated.index(f'name = "{name}"')
+                    start = generated.rindex("{", 0, at)
+                    own = _children(generated[start + 1:_close(generated, start)])
+                    props = [(k, v) for kind, k, v in own if kind == "property"]
+                    self.assertIn(("datacontext", '"[GetPlayer]"'), props)
+
+    def test_the_journal_wrapper(self):
+        """te_je_country only sets the Country: it adds no spacing, margin,
+        size or gate of its own, and anchors as every composer does."""
+        body = _strip_comments(_type_body(_read(WIDGETS), "te_je_country"))
+        self.assertRegex(_read(WIDGETS), r"(?m)^\ttype te_je_country = flowcontainer \{")
+        items = _children(body)
+        self.assertEqual({k: v for kind, k, v in items if kind == "property"}, JE_COUNTRY)
+        self.assertEqual([k for kind, k, _ in items if kind != "property"], [])
+
+    def test_every_journal_root_supplies_its_country(self):
+        """Each root holds its te_* instances inside te_je_country, so the
+        root's own visible keeps reading the entry. A non-te_ widget beside it
+        (Tax Code's link to the Budget tab) reads no Country and stays out, so
+        the root's spacing between them is kept."""
+        types = mod_types()
+        roots = _journal_roots()
+        self.assertEqual(sorted({f for f, _, _, _ in roots}), JOURNAL_ROOT_FILES)
+        self.assertGreaterEqual(len(roots), 49)
+        for path, line, name, body in roots:
+            with self.subTest(root=f"{path}:{line} {name}"):
+                items = _children(body)
+                direct = [k for kind, k, _ in items if kind == "widget" and k.startswith("te_")]
+                self.assertEqual(direct, ["te_je_country"], "the root's te_* instances sit in te_je_country")
+                inner = [text for kind, k, text in items if k == "te_je_country"][0]
+                wrapped = [(k, text) for kind, k, text in _children(inner)]
+                self.assertTrue(wrapped)
+                for k, text in wrapped:
+                    self.assertTrue(k.startswith("te_"), f"te_je_country holds only the composer: {k}")
+                    self.assertEqual(text.strip(), "", f"{k}: the instance as it was, nothing added")
+                    # the wrapper anchors as the composer it holds, so the composer sits where it did
+                    root = {kk: v for kind, kk, v in _children(types[k].body) if kind == "property"}
+                    self.assertEqual(root.get("parentanchor"), JE_COUNTRY["parentanchor"], k)
 
 
 if __name__ == "__main__":

@@ -17,7 +17,11 @@ launcher and the root, and instances what this writes:
                                      tax-probes strip
     te_systems_window_tabs_narrow    the scroll area's column: the tax-probes
                                      panel, then each tab's mount, holding its
-                                     body type
+                                     body type. Every mount supplies the
+                                     player's Country (datacontext GetPlayer),
+                                     the Country its sections read (spec
+                                     2026-11-02-charts-help-national-info
+                                     § 6.3)
     te_sr_window_milestones          the Space Race body's entries: a note
                                      while none runs, then one
                                      te_system_tab_frame per milestone
@@ -376,6 +380,7 @@ def _mount(tab: Tab, wide: bool = False) -> list[str]:
                    "\t\t}", "\t}"]
     return ["flowcontainer = {",
             f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
+            '\tdatacontext = "[GetPlayer]"',
             f"\tusing = te_systems_window_{tab.key}_selected",
             "\tusing = default_fade_in_out",
             "\tparentanchor = hcenter",

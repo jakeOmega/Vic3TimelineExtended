@@ -716,14 +716,15 @@ class StripTest(unittest.TestCase):
 
 def _journal_types(entry_key, je_file, widget_file, skip=()):
     """The types the entry's journal roots wrap, in the order it attaches them
-    (the bars-on-top marker is not content)."""
+    (the bars-on-top marker is not content), each inside its root's
+    te_je_country (the entry's Country, test_te_system_tab_bodies.py)."""
     entry = _txt_block(_read(os.path.join(JE_DIR, je_file)), entry_key)
     widgets = _read(os.path.join(WIDGETS, widget_file))
     types = []
     for name in re.findall(r'name = "(\w+)"\s*container', entry):
         if name == "widget_te_je_bars_on_top_marker" or name in skip:
             continue
-        types += re.findall(r"^\t(te_\w+) = \{\}", _top_level(widgets, name), re.M)
+        types += re.findall(r"^\t\t(te_\w+) = \{\}", _top_level(widgets, name), re.M)
     return types
 
 
@@ -855,7 +856,9 @@ class TabContentTest(unittest.TestCase):
             for kind, root in (("overview", f"widget_je_space_race_{m}_overview"), ("status", f"widget_je_space_race_{m}")):
                 with self.subTest(root=root):
                     wrapper = _top_level(widgets, root)
-                    self.assertEqual(re.findall(r"^\t(\w+) = \{\}$", wrapper, re.M), [f"te_sr_{m}_{kind}"])
+                    # the type in the root's te_je_country, which only supplies the Country
+                    self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{\}\n\t\}$", wrapper, re.M),
+                                     [f"te_sr_{m}_{kind}"])
                     self.assertNotIn("datacontext", wrapper)
                     body = _type_body(widgets, f"te_sr_{m}_{kind}")
                     self.assertIn(f"datacontext = \"[GetScriptedGui('sr_milestone_{m}_sgui')]\"", body)

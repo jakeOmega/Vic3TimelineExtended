@@ -114,7 +114,9 @@ class OrderTest(unittest.TestCase):
             self.assertEqual(len(visible), 1, name)
             self.assertTrue(visible[0] == "JournalEntry.IsActive"
                             or visible[0].startswith("And( JournalEntry.IsActive, "), name)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{\}?$", body, re.M), [wrapped], name)
+            # the section in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+            self.assertEqual(re.findall(r"^\t(\w+) = \{\}?$", body, re.M), ["te_je_country"], name)
+            self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{\}$", body, re.M), [wrapped], name)
 
     def test_roots_are_a_section_wide(self):
         """A wrapper sized by its one child was centred by the width it had at its

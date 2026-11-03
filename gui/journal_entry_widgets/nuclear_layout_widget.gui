@@ -342,7 +342,9 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_nuclear_overview_panel = {}
+	te_je_country = {
+		te_nuclear_overview_panel = {}
+	}
 }
 
 ### container_3, directly above the native bar. The root carries the section's
@@ -356,7 +358,9 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_nuclear_sec_programme = {}
+	te_je_country = {
+		te_nuclear_sec_programme = {}
+	}
 }
 
 flowcontainer = {
@@ -367,7 +371,9 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_nuclear_status_sections = {}
+	te_je_country = {
+		te_nuclear_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -378,5 +384,7 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_nuclear_reference_sections = {}
+	te_je_country = {
+		te_nuclear_reference_sections = {}
+	}
 }

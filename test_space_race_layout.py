@@ -142,7 +142,8 @@ def _root(text, name):
     start = text.rfind("flowcontainer = {", 0, m.start())
     brace = text.index("{", start)
     root = text[start:_close(text, brace) + 1]
-    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+    # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+    for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
         root += "\n" + _type_body(text, wrapped)
     return root
 

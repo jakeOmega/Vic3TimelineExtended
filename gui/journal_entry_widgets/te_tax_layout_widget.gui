@@ -462,7 +462,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	spacing = 6
 
-	te_tax_overview_panel = {}
+	te_je_country = {
+		te_tax_overview_panel = {}
+	}
 
 	# The tab carries the same panels, and later the workbench, so the entry
 	# links to it. OpenPanelTab with a mod tab name is the top bar's Banking
@@ -488,7 +490,9 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_tax_status_sections = {}
+	te_je_country = {
+		te_tax_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -499,5 +503,7 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_tax_reference_sections = {}
+	te_je_country = {
+		te_tax_reference_sections = {}
+	}
 }

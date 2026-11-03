@@ -60,7 +60,8 @@ def _root(text, name):
     assert m, name
     start = text.rfind("flowcontainer = {", 0, m.start())
     root = _body(text[start:], "flowcontainer")
-    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+    # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+    for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
         root += "\n" + _body(text, wrapped, prefix=r"\ttype ")
     return root
 

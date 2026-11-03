@@ -9264,7 +9264,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_suborbital_overview = {}
+	te_je_country = {
+		te_sr_suborbital_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9274,7 +9276,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_suborbital_status = {}
+	te_je_country = {
+		te_sr_suborbital_status = {}
+	}
 }
 
 ### orbital
@@ -9286,7 +9290,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_orbital_overview = {}
+	te_je_country = {
+		te_sr_orbital_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9296,7 +9302,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_orbital_status = {}
+	te_je_country = {
+		te_sr_orbital_status = {}
+	}
 }
 
 ### moon_landing
@@ -9308,7 +9316,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_moon_landing_overview = {}
+	te_je_country = {
+		te_sr_moon_landing_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9318,7 +9328,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_moon_landing_status = {}
+	te_je_country = {
+		te_sr_moon_landing_status = {}
+	}
 }
 
 ### probe
@@ -9330,7 +9342,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_probe_overview = {}
+	te_je_country = {
+		te_sr_probe_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9340,7 +9354,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_probe_status = {}
+	te_je_country = {
+		te_sr_probe_status = {}
+	}
 }
 
 ### moon_base
@@ -9352,7 +9368,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_moon_base_overview = {}
+	te_je_country = {
+		te_sr_moon_base_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9362,7 +9380,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_moon_base_status = {}
+	te_je_country = {
+		te_sr_moon_base_status = {}
+	}
 }
 
 ### mars_landing
@@ -9374,7 +9394,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_mars_landing_overview = {}
+	te_je_country = {
+		te_sr_mars_landing_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9384,7 +9406,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_mars_landing_status = {}
+	te_je_country = {
+		te_sr_mars_landing_status = {}
+	}
 }
 
 ### interstellar_probe
@@ -9396,7 +9420,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_interstellar_probe_overview = {}
+	te_je_country = {
+		te_sr_interstellar_probe_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9406,7 +9432,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_interstellar_probe_status = {}
+	te_je_country = {
+		te_sr_interstellar_probe_status = {}
+	}
 }
 
 ### solar_colonization
@@ -9418,7 +9446,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_solar_colonization_overview = {}
+	te_je_country = {
+		te_sr_solar_colonization_overview = {}
+	}
 }
 
 flowcontainer = {
@@ -9428,7 +9458,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_solar_colonization_status = {}
+	te_je_country = {
+		te_sr_solar_colonization_status = {}
+	}
 }
 
 ### interstellar_results — the waiting entry: no controls, nothing to adjust;
@@ -9440,7 +9472,9 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_overview_transit = {}
+	te_je_country = {
+		te_sr_overview_transit = {}
+	}
 }
 
 ### How the Space Race Works, on all nine entries.
@@ -9451,5 +9485,7 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
 
-	te_sr_reference_sections = {}
+	te_je_country = {
+		te_sr_reference_sections = {}
+	}
 }

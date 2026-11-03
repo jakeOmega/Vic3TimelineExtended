@@ -104,7 +104,9 @@ class OrderTest(unittest.TestCase):
             self.assertTrue(m, name)
             body = _block_from(gui, gui.index("{", m.start()) + 1)
             self.assertIn('visible = "[JournalEntry.IsActive]"', body, name)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [composer], name)
+            # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), ["te_je_country"], name)
+            self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer], name)
 
     def test_the_bars_on_top_marker_is_attached(self):
         """Round 2: the overview draws the temperature bar, so the entry carries
