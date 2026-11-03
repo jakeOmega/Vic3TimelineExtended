@@ -157,8 +157,13 @@ class BodyTest(unittest.TestCase):
                 self.assertTrue(m, content)
                 self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}$", m.group(1), re.M), composers)
                 # the gate is the body's one visible, but for the "?"'s
-                # observer gate in the header (test_te_help_pages.py)
-                rest = body.replace(_override(body, "tab_gate"), "").replace(head, "")
+                # observer gate, once, on the button in the header
+                # (test_te_help_pages.py): any other visible, the header's
+                # included, still fails
+                observer = 'visible = "[Not( GetMetaPlayer.IsObserver )]"'
+                self.assertEqual(body.count(observer), head.count(observer), "the observer gate is the header's")
+                self.assertLessEqual(head.count(observer), 1)
+                rest = body.replace(_override(body, "tab_gate"), "").replace(observer, "", 1)
                 if name in READOUTS:
                     # the tab without the entry, before the gate: its own gate,
                     # never true with the entry's (Banking's #805 shape)
