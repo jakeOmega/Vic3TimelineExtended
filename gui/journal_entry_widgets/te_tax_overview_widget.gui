@@ -452,7 +452,9 @@ types te_tax_overview_widget_types
 						# committed share, or the offers waiting while it is short. The hover is
 						# Pass's checklist. The offers are the player's own (spec
 						# 2026-11-02-charts-help-national-info § 6.4): another country's cell
-						# gives the share and the bill's revision, never its offers.
+						# gives the share and the bill's revision, never its offers. Nor
+						# Pass's checklist: its lines (te_tax_tt_pass_*) are script's and read
+						# GetPlayer, and the passage section's conditions show the same.
 						te_banking_ov_cell = {
 							visible = "[Not( GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 							size = { 238 70 }
@@ -479,7 +481,7 @@ types te_tax_overview_widget_types
 						te_banking_ov_cell = {
 							visible = "[GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 							size = { 238 70 }
-							tooltip = "[SelectLocalization( GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_bill_ready_tt', Concatenate( SelectLocalization( And( Country.IsLocalPlayer, NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_offers_open'), '(CFixedPoint)0' ) ), 'te_tax_ov_bill_offers_tt', 'te_tax_ov_bill_head_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
+							tooltip = "[SelectLocalization( GetScriptedGui('te_tax_cmd_pass_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_ov_bill_ready_tt', SelectLocalization( Country.IsLocalPlayer, Concatenate( SelectLocalization( NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_offers_open'), '(CFixedPoint)0' ), 'te_tax_ov_bill_offers_tt', 'te_tax_ov_bill_head_tt' ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), 'te_tax_ov_bill_head_tt' ) )]"
 							blockoverride "caption_width" {
 								max_width = 154
 							}

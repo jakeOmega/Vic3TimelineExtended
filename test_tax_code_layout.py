@@ -587,12 +587,44 @@ class PrivateTest(unittest.TestCase):
         self.assert_guarded(self.overview, 'text = "te_tax_ov_draft"', "the overview's draft cells")
         self.assertRegex(self.overview, rf"widget = \{{\s*using = {GUARD}\s*size = \{{ 238 70 \}}")
 
+    @staticmethod
+    def own_branch(text, pos):
+        """Whether `pos` sits in the branch a SelectLocalization takes only for
+        the local player: the first branch of one whose condition is
+        Country.IsLocalPlayer, or And( Country.IsLocalPlayer, ... )."""
+        for m in re.finditer(r"SelectLocalization\( ", text[:pos]):
+            depth, args, start = 0, [], m.end()
+            for i in range(m.end() - 2, len(text)):   # from its opening parenthesis
+                if text[i] == "(":
+                    depth += 1
+                elif text[i] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        args.append((start, i))
+                        break
+                elif text[i] == "," and depth == 1:
+                    args.append((start, i))
+                    start = i + 1
+            if len(args) < 2 or not args[1][0] <= pos < args[1][1]:
+                continue
+            cond = text[args[0][0]:args[0][1]].strip()
+            if cond == "Country.IsLocalPlayer" or cond.startswith("And( Country.IsLocalPlayer, "):
+                return True
+        return False
+
     def test_the_bill_cell_names_no_offers_for_another_country(self):
-        for key in ("'te_tax_ov_bill_offers'", "'te_tax_ov_bill_offers_tt'"):
+        """Nor Pass's checklist, whose lines are script's and read GetPlayer
+        (te_tax_tt_pass_*): another country's hover is the bill's revision, its
+        conditions are the passage section's."""
+        for key in ("'te_tax_ov_bill_offers'", "'te_tax_ov_bill_offers_tt'",
+                    "GetScriptedGui('te_tax_cmd_pass_sgui').IsValidTooltip("):
             with self.subTest(key=key):
-                pos = self.overview.index(key)
-                choice = self.overview[self.overview.rindex("SelectLocalization( ", 0, pos):pos]
-                self.assertTrue(choice.startswith("SelectLocalization( And( Country.IsLocalPlayer, "), choice[:80])
+                found = [m.start() for m in re.finditer(re.escape(key), self.overview)]
+                self.assertTrue(found)
+                for pos in found:
+                    self.assertTrue(self.own_branch(self.overview, pos), self.overview[max(0, pos - 120):pos])
+        self.assertFalse(self.own_branch("SelectLocalization( x, 'a', 'b' )", 23), "guard the helper")
+        self.assertTrue(self.own_branch("SelectLocalization( Country.IsLocalPlayer, 'a', 'b' )", 43))
 
     def test_the_bargaining_and_the_actions_are_the_players(self):
         """The interest-group cards (stances, reasons, offers, Accept), their
