@@ -171,8 +171,10 @@ Below them are five sections: Governance, Society, Economy, Science and Space,
 and International. Each starts with its scores, if it has any. Legislative
 Override Capacity's figure names every source on hover, and the lines on its bar
 mark where Forceful Legislation's options open, at 0, 2 and 4. Once a United
-Nations exists, International starts with your seat in it, your International
-Standing and your UN Dues, with any months in arrears.
+Nations exists, International starts with your place in it: a member, a
+permanent member, suspended, or outside. Once you have joined it adds your
+International Standing, kept if you leave, and while you are a member your UN
+Dues, with any months in arrears.
 
 Under the scores, each section has a row for each kind of effect the mod's
 permanent effects give your country, grouped under small headings: "Arable

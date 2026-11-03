@@ -545,11 +545,32 @@ class TabLayoutTest(unittest.TestCase):
 
     # The UN lines' rows, each with the UN display code it reads and the UN
     # overview's words for that code (gui/journal_entry_widgets/un_overview_widget.gui).
+    # The UN lines' rows: the UN display code each reads, the UN overview's
+    # words for its values in order (gui/journal_entry_widgets/un_overview_widget.gui),
+    # and the one other value the row may read, its figure's condition.
     UN_ROWS = (
-        ("te_nation_un_member_row", "un_disp_member_code", [f"je_un_ov_member_{i}" for i in range(1, 7)]),
-        ("te_nation_un_standing_row", "un_disp_standing_code", [f"je_un_ov_standing_{i}" for i in range(0, 7)]),
-        ("te_nation_un_dues_row", "un_disp_dues_code", [f"je_un_ov_dues_{i}" for i in range(1, 6)]),
+        ("te_nation_un_member_row", "un_disp_member_code", [f"je_un_ov_member_{i}" for i in range(1, 7)], None),
+        ("te_nation_un_standing_row", "un_disp_standing_code", [f"je_un_ov_standing_{i}" for i in range(0, 7)],
+         None),
+        ("te_nation_un_dues_row", "un_disp_dues_code", [f"je_un_ov_dues_{i}" for i in range(1, 6)],
+         "un_disp_arrears_months"),
     )
+    # A branch of a code's SelectLocalization chain: the value tested and the
+    # key it picks, whose last _N must be that value.
+    UN_BRANCH = re.compile(r"EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('(\w+)'\), "
+                           r"'\(CFixedPoint\)(-?\d+)' \), '(\w+?_(-?\d+))'")
+
+    def _assert_chain(self, text, code, keys):
+        """text picks keys[i] for each value of code in order, the last one
+        the fallback: each branch's value is its key's suffix, and every
+        branch tests code."""
+        branches = self.UN_BRANCH.findall(text)
+        self.assertEqual([key for _, _, key, _ in branches], keys[:-1])
+        for tested, value, key, suffix in branches:
+            with self.subTest(key=key):
+                self.assertEqual(tested, code)
+                self.assertEqual(value, suffix)
+        self.assertIn(f"'{keys[-2]}', '{keys[-1]}' )", text)
 
     def test_the_un_lines(self):
         """The United Nations in International (spec
@@ -569,7 +590,7 @@ class TabLayoutTest(unittest.TestCase):
         at = body.index('text = "te_nation_un_member_row"')
         block = body[body.rindex("flowcontainer = {", 0, at):body.index("te_nation_types_international = {}")]
         self.assertEqual(block.split("\n")[1].strip(), f'visible = "[{un_on}]"')
-        self.assertEqual(re.findall(r'text = "(te_nation_un_\w+)"', block), [row for row, _, _ in self.UN_ROWS])
+        self.assertEqual(re.findall(r'text = "(te_nation_un_\w+)"', block), [row for row, _, _, _ in self.UN_ROWS])
         # standing once the country has a score (a member, or one that left);
         # dues while it is a member
         rows = block.split("te_nation_row = {")[1:]
@@ -579,15 +600,42 @@ class TabLayoutTest(unittest.TestCase):
         self.assertIn("visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_dues_code'), "
                       "'(CFixedPoint)0' )]\"", rows[2])
         loc = _loc()
-        for row, code, words in self.UN_ROWS:
+        for row, code, words, figure in self.UN_ROWS:
             with self.subTest(row=row):
                 self.assertIn(f'tooltip = "{row}_tt"', block)
                 self.assertIn(f"{row}_tt", loc)
                 text = loc[row]
                 self.assertEqual(re.findall(r"'(je_un_ov_\w+)'", text), words)
+                self._assert_chain(text, code, words)
+                for word in words:
+                    self.assertIn(word, loc, "the overview's word: without it the row shows a raw key")
                 self.assertNotIn("JournalEntry", text)
-                self.assertIn(f"Country.MakeScope.ScriptValue('{code}')", text)
+                self.assertLessEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", text)), {code, figure} - {None})
                 self.assertTrue(text.startswith("[concept_"), "Label: value, the label a concept (rule 3)")
+        # The figures: the score unless the country is not yet rated (code 1),
+        # the months in arrears while any are owed; each reads its own value.
+        self.assertIn("[AddLocalizationIf( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
+                      "'un_disp_standing_code'), '(CFixedPoint)1' ) ), 'te_nation_un_standing_fig' )]",
+                      loc["te_nation_un_standing_row"])
+        self.assertIn("[AddLocalizationIf( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue("
+                      "'un_disp_arrears_months'), '(CFixedPoint)0' ), 'te_nation_un_arrears' )]",
+                      loc["te_nation_un_dues_row"])
+        for key, value in (("te_nation_un_standing_fig", "un_disp_standing"),
+                           ("te_nation_un_arrears", "un_disp_arrears_months")):
+            with self.subTest(key=key):
+                self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", loc[key])), {value})
+        # The seat's hover says what each state means, Cannot Join and Not a
+        # Member included; the dues' says who pays where the overlord does.
+        self._assert_chain(loc["te_nation_un_member_row_tt"], "un_disp_member_code",
+                           [f"te_nation_un_member_tt_{i}" for i in range(1, 7)])
+        self._assert_chain(loc["te_nation_un_dues_basis_tt"], "un_disp_dues_code",
+                           ["te_nation_un_dues_tt_1", "te_nation_un_dues_rate_tt"])
+        for key in [f"te_nation_un_member_tt_{i}" for i in range(1, 7)] + ["te_nation_un_dues_tt_1"]:
+            with self.subTest(key=key):
+                self.assertIn(key, loc)
+        self.assertIn("$te_nation_un_dues_basis_tt$", loc["te_nation_un_dues_arrears_tt"])
+        self.assertIn("'te_nation_un_dues_arrears_tt', 'te_nation_un_dues_basis_tt' )",
+                      loc["te_nation_un_dues_row_tt"])
         values = "".join(_read(ROOT / "common" / "script_values" / name)
                          for name in ("un_overview_display_values.txt", "un_dues_values.txt"))
         defined = set(re.findall(r"^(\w+) = \{", values, re.M))
