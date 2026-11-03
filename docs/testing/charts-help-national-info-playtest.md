@@ -213,6 +213,26 @@ Monuments" (the section and the overview cell) and the empty-section line read n
 | **5. The player's own country in National Info, and a state's panel.** National Info for the player's country; then a state's panel with a monument card and a construction site card. | The controls show and work in both: the five button types the cards share (Dedicate, Carry It Off and Clear It Away, on a state's monument and on one beside it) read `GetPlayer` there, as before. | A button gone from a state card, or a tooltip that logs: the state panel has no `Country`, and nothing the cards draw may read it (`test_grand_monuments_layout.py`'s `StateCardTest`). |
 | **6. The log.** After 1 to 5, search `debug.log` for `wanted context of type 'JournalEntry'`, `wanted context of type 'Country'`, `Failed to fetch variable` and `gm_`. | No new lines. | Each line names the expression and its file:line. |
 
+## Banking in National Info (PR F2, Banking, 2026-11-02)
+
+Banking is public: another country's tab draws its own cycle, bars, Monetary Policy readings, Active Policies and
+history, with every control, Available Interventions and the start notes under `te_own_country_only`. The player's
+own panel draws the entry's own bars, as before; another country's draws `te_banking_bars`, the same markup from the
+country variables the entry's bars are set from (`banking_disp_bar_*`). The text speaks of "the country";
+the Not Started cell keeps the player's checklist through `SelectLocalization( Country.IsLocalPlayer, … )`. None of
+it has been seen in game.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The player's own panel**, before anything else: the journal entry, the Budget panel's Banking tab and the Timeline Extended window's, side and full screen. | As before: the entry's four bars with their hovers; every button in its old place and working; the topbar phase icon and its hover. | No bars: the guard's wrapper around `te_je_scripted_bars` (`te_banking_overview_panel`) needs `Country.IsLocalPlayer`, true for your country in every one of its mounts. |
+| **2. Another country's figures** (spec § 9 item 3). Open France's National Info, Banking tab, then play France (or compare with a known value). | France's phase, momentum, bubble, bars, policy rate, inflation, exchange rate and history, not yours. The bars sit as the entry's do, the stance bar's marker in the middle when neutral. A bar with a contagion marker reads "Financial contagion reached the country this month". | A figure equal to yours: the read under it still says `GetPlayer` (`te_rebind_country.py banking`). |
+| **3. No controls.** On France's tab. | No Enable, Disable, stepper, mandate, delegation, recapitalize or union button; each Active Policies row keeps its empty button slot at the right. No Available Interventions section; under Monetary Policy, no "how to start" note, and no gap where one was. | A control shows: its widget lost `using = te_own_country_only`, or an instance set its own `visible` over the type's (gotcha #17). |
+| **4. The interventions in force are France's** (spec § 9 item 3). France's Active Policies, against France's own journal entry when playing it. | The AI's own policies, through `market_triggers.txt`'s `je:` triggers. | A row shows yours: its scripted GUI's trigger reads the player, not its root (`GuiScope.SetRoot( Country.MakeScope )`). |
+| **5. A bloc's union.** A country in a power bloc with a monetary union, member and leader. | The "received from the leader" row shows the bloc leader's flag and name, and only while the member receives something. | The row's `visible` read the leader: the leader's datacontext must sit on the flag and name only (`banking_dash_mon_bs_union_from`). |
+| **6. Not Started.** Hover the overview's Not Started cell on a minor without a stock exchange, then on your own country before its cycle starts. | The minor's: "The country's Banking Cycle has no readings yet…", no checklist. Your own: the checklist with ticks, as before. | `banking_dash_not_started_own_tt` / `_other_tt`. |
+| **7. A country without the entry** (the #805 readout). A country with a central bank in a game's first fortnight, or a revolution's rebels. | Its Monetary Policy readings, under National Info's header; yours as before in the Budget tab. | `te_banking_mon_readout` reads `Country`; National Info draws it under `te_budget_banking_readout_sgui` on the window's `Country`. |
+| **8. The log** (spec § 9 item 3). After 1 to 7, search `debug.log` for `wanted context of type 'JournalEntry'`, `Failed to fetch variable`, `banking_disp_bar` and null-country lines. | No new lines. | Each line names the expression and its file:line. |
+
 ## Cultural Hegemony for another country (PR F4, Cultural Hegemony, 2026-11-03)
 
 The Cultural Hegemony tab is public: its sections read `Country`, and the composers' and wide columns' gate is the

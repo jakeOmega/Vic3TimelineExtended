@@ -199,7 +199,7 @@ types te_banking_history_types
 	### holding the legend, not a type derived from it (gotcha #37).
 	type te_banking_hist_marker_key = flowcontainer {
 		parentanchor = hcenter
-		visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+		visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
 
 		te_history_marker_legend = {
 			blockoverride "marker_legend_font" {
@@ -263,7 +263,7 @@ types te_banking_history_types
 		}
 
 		textbox = {
-			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+			visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
 			parentanchor = hcenter
 			autoresize = yes
 			multiline = yes
@@ -308,7 +308,7 @@ types te_banking_history_types
 
 		### Everyone except a digital currency: the axis starts at 0.
 		te_hist_mon_policy = {
-			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 		}
 
 		### Digital currency: the axis reaches down to the -3 floor, and the
@@ -318,7 +318,7 @@ types te_banking_history_types
 		### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
 		### number here that cannot be checked from the files.
 		te_hist_mon_policy_digital = {
-			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 		}
 
 		### ---- Rate the government pays (percentage points) --------------
@@ -372,7 +372,7 @@ types te_banking_history_types
 		### the two charts that read them are hidden rather than drawn empty; the
 		### samples are not taken either (te_history_banking_effects.txt).
 		te_hist_mon_inflation = {
-			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 		}
 
 		### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
@@ -389,7 +389,7 @@ types te_banking_history_types
 		### the two charts that read them are hidden rather than drawn empty; the
 		### samples are not taken either (te_history_banking_effects.txt).
 		te_hist_mon_fx = {
-			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 		}
 	}
 
@@ -402,7 +402,7 @@ types te_banking_history_types
 		# Every country holds je_banking_cycle, dormant until its financial cycle
 		# starts, and nothing is sampled before then
 		# (te_history_record_banking_samples). Draw nothing until the cycle runs.
-		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
