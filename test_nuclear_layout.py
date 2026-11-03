@@ -1338,5 +1338,69 @@ class TooltipKeysTest(unittest.TestCase):
         self.assertIn("SCOPE.GetRootScope.ScriptValue('nd_taboo_tradition_cap')", self.loc["nd_taboo_bd_tradition"])
 
 
+# An observer's gate: what a world read (`# world:`) needs, since an observer has no GetPlayer.
+OBSERVER_GATE = re.compile(r"Not\( GetMetaPlayer\.IsObserver \)|GetPlayer\.IsValid")
+
+
+def _observer_gated(body, pos):
+    """Whether a body offset sits under an observer gate: on its own line, or
+    on the `visible` of a block around it."""
+    line = body[body.rfind("\n", 0, pos) + 1:body.find("\n", pos)]
+    if OBSERVER_GATE.search(line):
+        return True
+    a, b = gh.enclosing_block(body, pos)
+    while True:
+        inside = body if (a, b) == (0, len(body)) else body[a + 1:b]
+        if any(OBSERVER_GATE.search(v) for v in re.findall(r'visible = "[^"]*"', gh.own_props(inside))):
+            return True
+        if a == 0:
+            return False
+        a, b = gh.enclosing_block(body, a)
+
+
+class ObserverTest(unittest.TestCase):
+    """National Info opens this panel for an observer too, for whom GetPlayer is
+    no country and Country.IsLocalPlayer is false for every country, so an
+    observer sees another country's panel. A player read there logs every
+    frame (gui_modding_guide.md, "An observer has no GetPlayer"). So nothing
+    another country's panel draws reads the player or the entry, in markup or
+    in a key it renders, but a world read (`# world:`), and a world read sits
+    under Not( GetMetaPlayer.IsObserver ) or behind GetPlayer.IsValid. Nuclear
+    has no world read: World Crises, Nuclear Powers and the taboo read global
+    lists and variables."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = gh.mod_types()
+        cls.templates = gh.mod_templates()
+        cls.reads = gh.markup_reads({WIDE}, cls.types, cls.templates)
+        loc = gh.load_loc()
+        cls.keys = gh.panel_loc_keys({WIDE}, cls.types, loc)
+        cls.index = gh.loc_index()
+
+    def test_every_world_read_is_gated(self):
+        for f in self.reads:
+            with self.subTest(read=str(f)):
+                self.assertTrue(f.world, "a player read another country's panel draws")
+                name = f.where.removeprefix("template ")
+                td = (self.templates if f.where.startswith("template ") else self.types)[name]
+                k = f.line - td.line
+                pos = gh._line_starts(td.body)[k] + f.col - (td.col if k == 0 else 0)
+                self.assertTrue(_observer_gated(td.body, pos), "a world read with no observer gate")
+
+    def test_no_key_another_country_renders_reads_the_player(self):
+        self.assertEqual([str(f) for f in gh.loc_reads(self.keys, self.index)], [])
+
+    def test_the_gate_check(self):
+        """_observer_gated finds a gate on the read's line or on a block around
+        it, and none elsewhere."""
+        gated = 'a = {\n\tvisible = "[Not( GetMetaPlayer.IsObserver )]"\n\tb = {\n\t\ttext = "[GetPlayer.GetName]"\n\t}\n}'
+        self.assertTrue(_observer_gated(gated, gated.index("GetPlayer.GetName")))
+        sibling = 'a = {\n\tb = {\n\t\tvisible = "[Not( GetMetaPlayer.IsObserver )]"\n\t}\n\tc = {\n\t\ttext = "[GetPlayer.GetName]"\n\t}\n}'
+        self.assertFalse(_observer_gated(sibling, sibling.index("GetPlayer.GetName")))
+        inline = 'a = {\n\ttext = "[GetPlayer.IsValid]"\n}'
+        self.assertTrue(_observer_gated(inline, inline.index("GetPlayer.IsValid")))
+
+
 if __name__ == "__main__":
     unittest.main()
