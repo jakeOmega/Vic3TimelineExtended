@@ -216,6 +216,32 @@ ch_exported_model_owner = {
 	}
 }
 
+# The same for another country's panel (National Info), in the third person:
+# je_ch_ov_model_tt picks one on Country.IsLocalPlayer, so the player keeps
+# "(ours)" / "(not ours)".
+ch_exported_model_owner_theirs = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_global_variable = ch_rank_1
+			global_var:ch_rank_1 ?= ROOT
+		}
+		localization_key = ch_model_owner_us_theirs
+	}
+	text = {
+		trigger = {
+			has_global_variable = ch_rank_1
+			exists = global_var:ch_rank_1
+		}
+		localization_key = ch_model_owner_them_theirs
+	}
+	text = {
+		localization_key = ch_model_owner_unknown
+	}
+}
+
 # The scoped country's OWN political model, from the last census
 # (var:ch_model_census, written by ch_add_country_to_model_totals). Used by the
 # model events to name a country's model in prose:

@@ -256,7 +256,7 @@ TABS: list[Tab] = [
     replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
                     readout=CE_READOUT),
             open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
-            public=False),
+            public=True),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
@@ -299,7 +299,7 @@ TABS: list[Tab] = [
             public=True),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
             "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections",
-            public=False),
+            public=True),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
             "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",

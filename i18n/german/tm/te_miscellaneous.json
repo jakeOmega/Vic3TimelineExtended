@@ -6752,16 +6752,16 @@
   "de": "Vorstoß zur Reform der Wahlkampffinanzierung"
  },
  "ce_unlock_colonies_tt": {
-  "en": "You hold an overseas colony or a colonial subject",
-  "de": "Sie besitzen eine Überseekolonie oder ein koloniales Klientelland"
+  "en": "Holds an overseas colony or a colonial subject",
+  "de": "Besitzt eine Überseekolonie oder ein koloniales Klientelland"
  },
  "ce_unlock_no_collapse_tt": {
-  "en": "Your colonial system has not collapsed in the last ten years",
-  "de": "Ihr Kolonialsystem ist in den letzten zehn Jahren nicht zusammengebrochen"
+  "en": "The colonial system has not collapsed in the last ten years",
+  "de": "Das Kolonialsystem ist in den letzten zehn Jahren nicht zusammengebrochen"
  },
  "ce_unlock_not_secured_tt": {
-  "en": "Your colonial empire has not been secured already: once it is, the entry does not return",
-  "de": "Ihr Kolonialreich wurde noch nicht gesichert: Ist es einmal gesichert, kehrt der Eintrag nicht zurück"
+  "en": "The colonial empire has not been secured already: once it is, the entry does not return",
+  "de": "Das Kolonialreich wurde noch nicht gesichert: Ist es einmal gesichert, kehrt der Eintrag nicht zurück"
  },
  "ch_board_detail_1": {
   "en": "#title [concept_cultural_pull_components]#! — [AddLocalizationIf(THIS.GetCountry.Exists, THIS.GetCountry.GetName)][AddLocalizationIf(Not(THIS.GetCountry.Exists), 'ch_board_row_gone')]\\n  [concept_ch_art_production]: #v [GetGlobalVariable('ch_rank_1_art').GetValue|1]#!\\n  [concept_ch_prestige]: #v [GetGlobalVariable('ch_rank_1_prs').GetValue|1]#!\\n  [concept_ch_sol]: #v [GetGlobalVariable('ch_rank_1_sol').GetValue|1]#!\\n  [concept_ch_tech_leadership]: #v [GetGlobalVariable('ch_rank_1_tech').GetValue|1]#!\\n  [concept_cultural_pull_raw_score]: #v [GetGlobalVariable('ch_rank_1_raw').GetValue|1]#!\\n#lore As of the last yearly recount.#!",
@@ -6972,8 +6972,8 @@
   "de": "5 Jahre"
  },
  "ch_model_hist_since": {
-  "en": "Recorded years: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_last_year')|0]",
-  "de": "Erfasste Jahre: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_last_year')|0]"
+  "en": "Recorded years: [Country.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[Country.MakeScope.ScriptValue('ch_model_hist_last_year')|0]",
+  "de": "Erfasste Jahre: [Country.MakeScope.ScriptValue('ch_model_hist_since_year')|0]–[Country.MakeScope.ScriptValue('ch_model_hist_last_year')|0]"
  },
  "ch_model_hist_title": {
   "en": "Political Models over Time",
@@ -7062,6 +7062,10 @@
  "ch_policy_funding_step_tt": {
   "en": "Each funding step adds:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nand costs, per step, @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week. At its current level the programme costs @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/week.\\n#lore The cost scales with our GDP.#!",
   "de": "Jede Finanzierungsstufe fügt hinzu:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nund kostet pro Stufe @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/Woche. Auf der aktuellen Stufe kostet das Programm @money!#R [GetPlayer.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/Woche.\\n#lore Die Kosten skalieren mit unserem BIP.#!"
+ },
+ "ch_policy_funding_step_tt_ni": {
+  "en": "Each funding step adds:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nand costs, per step, @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week. At its current level the programme costs @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/week.\\n#lore The cost scales with our GDP.#!",
+  "de": "Jede Finanzierungsstufe fügt hinzu:\\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\\nund kostet pro Stufe @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/Woche. Auf der aktuellen Stufe kostet das Programm @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_total_cost_display')|D]#!/Woche.\\n#lore Die Kosten skalieren mit unserem BIP.#!"
  },
  "ch_policy_institutes_off": {
   "en": "Defund",

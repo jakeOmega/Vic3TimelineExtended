@@ -23,7 +23,10 @@ rest (see [The Cultural Hegemony panels](#the-cultural-hegemony-panels)).
 The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
 show the same panels, and a change made in one shows in the other. The tab is
 grayed until the journal entry opens; hover it for what is still missing. It
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Cultural Hegemony tab with that country's tier, rank, share, programs and
+breakdown, and the same Top Cultural Powers, political models and history as
+yours; the funding and program buttons are only on your own.
 
 ![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programs, and where our pull comes from.](images/hegemony_tab.png)
 
