@@ -367,6 +367,75 @@ sr_solar_colonization_profile = {
 	}
 }
 
+# The same for another country's stage cell (National Info;
+# je_space_race_widget_profile_solar_colonization_ni): the completed
+# program's line in the third person. The player's keeps
+# sr_solar_colonization_profile and its words.
+sr_solar_colonization_profile_ni = {
+	type = country
+	random_valid = no
+
+	# Not while resumed for the Moon (lunar colonization 2b): the stage reads.
+	text = {
+		trigger = {
+			has_variable = sr_completed_solar_colonization
+			NOT = { has_variable = sr_colonization_resumed }
+		}
+		localization_key = je_space_race_solar_colonization_status_complete_ni
+	}
+
+	# The Moon is stage 0 (lunar colonization design § 3.2), and where a game
+	# that has not started colonizing begins.
+	text = {
+		trigger = {
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage = 0
+			}
+		}
+		localization_key = je_space_race_solar_colonization_status_stage0
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 1
+		}
+		localization_key = je_space_race_solar_colonization_status_stage1
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 2
+		}
+		localization_key = je_space_race_solar_colonization_status_stage2
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 3
+		}
+		localization_key = je_space_race_solar_colonization_status_stage3
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 4
+		}
+		localization_key = je_space_race_solar_colonization_status_stage4
+	}
+
+	text = {
+		trigger = {
+			global_var:sr_colonization_stage = 5
+		}
+		localization_key = je_space_race_solar_colonization_status_stage5
+	}
+
+	text = {
+		localization_key = sr_profile_none
+	}
+}
+
 sr_prog_suborbital = {
 	type = country
 	random_valid = no

@@ -564,7 +564,7 @@ types space_race_widget_types
 			size = { 44 44 }
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_not_begun.dds"
-			tooltip = "je_space_race_widget_prog_interstellar_0"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_interstellar_0', 'je_space_race_widget_prog_interstellar_0_ni' )]"
 			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
 		}
 
@@ -573,7 +573,7 @@ types space_race_widget_types
 			size = { 44 44 }
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_under_way.dds"
-			tooltip = "je_space_race_widget_prog_interstellar_1"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_interstellar_1', 'je_space_race_widget_prog_interstellar_1_ni' )]"
 			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
 		}
 
@@ -582,7 +582,7 @@ types space_race_widget_types
 			size = { 44 44 }
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_awaiting_data.dds"
-			tooltip = "je_space_race_widget_prog_interstellar_2"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_interstellar_2', 'je_space_race_widget_prog_interstellar_2_ni' )]"
 			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
 		}
 
@@ -591,7 +591,7 @@ types space_race_widget_types
 			size = { 44 44 }
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_data_received.dds"
-			tooltip = "je_space_race_widget_prog_interstellar_3"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_interstellar_3', 'je_space_race_widget_prog_interstellar_3_ni' )]"
 			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
 		}
 
@@ -622,7 +622,7 @@ types space_race_widget_types
 			align = hcenter|nobaseline
 			using = te_sr_fontsize_overview
 			text = "je_space_race_widget_programme_header"
-			tooltip = "je_space_race_widget_ov_programme_tt"
+			tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_ov_programme_tt', 'je_space_race_widget_ov_programme_tt_ni' )]"
 		}
 		flowcontainer = {
 			direction = horizontal
@@ -630,7 +630,7 @@ types space_race_widget_types
 			parentanchor = hcenter
 
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_suborbital"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_suborbital', 'je_space_race_widget_prog_suborbital_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
 				}
@@ -648,7 +648,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_orbital"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_orbital', 'je_space_race_widget_prog_orbital_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
 				}
@@ -666,7 +666,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_moon_landing"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_moon_landing', 'je_space_race_widget_prog_moon_landing_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
 				}
@@ -684,7 +684,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_probe"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_probe', 'je_space_race_widget_prog_probe_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
 				}
@@ -702,7 +702,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_moon_base"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_moon_base', 'je_space_race_widget_prog_moon_base_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
 				}
@@ -720,7 +720,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_ov_prog_cell = {
-				tooltip = "je_space_race_widget_prog_mars_landing"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_prog_mars_landing', 'je_space_race_widget_prog_mars_landing_ni' )]"
 				blockoverride "prog_texture" {
 					texture = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
 				}
@@ -876,7 +876,7 @@ types space_race_widget_types
 
 				### The state while the programme isn't running.
 				te_sr_ov_icon_label = {
-					tooltip = "je_space_race_widget_ov_idle_tt"
+					tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_ov_idle_tt', 'je_space_race_widget_ov_idle_tt_ni' )]"
 					blockoverride "icon_texture" {
 						texture = "gfx/interface/icons/space_race_icons/state_idle.dds"
 					}
@@ -7628,9 +7628,9 @@ types space_race_widget_types
 
 			te_sr_debris_row = {}
 			te_sr_value_row = {
-				tooltip = "te_orbit_satellites_tt"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'te_orbit_satellites_tt', 'te_orbit_satellites_tt_ni' )]"
 				blockoverride "row_label" {
-					text = "je_space_race_widget_orbit_satellites_label"
+					text = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_orbit_satellites_label', 'je_space_race_widget_orbit_satellites_ni_label' )]"
 				}
 				blockoverride "row_value" {
 					text = "te_orbit_satellites_value"
@@ -7646,7 +7646,7 @@ types space_race_widget_types
 				}
 			}
 			te_sr_value_row = {
-				tooltip = "te_orbit_moratorium_tt"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'te_orbit_moratorium_tt', 'te_orbit_moratorium_tt_ni' )]"
 				blockoverride "row_label" {
 					text = "je_space_race_widget_orbit_moratorium_label"
 				}
@@ -8095,7 +8095,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_suborbital"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_suborbital"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_suborbital', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8241,7 +8241,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_orbital"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_orbital"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_orbital', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8387,7 +8387,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_moon_landing"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_moon_landing"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_moon_landing', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8533,7 +8533,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_probe"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_probe"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_probe', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8679,7 +8679,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_moon_base"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_moon_base"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_moon_base', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8825,7 +8825,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_mars_landing"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_mars_landing"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_mars_landing', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -8971,7 +8971,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_interstellar_probe"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_interstellar_probe"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_interstellar_probe', 'te_tt_blank' )]"
 			}
 		}
 	}
@@ -9091,7 +9091,7 @@ types space_race_widget_types
 			# Country, the same for every country.
 			blockoverride "sr_third_cells" {
 				te_sr_ov_icon_label = {
-					tooltip = "je_space_race_widget_profile_solar_colonization"
+					tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_profile_solar_colonization', 'je_space_race_widget_profile_solar_colonization_ni' )]"
 					blockoverride "icon_texture" {
 						texture = "gfx/interface/icons/space_race_icons/stage.dds"
 					}
@@ -9422,7 +9422,7 @@ types space_race_widget_types
 				text = "je_space_race_widget_progress_solar_colonization"
 			}
 			blockoverride "sr_progress_tooltip" {
-				tooltip = "je_space_race_widget_reward_solar_colonization"
+				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_solar_colonization', 'te_tt_blank' )]"
 			}
 		}
 	}
