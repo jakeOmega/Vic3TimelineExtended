@@ -168,13 +168,17 @@ share one icon with four pictures: the probe grayed (not begun), the probe with
 a wrench (under way), radio dishes with a clock (launched, awaiting data) and
 the dishes with a check (data received). Hover any icon for its state.
 
-Three sections follow the overview:
+Two sections follow the overview:
 
 | Section | Starts | Shows |
 |---|---|---|
 | Mission Control | Open | The Approach buttons (Standard, Safe and Ambitious; the one in force is grayed, and each tooltip gives its effect and weekly cost), the Funding stepper with your level and the cap, Setbacks So Far, the Estimate of months left at this month's pace (setbacks not counted), the Orbital Debris index on the journal entry (see [Orbital debris](#orbital-debris)), and the Mission Profile. |
 | Rivals | Open | The other powers running the same milestone, each with an estimate of its progress. |
-| How the Space Race Works | A link | Opens the Help page, as does the "?" in each milestone's header in the Timeline Extended window. It explains approach and pace, funding, setbacks, the first, rivals, the program, space powers, and satellites and debris, then solar colonization. |
+
+The "?" at the top of each milestone's journal entry, and in each milestone's
+header in the Timeline Extended window, opens the Help page, How the Space Race
+Works. It explains approach and pace, funding, setbacks, the first, rivals, the
+program, space powers, and satellites and debris, then solar colonization.
 
 A rival's progress is an estimate. Every rival is listed, furthest along
 first, each with a band reaching 25% of the goal to either side of a marker,
@@ -220,7 +224,7 @@ were last on stays chosen while you play:
 | Mission Control | Mission Control (with Next Windows) and Rivals, as every milestone has. Shown first. |
 | Fleets | Colony Fleets, then under Full Colonies Space Command and Space Fleets. |
 | Colonies | Colonies. |
-| Solar System | Solar System, then How Solar Colonization Works, which opens the Space Race's Help page; the colonies' rules come last on it. |
+| Solar System | Solar System. The colonies' rules come last on the Space Race's Help page, under How Solar Colonization Works. |
 
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,

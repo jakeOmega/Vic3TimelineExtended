@@ -45,8 +45,7 @@ Ministry of Culture's icon: how many of the four programs are running and your
 funding level against its cap, or No Ministry in red while you lack the law.
 Hover it for each program and the funding cost.
 
-The sections below all start open. The last, How Cultural Hegemony Works,
-opens the Help page, as the "?" at the right of the tab's header does:
+The sections below all start open:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -55,7 +54,10 @@ opens the Help page, as the "?" at the right of the tab's header does:
 | Where Our Pull Comes From | Open | A bar for each component of your pull, with zero in the middle: gains fill to the right in green, penalties to the left in red, each against that component's usual range. Hover a row for the working behind the number and the bar's range. Cultural Pull from Art sits under Art Production when it is not zero, the Pull Multiplier closes the components, and Raw Score stands under the rule. |
 | Political Models of the World | Open | The pie of the world's political models and its legend, by short name. Hover a model for its full name and the laws that put a country in it. |
 | History | Open | Each political model's share of world cultural influence, stacked to 100% in one bar per year, over 5, 20 or 100 years, its legend by short name. Hover a bar for its date and all fifteen model shares. Every country sees the same history. Existing saves begin collecting at the next cultural recount; up to 100 annual snapshots are kept. |
-| How Cultural Hegemony Works | A link | The Help page explains cultural share and tiers, the programs, where pull comes from, the top cultural powers, political models and the Foreign Cultural Benchmark. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Cultural Hegemony Works. It explains cultural
+share and tiers, the programs, where pull comes from, the top cultural powers,
+political models and the Foreign Cultural Benchmark.
 
 ### Cultural share and influence tiers
 
@@ -256,8 +258,7 @@ arrow for which way it last moved. Hover any of them for the detail: the
 standing's meaning, the funding level's name and cost, the capacity breakdown,
 this month's Tradecraft and why it last changed.
 
-The sections below are open by default. The last, How Covert Warfare Works,
-opens the Help page, as the "?" at the right of the tab's header does:
+The sections below are open by default:
 
 | Section | Starts | Shows |
 |---|---|---|
@@ -266,7 +267,10 @@ opens the Help page, as the "?" at the right of the tab's header does:
 | Agent Networks | Open, once you have a network | A table with a line for each network: the target's flag (hover it for the country, click it to open the country) and name, its strength with a bar and an arrow for growing or decaying, your operations there, the head start a new one would get, and what it reports (None, Partial or Full; hover it for the report). Hover the name for what the network adds to catching that country's operations. |
 | Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
 | Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
-| How Covert Warfare Works | A link | The Help page explains operations, funding, detection, networks, Tradecraft, counterintelligence, watching and intelligence standing. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Covert Warfare Works. It explains operations,
+funding, detection, networks, Tradecraft, counterintelligence, watching and
+intelligence standing.
 
 ### Intelligence capacity and operation slots
 

@@ -20,11 +20,9 @@ left there, brings it back to the width of the other panels. The tab you chose
 stays chosen when you switch.
 
 Each system has a Help page that explains how it works, with a heading for
-each topic. The "?" at the right of the tab's header opens it, and so does the
-last heading of the panel, such as How Banking Works, in the tab and in the
-journal entry. Nation, Budget Breakdown and Demographics have no header, so
-their last heading is the way in. Press Escape or click outside the page to
-close it.
+each topic. The "?" opens it: at the right of the tab's header, and at the top
+right of the system's journal entry and of a state's Demographics subtab. Press
+Escape or click outside the page to close it.
 
 National Info, the base game's Census Data window under a new name, shows
 another country's panels. Open it from the foot of that country's Politics tab,
@@ -165,8 +163,8 @@ central bank's gold each month, which stays outside the weekly budget.
 
 The charts show positive component amounts; negative adjustments stay in the
 list. Expanding a group preserves the chart total, including when costs and
-refunds offset each other inside that group. How the Breakdown Works, at the
-bottom, opens the Help page with the accounting details.
+refunds offset each other inside that group. The "?" in the tab's header
+opens the Help page with the accounting details.
 
 ## The Nation tab
 
