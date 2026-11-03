@@ -274,7 +274,7 @@ TABS: list[Tab] = [
                          f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
                          "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )",
             wide="te_banking_wide_sections",
-            public=False),
+            public=True),
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt", footer=TAX_FOOTER,
             wide="te_tax_wide_sections",

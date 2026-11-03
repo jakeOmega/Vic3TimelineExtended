@@ -164,7 +164,9 @@ class GateTest(unittest.TestCase):
 
 class ReadsThePlayerTest(unittest.TestCase):
     """Drawn where there is no entry, so nothing in it may read JournalEntry,
-    however many keys or custom localizations away."""
+    however many keys or custom localizations away. It reads the shown country,
+    Country (the tab's frame supplies the player's; National Info another's),
+    since PR F2's binding: test_te_system_tab_bodies.py holds it to that."""
 
     @classmethod
     def setUpClass(cls):
@@ -190,7 +192,8 @@ class ReadsThePlayerTest(unittest.TestCase):
         self.assertNotIn("JournalEntry", self.body)
         for expr in re.findall(r'"(\[[^"]*\])"', self.body):
             if "GetScriptedGui" in expr or "ScriptValue" in expr:
-                self.assertIn("GetPlayer.MakeScope", expr)
+                self.assertIn("Country.MakeScope", expr)
+                self.assertNotIn("GetPlayer", expr)
 
     def test_every_key_exists_and_reads_no_journal_entry(self):
         tab = _tab_content()
@@ -235,7 +238,9 @@ class ReadsThePlayerTest(unittest.TestCase):
 
 class CopiesTest(unittest.TestCase):
     """The readout's own copies of three dashboard state words: the same
-    branches in the same order, keys reading GetPlayer."""
+    branches in the same order. The copies were made when the dashboard read
+    the entry and the readout GetPlayer; since PR F2 both read Country, so a
+    copy's text is the dashboard's word for word."""
 
     @classmethod
     def setUpClass(cls):
@@ -246,7 +251,7 @@ class CopiesTest(unittest.TestCase):
         ours, theirs = (_branches(self.custom[n]) for n in ("te_mon_ro_fx_state", "te_mon_fx_state"))
         self.assertEqual([t for t, _ in ours], [t for t, _ in theirs])
         for (_, mine), (_, dash) in zip(ours, theirs):
-            self.assertEqual(self.loc[mine], self.loc[dash].replace("JournalEntry.GetCountry", "GetPlayer"), mine)
+            self.assertEqual(self.loc[mine], self.loc[dash], mine)
 
     def test_anchor_state_follows_the_dashboard_without_the_rate(self):
         ours = _branches(self.custom["te_mon_ro_anchor_state"])
@@ -254,7 +259,7 @@ class CopiesTest(unittest.TestCase):
         self.assertEqual([t for t, _ in ours[:-1]], [t for t, _ in theirs])
         self.assertEqual(ours[-1], ("", "banking_dash_mon_anchor_state_none"))
         for (_, mine), (_, dash) in zip(ours, theirs):
-            want = self.loc[dash].split(" — rate")[0].replace("JournalEntry.GetCountry", "GetPlayer")
+            want = self.loc[dash].split(" — rate")[0]
             self.assertEqual(self.loc[mine], want, mine)
 
     def test_rate_source(self):
