@@ -238,6 +238,22 @@ class StripTest(unittest.TestCase):
         self.assertEqual([t.key for t in gen.ni_tabs()], ["demographics"])
 
 
+class NameTest(unittest.TestCase):
+    """The window's name (spec § 6.2): POP_BROWSER, its title, the Population panel's button and the Politics tab's,
+    renamed in the replace loc, with vanilla's adjective for another country kept."""
+
+    def test_the_window_is_national_info(self):
+        loc = load_loc()
+        self.assertEqual(loc["POP_BROWSER"], "[AddLocalizationIf(Not(Country.IsLocalPlayer), "
+                                             "Concatenate(Country.GetAdjective, ' '))]National Info")
+        with open(VANILLA_LOC, encoding="utf-8") as f:
+            vanilla = dict(json.load(f))["POP_BROWSER"]
+        self.assertEqual(vanilla.replace("Census Data", "National Info"), loc["POP_BROWSER"], "vanilla's splice kept")
+        self.assertIn('text = "POP_BROWSER"', read(OVERRIDE))
+        for key in ("te_pop_browser_tab_demog_tt", "te_pop_browser_tab_demog_pending_tt"):
+            self.assertNotIn(key, loc, "the strip's tooltips are the generated ones now")
+
+
 class CountryContextTest(unittest.TestCase):
     """The country's sections read the Country in their context, so the Census Data window shows its own country's
     figures; GetPlayer there would show the player's."""
@@ -288,8 +304,8 @@ class CountryContextTest(unittest.TestCase):
                 self.assertNotRegex(body, r"(?<![\w.])Country\.")
 
     def test_the_new_keys_exist(self):
-        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_pop_browser_tab_demog_tt",
-                    "te_pop_browser_tab_demog_pending_tt", "te_demog_hist_untracked", "te_demog_pyr_outline_next",
+        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_demog_hist_untracked",
+                    "te_demog_pyr_outline_next",
                     "te_demog_pyr_outline_played"):
             with self.subTest(key=key):
                 self.assertIn(key, self.loc)

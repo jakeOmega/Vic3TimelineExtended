@@ -9031,8 +9031,6 @@
  te_pb_slot_source_universal_digital_identity_tt:0 "The [concept_power_bloc_leader] has researched $universal_digital_identity$"
  te_pb_slot_techs_sentence:0 " Each of $intergovernmental_organizations$, $containerization$, $globalization$ and $universal_digital_identity$ its leader researches adds #v 1#! more, up to #v 8#! in all."
  te_political_commissars_indoctrination:0 "Commissar Indoctrination"
- te_pop_browser_tab_demog_pending_tt:0 "#b $te_pops_tab_demog$#!\nNot open yet. It opens with the country's first census, at the start of the game or within a new country's first year."
- te_pop_browser_tab_demog_tt:0 "Who the country's people are: their ages, how many children they have, how long they live, how wealth is held and where they live, from the yearly census."
  te_pop_browser_tab_pops:0 "Pops"
  te_pop_browser_tab_pops_tt:0 "Every pop in the country, with filters and charts."
  te_pops_tab_demog:0 "Demographics"
