@@ -117,17 +117,47 @@ def _translations():
     return out
 
 
-def _keys_reached(text, loc):
+# What a loc text reaches: a splice ($key$), a key quoted as a loc function's
+# argument (Localize('key'), SelectLocalization( …, 'a', 'b' ), AddLocalizationIf,
+# AddTextIf) and an inline tooltip (#tooltippable;tooltip:key).
+_LOC_REFS = re.compile(r"\$(\w+)\$|'(\w+)'|tooltip:(\w+)")
+
+
+def _keys_reached(text, loc, translations=None):
     """The loc keys a GUI text names (a quoted key, a quoted argument), and
-    every key those splice in ($key$), recursively."""
+    every key those reach (_LOC_REFS), in English or in a translation,
+    recursively."""
     found = {k for k in re.findall(r"""["'](\w+)["']""", text) if k in loc}
     todo = list(found)
     while todo:
-        for k in re.findall(r"\$(\w+)\$", loc[todo.pop()]):
-            if k in loc and k not in found:
-                found.add(k)
-                todo.append(k)
+        key = todo.pop()
+        texts = [loc[key]] + [value for _, _, value in (translations or {}).get(key, ())]
+        for value in texts:
+            for groups in _LOC_REFS.findall(value):
+                k = next(g for g in groups if g)
+                if k in loc and k not in found:
+                    found.add(k)
+                    todo.append(k)
     return found
+
+
+# A popup sits in te_popups, a root with no datacontext: the only objects a
+# page can read are the global ones. Every data chain in a page's markup and
+# loc must start at one of these (a chain's head: a name followed by a dot,
+# not itself after a dot). Functions (Localize(…), GetScriptedGui(…),
+# Concept(…)) take no context. Country, JournalEntry, State, ScriptContainer
+# and the host panels are what a page must not read.
+GLOBAL_HEADS = {"GetPlayer", "GetMetaPlayer", "GetVariableSystem", "GuiScope", "PdxGuiWidget"}
+
+
+def _chain_heads(text):
+    """The heads of the data chains in a text's [ … ] expressions, quoted
+    arguments left out."""
+    heads = set()
+    for expr in re.findall(r"\[([^\[\]]*)\]", text):
+        expr = re.sub(r"'[^']*'", "''", expr)
+        heads.update(re.findall(r"(?<![\w.])([A-Za-z_]\w*)\.", expr))
+    return heads
 
 
 def _override(body, name):
@@ -237,7 +267,9 @@ class PageTest(unittest.TestCase):
 
     def test_the_body_reads_the_player(self):
         """No JournalEntry read in what the popup reaches, nor in the loc it
-        names: a page opens from any host, the entry held or not."""
+        names, and no read of any context the popups root lacks (Country,
+        State, a host panel): a page opens from any host, the entry held or
+        not."""
         for page in PAGES:
             with self.subTest(page=page.key):
                 reached = _closure(self.types, f"te_{page.key}_help_popup")
@@ -245,13 +277,16 @@ class PageTest(unittest.TestCase):
                 self.assertIn("te_ui_popup", reached)
                 text = "\n".join(self.types[name][1] for name in sorted(reached))
                 self.assertNotRegex(text, r"\bJournalEntry\b|GetPlayerJournalEntry")
-                keys = _keys_reached(text, self.loc)
+                self.assertLessEqual(_chain_heads(text), GLOBAL_HEADS, "the markup reads a context a popup lacks")
+                keys = _keys_reached(text, self.loc, self.translations)
                 self.assertIn(page.title, keys)
                 for key in sorted(keys):
-                    self.assertNotIn("JournalEntry", self.loc[key], key)
-                    # and in German and Spanish, which ship into the same popup
-                    for rel, field, value in self.translations.get(key, ()):
-                        self.assertNotIn("JournalEntry", value, f"{rel}: {key} ({field})")
+                    # in English, and in German and Spanish, which ship into the same popup
+                    for where, value in [("English", self.loc[key])] + [
+                            (f"{rel} ({field})", value) for rel, field, value in self.translations.get(key, ())]:
+                        self.assertNotIn("JournalEntry", value, f"{key}, {where}")
+                        self.assertLessEqual(_chain_heads(value), GLOBAL_HEADS,
+                                             f"{key}, {where}: reads a context a popup lacks")
 
     def test_each_header_has_its_button(self):
         """Every default_header in a tab body's tab_header holds one "?" that
