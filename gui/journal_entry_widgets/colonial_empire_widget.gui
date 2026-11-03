@@ -1585,7 +1585,7 @@ types colonial_empire_widget_types
 				### own hovers read GetPlayer (the entry's owner: a player sees only
 				### his own journal). Everything else in the row is a widget property or
 				### text, which does see JournalEntry. Four fixed cells, 90 + 180 + 145
-				### + 24 and three 8 px gaps = 463: "100% (-1.67/mo)" is 15 characters,
+				### + 24 and three 8 px gaps = 463: "100% (-1.50/mo)" is 15 characters,
 				### about 142 units at the overview's size (it elided in 120,
 				### play-test round 3).
 				###
@@ -2312,14 +2312,23 @@ types colonial_empire_widget_types
 
 				# The rows: colonial_empire_refresh_gp_rows builds them for every
 				# empire with the entry, each power weighed against that empire's
-				# prestige, so they read the shown Country.
+				# prestige, so they read the shown Country. Drawn once this
+				# version's build has run (colonial_empire_disp_gp_rows_built):
+				# an AI empire from an older save has no rows until its next
+				# monthly pulse, and the player's old rows no share, so either
+				# would read as nobody pressing it.
+				colonial_empire_text = {
+					visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_gp_rows_built'), '(CFixedPoint)0' ) )]"
+					text = "je_colonial_empire_conditions_pending"
+				}
 				te_ce_gp_head = {
-					visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
+					visible = "[And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_gp_rows_built'), '(CFixedPoint)0' ), Not( IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) ) )]"
 				}
 				flowcontainer = {
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_gp_rows_built'), '(CFixedPoint)0' )]"
 					datamodel = "[Country.MakeScope.GetList('colonial_empire_gp_rows')]"
 
 					item = {
@@ -2329,7 +2338,7 @@ types colonial_empire_widget_types
 					}
 				}
 				colonial_empire_list_text = {
-					visible = "[IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') )]"
+					visible = "[And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('colonial_empire_disp_gp_rows_built'), '(CFixedPoint)0' ), IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
 					text = "je_colonial_empire_pressure_none"
 				}
 

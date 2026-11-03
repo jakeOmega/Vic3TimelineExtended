@@ -451,7 +451,7 @@ class DisplayScriptTest(unittest.TestCase):
     def test_display_values_guard_every_variable(self):
         values = _read(VALUES)
         names = re.findall(r"(?m)^(colonial_empire_disp_\w+) = \{", values)
-        self.assertEqual(len(names), 43)
+        self.assertEqual(len(names), 44)
         panel = _read(GUI) + "\n".join(v for k, v in _loc().items() if k.startswith("je_colonial_empire_"))
         for name in names:
             with self.subTest(value=name):
@@ -1603,7 +1603,7 @@ class WidthBudgetTest(unittest.TestCase):
             ("100%", "row", gp_share, "a great power's share of prestige"),
             ("-2.00/mo", "row", esc_value, "an escalation's loss"),
             ("Stability", ov_label[1], ov_label[0], "the bar's label"),
-            ("100% (-1.67/mo)", ov_value[1], ov_value[0], "the overview's value"),
+            ("100% (-1.50/mo)", ov_value[1], ov_value[0], "the overview's value"),
             ("-10.00", "row", pillar_value, "a term's value"),
             ("Supporting: 100%", legend[1], legend[0], "the pie's legend"),
             ("3 / 3", "row", level, "a programme's level"),

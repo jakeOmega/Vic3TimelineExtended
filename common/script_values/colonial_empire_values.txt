@@ -2327,6 +2327,19 @@ colonial_gp_row_disp_factor = {
 	}
 }
 
+# SCOPE: country (the empire). 1 once colonial_empire_refresh_gp_rows has
+# built the table in this version (it sets colonial_empire_gp_pool, which the
+# cleanup removes), else 0: an AI empire from an older save has no rows until
+# its next monthly pulse, and the player's old rows hold no share. International
+# Pressure shows its pending line until then.
+colonial_empire_disp_gp_rows_built = {
+	value = 0
+	if = {
+		limit = { has_variable = colonial_empire_gp_pool }
+		value = 1
+	}
+}
+
 # SCOPE: country (the empire). How many great powers condemn and how many back
 # us, counted off the table's rows: the overview's Great Powers cell.
 colonial_empire_disp_gp_condemners = {

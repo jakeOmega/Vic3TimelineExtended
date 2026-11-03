@@ -450,7 +450,7 @@
 			# status_desc. It is gone: the widget's International Pressure
 			# section is a table of script containers built in
 			# colonial_empire_refresh_display (colonial_empire_refresh_gp_rows,
-			# players only), each reaching its country through a stored capital
+			# every empire's), each reaching its country through a stored capital
 			# rather than the `Var('x').GetCountry.GetName` chain that
 			# gui_modding_guide gotcha #11 records as rendering blank in this mod.
 

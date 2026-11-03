@@ -397,16 +397,17 @@ class AiStanceTest(unittest.TestCase):
 
     def test_the_colonizing_laws_and_the_illiberal_ones(self):
         laws = _block(self.triggers, "decol_ai_colonial_laws")
-        self.assertEqual(sorted(re.findall(r"law_type:(law_\w+)", laws)),
+        self.assertEqual(sorted(re.findall(r"has_law_or_variant = law_type:(law_\w+)", laws)),
                          ["law_colonial_exploitation", "law_colonial_resettlement"])
-        illiberal = re.findall(r"law_type:(law_\w+)", _block(self.triggers, "decol_ai_illiberal"))
-        # Every unelected Distribution of Power law, variants named (a variant
-        # is a law type of its own), and Outlawed Dissent; not Censorship,
-        # most countries' starting law.
+        body = _block(self.triggers, "decol_ai_illiberal")
+        # Every unelected Distribution of Power law and Outlawed Dissent, each
+        # with its variants (has_law_or_variant); not Censorship, most
+        # countries' starting law.
+        illiberal = re.findall(r"has_law_or_variant = law_type:(law_\w+)", body)
         self.assertEqual(sorted(illiberal), sorted([
-            "law_autocracy", "law_bakufu", "law_neo_absolutism", "law_oligarchy", "law_organic_regulation",
-            "law_elder_council", "law_technocracy", "law_single_party_state", "law_algorithmic_governance",
-            "law_outlawed_dissent"]))
+            "law_autocracy", "law_oligarchy", "law_elder_council", "law_technocracy", "law_single_party_state",
+            "law_algorithmic_governance", "law_outlawed_dissent"]))
+        self.assertNotIn("has_law =", body + laws, "a bare has_law would miss a variant")
         import json
         with open(VANILLA_LAWS, encoding="utf-8") as f:
             vanilla = json.load(f)
@@ -415,11 +416,11 @@ class AiStanceTest(unittest.TestCase):
             known |= set(re.findall(r"^(law_\w+) = \{", _read(path), re.M))
         for law in illiberal + ["law_colonial_exploitation", "law_colonial_resettlement"]:
             self.assertIn(law, known)
-        # Each vanilla variant's parent is in the list with it.
-        for law in illiberal:
-            parent = vanilla.get(law, ["=", {}])[1].get("parent")
-            if parent:
-                self.assertIn(parent[1], illiberal, law)
+            # Each named law is a parent, not itself a variant.
+            self.assertNotIn("parent", vanilla.get(law, ["=", {}])[1], law)
+        # Vanilla's variants of those laws are covered by their parents.
+        variants = sorted(k for k, v in vanilla.items() if v[1].get("parent", ["=", ""])[1] in illiberal)
+        self.assertEqual(variants, ["law_bakufu", "law_neo_absolutism", "law_organic_regulation"])
 
     def test_less_likely_for_a_stake_in_colonialism(self):
         for trigger in ("decol_ai_regressive = yes", "decol_ai_slaveholding = yes",

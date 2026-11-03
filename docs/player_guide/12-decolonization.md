@@ -215,8 +215,9 @@ and Industrialists; backing the colonial powers does the reverse and radicalizes
 some academics. Below great-power rank a stance lies dormant: it costs nothing
 and moves no one until you are a great power again. Stay Neutral needs no rank,
 so you can always drop a dormant stance. Our Stance on Colonialism also gives
-your share of the prestige of all great powers, which is how much your stance
-counts toward the escalations below; below great-power rank it is None.
+your share of the prestige of all great powers, which is how much your
+condemnation counts toward the escalations below; below great-power rank it is
+None.
 
 The AI is asked in The Colonial Question every three years instead. An AI power
 with colonies or colonial subjects of its own never chooses to condemn
