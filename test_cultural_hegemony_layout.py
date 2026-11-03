@@ -126,7 +126,9 @@ class OrderTest(unittest.TestCase):
                 self.assertRegex(je, rf'name = "{root}"\s*container = "{container}"')
                 body = _root(self.gui, root)
                 self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [composer])
+                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), ["te_je_country"])
+                self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer])
         self.assertEqual(je.count('gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"'), 3)
 
     def test_the_tab_composes_the_same_sections_then_the_link(self):

@@ -749,14 +749,15 @@ class StripTest(unittest.TestCase):
 
 def _journal_types(entry_key, je_file, widget_file, skip=()):
     """The types the entry's journal roots wrap, in the order it attaches them
-    (the bars-on-top marker is not content)."""
+    (the bars-on-top marker is not content), each inside its root's
+    te_je_country (the entry's Country, test_te_system_tab_bodies.py)."""
     entry = _txt_block(_read(os.path.join(JE_DIR, je_file)), entry_key)
     widgets = _read(os.path.join(WIDGETS, widget_file))
     types = []
     for name in re.findall(r'name = "(\w+)"\s*container', entry):
         if name == "widget_te_je_bars_on_top_marker" or name in skip:
             continue
-        types += re.findall(r"^\t(te_\w+) = \{\}", _top_level(widgets, name), re.M)
+        types += re.findall(r"^\t\t(te_\w+) = \{\}", _top_level(widgets, name), re.M)
     return types
 
 
@@ -888,7 +889,9 @@ class TabContentTest(unittest.TestCase):
             for kind, root in (("overview", f"widget_je_space_race_{m}_overview"), ("status", f"widget_je_space_race_{m}")):
                 with self.subTest(root=root):
                     wrapper = _top_level(widgets, root)
-                    self.assertEqual(re.findall(r"^\t(\w+) = \{\}$", wrapper, re.M), [f"te_sr_{m}_{kind}"])
+                    # the type in the root's te_je_country, which only supplies the Country
+                    self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{\}\n\t\}$", wrapper, re.M),
+                                     [f"te_sr_{m}_{kind}"])
                     self.assertNotIn("datacontext", wrapper)
                     body = _type_body(widgets, f"te_sr_{m}_{kind}")
                     self.assertIn(f"datacontext = \"[GetScriptedGui('sr_milestone_{m}_sgui')]\"", body)
@@ -1163,6 +1166,29 @@ class GeneratorTest(unittest.TestCase):
         self.assertEqual(committed.decode("utf-8-sig"), gen.render(),
                          "stale: run python3 scripts/generators/gen_te_systems_window.py")
         self.assertEqual(gen.main(["--check"]), 0)
+
+    def test_the_gates_take_a_root(self):
+        """The gates root on the player by default, the window's as before
+        (the committed file, above), and on another root when asked: National
+        Info roots them on the shown country (charts-help-national-info plan,
+        F0.3 and F1.1). Only the developer tax-probes gate stays the player's."""
+        self.assertEqual(gen._root(), "GuiScope.SetRoot( GetPlayer.MakeScope ).End")
+        self.assertEqual(gen.shown("x"), gen.shown("x", gen.PLAYER_ROOT))
+        self.assertEqual(gen.shown("x", gen.COUNTRY_ROOT),
+                         "GetScriptedGui('x').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                for gate in (t.open_, t.strip, t.tooltip_expr):
+                    self.assertEqual(gen.rooted(gate), gate)
+                    if gate:
+                        self.assertNotIn("GetPlayer", gen.rooted(gate, gen.COUNTRY_ROOT))
+                country = [gen._tooltip(t, gen.COUNTRY_ROOT), *gen._slot("first", t, gen.COUNTRY_ROOT),
+                           gen.selected(t, gen.COUNTRY_ROOT), gen.unselected(t, gen.COUNTRY_ROOT)]
+                text = "\n".join(country).replace(gen.TAX_PROBES, "")
+                self.assertNotIn("GetPlayer", text)
+                if t.open_:
+                    self.assertIn("Country.MakeScope", text)
+                self.assertEqual(gen._tooltip(t), gen._tooltip(t, gen.PLAYER_ROOT))
 
     def test_nation_is_first_and_the_fallback(self):
         self.assertEqual(gen.TABS[0].key, "nation")

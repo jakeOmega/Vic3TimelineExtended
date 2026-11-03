@@ -395,7 +395,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_banking_overview_panel = {}
+	te_je_country = {
+		te_banking_overview_panel = {}
+	}
 }
 
 flowcontainer = {
@@ -404,7 +406,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_banking_status_sections = {}
+	te_je_country = {
+		te_banking_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -413,5 +417,7 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_banking_reference_sections = {}
+	te_je_country = {
+		te_banking_reference_sections = {}
+	}
 }

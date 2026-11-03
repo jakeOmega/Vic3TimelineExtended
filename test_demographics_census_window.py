@@ -15,21 +15,21 @@ file holds:
   lines added inside `### MOD: Demographics tab` blocks, none removed;
 * the strip, its gates and the tab flag;
 * that nothing the country's sections draw reads GetPlayer, in the markup or in
-  any loc key they reach, and that none of that text says "our" or "your";
+  any loc key they reach (that none of that text says "our" or "your" is
+  test_te_system_tab_bodies.py's BindingTest's, for every public tab);
 * that the controls which change a country (the pension and Family Policy
   buttons) show only for the player's own;
 * that nothing the Census Data window draws reads the Population panel's own
   data (PopsOverviewPanel), which only that panel's window holds.
 """
 import difflib
-import glob
 import json
 import os
 import re
 import unittest
 from pathlib import Path
 
-from gui_test_helpers import history_charts
+from gui_test_helpers import gui_keys, history_charts, load_loc, loc_closure, type_bodies
 
 ROOT = Path(__file__).resolve().parent
 OVERRIDE = ROOT / "gui" / "pop_browser_panel.gui"
@@ -37,7 +37,6 @@ FIXTURE = ROOT / "test_fixtures" / "vanilla_gui" / "pop_browser_panel.gui"
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
-LOC_DIR = ROOT / "localization" / "english"
 VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
 
 MOD_OPEN = "### MOD: Demographics tab"
@@ -49,17 +48,14 @@ SHOWN = f"And( GetVariableSystem.Exists('{FLAG}'), {RULE} )"
 
 # The composers of the country's sections, one a host.
 COMPOSERS = ("te_demog_tab_sections", "te_demog_browser_sections")
-# The one GetPlayer read the country's markup keeps: the current year, the same for every country, in the history
-# charts' sample_visible.
-KEPT_GETPLAYER = "GetPlayer.MakeScope.ScriptValue('te_history_current_year')"
 # Loc keys the Help page reaches that read GetPlayer, as a popup must (it has no Country in context, spec
 # 2026-11-02-charts-help-national-info § 5.2), and read only a constant (te_demog_k_conscription_ref).
 HELP_PAGE_GETPLAYER = {"te_demog_fam_rule"}
 # The Help page's types (te_demographics_help_body, _popup): not a section of the panel, so not read for its country.
-# Its keys are left out of the pronoun rule (test_the_text_is_not_the_players) on purpose: the page explains the
-# player's own rules and never shows another country (Covert Warfare's page says "our" too).
+# Its keys are left out of the pronoun rule (test_te_system_tab_bodies.py's test_the_text_is_not_the_players) on
+# purpose: the page explains the player's own rules and never shows another country (Covert Warfare's page says "our"
+# too).
 HELP_PAGE = re.compile(r"^te_demographics_help_")
-PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
 # The Population panel's own data: its window holds it and the Census Data window doesn't, so a key that reads it (as
 # vanilla's POPS_OVERVIEW_AVERAGE_INCOME_* keys do) renders only in the Population panel.
 POPULATION_PANEL_ONLY = "PopsOverviewPanel."
@@ -82,11 +78,6 @@ def block_from(text, start):
     raise AssertionError("unbalanced block")
 
 
-def type_bodies(text):
-    """Each `type X = Y { ... }` in a types file, by name."""
-    return {m.group(1): block_from(text, m.end() - 1)
-            for m in re.finditer(r"(?m)^\ttype (\w+) = \w+ \{", text)}
-
 
 def code(text):
     """The markup less its comments (no quoted value here holds a #)."""
@@ -94,34 +85,7 @@ def code(text):
                      for line in text.splitlines() if not line.lstrip().startswith("#"))
 
 
-def load_loc():
-    keys = {}
-    for path in sorted(glob.glob(str(LOC_DIR / "**" / "*.yml"), recursive=True)):
-        for line in read(path).splitlines():
-            m = re.match(r'^\s*([\w.\-]+):\d*\s+"(.*)"\s*$', line)
-            if m:
-                keys[m.group(1)] = m.group(2)
-    return keys
 
-
-def gui_keys(text, loc):
-    out = set(re.findall(r'(?:text|tooltip|raw_text)\s*=\s*"([\w.\-]+)"', text))
-    for expr in re.findall(r'"\[(.*?)\]"', text):
-        out |= {k for k in re.findall(r"'([\w.\-]+)'", expr) if k in loc}
-    return out & set(loc)
-
-
-def loc_closure(keys, loc):
-    seen, stack = set(), list(keys)
-    while stack:
-        key = stack.pop()
-        if key in seen or key not in loc:
-            continue
-        seen.add(key)
-        value = loc[key]
-        stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
-        stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
-    return seen
 
 
 def without_blocks(text, names):
@@ -258,7 +222,9 @@ class CountryContextTest(unittest.TestCase):
     def test_the_markup_reads_the_context_country(self):
         for name, body in self.country.items():
             with self.subTest(type=name):
-                self.assertEqual(body.replace(KEPT_GETPLAYER, "").count("GetPlayer"), 0)
+                # the charts' one read of the year, the same for every country, is in their generated wrappers,
+                # under a `# world:` line (test_te_system_tab_bodies.py's BindingTest)
+                self.assertEqual(body.count("GetPlayer"), 0)
                 self.assertNotIn("AccessPlayer", body)
         self.assertGreater(sum(b.count("Country.MakeScope") for b in self.country.values()), 300)
 
@@ -284,13 +250,6 @@ class CountryContextTest(unittest.TestCase):
         for name, body in self.state.items():
             with self.subTest(type=name):
                 self.assertNotRegex(body, r"(?<![\w.])Country\.")
-
-    def test_the_text_is_not_the_players(self):
-        """The same sections show another country in the Census Data window, so none of their text says 'our'."""
-        for key in sorted(self.keys):
-            text = re.sub(r"\[[^\]]*\]|\$[\w.\-]+\$|#\w+|\\n", " ", self.loc[key])
-            with self.subTest(key=key):
-                self.assertIsNone(PERSONAL.search(text), text)
 
     def test_the_new_keys_exist(self):
         for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_pop_browser_tab_demog_tt",
@@ -372,7 +331,7 @@ class ControlsTest(unittest.TestCase):
     def test_the_measure_button_keeps_its_slot(self):
         row = self.widgets["te_demog_measure_row"]
         button = block_from(row, row.index("button = {"))
-        self.assertIn('visible = "[Country.IsLocalPlayer]"', button)
+        self.assertIn("using = te_own_country_only", button)
         slot = row[:row.index("button = {")].rsplit("widget = {", 1)[1]
         self.assertIn("size = { 72 24 }", slot, "an empty slot of the button's size for another country")
 
@@ -383,7 +342,7 @@ class ControlsTest(unittest.TestCase):
                 and "te_demog_figure_row" not in block_from(work, m.start())]
         self.assertEqual(len(rows), 2)
         for row in rows:
-            self.assertIn('visible = "[Country.IsLocalPlayer]"', row)
+            self.assertIn("using = te_own_country_only", row)
         for note in ("te_demog_wk_buttons_full_only", "te_demog_wk_buttons_term"):
             at = work.index(f'text = "{note}"')
             box = work[:at].rsplit("te_demog_text = {", 1)[1]

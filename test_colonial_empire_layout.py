@@ -216,7 +216,9 @@ class RootsTest(unittest.TestCase):
                 a, b = _span(gui, m.start())
                 body = gui[a + 1:b]
                 self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-                self.assertEqual(re.findall(r"(?m)^\t(\w+) = \{", body), [inner])
+                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+                self.assertEqual(re.findall(r"(?m)^\t(\w+) = \{", body), ["te_je_country"])
+                self.assertEqual(re.findall(r"(?m)^\tte_je_country = \{\n\t\t(\w+) = \{", body), [inner])
         for old in OLD_ROOTS:
             self.assertNotIn(f'name = "{old}"', gui, old)
 

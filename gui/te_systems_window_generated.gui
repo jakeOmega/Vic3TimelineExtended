@@ -672,6 +672,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_nation_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_nation_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -685,6 +686,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_space_race_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_space_race_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -698,6 +700,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_grand_monuments_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_grand_monuments_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -711,6 +714,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_colonial_empire_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_colonial_empire_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -724,6 +728,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_seabed_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_seabed_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -737,6 +742,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_banking_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_banking_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -750,6 +756,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_tax_code_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_tax_code_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -763,6 +770,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_budget_breakdown_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_budget_breakdown_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -776,6 +784,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_strategic_reserve_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_strategic_reserve_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -789,6 +798,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_global_warming_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_global_warming_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -802,6 +812,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_demographics_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_demographics_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -815,6 +826,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_cultural_hegemony_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_cultural_hegemony_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -828,6 +840,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_united_nations_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_united_nations_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -841,6 +854,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_nuclear_weapons_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_nuclear_weapons_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -854,6 +868,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_covert_warfare_tab"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_covert_warfare_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1246,6 +1261,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_nation_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_nation_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1259,6 +1275,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_space_race_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_space_race_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1276,6 +1293,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_grand_monuments_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_grand_monuments_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1293,6 +1311,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_colonial_empire_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_colonial_empire_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1310,6 +1329,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_seabed_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_seabed_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1327,6 +1347,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_banking_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_banking_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1344,6 +1365,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_tax_code_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_tax_code_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1361,6 +1383,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_budget_breakdown_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_budget_breakdown_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1374,6 +1397,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_strategic_reserve_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_strategic_reserve_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1391,6 +1415,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_global_warming_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_global_warming_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1408,6 +1433,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_demographics_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_demographics_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1425,6 +1451,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_cultural_hegemony_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_cultural_hegemony_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1442,6 +1469,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_united_nations_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_united_nations_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1459,6 +1487,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_nuclear_weapons_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_nuclear_weapons_selected
 			using = default_fade_in_out
 			parentanchor = hcenter
@@ -1476,6 +1505,7 @@ types te_systems_window_generated_types
 
 		flowcontainer = {
 			name = "te_systems_window_covert_warfare_tab_wide"
+			datacontext = "[GetPlayer]"
 			using = te_systems_window_covert_warfare_selected
 			using = default_fade_in_out
 			parentanchor = hcenter

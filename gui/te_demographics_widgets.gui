@@ -57,11 +57,13 @@
 ###   roots of its scripted GUIs (GuiScope.SetRoot( Country.MakeScope ).End), never GetPlayer, which would show the
 ###   player's figures for another country; test_demographics_census_window.py fails on one. A state row's read
 ###   State.MakeScope.Var(...). Never SCOPE.sCountry(...), which printed wrong values in the 2026-10-08 probe
-###   (scripting_best_practices.md). Two exceptions: a history bar's tooltip, which renders with its ScriptContainer
-###   alone (gotcha #24; its keys read no country), and te_history_current_year, the same for every country, which the
-###   charts' sample_visible still reads through GetPlayer.
+###   (scripting_best_practices.md). One exception: a history bar's tooltip, which renders with its ScriptContainer
+###   alone (gotcha #24; its keys read no country). The charts' sample_visible reads te_history_current_year, the
+###   date's and so the same for every country, on Country too: GetPlayer is no country for an observer
+###   (scripts/generators/te_history_charts/demographics.gui.in; test_te_system_tab_bodies.py's BindingTest).
 ### * A control that changes the country (the pension buttons, the Family Policy measures' buttons) shows only for
-###   Country.IsLocalPlayer: the Census Data window shows another country's settings without them.
+###   the player's own, under using = te_own_country_only (Country.IsLocalPlayer; gui/te_system_tab_widgets.gui): the
+###   Census Data window shows another country's settings without them.
 ### * A trend arrow tests a te_demog_trend_* code (te_demog_display_values.txt) for identity (gotcha #23): 1 rose, -1
 ###   fell, 0 level, 2 none.
 ### * A tooltip inside a datamodel row reads only that row's State (gotcha #24); a history bar's, only its
@@ -3497,7 +3499,7 @@ types te_demographics_widgets
 			parentanchor = vcenter
 
 			button = {
-				visible = "[Country.IsLocalPlayer]"
+				using = te_own_country_only
 				using = default_button_action
 				size = { 72 24 }
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
@@ -4189,7 +4191,7 @@ types te_demographics_widgets
 						text = "te_demog_wk_buttons_term"
 					}
 					flowcontainer = {
-						visible = "[Country.IsLocalPlayer]"
+						using = te_own_country_only
 						direction = horizontal
 						parentanchor = hcenter
 						spacing = 6
@@ -4211,7 +4213,7 @@ types te_demographics_widgets
 						}
 					}
 					flowcontainer = {
-						visible = "[Country.IsLocalPlayer]"
+						using = te_own_country_only
 						direction = horizontal
 						parentanchor = hcenter
 						spacing = 6

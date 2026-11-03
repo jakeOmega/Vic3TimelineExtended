@@ -17,7 +17,11 @@ launcher and the root, and instances what this writes:
                                      tax-probes strip
     te_systems_window_tabs_narrow    the scroll area's column: the tax-probes
                                      panel, then each tab's mount, holding its
-                                     body type
+                                     body type. Every mount supplies the
+                                     player's Country (datacontext GetPlayer),
+                                     the Country its sections read (spec
+                                     2026-11-02-charts-help-national-info
+                                     § 6.3)
     te_sr_window_milestones          the Space Race body's entries: a note
                                      while none runs, then one
                                      te_system_tab_frame per milestone
@@ -63,20 +67,34 @@ SLOTS = ["first", "second", "third", "fourth", "fifth"]
 
 # --- expressions: the exact GUI text the templates and the strip use ---------
 
-def _root():
-    return "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+# The scope a gate roots on (spec 2026-11-02-charts-help-national-info § 6.3):
+# the player, in this window and the vanilla panels' tabs, or the shown
+# country, in National Info (PR F1). The registry's gates are written on
+# PLAYER_ROOT; rooted() puts one on another root.
+PLAYER_ROOT = "GetPlayer.MakeScope"
+COUNTRY_ROOT = "Country.MakeScope"
 
 
-def shown(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsShown( {_root()} )"
+def _root(root: str = PLAYER_ROOT) -> str:
+    return f"GuiScope.SetRoot( {root} ).End"
 
 
-def valid(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsValid( {_root()} )"
+def shown(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsShown( {_root(root)} )"
 
 
-def valid_tooltip(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsValidTooltip( {_root()} )"
+def valid(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsValid( {_root(root)} )"
+
+
+def valid_tooltip(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsValidTooltip( {_root(root)} )"
+
+
+def rooted(expr: str | None, root: str = PLAYER_ROOT) -> str | None:
+    """A registry gate (open_, strip, tooltip_expr: written on PLAYER_ROOT)
+    on another root: every scripted GUI it asks, asked of that root."""
+    return None if expr is None else expr.replace(_root(PLAYER_ROOT), _root(root))
 
 
 def stored(key: str) -> str:
@@ -127,6 +145,13 @@ class Tab:
     wide          the wide composer the full-screen mount places (every tab has
                   one; test_te_systems_window.py fails on a tab without)
     tooltip_expr  a tooltip expression replacing the three-branch one
+    public        another country's panel may show it (National Info, spec
+                  2026-11-02-charts-help-national-info § 6.4): its sections
+                  read the shown Country and its controls are the player's own
+                  (test_te_system_tab_bodies.py's BindingTest and GuardTest,
+                  which run over every public tab). Each system's binding PR
+                  sets it, on its own line below, and takes the system off
+                  that test's UNBOUND.
     """
     key: str
     row: int
@@ -141,6 +166,7 @@ class Tab:
     layout: str | None = None
     wide: str | None = None
     tooltip_expr: str | None = None
+    public: bool = False
 
 
 def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
@@ -183,16 +209,24 @@ CE_TOOLTIP = (f"SelectLocalization( {shown('te_window_colonial_empire_tab_sgui')
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
+    # The public flag (another country's panel shows the tab) sits on a line of
+    # its own for each system National Info is to show (spec § 6.4), so each
+    # system's binding PR changes one line and parallel PRs merge cleanly.
     Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
-        body="te_nation_tab_sections", wide="te_nation_wide_sections"),
-    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections"),
-    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections"),
+        body="te_nation_tab_sections", wide="te_nation_wide_sections",
+        public=False),
+    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections",
+            public=False),
+    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
+            public=False),
     replace(_system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
-            open_=CE_OPEN, tooltip_expr=CE_TOOLTIP),
+            open_=CE_OPEN, tooltip_expr=CE_TOOLTIP,
+            public=False),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
-            wide="te_seabed_wide_sections"),
+            wide="te_seabed_wide_sections",
+            public=False),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -204,10 +238,12 @@ TABS: list[Tab] = [
             tooltip_expr=f"SelectLocalization( {shown('te_budget_banking_tab_sgui')}, 'te_budget_tab_banking_tt', "
                          f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
                          "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )",
-            wide="te_banking_wide_sections"),
+            wide="te_banking_wide_sections",
+            public=False),
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
-            wide="te_tax_wide_sections"),
+            wide="te_tax_wide_sections",
+            public=False),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
         body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.
@@ -224,13 +260,16 @@ TABS: list[Tab] = [
     _mirror("demographics", 3, "te_pops_tab_demog_tt", "te_demog_window_body", "te_demog_tab_layout",
             "te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui", locked="te_pops_tab_demog_locked_tt",
             open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui")),
-            wide="te_demog_browser_sections"),
+            wide="te_demog_browser_sections",
+            public=True),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
-            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections"),
+            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections",
+            public=False),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
             "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
-            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections"),
+            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections",
+            public=False),
     _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
             "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]
@@ -247,21 +286,23 @@ TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
 # --- templates ----------------------------------------------------------------
 
-def selected(tab: Tab) -> str:
+def selected(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.key == TABS[0].key:
-        return and_(not_(TAX_PROBES), not_(_any_system_shown()))
-    mine = stored(tab.key) if tab.open_ is None else and_(stored(tab.key), tab.open_)
+        return and_(not_(TAX_PROBES), not_(_any_system_shown(root)))
+    mine = stored(tab.key) if tab.open_ is None else and_(stored(tab.key), rooted(tab.open_, root))
     return and_(not_(TAX_PROBES), mine)
 
 
-def unselected(tab: Tab) -> str:
+def unselected(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.key == TABS[0].key:
-        return or_(TAX_PROBES, _any_system_shown())
-    return not_(selected(tab)) if tab.strip is None else and_(tab.strip, not_(selected(tab)))
+        return or_(TAX_PROBES, _any_system_shown(root))
+    return (not_(selected(tab, root)) if tab.strip is None
+            else and_(rooted(tab.strip, root), not_(selected(tab, root))))
 
 
-def _any_system_shown() -> str:
-    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), t.open_) for t in TABS[1:]])
+def _any_system_shown(root: str = PLAYER_ROOT) -> str:
+    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), rooted(t.open_, root))
+                   for t in TABS[1:]])
 
 
 def _template(name: str, expr: str) -> list[str]:
@@ -279,23 +320,23 @@ def templates() -> list[str]:
 
 # --- the strip ----------------------------------------------------------------
 
-def _tooltip(tab: Tab) -> str:
+def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.tooltip_expr:
-        return f'tooltip = "[{tab.tooltip_expr}]"'
+        return f'tooltip = "[{rooted(tab.tooltip_expr, root)}]"'
     if tab.open_ is None:
         return f'tooltip = "{tab.tooltip}"'
-    checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock)} )"
-    return (f"tooltip = \"[SelectLocalization( {tab.open_}, '{tab.tooltip}', "
-            f"SelectLocalization( {valid(tab.unlock)}, '{tab.met}', {checklist} ) )]\"")
+    checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock, root)} )"
+    return (f"tooltip = \"[SelectLocalization( {rooted(tab.open_, root)}, '{tab.tooltip}', "
+            f"SelectLocalization( {valid(tab.unlock, root)}, '{tab.met}', {checklist} ) )]\"")
 
 
-def _slot(slot: str, tab: Tab) -> list[str]:
+def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT) -> list[str]:
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
-    click = [] if tab.open_ is None else [f'enabled = "[{tab.open_}]"']
+    click = [] if tab.open_ is None else [f'enabled = "[{rooted(tab.open_, root)}]"']
     click.append(f"onclick = \"[GetVariableSystem.Set('{STORED}', '{tab.key}')]\"")
     return (override("button", f'text = "{tab.label}"')
-            + override("button_tooltip", _tooltip(tab))
+            + override("button_tooltip", _tooltip(tab, root))
             + override("button_click", *click)
             + override("button_visibility", f"using = te_systems_window_{tab.key}_selected")
             + override("button_visibility_checked", f"using = te_systems_window_{tab.key}_unselected")
@@ -307,14 +348,14 @@ def _slot(slot: str, tab: Tab) -> list[str]:
 WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
 
 
-def _strip(tabs: list[Tab], wide: bool = False) -> list[str]:
+def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
     assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
     out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
     for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
         if i:
             out.append("")
         out.append(f"\t### {tab.key}")
-        out += [f"\t{ln}" for ln in _slot(slot, tab)]
+        out += [f"\t{ln}" for ln in _slot(slot, tab, root)]
     return out + ["}"]
 
 
@@ -390,6 +431,7 @@ def _mount(tab: Tab, wide: bool = False) -> list[str]:
                    "\t\t}", "\t}"]
     return ["flowcontainer = {",
             f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
+            '\tdatacontext = "[GetPlayer]"',
             f"\tusing = te_systems_window_{tab.key}_selected",
             "\tusing = default_fade_in_out",
             "\tparentanchor = hcenter",

@@ -2309,7 +2309,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_gw_overview_panel = {}
+	te_je_country = {
+		te_gw_overview_panel = {}
+	}
 }
 
 flowcontainer = {
@@ -2318,7 +2320,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_gw_status_sections = {}
+	te_je_country = {
+		te_gw_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -2327,5 +2331,7 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_gw_reference_sections = {}
+	te_je_country = {
+		te_gw_reference_sections = {}
+	}
 }

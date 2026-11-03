@@ -2550,7 +2550,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_st_res_overview_panel = {}
+	te_je_country = {
+		te_st_res_overview_panel = {}
+	}
 }
 
 flowcontainer = {
@@ -2559,7 +2561,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_st_res_status_sections = {}
+	te_je_country = {
+		te_st_res_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -2568,5 +2572,7 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_st_res_reference_sections = {}
+	te_je_country = {
+		te_st_res_reference_sections = {}
+	}
 }
