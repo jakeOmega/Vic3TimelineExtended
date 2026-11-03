@@ -2802,7 +2802,7 @@ ICONS: dict[str, dict[str, dict]] = {
         # phase 3 methods were painted in batch 9. Programmable matter: the product dissolving into cubes.
         "pm_ai_mediated_mind_sharing": {"subject": "two human heads in profile linked by a glowing beam between their foreheads, a small robot head above them", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_neural_lace_telepathy": {"subject": "two human heads in profile linked by glowing waves between their foreheads", "seed": 2},
-        "pm_self_replicating_assemblers": {"subject": "a tiny spider-like nanobot assembling a second one from a heap of tiny parts", "seed": 2},
+        "pm_self_replicating_assemblers": {"subject": "a tiny spider-like nanobot assembling a second one from a heap of tiny parts", "seed": 1},
         "pm_advanced_self_replicating_assemblers": {"subject": "a swarm of tiny spider-like nanobots assembling a big cube", "seed": 3},
         "pm_antimatter_engine": {"subject": "a spacecraft engine with a ring-shaped magnetic nozzle and a glowing core", "seed": 0},
         "pm_antimatter_warhead_plant": {"subject": "a sleek missile warhead held in a ring-shaped magnetic containment cradle", "seed": 1},
@@ -2814,7 +2814,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_fusion_battery_motors": {"subject": "an electric motor with a small glowing fusion battery cell fixed on top", "seed": 2},
         "pm_fusion_battery_vehicles": {"subject": "a sleek car with a small glowing fusion battery cell above its hood", "seed": 3},
         "pm_nanobot_assemblers": {"subject": "a swarm of tiny nanobots assembling a big wrench", "seed": 3},
-        "pm_nanorobots": {"subject": "a cloud of tiny glowing nanorobots forming the shape of a hand", "seed": 3},
+        "pm_nanorobots": {"subject": "a cloud of tiny glowing nanorobots forming the shape of a hand", "seed": 0},
         "pm_consciousness_network_open": {"subject": "a ring of human heads in profile linked by glowing lines, an open hand at the centre", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
         "pm_consciousness_network_social_control": {"subject": "one big open eye above a ring of human heads linked by glowing lines", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
         "pm_programmable_fibers": {"subject": "a spool of thread whose loose end dissolves into a cloud of small cubes", "seed": 3},
