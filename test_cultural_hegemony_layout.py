@@ -46,7 +46,7 @@ OLD_FLAGS = ["ch_breakdown_open", "ch_board_open", "ch_models_open", "ch_hist_op
 OLD_TYPES = ["te_ch_summary_panel", "te_ch_programmes_panel", "te_ch_standing_panel", "ch_reading_row"]
 
 # Explanations that live in How Cultural Hegemony Works, never in a live section.
-HOW_KEYS = ["je_ch_how_share", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_how_board",
+HOW_KEYS = ["je_ch_how_share", "je_ch_how_bonus", "je_ch_how_programmes", "je_ch_how_pull", "je_ch_how_board",
             "je_ch_widget_models_legend", "je_ch_how_models", "je_ch_how_benchmark"]
 
 # The overview's art (PR #586; docs/systems/cultural_hegemony_gui_icons.md).
@@ -55,10 +55,13 @@ CH_PIES = "gfx/interface/journal_entry_widgets/ch_model_pie/"
 TIER_ICONS = ["tier_negligible", "tier_minor", "tier_moderate", "tier_significant", "tier_major", "tier_hegemon"]
 # Textures the overview keeps from vanilla on purpose, and the Ministry of
 # Culture's own institution icon on the programs cell (CH-9): the programs
-# need the Ministry, so its icon is the cell's, not a placeholder.
+# need the Ministry, so its icon is the cell's, not a placeholder. The
+# Hegemony Bonus cell draws the cultural_hegemony_effect modifier's own icon,
+# the one the journal entry's modifier strip shows for it.
 VANILLA_KEPT = {"gfx/interface/backgrounds/round_frame_dec.dds", "gfx/interface/icons/generic_icons/trend_up.dds",
                 "gfx/interface/icons/generic_icons/trend_down.dds", "gfx/interface/icons/generic_icons/trend_nochange.dds",
-                "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds"}
+                "gfx/interface/icons/institution_icons/institution_ministry_of_culture.dds",
+                "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"}
 
 
 def _read(path):
@@ -369,7 +372,8 @@ class DisplayDataTest(unittest.TestCase):
 
     def test_every_read_is_guarded(self):
         values = _read(VALUES)
-        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code", "ch_disp_leader_count"):
+        for name in ("ch_disp_tier_code", "ch_disp_share_delta", "ch_disp_model_code", "ch_disp_leader_count",
+                     "ch_bonus_strength_display"):
             body = _block(values, name)
             for kind, var in re.findall(r"\b(var|global_var):(\w+)", body):
                 with self.subTest(value=name, var=var):
@@ -727,8 +731,10 @@ STATIC_LABELS = (
     + [("je_ch_board_head_rank", 26, "row", ()), ("je_ch_board_head_country", 208, "row", ()),
        ("je_ch_board_head_share", 60, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
        ("je_ch_board_head_model", 50, "row", ())]
-    # The programs cell (CH-9): Banking's cell, its lines in a 154 column at 16.
-    + [("je_ch_ov_prog_label", 154, "overview", ()), ("je_ch_ov_prog_no_ministry", 154, "overview", ())]
+    # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 234, two
+    # to the row, its lines in a 150 column at 16.
+    + [("je_ch_ov_prog_label", 150, "overview", ()), ("je_ch_ov_prog_no_ministry", 150, "overview", ())]
+    + [(f"je_ch_ov_bonus_{k}", 150, "overview", ()) for k in ("label", "active", "none", "from")]
 )
 # Dynamic text, at its longest: the political models' short names (the longest are
 # "Constitutional", "Military Junta" and "Technocratic"; the full names, up to
@@ -758,7 +764,8 @@ DYNAMIC_LABELS = (
        ("ch_board_row_rank", 26, "row", ("10",)), ("ch_board_row_share", 60, "row", ("100.0",)),
        ("ch_board_row_change", 48, "row", ("+12.3",)),
        # The programs cell's word and funding line.
-       ("je_ch_ov_prog_running", 154, "overview", ("4",)), ("je_ch_ov_prog_funding", 154, "overview", ("10", "10"))]
+       ("je_ch_ov_prog_running", 150, "overview", ("4",)), ("je_ch_ov_prog_funding", 150, "overview", ("10", "10")),
+       ("je_ch_ov_bonus_strength", 150, "overview", ("100.0",))]
     + [(f"je_ch_widget_models_share_{m}", 60, "row", ("100.0",)) for m in MODEL_KEYS]
 )
 
@@ -1045,6 +1052,81 @@ class ProgramsCellTest(unittest.TestCase):
             self.assertIn(f"$je_ch_widget_prog_{p}_status$", listing)
         # Below the leaders: the owner's board-first order and leader flags stand.
         self.assertLess(ov.index("ch_leader_seat_3"), ov.index("te_banking_ov_cell = {"))
+
+
+class HegemonyBonusTest(unittest.TestCase):
+    """The cultural_hegemony_effect modifier sits on the journal entry, so only
+    the entry's own modifier strip showed it; the overview's Hegemony Bonus cell
+    shows it in every host, its effects at the strength applied on hover."""
+
+    MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+        cls.loc = _loc()
+        cls.ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
+        body = _strip_comments(_block(_read(cls.MODIFIERS), "cultural_hegemony_effect"))
+        cls.fields = {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+
+    def test_the_modifier_has_fields(self):
+        self.assertGreaterEqual(len(self.fields), 8)
+        self.assertIn("country_mass_migration_attraction_mult", self.fields)
+
+    def test_each_unit_equals_its_modifier_field(self):
+        # A script value cannot read a static modifier, so the units restate it.
+        units = {k: float(v) for k, v in re.findall(r"(?m)^ch_bonus_unit_(\w+) = (-?[\d.]+)", self.values)}
+        self.assertEqual(units, self.fields)
+
+    def test_each_field_has_its_display_value_and_hover_line(self):
+        listing = self.loc["je_ch_ov_bonus_tt_list"]
+        for field in self.fields:
+            with self.subTest(field=field):
+                body = _block(self.values, f"ch_bonus_{field}_display")
+                self.assertIn("value = ch_bonus_strength_display", body)
+                self.assertIn(f"multiply = ch_bonus_unit_{field}", body)
+                self.assertIn(f"${field}$: [Country.MakeScope.ScriptValue('ch_bonus_{field}_display')|+=1", listing)
+
+    def test_the_strength_is_what_the_pulse_applied_and_zero_without_the_modifier(self):
+        body = _block(self.values, "ch_bonus_strength_display")
+        self.assertIn("has_variable = ch_effect_mult_cached", body)
+        self.assertIn("je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }", body)
+        self.assertIn("add = var:ch_effect_mult_cached", body)
+        self.assertIn("add_modifier = { name = cultural_hegemony_effect multiplier = root.var:ch_effect_mult_cached }",
+                      _read(JE))
+
+    def test_the_cell_sits_beside_the_programs_in_a_row_that_fits(self):
+        text = _read(WIDGET)
+        row = gui_tree.node_after(gui_tree.parse(text), text, "### Row 3:", "flowcontainer")
+        self.assertEqual(row.prop("parentanchor").value, "hcenter")
+        cells = gui_tree.widgets(row)
+        self.assertEqual([c.kind for c in cells], ["te_banking_ov_cell"] * 2)
+        self.assertEqual([c.prop("tooltip").value for c in cells], ["je_ch_ov_prog_tt", "je_ch_ov_bonus_tt"])
+        for cell in cells:
+            self.assertIsNone(cell.prop("visible"))   # both always show: one width (gotcha #43)
+            self.assertEqual(gui_tree.size(cell), (234, 70))
+        self.assertEqual(row.prop("spacing").value, "4")
+        self.assertLessEqual(234 * 2 + 4, 474)
+
+    def test_the_cells_states_are_gated_on_the_strength(self):
+        cell = self.ov[self.ov.index('tooltip = "je_ch_ov_bonus_tt"'):]
+        on = "GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )"
+        for key, gate in (("je_ch_ov_bonus_active", f"[{on}]"), ("je_ch_ov_bonus_strength", f"[{on}]"),
+                          ("je_ch_ov_bonus_none", f"[Not( {on} )]"), ("je_ch_ov_bonus_from", f"[Not( {on} )]")):
+            with self.subTest(key=key):
+                i = cell.index(f'text = "{key}"')
+                opener = cell.rindex("te_banking_ov_word = {", 0, i)
+                self.assertIn(f'visible = "{gate}"', cell[opener:i])
+        self.assertEqual(cell.count("alpha = 0.4"), 1)
+        self.assertIn(on, self.loc["je_ch_ov_bonus_tt"])
+        self.assertIn("'je_ch_ov_bonus_tt_list', 'je_ch_ov_bonus_tt_none'", self.loc["je_ch_ov_bonus_tt"])
+
+    def test_the_hover_reads_the_shown_country_not_the_entry(self):
+        # Another country's National Info has no JournalEntry (gotcha #35).
+        for key in ("je_ch_ov_bonus_tt", "je_ch_ov_bonus_tt_list", "je_ch_ov_bonus_tt_none", "je_ch_ov_bonus_strength"):
+            with self.subTest(key=key):
+                self.assertNotIn("JournalEntry", self.loc[key])
+                self.assertNotIn("GetPlayer", self.loc[key])
 
 
 class WideTest(unittest.TestCase):

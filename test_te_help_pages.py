@@ -134,7 +134,8 @@ JE_DIR = os.path.join(REPO, "common", "journal_entries")
 # 2026-11-02, after a node-by-node check against the old sections.
 TOPICS = {
     "cultural_hegemony": [
-        "je_ch_how_sub_share", "je_ch_how_share", "je_ch_how_sub_programmes", "je_ch_how_programmes",
+        "je_ch_how_sub_share", "je_ch_how_share", "je_ch_how_sub_bonus", "je_ch_how_bonus",
+        "je_ch_how_sub_programmes", "je_ch_how_programmes",
         "je_ch_how_sub_pull", "je_ch_how_pull", "je_ch_how_sub_board", "je_ch_how_board",
         "je_ch_how_sub_models", "je_ch_widget_models_legend", "je_ch_how_models", "ch_model_order_tt",
         "je_ch_how_sub_benchmark", "je_ch_how_benchmark",
