@@ -1168,7 +1168,8 @@ class PrivateTest(unittest.TestCase):
         for key in ("je_ch_ov_tier_tt", "je_ch_ov_rank_value", "je_ch_widget_rank_tt", "je_ch_ov_model_tt",
                     "je_ch_ov_benchmark_tt", "je_ch_ov_share_label", "je_ch_ov_share_tt", "je_ch_ov_leaders_label",
                     "je_ch_ov_prog_running", "je_ch_ov_prog_funding", "je_ch_ov_prog_tt_list",
-                    "ch_tier_blurb_hegemon", "ch_model_owner_us", "ch_model_owner_them"):
+                    "ch_tier_blurb_hegemon", "je_ch_ov_model_owner_theirs", "ch_model_owner_us_theirs",
+                    "ch_model_owner_them_theirs"):
             self.assertIn(key, self.keys, key)
 
     def test_the_leader_flags_are_the_worlds(self):
@@ -1216,7 +1217,6 @@ class PrivateTest(unittest.TestCase):
         self.assertIn('tooltip = "ch_policy_funding_step_tt_ni"', progs)
         self.assertEqual(progs.count("ch_programme_row = {"), 4)
         self.assertIn("ch_programme_row", self.view.open)
-        for op in ("outreach", "institutes", "media", "protectionism"):
         # drawn, not only reached: the overview's hover splices the same status
         # keys ($je_ch_widget_prog_<op>_status$ in je_ch_ov_prog_tt_list), so the
         # loc closure alone misses a guard on the row's cells or an instance's
@@ -1226,6 +1226,7 @@ class PrivateTest(unittest.TestCase):
         for op in ("outreach", "institutes", "media", "protectionism"):
             self.assertIn(f'blockoverride "programme_status" {{ text = "je_ch_widget_prog_{op}_status" }}', progs, op)
             self.assertIn(f'blockoverride "programme_label" {{ text = "je_ch_widget_prog_{op}" ', progs, op)
+        for op in ("outreach", "institutes", "media", "protectionism"):
             self.assertIn(f"je_ch_widget_prog_{op}_status", self.keys, op)
             self.assertIn(f"je_ch_widget_prog_{op}", self.keys, op)
         for key in ("ch_policy_status_active", "ch_policy_status_idle", "je_ch_prog_needs_ministry",
@@ -1260,8 +1261,24 @@ class PrivateTest(unittest.TestCase):
             self.assertIn(key, self.keys, key)
 
     def test_the_players_own_labels_are_left_out(self):
-        for key in ("je_ch_widget_board_us_ours", "je_ch_widget_breakdown_header_ours"):
+        for key in ("je_ch_widget_board_us_ours", "je_ch_widget_breakdown_header_ours", "je_ch_ov_model_owner_ours",
+                    "ch_model_owner_us", "ch_model_owner_them"):
             self.assertNotIn(key, self.keys, f"{key}: the player's own")
+
+    def test_the_player_keeps_ours(self):
+        """The exported model's owner splits as the two labels do: "(ours)" and
+        "(not ours)" for the player, as before, the third person for another
+        country, from a twin of the custom loc."""
+        loc = self.loc
+        self.assertEqual(loc["ch_model_owner_us"], "#G (ours)#!")
+        self.assertEqual(loc["ch_model_owner_them"], "#lore (not ours)#!")
+        self.assertIn("SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', "
+                      "'je_ch_ov_model_owner_theirs' )", loc["je_ch_ov_model_tt"])
+        self.assertEqual(loc["je_ch_ov_model_owner_ours"], "[Country.GetCustom('ch_exported_model_owner')]")
+        self.assertEqual(loc["je_ch_ov_model_owner_theirs"], "[Country.GetCustom('ch_exported_model_owner_theirs')]")
+        custom = _read(os.path.join(REPO, "common", "customizable_localization", "cultural_hegemony_custom_loc.txt"))
+        ours, theirs = _block(custom, "ch_exported_model_owner"), _block(custom, "ch_exported_model_owner_theirs")
+        self.assertEqual(theirs.replace("_theirs", ""), ours, "the same branches")
 
 
 if __name__ == "__main__":

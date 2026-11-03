@@ -71,7 +71,8 @@
 ###     frame. The board, the models and the history are global stores, the
 ###     same through any Country.
 ###   - text says "the country's", or splits on Country.IsLocalPlayer (_ours /
-###     _theirs) where the player guide names the label.
+###     _theirs) where the player guide names the label, and for the exported
+###     model's "(ours)" (je_ch_ov_model_owner_*, ch_exported_model_owner_theirs).
 ###   - every banded word      -> GetCustom('ch_tier_text' / 'ch_tier_blurb' /
 ###                               'ch_exported_model_text') or a code-gated
 ###                               variant, driven by ch_tier and
@@ -1433,10 +1434,10 @@ types cultural_hegemony_widget_types
 							widget = {
 								size = { 70 48 }
 
-								widget = {
 								# An observer has no GetPlayer: this container hides the seat's two
 								# reads below for one, so neither is evaluated (gotcha #42, the
 								# proven form).
+								widget = {
 									size = { 70 48 }
 									visible = "[Not( GetMetaPlayer.IsObserver )]"
 
@@ -1456,10 +1457,10 @@ types cultural_hegemony_widget_types
 							widget = {
 								size = { 70 48 }
 
-								widget = {
 								# An observer has no GetPlayer: this container hides the seat's two
 								# reads below for one, so neither is evaluated (gotcha #42, the
 								# proven form).
+								widget = {
 									size = { 70 48 }
 									visible = "[Not( GetMetaPlayer.IsObserver )]"
 
@@ -1479,10 +1480,10 @@ types cultural_hegemony_widget_types
 							widget = {
 								size = { 70 48 }
 
-								widget = {
 								# An observer has no GetPlayer: this container hides the seat's two
 								# reads below for one, so neither is evaluated (gotcha #42, the
 								# proven form).
+								widget = {
 									size = { 70 48 }
 									visible = "[Not( GetMetaPlayer.IsObserver )]"
 

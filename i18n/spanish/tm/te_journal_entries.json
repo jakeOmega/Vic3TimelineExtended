@@ -180,8 +180,8 @@
   "es": "Tecnocrática"
  },
  "je_ch_ov_model_tt": {
-  "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [Country.GetCustom('ch_exported_model_owner')]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
-  "es": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [Country.GetCustom('ch_exported_model_owner')]\\nCuota de la cultura mundial: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
+  "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
+  "es": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [SelectLocalization( Country.IsLocalPlayer, 'je_ch_ov_model_owner_ours', 'je_ch_ov_model_owner_theirs' )]\\nCuota de la cultura mundial: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
  },
  "je_ch_ov_rank_label": {
   "en": "World Rank",
