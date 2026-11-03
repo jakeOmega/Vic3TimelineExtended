@@ -5917,7 +5917,7 @@
  },
  "banking_dash_ro_anchor_tt": {
   "en": "#header Monetary Anchor#!\\nThe country's money is tied to another country's. It takes that country's policy rate, plus any spread, and its exchange rate, and it cannot print its way out of trouble. Its inflation and its economy stay its own, so the borrowed rate is the wrong one whenever the two economies part ways.",
-  "es": "#header Ancla monetaria#!\\nLa moneda del país está atada a la de otro país. Adopta su tipo de interés oficial, más cualquier diferencial, y su tipo de cambio, y no puede salir de los apuros imprimiendo dinero. Su inflación y su economía siguen siendo suyas, así que el tipo prestado es el equivocado siempre que las dos economías divergen."
+  "es": "#header Ancla monetaria#!\\nLa moneda del país está atada a la de otro país. El país adopta el tipo de interés oficial de ese otro país, más cualquier diferencial, y su tipo de cambio, y no puede salir de los apuros imprimiendo dinero. Su inflación y su economía siguen siendo suyas, así que el tipo prestado es el equivocado siempre que las dos economías divergen."
  },
  "banking_dash_ro_anchorpeg_tt": {
   "en": "#header Peg Confidence#!\\nHow far the world believes you will hold your parity with #v [Country.MakeScope.Var('te_mon_anchor').GetCountry.GetName]#!. You have no rate of your own to defend it with, so it moves on #b overvaluation#!: how far their exchange rate sits above where your own currency would float. Overvalued by #v [Country.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#! now.\\n$TOOLTIP_DELIMITER$\\nAt #v [Country.MakeScope.ScriptValue('te_mon_peg_crisis_threshold')|0]#! the markets force the question: shut the door, break the peg, or re-peg lower.",
