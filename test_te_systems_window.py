@@ -1169,6 +1169,11 @@ class TaxFooterTest(unittest.TestCase):
             with self.subTest(frame=frame):
                 self.assertRegex(_override(_type_body(self.gui, frame), "fixed_bottom"),
                                  r"^\s*te_systems_window_tax_footer = \{\}\s*$")
+        # Both frames' fixed_bottom is a vbox child: a position there is
+        # ignored and logs "Widget cannot have a position in a layout"
+        # (2026-11-03, :162 and :206), so the footer carries none.
+        head = self.footer[:self.footer.index("flowcontainer = {")]
+        self.assertNotRegex(_strip_comments(head), r"parentanchor|position")
 
     def test_only_on_the_tax_code_tab_while_a_draft_or_a_bill_is(self):
         head = self.footer[:self.footer.index("flowcontainer = {")]
