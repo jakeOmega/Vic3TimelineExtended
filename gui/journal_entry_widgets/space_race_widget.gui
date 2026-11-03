@@ -9626,9 +9626,17 @@ types space_race_widget_types
 flowcontainer = {
 	name = "widget_je_space_race_suborbital_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_suborbital_overview = {}
@@ -9652,9 +9660,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_orbital_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_orbital_overview = {}
@@ -9678,9 +9694,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_moon_landing_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_moon_landing_overview = {}
@@ -9704,9 +9728,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_probe_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_probe_overview = {}
@@ -9730,9 +9762,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_moon_base_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_moon_base_overview = {}
@@ -9756,9 +9796,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_mars_landing_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_mars_landing_overview = {}
@@ -9782,9 +9830,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_interstellar_probe_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_interstellar_probe_overview = {}
@@ -9808,9 +9864,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_solar_colonization_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_solar_colonization_overview = {}
@@ -9834,9 +9898,17 @@ flowcontainer = {
 flowcontainer = {
 	name = "widget_je_space_race_interstellar_results_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	minimumsize = { 520 -1 }
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+		}
+	}
 
 	te_je_country = {
 		te_sr_overview_transit = {}

@@ -237,6 +237,7 @@ types nuclear_layout_widget_types
 					text = "je_nuclear_program"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
 				}
 			}
@@ -390,6 +391,13 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
+		}
+	}
 
 	te_je_country = {
 		te_nuclear_overview_panel = {}

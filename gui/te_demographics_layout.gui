@@ -34,6 +34,14 @@ types te_demographics_layout
 		minimumsize = { 520 -1 }
 		maximumsize = { 520 -1 }
 
+		### The tab has no header: the "?" to the Help page in a row at its top (te_help_row), outside the census
+		### gate, so the pending line has it too.
+		te_help_row = {
+			blockoverride "help_onclick" {
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
+			}
+		}
+
 		te_demog_panel = {
 			visible = "[Not( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
@@ -160,9 +168,23 @@ types te_demographics_layout
 	}
 
 	### The window's tab body: te_system_tab_frame with the Population panel tab's gate. No entry: the Country the
-	### sections read is the player's (the Population panel's window supplies AccessPlayer), and there is no link.
-	### te_demog_tab_layout is what a wide mount overrides.
+	### sections read is the player's (the Population panel's window supplies AccessPlayer), and there is no Open
+	### Journal Entry. Its header, as every other tab's in the window, carries the "?" to the Help page, hidden for an
+	### observer. te_demog_tab_layout is what a wide mount overrides.
 	type te_demog_window_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_demographics"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
+				}
+			}
+		}
+
 		blockoverride "tab_gate" {
 			visible = "[GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 		}
@@ -188,6 +210,14 @@ types te_demographics_layout
 		spacing = 10
 		minimumsize = { 520 -1 }
 		maximumsize = { 520 -1 }
+
+		### The subtab has no header: the "?" to the Help page in a row at its top (te_help_row), outside the state's
+		### census gate, so "Census pending" has it too.
+		te_help_row = {
+			blockoverride "help_onclick" {
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
+			}
+		}
 
 		te_demog_panel = {
 			visible = "[Not( GetScriptedGui('te_demog_state_census_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"

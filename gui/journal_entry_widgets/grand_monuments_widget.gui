@@ -3555,6 +3555,7 @@ types grand_monuments_widget_types
 					text = "te_window_tab_grand_monuments"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]"
 				}
 			}
@@ -3638,8 +3639,16 @@ types grand_monuments_widget_types
 flowcontainer = {
 	name = "widget_je_gm_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]"
+		}
+	}
 
 	te_je_country = {
 		te_gm_overview_panel = {}

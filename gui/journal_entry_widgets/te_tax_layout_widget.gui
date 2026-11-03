@@ -336,6 +336,7 @@ types te_tax_layout_widget_types
 					text = "je_tax_code"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
 				}
 			}
@@ -471,6 +472,13 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 	spacing = 6
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
+		}
+	}
 
 	te_je_country = {
 		te_tax_overview_panel = {}

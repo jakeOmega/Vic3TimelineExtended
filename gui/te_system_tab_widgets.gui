@@ -704,7 +704,11 @@ types te_system_tab_widgets
 	### the body's default_header, vanilla's own shape for a button in a
 	### header (states_panel_buildings.gui's list toggle). An instance adds
 	### its onclick, `[GetVariableSystem.Set('te_popup', 'help_<key>')]`, as
-	### the header's last child. The icon is a placeholder (style guide rule
+	### the header's last child, and `visible = "[Not(
+	### GetMetaPlayer.IsObserver )]"`: te_popups is down for an observer, so a
+	### "?" would do nothing. A host with no header has te_help_row (below).
+	### It is the only way to a Help page: the "How X Works" links are gone
+	### (owner, 2026-11-03). The icon is a placeholder (style guide rule
 	### 10; docs/systems/te_systems_window_gui_icons.md): vanilla's own gold
 	### question mark, which it ships in button_icons/unused/ and draws
 	### nowhere. The plan named the encyclopedia button's book, but that reads
@@ -719,6 +723,34 @@ types te_system_tab_widgets
 
 		blockoverride "icon" {
 			texture = "gfx/interface/buttons/button_icons/unused/help.dds"
+		}
+	}
+
+	### --- The "?" where there is no header (help-button-everywhere PR) ---
+	### A host with no header of its own gets its "?" in this row, a section's
+	### width (520) with the button at its right, 10 in, where a header has it
+	### (owner, 2026-11-03: a "?" in every host, the "How X Works" links gone).
+	### It sits at the top of the host: a journal entry's, as the first child of
+	### its overview root (each widget_je_*_overview in
+	### custom_widget_container_1), outside te_je_country and so outside the
+	### composer the entry shares with its tab, whose header has its own "?"; and
+	### the Population panel's Demographics tab and the state panel's
+	### Demographics subtab, which have no header either. Hidden for an
+	### observer, for whom te_popups never opens; on the row, not the button, so
+	### the hidden row collapses in its host (each is ignoreinvisible) instead of
+	### leaving 29 px. An instance names its page:
+	###   te_help_row = {
+	###   	blockoverride "help_onclick" {
+	###   		onclick = "[GetVariableSystem.Set('te_popup', 'help_<key>')]"
+	###   	}
+	###   }
+	type te_help_row = widget {
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+		parentanchor = hcenter
+		size = { 520 29 }
+
+		te_help_button = {
+			block "help_onclick" {}
 		}
 	}
 	### --- end Help pages ---------------------------------------------------

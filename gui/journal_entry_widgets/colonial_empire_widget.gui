@@ -3620,6 +3620,7 @@ types colonial_empire_widget_types
 					text = "je_colonial_empire"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
 				}
 			}
@@ -3704,8 +3705,16 @@ types colonial_empire_widget_types
 flowcontainer = {
 	name = "widget_je_colonial_empire_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
+		}
+	}
 
 	te_je_country = {
 		te_ce_overview_panel = {}

@@ -944,4 +944,35 @@ types te_nation_widget_types
 			te_nation_how_panel = {}
 		}
 	}
+
+	### The tab's body (help-button-everywhere PR): te_system_tab_frame, as
+	### every other tab of the window has, for its header: the tab's name and
+	### the "?" to the Help page, hidden for an observer. No gate (the tab is
+	### always open) and no entry, so no Open Journal Entry. The window mounts
+	### it narrow and, with te_nation_tab_layout overridden by
+	### te_nation_wide_sections, full screen and in National Info for the
+	### player's own country; National Info's mount for another country draws
+	### its own header over te_nation_wide_sections.
+	type te_nation_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_nation"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_nation')]"
+				}
+			}
+		}
+
+		blockoverride "tab_content" {
+			block "te_nation_tab_layout" {
+				te_nation_tab_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal" {}
+	}
 }

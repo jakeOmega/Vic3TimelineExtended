@@ -254,7 +254,7 @@ TABS: list[Tab] = [
     # its own for each system National Info is to show (spec § 6.4), so each
     # system's binding PR changes one line and parallel PRs merge cleanly.
     Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
-        body="te_nation_tab_sections", wide="te_nation_wide_sections",
+        body="te_nation_tab_body", layout="te_nation_tab_layout", wide="te_nation_wide_sections",
         public=True),
     _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections",
             public=True),
@@ -287,7 +287,8 @@ TABS: list[Tab] = [
             wide="te_tax_wide_sections",
             public=True),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
-        body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
+        body="te_budget_breakdown_tab_body", layout="te_budget_breakdown_tab_layout",
+        wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.
     _mirror("strategic_reserve", 2, "te_window_tab_strategic_reserve_tt", "te_st_res_tab_body", "te_st_res_tab_layout",
             "te_market_strategic_reserve_tab_sgui", "te_market_strategic_reserve_tab_unlock_sgui",

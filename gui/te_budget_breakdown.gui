@@ -228,4 +228,34 @@ types te_budget_breakdown {
 			te_budget_sec_how = {}
 		}
 	}
+
+	### The tab's body (help-button-everywhere PR): te_system_tab_frame, as
+	### Banking's and Tax Code's beside it in the Budget panel, for its header:
+	### the tab's name and the "?" to the Help page, hidden for an observer. No
+	### gate (the tab is always open) and no entry, so no Open Journal Entry.
+	### The Budget panel's Breakdown tab and the Timeline Extended window mount
+	### it; full screen, te_budget_breakdown_tab_layout holds
+	### te_budget_breakdown_wide_sections.
+	type te_budget_breakdown_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_budget_breakdown"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_budget_breakdown')]"
+				}
+			}
+		}
+
+		blockoverride "tab_content" {
+			block "te_budget_breakdown_tab_layout" {
+				te_budget_breakdown_panel = {}
+			}
+		}
+
+		blockoverride "tab_open_journal" {}
+	}
 }

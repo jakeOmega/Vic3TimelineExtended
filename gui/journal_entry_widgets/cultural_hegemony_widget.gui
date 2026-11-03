@@ -2861,6 +2861,7 @@ types cultural_hegemony_widget_types
 					text = "je_cultural_hegemony"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
 				}
 			}
@@ -2942,8 +2943,16 @@ types cultural_hegemony_widget_types
 flowcontainer = {
 	name = "widget_je_ch_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"
+		}
+	}
 
 	te_je_country = {
 		te_ch_overview_panel = {}

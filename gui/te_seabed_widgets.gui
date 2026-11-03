@@ -1688,6 +1688,7 @@ types te_seabed_widget_types
 					text = "te_seabed_tab_header"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
 				}
 			}

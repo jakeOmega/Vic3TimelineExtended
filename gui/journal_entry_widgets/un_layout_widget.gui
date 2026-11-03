@@ -704,6 +704,7 @@ types un_layout_widget_types
 					text = "je_united_nations"
 				}
 				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
 				}
 			}
@@ -801,8 +802,16 @@ types un_layout_widget_types
 flowcontainer = {
 	name = "widget_je_un_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
+
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
+		}
+	}
 
 	te_je_country = {
 		te_un_overview_panel = {}
