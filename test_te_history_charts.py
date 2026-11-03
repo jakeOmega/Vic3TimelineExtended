@@ -1,0 +1,465 @@
+"""The history charts: one registry entry per chart, drawn at two sizes (spec
+docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 4.3).
+
+te_history_chart (gui/journal_entry_widgets/te_history_chart.gui) is the chart
+type. Its widths are blocks, so an instance can draw it at another size.
+scripts/generators/gen_te_history_charts.py holds each of the 33 charts once,
+as a fragment of its instance's text with each size a placeholder, and writes
+each as two wrapper types into gui/te_history_charts_generated.gui:
+te_hist_<id> at the panel's size (SMALL), which the chart's section instances,
+and te_hist_<id>_large at the full-screen viewer's (LARGE).
+"""
+import glob
+import os
+import re
+import sys
+import tempfile
+import unittest
+from decimal import ROUND_HALF_UP, Decimal
+from unittest import mock
+
+REPO = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, REPO)
+from gui_test_helpers import _close, _read, _strip_comments, _type_body  # noqa: E402
+from scripts.generators import gen_te_history_charts as gen  # noqa: E402
+from scripts.generators import gen_te_systems_window as window  # noqa: E402
+
+CHART_GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "te_history_chart.gui")
+GENERATED = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
+SGUIS = os.path.join(REPO, "common", "scripted_guis")
+JE_DIR = os.path.join(REPO, "common", "journal_entries")
+# The sections that hold the charts, and so their range buttons.
+SECTIONS = {
+    "banking": "gui/journal_entry_widgets/banking_history_widget.gui",
+    "strategic_reserve": "gui/journal_entry_widgets/strategic_reserve_widget.gui",
+    "demographics": "gui/te_demographics_widgets.gui",
+    "cultural_hegemony": "gui/journal_entry_widgets/cultural_hegemony_widget.gui",
+    "nuclear_weapons": "gui/journal_entry_widgets/nuclear_program_widget.gui",
+    "united_nations": "gui/journal_entry_widgets/un_authority_widget.gui",
+    "global_warming": "gui/journal_entry_widgets/global_warming_widget.gui",
+    "colonial_empire": "gui/journal_entry_widgets/colonial_empire_widget.gui",
+}
+# Fixed pixels a fragment may hold, the same at both sizes: the zero line's
+# thickness and the axis labels' pads (the bars keep 6 px clear of their box).
+FIXED = {"size = { 100% 2 }", "position = { 8 6 }", "position = { 8 -6 }"}
+
+
+def _block_bodies(text, name):
+    """The body of each `block "name" { … }` in text, in order."""
+    return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(rf'block "{name}" \{{', text)]
+
+
+def _unblocked(text, pattern):
+    """Each line matching `pattern` that no `block "…" { … }` encloses."""
+    out, stack = [], []
+    for line in _strip_comments(text).split("\n"):
+        if re.search(pattern, line) and not any(stack):
+            out.append(line.strip())
+        for ch in line:
+            if ch == "{":
+                stack.append(bool(re.search(r'\bblock "\w+" \{', line)))
+            elif ch == "}":
+                stack.pop()
+    return out
+
+
+class ChartTypeTest(unittest.TestCase):
+    """The chart's own widths are blocks with today's values as their defaults,
+    so the panel's charts draw as before and the viewer's can set them."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.chart = _type_body(_read(CHART_GUI), "te_history_chart")
+
+    def test_the_text_width_is_a_block_on_the_title_and_the_legend(self):
+        self.assertEqual([b.strip() for b in _block_bodies(self.chart, "chart_text_width")],
+                         ["max_width = 484", "max_width = 484"])
+        for font in ("chart_title_font", "chart_legend_font"):
+            box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index(f'block "{font}"')):]
+            self.assertIn('block "chart_text_width"', box[:box.index(f'block "{font}"')], font)
+
+    def test_the_empty_states_width_is_a_block(self):
+        self.assertEqual([b.strip() for b in _block_bodies(self.chart, "empty_width")], ["max_width = 420"])
+        box = self.chart[self.chart.rindex("textbox = {", 0, self.chart.index('block "empty_text"')):]
+        self.assertIn('block "empty_width"', box)
+
+    def test_no_other_literal_width_in_the_type(self):
+        """Every pixel width or size the chart draws at is a block an instance
+        can override: the text, the empty state, the frame (plot_size) and the
+        bars (plot_layouts)."""
+        self.assertEqual(_unblocked(self.chart, r"\b(max_width|size) = \{?\s*\d"), [])
+        self.assertTrue(_block_bodies(self.chart, "plot_size"))
+        self.assertTrue(_block_bodies(self.chart, "plot_layouts"))
+
+
+def _code_lines(text):
+    """Each line without its comment, whole-line comments dropped."""
+    return [ln for ln in _strip_comments(text).split("\n") if ln.strip()]
+
+
+def _enclosing(lines, i):
+    """The lines directly inside the block that holds line i."""
+    depth, start = 0, 0
+    for j in range(i - 1, -1, -1):
+        depth += lines[j].count("}") - lines[j].count("{")
+        if depth < 0:
+            start = j + 1
+            break
+    out, depth = [], 0
+    for line in lines[start:]:
+        if depth == 0:
+            out.append(line)
+        depth += line.count("{") - line.count("}")
+        if depth < 0:
+            break
+    return out
+
+
+def _all_fragments():
+    return [(s, name, text) for s in gen.SYSTEMS for name, text in gen.fragments(s).items()]
+
+
+class RegistryTest(unittest.TestCase):
+    """One registry entry per chart, its fragment drawn at two sizes (spec § 4.3)."""
+
+    def test_the_33_charts(self):
+        self.assertEqual(len(gen.CHARTS), 33)
+        counts = {s: sum(c.system == s for c in gen.CHARTS) for s in gen.SYSTEMS}
+        self.assertEqual(counts, {"banking": 8, "strategic_reserve": 8, "demographics": 8, "cultural_hegemony": 1,
+                                  "nuclear_weapons": 2, "united_nations": 2, "global_warming": 2,
+                                  "colonial_empire": 2})
+        self.assertEqual(sorted(gen.SYSTEMS), sorted(SECTIONS))
+
+    def test_the_small_size_is_todays(self):
+        """SMALL holds the literals the charts drew at before the registry, and
+        the chart type's own defaults are its monthly row, so a monthly chart's
+        small wrapper needs no size of its own."""
+        m, ch, dg = gen.SMALL["monthly"], gen.SMALL["annual"], gen.SMALL["annual_pips"]
+        self.assertEqual((m.frame, m.bar_h, m.text_w, m.empty_w), ((496, 96), 84, 484, 420))
+        self.assertEqual(gen.bars(m, gen.RANGES["te_hist_range"]), {"1": 40, "5": 8, "20": 2})
+        self.assertEqual((ch.frame, ch.bar_h, ch.text_w, ch.empty_w), ((456, 180), 168, 484, 420))
+        self.assertEqual(gen.bars(ch, gen.RANGES["ch_model_hist_range"]), {"5": 80, "20": 20, "100": 4})
+        self.assertEqual((dg.frame, dg.box_h, dg.bar_h, dg.text_w, dg.empty_w), ((456, 132), 96, 84, 484, 420))
+        self.assertEqual(gen.bars(dg, gen.RANGES["te_demog_hist_range"]), {"5": 80, "20": 20, "100": 4})
+        digital = gen.BY_ID["mon_policy_digital"]
+        self.assertEqual(gen.substitute("${zero_y:0.2}", digital, gen.SMALL), "-23")     # 6 + 0.2 x 84
+        self.assertEqual(gen.substitute("${zero_y:0.25}", digital, gen.SMALL), "-27")    # 6 + 0.25 x 84
+        # the chart type's defaults
+        chart = _type_body(_read(CHART_GUI), "te_history_chart")
+        plot = _type_body(_read(CHART_GUI), "te_history_plot")
+        self.assertEqual(re.findall(r'block "plot_size" \{\s*size = \{ (\d+) (\d+) \}', chart), [("496", "96")])
+        self.assertEqual(re.findall(r'block "bar_size" \{\s*size = \{ (\d+) (\d+) \}', plot), [("2", "84")])
+        layouts = chart[chart.index('block "plot_layouts"'):]
+        layouts = layouts[:_close(layouts, layouts.index("{")) + 1]
+        widths = re.findall(r'size = \{ (\d+) (\d+) \}', layouts)
+        self.assertEqual(widths, [("40", "84"), ("8", "84")])   # the full range takes te_history_plot's 2 x 84
+        ours = "\n".join(gen.plot_layouts(m, gen.RANGES["te_hist_range"]))
+        self.assertEqual(re.findall(r'visible = "(.*)"', layouts), re.findall(r'visible = "(.*)"', ours))
+        self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
+
+    def test_the_small_wrapper_is_its_fragment(self):
+        """At SMALL the generator substitutes and adds nothing, so the panel's
+        charts are their fragments' text, as their sections had it."""
+        for chart in gen.CHARTS:
+            with self.subTest(chart=chart.id):
+                text = gen.substitute(gen.fragment(chart), chart, gen.SMALL)
+                self.assertEqual(gen.size_overrides(chart, gen.SMALL, text), [])
+                self.assertEqual(gen.render_chart(chart, gen.SMALL), text)
+
+    def test_no_size_literal_in_a_fragment(self):
+        """Every size a fragment draws at is a placeholder: no number left in a
+        size, a position, a width or the frame, and no thin cap or floor
+        outside ${thin:...} (a value line keeps only its axis's own clamps)."""
+        checked = 0
+        for system, name, text in _all_fragments():
+            lines = _code_lines(text)
+            for i, line in enumerate(lines):
+                s = line.strip()
+                with self.subTest(fragment=name, line=s[:80]):
+                    for m in re.finditer(r"\b(size|position) = \{ ([^}]*) \}", s):
+                        if m.group(0) in FIXED:
+                            continue
+                        for token in m.group(2).split():
+                            self.assertRegex(token, r"^(\$\{[^}]+\}|\d+%|0)$", m.group(0))
+                        checked += 1
+                    self.assertNotRegex(s, r"\b(max_width|minimumsize|maximumsize)\b", "a width is the generator's")
+                    if s.startswith("value = "):
+                        own = _enclosing(lines, i)
+                        clamps = {Decimal(v) for v in re.findall(r"^\s*(?:min|max) = (-?[\d.]+)\s*$",
+                                                                  "\n".join(own), re.M)}
+                        uppers = {Decimal(v) for v in re.findall(
+                            r"Min_CFixedPoint\( [^,]+\), '\(CFixedPoint\)(-?[\d.]+)' \)", s)}
+                        for v in re.findall(r"\(CFixedPoint\)(-?\d+(?:\.\d+)?)", s):
+                            self.assertIn(Decimal(v), clamps | uppers | {Decimal(0)},
+                                          f"{v}: a cap or floor outside ${{thin:...}}")
+                        checked += 1
+        self.assertGreater(checked, 90, "the sweep checked almost nothing")
+
+    def test_a_fragment_holds_no_dollar_but_its_placeholders(self):
+        """No $ in the sections, the chart type or the output, so a ${...} in a
+        fragment can only be a placeholder; each is one the generator knows."""
+        for path in list(SECTIONS.values()) + [os.path.relpath(CHART_GUI, REPO), os.path.relpath(GENERATED, REPO)]:
+            self.assertNotIn("$", _read(os.path.join(REPO, path)), path)
+        for chart in gen.CHARTS:
+            text = gen.fragment(chart)
+            known = set(gen.values(chart, gen.SMALL)) | {"thin", "zero_y"}
+            with self.subTest(chart=chart.id):
+                self.assertEqual(text.count("$"), len(gen.PLACEHOLDER.findall(text)))
+                self.assertLessEqual({m.group(1) for m in gen.PLACEHOLDER.finditer(text)}, known)
+        with self.assertRaisesRegex(ValueError, "unknown placeholder"):
+            gen.substitute("${frmae}", gen.CHARTS[0], gen.SMALL)
+
+    def test_the_bars_fill_the_plot(self):
+        """At each size, every range's bars fill the plot exactly (integer
+        widths: a remainder goes to the newest bar, history_charts.md), and the
+        frame is the plot plus its margins, the bars 6 px clear of their box."""
+        for size in gen.SIZES:
+            for chart in {c.kind: c for c in gen.CHARTS}.values():
+                dims, rng = size[chart.kind], gen.RANGES[chart.range]
+                with self.subTest(size=size.name, kind=chart.kind):
+                    widths = gen.bars(dims, rng)
+                    for value, n in zip(rng.values, rng.samples):
+                        self.assertEqual(widths[value] * n, dims.plot)
+                    self.assertEqual(dims.frame[0], dims.left + dims.plot + 8)
+                    box = dims.box_h if dims.box_h is not None else dims.frame[1]
+                    self.assertEqual(box, dims.bar_h + 12)
+                    self.assertEqual(dims.frame[1], box + (gen.PIP_LANE if chart.kind == "annual_pips" else 0))
+                    self.assertEqual(dims.text_w, dims.frame[0] - 12 if size is gen.LARGE else 484)
+        self.assertIn("margin_right = 8", _type_body(_read(CHART_GUI), "te_history_plot"))
+        self.assertEqual({gen.LARGE[k].plot for k in gen.KINDS}, {1200})   # owner call 7
+        with self.assertRaisesRegex(ValueError, "don't divide"):
+            gen.bars(gen.Dims(plot=500, left=8, frame=(516, 96), bar_h=84, text_w=0, empty_w=0),
+                     gen.RANGES["te_hist_range"])
+
+    def test_the_large_caps_scale(self):
+        """A cap or floor in the axis's units draws as many pixels at LARGE:
+        x at SMALL, x times the bars' height ratio at LARGE (to CFixedPoint's
+        thousandth); a + x keeps a and scales x. The zero lines move with the
+        bars: 6 + 0.2 x 336 and 6 + 0.25 x 336."""
+        seen = 0
+        for chart in gen.CHARTS:
+            ratio = Decimal(gen.SMALL[chart.kind].bar_h) / Decimal(gen.LARGE[chart.kind].bar_h)
+            for m in re.finditer(r"\$\{thin:([^}]*)\}", gen.fragment(chart)):
+                base, _, x = m.group(1).rpartition("+")
+                base, x = Decimal(base or 0), Decimal(x)
+                with self.subTest(chart=chart.id, thin=m.group(1)):
+                    self.assertEqual(Decimal(gen.substitute(m.group(0), chart, gen.SMALL)), base + x)
+                    want = (base + x * ratio).quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
+                    self.assertEqual(Decimal(gen.substitute(m.group(0), chart, gen.LARGE)), want)
+                    self.assertLess(want - base, x)
+                seen += 1
+        self.assertGreater(seen, 50)
+        digital = gen.BY_ID["mon_policy_digital"]
+        self.assertEqual(gen.substitute("${zero_y:0.2}", digital, gen.LARGE), "-73")
+        self.assertEqual(gen.substitute("${zero_y:0.25}", digital, gen.LARGE), "-90")
+        large = gen.render_chart(gen.BY_ID["bank_bubble"], gen.LARGE)
+        self.assertIn("'(CFixedPoint)0.5', ScriptContainer", large)    # the floor: 2 of 100 at 84 px
+        self.assertIn("'(CFixedPoint)1' )", large)                     # the cap: 4
+
+    def test_the_cycle_chart_thins_its_floor_and_cap(self):
+        """te_history_bar_cycle_phase holds its bars' floor and cap as blocks
+        (phase_value on all six bars, phase_cover_value on the cover). A chart
+        drawing it overrides both with ${thin:...}, or its large size would
+        keep a 13 px cap, and the type's seven defaults are those overrides at
+        SMALL, so the panel draws as the defaults would."""
+        phase = _type_body(_read(os.path.join(REPO, SECTIONS["banking"])), "te_history_bar_cycle_phase")
+        defaults = {name: [b.strip() for b in _block_bodies(phase, name)] for name in ("phase_value", "phase_cover_value")}
+        self.assertEqual([len(defaults["phase_value"]), len(defaults["phase_cover_value"])], [6, 1])
+        users = [c for c in gen.CHARTS if "te_history_bar_cycle_phase = {" in gen.fragment(c)]
+        self.assertEqual([c.id for c in users], ["bank_value"])
+        for chart in users:
+            text = gen.fragment(chart)
+            start = text.index("te_history_bar_cycle_phase = {")
+            bar = text[start:_close(text, text.index("{", start)) + 1]
+            for name, values in defaults.items():
+                with self.subTest(chart=chart.id, block=name):
+                    m = re.search(rf'blockoverride "{name}" \{{', bar)
+                    self.assertIsNotNone(m, f"the fragment leaves {name} to the type's default")
+                    body = bar[m.end():_close(bar, m.end() - 1)]
+                    self.assertIn("${thin:", body)
+                    small = gen.substitute(body, chart, gen.SMALL).strip()
+                    self.assertEqual(set(values), {small}, "the type's defaults are the override at SMALL")
+                    self.assertNotEqual(gen.substitute(body, chart, gen.LARGE).strip(), small)
+
+    def test_the_large_wrapper_sets_every_size(self):
+        """The large wrapper draws at the viewer's size: a monthly chart gains
+        the frame, the bars and both widths, an annual one both widths (its
+        fragment sizes the frame and the bars), and no comment is left to
+        describe the panel's size."""
+        for chart in gen.CHARTS:
+            dims = gen.LARGE[chart.kind]
+            large = gen.render_chart(chart, gen.LARGE)
+            with self.subTest(chart=chart.id):
+                self.assertIn(f"size = {{ {dims.frame[0]} {dims.frame[1]} }}", large)
+                for w in gen.bars(dims, gen.RANGES[chart.range]).values():
+                    self.assertIn(f"size = {{ {w} {dims.bar_h} }}", large)
+                self.assertIn(f'blockoverride "chart_text_width" {{\n\t\tmax_width = {dims.text_w}\n\t}}', large)
+                self.assertIn(f'blockoverride "empty_width" {{\n\t\tmax_width = {dims.empty_w}\n\t}}', large)
+                self.assertFalse([ln for ln in large.split("\n") if ln.lstrip().startswith("#")])
+                self.assertEqual(large.count("{"), large.count("}"))
+                for name in ("plot_size", "plot_layouts", "chart_text_width", "empty_width"):
+                    self.assertEqual(large.count(f'blockoverride "{name}"'), 1, name)
+
+    def test_the_wrappers_are_plain_flowcontainers(self):
+        """Each wrapper holds its chart's te_history_chart instance and only
+        the chart's own parentanchor (gotcha #37: never a type derived from
+        te_history_plot or te_history_chart), so the panel lays out as before."""
+        text = _read(GENERATED)
+        types = re.findall(r"^\ttype (\w+) = (\w+) \{", text, re.M)
+        self.assertEqual([n for n, _ in types],
+                         [gen.wrapper_name(c, s) for c in gen.CHARTS for s in gen.SIZES])
+        self.assertEqual({base for _, base in types}, {"flowcontainer"})
+        for name, _ in types:
+            body = _type_body(text, name)
+            with self.subTest(wrapper=name):
+                self.assertEqual(body[:body.index("te_history_chart = {")].split(), ["parentanchor", "=", "hcenter"])
+                self.assertEqual(body.rstrip()[-1], "}")
+                chart = body[body.index("te_history_chart = {"):]
+                self.assertEqual(_close(chart, chart.index("{")), len(chart.rstrip()) - 1, "one child")
+        self.assertIn("parentanchor = hcenter", _type_body(_read(CHART_GUI), "te_history_chart"))
+        for path in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True):
+            self.assertIsNone(re.search(r"\btype \w+ = te_history_(plot|chart)\b", _read(path)), path)
+
+    def test_every_chart_is_generated(self):
+        """No hand-written te_history_chart instance is left in gui/: each
+        chart's section instances its small wrapper, once, and no hand-written
+        file instances a large one (the viewer's are generated with them)."""
+        generated = os.path.normpath(GENERATED)
+        hand = {os.path.relpath(p, REPO): _strip_comments(_read(p))
+                for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)
+                if os.path.normpath(p) != generated}
+        self.assertGreater(len(hand), 50)
+        placed = {}
+        for path, text in hand.items():
+            self.assertNotIn("te_history_chart = {", text, path)
+            for name in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", text):
+                placed.setdefault(name, []).append(path)
+        self.assertFalse([n for n in placed if n.endswith("_large")], "a large wrapper instanced by hand")
+        for chart in gen.CHARTS:
+            with self.subTest(chart=chart.id):
+                self.assertEqual(placed.get(gen.wrapper_name(chart, gen.SMALL)), [SECTIONS[chart.system]])
+
+    def test_the_registry_names_what_the_viewer_reads(self):
+        """Each chart's tab, entry, gate and range, for the viewer (C2): the
+        gate is the tab's scripted GUI, scope-free, and holds the entry the
+        viewer's GetPlayerJournalEntry reads (gotcha #29)."""
+        sguis = "\n".join(_read(p) for p in glob.glob(os.path.join(SGUIS, "*.txt")))
+        entries = "\n".join(_read(p) for p in glob.glob(os.path.join(JE_DIR, "*.txt")))
+        tabs = {t.key for t in window.TABS}
+        for chart in gen.CHARTS:
+            with self.subTest(chart=chart.id):
+                self.assertIn(chart.system, tabs)
+                m = re.search(rf"(?m)^{chart.gate} = \{{", sguis)
+                self.assertIsNotNone(m, f"no scripted GUI {chart.gate}")
+                body = sguis[m.end():_close(sguis, m.end() - 1)]
+                self.assertIn("scope = country", body)
+                if chart.entry is None:
+                    self.assertEqual(chart.system, "demographics", "only Demographics reads Country")
+                else:
+                    self.assertRegex(entries, rf"(?m)^{chart.entry} = \{{")
+                    self.assertIn(f"has_journal_entry = {chart.entry}", body)
+                self.assertIn(chart.range, gen.RANGES)
+
+    def test_each_section_places_its_charts_in_registry_order(self):
+        """Each section instances its charts in CHARTS order, so two charts
+        swapped in a section (or in the registry) fail here."""
+        for system, path in SECTIONS.items():
+            text = _strip_comments(_read(os.path.join(REPO, path)))
+            names = {gen.wrapper_name(c, gen.SMALL): c.id for c in gen.CHARTS}
+            placed = [names[n] for n in re.findall(r"(?<![\w.])(te_hist_\w+) = \{", text) if n in names]
+            with self.subTest(system=system):
+                self.assertEqual(placed, [c.id for c in gen.CHARTS if c.system == system])
+
+    def test_the_sections_carry_each_charts_own_visible(self):
+        """A chart drawn only for some countries (Chart.shown: Banking's
+        policy-rate pair, inflation and the exchange rate) keeps that visible
+        on its section's instance of the wrapper, exactly; every other
+        instance is a bare te_hist_<id> = {}. A visible dropped in a rebinding
+        would draw both policy-rate charts, or empty monetary charts under
+        banking_system_simplified."""
+        self.assertEqual({c.id for c in gen.CHARTS if c.shown},
+                         {"mon_policy", "mon_policy_digital", "mon_inflation", "mon_fx"})
+        for chart in gen.CHARTS:
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[chart.system])))
+            m = re.search(rf"(?<![\w.]){gen.wrapper_name(chart, gen.SMALL)} = \{{", text)
+            body = text[m.end():_close(text, m.end() - 1)].strip()
+            with self.subTest(chart=chart.id):
+                self.assertEqual(body, f'visible = "[{chart.shown}]"' if chart.shown else "")
+
+    def test_the_entry_and_gate_are_the_charts_own_tabs(self):
+        """A chart's gate and entry are its own system's: the gate is the first
+        scripted GUI its tab's open test (gen_te_systems_window.TABS) shows on,
+        and the entry is the journal entry its tab body mounts (tab_entry's
+        GetPlayerJournalEntry; Demographics' body mounts GetPlayer, so None).
+        A chart given another system's pair would open its viewer on that
+        system's tab and read that system's entry."""
+        texts = [_read(p) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)]
+        tabs = {t.key: t for t in window.TABS}
+        for chart in gen.CHARTS:
+            tab = tabs[chart.system]
+            with self.subTest(chart=chart.id):
+                self.assertEqual(chart.gate, re.findall(r"GetScriptedGui\('(\w+)'\)\.IsShown", tab.open_)[0])
+                (src,) = [x for x in texts if re.search(rf"type {tab.body} = \w+ \{{", x)]
+                mount = re.search(r'blockoverride "tab_entry" \{\s*datacontext = "\[(.*)\]"', _type_body(src, tab.body))
+                self.assertIsNotNone(mount, f"{tab.body} mounts no entry")
+                entry = re.fullmatch(r"GetPlayerJournalEntry\('(\w+)'\)", mount.group(1))
+                self.assertEqual(chart.entry, entry.group(1) if entry else None, mount.group(1))
+                if entry is None:
+                    self.assertEqual(mount.group(1), "GetPlayer")
+
+    def test_the_ranges_are_the_sections_buttons(self):
+        """RANGES holds each range variable's three buttons as the sections
+        draw them (values, labels, width), so the viewer's row (C2) can be
+        theirs."""
+        found = {}
+        for system, path in SECTIONS.items():
+            text = _strip_comments(_read(os.path.join(REPO, path)))
+            for m in re.finditer(r"te_history_range_button = \{", text):
+                button = text[m.end():_close(text, m.end() - 1)]
+                var, value = re.search(r"GetVariableSystem\.Set\(\s*'(\w+)',\s*'(\w+)'\s*\)", button).groups()
+                label = re.search(r'text = "(\w+)"', button).group(1)
+                width = re.search(r"\bsize = \{ (\d+) 26 \}", button)
+                found.setdefault((system, var), []).append((value, label, int(width.group(1)) if width else 72))
+        self.assertEqual({var for _, var in found}, set(gen.RANGES))
+        for (system, var), buttons in found.items():
+            rng = gen.RANGES[var]
+            with self.subTest(system=system, range=var):
+                self.assertEqual(buttons, [(v, lab, rng.button_w) for v, lab in zip(rng.values, rng.labels)])
+                self.assertIn(var, {c.range for c in gen.CHARTS if c.system == system})
+        self.assertIn("size = { 72 26 }", _type_body(_read(CHART_GUI), "te_history_range_button"))
+
+    def test_validate(self):
+        bad = gen.Chart("x", "banking", "monthly", "bank_value", None, "te_x_sgui", "te_demog_hist_range")
+        with mock.patch.object(gen, "CHARTS", gen.CHARTS + [bad]), mock.patch.object(gen, "BY_ID", {}):
+            with self.assertRaisesRegex(ValueError, "unique|te_hist_range"):
+                gen.render()
+        orphan = [c for c in gen.CHARTS if c.id != "gw_share"]
+        with mock.patch.object(gen, "CHARTS", orphan), mock.patch.object(gen, "BY_ID", {c.id: c for c in orphan}):
+            with self.assertRaisesRegex(ValueError, "no chart uses"):
+                gen.render()
+
+
+class GeneratorTest(unittest.TestCase):
+    def test_generated_file_is_current(self):
+        with open(GENERATED, "rb") as f:
+            committed = f.read()
+        self.assertTrue(committed.startswith(b"\xef\xbb\xbf"))
+        self.assertFalse(committed[3:].startswith(b"\xef\xbb\xbf"))    # exactly one BOM
+        self.assertEqual(committed.decode("utf-8-sig"), gen.render(),
+                         "stale: run python3 scripts/generators/gen_te_history_charts.py")
+        self.assertEqual(gen.main(["--check"]), 0)
+
+    def test_check_fails_on_a_file_without_its_bom(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = gen.Path(tmp) / "generated.gui"
+            with mock.patch.object(gen, "GUI_OUT", path):
+                path.write_bytes(gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+                path.write_bytes(b"\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 0)
+                path.write_bytes(b"\xef\xbb\xbf\xef\xbb\xbf" + gen.render().encode("utf-8"))
+                self.assertEqual(gen.main(["--check"]), 1)
+
+
+if __name__ == "__main__":
+    unittest.main()

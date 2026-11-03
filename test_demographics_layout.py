@@ -15,7 +15,7 @@ import re
 import unittest
 from decimal import ROUND_HALF_UP, Decimal
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import HISTORY_CHARTS, assert_wide_matches_narrow, history_charts
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui")
@@ -337,6 +337,9 @@ class FontTest(unittest.TestCase):
     def test_every_textbox_takes_a_template(self):
         medium_ok = {"te_demog_sec_history", "te_demog_hist_pip_legend"}
         found = _textboxes(self.widgets) + _textboxes(_read(LAYOUT))
+        # the history charts' axis labels, in their generated wrappers
+        found += [("te_demog_sec_history", box) for chart in history_charts(_type_body(self.widgets, "te_demog_sec_history"))
+                  for _, box in _textboxes(chart)]
         self.assertGreater(len(found), 60)
         for owner, block in found:
             fonts = [u for u in re.findall(r"using = (\w+)", _own(block)) if "font" in u]
@@ -355,7 +358,8 @@ class FontTest(unittest.TestCase):
 
     def test_the_charts_titles_are_headings(self):
         history = _type_body(self.widgets, "te_demog_sec_history")
-        charts = _instances(history, "te_history_chart")
+        charts = history_charts(history)
+        self.assertEqual(len(charts), 8)
         for chart in charts:
             self.assertIn("using = te_demog_fontsize_heading", _override(chart, "chart_title_font"))
             self.assertIn("using = fontsize_medium", _override(chart, "chart_legend_font"))
@@ -557,11 +561,11 @@ class WidthTest(unittest.TestCase):
     def test_the_chart_titles(self):
         chart = _read(CHART)
         title = chart[chart.index("type te_history_chart"):]
-        width = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = nobaseline\s*block "chart_title_font"',
-                              title).group(1))
+        width = int(re.search(r'block "chart_text_width" \{\s*max_width = (\d+)\s*\}\s*elide = right\s*align = nobaseline'
+                              r'\s*block "chart_title_font"', title).group(1))
         history = _type_body(self.widgets, "te_demog_sec_history")
         titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1)
-                  for c in _instances(history, "te_history_chart")]
+                  for c in history_charts(history)]
         self.assertEqual(len(titles), 8)
         for key in titles:
             with self.subTest(title=key):
@@ -716,7 +720,7 @@ class PieTest(unittest.TestCase):
 
     def test_the_history_chart_uses_the_pies_colours(self):
         history = _type_body(self.widgets, "te_demog_sec_history")
-        chart = next(c for c in _instances(history, "te_history_chart")
+        chart = next(c for c in history_charts(history)
                      if "te_demog_hist_causes_title" in _override(c, "chart_title"))
         layers = re.findall(r"color = \{ ([\d.]+) ([\d.]+) ([\d.]+) 1\.0 \}\s*value = \"\[FixedPointToFloat\( "
                             r"ScriptContainer\.GetVariableValue\('te_dg_h_c(\d)'\) \)\]\"", _override(chart, "bar_body"))
@@ -739,7 +743,7 @@ class HistoryTest(unittest.TestCase):
     def setUpClass(cls):
         cls.widgets = _read(WIDGETS)
         cls.history = _type_body(cls.widgets, "te_demog_sec_history")
-        cls.charts = _instances(cls.history, "te_history_chart")
+        cls.charts = history_charts(cls.history)
 
     def test_the_eight_charts(self):
         titles = [re.search(r'text = "(\w+)"', _override(c, "chart_title")).group(1) for c in self.charts]
@@ -774,7 +778,7 @@ class HistoryTest(unittest.TestCase):
         recorded |= {f"te_dg_h_s{k}" for k in range(1, 9)} if "name = te_dg_h_s$K$" in _read(HISTORY) else set()
         reads = set()
         loc = "\n".join(_read(os.path.join(LOC_DIR, n)) for n in os.listdir(LOC_DIR) if n.endswith(".yml"))
-        for text in (self.widgets, loc):
+        for text in (self.widgets, _read(HISTORY_CHARTS), loc):
             reads |= set(re.findall(r"(?:GetVariableValue|HasVariable)\(\s*'(te_dg_h_\w+)'", text))
         self.assertGreaterEqual(len(reads), 20)
         self.assertEqual(reads - recorded, set(), "read but never recorded")

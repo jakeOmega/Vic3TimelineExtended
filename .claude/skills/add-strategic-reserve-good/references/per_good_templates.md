@@ -705,33 +705,7 @@ One `te_st_res_good_row` instance, added inside the `te_st_res_sec_inventory` ty
 		blockoverride "row_policy" { text = "st_res_row_<GOOD>_policy" }
 		blockoverride "row_policy_reason" { text = "st_res_row_<GOOD>_policy_reason" }
 		blockoverride "row_history" {
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "st_res_hist_title"
-				}
-				blockoverride "chart_legend" {
-					text = "st_res_hist_legend"
-				}
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "st_res_hist_tt_<GOOD>"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_<GOOD>' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_<GOOD>' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_<GOOD>' ), '(CFixedPoint)4' ) ) )]"
-						}
-					}
-				}
-			}
+			te_hist_st_res_<GOOD> = {}
 		}
 		blockoverride "row_settings_toggle" {
 			onclick = "[GetVariableSystem.Toggle('st_res_policy_<GOOD>_open')]"
@@ -788,7 +762,7 @@ What each part does:
 - `row_auto` shows the lit policy icon over the always-drawn dimmed one; `row_auto_tooltip` is its hover, the good's policy and what it is doing.
 - The row has no hover of its own (2026-10-27): `row_stock_tooltip` is the Stock bar's (stored, capacity, the markers), `row_rate_tooltip` and `row_decay_tooltip` the expanded Rate Setting and Decay lines' (the rate the hub actually trades; the decay's sources), and `row_rate_short` the rate between the - and + buttons.
 - `row_stored` … `row_policy_reason` are the expanded figures, one loc key each (file 14).
-- `row_history` is the good's fill-by-month chart (`te_history_chart`, shown inside the expanded row): its bars read `te_hist_v_st_res_<GOOD>`, which `te_history_record_strategic_reserve_samples` records (file 7g), and its bar tooltip is `st_res_hist_tt_<GOOD>` (file 14). The tooltip key may read only `ScriptContainer` (gotcha #24; `test_history_chart_tooltip_context.py`).
+- `row_history` is the good's fill-by-month chart, shown inside the expanded row: `te_hist_st_res_<GOOD>`, a wrapper `scripts/generators/gen_te_history_charts.py` writes into `gui/te_history_charts_generated.gui` from the one fragment every good shares (`scripts/generators/te_history_charts/strategic_reserve.gui.in`). A new good is one entry in that generator's `ST_RES_GOODS` list, after the others in `st_res_triggers.txt` order, then a run of the generator; never write the chart inline. Its bars read `te_hist_v_st_res_<GOOD>`, which `te_history_record_strategic_reserve_samples` records (file 7g), and its bar tooltip is `st_res_hist_tt_<GOOD>` (file 14). The tooltip key may read only `ScriptContainer` (gotcha #24; `test_history_chart_tooltip_context.py`).
 - `row_settings_toggle` / `row_settings_open` / `row_settings_closed` share `st_res_policy_<GOOD>_open`, the Policy Settings subsection, collapsed until opened. `row_settings_toggle` is also the policy icon's click, so the icon opens the settings from the table line; `row_settings_shown` shows the subsection under an expanded row, or under a collapsed one while it is open.
 - `row_policy_panel` nests the shared `widget_je_st_res_policy_panel` with the good's `st_res_policy_<GOOD>_sgui` as its datacontext, the policy in force on its "Policy:" line (`policy_value_policy`) and its eight value cells. The value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
 
