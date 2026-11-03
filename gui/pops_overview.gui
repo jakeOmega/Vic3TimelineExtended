@@ -168,6 +168,9 @@ types pops_overview
 				# and the te_system_tab_met_tt branch can't be reached here; it stays
 				# for the shape every tab tooltip shares. Gates:
 				# common/scripted_guis/te_system_tab_sguis.txt.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fifth_button" {
 					text = "te_pops_tab_demog"
 				}
@@ -179,10 +182,10 @@ types pops_overview
 					onclick = "[InformationPanel.SelectTab('te_demog')]"
 				}
 				blockoverride "fifth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_demog'), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_demog'), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_demog') ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_demog') ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_pops_tab_demog"

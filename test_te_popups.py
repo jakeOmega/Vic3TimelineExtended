@@ -10,15 +10,20 @@ scrollarea. Which popup is open is the client-side te_popup key.
 
 import os
 import re
+import sys
 import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, REPO)
+from scripts.generators import gen_te_history_charts as charts  # noqa: E402
 LIBRARY = os.path.join(REPO, "gui", "te_widget_library.gui")
 POPUPS = os.path.join(REPO, "gui", "te_popups.gui")
 REGISTRATION = os.path.join(REPO, "gui", "scripted_widgets", "te_systems_window.txt")
 SR_WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 # The per-slot popup bodies and the fleet rows (gen_space_fleets.py).
 SR_FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")
+# The history charts' viewers (charts PR C2, gen_te_history_charts.py).
+CHARTS_GENERATED = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
 SLOTS = 9  # gen_space_fleets.SLOTS
 SR_GATE = ("GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( "
            "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
@@ -233,6 +238,75 @@ class PopupHostTest(unittest.TestCase):
                 # The gate's block holds the datacontext's.
                 gate_start = body.rindex("{", 0, gate)
                 self.assertGreater(_close(body, gate_start), _close(body, start))
+
+
+class ChartPopupTest(unittest.TestCase):
+    """The history charts' full-screen viewers (charts PR C2, spec § 4.2):
+    one popup a chart, generated into te_history_charts_generated.gui and held
+    by te_chart_popups, which the root instances once."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(CHARTS_GENERATED))
+        cls.root = _top_level(_strip_comments(_read(POPUPS)), "te_popups")
+        cls.popups = {m.group(1): _type_body(cls.text, m.group(1))
+                      for m in re.finditer(r"type (te_chart_\w+_popup) = (\w+) \{", cls.text)}
+
+    def test_the_root_holds_them_once(self):
+        self.assertEqual(self.root.count("te_chart_popups = {}"), 1)
+        holder = _type_body(self.text, "te_chart_popups")
+        self.assertEqual(sorted(re.findall(r"(te_chart_\w+_popup) = \{\}", holder)), sorted(self.popups))
+
+    def test_one_a_chart_each_deriving_from_the_shell(self):
+        self.assertEqual(sorted(self.popups), sorted(charts.popup_name(c) for c in charts.CHARTS))
+        self.assertEqual(set(re.findall(r"type te_chart_\w+_popup = (\w+) \{", self.text)), {"te_ui_popup"})
+        for chart in charts.CHARTS:
+            body = self.popups[charts.popup_name(chart)]
+            with self.subTest(chart=chart.id):
+                self.assertRegex(body, r'blockoverride "popup_visible" \{\s*visible = '
+                                       rf'"\[GetVariableSystem\.HasValue\(\'te_popup\', \'chart_{chart.id}\'\)\]"\s*\}}')
+                for name in ("popup_title", "popup_size", "popup_list"):
+                    self.assertEqual(body.count(f'blockoverride "{name}"'), 1, name)
+
+    def test_the_gate_sits_on_a_parent_of_the_entry(self):
+        """The player as Country, the tab's scope-free gate on the same parent,
+        and the entry through GetPlayerJournalEntry on a child that holds the
+        chart (gotchas #22, #29); Demographics, which reads Country, needs no
+        entry. With the gate shut, one line in its place."""
+        for chart in charts.CHARTS:
+            body = self.popups[charts.popup_name(chart)]
+            gate = (f"GetScriptedGui('{chart.gate}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
+            large = f"{charts.wrapper_name(chart, charts.LARGE)} = {{}}"
+            with self.subTest(chart=chart.id):
+                shown = body.index(f'visible = "[{gate}]"')
+                outer = body.rindex("{", 0, shown)
+                self.assertIn('datacontext = "[GetPlayer]"', body[outer:shown])
+                self.assertGreater(_close(body, outer), body.index(large))
+                contexts = re.findall(r"GetPlayerJournalEntry\('(\w+)'\)", body)
+                if chart.entry is None:
+                    self.assertEqual(contexts, [])
+                else:
+                    self.assertEqual(contexts, [chart.entry])
+                    context = body.index(f"datacontext = \"[GetPlayerJournalEntry('{chart.entry}')]\"")
+                    inner = body.rindex("{", 0, context)
+                    self.assertGreater(inner, shown)
+                    self.assertGreater(_close(body, inner), body.index(large))
+                    self.assertLess(_close(body, inner), _close(body, outer))
+                gone = body.index(f'visible = "[Not( {gate} )]"')
+                self.assertGreater(gone, _close(body, outer))
+                self.assertIn('text = "te_chart_gone"', body[gone:])
+
+    def test_the_gate_and_nothing_else(self):
+        """The viewer shows its chart while the tab's gate holds and on nothing
+        more: what else hides a chart in its panel only ever turns on, or (the
+        policy-rate pair's law) leaves a chart that still draws
+        (gen_te_history_charts.py, "THE GATE AND NOTHING ELSE")."""
+        for chart in charts.CHARTS:
+            body = self.popups[charts.popup_name(chart)]
+            listed = body[body.index('blockoverride "popup_list"'):]
+            gate = f"GetScriptedGui('{chart.gate}').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+            with self.subTest(chart=chart.id):
+                self.assertEqual(re.findall(r'visible = "(.*)"', listed), [f"[{gate}]", f"[Not( {gate} )]"])
 
 
 if __name__ == "__main__":

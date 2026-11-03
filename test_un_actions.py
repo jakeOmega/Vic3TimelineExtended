@@ -99,9 +99,14 @@ class ButtonsAreTheAisTest(unittest.TestCase):
                 self.assertTrue(visible.startswith("is_ai = yes"), visible)
 
     def test_the_tab_has_no_button_grid(self):
+        """The tab's body (te_un_tab_body), which the Diplomacy panel's tab and
+        the Timeline Extended window's both mount."""
         tab = _read(TAB)
         start = tab.index("name = \"te_diplomacy_un_tab\"")
-        un_tab = tab[start:tab.index("### END MOD ###", start)]
+        self.assertIn("te_un_tab_body = {}", tab[start:tab.index("### END MOD ###", start)])
+        layout = _read(os.path.join(REPO, "gui", "journal_entry_widgets", "un_layout_widget.gui"))
+        start = layout.index("type te_un_tab_body = te_system_tab_frame {")
+        un_tab = layout[start:layout.index("\n\t}\n", start)]
         self.assertIn("te_un_status_sections = {}", un_tab)
         self.assertNotIn("te_je_scripted_buttons", un_tab)
         self.assertNotIn("te_un_tab_actions_closed", un_tab)

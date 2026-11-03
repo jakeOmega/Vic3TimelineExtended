@@ -13,6 +13,8 @@ import re
 import unittest
 
 import gui_tree
+from gui_test_helpers import assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
 
@@ -30,6 +32,10 @@ SGUIS_FILE = os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis
 STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
           "te_covert_sec_counterintel", "te_covert_sec_known"]
 REFERENCE = ["te_covert_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_covert_overview_panel", "te_covert_sec_operations"],
+                ["te_covert_sec_funding", "te_covert_sec_networks", "te_covert_sec_counterintel"],
+                ["te_covert_sec_known", "te_covert_sec_how"]]
 # root name -> (container, what it wraps)
 ROOTS = {
     "widget_je_covert_overview": ("custom_widget_container_1", "te_covert_overview_panel"),
@@ -180,7 +186,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"covert_ops_closed", "covert_nets_closed", "covert_funding_closed",
-                                 "covert_counterintel_closed", "covert_known_closed", "covert_how_open"})
+                                 "covert_counterintel_closed", "covert_known_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -192,15 +198,26 @@ class FlagTest(unittest.TestCase):
                 self.assertGreaterEqual(bare, 2, f)
 
     def test_each_section_has_its_own_flag(self):
-        for sec in STATUS + REFERENCE:
+        for sec in STATUS:
             body = _type_body(self.text, sec)
             self.assertEqual(len(re.findall(r"GetVariableSystem\.Toggle\('", body)), 1, sec)
 
-    def test_only_how_it_works_starts_collapsed(self):
-        how = _type_body(self.text, "te_covert_sec_how")
-        self.assertIn("GetVariableSystem.Toggle('covert_how_open')", how)
+    def test_every_live_section_starts_open(self):
         for sec in STATUS:
             self.assertRegex(_type_body(self.text, sec), r"Toggle\('covert_\w+_closed'\)", sec)
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_covert_warfare_help_popup, on te_popup = help_covert_warfare); its
+        collapse flag retired with its content (test_te_help_pages.py)."""
+        how = _type_body(self.text, "te_covert_sec_how")
+        self.assertIn('text = "je_iw_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
+        self.assertNotIn("Toggle", how)
+        self.assertNotIn("covert_how_open", self.text)
+        self.assertNotIn("covert_note", how)
 
 
 class StateGateTest(unittest.TestCase):
@@ -594,9 +611,12 @@ class KnownSectionTest(unittest.TestCase):
         self.assertLess(composer.index("te_covert_sec_counterintel = {}"), composer.index("te_covert_sec_known = {}"))
 
     def test_the_military_tab_gets_it_from_the_composer(self):
-        # The Covert tab instances te_covert_status_sections, so it needs no edit of its own.
+        # The Covert tab's body instances te_covert_status_sections, so the
+        # tab needs no edit of its own.
         self.assertNotIn("te_covert_sec_known", _read(MILITARY))
-        self.assertIn("te_covert_status_sections = {}", _read(MILITARY))
+        self.assertIn("te_covert_tab_body = {}", _read(MILITARY))
+        self.assertIn("te_covert_status_sections = {}", _type_body(_read(GUI), "te_covert_tab_body"))
+        self.assertNotIn("te_covert_sec_known", _type_body(_read(GUI), "te_covert_tab_body"))
 
     def test_hidden_while_nothing_is_watched(self):
         self.assertIn("visible = \"[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]\"",
@@ -695,7 +715,7 @@ class KnownSectionTest(unittest.TestCase):
             self.assertIn(key, self.loc, key)
 
     def test_how_it_works_explains_watching(self):
-        how = _type_body(self.gui, "te_covert_sec_how")
+        how = _type_body(self.gui, "te_covert_warfare_help_body")
         self.assertIn('text = "je_iw_how_sub_watching"', how)
         self.assertLess(how.index("je_iw_how_ci"), how.index("je_iw_how_sub_watching"))
         self.assertLess(how.index("je_iw_how_sub_watching"), how.index("je_iw_how_sub_standing"))
@@ -948,7 +968,7 @@ class WidthBudgetTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
         gui = _read(GUI)
-        how = _type_body(gui, "te_covert_sec_how")
+        how = _type_body(gui, "te_covert_warfare_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sec in STATUS + ["te_covert_overview_panel", "widget_je_covert_operation_row",
@@ -958,7 +978,7 @@ class HowItWorksTest(unittest.TestCase):
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
 
     def test_every_topic_has_a_heading(self):
-        how = _type_body(_read(GUI), "te_covert_sec_how")
+        how = _type_body(_read(GUI), "te_covert_warfare_help_body")
         self.assertEqual(how.count("covert_subheader = {"), len(HOW_KEYS))
         self.assertEqual(how.count("covert_note = {"), len(HOW_KEYS))
 
@@ -1147,15 +1167,22 @@ class MilitaryCovertTabTest(unittest.TestCase):
         cls.military = _read(MILITARY)
         cls.blocks = _marked(cls.military, TAB_TAG)
 
-    def _content(self):
+    def _host(self):
         body = self.blocks[1]
         self.assertIn('name = "te_military_covert_tab"', body)
         return body
 
+    def _content(self):
+        """The tab's body (te_covert_tab_body), which the Military panel's tab
+        and the Timeline Extended window's both mount
+        (test_te_system_tab_bodies.py checks the mounts)."""
+        self.assertIn("te_covert_tab_body = {}", self._host())
+        return _type_body(_read(GUI), "te_covert_tab_body")
+
     def test_two_marked_blocks_the_button_and_the_content(self):
         self.assertEqual(len(self.blocks), 2)
         self.assertIn('blockoverride "fifth_button"', self.blocks[0])
-        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._content())
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._host())
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
@@ -1164,9 +1191,8 @@ class MilitaryCovertTabTest(unittest.TestCase):
         self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections",
                                    "te_covert_reference_sections"])
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index(wrapped[-1]))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
     def test_the_journal_draws_nothing_the_composers_do_not(self):
         """No te_je_* piece is needed (feasibility study 5.1): no goal bar, no
@@ -1185,18 +1211,16 @@ class MilitaryCovertTabTest(unittest.TestCase):
         body = self._content()
         dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_covert_warfare')]\"")
         self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
+        # Never on the widget that carries the datacontext itself (the
+        # frame's tab_entry block holds it alone).
+        self.assertNotIn("visible", body[body.index('blockoverride "tab_entry"'):dc])
         # The header sits outside the gate.
         self.assertLess(body.index('text = "je_covert_warfare"'), body.index(f'visible = "[{TAB_GATE}]"'))
 
     def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self._content()
-        dc = body.index("GetPlayerJournalEntry('je_covert_warfare')")
-        head = body[dc:body.index("te_covert_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's column, a fixed 520 (test_te_system_tab_bodies.py)."""
+        self._content()
+        self.assertRegex(_read(GUI), r"type te_covert_tab_body = te_system_tab_frame \{")
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         button = self.blocks[0]
@@ -1284,6 +1308,22 @@ class MilitaryCovertTabTest(unittest.TestCase):
                 for _ in range(line.count("}")):
                     if len(stack) > 1:
                         stack.pop()
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_covert_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_covert_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_covert_wide_sections",
+                                             layout=("te_covert_tab_body", "te_covert_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["covert_warfare"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_covert_tab_body", "te_covert_tab_layout", "te_covert_wide_sections"))
 
 
 if __name__ == "__main__":

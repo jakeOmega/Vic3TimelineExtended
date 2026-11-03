@@ -10,21 +10,22 @@ How to build each piece (widget types, data binding, scripted GUIs, the engine's
 
 A player who already knows the system and has opened the panel to check on it. Did the credibility pillar go up? Is the resolution passing? Which conventions bind us? Every choice below follows from that reader.
 
-The walls of text still matter, but for players learning the mod. They stay in the panel, collapsed, where the experienced player never has to scroll past them.
+The walls of text still matter, but for players learning the mod. They live on each system's Help page, a click away, where the experienced player never has to scroll past them.
 
 ## The rules
 
 The rules run roughly from the most to the least important.
 
-### 1. Dynamic content is visual and open; explanations are collapsed
+### 1. Dynamic content is visual and open; explanations are on the Help page
 
 - Anything that changes from month to month gets a visual where one fits (a bar, a pie, an icon, a table) and is **open by default**. Examples are missions in the field, the resolution in session, the authority pillars and why authority is moving.
-- Anything that explains how the system works goes into **one collapsed "How X Works" section** at the bottom of the panel, with a subheading per topic. Don't sprinkle explanatory notes through the live sections. `long_tooltip_audit.py` lists live text and tooltips over 500 rendered characters.
+- Anything that explains how the system works goes on **the system's Help page**, with a subheading per topic. Don't sprinkle explanatory notes through the live sections. `long_tooltip_audit.py` lists live text and tooltips over 500 rendered characters.
+- *(owner, 2026-11-02: a Help page behind a "?")* The page is a popup for now, the plan's answer that the play-test settles (`te_<key>_help_popup` in `gui/te_popups.gui`, its content `te_<key>_help_body`), opened by the "?" at the right of the tab's header (`te_help_button`) and by the "How X Works" link at the foot of the panel, which is that section's header alone. It reads `GetPlayer` only, so it opens from any host, whether or not the player holds the entry (`test_te_help_pages.py`). Every system tab has its page (`test_every_system_with_a_tab_has_a_page`). A tab with no header (Nation, Budget Breakdown, Demographics) has the link alone. A second How section elsewhere (the Light Tax Code's, Solar Colonization's, the Fossil Transition's, the state subtab's) is a second link to the same page, which holds its topics under their own heading.
 - The overview at the top is always shown and cannot be collapsed.
 - *(play-test)* A **history chart** is open by default. A **list of past items** (an archive, a ledger, ended missions) starts collapsed. A **live list** (rivals, pressure, networks) is open.
 - *(play-test)* The journal entry's own **status text must not repeat the overview.** When the overview shows everything it said, it is empty while the entry is active. It keeps one line for the inactive entry, which draws no overview.
 
-Example: `te_un_status_sections` (open, dynamic) and `te_un_reference_sections` → `te_un_sec_how` (collapsed) in `gui/journal_entry_widgets/un_layout_widget.gui`.
+Example: `te_banking_status_sections` (open, dynamic) and `te_banking_reference_sections` → `te_banking_sec_how` (the link), with the page's content in `te_banking_help_body`, in `gui/journal_entry_widgets/banking_layout_widget.gui`.
 
 ### 2. Nothing is lost
 
@@ -102,7 +103,8 @@ Example: the overview's first row and the agency icons in `gui/journal_entry_wid
 - *(2026-10-27 audit, WIN-1)* **Every greyed tab's checklist has one shape.** The header is the tab's own name, spliced from the tab's key (`#b $te_market_tab_global_warming$#!`, not the entry's name). The lead-in is `Not open yet. It opens once:` on every tab. Each condition is one second-person clause with no full stop ("You have a coastal state", "You hold an overseas colony or a colonial subject"); a world condition names who ("Any country has researched …"). An OR stays one `custom_tooltip` line, since a bare OR prints an empty "All of these:". When every condition passes but the tab is still greyed, the tooltip is the shared `te_system_tab_met_tt`; a system whose timing differs keeps its own (the Seabed's `te_window_tab_seabed_met_tt`, "at the next seabed sharing").
 - *(owner, 2026-10-17)* **An entry every country holds, whose system starts later, opens its tab from the start.** Banking's entry is every country's, dormant until its financial cycle starts. The overview then shows what the system needs (a Not Started cell, its checklist on hover), the readings that already exist (Monetary Policy) still show, and each control is greyed with the start as its tooltip's first line and said once above its rows (rule 6). Sections that only mean something once the system runs (Active Policies, the history) wait for it. Banking's early read-only readout (#805) now serves only a country without the entry: the game's first fortnight, and the rebels of a running revolution.
 - *(owner, 2026-10-17)* **The Timeline Extended window's Nation tab is the one tab with no system behind it**: always open and first, never greyed, so the window opens there unless an open system tab was the last chosen.
-- *(owner, 2026-10-17)* **One tab strip per window, up to six tabs**, as vanilla's panels hold five and the mod's Budget, Diplomacy and Market panels six. A two-word name that wraps or shrinks on a full strip, as vanilla's "Nation Formation" does, is no reason for a second strip: the Timeline Extended window had one for two of its five tabs.
+- *(owner, 2026-10-17)* **One tab strip per window, up to six tabs**, as vanilla's panels hold five and the mod's Budget, Diplomacy and Market panels six. A two-word name that wraps or shrinks on a full strip, as vanilla's "Nation Formation" does, is no reason for a second strip.
+- *(owner, 2026-11-02)* **The Timeline Extended window also shows every tab that lives in a vanilla panel**, the same body as the host's, so the window holds every system in one place. It is the one window with more than one strip: up to three strips of five, stacked in the side panel and side by side in full screen (its own systems, then Budget's and Market's, then Population's, Society's, Diplomacy's and Military's). Its tabs take the systems' full names (the entries', not the hosts' short ones: Global Warming, not Climate). Every other window keeps one strip of up to six.
 - *(play-test, 2026-09-30)* **System tabs in vanilla panels, and in the mod's own window, carry no icon**, as vanilla's tabs don't; the tab's place after vanilla's and its greyed-until-unlocked checklist mark it as the mod's.
 - The tab reads the entry through `GetPlayerJournalEntry('<key>')` (gotcha #29) and ends with an **"Open Journal Entry"** button, placed below everything else.
 - **Build each section as a type**, so the journal entry and the tab compose the same pieces. The journal entry stays and may shrink to a stub once the tab carries everything.
