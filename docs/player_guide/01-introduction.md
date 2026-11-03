@@ -200,19 +200,23 @@ appears once one of those permanent effects adds to it. A state, building or
 interest group row is what your country gives each of them; their own panels add
 their local sources.
 
-Where These Come From, collapsed at the bottom, lists the permanent effects
+Where These Come From, collapsed below the sections, lists the permanent effects
 themselves under the section whose systems granted them, and its heading gives
 how many there are. Hover one to see what it does at its current size.
 
-The Modifiers list in the country panel's Information tab leaves these effects
-out, and a line under it gives how many it left out. On your own country an
-arrow beside that line opens the Nation tab; on another country's it opens
-that country's Nation tab in National Info, which shows all of it: the scores,
-the rows, the permanent effects and the UN lines. The list keeps the timed
-effects, such as what an event has just done to you, and a few others: Nuclear Power,
-and what a foreign operation is doing to you. A system's weekly costs are in the
-Budget panel's Breakdown tab. Tooltips that break down a figure, such as
-legitimacy, still name every source.
+All Modifiers, collapsed under it, lists every modifier your country holds, as
+the base game's country panel does: the timed effects, such as what an event has
+just done to you, with the time each has left; the permanent effects the sections
+add up; and a few that no section covers, such as Nuclear Power and what a
+foreign operation is doing to you. Its heading gives how many there are.
+
+The country panel's Information tab doesn't list modifiers. Under its Modifiers
+heading, a line gives how many the country holds. On your own country an arrow
+beside that line opens the Nation tab; on another country's it opens that
+country's Nation tab in National Info, which shows all of it: the scores, the
+rows, the permanent effects, All Modifiers and the UN lines. A system's weekly
+costs are in the Budget panel's Breakdown tab. Tooltips that break down a
+figure, such as legitimacy, still name every source.
 
 ## How the guide is organized
 
