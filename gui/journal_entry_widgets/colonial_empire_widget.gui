@@ -16,7 +16,10 @@
 ###       the colonial subjects, each with its own buttons, and Planned Full
 ###       Decolonization), why stability is moving (pillar bars),
 ###       international pressure (a row per great power that condemns or backs
-###       us), the three colonial programmes.
+###       us), the three colonial programmes, then the two sections that
+###       outlive the entry: our stance on colonialism with its three buttons,
+###       and the largest colonial powers (te_ce_sec_stance, te_ce_sec_powers;
+###       the tab shows them alone without the entry, te_ce_readout).
 ###   widget_je_colonial_empire_reference  custom_widget_container_3
 ###       te_ce_reference_sections: the two history charts, then "How the
 ###       Colonial Empire Works", a link to the Help page that holds the
@@ -2777,6 +2780,14 @@ types colonial_empire_widget_types
 		}
 		colonial_empire_subheader = {
 			blockoverride "subheader_text" {
+				text = "je_colonial_empire_how_sub_stance"
+			}
+		}
+		colonial_empire_note = {
+			text = "je_colonial_empire_how_stance"
+		}
+		colonial_empire_subheader = {
+			blockoverride "subheader_text" {
 				text = "je_colonial_empire_how_sub_programmes"
 			}
 		}
@@ -2807,6 +2818,610 @@ types colonial_empire_widget_types
 	}
 
 	### ======================================================================
+	### OUR STANCE AND THE COLONIAL POWERS (owner, 2026-11-03). The two
+	### sections that outlive the entry: the country's stance on colonialism,
+	### with the three buttons that change it, and the largest colonial powers
+	### with where each stands. The entry's live sections end with them, and
+	### without the entry the tab shows them alone (te_ce_readout, from the
+	### moment the country has researched Decolonization). So they read
+	### GetPlayer and never JournalEntry, and carry no IsActive gate: the
+	### datacontext of the readout has no entry. Script:
+	### common/scripted_effects/decolonization_stance_effects.txt; figures:
+	### common/script_values/decolonization_stance_values.txt.
+	###
+	### OP TABLE — colonial_empire_stance_sgui
+	###   0  condemn colonialism   1  neutral   2  back the colonial powers
+	### ======================================================================
+
+	### A line of Our Stance on Colonialism: "Label: value", the value right
+	### of its fixed cell. 4 + 200 + 4 + 264 + 4 = 476: the longest value,
+	### "Dormant: not a great power", is 26 characters, about 243 units.
+	type te_ce_stance_line = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 200 -1 }
+			maximumsize = { 200 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			elide = right
+			using = colonial_empire_fontsize_row
+			block "line_label" {}
+		}
+		block "line_values" {}
+	}
+
+	### The stance, whether it is in force (a great power's, at its influence
+	### cost; a lesser power's lies dormant) and when it can next change, then
+	### the three buttons. Each button is always drawn, in a fixed 476 row, and
+	### greys out with its reason on hover (rule 6): the stance held already,
+	### the cooldown, great-power rank and influence for a side. Its hover then
+	### says what it does: the stance, the policy modifier and the reactions at
+	### home (decol_stance_take_*). Open by default.
+	type te_ce_sec_stance = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_stance_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_stance_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_stance_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_stance_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_stance_closed'))]"
+
+			te_ce_stance_line = {
+				blockoverride "line_label" {
+					text = "je_colonial_empire_stance_label"
+				}
+				blockoverride "line_values" {
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)-1' )]"
+						text = "je_colonial_empire_stance_anti"
+						tooltip = "je_colonial_empire_stance_anti_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_stance_neutral"
+						tooltip = "je_colonial_empire_stance_neutral_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_code'), '(CFixedPoint)1' )]"
+						text = "je_colonial_empire_stance_pro"
+						tooltip = "je_colonial_empire_stance_pro_tt"
+					}
+				}
+			}
+			te_ce_stance_line = {
+				blockoverride "line_label" {
+					text = "je_colonial_empire_stance_force_label"
+				}
+				blockoverride "line_values" {
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_stance_force_none"
+						tooltip = "je_colonial_empire_stance_force_none_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)1' )]"
+						text = "je_colonial_empire_stance_force_yes"
+						tooltip = "je_colonial_empire_stance_force_yes_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)2' )]"
+						text = "je_colonial_empire_stance_force_dormant"
+						tooltip = "je_colonial_empire_stance_force_dormant_tt"
+					}
+				}
+			}
+			te_ce_stance_line = {
+				blockoverride "line_label" {
+					text = "je_colonial_empire_stance_next_label"
+				}
+				blockoverride "line_values" {
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' ) )]"
+						text = "je_colonial_empire_stance_next_now"
+						tooltip = "je_colonial_empire_stance_next_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('decol_stance_disp_months_left'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_stance_next_wait"
+						tooltip = "je_colonial_empire_stance_next_tt"
+					}
+				}
+			}
+
+			### The three buttons: 3 x 150 and two 13 px gaps = 476.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 13
+				margin_top = 6
+				minimumsize = { 476 -1 }
+				maximumsize = { 476 -1 }
+				datacontext = "[GetScriptedGui('colonial_empire_stance_sgui')]"
+
+				button = {
+					using = default_button_action
+					size = { 150 28 }
+					parentanchor = vcenter
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 140
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_stance_btn_anti"
+					}
+				}
+				button = {
+					using = default_button_action
+					size = { 150 28 }
+					parentanchor = vcenter
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 140
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_stance_btn_neutral"
+					}
+				}
+				button = {
+					using = default_button_action
+					size = { 150 28 }
+					parentanchor = vcenter
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 140
+						elide = right
+						using = colonial_empire_fontsize_row
+						text = "je_colonial_empire_stance_btn_pro"
+					}
+				}
+			}
+		}
+	}
+
+	### The Colonial Powers' column heads. Fixed cells, 28 + 160 + 80 + 130 +
+	### 58 and four 4 px gaps = 472: the longest status, "Not begun", and
+	### the longest band, "Solidified", fit 130 at the row size. The flag has
+	### no head.
+	type te_ce_power_head = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 28 24 }
+		}
+		widget = {
+			size = { 160 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 160
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				text = "je_colonial_empire_power_head_name"
+				tooltip = "je_colonial_empire_power_head_name_tt"
+			}
+		}
+		widget = {
+			size = { 80 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 80
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				text = "je_colonial_empire_power_head_people"
+				tooltip = "je_colonial_empire_power_head_people_tt"
+			}
+		}
+		widget = {
+			size = { 130 24 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 130
+				elide = right
+				align = left|nobaseline
+				using = colonial_empire_fontsize_row
+				text = "je_colonial_empire_power_head_status"
+				tooltip = "je_colonial_empire_power_head_status_tt"
+			}
+		}
+		widget = {
+			size = { 58 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 58
+				elide = right
+				align = right|nobaseline
+				using = colonial_empire_fontsize_row
+				text = "je_colonial_empire_power_head_stability"
+				tooltip = "je_colonial_empire_power_head_stability_tt"
+			}
+		}
+	}
+
+	### One colonial power: its flag (vanilla's tiny_flag, the country on
+	### click) and name, the people of its colonies and colonial subjects,
+	### where it stands (its entry not begun, the band its entry is in, its
+	### empire secured, or its colonial system collapsed) and its stability
+	### while the entry runs. An item of the datamodel over decol_world_rows,
+	### whose datacontext is the row's script container
+	### (decol_world_refresh_display); the country is reached through its
+	### stored capital, as International Pressure's rows reach theirs. The
+	### row's hover says what our stance does to it a month. Hovers read the
+	### container and the player only (gotcha #24).
+	type te_ce_power_row = widget {
+		size = { 476 28 }
+		tooltip = "[SelectLocalization( Not( EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_weight'), '(CFixedPoint)0' ) ), 'je_colonial_empire_power_row_tt', 'je_colonial_empire_power_row_none_tt' )]"
+
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+			parentanchor = vcenter
+			ignoreinvisible = yes
+
+			widget = {
+				size = { 28 26 }
+				parentanchor = vcenter
+
+				tiny_flag = {
+					parentanchor = center
+					visible = "[ScriptContainer.HasVariable('ce_pw_capital')]"
+					datacontext = "[ScriptContainer.MakeScope.Var('ce_pw_capital').GetState.GetCountry]"
+				}
+			}
+			widget = {
+				size = { 160 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 160
+					fontsize_min = 12
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[ScriptContainer.HasVariable('ce_pw_capital')]"
+					text = "je_colonial_empire_power_name"
+				}
+			}
+			widget = {
+				size = { 80 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 80
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					text = "je_colonial_empire_power_people"
+				}
+			}
+			widget = {
+				size = { 130 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_power_status_not_begun"
+					tooltip = "je_colonial_empire_power_status_not_begun_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)1' )]"
+					text = "je_colonial_empire_power_status_collapsing"
+					tooltip = "je_colonial_empire_power_status_collapsing_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)2' )]"
+					text = "je_colonial_empire_power_status_crumbling"
+					tooltip = "je_colonial_empire_power_status_crumbling_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)3' )]"
+					text = "je_colonial_empire_power_status_strained"
+					tooltip = "je_colonial_empire_power_status_strained_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)4' )]"
+					text = "je_colonial_empire_power_status_stable"
+					tooltip = "je_colonial_empire_power_status_stable_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)5' )]"
+					text = "je_colonial_empire_power_status_solidified"
+					tooltip = "je_colonial_empire_power_status_solidified_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)6' )]"
+					text = "je_colonial_empire_power_status_secured"
+					tooltip = "je_colonial_empire_power_status_secured_tt"
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 130
+					elide = right
+					align = left|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_status'), '(CFixedPoint)7' )]"
+					text = "je_colonial_empire_power_status_collapsed"
+					tooltip = "je_colonial_empire_power_status_collapsed_tt"
+				}
+			}
+			widget = {
+				size = { 58 26 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 58
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_stability'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_power_stability"
+					tooltip = "je_colonial_empire_power_stability_tt"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 58
+					elide = right
+					align = right|nobaseline
+					using = colonial_empire_fontsize_row
+					visible = "[LessThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('ce_pw_row_disp_stability'), '(CFixedPoint)0' )]"
+					text = "je_colonial_empire_power_stability_none"
+					tooltip = "je_colonial_empire_power_stability_none_tt"
+				}
+			}
+		}
+	}
+
+	### The largest colonial powers (decol_world_refresh_display: the eight
+	### with the most people in their colonies and colonial subjects, monthly
+	### and after a change of stance), ours among them if it is one. A live
+	### list, so open by default (rule 1).
+	type te_ce_sec_powers = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		colonial_empire_section_header = {
+			blockoverride "left_text" {
+				text = "je_colonial_empire_powers_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('colonial_empire_powers_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('colonial_empire_powers_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('colonial_empire_powers_closed'))]"
+			}
+		}
+
+		colonial_empire_panel = {
+			visible = "[Not(GetVariableSystem.Exists('colonial_empire_powers_closed'))]"
+
+			# Before the first monthly list, as on a newly opened tab.
+			colonial_empire_list_text = {
+				visible = "[Not(GetScriptedGui('decol_world_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ))]"
+				text = "je_colonial_empire_powers_pending"
+			}
+
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+				visible = "[GetScriptedGui('decol_world_display_ready').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+				te_ce_power_head = {
+					visible = "[Not( IsDataModelEmpty( GetPlayer.MakeScope.GetList('decol_world_rows') ) )]"
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('decol_world_rows')]"
+
+					item = {
+						te_ce_power_row = {
+							datacontext = "[Scope.GetScriptContainer]"
+						}
+					}
+				}
+				colonial_empire_list_text = {
+					visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('decol_world_rows') )]"
+					text = "je_colonial_empire_powers_none"
+				}
+			}
+		}
+	}
+
+	### The tab without the entry (te_window_colonial_empire_readout_sgui):
+	### why the entry is not running, with what opens it on hover, then the
+	### two sections above. In a fixed 520 column, as the entry's are.
+	type te_ce_readout = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		minimumsize = { 520 -1 }
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'ce_readout_entry_tt' ), GetScriptedGui('te_window_colonial_empire_entry_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+
+			colonial_empire_note = {
+				parentanchor = hcenter
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
+				text = "je_colonial_empire_readout_secured"
+			}
+			colonial_empire_note = {
+				parentanchor = hcenter
+				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)7' )]"
+				text = "je_colonial_empire_readout_collapsed"
+			}
+			colonial_empire_note = {
+				parentanchor = hcenter
+				visible = "[LessThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ce_power_status'), '(CFixedPoint)6' )]"
+				text = "je_colonial_empire_readout_none"
+			}
+		}
+
+		te_ce_sec_stance = {}
+		te_ce_sec_powers = {}
+	}
+
+	### ======================================================================
 	### LAYOUT. The one order of the sections.
 	### ======================================================================
 
@@ -2822,6 +3437,8 @@ types colonial_empire_widget_types
 		te_ce_sec_stability = {}
 		te_ce_sec_pressure = {}
 		te_ce_sec_programmes = {}
+		te_ce_sec_stance = {}
+		te_ce_sec_powers = {}
 	}
 
 	### The charts, then how it all works.
@@ -2842,7 +3459,13 @@ types colonial_empire_widget_types
 	### entry's roots wrap, in its order: the overview (which draws the
 	### stability bar, so the entry mounts the bars-on-top marker and nothing
 	### here draws a bar), the live sections, the history charts and How the
-	### Colonial Empire Works. Then Open Journal Entry. Not drawn: the status
+	### Colonial Empire Works. Then Open Journal Entry. Without the entry,
+	### once the country has researched Decolonization, the tab opens on
+	### te_ce_readout instead (tab_before_gate, under
+	### te_window_colonial_empire_readout_sgui, never true with the entry's
+	### gate): our stance and the colonial powers, which outlive the entry
+	### (owner, 2026-11-03), as Banking's readout serves a country without its
+	### entry. Not drawn: the status
 	### line (empty while the entry runs: the overview says it) and the nine
 	### scripted buttons (the AI's: every one's `visible` carries is_ai = yes;
 	### the programme and decision rows carry the same actions for a human).
@@ -2858,6 +3481,16 @@ types colonial_empire_widget_types
 				te_help_button = {
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]"
 				}
+			}
+		}
+		blockoverride "tab_before_gate" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				using = default_list_position
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_ce_readout = {}
 			}
 		}
 		blockoverride "tab_gate" {
@@ -2911,6 +3544,8 @@ types colonial_empire_widget_types
 
 				te_ce_sec_pressure = {}
 				te_ce_sec_programmes = {}
+				te_ce_sec_stance = {}
+				te_ce_sec_powers = {}
 			}
 		}
 

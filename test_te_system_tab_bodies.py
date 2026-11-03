@@ -112,6 +112,11 @@ WINDOW_BODIES = [
 ]
 
 
+# Window bodies that open without their entry too (owner, 2026-11-03), on a
+# readout in tab_before_gate: (its gate, the type it shows).
+READOUTS = {"te_ce_tab_body": ("te_window_colonial_empire_readout_sgui", "te_ce_readout")}
+
+
 class BodyTest(unittest.TestCase):
     """Each tab's body: the frame with its blocks filled, the content the
     window's tab drew inline before the frame (spec § 9.1)."""
@@ -144,7 +149,17 @@ class BodyTest(unittest.TestCase):
                 m = re.fullmatch(rf'\s*block "{layout}" \{{(.*)\}}\s*', content, re.S)
                 self.assertTrue(m, content)
                 self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}$", m.group(1), re.M), composers)
-                self.assertNotIn("visible", body.replace(_override(body, "tab_gate"), ""))
+                rest = body.replace(_override(body, "tab_gate"), "")
+                if name in READOUTS:
+                    # the tab without the entry, before the gate: its own gate,
+                    # never true with the entry's (Banking's #805 shape)
+                    gate, readout = READOUTS[name]
+                    before = _override(body, "tab_before_gate")
+                    self.assertIn(f'visible = "[{_gate(gate)}]"', before)
+                    self.assertIn(f"{readout} = {{}}", before)
+                    self.assertNotIn("JournalEntry", before)
+                    rest = rest.replace(before, "")
+                self.assertNotIn("visible", rest)
 
     def test_the_space_race_body(self):
         """Nine entries, each its own frame (te_sr_window_milestones, generated),

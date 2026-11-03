@@ -133,6 +133,14 @@ gui_country_hidden_modifier_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = heir_ed_ideology_focus_active }
 		add = 1
 	}
@@ -1791,6 +1799,14 @@ te_nation_list_international_count = {
 	}
 	if = {
 		limit = { has_modifier = cultural_hegemony_foreign_benchmark }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
 		add = 1
 	}
 	if = {
@@ -5734,6 +5750,14 @@ te_nation_types_international_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = imperial_federation_modifier }
 		add = 1
 	}
@@ -6007,6 +6031,14 @@ te_nation_group_standing_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = imperial_federation_modifier }
 		add = 1
 	}
@@ -6222,6 +6254,14 @@ te_nation_type_country_prestige_mult_count = {
 	value = 0
 	if = {
 		limit = { has_modifier = colonial_empire_solidified_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
 		add = 1
 	}
 	if = {
@@ -6506,6 +6546,14 @@ te_nation_type_country_influence_mult_count = {
 # Used by: the country_influence_cost_add row
 te_nation_type_country_influence_cost_add_count = {
 	value = 0
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		add = 1
+	}
 	if = {
 		limit = { has_modifier = te_mon_union_pressure }
 		add = 1
@@ -6808,6 +6856,10 @@ te_nation_type_country_nuclear_program_pause_bool_count = {
 te_nation_group_commitments_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = un_regime_climate_emitter_modifier }
 		add = 1
 	}
@@ -6829,6 +6881,10 @@ te_nation_type_country_greenhouse_gas_emissions_mult_count = {
 # Used by: the country_colonial_stability_drift_add row
 te_nation_type_country_colonial_stability_drift_add_count = {
 	value = 0
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		add = 1
+	}
 	if = {
 		limit = { has_modifier = un_regime_colonial_pressure_modifier }
 		add = 1

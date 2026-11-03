@@ -155,6 +155,9 @@ SECTIONS = {
         "intelligence_sharing_defense_shield_modifier", "nd_taboo_*",
         # A colonial subject's overlord in decline
         "colonial_overlord_*",
+        # A great power's stance on colonialism, held while it counts
+        # (decolonization_stance_effects.txt)
+        "gp_anti_colonial_policy_modifier", "gp_pro_colonial_policy_modifier",
         # Foreign cultures' pull on legitimacy, scaled monthly by the cultural
         # hegemony entry's pulse but added to the country itself
         "cultural_hegemony_foreign_benchmark",
@@ -401,6 +404,8 @@ NOT_A_ROW = {
     "state_*_investment_pool_contribution_add": "row: Private Construction (Overinvestment's pool contributions); the "
                                                 "Robot Tax's and the Automation Dividend's own lines in the Economy list",
     "country_tech_spread_add": "row: Global Technological Development",
+    "country_colonial_*_effectiveness_add": "the Colonial Empire tab's Colonial Programs rows, each program's term "
+                                            "(the Anti-Colonial Policy's hypocrite tax on them)",
     "country_banking_*": "the Banking tab", "country_bubble_pressure_monthly_add": "the Banking tab",
     "country_credit_standing_add": "the Banking tab", "country_finance_momentum_monthly_add": "the Banking tab",
     "goods_trade_advantage_*_mult": "the arms embargo's own line in Where These Come From (seven goods)",

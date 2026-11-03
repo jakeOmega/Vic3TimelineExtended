@@ -540,9 +540,11 @@ un_vote_apply_treaty_modifier = {
 	}
 	# Voting YES on decolonization is a public commitment — great powers
 	# that do so adopt the anti-colonial stance variable consumed by the
-	# je_colonial_empire bar (via colonial_gp_condemners_count). Setting
-	# the cooldown variable prevents decolonization_events.14 from firing
-	# afterward and letting the player re-deliberate the same stance.
+	# je_colonial_empire bar (via colonial_gp_condemners_count), through the
+	# stance's one core (decol_stance_core_anti: its influence cost while it
+	# counts, and the 24-month wait before the Colonial Empire tab can change
+	# it). Setting the cooldown variable prevents decolonization_events.14
+	# from firing afterward and letting the AI re-deliberate the same stance.
 	# Only a member that cast a ballot takes the stance: a yes voter (the
 	# proposer included), or a no voter that accepts the declaration anyway
 	# (un_vote.3 option B). A member that cast none — its vote suspended
@@ -556,20 +558,11 @@ un_vote_apply_treaty_modifier = {
 			}
 			country_rank >= rank_value:great_power
 		}
-		set_variable = gp_anti_colonial_stance
-		if = {
-			limit = { has_variable = gp_pro_colonial_stance }
-			remove_variable = gp_pro_colonial_stance
+		custom_tooltip = {
+			text = decol_stance_un_vote_tt
+			decol_stance_core_anti = yes
 		}
 		set_variable = { name = gp_colonial_policy_cooldown days = 1095 }
-		if = {
-			limit = { NOT = { has_modifier = gp_anti_colonial_policy_modifier } }
-			add_modifier = {
-				name = gp_anti_colonial_policy_modifier
-				days = 1095
-				is_decaying = yes
-			}
-		}
 	}
 	if = {
 		limit = {
