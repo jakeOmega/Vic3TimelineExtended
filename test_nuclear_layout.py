@@ -1264,6 +1264,30 @@ class PrivateTest(unittest.TestCase):
         ranking = _scripts("scripted_effects")["update_nuclear_powers_ranking"]
         self.assertIn("has_modifier = nuclear_power", ranking, LEAK_SAFE["nuclear_program_power_estimate"])
 
+    def test_no_custom_loc_asks_the_true_count(self):
+        """The GetCustom calls another country's panel makes (the guarantees'
+        word, figure and line; the crisis's stage and danger) pick their text
+        on triggers. None of them, or of the scripted triggers they call, reads
+        the true count or asks nd_is_armed: the umbrella asks nd_believed_armed,
+        and treaties are public."""
+        texts = list(self.markup.values()) + [self.loc[k] for k in self.keys]
+        names = {n for t in texts for n in re.findall(r"GetCustom\(\s*'(\w+)'\s*\)", t)}
+        self.assertTrue({"nd_public_guarantee_word", "nd_public_guarantee_figure", "nd_public_guarantee_line"} <= names)
+        custom = _scripts("customizable_localization")
+        triggers = _scripts("scripted_triggers")
+        true_count = re.compile(LEAKS.pattern + r"|\bnd_is_armed\b")
+        for name in sorted(names):
+            seen, todo = set(), [custom[name]]
+            while todo:
+                body = todo.pop()
+                with self.subTest(custom=name):
+                    self.assertFalse(true_count.findall(body))
+                for called in re.findall(r"\b(\w+)\s*=\s*(?:yes|\{)", body):
+                    if called in triggers and called not in seen:
+                        seen.add(called)
+                        todo.append(triggers[called])
+        self.assertIn("nd_believed_armed = yes", triggers["nd_under_an_umbrella"])
+
     def test_no_chart_plots_a_stockpile(self):
         """Nuclear's charts are the taboo and its target, the world's: none plots
         an arsenal (scripts/generators/gen_te_history_charts.py's registry)."""
