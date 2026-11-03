@@ -1161,6 +1161,10 @@ class PrivateTest(unittest.TestCase):
                      "ScriptValue('ch_disp_share_frac')", "ScriptValue('ch_disp_share_trend')",
                      "GetScriptedGui('ch_ministry_missing_sgui')", "te_banking_ov_cell"):
             self.assertIn(read, ov, read)
+        # every tier's cell, not just one: a guarded cell would leave that tier blank
+        codes = re.findall(r"visible = \"\[EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('ch_disp_tier_code'\), "
+                           r"'\(CFixedPoint\)(\d+)' \)\]\" blockoverride \"icon_texture\"", ov)
+        self.assertEqual(sorted(map(int, codes)), list(range(len(TIER_ICONS))))
         for key in ("je_ch_ov_tier_tt", "je_ch_ov_rank_value", "je_ch_widget_rank_tt", "je_ch_ov_model_tt",
                     "je_ch_ov_benchmark_tt", "je_ch_ov_share_label", "je_ch_ov_share_tt", "je_ch_ov_leaders_label",
                     "je_ch_ov_prog_running", "je_ch_ov_prog_funding", "je_ch_ov_prog_tt_list",
@@ -1213,6 +1217,15 @@ class PrivateTest(unittest.TestCase):
         self.assertEqual(progs.count("ch_programme_row = {"), 4)
         self.assertIn("ch_programme_row", self.view.open)
         for op in ("outreach", "institutes", "media", "protectionism"):
+        # drawn, not only reached: the overview's hover splices the same status
+        # keys ($je_ch_widget_prog_<op>_status$ in je_ch_ov_prog_tt_list), so the
+        # loc closure alone misses a guard on the row's cells or an instance's
+        row = self._drawn("ch_programme_row")
+        for block in ('block "programme_label"', 'block "programme_status"'):
+            self.assertIn(block, row, block)  # its default {} is blanked, as the instances override it
+        for op in ("outreach", "institutes", "media", "protectionism"):
+            self.assertIn(f'blockoverride "programme_status" {{ text = "je_ch_widget_prog_{op}_status" }}', progs, op)
+            self.assertIn(f'blockoverride "programme_label" {{ text = "je_ch_widget_prog_{op}" ', progs, op)
             self.assertIn(f"je_ch_widget_prog_{op}_status", self.keys, op)
             self.assertIn(f"je_ch_widget_prog_{op}", self.keys, op)
         for key in ("ch_policy_status_active", "ch_policy_status_idle", "je_ch_prog_needs_ministry",
