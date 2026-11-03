@@ -256,6 +256,31 @@ class RegistryTest(unittest.TestCase):
         self.assertIn("'(CFixedPoint)0.5', ScriptContainer", large)    # the floor: 2 of 100 at 84 px
         self.assertIn("'(CFixedPoint)1' )", large)                     # the cap: 4
 
+    def test_the_cycle_chart_thins_its_floor_and_cap(self):
+        """te_history_bar_cycle_phase holds its bars' floor and cap as blocks
+        (phase_value on all six bars, phase_cover_value on the cover). A chart
+        drawing it overrides both with ${thin:...}, or its large size would
+        keep a 13 px cap, and the type's seven defaults are those overrides at
+        SMALL, so the panel draws as the defaults would."""
+        phase = _type_body(_read(os.path.join(REPO, SECTIONS["banking"])), "te_history_bar_cycle_phase")
+        defaults = {name: [b.strip() for b in _block_bodies(phase, name)] for name in ("phase_value", "phase_cover_value")}
+        self.assertEqual([len(defaults["phase_value"]), len(defaults["phase_cover_value"])], [6, 1])
+        users = [c for c in gen.CHARTS if "te_history_bar_cycle_phase = {" in gen.fragment(c)]
+        self.assertEqual([c.id for c in users], ["bank_value"])
+        for chart in users:
+            text = gen.fragment(chart)
+            start = text.index("te_history_bar_cycle_phase = {")
+            bar = text[start:_close(text, text.index("{", start)) + 1]
+            for name, values in defaults.items():
+                with self.subTest(chart=chart.id, block=name):
+                    m = re.search(rf'blockoverride "{name}" \{{', bar)
+                    self.assertIsNotNone(m, f"the fragment leaves {name} to the type's default")
+                    body = bar[m.end():_close(bar, m.end() - 1)]
+                    self.assertIn("${thin:", body)
+                    small = gen.substitute(body, chart, gen.SMALL).strip()
+                    self.assertEqual(set(values), {small}, "the type's defaults are the override at SMALL")
+                    self.assertNotEqual(gen.substitute(body, chart, gen.LARGE).strip(), small)
+
     def test_the_large_wrapper_sets_every_size(self):
         """The large wrapper draws at the viewer's size: a monthly chart gains
         the frame, the bars and both widths, an annual one both widths (its
