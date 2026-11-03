@@ -942,7 +942,7 @@ class GuiTest(unittest.TestCase):
             with self.subTest(mode=mode):
                 self.assertRegex(squash(self.workbench),
                                  r"visible = \"\[And\( GetVariableSystem\.Exists\('te_tax_wb_customs_open'\), "
-                                 r"EqualTo_CFixedPoint\( GetPlayer\.MakeScope\.ScriptValue\('te_tax_view_customs_mode'\), "
+                                 r"EqualTo_CFixedPoint\( Country\.MakeScope\.ScriptValue\('te_tax_view_customs_mode'\), "
                                  rf"'\(CFixedPoint\){mode}' \) \)\]\" text = \"{key}\"")
         for category in CATEGORIES:
             with self.subTest(category=category):
@@ -951,7 +951,7 @@ class GuiTest(unittest.TestCase):
 
     def test_the_plain_option_and_a_member_say_who_sets_tariffs(self):
         self.assertIn("Market panel", self.loc_value("te_tax_wb_customs_native"))
-        self.assertIn("[GetPlayer.GetMarket.GetOwner.GetName]", self.loc_value("te_tax_wb_customs_member"))
+        self.assertIn("[Country.GetMarket.GetOwner.GetName]", self.loc_value("te_tax_wb_customs_member"))
         self.assertTrue(self.loc_value("te_tax_wb_customs_member").startswith("Set by "))
 
     def test_level_names_say_subsidy_below_zero_and_tariff_above(self):
@@ -965,7 +965,7 @@ class GuiTest(unittest.TestCase):
 
     def test_the_steppers_are_the_editors_only(self):
         row = squash(self.workbench.split("type te_tax_customs_row = flowcontainer {", 1)[1].split("\n\ttype ", 1)[0])
-        editor = ("EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_customs_mode'), "
+        editor = ("EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_customs_mode'), "
                   "'(CFixedPoint)1' )")
         self.assertEqual(row.count("button_icon_minus_action = {"), 2)
         self.assertEqual(row.count("button_icon_plus_action = {"), 2)
@@ -983,7 +983,7 @@ class GuiTest(unittest.TestCase):
                     for d in DIRS:
                         for idx, suffix in LEVEL_KEYS.items():
                             # Vanilla's tariff icon for the level, its word on hover (GUI audit TAX-26).
-                            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
                                           f"'te_tax_view_cu_{d}_{good}'), '(CFixedPoint){idx}' )]\" "
                                           f"texture = \"gfx/interface/icons/trade_icons/"
                                           f"{gen.CUSTOMS_LEVEL_TEXTURES[idx]}.dds\" "
@@ -995,12 +995,12 @@ class GuiTest(unittest.TestCase):
         body = squash(self.rows.split("type te_tax_rv_customs_rows = flowcontainer {", 1)[1].split("\n\ttype ", 1)[0])
         for good in catalog():
             for d in DIRS:
-                self.assertIn(f"visible = \"[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                self.assertIn(f"visible = \"[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
                               f"'te_tax_view_cu_{d}_{good}_on'), '(CFixedPoint)0' )]\"", body)
                 self.assertIn(f"ScriptValue('te_tax_view_cu_{d}_{good}_base')", body)
-                blocked = (f"visible = \"[And( NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue("
+                blocked = (f"visible = \"[And( NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue("
                            f"'te_tax_view_cu_{d}_{good}_blocked'), '(CFixedPoint)0' ), NotEqualTo_CFixedPoint( "
-                           f"GetPlayer.MakeScope.ScriptValue('te_tax_view_cu_{d}_{good}_on'), '(CFixedPoint)0' ) )]\"")
+                           f"Country.MakeScope.ScriptValue('te_tax_view_cu_{d}_{good}_on'), '(CFixedPoint)0' ) )]\"")
                 self.assertIn(blocked, body)
         for d in DIRS:
             text = self.loc_value(f"te_tax_rv_cu_blocked_{d}")
