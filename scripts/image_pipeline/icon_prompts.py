@@ -2648,7 +2648,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "pm_pharma_biologics": {"subject": "a syringe beside a small vial and a twisted ribbon strand", "seed": 0},
         "pm_sr_site_marker": {"subject": "a flag on a tall pole planted on a cratered surface beside a small domed habitat", "seed": 2},
         "pm_directed_energy_point_defense": {"subject": "a laser turret on a squat base firing one thick straight beam up into the sky", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
-        "pm_electric_cars": {"subject": "a sleek electric car plugged into a charging post by a thick cable, seen from the side", "seed": 2},
+        "pm_electric_cars": {"subject": "a sleek electric car plugged into a charging post by a thick cable, seen from the side", "seed": 1},
         "pm_electric_civil_highway": {"subject": "an electric car on a wide highway beside a roadside charging post", "seed": 1},
         "pm_electric_industrial_highway": {"subject": "an electric truck with a pantograph on its cab roof driving under overhead power lines", "seed": 1},
         "pm_high_bandwidth": {"subject": "a tall cell tower with many flat antenna panels and a thick cable running down it", "seed": 2},
