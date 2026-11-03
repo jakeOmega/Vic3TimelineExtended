@@ -877,6 +877,100 @@ colonial_empire_clear_path_months = {
 }
 
 # ============================================================================
+# COLONIAL EMPIRE — STARTING AGAIN AFTER IT ENDS (2026-11-03)
+#
+# The engine deletes a finished je_colonial_empire record, failed or completed,
+# and never activates the type again. The owner's 1910 save holds no record of
+# it, active or inactive, for Britain, France, Spain, the Netherlands or the
+# USA, whose entries had ended, while 211 other countries hold an inactive one;
+# France's and Spain's ten-year cooldowns had run out about two years before.
+# So the entry's re-entry rules (its possible: a secured empire never returns,
+# a collapse waits ten years, a voluntary end not at all) held only on paper.
+# This pass makes them real. It runs monthly for every country, from
+# colonial_geography_on_action straight after the separation cache's step, so
+# the colony test reads this month's cache.
+#
+#   1. The self-check. ce_reentry_added, set by step 3 last month, names the
+#      country it was set on. Read once a game, at the first answer that
+#      settles it:
+#        TE_SELF_CHECK OK ce_reentry      the entry the pass added is running
+#        TE_SELF_CHECK BROKEN ce_reentry  it is not, though the country is still
+#                                         due it (ce_reentry_due)
+#      A country no longer due proves nothing (its colony test moved, and the
+#      entry may have ended at once), so it gives no verdict. Nor does a
+#      revolution's winner that inherited the loser's marker (variables merge):
+#      the marker names the dead loser, not the winner. Removed once read.
+#   2. ce_reentry_due (colonial_empire_triggers.txt): the entry's
+#      is_shown_when_inactive and possible, which add_journal_entry skips, and
+#      what the add needs on top.
+#   3. A whole month first. The first pass that finds the country due marks it
+#      (ce_reentry_waiting), and the next adds the entry and logs the add. In
+#      that month the engine activates an inactive record whose possible has
+#      turned true (a country that has never run the entry holds one), so the
+#      pass never races it; and a colony test that holds for a month and no
+#      longer does not start an entry whose voluntary end (.206) would follow
+#      at once. The mark goes whenever the country stops being due, the entry
+#      running among the reasons. A revolution's winner that inherits a
+#      half-counted month adds the entry a month early, which is harmless.
+#
+# If the self-check reads BROKEN, add_journal_entry cannot bring back a type
+# the country has finished. The fallback: the entry never ends on a failure,
+# and keeps a dormant phase in place of `fail` (docs/testing/colonial-holdings-playtest.md,
+# "Starting again after it ends", Self-checks).
+# Scope: country. From colonial_geography_on_action
+# (common/on_actions/colonial_geography_on_actions.txt).
+# ============================================================================
+ce_reentry_monthly = {
+	save_scope_as = ce_reentry_country
+
+	# 1. Did last month's add take?
+	if = {
+		limit = { has_variable = ce_reentry_added }
+		if = {
+			limit = {
+				var:ce_reentry_added ?= scope:ce_reentry_country
+				NOT = { has_global_variable = ce_reentry_selfcheck_done }
+			}
+			if = {
+				limit = { has_journal_entry = je_colonial_empire }
+				set_global_variable = ce_reentry_selfcheck_done
+				debug_log = "TE_SELF_CHECK OK ce_reentry country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] adds=[GetGlobalVariable('ce_reentry_adds').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_colonial_empire last month to a country that had finished it, and the entry is running)"
+			}
+			else_if = {
+				limit = { ce_reentry_due = yes }
+				set_global_variable = ce_reentry_selfcheck_done
+				debug_log = "TE_SELF_CHECK BROKEN ce_reentry country=[THIS.GetCountry.GetTagName] name=[THIS.GetCountry.GetNameNoFormatting] adds=[GetGlobalVariable('ce_reentry_adds').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (the re-entry pass added je_colonial_empire last month, and the country is still due it but holds no entry: add_journal_entry does not bring back a type the country has finished; take the fallback in docs/testing/colonial-holdings-playtest.md)"
+			}
+		}
+		remove_variable = ce_reentry_added
+	}
+
+	# 2-3. Due for a whole month: add the entry.
+	if = {
+		limit = { ce_reentry_due = yes }
+		if = {
+			limit = { has_variable = ce_reentry_waiting }
+			remove_variable = ce_reentry_waiting
+			add_journal_entry = { type = je_colonial_empire }
+			set_variable = { name = ce_reentry_added value = scope:ce_reentry_country }
+			if = {
+				limit = { NOT = { has_global_variable = ce_reentry_adds } }
+				set_global_variable = { name = ce_reentry_adds value = 0 }
+			}
+			change_global_variable = { name = ce_reentry_adds add = 1 }
+			debug_log = "TE_CE_REENTRY: added je_colonial_empire to [THIS.GetCountry.GetNameNoFormatting] country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			set_variable = ce_reentry_waiting
+		}
+	}
+	else_if = {
+		limit = { has_variable = ce_reentry_waiting }
+		remove_variable = ce_reentry_waiting
+	}
+}
+
+# ============================================================================
 # COLONIAL EMPIRE — WHAT A REVOLUTION'S WINNER KEEPS
 #
 # A civil war's winner inherits the loser's variables but none of its

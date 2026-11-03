@@ -29,8 +29,16 @@
 		#   any successful end commits the player out of further colonial JE.
 		# - colonial_empire_collapsed_recently: 10-year cooldown after a fail
 		#   that involved bar=0 (negotiated withdrawal or crumbling collapse).
-		#   The voluntary fail path (bar>0, no colonies) sets NO cooldown --
-		#   reacquiring colonies retriggers the JE immediately.
+		#   The voluntary fail path (bar>0, no colonies) sets NO cooldown.
+		# The engine reads this block only to activate the inactive record a
+		# country holds before its first run. It deletes a finished record and
+		# never activates the type again, so after an end the monthly re-entry
+		# pass (ce_reentry_monthly, decolonization.txt) adds the entry back,
+		# a month after the country is due it (ce_reentry_due,
+		# colonial_empire_triggers.txt, which restates this block word for
+		# word; test_colonial_empire_reentry.py holds the two together).
+		# So reacquiring a colony after a voluntary end, or holding one when
+		# the cooldown runs out, starts the entry within two months.
 		NOT = { has_variable = colonial_empire_completed }
 		NOT = { has_variable = colonial_empire_collapsed_recently }
 	}
@@ -104,7 +112,13 @@
 	# round 2: status text that repeats the overview goes). The entry is shown
 	# while inactive (`is_shown_when_inactive`), where the widgets are hidden,
 	# and there the line says why it is not running: the three ways `possible`
-	# fails.
+	# fails. That inactive record exists only before a country's first run:
+	# the engine deletes a finished record (the re-entry pass adds a new one,
+	# ce_reentry_monthly), so the _completed and _cooldown lines can show only
+	# on a record that has never run, held by a country with the variable: in
+	# practice a revolution's winner (fresh records, and the loser's
+	# variables). After an end, the Timeline Extended window's Colonial Empire
+	# tab says why (te_ce_readout, colonial_empire_widget.gui).
 	#
 	# `first_valid` + `triggered_desc`, the form the journal-entry script docs
 	# name and this mod's other entries use (je_banking.txt, je_civil_rights.txt).
@@ -278,7 +292,10 @@
 			remove_variable = decol_chosen_releases   # read only by .206
 			# Bar reached zero -- 10-year cooldown blocks re-entry even if
 			# colonies are reacquired. Voluntary fail (bar>0) above does not
-			# set this flag, so peaceful decolonizers can re-engage freely.
+			# set this flag, so peaceful decolonizers can re-engage freely:
+			# the re-entry pass (ce_reentry_monthly) adds the entry back a
+			# month after the country is due it, here once the ten years
+			# have run out.
 			set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
 		}
 		else = {

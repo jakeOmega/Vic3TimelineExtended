@@ -582,6 +582,44 @@ ce_entry_unlocked = {
 	}
 }
 
+# Country scope. Is this country due its Colonial Empire entry back? The
+# re-entry pass (ce_reentry_monthly, common/scripted_effects/decolonization.txt)
+# adds je_colonial_empire to a country that has been due for a whole month.
+# The engine deletes a finished record, failed or completed, and never
+# activates the type again, so after an entry ends add_journal_entry is the
+# only way back. That effect skips the entry's is_shown_when_inactive and
+# possible, so this restates both, word for word (test_colonial_empire_reentry.py
+# holds them together), and adds what the add needs on top:
+#   - not decentralized: such a country takes no journal entries, and an add
+#     logs an error (scripting_best_practices.md);
+#   - not the rebels of a running revolution: without an entry of their own
+#     they inherit the nation's when they win, and with one they would run a
+#     fresh bar of their own, whose values would take precedence at the merge
+#     (te_banking_entry_expected leaves them out for the same reason);
+#   - no entry running;
+#   - the separation cache: the colony test reads it (the entry's voluntary
+#     end waits for it for the same reason).
+# Cheap tests first; the colony test walks the states last.
+ce_reentry_due = {
+	# je_colonial_empire's is_shown_when_inactive
+	has_game_rule = decolonization_enabled
+	has_technology_researched = decolonization
+	# What add_journal_entry needs
+	NOT = { is_country_type = decentralized }
+	is_revolutionary = no
+	NOT = { has_journal_entry = je_colonial_empire }
+	has_variable = ce_separation_cached
+	# je_colonial_empire's possible
+	OR = {
+		any_scope_state = {
+			is_overseas_colonial_state = yes
+		}
+		country_has_qualifying_colonial_subject = yes
+	}
+	NOT = { has_variable = colonial_empire_completed }
+	NOT = { has_variable = colonial_empire_collapsed_recently }
+}
+
 # Country-scope (evaluated on a METROPOLE): is it fighting a colonial war?
 # At war, and one of:
 #   - its colonial crackdown is running (colonial_crackdown_modifier, from
