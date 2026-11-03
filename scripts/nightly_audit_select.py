@@ -121,6 +121,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/te_nation_generated_values.txt",
     "gui/te_nation_generated.gui",
     "gui/te_systems_window_generated.gui",
+    "gui/te_national_info_generated.gui",
     "gui/te_history_charts_generated.gui",
     "gui/00_te_country_panel_information.gui",
     "gui/00_te_law_effects.gui",

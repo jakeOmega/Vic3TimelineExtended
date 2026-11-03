@@ -3287,7 +3287,7 @@ types te_demographics_widgets
 	}
 
 	### History: one bar a census year from te_dg_hist (Task 12; kept for played countries and major powers, so a minor AI
-	### country in the Census Data window has none, and its empty charts say so: te_demog_hist_tracked_sgui), on one range of 5,
+	### country in National Info has none, and its empty charts say so: te_history_tracked_sgui), on one range of 5,
 	### 20 or 100 years (te_demog_hist_range; unset shows every sample, up to 100). Open by default (rule 1). Eight charts,
 	### one a unit (issue #1029, after Banking's six): births and deaths per 1,000 side by side, whose gap is natural change;
 	### net migration per 1,000, signed; life expectancy, children per woman and median age; deaths by cause, a column a

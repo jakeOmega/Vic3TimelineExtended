@@ -94,11 +94,12 @@ This generator runs explicitly; it is not a post-load regenerator.
 Run `python3 scripts/generators/gen_te_systems_window.py` after changing its
 `TABS` registry (a tab's key, strip, label, tooltips, gates, body type) or
 `SR_MILESTONES`, its renderers, or vanilla's `block_windows.gui` fixture; `--check` writes nothing and exits 1 when
-the file is stale. `test_te_systems_window.py` fails while it is. It writes:
+either file is stale. `test_te_systems_window.py` and `test_national_info.py` fail while one is. It writes:
 
 | File | Owner script | Input |
 |---|---|---|
 | `gui/te_systems_window_generated.gui` | `scripts/generators/gen_te_systems_window.py` | `test_fixtures/vanilla_gui/block_windows.gui` (vanilla, byte for byte): its `fullscreen_block_window` as `te_fullscreen_block_window`, Back and Close clearing `com_open_window`. `TABS` and `SR_MILESTONES`: the selection templates (`te_systems_window_<tab>_selected` / `_unselected`, `te_systems_window_tax_probes_selected`), the strips (`te_systems_window_strips_narrow`), the scroll area's column of tab mounts (`te_systems_window_tabs_narrow`) and the Space Race body's entries (`te_sr_window_milestones`, one `te_system_tab_frame` per milestone). The window's own, hand-written file keeps the frame, the launcher and the root, and instances them |
+| `gui/te_national_info_generated.gui` | `scripts/generators/gen_te_systems_window.py` | `TABS` (each tab with `public`, in `NI_ORDER`) and its `readout`: National Info's selection templates (`te_ni_pops_selected` / `_unselected`, `te_ni_<tab>_selected` / `_unselected`, `te_ni_strip_shown`, `te_ni_content_shown`), its strips (`te_ni_strips`: Pops, then the public tabs, five a strip) and its column of mounts (`te_ni_tabs`: per public tab, the player's own country's, the Timeline Extended window's full-screen mount, and another country's, the tab's header, its readout and its wide layout under the window's `Country`). The window's own file, the hand-written override of vanilla's Census Data window, instances them |
 
 This generator runs explicitly; it is not a post-load regenerator, so a reload
 never rewrites the window.

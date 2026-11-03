@@ -17,6 +17,7 @@ on_monthly_pulse = {
 		te_repair_judiciary_seed
 		te_repair_lunar_technologies
 		te_repair_era_13_technologies
+		te_repair_history_order
 	}
 }
 
@@ -463,6 +464,37 @@ te_repair_era_13_technologies = {
 				}
 				add_technology_researched = aneutronic_fusion
 				debug_log = "TE_ERA13_TECH_REPAIR: [THIS.GetCountry.GetNameNoFormatting] given Aneutronic Fusion"
+			}
+		}
+	}
+}
+
+# OLD-SAVE REPAIR (#1341): remove after 2027-01-31 or at vanilla 1.15, whichever comes first.
+#
+# National Info (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
+# § 6.6) shows another country's history charts, which draw a store (te_hist)
+# in the order it is kept. Every eviction re-sorts it (te_history_prune_samples
+# calls te_history_sort_samples, common/scripted_effects/te_history_effects.txt),
+# so a store that stops recording is already in order. The only stores out of
+# order are ones scrambled before that sort existed (#356, 2026-09-21) and not
+# evicted since: a country that dropped below major power, or out of the
+# entry its series belongs to, before then. Nobody could open another
+# country's journal entry, so they were unreachable; National Info reaches
+# them. Once, in the first month after the load, every country with a store
+# sorts it. Safe for every country: a store under the cap has never evicted,
+# so it is in order, and the sort's own completeness gate (count >= 240)
+# leaves a shorter list as it is. The flag only saves the 2 x 240 iterations
+# a month; a new game sets it in its first month with nothing to sort.
+# scripts/analysis/check_save_history_order.py fails on any store out of
+# order, frozen or not, so a save shows whether this held.
+te_repair_history_order = {
+	effect = {
+		if = {
+			limit = { NOT = { has_global_variable = te_history_order_repaired } }
+			set_global_variable = te_history_order_repaired
+			every_country = {
+				limit = { has_variable_list = te_hist }
+				te_history_sort_samples = yes
 			}
 		}
 	}

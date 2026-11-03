@@ -17,7 +17,8 @@ loc reads with their classes, the controls, the text), and write(survey) the
 rewrite.
 
 It walks what the tests walk (gui_test_helpers.panel_view, markup_reads,
-panel_loc_keys): the tab's wide composer (gen_te_systems_window.TABS), every type it
+panel_loc_keys): the tab's wide composer (gen_te_systems_window.TABS) and, for a tab
+that opens without its entry, its readout (Tab.readout, gen.ni_types), every type it
 draws outside te_own_country_only and outside a block default that every place
 drawing the type overrides, the templates they use, and every loc key their text
 renders, through splices and GetCustom (common/customizable_localization). A read is
@@ -385,16 +386,17 @@ def _item_tooltip(name, td, pos, item, items_of):
     return None
 
 
-def survey(target, root=REPO, world_loc=(), gate=None, others=None):
+def survey(target, root=REPO, world_loc=(), gate=None, others=None, also=()):
     """Everything the tool reports for a wide composer (a tab's, or any type).
     others: {tab key: the loc keys its panel renders} for the other tabs a
-    country's panel shows, to name the ones that reach a key too."""
+    country's panel shows, to name the ones that reach a key too. also: more
+    types the panel draws beside the target (a tab's readout)."""
     types = h.mod_types(root)
     templates = h.mod_templates(root)
     custom = h.custom_loc(root)
     index = h.loc_index(os.path.join(root, "localization", "english"), root)
     loc = {k: v for k, (v, _, _) in index.items()}
-    names = {target}
+    names = {target} | set(also)
     view = h.panel_view(names, types, templates)
     other, item, drawn_at, spans_of, items_of = _walk(names, types, view)
     opened = view.open
@@ -653,8 +655,8 @@ def world_loc_keys():
 @functools.lru_cache(maxsize=None)
 def _tab_keys(key):
     """The loc keys tab `key`'s panel renders (gui_test_helpers.panel_loc_keys)."""
-    tab, _ = _tab(key)
-    return frozenset(h.panel_loc_keys({tab.wide}, h.mod_types(), h.load_loc()))
+    tab, gen = _tab(key)
+    return frozenset(h.panel_loc_keys(gen.ni_types(tab), h.mod_types(), h.load_loc()))
 
 
 def candidate_tabs():
@@ -670,14 +672,17 @@ def candidate_tabs():
 
 def survey_tab(key, root=REPO):
     """survey() of a tab (gen_te_systems_window.TABS) as BindingTest sees it:
-    its wide composer, WORLD_LOC, its entry's gate on Country for IsActive reads, and
-    the other candidate tabs that render each of its keys."""
+    what National Info's mount for another country draws (gen.ni_types: its
+    wide composer and its readout, Tab.readout), WORLD_LOC, its entry's gate
+    on Country for IsActive reads, and the other candidate tabs that render
+    each of its keys."""
     tab, gen = _tab(key)
     if tab is None:
         raise KeyError(f"{key}: no such tab in gen_te_systems_window.TABS")
     others = {t: _tab_keys(t) for t in candidate_tabs() if t != key}
-    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(entry_gate(tab), gen.COUNTRY_ROOT), others)
-    s.target = f"{tab.key} ({tab.wide})"
+    also = sorted(gen.ni_types(tab) - {tab.wide})
+    s = survey(tab.wide, root, world_loc_keys(), gen.rooted(entry_gate(tab), gen.COUNTRY_ROOT), others, also)
+    s.target = f"{tab.key} ({', '.join([tab.wide] + also)})"
     return s
 
 
