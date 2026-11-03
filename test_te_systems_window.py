@@ -833,7 +833,9 @@ class TabContentTest(unittest.TestCase):
         content = _override(frame, "tab_content")
         guard = content.index("using = te_own_country_only")
         shown = re.findall(r"^\t+(te_\w+) = \{\}$", content[:guard], re.M)
-        own = content[content.rindex("flowcontainer = {", 0, guard):]
+        start = content.rindex("flowcontainer = {", 0, guard)
+        own = content[start:_close(content, content.index("{", start)) + 1]  # the guard's wrapper, no further
+        self.assertEqual(content[start + len(own):].strip(), "", "the guard's wrapper ends the tab's content")
         self.assertRegex(own, rf'^flowcontainer = \{{\s*using = te_own_country_only\s*parentanchor = hcenter\s*'
                               rf'direction = vertical\s*ignoreinvisible = yes\s*flowcontainer = \{{\s*'
                               rf'datacontext = "\[GetPlayerJournalEntry\(\'{key}\'\)\]"\s*parentanchor = hcenter\s*'

@@ -128,6 +128,26 @@ class RefreshTest(unittest.TestCase):
         self.assertRegex(pulse, r"limit = \{ sr_space_race_participant = yes \}(?:(?!is_player)[\s\S])*?"
                                 r"sr_own_fuzz_refresh = yes")
 
+    def test_a_milestone_draws_its_offset_as_it_starts(self):
+        """Review of #1367, M1: the band is drawn around progress + offset x
+        band, so with no offset yet it would sit centered on the exact figure
+        until the next monthly pulse. Each place a milestone starts draws its
+        first offset there, if it has none, so a re-run of the immediate (a
+        revolution's inheritance) keeps the one it has."""
+        first = _body(self.effects, "sr_power_fuzz_first")
+        self.assertRegex(first, r"^\s*if = \{\s*limit = \{ NOT = \{ has_variable = sr_fuzz_until_\$MILESTONE\$ \} \}\s*"
+                                r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}\s*\}\s*$")
+        starts = []
+        for path in ("common/journal_entries/je_space_race.txt", "common/scripted_effects/sr_site_effects.txt"):
+            text = _read(os.path.join(REPO, path))
+            for m in re.finditer(r"set_variable = \{ name = sr_active_(\w+) value = yes \}\n(.*)\n(.*)\n", text):
+                if m.group(1) == "interstellar_results":  # the wait for data: no band
+                    continue
+                starts.append(m.group(1))
+                with self.subTest(path=path, milestone=m.group(1)):
+                    self.assertEqual(m.group(3).strip(), f"sr_power_fuzz_first = {{ MILESTONE = {m.group(1)} }}")
+        self.assertEqual(sorted(starts), sorted(MILESTONES + ("solar_colonization",)))
+
     def test_the_draw(self):
         roll = _body(self.effects, "sr_roll_rival_fuzz")
         branches = re.findall(r"(\d+) = \{ set_variable = \{ name = sr_fuzz_\$MILESTONE\$ value = (-?[\d.]+) \} \}", roll)

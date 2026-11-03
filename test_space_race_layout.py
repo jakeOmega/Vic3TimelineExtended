@@ -20,9 +20,9 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, guard_spans, in_spans,  # noqa: E402
-                              load_loc, loc_closure, mod_types, panel_loc_keys, panel_view, type_closure,
-                              unguarded)
+from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, gui_keys, guard_spans,  # noqa: E402
+                              in_spans, load_loc, loc_closure, mod_types, panel_loc_keys, panel_view,
+                              type_closure, unguarded)
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
@@ -762,7 +762,12 @@ class ProgrammeRowTest(unittest.TestCase):
                 self.assertTrue(cell.lstrip().startswith("}"), "the interstellar cell takes no overrides")
                 names.append("interstellar")
             else:
-                names.append(re.search(r'tooltip = "je_space_race_widget_prog_(\w+)"', cell).group(1))
+                # the player's words, or a neutral twin for another country
+                # (I3); solar colonization's says nothing of who was first
+                m = re.search(r"tooltip = \"\[SelectLocalization\( Country\.IsLocalPlayer, "
+                              r"'je_space_race_widget_prog_(\w+)', 'je_space_race_widget_prog_\1_ni' \)\]\"", cell)
+                m = m or re.search(r'tooltip = "je_space_race_widget_prog_(solar_colonization)"', cell)
+                names.append(m.group(1))
         self.assertEqual(names, ROW)
         for m, cell in zip(names, cells):
             if m == "interstellar":
@@ -813,7 +818,9 @@ class InterstellarCellTest(unittest.TestCase):
                                  visibles[0])
                 self.assertIsNotNone(m, visibles[0])
                 codes.append(int(m.group(1)))
-                self.assertIn(f'tooltip = "je_space_race_widget_prog_interstellar_{n}"', icon)
+                self.assertIn(f"tooltip = \"[SelectLocalization( Country.IsLocalPlayer, "
+                              f"'je_space_race_widget_prog_interstellar_{n}', "
+                              f"'je_space_race_widget_prog_interstellar_{n}_ni' )]\"", icon)
                 self.assertIn(f'texture = "{SR_ICONS}{INTERSTELLAR_STATES[n]}.dds"', icon)
                 self.assertNotIn("alpha", icon, "the art carries the state; no state is faded")
         # Each state tests equality with a code of its own, so no two show at once.
@@ -987,8 +994,12 @@ class OrbitTest(unittest.TestCase):
     def test_rows_and_their_sources(self):
         body = _type_body(_read(GUI), "te_sr_sec_orbit")
         self.assertIn("te_sr_debris_row = {}", body)
-        self.assertEqual(re.findall(r'text = "(je_space_race_widget_orbit_\w+_label)"', body),
+        self.assertEqual(re.findall(r'text = "(?:\[SelectLocalization\( Country\.IsLocalPlayer, \')?'
+                                    r'(je_space_race_widget_orbit_\w+_label)', body),
                          [f"je_space_race_widget_orbit_{r}_label" for r in ("satellites", "strikes", "moratorium", "strike")])
+        # "Our Satellites" is the player's; another country's reads "Satellites" (I3)
+        self.assertIn("text = \"[SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_orbit_satellites_label', "
+                      "'je_space_race_widget_orbit_satellites_ni_label' )]\"", body)
         self.assertNotIn("JournalEntry", body)
 
     def test_debris_shows_once_in_the_tab(self):
@@ -1103,7 +1114,7 @@ class SpaceRaceIconsTest(unittest.TestCase):
         return re.findall(r'texture = "([^"]+)"', cell)
 
     def test_each_state_draws_its_own_icon(self):
-        for anchor, name in (('tooltip = "je_space_race_widget_ov_idle_tt"', "state_idle"),
+        for anchor, name in (("je_space_race_widget_ov_idle_tt', 'je_space_race_widget_ov_idle_tt_ni' )]\"", "state_idle"),
                              ('tooltip = "sr_pace_note_standard"', "state_standard"),
                              ('tooltip = "sr_pace_note_safe"', "state_safe"),
                              ('tooltip = "sr_pace_note_ambitious"', "state_ambitious"),
@@ -1626,22 +1637,183 @@ class PrivateTest(unittest.TestCase):
         shown = [f"je_space_race_widget_band_{m}" for m in CONTROLLED] + ["je_space_race_widget_band_tt"]
         shown += [f"je_space_race_widget_power_prog_{m}" for m in CONTROLLED if m != "interstellar_probe"]
         shown += ["je_space_race_widget_power_prog_interstellar", "je_space_race_widget_ov_first_claimed",
-                  "je_space_race_widget_ov_first_open", "je_space_race_widget_ov_programme_tt",
-                  "je_space_race_widget_ov_idle", "je_space_race_widget_ov_stage",
+                  "je_space_race_widget_ov_first_open", "je_space_race_widget_ov_programme_tt_ni",
+                  "je_space_race_widget_ov_idle", "je_space_race_widget_ov_idle_tt_ni", "je_space_race_widget_ov_stage",
                   "je_space_race_widget_ov_worlds_tt_theirs", "te_window_space_race_idle_note_theirs",
                   "je_space_race_widget_colonies_header", "je_space_race_widget_colonies_held_label",
                   "je_space_race_widget_colonies_held_figure", "je_space_race_widget_colonies_brief_empty",
-                  "je_space_race_widget_orbit_satellites_label", "je_space_race_widget_orbit_strikes_label",
-                  "je_space_race_widget_orbit_moratorium_label", "te_debris_row", "te_orbit_satellites_tt",
-                  "te_orbit_strikes_tt", "te_orbit_moratorium_tt"]
-        shown += [f"je_space_race_widget_reward_{m}" for m in RACING]
+                  "je_space_race_widget_orbit_satellites_ni_label", "je_space_race_widget_orbit_strikes_label",
+                  "je_space_race_widget_orbit_moratorium_label", "te_debris_row", "te_debris_row_tt",
+                  "te_debris_row_tt_cleaners_ni", "te_orbit_satellites_tt_ni", "te_orbit_strikes_tt",
+                  "te_orbit_moratorium_tt_ni", "je_space_race_widget_profile_solar_colonization_ni"]
+        shown += [f"te_orbit_satellites_tt_{w}_ni" for w in ("disrupted", "cooldown", "exposed", "none")]
+        shown += [f"je_space_race_widget_prog_{m}_ni" for m in ROW if m not in ("interstellar", "solar_colonization")]
+        shown += ["je_space_race_widget_prog_solar_colonization"]
+        shown += [f"je_space_race_widget_prog_interstellar_{n}_ni" for n in range(4)]
         self.assertEqual([k for k in shown if k not in self.keys], [], "another country's panel doesn't render these")
-        # and the player's own words, which it doesn't
-        for key in ("je_space_race_widget_ov_worlds_tt_ours", "te_window_space_race_idle_note_ours",
-                    "je_space_race_widget_ov_risk_tt", "je_space_race_widget_pace_tt",
-                    "je_space_race_widget_powers_others", "te_orbit_strike_tt"):
+        # and the player's own words, which it doesn't: the rewards (what
+        # winning would earn us), and the keys whose "we"/"our" the player
+        # keeps while another country reads the _ni twin (I3)
+        mine = ["je_space_race_widget_ov_worlds_tt_ours", "te_window_space_race_idle_note_ours",
+                "je_space_race_widget_ov_risk_tt", "je_space_race_widget_pace_tt",
+                "je_space_race_widget_powers_others", "te_orbit_strike_tt"]
+        mine += [f"je_space_race_widget_reward_{m}" for m in RACING]
+        mine += [k[:-len("_ni")] for k in shown if k.endswith("_ni")]
+        mine += ["je_space_race_widget_orbit_satellites_label"]
+        for key in mine:
             with self.subTest(key=key):
                 self.assertNotIn(key, self.keys)
+
+    # Another country's progress is the estimate, never the exact figure, and
+    # nothing of its plans (spec § 6.4; review of #1367, I4). The band's three
+    # values and its text read only the open band, sr_disp_rival_* with the
+    # country as viewer and rival; and the parts another country sees (the
+    # band row, the Program row, the first-to-finish cell, the country's own
+    # Space Powers row, Orbit and the colonies brief, with what the overviews
+    # pass into them) read none of the player's own figures. Both branches of
+    # a SelectLocalization on Country.IsLocalPlayer count: the parts are
+    # shared, and the player's exact figure has its own row, the bar.
+    EXACT = re.compile(r"^(sr_progress_\w+|sr_disp_progress_frac_(?!interstellar_results$)\w+|sr_pace_rate_\w+"
+                       r"|sr_risk_shown_\w+|sr_disp_status_\w+|sr_funding_\w+|sr_disp_cost_\w+|sr_launch_staged_\w+)$")
+    SHARED = ("te_sr_ov_band_row", "te_sr_ov_programme", "te_sr_ov_first", "te_sr_power_row", "te_sr_sec_orbit",
+              "te_sr_sec_colonies_brief")
+    FED = ("sr_third_cells", "sr_band_text", "sr_band_lo", "sr_band_hi", "sr_band_est")  # overviews' blockoverrides
+
+    @staticmethod
+    def _overrides(body, name):
+        return [body[m.end() - 1:_close(body, m.end() - 1) + 1]
+                for m in re.finditer(rf'blockoverride "{name}" \{{', body)]
+
+    def test_the_band_is_the_estimate(self):
+        gui = _read(GUI)
+        for m in CONTROLLED:
+            body = _type_body(gui, f"te_sr_{m}_overview")
+            for part in ("lo", "hi", "est"):
+                with self.subTest(milestone=m, value=part):
+                    got = [re.sub(r"\s+", " ", o) for o in self._overrides(body, f"sr_band_{part}")]
+                    self.assertEqual(got, ["{ value = \"[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope )."
+                                           f"AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_{part}_{m}')"
+                                           " )]\" }"])
+            with self.subTest(milestone=m, value="text"):
+                self.assertEqual([re.sub(r"\s+", " ", o) for o in self._overrides(body, "sr_band_text")],
+                                 [f'{{ text = "je_space_race_widget_band_{m}" }}'])
+                band = self.loc[f"je_space_race_widget_band_{m}"]
+                self.assertEqual(re.findall(r"'(\w+)'", band), ["sr_rival", f"sr_disp_rival_lo_{m}",
+                                                                "sr_rival", f"sr_disp_rival_hi_{m}"])
+                self.assertEqual(band.count("GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', "
+                                            "Country.MakeScope )"), 2)
+        # the band's hover reads nothing but the band
+        for key in loc_closure({"je_space_race_widget_band_tt"}, self.loc):
+            with self.subTest(hover=key):
+                self.assertEqual([n for n in re.findall(r"'(\w+)'", self.loc[key])
+                                  if n != "sr_rival" and not n.startswith("sr_disp_rival_")], [])
+        self.assertIn('tooltip = "je_space_race_widget_band_tt"', self.types["te_sr_ov_band_row"].body)
+
+    def test_the_shared_parts_read_no_exact_figure(self):
+        drawn = sorted(t for t in type_closure(self.SHARED, self.types) if t in self.view.open)
+        texts = {t: unguarded(self.types[t].body, self.view.skip[t]) for t in drawn}
+        gui = _read(GUI)
+        for m in CONTROLLED:
+            body = _type_body(gui, f"te_sr_{m}_overview")
+            for name in self.FED:
+                for n, text in enumerate(self._overrides(body, name)):
+                    texts[f"te_sr_{m}_overview {name} {n}"] = unguarded(text)
+        keys = set()
+        for text in texts.values():
+            keys |= gui_keys(text, self.loc)
+        keys = loc_closure(keys, self.loc)
+        found = [(where, n) for where, text in sorted(texts.items()) for n in re.findall(r"'([\w.\-]+)'", text)
+                 if self.EXACT.match(n)]
+        found += [(k, n) for k in sorted(keys) for n in re.findall(r"'([\w.\-]+)'", self.loc[k]) if self.EXACT.match(n)]
+        self.assertEqual(found, [], "an exact figure or the player's plans in a part another country sees")
+        # what the walk covers, so the check can't pass on nothing
+        for name in ("te_sr_ov_band_row", "te_sr_ov_prog_cell", "te_sr_ov_prog_cell_interstellar", "te_sr_ov_first",
+                     "te_sr_power_cell", "te_sr_sec_orbit", "te_sr_debris_row", "te_sr_colony_brief_row"):
+            self.assertIn(name, drawn)
+        for key in ("je_space_race_widget_band_tt", "je_space_race_widget_band_suborbital",
+                    "je_space_race_widget_prog_suborbital", "je_space_race_widget_prog_suborbital_ni",
+                    "je_space_race_widget_prog_interstellar_2", "je_space_race_widget_power_prog_suborbital",
+                    "te_orbit_satellites_tt_ni", "te_debris_row_tt", "je_space_race_widget_ov_first_claimed"):
+            self.assertIn(key, keys)
+        self.assertTrue(self.EXACT.match("sr_disp_progress_frac_suborbital"))
+        self.assertFalse(self.EXACT.match("sr_disp_progress_frac_interstellar_results"))
+
+    # The player's own words (I3, review of #1367): each key that speaks as
+    # "we" keeps its text from before National Info, and another country's
+    # panel reads a neutral twin, <key>_ni, chosen on Country.IsLocalPlayer
+    # where the key is used. The phrase pinned is the one the twin drops.
+    OURS = {
+        "je_space_race_widget_orbit_satellites_label": "Our Satellites",
+        "te_orbit_satellites_tt": "#header Our Satellites#!",
+        "te_orbit_satellites_tt_disrupted": "has disrupted our orbital network",
+        "te_orbit_satellites_tt_cooldown": "We were struck",
+        "te_orbit_satellites_tt_exposed": "at war with us",
+        "te_orbit_satellites_tt_none": "We have nothing in orbit",
+        "te_asat_moratorium_detail_bound": "In force, and we are a party",
+        "te_asat_moratorium_detail_not_bound": "In force, but we are not a party",
+        "te_debris_row_tt_cleaners": "Ours: #v [Country.MakeScope.ScriptValue('te_debris_removal_country')|2]#!",
+        "je_space_race_widget_ov_programme_tt": "a flag marks one we were first to",
+        "je_space_race_widget_ov_idle_tt": "The colonies we hold keep their modifiers.",
+        "je_space_race_widget_prog_interstellar_1": "before its data reaches us",
+        "je_space_race_widget_prog_interstellar_2": "Its data reaches us in",
+        "je_space_race_solar_colonization_status_complete": "Our civilization's presence",
+        "sr_prog_state_first": "#G achieved, and we were first#!",
+        "sr_prog_state_signal_received": "#G the signal has reached us#!",
+    }
+
+    def test_the_player_keeps_ours(self):
+        loc, gui = self.loc, _read(GUI)
+        for key, phrase in self.OURS.items():
+            with self.subTest(key=key):
+                self.assertIn(phrase, loc[key])
+                self.assertNotIn("JournalEntry", loc[key])
+                self.assertNotIn("GetPlayer", loc[key])
+        # the twins, and where each is chosen
+        label = "je_space_race_widget_orbit_satellites"
+        self.assertEqual(loc[f"{label}_ni_label"], "Satellites")
+        self.assertIn(f"SelectLocalization( Country.IsLocalPlayer, '{label}_label', '{label}_ni_label' )", gui)
+        for key in ("te_orbit_satellites_tt", "te_orbit_moratorium_tt", "je_space_race_widget_ov_programme_tt",
+                    "je_space_race_widget_ov_idle_tt", "je_space_race_widget_profile_solar_colonization") + tuple(
+                    f"je_space_race_widget_prog_{m}" for m in ROW[:6]) + tuple(
+                    f"je_space_race_widget_prog_interstellar_{n}" for n in range(4)):
+            with self.subTest(dispatch=key):
+                self.assertIn(f"tooltip = \"[SelectLocalization( Country.IsLocalPlayer, '{key}', '{key}_ni' )]\"", gui)
+                self.assertIn(f"{key}_ni", loc)
+        for word in ("disrupted", "cooldown", "exposed", "none"):
+            with self.subTest(sub=word):
+                self.assertIn(f"'te_orbit_satellites_tt_{word}' )", loc["te_orbit_satellites_tt"])
+                self.assertIn(f"'te_orbit_satellites_tt_{word}_ni' )", loc["te_orbit_satellites_tt_ni"])
+                self.assertNotRegex(loc[f"te_orbit_satellites_tt_{word}_ni"], r"\b(we|We|us|our|Our)\b")
+        self.assertEqual(loc["te_orbit_satellites_tt_ni"].replace("_ni'", "'"),
+                         loc["te_orbit_satellites_tt"].replace("#header Our Satellites#!", "#header Satellites#!"))
+        self.assertIn("[AddLocalizationIf( Country.IsLocalPlayer, 'te_debris_row_tt_cleaners' )]"
+                      "[AddLocalizationIf( Not( Country.IsLocalPlayer ), 'te_debris_row_tt_cleaners_ni' )]",
+                      loc["te_debris_row_tt_cleaners_line"])
+        self.assertIn("'te_debris_row_tt_cleaners_line'", loc["te_debris_row_tt"])
+        # the Program row's hovers for another country use the third-person
+        # sr_power_prog_<m>, the Space Powers row's
+        for m in ROW[:6]:
+            with self.subTest(prog=m):
+                self.assertIn(f"[Country.GetCustom('sr_power_prog_{m}')]", loc[f"je_space_race_widget_prog_{m}_ni"])
+        self.assertIn("$sr_power_state_data_received$", loc["je_space_race_widget_prog_interstellar_3_ni"])
+        # the custom loc twins: the same branches, the _ni keys in place of the player's
+        debris = _read(os.path.join(REPO, "common", "customizable_localization", "te_orbital_debris_custom_loc.txt"))
+        self.assertEqual(_block(debris, "te_asat_moratorium_detail_ni").replace("_ni\n", "\n"),
+                         _block(debris, "te_asat_moratorium_detail"))
+        self.assertIn("GetCustom('te_asat_moratorium_detail_ni')", loc["te_orbit_moratorium_tt_ni"])
+        custom = _read(CUSTOM_LOC)
+        flat = lambda b: re.sub(r"\s+", " ", _strip_comments(b)).strip()
+        self.assertEqual(flat(_block(custom, "sr_solar_colonization_profile_ni")).replace("_complete_ni", "_complete"),
+                         flat(_block(custom, "sr_solar_colonization_profile")))
+        self.assertIn("GetCustom('sr_solar_colonization_profile_ni')",
+                      loc["je_space_race_widget_profile_solar_colonization_ni"])
+        # the rewards are the player's alone, as before
+        for m in RACING:
+            with self.subTest(reward=m):
+                self.assertIn("#bold If we are the first nation to do this:#!", loc[f"je_space_race_widget_reward_{m}"])
+                self.assertIn(f"SelectLocalization( Country.IsLocalPlayer, 'je_space_race_widget_reward_{m}', "
+                              "'te_tt_blank' )", gui)
+        self.assertEqual(loc["te_tt_blank"], "")
 
     def test_another_countrys_colonies_read_it(self):
         """te_sr_colony_brief_rows (gen_solar_sites.py): one row per site,
