@@ -64,8 +64,12 @@
 ###     through je: (ch_active_<programme>), but no button.
 ###   - the overview's leader flags read the player's copy of the seats on
 ###     `# world:` lines: only a player holds them (ch_leaders_display_write), and
-###     they are the same three powers for every country. The board, the models
-###     and the history are global stores, the same through any Country.
+###     they are the same three powers for every country. Each slot's gate tests
+###     Not( GetMetaPlayer.IsObserver ) first (gui_modding_guide.md, the observer
+###     paragraph): National Info opens to an observer, who has no GetPlayer, so
+###     the flags stay empty for one instead of logging every frame. The board,
+###     the models and the history are global stores, the same through any
+###     Country.
 ###   - text says "the country's", or splits on Country.IsLocalPlayer (_ours /
 ###     _theirs) where the player guide names the label.
 ###   - every banded word      -> GetCustom('ch_tier_text' / 'ch_tier_blurb' /
@@ -1431,8 +1435,8 @@ types cultural_hegemony_widget_types
 
 								widget = {
 									size = { 70 48 }
-									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write)
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)1' )]"
+									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write); an observer has none, and the flag's read is inside this gate
+									visible = "[And( Not( GetMetaPlayer.IsObserver ), GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)1' ) )]"
 
 									flag = {
 										parentanchor = center
@@ -1446,8 +1450,8 @@ types cultural_hegemony_widget_types
 
 								widget = {
 									size = { 70 48 }
-									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write)
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)2' )]"
+									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write); an observer has none, and the flag's read is inside this gate
+									visible = "[And( Not( GetMetaPlayer.IsObserver ), GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)2' ) )]"
 
 									flag = {
 										parentanchor = center
@@ -1461,8 +1465,8 @@ types cultural_hegemony_widget_types
 
 								widget = {
 									size = { 70 48 }
-									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write)
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)3' )]"
+									# world: the leading powers are the world's; only a player holds their seats (ch_leaders_display_write); an observer has none, and the flag's read is inside this gate
+									visible = "[And( Not( GetMetaPlayer.IsObserver ), GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('ch_disp_leader_count'), '(CFixedPoint)3' ) )]"
 
 									flag = {
 										parentanchor = center

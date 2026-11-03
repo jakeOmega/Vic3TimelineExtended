@@ -11,8 +11,8 @@ import re
 import unittest
 
 import gui_tree
-from gui_test_helpers import (_block_at, _strip_comments, assert_wide_matches_narrow, load_loc, markup_reads,
-                              mod_types, panel_loc_keys, panel_view, unguarded)
+from gui_test_helpers import (_block_at, _strip_comments, assert_wide_matches_narrow, enclosing_block, load_loc,
+                              markup_reads, mod_types, own_props, panel_loc_keys, panel_view, unguarded)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -509,8 +509,9 @@ class LeaderFlagsTest(unittest.TestCase):
                 # (test_te_system_tab_bodies.py; charts-help-national-info spec § 6.7).
                 m = re.search(
                     r"# world: [^\n]+\n\s*"
-                    r"visible = \"\[GreaterThanOrEqualTo_CFixedPoint\( GetPlayer\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
-                    rf"'\(CFixedPoint\){n}' \)\]\"\s*flag = \{{\s*parentanchor = center\s*# world: [^\n]+\n\s*"
+                    r"visible = \"\[And\( Not\( GetMetaPlayer\.IsObserver \), GreaterThanOrEqualTo_CFixedPoint\( "
+                    r"GetPlayer\.MakeScope\.ScriptValue\('ch_disp_leader_count'\), "
+                    rf"'\(CFixedPoint\){n}' \) \)\]\"\s*flag = \{{\s*parentanchor = center\s*# world: [^\n]+\n\s*"
                     rf"datacontext = \"\[GetPlayer\.MakeScope\.Var\('ch_leader_seat_{n}'\)\.GetState\.GetCountry\]\"",
                     self.ov)
                 self.assertTrue(m, f"seat {n}")
@@ -1070,6 +1071,9 @@ class WideTest(unittest.TestCase):
 WIDE = {"te_ch_wide_sections"}
 # A scripted GUI's printed text: the custom_tooltip keys its triggers and effects
 # print, which neither BindingTest nor te_rebind_country.py follows.
+# What gates a world read for an observer (who has no GetPlayer): the observer
+# test first in the widget's `visible`.
+OBSERVER_GATE = 'visible = "[And( Not( GetMetaPlayer.IsObserver ),'
 SGUI_TOOLTIP = re.compile(r"\b(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
 
 
@@ -1166,6 +1170,29 @@ class PrivateTest(unittest.TestCase):
         self.assertEqual(sorted(re.search(r"ch_leader_seat_\d", f.text).group(0) for f in world
                                 if "ch_leader_seat_" in f.text), ["ch_leader_seat_1", "ch_leader_seat_2",
                                                                   "ch_leader_seat_3"])
+
+    def test_every_world_read_is_gated_for_an_observer(self):
+        """National Info opens to an observer, for whom GetPlayer is no country,
+        so a world read of the player's copy logs every frame it draws
+        (gui_modding_guide.md, the observer paragraph). Each sits under a
+        `visible` that tests Not( GetMetaPlayer.IsObserver ) first: its own
+        line's, or a block's around it."""
+        world = [f for f in markup_reads(WIDE, self.types) if f.world]
+        self.assertEqual(len(world), 6)
+        for f in world:
+            with self.subTest(at=f"{f.path}:{f.line}"):
+                body = self.types[f.where].body
+                k = f.line - self.types[f.where].line
+                start = sum(len(line) + 1 for line in body.split("\n")[:k])
+                gated = OBSERVER_GATE in body.split("\n")[k]
+                pos = start
+                while not gated:
+                    a, b = enclosing_block(body, pos)
+                    if (a, b) == (0, len(body)):
+                        break
+                    gated = OBSERVER_GATE in own_props(body[a + 1:b])
+                    pos = a
+                self.assertTrue(gated, f"{f.text.strip()[:100]}: no observer gate over it")
 
     def test_the_programs_are_shown(self):
         """Each program's Running or Idle, from the country's own entry's
