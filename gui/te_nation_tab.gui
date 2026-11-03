@@ -4,8 +4,8 @@
 ### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
 ### score rows and then its type rows (#1030); Where These Come From,
-### collapsed. The explanations are on the Help page (gui/te_popups.gui).
-### House style: docs/guides/gui_style_guide.md.
+### collapsed; All Modifiers, collapsed. The explanations are on the Help page
+### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry and no gate: everything reads the shown country,
 ### Country, which each mount supplies (the window's, the player's; National
@@ -19,8 +19,10 @@
 ### own timed modifiers filtered by name (te_nation_list_<section> in Where
 ### These Come From, and te_nation_row_<row> under a score row, both
 ### generated), each with its own tooltip, so the engine renders the effects
-### at their current scale. The country panel's list hides the same names
-### (gui/00_te_country_panel_information.gui).
+### at their current scale. All Modifiers (te_nation_all_panel) is the same
+### datamodel unfiltered, every modifier the country holds: the country panel's
+### Information tab lists none, only how many, with a goto here
+### (gui/00_te_country_panel_information.gui; owner, 2026-11-03).
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_nation_fontsize_*; rule 3).
@@ -771,6 +773,92 @@ types te_nation_widget_types
 		}
 	}
 
+	### ----------------------------------------------------------------------
+	### All Modifiers: collapsed (te_nation_all_open). Every modifier the country
+	### holds, timed and lasting, in vanilla's row (icon, name, time left, the
+	### modifier's own tooltip) with no filter, so it includes the lasting ones
+	### the sections add up (the owner, 2026-11-03). The country panel's
+	### Information tab lists none: its line counts them and leads here (its
+	### name filter made it lag, #1372). The rows sit inside the panel that the
+	### flag shows, so while it is collapsed none of them is evaluated (gotcha
+	### #42). Drawn while the country holds a modifier, as vanilla's header was.
+	### ----------------------------------------------------------------------
+	type te_nation_all_panel = flowcontainer {
+		visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			tooltip = "te_nation_all_header_tt"
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			### "Label: value": how many modifiers the country holds.
+			blockoverride "left_text" {
+				text = "te_nation_all_header_count"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_nation_all_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_nation_all_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
+			}
+		}
+
+		te_nation_panel = {
+			visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
+
+			### Vanilla's list (country_panel.gui's TIMED MODIFIERS) at the
+			### panel's 480: the name wraps short of the time left.
+			flowcontainer = {
+				datamodel = "[Country.GetTimedModifiers]"
+				direction = vertical
+				spacing = 5
+				minimumsize = { 480 -1 }
+
+				item = {
+					container = {
+						minimumsize = { 480 -1 }
+						tooltip = "[TimedModifier.GetTooltip]"
+
+						flowcontainer = {
+							spacing = 10
+
+							icon = {
+								texture = "[TimedModifier.GetIcon]"
+								size = { 25 25 }
+							}
+
+							textbox = {
+								text = "[TimedModifier.GetName]"
+								autoresize = yes
+								multiline = yes
+								maximumsize = { 340 -1 }
+								align = nobaseline
+								parentanchor = vcenter
+								using = te_nation_fontsize_row
+							}
+						}
+
+						textbox = {
+							text = "[TimedModifier.GetRemainingDuration]"
+							autoresize = yes
+							align = nobaseline
+							parentanchor = right|vcenter
+							using = te_nation_fontsize_row
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### The Help page: every explanation, gathered out of the live sections, one
 	### subheading per topic. The live sections say what is happening; this says
 	### how it works. It reads no country at all, so it opens from any host
@@ -881,15 +969,17 @@ types te_nation_widget_types
 		te_nation_section_science_and_space = {}
 		te_nation_section_international = {}
 		te_nation_sources_panel = {}
+		te_nation_all_panel = {}
 	}
 
 	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
 	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
 	### read down each and then across, so the order is the tab's: the overview
 	### and governance, the economy and what science and the world give, then
-	### Where These Come From. The window mounts it in te_nation_tab_body's
-	### te_nation_tab_layout, in place of te_nation_tab_sections, which carries
-	### no gate or context; its spacing of 10 is the columns' own.
+	### Where These Come From and All Modifiers. The window mounts it in
+	### te_nation_tab_body's te_nation_tab_layout, in place of
+	### te_nation_tab_sections, which carries no gate or context; its spacing of
+	### 10 is the columns' own.
 	type te_nation_wide_sections = te_ui_columns_three {
 		blockoverride "column_1" {
 			te_nation_overview_panel = {}
@@ -904,15 +994,17 @@ types te_nation_widget_types
 		}
 
 		### Where These Come From shows only once a permanent effect is listed,
-		### so the column takes its gate (column_3_visible) and closes up until
-		### then, rather than leave an empty 520 band (test_nation_tab.py holds
-		### them equal).
+		### and All Modifiers while the country holds any modifier, so the
+		### column takes both gates (column_3_visible) and closes up only when
+		### both panels hide, rather than leave an empty 520 band
+		### (test_nation_tab.py holds it to their own gates).
 		blockoverride "column_3_visible" {
-			visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+			visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' ), Not(IsDataModelEmpty(Country.GetTimedModifiers)) )]"
 		}
 
 		blockoverride "column_3" {
 			te_nation_sources_panel = {}
+			te_nation_all_panel = {}
 		}
 	}
 

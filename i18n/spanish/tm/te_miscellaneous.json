@@ -24825,7 +24825,7 @@
  },
  "te_demog_ms_restricted_contraception": {
   "en": "Restricted Contraception",
-  "es": "Anticonceptivos restringidos"
+  "es": "Anticoncepción restringida"
  },
  "te_demog_ms_restricted_contraception_authority_tt": {
   "en": "Needs @aut! [GetPlayer.MakeScope.ScriptValue('te_demog_ms_authority_restricted_contraception')|0] free authority to start",
