@@ -1680,6 +1680,13 @@ decolonization_events.14 = {
 	# Retuned for proposal #9: non-overlord GPs (USSR, USA, post-1945 China)
 	# should pick anti-colonial stance with high reliability so AI overlords
 	# face a steady stream of GP condemnation pressure even early.
+	# Issue #1370 (owner, 2026-11-03): an empire never condemns the colonialism
+	# it practices, and a power with a stake in colonialism, at home or through
+	# a partner, condemns it less often. The adds come first and the factors
+	# last, so no add lifts a factor = 0 (the tests are in
+	# decolonization_stance_triggers.txt). A typical power without colonies:
+	# 26 here against Neutral's 1; regressive, 13 against 5; beside an empire,
+	# 13 against Support's 5-8; both, 6.5.
 	option = {
 		name = decolonization_events.14.a
 		trigger = { decol_stance_affordable = yes }
@@ -1689,22 +1696,9 @@ decolonization_events.14 = {
 			# Big bonus for non-overlords — the geopolitical leverage play
 			modifier = {
 				trigger = {
-					NOT = {
-						any_scope_state = {
-							is_overseas_colonial_state = yes
-						}
-					}
+					NOT = { decol_holds_colonial_empire = yes }
 				}
 				add = 15
-			}
-			# Strong penalty for overlords — they almost never pick this
-			modifier = {
-				trigger = {
-					any_scope_state = {
-						is_overseas_colonial_state = yes
-					}
-				}
-				add = -10
 			}
 			# Geopolitical-rivalry bonus: condemn the colonial powers we don't like
 			modifier = {
@@ -1739,6 +1733,26 @@ decolonization_events.14 = {
 				}
 				add = 3
 			}
+			# A regressive regime (colonial exploitation, a hierarchy of
+			# peoples, slavery, a jingoist ruler, colonialists in government)
+			# is in no position to condemn it: half as likely (Neutral +4).
+			modifier = {
+				trigger = { decol_ai_regressive = yes }
+				factor = 0.5
+			}
+			# Nor one whose ally, defensive-pact or bloc partner, subject or
+			# overlord runs an empire: half as likely (Support +5).
+			modifier = {
+				trigger = { decol_ai_partner_holds_empire = yes }
+				factor = 0.5
+			}
+			# An empire never condemns colonialism: a colony, a colonial
+			# subject or its Colonial Empire entry (decol_stance_monthly drops
+			# a condemnation an AI empire already holds).
+			modifier = {
+				trigger = { decol_holds_colonial_empire = yes }
+				factor = 0
+			}
 			# A stance costs influence: start one only with the cost and a
 			# spare in hand (decol_stance_ai_can_hold).
 			modifier = {
@@ -1755,6 +1769,12 @@ decolonization_events.14 = {
 		default_option = yes
 		ai_chance = {
 			base = 1
+			# A regressive regime that will not condemn colonialism mostly
+			# stays out (option A's factor)
+			modifier = {
+				trigger = { decol_ai_regressive = yes }
+				add = 4
+			}
 		}
 		decol_stance_take_neutral = yes
 	}
@@ -1766,11 +1786,10 @@ decolonization_events.14 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 0
+			# An empire backs the colonial powers
 			modifier = {
 				trigger = {
-					any_scope_state = {
-						is_overseas_colonial_state = yes
-					}
+					decol_holds_colonial_empire = yes
 				}
 				add = 5
 			}
@@ -1785,6 +1804,12 @@ decolonization_events.14 = {
 					}
 				}
 				add = 3
+			}
+			# And so does a partner of one: stand by our ally's empire
+			# (option A's factor)
+			modifier = {
+				trigger = { decol_ai_partner_holds_empire = yes }
+				add = 5
 			}
 			modifier = {
 				trigger = { NOT = { decol_stance_ai_can_hold = yes } }

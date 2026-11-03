@@ -26,7 +26,8 @@
 #                              monthly and after a revolution: a winner inherits
 #                              the variables and no modifier.
 #   decol_stance_monthly       the cooldown's month, the AI's drop of a stance
-#                              it can no longer pay for, then the refresh.
+#                              it can no longer pay for or of a condemnation
+#                              while it runs an empire, then the refresh.
 #
 # The cores write each modifier explicitly rather than through the refresh,
 # whose limits read the variables: a tooltip evaluates a limit before the
@@ -194,6 +195,20 @@ decol_stance_monthly = {
 			is_ai = yes
 			decol_stance_paid = yes
 			influence < 0
+		}
+		decol_stance_core_neutral = yes
+	}
+	# An AI empire does not condemn the colonialism it practices (issue #1370,
+	# owner 2026-11-03): one that holds the stance, from before it had its
+	# empire, from an older save or from a Decolonization Resolution's vote,
+	# drops it once the stance can change, and The Colonial Question never
+	# gives it back (decolonization_events.14). A dormant stance goes too.
+	else_if = {
+		limit = {
+			is_ai = yes
+			has_variable = gp_anti_colonial_stance
+			NOT = { has_variable = decol_stance_months_left }
+			decol_holds_colonial_empire = yes
 		}
 		decol_stance_core_neutral = yes
 	}

@@ -124,6 +124,10 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 				NOT = { has_variable = gp_anti_colonial_stance }
 			}
 			set_variable = gp_anti_colonial_stance
+			# The stance's 24-month wait, so the AI's monthly review
+			# (decol_stance_monthly) leaves a colonial great power's
+			# condemnation in place while the table is checked.
+			decol_stance_start_cooldown = yes
 		}
 		colonial_empire_refresh_display = yes
 	}
