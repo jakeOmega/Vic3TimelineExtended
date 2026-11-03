@@ -4117,7 +4117,7 @@ types te_history_charts_generated_types
 				}
 			}
 			blockoverride "empty_visible" {
-				visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
+				visible = "[EqualTo_CFixedPoint(Country.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 			}
 			blockoverride "empty_text" { text = "ch_model_hist_empty" }
 			blockoverride "chart_title_width" {
@@ -4370,7 +4370,7 @@ types te_history_charts_generated_types
 				}
 			}
 			blockoverride "empty_visible" {
-				visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
+				visible = "[EqualTo_CFixedPoint(Country.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 			}
 			blockoverride "empty_text" { text = "ch_model_hist_empty" }
 			blockoverride "chart_text_width" {

@@ -252,7 +252,7 @@ te_history_chart = {
 		}
 	}
 	blockoverride "empty_visible" {
-		visible = "[EqualTo_CFixedPoint(JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
+		visible = "[EqualTo_CFixedPoint(Country.MakeScope.ScriptValue('ch_model_hist_has_data'), '(CFixedPoint)0')]"
 	}
 	blockoverride "empty_text" { text = "ch_model_hist_empty" }
 }

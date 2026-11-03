@@ -581,7 +581,6 @@ UNBOUND = set([
 
     "seabed",
 
-    "cultural_hegemony",
 
     "nuclear_weapons",
 
