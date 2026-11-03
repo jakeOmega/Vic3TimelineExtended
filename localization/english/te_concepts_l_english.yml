@@ -2960,7 +2960,7 @@
  te_continuous_vote_desc:0 "Neural implants let citizens vote the moment a question arises and move their delegations as their trust shifts. The government always knows where the people stand, and can lose them overnight."
  te_debris_cleaner_prestige_desc:0 "Our Space Program clears debris that every country in orbit would otherwise have to fly through, and the world notices: +1% prestige for every 0.1 point we remove a month."
  te_debris_removal_method_prestige_desc:0 "Our Space Program runs a debris-removal mission, and a cleaner orbit is a public good the world credits to us."
- te_debris_row:0 "[concept_orbital_debris]: #v [GetPlayer.MakeScope.ScriptValue('te_debris_index')|1]#! ([GetPlayer.GetCustom('te_debris_tier')])"
+ te_debris_row:0 "[concept_orbital_debris]: #v [Country.MakeScope.ScriptValue('te_debris_index')|1]#! ([Country.GetCustom('te_debris_tier')])"
  te_debug_demog_scaled_probe_desc:0 "The demographics test console's one-day probe: does the game scale a census-only births line by its modifier's multiplier? It comes off a day after the console adds it."
  te_debug_pb_fast_mandates_desc:0 "Applied from the power bloc test console so mandates arrive in days."
  te_debug_pb_principle_slots_desc:0 "Applied from the power bloc test console. Stands in for the four technologies that each add a principle slot."
