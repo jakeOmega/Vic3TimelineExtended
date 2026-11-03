@@ -13,11 +13,13 @@
 ### ExecuteTooltip, the chamber's pattern (see un_chamber_widget.gui for why
 ### country names are printed that way). Every figure is an O(1) read of a
 ### snapshot the monthly update wrote. The chart reuses te_history_chart from
-### te_history_chart.gui; its samples come from un_authority_record_history
-### (un_authority_effects.txt).
+### te_history_chart.gui, each its te_hist_<id> wrapper generated from
+### scripts/generators/te_history_charts/united_nations.gui.in; its samples come
+### from un_authority_record_history (un_authority_effects.txt).
 ###
 ### A type library, one type per section (te_un_sec_why, te_un_sec_auth_history), plus
-### te_un_help_authority, the text "How the UN Works" shows. gui/journal_entry_widgets/un_layout_widget.gui
+### te_un_help_authority, the text the UN's Help page shows (te_united_nations_help_body).
+### gui/journal_entry_widgets/un_layout_widget.gui
 ### sets their order among the chamber's sections, for the journal entry and
 ### the Diplomacy panel's UN tab alike.
 ###
@@ -777,8 +779,9 @@ types un_authority_widget_types
 		}
 	}
 
-	### How UN authority works: the text only, for "How the UN Works"
-	### (te_un_sec_how, un_layout_widget.gui), which carries the heading.
+	### How UN authority works: the text only, for the UN's Help page
+	### (te_united_nations_help_body, un_layout_widget.gui), which carries the
+	### heading and is the only type that instances it.
 	type te_un_help_authority = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -894,72 +897,10 @@ types un_authority_widget_types
 			}
 
 			### ---- UN authority (0-100) ----------------------------------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "un_hist_chart_auth_title"
-				}
-				blockoverride "chart_legend" {
-					text = "un_hist_chart_auth_legend"
-				}
-				# The store's marker pips belong to the banking system; the UN
-				# series has none of its own.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "un_hist_tt_auth"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_auth' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.36 0.60 0.85 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_un_auth = {}
 
 			### ---- The target authority was moving toward (0-100) -------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "un_hist_chart_target_title"
-				}
-				blockoverride "chart_legend" {
-					text = "un_hist_chart_target_legend"
-				}
-				# The store's marker pips belong to the banking system; the UN
-				# series has none of its own.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "un_hist_tt_target"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_target' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.55 0.55 0.70 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_un_target = {}
 		}
 	}
 }

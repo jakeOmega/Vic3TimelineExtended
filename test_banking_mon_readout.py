@@ -15,6 +15,7 @@ import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 DASH = os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")
+LAYOUT = os.path.join(REPO, "gui", "journal_entry_widgets", "banking_layout_widget.gui")
 BUDGET = os.path.join(REPO, "gui", "budget_panel.gui")
 TAB_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_system_tab_sguis.txt")
 CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "banking_dash_custom_loc.txt")
@@ -92,9 +93,9 @@ def _branches(block):
 
 
 def _tab_content():
-    text = _read(BUDGET)
-    start = text.index('name = "te_budget_banking_tab"')
-    return text[start:text.index("### END MOD ###", start)]
+    """The Banking tab's body (te_banking_tab_body), which the Budget panel's
+    tab and the Timeline Extended window's both mount."""
+    return _type_body(_read(LAYOUT), "te_banking_tab_body")
 
 
 def _tab_button():
@@ -134,16 +135,21 @@ class GateTest(unittest.TestCase):
 
     def test_the_content_shows_one_header_and_the_readout_behind_its_gate(self):
         tab = _tab_content()
-        self.assertIn("ignoreinvisible = yes", tab[:tab.index("default_header")])
-        headers = re.findall(r'default_header = \{\s*visible = "(.*)"\s*blockoverride "text" \{\s*text = "(\w+)"',
-                             tab)
+        # both headers in the frame's header block, which ignores the hidden one
+        self.assertIn("default_header", tab[tab.index('blockoverride "tab_header"'):tab.index('blockoverride "tab_before_gate"')])
+        # each centered over the full-screen columns (#1335's review)
+        headers = re.findall(r'default_header = \{\s*using = default_list_position\s*visible = "(.*)"\s*'
+                             r'blockoverride "text" \{\s*text = "(\w+)"', tab)
         self.assertEqual(headers, [(f"[Not( {_shown(READOUT_SGUI)} )]", "je_banking_cycle"),
                                    (f"[{_shown(READOUT_SGUI)}]", "banking_dash_cat_monetary")])
         at = tab.index("te_banking_mon_readout = {}")
         gate = tab.rindex("flowcontainer = {", 0, at)
         block = _block_from(tab, gate)
         self.assertRegex(block, rf'^\{{\s*visible = "\[{re.escape(_shown(READOUT_SGUI))}\]"')
-        # the readout comes before the entry's panels, which keep their gate
+        # the readout comes before the entry's panels (the frame's
+        # tab_before_gate), which keep their gate
+        self.assertGreater(at, tab.index('blockoverride "tab_before_gate"'))
+        self.assertLess(at, tab.index('blockoverride "tab_gate"'))
         self.assertLess(at, tab.index("GetPlayerJournalEntry('je_banking_cycle')"))
         self.assertNotIn("GetPlayerJournalEntry", block)
 

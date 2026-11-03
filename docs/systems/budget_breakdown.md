@@ -78,8 +78,10 @@ graph template, `TOOLTIP_TEMPLATES` in the generator, on its amount as the
 Overview does. Every other leaf has a line of its own (`ROW_TOOLTIPS`), a
 group says it includes the rows below, and an institution gives its level and
 share of the institution pool, whose figures are on the Administration group's
-row once. The rules are stated once, in How the Breakdown Works, as subheaded
-notes (`HOW_TOPICS`, drawn by `gui/te_budget_breakdown.gui`). The tab's rows
+row once. The rules are stated once, as subheaded notes (`HOW_TOPICS`, drawn by
+`te_budget_breakdown_help_body` in `gui/te_budget_breakdown.gui`) on the Help
+page that How the Breakdown Works opens (`te_budget_breakdown_help_popup`,
+2026-11-02; the tab has no header, so no "?"). The tab's rows
 and notes are 17 and its subheadings 20 (`te_budget_fontsize_row` /
 `_heading`), with a 291 label column that wraps rather than elides
 (`test_budget_breakdown.BreakdownWidthBudgetTest`).

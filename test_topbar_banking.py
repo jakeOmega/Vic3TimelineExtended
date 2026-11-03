@@ -184,7 +184,9 @@ class GateTest(unittest.TestCase):
         self.assertNotRegex(_own(r.body), r"\bvisible =")    # its 40 stay: see GeometryTest
 
     def test_the_gate_is_the_budget_tabs(self):
-        tab = _read(BUDGET)
+        # the Budget tab's content is te_banking_tab_body (C1 of the wide-mode plan)
+        tab = _read(BUDGET) + _read(os.path.join(REPO, "gui", "journal_entry_widgets", "banking_layout_widget.gui"))
+        self.assertIn("te_banking_tab_body = {}", _read(BUDGET))
         self.assertIn("GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope )"
                       ".End )", tab)
         self.assertIn("GetPlayerJournalEntry('je_banking_cycle')", tab)
