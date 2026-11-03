@@ -11,13 +11,15 @@ fills its blocks, so two hosts of one tab can't drift apart.
 import glob
 import os
 import re
+import tempfile
 import unittest
 
 import functools
 
-from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body, file_types,
-                              is_entry_read, load_loc, loc_index, loc_reads, markup_reads, mod_gui_paths, mod_types,
-                              panel_loc_keys, personal_text, type_closure, unguarded_controls, WORLD, READ)
+from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body, custom_loc,
+                              file_templates, file_types, is_entry_read, load_loc, loc_closure, loc_index, loc_reads,
+                              markup_reads, mod_gui_paths, mod_types, panel_loc_keys, personal_text, type_closure,
+                              unguarded_controls, WORLD, READ)
 from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -547,10 +549,11 @@ class MountContextTest(unittest.TestCase):
 PUBLIC = [t for t in gen.TABS if t.public]
 
 # The systems National Info is to show (spec § 6.4) whose panels aren't bound yet: off the binding tests until their
-# PR binds them. A system's PR sets its Tab's public=True and deletes its line here; one still here that passes every
-# check fails test_unbound_is_honest, so this list only shrinks. One a line, a blank line between them, so parallel
-# PRs each delete their own line and merge cleanly.
-UNBOUND = {
+# PR binds them. A system's PR sets its Tab's public=True and deletes its own `"key",` line here, and only that line:
+# keep the blank lines, or two parallel PRs' deletions touch and conflict. One still here that passes every check
+# fails test_unbound_is_honest, so this list only shrinks. A set() call, not a {...} literal, so it stays a set when
+# the last system goes.
+UNBOUND = set([
     "nation",
 
     "banking",
@@ -568,7 +571,7 @@ UNBOUND = {
     "nuclear_weapons",
 
     "space_race",
-}
+])
 
 # The systems National Info doesn't show in this work (spec § 6.4): never public.
 PRIVATE = {
@@ -582,10 +585,16 @@ PRIVATE = {
 # A world read in loc (spec § 6.7): a key a public panel renders that reads the player's copy of what is the same
 # for every country (a world list written for players only), with why. Markup marks its world reads with a
 # `# world: <why>` line over the read instead. An entry read is never a world read. Each system's PR adds its keys
-# under its own heading, one a line, in order, so parallel PRs merge cleanly; a key no public panel renders, or that
-# reads no player, fails test_world_loc_is_live.
+# under its own heading, one a line, in order, so parallel PRs merge cleanly. A key that more than one system's
+# panel reaches goes under Shared, once (two PRs adding it under their own headings would repeat a dict key, which
+# ruff's F601 fails on main): test_a_shared_world_key_is_under_shared. A key no public or unbound panel renders, or
+# that reads no player, fails test_world_loc_is_live. te_rebind_country.py names the other tabs that reach a key.
 WORLD_LOC = {
-    # Demographics: none (its year reads are in markup).
+    # Shared: keys more than one system's panel reaches.
+    "te_hist_tt_markers": "a chart bar's tooltip has only the bar's context (gotcha #24), and the scripted GUI it "
+                          "asks roots on GetPlayer only to have a root: its handler reads scope:te_hist_sample",
+
+    # Demographics: none.
 
     # Nation (F2)
 
@@ -612,7 +621,8 @@ HOW_TO_BIND = (
     "reads (JournalEntry.GetCountry. and GetPlayer. to Country.); put an entry-only part or a control under "
     "`using = te_own_country_only` (on a wrapper where the widget has its own visible; gui/te_system_tab_widgets.gui); "
     "a read of the player's copy of what is the same for every country takes a `# world: <why>` line over it "
-    "(a loc key: an entry in WORLD_LOC). Then take {key} off UNBOUND and set its Tab's public=True.")
+    "(a loc key: an entry in WORLD_LOC, under Shared if another system's panel reaches it too). Then set its Tab's "
+    "public=True and delete only its `\"{key}\",` line from UNBOUND, keeping the blank lines.")
 
 
 def _report(findings, key, limit=60):
@@ -620,6 +630,29 @@ def _report(findings, key, limit=60):
     if len(findings) > limit:
         lines.append(f"... and {len(findings) - limit} more")
     return "\n" + "\n".join(lines) + "\n" + HOW_TO_BIND.format(key=key)
+
+
+def _candidates():
+    """The tabs another country's panel shows or will: public, and UNBOUND."""
+    return sorted({t.key for t in PUBLIC} | UNBOUND)
+
+
+def _world_loc_headings():
+    """Each WORLD_LOC key and the heading comment it sits under, from this
+    file's source."""
+    src = _read(os.path.abspath(__file__))
+    block = src[src.index("\nWORLD_LOC = {"):]
+    block = block[:block.index("\n}\n")]
+    heads, head = {}, None
+    for line in block.split("\n"):
+        m = re.match(r"\s*#\s*(.+)", line)
+        if m:
+            head = m.group(1).strip()
+            continue
+        m = re.match(r'\s*"([\w.\-]+)"\s*:', line)
+        if m:
+            heads[m.group(1)] = head
+    return heads
 
 
 @functools.lru_cache(maxsize=None)
@@ -654,13 +687,15 @@ class BindingTest(unittest.TestCase):
         for t in PUBLIC:
             with self.subTest(tab=t.key):
                 found = _panel(t.key)["markup"]
-                self.assertEqual(found, [], _report(found, t.key))
+                if found:
+                    self.fail(_report(found, t.key))
 
     def test_the_loc_reads_no_entry_or_player(self):
         for t in PUBLIC:
             with self.subTest(tab=t.key):
                 found = _panel(t.key)["loc"]
-                self.assertEqual(found, [], _report(found, t.key))
+                if found:
+                    self.fail(_report(found, t.key))
 
     def test_the_text_is_not_the_players(self):
         """Another country's panel shows the same text, so none of it says
@@ -671,7 +706,8 @@ class BindingTest(unittest.TestCase):
         for t in PUBLIC:
             with self.subTest(tab=t.key):
                 text = _panel(t.key)["text"]
-                self.assertEqual(text, {}, "\n" + "\n".join(f"{k}: {v.strip()[:140]}" for k, v in text.items()))
+                if text:
+                    self.fail("\n" + "\n".join(f"{k}: {' '.join(v.split())[:140]}" for k, v in text.items()))
 
     def test_every_world_line_marks_a_player_read(self):
         """A `# world:` line sits directly over a line that reads the player,
@@ -692,15 +728,29 @@ class BindingTest(unittest.TestCase):
                                      f"{path}:{i + 1}: an entry read is never a world read")
 
     def test_world_loc_is_live(self):
+        """A WORLD_LOC key is one a public panel, or one still to bind, renders,
+        and it reads the player, never the entry."""
         index = loc_index()
-        reached = set().union(*(_panel(t.key)["keys"] for t in PUBLIC))
+        reached = set().union(*(_panel(key)["keys"] for key in _candidates()))
         for key, why in WORLD_LOC.items():
             with self.subTest(key=key):
                 self.assertTrue(why.strip(), "say why")
-                self.assertIn(key, reached, f"{key}: no public panel renders it")
+                self.assertIn(key, reached, f"{key}: no public or unbound panel renders it")
                 reads = READ.findall(index[key][0])
                 self.assertTrue(reads and not [r for r in reads if is_entry_read(r)],
                                 f"{key}: a world key reads the player, never the entry")
+
+    def test_a_shared_world_key_is_under_shared(self):
+        """A WORLD_LOC key more than one system's panel reaches sits under the
+        Shared heading, so two systems' PRs can't each add it."""
+        heads = _world_loc_headings()
+        for key in WORLD_LOC:
+            tabs = [t for t in _candidates() if key in _panel(t)["keys"]]
+            with self.subTest(key=key):
+                self.assertIn(key, heads, "a WORLD_LOC key sits under a heading comment")
+                if len(tabs) > 1:
+                    self.assertTrue(heads[key].startswith("Shared"),
+                                    f"{key}: {', '.join(tabs)} reach it, so it goes under Shared, not {heads[key]!r}")
 
 
 class GuardTest(unittest.TestCase):
@@ -713,7 +763,8 @@ class GuardTest(unittest.TestCase):
         for t in PUBLIC:
             with self.subTest(tab=t.key):
                 found = _panel(t.key)["controls"]
-                self.assertEqual(found, [], _report(found, t.key))
+                if found:
+                    self.fail(_report(found, t.key))
 
 
 class PublicTest(unittest.TestCase):
@@ -825,6 +876,135 @@ class MutationTest(unittest.TestCase):
         keys = panel_loc_keys({"fx_wide"}, types, loc)
         self.assertEqual(keys, {"fx_label", "fx_theirs"})
         self.assertEqual(personal_text(keys | {"fx_says"}, loc), {"fx_says": "We hold  "})
+
+    FRAME = """types fixture
+{
+	type fx_wide = flowcontainer {
+		fx_frame = {
+			blockoverride "tab_country" {}
+		}
+		@SECOND@
+	}
+	type fx_frame = flowcontainer {
+		block "tab_country" {
+			datacontext = "[GetPlayer]"
+		}
+		block "tab_open" {
+			button = { onclick = "[GetScriptedGui('x').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]" }
+		}
+	}
+	type fx_derived = fx_frame {
+		blockoverride "tab_country" {}
+	}
+}
+"""
+
+    def frame(self, second=""):
+        return file_types(self.FRAME.replace("@SECOND@", second), "fixture.gui")
+
+    def test_an_overridden_block_default_is_not_drawn(self):
+        """A block default every place that draws the type overrides is not
+        drawn there (the frame's tab_country under the Space Race's
+        milestones); one place that leaves it draws it."""
+        self.assertEqual(markup_reads({"fx_wide"}, self.frame()), [], "the only instance overrides it")
+        self.assertEqual(markup_reads({"fx_wide"}, self.frame("fx_derived = {}")), [],
+                         "a derived type that overrides it at its root")
+        found = markup_reads({"fx_wide"}, self.frame("fx_frame = {}"))
+        self.assertEqual([(f.where, f.what) for f in found], [("fx_frame", "GetPlayer")], "a second, plain instance")
+        self.assertEqual([f.what for f in unguarded_controls({"fx_wide"}, self.frame())], ["Execute"],
+                         "a block no instance overrides is still drawn")
+
+    def test_a_guarded_type_given_its_own_visible_is_open(self):
+        """A type whose root takes te_own_country_only loses the guard where an
+        instance sets its own visible: the instance's replaces the template's
+        (gotcha #17)."""
+        text = """types fixture
+{
+	type fx_wide = flowcontainer {
+		fx_ctl = {@VIS@}
+	}
+	type fx_ctl = flowcontainer {
+		using = te_own_country_only
+		button = { onclick = "[GetScriptedGui('x').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]" }
+	}
+}
+"""
+        self.assertEqual(unguarded_controls({"fx_wide"}, file_types(text.replace("@VIS@", ""), "f.gui")), [])
+        found = unguarded_controls({"fx_wide"}, file_types(text.replace("@VIS@", ' visible = "[Country.IsAtWar]" '),
+                                                           "f.gui"))
+        self.assertEqual([(f.where, f.what) for f in found], [("fx_ctl", "Execute")])
+
+    def test_a_template_the_panel_uses_is_read(self):
+        text = """template fx_tmpl {
+	tooltip = "[GetPlayer.GetName]"
+}
+types fixture
+{
+	type fx_wide = flowcontainer {
+		widget = { using = fx_tmpl }
+		widget = {
+			using = te_own_country_only
+			using = fx_tmpl_mine
+		}
+	}
+}
+template fx_tmpl_mine {
+	tooltip = "[JournalEntry.GetCountry.GetName]"
+}
+"""
+        found = markup_reads({"fx_wide"}, file_types(text, "f.gui"), file_templates(text, "f.gui"))
+        self.assertEqual([(f.where, f.what, f.line) for f in found], [("template fx_tmpl", "GetPlayer", 2)])
+
+    def test_a_dialog_and_a_toggled_popup_are_controls(self):
+        found = unguarded_controls({"fx_wide"}, _fixture(
+            "button = { onclick = \"[PopupManager.ShowCompanyChangeName( Country.MakeScope.Var('c').GetCompany.Self )]\" }"))
+        self.assertEqual([f.what for f in found], ["PopupManager.ShowCompanyChangeName"])
+        found = unguarded_controls({"fx_wide"}, _fixture(
+            "button = { onclick = \"[GetVariableSystem.Toggle('te_popup', 'fx_picker')]\" }"))
+        self.assertIn("fx_picker, whose popup holds controls", found[0].what)
+
+    def test_every_loc_line_shape_is_read(self):
+        """`key:"v"` (no space) and a line with a trailing REVIEWED comment are
+        loc lines too: the game reads both."""
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, "fx_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write('l_english:\n'
+                         ' fx_tight:"[GetPlayer.GetName] and our name"\n'
+                         ' fx_long:0 "[JournalEntry.GetCountry.GetName]" # REVIEWED 2026-11-02 (long_tooltip): long\n'
+                         ' fx_plain:0 "Plain"\n')
+            index = loc_index(tmp, tmp)
+        self.assertEqual(sorted(index), ["fx_long", "fx_plain", "fx_tight"])
+        self.assertEqual(index["fx_long"][0], "[JournalEntry.GetCountry.GetName]")
+        self.assertEqual(sorted((f.where, f.what) for f in loc_reads(set(index), index)),
+                         [("fx_long", "JournalEntry.GetCountry"), ("fx_tight", "GetPlayer")])
+
+    def test_a_custom_localization_key_is_reached(self):
+        """`[X.GetCustom('name')]` renders the entry's localization_keys
+        (common/customizable_localization/), in the caller's context."""
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, "common", "customizable_localization"))
+            with open(os.path.join(tmp, "common", "customizable_localization", "fx.txt"), "w",
+                      encoding="utf-8-sig") as fh:
+                fh.write("fx_custom = {\n\ttype = country\n\ttext = {\n\t\ttrigger = { always = yes }\n"
+                         "\t\tlocalization_key = fx_picked\n\t}\n}\n")
+            custom = custom_loc(tmp)
+        loc = {"fx_label": "Arsenal [Country.GetCustom('fx_custom')]", "fx_picked": "[GetPlayer.GetName]'s"}
+        types = _fixture('textbox = { text = "[Country.GetCustom(\'fx_custom\')]" }')
+        self.assertEqual(panel_loc_keys({"fx_wide"}, types, loc, custom=custom), {"fx_label", "fx_picked"})
+        self.assertEqual(loc_closure({"fx_label"}, loc, custom=custom), {"fx_label", "fx_picked"})
+        self.assertEqual(loc_closure({"fx_label"}, loc, custom={}), {"fx_label"})
+
+    def test_unbound_stays_a_set_when_it_empties(self):
+        """The last system's PR leaves UNBOUND with no entries: still a set
+        (a bare {} would be a dict, and UNBOUND | PRIVATE would raise)."""
+        src = _read(os.path.abspath(__file__))
+        block = src[src.index("\nUNBOUND = ") + 1:]
+        block = block[:block.index("\n])\n") + 3]
+        emptied = re.sub(r'(?m)^\s*"\w+",\n', "", block)
+        scope = {}
+        exec(emptied, scope)
+        self.assertEqual(scope["UNBOUND"], set())
+        self.assertIsInstance(scope["UNBOUND"] | PRIVATE, set)
 
 
 if __name__ == "__main__":

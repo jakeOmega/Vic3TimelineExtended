@@ -378,17 +378,19 @@ def history_charts(section):
 # --- Loc a panel reaches (moved from test_demographics_census_window.py, PR F0) -------------------
 
 LOC_DIR = os.path.join(REPO, "localization", "english")
-_LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s+"(.*)"\s*$')
 
 
 @functools.lru_cache(maxsize=4)
 def _loc_index(loc_dir, root=REPO):
+    # mod_state.split_loc_line, the repo's loc-line reader: `key:0 "v"`, `key:"v"`
+    # and a line with a trailing `# REVIEWED ...` comment all count.
+    from mod_state import split_loc_line
     out = {}
     for path in sorted(glob.glob(os.path.join(loc_dir, "**", "*.yml"), recursive=True)):
         for n, line in enumerate(_read(path).splitlines(), 1):
-            m = _LOC_LINE.match(line)
-            if m:
-                out[m.group(1)] = (m.group(2), os.path.relpath(path, root), n)
+            got = split_loc_line(line)
+            if got:
+                out[got[0]] = (got[1], os.path.relpath(path, root), n)
     return out
 
 
@@ -403,27 +405,59 @@ def load_loc(loc_dir=LOC_DIR):
     return {k: v for k, (v, _, _) in _loc_index(loc_dir).items()}
 
 
+# Customizable localization: `[X.GetCustom('name')]` renders one of the entry's
+# `localization_key`s (common/customizable_localization/), in the caller's context.
+_GET_CUSTOM = re.compile(r"""GetCustom\(\s*\\?['"]([\w.\-]+)\\?['"]\s*\)""")
+_CUSTOM_TOP = re.compile(r"(?m)^([\w.\-]+)\s*=\s*\{")
+_CUSTOM_KEY = re.compile(r"""\blocalization_key\s*=\s*"?([\w.\-]+)"?""")
+
+
+@functools.lru_cache(maxsize=4)
+def _custom_loc(root):
+    out = {}
+    for path in sorted(glob.glob(os.path.join(root, "common", "customizable_localization", "*.txt"))):
+        code = _strip_comments(_read(path))
+        for m in _CUSTOM_TOP.finditer(code):
+            brace = m.end() - 1
+            out.setdefault(m.group(1), []).extend(_CUSTOM_KEY.findall(code[brace:_close(code, brace) + 1]))
+    return out
+
+
+def custom_loc(root=REPO):
+    """Each customizable localization entry and the loc keys it may render."""
+    return dict(_custom_loc(root))
+
+
+def custom_keys(text, custom=None):
+    """The loc keys the GetCustom calls in a text may render."""
+    custom = _custom_loc(REPO) if custom is None else custom
+    return {k for name in _GET_CUSTOM.findall(text) for k in custom.get(name, ())}
+
+
 # A key shown only for the player's own country: the first branch of a
 # SelectLocalization on Country.IsLocalPlayer (Global Warming's wording), or
 # AddLocalizationIf's. own=False leaves these out of a text's keys.
 _OWN_BRANCH = re.compile(r"((?:SelectLocalization|AddLocalizationIf)\(\s*Country\.IsLocalPlayer\s*,\s*)'[\w.\-]+'")
 
 
-def gui_keys(text, loc, own=True):
-    """The loc keys a markup text names: a text, tooltip or raw_text, and a
-    quoted key inside an expression. own=False leaves out a key shown only for
-    the player's own country (_OWN_BRANCH)."""
+def gui_keys(text, loc, own=True, custom=None):
+    """The loc keys a markup text names: a text, tooltip or raw_text, a quoted
+    key inside an expression, and the keys its GetCustom calls may render
+    (custom: custom_loc(); the repo's when None). own=False leaves out a key
+    shown only for the player's own country (_OWN_BRANCH)."""
     if not own:
         text = _OWN_BRANCH.sub(r"\1''", text)
     out = set(re.findall(r'(?:text|tooltip|raw_text)\s*=\s*"([\w.\-]+)"', text))
     for expr in re.findall(r'"\[(.*?)\]"', text):
-        out |= {k for k in re.findall(r"'([\w.\-]+)'", expr) if k in loc}
-    return out & set(loc)
+        out.update(re.findall(r"'([\w.\-]+)'", expr))
+    out |= custom_keys(text, custom)
+    return {k for k in out if k in loc}
 
 
-def loc_closure(keys, loc, own=True):
-    """The keys and every key their values splice ($key$) or name ('key'),
-    all the way down. own=False as gui_keys."""
+def loc_closure(keys, loc, own=True, custom=None):
+    """The keys and every key their values splice ($key$), name ('key') or
+    render through GetCustom, all the way down. own and custom as gui_keys."""
+    custom = _custom_loc(REPO) if custom is None else custom
     seen, stack = set(), list(keys)
     while stack:
         key = stack.pop()
@@ -433,6 +467,7 @@ def loc_closure(keys, loc, own=True):
         value = loc[key] if own else _OWN_BRANCH.sub(r"\1''", loc[key])
         stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
         stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
+        stack.extend(custom_keys(value, custom))
     return seen
 
 
@@ -482,6 +517,16 @@ def mod_gui_paths(root=REPO):
 
 def file_types(text, path=""):
     """Every type in one GUI file's text, by name."""
+    return _file_blocks(text, path, r"(?m)^\s*type (\w+) = (\w+) \{")
+
+
+def file_templates(text, path=""):
+    """Every template in one GUI file's text, by name, as a TypeDef whose base
+    is "template"."""
+    return _file_blocks(text, path, r"(?m)^\s*template (\w+)() \{")
+
+
+def _file_blocks(text, path, pattern):
     code = _strip_comments(text)
     raw_lines, code_lines = text.split("\n"), code.split("\n")
     raw_starts, code_starts, n = [], [], 0
@@ -502,10 +547,10 @@ def file_types(text, path=""):
         return raw_starts[line] + pos - code_starts[line]
 
     out = {}
-    for m in re.finditer(r"(?m)^\s*type (\w+) = (\w+) \{", code):
+    for m in re.finditer(pattern, code):
         brace = m.end() - 1
         end = _close(code, brace)
-        out[m.group(1)] = TypeDef(m.group(1), m.group(2), path, line_of(m.start(1)) + 1,
+        out[m.group(1)] = TypeDef(m.group(1), m.group(2) or "template", path, line_of(m.start(1)) + 1,
                                   code[brace + 1:end], text[to_raw(brace) + 1:to_raw(end)],
                                   brace + 1 - code_starts[line_of(brace)])
     return out
@@ -522,6 +567,19 @@ def _mod_types(root):
 def mod_types(root=REPO):
     """Every type in the mod's own GUI files (MOD_GUI), by name."""
     return dict(_mod_types(root))
+
+
+@functools.lru_cache(maxsize=4)
+def _mod_templates(root):
+    out = {}
+    for path in mod_gui_paths(root):
+        out.update(file_templates(_read(os.path.join(root, path)), path))
+    return out
+
+
+def mod_templates(root=REPO):
+    """Every template in the mod's own GUI files, by name."""
+    return dict(_mod_templates(root))
 
 
 _CHILD = re.compile(r"(?<![\w.])(\w+) = \{")
@@ -577,34 +635,162 @@ def unguarded(body, spans=None):
     spans = guard_spans(body) if spans is None else spans
     chars = list(body)
     for a, b in spans:
-        for i in range(a, b + 1):
+        for i in range(a, min(b, len(chars) - 1) + 1):  # (0, len(body)) is the root's
             if chars[i] != "\n":
                 chars[i] = " "
     return "".join(chars)
 
 
-def open_types(names, types):
-    """The types of type_closure(names) another country's panel draws: each
-    reached by some path that passes no te_own_country_only. A child whose block
-    sits in a guarded part of its parent is the player's own, and so is
-    everything under it; a type whose root carries the guard draws nothing
-    else either, its base included."""
-    seen, todo = set(), [n for n in names if n in types]
+_BRACE = re.compile(r"[{}]")
+
+
+def own_props(text):
+    """A block's own properties: its inside with every nested block's contents
+    cut (the nested blocks' names and braces kept), so `visible =` or
+    `blockoverride "x"` found in it is the block's own. Offsets don't hold."""
+    out, depth, last = [], 0, 0
+    for m in _BRACE.finditer(text):
+        if m.group() == "{":
+            if depth == 0:
+                out.append(text[last:m.end()])
+            depth += 1
+        elif depth:
+            depth -= 1
+            if depth == 0:
+                last = m.start()
+    out.append(text[last:] if depth == 0 else "")
+    return "".join(out)
+
+
+_BLOCK_DEF = re.compile(r'\bblock\s+"(\w+)"\s*\{')
+_OVERRIDE = re.compile(r'\bblockoverride\s+"(\w+)"')
+_OWN_VISIBLE = re.compile(r"(?<![\w.])visible\s*=")
+_USING = re.compile(r"\busing\s*=\s*(\w+)")
+
+
+@functools.lru_cache(maxsize=8192)
+def block_defaults(body):
+    """Each `block "x" { ... }` default in a body: (start, end, name)."""
+    return tuple((m.end() - 1, _close(body, m.end() - 1), m.group(1)) for m in _BLOCK_DEF.finditer(body))
+
+
+@dataclass
+class View:
+    """What another country's panel draws of the types it names.
+
+    open       the types it draws: each reached by some path through no
+               te_own_country_only and no block default that is overridden
+    skip       type -> the parts of its body it doesn't draw, as (start, end):
+               its te_own_country_only widgets (less the root's, where an
+               instance or a derived type sets its own visible, which replaces
+               the template's: gotcha #17), and each block default that every
+               place the panel draws the type overrides (a blockoverride in the
+               instance, or in a derived type's root or all of its instances)
+    templates  the templates the open types use outside those parts (but the
+               guard itself), and the templates those use
+    """
+    open: set
+    skip: dict
+    templates: set
+
+
+_VIEWS = {}  # (names, id(types), id(templates)) -> (types, templates, View): the dicts held, so no id is reused
+
+
+def panel_view(names, types, templates=None):
+    """The View of what another country's panel draws of the named types.
+    templates: mod_templates() (the repo's when None). The last few are kept,
+    by the identity of the dicts they were drawn from."""
+    templates = _mod_templates(REPO) if templates is None else templates
+    key = (frozenset(names), id(types), id(templates))
+    hit = _VIEWS.get(key)
+    if hit and hit[0] is types and hit[1] is templates:
+        return hit[2]
+    view = _panel_view(names, types, templates)
+    if len(_VIEWS) >= 32:
+        _VIEWS.pop(next(iter(_VIEWS)))
+    _VIEWS[key] = (types, templates, view)
+    return view
+
+
+def _panel_view(names, types, templates):
+    dead, view = {}, None
+    for _ in range(8):  # a dead default can hide an instance, which can kill another default
+        view, sites = _view_walk(names, types, dead, templates)
+        found = _dead_defaults(names, types, sites)
+        if found == dead:
+            break
+        dead = found
+    return view
+
+
+def _view_walk(names, types, dead, templates):
+    seen, skip, sites = {}, {}, {}  # seen: type -> whether a place voids its root guard
+    todo = [(n, False) for n in sorted(names) if n in types]
     while todo:
-        name = todo.pop()
-        if name in seen:
+        name, voided = todo.pop()
+        if name in seen and (seen[name] or not voided):
             continue
-        seen.add(name)
+        seen[name] = seen.get(name, False) or voided
         body = types[name].body
-        spans = guard_spans(body)
-        if (0, len(body)) in spans:
+        root = (0, len(body))
+        spans = [sp for sp in guard_spans(body) if not (sp == root and seen[name])]
+        spans += [(a, b) for a, b, x in block_defaults(body) if x in dead.get(name, ())]
+        skip[name] = spans
+        if root in spans:
             continue
         for m in _CHILD.finditer(body):
-            if m.group(1) in types and not in_spans(m.end() - 1, spans):
-                todo.append(m.group(1))
-        if types[name].base in types:
-            todo.append(types[name].base)
-    return seen
+            child, brace = m.group(1), m.end() - 1
+            if child not in types or in_spans(brace, spans):
+                continue
+            own = own_props(body[brace + 1:_close(body, brace)])
+            sites.setdefault(child, []).append((None, set(_OVERRIDE.findall(own))))
+            todo.append((child, bool(_OWN_VISIBLE.search(own))))
+        base = types[name].base
+        if base in types:
+            own = own_props(body)
+            sites.setdefault(base, []).append((name, set(_OVERRIDE.findall(own))))
+            todo.append((base, bool(_OWN_VISIBLE.search(own))))
+    used, stack = set(), []
+    for name in seen:
+        stack += [u for u in _USING.findall(unguarded(types[name].body, skip[name])) if u != GUARD]
+    while stack:
+        t = stack.pop()
+        if t in templates and t not in used:
+            used.add(t)
+            stack += [u for u in _USING.findall(templates[t].body) if u != GUARD]
+    return View(set(seen), skip, used), sites
+
+
+def _dead_defaults(names, types, sites):
+    """type -> the block names whose default no place that draws it shows."""
+    memo = {}
+
+    def dead(t, x, path=()):
+        if t in names or not sites.get(t) or t in path:
+            return False
+        if (t, x) not in memo:
+            memo[(t, x)] = all(x in over or (derived is not None and dead(derived, x, path + (t,)))
+                               for derived, over in sites[t])
+        return memo[(t, x)]
+
+    out = {}
+    for t in sites:
+        gone = frozenset(x for _, _, x in block_defaults(types[t].body) if dead(t, x))
+        if gone:
+            out[t] = gone
+    return out
+
+
+def open_types(names, types):
+    """The types of type_closure(names) another country's panel draws
+    (panel_view(names, types).open): each reached by some path that passes no
+    te_own_country_only and no overridden block default. A child whose block
+    sits in a guarded part of its parent is the player's own, and so is
+    everything under it; a type whose root carries the guard draws nothing
+    else either, its base included, unless the place that draws it sets its
+    own visible."""
+    return panel_view(names, types).open
 
 
 # A read of the entry or of the player. GetPlayerJournalEntry is an entry read
@@ -614,10 +800,15 @@ READ = re.compile(r"(?<![\w.])(JournalEntry\.\w+|GetPlayerJournalEntry|GetPlayer
 # copy of what is the same for every country (spec § 6.7). It lets a player
 # read through, never an entry read: another country's panel has no entry.
 WORLD = re.compile(r"^\s*# world: \S")
-# A control: a scripted GUI's Execute (not ExecuteTooltip).
-CONTROL = re.compile(r"\.Execute\s*\(")
+# A control: a scripted GUI's Execute (not ExecuteTooltip), or a PopupManager
+# dialog that changes the country (Grand Monuments' ShowCompanyChangeName).
+CONTROL = re.compile(r"\.Execute\s*\(|\bPopupManager\.Show\w*\s*\(")
+
+
+def _control_name(m):
+    return "Execute" if m.group(0).startswith(".") else m.group(0).rstrip("( ")
 # A popup's opener, and the popup that shows on its value (te_popups.gui).
-OPENER = re.compile(r"GetVariableSystem\.Set\(\s*'te_popup'\s*,\s*'(\w+)'\s*\)")
+OPENER = re.compile(r"GetVariableSystem\.(?:Set|Toggle)\(\s*'te_popup'\s*,\s*'(\w+)'\s*\)")
 _POPUP_KEY = re.compile(r"GetVariableSystem\.HasValue\(\s*'te_popup'\s*,\s*'(\w+)'\s*\)")
 
 
@@ -659,14 +850,22 @@ def file_col(td, pos):
     return pos - _line_starts(td.body)[k] + (td.col if k == 0 else 0)
 
 
-def markup_reads(names, types):
+def _drawn(names, types, templates=None):
+    """(where, TypeDef, spans not drawn) for each body another country's panel
+    draws: the View's open types, then its templates ("template X")."""
+    templates = _mod_templates(REPO) if templates is None else templates
+    view = panel_view(names, types, templates)
+    out = [(name, types[name], view.skip[name]) for name in sorted(view.open)]
+    return out + [(f"template {t}", templates[t], []) for t in sorted(view.templates)]
+
+
+def markup_reads(names, types, templates=None):
     """Each JournalEntry or player read in what another country sees of the
-    named types (open_types), outside te_own_country_only, as a Finding;
-    world=True where a `# world:` line marks it."""
+    named types (panel_view: outside te_own_country_only and overridden block
+    defaults, the templates they use included), as a Finding; world=True where
+    a `# world:` line marks it."""
     out = []
-    for name in sorted(open_types(names, types)):
-        td = types[name]
-        spans = guard_spans(td.body)
+    for where, td, spans in _drawn(names, types, templates):
         raw = td.raw.split("\n") if td.raw else []
         lines = td.body.split("\n")
         for m in READ.finditer(td.body):
@@ -674,7 +873,7 @@ def markup_reads(names, types):
                 continue
             k = _line_of(td, m.start())
             world = k >= 1 and k - 1 < len(raw) and bool(WORLD.match(raw[k - 1]))
-            out.append(Finding(name, td.path, td.line + k, m.group(1), lines[k], world, file_col(td, m.start())))
+            out.append(Finding(where, td.path, td.line + k, m.group(1), lines[k], world, file_col(td, m.start())))
     return out
 
 
@@ -702,23 +901,21 @@ def popup_controls(key, types, shown=None):
         td = types[name]
         for m in CONTROL.finditer(td.body):
             k = _line_of(td, m.start())
-            out.append(Finding(name, td.path, td.line + k, "Execute", td.body.split("\n")[k]))
+            out.append(Finding(name, td.path, td.line + k, _control_name(m), td.body.split("\n")[k]))
     return out
 
 
-def unguarded_controls(names, types):
-    """Each control another country's panel would draw: an Execute, or an
-    opener of a popup that holds controls (or of a popup that isn't there),
-    outside te_own_country_only, as a Finding."""
+def unguarded_controls(names, types, templates=None):
+    """Each control another country's panel would draw (CONTROL: an Execute, a
+    PopupManager dialog), or an opener of a popup that holds controls (or of a
+    popup that isn't there), outside te_own_country_only, as a Finding."""
     out, shown, held = [], popups(types), {}
-    for name in sorted(open_types(names, types)):
-        td = types[name]
-        spans = guard_spans(td.body)
+    for name, td, spans in _drawn(names, types, templates):
         lines = td.body.split("\n")
         for m in CONTROL.finditer(td.body):
             if not in_spans(m.start(), spans):
                 k = _line_of(td, m.start())
-                out.append(Finding(name, td.path, td.line + k, "Execute", lines[k]))
+                out.append(Finding(name, td.path, td.line + k, _control_name(m), lines[k]))
         for m in OPENER.finditer(td.body):
             if in_spans(m.start(), spans):
                 continue
@@ -733,15 +930,16 @@ def unguarded_controls(names, types):
     return out
 
 
-def panel_loc_keys(names, types, loc):
-    """The loc keys another country's panel renders: those the open types'
-    unguarded text names, and every key they reach, less a key shown only for
-    the player's own country (the first branch of a SelectLocalization on
-    Country.IsLocalPlayer, which another country's panel never renders)."""
+def panel_loc_keys(names, types, loc, templates=None, custom=None):
+    """The loc keys another country's panel renders: those the drawn parts of
+    the open types and their templates name (panel_view), and every key they
+    reach, GetCustom's included, less a key shown only for the player's own
+    country (the first branch of a SelectLocalization on Country.IsLocalPlayer,
+    which another country's panel never renders). custom: custom_loc()."""
     roots = set()
-    for name in open_types(names, types):
-        roots |= gui_keys(unguarded(types[name].body), loc, own=False)
-    return loc_closure(roots, loc, own=False)
+    for _, td, spans in _drawn(names, types, templates):
+        roots |= gui_keys(unguarded(td.body, spans), loc, own=False, custom=custom)
+    return loc_closure(roots, loc, own=False, custom=custom)
 
 
 def loc_reads(keys, index):
