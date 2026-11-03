@@ -108,8 +108,8 @@
   "es": "#R Referente#!"
  },
  "je_ch_ov_benchmark_tt": {
-  "en": "#title [concept_foreign_cultural_benchmark]#!\\nWe trail the leading cultural power, and our people measure our government against it.\\nStrength: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
-  "es": "#title [concept_foreign_cultural_benchmark]#!\\nNos quedamos por detrás de la potencia cultural líder y nuestra población compara a nuestro gobierno con ella.\\nIntensidad: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
+  "en": "#title [concept_foreign_cultural_benchmark]#!\\nWe trail the leading cultural power, and our people measure our government against it.\\nStrength: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]",
+  "es": "#title [concept_foreign_cultural_benchmark]#!\\nNos quedamos por detrás de la potencia cultural líder y nuestra población compara a nuestro gobierno con ella.\\nIntensidad: #v ×[Country.MakeScope.ScriptValue('ch_benchmark_applied_display')|2]#!\\n#R -[Country.MakeScope.ScriptValue('ch_benchmark_legitimacy_display')|2]#! [concept_legitimacy]"
  },
  "je_ch_ov_leaders_label": {
   "en": "Leading Powers",
@@ -180,16 +180,16 @@
   "es": "Tecnocrática"
  },
  "je_ch_ov_model_tt": {
-  "en": "#title [concept_ch_exported_model]#!\\n[JournalEntry.GetCountry.GetCustom('ch_exported_model_text')] [JournalEntry.GetCountry.GetCustom('ch_exported_model_owner')]\\nShare of World Culture: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
-  "es": "#title [concept_ch_exported_model]#!\\n[JournalEntry.GetCountry.GetCustom('ch_exported_model_text')] [JournalEntry.GetCountry.GetCustom('ch_exported_model_owner')]\\nCuota de la cultura mundial: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[JournalEntry.GetCountry.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
+  "en": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [Country.GetCustom('ch_exported_model_owner')]\\nShare of World Culture: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nCountries Running It: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nPush Abroad: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!",
+  "es": "#title [concept_ch_exported_model]#!\\n[Country.GetCustom('ch_exported_model_text')] [Country.GetCustom('ch_exported_model_owner')]\\nCuota de la cultura mundial: #v [Country.MakeScope.ScriptValue('ch_model_share_display')|1]%#!\\nPaíses que lo aplican: #v [Country.MakeScope.ScriptValue('ch_model_aligned_display')|0]#!\\nEmpuje en el exterior: #v ×[Country.MakeScope.ScriptValue('ch_model_pressure_mult')|2]#!"
  },
  "je_ch_ov_rank_label": {
   "en": "World Rank",
   "es": "Rango mundial"
  },
  "je_ch_ov_share_label": {
-  "en": "Share #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_display')|1]%#!",
-  "es": "Cuota #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_display')|1]%#!"
+  "en": "Share #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!",
+  "es": "Cuota #v [Country.MakeScope.ScriptValue('cultural_pull_display')|1]%#!"
  },
  "je_ch_ov_share_tt": {
   "en": "#title [concept_cultural_pull_share]#!\\nOur raw [concept_cultural_pull] as a percentage of every country's raw pull added together.\\nSince Last Month: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_disp_share_delta')|+1]\\n[concept_cultural_pull_raw_score]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('cultural_pull_raw_display')|1]#! of a world total of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!\\n#lore The world total is every other country's pull at the last recount, about twice a year and after every war, plus ours as it stands. So the share can step without our own output changing.#!",
@@ -232,74 +232,74 @@
   "es": "La financiación y todos los programas requieren la ley [GetLawType('law_ministry_of_culture').GetName]."
  },
  "je_ch_prog_outreach_tt": {
-  "en": "#title International Cultural Outreach#!\\nWhile it runs:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCost: @money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week, the price of one funding step",
-  "es": "#title Difusión cultural internacional#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCoste: @money!#R [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/semana, el precio de un escalón de financiación"
+  "en": "#title International Cultural Outreach#!\\nWhile it runs:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCost: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/week, the price of one funding step",
+  "es": "#title Difusión cultural internacional#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_world_exposition').GetDesc]\\nCoste: @money!#R [Country.MakeScope.ScriptValue('ch_program_funding_step_cost_display')|D]#!/semana, el precio de un escalón de financiación"
  },
  "je_ch_prog_protectionism_tt": {
   "en": "#title $je_ch_widget_prog_protectionism$#!\\nWhile it runs:\\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]",
   "es": "#title $je_ch_widget_prog_protectionism$#!\\nMientras está en marcha:\\n[GetStaticModifier('ch_cultural_protectionism_program').GetDesc]"
  },
  "je_ch_widget_bd_art_dr_tt": {
-  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, counts as #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! after [concept_ch_art_diminishing_returns].\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
-  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, cuenta como #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! tras los [concept_ch_art_diminishing_returns|l].\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, counts as #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! after [concept_ch_art_diminishing_returns].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes, #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!, cuenta como #v [Country.MakeScope.ScriptValue('country_art_share_pct_diminished_display')|1]%#! tras los [concept_ch_art_diminishing_returns|l].\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
  },
  "je_ch_widget_bd_art_mult_tt": {
   "en": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ It scales the Art Production line above.",
   "es": "#title $country_cultural_hegemony_art_mult$#!\\n$country_cultural_hegemony_art_mult_desc$ Multiplica la línea de Producción artística situada encima."
  },
  "je_ch_widget_bd_art_tt": {
-  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output: [JournalEntry.GetCountry.MakeScope.ScriptValue('country_fine_art_production_display')|0] of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nA dominant share runs into [concept_ch_art_diminishing_returns].\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
-  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes: [JournalEntry.GetCountry.MakeScope.ScriptValue('country_fine_art_production_display')|0] de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [JournalEntry.GetCountry.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nUna cuota dominante se topa con los [concept_ch_art_diminishing_returns|l].\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
+  "en": "#title [concept_ch_art_production]#!\\nOur share of the world's fine-art output: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] of [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nA dominant share runs into [concept_ch_art_diminishing_returns].\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!",
+  "es": "#title [concept_ch_art_production]#!\\nNuestra cuota de la producción mundial de bellas artes: [Country.MakeScope.ScriptValue('country_fine_art_production_display')|0] de [Country.MakeScope.ScriptValue('global_fine_art_production_display')|0] = #v [Country.MakeScope.ScriptValue('country_art_share_pct_display')|1]%#!.\\n$country_cultural_hegemony_art_mult$: [Country.MakeScope.ScriptValue('ch_art_mult_pct_display')|+=0]%\\nUna cuota dominante se topa con los [concept_ch_art_diminishing_returns|l].\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_art_max')|0].#!"
  },
  "je_ch_widget_bd_infamy_tt": {
-  "en": "#title [concept_ch_infamy]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_infamy_min')|0], an infamy of 100.#!",
-  "es": "#title [concept_ch_infamy]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_infamy_min')|0], una infamia de 100.#!"
+  "en": "#title [concept_ch_infamy]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], an infamy of 100.#!",
+  "es": "#title [concept_ch_infamy]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_infamy_min')|0], una infamia de 100.#!"
  },
  "je_ch_widget_bd_instability_tt": {
-  "en": "#title [concept_ch_instability]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_instability_min')|0]: full turmoil and a civil war.#!",
-  "es": "#title [concept_ch_instability]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_instability_min')|0]: agitación total y una guerra civil.#!"
+  "en": "#title [concept_ch_instability]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: full turmoil and a civil war.#!",
+  "es": "#title [concept_ch_instability]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_instability_min')|0]: agitación total y una guerra civil.#!"
  },
  "je_ch_widget_bd_megaprojects_tt": {
-  "en": "#title [concept_ch_megaprojects]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], all seven megaprojects.#!",
-  "es": "#title [concept_ch_megaprojects]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], con los siete megaproyectos.#!"
+  "en": "#title [concept_ch_megaprojects]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], all seven megaprojects.#!",
+  "es": "#title [concept_ch_megaprojects]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_megaprojects_max')|0], con los siete megaproyectos.#!"
  },
  "je_ch_widget_bd_modifiers_tt": {
-  "en": "#title [concept_ch_modifiers]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!",
-  "es": "#title [concept_ch_modifiers]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!"
+  "en": "#title [concept_ch_modifiers]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!",
+  "es": "#title [concept_ch_modifiers]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_modifiers_max')|0].#!"
  },
  "je_ch_widget_bd_monuments_tt": {
-  "en": "#title [concept_ch_monuments]#!\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_monuments_max')|0], twenty monuments.#!",
-  "es": "#title [concept_ch_monuments]#!\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_monuments_max')|0], con veinte monumentos.#!"
+  "en": "#title [concept_ch_monuments]#!\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0], twenty monuments.#!",
+  "es": "#title [concept_ch_monuments]#!\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_monuments_max')|0], con veinte monumentos.#!"
  },
  "je_ch_widget_bd_mult_tt": {
   "en": "#title [Concept('concept_ch_modifier_bonus','Pull Multiplier')]#!\\nRaises the sum of the lines above by this much.",
   "es": "#title [Concept('concept_ch_modifier_bonus','Multiplicador de atractivo')]#!\\nAumenta en esta medida la suma de las líneas de arriba."
  },
  "je_ch_widget_bd_prestige_tt": {
-  "en": "#title [concept_ch_prestige]#!\\nOur prestige: [JournalEntry.GetCountry.MakeScope.ScriptValue('prestige_display')|0] of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_prestige_total_display')|0] worldwide.\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!",
-  "es": "#title [concept_ch_prestige]#!\\nNuestro prestigio: [JournalEntry.GetCountry.MakeScope.ScriptValue('prestige_display')|0] de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_prestige_total_display')|0] en todo el mundo.\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!"
+  "en": "#title [concept_ch_prestige]#!\\nOur prestige: [Country.MakeScope.ScriptValue('prestige_display')|0] of [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] worldwide.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!",
+  "es": "#title [concept_ch_prestige]#!\\nNuestro prestigio: [Country.MakeScope.ScriptValue('prestige_display')|0] de [Country.MakeScope.ScriptValue('global_prestige_total_display')|0] en todo el mundo.\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_prestige_max')|0].#!"
  },
  "je_ch_widget_bd_raw_tt": {
-  "en": "#title [concept_cultural_pull_raw_score]#!\\nWorld Total: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
-  "es": "#title [concept_cultural_pull_raw_score]#!\\nTotal mundial: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
+  "en": "#title [concept_cultural_pull_raw_score]#!\\nWorld Total: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!",
+  "es": "#title [concept_cultural_pull_raw_score]#!\\nTotal mundial: #v [Country.MakeScope.ScriptValue('ch_global_raw_display')|0]#!"
  },
  "je_ch_widget_bd_sol_tt": {
   "en": "#title [concept_ch_sol]#!\\nOur standard of living: [JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] against a world average of [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1].\\n#lore The bar runs from [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_min')|0] to [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_max')|0], zero at the centre line.#!",
   "es": "#title [concept_ch_sol]#!\\nNuestro nivel de vida: [JournalEntry.GetCountry.MakeScope.ScriptValue('sol_display')|1] frente a una media mundial de [JournalEntry.GetCountry.MakeScope.ScriptValue('global_average_sol_display')|1].\\n#lore La barra va de [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_min')|0] a [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_sol_max')|0], con el cero en la línea central.#!"
  },
  "je_ch_widget_bd_tech_tt": {
-  "en": "#title [concept_ch_tech_leadership]#!\\nWorld firsts, decaying each year.\\n#lore The bar is full at [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!",
-  "es": "#title [concept_ch_tech_leadership]#!\\nPrimicias mundiales, que decaen cada año.\\n#lore La barra está llena en [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!"
+  "en": "#title [concept_ch_tech_leadership]#!\\nWorld firsts, decaying each year.\\n#lore The bar is full at [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!",
+  "es": "#title [concept_ch_tech_leadership]#!\\nPrimicias mundiales, que decaen cada año.\\n#lore La barra está llena en [Country.MakeScope.ScriptValue('ch_bar_tech_max')|0].#!"
  },
  "je_ch_widget_board_header": {
   "en": "Top Cultural Powers",
   "es": "Principales potencias culturales"
  },
- "je_ch_widget_board_us": {
-  "en": "Our Rank: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
-  "es": "Nuestro puesto: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_rank_self_display')|0]#! de [JournalEntry.GetCountry.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
+ "je_ch_widget_board_us_ours": {
+  "en": "Our Rank: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! of [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]",
+  "es": "Nuestro puesto: #v [Country.MakeScope.ScriptValue('ch_rank_self_display')|0]#! de [Country.MakeScope.ScriptValue('ch_ranked_total_display')|0]"
  },
- "je_ch_widget_breakdown_header": {
+ "je_ch_widget_breakdown_header_ours": {
   "en": "Where Our Pull Comes From",
   "es": "De dónde procede nuestro atractivo"
  },
