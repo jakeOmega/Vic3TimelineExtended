@@ -1,10 +1,13 @@
-"""The Demographics tab of the Census Data window, and the country it reads.
+"""National Info, the Census Data window, and the country its Demographics tab reads.
 
 Vanilla's Census Data window (gui/pop_browser_panel.gui, the pop browser) lists
-the pops of whichever country it was opened for: "Census Data" for the player's,
-"French Census Data" for France. The mod's override adds a strip of two tabs over
-it, Pops (vanilla's window) and Demographics, the census of that same country,
-from the sections the Population panel's Demographics tab draws.
+the pops of whichever country it was opened for. The mod renames it National
+Info ("French National Info" for France) and adds a strip over it: Pops
+(vanilla's window), then a tab for each system another country's panel may show
+(gen_te_systems_window.TABS' public tabs, Demographics among them), generated into
+gui/te_national_info_generated.gui (test_national_info.py holds what it writes).
+Demographics is the census of that same country, from the sections the
+Population panel's Demographics tab draws.
 
 For that, the country's sections read the Country in their context rather than
 the player: the Population panel's window sets it to the player (AccessPlayer),
@@ -12,8 +15,8 @@ the Census Data window to its own country (PopBrowserPanel.GetCountry). So this
 file holds:
 
 * the override to vanilla's file (test_fixtures/vanilla_gui/pop_browser_panel.gui):
-  lines added inside `### MOD: Demographics tab` blocks, none removed;
-* the strip, its gates and the tab flag;
+  lines added inside `### MOD: National Info` blocks, none removed;
+* the strip, its gates and the tab key (te_ni_tab), as the window places them;
 * that nothing the country's sections draw reads GetPlayer, in the markup or in
   any loc key they reach (that none of that text says "our" or "your" is
   test_te_system_tab_bodies.py's BindingTest's, for every public tab);
@@ -30,6 +33,7 @@ import unittest
 from pathlib import Path
 
 from gui_test_helpers import gui_keys, history_charts, load_loc, loc_closure, type_bodies
+from scripts.generators import gen_te_systems_window as gen
 
 ROOT = Path(__file__).resolve().parent
 OVERRIDE = ROOT / "gui" / "pop_browser_panel.gui"
@@ -39,12 +43,14 @@ LAYOUT = ROOT / "gui" / "te_demographics_layout.gui"
 SGUIS = ROOT / "common" / "scripted_guis" / "te_demog_sguis.txt"
 VANILLA_LOC = ROOT / "vanilla_parsed" / "localization_english.json"
 
-MOD_OPEN = "### MOD: Demographics tab"
+MOD_OPEN = "### MOD: National Info"
 MOD_CLOSE = "### END MOD ###"
-FLAG = "te_pop_browser_demog"
+GENERATED = ROOT / "gui" / "te_national_info_generated.gui"
+FLAG, FLAG_VALUE = "te_ni_tab", "demographics"
 RULE = "GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 UNLOCK = "GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End )"
-SHOWN = f"And( GetVariableSystem.Exists('{FLAG}'), {RULE} )"
+# Demographics is shown: chosen last, the rule on and the country's first census taken
+SHOWN = f"And( GetVariableSystem.HasValue('{FLAG}', '{FLAG_VALUE}'), And( {RULE}, {UNLOCK} ) )"
 
 # The composers of the country's sections, one a host.
 COMPOSERS = ("te_demog_tab_sections", "te_demog_browser_sections")
@@ -146,7 +152,8 @@ class OverrideTest(unittest.TestCase):
                 regions.append((opened, i))
                 opened = None
         self.assertIsNone(opened, "unclosed MOD block")
-        self.assertEqual(len(regions), 5, "the header, the strip, two vanilla rows' gates and the census")
+        self.assertEqual(len(regions), 7, "the header, the show state's clear, the strip, two vanilla rows' gates, "
+                                          "the tabs' column and the chart viewers")
         # Without its MOD blocks the override is vanilla's file, line for line (blank lines aside): nothing changed,
         # nothing removed, nothing added outside a block.
         inside = {i for a, b in regions for i in range(a, b + 1)}
@@ -163,43 +170,94 @@ class OverrideTest(unittest.TestCase):
                          "vanilla changed: merge it into gui/pop_browser_panel.gui and refresh the fixture")
 
 
+def _template(text, name):
+    m = re.search(rf'^template {name} \{{\n\tvisible = (?:"\[(.*)\]"|(yes|no))\n\}}', text, re.M)
+    assert m, f"no template {name}"
+    return m.group(1) or m.group(2)
+
+
 class StripTest(unittest.TestCase):
+    """The window's strip and its column, as it places the generated pieces
+    (test_national_info.py holds the pieces themselves)."""
+
     @classmethod
     def setUpClass(cls):
         cls.text = code(read(OVERRIDE))
-        cls.flat = re.sub(r"\s+", " ", cls.text)
+        cls.generated = code(read(GENERATED))
 
-    def test_the_strip_shows_while_the_rule_runs_and_holds_two_tabs(self):
-        strip = block_from(self.text, self.text.index("tab_buttons = {"))
-        self.assertEqual(self.text.count("tab_buttons = {"), 1)
-        self.assertIn(f'visible = "[{RULE}]"', self.text[:self.text.index("tab_buttons = {")].rsplit("hbox = {", 1)[1])
-        slots = set(re.findall(r'blockoverride "(\w+?)_button', strip))
-        self.assertEqual(slots, {"first", "second"}, "the other slots stay hidden")
+    def test_the_strip_shows_while_the_rule_runs(self):
+        self.assertEqual(self.text.count("te_ni_strips = {}"), 1)
+        row = block_from(self.text, self.text[:self.text.index("te_ni_strips = {}")].rindex("hbox = {"))
+        self.assertIn("using = te_ni_strip_shown", row)
+        self.assertNotIn("tab_buttons", self.text, "the strip is generated")
+        # the strip shows while the public tabs' strip gates allow, Demographics' among them: while its
+        # rule runs the census
+        strip_shown = gen.ni_strip_shown()
+        self.assertEqual(_template(self.generated, "te_ni_strip_shown"), strip_shown or "yes")
+        if strip_shown is not None:
+            self.assertIn("GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( "
+                          "Country.MakeScope ).End )", strip_shown)
+        strip = block_from(self.generated, self.generated.index("type te_ni_strips"))
+        keys = 1 + len(gen.ni_tabs())
+        self.assertEqual(set(re.findall(r'blockoverride "(\w+?)_button', strip)),
+                         set(gen.SLOTS[:min(keys, gen.NI_PER_STRIP)]), "a slot a tab, the rest hidden")
         self.assertIn('text = "te_pop_browser_tab_pops"', strip)
-        self.assertIn('text = "te_pops_tab_demog"', strip)
+        self.assertIn('text = "te_window_tab_demographics"', strip)
 
     def test_the_demographics_tab_opens_with_the_countrys_first_census(self):
-        strip = block_from(self.text, self.text.index("tab_buttons = {"))
+        strip = block_from(self.generated, self.generated.index("type te_ni_strips"))
         click = block_from(strip, strip.index('blockoverride "second_button_click"'))
-        self.assertIn(f'enabled = "[{UNLOCK}]"', click)
-        self.assertIn(f"GetVariableSystem.Set('{FLAG}', 'yes')", click)
+        self.assertIn(f'enabled = "[And( {RULE}, {UNLOCK} )]"', click)
+        self.assertIn(f"GetVariableSystem.Set('{FLAG}', '{FLAG_VALUE}')", click)
         first = block_from(strip, strip.index('blockoverride "first_button_click"'))
-        self.assertIn(f"GetVariableSystem.Clear('{FLAG}')", first)
-        tooltip = block_from(strip, strip.index('blockoverride "second_button_tooltip"'))
-        self.assertIn(f"SelectLocalization( {UNLOCK}, 'te_pop_browser_tab_demog_tt', "
-                      f"'te_pop_browser_tab_demog_pending_tt' )", tooltip)
+        self.assertIn(f"GetVariableSystem.Set('{FLAG}', 'pops')", first)
+        self.assertEqual(_template(self.generated, "te_ni_demographics_selected"), SHOWN)
 
-    def test_the_census_takes_the_place_of_vanillas_rows(self):
-        # vanilla's header row and its filters, charts and table: each hidden exactly while the census shows
-        self.assertEqual(self.text.count(f'visible = "[Not( {SHOWN} )]"'), 2)
-        census = block_from(self.text, self.text.index('name = "te_pop_browser_demog_tab"') - 40)
-        self.assertIn(f'visible = "[{SHOWN}]"', census)
-        self.assertIn("te_demog_browser_sections = {}", census)
-        self.assertEqual(self.text.count("te_demog_browser_sections = {}"), 1)
+    def test_the_tabs_take_the_place_of_vanillas_rows(self):
+        # vanilla's header row and its filters, charts and table: each shown exactly while Pops is
+        self.assertEqual(self.text.count("using = te_ni_pops_selected"), 2)
+        self.assertEqual(_template(self.generated, "te_ni_pops_selected"), gen.ni_pops_selected())
+        self.assertIn(SHOWN, gen.ni_pops_selected(), "Demographics shown is one way Pops isn't")
+        content = block_from(self.text, self.text.index('name = "te_ni_content"') - 40)
+        self.assertIn("using = te_ni_content_shown", content)
+        self.assertIn("te_ni_tabs = {}", content)
+        self.assertEqual(self.text.count("te_ni_tabs = {}"), 1)
+        self.assertEqual(_template(self.generated, "te_ni_content_shown"), gen.ni_any_shown())
+        self.assertEqual(gen.ni_pops_selected(), f"Not( {gen.ni_any_shown()} )")
+        # the census: the player's own country's mount and another country's, each the browser's three columns
+        self.assertNotIn("te_demog_browser_sections", self.text)
+        self.assertEqual(self.generated.count("te_demog_browser_sections = {}"), 2)
+
+    def test_the_old_flag_is_gone(self):
+        for path in (OVERRIDE, GENERATED, LAYOUT, WIDGETS):
+            self.assertNotIn("te_pop_browser_demog", read(path))
+
+    def test_a_viewer_left_open_never_reopens_with_the_window(self):
+        show = self.text[self.text.index('blockoverride "animation_state_block"'):]
+        show = block_from(show, show.index("state = {"))
+        self.assertIn("name = _show", show)
+        self.assertIn("on_start = \"[GetVariableSystem.Clear('te_ni_chart')]\"", show)
 
     def test_the_window_keeps_its_country(self):
         self.assertIn('datacontext = "[PopBrowserPanel.GetCountry]"', self.text)
         self.assertNotIn("GetPlayer", self.text, "the window's tabs read its own country")
+        self.assertIn("demographics", [t.key for t in gen.ni_tabs()])
+
+
+class NameTest(unittest.TestCase):
+    """The window's name (spec § 6.2): POP_BROWSER, its title, the Population panel's button and the Politics tab's,
+    renamed in the replace loc, with vanilla's adjective for another country kept."""
+
+    def test_the_window_is_national_info(self):
+        loc = load_loc()
+        self.assertEqual(loc["POP_BROWSER"], "[AddLocalizationIf(Not(Country.IsLocalPlayer), "
+                                             "Concatenate(Country.GetAdjective, ' '))]National Info")
+        with open(VANILLA_LOC, encoding="utf-8") as f:
+            vanilla = dict(json.load(f))["POP_BROWSER"]
+        self.assertEqual(vanilla.replace("Census Data", "National Info"), loc["POP_BROWSER"], "vanilla's splice kept")
+        self.assertIn('text = "POP_BROWSER"', read(OVERRIDE))
+        for key in ("te_pop_browser_tab_demog_tt", "te_pop_browser_tab_demog_pending_tt"):
+            self.assertNotIn(key, loc, "the strip's tooltips are the generated ones now")
 
 
 class CountryContextTest(unittest.TestCase):
@@ -252,8 +310,8 @@ class CountryContextTest(unittest.TestCase):
                 self.assertNotRegex(body, r"(?<![\w.])Country\.")
 
     def test_the_new_keys_exist(self):
-        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_pop_browser_tab_demog_tt",
-                    "te_pop_browser_tab_demog_pending_tt", "te_demog_hist_untracked", "te_demog_pyr_outline_next",
+        for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_history_untracked",
+                    "te_demog_pyr_outline_next",
                     "te_demog_pyr_outline_played"):
             with self.subTest(key=key):
                 self.assertIn(key, self.loc)
@@ -361,12 +419,16 @@ class GatesTest(unittest.TestCase):
         self.assertIn("has_variable = te_dg_pjf0", body)
 
     def test_the_history_gate_asks_whether_the_country_is_tracked(self):
-        body = block_from(self.sguis, self.sguis.index("te_demog_hist_tracked_sgui = {"))
+        # the shared gate and key every chart's empty state uses (te_history_chart.gui, plan F1.5)
+        sguis = read(ROOT / "common" / "scripted_guis" / "te_history_scripted_gui.txt")
+        body = block_from(sguis, sguis.index("te_history_tracked_sgui = {"))
         self.assertIn("te_history_country_is_tracked = yes", body)
+        self.assertNotIn("te_demog_hist_tracked_sgui", self.sguis)
         charts = history_charts(type_bodies(read(WIDGETS))["te_demog_sec_history"])
         self.assertEqual(len(charts), 8)
         for chart in charts:
-            self.assertEqual(chart.count("'te_demog_hist_empty', 'te_demog_hist_untracked'"), 1)
+            self.assertEqual(chart.count("GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( "
+                                         "Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked'"), 1)
 
 
 if __name__ == "__main__":

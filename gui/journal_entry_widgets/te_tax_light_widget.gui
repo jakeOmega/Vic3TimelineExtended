@@ -13,8 +13,9 @@
 ###   te_tax_light_how_section    How the Light Tax Code Works, a link to the
 ###                               Help page (te_tax_code_help_popup)
 ###
-### Every number is a guarded view of the player's code,
-### GetPlayer.MakeScope.ScriptValue('te_tax_view_light_*' / 'te_tax_view_en_*'),
+### Every number is a guarded view of the shown country's code (Country, which
+### every mount supplies: another country's in National Info),
+### Country.MakeScope.ScriptValue('te_tax_view_light_*' / 'te_tax_view_en_*'),
 ### and every name a customizable localization
 ### (te_tax_light_generated_custom_loc.txt), so nothing here copies a value from
 ### script. Rows are at most 480 wide inside a 520 panel (style guide rule 8).
@@ -147,7 +148,7 @@ types te_tax_light_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_tax_section_header = {
 			blockoverride "left_text" {
@@ -172,99 +173,102 @@ types te_tax_light_widget_types
 				ignoreinvisible = yes
 				spacing = 2
 
+				# How to use the − and +, which only the player's own panel draws
+				# (te_tax_instrument_row's slots): the player's own too.
 				te_tax_text = {
+					using = te_own_country_only
 					text = "te_tax_lt_intro"
 				}
 				te_tax_light_head = {}
 
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_wage'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_light_levied_wage'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_wage_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_wage"
 						tooltip = "te_tax_lt_row_wage_tt"
 					}
 					blockoverride "row_law" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_range_wage')]"
+						text = "[Country.GetCustom('te_tax_lt_range_wage')]"
 					}
 					blockoverride "row_arrow" {}
 					blockoverride "row_draft" {
 						text = "te_tax_en_rate_wage"
 					}
 					blockoverride "row_delta" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_rung_wage')]"
+						text = "[Country.GetCustom('te_tax_lt_rung_wage')]"
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_div'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_light_levied_div'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_div_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_div"
 						tooltip = "te_tax_lt_row_div_tt"
 					}
 					blockoverride "row_law" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_range_div')]"
+						text = "[Country.GetCustom('te_tax_lt_range_div')]"
 					}
 					blockoverride "row_arrow" {}
 					blockoverride "row_draft" {
 						text = "te_tax_en_rate_div"
 					}
 					blockoverride "row_delta" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_rung_div')]"
+						text = "[Country.GetCustom('te_tax_lt_rung_div')]"
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_land'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_light_levied_land'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_land_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_land"
 						tooltip = "te_tax_lt_row_land_tt"
 					}
 					blockoverride "row_law" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_range_land')]"
+						text = "[Country.GetCustom('te_tax_lt_range_land')]"
 					}
 					blockoverride "row_arrow" {}
 					blockoverride "row_draft" {
 						text = "te_tax_en_rate_land"
 					}
 					blockoverride "row_delta" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_rung_land')]"
+						text = "[Country.GetCustom('te_tax_lt_rung_land')]"
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_head'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_light_levied_head'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_head_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_head"
 						tooltip = "te_tax_lt_row_head_tt"
 					}
 					blockoverride "row_law" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_range_head')]"
+						text = "[Country.GetCustom('te_tax_lt_range_head')]"
 					}
 					blockoverride "row_arrow" {}
 					blockoverride "row_draft" {
 						text = "te_tax_en_rate_head"
 					}
 					blockoverride "row_delta" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_rung_head')]"
+						text = "[Country.GetCustom('te_tax_lt_rung_head')]"
 					}
 				}
 				te_tax_instrument_row = {
-					visible = "[NotEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_tax_view_light_levied_cons'), '(CFixedPoint)0' )]"
+					visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_tax_view_light_levied_cons'), '(CFixedPoint)0' )]"
 					datacontext = "[GetScriptedGui('te_tax_light_step_cons_sgui')]"
 					blockoverride "row_label" {
 						text = "te_tax_inst_cons"
 						tooltip = "te_tax_lt_row_cons_tt"
 					}
 					blockoverride "row_law" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_range_cons')]"
+						text = "[Country.GetCustom('te_tax_lt_range_cons')]"
 					}
 					blockoverride "row_arrow" {}
 					blockoverride "row_draft" {
 						text = "te_tax_en_rate_cons"
 					}
 					blockoverride "row_delta" {
-						text = "[GetPlayer.GetCustom('te_tax_lt_rung_cons')]"
+						text = "[Country.GetCustom('te_tax_lt_rung_cons')]"
 					}
 				}
 			}
@@ -282,7 +286,7 @@ types te_tax_light_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
-		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_tax_section_header = {
 			tooltip = "te_help_link_tt"

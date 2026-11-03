@@ -11,7 +11,7 @@
 # label the country census writes exists with it. These cover the rest. Each
 # reads only its root (is_shown only: none changes anything, so none is valid
 # or does anything), but for phase 2 step 2's five pension buttons at the end,
-# the only ones the player presses. The first eight are country scope, rooted at the country
+# the only ones the player presses. The first seven are country scope, rooted at the country
 # the panel shows (Country.MakeScope: the player's in the Population panel, any country's in the
 # Census Data window); the six at the end are state scope, rooted at the state the panel
 # shows (the state panel's Demographics subtab, plan Task 14; the last three its
@@ -103,19 +103,6 @@ te_demog_outline_ready_sgui = {
 		is_ai = no
 		has_variable = te_dg_pjf0
 	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-# The yearly history (te_dg_hist, te_demog_history_record) is kept only for the
-# countries te_history_country_is_tracked names: played ones and major powers.
-# The History section's empty charts say which case they are in: nothing
-# recorded yet, or a country (a minor AI one, in the Census Data window) with no
-# record kept.
-te_demog_hist_tracked_sgui = {
-	scope = country
-	is_shown = { te_history_country_is_tracked = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

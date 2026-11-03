@@ -435,8 +435,11 @@ class OtherTabsTest(unittest.TestCase):
                       tool.render(s))
 
     def test_the_repo_names_a_key_two_tabs_render(self):
-        s = tool.survey_tab("banking")
-        self.assertIn("colonial_empire", s.loc["te_hist_since"].also)
+        # The tabs' rendered keys, which `also` is drawn from: a key with no read
+        # left (Banking's binding, PR F2, took te_hist_since's) still counts, so
+        # this holds however many systems are bound; test_the_note holds `also`.
+        for key in ("banking", "colonial_empire"):
+            self.assertIn("te_hist_since", tool._tab_keys(key), key)
 
     def test_isactive_becomes_the_entrys_gate_not_the_readouts(self):
         """Banking and the Colonial Empire open on a readout without the entry
@@ -447,7 +450,9 @@ class OtherTabsTest(unittest.TestCase):
                 s = tool.survey_tab(key)
                 self.assertEqual(s.gate, f"GetScriptedGui('{entry}').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
                 self.assertNotIn("readout", s.gate)
-                self.assertIn(f"the entry's gate on Country: [{s.gate}]", tool.render(s))
+                # The advice prints while an IsActive read is left to bind.
+                if any(r.finding.what == "JournalEntry.IsActive" for r in s.markup):
+                    self.assertIn(f"the entry's gate on Country: [{s.gate}]", tool.render(s))
         from scripts.generators import gen_te_systems_window as gen
         nation = next(t for t in gen.TABS if t.key == "nation")
         self.assertIsNone(tool.entry_gate(nation))  # always open, no gate
@@ -496,6 +501,22 @@ class RepoTest(unittest.TestCase):
         finally:
             bodies.WORLD_LOC.clear()
             bodies.WORLD_LOC.update(saved)
+
+    def test_survey_tab_walks_the_readout(self):
+        """A tab that opens on a readout without its entry (Tab.readout) is
+        surveyed with it, as BindingTest walks it: the readout's types, its
+        name in the target, and its loc keys among the tab's."""
+        import gui_test_helpers as h
+        from scripts.generators import gen_te_systems_window as gen
+        banking = next(t for t in gen.TABS if t.key == "banking")
+        readout = banking.readout.panel
+        s = tool.survey_tab("banking")
+        self.assertIn(readout, s.types)
+        self.assertIn(readout, s.target)
+        types, loc = h.mod_types(), h.load_loc()
+        only = h.panel_loc_keys({readout}, types, loc) - h.panel_loc_keys({banking.wide}, types, loc)
+        self.assertTrue(only, "the readout renders keys the composer doesn't")
+        self.assertLessEqual(only, tool._tab_keys("banking"))
 
     def test_survey_tab_names_an_unknown_tab(self):
         with self.assertRaises(KeyError):

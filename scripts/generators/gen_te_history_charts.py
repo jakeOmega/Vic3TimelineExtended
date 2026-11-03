@@ -19,10 +19,11 @@ THE SHAPE. Each chart is two wrapper types:
 
 each a plain flowcontainer holding one te_history_chart instance with its
 blockoverrides inline. That is the shape that draws: gotcha #37 was a type
-derived from te_history_plot, which this is not. The wrapper mirrors the
-chart's own parentanchor and adds nothing else, so the panel lays out as
-before. A chart shown only for some countries keeps its own visible on the
-section's instance of the wrapper, so a hidden chart leaves no spacing
+derived from te_history_plot, which this is not. The wrapper is a column,
+centered, at the chart's fixed width (Dims.width; THE WIDTH IS FIXED below),
+so every chart in a section shares one left edge, as before the registry. A
+chart shown only for some countries keeps its own visible on the section's
+instance of the wrapper, so a hidden chart leaves no spacing
 behind; Chart.shown records it (test_te_history_charts.py holds the section
 to it). The viewer leaves it out: see THE GATE AND NOTHING ELSE below.
 
@@ -46,8 +47,9 @@ adds the blockoverrides a fragment doesn't carry where the size differs from
 te_history_chart's own defaults (which are SMALL's monthly): at LARGE, a
 monthly chart's frame, bars and widths, an annual chart's widths. At SMALL it
 adds only the open button beside the title (chart_open, which opens the
-chart's viewer) and the title's width beside it (open_overrides), so the
-panel's charts are otherwise the fragments' text. The large wrapper leaves out
+chart's viewer) and the title's width beside it (open_overrides), and an
+annual chart's width (chart_width, its text being wider than its frame), so
+the panel's charts are otherwise the fragments' text. The large wrapper leaves out
 the fragment's whole-line comments, which describe the panel's size, but a
 `# world:` line (WORLD), which marks the read under it.
 
@@ -87,6 +89,8 @@ class Dims:
     title_w  the title's max_width (chart_title_width): on the panel, the
              legend's less the open button and its gap beside the title
     empty_w  the empty state's max_width (empty_width)
+    width    (derived) the chart's fixed width (chart_width), and its
+             wrapper's: the frame or the text over it, whichever is wider
     """
     plot: int
     left: int
@@ -96,6 +100,10 @@ class Dims:
     title_w: int
     empty_w: int
     box_h: int | None = None
+
+    @property
+    def width(self) -> int:
+        return max(self.frame[0], TEXT_MARGIN + self.text_w)
 
 
 @dataclass(frozen=True)
@@ -113,6 +121,14 @@ class Size:
 OPEN_BUTTON = 24
 OPEN_GAP = 4
 TITLE_W = 484   # te_history_chart's chart_title_width default
+TEXT_MARGIN = 4   # the margin_left of te_history_chart's title and legend column
+
+# THE WIDTH IS FIXED (Dims.width), on the chart (block "chart_width") and on its
+# wrapper. C1's wrapper, sized by its content, was centered in its column at the
+# width of the chart's text alone, the plot left out, so each chart sat half its
+# plot's excess over its text right of where it belonged, and the short-titled
+# ones ran out of the panel (gui_modding_guide.md gotcha #46). Only the wrapper
+# centers: the chart (te_history_chart) has no anchor and sits at its left.
 
 # The panel's size: today's literals. The monthly row is te_history_chart's own
 # defaults (test_te_history_charts.py holds the type to it), but for the title,
@@ -217,8 +233,8 @@ def _monthly(system: str, entry: str, gate: str, ids: list[str], shown: dict[str
 # Banking's charts drawn only for some countries: one policy-rate chart a
 # currency (a digital one's axis reaches below 0), and no inflation or exchange
 # rate under banking_system_simplified (te_monetary_sguis.txt).
-_DIGITAL = "GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
-_MONETARY = "GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+_DIGITAL = "GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
+_MONETARY = "GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
 BANKING_SHOWN = {"mon_policy": f"Not( {_DIGITAL} )", "mon_policy_digital": _DIGITAL,
                  "mon_inflation": _MONETARY, "mon_fx": _MONETARY}
 
@@ -349,6 +365,12 @@ def _override(name: str, lines: list[str]) -> list[str]:
     return [f'blockoverride "{name}" {{'] + [f"\t{ln}" if ln else "" for ln in lines] + ["}"]
 
 
+def fixed_width(width: int) -> list[str]:
+    """A flowcontainer's width, fixed whatever its content (vanilla's
+    culture_panel.gui list): the chart's and its wrapper's (Dims.width)."""
+    return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
+
+
 def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     """The three plots of te_history_chart's default plot_layouts at other bar
     sizes: one a range, the full range's shown while neither shorter one is set."""
@@ -367,36 +389,38 @@ def plot_layouts(dims: Dims, rng: Range) -> list[str]:
     return out
 
 
-# The open button's own visible, for a chart that reads the Country its host
-# supplies rather than the player's entry: Demographics' (entry None). The
-# Census Data window draws them for any country (pop_browser_panel.gui's
-# PopBrowserPanel.GetCountry), and the viewer reads GetPlayer, so another
-# country's chart shows no button. This is the first half of F1.4's two-button
-# slot (spec § 4.4): F1 adds its other half, the button that opens the foreign
-# viewer (te_ni_chart) for any other country. Every Demographics host supplies a
-# Country: the Population panel (AccessPlayer), the Timeline Extended window's
-# mount (GetPlayer) and the Census Data window.
+# The open button is two buttons in one slot (spec § 4.4), so no section needs
+# to know which window it is in. Every chart host supplies a Country (PR F0):
+# the player's, but in National Info (the Census Data window,
+# PopBrowserPanel.GetCountry), which shows any country. For the player's own
+# country (OWN_COUNTRY_ONLY) the button opens the player's viewer, in te_popups
+# on te_popup, which reads GetPlayer; for another (OTHER_COUNTRY) it opens that
+# country's viewer, which National Info instances at window level under its own
+# Country, on te_ni_chart (NI_KEY, te_ni_chart_viewers). Outside National Info
+# Country is always the player, so only the first ever shows there.
 OWN_COUNTRY_ONLY = "[Country.IsLocalPlayer]"
+OTHER_COUNTRY = "[Not( Country.IsLocalPlayer )]"
+NI_KEY = "te_ni_chart"
 
 
 def open_overrides(chart: Chart) -> list[str]:
     """What the panel's wrapper adds to its fragment (charts PR C2): the title
-    narrowed beside the open button, and the button, which opens the chart's
-    viewer; on a chart that reads its host's Country, only for the player's
-    own (OWN_COUNTRY_ONLY)."""
-    button = ["te_chart_open_button = {"]
-    if chart.entry is None:
-        button.append(f'\tvisible = "{OWN_COUNTRY_ONLY}"')
-    button += [f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"", "}"]
+    narrowed beside the open button, and the slot's two buttons, which open
+    the chart's viewer: the player's (te_popup) for the player's own country,
+    another country's (te_ni_chart) for any other (F1.4)."""
+    own = ["te_chart_open_button = {", f'\tvisible = "{OWN_COUNTRY_ONLY}"',
+           f"\tonclick = \"[GetVariableSystem.Set('te_popup', '{popup_key(chart)}')]\"", "}"]
+    other = ["te_chart_open_button = {", f'\tvisible = "{OTHER_COUNTRY}"',
+             f"\tonclick = \"[GetVariableSystem.Set('{NI_KEY}', '{chart.id}')]\"", "}"]
     return (_override("chart_title_width", [f"max_width = {SMALL[chart.kind].title_w}"])
-            + _override("chart_open", button))
+            + _override("chart_open", own + other))
 
 
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
     """The blockoverrides the chart needs at the size beyond its fragment: each
     the fragment doesn't carry whose value differs from te_history_chart's
-    defaults (SMALL's monthly row, and TITLE_W), and at SMALL the open button
-    beside the title."""
+    defaults (SMALL's monthly row, and TITLE_W), the chart's width among them,
+    and at SMALL the open button beside the title."""
     dims, default = size[chart.kind], SMALL["monthly"]
     carried = set(re.findall(r'blockoverride "(\w+)"', text))
     out: list[str] = []
@@ -408,6 +432,10 @@ def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
         out += _override("chart_text_width", [f"max_width = {dims.text_w}"])
     if "empty_width" not in carried and dims.empty_w != default.empty_w:
         out += _override("empty_width", [f"max_width = {dims.empty_w}"])
+    if "chart_width" in carried:
+        raise ValueError(f"{chart.id}: a fragment leaves chart_width to the generator")
+    if dims.width != default.width:
+        out += _override("chart_width", fixed_width(dims.width))
     if size is SMALL:
         if {"chart_title_width", "chart_open"} & carried:
             raise ValueError(f"{chart.id}: a fragment leaves chart_title_width and chart_open to the generator")
@@ -437,8 +465,11 @@ def render_chart(chart: Chart, size: Size) -> str:
 
 
 def wrapper(chart: Chart, size: Size) -> list[str]:
+    """The chart in a column, as before the registry, at its fixed width (see
+    THE WIDTH IS FIXED): never centred on a width its content gives it."""
     body = render_chart(chart, size).split("\n")
-    return ([f"type {wrapper_name(chart, size)} = flowcontainer {{", "\tparentanchor = hcenter", ""]
+    head = ["direction = vertical", "parentanchor = hcenter"] + fixed_width(size[chart.kind].width)
+    return ([f"type {wrapper_name(chart, size)} = flowcontainer {{"] + [f"\t{ln}" for ln in head] + [""]
             + [f"\t{ln}" if ln else "" for ln in body] + ["}"])
 
 
@@ -477,7 +508,9 @@ def wrapper(chart: Chart, size: Size) -> list[str]:
 # range buttons, so the two never drift (by system), with the height the popup
 # allows it.
 KEYS = {
-    "banking": ("te_banking_hist_marker_key", 44),          # two lines of fontsize_medium
+    "banking": ("te_banking_hist_marker_key", 88),          # four lines of fontsize_medium: the
+                                                            # marker's, wrapped to two, and the crash's,
+                                                            # one in English, two in German
     "demographics": ("te_demog_hist_pip_legend", 26),       # one line
     "cultural_hegemony": ("te_ch_hist_model_key", 184),     # eight rows of ch_fontsize_row (17)
 }
@@ -594,6 +627,51 @@ def popups() -> list[str]:
             + [f"\t{popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
 
 
+# --- another country's viewer (National Info, plan PR F1.4) ------------------------
+#
+# National Info (the Census Data window, gui/pop_browser_panel.gui) shows any
+# country, and te_popups reads the player, so another country's chart opens in
+# a viewer the window instances itself, at window level, outside its scroll
+# area: te_ni_chart_<id>_popup, shown on te_ni_chart = <id>, which the open
+# slot's second button sets. Its datacontext is the window's own Country, so it
+# has no GetPlayer and no entry: the same range buttons, large chart and key as
+# the player's viewer, without the gate (the button lives on a chart the panel
+# draws only while its tab is open for that country). Its close buttons clear
+# te_ni_chart (te_ui_popup's popup_close), and the window's _show state clears
+# it too, so a viewer left open never reopens with the window. One a chart, for
+# every chart, so a system joins National Info with no change here.
+
+def ni_popup_name(chart: Chart) -> str:
+    return f"te_ni_chart_{chart.id}_popup"
+
+
+def ni_popup(chart: Chart) -> list[str]:
+    """te_ni_chart_<id>_popup: the chart alone at the viewer's size, for the
+    country National Info shows."""
+    width, height = popup_size(chart)
+    content = [f"{range_row_name(chart.range)} = {{}}", f"{wrapper_name(chart, LARGE)} = {{}}"]
+    if chart.system in KEYS:
+        content.append(f"{KEYS[chart.system][0]} = {{}}")
+    out = [f"type {ni_popup_name(chart)} = te_ui_popup {{"]
+    out += [f"\t{ln}" for ln in _override(
+        "popup_visible", [f"visible = \"[GetVariableSystem.HasValue('{NI_KEY}', '{chart.id}')]\""])]
+    out += [f"\t{ln}" for ln in _override("popup_close", [f"onclick = \"[GetVariableSystem.Clear('{NI_KEY}')]\""])]
+    out += [f"\t{ln}" for ln in _override("popup_title", [f'text = "{popup_title(chart)}"'])]
+    out += [f"\t{ln}" for ln in _override("popup_size", [f"size = {{ {width} {height} }}"])]
+    out += [f"\t{ln}" if ln else "" for ln in _override("popup_list", _container(content, []))]
+    return out + ["}"]
+
+
+def ni_popups() -> list[str]:
+    """te_ni_chart_viewers: every chart's viewer for another country, for
+    National Info to instance once. Up only while one is open, as te_popups is
+    only while te_popup exists: no full-window widget lies over the Pops rows,
+    and the 33 viewers are built only then."""
+    return (["type te_ni_chart_viewers = widget {", "\tsize = { 100% 100% }",
+             f"\tvisible = \"[GetVariableSystem.Exists('{NI_KEY}')]\"", ""]
+            + [f"\t{ni_popup_name(c)} = {{}}" for c in CHARTS] + ["}"])
+
+
 # --- the file -------------------------------------------------------------------
 
 HEADER = [
@@ -607,7 +685,9 @@ HEADER = [
     "### docstring and docs/systems/mod_systems/history_charts.md.",
     "### Then the viewer (charts PR C2): each range variable's buttons (te_chart_range_row_<var>),",
     "### each chart's popup (te_chart_<id>_popup, on te_popup = chart_<id>) and te_chart_popups,",
-    "### which gui/te_popups.gui instances.",
+    "### which gui/te_popups.gui instances. Then another country's viewer (National Info, PR F1):",
+    "### each chart's popup (te_ni_chart_<id>_popup, on te_ni_chart = <id>) and te_ni_chart_viewers,",
+    "### which gui/pop_browser_panel.gui instances.",
     "",
 ]
 
@@ -630,6 +710,11 @@ def _validate() -> None:
         unused = set(fragments(s)) - used[s]
         if unused:
             raise ValueError(f"{s}.gui.in: fragments no chart uses: {sorted(unused)}")
+    for size in SIZES:
+        for kind, dims in size.kinds.items():
+            title_row = dims.title_w + (OPEN_GAP + OPEN_BUTTON if size is SMALL else 0)
+            if TEXT_MARGIN + max(title_row, dims.text_w) > dims.width or dims.empty_w > dims.frame[0]:
+                raise ValueError(f"{size.name} {kind}: the text is wider than the chart's {dims.width} px")
     if set(KEYS) - set(SYSTEMS) or set(POPUP_TITLES) - set(BY_ID):
         raise ValueError("KEYS names a system, and POPUP_TITLES a chart, that CHARTS doesn't")
     for c in CHARTS:
@@ -660,6 +745,13 @@ def render() -> str:
         lines += [f"\t{ln}" if ln else "" for ln in popup(chart)]
     lines += ["", "\t### The viewer: every popup, for te_popups (gui/te_popups.gui)"]
     lines += [f"\t{ln}" if ln else "" for ln in popups()]
+    lines += ["", "\t### Another country's viewer (National Info): each chart's popup"]
+    for i, chart in enumerate(CHARTS):
+        if i:
+            lines.append("")
+        lines += [f"\t{ln}" if ln else "" for ln in ni_popup(chart)]
+    lines += ["", "\t### Another country's viewer: every popup, for National Info (gui/pop_browser_panel.gui)"]
+    lines += [f"\t{ln}" if ln else "" for ln in ni_popups()]
     lines.append("}")
     return "\n".join(lines) + "\n"
 
