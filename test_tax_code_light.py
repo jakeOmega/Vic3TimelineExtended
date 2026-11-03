@@ -678,8 +678,8 @@ class PanelTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertIn(f"datacontext = \"[GetScriptedGui('te_tax_light_step_{key}_sgui')]\"", text)
                 self.assertIn(f"ScriptValue('te_tax_view_light_levied_{key}')", text)
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_lt_range_{key}')", text)
-                self.assertIn(f"GetPlayer.GetCustom('te_tax_lt_rung_{key}')", text)
+                self.assertIn(f"Country.GetCustom('te_tax_lt_range_{key}')", text)
+                self.assertIn(f"Country.GetCustom('te_tax_lt_rung_{key}')", text)
         self.assertEqual(text.count('blockoverride "row_arrow" {}'), len(KEYS))
 
     def test_display_gate(self):
