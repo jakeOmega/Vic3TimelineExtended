@@ -20,7 +20,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import assert_wide_matches_narrow  # noqa: E402
+from gui_test_helpers import _children, assert_wide_matches_narrow  # noqa: E402
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_space_race.txt")
@@ -298,12 +298,12 @@ class FlagTest(unittest.TestCase):
         # two live sections per milestone; solar colonization's Colony Fleets,
         # Solar System and its "show all" toggle, Colonies (audit SPC-5: one
         # table for what Our Colonies, Settlers, Colony Modules, Colony
-        # Autonomy and Colony Defences showed) and How Solar Colonization
-        # Works; the shared reference; the Space Race tab's Space Powers and
-        # Orbit; and under Full Colonies Space Command, Space Fleets and
-        # Locations (slice 6); and the colony target popup's "show all"
-        # (UI pass design § 5)
-        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 12)
+        # Autonomy and Colony Defences showed); the Space Race tab's Space
+        # Powers and Orbit; and under Full Colonies Space Command, Space Fleets
+        # and Locations (slice 6); and the colony target popup's "show all"
+        # (UI pass design § 5). How the Space Race Works and How Solar
+        # Colonization Works have none: they are links to the Help page.
+        self.assertEqual(len(flags), 2 * len(CONTROLLED) + 10)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -316,13 +316,27 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(negated, 1, f)
                 self.assertGreaterEqual(bare, 2, f)
 
-    def test_live_sections_open_and_how_it_works_collapsed(self):
+    def test_live_sections_open_and_how_it_works_a_link(self):
         for m in CONTROLLED:
             root = _root(self.text, f"widget_je_space_race_{m}")
             self.assertIn(f"'sr_panel_control_{m}_closed'", root)
             self.assertIn(f"'sr_panel_rivals_{m}_closed'", root)
-        self.assertIn("Toggle('sr_panel_how_open')", _type_body(self.text, "te_sr_sec_how"))
         self.assertIn("Toggle('sr_panel_colonies_closed')", _type_body(self.text, "te_sr_sec_colonies"))
+        # both How sections are their header alone, which opens the Help page
+        # (te_space_race_help_popup, on te_popup = help_space_race), each with
+        # its own name; their flags retired (test_te_help_pages.py)
+        for section, title in (("te_sr_sec_how", "je_space_race_widget_how_header"),
+                               ("te_sr_sec_how_colonies", "je_space_race_widget_howc_header")):
+            body = _type_body(self.text, section)
+            with self.subTest(section=section):
+                self.assertIn(f'text = "{title}"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"", body)
+                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+                self.assertNotRegex(body, r'blockoverride "onclick_show')
+                self.assertNotIn("te_sr_note", body)
+                self.assertNotIn("Toggle", body)
+        for flag in ("sr_panel_how_open", "sr_panel_how_colonies_open"):
+            self.assertNotIn(flag, self.text)
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -648,15 +662,20 @@ class ColoniesTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_space_race_works(self):
         gui = _read(GUI)
-        how = _type_body(gui, "te_sr_sec_how")
+        how = _type_body(gui, "te_space_race_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
-        # audit SPC-4: the colony sections' rules are in How Solar Colonization
-        # Works, collapsed, at the foot of the colonization panel
-        how_colonies = _type_body(gui, "te_sr_sec_how_colonies")
-        self.assertIn("Toggle('sr_panel_how_colonies_open')", how_colonies)
+        # audit SPC-4: the colony sections' rules are How Solar Colonization
+        # Works, on the same Help page under that name, after the Space Race's
+        # own topics; the colonization panel's section is its link. The rule's
+        # topics are gated on the player, not an entry (test_te_help_pages.py).
+        at = how.index('text = "je_space_race_widget_howc_header"')
+        self.assertGreater(at, how.index(f'"{HOW_KEYS[-1]}"'))
+        how_colonies = how[at:]
         for topic in ("fleets", "windows", "settlers", "modules", "autonomy", "space_command", "defences"):
             self.assertIn(f'"je_space_race_widget_howc_{topic}"', how_colonies, topic)
+        for rule, n in (("sr_disp_colonies_contested", 6), ("sr_disp_colonies_full", 4)):
+            self.assertEqual(how_colonies.count(f"GetPlayer.MakeScope.ScriptValue('{rule}')"), n, rule)
         for sec in ("te_sr_sec_control", "te_sr_sec_rivals", "te_sr_overview_milestone",
                     "te_sr_overview_transit", "te_sr_sec_colonies", "te_sr_sec_colony_fleets",
                     "te_sr_sec_solar_system", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
@@ -665,6 +684,26 @@ class HowItWorksTest(unittest.TestCase):
             self.assertNotIn("te_sr_note", body, f"{sec} carries an explanation")
             for key in HOW_KEYS:
                 self.assertNotIn(key, body, sec)
+
+    def test_each_colony_topic_shows_under_its_rule(self):
+        """Each Solar Colonization topic's heading and note carry its own
+        colonies rule (or none), read on the player: swapping two topics'
+        gates keeps the counts above but fails here."""
+        rules = {"fleets": None, "windows": None, "settlers": "sr_disp_colonies_contested",
+                 "modules": "sr_disp_colonies_contested", "autonomy": "sr_disp_colonies_contested",
+                 "space_command": "sr_disp_colonies_full", "defences": "sr_disp_colonies_full"}
+        how = _strip_comments(_type_body(_read(GUI), "te_space_race_help_body"))
+        gates = {}
+        for kind, name, inner in _children(how):
+            m = re.search(r'text = "je_space_race_widget_howc_(\w+)"', inner) if kind == "widget" else None
+            if m and m.group(1) != "header":
+                gate = re.search(r'visible = "(.*)"', inner)
+                gates[m.group(1)] = gate.group(1) if gate else None
+        expected = {}
+        for topic, rule in rules.items():
+            shown = None if rule is None else f"[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{rule}'), '(CFixedPoint)1' )]"
+            expected[f"sub_{topic}"] = expected[topic] = shown
+        self.assertEqual(gates, expected)
 
     def test_the_old_long_labels_are_gone(self):
         """The funding label's "(each level draws on innovation)" is in the concept

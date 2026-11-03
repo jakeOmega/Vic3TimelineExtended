@@ -1499,7 +1499,8 @@ types te_systems_window_generated_types
 	### goes with it), and a note in their place while none runs
 	### (te_window_space_race_idle_sgui). Several can run at once. Each shows
 	### the types its journal roots wrap, the debris row overridden out (Orbit
-	### shows it once), then Open Journal Entry for that entry.
+	### shows it once), then Open Journal Entry for that entry. Every header
+	### here, the note's too, ends on the "?" that opens the Help page.
 	type te_sr_window_milestones = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
@@ -1522,6 +1523,9 @@ types te_systems_window_generated_types
 				blockoverride "text" {
 					text = "te_window_space_race_idle_header"
 				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+				}
 			}
 			te_sr_panel = {
 				te_sr_text = {
@@ -1538,6 +1542,9 @@ types te_systems_window_generated_types
 					using = default_list_position
 					blockoverride "text" {
 						text = "je_space_race_suborbital"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
@@ -1564,6 +1571,9 @@ types te_systems_window_generated_types
 					blockoverride "text" {
 						text = "je_space_race_orbital"
 					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+					}
 				}
 			}
 			blockoverride "tab_entry" {
@@ -1588,6 +1598,9 @@ types te_systems_window_generated_types
 					using = default_list_position
 					blockoverride "text" {
 						text = "je_space_race_moon_landing"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
@@ -1614,6 +1627,9 @@ types te_systems_window_generated_types
 					blockoverride "text" {
 						text = "je_space_race_probe"
 					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+					}
 				}
 			}
 			blockoverride "tab_entry" {
@@ -1638,6 +1654,9 @@ types te_systems_window_generated_types
 					using = default_list_position
 					blockoverride "text" {
 						text = "je_space_race_moon_base"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
@@ -1664,6 +1683,9 @@ types te_systems_window_generated_types
 					blockoverride "text" {
 						text = "je_space_race_mars_landing"
 					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+					}
 				}
 			}
 			blockoverride "tab_entry" {
@@ -1688,6 +1710,9 @@ types te_systems_window_generated_types
 					using = default_list_position
 					blockoverride "text" {
 						text = "je_space_race_interstellar_probe"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}
@@ -1714,6 +1739,9 @@ types te_systems_window_generated_types
 					blockoverride "text" {
 						text = "je_space_race_interstellar_results"
 					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+					}
 				}
 			}
 			blockoverride "tab_entry" {
@@ -1735,6 +1763,9 @@ types te_systems_window_generated_types
 					using = default_list_position
 					blockoverride "text" {
 						text = "je_space_race_solar_colonization"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 					}
 				}
 			}

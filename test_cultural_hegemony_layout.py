@@ -166,7 +166,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"ch_programmes_closed", "ch_breakdown_closed", "ch_board_closed",
-                                 "ch_models_closed", "ch_hist_closed", "ch_how_open"})
+                                 "ch_models_closed", "ch_hist_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -180,9 +180,21 @@ class FlagTest(unittest.TestCase):
     def test_each_section_owns_its_flag(self):
         for sec, flag in (("te_ch_sec_programmes", "ch_programmes_closed"), ("te_ch_sec_breakdown", "ch_breakdown_closed"),
                           ("te_ch_sec_board", "ch_board_closed"), ("te_ch_sec_models", "ch_models_closed"),
-                          ("te_ch_sec_history", "ch_hist_closed"), ("te_ch_sec_how", "ch_how_open")):
+                          ("te_ch_sec_history", "ch_hist_closed")):
             with self.subTest(section=sec):
                 self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec))
+
+    def test_how_it_works_is_a_link(self):
+        """The section is its header alone, which opens the Help page
+        (te_cultural_hegemony_help_popup, on te_popup = help_cultural_hegemony); its collapse flag retired with its
+        content (test_te_help_pages.py)."""
+        how = _type_body(self.text, "te_ch_sec_how")
+        self.assertIn('text = "je_ch_how_header"', how)
+        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how, r'blockoverride "onclick_show')
+        self.assertNotIn("ch_how_open", self.text)
+        self.assertNotIn("ch_note", how)
 
     def test_no_old_flag_survives(self):
         for path in (WIDGET, TAB):
@@ -196,7 +208,7 @@ class HowItWorksTest(unittest.TestCase):
         cls.gui = _read(WIDGET)
 
     def test_explanations_live_in_how_it_works(self):
-        how = _type_body(self.gui, "te_ch_sec_how")
+        how = _type_body(self.gui, "te_cultural_hegemony_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         # It opens on a heading, not an empty line.

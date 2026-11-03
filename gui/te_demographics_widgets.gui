@@ -3911,8 +3911,11 @@ types te_demographics_widgets
 		}
 	}
 
-	### How Demographics Works: every explanation, collapsed by default, one
-	### heading per topic (rule 1).
+	### How Demographics Works: a link at the foot of the tab to the Help page
+	### (rule 1; spec 2026-11-02-charts-help-national-info § 5.2). Its header
+	### alone, which opens te_demographics_help_popup (te_popup =
+	### help_demographics) instead of expanding; it keeps its name and its place
+	### in every composer. No host of it has a tab header, so no "?".
 	type te_demog_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -3920,140 +3923,178 @@ types te_demographics_widgets
 		spacing = 2
 
 		te_demog_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "te_demog_sec_how"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_demog_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_demog_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_demog_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		te_demog_panel = {
-			visible = "[GetVariableSystem.Exists('te_demog_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. Both hosts' sections become this one page: the country
+	### tab's topics, then the state subtab's own. It reads no country or state,
+	### so it opens from any host (test_te_help_pages.py). Instanced only by
+	### te_demographics_help_popup.
+	type te_demographics_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			te_demog_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_census"
-				}
+		te_demog_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_census"
 			}
-			te_demog_note = {
-				text = "te_demog_how_census"
+		}
+		te_demog_note = {
+			text = "te_demog_how_census"
+		}
+		te_demog_note = {
+			text = "te_demog_how_applied"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_fertility"
 			}
-			te_demog_note = {
-				text = "te_demog_how_applied"
+		}
+		te_demog_note = {
+			text = "te_demog_how_fertility"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_mortality"
 			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_fertility"
-				}
+		}
+		te_demog_note = {
+			text = "te_demog_how_mortality"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_causes"
 			}
-			te_demog_note = {
-				text = "te_demog_how_fertility"
+		}
+		te_demog_note = {
+			text = "te_demog_how_causes"
+		}
+		### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
+		### hover keeps its title, a line and its figures.
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_work"
 			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_mortality"
-				}
+		}
+		te_demog_note = {
+			text = "te_demog_how_work"
+		}
+		te_demog_note = {
+			text = "te_demog_how_pensions"
+		}
+		te_demog_note = {
+			text = "te_demog_how_men"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_longevity"
 			}
-			te_demog_note = {
-				text = "te_demog_how_mortality"
+		}
+		te_demog_note = {
+			text = "te_demog_how_longevity"
+		}
+		te_demog_note = {
+			text = "te_demog_how_longevity_laws"
+		}
+		te_demog_note = {
+			text = "te_demog_how_minds"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_family"
 			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_causes"
-				}
+		}
+		te_demog_note = {
+			text = "te_demog_how_family"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_outline"
 			}
-			te_demog_note = {
-				text = "te_demog_how_causes"
+		}
+		te_demog_note = {
+			text = "te_demog_how_outline"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_migration"
 			}
-			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
-			### hover keeps its title, a line and its figures.
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_work"
-				}
+		}
+		te_demog_note = {
+			text = "te_demog_how_migration"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_wealth"
 			}
-			te_demog_note = {
-				text = "te_demog_how_work"
+		}
+		te_demog_note = {
+			text = "te_demog_how_gini"
+		}
+		te_demog_note = {
+			text = "te_demog_how_wc"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_places"
 			}
-			te_demog_note = {
-				text = "te_demog_how_pensions"
+		}
+		te_demog_note = {
+			text = "te_demog_how_places"
+		}
+		### What only the state subtab shows: its own Gini coefficient and its
+		### standing modifiers (spec 2026-11-02-charts-help-national-info § 5.2:
+		### one page, the state's own topics under their own subheading). Every
+		### other topic the subtab's section had is the country's, above.
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_state"
 			}
-			te_demog_note = {
-				text = "te_demog_how_men"
+		}
+		te_demog_note = {
+			text = "te_demog_how_gini_state"
+		}
+		te_demog_note = {
+			text = "te_demog_how_modifiers"
+		}
+		te_demog_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_demog_how_sub_sources"
 			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_longevity"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_longevity"
-			}
-			te_demog_note = {
-				text = "te_demog_how_longevity_laws"
-			}
-			te_demog_note = {
-				text = "te_demog_how_minds"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_family"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_family"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_outline"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_outline"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_migration"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_migration"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_wealth"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_gini"
-			}
-			te_demog_note = {
-				text = "te_demog_how_wc"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_places"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_places"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_sources"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_sources"
-			}
+		}
+		te_demog_note = {
+			text = "te_demog_how_sources"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_demographics_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_demographics')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_demog_sec_how"
+		}
+		blockoverride "popup_list" {
+			te_demographics_help_body = {}
 		}
 	}
 
@@ -6836,9 +6877,10 @@ types te_demographics_widgets
 		}
 	}
 
-	### How Demographics Works on the state panel: the country tab's topics that
-	### apply to one state (the outline and the national urban pattern do not),
-	### from the same loc, collapsed by default (its own flag, te_demog_st_how_open).
+	### How Demographics Works on the state panel: a second link to the Help
+	### page (te_demographics_help_popup, on te_popup = help_demographics), whose
+	### last topic is the subtab's own, under its own subheading. Its header
+	### alone, in the subtab's place for it.
 	type te_state_demog_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -6846,123 +6888,19 @@ types te_demographics_widgets
 		spacing = 2
 
 		te_demog_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "te_demog_sec_how"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_demog_st_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_demog_st_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_demog_st_how_open')]"
-			}
-		}
-
-		te_demog_panel = {
-			visible = "[GetVariableSystem.Exists('te_demog_st_how_open')]"
-
-			te_demog_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_census"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_census"
-			}
-			te_demog_note = {
-				text = "te_demog_how_applied"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_fertility"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_fertility"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_mortality"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_mortality"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_causes"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_causes"
-			}
-			### Work and Retirement and Longevity (2026-10-27 audit, DEM-3): the rules their live hovers taught, so each
-			### hover keeps its title, a line and its figures.
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_work"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_work"
-			}
-			te_demog_note = {
-				text = "te_demog_how_pensions"
-			}
-			te_demog_note = {
-				text = "te_demog_how_men"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_longevity"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_longevity"
-			}
-			te_demog_note = {
-				text = "te_demog_how_longevity_laws"
-			}
-			te_demog_note = {
-				text = "te_demog_how_minds"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_migration"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_migration"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_wealth"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_gini_state"
-			}
-			te_demog_note = {
-				text = "te_demog_how_wc"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_modifiers"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_modifiers"
-			}
-			te_demog_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_demog_how_sub_sources"
-				}
-			}
-			te_demog_note = {
-				text = "te_demog_how_sources"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
 	}

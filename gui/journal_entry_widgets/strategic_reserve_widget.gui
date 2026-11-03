@@ -15,7 +15,8 @@
 ###
 ### Style: docs/guides/gui_style_guide.md. The overview is always shown. The
 ### inventory is open until closed (st_res_inventory_closed). How the
-### Strategic Reserve Works is collapsed until opened (st_res_how_open). Each
+### Strategic Reserve Works is a link to the Help page
+### (te_strategic_reserve_help_popup, in gui/te_popups.gui). Each
 ### section is a type, and the two composers set their order, so the Market
 ### panel's Reserve tab (gui/market_panel.gui) shows the same pieces. Nothing
 ### here may read the panel's ambient Market or Country (MarketTabTest).
@@ -2314,9 +2315,12 @@ types strategic_reserve_widget_types
 		}
 	}
 
-	### "How the Strategic Reserve Works": every explanation, one heading per
-	### topic, collapsed until opened (style rule 1). The live sections above
-	### say what is happening; this says how it works.
+	### "How the Strategic Reserve Works": a link at the foot of the panel to
+	### the Help page (style rule 1; spec 2026-11-02-charts-help-national-info
+	### § 5.2). Its header alone, which opens te_strategic_reserve_help_popup
+	### (te_popup = help_strategic_reserve) instead of expanding; it keeps its
+	### name and its place in the composer. The "?" in the tab's header opens
+	### the same page.
 	type te_st_res_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2324,88 +2328,110 @@ types strategic_reserve_widget_types
 		spacing = 4
 
 		st_res_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_strategic_reserve_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('st_res_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('st_res_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('st_res_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		st_res_panel = {
-			visible = "[GetVariableSystem.Exists('st_res_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads GetPlayer only, never the entry, so it opens from
+	### any host (test_te_help_pages.py). Instanced only by
+	### te_strategic_reserve_help_popup.
+	type te_strategic_reserve_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			st_res_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_hub"
-				}
+		st_res_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_hub"
 			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_hub"
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_hub"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_rates"
 			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_rates"
-				}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_rates"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_status"
 			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_rates"
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_status"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_decay"
 			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_status"
-				}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_decay"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_policies"
 			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_status"
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_policies"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_presets"
 			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_decay"
-				}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_presets"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_income"
 			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_decay"
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_income"
+		}
+		st_res_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_strategic_reserve_how_sub_history"
 			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_policies"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_policies"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_presets"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_presets"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_income"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_income"
-			}
-			st_res_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_strategic_reserve_how_sub_history"
-				}
-			}
-			st_res_note = {
-				text = "je_strategic_reserve_how_history"
-			}
+		}
+		st_res_note = {
+			text = "je_strategic_reserve_how_history"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_strategic_reserve_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_strategic_reserve')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_strategic_reserve_how_header"
+		}
+		blockoverride "popup_list" {
+			te_strategic_reserve_help_body = {}
 		}
 	}
 
@@ -2425,7 +2451,7 @@ types strategic_reserve_widget_types
 		te_st_res_sec_inventory = {}
 	}
 
-	### How it all works, collapsed.
+	### How it all works: a link to the Help page (te_st_res_sec_how).
 	type te_st_res_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2458,6 +2484,9 @@ types strategic_reserve_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_strategic_reserve"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_strategic_reserve')]"
 				}
 			}
 		}

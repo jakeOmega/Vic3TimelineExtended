@@ -18,7 +18,8 @@
 ### from un_authority_record_history (un_authority_effects.txt).
 ###
 ### A type library, one type per section (te_un_sec_why, te_un_sec_auth_history), plus
-### te_un_help_authority, the text "How the UN Works" shows. gui/journal_entry_widgets/un_layout_widget.gui
+### te_un_help_authority, the text the UN's Help page shows (te_united_nations_help_body).
+### gui/journal_entry_widgets/un_layout_widget.gui
 ### sets their order among the chamber's sections, for the journal entry and
 ### the Diplomacy panel's UN tab alike.
 ###
@@ -778,8 +779,9 @@ types un_authority_widget_types
 		}
 	}
 
-	### How UN authority works: the text only, for "How the UN Works"
-	### (te_un_sec_how, un_layout_widget.gui), which carries the heading.
+	### How UN authority works: the text only, for the UN's Help page
+	### (te_united_nations_help_body, un_layout_widget.gui), which carries the
+	### heading and is the only type that instances it.
 	type te_un_help_authority = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes

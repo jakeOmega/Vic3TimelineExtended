@@ -52,9 +52,13 @@ COMPOSERS = ("te_demog_tab_sections", "te_demog_browser_sections")
 # The one GetPlayer read the country's markup keeps: the current year, the same for every country, in the history
 # charts' sample_visible.
 KEPT_GETPLAYER = "GetPlayer.MakeScope.ScriptValue('te_history_current_year')"
-# Loc keys the country's sections reach that keep GetPlayer: shared with the state panel's How section, where no
-# Country is in context, and read only a constant (te_demog_k_conscription_ref).
-SHARED_WITH_THE_STATE = {"te_demog_fam_rule"}
+# Loc keys the Help page reaches that read GetPlayer, as a popup must (it has no Country in context, spec
+# 2026-11-02-charts-help-national-info § 5.2), and read only a constant (te_demog_k_conscription_ref).
+HELP_PAGE_GETPLAYER = {"te_demog_fam_rule"}
+# The Help page's types (te_demographics_help_body, _popup): not a section of the panel, so not read for its country.
+# Its keys are left out of the pronoun rule (test_the_text_is_not_the_players) on purpose: the page explains the
+# player's own rules and never shows another country (Covert Warfare's page says "our" too).
+HELP_PAGE = re.compile(r"^te_demographics_help_")
 PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
 # The Population panel's own data: its window holds it and the Census Data window doesn't, so a key that reads it (as
 # vanilla's POPS_OVERVIEW_AVERAGE_INCOME_* keys do) renders only in the Population panel.
@@ -243,7 +247,9 @@ class CountryContextTest(unittest.TestCase):
         cls.loc = load_loc()
         widgets = type_bodies(read(WIDGETS))
         layout = type_bodies(read(LAYOUT))
-        cls.country = {name: code(body) for name, body in widgets.items() if not name.startswith("te_state_")}
+        cls.country = {name: code(body) for name, body in widgets.items()
+                       if not name.startswith("te_state_") and not HELP_PAGE.match(name)}
+        cls.help = {name: code(body) for name, body in widgets.items() if HELP_PAGE.match(name)}
         cls.country.update({name: code(layout[name]) for name in COMPOSERS})
         cls.state = {name: code(body) for name, body in widgets.items() if name.startswith("te_state_")}
         cls.state["te_state_demog_content"] = code(layout["te_state_demog_content"])
@@ -258,16 +264,18 @@ class CountryContextTest(unittest.TestCase):
 
     def test_the_loc_reads_the_context_country(self):
         self.assertGreater(len(self.keys), 500)
-        for key in sorted(self.keys - SHARED_WITH_THE_STATE):
+        for key in sorted(self.keys):
             with self.subTest(key=key):
                 self.assertNotIn("GetPlayer", self.loc[key])
                 self.assertNotIn("AccessPlayer", self.loc[key])
 
-    def test_the_kept_keys_read_only_constants(self):
-        state_keys = loc_closure(set().union(*(gui_keys(b, self.loc) for b in self.state.values())), self.loc)
-        for key in SHARED_WITH_THE_STATE:
+    def test_the_help_pages_player_reads_are_constants(self):
+        help_keys = loc_closure(set().union(*(gui_keys(b, self.loc) for b in self.help.values())), self.loc)
+        self.assertIn("te_demographics_help_body", self.help)
+        self.assertEqual({k for k in help_keys if "GetPlayer" in self.loc[k]}, HELP_PAGE_GETPLAYER)
+        for key in HELP_PAGE_GETPLAYER:
             with self.subTest(key=key):
-                self.assertIn(key, self.keys & state_keys)
+                self.assertNotIn(key, self.keys, "a live section reads it too")
                 for read_ in re.findall(r"GetPlayer\.MakeScope\.(\w+\('[\w]+'\))", self.loc[key]):
                     self.assertRegex(read_, r"^ScriptValue\('te_demog_k_\w+'\)$")
 

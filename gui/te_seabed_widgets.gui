@@ -4,7 +4,7 @@
 ### seabed claims spec (docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-
 ### panel-design.md § 3): an overview of six boxes, two to a row; the three
 ### policy buttons; the Ocean Basins table, each basin opening onto its
-### claimants; How Seabed Licences Work, collapsed. House style:
+### claimants; How Seabed Licences Work, a link to the Help page (gui/te_popups.gui). House style:
 ### docs/guides/gui_style_guide.md.
 ###
 ### DATA. No journal entry, so every read goes through GetPlayer.MakeScope:
@@ -1509,7 +1509,11 @@ types te_seabed_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### How Seabed Licences Work: collapsed (te_seabed_how_open).
+	### How Seabed Licences Work: a link to the Help page (style rule 1; spec
+	### 2026-11-02-charts-help-national-info § 5.2). Its header alone, which
+	### opens te_seabed_help_popup (te_popup = help_seabed) instead of
+	### expanding; it keeps its name and its place in the tab. The "?" in the
+	### tab's header opens the same page.
 	### ----------------------------------------------------------------------
 	type te_seabed_how_panel = flowcontainer {
 		direction = vertical
@@ -1518,6 +1522,7 @@ types te_seabed_widget_types
 		spacing = 4
 
 		section_header_button = {
+			tooltip = "te_help_link_tt"
 			blockoverride "layout" {
 				parentanchor = hcenter
 				size = { 520 38 }
@@ -1526,73 +1531,94 @@ types te_seabed_widget_types
 				text = "te_seabed_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_seabed_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_seabed_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		te_seabed_panel = {
-			visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. Seabed has no journal entry, and the figures its notes
+	### quote read GetPlayer, as they did in the panel, so the page opens from
+	### any host (test_te_help_pages.py). Instanced only by te_seabed_help_popup.
+	type te_seabed_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
 
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_pools"
-				}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_pools"
 			}
-			te_seabed_note = {
-				text = "te_seabed_how_pools"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_pools"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_weight"
 			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_weight"
-				}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_weight"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_licences"
 			}
-			te_seabed_note = {
-				text = "te_seabed_how_weight"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_licences"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_distant"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_claims"
 			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_licences"
-				}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_claims"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_leases"
 			}
-			te_seabed_note = {
-				text = "te_seabed_how_licences"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_leases"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_policy"
 			}
-			te_seabed_note = {
-				text = "te_seabed_how_distant"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_claims"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_claims"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_leases"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_leases"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_policy"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_policy"
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_regime"
-			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_policy"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_regime"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_seabed_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_seabed')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_seabed_how_header"
+		}
+		blockoverride "popup_list" {
+			te_seabed_help_body = {}
 		}
 	}
 
@@ -1611,6 +1637,9 @@ types te_seabed_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "te_seabed_tab_header"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
 				}
 			}
 		}

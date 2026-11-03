@@ -21,7 +21,8 @@
 ###       With the Global Warming game rule off only Fossil Transition shows.
 ###   widget_je_gw_reference -> custom_widget_container_3 (below the grid)
 ###       te_gw_reference_sections: History (the two charts, open) and How
-###       Global Warming Works (every explanation, collapsed).
+###       Global Warming Works, a link to the Help page that holds every
+###       explanation (te_global_warming_help_popup, in gui/te_popups.gui).
 ### Each section is a type, so the Market panel's Climate tab
 ### (gui/market_panel.gui) composes the same pieces (style rule 9); the roots
 ### are thin wrappers that repeat the composers' [JournalEntry.IsActive] gate.
@@ -1669,10 +1670,12 @@ types global_warming_widget_types
 		}
 	}
 
-	### "How Global Warming Works": every explanation, gathered into one
-	### section at the foot, collapsed by default, one heading per topic (style
-	### rule 1). The live sections above say what is happening; this says how
-	### it works.
+	### "How Global Warming Works": a link at the foot of the panel to the Help
+	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2).
+	### Its header alone, which opens te_global_warming_help_popup (te_popup =
+	### help_global_warming) instead of expanding; it keeps its name and its
+	### place in the composer, under the composer's rule gate. The "?" in the
+	### tab's header and the Fossil Transition's own link open the same page.
 	type te_gw_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1680,22 +1683,72 @@ types global_warming_widget_types
 		spacing = 4
 
 		gw_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "gw_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('gw_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('gw_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('gw_how_open')]"
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
 			}
 		}
+	}
 
-		gw_panel = {
-			visible = "[GetVariableSystem.Exists('gw_how_open')]"
+	### The Fossil Transition's own link to the Help page, nested in its
+	### section (te_gw_sec_transition): its subsection header alone, which
+	### opens te_global_warming_help_popup (te_popup = help_global_warming),
+	### as How Global Warming Works does. The page opens at its top: the
+	### transition's topics follow the climate's, at the foot under the Global
+	### Warming rule, and are the whole page with the rule off.
+	type te_gw_transition_how_link = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		margin_left = 20
+		margin_top = 6
+
+		gw_subsection_header = {
+			tooltip = "te_help_link_tt"
+			blockoverride "left_text" {
+				text = "rt_how_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"
+			}
+			### No arrow: the link opens a page. Hide the arrows' container,
+			### not the onclick_show* blocks: one of those also sits on the
+			### header's expand_button widget, whose visibility picks the click
+			### sound (vanilla section_header_button), so this keeps "increment".
+			blockoverride "arrow_visible" {
+				visible = no
+			}
+		}
+	}
+
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. The climate's topics, then How the Fossil Transition
+	### Works, which the transition section's link opens too. It reads
+	### GetPlayer only, never the entry, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_global_warming_help_popup.
+	type te_global_warming_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		### The climate's topics, under the Global Warming rule only, as the
+		### reference composer that held them was (#660): with the rule off the
+		### page explains the Fossil Transition alone.
+		flowcontainer = {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
 
 			gw_subheader = {
 				blockoverride "subheader_margin" {}
@@ -1753,6 +1806,61 @@ types global_warming_widget_types
 			gw_note = {
 				text = "gw_how_aerosols_2"
 			}
+		}
+
+		### How the Fossil Transition Works, the transition section's own link's
+		### topics, under a header of that name while the climate's topics
+		### precede them. With the rule off they are the whole page, which the
+		### popup's title then names, so the header hides rather than repeat it.
+		default_header = {
+			visible = "[GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			blockoverride "size" {
+				size = { 480 38 }
+			}
+			blockoverride "text" {
+				text = "rt_how_header"
+			}
+		}
+		gw_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "rt_how_laws_head"
+			}
+		}
+		gw_note = {
+			text = "rt_how_laws"
+		}
+		gw_subheader = {
+			blockoverride "subheader_text" {
+				text = "rt_how_programmes_head"
+			}
+		}
+		gw_note = {
+			text = "rt_how_programmes"
+		}
+		gw_subheader = {
+			blockoverride "subheader_text" {
+				text = "rt_how_emissions_head"
+			}
+		}
+		gw_note = {
+			text = "rt_how_emissions"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_global_warming_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_global_warming')]"
+		}
+		### Titled for what it shows: How Global Warming Works under the rule,
+		### How the Fossil Transition Works with the rule off, when the page holds
+		### the transition's topics alone (as Tax Code's title follows its code).
+		blockoverride "popup_title" {
+			text = "[SelectLocalization( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'gw_how_header', 'rt_how_header' )]"
+		}
+		blockoverride "popup_list" {
+			te_global_warming_help_body = {}
 		}
 	}
 
@@ -2041,60 +2149,12 @@ types global_warming_widget_types
 				}
 			}
 
-			### ---- How the Fossil Transition Works: collapsed, nested (style
-			### rule 1: with the rule off this section is the entry's only one,
-			### so its explanation cannot live in How Global Warming Works).
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				margin_left = 20
-				margin_top = 6
-
-				gw_subsection_header = {
-					blockoverride "left_text" {
-						text = "rt_how_header"
-					}
-					blockoverride "onclick" {
-						onclick = "[GetVariableSystem.Toggle('rt_how_open')]"
-					}
-					blockoverride "onclick_showmore" {
-						visible = "[Not(GetVariableSystem.Exists('rt_how_open'))]"
-					}
-					blockoverride "onclick_showless" {
-						visible = "[GetVariableSystem.Exists('rt_how_open')]"
-					}
-				}
-			}
-			flowcontainer = {
-				direction = vertical
-				ignoreinvisible = yes
-				visible = "[GetVariableSystem.Exists('rt_how_open')]"
-
-				gw_subheader = {
-					blockoverride "subheader_text" {
-						text = "rt_how_laws_head"
-					}
-				}
-				gw_note = {
-					text = "rt_how_laws"
-				}
-				gw_subheader = {
-					blockoverride "subheader_text" {
-						text = "rt_how_programmes_head"
-					}
-				}
-				gw_note = {
-					text = "rt_how_programmes"
-				}
-				gw_subheader = {
-					blockoverride "subheader_text" {
-						text = "rt_how_emissions_head"
-					}
-				}
-				gw_note = {
-					text = "rt_how_emissions"
-				}
-			}
+			### ---- How the Fossil Transition Works: a nested link to Global
+			### Warming's Help page, whose last topics are the transition's (style
+			### rule 1). With the rule off this section is the entry's only one and
+			### How Global Warming Works is hidden, so the journal entry needs a
+			### way in of its own (te_gw_transition_how_link).
+			te_gw_transition_how_link = {}
 		}
 	}
 
@@ -2155,6 +2215,9 @@ types global_warming_widget_types
 				using = default_list_position
 				blockoverride "text" {
 					text = "je_global_warming"
+				}
+				te_help_button = {
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_global_warming')]"
 				}
 			}
 		}

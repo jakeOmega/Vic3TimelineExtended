@@ -428,6 +428,15 @@ def tabs_wide() -> list[str]:
     return out + ["}"]
 
 
+# The Space Race's Help page (spec docs/superpowers/specs/2026-11-02-charts-help-
+# national-info-design.md § 5.2): the "?" (te_help_button, gui/te_system_tab_widgets.gui)
+# that every header of the tab's entries carries, its last child, as each other
+# tab's header does in its body type. Its lines, at a header's child depth.
+SR_HELP_BUTTON = ["te_help_button = {",
+                  "\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"",
+                  "}"]
+
+
 def _milestone(m: str) -> list[str]:
     if m in SR_TRANSIT:
         content = ["te_sr_overview_transit = {}"]
@@ -441,8 +450,9 @@ def _milestone(m: str) -> list[str]:
              "\t\t\tusing = default_list_position",
              '\t\t\tblockoverride "text" {',
              f'\t\t\t\ttext = "je_space_race_{m}"',
-             "\t\t\t}",
-             "\t\t}",
+             "\t\t\t}"]
+            + [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+            + ["\t\t}",
              "\t}",
              '\tblockoverride "tab_entry" {',
              f"\t\tdatacontext = \"[GetPlayerJournalEntry('je_space_race_{m}')]\"",
@@ -464,7 +474,8 @@ def sr_milestones() -> list[str]:
            "### goes with it), and a note in their place while none runs",
            "### (te_window_space_race_idle_sgui). Several can run at once. Each shows",
            "### the types its journal roots wrap, the debris row overridden out (Orbit",
-           "### shows it once), then Open Journal Entry for that entry.",
+           "### shows it once), then Open Journal Entry for that entry. Every header",
+           "### here, the note's too, ends on the \"?\" that opens the Help page.",
            "type te_sr_window_milestones = flowcontainer {",
            "\tparentanchor = hcenter",
            "\tdirection = vertical",
@@ -486,14 +497,15 @@ def sr_milestones() -> list[str]:
            "\t\t\tusing = default_list_position",
            '\t\t\tblockoverride "text" {',
            '\t\t\t\ttext = "te_window_space_race_idle_header"',
-           "\t\t\t}",
-           "\t\t}",
-           "\t\tte_sr_panel = {",
-           "\t\t\tte_sr_text = {",
-           '\t\t\t\ttext = "te_window_space_race_idle_note"',
-           "\t\t\t}",
-           "\t\t}",
-           "\t}"]
+           "\t\t\t}"]
+    out += [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+    out += ["\t\t}",
+            "\t\tte_sr_panel = {",
+            "\t\t\tte_sr_text = {",
+            '\t\t\t\ttext = "te_window_space_race_idle_note"',
+            "\t\t\t}",
+            "\t\t}",
+            "\t}"]
     for m in SR_MILESTONES:
         out.append("")
         out += [f"\t{ln}" for ln in _milestone(m)]

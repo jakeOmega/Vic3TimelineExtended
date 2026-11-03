@@ -648,14 +648,15 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         expected = [k for sub, _, note, _ in gen.HOW_TOPICS for k in (sub, note)]
         self.assertEqual(drawn, expected)
         self.assertNotIn("te_budget_chart_how_text", gui)
-        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_sec_how"))
+        first = gui.index("te_budget_how_subheader = {", gui.index("type te_budget_breakdown_help_body"))
         self.assertRegex(gui[first:first + 200], r'blockoverride "subheader_margin" \{\}')
 
     def test_the_panel_is_its_three_sections(self):
         """The panel instances Income, Expenses and How the Breakdown Works, in
         that order and nothing else, so the full-screen layout can place each
-        (spec 2026-11-02-te-window-wide-mode § 7). How keeps the panel's 8
-        between its header and its topics, and collapses on its flag."""
+        (spec 2026-11-02-te-window-wide-mode § 7). How is its header alone,
+        which opens the Help page (te_budget_breakdown_help_popup, on te_popup
+        = help_budget_breakdown; test_te_help_pages.py), its topics there."""
         gui = _strip_comments(LAYOUT.read_text(encoding="utf-8-sig"))
         panel = _children(_type_body(gui, "te_budget_breakdown_panel"))
         self.assertEqual([name for kind, name, _ in panel if kind != "property"],
@@ -663,9 +664,12 @@ class BreakdownHowItWorksTest(unittest.TestCase):
         how = _children(_type_body(gui, "te_budget_sec_how"))
         props = {name: value for kind, name, value in how if kind == "property"}
         self.assertEqual((props["spacing"], props["ignoreinvisible"]), ("8", "yes"))
-        self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button", "flowcontainer"])
-        self.assertIn("GetVariableSystem.Toggle('te_budget_chart_how_open')", how[-2][2])
-        self.assertIn("visible = \"[GetVariableSystem.Exists('te_budget_chart_how_open')]\"", how[-1][2])
+        self.assertEqual([name for kind, name, _ in how if kind != "property"], ["section_header_button"])
+        self.assertIn("GetVariableSystem.Set('te_popup', 'help_budget_breakdown')", how[-1][2])
+        self.assertRegex(how[-1][2], r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotRegex(how[-1][2], r'blockoverride "onclick_show')
+        self.assertNotIn("te_budget_chart_how_open", gui)
+        self.assertIn('text = "te_budget_chart_how_sub_admin"', _type_body(gui, "te_budget_breakdown_help_body"))
 
     def test_no_ui_help(self):
         text = " ".join(note for _, _, _, note in gen.HOW_TOPICS)
