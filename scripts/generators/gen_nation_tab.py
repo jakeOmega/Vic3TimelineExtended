@@ -677,7 +677,7 @@ def _any_of(names):
 
 def _shown(value):
     """A `visible` that holds while a generated count is above zero."""
-    return f"visible = \"[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )]\""
+    return f"visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )]\""
 
 
 def type_count(kind):
@@ -810,9 +810,9 @@ def generated_loc(types):
                 key = row_key(kind, row)
                 if row == "status":
                     loc[key] = f"${kind}$: #v $te_nation_in_force$#!"
-                    loc[key + "_tt"] = f"${kind}_desc$\\n\\n[GetPlayer.GetModifier.GetFullEntryDescFor('{kind}')]"
+                    loc[key + "_tt"] = f"${kind}_desc$\\n\\n[Country.GetModifier.GetFullEntryDescFor('{kind}')]"
                 else:
-                    loc[key] = f"${kind}$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
+                    loc[key] = f"${kind}$: #v [Country.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
                     scope = next((s for s in _NOTE_SCOPES if kind.startswith(s + "_")), None)
                     note = f"\\n\\n$te_nation_note_{scope}$" if scope else ""
                     loc[key + "_tt"] = f"${kind}_desc${note}"

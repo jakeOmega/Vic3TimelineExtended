@@ -1,5 +1,6 @@
 ﻿# The Nation tab's rows (gui/te_nation_tab.gui). Country scope, read through
-# GetPlayer.MakeScope. Each is safe before its system has first run. The
+# Country.MakeScope: the player's country, or another's in National Info. Each
+# is safe before its system has first run. The
 # lists' counts are generated (te_nation_generated_values.txt).
 
 # Legislative Override Capacity, the raw modifier sum (its sources:

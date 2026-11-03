@@ -569,7 +569,6 @@ PUBLIC = [t for t in gen.TABS if t.public]
 # fails test_unbound_is_honest, so this list only shrinks. A set() call, not a {...} literal, so it stays a set when
 # the last system goes.
 UNBOUND = set([
-    "nation",
 
     "banking",
 
@@ -612,6 +611,34 @@ WORLD_LOC = {
     # Demographics: none.
 
     # Nation (F2)
+    "state_birth_limit_relief_add": "a modifier type's name, which the engine renders wherever it names the type, "
+                                    "mostly with no Country in context (breakdowns, law tooltips, loading tips): "
+                                    "GetPlayer is a root, behind vanilla's GetPlayer.IsValid guard, only to ask a "
+                                    "game rule, the same for every country (te_demog_custom_loc.txt's header)",
+    "state_birth_limit_relief_add_desc": "its description: as state_birth_limit_relief_add",
+    "state_demog_womens_work_ratio_add": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_demog_womens_work_ratio_add_desc": "its description: as state_birth_limit_relief_add",
+    "state_desired_fertility_mult": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_desired_fertility_mult_desc": "its description: as state_birth_limit_relief_add",
+    "state_fertility_means_add": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_fertility_means_add_desc": "its description: as state_birth_limit_relief_add",
+    "state_maternal_mortality_mult": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_maternal_mortality_mult_desc": "its description: as state_birth_limit_relief_add",
+    "state_means_literacy_add": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_means_literacy_add_desc": "its description: as state_birth_limit_relief_add",
+    "state_sex_ratio_at_birth_add": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_sex_ratio_at_birth_add_desc": "its description: as state_birth_limit_relief_add",
+    "state_urban_fertility_relief_add": "a modifier type's name: as state_birth_limit_relief_add",
+    "state_urban_fertility_relief_add_desc": "its description: as state_birth_limit_relief_add",
+    "te_demog_census_off_name_ingame": "those names' custom loc, which asks the Demographics rule "
+                                       "(te_demog_cohorts_run)",
+    "te_demog_census_off_desc_ingame": "those descriptions' custom loc, which asks the Demographics rule "
+                                       "(te_demog_cohorts_run)",
+    "te_demog_wf_womens_name_ingame": "a name's custom loc, which asks the Demographics rule (te_demog_effects_run)",
+    "te_demog_wf_womens_desc_ingame": "a description's custom loc, which asks the Demographics rule "
+                                      "(te_demog_effects_run)",
+    "te_demog_wf_womens_desc_full": "that description's text under the rule: a constant "
+                                    "(te_demog_k_womens_work_full), read through GetPlayer for a root",
 
     # Banking (F2)
 

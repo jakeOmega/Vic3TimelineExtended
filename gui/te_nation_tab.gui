@@ -6,8 +6,11 @@
 ### collapsed, and How the Nation Works, a link to the Help page
 ### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
 ###
-### DATA. No journal entry and no gate: everything reads the player's country
-### through GetPlayer. The score rows read script values
+### DATA. No journal entry and no gate: everything reads the shown country,
+### Country, which each mount supplies (the window's, the player's; National
+### Info's, any country's: spec 2026-11-02-charts-help-national-info § 6.3,
+### test_te_system_tab_bodies.py's BindingTest). Nothing on it is private and it
+### has no control (§ 6.4). The score rows read script values
 ### (common/script_values/te_nation_values.txt) and the engine's modifier sums.
 ### A section's type rows (te_nation_types_<section>, generated in
 ### gui/te_nation_generated.gui) are modifier types' national totals, each
@@ -162,7 +165,7 @@ types te_nation_widget_types
 	### `visible`; the list ignores the items it hides.
 	### ----------------------------------------------------------------------
 	type te_nation_list = flowcontainer {
-		datamodel = "[GetPlayer.GetTimedModifiers]"
+		datamodel = "[Country.GetTimedModifiers]"
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 4
@@ -361,7 +364,7 @@ types te_nation_widget_types
 				default_progressbar_horizontal = {
 					size = { 100% 100% }
 					blockoverride "values" {
-						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_nation_override_bar') )]"
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_nation_override_bar') )]"
 						min = 0
 						max = 1
 					}
@@ -391,24 +394,24 @@ types te_nation_widget_types
 				}
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_tier_0"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
 				text = "te_nation_override_tier_1"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
 				text = "te_nation_override_tier_2"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
 				text = "te_nation_override_tier_3"
 			}
 			### While authority produced, not capacity, holds it there.
 			te_nation_row = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_short"
 			}
 
@@ -418,7 +421,7 @@ types te_nation_widget_types
 			### paper court's under a government that can ignore its courts), and
 			### the courts' own modifiers under it.
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
@@ -432,18 +435,18 @@ types te_nation_widget_types
 				}
 				te_nation_target_bar = {
 					blockoverride "high" {
-						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Country.MakeScope.ScriptValue('te_jud_display'), Country.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
 					}
 					blockoverride "low" {
-						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( Country.MakeScope.ScriptValue('te_jud_display'), Country.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
 					}
 				}
 				te_nation_row = {
-					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
+					visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
 					text = "te_nation_jud_ceiling_row"
 				}
 				te_nation_row = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
 					text = "te_nation_jud_ceiling_paper_row"
 				}
 				te_nation_list = {
@@ -455,7 +458,7 @@ types te_nation_widget_types
 
 			### The Algorithmic Mandate, under Algorithmic Governance only.
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_mandate_on'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_mandate_on'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
@@ -493,15 +496,16 @@ types te_nation_widget_types
 			te_nation_row = {
 				text = "te_nation_wc_row"
 				### The Population panel's Demographics tab is there only under the
-				### Demographics rule (te_pops_demog_tab_sgui).
-				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_tt' )]"
+				### Demographics rule (te_pops_demog_tab_sgui); another country's is
+				### in National Info, the window that shows it.
+				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), SelectLocalization( Country.IsLocalPlayer, 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_demog_other_tt' ), 'te_nation_wc_row_tt' )]"
 			}
 			te_nation_target_bar = {
 				blockoverride "high" {
-					value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+					value = "[FixedPointToFloat( Max_CFixedPoint( Country.MakeScope.ScriptValue('te_inh_concentration_display'), Country.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
 				}
 				blockoverride "low" {
-					value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+					value = "[FixedPointToFloat( Min_CFixedPoint( Country.MakeScope.ScriptValue('te_inh_concentration_display'), Country.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
 				}
 			}
 			te_nation_list = {
@@ -539,7 +543,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_private_construction'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_private_construction'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
@@ -564,7 +568,7 @@ types te_nation_widget_types
 	### something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_science_and_space = flowcontainer {
-		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_science_and_space_count'), '(CFixedPoint)0' ) )]"
+		visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_science_and_space_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -576,7 +580,7 @@ types te_nation_widget_types
 		}
 		te_nation_panel = {
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -600,7 +604,7 @@ types te_nation_widget_types
 	### (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_international = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' )]"
+		visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -622,7 +626,7 @@ types te_nation_widget_types
 	### one's full effects, one click away). Drawn only with one to show.
 	### ----------------------------------------------------------------------
 	type te_nation_sources_panel = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+		visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -653,7 +657,7 @@ types te_nation_widget_types
 			visible = "[GetVariableSystem.Exists('te_nation_sources_open')]"
 
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -669,7 +673,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -685,7 +689,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -701,7 +705,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -717,7 +721,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 

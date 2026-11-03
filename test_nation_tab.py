@@ -546,7 +546,7 @@ class TabLayoutTest(unittest.TestCase):
         for key, modifier in (("te_nation_construction_breakdown", "goods_input_construction_mult"),
                               ("te_nation_construction_breakdown_direct", "country_construction_goods_cost_mult")):
             self.assertIn(f"'{key}'", tt)
-            self.assertIn(f"GetPlayer.GetModifier.GetValueWithBreakdownFor('{modifier}')", loc[key])
+            self.assertIn(f"Country.GetModifier.GetValueWithBreakdownFor('{modifier}')", loc[key])
 
     def _nation_loc(self):
         return {k: v for k, v in _loc().items() if k.startswith(("te_nation_", "te_window_tab_nation"))}
@@ -632,6 +632,14 @@ class TabLayoutTest(unittest.TestCase):
         # (demographics_rule): point to it only while it is there.
         self.assertNotIn("Demographics tab", _loc()["te_nation_wc_row_tt"])
         self.assertIn("te_pops_demog_tab_sgui", self.gui)
+        # Another country's (National Info, spec 2026-11-02-charts-help-national-info
+        # § 6.8): its Demographics tab is in the window it is shown in, not the
+        # player's Population panel.
+        self.assertIn("SelectLocalization( Country.IsLocalPlayer, 'te_nation_wc_row_demog_tt', "
+                      "'te_nation_wc_row_demog_other_tt' )", self.gui)
+        other = _loc()["te_nation_wc_row_demog_other_tt"]
+        self.assertIn("$POP_BROWSER$", other)
+        self.assertNotIn("Population", other)
 
     def test_formatters_are_the_mods_proven_ones(self):
         for key, value in self._nation_loc().items():
