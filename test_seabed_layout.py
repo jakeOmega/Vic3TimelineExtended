@@ -12,7 +12,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import assert_wide_matches_narrow, guard_spans, in_spans, mod_types, panel_view, type_closure
 from scripts.generators import gen_te_systems_window as window_gen
 from test_banking_layout import MARGIN, _all_loc, _block_from, _custom_options, _read, _type_body
 
@@ -223,6 +223,56 @@ class SeabedPanelTest(unittest.TestCase):
         keys |= set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
         keys |= set(re.findall(r", '(te_seabed_\w+)'", self.gui))
         self.assertEqual(sorted(k for k in keys if k not in loc and not k.endswith("_sgui")), [])
+
+
+class PrivateTest(unittest.TestCase):
+    """What another country's Seabed tab leaves out (National Info; spec
+    2026-11-02-charts-help-national-info §§ 6.4, 6.5, 6.7): the policy
+    buttons, each basin's claimants with Relinquish and Claim Again, and the
+    chevron that opens them, all under te_own_country_only. The claimant list
+    is the viewer's (te_seabed_rank_listed leaves the viewer out, its own row
+    drawn apart), so read for another country it would draw that country twice
+    and leave the player out. What another country's panel draws is the walk
+    test_te_system_tab_bodies.py's BindingTest makes (panel_view)."""
+
+    PRIVATE = ("te_seabed_policy_button", "te_seabed_claim_button", "te_seabed_rival_head", "te_seabed_rival_row",
+               "te_seabed_rival_us")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.types = mod_types()
+        cls.view = panel_view({"te_seabed_wide_sections"}, cls.types)
+
+    def test_the_players_own_parts_are_left_out(self):
+        drawn = type_closure({"te_seabed_wide_sections"}, self.types)
+        for name in self.PRIVATE:
+            with self.subTest(type=name):
+                self.assertIn(name, drawn, "the player's own panel still draws it")
+                self.assertNotIn(name, self.view.open, f"another country's panel draws {name}")
+
+    def test_the_policy_panel_is_the_players(self):
+        body = self.types["te_seabed_policy_panel"].body
+        self.assertIn((0, len(body)), guard_spans(body), "the guard on the policy panel's root")
+        # an instance's own visible would replace the guard's (gotcha #17)
+        for host in ("te_seabed_wide_sections", "te_seabed_tab_body"):
+            self.assertRegex(self.types[host].body, r"\bte_seabed_policy_panel = \{\}", host)
+
+    def test_each_basins_claimants_are_the_players(self):
+        body = self.types["te_seabed_basins_panel"].body
+        spans = guard_spans(body)
+        for b in BASINS:
+            with self.subTest(basin=b):
+                for anchor in (f"GetList('te_seabed_rk_list_{b}')", f"te_seabed_relinquish_{b}_sgui",
+                               f"te_seabed_claim_again_{b}_sgui", f"te_seabed_us_shown_{b}"):
+                    self.assertTrue(in_spans(body.index(anchor), spans), f"{anchor} outside te_own_country_only")
+                # the basin's own row stays: another country's Free, Pool and Weight
+                self.assertFalse(in_spans(body.index(f"'te_seabed_free_{b}'"), spans))
+                self.assertFalse(in_spans(body.index(f"'te_seabed_bar_{b}_1'"), spans))
+
+    def test_the_chevron_is_the_players(self):
+        body = self.types["te_seabed_basin_row"].body
+        self.assertTrue(in_spans(body.index('block "basin_toggle"'), self.view.skip["te_seabed_basin_row"]))
+        self.assertFalse(in_spans(body.index('block "basin_name"'), self.view.skip["te_seabed_basin_row"]))
 
 
 class WideLayoutTest(unittest.TestCase):
