@@ -136,6 +136,52 @@ decol_ai_partner_holds_empire = {
 	}
 }
 
+# ---- Who backs the colonial powers (owner, 2026-11-03) ---------------------
+# The Colonial Question's Support weights (decolonization_events.14, option C):
+# besides an empire and a partner of one, a country whose own laws colonize
+# and one whose government answers to no voter lean toward backing the
+# colonial powers.
+
+# Its Colonization law founds colonies: Colonial Resettlement ("colonies are
+# established to provide land to settlers from the country's incorporated
+# states") or Colonial Exploitation ("to exploit the area for their natural
+# resources and cheap labor"), the two the owner named. Frontier Colonization
+# settles "the wild frontiers on our borders", not lands overseas, and the
+# mod's Neocolonialism, which Decolonization unlocks, is indirect control after
+# the empire: neither counts. Scope: country.
+decol_ai_colonial_laws = {
+	OR = {
+		has_law = law_type:law_colonial_resettlement
+		has_law = law_type:law_colonial_exploitation
+	}
+}
+
+# Illiberal: a government no election chooses, or one that outlaws dissent,
+# each read from its description. Distribution of Power: Autocracy ("the Head
+# of State's power is absolute") and its two variants, Bakufu and
+# Neo-Absolutism; Oligarchy ("a small group of powerful, unelected
+# individuals") and its variant Organic Regulation; Elder Council ("the most
+# venerated men"); Technocracy ("an unelected council"); Single-Party State
+# ("a monopoly on all political activity"); and the mod's Algorithmic
+# Governance (authority "vested in artificial intelligence"). Free Speech:
+# Outlawed Dissent ("criticizing the government is considered treasonous").
+# Censorship is left out: it is most countries' starting law. A variant law is
+# a law type of its own, so each is named. Scope: country.
+decol_ai_illiberal = {
+	OR = {
+		has_law = law_type:law_autocracy
+		has_law = law_type:law_bakufu
+		has_law = law_type:law_neo_absolutism
+		has_law = law_type:law_oligarchy
+		has_law = law_type:law_organic_regulation
+		has_law = law_type:law_elder_council
+		has_law = law_type:law_technocracy
+		has_law = law_type:law_single_party_state
+		has_law = law_type:law_algorithmic_governance
+		has_law = law_type:law_outlawed_dissent
+	}
+}
+
 # The panel's three buttons (colonial_empire_stance_sgui), each greyed with
 # the failing line on hover. Shared lines first: not the stance held already,
 # and not changed in the last decol_stance_cooldown_months.

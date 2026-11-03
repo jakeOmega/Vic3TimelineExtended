@@ -961,8 +961,11 @@ types colonial_empire_widget_types
 
 	### International Pressure's table (CE-2 of the 2026-10-27 GUI audit: a
 	### script-built roster before): its column heads, then one row per great
-	### power that condemns or backs us. Fixed cells, 28 + 180 + 100 + 76 + 76
-	### and four 4 px gaps = 476. The flag has no head.
+	### power that condemns or backs the empire. Fixed cells, 28 + 180 + 100 +
+	### 76 + 76 and four 4 px gaps = 476. The flag has no head. The fourth
+	### column is the power's share of great-power prestige (its prestige until
+	### 2026-11-03, now on the row's hover), so the condemners' cells add up to
+	### the overview pie's red slice and the supporters' to its green one.
 	type te_ce_gp_head = flowcontainer {
 		direction = horizontal
 		spacing = 4
@@ -1006,8 +1009,8 @@ types colonial_empire_widget_types
 				elide = right
 				align = right|nobaseline
 				using = colonial_empire_fontsize_row
-				text = "je_colonial_empire_gp_head_prestige"
-				tooltip = "je_colonial_empire_gp_head_prestige_tt"
+				text = "je_colonial_empire_gp_head_share"
+				tooltip = "je_colonial_empire_gp_head_share_tt"
 			}
 		}
 		widget = {
@@ -1026,15 +1029,16 @@ types colonial_empire_widget_types
 	}
 
 	### One great power: its flag (vanilla's tiny_flag, the country on click)
-	### and name, its stance, its prestige at the monthly assessment and what
-	### it adds to or takes from stability a month, the one term of the bar it
-	### makes. An item of the datamodel over colonial_empire_gp_rows, whose
+	### and name, its stance, its share of great-power prestige at the monthly
+	### assessment and what it adds to or takes from stability a month, the one
+	### term of the bar it makes. An item of the datamodel over colonial_empire_gp_rows, whose
 	### datacontext is the row's script container
 	### (colonial_empire_refresh_gp_rows). The country is reached through its
 	### stored capital, ScriptContainer.MakeScope.Var('ce_gp_capital')
 	### .GetState.GetCountry, the covert rows' proven chain (gotcha #15); the
 	### figures through the guarded colonial_gp_row_disp_* values. The hover
-	### reads nothing but the container and the player (gotcha #24).
+	### reads nothing but the container (gotcha #24), so it speaks of "the
+	### empire", which reads right on any country's panel.
 	type te_ce_gp_row = widget {
 		size = { 476 28 }
 		tooltip = "je_colonial_empire_gp_row_tt"
@@ -1107,7 +1111,7 @@ types colonial_empire_widget_types
 					elide = right
 					align = right|nobaseline
 					using = colonial_empire_fontsize_row
-					text = "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_prestige')|0]"
+					text = "[ScriptContainer.MakeScope.ScriptValue('colonial_gp_row_disp_share')|%0]"
 				}
 			}
 			widget = {
@@ -2261,13 +2265,15 @@ types colonial_empire_widget_types
 	}
 
 	### International pressure: a row per great power that condemns or backs
-	### us, condemners first, each by its prestige, with what it does to
-	### stability a month (CE-2 of the 2026-10-27 GUI audit: a script-built
-	### roster in the row font before, which repeated the overview pie's two
-	### shares and gave no power's weight). Then the escalation in force, if
-	### any: the one great-power loss no single power makes. The rows are the
-	### monthly assessment's (colonial_empire_refresh_gp_rows), so the panel
-	### walks no country. Open by default, a live list.
+	### the empire, condemners first, each by its prestige, with its share of
+	### great-power prestige and what it does to stability a month (CE-2 of the
+	### 2026-10-27 GUI audit: a script-built roster in the row font before,
+	### which repeated the overview pie's two shares and gave no power's
+	### weight). Then the escalation in force, if any: the one great-power loss
+	### no single power makes. The rows are the monthly assessment's
+	### (colonial_empire_refresh_gp_rows), built for every empire with the
+	### entry since 2026-11-03, so National Info lists who presses another
+	### country, and the panel walks no country. Open by default, a live list.
 	type te_ce_sec_pressure = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2304,41 +2310,27 @@ types colonial_empire_widget_types
 				spacing = 2
 				visible = "[GetScriptedGui('colonial_empire_display_ready').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
-				# The rows, the player's own: colonial_empire_refresh_gp_rows
-				# builds them for a played country alone (each power weighed
-				# against that country's prestige), so another country's list
-				# would be empty and its "none" line false. Another country's
-				# panel has a note; the overview's cell and the escalations
-				# below give its pressure.
+				# The rows: colonial_empire_refresh_gp_rows builds them for every
+				# empire with the entry, each power weighed against that empire's
+				# prestige, so they read the shown Country.
+				te_ce_gp_head = {
+					visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
+				}
 				flowcontainer = {
-					using = te_own_country_only
 					direction = vertical
 					ignoreinvisible = yes
 					spacing = 2
+					datamodel = "[Country.MakeScope.GetList('colonial_empire_gp_rows')]"
 
-					te_ce_gp_head = {
-						visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') ) )]"
-					}
-					flowcontainer = {
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 2
-						datamodel = "[Country.MakeScope.GetList('colonial_empire_gp_rows')]"
-
-						item = {
-							te_ce_gp_row = {
-								datacontext = "[Scope.GetScriptContainer]"
-							}
+					item = {
+						te_ce_gp_row = {
+							datacontext = "[Scope.GetScriptContainer]"
 						}
-					}
-					colonial_empire_list_text = {
-						visible = "[IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') )]"
-						text = "je_colonial_empire_pressure_none"
 					}
 				}
 				colonial_empire_list_text = {
-					visible = "[Not( Country.IsLocalPlayer )]"
-					text = "je_colonial_empire_pressure_own_only_ni"
+					visible = "[IsDataModelEmpty( Country.MakeScope.GetList('colonial_empire_gp_rows') )]"
+					text = "je_colonial_empire_pressure_none"
 				}
 
 				# The escalations in force (colonial_empire_disp_pressure_level: 1
@@ -2805,7 +2797,7 @@ types colonial_empire_widget_types
 			# ---- Projected monthly drift, signed ----
 			# Exact: colonial_stability_drift_total, the same capped sum of leaf
 			# script values the bar applies. The scale is +/-2 because that sum is
-			# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
+			# capped at +/-colonial_stability_drift_cap (1.5); the cap stripe is
 			# 0.17, the same 1/12 of the half-height the other signed charts use.
 			te_hist_ce_drift = {}
 		}
@@ -2931,8 +2923,9 @@ types colonial_empire_widget_types
 	}
 
 	### The stance, whether it is in force (a great power's, at its influence
-	### cost; a lesser power's lies dormant) and when it can next change, then
-	### the three buttons. Each button is always drawn, in a fixed 476 row, and
+	### cost; a lesser power's lies dormant), the country's share of
+	### great-power prestige and when it can next change, then the three
+	### buttons. Each button is always drawn, in a fixed 476 row, and
 	### greys out with its reason on hover (rule 6): the stance held already,
 	### the cooldown, great-power rank and influence for a side. Its hover then
 	### says what it does: the stance, the policy modifier and the reactions at
@@ -3044,6 +3037,41 @@ types colonial_empire_widget_types
 						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_weight'), '(CFixedPoint)2' )]"
 						text = "je_colonial_empire_stance_force_dormant"
 						tooltip = "je_colonial_empire_stance_force_dormant_tt"
+					}
+				}
+			}
+			### The country's share of great-power prestige, how much its stance
+			### weighs: the shares of the powers condemning an empire add up to
+			### the escalations' test (owner, 2026-11-03). None below great-power
+			### rank, where a stance lies dormant.
+			te_ce_stance_line = {
+				blockoverride "line_label" {
+					text = "je_colonial_empire_stance_share_label"
+				}
+				blockoverride "line_values" {
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_gp_share'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_stance_share"
+						tooltip = "je_colonial_empire_stance_share_tt"
+					}
+					textbox = {
+						autoresize = yes
+						minimumsize = { 264 -1 }
+						maximumsize = { 264 -1 }
+						parentanchor = vcenter
+						align = right|nobaseline
+						elide = right
+						using = colonial_empire_fontsize_row
+						visible = "[LessThan_CFixedPoint( Country.MakeScope.ScriptValue('decol_stance_disp_gp_share'), '(CFixedPoint)0' )]"
+						text = "je_colonial_empire_stance_share_none"
+						tooltip = "je_colonial_empire_stance_share_none_tt"
 					}
 				}
 			}

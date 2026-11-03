@@ -319,8 +319,8 @@
 		# Direct-state release (where applicable) happens through the wave of
 		# declarations .204 / .201 start (decol_wave_start, .77 -> .70).
 		# Removed first: the entry can now run again after a collapse (the
-		# re-entry pass), a second collapse comes about 12.7 years after the
-		# first (ten years, up to two months, some 30 months at the drift
+		# re-entry pass), a second collapse comes about 13 years after the
+		# first (ten years, up to two months, some 34 months at the drift
 		# cap), and a same-name add_modifier stacks, so a subject through two
 		# collapses would carry the 20-year aftershock twice.
 		every_subject_or_below = {
