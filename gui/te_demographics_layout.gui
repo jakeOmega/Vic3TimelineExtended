@@ -14,7 +14,7 @@
 ### States). The explanations are on the Help page (te_demographics_help_popup, in gui/te_popups.gui), which a "?" at the
 ### top of every host opens: te_demog_window_body's header on the Population panel's tab and the window's, National
 ### Info's header for another country, and te_help_row on the state subtab, which has no header. The Census Data window
-### takes the tab's order in three columns. The
+### (and the window's full screen) sets the tab's sections out in three columns the owner balanced (2026-11-03). The
 ### state subtab takes the same order, less the sections a state has no figures for (Family Policy, History, Where People
 ### Live, States), and with one of its own after Wealth: the state's Modifiers, the nine standing
 ### modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds the orders, the
@@ -66,9 +66,10 @@ types te_demographics_layout
 	}
 
 	### The Census Data window, a fullscreen one: the tab's sections in three columns of a fixed 520 (rule 8), 30 apart,
-	### on te_ui_columns_three (gui/te_widget_library.gui), read down each column and then across, so the order is the
-	### tab's: the people's health, then the levers and the record, then the per-state detail. Until the country's first
-	### census the pending line alone, at the column's width. The Timeline Extended window's full-screen Demographics tab
+	### on te_ui_columns_three (gui/te_widget_library.gui), as the owner balanced them (2026-11-03): the census with the
+	### figures a country works with (Work and Retirement, Longevity, Wealth), then the pyramid and its record (History),
+	### then where people die, the family laws and where they live, with the per-state detail last. Until the country's
+	### first census the pending line alone, at the column's width. The Timeline Extended window's full-screen Demographics tab
 	### places the same composer for the player's country (wide-mode PR D2), so nothing in it may read either window's own
 	### panel: it reads the Country in its context.
 	type te_demog_browser_sections = flowcontainer {
@@ -89,24 +90,24 @@ types te_demographics_layout
 
 			blockoverride "column_1" {
 				te_demog_overview = {}
-				te_demog_sec_causes = {}
-				te_demog_sec_pyramid = {}
-			}
-
-			blockoverride "column_2" {
 				te_demog_sec_work = {}
 				### phase 3: shown once the country's late figures exist
 				te_demog_sec_longevity = {}
-				te_demog_sec_family = {}
-				te_demog_sec_history = {}
-			}
-
-			blockoverride "column_3" {
 				### less the strata's incomes: vanilla's keys read the Population panel (PopsOverviewPanel), which this
 				### window doesn't have, and logged nine lines a frame here (2026-10-31)
 				te_demog_sec_wealth = {
 					blockoverride "te_demog_wealth_strata_incomes" {}
 				}
+			}
+
+			blockoverride "column_2" {
+				te_demog_sec_pyramid = {}
+				te_demog_sec_history = {}
+			}
+
+			blockoverride "column_3" {
+				te_demog_sec_causes = {}
+				te_demog_sec_family = {}
 				te_demog_sec_places = {}
 				te_demog_sec_states = {}
 			}

@@ -164,3 +164,14 @@ Both frames' `fixed_bottom` sits in a `vbox`, where the footer's `parentanchor =
 |---|---|---|
 | **1. The footer.** On the Tax Code tab, with a draft open and then with a bill under debate, in the side panel and in Full Screen. | The draft summary or the bill's footer sits at the bottom where it did before, its buttons usable. | It moved: the layout had honored the anchor after all; put `parentanchor = hcenter` back and accept the log line. |
 | **2. The log.** Read `gui.log` after the check. | No `Widget cannot have a position in a layout` line for `te_systems_window.gui`. | Another widget in a layout carries a position: the line names it. |
+
+## The owner's column balance (2026-11-03)
+
+The owner rebalanced four full-screen tabs. Each tab's columns are its wide composer, which National Info's view of another country places too, so check both. The side panel and the hosts keep their one column and order. Banking, Grand Monuments and Demographics now read in an order of their own rather than the narrow one; `assert_wide_matches_narrow(..., columns=...)` pins each and still holds every section to its narrow gates.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Demographics.** Open Demographics in full screen after the first census, then National Info's Demographics tab for another country. | Column 1: the census, Work and Retirement, Longevity (once the late figures exist) and Wealth; column 2: the pyramid and History; column 3: Causes of Death, Family Policy, Where People Live and States. The same for another country, less what only a played country has. Nothing is cut off. | Uneven or cut off: move a section in `te_demog_browser_sections` (`gui/te_demographics_layout.gui`) and `BROWSER_COLUMNS` in `test_demographics_layout.py`. Longevity was placed after Work and Retirement, where the tab has it; the owner's list didn't name it. |
+| **2. Grand Monuments.** Open the tab in full screen. | Column 1: the overview's cells, then National Effects, Opportunity, Awaiting a Decision and Awaiting Dedication; column 2: Archaeological Expeditions and Our Monuments; column 3 as before. | As above, in `te_gm_wide_sections` and `test_grand_monuments_layout.WideLayoutTest`. |
+| **3. Banking.** Open Banking in full screen with the cycle running. | Column 1: the overview, Active Policies and Available Interventions; column 2: Monetary Policy alone; column 3 as before. | As above, in `te_banking_wide_sections` and `test_banking_layout.WideTest`. |
+| **4. Nuclear Weapons.** Open the tab in full screen with a stockpile, then National Info's Nuclear tab for another country. | Yours: Nuclear Posture at the foot of column 1, under World Crises; column 2 Forces, At Home and Reputation. Another country's: no Posture anywhere; column 2 its Nuclear Taboo and Nuclear Powers, as before. | Posture shows for another country: its wrapper lost `Country.IsLocalPlayer` (`test_nuclear_layout.WideTest`). |

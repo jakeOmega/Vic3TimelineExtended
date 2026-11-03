@@ -200,7 +200,10 @@ would be a redesign of every system and is out of scope.
 Proposed columns. Section types are named without their `te_<system>_` prefix.
 They were balanced by each section's GUI line count, which is a poor proxy for
 height (tooltips count, collapsed sections don't show), so the play-test
-settles them.
+settles them. The owner rebalanced Grand Monuments, Banking, Demographics and
+Nuclear Weapons on 2026-11-03; their composers and
+`docs/testing/te-window-wide-playtest.md` § "The owner's column balance" hold
+the current columns.
 
 | Tab | Column 1 | Column 2 | Column 3 |
 |---|---|---|---|

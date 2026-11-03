@@ -1363,19 +1363,20 @@ class SignatureRowsTest(unittest.TestCase):
 
 class WideLayoutTest(unittest.TestCase):
     """te_gm_wide_sections, the window's full-screen Grand Monuments (spec
-    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns,
-    read down each and then across, under the narrow layout's gates."""
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in the three
+    columns the owner set, under the narrow layout's gates."""
 
     def test_the_columns(self):
+        # National Effects straight under the overview (owner, 2026-11-03).
         # Trophies and Held Abroad each show only while there is something in
         # them: column 3 closes up on their two gates, joined.
-        columns = assert_wide_matches_narrow(self, "te_gm_wide_sections", layout=("te_gm_tab_body", "te_gm_tab_layout"),
-                                             added_gates=("te_gm_sec_trophies", "te_gm_sec_abroad"))
+        assert_wide_matches_narrow(self, "te_gm_wide_sections", layout=("te_gm_tab_body", "te_gm_tab_layout"),
+                                   added_gates=("te_gm_sec_trophies", "te_gm_sec_abroad"),
+                                   columns=[["te_gm_overview_panel", "te_gm_sec_national", "te_gm_sec_commission",
+                                             "te_gm_sec_decisions", "te_gm_sec_awaiting"],
+                                            ["te_gm_sec_archaeology", "te_gm_sec_monuments"],
+                                            ["te_gm_sec_trophies", "te_gm_sec_abroad"]])
         assert_column_closes_with_its_sections(self, "te_gm_wide_sections", 3, ["te_gm_sec_trophies", "te_gm_sec_abroad"])
-        self.assertEqual(columns, [
-            ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_awaiting"],
-            ["te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments"],
-            ["te_gm_sec_trophies", "te_gm_sec_abroad"]])
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "grand_monuments")

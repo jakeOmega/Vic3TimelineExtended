@@ -31,11 +31,12 @@ WORLD_COLUMN = "te_nuclear_world_column"
 WIDE_OWN = ("te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation",
             "te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers")
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7): the goal
-# bar stays under The Programme, in its own gated wrapper.
+# bar stays under The Programme, in its own gated wrapper; Nuclear Posture at
+# the foot of column 1 (owner, 2026-11-03), the narrow order kept.
 WIDE_COLUMNS = [["te_nuclear_overview_panel", "te_nuclear_sec_programme", "te_nuclear_programme_bar",
-                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises"],
-                ["te_nuclear_sec_posture", "te_nuclear_sec_forces", "te_nuclear_sec_home",
-                 "te_nuclear_sec_reputation"],
+                 "te_nuclear_sec_crisis", "te_nuclear_sec_strike", "te_nuclear_sec_world_crises",
+                 "te_nuclear_sec_posture"],
+                ["te_nuclear_sec_forces", "te_nuclear_sec_home", "te_nuclear_sec_reputation"],
                 ["te_nuclear_sec_taboo", "te_nuclear_sec_delivery", "te_nuclear_sec_powers"]]
 # (root name, container, the one type it wraps), in the entry's declaration order.
 ROOTS = [("widget_je_nuclear_overview", "custom_widget_container_1", "te_nuclear_overview_panel"),
@@ -1138,7 +1139,8 @@ class WideTest(unittest.TestCase):
         self.assertTrue(col2.rstrip().endswith(f"{WORLD_COLUMN} = {{}}"), "the copy closes column 2")
         self.assertEqual(wide.count(f"{WORLD_COLUMN} = {{}}"), 1)
         visibles = re.findall(r'visible = "\[(.*)\]"', wide)
-        self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 2, "columns 2 and 3's composers")
+        self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 3,
+                         "column 1's Nuclear Posture, columns 2 and 3's composers")
         self.assertNotIn("Country.IsLocalPlayer", visibles, "column 3's How wrapper is gone")
         self.assertEqual(visibles.count(gate), 1, "column 1's composer, open for both")
 

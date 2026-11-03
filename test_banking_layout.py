@@ -194,12 +194,15 @@ class WideTest(unittest.TestCase):
     2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns
     of 520, under the gates the narrow tab gives them."""
 
-    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
-        columns = assert_wide_matches_narrow(self, "te_banking_wide_sections",
-                                             layout=("te_banking_tab_body", "te_banking_tab_layout"))
-        self.assertEqual(columns, [["te_banking_overview_panel", "te_banking_sec_active"],
-                                   ["te_banking_sec_monetary", "te_banking_sec_interventions"],
-                                   REFERENCE])
+    def test_the_wide_layout_takes_the_owners_three_columns(self):
+        """The owner's columns (2026-11-03): Available Interventions under Active Policies, the dial alone in the
+        middle, the record last."""
+        assert_wide_matches_narrow(self, "te_banking_wide_sections",
+                                   layout=("te_banking_tab_body", "te_banking_tab_layout"),
+                                   columns=[["te_banking_overview_panel", "te_banking_sec_active",
+                                             "te_banking_sec_interventions"],
+                                            ["te_banking_sec_monetary"],
+                                            REFERENCE])
 
     def test_the_registry_names_it(self):
         from scripts.generators import gen_te_systems_window as gen

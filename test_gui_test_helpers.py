@@ -113,6 +113,35 @@ class WideMatchesNarrowTest(unittest.TestCase):
         moved = moved.replace('blockoverride "column_3"', 'blockoverride "column_1"')
         self.fails("the narrow layout's sections", moved.replace('blockoverride "column_tmp"', 'blockoverride "column_3"'))
 
+    # columns= (owner, 2026-11-03): a layout balanced by hand may read in another order than the narrow one, but must
+    # place each narrow section once, under the same gates, in exactly the columns named.
+    REORDERED = GOOD.replace("\t\t\tte_x_overview = {}\n", "\t\t\tte_x_sec_how = {}\n", 1).replace(
+        "\t\t\tte_x_sec_how = {}\n\t\t}\n\t}", "\t\t\tte_x_overview = {}\n\t\t}\n\t}", 1)
+    REORDERED_COLUMNS = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c", "te_x_overview"]]
+
+    def test_columns_let_a_layout_leave_the_narrow_order(self):
+        self.assertNotEqual(self.REORDERED, GOOD)
+        self.fails("the narrow layout's sections", self.REORDERED)
+        self.assertEqual(self.check(self.REORDERED, columns=self.REORDERED_COLUMNS), self.REORDERED_COLUMNS)
+
+    def test_columns_must_be_the_layouts(self):
+        self.fails("the columns the owner set", self.REORDERED, columns=COLUMNS)
+
+    def test_columns_still_want_every_section_once(self):
+        left_out = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"], ["te_x_sec_c"]]
+        self.fails("each once, in any order",
+                   self.REORDERED.replace("\t\t\tte_x_overview = {}\n", ""), columns=left_out)
+        twice = [["te_x_sec_how", "te_x_sec_a"], ["te_x_sec_b", "te_x_summary"],
+                 ["te_x_sec_c", "te_x_overview", "te_x_sec_how"]]
+        self.fails("each once, in any order",
+                   self.REORDERED.replace("\t\t\tte_x_overview = {}\n", "\t\t\tte_x_overview = {}\n"
+                                          "\t\t\tte_x_sec_how = {}\n"), columns=twice)
+
+    def test_columns_compare_gates_section_by_section(self):
+        self.fails(r"te_x_sec_c shows in the narrow layout only while \['HasC'\]",
+                   self.REORDERED.replace('te_x_sec_c = { visible = "[HasC]" }', "te_x_sec_c = {}"),
+                   columns=self.REORDERED_COLUMNS)
+
     def test_a_composers_gate_dropped(self):
         self.fails(r"te_x_sec_a shows in the narrow layout only while \['JournalEntry.IsActive'\]",
                    GOOD.replace('visible = "[JournalEntry.IsActive]"\n\t\t\t\tte_x_sec_a', "te_x_sec_a", 1))
