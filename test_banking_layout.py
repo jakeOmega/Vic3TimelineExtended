@@ -1321,13 +1321,16 @@ class PrivateTest(unittest.TestCase):
         Shown half above sees it. A visible that asks Country.IsLocalPlayer
         itself may only gate a wrapper whose every child is under the guard
         (the gap-free wrappers: the dormant note, the mandate grid,
-        Recapitalize, the union buttons). Not( Country.IsLocalPlayer ) shows a
-        part to another country, and SelectLocalization's first argument picks
-        text; both are fine."""
+        Recapitalize, the union buttons), or one of a pair that swaps by viewer,
+        a sibling for another country beside it (a chart's open button: the
+        player's viewer, or National Info's). Not( Country.IsLocalPlayer )
+        shows a part to another country, and SelectLocalization's first
+        argument picks text; both are fine."""
         from gui_test_helpers import GUARD, enclosing_block, mod_types, panel_view
         types = mod_types()
         view = panel_view({"te_banking_wide_sections"}, types)
-        allowed = 0
+        allowed = pairs = 0
+        other = re.compile(r'^\w+ = \{\s*visible = "\[Not\( Country\.IsLocalPlayer \)\]"')
         for name in sorted(view.open):
             body = types[name].body
             for m in re.finditer(r"Country\.IsLocalPlayer", body):
@@ -1340,6 +1343,11 @@ class PrivateTest(unittest.TestCase):
                 with self.subTest(type=name, line=line.strip()[:90]):
                     self.assertRegex(line, r"^\s*visible\s*=", "Country.IsLocalPlayer outside a visible: use the guard")
                     a, b = enclosing_block(body, m.start())
+                    if line.strip() == 'visible = "[Country.IsLocalPlayer]"':
+                        pa, pb = enclosing_block(body, a)
+                        if any(other.match(c) for c in _child_blocks(body[pa + 1:pb])):
+                            pairs += 1
+                            continue
                     children = _child_blocks(body[a + 1:b])
                     self.assertTrue(children, "a gate with nothing under it")
                     for child in children:
@@ -1347,6 +1355,7 @@ class PrivateTest(unittest.TestCase):
                                          "a part another country should see, hidden inline: guard only the player's parts")
                     allowed += 1
         self.assertEqual(allowed, 4, "the four gap-free wrappers")
+        self.assertGreaterEqual(pairs, 8, "the history charts' open buttons")
 
 
 class BlocLeaderRowTest(unittest.TestCase):
