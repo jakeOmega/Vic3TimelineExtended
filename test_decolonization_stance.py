@@ -330,5 +330,193 @@ class TabTest(unittest.TestCase):
                     self.assertIn(key, loc, f"{key} has no loc")
 
 
+VANILLA_LAWS = _path("vanilla_parsed", "common", "laws.json")
+VANILLA_IDEOLOGIES = _path("vanilla_parsed", "common", "ideologies.json")
+AI_TRIGGERS = ("decol_holds_colonial_empire", "decol_ai_regressive", "decol_ai_slaveholding",
+               "decol_ai_partner_holds_empire")
+
+
+def _option(event, name):
+    """The body of the option whose ``name`` is ``name``."""
+    start = event.index(f"name = {name}")
+    start = event.rindex("option = {", 0, start)
+    return _block(event[start:], "option", prefix=r"")
+
+
+def _weights(option):
+    """The option's ai_chance as (trigger body, 'add'|'factor', number), in order."""
+    chance = _block(option, "ai_chance", prefix=r"")
+    rows = []
+    for m in re.finditer(r"\bmodifier = \{", chance):
+        body = _block(chance[m.start():], "modifier", prefix=r"")
+        trigger = _block(body, "trigger", prefix=r"")
+        kind = re.search(r"\b(add|factor) = (-?\d+(?:\.\d+)?)\s*$", body.strip())
+        rows.append((trigger.strip(), kind.group(1), float(kind.group(2))))
+    return rows
+
+
+class AiStanceTest(unittest.TestCase):
+    """Issue #1370 (owner, 2026-11-03): the AI never condemns colonialism while
+    it runs an empire, and condemns it less often when it is regressive or a
+    partner of an empire. The Colonial Question's weights and the monthly
+    review."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.event = _block(_read(EVENTS), "decolonization_events.14", prefix=r"^")
+        cls.triggers = _read(TRIGGERS)
+        cls.condemn = _weights(_option(cls.event, "decolonization_events.14.a"))
+        cls.neutral = _weights(_option(cls.event, "decolonization_events.14.b"))
+        cls.support = _weights(_option(cls.event, "decolonization_events.14.c"))
+
+    def _row(self, rows, trigger, kind):
+        found = [n for t, k, n in rows if t == trigger and k == kind]
+        self.assertEqual(len(found), 1, f"{kind} on {trigger!r}")
+        return found[0]
+
+    def test_an_empire_never_condemns(self):
+        self.assertEqual(self._row(self.condemn, "decol_holds_colonial_empire = yes", "factor"), 0)
+        # The old -10 for colonies is gone: the factor does its work, and the
+        # +15 for powers without colonies reads the same test.
+        self.assertNotIn(-10, [n for _, k, n in self.condemn if k == "add"])
+        self.assertEqual(self._row(self.condemn, "NOT = { decol_holds_colonial_empire = yes }", "add"), 15)
+        # An empire backs the colonial powers instead.
+        self.assertEqual(self._row(self.support, "decol_holds_colonial_empire = yes", "add"), 5)
+
+    def test_less_likely_for_a_stake_in_colonialism(self):
+        for trigger in ("decol_ai_regressive = yes", "decol_ai_slaveholding = yes",
+                        "decol_ai_partner_holds_empire = yes"):
+            with self.subTest(trigger=trigger):
+                self.assertEqual(self._row(self.condemn, trigger, "factor"), 0.5)
+        # Slavery is regressive and halves Condemn again (owner, 2026-11-03):
+        # a slaveholding power at a quarter.
+        self.assertIn("decol_ai_slaveholding = yes", _block(self.triggers, "decol_ai_regressive"))
+        self.assertIn("NOT = { has_law = law_type:law_slavery_banned }", _block(self.triggers, "decol_ai_slaveholding"))
+        self.assertGreater(self._row(self.neutral, "decol_ai_regressive = yes", "add"), 0)
+        self.assertGreater(self._row(self.support, "decol_ai_partner_holds_empire = yes", "add"), 0)
+
+    def test_no_add_after_a_factor(self):
+        """The weights apply in order: an add after factor = 0 would lift it."""
+        for name, rows in (("condemn", self.condemn), ("neutral", self.neutral), ("support", self.support)):
+            kinds = [k for _, k, _ in rows]
+            with self.subTest(option=name):
+                if "factor" in kinds:
+                    self.assertNotIn("add", kinds[kinds.index("factor"):])
+
+    def test_the_weights_read_no_is_ai(self):
+        for side in ("a", "b", "c"):
+            chance = _block(_option(self.event, f"decolonization_events.14.{side}"), "ai_chance", prefix=r"")
+            self.assertNotIn("is_ai", chance, side)
+        for name in AI_TRIGGERS:
+            self.assertNotIn("is_ai", _block(self.triggers, name), name)
+
+    def test_the_empire_test_is_the_entrys(self):
+        """je_colonial_empire's `possible`: a colony or a colonial subject; or
+        the entry itself."""
+        empire = _block(self.triggers, "decol_holds_colonial_empire")
+        for line in ("has_journal_entry = je_colonial_empire", "country_has_qualifying_colonial_subject = yes",
+                     "any_scope_state = { is_overseas_colonial_state = yes }"):
+            self.assertIn(line, empire)
+
+    def test_the_partners(self):
+        partner = _block(self.triggers, "decol_ai_partner_holds_empire")
+        for line in ("has_treaty_alliance_with = { TARGET = scope:decol_ai_self }",
+                     "has_treaty_defensive_pact_with = { TARGET = scope:decol_ai_self }",
+                     "is_in_same_power_bloc = scope:decol_ai_self",
+                     "is_subject_of = scope:decol_ai_self",
+                     "overlord ?= { decol_holds_colonial_empire = yes }"):
+            self.assertIn(line, partner)
+        self.assertIn("NOT = { this = scope:decol_ai_self }", partner)
+        self.assertEqual(partner.count("decol_holds_colonial_empire = yes"), 2)
+
+    def test_every_trigger_is_defined(self):
+        """Each scripted trigger the weights and the new tests call exists."""
+        defined = set()
+        for path in glob.glob(_path("common", "scripted_triggers", "*.txt")):
+            defined |= set(re.findall(r"^([A-Za-z_]\w*) = \{", _read(path), re.M))
+        for name in AI_TRIGGERS:
+            self.assertIn(name, defined)
+        calls = re.compile(r"\b(decol_\w+|country_has_\w+|is_overseas_\w+) = yes")
+        called = set()
+        for side in ("a", "b", "c"):
+            chance = _block(_option(self.event, f"decolonization_events.14.{side}"), "ai_chance", prefix=r"")
+            called |= set(calls.findall(chance))
+        for name in AI_TRIGGERS:
+            called |= set(calls.findall(_block(self.triggers, name)))
+        self.assertLessEqual(set(AI_TRIGGERS), called)
+        self.assertLessEqual({"country_has_qualifying_colonial_subject", "is_overseas_colonial_state"}, called)
+        for name in sorted(called):
+            with self.subTest(trigger=name):
+                self.assertIn(name, defined)
+
+    def test_the_regressive_signals_exist(self):
+        """Each law and ideology the regressive test names is in the game."""
+        import json
+        with open(VANILLA_LAWS, encoding="utf-8") as f:
+            laws = set(json.load(f))
+        for path in glob.glob(_path("common", "laws", "*.txt")):
+            laws |= set(re.findall(r"^(law_\w+) = \{", _read(path), re.M))
+        with open(VANILLA_IDEOLOGIES, encoding="utf-8") as f:
+            ideologies = json.load(f)
+        regressive = _block(self.triggers, "decol_ai_regressive") + _block(self.triggers, "decol_ai_slaveholding")
+        named_laws = re.findall(r"law_type:(law_\w+)", regressive)
+        self.assertGreaterEqual(len(named_laws), 4)
+        for law in named_laws:
+            self.assertIn(law, laws)
+        named = re.findall(r"ideology:(ideology_\w+)", regressive)
+        self.assertEqual(sorted(named), ["ideology_colonialist", "ideology_jingoist_leader"])
+        for ideology in named:
+            self.assertIn(ideology, ideologies)
+        # The ruler's is a leader ideology, the government's an interest group's.
+        self.assertEqual(ideologies["ideology_jingoist_leader"][1].get("character_ideology", ["=", "no"])[1], "yes")
+        self.assertNotIn("character_ideology", ideologies["ideology_colonialist"][1])
+
+    def test_the_monthly_review_drops_an_empires_condemnation(self):
+        monthly = _block(_read(EFFECTS), "decol_stance_monthly")
+        self.assertRegex(monthly, r"\}\s*else_if = \{\s*limit = \{\s*is_ai = yes\s*has_variable = gp_anti_colonial_stance"
+                                  r"\s*NOT = \{ has_variable = decol_stance_months_left \}"
+                                  r"\s*decol_holds_colonial_empire = yes\s*\}\s*decol_stance_core_neutral = yes\s*\}"
+                                  r"\s*else = \{\s*decol_stance_refresh = yes")
+        # After the influence drop, which it must not shadow.
+        self.assertLess(monthly.index("influence < 0"), monthly.index("decol_holds_colonial_empire"))
+
+    def test_the_factor_order_self_check(self):
+        """TE_SELF_CHECK ai_condemn_factor_order: BROKEN once a game when an AI
+        empire takes Condemn, OK once when one takes another side with Condemn
+        open to it; hidden, and logged with proven accessors only."""
+        raw = _raw(EFFECTS)
+        for name, verdict, flag in (("decol_selfcheck_empire_condemned", "BROKEN", "te_decol_cfo_broken_logged"),
+                                    ("decol_selfcheck_empire_declined", "OK", "te_decol_cfo_ok_logged")):
+            body = _block(raw, name, prefix=r"^")
+            with self.subTest(check=name):
+                self.assertRegex(body.strip(), r"^hidden_effect = \{")
+                limit = _block(body, "limit", prefix=r"")
+                for line in ("is_ai = yes", "decol_holds_colonial_empire = yes",
+                             f"NOT = {{ has_global_variable = {flag} }}"):
+                    self.assertIn(line, limit)
+                self.assertIn(f"set_global_variable = {flag}", body)
+                logs = re.findall(r'debug_log = "([^"]*)"', body)
+                self.assertEqual(len(logs), 1)
+                self.assertTrue(logs[0].startswith(f"TE_SELF_CHECK {verdict} ai_condemn_factor_order "), logs[0])
+                self.assertIn("country=[THIS.GetCountry.GetTagName]", logs[0])
+                self.assertIn("date=[TimeKeeper.GetCurrentDate.GetString]", logs[0])
+                self.assertEqual(re.findall(r"\[([^\]]*)\]", logs[0]),
+                                 ["THIS.GetCountry.GetTagName", "TimeKeeper.GetCurrentDate.GetString"])
+        # An OK needs Condemn to have been open: the influence for it.
+        declined = _block(_block(raw, "decol_selfcheck_empire_declined", prefix=r"^"), "limit", prefix=r"")
+        self.assertIn("decol_stance_affordable = yes", declined)
+        self.assertIn("decol_stance_ai_can_hold = yes", declined)
+        # Each option calls its check before its take changes the stance.
+        for side, check in (("a", "condemned"), ("b", "declined"), ("c", "declined")):
+            option = _option(self.event, f"decolonization_events.14.{side}")
+            with self.subTest(option=side):
+                self.assertEqual(option.count("decol_selfcheck_empire_"), 1)
+                self.assertLess(option.index(f"decol_selfcheck_empire_{check} = yes"),
+                                option.index("decol_stance_take_"))
+        # The play-test list names it, with a fallback.
+        playtest = _raw(_path("docs", "testing", "colonial-holdings-playtest.md"))
+        self.assertRegex(playtest, r"\| `ai_condemn_factor_order` \|[^\n]*\| [^\n]*decol_ai_condemn_weight[^\n]*\|\n")
+
+
 if __name__ == "__main__":
     unittest.main()
