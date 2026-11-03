@@ -81,6 +81,10 @@ PAGES = [
          ("te_tax_how_open", "te_tax_light_how_open"), ("te_tax_tab_body",),
          popup_title="text = \"[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( "
                      "GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]\""),
+    # the panel's section and the colonization panel's, one page; the "?" is in
+    # the milestones' generated headers (SpaceRaceHeaderTest)
+    Page("space_race", ("te_sr_sec_how", ("te_sr_sec_how_colonies", "je_space_race_widget_howc_header")),
+         "je_space_race_widget_how_header", ("sr_panel_how_open", "sr_panel_how_colonies_open"), ()),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State
@@ -294,6 +298,24 @@ class PageTest(unittest.TestCase):
                         self.assertEqual(items[-1][:2], ("widget", "te_help_button"))
                         self.assertEqual([name for _, name, _ in items].count("te_help_button"), 1)
                         self.assertEqual(items[-1][2].strip(), f'onclick = "{_open(page.key)}"')
+
+
+class SpaceRaceHeaderTest(unittest.TestCase):
+    """The Space Race tab's body is no frame: its entries' frames, and the note
+    in their place while none runs, are generated (gen_te_systems_window.py's
+    _milestone and sr_milestones). Every header there ends on the "?"."""
+
+    def test_every_milestone_header_has_the_button(self):
+        from scripts.generators import gen_te_systems_window as gen
+        _, body = _all_types()["te_sr_window_milestones"]
+        headers = [m.end() - 1 for m in re.finditer(r"\bdefault_header = \{", body)]
+        self.assertEqual(len(headers), len(gen.SR_MILESTONES) + 1)   # each entry's and the idle note's
+        for at in headers:
+            items = _children(body[at + 1:_close(body, at)])
+            with self.subTest(header=re.search(r'text = "(\w+)"', body[at:_close(body, at)]).group(1)):
+                self.assertEqual(items[-1][:2], ("widget", "te_help_button"))
+                self.assertEqual([name for _, name, _ in items].count("te_help_button"), 1)
+                self.assertEqual(items[-1][2].strip(), f'onclick = "{_open("space_race")}"')
 
 
 if __name__ == "__main__":

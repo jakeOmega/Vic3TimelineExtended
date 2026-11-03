@@ -122,9 +122,10 @@
 ### sections are open until closed, *_open ones collapsed until opened. The live
 ### sections' flags are per milestone (`sr_panel_control_<m>_closed`,
 ### `sr_panel_rivals_<m>_closed`), because several milestone entries can be
-### active at once; the shared reference has one (`sr_panel_how_open`). They
-### live in GetVariableSystem, which is client-side, never saved and invisible
-### to script.
+### active at once. The shared reference, How the Space Race Works, has none:
+### it is a link to the Help page (te_space_race_help_popup, in
+### gui/te_popups.gui). They live in GetVariableSystem, which is client-side,
+### never saved and invisible to script.
 
 ### TYPE SIZES (style guide rule 3, the owner 2026-10-17; audit SPC-11): rows,
 ### values, buttons and notes 17, subheadings 20, the overview 16 in the
@@ -7442,12 +7443,16 @@ types space_race_widget_types
 	}
 
 	### ======================================================================
-	### REFERENCE (collapsed by default)
+	### REFERENCE: the links to the Help page
 	### ======================================================================
 
-	### "How the Space Race Works": every explanation the live sections used to
-	### carry, one heading per topic. The same on all nine entries, so one
-	### flag serves them all.
+	### "How the Space Race Works": a link at the foot of the panel to the Help
+	### page (style rule 1; spec 2026-11-02-charts-help-national-info § 5.2),
+	### the same on all nine entries. Its header alone, which opens
+	### te_space_race_help_popup (te_popup = help_space_race) instead of
+	### expanding; it keeps its name and its place in every composer. The "?"
+	### in each milestone's header in the Timeline Extended window opens the
+	### same page.
 	type te_sr_sec_how = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -7455,96 +7460,198 @@ types space_race_widget_types
 		spacing = 2
 
 		te_sr_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_space_race_widget_how_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_how_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_how_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('sr_panel_how_open')]"
-			}
-		}
-
-		te_sr_panel = {
-			visible = "[GetVariableSystem.Exists('sr_panel_how_open')]"
-
-			te_sr_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_approach"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_approach"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_funding"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_funding"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_setbacks"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_setbacks"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_first"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_first"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_rivals"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_rivals"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_programme"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_programme"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_powers"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_powers"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_how_sub_orbit"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_how_orbit"
+				visible = no
 			}
 		}
 	}
 
-	### How Solar Colonization Works (audit SPC-4): the rules the colony sections
-	### opened with, one heading per topic, collapsed, after the colonization
-	### panel's live sections. The topics for Simple or Full Colonies show only
-	### under that rule. Most lean on the concepts (concept_sr_*), which carry
-	### the definitions. The flag is sr_panel_how_colonies_open.
+	### The Help page: every explanation the live sections used to carry, one
+	### subheading per topic, then How Solar Colonization Works under its own
+	### heading. The live sections say what is happening; this says how it
+	### works. It reads GetPlayer only, never an entry, so it opens from any
+	### host, any milestone running or none (test_te_help_pages.py). Instanced
+	### only by te_space_race_help_popup.
+	type te_space_race_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_sr_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_approach"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_approach"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_funding"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_funding"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_setbacks"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_setbacks"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_first"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_first"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_rivals"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_rivals"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_programme"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_programme"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_powers"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_powers"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_how_sub_orbit"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_how_orbit"
+		}
+
+		### How Solar Colonization Works, the colonization panel's own link's
+		### topics (audit SPC-4): a heading over them, as the panel's section
+		### had. The topics for Simple or Full Colonies show only under that
+		### rule, read on the player (sr_disp_colonies_*); the rest always. Most
+		### lean on the concepts (concept_sr_*), which carry the definitions.
+		default_header = {
+			blockoverride "size" {
+				size = { 480 38 }
+			}
+			blockoverride "text" {
+				text = "je_space_race_widget_howc_header"
+			}
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_fleets"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_howc_fleets"
+		}
+		te_sr_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_windows"
+			}
+		}
+		te_sr_note = {
+			text = "je_space_race_widget_howc_windows"
+		}
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_settlers"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_settlers"
+		}
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_modules"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_modules"
+		}
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_autonomy"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_autonomy"
+		}
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_space_command"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_space_command"
+		}
+		te_sr_subheader = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+			blockoverride "subheader_text" {
+				text = "je_space_race_widget_howc_sub_defences"
+			}
+		}
+		te_sr_note = {
+			visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+			text = "je_space_race_widget_howc_defences"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_space_race_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_space_race')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_how_header"
+		}
+		blockoverride "popup_list" {
+			te_space_race_help_body = {}
+		}
+	}
+
+	### How Solar Colonization Works (audit SPC-4): after the colonization
+	### panel's live sections, a second link to the Space Race's Help page,
+	### whose last topics are the colonies' rules under this section's name. Its
+	### header alone, under the section's own gate (the entry running).
 	type te_sr_sec_how_colonies = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -7554,89 +7661,18 @@ types space_race_widget_types
 		visible = "[JournalEntry.IsActive]"
 
 		te_sr_section_header = {
+			tooltip = "te_help_link_tt"
 			blockoverride "left_text" {
 				text = "je_space_race_widget_howc_header"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('sr_panel_how_colonies_open')]"
+				onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('sr_panel_how_colonies_open'))]"
+				visible = no
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('sr_panel_how_colonies_open')]"
-			}
-		}
-
-		te_sr_panel = {
-			visible = "[GetVariableSystem.Exists('sr_panel_how_colonies_open')]"
-
-			te_sr_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_fleets"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_howc_fleets"
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_windows"
-				}
-			}
-			te_sr_note = {
-				text = "je_space_race_widget_howc_windows"
-			}
-			te_sr_subheader = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_settlers"
-				}
-			}
-			te_sr_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				text = "je_space_race_widget_howc_settlers"
-			}
-			te_sr_subheader = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_modules"
-				}
-			}
-			te_sr_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				text = "je_space_race_widget_howc_modules"
-			}
-			te_sr_subheader = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_autonomy"
-				}
-			}
-			te_sr_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
-				text = "je_space_race_widget_howc_autonomy"
-			}
-			te_sr_subheader = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_space_command"
-				}
-			}
-			te_sr_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-				text = "je_space_race_widget_howc_space_command"
-			}
-			te_sr_subheader = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_howc_sub_defences"
-				}
-			}
-			te_sr_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-				text = "je_space_race_widget_howc_defences"
+				visible = no
 			}
 		}
 	}
@@ -7660,7 +7696,8 @@ types space_race_widget_types
 	### te_sr_window_milestones (generated, from the generator's SR_MILESTONES)
 	### holds a te_system_tab_frame per entry, since GetPlayerJournalEntry takes
 	### one literal key, each shown only while the player holds that entry
-	### active, and a note in their place while none is. Then the tab's own
+	### active, and a note in their place while none is; each frame's header,
+	### and the note's, carries the "?" to the Help page. Then the tab's own
 	### sections, which read no entry: Space Powers (our program and every other
 	### power's) and Orbit (debris, satellites, strikes), after the milestones
 	### (owner, 2026-10-27: the milestone we run is the summary a player acts
