@@ -156,11 +156,11 @@ template's name it reads, and a mod's `00_` file is read before vanilla's, so th
 | **6. A vanilla full screen still hides it.** From the window in Full Screen, open the Politics panel (it closes the window), then the tech tree. Then open the treaty draft. | Under Politics and the tech tree the HUD hides as before; under the treaty draft the outliner hides but the "Paused" button and the time controls' background stay, as in vanilla. | Different from vanilla: a vanilla term was lost in the mod's copy (`test_te_fullscreen_hud.py` should have failed). |
 | **7. Loading a save.** In Full Screen, go to the main menu and load a save. | Either the window opens again in Full Screen with the HUD hidden, or it is closed with the HUD shown; never the HUD hidden with no window. | The HUD hidden with no window: the window's root hides on something the term doesn't read; add it to the term and to `te_full_screen_term` in the test. |
 
-## The Tax Code footer in Full Screen (log fix, 2026-11-03)
+## The Tax Code footer's anchor (log fix, 2026-11-03)
 
-The full-screen frame's `fixed_bottom` sits in a `vbox`, where the footer's `parentanchor = hcenter` was ignored and logged `gui/te_systems_window.gui:206 - Widget cannot have a position in a layout` (28 lines in the owner's 1910 game). The full-screen instance now leaves the anchor out, which the engine had been doing anyway, so nothing should move.
+Both frames' `fixed_bottom` sits in a `vbox`, where the footer's `parentanchor = hcenter` was ignored and logged `gui/te_systems_window.gui:162` (side panel) and `:206` (Full Screen) `- Widget cannot have a position in a layout`, about 25 lines each time the footer was laid out. The anchor is gone, which the engine had been doing anyway, so nothing should move.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **1. The footer.** In Full Screen, open the Tax Code tab with a draft open, then with a bill under debate. | The draft summary or the bill's footer sits at the bottom where it did before, its buttons usable. | It moved: the layout had honoured the anchor after all; put `parentanchor = hcenter` back on that instance and accept the log line. |
-| **2. The log.** Read `error.log` after the check. | No `Widget cannot have a position in a layout` line. | Another widget in a layout carries a position: the line names it. |
+| **1. The footer.** On the Tax Code tab, with a draft open and then with a bill under debate, in the side panel and in Full Screen. | The draft summary or the bill's footer sits at the bottom where it did before, its buttons usable. | It moved: the layout had honored the anchor after all; put `parentanchor = hcenter` back and accept the log line. |
+| **2. The log.** Read `gui.log` after the check. | No `Widget cannot have a position in a layout` line for `te_systems_window.gui`. | Another widget in a layout carries a position: the line names it. |

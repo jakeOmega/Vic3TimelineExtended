@@ -1173,17 +1173,15 @@ class TaxFooterTest(unittest.TestCase):
         cls.footer = _type_body(cls.gui, "te_systems_window_tax_footer")
 
     def test_both_frames_show_it(self):
-        self.assertRegex(_override(_type_body(self.gui, "te_systems_window_panel"), "fixed_bottom"),
-                         r"^\s*te_systems_window_tax_footer = \{\}\s*$")
-        # The full-screen frame's fixed_bottom is a vbox child: a position
-        # there is ignored and logs "Widget cannot have a position in a
-        # layout" every frame (2026-11-03), so that instance drops the anchor.
-        self.assertRegex(_override(_type_body(self.gui, "te_systems_window_panel_wide"), "fixed_bottom"),
-                         r'^\s*te_systems_window_tax_footer = \{\s*blockoverride "footer_anchor" \{\}\s*\}\s*$')
+        for frame in ("te_systems_window_panel", "te_systems_window_panel_wide"):
+            with self.subTest(frame=frame):
+                self.assertRegex(_override(_type_body(self.gui, frame), "fixed_bottom"),
+                                 r"^\s*te_systems_window_tax_footer = \{\}\s*$")
+        # Both frames' fixed_bottom is a vbox child: a position there is
+        # ignored and logs "Widget cannot have a position in a layout"
+        # (2026-11-03, :162 and :206), so the footer carries none.
         head = self.footer[:self.footer.index("flowcontainer = {")]
-        self.assertRegex(head, r'block "footer_anchor" \{\s*parentanchor = hcenter\s*\}')
-        self.assertNotRegex(_strip_comments(head.replace(_block_at(head, head.index('block "footer_anchor"')), "")),
-                            r"parentanchor|position")
+        self.assertNotRegex(_strip_comments(head), r"parentanchor|position")
 
     def test_only_on_the_tax_code_tab_while_a_draft_or_a_bill_is(self):
         head = self.footer[:self.footer.index("flowcontainer = {")]
