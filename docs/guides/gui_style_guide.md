@@ -10,21 +10,22 @@ How to build each piece (widget types, data binding, scripted GUIs, the engine's
 
 A player who already knows the system and has opened the panel to check on it. Did the credibility pillar go up? Is the resolution passing? Which conventions bind us? Every choice below follows from that reader.
 
-The walls of text still matter, but for players learning the mod. They stay in the panel, collapsed, where the experienced player never has to scroll past them.
+The walls of text still matter, but for players learning the mod. They live on each system's Help page, a click away, where the experienced player never has to scroll past them.
 
 ## The rules
 
 The rules run roughly from the most to the least important.
 
-### 1. Dynamic content is visual and open; explanations are collapsed
+### 1. Dynamic content is visual and open; explanations are on the Help page
 
 - Anything that changes from month to month gets a visual where one fits (a bar, a pie, an icon, a table) and is **open by default**. Examples are missions in the field, the resolution in session, the authority pillars and why authority is moving.
-- Anything that explains how the system works goes into **one collapsed "How X Works" section** at the bottom of the panel, with a subheading per topic. Don't sprinkle explanatory notes through the live sections. `long_tooltip_audit.py` lists live text and tooltips over 500 rendered characters.
+- Anything that explains how the system works goes on **the system's Help page**, with a subheading per topic. Don't sprinkle explanatory notes through the live sections. `long_tooltip_audit.py` lists live text and tooltips over 500 rendered characters.
+- *(owner, 2026-11-02)* The Help page is a popup (`te_<key>_help_popup` in `gui/te_popups.gui`, its content `te_<key>_help_body`), opened by the "?" at the right of the tab's header (`te_help_button`) and by the "How X Works" link at the foot of the panel, which is that section's header alone. It reads `GetPlayer` only, so it opens from any host, whether or not the player holds the entry (`test_te_help_pages.py`). Banking, Grand Monuments and the Colonial Empire have theirs; the other systems still keep their explanations in one collapsed "How X Works" section at the foot of the panel until they move (plan `2026-11-02-charts-help-national-info`, PR H2).
 - The overview at the top is always shown and cannot be collapsed.
 - *(play-test)* A **history chart** is open by default. A **list of past items** (an archive, a ledger, ended missions) starts collapsed. A **live list** (rivals, pressure, networks) is open.
 - *(play-test)* The journal entry's own **status text must not repeat the overview.** When the overview shows everything it said, it is empty while the entry is active. It keeps one line for the inactive entry, which draws no overview.
 
-Example: `te_un_status_sections` (open, dynamic) and `te_un_reference_sections` → `te_un_sec_how` (collapsed) in `gui/journal_entry_widgets/un_layout_widget.gui`.
+Example: `te_banking_status_sections` (open, dynamic) and `te_banking_reference_sections` → `te_banking_sec_how` (the link), with the page's content in `te_banking_help_body`, in `gui/journal_entry_widgets/banking_layout_widget.gui`.
 
 ### 2. Nothing is lost
 
