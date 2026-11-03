@@ -1084,12 +1084,13 @@ sr_fire_safe_setback_event = {
 #   does not go through sr_complete_milestone_effect_base).
 #
 # The lists are players' only: nobody else looks. The offsets are drawn here,
-# on the rivals a player can see, and also by each country running a milestone
-# in its own monthly pulse (sr_own_fuzz_refresh, below), because a player's
-# National Info shows any country's band, whether or not that player races the
-# same milestone or races at all (spec 2026-11-02-charts-help-national-info
-# § 6.4). Several players seeing one rival share its offset, and a month index
-# (not a countdown) dates it, so a second pulse cannot age it twice. A revolution's winner inherits the
+# on the rivals a player can see, by sr_powers_refresh for every power in the
+# race, and by each country running a milestone in its own monthly pulse
+# (sr_own_fuzz_refresh, below): National Info shows any country's band, also
+# to a player not in the race, whose pulse draws none (spec
+# 2026-11-02-charts-help-national-info § 6.4). Several players seeing one
+# rival share its offset, and a month index (not a countdown) dates it, so a
+# second pulse cannot age it twice. A revolution's winner inherits the
 # offsets (variables) but not the list, which the next month rebuilds.
 # Scope: country (a player); ROOT is the same country (the monthly pulse).
 sr_rivals_estimate_refresh = {
@@ -1162,36 +1163,23 @@ sr_roll_rival_fuzz = {
 	change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }
 }
 
-# A country's own offsets, for every milestone it runs: drawn if it has none,
-# again a year after. Another country's National Info draws its band around
-# progress + offset × band (sr_disp_rival_est_<m>), so without an offset the
-# band would sit centered on the exact figure. The Rivals refresh above draws
-# the same variables for the rivals a player sees; whichever pulse comes first
-# in a month draws, and the date stops the other.
+# A country's own offsets, for every milestone it runs (sr_power_fuzz_base,
+# below: drawn if it has none, again a year after). Another country's National
+# Info draws its band around progress + offset × band (sr_disp_rival_est_<m>),
+# so without an offset the band would sit centered on the exact figure. The
+# players' refreshes draw the same variables for the powers they see when they
+# are in the race; whichever pulse comes first in a month draws, and the date
+# stops the others.
 # Scope: country (the monthly pulse; ROOT is the same country).
 sr_own_fuzz_refresh = {
-	sr_own_fuzz_refresh_base = { MILESTONE = suborbital         }
-	sr_own_fuzz_refresh_base = { MILESTONE = orbital            }
-	sr_own_fuzz_refresh_base = { MILESTONE = moon_landing       }
-	sr_own_fuzz_refresh_base = { MILESTONE = probe              }
-	sr_own_fuzz_refresh_base = { MILESTONE = moon_base          }
-	sr_own_fuzz_refresh_base = { MILESTONE = mars_landing       }
-	sr_own_fuzz_refresh_base = { MILESTONE = interstellar_probe }
-	sr_own_fuzz_refresh_base = { MILESTONE = solar_colonization }
-}
-
-sr_own_fuzz_refresh_base = {
-	if = {
-		limit = { has_variable = sr_active_$MILESTONE$ }
-		if = {
-			limit = { NOT = { has_variable = sr_fuzz_until_$MILESTONE$ } }
-			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
-		}
-		else_if = {
-			limit = { var:sr_fuzz_until_$MILESTONE$ <= te_history_month_index }
-			sr_roll_rival_fuzz = { MILESTONE = $MILESTONE$ }
-		}
-	}
+	sr_power_fuzz_base = { MILESTONE = suborbital         }
+	sr_power_fuzz_base = { MILESTONE = orbital            }
+	sr_power_fuzz_base = { MILESTONE = moon_landing       }
+	sr_power_fuzz_base = { MILESTONE = probe              }
+	sr_power_fuzz_base = { MILESTONE = moon_base          }
+	sr_power_fuzz_base = { MILESTONE = mars_landing       }
+	sr_power_fuzz_base = { MILESTONE = interstellar_probe }
+	sr_power_fuzz_base = { MILESTONE = solar_colonization }
 }
 
 # The viewer's snapshot for a milestone: the list, and the five slots and the
