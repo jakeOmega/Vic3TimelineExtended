@@ -213,6 +213,45 @@ Monuments" (the section and the overview cell) and the empty-section line read n
 | **5. The player's own country in National Info, and a state's panel.** National Info for the player's country; then a state's panel with a monument card and a construction site card. | The controls show and work in both: the five button types the cards share (Dedicate, Carry It Off and Clear It Away, on a state's monument and on one beside it) read `GetPlayer` there, as before. | A button gone from a state card, or a tooltip that logs: the state panel has no `Country`, and nothing the cards draw may read it (`test_grand_monuments_layout.py`'s `StateCardTest`). |
 | **6. The log.** After 1 to 5, search `debug.log` for `wanted context of type 'JournalEntry'`, `wanted context of type 'Country'`, `Failed to fetch variable` and `gm_`. | No new lines. | Each line names the expression and its file:line. |
 
+## Banking in National Info (PR F2, Banking, 2026-11-02)
+
+Banking is public: another country's tab draws its own cycle, bars, Monetary Policy readings, Active Policies and
+history, with every control, Available Interventions and the start notes under `te_own_country_only`. The player's
+own panel draws the entry's own bars, as before; another country's draws `te_banking_bars`, the same markup from the
+country variables the entry's bars are set from (`banking_disp_bar_*`). The text speaks of "the country";
+the Not Started cell keeps the player's checklist through `SelectLocalization( Country.IsLocalPlayer, … )`. None of
+it has been seen in game.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. The player's own panel**, before anything else: the journal entry, the Budget panel's Banking tab and the Timeline Extended window's, side and full screen. | As before: the entry's four bars with their hovers; every button in its old place and working; the topbar phase icon and its hover. | No bars: the guard's wrapper around `te_je_scripted_bars` (`te_banking_overview_panel`) needs `Country.IsLocalPlayer`, true for your country in every one of its mounts. |
+| **2. Another country's figures** (spec § 9 item 3). Open France's National Info, Banking tab, then play France (or compare with a known value). | France's phase, momentum, bubble, bars, policy rate, inflation, exchange rate and history, not yours. The bars sit as the entry's do, the stance bar's marker in the middle when neutral. A bar with a contagion marker reads "Financial contagion reached the country this month". | A figure equal to yours: the read under it still says `GetPlayer` (`te_rebind_country.py banking`). |
+| **3. No controls.** On France's tab. | No Enable, Disable, stepper, mandate, delegation, recapitalize or union button; each Active Policies row keeps its empty button slot at the right. No Available Interventions section; under Monetary Policy, no "how to start" note, and no gap where one was. | A control shows: its widget lost `using = te_own_country_only`, or an instance set its own `visible` over the type's (gotcha #17). |
+| **4. The interventions in force are France's** (spec § 9 item 3). France's Active Policies, against France's own journal entry when playing it. | The AI's own policies, through `market_triggers.txt`'s `je:` triggers. | A row shows yours: its scripted GUI's trigger reads the player, not its root (`GuiScope.SetRoot( Country.MakeScope )`). |
+| **5. A bloc's union.** A country in a power bloc with a monetary union, member and leader. | The "received from the leader" row shows the bloc leader's flag and name, and only while the member receives something. | The row's `visible` read the leader: the leader's datacontext must sit on the flag and name only (`banking_dash_mon_bs_union_from`). |
+| **6. Not Started.** Hover the overview's Not Started cell on a minor without a stock exchange, then on your own country before its cycle starts. | The minor's: "The country's Banking Cycle has no readings yet…", no checklist. Your own: the checklist with ticks, as before. | `banking_dash_not_started_own_tt` / `_other_tt`. |
+| **7. A country without the entry** (the #805 readout). A country with a central bank in a game's first fortnight, or a revolution's rebels. | Its Monetary Policy readings, under National Info's header; yours as before in the Budget tab. | `te_banking_mon_readout` reads `Country`; National Info draws it under `te_budget_banking_readout_sgui` on the window's `Country`. |
+| **8. The log** (spec § 9 item 3). After 1 to 7, search `debug.log` for `wanted context of type 'JournalEntry'`, `Failed to fetch variable`, `banking_disp_bar` and null-country lines. | No new lines. | Each line names the expression and its file:line. |
+
+## Nation in National Info (PR F2, Nation, 2026-11-02)
+
+The Nation tab reads the shown `Country`, so National Info can show it for any country: every score, row, bar and
+list, with nothing hidden, since the tab has no control. The modifier types' names its rows splice still read
+`GetPlayer`, only to ask a game rule. International now opens with the United Nations once one exists: the seat,
+International Standing and UN Dues with any arrears, from the UN overview's own codes. Another country's
+Information-tab line ("Lasting modifiers not listed") gains a goto into National Info on its Nation tab. Needs PR F1's
+National Info, which shows the tab while its `public` flag is set.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Another country's figures.** Open a great power's National Info on its Nation tab and note the five boxes, a few type rows and Where These Come From's count; then `tag` into it from the console and open its own Nation tab. | The same figures, rows and count, not the player's. | The player's figures: a read is still `GetPlayer`; `test_te_system_tab_bodies.py`'s `BindingTest` should have caught it, so note the row. A 0 or a hidden row only for another country: the script value behind it isn't kept for that country (the writers checked are country pulses for every country). |
+| **2. Its lists.** On the same country, open Where These Come From. | The lists hold that country's lasting modifiers, each with its tooltip, and the heading's count is its own tab's (check 1). | Empty or the player's: `te_nation_list`'s `Country.GetTimedModifiers` doesn't resolve under National Info's `Country`. |
+| **3. The UN lines.** Play a UN member and compare International's three lines with the UN tab's overview: Membership, Standing and Dues. Then run `event te_debug_un.1` and pick the arrears option, and look again; then view a non-member and a permanent member in National Info. | United Nations reads as the overview's Membership word, International Standing as its Standing word with the score, UN Dues as its Dues word, with "24 months in arrears" after the debug option and the sum owed on hover. A non-member shows its seat only, or its frozen standing if it left; no lines before a UN exists. | A blank word or a raw key: a `je_un_ov_*` key was renamed. Lines that disagree with the overview: `un_disp_*_code` changed its numbering; both read the same values. |
+| **4. The goto.** On another country's Information tab, click the arrow beside "Lasting modifiers not listed"; then on your own. | Another country's opens National Info for that country on its Nation tab; your own opens the Timeline Extended window on Nation, as before. The tooltip names the window ("Opens the Nation tab of French National Info"). | National Info opens on Pops: F1's window doesn't keep a `te_ni_tab` set before it opens; set it after `OpenPopBrowserPanel` instead. Nothing opens: the two `onclick`s on one `button_icon_goto` didn't both run. |
+| **5. The wording.** For another country, hover the Construction Cost row, the Legislative Override box and the Wealth Concentration row. | "The country", never "your" or "you"; Wealth Concentration's hover points at the Demographics tab of that country's National Info, not the Population panel. | Note the key. |
+| **6. The log and an observer.** After 1 to 5, and as an observer opening any country's Nation tab in National Info, search `debug.log` for `wanted context of type`, `Failed to fetch variable` and null-country lines. | None new. The Demographics type rows' names render plain for an observer (their `GetPlayer.IsValid` guard). | Each line names its expression: a read still on `GetPlayer` outside `WORLD_LOC`. |
+| **7. The strip with every rule off.** Start a game with every system's game rule off and open National Info for your own country and another. | The strip shows, with Pops and Nation; Nation is never grayed. Before this PR the window was the base game's with those rules off. | No strip: `te_ni_strip_shown` isn't `visible = yes` in `gui/te_national_info_generated.gui`; rerun `gen_te_systems_window.py`. |
+
 ## Another country's Colonial Empire (the Colonial Empire's binding PR, 2026-11-02)
 
 The Colonial Empire tab is public: its sections read `Country`, the shown country, and every control sits under
