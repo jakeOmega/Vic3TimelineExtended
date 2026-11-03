@@ -238,7 +238,7 @@ TABS: list[Tab] = [
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
             wide="te_seabed_wide_sections",
-            public=False),
+            public=True),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805

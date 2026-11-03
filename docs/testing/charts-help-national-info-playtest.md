@@ -130,3 +130,23 @@ and its sections under the window's `Country`. Another country's chart opens in 
 | **9. An old save's history.** Load a save from before 2026-09-21 (#356) in which a country fell below major power since, wait a month, then run `python3 scripts/analysis/check_save_history_order.py` on a new save. | Every store `ascending=True`; the month's repair (`te_repair_history_order`) sorted the frozen ones. | The repair's global flag `te_history_order_repaired` is set in the first month; a store still out of order means the sort's completeness gate (240) did not pass for it. |
 | **10. Observer** (spec § 9 item 7). As an observer, open National Info for two countries and their Demographics tabs. | No errors; each shows the country's figures, no controls. A chart's round button opens the window's own viewer for that country (`IsLocalPlayer` is false for an observer; the popups root, which an observer never sees, isn't needed). | Null-country lines name the read that fell back to `GetPlayer`. |
 | **11. Outside National Info** (any chart). A chart on a journal entry, a window tab and a vanilla panel's tab. | One round button, which opens the usual viewer. | Both buttons show: `Country` there isn't the player (`te_je_country`, the frame's `tab_country`). An observer sees the second button on a journal entry's chart: it sets `te_ni_chart` and nothing opens. |
+
+## Seabed in National Info (PR F3, Seabed, 2026-11-02)
+
+The Seabed tab reads the shown `Country`, so National Info can show it for any country: the overview's six boxes,
+the Ocean Basins table (Free, Pool, Weight, +1 license) and every hover, for that country. Hidden for another
+country, under `te_own_country_only`: the policy panel (its three buttons are all it holds; the overview's Policy box
+still shows the policy and its lock), and each basin's claimants with Relinquish and Claim Again, with the chevron that
+opens them. The claimant list is the viewer's own (`te_seabed_rank_listed` leaves the viewer out and the tab draws the
+viewer's row apart), so read for another country it would show that country twice and leave the player out. The Free
+figure's hover is printed by a scripted GUI's effect, so its lines read the root it is given
+(`SCOPE.GetRootScope.ScriptValue`) rather than `GetPlayer`. Needs PR F1's National Info, which shows the tab while its
+`public` flag is set.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **1. Another country's figures.** Pick a claimant that appears in one of your basins' claimant lists. Note its Mines, Claims and Weight there, then open its National Info on the Seabed tab. | That basin's Free is its Claims and Weight its Weight; the pool bar's hover gives its own mines and queued levels, which add up to its Mines figure but for what it built or queued since the last sharing, and its own unused claims; the overview's boxes are its own (`tag` into it from the console to compare with its own tab). | The player's figures: a read is still `GetPlayer` (`test_te_system_tab_bodies.py`'s `BindingTest` should have caught it), or the window doesn't supply that country's `Country`. |
+| **2. The Free hover.** On the same country, hover a basin's Free figure. | Its unused claims in the basin, then its own coastal states there (or "No coast here"). | The player's count over the other country's states: `te_seabed_build_in_*` don't read the scripted GUI's root; `ROOT.GetCountry.MakeScope.ScriptValue` is the other form. |
+| **3. Nothing to press.** Same country. | No Seabed Policy panel, no chevrons, no claimant lists, no Relinquish or Claim Again. The basin names sit where they were, beside an empty slot. The Policy box's hover gives its policy, the influence it holds and when it can next change. | A control shows: it isn't under `te_own_country_only` (`GuardTest`, and `test_seabed_layout.py`'s `PrivateTest`). |
+| **4. Your own tab.** Your own Seabed tab, in the window and in National Info for your own country. | As before, with the policy buttons, the chevrons, the claimants and Relinquish or Claim Again. The words that changed: Licenses (was Our licenses), own mines and own claims in the legend, and the hovers' "Coast here", "Claim weight in the …", "Own mines", "no coast here". | — |
+| **5. The log and an observer.** After 1 to 4, and as an observer opening any coastal country's Seabed tab in National Info, search `debug.log` for `wanted context of type`, `Failed to fetch variable`, `Promote 'SCOPE' returned nullptr` and null-country lines. | None new. | Each line names its expression: a `SCOPE` line names a Free hover key (check 2's fallback); the rest, a read still on `GetPlayer` outside `te_own_country_only`. |

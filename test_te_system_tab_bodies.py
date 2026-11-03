@@ -580,7 +580,6 @@ UNBOUND = set([
 
     "colonial_empire",
 
-    "seabed",
 
     "cultural_hegemony",
 

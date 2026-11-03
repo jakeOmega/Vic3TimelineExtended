@@ -10,11 +10,11 @@
 ### column's (every tab but Pops).
 
 template te_ni_pops_selected {
-	visible = "[Not( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
+	visible = "[Not( Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 }
 
 template te_ni_pops_unselected {
-	visible = "[And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+	visible = "[Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 }
 
 template te_ni_demographics_selected {
@@ -25,12 +25,20 @@ template te_ni_demographics_unselected {
 	visible = "[And( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) )]"
 }
 
+template te_ni_seabed_selected {
+	visible = "[And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+}
+
+template te_ni_seabed_unselected {
+	visible = "[And( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
+}
+
 template te_ni_strip_shown {
-	visible = "[GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+	visible = "[Or( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 }
 
 template te_ni_content_shown {
-	visible = "[And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+	visible = "[Or( And( GetVariableSystem.HasValue('te_ni_tab', 'demographics'), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_ni_tab', 'seabed'), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 }
 
 types te_national_info_generated_types
@@ -85,6 +93,27 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_demographics"
+			}
+
+			### seabed
+			blockoverride "third_button" {
+				text = "te_window_tab_seabed"
+			}
+			blockoverride "third_button_tooltip" {
+				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
+			}
+			blockoverride "third_button_click" {
+				enabled = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				onclick = "[GetVariableSystem.Set('te_ni_tab', 'seabed')]"
+			}
+			blockoverride "third_button_visibility" {
+				using = te_ni_seabed_selected
+			}
+			blockoverride "third_button_visibility_checked" {
+				using = te_ni_seabed_unselected
+			}
+			blockoverride "third_button_selected" {
+				text = "te_window_tab_seabed"
 			}
 		}
 		expand = {}
@@ -145,6 +174,54 @@ types te_national_info_generated_types
 				}
 
 				te_demog_browser_sections = {}
+			}
+		}
+
+		### seabed
+		flowcontainer = {
+			name = "te_ni_seabed_tab"
+			using = te_ni_seabed_selected
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+
+			### The player's own country: the window's full-screen mount, with its gate,
+			### its entry and its controls.
+			flowcontainer = {
+				name = "te_ni_seabed_own"
+				visible = "[Country.IsLocalPlayer]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_seabed_tab_body = {
+					blockoverride "te_seabed_tab_layout" {
+						te_seabed_wide_sections = {}
+					}
+				}
+			}
+
+			### Another country: the tab's header, its readout if it has one, then its
+			### sections under the window's Country, with no journal entry and no frame.
+			flowcontainer = {
+				name = "te_ni_seabed_other"
+				visible = "[Not( Country.IsLocalPlayer )]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 10
+
+				default_header = {
+					using = default_list_position
+					blockoverride "text" {
+						text = "te_window_tab_seabed"
+					}
+					te_help_button = {
+						onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
+					}
+				}
+
+				te_seabed_wide_sections = {}
 			}
 		}
 	}
