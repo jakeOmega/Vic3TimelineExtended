@@ -775,7 +775,7 @@ class ViewerTest(unittest.TestCase):
         """Banking's and Demographics' keys hide until the store holds a
         sample, as their sections' instances did before the keys became types
         (the visible moved into the type); Cultural Hegemony's always shows."""
-        lists = {"banking": "JournalEntry.GetCountry.MakeScope.GetList('te_hist')",
+        lists = {"banking": "Country.MakeScope.GetList('te_hist')",
                  "demographics": "Country.MakeScope.GetList('te_dg_hist')"}
         for system, (name, _height) in gen.KEYS.items():
             body = _type_body(_strip_comments(_read(os.path.join(REPO, SECTIONS[system]))), name)

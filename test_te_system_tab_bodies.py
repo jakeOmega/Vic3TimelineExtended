@@ -572,7 +572,6 @@ PUBLIC = [t for t in gen.TABS if t.public]
 UNBOUND = set([
     "nation",
 
-    "banking",
 
 
 
