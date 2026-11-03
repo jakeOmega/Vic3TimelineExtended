@@ -192,9 +192,9 @@ Bills and your Promises, each shown only while it has something in it. Then:
   game uses; under the Light code it explains the Light code instead.
 
 Another country's National Info window has its Tax Code tab too: its enacted
-code, its passed bills, the bill it is debating and its history. Its draft, its
-offers and promises, where its interest groups stand on the bill and every
-button stay hidden.
+code, its passed bills, the bill it is debating with its support bar, and its
+history. Its draft, its promises, each interest group's stance and offers, and
+every button stay hidden.
 
 ## Drafting a tax reform
 
