@@ -168,21 +168,16 @@ class SeabedPanelTest(unittest.TestCase):
     def setUpClass(cls):
         cls.gui = _read(GUI)
 
-    def test_four_sections_in_order(self):
-        at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins", "how")]
+    def test_three_sections_in_order(self):
+        at = [self.gui.index(f"type te_seabed_{s}_panel = ") for s in ("overview", "policy", "basins")]
         self.assertEqual(at, sorted(at))
 
-    def test_how_it_works_is_a_link(self):
-        """How Seabed Licences Work is its header alone, which opens the Help
-        page (te_seabed_help_popup, on te_popup = help_seabed); its collapse
-        flag retired with its content (test_te_help_pages.py)."""
-        how = _type_body(self.gui, "te_seabed_how_panel")
-        self.assertIn('text = "te_seabed_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_seabed')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how, r'blockoverride "onclick_show')
+    def test_how_it_works_is_the_help_page(self):
+        """How Seabed Licenses Work is the Help page alone (te_seabed_help_popup,
+        on te_popup = help_seabed), which the "?" in the tab's header opens: the
+        link panel is gone (test_te_help_pages.py)."""
+        self.assertNotIn("te_seabed_how_panel", self.gui)
         self.assertNotIn("te_seabed_how_open", self.gui)
-        self.assertNotIn("te_seabed_note", how)
         self.assertIn('text = "te_seabed_how_sub_pools"', _type_body(self.gui, "te_seabed_help_body"))
 
     def test_every_basin_lists_its_claimants(self):
@@ -380,15 +375,16 @@ class ScriptTooltipTest(unittest.TestCase):
 
 class WideLayoutTest(unittest.TestCase):
     """te_seabed_wide_sections, the window's full-screen Seabed tab (spec
-    2026-11-02-te-window-wide-mode § 7): the overview and policy, the basins,
-    then How Seabed Licenses Work."""
+    2026-11-02-te-window-wide-mode § 7): the overview and policy, then the
+    basins, in two columns (te_ui_columns_two), since a third would hold
+    nothing now that How Seabed Licenses Work is the Help page."""
 
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_seabed_wide_sections", layout=("te_seabed_tab_body", "te_seabed_tab_layout"))
         self.assertEqual(columns, [
             ["te_seabed_overview_panel", "te_seabed_policy_panel"],
-            ["te_seabed_basins_panel"],
-            ["te_seabed_how_panel"]])
+            ["te_seabed_basins_panel"]])
+        self.assertIn("type te_seabed_wide_sections = te_ui_columns_two", _read(GUI))
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "seabed")

@@ -32,7 +32,7 @@ BANKING_GUI = [DASH, HIST, LAYOUT, BUDGET]
 ENTRY_GATE = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 STATUS = ["te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions"]
-REFERENCE = ["te_banking_history_panel", "te_banking_sec_how"]
+REFERENCE = ["te_banking_history_panel"]
 # Available Interventions' categories, by the economic system that shows them.
 CATEGORIES = {
     "banking_dash_system_market": ["prudential", "credit", "external", "crisis"],
@@ -111,7 +111,7 @@ class OrderTest(unittest.TestCase):
         body = _type_body(_read(LAYOUT), "te_banking_status_sections")
         self.assertEqual(re.findall(r"^\t\t(te_banking_\w+) = \{", body, re.M), STATUS)
 
-    def test_reference_order_history_then_how(self):
+    def test_reference_order_the_history(self):
         body = _type_body(_read(LAYOUT), "te_banking_reference_sections")
         self.assertEqual(re.findall(r"^\t\t(te_banking_\w+) = \{", body, re.M), REFERENCE)
         # one open history shell for both hosts (play-test round 2): no swap left
@@ -228,17 +228,15 @@ class FlagTest(unittest.TestCase):
                           ("te_banking_sec_monetary", "banking_dash_monetary_closed")):
             self.assertIn(f"Toggle('{flag}')", _type_body(dash, sec), sec)
 
-    def test_how_banking_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_banking_help_popup, on te_popup = help_banking); its collapse flag
-        retired with its content (test_te_help_pages.py)."""
-        how = _type_body(_strip_comments(_read(LAYOUT)), "te_banking_sec_how")
-        self.assertIn('text = "banking_dash_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_banking')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotIn("onclick_show", how)
+    def test_how_banking_works_is_the_help_page(self):
+        """How Banking Works is the Help page (te_banking_help_popup, on
+        te_popup = help_banking), which only the "?" opens: the link that stood
+        for it at the foot of the panel is gone, and the collapse flag with it
+        (test_te_help_pages.py)."""
+        layout = _strip_comments(_read(LAYOUT))
+        self.assertNotIn("te_banking_sec_how", layout)
+        self.assertIn("type te_banking_help_body = flowcontainer {", layout)
         self.assertNotIn("banking_dash_how_open", self.text)
-        self.assertNotIn("banking_dash_note", how)
 
 
 class GateTest(unittest.TestCase):

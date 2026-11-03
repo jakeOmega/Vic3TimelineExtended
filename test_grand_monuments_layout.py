@@ -35,11 +35,9 @@ CONCEPT_LOC = os.path.join(REPO, "localization", "english", "te_concepts_l_engli
 # GM-3 of the GUI audit, approved as proposed).
 STATUS = ["te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_awaiting", "te_gm_sec_archaeology",
           "te_gm_sec_national", "te_gm_sec_monuments", "te_gm_sec_trophies", "te_gm_sec_abroad"]
-REFERENCE = ["te_gm_sec_how"]
 # root -> (container, what it wraps)
 ROOTS = {"widget_je_gm_overview": ("custom_widget_container_1", "te_gm_overview_panel"),
-         "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections"),
-         "widget_je_gm_reference": ("custom_widget_container_3", "te_gm_reference_sections")}
+         "widget_je_gm_status": ("custom_widget_container_2", "te_gm_status_sections")}
 # The composers' gate: the tab's own, on the shown country (the journal entry's
 # roots keep [JournalEntry.IsActive]).
 TAB_GATE = "GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )"
@@ -164,8 +162,7 @@ def _gui():
 class OrderTest(unittest.TestCase):
     def test_composers_set_the_order(self):
         gui = _gui()
-        for composer, expected in (("te_gm_status_sections", STATUS),
-                                   ("te_gm_reference_sections", REFERENCE)):
+        for composer, expected in (("te_gm_status_sections", STATUS),):
             found = re.findall(r"^\t\t(te_gm_sec_\w+) = \{", _type_body(gui, composer), re.M)
             self.assertEqual(found, expected, composer)
 
@@ -207,17 +204,17 @@ class FlagTest(unittest.TestCase):
                           ("te_gm_sec_monuments", "gm_monuments_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(gui, sec), sec)
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_grand_monuments_help_popup, on te_popup = help_grand_monuments);
-        its collapse flag retired with its content (test_te_help_pages.py)."""
-        how = _strip_comments(_type_body(_gui(), "te_gm_sec_how"))
-        self.assertIn('text = "gm_je_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotIn("onclick_show", how)
-        self.assertNotIn("gm_how_open", _gui())
-        self.assertNotIn("gm_note", how)
+    def test_how_it_works_is_the_help_page(self):
+        """How Grand Monuments Work is the Help page alone
+        (te_grand_monuments_help_popup, on te_popup = help_grand_monuments),
+        which the "?" at the top of the entry opens: the link section is gone
+        and its reference composer with it (test_te_help_pages.py)."""
+        gui = _gui()
+        self.assertNotIn("te_gm_sec_how", gui)
+        self.assertNotIn("te_gm_reference_sections", gui)
+        self.assertNotIn("widget_je_gm_reference", _read(JE))
+        self.assertIn("type te_grand_monuments_help_body", gui)
+        self.assertNotIn("gm_how_open", gui)
 
 
 class HowItWorksTest(unittest.TestCase):
@@ -1373,7 +1370,7 @@ class WideLayoutTest(unittest.TestCase):
         self.assertEqual(columns, [
             ["te_gm_overview_panel", "te_gm_sec_commission", "te_gm_sec_decisions", "te_gm_sec_awaiting"],
             ["te_gm_sec_archaeology", "te_gm_sec_national", "te_gm_sec_monuments"],
-            ["te_gm_sec_trophies", "te_gm_sec_abroad", "te_gm_sec_how"]])
+            ["te_gm_sec_trophies", "te_gm_sec_abroad"]])
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "grand_monuments")

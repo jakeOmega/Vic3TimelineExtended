@@ -24,7 +24,7 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 # colonial powers, owner 2026-11-03), which the tab shows alone without it.
 STATUS = ["te_ce_sec_holdings", "te_ce_sec_stability", "te_ce_sec_pressure", "te_ce_sec_programmes",
           "te_ce_sec_stance", "te_ce_sec_powers"]
-REFERENCE = ["te_ce_sec_history", "te_ce_sec_how"]
+REFERENCE = ["te_ce_sec_history"]
 ROOTS = {   # root name -> (what it instances, the journal container it is attached to)
     "widget_je_colonial_empire_overview": ("te_ce_overview_panel", "custom_widget_container_1"),
     "widget_je_colonial_empire_status": ("te_ce_status_sections", "custom_widget_container_2"),
@@ -234,8 +234,10 @@ class RootsTest(unittest.TestCase):
                 a, b = _span(gui, m.start())
                 body = gui[a + 1:b]
                 self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
-                self.assertEqual(re.findall(r"(?m)^\t(\w+) = \{", body), ["te_je_country"])
+                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py),
+                # under the "?" at the top of the entry (test_te_help_pages.py)
+                expected = ["te_help_row", "te_je_country"] if _container == "custom_widget_container_1" else ["te_je_country"]
+                self.assertEqual(re.findall(r"(?m)^\t(\w+) = \{", body), expected)
                 self.assertEqual(re.findall(r"(?m)^\tte_je_country = \{\n\t\t(\w+) = \{", body), [inner])
         for old in OLD_ROOTS:
             self.assertNotIn(f'name = "{old}"', gui, old)
@@ -282,17 +284,15 @@ class FlagTest(unittest.TestCase):
                           ("te_ce_sec_powers", "colonial_empire_powers_closed")):
             self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec), sec)
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_colonial_empire_help_popup, on te_popup = help_colonial_empire);
-        its collapse flag retired with its content (test_te_help_pages.py)."""
-        how = _strip_comments(_type_body(self.text, "te_ce_sec_how"))
-        self.assertIn('text = "je_colonial_empire_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotIn("onclick_show", how)
+    def test_how_it_works_is_the_help_page(self):
+        """How the Colonial Empire Works is the Help page
+        (te_colonial_empire_help_popup, on te_popup = help_colonial_empire),
+        which only the "?" opens: the link at the panel's foot is gone, and its
+        collapse flag with it (test_te_help_pages.py)."""
+        text = _strip_comments(self.text)
+        self.assertNotIn("te_ce_sec_how", text)
+        self.assertIn("type te_colonial_empire_help_body = flowcontainer {", text)
         self.assertNotIn("colonial_empire_how_open", self.text)
-        self.assertNotIn("colonial_empire_note", how)
 
     def test_no_section_is_an_exception(self):
         """Live lists stay open (owner, play-test round 2): International
@@ -1910,7 +1910,7 @@ class WideLayoutTest(unittest.TestCase):
         self.assertEqual(columns, [
             ["te_ce_overview_panel", "te_ce_sec_holdings", "te_ce_sec_stability"],
             ["te_ce_sec_pressure", "te_ce_sec_programmes", "te_ce_sec_stance", "te_ce_sec_powers"],
-            ["te_ce_sec_history", "te_ce_sec_how"]])
+            ["te_ce_sec_history"]])
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "colonial_empire")

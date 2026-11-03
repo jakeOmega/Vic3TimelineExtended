@@ -13,7 +13,7 @@ import re
 import unittest
 
 import gui_tree
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import _strip_comments, assert_wide_matches_narrow
 from scripts.generators import gen_te_systems_window as gen
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
@@ -31,18 +31,18 @@ SGUIS_FILE = os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis
 # is a table at the top of Operations, not a section of its own.
 STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
           "te_covert_sec_counterintel", "te_covert_sec_known"]
-REFERENCE = ["te_covert_sec_how"]
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
 WIDE_COLUMNS = [["te_covert_overview_panel", "te_covert_sec_operations"],
                 ["te_covert_sec_funding", "te_covert_sec_networks", "te_covert_sec_counterintel"],
-                ["te_covert_sec_known", "te_covert_sec_how"]]
+                ["te_covert_sec_known"]]
 # root name -> (container, what it wraps)
 ROOTS = {
     "widget_je_covert_overview": ("custom_widget_container_1", "te_covert_overview_panel"),
     "widget_je_covert_status": ("custom_widget_container_2", "te_covert_status_sections"),
-    "widget_je_covert_reference": ("custom_widget_container_3", "te_covert_reference_sections"),
 }
-OLD_ROOTS = ["widget_je_covert_command_centre", "widget_je_covert_operations", "widget_je_covert_networks"]
+# the reference root went with How Covert Warfare Works' link (its only section)
+OLD_ROOTS = ["widget_je_covert_command_centre", "widget_je_covert_operations", "widget_je_covert_networks",
+             "widget_je_covert_reference"]
 
 # Explanations that live in "How Covert Warfare Works" only.
 HOW_KEYS = ["je_iw_how_ops", "je_iw_how_funding", "je_iw_how_detection", "je_iw_net_header_tooltip",
@@ -129,16 +129,16 @@ def _gate_before(body, key):
 
 
 class OrderTest(unittest.TestCase):
-    def test_status_and_reference_order(self):
+    def test_status_order(self):
         gui = _read(GUI)
-        for composer, expected in (("te_covert_status_sections", STATUS),
-                                   ("te_covert_reference_sections", REFERENCE)):
-            found = re.findall(r"^\t\t(te_covert_sec_\w+) = \{", _type_body(gui, composer), re.M)
-            self.assertEqual(found, expected, composer)
+        found = re.findall(r"^\t\t(te_covert_sec_\w+) = \{", _type_body(gui, "te_covert_status_sections"), re.M)
+        self.assertEqual(found, STATUS)
+        # no reference composer: its one section was the link to the Help page
+        self.assertNotIn("te_covert_reference_sections", gui)
 
     def test_composers_and_overview_are_gated_on_the_active_entry(self):
         gui = _read(GUI)
-        for t in ("te_covert_overview_panel", "te_covert_status_sections", "te_covert_reference_sections"):
+        for t in ("te_covert_overview_panel", "te_covert_status_sections"):
             self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(gui, t)[:300], t)
 
 
@@ -155,8 +155,10 @@ class RootTest(unittest.TestCase):
             root = _root(gui, name)
             self.assertIn('visible = "[JournalEntry.IsActive]"', root, name)
             self.assertIn(f"{inner} = {{}}", root, name)
-            # A bare wrapper: nothing else in it.
-            self.assertEqual(len(re.findall(r"^\t\w+ = \{", root, re.M)), 1, name)
+            # A bare wrapper: nothing else in it, but the overview's "?" at the
+            # top of the entry (test_te_help_pages.py).
+            expected = ["te_help_row", "te_je_country"] if name == "widget_je_covert_overview" else ["te_je_country"]
+            self.assertEqual(re.findall(r"^\t(\w+) = \{", root, re.M), expected, name)
 
     def test_the_old_roots_are_gone(self):
         text = _read(GUI) + _read(JE)
@@ -206,18 +208,15 @@ class FlagTest(unittest.TestCase):
         for sec in STATUS:
             self.assertRegex(_type_body(self.text, sec), r"Toggle\('covert_\w+_closed'\)", sec)
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_covert_warfare_help_popup, on te_popup = help_covert_warfare); its
-        collapse flag retired with its content (test_te_help_pages.py)."""
-        how = _type_body(self.text, "te_covert_sec_how")
-        self.assertIn('text = "je_iw_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_covert_warfare')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how, r'blockoverride "onclick_show')
-        self.assertNotIn("Toggle", how)
+    def test_how_it_works_is_the_help_page(self):
+        """How Covert Warfare Works is the Help page (te_covert_warfare_help_popup,
+        on te_popup = help_covert_warfare), which only the "?" opens: the link at
+        the panel's foot is gone, and its collapse flag with it
+        (test_te_help_pages.py)."""
+        text = _strip_comments(self.text)
+        self.assertNotIn("te_covert_sec_how", text)
+        self.assertIn("type te_covert_warfare_help_body = flowcontainer {", text)
         self.assertNotIn("covert_how_open", self.text)
-        self.assertNotIn("covert_note", how)
 
 
 class StateGateTest(unittest.TestCase):
@@ -1188,8 +1187,7 @@ class MilitaryCovertTabTest(unittest.TestCase):
         body = self._content()
         mounted = re.findall(r'name = "(widget_je_covert_\w+)"', _read(JE))
         wrapped = [ROOTS[name][1] for name in mounted]
-        self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections",
-                                   "te_covert_reference_sections"])
+        self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections"])
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
         # The link back to the entry is the frame's, after every section.
         self.assertNotIn('blockoverride "tab_open_journal" ', body)

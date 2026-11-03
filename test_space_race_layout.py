@@ -74,7 +74,6 @@ COLONY_KINDS = {
 }
 
 STATUS = ["te_sr_sec_control", "te_sr_sec_rivals"]
-REFERENCE = ["te_sr_sec_how"]
 OLD_FLAGS = [f"sr_panel_rivals_{m}" for m in CONTROLLED] + \
             [f"sr_panel_programme_{m}" for m in ALL]
 HOW_KEYS = ["je_space_race_widget_how_approach", "je_space_race_widget_how_funding",
@@ -191,10 +190,9 @@ def _milestones_named(text):
 
 
 class OrderTest(unittest.TestCase):
-    def test_status_and_reference_order(self):
+    def test_status_order(self):
         gui = _read(GUI)
-        for composer, expected in (("te_sr_status_sections", STATUS),
-                                   ("te_sr_reference_sections", REFERENCE)):
+        for composer, expected in (("te_sr_status_sections", STATUS),):
             found = re.findall(r"^\t\t(te_sr_sec_\w+) = \{", _type_body(gui, composer), re.M)
             self.assertEqual(found, expected, composer)
 
@@ -208,7 +206,8 @@ class OrderTest(unittest.TestCase):
 
     def test_the_overview_is_the_top_container(self):
         """Overview in container 1 (above the status line), live sections in 2,
-        the reference in 3, as the UN entry attaches them."""
+        as the UN entry attaches them. How the Space Race Works, once a
+        reference root in 3, is the Help page the overview's "?" opens."""
         je = _read(JE)
         for m in ALL:
             with self.subTest(milestone=m):
@@ -217,7 +216,6 @@ class OrderTest(unittest.TestCase):
                 expected = [(f"widget_je_space_race_{m}_overview", "custom_widget_container_1")]
                 if m in CONTROLLED:
                     expected.append((f"widget_je_space_race_{m}", "custom_widget_container_2"))
-                expected.append(("widget_je_space_race_reference", "custom_widget_container_3"))
                 # the bars-on-top marker: the overview draws the progress, so the
                 # entry's own goal bar at the foot is hidden (gui/journal_entry.gui)
                 expected.append(("widget_te_je_bars_on_top_marker", "custom_widget_container_7"))
@@ -245,7 +243,7 @@ class RootTest(unittest.TestCase):
         names = re.findall(r'name = "(widget_je_space_race_\w+)"', self.gui)
         expected = {f"widget_je_space_race_{m}_overview" for m in ALL}
         expected |= {f"widget_je_space_race_{m}" for m in CONTROLLED}
-        expected.add("widget_je_space_race_reference")
+        self.assertNotIn("widget_je_space_race_reference", self.gui + _read(JE))
         self.assertEqual(set(names), expected)
         self.assertEqual(len(names), len(expected))
         for name in names:
@@ -256,7 +254,7 @@ class RootTest(unittest.TestCase):
 
     def test_composers_and_number_columns_are_fixed_width(self):
         for composer in ("te_sr_overview_milestone", "te_sr_overview_transit",
-                         "te_sr_status_sections", "te_sr_reference_sections"):
+                         "te_sr_status_sections"):
             self.assertIn("minimumsize = { 520 -1 }", _type_body(self.gui, composer).split("\n\n")[0], composer)
         bar = _type_body(self.gui, "te_sr_ov_bar_row")
         # round 3: the label column fits "Next Colony" (test_space_race_labels.py)
@@ -310,8 +308,7 @@ class FlagTest(unittest.TestCase):
         # and Locations (slice 6); and the colony target popup's "show all"
         # (UI pass design § 5); and the colonies another country holds
         # (National Info, te_sr_sec_colonies_brief). How the Space Race Works
-        # and How Solar Colonization Works have none: they are links to the
-        # Help page.
+        # and How Solar Colonization Works have none: they are the Help page.
         self.assertEqual(len(flags), 2 * len(CONTROLLED) + 11)
         for f in flags:
             self.assertRegex(f, r"^sr_panel_\w+_(open|closed)$", f"section flag {f} does not say its default")
@@ -325,27 +322,19 @@ class FlagTest(unittest.TestCase):
                 self.assertEqual(negated, 1, f)
                 self.assertGreaterEqual(bare, 2, f)
 
-    def test_live_sections_open_and_how_it_works_a_link(self):
+    def test_live_sections_open_and_how_it_works_the_help_page(self):
         for m in CONTROLLED:
             root = _root(self.text, f"widget_je_space_race_{m}")
             self.assertIn(f"'sr_panel_control_{m}_closed'", root)
             self.assertIn(f"'sr_panel_rivals_{m}_closed'", root)
         self.assertIn("Toggle('sr_panel_colonies_closed')", _type_body(self.text, "te_sr_sec_colonies"))
-        # both How sections are their header alone, which opens the Help page
-        # (te_space_race_help_popup, on te_popup = help_space_race), each with
-        # its own name; their flags retired (test_te_help_pages.py)
-        for section, title in (("te_sr_sec_how", "je_space_race_widget_how_header"),
-                               ("te_sr_sec_how_colonies", "je_space_race_widget_howc_header")):
-            body = _type_body(self.text, section)
-            with self.subTest(section=section):
-                self.assertIn(f'text = "{title}"', body)
-                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"", body)
-                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-                self.assertNotRegex(body, r'blockoverride "onclick_show')
-                self.assertNotIn("te_sr_note", body)
-                self.assertNotIn("Toggle", body)
-        for flag in ("sr_panel_how_open", "sr_panel_how_colonies_open"):
-            self.assertNotIn(flag, self.text)
+        # How the Space Race Works and How Solar Colonization Works are the
+        # Help page alone (te_space_race_help_popup, on te_popup =
+        # help_space_race), which the "?" on each overview and in the tab's
+        # header opens: both link sections and the reference composer are gone
+        # (test_te_help_pages.py)
+        for gone in ("te_sr_sec_how", "te_sr_reference_sections", "sr_panel_how_open", "sr_panel_how_colonies_open"):
+            self.assertNotIn(gone, self.text, gone)
 
     def test_no_old_flag_survives(self):
         for f in OLD_FLAGS:
@@ -503,15 +492,16 @@ class ColoniesTest(unittest.TestCase):
 
     def test_the_colonization_panel_order(self):
         """Colony Fleets, Colonies, Space Command, Space Fleets, then Solar
-        System (moved down by the owner, 2026-10-31) just above How Solar
-        Colonization Works; the old per-aspect sections are gone (SPC-5)."""
+        System (moved down by the owner, 2026-10-31); the old per-aspect
+        sections are gone (SPC-5), and How Solar Colonization Works is the
+        Help page."""
         status = _type_body(self.gui, "te_sr_solar_colonization_status")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
         # Across the tabs (UI pass design § 11), Mission Control's own launch
         # windows aside.
         self.assertEqual([s for s in re.findall(r"^\t+(te_sr_sec_\w+) = \{\}", status, re.M) if s != "te_sr_sec_windows"],
                          ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets",
-                          "te_sr_sec_colonies", "te_sr_sec_solar_system", "te_sr_sec_how_colonies"])
+                          "te_sr_sec_colonies", "te_sr_sec_solar_system"])
         self.assertLess(status.index("te_sr_status_sections = {"), status.index("te_sr_sec_colony_fleets = {}"))
         for gone in ("te_sr_sec_settlers", "te_sr_sec_modules", "te_sr_sec_autonomy", "te_sr_sec_colony_defences",
                      "te_sr_settler_row", "te_sr_module_row", "te_sr_autonomy_row", "te_sr_defence_row"):
@@ -677,7 +667,7 @@ class HowItWorksTest(unittest.TestCase):
             self.assertIn(f'"{key}"', how, key)
         # audit SPC-4: the colony sections' rules are How Solar Colonization
         # Works, on the same Help page under that name, after the Space Race's
-        # own topics; the colonization panel's section is its link. The rule's
+        # own topics, which the "?" opens from every host. The rule's
         # topics are gated on the player, not an entry (test_te_help_pages.py).
         at = how.index('text = "je_space_race_widget_howc_header"')
         self.assertGreater(at, how.index(f'"{HOW_KEYS[-1]}"'))
@@ -1369,7 +1359,7 @@ class TabTest(unittest.TestCase):
             ("fleets", "[GetVariableSystem.HasValue('sr_tab', 'fleets')]",
              ["te_sr_sec_colony_fleets", "te_sr_sec_space_command", "te_sr_sec_space_fleets"]),
             ("colonies", "[GetVariableSystem.HasValue('sr_tab', 'colonies')]", ["te_sr_sec_colonies"]),
-            ("system", "[GetVariableSystem.HasValue('sr_tab', 'system')]", ["te_sr_sec_solar_system", "te_sr_sec_how_colonies"]))
+            ("system", "[GetVariableSystem.HasValue('sr_tab', 'system')]", ["te_sr_sec_solar_system"]))
 
     @classmethod
     def setUpClass(cls):
@@ -1877,15 +1867,16 @@ class ScriptTooltipTest(unittest.TestCase):
 class WideLayoutTest(unittest.TestCase):
     """te_sr_wide_sections, the window's full-screen Space Race (spec
     2026-11-02-te-window-wide-mode § 7): the milestones under way, then Space
-    Powers and Orbit, then How the Space Race Works, each column under the
-    gate its narrow run carries."""
+    Powers and Orbit, each column under the gate its narrow run carries, in
+    two columns (te_ui_columns_two): How the Space Race Works, once the
+    third, is the Help page."""
 
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"))
         self.assertEqual(columns, [
             ["te_sr_window_milestones"],
-            ["te_sr_sec_powers", "te_sr_sec_orbit"],
-            ["te_sr_sec_how"]])
+            ["te_sr_sec_powers", "te_sr_sec_orbit"]])
+        self.assertIn("type te_sr_wide_sections = te_ui_columns_two", _read(GUI))
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "space_race")

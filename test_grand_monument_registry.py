@@ -1796,12 +1796,12 @@ class WidgetTests(unittest.TestCase):
     def setUp(self):
         self.gui = read(WIDGET)
 
-    # The three roots of the style-guide pass (2026-09-29): the overview above
-    # the status description, the live sections below it, How Grand Monuments
-    # Work at the foot (test_grand_monuments_layout.py checks their contents).
+    # The roots of the style-guide pass (2026-09-29): the overview above the
+    # status description, the live sections below it (test_grand_monuments_layout.py
+    # checks their contents). How Grand Monuments Work, once a third root at the
+    # foot, is the Help page the "?" on the overview opens.
     ROOTS = (("widget_je_gm_overview", "custom_widget_container_1"),
-             ("widget_je_gm_status", "custom_widget_container_2"),
-             ("widget_je_gm_reference", "custom_widget_container_3"))
+             ("widget_je_gm_status", "custom_widget_container_2"))
 
     def test_mounted(self):
         je = squash(read(JE))

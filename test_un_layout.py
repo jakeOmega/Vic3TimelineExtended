@@ -16,14 +16,14 @@ UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
           "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure"]
-REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
+REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive"]
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7). The
 # Assembly is by far the largest section, so column 1 holds it under only the
 # overview and the Status line (shown at a founding or a dissolution).
 WIDE_COLUMNS = [["te_un_overview_panel", "te_un_sec_status", "te_un_sec_assembly"],
                 ["te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes", "te_un_sec_mandates"],
                 ["te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure",
-                 "te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]]
+                 "te_un_sec_auth_history", "te_un_sec_archive"]]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
@@ -154,19 +154,14 @@ LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_un_works(self):
         """On the Help page (te_united_nations_help_body), the UN's two help
-        types with it; the section is its header alone, which opens the page
-        (test_te_help_pages.py)."""
+        types with it, which the "?" at the top of the entry and in the tab's
+        header opens; the link section is gone (test_te_help_pages.py)."""
         how = _type_body(_read(LAYOUT), "te_united_nations_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sub in ("te_un_help_authority", "te_un_help_standing"):
             self.assertIn(f"{sub} = {{", how, sub)
-        link = _type_body(_read(LAYOUT), "te_un_sec_how")
-        self.assertIn('text = "je_un_how_header"', link)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_united_nations')]\"", link)
-        self.assertRegex(link, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(link, r'blockoverride "onclick_show')
-        self.assertNotIn("un_chamber_note", link)
+        self.assertNotIn("te_un_sec_how", "\n".join(_read(p) for p in UN_GUI))
         self.assertNotIn("un_how_open", _read(LAYOUT))
 
     def test_live_sections_carry_no_explanations(self):

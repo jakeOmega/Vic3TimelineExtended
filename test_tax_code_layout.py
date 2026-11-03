@@ -82,7 +82,7 @@ FLAGS = {"te_tax_enacted_closed", "te_tax_history_open",
          "te_tax_wb_cons_closed", "te_tax_wb_goods_open", "te_tax_wb_relief_closed", "te_tax_wb_customs_open",
          "te_tax_wb_relief_states_closed", "te_tax_wb_dates_closed", "te_tax_review_open", "te_tax_politics_closed",
          "te_tax_pending_closed", "te_tax_obligations_closed", "te_tax_light_closed"}
-REFERENCE = ["te_tax_history_section", "te_tax_how_section"]
+REFERENCE = ["te_tax_history_section"]
 ROOTS = [("widget_je_tax_code_overview", "custom_widget_container_1"),
          ("widget_je_tax_code_status", "custom_widget_container_2"),
          ("widget_je_tax_code_reference", "custom_widget_container_3")]
@@ -416,14 +416,17 @@ class LayoutTest(unittest.TestCase):
         self.assertLess(summary, body.index("te_tax_review_section = {}"))
         self.assertRegex(body, r'block "draft_summary" \{\s*te_tax_draft_summary = \{\}\s*\}')
 
-    def test_reference_sections_history_then_how(self):
+    def test_reference_sections_the_history(self):
+        """The legislated code's history, under its gate; How Tax Legislation
+        Works and How the Light Tax Code Works, once beside it, are the Help
+        page the "?" opens (test_te_help_pages.py)."""
         body = type_body(self.layout, "te_tax_reference_sections")
         self.assertEqual(re.findall(r"^\t\t\t(te_tax_\w+) = \{", body, re.M), REFERENCE)
-        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), ["te_tax_light_how_section"])
+        self.assertEqual(re.findall(r"^\t\t(te_tax_\w+) = \{", body, re.M), [])
         self.assertIn(f'visible = "[Not( {LIGHT_SHOWN} )]"', body)
 
     def test_the_brief_types_exist(self):
-        for name in ("te_tax_overview_panel", "te_tax_enacted_table", "te_tax_how_section",
+        for name in ("te_tax_overview_panel", "te_tax_enacted_table",
                      "te_tax_history_section", "te_tax_status_sections", "te_tax_reference_sections",
                      "te_tax_workbench_section", "te_tax_instrument_row", "te_tax_sunset_row",
                      "te_tax_good_row", "te_tax_draft_summary", "te_tax_review_section",
@@ -495,15 +498,15 @@ class WideTest(unittest.TestCase):
     2026-11-02-te-window-wide-mode § 7): one row of three 520 columns, under
     the gates the narrow tab gives each section. Under the full code it reads
     the spec's columns; under the light code, the overview and the light
-    section, then the light How, then an empty column, as the full code's
-    sections hide. The draft summary is in the window's footer, so neither
+    section, then two empty columns, as the full code's sections hide (the
+    light How, once column 2's, is the Help page). The draft summary is in the window's footer, so neither
     layout places it."""
 
     def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
         columns = assert_wide_matches_narrow(self, "te_tax_wide_sections",
                                              layout=("te_tax_tab_body", "te_tax_tab_layout"))
         self.assertEqual(columns, [["te_tax_overview_panel", "te_tax_light_section"] + STATUS[:3],
-                                   STATUS[3:] + ["te_tax_light_how_section"],
+                                   STATUS[3:],
                                    REFERENCE])
 
     def test_the_registry_names_it(self):
@@ -661,8 +664,7 @@ class PrivateTest(unittest.TestCase):
         and the bill and passed-bill cells."""
         for name in ("te_tax_overview_panel", "te_tax_light_section", "te_tax_politics_section",
                      "te_tax_pending_section", "te_tax_enacted_table", "te_tax_workbench_section",
-                     "te_tax_review_section", "te_tax_history_section", "te_tax_how_section",
-                     "te_tax_light_how_section", "te_tax_obligations_section"):
+                     "te_tax_review_section", "te_tax_history_section", "te_tax_obligations_section"):
             with self.subTest(section=name):
                 self.assert_shown(self.wide, f"{name} = {{}}", "te_tax_wide_sections")
         for key in ("te_tax_pol_support", "te_tax_pol_legitimacy", "te_tax_pol_debate", "te_tax_pol_due",
@@ -690,7 +692,7 @@ class PrivateTest(unittest.TestCase):
              "te_tax_light_section", "te_tax_light_overview_rows", "te_tax_light_head", "te_tax_instrument_row",
              "te_tax_politics_section", "te_tax_condition_row", "te_tax_pending_section", "te_tax_review_line",
              "te_tax_pk_goods_icons_a", "te_tax_pk_goods_icons_b", "te_tax_history_section", "te_tax_history_row",
-             "te_tax_how_section", "te_tax_light_how_section", "te_tax_value_row", "te_tax_panel")
+             "te_tax_value_row", "te_tax_panel")
     INSTRUMENTS = ("wage", "div", "land", "head", "cons")
 
     def test_another_country_sees_its_code_bills_and_history(self):
@@ -1308,22 +1310,15 @@ class FlagTest(unittest.TestCase):
         self.assertIn("Toggle('te_tax_enacted_closed')", type_body(overview, "te_tax_enacted_table"))
         self.assertIn("Toggle('te_tax_history_open')", type_body(overview, "te_tax_history_section"))
 
-    def test_both_hows_are_links_to_one_page(self):
-        """How Tax Legislation Works and How the Light Tax Code Works are each
-        their header alone, under their own gates, and both open the Help page
-        (te_tax_code_help_popup, on te_popup = help_tax_code). The page shows
-        the Light code's text while it is in force and the full code's
-        otherwise, titled to match (test_te_help_pages.py)."""
-        for path, section, title in ((LAYOUT, "te_tax_how_section", "te_tax_how_header"),
-                                     (LIGHT_GUI, "te_tax_light_how_section", "te_tax_lt_how_header")):
-            body = type_body(gui(path), section)
-            with self.subTest(section=section):
-                self.assertIn(f'text = "{title}"', body)
-                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_tax_code')]\"", body)
-                self.assertRegex(body, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-                self.assertNotRegex(body, r'blockoverride "onclick_show')
-                self.assertNotIn("te_tax_note", body)
-        self.assertIn(f'visible = "[{LIGHT_SHOWN}]"', type_body(gui(LIGHT_GUI), "te_tax_light_how_section").split("\n\n")[0])
+    def test_both_hows_are_one_help_page(self):
+        """How Tax Legislation Works and How the Light Tax Code Works are the
+        Help page alone (te_tax_code_help_popup, on te_popup = help_tax_code),
+        which the "?" at the top of the entry and in the tab's header opens:
+        both link sections are gone. The page shows the Light code's text
+        while it is in force and the full code's otherwise, titled to match
+        (test_te_help_pages.py)."""
+        for path, section in ((LAYOUT, "te_tax_how_section"), (LIGHT_GUI, "te_tax_light_how_section")):
+            self.assertNotIn(section, gui(path), section)
         page = type_body(gui(LAYOUT), "te_tax_code_help_body")
         light = page.index(f'visible = "[{LIGHT_SHOWN_PLAYER}]"')
         full = page.index(f'visible = "[Not( {LIGHT_SHOWN_PLAYER} )]"')

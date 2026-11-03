@@ -28,12 +28,12 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "cultural_hegemony_gui_icons.md")
 
 STATUS = ["te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"]   # board first (owner, 2026-09-29)
-REFERENCE = ["te_ch_sec_history", "te_ch_sec_how"]
+REFERENCE = ["te_ch_sec_history"]
 COMPOSERS = ["te_ch_overview_panel", "te_ch_status_sections", "te_ch_reference_sections"]
 # The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
 WIDE_COLUMNS = [["te_ch_overview_panel", "te_ch_sec_board"],
                 ["te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models"],
-                ["te_ch_sec_history", "te_ch_sec_how"]]
+                ["te_ch_sec_history"]]
 ROOTS = {   # named root -> (container, composer)
     "widget_je_ch_overview": ("custom_widget_container_1", "te_ch_overview_panel"),
     "widget_je_ch_status": ("custom_widget_container_2", "te_ch_status_sections"),
@@ -138,8 +138,10 @@ class OrderTest(unittest.TestCase):
                 self.assertRegex(je, rf'name = "{root}"\s*container = "{container}"')
                 body = _root(self.gui, root)
                 self.assertIn('visible = "[JournalEntry.IsActive]"', body)
-                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
-                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), ["te_je_country"])
+                # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py),
+                # under the "?" at the top of the entry (test_te_help_pages.py)
+                expected = ["te_help_row", "te_je_country"] if container == "custom_widget_container_1" else ["te_je_country"]
+                self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), expected)
                 self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer])
         self.assertEqual(je.count('gui = "gui/journal_entry_widgets/cultural_hegemony_widget.gui"'), 3)
 
@@ -198,17 +200,14 @@ class FlagTest(unittest.TestCase):
             with self.subTest(section=sec):
                 self.assertIn(f"GetVariableSystem.Toggle('{flag}')", _type_body(self.text, sec))
 
-    def test_how_it_works_is_a_link(self):
-        """The section is its header alone, which opens the Help page
-        (te_cultural_hegemony_help_popup, on te_popup = help_cultural_hegemony); its collapse flag retired with its
-        content (test_te_help_pages.py)."""
-        how = _type_body(self.text, "te_ch_sec_how")
-        self.assertIn('text = "je_ch_how_header"', how)
-        self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]\"", how)
-        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
-        self.assertNotRegex(how, r'blockoverride "onclick_show')
+    def test_how_it_works_is_the_help_page(self):
+        """How Cultural Hegemony Works is the Help page
+        (te_cultural_hegemony_help_popup, on te_popup = help_cultural_hegemony), which only the "?" opens: the link
+        at the panel's foot is gone, and its collapse flag with it (test_te_help_pages.py)."""
+        text = _strip_comments(self.text)
+        self.assertNotIn("te_ch_sec_how", text)
+        self.assertIn("type te_cultural_hegemony_help_body = flowcontainer {", text)
         self.assertNotIn("ch_how_open", self.text)
-        self.assertNotIn("ch_note", how)
 
     def test_no_old_flag_survives(self):
         for path in (WIDGET, TAB):
@@ -1250,7 +1249,7 @@ class PrivateTest(unittest.TestCase):
         board = self._drawn("te_ch_sec_board")
         self.assertIn("GetGlobalVariable('ch_board_store').GetList('ch_board')", board)
         for name in ("ch_board_head", "ch_board_row", "te_ch_sec_models", "ch_model_legend_row",
-                     "te_ch_sec_history", "te_hist_ch_models", "te_ch_hist_model_key", "te_ch_sec_how"):
+                     "te_ch_sec_history", "te_hist_ch_models", "te_ch_hist_model_key"):
             self.assertIn(name, self.view.open, name)
         self.assertIn("EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('ch_board_rank'), "
                       "Country.MakeScope.ScriptValue('ch_rank_self_display') )", self._drawn("ch_board_row"),
