@@ -20,11 +20,12 @@ types sr_launch_window_types
 {
 	### "Staged in Orbit: 1.4 fleets": progress past the goal, in goals, while
 	### no fleet can leave. Hover for each destination's next window, how the
-	### fleets depart and what ends the waiting.
+	### fleets depart and what ends the waiting. Shown while sr_launch_staged_shown
+	### is above 0, by the wrapper the overview puts round it, which also keeps
+	### it the player's own (te_own_country_only: exact progress, National Info).
 	type te_sr_ov_staged = te_sr_value_row {
 		parentanchor = hcenter
-		visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_launch_staged_shown'), '(CFixedPoint)0' )]"
-		tooltip = "[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+		tooltip = "[GetScriptedGui('sr_launch_windows_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 		blockoverride "row_label" {
 			text = "je_space_race_widget_ov_staged_label"
 		}

@@ -378,6 +378,85 @@ types space_race_widget_types
 		}
 	}
 
+	### Another country's progress on a milestone (National Info, spec
+	### 2026-11-02-charts-help-national-info § 6.4), in the exact bar's place:
+	### the Rivals rows' estimate band and marker (sr_disp_rival_lo/hi/est_<m>),
+	### with the country as its own viewer and rival, so the band is the open
+	### one, a quarter of the goal either side, around the marker its yearly
+	### offset places (sr_fuzz_<m>). te_sr_ov_bar_row's layout (110 + 140 + 210
+	### and two gaps of 8), so the row keeps the bar's width. The instance passes
+	### the label, the three values and the text.
+	type te_sr_ov_band_row = flowcontainer {
+		direction = horizontal
+		spacing = 8
+		parentanchor = hcenter
+		tooltip = "je_space_race_widget_band_tt"
+
+		textbox = {
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
+			autoresize = yes
+			elide = right
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_sr_fontsize_overview
+			block "band_label" {}
+		}
+		widget = {
+			size = { 140 18 }
+			parentanchor = vcenter
+
+			white_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "values" {
+					block "band_hi" {}
+					min = 0
+					max = 1
+				}
+			}
+			default_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "background" {}
+				blockoverride "frame" {}
+				blockoverride "values" {
+					block "band_lo" {}
+					min = 0
+					max = 1
+				}
+				blockoverride "on_top_of_the_progressbar" {
+					progressbar = {
+						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+						size = { 100% 100% }
+						skip_initial_animation = yes
+						direction = horizontal
+						block "band_est" {}
+						min = 0
+						max = 1
+						marker = {
+							icon = {
+								size = { 24 18 }
+								parentanchor = vcenter
+								widgetanchor = center
+								texture = "gfx/interface/progressbar/progressbar_marker.dds"
+							}
+						}
+					}
+				}
+			}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 210 -1 }
+			maximumsize = { 210 -1 }
+			elide = right
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_sr_fontsize_overview
+			block "band_text" {}
+		}
+	}
+
 	### A share of the 40 worlds as a framed pie (te_un_ov_pie, with a third
 	### layer): the disc is the unclaimed rest, then every world claimed, then
 	### ours on top — largest first (gui_modding_guide.md, "Pie charts of
@@ -486,7 +565,7 @@ types space_race_widget_types
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_not_begun.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_0"
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)0' )]"
 		}
 
 		### 1: under way
@@ -495,7 +574,7 @@ types space_race_widget_types
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_under_way.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_1"
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)1' )]"
 		}
 
 		### 2: launched, awaiting data
@@ -504,7 +583,7 @@ types space_race_widget_types
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_awaiting_data.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_2"
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)2' )]"
 		}
 
 		### 3: data received
@@ -513,7 +592,7 @@ types space_race_widget_types
 			parentanchor = center
 			texture = "gfx/interface/icons/space_race_icons/interstellar_data_received.dds"
 			tooltip = "je_space_race_widget_prog_interstellar_3"
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar'), '(CFixedPoint)3' )]"
 		}
 
 		icon = {
@@ -521,7 +600,7 @@ types space_race_widget_types
 			parentanchor = top|right
 			alwaystransparent = yes
 			texture = "gfx/interface/icons/space_race_icons/first_mark.dds"
-			visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
+			visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_interstellar_probe'), '(CFixedPoint)4' )]"
 		}
 	}
 
@@ -556,16 +635,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_suborbital.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_suborbital'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell = {
@@ -574,16 +653,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_orbital.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_orbital'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell = {
@@ -592,16 +671,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_moon_landing.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_landing'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell = {
@@ -610,16 +689,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_probe.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_probe'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell = {
@@ -628,16 +707,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_moon_base.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_moon_base'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell = {
@@ -646,16 +725,16 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_mars_landing.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)1' ) )]"
 				}
 				blockoverride "first" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)4' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_mars_landing'), '(CFixedPoint)4' )]"
 				}
 			}
 			te_sr_ov_prog_cell_interstellar = {}
@@ -665,13 +744,13 @@ types space_race_widget_types
 					texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
 				}
 				blockoverride "lit" {
-					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' )]"
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' )]"
 				}
 				blockoverride "running" {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' )]"
+					visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' )]"
 				}
 				blockoverride "unlit" {
-					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' ) )]"
+					visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)3' ) ), NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_prog_solar_colonization'), '(CFixedPoint)1' ) )]"
 				}
 			}
 		}
@@ -693,7 +772,7 @@ types space_race_widget_types
 		parentanchor = hcenter
 		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_sr_panel = {
 			spacing = 10
@@ -710,10 +789,13 @@ types space_race_widget_types
 				spacing = 6
 				ignoreinvisible = yes
 				parentanchor = hcenter
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 
-				### The state: one of three cells shows.
+				### The state: one of three cells shows. The approach is the
+				### player's own (National Info shows another country the third
+				### cell alone).
 				flowcontainer = {
+					using = te_own_country_only
 					ignoreinvisible = yes
 
 					te_sr_ov_icon_label = {
@@ -752,7 +834,9 @@ types space_race_widget_types
 
 				### Setback risk: lit while the monthly roll is made, faint at 0%
 				### (no longer reached: the risk is at least 1% since the cooldown went).
+				### The player's own, as the approach is.
 				flowcontainer = {
+					using = te_own_country_only
 					ignoreinvisible = yes
 					tooltip = "je_space_race_widget_ov_risk_tt"
 
@@ -788,7 +872,7 @@ types space_race_widget_types
 				spacing = 6
 				ignoreinvisible = yes
 				parentanchor = hcenter
-				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+				visible = "[Not( ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
 
 				### The state while the programme isn't running.
 				te_sr_ov_icon_label = {
@@ -805,23 +889,52 @@ types space_race_widget_types
 				block "sr_third_cells" {}
 			}
 
-			### Row 2: progress, while the programme runs.
-			te_sr_ov_bar_row = {
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-				blockoverride "row_tooltip" {
-					block "sr_progress_tooltip" {}
+			### Row 2: progress, while the programme runs. The player's own
+			### country sees the exact bar; another country (National Info, spec
+			### 2026-11-02-charts-help-national-info § 6.4) the estimate band in
+			### its place, at the bar's width, so the row is one of the two
+			### whenever it shows.
+			flowcontainer = {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+
+				te_sr_ov_bar_row = {
+					using = te_own_country_only
+					blockoverride "row_tooltip" {
+						block "sr_progress_tooltip" {}
+					}
+					blockoverride "bar_label" {
+						block "sr_progress_label" {}
+					}
+					blockoverride "bar_value" {
+						block "sr_progress_value" {}
+					}
+					### The headline's rate opens the breakdown of where the pace
+					### comes from; the rest of the row keeps the reward preview.
+					blockoverride "bar_text" {
+						tooltip = "je_space_race_widget_pace_tt"
+						block "sr_progress_text" {}
+					}
 				}
-				blockoverride "bar_label" {
-					block "sr_progress_label" {}
-				}
-				blockoverride "bar_value" {
-					block "sr_progress_value" {}
-				}
-				### The headline's rate opens the breakdown of where the pace
-				### comes from; the rest of the row keeps the reward preview.
-				blockoverride "bar_text" {
-					tooltip = "je_space_race_widget_pace_tt"
-					block "sr_progress_text" {}
+				te_sr_ov_band_row = {
+					visible = "[Not( Country.IsLocalPlayer )]"
+					blockoverride "band_label" {
+						block "sr_progress_label" {}
+					}
+					blockoverride "band_lo" {
+						block "sr_band_lo" {}
+					}
+					blockoverride "band_hi" {
+						block "sr_band_hi" {}
+					}
+					blockoverride "band_est" {
+						block "sr_band_est" {}
+					}
+					blockoverride "band_text" {
+						block "sr_band_text" {}
+					}
 				}
 			}
 
@@ -837,7 +950,7 @@ types space_race_widget_types
 		parentanchor = hcenter
 		minimumsize = { 520 -1 }
 		ignoreinvisible = yes
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
 		te_sr_panel = {
 			spacing = 10
@@ -850,7 +963,7 @@ types space_race_widget_types
 					text = "je_space_race_widget_ov_transit_label"
 				}
 				blockoverride "bar_value" {
-					value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_results') )]"
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_results') )]"
 				}
 				blockoverride "bar_text" {
 					text = "je_space_race_widget_progress_interstellar_results"
@@ -3906,6 +4019,101 @@ types space_race_widget_types
 				}
 				te_sr_free_rows = {}
 			}
+		}
+	}
+
+	### Another country's Colonies (National Info, spec
+	### 2026-11-02-charts-help-national-info § 6.4): the colonies it holds, to
+	### read. The player's own Colonies section (te_sr_sec_colonies, with the
+	### settlers, modules, autonomy and defenses and their buttons) reads the
+	### entry, so it stays the player's; this reads the shown Country only, and
+	### shows only for another country. Its header and the count as the
+	### player's section has them, then a row per colony
+	### (te_sr_colony_brief_rows, generated). The solar colonization frame of the
+	### Timeline Extended window's tab draws it, under the overview
+	### (gen_te_systems_window.SR_FOREIGN); the journal never does. The flag is
+	### sr_panel_colonies_brief_closed, client-side like the rest.
+	type te_sr_sec_colonies_brief = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		minimumsize = { 520 -1 }
+		spacing = 2
+		visible = "[Not( Country.IsLocalPlayer )]"
+
+		te_sr_section_header = {
+			blockoverride "left_text" {
+				text = "je_space_race_widget_colonies_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('sr_panel_colonies_brief_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('sr_panel_colonies_brief_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('sr_panel_colonies_brief_closed'))]"
+			}
+		}
+
+		te_sr_panel = {
+			visible = "[Not(GetVariableSystem.Exists('sr_panel_colonies_brief_closed'))]"
+
+			te_sr_value_row = {
+				blockoverride "row_label" {
+					text = "je_space_race_widget_colonies_held_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_colonies_held_figure"
+				}
+			}
+			te_sr_text = {
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_held'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_colonies_brief_empty"
+			}
+			te_sr_colony_brief_rows = {}
+		}
+	}
+
+	### One colony in another country's Colonies (te_sr_sec_colonies_brief):
+	### its icon, its name (the hover its specializations' effects, the
+	### player's Colonies rows' hover) and, under Simple and Full Colonies, its
+	### people against its room. Nothing to press. 24 + 330 + 110 + 2 x 4
+	### spacing + 2 x 4 margin = 480. Instances in te_sr_colony_brief_rows
+	### (sr_sites_generated_rows.gui), one per world, each shown while the
+	### shown country holds it.
+	type te_sr_colony_brief_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin = { 4 1 }
+		block "brief_visible" {}
+
+		icon = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			block "brief_icon" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 330 -1 }
+			maximumsize = { 330 -1 }
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "brief_name" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 110 -1 }
+			maximumsize = { 110 -1 }
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			tooltip = "je_space_race_widget_settlers_people_tt"
+			block "brief_people" {}
 		}
 	}
 
@@ -7330,39 +7538,55 @@ types space_race_widget_types
 		te_sr_panel = {
 			visible = "[Not(GetVariableSystem.Exists('sr_panel_powers_closed'))]"
 
+			### The shown country's row: its name and program, for any country
+			### (National Info); its exact progress only for the player's own.
 			te_sr_power_row = {
 				blockoverride "row_context" {
-					datacontext = "[GetPlayer.GetCapital]"
+					datacontext = "[Country.GetCapital]"
 				}
 				blockoverride "lead_column" {
-					te_sr_power_lead_own = {}
+					te_sr_power_lead_own = {
+						using = te_own_country_only
+					}
 				}
-			}
-			te_sr_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_space_race_widget_powers_others"
-				}
-			}
-			te_sr_text = {
-				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' ) )]"
-				text = "je_space_race_widget_powers_pending"
-			}
-			te_sr_text = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' )]"
-				text = "je_space_race_widget_powers_none"
 			}
 
+			### The other powers, from the viewer's side: the viewer's own list
+			### (sr_powers_list, filled for players) and the viewer's estimates
+			### of them, so the player's own country's panel alone shows them
+			### (National Info, spec 2026-11-02-charts-help-national-info § 6.7).
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 2
-				datamodel = "[GetPlayer.MakeScope.GetList('sr_powers_list')]"
 
-				item = {
-					te_sr_power_row = {
-						datacontext = "[Scope.GetState]"
-						blockoverride "lead_column" {
-							te_sr_power_lead_band = {}
+				te_sr_subheader = {
+					blockoverride "subheader_text" {
+						text = "je_space_race_widget_powers_others"
+					}
+				}
+				te_sr_text = {
+					visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' ) )]"
+					text = "je_space_race_widget_powers_pending"
+				}
+				te_sr_text = {
+					visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_disp_power_total'), '(CFixedPoint)0' )]"
+					text = "je_space_race_widget_powers_none"
+				}
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					datamodel = "[GetPlayer.MakeScope.GetList('sr_powers_list')]"
+
+					item = {
+						te_sr_power_row = {
+							datacontext = "[Scope.GetState]"
+							blockoverride "lead_column" {
+								te_sr_power_lead_band = {}
+							}
 						}
 					}
 				}
@@ -7430,7 +7654,10 @@ types space_race_widget_types
 					text = "te_orbit_moratorium_value"
 				}
 			}
+			### The country's own strike: what the action asks of it and whom it
+			### could hit, the player's own (National Info).
 			te_sr_value_row = {
+				using = te_own_country_only
 				tooltip = "te_orbit_strike_tt"
 				blockoverride "row_label" {
 					text = "je_space_race_widget_orbit_strike_label"
@@ -7764,7 +7991,7 @@ types space_race_widget_types
 
 		blockoverride "column_2" {
 			flowcontainer = {
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				parentanchor = hcenter
 				direction = vertical
 				ignoreinvisible = yes
@@ -7778,7 +8005,7 @@ types space_race_widget_types
 
 		blockoverride "column_3" {
 			flowcontainer = {
-				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				visible = "[GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 				parentanchor = hcenter
 				direction = vertical
 				ignoreinvisible = yes
@@ -7809,19 +8036,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_suborbital'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_suborbital'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_suborbital"
@@ -7835,10 +8062,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_suborbital'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -7846,7 +8073,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_suborbital') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_suborbital') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_suborbital') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_suborbital') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_suborbital') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_suborbital"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_suborbital"
@@ -7941,19 +8182,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_orbital'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_orbital'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_orbital"
@@ -7967,10 +8208,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_orbital'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -7978,7 +8219,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_orbital') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_orbital') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_orbital') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_orbital') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_orbital') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_orbital"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_orbital"
@@ -8073,19 +8328,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_landing'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_landing'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_moon_landing"
@@ -8099,10 +8354,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_landing'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -8110,7 +8365,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_moon_landing') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_landing') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_landing') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_moon_landing') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_moon_landing"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_moon_landing"
@@ -8205,19 +8474,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_probe'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_probe'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_probe"
@@ -8231,10 +8500,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_probe'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -8242,7 +8511,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_probe') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_probe') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_probe') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_probe') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_probe') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_probe"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_probe"
@@ -8337,19 +8620,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_moon_base'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_moon_base'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_moon_base"
@@ -8363,10 +8646,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_moon_base'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -8374,7 +8657,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_moon_base') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_moon_base') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_moon_base') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_moon_base') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_moon_base"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_moon_base"
@@ -8469,19 +8766,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_mars_landing'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_mars_landing'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_mars_landing"
@@ -8495,10 +8792,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_mars_landing'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -8506,7 +8803,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_mars_landing') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_mars_landing') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_mars_landing') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_mars_landing') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_mars_landing"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_mars_landing"
@@ -8601,19 +8912,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_interstellar_probe'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_interstellar_probe'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_interstellar_probe"
@@ -8627,10 +8938,10 @@ types space_race_widget_types
 			blockoverride "sr_third_cells" {
 				te_sr_ov_first = {
 					blockoverride "first_open" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)0' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)0' )]"
 					}
 					blockoverride "first_claimed" {
-						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_first_claimed_interstellar_probe'), '(CFixedPoint)1' )]"
 					}
 				}
 			}
@@ -8638,7 +8949,21 @@ types space_race_widget_types
 				text = "je_space_race_widget_ov_progress_label"
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_probe') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_interstellar_probe') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_interstellar_probe') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_interstellar_probe') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_interstellar_probe') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_interstellar_probe"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_interstellar_probe"
@@ -8733,19 +9058,19 @@ types space_race_widget_types
 
 		te_sr_overview_milestone = {
 			blockoverride "sr_status_standard" {
-				visible = "[LessThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)1' )]"
+				visible = "[LessThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "sr_status_safe" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)2' )]"
 			}
 			blockoverride "sr_status_ambitious" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_status_solar_colonization'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "sr_risk_lit" {
-				visible = "[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
+				visible = "[NotEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_unlit" {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_risk_shown_solar_colonization'), '(CFixedPoint)0' )]"
 			}
 			blockoverride "sr_risk_label" {
 				text = "je_space_race_widget_risk_solar_colonization"
@@ -8759,8 +9084,9 @@ types space_race_widget_types
 			# The stage, whose tooltip is the stage's description (the first lunar
 			# colony's race for the first is on the reward hover and the Program
 			# row's Lunar Colony icon).
-			# Stage 0 (and a race not yet begun) reads "the Moon"; SelectLocalization
-			# renders its key without the journal entry, so both read the player.
+			# Stage 0 (and a race not yet begun) reads "the Moon". The stage is the
+			# world's (global_var:sr_colonization_stage), so both keys read it on
+			# Country, the same for every country.
 			blockoverride "sr_third_cells" {
 				te_sr_ov_icon_label = {
 					tooltip = "je_space_race_widget_profile_solar_colonization"
@@ -8768,7 +9094,7 @@ types space_race_widget_types
 						texture = "gfx/interface/icons/space_race_icons/stage.dds"
 					}
 					blockoverride "label" {
-						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), 'je_space_race_widget_ov_stage', 'je_space_race_widget_ov_stage_moon' )]"
+						text = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), 'je_space_race_widget_ov_stage', 'je_space_race_widget_ov_stage_moon' )]"
 					}
 				}
 			}
@@ -8779,15 +9105,28 @@ types space_race_widget_types
 			# (gui/sr_launch_window_widgets.gui), then the 40 worlds: every one
 			# claimed, ours on top; then what needs us.
 			blockoverride "sr_extra_rows" {
-				te_sr_ov_staged = {}
+				# Staged in Orbit is the player's own: progress past the goal, the
+				# exact progress another country's band stands for. Its gate here,
+				# with Country.IsLocalPlayer, so another country's column keeps no
+				# empty row.
+				flowcontainer = {
+					visible = "[And( Country.IsLocalPlayer, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_launch_staged_shown'), '(CFixedPoint)0' ) )]"
+					direction = vertical
+					parentanchor = hcenter
+					ignoreinvisible = yes
+
+					te_sr_ov_staged = {
+						using = te_own_country_only
+					}
+				}
 				te_sr_ov_pie = {
 					parentanchor = hcenter
 					tooltip = "je_space_race_widget_ov_worlds_tt"
 					blockoverride "pie_claimed" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_worlds_claimed_frac') )]"
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_worlds_claimed_frac') )]"
 					}
 					blockoverride "pie_ours" {
-						value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_worlds_ours_frac') )]"
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_worlds_ours_frac') )]"
 					}
 					blockoverride "pie_label" {
 						text = "je_space_race_widget_ov_worlds"
@@ -8797,252 +9136,263 @@ types space_race_widget_types
 				# cells, two to a row. Colonies names a colony demanding self-rule,
 				# Defense (Full Colonies) the worst threat to ours, Modules an idle
 				# queue, Next Window the stage's next one; each hover lists the rest.
+				# The player's own (National Info shows another country none of
+				# it): what the colonies, their defense, the module queue and the
+				# next window ask of us. The outer gate repeats Country.IsLocalPlayer
+				# so another country's column keeps no empty row.
 				flowcontainer = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )]"
+					visible = "[And( Country.IsLocalPlayer, EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' ) )]"
 					direction = vertical
 					ignoreinvisible = yes
-					spacing = 4
 					parentanchor = hcenter
 
 					flowcontainer = {
-						direction = horizontal
+						using = te_own_country_only
+						direction = vertical
 						ignoreinvisible = yes
 						spacing = 4
 						parentanchor = hcenter
 
-						te_banking_ov_cell = {
-							tooltip = "je_space_race_widget_ovc_colonies_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_colonies_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
-								}
-							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' )]"
-									text = "je_space_race_widget_ovc_colonies_word_restless"
-								}
-								te_banking_ov_word = {
-									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_colonies_word_calm"
-								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_colonies_fig_one"
-								}
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)2' )]"
-									text = "je_space_race_widget_ovc_colonies_fig_more"
-								}
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_colonies_fig_calm"
-								}
-							}
-						}
-						te_banking_ov_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
-							tooltip = "je_space_race_widget_ovc_defense_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_defense_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/space_race_icons/warship.dds"
-								}
-							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									text = "je_space_race_widget_ovc_defense_word"
-								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									text = "je_space_race_widget_ovc_defense_fig"
-								}
-							}
-						}
-					}
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 4
-						parentanchor = hcenter
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+							parentanchor = hcenter
 
-						te_banking_ov_cell = {
-							tooltip = "je_space_race_widget_ovc_modules_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_modules_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/space_race_icons/module.dds"
+							te_banking_ov_cell = {
+								tooltip = "je_space_race_widget_ovc_colonies_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_colonies_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+									}
+								}
+								blockoverride "word" {
+									te_banking_ov_word = {
+										visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' )]"
+										text = "je_space_race_widget_ovc_colonies_word_restless"
+									}
+									te_banking_ov_word = {
+										visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_colonies_word_calm"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[And( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_colonies_fig_one"
+									}
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)2' )]"
+										text = "je_space_race_widget_ovc_colonies_fig_more"
+									}
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_aut_restless_count'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_colonies_fig_calm"
+									}
 								}
 							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' )]"
-									text = "je_space_race_widget_ovc_modules_word_queued"
+							te_banking_ov_cell = {
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )]"
+								tooltip = "je_space_race_widget_ovc_defense_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_defense_cap"
 								}
-								te_banking_ov_word = {
-									visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fab_stock'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mod_fab_stock_cap') ) )]"
-									text = "je_space_race_widget_ovc_modules_word_idle"
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/warship.dds"
+									}
 								}
-								te_banking_ov_word = {
-									visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' ) ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fab_stock'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_mod_fab_stock_cap') ) ) )]"
-									text = "je_space_race_widget_ovc_modules_word_empty"
+								blockoverride "word" {
+									te_banking_ov_word = {
+										text = "je_space_race_widget_ovc_defense_word"
+									}
 								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									text = "je_space_race_widget_ovc_modules_fig"
-								}
-							}
-						}
-						te_banking_ov_cell = {
-							tooltip = "je_space_race_widget_ovc_window_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_window_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
-								}
-							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_window_word_any"
-								}
-								te_banking_ov_word = {
-									visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)999' ) )]"
-									text = "je_space_race_widget_ovc_window_word_none"
-								}
-								te_banking_ov_word = {
-									visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)0' ) )]"
-									text = "je_space_race_widget_ovc_window_word_open"
-								}
-								te_banking_ov_word = {
-									visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)999' ) ) ) )]"
-									text = "je_space_race_widget_ovc_window_word_in"
-								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) ) )]"
-									text = "je_space_race_widget_ovc_window_fig"
-								}
-								# The Moon full and no Mars Landing: why the bar holds.
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_window_fig_mars"
-								}
-								# Stage 0 is the Moon, which needs no window.
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_window_fig_moon"
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										text = "je_space_race_widget_ovc_defense_fig"
+									}
 								}
 							}
 						}
-					}
-					### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
-					### our Extraplanetary Base levels against our room, red once built and
-					### queued levels pass it; the grade the next level would work at; on
-					### hover the queued levels, the average now and the rule. Five-digit
-					### figures leave the word no room for the queued count. Shown once the building is ours to
-					### build. Levels, queue and room are read live; the grades come from the
-					### monthly refresh and the one when a base is built (space_race_events.110).
-					### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
-					### shows while either cell does.
-					flowcontainer = {
-						visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) )]"
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 4
-						parentanchor = hcenter
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+							parentanchor = hcenter
 
-						te_banking_ov_cell = {
-							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
-							tooltip = "je_space_race_widget_ovc_ebase_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_ebase_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+							te_banking_ov_cell = {
+								tooltip = "je_space_race_widget_ovc_modules_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_modules_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/module.dds"
+									}
+								}
+								blockoverride "word" {
+									te_banking_ov_word = {
+										visible = "[GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' )]"
+										text = "je_space_race_widget_ovc_modules_word_queued"
+									}
+									te_banking_ov_word = {
+										visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' ) ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_fab_stock'), Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap') ) )]"
+										text = "je_space_race_widget_ovc_modules_word_idle"
+									}
+									te_banking_ov_word = {
+										visible = "[And( Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_mq_count'), '(CFixedPoint)1' ) ), Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_fab_stock'), Country.MakeScope.ScriptValue('sr_mod_fab_stock_cap') ) ) )]"
+										text = "je_space_race_widget_ovc_modules_word_empty"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										text = "je_space_race_widget_ovc_modules_fig"
+									}
 								}
 							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) )]"
-									text = "je_space_race_widget_ovc_ebase_word"
+							te_banking_ov_cell = {
+								tooltip = "je_space_race_widget_ovc_window_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_window_cap"
 								}
-								te_banking_ov_word = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' )]"
-									text = "je_space_race_widget_ovc_ebase_word_past"
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/event_icons/je_space_race_solar_colonization.dds"
+									}
 								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' )]"
-									text = "je_space_race_widget_ovc_ebase_fig_plus"
+								blockoverride "word" {
+									te_banking_ov_word = {
+										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_window_word_any"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)999' ) )]"
+										text = "je_space_race_widget_ovc_window_word_none"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)0' ) )]"
+										text = "je_space_race_widget_ovc_window_word_open"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_apply'), '(CFixedPoint)1' ), And( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)1' ), Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_window_disp_next'), '(CFixedPoint)999' ) ) ) )]"
+										text = "je_space_race_widget_ovc_window_word_in"
+									}
 								}
-								te_banking_ov_word = {
-									position = { 78 46 }
-									visible = "[Not( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' ) )]"
-									text = "je_space_race_widget_ovc_ebase_fig"
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[And( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) ) )]"
+										text = "je_space_race_widget_ovc_window_fig"
+									}
+									# The Moon full and no Mars Landing: why the bar holds.
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[And( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_held_beyond_moon'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_window_fig_mars"
+									}
+									# Stage 0 is the Moon, which needs no window.
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_current_colonization_stage'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_window_fig_moon"
+									}
 								}
 							}
 						}
-						# The Earth alert (UI pass design § 9; Full Colonies): while a fleet
-						# of a power at war with us is bound for Earth, when the first
-						# lands and its strength against ours there; red while a landing
-						# would tip the balance at Earth (sr_earth_alert_loud).
-						te_banking_ov_cell = {
-							visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
-							tooltip = "je_space_race_widget_ovc_earth_tt"
-							blockoverride "caption" {
-								text = "je_space_race_widget_ovc_earth_cap"
-							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									texture = "gfx/interface/icons/space_race_icons/warship.dds"
+						### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
+						### our Extraplanetary Base levels against our room, red once built and
+						### queued levels pass it; the grade the next level would work at; on
+						### hover the queued levels, the average now and the rule. Five-digit
+						### figures leave the word no room for the queued count. Shown once the building is ours to
+						### build. Levels, queue and room are read live; the grades come from the
+						### monthly refresh and the one when a base is built (space_race_events.110).
+						### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
+						### shows while either cell does.
+						flowcontainer = {
+							visible = "[Or( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' ), And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) ) )]"
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+							parentanchor = hcenter
+
+							te_banking_ov_cell = {
+								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]"
+								tooltip = "je_space_race_widget_ovc_ebase_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_ebase_cap"
+								}
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/building_icons/building_space_mine.dds"
+									}
+								}
+								blockoverride "word" {
+									te_banking_ov_word = {
+										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_ebase_word"
+									}
+									te_banking_ov_word = {
+										visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' )]"
+										text = "je_space_race_widget_ovc_ebase_word_past"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' )]"
+										text = "je_space_race_widget_ovc_ebase_fig_plus"
+									}
+									te_banking_ov_word = {
+										position = { 78 46 }
+										visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_next_grade'), '(CFixedPoint)0' ) )]"
+										text = "je_space_race_widget_ovc_ebase_fig"
+									}
 								}
 							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' ) )]"
-									text = "je_space_race_widget_ovc_earth_word"
+							# The Earth alert (UI pass design § 9; Full Colonies): while a fleet
+							# of a power at war with us is bound for Earth, when the first
+							# lands and its strength against ours there; red while a landing
+							# would tip the balance at Earth (sr_earth_alert_loud).
+							te_banking_ov_cell = {
+								visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' ), GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)1' ) )]"
+								tooltip = "je_space_race_widget_ovc_earth_tt"
+								blockoverride "caption" {
+									text = "je_space_race_widget_ovc_earth_cap"
 								}
-								te_banking_ov_word = {
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )]"
-									text = "je_space_race_widget_ovc_earth_word_loud"
+								blockoverride "icons" {
+									icon = {
+										size = { 100% 100% }
+										texture = "gfx/interface/icons/space_race_icons/warship.dds"
+									}
 								}
-							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									position = { 78 46 }
-									text = "je_space_race_widget_ovc_earth_fig"
+								blockoverride "word" {
+									te_banking_ov_word = {
+										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' ) )]"
+										text = "je_space_race_widget_ovc_earth_word"
+									}
+									te_banking_ov_word = {
+										visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_earth_hostile'), '(CFixedPoint)2' )]"
+										text = "je_space_race_widget_ovc_earth_word_loud"
+									}
+								}
+								blockoverride "third_line" {
+									te_banking_ov_word = {
+										position = { 78 46 }
+										text = "je_space_race_widget_ovc_earth_fig"
+									}
 								}
 							}
 						}
@@ -9050,7 +9400,21 @@ types space_race_widget_types
 				}
 			}
 			blockoverride "sr_progress_value" {
-				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_progress_frac_solar_colonization') )]"
+				value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('sr_disp_progress_frac_solar_colonization') )]"
+			}
+			# Another country's estimate (te_sr_ov_band_row): the country as
+			# its own viewer and rival, so the open band.
+			blockoverride "sr_band_lo" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_lo_solar_colonization') )]"
+			}
+			blockoverride "sr_band_hi" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_hi_solar_colonization') )]"
+			}
+			blockoverride "sr_band_est" {
+				value = "[FixedPointToFloat( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'sr_rival', Country.MakeScope ).ScriptValue('sr_disp_rival_est_solar_colonization') )]"
+			}
+			blockoverride "sr_band_text" {
+				text = "je_space_race_widget_band_solar_colonization"
 			}
 			blockoverride "sr_progress_text" {
 				text = "je_space_race_widget_progress_solar_colonization"
