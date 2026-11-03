@@ -22,6 +22,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -142,6 +143,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -269,6 +271,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -366,6 +369,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -461,6 +465,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -556,6 +561,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -744,6 +750,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
@@ -839,6 +846,7 @@ te_history_chart = {
 		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 	}
 	blockoverride "sample_visible" {
+		# world: the current year is the date's, the same for every country
 		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {

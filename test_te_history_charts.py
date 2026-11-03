@@ -380,7 +380,8 @@ class RegistryTest(unittest.TestCase):
         """The large wrapper draws at the viewer's size: a monthly chart gains
         the frame, the bars and both widths, an annual one both widths (its
         fragment sizes the frame and the bars), and no comment is left to
-        describe the panel's size."""
+        describe the panel's size but a `# world:` line, which marks the read
+        under it (the year, which the binding test lets through)."""
         for chart in gen.CHARTS:
             dims = gen.LARGE[chart.kind]
             large = gen.render_chart(chart, gen.LARGE)
@@ -390,7 +391,10 @@ class RegistryTest(unittest.TestCase):
                     self.assertIn(f"size = {{ {w} {dims.bar_h} }}", large)
                 self.assertIn(f'blockoverride "chart_text_width" {{\n\t\tmax_width = {dims.text_w}\n\t}}', large)
                 self.assertIn(f'blockoverride "empty_width" {{\n\t\tmax_width = {dims.empty_w}\n\t}}', large)
-                self.assertFalse([ln for ln in large.split("\n") if ln.lstrip().startswith("#")])
+                self.assertFalse([ln for ln in large.split("\n") if ln.lstrip().startswith("#") and not gen.WORLD.match(ln)])
+                small = gen.render_chart(chart, gen.SMALL)
+                self.assertEqual([ln.strip() for ln in large.split("\n") if gen.WORLD.match(ln)],
+                                 [ln.strip() for ln in small.split("\n") if gen.WORLD.match(ln)])
                 self.assertEqual(large.count("{"), large.count("}"))
                 for name in ("plot_size", "plot_layouts", "chart_text_width", "empty_width"):
                     self.assertEqual(large.count(f'blockoverride "{name}"'), 1, name)

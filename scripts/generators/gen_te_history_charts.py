@@ -48,7 +48,8 @@ monthly chart's frame, bars and widths, an annual chart's widths. At SMALL it
 adds only the open button beside the title (chart_open, which opens the
 chart's viewer) and the title's width beside it (open_overrides), so the
 panel's charts are otherwise the fragments' text. The large wrapper leaves out
-the fragment's whole-line comments, which describe the panel's size.
+the fragment's whole-line comments, which describe the panel's size, but a
+`# world:` line (WORLD), which marks the read under it.
 
 ADDING A CHART: record the series (history_charts.md), add its fragment to its
 system's file, a Chart line below, instance te_hist_<id> in its section, then
@@ -416,6 +417,13 @@ def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
     return out
 
 
+# A world read's marker (spec 2026-11-02-charts-help-national-info § 6.7): the
+# comment line over a read of the player's copy of what is the same for every
+# country (the date), which test_te_system_tab_bodies.py's BindingTest lets
+# through. The large wrapper keeps it, as the small one does.
+WORLD = re.compile(r"^\s*# world: \S")
+
+
 def render_chart(chart: Chart, size: Size) -> str:
     """The chart's te_history_chart instance at the size, dedented."""
     text = substitute(fragment(chart), chart, size)
@@ -424,7 +432,7 @@ def render_chart(chart: Chart, size: Size) -> str:
     if extra:
         lines = lines[:-1] + [f"\t{ln}" for ln in extra] + lines[-1:]
     if size is not SMALL:
-        lines = [ln for ln in lines if not ln.lstrip().startswith("#")]
+        lines = [ln for ln in lines if not ln.lstrip().startswith("#") or WORLD.match(ln)]
     return "\n".join(lines)
 
 

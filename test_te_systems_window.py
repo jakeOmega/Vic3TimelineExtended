@@ -1134,6 +1134,29 @@ class GeneratorTest(unittest.TestCase):
                          "stale: run python3 scripts/generators/gen_te_systems_window.py")
         self.assertEqual(gen.main(["--check"]), 0)
 
+    def test_the_gates_take_a_root(self):
+        """The gates root on the player by default, the window's as before
+        (the committed file, above), and on another root when asked: National
+        Info roots them on the shown country (charts-help-national-info plan,
+        F0.3 and F1.1). Only the developer tax-probes gate stays the player's."""
+        self.assertEqual(gen._root(), "GuiScope.SetRoot( GetPlayer.MakeScope ).End")
+        self.assertEqual(gen.shown("x"), gen.shown("x", gen.PLAYER_ROOT))
+        self.assertEqual(gen.shown("x", gen.COUNTRY_ROOT),
+                         "GetScriptedGui('x').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
+        for t in gen.TABS:
+            with self.subTest(tab=t.key):
+                for gate in (t.open_, t.strip, t.tooltip_expr):
+                    self.assertEqual(gen.rooted(gate), gate)
+                    if gate:
+                        self.assertNotIn("GetPlayer", gen.rooted(gate, gen.COUNTRY_ROOT))
+                country = [gen._tooltip(t, gen.COUNTRY_ROOT), *gen._slot("first", t, gen.COUNTRY_ROOT),
+                           gen.selected(t, gen.COUNTRY_ROOT), gen.unselected(t, gen.COUNTRY_ROOT)]
+                text = "\n".join(country).replace(gen.TAX_PROBES, "")
+                self.assertNotIn("GetPlayer", text)
+                if t.open_:
+                    self.assertIn("Country.MakeScope", text)
+                self.assertEqual(gen._tooltip(t), gen._tooltip(t, gen.PLAYER_ROOT))
+
     def test_nation_is_first_and_the_fallback(self):
         self.assertEqual(gen.TABS[0].key, "nation")
         self.assertIsNone(gen.TABS[0].open_)

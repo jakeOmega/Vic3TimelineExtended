@@ -67,20 +67,34 @@ SLOTS = ["first", "second", "third", "fourth", "fifth"]
 
 # --- expressions: the exact GUI text the templates and the strip use ---------
 
-def _root():
-    return "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
+# The scope a gate roots on (spec 2026-11-02-charts-help-national-info § 6.3):
+# the player, in this window and the vanilla panels' tabs, or the shown
+# country, in National Info (PR F1). The registry's gates are written on
+# PLAYER_ROOT; rooted() puts one on another root.
+PLAYER_ROOT = "GetPlayer.MakeScope"
+COUNTRY_ROOT = "Country.MakeScope"
 
 
-def shown(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsShown( {_root()} )"
+def _root(root: str = PLAYER_ROOT) -> str:
+    return f"GuiScope.SetRoot( {root} ).End"
 
 
-def valid(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsValid( {_root()} )"
+def shown(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsShown( {_root(root)} )"
 
 
-def valid_tooltip(sgui: str) -> str:
-    return f"GetScriptedGui('{sgui}').IsValidTooltip( {_root()} )"
+def valid(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsValid( {_root(root)} )"
+
+
+def valid_tooltip(sgui: str, root: str = PLAYER_ROOT) -> str:
+    return f"GetScriptedGui('{sgui}').IsValidTooltip( {_root(root)} )"
+
+
+def rooted(expr: str | None, root: str = PLAYER_ROOT) -> str | None:
+    """A registry gate (open_, strip, tooltip_expr: written on PLAYER_ROOT)
+    on another root: every scripted GUI it asks, asked of that root."""
+    return None if expr is None else expr.replace(_root(PLAYER_ROOT), _root(root))
 
 
 def stored(key: str) -> str:
@@ -237,21 +251,23 @@ TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
 # --- templates ----------------------------------------------------------------
 
-def selected(tab: Tab) -> str:
+def selected(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.key == TABS[0].key:
-        return and_(not_(TAX_PROBES), not_(_any_system_shown()))
-    mine = stored(tab.key) if tab.open_ is None else and_(stored(tab.key), tab.open_)
+        return and_(not_(TAX_PROBES), not_(_any_system_shown(root)))
+    mine = stored(tab.key) if tab.open_ is None else and_(stored(tab.key), rooted(tab.open_, root))
     return and_(not_(TAX_PROBES), mine)
 
 
-def unselected(tab: Tab) -> str:
+def unselected(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.key == TABS[0].key:
-        return or_(TAX_PROBES, _any_system_shown())
-    return not_(selected(tab)) if tab.strip is None else and_(tab.strip, not_(selected(tab)))
+        return or_(TAX_PROBES, _any_system_shown(root))
+    return (not_(selected(tab, root)) if tab.strip is None
+            else and_(rooted(tab.strip, root), not_(selected(tab, root))))
 
 
-def _any_system_shown() -> str:
-    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), t.open_) for t in TABS[1:]])
+def _any_system_shown(root: str = PLAYER_ROOT) -> str:
+    return or_all([stored(t.key) if t.open_ is None else and_(stored(t.key), rooted(t.open_, root))
+                   for t in TABS[1:]])
 
 
 def _template(name: str, expr: str) -> list[str]:
@@ -269,23 +285,23 @@ def templates() -> list[str]:
 
 # --- the strip ----------------------------------------------------------------
 
-def _tooltip(tab: Tab) -> str:
+def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
     if tab.tooltip_expr:
-        return f'tooltip = "[{tab.tooltip_expr}]"'
+        return f'tooltip = "[{rooted(tab.tooltip_expr, root)}]"'
     if tab.open_ is None:
         return f'tooltip = "{tab.tooltip}"'
-    checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock)} )"
-    return (f"tooltip = \"[SelectLocalization( {tab.open_}, '{tab.tooltip}', "
-            f"SelectLocalization( {valid(tab.unlock)}, '{tab.met}', {checklist} ) )]\"")
+    checklist = f"Concatenate( Localize( '{tab.locked}' ), {valid_tooltip(tab.unlock, root)} )"
+    return (f"tooltip = \"[SelectLocalization( {rooted(tab.open_, root)}, '{tab.tooltip}', "
+            f"SelectLocalization( {valid(tab.unlock, root)}, '{tab.met}', {checklist} ) )]\"")
 
 
-def _slot(slot: str, tab: Tab) -> list[str]:
+def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT) -> list[str]:
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
-    click = [] if tab.open_ is None else [f'enabled = "[{tab.open_}]"']
+    click = [] if tab.open_ is None else [f'enabled = "[{rooted(tab.open_, root)}]"']
     click.append(f"onclick = \"[GetVariableSystem.Set('{STORED}', '{tab.key}')]\"")
     return (override("button", f'text = "{tab.label}"')
-            + override("button_tooltip", _tooltip(tab))
+            + override("button_tooltip", _tooltip(tab, root))
             + override("button_click", *click)
             + override("button_visibility", f"using = te_systems_window_{tab.key}_selected")
             + override("button_visibility_checked", f"using = te_systems_window_{tab.key}_unselected")
@@ -297,14 +313,14 @@ def _slot(slot: str, tab: Tab) -> list[str]:
 WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
 
 
-def _strip(tabs: list[Tab], wide: bool = False) -> list[str]:
+def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
     assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
     out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
     for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
         if i:
             out.append("")
         out.append(f"\t### {tab.key}")
-        out += [f"\t{ln}" for ln in _slot(slot, tab)]
+        out += [f"\t{ln}" for ln in _slot(slot, tab, root)]
     return out + ["}"]
 
 
