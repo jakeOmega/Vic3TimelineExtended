@@ -143,12 +143,12 @@ notifications in their compact form. `gui/00_te_fullscreen_hide.gui` redefines v
 (`fullscreen_hide`, `half_and_fullscreen_show`, `half_and_fullscreen_hide`, from `block_windows.gui`) with one more
 term, true exactly while the full-screen frame draws (the window open, for a played country, and the width key set),
 and the Community Mod Framework's `com_fullscreen`, inert without it. The engine keeps the first definition of a
-template's name in file-name order, so the `00_` file should win over `block_windows.gui` (gotcha #30 in
-`docs/guides/gui_modding_guide.md`). The Side Panel keeps the HUD as before.
+template's name it reads, and a mod's `00_` file is read before vanilla's, so the file should win over
+`block_windows.gui` (gotcha #30 in `docs/guides/gui_modding_guide.md`). The Side Panel keeps the HUD as before.
 
 | Check | Expect | If it fails |
 |---|---|---|
-| **1. The log.** After the first launch, read `gui.log`. | Three lines, `gui/block_windows.gui:<line> - Template '<name>' already registered at 'gui/00_te_fullscreen_hide.gui:<line>'`, one per template: vanilla's were read second and dropped. | A line the other way round (the mod's file named as the later one) or none: the engine didn't take the mod's templates, and nothing below changes. The fallback is a full-file `block_windows.gui`, the owner's compat call. |
+| **1. The log.** After the first launch, read `gui.log`. | Three lines, `gui/block_windows.gui:<line> - Template '<name>' already registered at 'gui/00_te_fullscreen_hide.gui:<line>'`, one per template: vanilla's were read second and dropped. GDP Plotline Plus, in the owner's playset, rests on the same rule (`00_GDPPP_graph_tooltips.gui` redefines vanilla's `GDP_tooltip_with_graph` template): if the GDP tooltip shows a prestige graph under the GDP graph (that mod's addition), the first template already wins in game. | A line the other way round (the mod's file named as the later one) or none: the engine didn't take the mod's templates, and nothing below changes. The fallback is a full-file `block_windows.gui`, the owner's compat call. |
 | **2. Full Screen hides it.** Pause the game, open the outliner, then the window, and switch to Full Screen. Compare with the Politics panel. | As under Politics: no outliner, no "Paused" button over the strips, no lens toolbar, no construction box over Close; the notifications compact at the bottom right. The top bar, the sidebar, the launcher and the speed controls stay. | One part still shows: note which; it is drawn by something other than the three templates, or by a mod file that copies vanilla's widget without them. All of it shows: check 1. |
 | **3. The Side Panel keeps it.** Open the window as a side panel. | The outliner, the "Paused" button and the lens toolbar show as before. | Hidden: the window's term reads the width key without the frame (`test_te_fullscreen_hud.py`). |
 | **4. Switching back.** In Full Screen, click Side Panel. | The HUD comes back at once, the outliner where it was. | It stays hidden: the side panel shows while the term still holds; compare the frame's `visible` with the term. |

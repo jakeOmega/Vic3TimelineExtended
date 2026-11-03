@@ -8,19 +8,19 @@
 ### in their place (half_and_fullscreen_show). The Side Panel keeps the HUD.
 ###
 ### WHY A 00_ FILE. A template's name is global, and the engine keeps the
-### first definition it reads, in file-name order across vanilla and the mods,
-### and logs each later one in gui.log as "Template 'X' already registered at
-### '<file>'" (gotcha #30 in docs/guides/gui_modding_guide.md). This name
-### sorts before block_windows.gui, so these win and vanilla's whole file stays
-### vanilla's.
+### first definition it reads and logs each later one in gui.log as
+### "Template 'X' already registered at '<file>'" (gotcha #30 in
+### docs/guides/gui_modding_guide.md). Every such line so far shows a mod's
+### 00_ file read before vanilla's, so these win and vanilla's whole file
+### stays vanilla's.
 ###
 ### EACH TEMPLATE is vanilla's expression, its Or chain verbatim, ORed with two
 ### more terms (one line each, as vanilla writes them):
 ###   - the Community Mod Framework's full-screen key, com_fullscreen. CMF
 ###     (Workshop 3385002128) redefines these three in 00_com_fullscreen_hide.gui
-###     with that key added; whichever file loads first wins, so with this term
-###     CMF's full screens keep hiding the HUD if this one does. Nothing sets
-###     the key without CMF.
+###     with that key added; whichever file is read first wins, so with this
+###     term CMF's full screens keep hiding the HUD if this file wins. Nothing
+###     sets the key without CMF.
 ###   - the Timeline Extended window's Full Screen: the window root's visible
 ###     AND the full-screen frame's (gui/te_systems_window.gui), so the HUD
 ###     hides exactly while the frame draws. Every route that closes the window

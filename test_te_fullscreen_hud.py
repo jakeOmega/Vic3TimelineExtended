@@ -9,10 +9,11 @@ construction box and the backgrounds of the time controls and the top bar
 (half_and_fullscreen_show). The three templates are in vanilla's
 gui/block_windows.gui:984-1000, each an Or chain of
 InformationPanelBar.IsPanelOpen, which a scripted widget never trips. The mod
-redefines them in a file whose name sorts before block_windows.gui: the
-engine keeps the first registration of a template's name, in file-name order,
-and logs the later one as `Template 'X' already registered at '<file>'` in
-gui.log (gotcha #30 in docs/guides/gui_modding_guide.md).
+redefines them in a 00_ file, which sorts before block_windows.gui: the
+engine keeps the first registration of a template's name and logs the later
+one as `Template 'X' already registered at '<file>'` in gui.log, and every
+such line so far shows a mod's 00_ file read before vanilla's (gotcha #30 in
+docs/guides/gui_modding_guide.md).
 
 These tests hold each template to vanilla's (the committed fixture, which
 test_te_fullscreen_frame.py holds to the installed game) plus two terms: the
