@@ -49,6 +49,11 @@ MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_rate_none", "banking_
                 "banking_dash_how_prices", "banking_dash_how_expected", "banking_dash_how_printing"]
 GENERAL_HOW = ["banking_dash_how_cycle", "banking_dash_how_cycle_moves", "banking_dash_how_crashes",
                "banking_dash_how_budget"]
+# The Help page's topics, in order: the subheadings over the notes above.
+GENERAL_SUBS = ["banking_dash_how_sub_cycle", "banking_dash_how_sub_crashes", "banking_dash_how_sub_budget"]
+MONETARY_SUBS = ["banking_dash_how_sub_rate", "banking_dash_how_sub_mandates", "banking_dash_how_sub_gold",
+                 "banking_dash_how_sub_fx", "banking_dash_how_sub_arrangements", "banking_dash_how_sub_borrowing",
+                 "banking_dash_how_sub_prices"]
 
 
 def _read(path):
@@ -224,6 +229,8 @@ class FlagTest(unittest.TestCase):
         how = _type_body(_strip_comments(_read(LAYOUT)), "te_banking_sec_how")
         self.assertIn('text = "banking_dash_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_banking')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
         self.assertNotIn("banking_dash_how_open", self.text)
         self.assertNotIn("banking_dash_note", how)
 
@@ -261,6 +268,10 @@ class GateTest(unittest.TestCase):
         for key in GENERAL_HOW:
             self.assertIn(f'text = "{key}"', body, key)
             self.assertNotIn(f'text = "{key}"', gated, key)
+        # the topics' subheadings, in order, each on its side of the gate
+        subs = re.compile(r'text = "(banking_dash_how_sub_\w+)"')
+        self.assertEqual(subs.findall(body.replace(gated, "")), GENERAL_SUBS)
+        self.assertEqual(subs.findall(gated), MONETARY_SUBS)
 
 
 class TidyTest(unittest.TestCase):

@@ -13,6 +13,7 @@ import unittest
 from paradox_file_parser import ParadoxFileParser
 from test_cultural_hegemony_layout import _type_body
 from test_history_chart_tooltip_context import _closure, _data_roots, _load_loc
+from gui_test_helpers import history_charts
 
 ROOT = Path(__file__).parent
 
@@ -248,7 +249,9 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
     def test_gui_palette_order_shared_binding_and_historical_tooltips(self):
         gui = read("gui/journal_entry_widgets/cultural_hegemony_widget.gui")
         history = _type_body(gui, "te_ch_sec_history")
-        chart = history[history.index("te_history_chart = {"):]
+        # the chart is its generated wrapper's (gen_te_history_charts.py), instanced once
+        self.assertEqual(history.count("te_hist_ch_models = {}"), 1)
+        chart = history_charts(history)[0]
         plot = chart[chart.index('blockoverride "sample_datamodel"'):chart.index('blockoverride "plot_layouts"')]
         self.assertIn("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')", plot)
         # The plot blocks sit on the te_history_chart instance, as in every
@@ -283,7 +286,7 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         # (mod_systems/history_charts.md, History Store and Charts), and the bars sit 6px clear
         # of the frame top and bottom, where the axis labels are placed.
         history = _type_body(read("gui/journal_entry_widgets/cultural_hegemony_widget.gui"), "te_ch_sec_history")
-        chart = history[history.index("te_history_chart = {"):]
+        (chart,) = history_charts(history)
         frame = re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart)
         self.assertIsNotNone(frame, "the chart no longer sizes its frame to its 400px of bars")
         width, height = map(int, frame.groups())

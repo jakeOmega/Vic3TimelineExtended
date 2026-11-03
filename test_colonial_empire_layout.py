@@ -38,6 +38,9 @@ PROGRAMMES = ("invest", "garrison", "assimilation")
 HOW_KEYS = ["je_colonial_empire_how_bar_1", "je_colonial_empire_how_bar_2", "je_colonial_empire_how_bar_3",
             "je_colonial_empire_how_moves", "je_colonial_empire_how_pressure",
             "je_colonial_empire_how_programmes", "je_colonial_empire_how_decolonization"]
+# Its topics, in order: the subheadings over those explanations.
+HOW_SUBS = ["je_colonial_empire_how_sub_bar", "je_colonial_empire_how_sub_moves", "je_colonial_empire_how_sub_pressure",
+            "je_colonial_empire_how_sub_programmes", "je_colonial_empire_how_sub_decolonization"]
 RETIRED_KEYS = ["je_colonial_empire_status_summary", "je_colonial_empire_ov_pie_label",
                 "je_colonial_empire_bar_headline", "je_colonial_empire_band_headline",
                 "je_colonial_empire_conditions_body", "je_colonial_empire_phase_row",
@@ -260,6 +263,8 @@ class FlagTest(unittest.TestCase):
         how = _strip_comments(_type_body(self.text, "te_ce_sec_how"))
         self.assertIn('text = "je_colonial_empire_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_colonial_empire')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
         self.assertNotIn("colonial_empire_how_open", self.text)
         self.assertNotIn("colonial_empire_note", how)
 
@@ -756,6 +761,9 @@ class HowItWorksTest(unittest.TestCase):
         how = _type_body(self.gui, "te_colonial_empire_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'text = "{key}"', how, key)
+        self.assertEqual(re.findall(r'text = "(je_colonial_empire_how_sub_\w+)"', _strip_comments(how)), HOW_SUBS)
+        for key in HOW_SUBS:
+            self.assertIn(key, self.loc)
         self.assertNotIn("ExecuteTooltip", how)
         self.assertNotRegex(how, r"\bcolonial_empire_text = \{")
 

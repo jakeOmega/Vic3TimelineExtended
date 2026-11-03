@@ -64,8 +64,10 @@
 ### MEMBER's journal entry by its leader. A member sees them lit and "Active",
 ### with "Set by our market leader" said once above them and a greyed control.
 ###
-### The two charts reuse te_history_chart from te_history_chart.gui; the samples
-### come from common/scripted_effects/te_history_global_warming_effects.txt.
+### The two charts reuse te_history_chart from te_history_chart.gui, each its
+### te_hist_<id> wrapper generated from scripts/generators/te_history_charts/
+### global_warming.gui.in; the samples come from
+### common/scripted_effects/te_history_global_warming_effects.txt.
 ###
 ### The icons are the painted set in gfx/interface/icons/gw_icons/ (PR #586),
 ### except the in-force check and Treaty-Bound, which stay vanilla marks. Each
@@ -1661,72 +1663,10 @@ types global_warming_widget_types
 			}
 
 			### ---- Global temperature anomaly (0-4 C, the journal entry's scale) -
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "gw_hist_chart_temp_title"
-				}
-				blockoverride "chart_legend" {
-					text = "gw_hist_chart_temp_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "gw_hist_tt_temp"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_temp' )]"
-						blockoverride "values" {
-							min = 0
-							max = 4
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0.08', ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 4
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_temp' ), '(CFixedPoint)0.16' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.85 0.42 0.30 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_gw_temp = {}
 
 			### ---- This market's share of world emissions (0-100 %) -------------
-			te_history_chart = {
-				blockoverride "chart_title" {
-					text = "gw_hist_chart_share_title"
-				}
-				blockoverride "chart_legend" {
-					text = "gw_hist_chart_share_legend"
-				}
-				# This series records no markers; the store's pips belong to
-				# other systems (banking, cultural hegemony) and would go unexplained.
-				blockoverride "marker_pips" {}
-				blockoverride "bar_tooltip" {
-					tooltip = "gw_hist_tt_share"
-				}
-				blockoverride "bar_body" {
-					te_history_bar_unsigned = {
-						visible = "[ScriptContainer.HasVariable( 'te_hist_v_gw_share' )]"
-						blockoverride "values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ) ) )]"
-						}
-						blockoverride "cover_values" {
-							min = 0
-							max = 100
-							value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_gw_share' ), '(CFixedPoint)4' ) ) )]"
-						}
-						blockoverride "color" {
-							color = { 0.45 0.60 0.40 1.0 }
-						}
-					}
-				}
-			}
+			te_hist_gw_share = {}
 		}
 	}
 

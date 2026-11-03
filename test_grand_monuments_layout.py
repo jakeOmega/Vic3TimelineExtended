@@ -46,6 +46,10 @@ HOW_KEYS = ["gm_je_how_grandeur", "gm_je_how_grandeur_age", "gm_je_how_grandeur_
             "gm_je_how_hard_times", "gm_je_how_commissions", "gm_je_how_commissions_rewards",
             "gm_je_how_names", "gm_je_how_policy", "gm_je_how_trophies", "gm_je_how_trophies_home",
             "gm_je_how_archaeology"]
+# The Help page's topics, in order: its subheadings.
+HOW_SUBS = ["gm_je_how_sub_grandeur", "gm_je_how_sub_counts", "gm_je_how_sub_signatures", "gm_je_how_sub_contested",
+            "gm_je_how_sub_hard_times", "gm_je_how_sub_commissions", "gm_je_how_sub_names", "gm_je_how_sub_policy",
+            "gm_je_how_sub_trophies", "gm_je_how_sub_archaeology"]
 # The fading ledgers under National Effects' Fading Legitimacy (v1 §4.3, §5).
 FADING = ("teardown", "vanity")
 # The opportunity boons under National Effects' Opportunities Seized
@@ -201,6 +205,8 @@ class FlagTest(unittest.TestCase):
         how = _strip_comments(_type_body(_gui(), "te_gm_sec_how"))
         self.assertIn('text = "gm_je_how_header"', how)
         self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_grand_monuments')]\"", how)
+        self.assertRegex(how, r'blockoverride "arrow_visible" \{\s*visible = no\s*\}')
+        self.assertNotIn("onclick_show", how)
         self.assertNotIn("gm_how_open", _gui())
         self.assertNotIn("gm_note", how)
 
@@ -211,6 +217,7 @@ class HowItWorksTest(unittest.TestCase):
         how = _type_body(gui, "te_grand_monuments_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
+        self.assertEqual(re.findall(r'text = "(gm_je_how_sub_\w+)"', _strip_comments(how)), HOW_SUBS)
         for sec in LIVE_SECTIONS:
             body = _type_body(gui, sec)
             self.assertNotIn("gm_je_how_", body, sec)
@@ -218,7 +225,7 @@ class HowItWorksTest(unittest.TestCase):
 
     def test_every_how_key_exists_and_reads_nothing(self):
         loc = _loc()
-        for key in HOW_KEYS:
+        for key in HOW_KEYS + HOW_SUBS:
             self.assertIn(key, loc)
             self.assertNotIn("ScriptValue", loc[key], key)
 

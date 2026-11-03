@@ -29,6 +29,8 @@ import re
 import unittest
 from pathlib import Path
 
+from gui_test_helpers import history_charts
+
 ROOT = Path(__file__).resolve().parent
 OVERRIDE = ROOT / "gui" / "pop_browser_panel.gui"
 FIXTURE = ROOT / "test_fixtures" / "vanilla_gui" / "pop_browser_panel.gui"
@@ -400,8 +402,10 @@ class GatesTest(unittest.TestCase):
     def test_the_history_gate_asks_whether_the_country_is_tracked(self):
         body = block_from(self.sguis, self.sguis.index("te_demog_hist_tracked_sgui = {"))
         self.assertIn("te_history_country_is_tracked = yes", body)
-        history = type_bodies(read(WIDGETS))["te_demog_sec_history"]
-        self.assertEqual(history.count("'te_demog_hist_empty', 'te_demog_hist_untracked'"), 8)
+        charts = history_charts(type_bodies(read(WIDGETS))["te_demog_sec_history"])
+        self.assertEqual(len(charts), 8)
+        for chart in charts:
+            self.assertEqual(chart.count("'te_demog_hist_empty', 'te_demog_hist_untracked'"), 1)
 
 
 if __name__ == "__main__":

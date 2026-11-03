@@ -103,6 +103,22 @@ the file is stale. `test_te_systems_window.py` fails while it is. It writes:
 This generator runs explicitly; it is not a post-load regenerator, so a reload
 never rewrites the window.
 
+## History charts (explicit regeneration)
+
+Run `python3 scripts/generators/gen_te_history_charts.py` after changing a
+chart's fragment in `scripts/generators/te_history_charts/<system>.gui.in`
+(the chart's instance text, each size a placeholder), its `CHARTS` registry
+line, or the `SMALL` / `LARGE` size tables; `--check` writes nothing and exits
+1 when the file is stale. `test_te_history_charts.py` fails while it is. It
+writes:
+
+| File | Owner script | Input |
+|---|---|---|
+| `gui/te_history_charts_generated.gui` | `scripts/generators/gen_te_history_charts.py` | `CHARTS`, `SMALL`, `LARGE` and the fragments in `scripts/generators/te_history_charts/`: each of the 33 history charts as two wrapper types, `te_hist_<id>` at the panel's size, which the chart's section (still hand-written) instances where the chart sits, and `te_hist_<id>_large` at the full-screen viewer's. Each is a plain flowcontainer holding the chart's `te_history_chart` instance inline |
+
+This generator runs explicitly; it is not a post-load regenerator, so a reload
+never rewrites the charts.
+
 ## Law effects (explicit regeneration)
 
 Run `python3 scripts/generators/gen_law_effects_gui.py` after a vanilla patch,

@@ -11,7 +11,7 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import assert_wide_matches_narrow
+from gui_test_helpers import assert_wide_matches_narrow, history_charts
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGET = os.path.join(REPO, "gui", "journal_entry_widgets", "strategic_reserve_widget.gui")
@@ -583,7 +583,9 @@ class HistoryTest(unittest.TestCase):
         self.assertIn('block "row_history" {}', chart_box)
         for row in _instances(_type_body(widget, "te_st_res_sec_inventory"), "te_st_res_good_row"):
             g = re.search(r"st_res_adjust_(\w+)_sgui", row).group(1)
-            chart = _body(row, r'blockoverride "row_history" \{')
+            # the good's chart is its generated wrapper's (gen_te_history_charts.py)
+            self.assertEqual(_body(row, r'blockoverride "row_history" \{').strip(), f"te_hist_st_res_{g} = {{}}", g)
+            (chart,) = history_charts(_body(row, r'blockoverride "row_history" \{'))
             self.assertIn(f'tooltip = "st_res_hist_tt_{g}"', chart, g)
             self.assertIn(f"ScriptContainer.HasVariable( 'te_hist_v_st_res_{g}' )", chart, g)
             self.assertIn('blockoverride "marker_pips" {}', chart, g)

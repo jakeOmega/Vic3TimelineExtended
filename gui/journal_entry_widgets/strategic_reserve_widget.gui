@@ -959,7 +959,9 @@ types strategic_reserve_widget_types
 	###   row_rate_tooltip, row_decay_tooltip
 	###                         the Rate Setting and Decay lines' hovers: what
 	###                         the hub actually trades, and the decay's sources
-	###   row_history           the good's te_history_chart
+	###   row_history           the good's history chart, te_hist_st_res_<good>
+	###                         (generated from the one fragment the goods share,
+	###                         scripts/generators/te_history_charts/strategic_reserve.gui.in)
 	###   row_settings_toggle, row_settings_open, row_settings_closed
 	###                         the settings' st_res_policy_<good>_open key
 	###   row_settings_shown    the settings' visible: the row expanded, or the
@@ -1258,7 +1260,7 @@ types strategic_reserve_widget_types
 
 		### The good's fill by month, while the row is expanded: the range
 		### buttons (the te_hist_range GUI variable every history chart shares)
-		### and the good's te_history_chart. Not set in, because the chart's
+		### and the good's history chart. Not set in, because the chart's
 		### plot is 496px, the inventory's whole width.
 		flowcontainer = {
 			direction = vertical
@@ -1542,33 +1544,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_grain_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_grain_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_grain"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_grain' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_grain' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_grain = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_grain_open')]"
@@ -1671,33 +1647,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_ammunition_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_ammunition_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_ammunition"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_ammunition' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_ammunition' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_ammunition = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_ammunition_open')]"
@@ -1800,33 +1750,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_oil_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_oil_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_oil"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_oil' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_oil' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_oil = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_oil_open')]"
@@ -1929,33 +1853,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_small_arms_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_small_arms_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_small_arms"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_small_arms' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_small_arms' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_small_arms = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_small_arms_open')]"
@@ -2058,33 +1956,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_artillery_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_artillery_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_artillery"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_artillery' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_artillery' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_artillery = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_artillery_open')]"
@@ -2187,33 +2059,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_aeroplanes_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_aeroplanes_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_aeroplanes"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_aeroplanes' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_aeroplanes' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_aeroplanes = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_aeroplanes_open')]"
@@ -2316,33 +2162,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_tanks_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_tanks_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_tanks"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_tanks' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_tanks' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_tanks = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_tanks_open')]"
@@ -2445,33 +2265,7 @@ types strategic_reserve_widget_types
 				blockoverride "row_policy" { text = "st_res_row_fertilizer_policy" }
 				blockoverride "row_policy_reason" { text = "st_res_row_fertilizer_policy_reason" }
 				blockoverride "row_history" {
-					te_history_chart = {
-						blockoverride "chart_title" {
-							text = "st_res_hist_title"
-						}
-						blockoverride "chart_legend" {
-							text = "st_res_hist_legend"
-						}
-						blockoverride "marker_pips" {}
-						blockoverride "bar_tooltip" {
-							tooltip = "st_res_hist_tt_fertilizer"
-						}
-						blockoverride "bar_body" {
-							te_history_bar_unsigned = {
-								visible = "[ScriptContainer.HasVariable( 'te_hist_v_st_res_fertilizer' )]"
-								blockoverride "values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ) ) )]"
-								}
-								blockoverride "cover_values" {
-									min = 0
-									max = 100
-									value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_st_res_fertilizer' ), '(CFixedPoint)4' ) ) )]"
-								}
-							}
-						}
-					}
+					te_hist_st_res_fertilizer = {}
 				}
 				blockoverride "row_settings_toggle" {
 					onclick = "[GetVariableSystem.Toggle('st_res_policy_fertilizer_open')]"
