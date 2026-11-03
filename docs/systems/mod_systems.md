@@ -63,7 +63,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 |---|---|---|
 | [Nuclear Weapons](mod_systems/nuclear.md) | The nuclear program, deterrence and crisis diplomacy, the Nuclear Program Pause article | Nuclear Weapons (`je_nuclear_program`)<br>Nuclear Deterrence and Crisis Diplomacy (part of `je_nuclear_program`)<br>Nuclear Program Pause (Treaty Article) |
 | [Covert Warfare](mod_systems/covert_warfare.md) | Covert operations, networks, tradecraft, backlash, counterintelligence; the intelligence-sharing shield | Covert Warfare System<br>Intelligence Sharing Defense Shield |
-| [Treaty Articles](mod_systems/treaties.md) | Treaty articles with entity selection, Enforce Emissions Reduction, dynamic treaty names | Treaty Articles with Entity Selection<br>Dynamic Treaty Names |
+| [Treaty Articles](mod_systems/treaties.md) | Treaty articles with entity selection, Enforce Emissions Reduction, dynamic treaty names, the Involvement each article builds | Treaty Articles with Entity Selection<br>Dynamic Treaty Names<br>Involvement |
 | [War](mod_systems/war.md) | The Rules of War laws, war support feeds, wartime munitions demand | Rules of War (`lawgroup_rules_of_war`)<br>War Support Feeds (1.14 hook)<br>Wartime Munitions Demand |
 
 ## Colonies, space and the global commons

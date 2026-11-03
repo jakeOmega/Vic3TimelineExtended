@@ -921,7 +921,10 @@ The last two are hostile: a larger power can demand them only of a country in
 default. If the stronger party leads a power bloc, each article also gives it
 leverage generation over the weaker, from 150 to 500 by article, which builds
 the Leverage Advantage it needs to invite that country into its bloc (see [Other
-power bloc changes](09-diplomacy.md#other-power-bloc-changes)). A country may
+power bloc changes](09-diplomacy.md#other-power-bloc-changes)). Bloc or not, the
+stronger party also builds Involvement in the regions where the weaker is local:
+up to 2,000 from either peg or a receivership, and 1,000 from a swap line or a
+guarantee (see [Treaty articles](09-diplomacy.md#treaty-articles)). A country may
 receive only one swap line at a time. A treaty pegger at Peg Confidence 20 gets
 The Peg Under Siege: impose capital controls for a year (+40 confidence), break
 the peg by leaving the treaty, or re-peg lower. AI countries look for a swap line when
