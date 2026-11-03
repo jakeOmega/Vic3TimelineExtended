@@ -145,6 +145,13 @@ class Tab:
     wide          the wide composer the full-screen mount places (every tab has
                   one; test_te_systems_window.py fails on a tab without)
     tooltip_expr  a tooltip expression replacing the three-branch one
+    public        another country's panel may show it (National Info, spec
+                  2026-11-02-charts-help-national-info § 6.4): its sections
+                  read the shown Country and its controls are the player's own
+                  (test_te_system_tab_bodies.py's BindingTest and GuardTest,
+                  which run over every public tab). Each system's binding PR
+                  sets it, on its own line below, and takes the system off
+                  that test's UNBOUND.
     """
     key: str
     row: int
@@ -159,6 +166,7 @@ class Tab:
     layout: str | None = None
     wide: str | None = None
     tooltip_expr: str | None = None
+    public: bool = False
 
 
 def _system(key: str, body: str, layout: str, row: int = 1, **kw) -> Tab:
@@ -188,15 +196,23 @@ BANKING_OPEN = or_(shown("te_budget_banking_tab_sgui"), shown("te_budget_banking
 TABS: list[Tab] = [
     # Nation: always open (no journal entry, no game rule), so never grayed and
     # never a checklist (style guide rule 9's exception). It is the fallback.
+    # The public flag (another country's panel shows the tab) sits on a line of
+    # its own for each system National Info is to show (spec § 6.4), so each
+    # system's binding PR changes one line and parallel PRs merge cleanly.
     Tab("nation", 1, label="te_window_tab_nation", tooltip="te_window_tab_nation_tt",
-        body="te_nation_tab_sections", wide="te_nation_wide_sections"),
-    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections"),
-    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections"),
-    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections"),
+        body="te_nation_tab_sections", wide="te_nation_wide_sections",
+        public=False),
+    _system("space_race", "te_sr_tab_body", "te_sr_tab_layout", wide="te_sr_wide_sections",
+            public=False),
+    _system("grand_monuments", "te_gm_tab_body", "te_gm_tab_layout", wide="te_gm_wide_sections",
+            public=False),
+    _system("colonial_empire", "te_ce_tab_body", "te_ce_tab_layout", wide="te_ce_wide_sections",
+            public=False),
     # No journal entry: open once the country has taken part in a seabed
     # sharing, so its own "met" line.
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
-            wide="te_seabed_wide_sections"),
+            wide="te_seabed_wide_sections",
+            public=False),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -208,10 +224,12 @@ TABS: list[Tab] = [
             tooltip_expr=f"SelectLocalization( {shown('te_budget_banking_tab_sgui')}, 'te_budget_tab_banking_tt', "
                          f"SelectLocalization( {shown('te_budget_banking_readout_sgui')}, "
                          "'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )",
-            wide="te_banking_wide_sections"),
+            wide="te_banking_wide_sections",
+            public=False),
     _mirror("tax_code", 2, "te_tax_tab_tt", "te_tax_tab_body", "te_tax_tab_layout",
             "te_budget_tax_tab_sgui", "te_budget_tax_tab_unlock_sgui", locked="te_tax_tab_locked_tt",
-            wide="te_tax_wide_sections"),
+            wide="te_tax_wide_sections",
+            public=False),
     Tab("budget_breakdown", 2, label="te_window_tab_budget_breakdown", tooltip="te_budget_chart_tab_tt",
         body="te_budget_breakdown_panel", wide="te_budget_breakdown_wide_sections"),
     # The Market tabs' own tooltips speak of another market: the window's own.
@@ -228,13 +246,16 @@ TABS: list[Tab] = [
     _mirror("demographics", 3, "te_pops_tab_demog_tt", "te_demog_window_body", "te_demog_tab_layout",
             "te_pops_demog_tab_sgui", "te_pops_demog_tab_unlock_sgui", locked="te_pops_tab_demog_locked_tt",
             open_=and_(shown("te_pops_demog_tab_sgui"), valid("te_pops_demog_tab_unlock_sgui")),
-            wide="te_demog_browser_sections"),
+            wide="te_demog_browser_sections",
+            public=True),
     _mirror("cultural_hegemony", 3, "te_society_tab_ch_tt", "te_ch_tab_body", "te_ch_tab_layout",
-            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections"),
+            "te_society_ch_tab_sgui", "te_society_ch_tab_unlock_sgui", wide="te_ch_wide_sections",
+            public=False),
     _mirror("united_nations", 3, "te_diplomacy_tab_un_tt", "te_un_tab_body", "te_un_tab_layout",
             "te_diplomacy_un_tab_sgui", "te_diplomacy_un_tab_unlock_sgui", wide="te_un_wide_sections"),
     _mirror("nuclear_weapons", 3, "te_military_tab_nuclear_tt", "te_nuclear_tab_body", "te_nuclear_tab_layout",
-            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections"),
+            "te_military_nuclear_tab_sgui", "te_military_nuclear_tab_unlock_sgui", wide="te_nuclear_wide_sections",
+            public=False),
     _mirror("covert_warfare", 3, "te_military_tab_covert_tt", "te_covert_tab_body", "te_covert_tab_layout",
             "te_military_covert_tab_sgui", "te_military_covert_tab_unlock_sgui", wide="te_covert_wide_sections"),
 ]

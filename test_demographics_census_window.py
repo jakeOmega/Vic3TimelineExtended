@@ -15,7 +15,8 @@ file holds:
   lines added inside `### MOD: Demographics tab` blocks, none removed;
 * the strip, its gates and the tab flag;
 * that nothing the country's sections draw reads GetPlayer, in the markup or in
-  any loc key they reach, and that none of that text says "our" or "your";
+  any loc key they reach (that none of that text says "our" or "your" is
+  test_te_system_tab_bodies.py's BindingTest's, for every public tab);
 * that the controls which change a country (the pension and Family Policy
   buttons) show only for the player's own;
 * that nothing the Census Data window draws reads the Population panel's own
@@ -47,17 +48,14 @@ SHOWN = f"And( GetVariableSystem.Exists('{FLAG}'), {RULE} )"
 
 # The composers of the country's sections, one a host.
 COMPOSERS = ("te_demog_tab_sections", "te_demog_browser_sections")
-# The one GetPlayer read the country's markup keeps: the current year, the same for every country, in the history
-# charts' sample_visible.
-KEPT_GETPLAYER = "GetPlayer.MakeScope.ScriptValue('te_history_current_year')"
 # Loc keys the Help page reaches that read GetPlayer, as a popup must (it has no Country in context, spec
 # 2026-11-02-charts-help-national-info § 5.2), and read only a constant (te_demog_k_conscription_ref).
 HELP_PAGE_GETPLAYER = {"te_demog_fam_rule"}
 # The Help page's types (te_demographics_help_body, _popup): not a section of the panel, so not read for its country.
-# Its keys are left out of the pronoun rule (test_the_text_is_not_the_players) on purpose: the page explains the
-# player's own rules and never shows another country (Covert Warfare's page says "our" too).
+# Its keys are left out of the pronoun rule (test_te_system_tab_bodies.py's test_the_text_is_not_the_players) on
+# purpose: the page explains the player's own rules and never shows another country (Covert Warfare's page says "our"
+# too).
 HELP_PAGE = re.compile(r"^te_demographics_help_")
-PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
 # The Population panel's own data: its window holds it and the Census Data window doesn't, so a key that reads it (as
 # vanilla's POPS_OVERVIEW_AVERAGE_INCOME_* keys do) renders only in the Population panel.
 POPULATION_PANEL_ONLY = "PopsOverviewPanel."
@@ -224,7 +222,9 @@ class CountryContextTest(unittest.TestCase):
     def test_the_markup_reads_the_context_country(self):
         for name, body in self.country.items():
             with self.subTest(type=name):
-                self.assertEqual(body.replace(KEPT_GETPLAYER, "").count("GetPlayer"), 0)
+                # the charts' one read of the year, the same for every country, is in their generated wrappers,
+                # under a `# world:` line (test_te_system_tab_bodies.py's BindingTest)
+                self.assertEqual(body.count("GetPlayer"), 0)
                 self.assertNotIn("AccessPlayer", body)
         self.assertGreater(sum(b.count("Country.MakeScope") for b in self.country.values()), 300)
 
@@ -250,13 +250,6 @@ class CountryContextTest(unittest.TestCase):
         for name, body in self.state.items():
             with self.subTest(type=name):
                 self.assertNotRegex(body, r"(?<![\w.])Country\.")
-
-    def test_the_text_is_not_the_players(self):
-        """The same sections show another country in the Census Data window, so none of their text says 'our'."""
-        for key in sorted(self.keys):
-            text = re.sub(r"\[[^\]]*\]|\$[\w.\-]+\$|#\w+|\\n", " ", self.loc[key])
-            with self.subTest(key=key):
-                self.assertIsNone(PERSONAL.search(text), text)
 
     def test_the_new_keys_exist(self):
         for key in ("te_pop_browser_tab_pops", "te_pop_browser_tab_pops_tt", "te_pop_browser_tab_demog_tt",

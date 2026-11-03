@@ -15,6 +15,7 @@ Existing tests move onto it only when they are next touched, not in a sweep.
   guard_spans and open_types the parts of them another country sees (charts-
   help-national-info plan, PR F0; test_te_system_tab_bodies.py's BindingTest).
 """
+import bisect
 from dataclasses import dataclass
 import functools
 import glob
@@ -445,6 +446,11 @@ def type_bodies(text):
 
 
 # --- The types a panel draws, and what another country sees of them (PR F0) ------------------------
+# The binding rule (docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md §§ 6.3, 6.5,
+# 7.1): a public tab's sections read the shown country as Country; JournalEntry and the player appear
+# only under te_own_country_only, or as a world read under a `# world: <why>` line; every control sits
+# under te_own_country_only. test_te_system_tab_bodies.py's BindingTest and GuardTest hold each public
+# tab to it, and scripts/analysis/te_rebind_country.py lists what a tab still reads.
 
 # The mod's own GUI files. The other files under gui/ copy vanilla's markup (an
 # override of a vanilla file, or a 00_te_* file that redefines vanilla's types,
@@ -457,40 +463,62 @@ MOD_GUI = ("gui/journal_entry_widgets/*.gui", "gui/te_*.gui", "gui/gm_*.gui", "g
 @dataclass(frozen=True)
 class TypeDef:
     """One type: its base, where it is (path relative to the repo, the line of
-    its `type` line), and its body between its braces, comments cut but the
-    lines kept, so body line i is file line `line + i`."""
+    its `type` line), and its body between its braces twice: `body` with the
+    comments cut, `raw` as written. Both keep the lines, so body line i is
+    file line `line + i`."""
     name: str
     base: str
     path: str
     line: int
     body: str
+    raw: str = ""
 
 
-def mod_gui_paths():
-    return sorted({os.path.relpath(p, REPO) for g in MOD_GUI for p in glob.glob(os.path.join(REPO, g))})
+def mod_gui_paths(root=REPO):
+    return sorted({os.path.relpath(p, root) for g in MOD_GUI for p in glob.glob(os.path.join(root, g))})
 
 
-@functools.lru_cache(maxsize=1)
-def _mod_types():
+def file_types(text, path=""):
+    """Every type in one GUI file's text, by name."""
+    code = _strip_comments(text)
+    raw_lines, code_lines = text.split("\n"), code.split("\n")
+    raw_starts, code_starts, n = [], [], 0
+    for line in raw_lines:
+        raw_starts.append(n)
+        n += len(line) + 1
+    n = 0
+    for line in code_lines:
+        code_starts.append(n)
+        n += len(line) + 1
+
+    def line_of(pos):
+        return bisect.bisect_right(code_starts, pos) - 1
+
+    def to_raw(pos):
+        # comments are cut only after their #, so a brace keeps its line and column
+        line = line_of(pos)
+        return raw_starts[line] + pos - code_starts[line]
+
     out = {}
-    for path in mod_gui_paths():
-        code = _strip_comments(_read(os.path.join(REPO, path)))
-        for m in re.finditer(r"(?m)^\s*type (\w+) = (\w+) \{", code):
-            brace = m.end() - 1
-            out[m.group(1)] = TypeDef(m.group(1), m.group(2), path, code.count("\n", 0, m.start()) + 1,
-                                      code[brace + 1:_close(code, brace)])
+    for m in re.finditer(r"(?m)^\s*type (\w+) = (\w+) \{", code):
+        brace = m.end() - 1
+        end = _close(code, brace)
+        out[m.group(1)] = TypeDef(m.group(1), m.group(2), path, line_of(m.start(1)) + 1,
+                                  code[brace + 1:end], text[to_raw(brace) + 1:to_raw(end)])
     return out
 
 
-def mod_types():
+@functools.lru_cache(maxsize=4)
+def _mod_types(root):
+    out = {}
+    for path in mod_gui_paths(root):
+        out.update(file_types(_read(os.path.join(root, path)), path))
+    return out
+
+
+def mod_types(root=REPO):
     """Every type in the mod's own GUI files (MOD_GUI), by name."""
-    return dict(_mod_types())
-
-
-@functools.lru_cache(maxsize=64)
-def raw_lines(path):
-    """A GUI file's lines, comments kept (a `# world:` marker is a comment)."""
-    return tuple(_read(os.path.join(REPO, path)).split("\n"))
+    return dict(_mod_types(root))
 
 
 _CHILD = re.compile(r"(?<![\w.])(\w+) = \{")
@@ -571,3 +599,157 @@ def open_types(names, types):
         if types[name].base in types:
             todo.append(types[name].base)
     return seen
+
+
+# A read of the entry or of the player. GetPlayerJournalEntry is an entry read
+# (of the player's own entry), never a player one.
+READ = re.compile(r"(?<![\w.])(JournalEntry\.\w+|GetPlayerJournalEntry|GetPlayer\w*|AccessPlayer\w*)")
+# A world read's marker: the comment line directly over a read of the player's
+# copy of what is the same for every country (spec § 6.7). It lets a player
+# read through, never an entry read: another country's panel has no entry.
+WORLD = re.compile(r"^\s*# world: \S")
+# A control: a scripted GUI's Execute (not ExecuteTooltip).
+CONTROL = re.compile(r"\.Execute\s*\(")
+# A popup's opener, and the popup that shows on its value (te_popups.gui).
+OPENER = re.compile(r"GetVariableSystem\.Set\(\s*'te_popup'\s*,\s*'(\w+)'\s*\)")
+_POPUP_KEY = re.compile(r"GetVariableSystem\.HasValue\(\s*'te_popup'\s*,\s*'(\w+)'\s*\)")
+
+
+def is_entry_read(read):
+    return read.startswith("JournalEntry.") or read == "GetPlayerJournalEntry"
+
+
+@dataclass(frozen=True)
+class Finding:
+    """One read or control another country's panel would draw: where (the type,
+    or the loc key, its file and line), what (the read's text, or the control),
+    the line as written, and whether a `# world:` line marks it."""
+    where: str
+    path: str
+    line: int
+    what: str
+    text: str
+    world: bool = False
+
+    def __str__(self):
+        return f"{self.path}:{self.line}  {self.where}  {self.what}  | {self.text.strip()[:120]}"
+
+
+@functools.lru_cache(maxsize=4096)
+def _line_starts(body):
+    return [0] + [m.end() for m in re.finditer("\n", body)]
+
+
+def _line_of(td, pos):
+    """The body line (0 = the type's own line) a body offset is on."""
+    return bisect.bisect_right(_line_starts(td.body), pos) - 1
+
+
+def markup_reads(names, types):
+    """Each JournalEntry or player read in what another country sees of the
+    named types (open_types), outside te_own_country_only, as a Finding;
+    world=True where a `# world:` line marks it."""
+    out = []
+    for name in sorted(open_types(names, types)):
+        td = types[name]
+        spans = guard_spans(td.body)
+        raw = td.raw.split("\n") if td.raw else []
+        lines = td.body.split("\n")
+        for m in READ.finditer(td.body):
+            if in_spans(m.start(), spans):
+                continue
+            k = _line_of(td, m.start())
+            world = k >= 1 and k - 1 < len(raw) and bool(WORLD.match(raw[k - 1]))
+            out.append(Finding(name, td.path, td.line + k, m.group(1), lines[k], world))
+    return out
+
+
+def popups(types):
+    """Each te_popup value and the popup types that show on it."""
+    out = {}
+    for name, td in types.items():
+        m = re.search(r'blockoverride "popup_visible" \{', td.body)
+        if m:
+            block = td.body[m.end():_close(td.body, m.end() - 1)]
+            for key in _POPUP_KEY.findall(block):
+                out.setdefault(key, []).append(name)
+    return out
+
+
+def popup_controls(key, types, shown=None):
+    """The controls the popup(s) on a te_popup value hold, as Findings (empty
+    for a page that only reads: a Help page, a chart viewer), or None when no
+    popup shows on it."""
+    shown = popups(types) if shown is None else shown
+    if key not in shown:
+        return None
+    out = []
+    for name in sorted(type_closure(set(shown[key]), types)):
+        td = types[name]
+        for m in CONTROL.finditer(td.body):
+            k = _line_of(td, m.start())
+            out.append(Finding(name, td.path, td.line + k, "Execute", td.body.split("\n")[k]))
+    return out
+
+
+def unguarded_controls(names, types):
+    """Each control another country's panel would draw: an Execute, or an
+    opener of a popup that holds controls (or of a popup that isn't there),
+    outside te_own_country_only, as a Finding."""
+    out, shown, held = [], popups(types), {}
+    for name in sorted(open_types(names, types)):
+        td = types[name]
+        spans = guard_spans(td.body)
+        lines = td.body.split("\n")
+        for m in CONTROL.finditer(td.body):
+            if not in_spans(m.start(), spans):
+                k = _line_of(td, m.start())
+                out.append(Finding(name, td.path, td.line + k, "Execute", lines[k]))
+        for m in OPENER.finditer(td.body):
+            if in_spans(m.start(), spans):
+                continue
+            if m.group(1) not in held:
+                held[m.group(1)] = popup_controls(m.group(1), types, shown)
+            inside = held[m.group(1)]
+            if inside is None or inside:
+                k = _line_of(td, m.start())
+                what = (f"opens te_popup = {m.group(1)}, which no popup shows on" if inside is None else
+                        f"opens te_popup = {m.group(1)}, whose popup holds controls ({inside[0].path}:{inside[0].line})")
+                out.append(Finding(name, td.path, td.line + k, what, lines[k]))
+    return out
+
+
+def panel_loc_keys(names, types, loc):
+    """The loc keys another country's panel renders: those the open types'
+    unguarded text names, and every key they reach, less a key shown only for
+    the player's own country (the first branch of a SelectLocalization on
+    Country.IsLocalPlayer, which another country's panel never renders)."""
+    roots = set()
+    for name in open_types(names, types):
+        roots |= gui_keys(unguarded(types[name].body), loc, own=False)
+    return loc_closure(roots, loc, own=False)
+
+
+def loc_reads(keys, index):
+    """Each JournalEntry or player read in the loc keys' values, as a Finding.
+    index: loc_index()."""
+    out = []
+    for key in sorted(keys):
+        value, path, line = index[key]
+        for m in READ.finditer(value):
+            out.append(Finding(key, path, line, m.group(1), value))
+    return out
+
+
+PERSONAL = re.compile(r"\b(you|your|yours|we|our|ours|us)\b", re.I)
+
+
+def personal_text(keys, loc):
+    """The keys whose text speaks as the player ("our", "you"), with the text:
+    another country's panel shows them. Markup, splices and formatting left out."""
+    out = {}
+    for key in sorted(keys):
+        text = re.sub(r"\[[^\]]*\]|\$[\w.\-]+\$|#\w+|\\n", " ", loc[key])
+        if PERSONAL.search(text):
+            out[key] = text
+    return out

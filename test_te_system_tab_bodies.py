@@ -13,8 +13,12 @@ import os
 import re
 import unittest
 
-from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body,
-                              mod_types, type_closure)
+import functools
+
+from gui_test_helpers import (GUARD, _children, _close, _instances, _read, _strip_comments, _type_body, file_types,
+                              is_entry_read, load_loc, loc_index, loc_reads, markup_reads, mod_gui_paths, mod_types,
+                              panel_loc_keys, personal_text, type_closure, unguarded_controls, WORLD, READ)
+from scripts.generators import gen_te_systems_window as gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
@@ -532,6 +536,296 @@ class MountContextTest(unittest.TestCase):
                     # the wrapper anchors as the composer it holds, so the composer sits where it did
                     root = {kk: v for kind, kk, v in _children(types[k].body) if kind == "property"}
                     self.assertEqual(root.get("parentanchor"), JE_COUNTRY["parentanchor"], k)
+
+
+
+# --- What another country's panel draws (spec §§ 6.3, 6.5, 7.1; plan Review Focus 3 and 4) --------------------------
+
+# The tabs another country's panel may show (National Info, PR F1): each Tab with public=True in
+# gen_te_systems_window.TABS. BindingTest and GuardTest run over each one's wide layout (Tab.wide), every type it
+# draws all the way down (gui_test_helpers.type_closure over the mod's own GUI files), and the loc that reaches.
+PUBLIC = [t for t in gen.TABS if t.public]
+
+# The systems National Info is to show (spec § 6.4) whose panels aren't bound yet: off the binding tests until their
+# PR binds them. A system's PR sets its Tab's public=True and deletes its line here; one still here that passes every
+# check fails test_unbound_is_honest, so this list only shrinks. One a line, a blank line between them, so parallel
+# PRs each delete their own line and merge cleanly.
+UNBOUND = {
+    "nation",
+
+    "banking",
+
+    "tax_code",
+
+    "grand_monuments",
+
+    "colonial_empire",
+
+    "seabed",
+
+    "cultural_hegemony",
+
+    "nuclear_weapons",
+
+    "space_race",
+}
+
+# The systems National Info doesn't show in this work (spec § 6.4): never public.
+PRIVATE = {
+    "budget_breakdown",
+    "strategic_reserve",
+    "global_warming",
+    "united_nations",
+    "covert_warfare",
+}
+
+# A world read in loc (spec § 6.7): a key a public panel renders that reads the player's copy of what is the same
+# for every country (a world list written for players only), with why. Markup marks its world reads with a
+# `# world: <why>` line over the read instead. An entry read is never a world read. Each system's PR adds its keys
+# under its own heading, one a line, in order, so parallel PRs merge cleanly; a key no public panel renders, or that
+# reads no player, fails test_world_loc_is_live.
+WORLD_LOC = {
+    # Demographics: none (its year reads are in markup).
+
+    # Nation (F2)
+
+    # Banking (F2)
+
+    # Tax Code (F2)
+
+    # Grand Monuments (F3)
+
+    # Colonial Empire (F3)
+
+    # Seabed (F3)
+
+    # Cultural Hegemony (F4)
+
+    # Nuclear Weapons (F4)
+
+    # Space Race (F5)
+}
+
+HOW_TO_BIND = (
+    "Each line: file:line, the type (or loc key), the read, the line. Bind each: run "
+    "`python3 scripts/analysis/te_rebind_country.py {key}` for the list by class, and --write for the mechanical "
+    "reads (JournalEntry.GetCountry. and GetPlayer. to Country.); put an entry-only part or a control under "
+    "`using = te_own_country_only` (on a wrapper where the widget has its own visible; gui/te_system_tab_widgets.gui); "
+    "a read of the player's copy of what is the same for every country takes a `# world: <why>` line over it "
+    "(a loc key: an entry in WORLD_LOC). Then take {key} off UNBOUND and set its Tab's public=True.")
+
+
+def _report(findings, key, limit=60):
+    lines = [str(f) for f in findings[:limit]]
+    if len(findings) > limit:
+        lines.append(f"... and {len(findings) - limit} more")
+    return "\n" + "\n".join(lines) + "\n" + HOW_TO_BIND.format(key=key)
+
+
+@functools.lru_cache(maxsize=None)
+def _panel(key):
+    """What tab `key`'s wide layout shows another country: its markup reads,
+    its loc reads, its controls and its loc keys."""
+    tab = next(t for t in gen.TABS if t.key == key)
+    types, loc = mod_types(), load_loc()
+    keys = panel_loc_keys({tab.wide}, types, loc)
+    markup = [f for f in markup_reads({tab.wide}, types) if not f.world or is_entry_read(f.what)]
+    reads = [f for f in loc_reads(keys, loc_index()) if f.where not in WORLD_LOC or is_entry_read(f.what)]
+    return {"markup": markup, "loc": reads, "controls": unguarded_controls({tab.wide}, types),
+            "text": personal_text(keys, loc), "keys": keys, "types": type_closure({tab.wide}, types)}
+
+
+class BindingTest(unittest.TestCase):
+    """A public tab's sections read the shown country, Country, and nothing
+    else (spec § 7.1): no JournalEntry and no player read outside
+    te_own_country_only, but a marked world read."""
+
+    def test_a_public_tab_is_bound(self):
+        self.assertTrue(PUBLIC, "Demographics at least")
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                self.assertNotIn(t.key, UNBOUND, f"{t.key} is public, so bound: take it off UNBOUND")
+                panel = _panel(t.key)
+                # the walk reaches the sections and their loc (guard the guard)
+                self.assertGreater(len(panel["types"]), 5)
+                self.assertGreater(len(panel["keys"]), 20)
+
+    def test_no_entry_or_player_read(self):
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                found = _panel(t.key)["markup"]
+                self.assertEqual(found, [], _report(found, t.key))
+
+    def test_the_loc_reads_no_entry_or_player(self):
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                found = _panel(t.key)["loc"]
+                self.assertEqual(found, [], _report(found, t.key))
+
+    def test_the_text_is_not_the_players(self):
+        """Another country's panel shows the same text, so none of it says
+        "our" or "you" (spec § 6.8): a label goes neutral, and a sentence that
+        needs its subject takes SelectLocalization( Country.IsLocalPlayer,
+        '<the player's>', '<the country's>' ), whose first branch is left out
+        here. (The census test's rule, moved here in PR F0.)"""
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                text = _panel(t.key)["text"]
+                self.assertEqual(text, {}, "\n" + "\n".join(f"{k}: {v.strip()[:140]}" for k, v in text.items()))
+
+    def test_every_world_line_marks_a_player_read(self):
+        """A `# world:` line sits directly over a line that reads the player,
+        and never over an entry read, which another country's panel can't
+        reach: a stale marker can't hide a read that moved."""
+        found = 0
+        for path in mod_gui_paths():
+            lines = _read(os.path.join(REPO, path)).split("\n")
+            for i, line in enumerate(lines):
+                if not WORLD.match(line):
+                    continue
+                found += 1
+                below = _strip_comments(lines[i + 1]) if i + 1 < len(lines) else ""
+                reads = READ.findall(below)
+                with self.subTest(at=f"{path}:{i + 1}"):
+                    self.assertTrue(reads, f"{path}:{i + 1}: a world marker over a line that reads no player")
+                    self.assertFalse([r for r in reads if is_entry_read(r)],
+                                     f"{path}:{i + 1}: an entry read is never a world read")
+        self.assertGreater(found, 0)
+
+    def test_world_loc_is_live(self):
+        index = loc_index()
+        reached = set().union(*(_panel(t.key)["keys"] for t in PUBLIC))
+        for key, why in WORLD_LOC.items():
+            with self.subTest(key=key):
+                self.assertTrue(why.strip(), "say why")
+                self.assertIn(key, reached, f"{key}: no public panel renders it")
+                reads = READ.findall(index[key][0])
+                self.assertTrue(reads and not [r for r in reads if is_entry_read(r)],
+                                f"{key}: a world key reads the player, never the entry")
+
+
+class GuardTest(unittest.TestCase):
+    """No control for another country (spec § 6.5): every scripted GUI's
+    Execute in a public tab sits under te_own_country_only, and so does an
+    opener of a popup that holds controls (the Space Race's pickers). The "?",
+    the Help links and the chart buttons open pages that only read."""
+
+    def test_every_control_is_the_players(self):
+        for t in PUBLIC:
+            with self.subTest(tab=t.key):
+                found = _panel(t.key)["controls"]
+                self.assertEqual(found, [], _report(found, t.key))
+
+
+class PublicTest(unittest.TestCase):
+    """The public flags and UNBOUND (one line each per system, so the
+    systems' parallel PRs merge cleanly)."""
+
+    def test_every_tab_is_public_unbound_or_private(self):
+        keys = [t.key for t in gen.TABS]
+        public = {t.key for t in PUBLIC}
+        for key in keys:
+            with self.subTest(tab=key):
+                where = [name for name, group in (("public", public), ("UNBOUND", UNBOUND), ("PRIVATE", PRIVATE))
+                         if key in group]
+                self.assertEqual(len(where), 1, f"{key} is {where or 'none of them'}: a shown system is public "
+                                                f"once bound and on UNBOUND until then; a private one is neither")
+        self.assertLessEqual(UNBOUND | PRIVATE, set(keys), "a name that is no tab")
+        self.assertEqual(public, {"demographics"} | (set(keys) - UNBOUND - PRIVATE))
+
+    def test_unbound_is_honest(self):
+        """A system still on UNBOUND still draws something another country
+        mustn't see; once it passes every check, it comes off the list."""
+        for key in sorted(UNBOUND):
+            with self.subTest(tab=key):
+                panel = _panel(key)
+                left = len(panel["markup"]) + len(panel["loc"]) + len(panel["controls"]) + len(panel["text"])
+                self.assertGreater(left, 0, f"{key} passes BindingTest and GuardTest: set its Tab's public=True in "
+                                            f"gen_te_systems_window.TABS and take it off UNBOUND")
+
+
+# A panel's fixture: a wide layout, a section, a control row and a popup, as test_unbound_is_honest's mutation
+# checks plant them (the files' own runs are in the PR).
+FIXTURE = """types fixture
+{
+	type fx_wide = flowcontainer {
+		fx_section = {}
+		widget = {
+			using = te_own_country_only
+			fx_controls = {}
+		}
+	}
+	type fx_section = flowcontainer {
+		textbox = { text = "fx_label" }
+		@READ@
+	}
+	type fx_controls = flowcontainer {
+		button = { onclick = "[GetScriptedGui('x').Execute( GuiScope.SetRoot( Country.MakeScope ).End )]" }
+	}
+	type fx_picker_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'fx_picker')]"
+		}
+		blockoverride "popup_list" {
+			fx_controls = {}
+		}
+	}
+	type fx_help_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'fx_help')]"
+		}
+	}
+}
+"""
+
+
+def _fixture(read):
+    return file_types(FIXTURE.replace("@READ@", read), "fixture.gui")
+
+
+class MutationTest(unittest.TestCase):
+    """The checks BindingTest and GuardTest make, each on a planted read or
+    control: each fails where it should and passes where it shouldn't."""
+
+    def test_an_entry_read_fails(self):
+        found = markup_reads({"fx_wide"}, _fixture('textbox = { text = "[JournalEntry.GetCountry.GetName]" }'))
+        self.assertEqual([(f.where, f.what, f.world) for f in found], [("fx_section", "JournalEntry.GetCountry", False)])
+        self.assertEqual(found[0].line, 12)
+
+    def test_a_player_read_fails_unless_a_world_line_marks_it(self):
+        bare = markup_reads({"fx_wide"}, _fixture("visible = \"[GetPlayer.MakeScope.ScriptValue('y')]\""))
+        self.assertEqual([(f.what, f.world) for f in bare], [("GetPlayer", False)])
+        marked = markup_reads({"fx_wide"}, _fixture("# world: the year\n\t\tvisible = \"[GetPlayer.MakeScope.ScriptValue('y')]\""))
+        self.assertEqual([(f.what, f.world) for f in marked], [("GetPlayer", True)])
+        entry = markup_reads({"fx_wide"}, _fixture("# world: no\n\t\tvisible = \"[JournalEntry.IsActive]\""))
+        self.assertTrue(entry[0].world and is_entry_read(entry[0].what), "BindingTest fails it all the same")
+        self.assertTrue(is_entry_read("GetPlayerJournalEntry"))
+        own = markup_reads({"fx_wide"}, _fixture("widget = {\n\t\t\tusing = te_own_country_only\n"
+                                                 "\t\t\tvisible = \"[GetPlayer.IsAtWar]\"\n\t\t}"))
+        self.assertEqual(own, [], "a read under the guard is the player's own")
+
+    def test_an_unguarded_control_fails(self):
+        self.assertEqual(unguarded_controls({"fx_wide"}, _fixture("")), [], "fx_controls sits under the guard")
+        found = unguarded_controls({"fx_wide"}, _fixture("fx_controls = {}"))
+        self.assertEqual([(f.where, f.what) for f in found], [("fx_controls", "Execute")])
+
+    def test_an_opener_of_controls_fails(self):
+        found = unguarded_controls({"fx_wide"}, _fixture(
+            "button = { onclick = \"[GetVariableSystem.Set('te_popup', 'fx_picker')]\" }"))
+        self.assertEqual(len(found), 1)
+        self.assertIn("fx_picker, whose popup holds controls", found[0].what)
+        self.assertEqual(unguarded_controls({"fx_wide"}, _fixture(
+            "button = { onclick = \"[GetVariableSystem.Set('te_popup', 'fx_help')]\" }")), [], "a page only reads")
+        self.assertIn("no popup shows on", unguarded_controls({"fx_wide"}, _fixture(
+            "button = { onclick = \"[GetVariableSystem.Set('te_popup', 'fx_gone')]\" }"))[0].what)
+
+    def test_the_players_own_text_is_left_out(self):
+        loc = {"fx_label": "Arsenal", "fx_mine": "Our arsenal", "fx_theirs": "The country's arsenal",
+               "fx_says": "We hold [GetPlayer.GetName]"}
+        types = _fixture("textbox = { text = \"[SelectLocalization( Country.IsLocalPlayer, 'fx_mine', 'fx_theirs' )]\" }")
+        keys = panel_loc_keys({"fx_wide"}, types, loc)
+        self.assertEqual(keys, {"fx_label", "fx_theirs"})
+        self.assertEqual(personal_text(keys | {"fx_says"}, loc), {"fx_says": "We hold  "})
 
 
 if __name__ == "__main__":
