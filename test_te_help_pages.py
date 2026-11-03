@@ -13,7 +13,8 @@ te_help_button with the same onclick.
 A help body reads only GetPlayer, never JournalEntry, so a page opens from any
 host, whether or not the player holds the entry.
 
-To move another section, add its row to PAGES.
+Every tab of the Timeline Extended window has its page
+(test_every_system_with_a_tab_has_a_page): a new system's is one row in PAGES.
 """
 import collections
 import glob
@@ -85,6 +86,10 @@ PAGES = [
     # the milestones' generated headers (SpaceRaceHeaderTest)
     Page("space_race", ("te_sr_sec_how", ("te_sr_sec_how_colonies", "je_space_race_widget_howc_header")),
          "je_space_race_widget_how_header", ("sr_panel_how_open", "sr_panel_how_colonies_open"), ()),
+    # the panel's section and the Fossil Transition's nested one (the only one
+    # shown with the Global Warming rule off), one page
+    Page("global_warming", ("te_gw_sec_how", ("te_gw_transition_how_link", "rt_how_header")), "gw_how_header",
+         ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",)),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State
@@ -227,6 +232,13 @@ class PageTest(unittest.TestCase):
                                  {"direction": "vertical", "ignoreinvisible": "yes", "spacing": "4"})
                 self.assertNotIn("visible", own)
                 self.assertEqual(len(re.findall(rf"\bte_{page.key}_help_body = \{{", self.gui)), 1)
+
+    def test_every_system_with_a_tab_has_a_page(self):
+        """Every tab of the Timeline Extended window has its Help page, and
+        no page is for a system without one (gen_te_systems_window.TABS)."""
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(sorted(page.key for page in PAGES), sorted(tab.key for tab in gen.TABS))
+        self.assertEqual(len(PAGES), len({page.key for page in PAGES}))
 
     def test_every_page_opens(self):
         """Something opens each page (its link at least), and nothing opens a

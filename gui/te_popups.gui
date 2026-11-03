@@ -33,8 +33,8 @@
 ###                      cultural_hegemony, nuclear_weapons,
 ###                      strategic_reserve, seabed, covert_warfare, nation,
 ###                      budget_breakdown, united_nations, demographics,
-###                      tax_code, space_race (test_te_help_pages.py's
-###                      PAGES).
+###                      tax_code, space_race, global_warming
+###                      (test_te_help_pages.py's PAGES).
 ### --- end Help pages ------------------------------------------------------
 ###
 ### A popup has no journal entry of its own, so each body sits under the entry's
@@ -68,5 +68,6 @@ widget = {
 	te_demographics_help_popup = {}
 	te_tax_code_help_popup = {}
 	te_space_race_help_popup = {}
+	te_global_warming_help_popup = {}
 	### --- end Help pages ---------------------------------------------------
 }

@@ -26,8 +26,8 @@ REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open",
-         "rt_transition_closed", "rt_how_open"}
+FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed",
+         "rt_transition_closed"}
 OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
 MARKET_WIDE = ["fossil_fuel_tariffs"]
 NATIONAL = ["carbon_tax", "renewable_investment", "emission_standards", "climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
@@ -257,12 +257,30 @@ class PolicyRowTest(unittest.TestCase):
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_global_warming_works(self):
+        """On the Help page (te_global_warming_help_body): the climate's
+        topics under the Global Warming rule, then the Fossil Transition's,
+        which its section's own link opens too (te_gw_transition_how_link: with
+        the rule off How Global Warming Works is hidden). Both links are their
+        header alone; the two flags retired (test_te_help_pages.py)."""
         gui = _read(GUI)
-        how = _type_body(gui, "te_gw_sec_how")
-        notes = re.findall(r'gw_note = \{\s*text = "(\w+)"', how)
+        how = _type_body(gui, "te_global_warming_help_body")
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        climate = how[how.index(f'visible = "[{rule}]"'):how.index('text = "rt_how_header"')]
+        notes = re.findall(r'gw_note = \{\s*text = "(\w+)"', climate)
         self.assertGreaterEqual(len(notes), 6)
         self.assertTrue(all(n.startswith("gw_how_") for n in notes), notes)
-        self.assertIn("GetVariableSystem.Toggle('gw_how_open')", how)
+        transition = how[how.index('text = "rt_how_header"'):]
+        self.assertEqual(re.findall(r'gw_note = \{\s*text = "(\w+)"', transition),
+                         ["rt_how_laws", "rt_how_programmes", "rt_how_emissions"])
+        for section, title in (("te_gw_sec_how", "gw_how_header"), ("te_gw_transition_how_link", "rt_how_header")):
+            body = _type_body(gui, section)
+            with self.subTest(section=section):
+                self.assertIn(f'text = "{title}"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_global_warming')]\"", body)
+                self.assertNotIn("gw_note", body)
+        self.assertEqual(_type_body(gui, "te_gw_sec_transition").count("te_gw_transition_how_link = {}"), 1)
+        for flag in ("gw_how_open", "rt_how_open"):
+            self.assertNotIn(flag, gui)
         for sec in ("te_gw_overview_panel", "te_gw_sec_policies", "te_gw_sec_history"):
             body = _type_body(gui, sec)
             self.assertNotIn("gw_note", body, sec)
@@ -1246,9 +1264,13 @@ class MarketTabTest(unittest.TestCase):
         for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
             self.assertIn("scope = state", _top_level(sguis, name), name)
         # the tab's body aside: its gate and datacontext are the tab's, read
-        # through the player as in every host (test_te_system_tab_bodies.py)
+        # through the player as in every host (test_te_system_tab_bodies.py);
+        # and the Help page's body, whose rule gate reads the player, as a
+        # popup must (test_te_help_pages.py)
         text = _read(GUI)
         text = text.replace("type te_gw_tab_body = te_system_tab_frame {" + _type_body(text, "te_gw_tab_body"), "")
+        text = text.replace("type te_global_warming_help_body = flowcontainer {"
+                            + _type_body(text, "te_global_warming_help_body"), "")
         code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
         ambient = re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
         self.assertEqual(ambient, [])
