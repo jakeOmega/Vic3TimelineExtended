@@ -333,7 +333,7 @@ class TabTest(unittest.TestCase):
 VANILLA_LAWS = _path("vanilla_parsed", "common", "laws.json")
 VANILLA_IDEOLOGIES = _path("vanilla_parsed", "common", "ideologies.json")
 AI_TRIGGERS = ("decol_holds_colonial_empire", "decol_ai_regressive", "decol_ai_slaveholding",
-               "decol_ai_partner_holds_empire")
+               "decol_ai_partner_holds_empire", "decol_ai_colonial_laws", "decol_ai_illiberal")
 
 
 def _option(event, name):
@@ -381,7 +381,49 @@ class AiStanceTest(unittest.TestCase):
         self.assertNotIn(-10, [n for _, k, n in self.condemn if k == "add"])
         self.assertEqual(self._row(self.condemn, "NOT = { decol_holds_colonial_empire = yes }", "add"), 15)
         # An empire backs the colonial powers instead.
-        self.assertEqual(self._row(self.support, "decol_holds_colonial_empire = yes", "add"), 5)
+        self.assertEqual(self._row(self.support, "decol_holds_colonial_empire = yes", "add"), 10)
+
+    def test_more_likely_to_back_the_colonial_powers(self):
+        """Owner, 2026-11-03: the AI backs colonialism more often with a
+        colonizing law, an illiberal government, or an empire of its own or
+        a partner's. Support's adds; the event comment's table assumes these."""
+        for trigger, add in (("decol_ai_partner_holds_empire = yes", 8), ("decol_ai_colonial_laws = yes", 8),
+                             ("decol_ai_illiberal = yes", 8)):
+            with self.subTest(trigger=trigger):
+                self.assertEqual(self._row(self.support, trigger, "add"), add)
+        # Only Support reads the two new tests: Condemn and Neutral are as #1370 left them.
+        for rows in (self.condemn, self.neutral):
+            self.assertEqual([t for t, _, _ in rows if t in ("decol_ai_colonial_laws = yes", "decol_ai_illiberal = yes")], [])
+
+    def test_the_colonizing_laws_and_the_illiberal_ones(self):
+        laws = _block(self.triggers, "decol_ai_colonial_laws")
+        self.assertEqual(sorted(re.findall(r"has_law_or_variant = law_type:(law_\w+)", laws)),
+                         ["law_colonial_exploitation", "law_colonial_resettlement"])
+        body = _block(self.triggers, "decol_ai_illiberal")
+        # Every unelected Distribution of Power law and Outlawed Dissent, each
+        # with its variants (has_law_or_variant); not Censorship, most
+        # countries' starting law.
+        illiberal = re.findall(r"has_law_or_variant = law_type:(law_\w+)", _block(body, "OR", prefix=r""))
+        self.assertEqual(sorted(illiberal), sorted([
+            "law_autocracy", "law_oligarchy", "law_elder_council", "law_technocracy", "law_single_party_state",
+            "law_algorithmic_governance", "law_outlawed_dissent"]))
+        self.assertNotIn("has_law =", body + laws, "a bare has_law would miss a variant")
+        # A Council Republic is never illiberal here (owner, 2026-11-03), so a
+        # Soviet-style single-party state gains no Support from it.
+        self.assertRegex(body.strip(), r"^NOT = \{ has_law_or_variant = law_type:law_council_republic \}\s*OR = \{")
+        import json
+        with open(VANILLA_LAWS, encoding="utf-8") as f:
+            vanilla = json.load(f)
+        known = set(vanilla)
+        for path in glob.glob(_path("common", "laws", "*.txt")):
+            known |= set(re.findall(r"^(law_\w+) = \{", _read(path), re.M))
+        for law in illiberal + ["law_colonial_exploitation", "law_colonial_resettlement", "law_council_republic"]:
+            self.assertIn(law, known)
+            # Each named law is a parent, not itself a variant.
+            self.assertNotIn("parent", vanilla.get(law, ["=", {}])[1], law)
+        # Vanilla's variants of those laws are covered by their parents.
+        variants = sorted(k for k, v in vanilla.items() if v[1].get("parent", ["=", ""])[1] in illiberal)
+        self.assertEqual(variants, ["law_bakufu", "law_neo_absolutism", "law_organic_regulation"])
 
     def test_less_likely_for_a_stake_in_colonialism(self):
         for trigger in ("decol_ai_regressive = yes", "decol_ai_slaveholding = yes",
@@ -516,6 +558,47 @@ class AiStanceTest(unittest.TestCase):
         # The play-test list names it, with a fallback.
         playtest = _raw(_path("docs", "testing", "colonial-holdings-playtest.md"))
         self.assertRegex(playtest, r"\| `ai_condemn_factor_order` \|[^\n]*\| [^\n]*decol_ai_condemn_weight[^\n]*\|\n")
+
+
+
+class PrestigeShareTest(unittest.TestCase):
+    """Owner, 2026-11-03: each country's Colonial Empire tab says its share of
+    great-power prestige. Our Stance on Colonialism shows it for any country,
+    with the entry or without it, from a monthly global total, so the panel
+    walks no country."""
+
+    def test_the_global_monthly_total(self):
+        on_actions = _read(ON_ACTIONS)
+        self.assertIn("decol_gp_prestige_on_action", _block(on_actions, "on_monthly_pulse", prefix=r"^"))
+        body = _block(on_actions, "decol_gp_prestige_on_action", prefix=r"^")
+        self.assertIn("has_game_rule = decolonization_enabled", body)
+        self.assertIn("set_global_variable = { name = decol_gp_prestige_total value = decol_gp_prestige_sum }", body)
+        total = _block(_read(VALUES), "decol_gp_prestige_sum", prefix=r"^")
+        self.assertRegex(total, r"every_country = \{\s*limit = \{ country_rank >= rank_value:great_power \}\s*add = prestige\s*\}")
+        self.assertIn("min = 1", total)
+
+    def test_the_lines_figure(self):
+        share = _block(_read(VALUES), "decol_stance_disp_gp_share", prefix=r"^")
+        self.assertRegex(share.strip(), r"^value = -1\s*if = \{\s*limit = \{ country_rank >= rank_value:great_power \}")
+        self.assertRegex(share, r"if = \{\s*limit = \{ has_global_variable = decol_gp_prestige_total \}\s*"
+                                r"divide = global_var:decol_gp_prestige_total\s*\}\s*else = \{\s*divide = decol_gp_prestige_sum\s*\}")
+        self.assertIn("max = 1", share)
+
+    def test_the_line(self):
+        stance = _gui_type(_raw(GUI), "te_ce_sec_stance")
+        self.assertIn('text = "je_colonial_empire_stance_share_label"', stance)
+        for key, test in (("je_colonial_empire_stance_share", "GreaterThanOrEqualTo_CFixedPoint"),
+                          ("je_colonial_empire_stance_share_none", "LessThan_CFixedPoint")):
+            with self.subTest(key=key):
+                self.assertRegex(stance, rf"visible = \"\[{test}\( Country\.MakeScope\.ScriptValue\('decol_stance_disp_gp_share'\), "
+                                         rf"'\(CFixedPoint\)0' \)\]\"\s*text = \"{key}\"")
+        loc = _loc()
+        self.assertIn("ScriptValue('decol_stance_disp_gp_share')|%0", loc["je_colonial_empire_stance_share"])
+        # It reads the shown Country, never the player or the entry.
+        for key in ("je_colonial_empire_stance_share", "je_colonial_empire_stance_share_tt_ours",
+                    "je_colonial_empire_stance_share_tt_theirs", "je_colonial_empire_stance_share_none_tt"):
+            self.assertNotIn("GetPlayer", loc[key])
+            self.assertNotIn("JournalEntry", loc[key])
 
 
 if __name__ == "__main__":

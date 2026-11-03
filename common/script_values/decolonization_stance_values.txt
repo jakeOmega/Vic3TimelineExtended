@@ -82,6 +82,44 @@ decol_stance_disp_months_left = {
 	}
 }
 
+# ---- Our share of great-power prestige (te_ce_sec_stance) ------------------
+# How much a stance weighs (owner, 2026-11-03): the shares of the great powers
+# condemning an empire add up to the share its two escalations fire on
+# (colonial_gp_condemner_prestige_share, whose pool also counts the empire).
+
+# Every great power's prestige, summed once a month into
+# global_var:decol_gp_prestige_total (decol_gp_prestige_on_action, from the
+# global on_monthly_pulse), so the panel walks no country. Floored at 1.
+decol_gp_prestige_sum = {
+	value = 0
+	every_country = {
+		limit = { country_rank >= rank_value:great_power }
+		add = prestige
+	}
+	min = 1
+}
+
+# The line's figure, read every frame: a great power's prestige as a share of
+# every great power's (0-1, its own included), or -1 below great-power rank,
+# where the stance lies dormant and the country holds no share. Today's
+# prestige over the month's total, so it is capped at 1; before the first
+# monthly sum (an older save's first month) it walks the countries itself.
+decol_stance_disp_gp_share = {
+	value = -1
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = prestige
+		if = {
+			limit = { has_global_variable = decol_gp_prestige_total }
+			divide = global_var:decol_gp_prestige_total
+		}
+		else = {
+			divide = decol_gp_prestige_sum
+		}
+		max = 1
+	}
+}
+
 # ---- The Colonial Powers (te_ce_sec_powers): who is one, and its row -------
 
 # A colonial power's size, the list's order: the people of its colonies

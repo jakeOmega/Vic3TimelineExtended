@@ -1688,16 +1688,26 @@ decolonization_events.14 = {
 	# regressive until it changes the law, and slavery halves Condemn again.
 	# The adds come first and the factors last, so no add lifts a factor = 0
 	# (the tests are in decolonization_stance_triggers.txt; self-check
-	# ai_condemn_factor_order). Condemn : Neutral : Support for a power without
-	# colonies (Condemn 26 to 39 with the adds; Support 3 beside a friendly
-	# colonial holder):
-	#   typical                   26-39     : 1 : 0-3   Condemn 87-98%
-	#   regressive                13-19.5   : 5 : 0-3   62-80%
-	#   slaveholding              6.5-9.75  : 5 : 0-3   45-66%
-	#   beside an empire          13-19.5   : 1 : 5-8   59-76%
-	#   regressive and beside     6.5-9.75  : 5 : 5-8   33-49%
-	#   slaveholding and beside   3.25-4.88 : 5 : 5-8   20-33%
-	# An empire: 0 : 1 (5 if regressive) : 5-13.
+	# ai_condemn_factor_order). Support gains 8 each for a colonizing law, an
+	# illiberal government and a partner of an empire (owner, 2026-11-03: the
+	# AI backs colonialism more often with those). Condemn : Neutral : Support
+	# for a power without colonies (Condemn 26 to 39 with the adds; Support 3
+	# beside a friendly colonial holder), with Condemn's and Support's shares:
+	#   typical                     26-39      : 1 : 0-3     87-98%, 0-10%
+	#   illiberal, or Resettlement  26-39      : 1 : 8-11    68-81%, 17-29%
+	#   both                        26-39      : 1 : 16-19   57-70%, 29-41%
+	#   regressive                  13-19.5    : 5 : 0-3     62-80%, 0-14%
+	#   Exploitation (regressive)   13-19.5    : 5 : 8-11    45-60%, 25-38%
+	#   Exploitation, illiberal     13-19.5    : 5 : 16-19   35-48%, 40-51%
+	#   slaveholding                6.5-9.75   : 5 : 0-3     45-66%, 0-21%
+	#   slaveholding, illiberal     6.5-9.75   : 5 : 8-11    29-43%, 35-49%
+	#   beside an empire            13-19.5    : 1 : 8-11    52-68%, 28-44%
+	#   beside, illiberal           13-19.5    : 1 : 16-19   39-53%, 44-58%
+	#   beside, regressive          6.5-9.75   : 5 : 8-11    29-43%, 35-49%
+	#   beside, slaveholding        3.25-4.88  : 5 : 8-11    17-27%, 45-57%
+	# An empire: 0 : 1 (5 if regressive) : 10-13, and 8 more for each of a
+	# colonizing law, an illiberal government and a partner empire: Support
+	# 91-93%, 67-72% when regressive, 78-81% under Colonial Exploitation.
 	option = {
 		name = decolonization_events.14.a
 		trigger = { decol_stance_affordable = yes }
@@ -1758,7 +1768,7 @@ decolonization_events.14 = {
 				factor = 0.5
 			}
 			# Nor one whose ally, defensive-pact or bloc partner, subject or
-			# overlord runs an empire: half the weight (Support +5).
+			# overlord runs an empire: half the weight (Support +8).
 			modifier = {
 				trigger = { decol_ai_partner_holds_empire = yes }
 				factor = 0.5
@@ -1806,12 +1816,12 @@ decolonization_events.14 = {
 		show_as_unavailable = { always = yes }
 		ai_chance = {
 			base = 0
-			# An empire backs the colonial powers
+			# An empire backs the colonial powers (5 before 2026-11-03)
 			modifier = {
 				trigger = {
 					decol_holds_colonial_empire = yes
 				}
-				add = 5
+				add = 10
 			}
 			modifier = {
 				trigger = {
@@ -1826,10 +1836,23 @@ decolonization_events.14 = {
 				add = 3
 			}
 			# And so does a partner of one: stand by our ally's empire
-			# (option A's factor)
+			# (option A's factor; 5 before 2026-11-03)
 			modifier = {
 				trigger = { decol_ai_partner_holds_empire = yes }
-				add = 5
+				add = 8
+			}
+			# A power whose own Colonization law founds colonies (Colonial
+			# Resettlement or Colonial Exploitation) backs those who hold them
+			modifier = {
+				trigger = { decol_ai_colonial_laws = yes }
+				add = 8
+			}
+			# And so does an illiberal one: an unelected government, or one
+			# that outlaws dissent, has little use for self-determination (a
+			# Council Republic never counts: decol_ai_illiberal)
+			modifier = {
+				trigger = { decol_ai_illiberal = yes }
+				add = 8
 			}
 			modifier = {
 				trigger = { NOT = { decol_stance_ai_can_hold = yes } }

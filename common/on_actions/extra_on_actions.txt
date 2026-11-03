@@ -321,6 +321,7 @@ on_monthly_pulse = {
 	on_actions = {
 		city_rank_on_action
 		global_warming_events_on_action
+		decol_gp_prestige_on_action
 	}
 }
 
@@ -2018,6 +2019,21 @@ international_relations_events_on_action = {
 					trigger_event = { id = nuclear_weapon_events.22 }
 				}
 			}
+		}
+	}
+}
+
+# ============================================================================
+# DECOLONIZATION - the great powers' prestige, once a month (global scope)
+# ============================================================================
+# Every great power's prestige, summed for the Colonial Empire tab's share
+# line (decol_stance_disp_gp_share, decolonization_stance_values.txt), so the
+# panel divides by a stored total instead of walking every country each frame.
+decol_gp_prestige_on_action = {
+	effect = {
+		if = {
+			limit = { has_game_rule = decolonization_enabled }
+			set_global_variable = { name = decol_gp_prestige_total value = decol_gp_prestige_sum }
 		}
 	}
 }
