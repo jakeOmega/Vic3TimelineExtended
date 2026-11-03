@@ -267,22 +267,42 @@ class FlagTest(unittest.TestCase):
                     self.assertLessEqual(self.flat.count(shown_when_unset), 1,
                                          "an _open flag's unset side is drawn once (its header's arrow)")
 
-    def test_sections_open_and_how_it_works_collapsed(self):
-        """Rule 1: the live sections start open; How Demographics Works starts collapsed (rule 7)."""
-        for section in COUNTRY[1:] + STATE[1:] + list(HOW.values()):
+    def test_sections_open(self):
+        """Rule 1: the live sections start open."""
+        for section in COUNTRY[1:] + STATE[1:]:
             body = _type_body(self.widgets, section)
             header = _instances(body, "te_demog_section_header")
             with self.subTest(section=section):
                 self.assertEqual(len(header), 1, "one header")
                 flag, = _toggles(header[0])
-                self.assertTrue(flag.endswith("_open" if section in HOW.values() else "_closed"), flag)
+                self.assertTrue(flag.endswith("_closed"), flag)
+
+    def test_how_it_works_is_a_link_on_both_hosts(self):
+        """How Demographics Works is its header alone on the tab and on the state subtab, and both open the one Help
+        page (te_demographics_help_popup, on te_popup = help_demographics), whose state topics come last under their
+        own subheading; the two collapse flags retired with the content (test_te_help_pages.py)."""
+        for section in HOW.values():
+            body = _type_body(self.widgets, section)
+            with self.subTest(section=section):
+                self.assertEqual(len(_instances(body, "te_demog_section_header")), 1, "one header")
+                self.assertEqual(_toggles(body), [])
+                self.assertIn('text = "te_demog_sec_how"', body)
+                self.assertIn("onclick = \"[GetVariableSystem.Set('te_popup', 'help_demographics')]\"", body)
+                self.assertNotIn("te_demog_note", body)
+        for flag in ("te_demog_how_open", "te_demog_st_how_open"):
+            self.assertNotIn(flag, self.widgets)
+        page = _type_body(self.widgets, "te_demographics_help_body")
+        state = page.index('text = "te_demog_how_sub_state"')
+        for key in ("te_demog_how_gini_state", "te_demog_how_modifiers"):
+            self.assertGreater(page.index(f'"{key}"'), state, key)
+        self.assertEqual(page.count('text = "te_demog_how_sources"'), 1)
 
     def test_the_hosts_keep_their_own_flags(self):
         country = set()
-        for section in COUNTRY + [HOW["te_demog_tab_sections"]]:
+        for section in COUNTRY:
             country |= set(_toggles(_type_body(self.widgets, section)))
         state = set()
-        for section in STATE + [HOW["te_state_demog_content"]]:
+        for section in STATE:
             state |= set(_toggles(_type_body(self.widgets, section)))
         self.assertFalse(country & state, "collapsing a section on one host leaves the other alone")
         for flag in state:

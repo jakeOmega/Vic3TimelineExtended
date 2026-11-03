@@ -32,7 +32,7 @@
 ###                      Pages: banking, grand_monuments, colonial_empire,
 ###                      cultural_hegemony, nuclear_weapons,
 ###                      strategic_reserve, seabed, covert_warfare, nation,
-###                      budget_breakdown, united_nations
+###                      budget_breakdown, united_nations, demographics
 ###                      (test_te_help_pages.py's PAGES).
 ### --- end Help pages ------------------------------------------------------
 ###
@@ -64,5 +64,6 @@ widget = {
 	te_nation_help_popup = {}
 	te_budget_breakdown_help_popup = {}
 	te_united_nations_help_popup = {}
+	te_demographics_help_popup = {}
 	### --- end Help pages ---------------------------------------------------
 }

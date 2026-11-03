@@ -11,7 +11,8 @@
 ###
 ### The order: the people's health (the overview, Causes of Death, the pyramid), then the levers (Work and Retirement,
 ### Longevity, Family Policy), then the record (History), with the per-state detail last (Wealth, Where People Live,
-### States) and How Demographics Works collapsed at the foot. The Census Data window takes the tab's order in three
+### States) and How Demographics Works at the foot, a link to the Help page (te_demographics_help_popup, in
+### gui/te_popups.gui; the state subtab's links to the same page). The Census Data window takes the tab's order in three
 ### columns. The state subtab takes the same order, less the sections a state has no figures for (Family Policy,
 ### History, Where People Live, States), and with one of its own after Wealth: the state's Modifiers, the nine standing
 ### modifiers the census gives it, which its modifier rows leave out. test_demographics_layout.py holds the orders, the
@@ -179,7 +180,7 @@ types te_demographics_layout
 		blockoverride "tab_open_journal" {}
 	}
 
-	### The subtab, at a fixed 520 (rule 8). A state with no census shows "Census pending" and the collapsed explanation.
+	### The subtab, at a fixed 520 (rule 8). A state with no census shows "Census pending" and the link to the Help page.
 	type te_state_demog_content = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter

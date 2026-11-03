@@ -73,6 +73,9 @@ PAGES = [
          ("te_budget_chart_how_open",), ()),
     Page("united_nations", ("te_un_sec_how",), "je_un_how_header",
          ("un_how_open",), ("te_un_tab_body",)),
+    # the tab's and the state subtab's sections, one page; no host has a header
+    Page("demographics", ("te_demog_sec_how", "te_state_demog_how"), "te_demog_sec_how",
+         ("te_demog_how_open", "te_demog_st_how_open"), ()),
 ]
 
 # What a help body may not read: a popup has no journal entry, Country, State
