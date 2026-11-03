@@ -4,7 +4,7 @@ Vanilla's Census Data window (gui/pop_browser_panel.gui, the pop browser) lists
 the pops of whichever country it was opened for. The mod renames it National
 Info ("French National Info" for France) and adds a strip over it: Pops
 (vanilla's window), then a tab for each system another country's panel may show
-(gen_te_systems_window.TABS' public tabs: Demographics so far), generated into
+(gen_te_systems_window.TABS' public tabs, Demographics among them), generated into
 gui/te_national_info_generated.gui (test_national_info.py holds what it writes).
 Demographics is the census of that same country, from the sections the
 Population panel's Demographics tab draws.
@@ -171,9 +171,9 @@ class OverrideTest(unittest.TestCase):
 
 
 def _template(text, name):
-    m = re.search(rf'^template {name} \{{\n\tvisible = "\[(.*)\]"\n\}}', text, re.M)
+    m = re.search(rf'^template {name} \{{\n\tvisible = (?:"\[(.*)\]"|(yes|no))\n\}}', text, re.M)
     assert m, f"no template {name}"
-    return m.group(1)
+    return m.group(1) or m.group(2)
 
 
 class StripTest(unittest.TestCase):
@@ -190,13 +190,17 @@ class StripTest(unittest.TestCase):
         row = block_from(self.text, self.text[:self.text.index("te_ni_strips = {}")].rindex("hbox = {"))
         self.assertIn("using = te_ni_strip_shown", row)
         self.assertNotIn("tab_buttons", self.text, "the strip is generated")
-        # Demographics the one public tab: the strip shows while its rule runs the census
-        self.assertEqual(_template(self.generated, "te_ni_strip_shown"),
-                         "GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( "
-                         "Country.MakeScope ).End )")
+        # the strip shows while the public tabs' strip gates allow, Demographics' among them: while its
+        # rule runs the census
+        strip_shown = gen.ni_strip_shown()
+        self.assertEqual(_template(self.generated, "te_ni_strip_shown"), strip_shown or "yes")
+        if strip_shown is not None:
+            self.assertIn("GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( "
+                          "Country.MakeScope ).End )", strip_shown)
         strip = block_from(self.generated, self.generated.index("type te_ni_strips"))
-        self.assertEqual(set(re.findall(r'blockoverride "(\w+?)_button', strip)), {"first", "second"},
-                         "the other slots stay hidden")
+        keys = 1 + len(gen.ni_tabs())
+        self.assertEqual(set(re.findall(r'blockoverride "(\w+?)_button', strip)),
+                         set(gen.SLOTS[:min(keys, gen.NI_PER_STRIP)]), "a slot a tab, the rest hidden")
         self.assertIn('text = "te_pop_browser_tab_pops"', strip)
         self.assertIn('text = "te_window_tab_demographics"', strip)
 
@@ -212,12 +216,14 @@ class StripTest(unittest.TestCase):
     def test_the_tabs_take_the_place_of_vanillas_rows(self):
         # vanilla's header row and its filters, charts and table: each shown exactly while Pops is
         self.assertEqual(self.text.count("using = te_ni_pops_selected"), 2)
-        self.assertEqual(_template(self.generated, "te_ni_pops_selected"), f"Not( {SHOWN} )")
+        self.assertEqual(_template(self.generated, "te_ni_pops_selected"), gen.ni_pops_selected())
+        self.assertIn(SHOWN, gen.ni_pops_selected(), "Demographics shown is one way Pops isn't")
         content = block_from(self.text, self.text.index('name = "te_ni_content"') - 40)
         self.assertIn("using = te_ni_content_shown", content)
         self.assertIn("te_ni_tabs = {}", content)
         self.assertEqual(self.text.count("te_ni_tabs = {}"), 1)
-        self.assertEqual(_template(self.generated, "te_ni_content_shown"), SHOWN)
+        self.assertEqual(_template(self.generated, "te_ni_content_shown"), gen.ni_any_shown())
+        self.assertEqual(gen.ni_pops_selected(), f"Not( {gen.ni_any_shown()} )")
         # the census: the player's own country's mount and another country's, each the browser's three columns
         self.assertNotIn("te_demog_browser_sections", self.text)
         self.assertEqual(self.generated.count("te_demog_browser_sections = {}"), 2)
@@ -235,7 +241,7 @@ class StripTest(unittest.TestCase):
     def test_the_window_keeps_its_country(self):
         self.assertIn('datacontext = "[PopBrowserPanel.GetCountry]"', self.text)
         self.assertNotIn("GetPlayer", self.text, "the window's tabs read its own country")
-        self.assertEqual([t.key for t in gen.ni_tabs()], ["demographics"])
+        self.assertIn("demographics", [t.key for t in gen.ni_tabs()])
 
 
 class NameTest(unittest.TestCase):

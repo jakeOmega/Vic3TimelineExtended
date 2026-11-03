@@ -236,6 +236,7 @@ class DemographicsStoreTests(unittest.TestCase):
         self.assertIn('te_dg_hist', out)
         self.assertIn('break@', out)
         self.assertIn(f'break@4: {YEAR} -> {YEAR - 9}', out, 'years, not months')
+        self.assertNotIn('frozen', out, "a live store, on its own clock: the years, not te_hist's months")
 
     def test_its_frozen_store_out_of_order_fails(self):
         broken, out = _run([_ordered(1, NOW)], [_ordered(100, YEAR), _rotated(200, YEAR - 20)])
