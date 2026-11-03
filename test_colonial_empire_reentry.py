@@ -119,11 +119,15 @@ class PassTests(unittest.TestCase):
 
     def test_adds_only_after_a_whole_month(self):
         due = _branch(PASS, "ce_reentry_due = yes")
-        waited = _branch(due, "has_variable = ce_reentry_waiting")
+        # The mark names the country: a revolution's winner holds a fresh record
+        # the engine activates itself, so a mark inherited from the loser must
+        # not add on top of it.
+        waited = _branch(due, "var:ce_reentry_waiting ?= scope:ce_reentry_country")
         self.assertIn("add_journal_entry = { type = je_colonial_empire }", _norm(waited))
         self.assertIn("remove_variable = ce_reentry_waiting", waited)
         # The first month marks, and adds nothing.
-        self.assertRegex(due, r"\}\s*else = \{\s*set_variable = ce_reentry_waiting\s*\}")
+        self.assertRegex(due, r"\}\s*else = \{\s*set_variable = \{ name = ce_reentry_waiting "
+                              r"value = scope:ce_reentry_country \}\s*\}")
         # The only add in the pass is the one behind the month's mark.
         self.assertEqual(len(re.findall(r"add_journal_entry\s*=\s*\{", PASS)), 1)
 

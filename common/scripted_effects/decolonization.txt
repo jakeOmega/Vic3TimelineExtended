@@ -904,14 +904,17 @@ colonial_empire_clear_path_months = {
 #      is_shown_when_inactive and possible, which add_journal_entry skips, and
 #      what the add needs on top.
 #   3. A whole month first. The first pass that finds the country due marks it
-#      (ce_reentry_waiting), and the next adds the entry and logs the add. In
-#      that month the engine activates an inactive record whose possible has
-#      turned true (a country that has never run the entry holds one), so the
-#      pass never races it; and a colony test that holds for a month and no
-#      longer does not start an entry whose voluntary end (.206) would follow
-#      at once. The mark goes whenever the country stops being due, the entry
-#      running among the reasons. A revolution's winner that inherits a
-#      half-counted month adds the entry a month early, which is harmless.
+#      (ce_reentry_waiting, naming the country), and the next adds the entry
+#      and logs the add. In that month the engine activates an inactive record
+#      whose possible has turned true (a country that has never run the entry
+#      holds one), so the pass never races it; and a colony test that holds
+#      for a month and no longer does not start an entry whose voluntary end
+#      (.206) would follow at once. The mark goes whenever the country stops
+#      being due, the entry running among the reasons. It names the country for a
+#      revolution's winner: it holds fresh records for an entry that has
+#      ended, which the engine activates itself, so a mark it inherited from
+#      the loser (naming the dead loser) must not add the entry on top of one.
+#      It starts its own month instead.
 #
 # If the self-check reads BROKEN, add_journal_entry cannot bring back a type
 # the country has finished. The fallback: the entry never ends on a failure,
@@ -949,7 +952,7 @@ ce_reentry_monthly = {
 	if = {
 		limit = { ce_reentry_due = yes }
 		if = {
-			limit = { has_variable = ce_reentry_waiting }
+			limit = { var:ce_reentry_waiting ?= scope:ce_reentry_country }
 			remove_variable = ce_reentry_waiting
 			add_journal_entry = { type = je_colonial_empire }
 			set_variable = { name = ce_reentry_added value = scope:ce_reentry_country }
@@ -961,7 +964,7 @@ ce_reentry_monthly = {
 			debug_log = "TE_CE_REENTRY: added je_colonial_empire to [THIS.GetCountry.GetNameNoFormatting] country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			set_variable = ce_reentry_waiting
+			set_variable = { name = ce_reentry_waiting value = scope:ce_reentry_country }
 		}
 	}
 	else_if = {
