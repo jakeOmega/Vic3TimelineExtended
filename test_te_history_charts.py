@@ -660,6 +660,23 @@ class ViewerTest(unittest.TestCase):
         self.assertIn("te_history_marker_legend = {", bank)
         self.assertEqual(bank.count("using = fontsize_medium"), 2)
 
+    def test_a_key_waits_for_the_first_sample(self):
+        """Banking's and Demographics' keys hide until the store holds a
+        sample, as their sections' instances did before the keys became types
+        (the visible moved into the type); Cultural Hegemony's always shows."""
+        lists = {"banking": "JournalEntry.GetCountry.MakeScope.GetList('te_hist')",
+                 "demographics": "Country.MakeScope.GetList('te_dg_hist')"}
+        for system, (name, _height) in gen.KEYS.items():
+            body = _type_body(_strip_comments(_read(os.path.join(REPO, SECTIONS[system]))), name)
+            own = [ln.strip() for ln in body.split("\n") if re.match(r"^\t\t\w", ln)]   # the type's own lines
+            with self.subTest(system=system):
+                visibles = [ln for ln in own if ln.startswith("visible = ")]
+                if system in lists:
+                    self.assertEqual(visibles, [f'visible = "[Not( IsDataModelEmpty( {lists[system]} ) )]"'])
+                else:
+                    self.assertEqual(visibles, [])
+                    self.assertNotIn("visible", body)
+
 
 class GeneratorTest(unittest.TestCase):
     def test_generated_file_is_current(self):
