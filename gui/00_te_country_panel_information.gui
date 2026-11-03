@@ -1071,6 +1071,13 @@ types te_country_panel_information
 				onclick = "[GetVariableSystem.Set('te_systems_window_tab', 'nation')]"
 				onclick = "[GetVariableSystem.Set('com_open_window', 'te_systems_window')]"
 			}
+			button_icon_goto = {
+				visible = "[Not( Country.IsLocalPlayer )]"
+				size = { 25 25 }
+				tooltip = "te_nation_panel_goto_other_tt"
+				onclick = "[GetVariableSystem.Set('te_ni_tab', 'nation')]"
+				onclick = "[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]"
+			}
 			textbox = {
 				text = "te_nation_panel_line"
 				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'te_nation_panel_line_tt', 'te_nation_panel_line_other_tt' )]"

@@ -9,11 +9,11 @@
 ###
 ### The strip, its selection templates and the tabs' column are generated (gui/te_national_info_generated.gui, by
 ### scripts/generators/gen_te_systems_window.py from its TABS registry: Pops, then the public tabs; never edit it).
-### The strip shows while a public tab could be on it (te_ni_strip_shown), so with their rules off the window is
-### vanilla's. The tab shown is a client-side value, te_ni_tab (GetVariableSystem, never saved): the last one chosen
-### while it is open for the window's country, otherwise Pops, in place of the filters, charts and table. Every tab
-### reads the window's Country (PopBrowserPanel.GetCountry): the player's own shows its controls, another country
-### its figures and none of the player's controls. The _show state clears te_ni_chart, another country's chart viewer.
+### The strip shows while a public tab could be on it (te_ni_strip_shown): always, since no game rule turns Nation
+### off. The tab shown is a client-side value, te_ni_tab (GetVariableSystem, never saved): the last one chosen while
+### it is open for the window's country, otherwise Pops, in place of the filters, charts and table. Every tab reads
+### the window's Country (PopBrowserPanel.GetCountry): the player's own shows its controls, another country its
+### figures and none of the player's controls. The _show state clears te_ni_chart, another country's chart viewer.
 ### END MOD ###
 # The spreadsheet cells are a fixed size in order to be optimized
 @spreadsheet_width = 1381

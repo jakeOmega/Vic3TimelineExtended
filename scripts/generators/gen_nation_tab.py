@@ -677,7 +677,7 @@ def _any_of(names):
 
 def _shown(value):
     """A `visible` that holds while a generated count is above zero."""
-    return f"visible = \"[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )]\""
+    return f"visible = \"[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )]\""
 
 
 def type_count(kind):
@@ -810,9 +810,9 @@ def generated_loc(types):
                 key = row_key(kind, row)
                 if row == "status":
                     loc[key] = f"${kind}$: #v $te_nation_in_force$#!"
-                    loc[key + "_tt"] = f"${kind}_desc$\\n\\n[GetPlayer.GetModifier.GetFullEntryDescFor('{kind}')]"
+                    loc[key + "_tt"] = f"${kind}_desc$\\n\\n[Country.GetModifier.GetFullEntryDescFor('{kind}')]"
                 else:
-                    loc[key] = f"${kind}$: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
+                    loc[key] = f"${kind}$: #v [Country.GetModifier.GetValueWithBreakdownFor('{kind}')]#!"
                     scope = next((s for s in _NOTE_SCOPES if kind.startswith(s + "_")), None)
                     note = f"\\n\\n$te_nation_note_{scope}$" if scope else ""
                     loc[key + "_tt"] = f"${kind}_desc${note}"
@@ -830,7 +830,11 @@ _SHOWN = ("visible = \"[GreaterThan_int32(GetDataModelSize(Country.GetTimedModif
 # Under the list, while it leaves one of the country's modifiers out: how many,
 # and where they went (2026-10-27 audit, NAT-1). For the player's own country
 # the goto opens the window on the Nation tab (rule 9's goto, as the state
-# view's Grand Monument card does); another country's have no tab to go to.
+# view's Grand Monument card does). For another country it opens National Info
+# on that country's Nation tab (spec 2026-11-02-charts-help-national-info
+# § 6.2, way in 3): the window's tab first (te_ni_tab, PR F1's key), then
+# vanilla's way into the window, as the country's Politics tab opens it
+# (country_politics_panel.gui's POP_BROWSER button).
 _WHERE = [
     "flowcontainer = {",
     f"\tvisible = \"[GreaterThan_CFixedPoint( {_HIDDEN}, '(CFixedPoint)0' )]\"",
@@ -846,6 +850,13 @@ _WHERE = [
     "\t\ttooltip = \"te_nation_panel_goto_tt\"",
     "\t\tonclick = \"[GetVariableSystem.Set('te_systems_window_tab', 'nation')]\"",
     "\t\tonclick = \"[GetVariableSystem.Set('com_open_window', 'te_systems_window')]\"",
+    "\t}",
+    "\tbutton_icon_goto = {",
+    "\t\tvisible = \"[Not( Country.IsLocalPlayer )]\"",
+    "\t\tsize = { 25 25 }",
+    "\t\ttooltip = \"te_nation_panel_goto_other_tt\"",
+    "\t\tonclick = \"[GetVariableSystem.Set('te_ni_tab', 'nation')]\"",
+    "\t\tonclick = \"[InformationPanelBar.OpenPopBrowserPanel( Country.Self )]\"",
     "\t}",
     "\ttextbox = {",
     "\t\ttext = \"te_nation_panel_line\"",
@@ -870,9 +881,10 @@ def generated_panel(vanilla_text=None):
     filtered: the list shown while a modifier the Nation tab doesn't show is
     left, the items the tab shows hidden (te_nation_hidden_filter), the list
     ignoring the hidden ones, and under it a line counting them, with a goto
-    to the tab for the player's own country (_WHERE). The header keeps
-    vanilla's test, since the list or the line shows whenever the country has
-    a modifier. Raises if vanilla moved a line the filter hooks onto."""
+    to the tab: the window's for the player's own country, National Info's for
+    another (_WHERE). The header keeps vanilla's test, since the list or the
+    line shows whenever the country has a modifier. Raises if vanilla moved a
+    line the filter hooks onto."""
     text = VANILLA_PANEL.read_text(encoding="utf-8-sig") if vanilla_text is None else vanilla_text
     lines = text.splitlines()
     head = [line for line in lines if re.match(r"@panel_width\w* = ", line)]
