@@ -32,15 +32,23 @@ A type's feeders are the modifiers above (lists and rows) whose block carries
 it, and its row shows while the country holds one. The test holds every field
 of every such modifier to exactly one of these lines, the same way.
 
+A third places the hidden names (the lists', the rows' and the budget
+carriers') in HIDDEN_GROUPS, one system's modifiers each. A monthly pulse
+stores how many of each group's modifiers a country holds, and the country
+panel's filter compares a row's name only with the groups the country holds
+(owner, 2026-11-03: the Information tab lagged at 260 comparisons a row).
+
 Run after changing the registry:
-    python3 scripts/generators/gen_nation_tab.py
+    python3 scripts/generators/gen_nation_tab.py [--check]
 It writes gui/te_nation_generated.gui,
 common/script_values/te_nation_generated_values.txt,
+common/scripted_effects/te_nation_generated_effects.txt,
 localization/english/te_nation_generated_l_english.yml and
 gui/00_te_country_panel_information.gui (vanilla's Information tab type, copied
 from test_fixtures/vanilla_gui/country_panel.gui with the list's filter added);
-never hand-edit them. After a vanilla patch, replace the fixture with the new
-vanilla file and run this again.
+never hand-edit them. --check writes nothing and exits 1 if one is stale.
+After a vanilla patch, replace the fixture with the new vanilla file and run
+this again.
 """
 from __future__ import annotations
 
@@ -60,6 +68,7 @@ VALUES_OUT = ROOT / "common" / "script_values" / "te_nation_generated_values.txt
 LOC_OUT = ROOT / "localization" / "english" / "te_nation_generated_l_english.yml"
 LOC_CATEGORY = "NATION_GENERATED"
 PANEL_OUT = ROOT / "gui" / "00_te_country_panel_information.gui"
+EFFECTS_OUT = ROOT / "common" / "scripted_effects" / "te_nation_generated_effects.txt"
 VANILLA_PANEL = ROOT / "test_fixtures" / "vanilla_gui" / "country_panel.gui"
 PANEL_TYPE = "country_panel_information_content"
 MOD_OPEN = "### MOD: Nation tab"
@@ -273,6 +282,88 @@ NOT_ON_COUNTRY = {
     "te_demog_um_nexus_*": "the Mind Upload Nexus's building",
     "te_construction_market_capacity_modifier": "construction sites",
 }
+
+# The hidden names by group (owner, 2026-11-03: the Information tab lagged).
+# The country panel's filter compares a row's name with every hidden name,
+# every frame (gui_modding_guide.md gotchas #40, #42), so a monthly pulse
+# writes one country variable per group, te_nation_hid_<group>, the count of
+# the group's modifiers the country holds, and a row is compared only with
+# the names of groups whose count is above 0. A group is one system's
+# modifiers, the ones a country carries together, kept small where they are
+# common: in the owner's 1910 save (291 countries) each of the first six
+# groups is on 190 to 240 countries, and ten groups are on none.
+# Commonest first, so a row the filter hides stops early if `Or` stops at its
+# first true argument. Every hidden name (the lists', the rows' and the budget
+# carriers') matches exactly one entry (test_nation_tab.py), at most 32 to a
+# group so the filter stays shallow; a new one fails the suite until it has a
+# line here.
+HIDDEN_GROUPS = {
+    "living_standards": ("sol_expectations_*",),
+    # The score rows' modifiers, near-universal: the courts, inheritance, the
+    # construction market and its cost, the tech spread
+    "scores": (
+        "te_judicial_independence", "te_jud_*", "inh_*", "construction_cost_scaling*", "overinvestment_modifier",
+        "too_much_private_construction", "te_construction_market_private_share_modifier",
+        "global_technological_development",
+    ),
+    "agriculture": ("agdiff_*",),
+    # The health bill, family limitation, the life-expectancy gap, pensions
+    "demography": ("te_demog_health_bill_*", "te_demog_family_limitation", "te_demog_lx_gap_politics",
+                   "te_demog_pension_*"),
+    # Membership, dues and the UN's programs' costs and grants
+    "united_nations": (
+        "un_membership_benefits_modifier", "un_nonmember_pariah_*", "un_dues_modifier",
+        "un_peacekeeping_contributor_cost", "un_development_contributor_cost", "un_mission_service_cost",
+        "un_dev_fund_*", "un_electoral_observers_modifier", "un_mandate_war_support_modifier",
+    ),
+    # The nonproliferation regime, the conventions on the bomb, the taboo, the program's upkeep
+    "nuclear_order": ("un_regime_npt_*", "un_nuclear_ban_modifier", "un_physical_protection_modifier",
+                      "un_npt_disarmament_modifier", "nd_taboo_*", "nd_upkeep_cost"),
+    # Barracks doctrine, heir education, Liquid Democracy, the Algorithmic Mandate
+    "governance": ("te_officer_academies_standing", "te_political_commissars_indoctrination", "heir_ed_*",
+                   "te_continuous_vote", "algorithmic_mandate"),
+    "un_regimes": (
+        "un_regime_rights_violator_modifier", "un_regime_colon*", "un_regime_climate_*",
+        "un_regime_cultural_hegemon_modifier", "un_regime_heritage_site_modifier", "un_regime_naval_curb_modifier",
+        "un_regime_refugee_*", "un_regime_shared_intelligence_modifier", "un_regime_space_*",
+    ),
+    # Demographic measures and their bills
+    "family_measures": ("te_demog_ms_*",),
+    "tax_reactions": ("te_tax_light_react_*",),
+    # The Strategic Reserve's sales, the climate policies' bills, Automation Policy
+    "policy": ("st_res_sell_profit_modifier", "renewable_investment_cost_modifier",
+               "aerosol_injection_cost_modifier", "te_automation_*"),
+    "civil_rights": ("cr_*",),
+    # A colonial subject's overlord in decline, a great power's stance on colonialism
+    "decolonization": ("colonial_overlord_*", "gp_*_colonial_policy_modifier"),
+    "sanctions": ("un_arms_embargo_*", "un_sanctions_*"),
+    "monetary": ("te_mon_*", "te_monetary_rate_paid", "te_monetisation_minting", "te_capital_controls_fatigue"),
+    # Inflation and exchange-rate bands, the banking entry's charges
+    "inflation": ("te_inflation_band_*", "te_fx_*", "planning_treasury_pool_balance", "banking_external_*"),
+    "tax_relief": ("te_tax_light_relief_*", "te_tax_relief_*"),
+    # The tax code's interest-group views, eight groups in two halves
+    "tax_views_1": ("te_tax_ig_view_armed_forces_*", "te_tax_ig_view_devout_*", "te_tax_ig_view_industrialists_*",
+                    "te_tax_ig_view_intelligentsia_*"),
+    "tax_views_2": ("te_tax_ig_view_landowners_*", "te_tax_ig_view_petty_bourgeoisie_*",
+                    "te_tax_ig_view_rural_folk_*", "te_tax_ig_view_trade_unions_*"),
+    "resettlement": ("resettlement_*",),
+    # Uploaded minds and Clade Citizenship's heritage parity
+    "transhumanism": ("te_demog_um_*", "te_clade_parity_*"),
+    # The Colonial Empire entry's programs and their bill, its endings, the two decisions
+    "colonial": ("colonial_cultural_assimilation_modifier", "colonial_development_*",
+                 "colonial_military_garrison_modifier", "colonial_empire_solidified_modifier", "*_path_modifier",
+                 "imperial_federation_modifier", "mandate_system_modifier"),
+    # Space race milestones, the probe's data, the dividend, Extraplanetary Base room, orbital debris
+    "space": ("sr_*", "te_orbital_debris", "te_debris_*"),
+    # The Antarctic station and regime, seabed policy and its fees
+    "commons": ("te_antarctic_*", "un_antarctic_*", "un_regime_antarctic_station_modifier", "te_seabed_*"),
+    "un_conventions": ("un_asat_moratorium_modifier", "un_cultural_diversity_modifier", "un_icc_member_modifier",
+                       "un_law_of_sea_modifier", "un_narcotics_control_modifier", "un_colony_protection_modifier"),
+    # Intelligence sharing, the cultural benchmark, the covert and hegemony bills
+    "foreign": ("intelligence_sharing_defense_shield_modifier", "cultural_hegemony_foreign_benchmark",
+                "covert_operation_funding_cost", "ch_*"),
+}
+MAX_GROUP = 32
 
 
 # ---------------------------------------------------------------------------
@@ -600,6 +691,29 @@ def resolve(cands):
     return lists, rows, hidden
 
 
+def group_lines():
+    """[(entry, group)] for every line of HIDDEN_GROUPS."""
+    return [(entry, group) for group, entries in HIDDEN_GROUPS.items() for entry in entries]
+
+
+def classify_groups(hidden):
+    """{name: [(entry, group)]}: the HIDDEN_GROUPS lines each hidden name matches."""
+    lines = group_lines()
+    return {name: [line for line in lines if _matches(line[0], name)] for name in hidden}
+
+
+def hidden_groups(hidden):
+    """{group: sorted names} in HIDDEN_GROUPS' order, a group no hidden name
+    reaches left out. Raises unless each hidden name matches exactly one line."""
+    placed = classify_groups(hidden)
+    wrong = {name: [line[0] for line in lines] for name, lines in placed.items() if len(lines) != 1}
+    if wrong:
+        raise ValueError(f"hidden modifiers with no HIDDEN_GROUPS line or two (gen_nation_tab.py): {wrong}")
+    groups = {group: sorted(name for name, lines in placed.items() if lines[0][1] == group)
+              for group in HIDDEN_GROUPS}
+    return {group: names for group, names in groups.items() if names}
+
+
 def carried_types(lists, rows, statics=None):
     """{type: sorted feeders}: every modifier type the blocks of the tab's
     modifiers (its lists' and its rows') carry, and which carry it."""
@@ -666,13 +780,56 @@ def type_rows(carried):
 # Output
 # ---------------------------------------------------------------------------
 
+def _tree(function, items):
+    """A balanced tree of two-argument `function` calls, so the nesting stays
+    shallow (about log2 of the count) however long the list grows."""
+    if len(items) == 1:
+        return items[0]
+    mid = len(items) // 2
+    return f"{function}({_tree(function, items[:mid])}, {_tree(function, items[mid:])})"
+
+
 def _any_of(names):
-    """A balanced Or tree of name tests, so the nesting stays shallow (about
-    log2 of the count) however long the list grows."""
-    if len(names) == 1:
-        return f"EqualTo_string(TimedModifier.GetName, Localize('{names[0]}'))"
-    mid = len(names) // 2
-    return f"Or({_any_of(names[:mid])}, {_any_of(names[mid:])})"
+    """A balanced Or tree of name tests."""
+    return _tree("Or", [f"EqualTo_string(TimedModifier.GetName, Localize('{name}'))" for name in names])
+
+
+def flag(group):
+    """The country variable the monthly pulse writes: how many of the group's
+    modifiers the country holds."""
+    return f"te_nation_hid_{group}"
+
+
+def flag_count(group):
+    """The live count the monthly pulse stores in flag(group)."""
+    return f"te_nation_hid_{group}_count"
+
+
+READY = "te_nation_hid_ready"
+EFFECT = "te_nation_refresh_hidden_flags"
+PULSE = "te_nation_hidden_flags_on_action"
+
+
+def _flag_on(group):
+    return f"GreaterThan_CFixedPoint(Country.MakeScope.Var('{flag(group)}').GetValue, '(CFixedPoint)0')"
+
+
+# Every flag is set (te_nation_hid_ready): ahead of the flag reads, so a
+# country the pulse hasn't reached yet (an old save's first month, a new
+# country) reads no unset variable, which would log every frame.
+_READY_ON = f"GreaterThan_CFixedPoint(Country.MakeScope.ScriptValue('{READY}'), '(CFixedPoint)0')"
+
+
+def _gated(groups, names):
+    """True for a row named one of `names` whose group's flag is on, once
+    the country has its flags. Each group's names sit behind its flag, so a
+    row is compared only with the names of groups the country held at the last
+    monthly pass. Both `And`s rest on `And` skipping its second argument when
+    the first is false (gotcha #42)."""
+    wanted = set(names)
+    parts = [f"And({_flag_on(group)}, {_any_of([name for name in members if name in wanted])})"
+             for group, members in groups.items() if wanted & set(members)]
+    return f"And({_READY_ON}, {_tree('Or', parts)})"
 
 
 def _shown(value):
@@ -735,22 +892,26 @@ def _type_widgets(section, groups):
 
 
 def generated_gui(lists, rows, hidden, types=None):
+    groups = hidden_groups(hidden)
     parts = [
         f"### {HEADER}",
         "### The Nation tab's name filters (gui_modding_guide.md gotcha #40): a timed",
-        "### modifier is picked out by its localized name, in any language. Then each",
+        "### modifier is picked out by its localized name, in any language. The country",
+        "### panel's and the sections' compare a name only with the groups (HIDDEN_GROUPS)",
+        "### the country held at the last monthly pass (te_nation_hid_<group>): a row costs",
+        "### one flag a group and the names of the groups the country holds. Then each",
         "### section's type rows (#1030): a modifier type's national total, the engine's",
         "### breakdown of its sources on hover, shown while one of the tab's modifiers feeds it.",
         "",
         "### The country panel's modifier list leaves these out (gui/00_te_country_panel_information.gui).",
         "template te_nation_hidden_filter {",
-        f'\tvisible = "[Not({_any_of(hidden)})]"',
+        f'\tvisible = "[Not({_gated(groups, hidden)})]"',
         "}",
     ]
     for section, names in lists.items():
         if names:
             parts += ["", f"### The {section} section's list.", f"template te_nation_list_{section} {{",
-                      f'\tvisible = "[{_any_of(names)}]"', "}"]
+                      f'\tvisible = "[{_gated(groups, names)}]"', "}"]
     for row, names in rows.items():
         if names:
             parts += ["", f"### What the {row} row's score gives now.", f"template te_nation_row_{row} {{",
@@ -770,14 +931,51 @@ def _count(name, names, used_by):
     return lines + ["}"]
 
 
+def _ready_limit(groups, indent):
+    """A `limit` that holds once the country has every group's flag."""
+    return ([f"{indent}limit = {{"] + [f"{indent}\thas_variable = {flag(group)}" for group in groups]
+            + [f"{indent}}}"])
+
+
+def _gated_count(name, groups, names, used_by):
+    """How many of `names` the country holds in groups whose flag is on, once
+    it has every flag: the rows _gated(groups, names) matches, so the filter
+    and the count agree at every moment, a modifier added mid-month in a group
+    whose flag is off counted by neither."""
+    wanted = set(names)
+    lines = [f"# Used by: {used_by}", f"{name} = {{", "\tvalue = 0", "\tif = {"] + _ready_limit(groups, "\t\t")
+    for group, members in groups.items():
+        mine = [member for member in members if member in wanted]
+        if not mine:
+            continue
+        lines += ["\t\tif = {", f"\t\t\tlimit = {{ var:{flag(group)} > 0 }}"]
+        if len(mine) == len(members):
+            lines.append(f"\t\t\tadd = {flag_count(group)}")
+        else:
+            for modifier in mine:
+                lines += ["\t\t\tif = {", f"\t\t\t\tlimit = {{ has_modifier = {modifier} }}", "\t\t\t\tadd = 1",
+                          "\t\t\t}"]
+        lines.append("\t\t}")
+    return lines + ["\t}", "}"]
+
+
 def generated_values(lists, rows, hidden, types=None):
+    groups = hidden_groups(hidden)
     parts = [f"# {HEADER}", "# Country scope: how many of the country's modifiers each Nation filter matches.", ""]
-    parts += _count("gui_country_hidden_modifier_count", hidden,
-                    "Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count') (the country panel's list)")
+    parts += ["# The hidden modifiers by group (HIDDEN_GROUPS): what te_nation_refresh_hidden_flags",
+              "# stores monthly in te_nation_hid_<group> (common/scripted_effects/te_nation_generated_effects.txt)."]
+    for group, names in groups.items():
+        parts += [""] + _count(flag_count(group), names, f"the monthly pulse, for te_nation_hid_{group}")
+    parts += ["", "# Used by: the filters in gui/te_nation_generated.gui, ahead of their flag reads: 1 once",
+              "# the country has every group's flag, 0 until its first monthly pass.", f"{READY} = {{",
+              "\tvalue = 0", "\tif = {"] + _ready_limit(groups, "\t\t") + ["\t\tvalue = 1", "\t}", "}", ""]
+    parts += _gated_count("gui_country_hidden_modifier_count", groups, hidden,
+                          "Country.MakeScope.ScriptValue('gui_country_hidden_modifier_count') (the country panel's "
+                          "list and the line under it)")
     for section, names in lists.items():
         if names:
-            parts += [""] + _count(f"te_nation_list_{section}_count", names,
-                                   f"the Nation tab's {section} list (gui/te_nation_tab.gui)")
+            parts += [""] + _gated_count(f"te_nation_list_{section}_count", groups, names,
+                                         f"the Nation tab's {section} list (gui/te_nation_tab.gui)")
     shown = [section for section, names in lists.items() if names]
     if shown:
         parts += ["", "# Used by: the Nation tab's Where These Come From panel (gui/te_nation_tab.gui)",
@@ -952,21 +1150,55 @@ def generated_panel(vanilla_text=None):
     return "\n".join(parts) + "\n"
 
 
+def generated_effects(hidden):
+    """te_nation_refresh_hidden_flags: every group's flag, set on every
+    country each month, 0 included, so a flag left on never outlives its
+    modifiers by more than a month."""
+    groups = hidden_groups(hidden)
+    lines = [
+        f"# {HEADER}",
+        "# Country scope, every country (the panel shows AI countries too), from the monthly",
+        f"# country pulse ({PULSE}, common/on_actions/extra_on_actions.txt): how",
+        "# many of each group's hidden modifiers the country holds (HIDDEN_GROUPS). The",
+        "# country panel's filter compares a row's name only with groups whose flag is",
+        "# above 0 (gui/te_nation_generated.gui), and the counts read the same flags",
+        "# (common/script_values/te_nation_generated_values.txt).",
+        f"{EFFECT} = {{",
+    ]
+    lines += [f"\tset_variable = {{ name = {flag(group)} value = {flag_count(group)} }}" for group in groups]
+    return "\n".join(lines + ["}"]) + "\n"
+
+
 def outputs():
-    """The GUI, the values and the country panel's type, as text without a
-    BOM, and the loc file as bytes."""
+    """The GUI, the values, the country panel's type and the effects, as text
+    without a BOM, and the loc file as bytes (fourth)."""
     lists, rows, hidden = resolve(candidates())
     types = type_rows(carried_types(lists, rows))
     return (generated_gui(lists, rows, hidden, types), generated_values(lists, rows, hidden, types),
-            generated_panel(), generated_loc_file(types))
+            generated_panel(), generated_loc_file(types), generated_effects(hidden))
 
 
-def main():
-    gui, values, panel, loc = outputs()
-    for path, text in ((GUI_OUT, gui), (VALUES_OUT, values), (PANEL_OUT, panel)):
-        path.write_text("\ufeff" + text, encoding="utf-8", newline="\n")
-    LOC_OUT.write_bytes(loc)
+def written():
+    """[(path, bytes)] for every file this writes."""
+    gui, values, panel, loc, effects = outputs()
+    texts = ((GUI_OUT, gui), (VALUES_OUT, values), (PANEL_OUT, panel), (EFFECTS_OUT, effects))
+    return [(path, ("\ufeff" + text).encode("utf-8")) for path, text in texts] + [(LOC_OUT, loc)]
+
+
+def main(argv=None):
+    """Write the outputs; with --check, write nothing and exit 1 if any is stale."""
+    argv = sys.argv[1:] if argv is None else argv
+    files = written()
+    if "--check" in argv:
+        stale = [path.relative_to(ROOT).as_posix() for path, data in files
+                 if not path.is_file() or path.read_bytes() != data]
+        for path in stale:
+            print(f"stale: {path} (run python3 scripts/generators/gen_nation_tab.py)")
+        return 1 if stale else 0
+    for path, data in files:
+        path.write_bytes(data)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

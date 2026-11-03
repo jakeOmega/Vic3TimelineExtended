@@ -119,6 +119,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/modifier_type_definitions/te_budget_generated_types.txt",
     "gui/te_budget_generated_charts.gui",
     "common/script_values/te_nation_generated_values.txt",
+    "common/scripted_effects/te_nation_generated_effects.txt",
     "gui/te_nation_generated.gui",
     "gui/te_systems_window_generated.gui",
     "gui/te_national_info_generated.gui",

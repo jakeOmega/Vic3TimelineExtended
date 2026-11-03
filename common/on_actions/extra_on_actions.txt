@@ -347,6 +347,20 @@ on_monthly_pulse_country = {
 		aptitude_traits_cleanup_on_action
 		tech_marker_grants_on_action
 		te_barracks_doctrine_country_pulse
+		te_nation_hidden_flags_on_action
+	}
+}
+
+# NATION TAB'S HIDDEN GROUPS - every country, every month, no rule gate (the
+# country panel shows AI countries too): how many of each group's hidden
+# modifiers the country holds, 0 included (te_nation_hid_<group>). The country
+# panel's Information tab compares a modifier's name only with the groups whose
+# flag is on, and its count reads the same flags (owner, 2026-11-03: the tab
+# lagged at 260 name comparisons a row). Generated effect:
+# common/scripted_effects/te_nation_generated_effects.txt (gen_nation_tab.py).
+te_nation_hidden_flags_on_action = {
+	effect = {
+		te_nation_refresh_hidden_flags = yes
 	}
 }
 

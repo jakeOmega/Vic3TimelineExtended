@@ -15,6 +15,10 @@ What the engine would never report:
 - A modifier type the tab's modifiers carry that no type registry line places
   (#1030): the type's row is missing, and a new field on a listed modifier
   would go unshown.
+- A hidden name in no group, or a count that reads other flags than the filter
+  (owner, 2026-11-03): the filter compares a row's name only with the groups
+  whose monthly flag is on, so an ungrouped name would stay in the list, and a
+  count that disagreed would hide the list or misstate the line under it.
 
 No game install needed; the fixture check skips without one.
 """
@@ -56,10 +60,110 @@ def _all_loc():
     return keys
 
 
+def _blocks(values):
+    """{script value: its body} from a generated values file."""
+    return dict(re.findall(r"^(\w+) = \{\n(.*?)^\}", values, re.S | re.M))
+
+
 def _counts(values):
-    """{script value: [the modifiers it counts]} from a generated values file."""
-    return {name: re.findall(r"has_modifier = (\w+)", body)
-            for name, body in re.findall(r"^(\w+) = \{\n(.*?)^\}", values, re.S | re.M)}
+    """{script value: [the modifiers it counts]} from a generated values file,
+    through the values it adds (`add = te_nation_hid_<group>_count`)."""
+    blocks = _blocks(values)
+
+    def names(name, seen):
+        body = blocks[name]
+        found = re.findall(r"has_modifier = (\w+)", body)
+        for ref in re.findall(r"\badd = (\w+)", body):
+            if ref in blocks and ref not in seen:
+                found += names(ref, seen | {ref})
+        return found
+
+    return {name: names(name, {name}) for name in blocks}
+
+
+def _call(expr):
+    """(function, [arguments]) for an `F(a, b)` expression, or None for a leaf
+    (anything that isn't one Not, And or Or call spanning the whole text)."""
+    m = re.match(r"(Not|And|Or)\(", expr)
+    if not m:
+        return None
+    depth, quoted, args, start = 0, False, [], m.end()
+    for i in range(m.end() - 1, len(expr)):
+        ch = expr[i]
+        if ch == "'":
+            quoted = not quoted
+        elif quoted:
+            continue
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                if i != len(expr) - 1:
+                    return None
+                args.append(expr[start:i].strip())
+                return m.group(1), args
+        elif ch == "," and depth == 1:
+            args.append(expr[start:i].strip())
+            start = i + 1
+    raise AssertionError(f"unbalanced: {expr[:80]}")
+
+
+def _or_leaves(expr):
+    """The arguments of a tree of Or calls, left to right."""
+    call = _call(expr)
+    if call and call[0] == "Or":
+        return [leaf for arg in call[1] for leaf in _or_leaves(arg)]
+    return [expr]
+
+
+READY_LEAF = "GreaterThan_CFixedPoint(Country.MakeScope.ScriptValue('te_nation_hid_ready'), '(CFixedPoint)0')"
+FLAG_LEAF = re.compile(r"GreaterThan_CFixedPoint\(Country\.MakeScope\.Var\('te_nation_hid_(\w+)'\)\.GetValue, "
+                       r"'\(CFixedPoint\)0'\)")
+NAME_LEAF = re.compile(r"EqualTo_string\(TimedModifier\.GetName, Localize\('(\w+)'\)\)")
+
+
+def _gated_groups(expression):
+    """{group: [names]} from a gated filter, And(ready, an Or tree of
+    And(<the group's flag>, an Or tree of its names)): each name under the
+    flag it sits behind. Raises if the filter has any other shape."""
+    call = _call(expression)
+    assert call and call[0] == "And" and len(call[1]) == 2, expression[:80]
+    ready, tree = call[1]
+    assert ready == READY_LEAF, ready
+    groups = {}
+    for part in _or_leaves(tree):
+        call = _call(part)
+        assert call and call[0] == "And" and len(call[1]) == 2, part[:80]
+        flag_leaf, names = call[1]
+        group = FLAG_LEAF.fullmatch(flag_leaf)
+        assert group, flag_leaf
+        assert group.group(1) not in groups, f"{group.group(1)} twice"
+        leaves = [NAME_LEAF.fullmatch(leaf) for leaf in _or_leaves(names)]
+        assert all(leaves), names[:80]
+        groups[group.group(1)] = [leaf.group(1) for leaf in leaves]
+    return groups
+
+
+def _count_groups(values, name):
+    """(the flags its gate asks for, {group: [names]}) for a gated count:
+    `if = { limit = { has_variable = <every flag> } <per group: if = { limit =
+    { var:<flag> > 0 } <its names> }> }`."""
+    blocks, counts = _blocks(values), _counts(values)
+    body = blocks[name]
+    gate = re.match(r"\tvalue = 0\n\tif = \{\n\t\tlimit = \{\n((?:\t\t\thas_variable = \w+\n)+)\t\t\}\n(.*)\t\}\n$",
+                    body, re.S)
+    assert gate, body[:200]
+    flags = re.findall(r"has_variable = te_nation_hid_(\w+)", gate.group(1))
+    groups = {}
+    for group, inner in re.findall(r"^\t\tif = \{\n\t\t\tlimit = \{ var:te_nation_hid_(\w+) > 0 \}\n(.*?)^\t\t\}\n",
+                                   gate.group(2), re.S | re.M):
+        names = re.findall(r"has_modifier = (\w+)", inner)
+        for ref in re.findall(r"\badd = (\w+)", inner):
+            if ref in blocks:
+                names += counts[ref]
+        groups[group] = names
+    return flags, groups
 
 
 def _names_in(expression):
@@ -144,21 +248,23 @@ class GeneratedTest(unittest.TestCase):
         cls.outputs = gen.outputs()
 
     def test_generated_files_are_current(self):
-        for path, text in zip((gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT), self.outputs):
+        files = gen.written()
+        self.assertEqual({path for path, _ in files},
+                         {gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT, gen.EFFECTS_OUT, gen.LOC_OUT})
+        for path, data in files:
             with self.subTest(path=path.name):
-                self.assertEqual(_read(path), text, "stale: run python3 scripts/generators/gen_nation_tab.py")
-        self.assertEqual(gen.LOC_OUT.read_bytes(), self.outputs[3],
-                         "stale: run python3 scripts/generators/gen_nation_tab.py")
+                self.assertEqual(path.read_bytes(), data, "stale: run python3 scripts/generators/gen_nation_tab.py")
+        self.assertEqual(gen.main(["--check"]), 0)
 
     def test_one_bom_each(self):
-        for path in (gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT, gen.LOC_OUT):
+        for path in (gen.GUI_OUT, gen.VALUES_OUT, gen.PANEL_OUT, gen.EFFECTS_OUT, gen.LOC_OUT):
             raw = path.read_bytes()
             with self.subTest(path=path.name):
                 self.assertTrue(raw.startswith(b"\xef\xbb\xbf"))
                 self.assertFalse(raw[3:].startswith(b"\xef\xbb\xbf"))
 
     def test_the_filters_and_counts_name_the_same_modifiers(self):
-        gui, values, _, _ = self.outputs
+        gui, values = self.outputs[:2]
         counts = _counts(values)
         hidden = _names_in(_template(gui, "te_nation_hidden_filter"))
         self.assertEqual(sorted(hidden), sorted(counts["gui_country_hidden_modifier_count"]))
@@ -180,6 +286,106 @@ class GeneratedTest(unittest.TestCase):
             self.assertLessEqual(deepest, 16, line[:80])
 
 
+class HiddenGroupsTest(unittest.TestCase):
+    """The filters gated by group (owner, 2026-11-03: the Information tab
+    lagged at 260 name comparisons a row): every hidden name in one group of
+    HIDDEN_GROUPS, the filter comparing a row's name only with the groups
+    whose monthly flag is on, and every count reading the same flags, so the
+    list, its test and the line under it agree at every moment."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.lists, cls.rows, cls.hidden = gen.resolve(gen.candidates())
+        cls.groups = gen.hidden_groups(cls.hidden)
+        cls.gui, cls.values = gen.outputs()[:2]
+        cls.effects = _read(gen.EFFECTS_OUT)
+
+    def test_every_hidden_name_is_in_one_group(self):
+        placed = gen.classify_groups(self.hidden)
+        wrong = {name: [line[0] for line in lines] for name, lines in placed.items() if len(lines) != 1}
+        self.assertFalse(wrong, "hidden modifiers with no HIDDEN_GROUPS line, or two, in "
+                                f"scripts/generators/gen_nation_tab.py: {wrong}")
+        self.assertEqual(sorted(n for names in self.groups.values() for n in names), sorted(self.hidden))
+        self.assertEqual(len(self.hidden), len(set(self.hidden)))
+
+    def test_every_group_line_places_a_name(self):
+        used = {line for lines in gen.classify_groups(self.hidden).values() for line in lines}
+        dead = [line for line in gen.group_lines() if line not in used]
+        self.assertFalse(dead, f"HIDDEN_GROUPS lines no hidden modifier matches: {dead}")
+        self.assertEqual(list(self.groups), list(gen.HIDDEN_GROUPS))
+
+    def test_groups_are_small(self):
+        # At most 32 names keeps each group's Or tree five deep (test_the_filters_stay_shallow).
+        for group, names in self.groups.items():
+            with self.subTest(group=group):
+                self.assertLessEqual(len(names), gen.MAX_GROUP)
+        self.assertLessEqual(gen.MAX_GROUP, 32)
+        self.assertGreaterEqual(len(self.groups), 10)
+
+    def test_each_groups_names_sit_under_its_flag(self):
+        hidden = _gated_groups(_template(self.gui, "te_nation_hidden_filter")[len("Not("):-1])
+        self.assertTrue(_template(self.gui, "te_nation_hidden_filter").startswith("Not(And("))
+        self.assertEqual(hidden, self.groups)
+        for section, names in self.lists.items():
+            with self.subTest(section=section):
+                listed = _gated_groups(_template(self.gui, f"te_nation_list_{section}"))
+                wanted = {group: [n for n in members if n in names] for group, members in self.groups.items()}
+                self.assertEqual(listed, {group: members for group, members in wanted.items() if members})
+
+    def test_the_counts_read_the_same_flags(self):
+        """The hidden count and each section's: gated on every flag being set,
+        as the filter is on te_nation_hid_ready, and then a group's names
+        counted only while its flag is on, the names the filter puts under it."""
+        _, ready = re.search(rf"^({gen.READY}) = \{{\n(.*?)^\}}", self.values, re.S | re.M).groups()
+        self.assertEqual(re.findall(r"has_variable = te_nation_hid_(\w+)", ready), list(self.groups))
+        self.assertIn("\t\tvalue = 1\n", ready)
+        flags, counted = _count_groups(self.values, "gui_country_hidden_modifier_count")
+        self.assertEqual(flags, list(self.groups))
+        self.assertEqual({group: sorted(names) for group, names in counted.items()}, self.groups)
+        for section, names in self.lists.items():
+            with self.subTest(section=section):
+                flags, counted = _count_groups(self.values, f"te_nation_list_{section}_count")
+                self.assertEqual(flags, list(self.groups))
+                self.assertEqual({group: sorted(members) for group, members in counted.items()},
+                                 _gated_groups(_template(self.gui, f"te_nation_list_{section}")))
+
+    def test_the_effect_sets_every_flag(self):
+        """Every group's flag, unconditionally (0 included), to the live count
+        of exactly the group's names."""
+        body = re.search(rf"^{gen.EFFECT} = \{{\n(.*?)^\}}", self.effects, re.S | re.M).group(1)
+        lines = body.strip("\n").split("\n")
+        self.assertEqual(lines, [f"\tset_variable = {{ name = te_nation_hid_{g} value = te_nation_hid_{g}_count }}"
+                                 for g in self.groups])
+        counts = _counts(self.values)
+        for group, names in self.groups.items():
+            with self.subTest(group=group):
+                self.assertEqual(sorted(counts[gen.flag_count(group)]), names)
+
+    def test_the_monthly_pulse_calls_it_for_every_country(self):
+        """From extra_on_actions.txt's on_monthly_pulse_country, which has no
+        rule gate, through a wrapper with none either; nothing else calls it,
+        so the flags have one refresh site."""
+        text = _read(ROOT / "common" / "on_actions" / "extra_on_actions.txt")
+        hosts = re.findall(r"^on_monthly_pulse_country = \{\n\ton_actions = \{\n(.*?)\t\}\n\}", text, re.S | re.M)
+        self.assertEqual(sum(f"\t\t{gen.PULSE}\n" in host for host in hosts), 1)
+        wrapper = re.search(rf"^{gen.PULSE} = \{{\n(.*?)^\}}", text, re.S | re.M).group(1)
+        self.assertEqual(wrapper, f"\teffect = {{\n\t\t{gen.EFFECT} = yes\n\t}}\n")
+        callers = []
+        for sub in ("common", "events"):
+            for path in sorted((ROOT / sub).rglob("*.txt")):
+                body = _read(path)
+                if f"{gen.EFFECT} = yes" in body or f"{gen.PULSE}\n" in body:
+                    callers.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(callers, ["common/on_actions/extra_on_actions.txt"])
+
+    def test_the_rows_stay_ungated(self):
+        # A score row's list is one to four names, near-universal ones: a flag
+        # would cost as much as it saves, so they compare live.
+        for row in gen.ROWS:
+            with self.subTest(row=row):
+                self.assertNotIn("Var(", _template(self.gui, f"te_nation_row_{row}"))
+
+
 class TypeRowsTest(unittest.TestCase):
     """The type rows (#1030): every modifier type the tab's modifiers carry is
     a row, a status line or a NOT_A_ROW line, and each row's gate counts
@@ -193,7 +399,7 @@ class TypeRowsTest(unittest.TestCase):
         cls.placed = gen.classify_types(cls.carried)
         cls.types = gen.type_rows(cls.carried)
         cls.tab = {name for names in (*lists.values(), *rows.values()) for name in names}
-        cls.gui, cls.values, _, _ = gen.outputs()
+        cls.gui, cls.values = gen.outputs()[:2]
 
     def _rows(self):
         return [(section, group, kind, row, feeders) for section, groups in self.types.items()
