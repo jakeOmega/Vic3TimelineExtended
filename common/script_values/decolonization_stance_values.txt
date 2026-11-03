@@ -102,7 +102,8 @@ ce_power_colonial_population = {
 }
 
 # Where the power stands: 0 its entry has not begun (it has not researched
-# Decolonization, or the entry starts this month), 1-5 the entry runs, in that
+# Decolonization, or the entry starts this month or, after an earlier run has
+# ended, within two months: ce_reentry_monthly), 1-5 the entry runs, in that
 # band (colonial_empire_live_tier: 1 collapsing .. 5 solidified), 6 it secured
 # its empire (colonial_empire_completed, the entry's win), 7 its colonial
 # system collapsed in the last ten years (colonial_empire_collapsed_recently).
