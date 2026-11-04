@@ -2943,6 +2943,8 @@
  te_asat_strike_action_effect_desc_third:0 "[COUNTRY.GetName] has destroyed the satellites of [TARGET_COUNTRY.GetName]"
  te_authority_boost:0 "Cabinet Authority Asserted"
  te_authority_drain:0 "Cabinet Authority Eroded"
+ te_automation_displacement:0 "Displaced Workers"
+ te_automation_displacement_desc:0 "Machines have put people out of work faster than new work has taken them up: the $ig_trade_unions$ blame the government, and the displaced turn to movements. Our automated share rose #v [GetPlayer.MakeScope.ScriptValue('te_ap_disp_rise_display')|1]#! points in the last counted year; the effect is full at 10 points and up to three times as much beyond. $law_robot_tax$ halves it, and $law_automation_dividend$ and $law_human_labor_quotas$ end it."
  te_automation_dividend:0 "Automation Dividend"
  te_automation_dividend_desc:0 "What our robots and AI make is paid out as living standards, in proportion to our automated share, now #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!, and half as much again under Universal Basic Income or Post-Scarcity Economy."
  te_automation_robot_tax_desc:0 "The owners of our robots and AI pay for the work they do, in proportion to our automated share, now #v [GetPlayer.MakeScope.ScriptValue('te_ap_share_display')|%0]#!."

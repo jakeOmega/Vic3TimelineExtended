@@ -6,15 +6,20 @@
 # ============================================================================
 
 # Country scope, from on_monthly_pulse_country. The only writer of the share
-# and of the two scaled modifiers (the dynamic-modifier pattern,
+# and of the three scaled modifiers (the dynamic-modifier pattern,
 # docs/systems/mod_systems/dynamic_modifier_pattern.md):
 #   1. A country the group is open to (Humanoid Robotics, or a share law held
 #      without it: a revolution's winner, a released country) counts its
 #      automated share. Everyone else skips the walk.
-#   2. Each modifier is removed, then re-added with the share as its
-#      multiplier while its law holds. A same-name add_modifier stacks, so the
-#      removal comes first, every month.
-#   3. The Human Labor Quotas self-check.
+#   2. Displacement's year: every twelfth count takes the share's rise since
+#      the count a year before (te_ap_disp_rise). The first count, in a new
+#      country or an old save, only sets the baseline, so what is already
+#      automated never counts as a rise. The multiplier is worked out every
+#      count, so a change of law shows within a month.
+#   3. Each modifier is removed, then re-added with its multiplier while its
+#      law holds. A same-name add_modifier stacks, so the removal comes first,
+#      every month.
+#   4. The Human Labor Quotas self-check.
 # Variables only, and never removed while a modifier reads them, so a civil
 # war's winner keeps them and the next pulse rebuilds the modifier
 # (scripting_best_practices.md, "What a Civil War's Winner Inherits").
@@ -36,9 +41,31 @@ te_ap_monthly_update = {
 		set_variable = { name = te_ap_automated value = te_ap_automated_levels }
 		set_variable = { name = te_automation_share value = te_ap_share_value }
 		set_variable = { name = te_ap_dividend_scale value = te_ap_dividend_scale_value }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = te_ap_share_year_ago }
+					NOT = { has_variable = te_ap_disp_months }
+				}
+			}
+			set_variable = { name = te_ap_share_year_ago value = var:te_automation_share }
+			set_variable = { name = te_ap_disp_months value = 0 }
+			set_variable = { name = te_ap_disp_rise value = 0 }
+		}
+		else = {
+			change_variable = { name = te_ap_disp_months add = 1 }
+			if = {
+				limit = { var:te_ap_disp_months >= 12 }
+				set_variable = { name = te_ap_disp_rise value = te_ap_disp_rise_value }
+				set_variable = { name = te_ap_share_year_ago value = var:te_automation_share }
+				set_variable = { name = te_ap_disp_months value = 0 }
+			}
+		}
+		set_variable = { name = te_ap_displacement_scale value = te_ap_displacement_scale_value }
 	}
 	remove_modifier_if_exists_effect = { MODIFIER = te_automation_robot_tax }
 	remove_modifier_if_exists_effect = { MODIFIER = te_automation_dividend }
+	remove_modifier_if_exists_effect = { MODIFIER = te_automation_displacement }
 	if = {
 		limit = {
 			has_law = law_type:law_robot_tax
@@ -59,6 +86,16 @@ te_ap_monthly_update = {
 		add_modifier = {
 			name = te_automation_dividend
 			multiplier = var:te_ap_dividend_scale
+		}
+	}
+	if = {
+		limit = {
+			has_variable = te_ap_displacement_scale
+			var:te_ap_displacement_scale > 0
+		}
+		add_modifier = {
+			name = te_automation_displacement
+			multiplier = var:te_ap_displacement_scale
 		}
 	}
 	te_ap_quotas_selfcheck = yes

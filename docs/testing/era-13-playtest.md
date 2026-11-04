@@ -144,6 +144,22 @@ ahead, raised if they fall short.
    leading great powers, the share at eras 11, 12 and 13, which Automation
    Policy law each holds, and its tax income and lower-strata standard of
    living beside a country under Unrestricted Automation.
+8. **Human Labor Quotas' own lines** (owner, 2026-11-04). The law's tooltip
+   lists Trade Unions +10% political strength and −10% radicals from
+   political movements, and the country's modifiers show both while it
+   holds. Neo-Luddite Terrorism (`post_scarcity_events.4`) never fires under
+   the quotas.
+9. **Displaced Workers** (owner, 2026-11-04). Under Unrestricted Automation,
+   move a few buildings onto robotic methods. Nothing shows until the twelfth
+   monthly count after the first; then the law group's tooltip quotes the
+   year's rise in points and, if it is above 0, the Nation tab's Economy list
+   shows Displaced Workers: −3 Trade Unions approval and +10% radicals at a
+   rise of 10 points, scaled by the rise, at most three times that. Enacting
+   Robot Tax halves it at the next month; the Dividend or the quotas remove
+   it. A save from before the change starts from its share as it stands, so
+   it shows no displacement for the first year. Record the AI's rises: if
+   great powers routinely rise 20 points or more a year, the full size may
+   want a larger rise.
 
 ## Phase 3: Morphological Freedom and Bodily Autonomy
 

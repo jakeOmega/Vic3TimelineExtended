@@ -3,9 +3,10 @@
 Static checks on the script: the default law comes first and has no gate, the
 group is set for every 1836 country, Human Labor Quotas withdraws exactly the
 methods the automated share counts and leaves every group a method, the share's
-base is exactly the buildings those methods can run in, the two scaled
+base is exactly the buildings those methods can run in, the three scaled
 modifiers have one writer that removes them before re-adding them, the preview
-lines quote the modifiers' figures, and every ideology stance names all four
+lines quote the modifiers' figures, Human Labor Quotas carries its political
+lines and ends Displaced Workers, and every ideology stance names all four
 laws.
 
 Run: python3 test_automation_policy.py
@@ -27,6 +28,7 @@ EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_automation_policy
 VALUES = os.path.join(REPO, "common", "script_values", "te_automation_policy_values.txt")
 MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "te_automation_policy_modifiers.txt")
 ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "te_automation_policy_on_actions.txt")
+POST_SCARCITY_EVENTS = os.path.join(REPO, "events", "post_scarcity_events.txt")
 HAND_IDEOLOGIES = os.path.join(REPO, "common", "ideologies", "extra_ideologies.txt")
 GENERATED_IDEOLOGIES = os.path.join(REPO, "common", "ideologies", "modified.txt")
 LAW_CONSISTENCY = os.path.join(REPO, "gen_law_consistency.py")
@@ -36,7 +38,7 @@ GROUP = "lawgroup_automation_policy"
 LAW_ORDER = ["law_unrestricted_automation", "law_robot_tax", "law_human_labor_quotas", "law_automation_dividend"]
 QUOTAS = "law_human_labor_quotas"
 TECH = "humanoid_robotics"
-SCALED = ("te_automation_robot_tax", "te_automation_dividend")
+SCALED = ("te_automation_robot_tax", "te_automation_dividend", "te_automation_displacement")
 # Groups whose methods form more than one ladder: the Deep-Sea Mine's capped
 # methods and the uncapped ones a game rule picks between.
 FAMILIES = {
@@ -295,7 +297,8 @@ class ScaledModifierTest(unittest.TestCase):
         effects = _code(_read(EFFECTS))
         self.assertIn("multiplier = var:te_automation_share", effects)
         self.assertIn("multiplier = var:te_ap_dividend_scale", effects)
-        for var in ("te_automation_share", "te_ap_dividend_scale"):
+        self.assertIn("multiplier = var:te_ap_displacement_scale", effects)
+        for var in ("te_automation_share", "te_ap_dividend_scale", "te_ap_displacement_scale"):
             self.assertNotIn(f"remove_variable = {var}", effects)
 
     def test_the_pulse_is_a_monthly_country_pulse(self):
@@ -332,6 +335,70 @@ class NumbersTest(unittest.TestCase):
         for law in ("law_universal_basic_income", "law_post-scarcity"):
             self.assertIn(f"has_law = law_type:{law}", welfare)
             self.assertIn(_loc_value(law), text)
+
+
+
+class QuotasPoliticsTest(unittest.TestCase):
+    """The government picks a building's methods, so the withdrawal alone only
+    takes options away: the law's own block carries what the guarantee buys
+    (owner, 2026-11-04)."""
+
+    def test_the_quotas_carry_the_unions_and_fewer_radicals(self):
+        block = _sub(_top_level(_read(LAWS), QUOTAS), "modifier")
+        self.assertEqual(_number(block, "interest_group_ig_trade_unions_pol_str_mult"), 0.1)
+        self.assertEqual(_number(block, "state_radicals_from_political_movements_mult"), -0.1)
+
+    def test_no_neo_luddite_terrorism_under_the_quotas(self):
+        event = _code(_top_level(_read(POST_SCARCITY_EVENTS), "post_scarcity_events.4"))
+        trigger = _sub(event, "trigger")
+        self.assertIn(f"NOT = {{ has_law = law_type:{QUOTAS} }}", trigger)
+
+
+class DisplacementTest(unittest.TestCase):
+    """Displaced Workers: the cost of a fast rise in the automated share, by
+    law (owner, 2026-11-04)."""
+
+    def test_the_rise_is_counted_once_a_year_from_a_baseline(self):
+        update = _code(_top_level(_read(EFFECTS), "te_ap_monthly_update"))
+        # The first count only sets the baseline, so what is already automated
+        # in an old save never counts as a rise.
+        first = update.index("NOT = { has_variable = te_ap_share_year_ago }")
+        self.assertLess(first, update.index("set_variable = { name = te_ap_disp_rise value = 0 }"))
+        self.assertIn("var:te_ap_disp_months >= 12", update)
+        self.assertIn("set_variable = { name = te_ap_disp_rise value = te_ap_disp_rise_value }", update)
+        rise = _code(_top_level(_read(VALUES), "te_ap_disp_rise_value"))
+        self.assertIn("min = 0", rise)
+
+    def test_the_law_sets_the_size(self):
+        scale = _code(_top_level(_read(VALUES), "te_ap_displacement_scale_value"))
+        self.assertIn("has_law = law_type:law_unrestricted_automation", scale)
+        self.assertIn("has_law = law_type:law_robot_tax", scale)
+        for law in ("law_automation_dividend", QUOTAS):
+            self.assertNotIn(law, scale)
+        self.assertIn("divide = TE_AP_DISPLACEMENT_FULL_RISE", scale)
+        self.assertIn("max = 3", scale)
+        self.assertIn("multiply = TE_AP_DISPLACEMENT_ROBOT_TAX_FACTOR", scale)
+
+    def test_the_preview_lines_quote_the_modifier(self):
+        values = _read(VALUES)
+        full = float(re.search(r"(?m)^TE_AP_DISPLACEMENT_FULL_RISE = ([\d.]+)", values).group(1))
+        half = float(re.search(r"(?m)^TE_AP_DISPLACEMENT_ROBOT_TAX_FACTOR = ([\d.]+)", values).group(1))
+        block = _top_level(_read(MODIFIERS), "te_automation_displacement")
+        approval = _number(block, "interest_group_ig_trade_unions_approval_add")
+        radicals = _number(block, "state_radicals_from_political_movements_mult")
+        text = _loc_value("te_ap_law_displacement_tt")
+        self.assertIn(f"a rise of {full * 100:g} points", text)
+        self.assertIn(f"#R −{abs(approval):g}#!", text)
+        self.assertIn(f"#R +{_percent(radicals)}#!", text)
+        self.assertIn("up to three times", text)
+        text = _loc_value("te_ap_law_displacement_half_tt")
+        self.assertIn(f"#R −{abs(approval) * half:g}#!", text)
+        self.assertIn(f"#R +{_percent(radicals * half)}#!", text)
+        laws = _read(LAWS)
+        self.assertIn("te_ap_law_displacement_tt", _top_level(laws, "law_unrestricted_automation"))
+        self.assertIn("te_ap_law_displacement_half_tt", _top_level(laws, "law_robot_tax"))
+        for law in ("law_automation_dividend", QUOTAS):
+            self.assertIn("te_ap_law_displacement_none_tt", _top_level(laws, law))
 
 
 class StanceTest(unittest.TestCase):

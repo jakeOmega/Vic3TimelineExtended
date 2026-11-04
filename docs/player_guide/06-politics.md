@@ -261,9 +261,9 @@ self-driving trains, highways and harvesters.
 
 | Law | At an automated share of 100% | You pay |
 |---|---|---|
-| Unrestricted Automation | Nothing changes. | Nothing. |
-| Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits |
-| Human Labor Quotas | The methods above can't be used, so the buildings on them keep their workers | The output those methods add |
+| Unrestricted Automation | Nothing changes. | Displaced Workers when the share rises (below) |
+| Robot Tax | +10% taxes collected from pops | Capitalists invest 5% less of their profits; Displaced Workers at half size |
+| Human Labor Quotas | The Trade Unions gain 10% political strength and movements create 10% fewer radicals; the methods above can't be used, so the buildings on them keep their workers; no Neo-Luddite Terrorism | The output those methods add |
 | Automation Dividend | +2 standard of living for the lower strata and +1 for the middle strata, half as much again with Universal Basic Income or Post-Scarcity Economy | Capitalists invest 10% less of their profits |
 
 At a share of 40%, Robot Tax gives +4% taxes. Its effect and the Dividend's
@@ -271,6 +271,14 @@ follow the share each month and start at the first count after the law passes.
 Under the quotas, buildings on a withdrawn method change to one still allowed.
 The Trade Unions back Human Labor Quotas and the Industrialists Unrestricted
 Automation.
+
+Displaced Workers is the cost of automating fast. Once a year the game compares
+your automated share with a year before. For the next year, a rise of 10
+points gives −3 Trade Unions approval and +10% radicals from movements, and a
+faster rise more, up to three times as much. Robot Tax halves it, and the
+Dividend and the quotas end it within a month. A slow change costs little, and
+a share that holds still, however high, costs nothing. The law group's tooltip
+shows last year's rise.
 
 ### New laws in base-game law groups
 

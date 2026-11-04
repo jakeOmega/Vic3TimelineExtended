@@ -139,8 +139,9 @@ SECTIONS = {
         "colonial_empire_solidified_modifier", "commonwealth_path_modifier", "iron_fist_path_modifier",
         "quiet_assimilation_path_modifier", "imperial_federation_modifier", "mandate_system_modifier",
         # Automation Policy: the Robot Tax and the Automation Dividend, scaled
-        # monthly by the automated share (te_automation_policy_effects.txt)
-        "te_automation_robot_tax", "te_automation_dividend",
+        # monthly by the automated share, and Displaced Workers, scaled by the
+        # share's yearly rise (te_automation_policy_effects.txt)
+        "te_automation_robot_tax", "te_automation_dividend", "te_automation_displacement",
     ),
     "science_and_space": (
         # Space race milestones (first and later), the probe's data, the dividend
