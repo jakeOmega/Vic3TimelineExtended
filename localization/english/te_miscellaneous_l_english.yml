@@ -8445,7 +8445,7 @@
  te_demog_tfr_mab_pending:0 "Mean age at childbirth: after the next count"
  te_demog_town_tt_city:0 "#b [State.GetCityHubName]#!, the capital of [State.GetNameNoFormatting]\n$te_demog_town_tt_how$"
  te_demog_town_tt_farm:0 "#b [State.GetFarmHubName]#!, the farming town of [State.GetNameNoFormatting]\n$te_demog_town_tt_how$"
- te_demog_town_tt_how:0 "A model, not a count: a state's towns are its capital and whichever of its port, mining, farming and logging towns have work of their kind, ordered by the people at that work, farm, mine and logging work at a quarter. The largest holds the state's metropolitan share of its urban people, the next that share of the rest.\n#lore A renamed town keeps the map's name. Click to open the state's Demographics subtab.#!"
+ te_demog_town_tt_how:0 "A state's towns are its capital and whichever of its port, mining, farming and logging towns have work of their kind, ordered by the people at that work, farm, mine and logging work at a quarter. Their people are estimated: the largest holds the state's metropolitan share of its urban people, the next that share of the rest.\n#lore A renamed town keeps the map's name. Click to open the state's Demographics subtab.#!"
  te_demog_town_tt_mine:0 "#b [State.GetMineHubName]#!, the mining town of [State.GetNameNoFormatting]\n$te_demog_town_tt_how$"
  te_demog_town_tt_port:0 "#b [State.GetPortHubName]#!, the port town of [State.GetNameNoFormatting]\n$te_demog_town_tt_how$"
  te_demog_town_tt_state:0 "#b [State.GetNameNoFormatting]#!\nNone of the state's towns is named on the map: one town, under the state's name.\n$te_demog_town_tt_how$"
