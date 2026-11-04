@@ -6,6 +6,28 @@ sr_has_space_program = {
 	}
 }
 
+# State scope: this state is where its owner's Space Program stands (owner,
+# 2026-11-03): the market capital of a market the owner leads, or, for a
+# country in another country's market, its own capital. Until then only the
+# first, so a customs-union member could never found one. Read by the
+# building's possible and by the two removal sweeps (extra_on_actions.txt);
+# te_decision_found_space_program places it by the same rule.
+#   A market leader whose market capital is not its capital (the USA starts
+#   with New York) keeps the program in the market capital; one that joins
+#   another market has its capital as the site from then on, so a program in
+#   its old market capital is removed, as before.
+# ?= throughout: an invalid market-capital link makes the capital the site,
+# and the sweeps also require the link to exist before removing anything.
+sr_space_program_site = {
+	OR = {
+		owner.market_capital ?= THIS
+		AND = {
+			owner.capital ?= THIS
+			NOT = { owner.market_capital.owner ?= owner }
+		}
+	}
+}
+
 # The country has run a milestone, so it may hold space-race state to repair:
 # the gate of the monthly sync (space_race_on_actions.txt). A cheap test that
 # no such country fails:

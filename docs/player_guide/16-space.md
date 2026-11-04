@@ -36,10 +36,11 @@ The Space Program is a monument in your market capital, and every milestone
 depends on it. It is a single, government-built building with a very high
 construction cost, but you don't have to build it: once you research Guided
 Missiles, the decision Found a Space Program places it in your market capital at
-once, with no construction cost, running Earth Orbit. Either way it can stand
-only in the capital of a market you lead, so a country in another country's
-market can't have one. It is removed if the state stops being your market
-capital, for example when you lose it in a war or join another market. It
+once, with no construction cost, running Earth Orbit. A country in another
+country's market has it in its own capital instead. It is removed if the state
+stops being that site, for example when you lose it in a war, move your capital
+or market capital, or join another market while it stands in a market capital
+that is not your capital. It
 employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
 good your Aerospace Industry makes. That weekly bill is what the program really
 costs; the Budget panel's Breakdown tab lists it under Program Costs, in the

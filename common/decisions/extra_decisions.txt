@@ -461,15 +461,17 @@ te_decision_establish_strategic_reserve = {
 
 # ============================================================================
 # Found a Space Program (mod_systems/space_race.md § Space Race)
-# Places the Space Program in the market capital at once, for free, on Earth
-# Orbit. The programme's expense is its weekly Launch Capacity bill, which
-# climbs with every mission (te_decision_space_mission_* below).
-#
-# The building's possible is `owner.market_capital ?= THIS`, so it stands only
-# in the capital of a market we lead: a member of another country's market
-# has a market capital in a foreign state, and the decision must not build
-# there (te_decision_tt_leads_market). create_building checks the unlocking
-# technology, Guided Missiles.
+# Places the Space Program at once, for free, on Earth Orbit, where the
+# building's possible lets it stand (sr_space_program_site,
+# space_race_triggers.txt): in our market capital when we lead our market, in
+# our capital when we are in another country's market. A member of another
+# country's market has a market capital in a foreign state, so the decision
+# must not build there. Until 2026-11-03 such a member could not found one at
+# all (owner: a country without its own market should still have a space
+# programme). Every country has one of the two, so `possible` asks only for
+# the technology, which create_building checks too. The programme's expense
+# is its weekly Launch Capacity bill, which climbs with every mission
+# (te_decision_space_mission_* below).
 #
 # ai_chance: only an AI that would race (sr_ai_should_participate, the top
 # three by ranking; any other makes no progress but would pay the bill, as
@@ -489,20 +491,28 @@ te_decision_found_space_program = {
 
 	possible = {
 		has_technology_researched = guided_missiles
-		custom_tooltip = {
-			text = te_decision_tt_leads_market
-			market_capital ?= { owner = ROOT }
-		}
 	}
 
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_create_space_program
-			market_capital = {
-				create_building = {
-					building = building_space_program
-					level = 1
-					activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-10-05: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+			if = {
+				limit = { market_capital ?= { owner = ROOT } }
+				market_capital = {
+					create_building = {
+						building = building_space_program
+						level = 1
+						activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-10-05: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+					}
+				}
+			}
+			else = {
+				capital = {
+					create_building = {
+						building = building_space_program
+						level = 1
+						activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-11-03: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
+					}
 				}
 			}
 		}
