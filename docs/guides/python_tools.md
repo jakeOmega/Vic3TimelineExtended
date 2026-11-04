@@ -967,7 +967,7 @@ and `INJECT_OR_CREATE:` (Modding-Digests 1.12.0 `inject_types.md`; Grey's
 Soft Pop Adjustments writes 160 `TRY_REPLACE:`s). `paradox_file_parser`
 handles all six (#1170). A
 naïve identifier regex like `[A-Za-z_][A-Za-z0-9_]*` won't match
-`REPLACE_OR_CREATE:building_synthetics_plant_rubber` and that entity
+`REPLACE_OR_CREATE:building_space_program` and that entity
 silently falls out of the walk — its `unlocking_technologies` (and any
 other field) goes uncounted. The engine resolves directive-prefixed
 keys to the underlying entity, so tooling should too. Reference
