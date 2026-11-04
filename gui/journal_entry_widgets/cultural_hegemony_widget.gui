@@ -10,7 +10,10 @@
 ###                               word beneath; our cultural share as a framed pie
 ###                               with last month's trend, and the three leading
 ###                               powers as vanilla flags; the programs as one of
-###                               Banking's cells (te_banking_ov_cell, CH-9)
+###                               Banking's cells (te_banking_ov_cell, CH-9),
+###                               and beside it the Hegemony Bonus, the
+###                               cultural_hegemony_effect modifier's effects
+###                               at the strength applied (on hover)
 ###   te_ch_status_sections       open by default (flags *_closed):
 ###     te_ch_sec_board           the top ten cultural powers as a table (first:
 ###                               owner, 2026-09-29; a table: CH-2)
@@ -1512,16 +1515,23 @@ types cultural_hegemony_widget_types
 				### the Ministry nothing can run, so the word says so in red; the
 				### four programs and the funding cost are on hover. The
 				### Cultural Programs section below has the controls.
+				### Beside it, the Hegemony Bonus: the cultural_hegemony_effect
+				### modifier, which sits on the journal entry and so showed only
+				### in the entry's own modifier strip, never in the tabs. Its
+				### effects at the strength applied are on hover. Two cells of 234
+				### and 4 between: 472 of the 474 column, as Row 1. Both always
+				### show, so the centred row keeps its width (gotcha #43).
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
 					ignoreinvisible = yes
+					spacing = 4
 
 					te_banking_ov_cell = {
 						tooltip = "je_ch_ov_prog_tt"
-						size = { 238 70 }
+						size = { 234 70 }
 						blockoverride "caption_width" {
-							max_width = 154
+							max_width = 150
 						}
 						blockoverride "caption" {
 							text = "je_ch_ov_prog_label"
@@ -1542,17 +1552,75 @@ types cultural_hegemony_widget_types
 						blockoverride "word" {
 							te_banking_ov_word = {
 								visible = "[GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								max_width = 150
 								text = "je_ch_ov_prog_no_ministry"
 							}
 							te_banking_ov_word = {
 								visible = "[Not( GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+								max_width = 150
 								text = "je_ch_ov_prog_running"
 							}
 						}
 						blockoverride "third_line" {
 							te_banking_ov_word = {
 								position = { 78 46 }
+								max_width = 150
 								text = "je_ch_ov_prog_funding"
+							}
+						}
+					}
+
+					### The Hegemony Bonus: the modifier's own icon (the one in the
+					### entry's strip), dimmed while the entry carries none (rule
+					### 4); Active and its strength, or None and the 1% share it
+					### starts at. ch_bonus_strength_display is 0 exactly while
+					### the entry carries no cultural_hegemony_effect.
+					te_banking_ov_cell = {
+						tooltip = "je_ch_ov_bonus_tt"
+						size = { 234 70 }
+						blockoverride "caption_width" {
+							max_width = 150
+						}
+						blockoverride "caption" {
+							text = "je_ch_ov_bonus_label"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' ) )]"
+								alpha = 0.4
+								texture = "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )]"
+								max_width = 150
+								text = "je_ch_ov_bonus_active"
+							}
+							te_banking_ov_word = {
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' ) )]"
+								max_width = 150
+								text = "je_ch_ov_bonus_none"
+							}
+						}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )]"
+								position = { 78 46 }
+								max_width = 150
+								text = "je_ch_ov_bonus_strength"
+							}
+							te_banking_ov_word = {
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' ) )]"
+								position = { 78 46 }
+								max_width = 150
+								text = "je_ch_ov_bonus_from"
 							}
 						}
 					}
@@ -2719,6 +2787,14 @@ types cultural_hegemony_widget_types
 		}
 		ch_note = {
 			text = "je_ch_how_share"
+		}
+		ch_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_ch_how_sub_bonus"
+			}
+		}
+		ch_note = {
+			text = "je_ch_how_bonus"
 		}
 		ch_subheader = {
 			blockoverride "subheader_text" {

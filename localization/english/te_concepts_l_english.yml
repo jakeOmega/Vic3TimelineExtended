@@ -1312,7 +1312,7 @@
  cultural_flowering_modifier:0 "Cultural Flowering"
  cultural_flowering_modifier_desc:0 "Protected minority communities are producing a cultural renaissance."
  cultural_hegemony_effect:0 "Cultural Hegemony"
- cultural_hegemony_effect_desc:0 "Our nation's global [concept_cultural_pull] attracts migrants, enhances [concept_trade_advantage] in $fine_art$, generates diplomatic [concept_power_bloc_leverage], and improves our diplomatic reputation. Strength scales with [concept_cultural_pull_share]."
+ cultural_hegemony_effect_desc:0 "Our nation's global [concept_cultural_pull] draws migrants and tourists, raises [concept_trade_advantage] in $fine_art$, [concept_power_bloc_leverage] generation and our diplomatic reputation, speeds [concept_assimilation] and the decay of [concept_infamy], and adds [Concept('concept_loyalist','$concept_loyalists$')] while [concept_legitimacy] is high. Strength scales with [concept_cultural_pull_share]."
  cultural_hegemony_foreign_benchmark_desc:0 "The global cultural hegemon's ideology pressures our government, reducing [concept_legitimacy]. See [concept_foreign_cultural_benchmark]."
  cultural_openness_modifier:0 "Cultural Openness"
  cultural_openness_modifier_desc:0 "The nation embraces cultural exchange, accelerating [concept_assimilation] and international [concept_prestige]."

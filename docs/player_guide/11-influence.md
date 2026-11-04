@@ -24,8 +24,8 @@ The Cultural Hegemony journal entry and the Hegemony tab in the Society panel
 show the same panels, and a change made in one shows in the other. The tab is
 grayed until the journal entry opens; hover it for what is still missing. It
 ends with an Open Journal Entry button. Another country's National Info has a
-Cultural Hegemony tab with that country's tier, rank, share, programs and
-breakdown, and the same Top Cultural Powers, political models and history as
+Cultural Hegemony tab with that country's tier, rank, share, Hegemony Bonus,
+programs and breakdown, and the same Top Cultural Powers, political models and history as
 yours; the funding and program buttons are only on your own.
 
 ![The Hegemony tab of the Society panel: the overview, Top Cultural Powers with each one's change since the last recount, Cultural Programs, and where our pull comes from.](images/hegemony_tab.png)
@@ -43,7 +43,10 @@ and the share the next tier starts at, the model's share of world culture and
 its push abroad, the benchmark's strength. Last comes Programs, with the
 Ministry of Culture's icon: how many of the four programs are running and your
 funding level against its cap, or No Ministry in red while you lack the law.
-Hover it for each program and the funding cost.
+Hover it for each program and the funding cost. Beside it, Hegemony Bonus shows
+whether you carry the Cultural Hegemony modifier and its strength, which is your
+share at the last monthly update; hover it for each of the modifier's effects at
+that strength (see [What cultural dominance gives](#what-cultural-dominance-gives)).
 
 The sections below all start open:
 
