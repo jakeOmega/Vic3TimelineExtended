@@ -1993,6 +1993,13 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn(live, next_grade)
         self.assertLess(next_grade.index("var:sr_ebase_next_grade"), next_grade.index(live))
         self.assertIn("sr_ebase_queued_levels > sr_ebase_room_total", _block(self.display, "sr_disp_ebase_past"))
+        # The word counts the queue: built plus queued, the same sum the red reads...
+        total = _block(self.display, "sr_disp_ebase_total")
+        self.assertIn("value = sr_ebase_levels", total)
+        self.assertIn("add = sr_disp_ebase_queued", total)
+        # ...shown apart only while levels are queued (test_space_race_labels.py
+        # holds the split word to the bounds).
+        self.assertIn("sr_disp_ebase_queued > 0", _block(self.display, "sr_disp_ebase_split"))
         self.assertIn("has_technology_researched = in_situ_resource_utilization", _block(self.display, "sr_disp_ebase_shown"))
 
     def test_the_cell(self):
@@ -2006,10 +2013,11 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn("ScriptValue('sr_disp_ebase_shown')", self.widget[start:cell.start()])
         self.assertEqual(cell.group(1), "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )]")
         self.assertIn('text = "je_space_race_widget_ovc_ebase_cap"', body)
-        for word in ("word", "word_past", "fig", "fig_plus"):
+        for word in ("word", "word_past", "word_split", "word_split_past", "fig", "fig_plus"):
             with self.subTest(word=word):
                 self.assertIn(f'text = "je_space_race_widget_ovc_ebase_{word}"', body)
         self.assertIn("ScriptValue('sr_disp_ebase_past')", body)
+        self.assertIn("ScriptValue('sr_disp_ebase_split')", body)
         self.assertIn("ScriptValue('sr_disp_ebase_next_grade')", body)
         self.assertIn("building_space_mine.dds", body)
         # It sits after the Modules cell, on a row of its own, in the grid that

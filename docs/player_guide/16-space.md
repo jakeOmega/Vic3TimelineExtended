@@ -211,7 +211,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Defense | Under Full Colonies only. Calm; or, in red, what threatens you (Under assault, Blockaded, Occupied, Interdicted, Earth blockaded or Launch site lost) and the colony it threatens. Hover it for every colony under threat and any hostile fleet on its way. |
 | Modules | How many modules are queued, and fabrication's stock. Queue empty turns red once the stock is full and waiting. |
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
-| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels against your room, red once your built and queued levels pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
+| Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the grade the next level would work at, queued levels counted (see [Extraplanetary Base room](#extraplanetary-base-room)). |
 | Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
 Below its overview, Solar System Colonization has four tabs, and the one you
@@ -860,10 +860,10 @@ all your levels, so only the levels past the room pay the penalty: with room for
 10 and 20 levels built, the base works at −37.5%. A new poor colony adds room
 without lowering what your levels already earn, and taking a rival's Psyche
 colony raises your average and lowers theirs. The overview's Base Room cell
-shows your levels against your room and the grade the next level would work at,
-counting the levels you have queued; that grade updates monthly and the day after
-a level finishes, except that it reads −75% at once when your queue passes all
-of your room. The Colonies section's Modules view shows
+shows your levels, built and queued, against your room and the grade the next
+level would work at, counting the levels you have queued; that grade updates
+monthly and the day after a level finishes, except that it reads −75% at once
+when your queue passes all of your room. The Colonies section's Modules view shows
 your levels against your room, any queued, and each colony's Bases figure its
 own room and grade. Private investors don't build past your room,
 and AI governments don't either; your government can, at the penalty. Under

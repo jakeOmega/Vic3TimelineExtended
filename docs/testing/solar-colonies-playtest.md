@@ -641,10 +641,12 @@ The colonization overview's Base Room cell and the refresh when a base is built 
 
 1. **The cell.** With In-Situ Resource Utilization, the overview's third row shows Base Room: our Extraplanetary Base
    levels against our room ("120 / 400"), and "next at +5%" under it. Without the technology the row is gone.
-2. **Queued levels.** Queue 20 levels: the hover counts them at once, the Modules view gains "Extraplanetary Base levels
+2. **Queued levels.** Queue 20 levels: the cell reads "120 +20 / 400" at once (owner, 2026-11-04; it had read "120 / 400"
+   with the queue left out), the hover counts them, the Modules view gains "Extraplanetary Base levels
    queued +20", and by the next month (or the day after a level finishes) "next at" moves to the grade of the room
    those levels would leave (counting them, not only the built ones). Queue past all of our room: the figure turns red
-   and reads "next at -75%" at once.
+   and reads "next at -75%" at once, and with nothing built and 80 queued against room for 75, "0 +80 / 75" in red. Nothing elides; with room of
+   10,000 or more (Mining Complexes) or 1,000 levels queued, the cell shows their sum instead ("12000 / 14335").
 3. **On completion.** When a queued level finishes, the cell's average and "next at" change the next day, not at the
    next month. If nothing changes until the month turns, `on_building_built` / `on_building_expanded` never reached
    `te_on_building_*` (unverified, `scripting_best_practices.md`); fallback: drop the hook, the monthly pulse stays.
