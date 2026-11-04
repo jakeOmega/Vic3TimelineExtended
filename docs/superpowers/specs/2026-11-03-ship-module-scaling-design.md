@@ -94,11 +94,15 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
 4. **Every mod hull gets its own module set.** Sized modules can't be shared
    between a 1,500- and a 2,800-damage hull, so the ten hulls that borrowed a set
    get their own (120 new modules). Their names and descriptions are spliced from
-   the set they borrowed (`"$ship_mod_arsenal_ship_armor_light$"`); their goods
-   are the borrowed set's, scaled by the ratio of the two hulls' construction
-   goods. The nine existing sets keep their goods.
+   the set they borrowed (`"$ship_mod_arsenal_ship_armor_light$"`), except where
+   that set is the base game's and its names date from the 1840s–1900s: the
+   Networked Air Defense Cruiser takes the Guided Missile Ship's names and the
+   three troop ships the Expeditionary Sea Base's. Their goods are the borrowed
+   set's, scaled by the ratio of the two hulls' construction goods, with the base
+   game's modernized at equal value (wood and iron to steel, fabric to engines,
+   coal to oil, grain to groceries). The nine existing sets keep their goods.
 5. **Rounding:** damage and armor to 5 (1 below 50), hit points to 25, supply to
-   5, power projection to 1. Medium totals land within 2% of today's.
+   5, power projection to 1. Medium totals land within 3% of today's.
 6. **Utility slots get roles.** Protection (hull and crew damage taken),
    countermeasures (accuracy against the ship, vulnerability, visibility),
    weapons, sensors and support. A one-slot hull lists everything it mounts; a
@@ -168,11 +172,18 @@ Two PRs, both against `main`:
 
 ## Play-test list (nothing here gates a merge)
 
+`docs/testing/naval-modules-playtest.md` has the checks, with what to expect
+and what a failure means. The ones that matter most:
+
+- A ship built before the update, of one of the ten types that borrowed a set,
+  may keep the borrowed modules on its new, smaller hull until retrofitted (a
+  Marine Assault Ship at about half its armor).
 - Saved ship templates on mod hulls: pruning Torpedo Nets and Searchlights and
   moving utilities between slots can invalidate a template saved before the
   update.
 - One battle log against the expected hit rate for a named pairing, under the
   multiplicative and the additive reading of `ship_suffered_accuracy_mult`
   (numbers in PR 2).
-- The AI designs late ships with high-tier modules more often than it did
-  (its scoring sees the bigger module values).
+- Which module tiers the AI fits on late ships. Module `ai_weight` is
+  unchanged, so it shouldn't move; if the AI favors light modules, its late
+  navies are weaker than before.
