@@ -250,6 +250,8 @@
  law_population_control_measures_desc:0 "The state takes direct action to manage the size and growth of its populace. These measures can range from strict limits on the number of children to state-guided eugenics programs, all in the name of the greater national good."
  law_post-scarcity:0 "Post-Scarcity Economy"
  law_post-scarcity_desc:0 "In this economic model, advanced technologies and efficient resource management have achieved [concept_post_scarcity_system], making scarcity a thing of the past. All essential goods and services are readily available to every citizen, nullifying traditional economic challenges tied to supply and demand."
+ law_prescribed_form:0 "Prescribed Form"
+ law_prescribed_form_desc:0 "The state decides what a citizen looks like, and the clinics that once sold change now enforce sameness. No one can be told apart by face, skin or frame, and no one may choose otherwise."
  law_primogeniture:0 "Primogeniture & Entail"
  law_primogeniture_desc:0 "The eldest son inherits the estate whole, and entail binds each heir to pass it on undivided. The great houses last for generations; the younger sons make their way in the army, the church, the colonies and the city."
  law_private_ai_labs:0 "Private Labs"

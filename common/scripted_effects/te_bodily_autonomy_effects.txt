@@ -1,5 +1,6 @@
 ﻿# ============================================================================
-# BODILY AUTONOMY — Clade Citizenship's heritage parity (era 13 spec § 7.3)
+# BODILY AUTONOMY — the heritage parity of Clade Citizenship (era 13 spec § 7.3)
+# and Prescribed Form (owner, 2026-11-04)
 # ============================================================================
 # Laws: common/laws/te_bodily_autonomy_laws.txt. Values:
 # common/script_values/te_bodily_autonomy_values.txt. Modifiers:
@@ -10,9 +11,12 @@
 # Country scope, from on_monthly_pulse_country. The only writer of the three
 # parity modifiers and their variables (the dynamic-modifier pattern,
 # docs/systems/mod_systems/dynamic_modifier_pattern.md). Under Clade
-# Citizenship each heritage figure (a shared heritage trait, a shared trait
-# group, none) is lifted to the highest of the three, so every pop reads the
-# same figure and heritage ranks no pop above another:
+# Citizenship or Prescribed Form each heritage figure (a shared heritage
+# trait, a shared trait group, none) is lifted to the highest of the three, so
+# every pop reads the same figure and heritage ranks no pop above another.
+# Clade Citizenship's own +10 to no shared heritage is among the figures it
+# reads; Prescribed Form carries no such line, so it lifts every figure to the
+# highest the citizenship law and technologies give, and no further:
 #   1. The three lifts are worked out first, into locals, from the figures less
 #      last month's lifts (te_clade_base_*_value): each base reads a variable
 #      the next step overwrites.
@@ -24,7 +28,12 @@
 # Up to a month passes between enacting (or repealing) the law and the parity.
 te_clade_parity_refresh = {
 	if = {
-		limit = { has_law = law_type:law_clade_citizenship }
+		limit = {
+			OR = {
+				has_law = law_type:law_clade_citizenship
+				has_law = law_type:law_prescribed_form
+			}
+		}
 		te_clade_parity_selfcheck = yes
 		set_local_variable = { name = te_clade_new_trait value = te_clade_lift_trait_value }
 		set_local_variable = { name = te_clade_new_group value = te_clade_lift_group_value }

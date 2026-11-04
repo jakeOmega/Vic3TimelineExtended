@@ -2,7 +2,8 @@
 # pattern, for lawgroup_bodily_autonomy (common/laws/te_bodily_autonomy_laws.txt).
 # It opens with the Morphological Freedom technology, succeeds on the law of the
 # same name or on Clade Citizenship (Self-Directed Evolution, era 13), and fails
-# on Natural Form held to the end. Licensed Modification at the end leaves the
+# on Natural Form held to the end, or at once on Prescribed Form (owner,
+# 2026-11-04: the state settles the question by decree). Licensed Modification at the end leaves the
 # question unsettled. The engine has no "failed at the deadline" hook, so both
 # of those are the timeout's branches.
 je_morphological_freedom = {
@@ -76,6 +77,12 @@ je_morphological_freedom = {
 					has_law = law_type:law_clade_citizenship
 				}
 			}
+			triggered_desc = {
+				desc = je_morphological_freedom_status_prescribed
+				trigger = {
+					has_law = law_type:law_prescribed_form
+				}
+			}
 		}
 	}
 
@@ -89,6 +96,15 @@ je_morphological_freedom = {
 	on_complete = {
 		set_variable = morphological_freedom_resolved
 		trigger_event = { id = morphological_freedom_events.200 popup = yes }
+	}
+
+	# The state has settled the question by decree: there is no debate left.
+	fail = {
+		has_law = law_type:law_prescribed_form
+	}
+
+	on_fail = {
+		set_variable = morphological_freedom_resolved
 	}
 
 	invalid = {

@@ -1,6 +1,6 @@
 # Government, laws and characters
 
-The mod adds 164 laws, most of them in 39 new law groups, with the institutions,
+The mod adds 165 laws, most of them in 39 new law groups, with the institutions,
 amendments, government types, ideologies, parties and movements that go with
 them. The new law groups exist from 1836: every country starts with a law in
 each, and most of the others unlock with technology. The chapter also covers
@@ -38,7 +38,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
-| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on, and from Self-Directed Evolution (era 13) whether someone who leaves the human body plan behind is still a citizen. |
+| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship, Prescribed Form | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on, and from Self-Directed Evolution (era 13) whether someone who leaves the human body plan behind is still a citizen; or a standard body the state imposes on everyone. |
 
 The mod renames the base game's six Citizenship laws and changes their effects.
 This guide, like the game, uses the new names:
@@ -103,6 +103,19 @@ Rural Folk and most groups that only tolerate Licensed Modification strongly
 oppose it. The groups that strongly support Morphological Freedom are content
 with either law, so the push from Morphological Freedom to Clade Citizenship
 comes from transhumanist leaders and the Transhumanist movement.
+
+Prescribed Form, also from Morphological Freedom, is the state's answer: it
+sets a standard body and requires it, so no one can be told apart by looks.
+Each month it raises the three heritage figures to the highest of them, as
+Clade Citizenship does but with nothing added. Under the inclusive Citizenship
+laws that changes little; under Racialized Citizenship every pop gets the 60 a
+shared heritage trait gives. The law also gives 50 authority, raises the
+bureaucracy each state's population costs (about 9% more at era 12), speeds
+assimilation by 25%, and takes 10% off Cultural Pull from Art and migration
+pull. Enacting it ends the morphological freedom debate as a failure. The
+fascist and ethno-nationalist ideologies strongly support it and the statist
+ones support it; the Devout and every group that values self-expression oppose
+it.
 
 ### Laws on state power and information
 

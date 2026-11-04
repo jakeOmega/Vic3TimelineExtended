@@ -29,7 +29,8 @@ LAW_CONSISTENCY = os.path.join(REPO, "gen_law_consistency.py")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 # Clade Citizenship (Self-Directed Evolution, era 13 spec § 7.3) is last: test_self_directed_evolution.py.
-LAW_ORDER = ["law_natural_form", "law_licensed_modification", "law_morphological_freedom", "law_clade_citizenship"]
+LAW_ORDER = ["law_natural_form", "law_licensed_modification", "law_morphological_freedom", "law_clade_citizenship",
+             "law_prescribed_form"]
 POOLED = [f"morphological_freedom_events.{n}" for n in range(1, 7)]
 OUTCOMES = ["morphological_freedom_events.100", "morphological_freedom_events.200"]
 
@@ -238,7 +239,7 @@ class LocalizationTest(unittest.TestCase):
         wanted = ["morphological_freedom", "lawgroup_bodily_autonomy", "je_morphological_freedom",
                   "je_morphological_freedom_reason", "je_morphological_freedom_status_natural",
                   "je_morphological_freedom_status_licensed", "je_morphological_freedom_status_free",
-                  "je_morphological_freedom_status_clade"]
+                  "je_morphological_freedom_status_clade", "je_morphological_freedom_status_prescribed"]
         wanted += LAW_ORDER
         for key in wanted:
             with self.subTest(key=key):
@@ -246,6 +247,74 @@ class LocalizationTest(unittest.TestCase):
                 # A journal entry's text is its _reason; nothing reads a _desc (#1212).
                 if not key.startswith("je_morphological_freedom"):
                     self.assertIn(f"{key}_desc", keys)
+
+
+
+PARITY_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_bodily_autonomy_effects.txt")
+ICON_PROMPTS = os.path.join(REPO, "scripts", "image_pipeline", "icon_prompts.py")
+
+
+class PrescribedFormTest(unittest.TestCase):
+    """The state's standard body (owner, 2026-11-04): the parity by erasure."""
+
+    def setUp(self):
+        self.law = _code(_top_level(_read(LAWS), "law_prescribed_form"))
+
+    def test_last_most_regressive_and_from_morphological_freedom(self):
+        self.assertEqual(re.findall(r"(?m)^(law_\w+) = \{", _code(_read(LAWS)))[-1], "law_prescribed_form")
+        self.assertRegex(self.law, r"progressiveness = 10\b")
+        self.assertEqual(_sub(self.law, "unlocking_technologies").split(), ["morphological_freedom"])
+        for key in ("unlocking_laws", "disallowing_laws"):
+            self.assertNotRegex(self.law, rf"\b{key} = ")
+
+    def test_the_state_chooses_and_its_bureaucracy_enforces(self):
+        block = _sub(self.law, "modifier")
+        for line in ("country_authority_add = 50", "state_bureaucracy_population_base_cost_factor_mult = 1",
+                     "state_assimilation_mult = 0.25", "country_cultural_hegemony_art_mult = -0.1",
+                     "state_migration_pull_mult = -0.1"):
+            self.assertRegex(block, re.escape(line) + r"\b")
+        # No static heritage line: the parity alone, lifting to the highest and no further.
+        self.assertNotIn("heritage", block)
+        self.assertNotIn("country_authority_cost_add", block)
+        self.assertIn("custom_tooltip = te_prescribed_form_parity_tt", _sub(self.law, "on_enact"))
+
+    def test_it_takes_the_heritage_parity(self):
+        refresh = _code(_top_level(_read(PARITY_EFFECTS), "te_clade_parity_refresh"))
+        gate = refresh[:refresh.index("te_clade_parity_selfcheck = yes")]
+        self.assertIn("has_law = law_type:law_prescribed_form", gate)
+        self.assertIn("has_law = law_type:law_clade_citizenship", gate)
+
+    def test_the_debate_fails_on_it(self):
+        je = _code(_read(JE))
+        self.assertIn("has_law = law_type:law_prescribed_form", _sub(je, "fail"))
+        self.assertIn("set_variable = morphological_freedom_resolved", _sub(je, "on_fail"))
+        self.assertIn("je_morphological_freedom_status_prescribed", je)
+
+    def test_the_fascists_carry_it_and_self_expression_opposes_it(self):
+        lists = {name: dict(stances) for name, stances in im.BODILY_AUTONOMY_LISTS.items()}
+        self.assertEqual(lists["uniform"]["law_prescribed_form"], "strongly_approve")
+        self.assertEqual(lists["statist"]["law_prescribed_form"], "approve")
+        for name in ("liberal", "libertarian"):
+            self.assertEqual(lists[name]["law_prescribed_form"], "strongly_disapprove", name)
+        self.assertEqual(lists["traditional"]["law_prescribed_form"], "disapprove")
+        for ideology in ("ideology_fascist", "ideology_ethno_nationalist"):
+            self.assertEqual(im.BODILY_AUTONOMY_STANCES[ideology], "uniform")
+        # Moving to "uniform" and "statist" changed no stance on the four older laws.
+        for older in LAW_ORDER[:4]:
+            self.assertEqual(lists["uniform"][older], lists["traditional"][older], older)
+            self.assertEqual(lists["statist"][older], lists["cautious"][older], older)
+
+    def test_hand_written_and_generated_blocks_name_it(self):
+        for path in (IDEOLOGIES, MODIFIED):
+            for block in re.finditer(r"lawgroup_bodily_autonomy = \{([^}]*)\}", _read(path)):
+                with self.subTest(path=os.path.basename(path)):
+                    self.assertRegex(block.group(1), r"law_prescribed_form = \w+")
+
+    def test_its_icon_is_borrowed_until_painted(self):
+        raw = _top_level(_read(LAWS), "law_prescribed_form")
+        icon = re.search(r'icon = "([^"]+)"', raw).group(1)
+        self.assertEqual(icon, "gfx/interface/icons/law_icons/law_mandatory_augmentation.dds")
+        self.assertRegex(_read(ICON_PROMPTS), r'"law_prescribed_form": \{"subject": "[^"]+", "seed": None\}')
 
 
 if __name__ == "__main__":
