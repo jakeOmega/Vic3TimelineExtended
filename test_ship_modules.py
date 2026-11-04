@@ -55,7 +55,7 @@ MEDIUM_TOTALS_BEFORE_RESHAPE = {
     'amphibious_assault_ship': {'hull_damage': 95, 'crew_damage': 30, 'armor': 110, 'hit_points_max': 4875, 'supply_capacity': 340, 'power_projection': 0},
     'antimatter_battleship': {'hull_damage': 3010, 'crew_damage': 1185, 'armor': 2170, 'hit_points_max': 29150, 'supply_capacity': 710, 'power_projection': 1350},
     'arsenal_ship': {'hull_damage': 1310, 'crew_damage': 385, 'armor': 670, 'hit_points_max': 13150, 'supply_capacity': 460, 'power_projection': 1130},
-    'asw_destroyer': {'hull_damage': 155, 'crew_damage': 50, 'armor': 85, 'hit_points_max': 4675, 'supply_capacity': 105, 'power_projection': 200},
+    'asw_destroyer': {'hull_damage': 155, 'crew_damage': 50, 'armor': 85, 'hit_points_max': 4675, 'supply_capacity': 105, 'power_projection': 233},  # PP 200 until #1390
     'autonomous_swarm_submarine': {'hull_damage': 680, 'crew_damage': 200, 'armor': 100, 'hit_points_max': 8175, 'supply_capacity': 165, 'power_projection': 150},
     'expeditionary_fast_transport': {'hull_damage': 65, 'crew_damage': 20, 'armor': 70, 'hit_points_max': 3875, 'supply_capacity': 190, 'power_projection': 0},
     'expeditionary_sea_base': {'hull_damage': 117, 'crew_damage': 40, 'armor': 160, 'hit_points_max': 6875, 'supply_capacity': 690, 'power_projection': 0},
@@ -65,7 +65,7 @@ MEDIUM_TOTALS_BEFORE_RESHAPE = {
     'marine_assault_ship': {'hull_damage': 105, 'crew_damage': 35, 'armor': 140, 'hit_points_max': 5875, 'supply_capacity': 440, 'power_projection': 0},
     'networked_air_defense_cruiser': {'hull_damage': 505, 'crew_damage': 140, 'armor': 381, 'hit_points_max': 6975, 'supply_capacity': 205, 'power_projection': 348},
     'nuclear_submarine': {'hull_damage': 260, 'crew_damage': 80, 'armor': 55, 'hit_points_max': 5175, 'supply_capacity': 135, 'power_projection': 75},
-    'nuclear_supercarrier': {'hull_damage': 450, 'crew_damage': 100, 'armor': 344, 'hit_points_max': 8050, 'supply_capacity': 360, 'power_projection': 275},
+    'nuclear_supercarrier': {'hull_damage': 450, 'crew_damage': 100, 'armor': 344, 'hit_points_max': 8050, 'supply_capacity': 360, 'power_projection': 330},  # PP 275 until #1390
     'orbital_support_amphibious_mothership': {'hull_damage': 187, 'crew_damage': 60, 'armor': 310, 'hit_points_max': 11375, 'supply_capacity': 1290, 'power_projection': 0},
     'pulsed_laser_escort': {'hull_damage': 1030, 'crew_damage': 280, 'armor': 731, 'hit_points_max': 8975, 'supply_capacity': 225, 'power_projection': 570},
     'stealth_attack_submarine': {'hull_damage': 400, 'crew_damage': 130, 'armor': 70, 'hit_points_max': 6675, 'supply_capacity': 155, 'power_projection': 105},
@@ -185,6 +185,44 @@ class TestShipModules(unittest.TestCase):
                         want = (a_hull + a_tiers[2]) / (a_hull + a_tiers[0])
                         got = (hull + tiers[2]) / (hull + tiers[0])
                         self.assertLess(abs(got / want - 1), 0.05, f"light->high x{got:.2f}, analogue x{want:.2f}")
+
+    def test_power_projection_never_below_predecessor(self):
+        """With medium modules, a mod ship projects at least what its vanilla
+        analogue does and what the ship it succeeds does: the same AI role,
+        unlocked by the technology that makes the other obsolete (#1390: the
+        Nuclear Supercarrier had projected less than the Fleet Carrier)."""
+        types, mods, _, _, _ = _state()
+        stat = "ship_power_projection_add"
+
+        def medium_pp(ship):
+            hull, tiers = _tier_values(types, mods, ship, "range", stat)
+            return hull + tiers[1]
+
+        def field(ship, key):
+            value = _body(types["ship_type_" + ship].get(key))
+            if isinstance(value, dict):
+                value = value.get("has_technology_researched", value)
+                value = _body(value)
+            return value
+
+        def unlocks(ship):
+            value = _body(types["ship_type_" + ship].get("unlocking_technologies"))
+            return {value} if isinstance(value, str) else set(value or ())
+
+        checked = 0
+        for ship, analogue in ANALOGUE.items():
+            with self.subTest(ship=ship, against=analogue):
+                self.assertGreaterEqual(medium_pp(ship), medium_pp(analogue))
+            obsolete_at = field(ship, "is_obsolete")
+            if not isinstance(obsolete_at, str):
+                continue
+            for successor in ANALOGUE:
+                if obsolete_at in unlocks(successor) and \
+                        field(successor, "ai_ship_category") == field(ship, "ai_ship_category"):
+                    checked += 1
+                    with self.subTest(ship=successor, succeeds=ship):
+                        self.assertGreaterEqual(medium_pp(successor), medium_pp(ship))
+        self.assertGreater(checked, 5, "no successor pairs found: has is_obsolete changed shape?")
 
     def test_tiers_rise(self):
         types, mods, _, _, _ = _state()

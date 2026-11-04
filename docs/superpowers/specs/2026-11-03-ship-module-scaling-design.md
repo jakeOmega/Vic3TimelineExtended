@@ -86,7 +86,13 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
 3. **Reshaped stats:** hull and crew damage (guns), armor and hit points (armor),
    supply capacity and power projection (range). The base game's range modules
    add power projection and the mod's added none; at medium it now moves out of
-   the hull into the module, so a default ship's prestige is unchanged. Speed,
+   the hull into the module, so a default ship's prestige is unchanged, except
+   for two ships that projected less than the ship they replace (issue #1390;
+   the owner asked for the fix in this PR): the ASW Destroyer takes the vanilla
+   destroyer's own 200 + 0/33/56 (233 at medium, was 200), and the Nuclear
+   Supercarrier 330 at medium (was 275), a step above the Fleet Carrier's 319
+   like vanilla's late successors (+4–7%). A test now holds every mod ship at or
+   above its analogue and its predecessor. Speed,
    critical hits, vulnerability, visibility and each set's extras are not
    reshaped: speed doesn't grow with the era the way damage does, the critical-hit
    tiers are the #223 anchors, and vulnerability waits on the open 1.14.5

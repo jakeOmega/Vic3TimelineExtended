@@ -54,6 +54,12 @@
 # modules projects what it did. (The Fleet Carrier and the Networked Air Defense
 # Cruiser had borrowed vanilla range modules that already carried PP, so their
 # totals were the derived figure plus that.)
+# With medium modules, a ship never projects less than its vanilla analogue or
+# the ship it succeeds (the same role, unlocked by the technology that obsoletes
+# it); test_ship_modules.py checks both. Two fell short until issue #1390: the
+# ASW Destroyer now takes the vanilla destroyer's own 200 + 0/33/56 (233 at
+# medium, was 200), and the Nuclear Supercarrier 330 at medium (was 275), a
+# step above the Fleet Carrier's 319 like vanilla's late successors (+4-7%).
 # =============================================================================
 
 
@@ -73,7 +79,7 @@ ship_type_asw_destroyer = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 172
+		ship_power_projection_add = 200
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 3675
 		ship_crew_max_add = 200
@@ -357,7 +363,7 @@ ship_type_nuclear_supercarrier = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 237
+		ship_power_projection_add = 284
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 6450
 		ship_crew_max_add = 1500

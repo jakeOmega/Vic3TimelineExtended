@@ -182,7 +182,7 @@ ship_mod_asw_destroyer_range_medium = {
 		ship_carrying_capacity_add = 0.25
 		ship_marine_capacity_add = 0.125
 		ship_supply_efficiency_add = 0.1
-		ship_power_projection_add = 28
+		ship_power_projection_add = 33
 	}
 	construction_goods = { goods_input_groceries_add = 34 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
@@ -196,7 +196,7 @@ ship_mod_asw_destroyer_range_high = {
 		ship_carrying_capacity_add = 0.5
 		ship_marine_capacity_add = 0.25
 		ship_supply_efficiency_add = 0.25
-		ship_power_projection_add = 48
+		ship_power_projection_add = 56
 	}
 	construction_goods = { goods_input_groceries_add = 52 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
@@ -676,7 +676,7 @@ ship_mod_nuclear_supercarrier_range_medium = {
 	modifier = {
 		ship_supply_capacity_add = 215
 		ship_supply_efficiency_add = 0.1
-		ship_power_projection_add = 38
+		ship_power_projection_add = 46
 	}
 	construction_goods = { goods_input_groceries_add = 55 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
@@ -688,7 +688,7 @@ ship_mod_nuclear_supercarrier_range_high = {
 	modifier = {
 		ship_supply_capacity_add = 440
 		ship_supply_efficiency_add = 0.25
-		ship_power_projection_add = 77
+		ship_power_projection_add = 92
 	}
 	construction_goods = { goods_input_groceries_add = 95 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
