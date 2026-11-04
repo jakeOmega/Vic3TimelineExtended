@@ -52,3 +52,11 @@ The space race panel's share of the GUI and localization audit (`docs/audits/gui
 
 1. **Colors without underlines.** On the Solar System, Colonies (People, Defenses) and Fleets views, look at a red status word (Blockaded, Occupied, Battle), a grey Ruined, a highlighted figure (a colony's people, a fleet's strength) and a plain one (Δv, supply). Each keeps its color (red, grey, the value color) with no underline, and its hover still opens. If a word shows cream, its inline color lost to the textbox's format: put the color back in the textbox's `default_format`.
 2. **Approach tooltips.** Hover Safe and Ambitious on a running milestone: the line of framing, then the approach modifier's own lines (risk −50%, or progress +50%).
+
+## The Space Program in the capital (2026-11-03)
+
+The Space Program now stands in its owner's capital (`sr_space_program_site`, `space_race_triggers.txt`: `owner.capital ?= THIS`), for every country. It was the market capital of a market the owner led, so a customs-union member could never found one.
+
+1. **Founding it as a customs-union member.** As a great or major power in another country's customs union, with Guided Missiles: Found a Space Program is possible, and the building appears in our capital, running Earth Orbit, and still stands two months later (the monthly `remove_invalid_buildings` sweep spares it).
+2. **A market capital that is not the capital.** As the USA (market capital New York, capital Washington), found one: it stands in Washington. The build menu lists only the capital, and the greyed reason on other states reads "This state is our capital".
+3. **Space Command's tie.** With two Space Commands of the same size after an annexation, the one in the capital stays.

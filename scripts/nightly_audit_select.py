@@ -59,7 +59,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/production_methods/greenhouse_gas_generated_injects.txt",
     "common/production_methods/carbon_capture_generated_pms.txt",
     "common/production_method_groups/carbon_capture_generated_groups.txt",
-    "common/buildings/carbon_capture_generated_injects.txt",
+    "common/buildings/zz_te_carbon_capture_injects.txt",
     "common/scripted_effects/company_building_cleanup_effects.txt",
     "common/scripted_effects/extra_law_consistency_generated.txt",
     "common/scripted_effects/covert_tech_theft_generated.txt",

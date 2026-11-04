@@ -56,7 +56,7 @@ class CategorizeKeyTests(unittest.TestCase):
     def test_te_decision_family_stays_together(self):
         for key in ("te_decision_found_space_program", "te_decision_found_space_program_desc",
                     "te_decision_space_mission_moon", "te_decision_space_mission_moon_desc",
-                    "te_decision_tt_leads_market"):
+                    "te_decision_tt_create_space_program"):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 

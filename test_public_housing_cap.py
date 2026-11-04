@@ -95,7 +95,7 @@ class PublicHousingCapTests(unittest.TestCase):
                     grant = _number(modifier, key)
                     if grant:
                         into[tech] = into.get(tech, 0) + grant
-        cls.building = _parse("common/buildings/extra_buildings.txt")[BUILDING]
+        cls.building = _parse("common/buildings/07_zz_te_government.txt")[BUILDING]
         pms = _parse("common/production_methods/extra_pms.txt")
         group = _parse("common/production_method_groups/extra_pm_groups.txt")["pmg_base_building_public_housing"]
         cls.methods = {}

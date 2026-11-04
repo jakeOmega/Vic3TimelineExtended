@@ -316,7 +316,7 @@ pm_monument_historic = {
 	}
 }
 
-# The construction site (grand_monument_site.txt): nothing in, nothing out.
+# The construction site (08_zz_te_grand_monument_site.txt): nothing in, nothing out.
 pm_grand_monument_site = {
 	texture = "gfx/interface/icons/production_method_icons/pm_grand_monument_site.dds"
 }

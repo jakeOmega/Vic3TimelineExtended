@@ -1,0 +1,473 @@
+﻿# ============================================================================
+# Industries the mod adds: synthetics and electrics variants, then high technology
+# ============================================================================
+# This file's name sets where its buildings appear in the building list,
+# whose default sort is the order building definitions load: file names in
+# ASCII order, vanilla's and the mod's in one list. 01_zz_te_industry.txt sorts
+# right after vanilla's 01_industry.txt, so these buildings follow its industries (after Munitions Plants).
+# Keep them bare definitions, not REPLACE_OR_CREATE: a directive applies
+# after every bare definition, so the entry it creates may land at the end.
+# Rule: docs/guides/scripting_best_practices.md § Load Order (probed
+# 2026-10-26), "Building list order"; test_building_list_order.py.
+# ============================================================================
+
+building_synthetics_plant_silk = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/synthetics_plants.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		art_silk
+	}
+
+	production_method_groups = {
+		pmg_synthetic_silk
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_very_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+}
+
+building_synthetics_plant_oil = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_oil.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		bergius_process
+	}
+
+	production_method_groups = {
+		pmg_synthetic_oil
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_rubber = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_rubber.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		isoprene
+	}
+
+	production_method_groups = {
+		pmg_synthetic_rubber
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_coal = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_coal.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		carbon_capture_and_storage
+	}
+
+	production_method_groups = {
+		pmg_synthetic_coal
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_wood = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_wood.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		biotechnology
+	}
+
+	production_method_groups = {
+		pmg_synthetic_wood
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_mega_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_sugar = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_sugar.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		green_revolution
+	}
+
+	production_method_groups = {
+		pmg_synthetic_sugar
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_drinks = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_drinks.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		biotechnology
+	}
+
+	production_method_groups = {
+		pmg_synthetic_drinks
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_opium = {
+	building_group = bg_biotechnology
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_opium.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	# Base-game Pharmaceuticals (era 2). The early methods lose to opium
+	# plantations; see the ladder comment in extra_pms.txt.
+	unlocking_technologies = {
+		pharmaceuticals
+	}
+
+	production_method_groups = {
+		pmg_synthetic_opium
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+		pmg_carbon_capture_synthetic_opium
+	}
+
+	required_construction = construction_cost_very_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	# Drugs are the opium good: a ban on it (Qing's Opium Crisis) stops these
+	# as it stops opium plantations.
+	can_build_government = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
+	}
+	can_build_private = {
+		owner = {
+			NOT = { is_banning_goods = g:opium }
+		}
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_meat = {
+	building_group = bg_biotechnology
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_meat.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		lab-grown_food
+	}
+
+	production_method_groups = {
+		pmg_synthetic_meat
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_mega_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_fruit = {
+	building_group = bg_biotechnology
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_fruit.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		lab-grown_food
+	}
+
+	production_method_groups = {
+		pmg_synthetic_fruit
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_mega_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_synthetics_plant_biomass = {
+	building_group = bg_biotechnology
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_biomass.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		genetic_engineering
+	}
+
+	production_method_groups = {
+		pmg_synthetic_biomass
+		pmg_automation_building_chemical_plant
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_mega_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_electrics_industry_radio = {
+	building_group = bg_heavy_industry
+	icon = "gfx/interface/icons/building_icons/building_electrics_industry_radio.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		radio
+	}
+
+	production_method_groups = {
+		pmg_radios_category
+		pmg_automation_building_electronic_components
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_electrics_industry_appliances = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_electrics_industry_appliances.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		personal_appliances
+	}
+
+	production_method_groups = {
+		pmg_consumer_appliances
+		pmg_automation_building_electronic_components
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_super_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_electronic_components_and_semiconductor_industry = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_electronic_components_and_semiconductor_industry.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	production_method_groups = {
+		pmg_base_building_electronic_components
+		pmg_automation_building_electronic_components
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_extreme
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_software_industry = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_software_industry.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	production_method_groups = {
+		pmg_base_building_software_industry
+		pmg_automation_building_software
+		pmg_maintenance_light
+	}
+
+	required_construction = construction_cost_very_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_robotics_industry = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_robotics_industry.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		robotics
+	}
+
+	production_method_groups = {
+		pmg_base_building_robotics
+		pmg_automation_building_electronic_components
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_mega_high
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_advanced_material_fabricator = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_advanced_material_fabricator.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		modern_material_science
+	}
+
+	production_method_groups = {
+		pmg_base_building_advanced_material_fabricator
+		pmg_automation_building_advanced_material_fabricator
+		pmg_location_building_advanced_material_fabricator
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_extreme
+
+	possible = {
+		is_industrial_production_allowed = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_aerospace_industry = {
+	building_group = bg_high_tech
+	icon = "gfx/interface/icons/building_icons/building_aerospace_industry.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		military_aviation
+	}
+
+	production_method_groups = {
+		pmg_aeroplanes
+		pmg_base_building_aerospace_industry
+		pmg_automation_building_aerospace_industry
+		pmg_maintenance
+		pmg_carbon_capture_aeroplanes
+	}
+
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

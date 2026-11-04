@@ -1711,7 +1711,7 @@ un_chamber_mandate_case_sgui = {
 # ============================================================================
 
 # Cast our ballot on the resolution in session, from the chamber card, without
-# waiting for the un_vote.1 popup that arrives 30 days in.
+# waiting for the un_vote.1 popup that arrives in the ninth month.
 #
 #   op 0   vote in favour   -> un_vote_cast_yes
 #   op 1   vote against     -> un_vote_cast_no

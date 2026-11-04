@@ -15,7 +15,10 @@ import pm_emissions as emissions
 u = emissions.unwrap
 METHODS = Path("common/production_methods/carbon_capture_generated_pms.txt")
 GROUPS = Path("common/production_method_groups/carbon_capture_generated_groups.txt")
-BUILDINGS = Path("common/buildings/carbon_capture_generated_injects.txt")
+# Named to load after every other building file: an INJECT appends its groups in
+# file order, so a capture group lands after the production groups the mod
+# injects into the same vanilla building (extra_buildings.txt), as in the panel.
+BUILDINGS = Path("common/buildings/zz_te_carbon_capture_injects.txt")
 LOC = Path("localization/english/te_production_methods_l_english.yml")
 REPORT = Path("docs/systems/carbon_capture_coverage.md")
 PREFIX = "pmg_carbon_capture_"

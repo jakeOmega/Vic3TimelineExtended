@@ -1847,7 +1847,7 @@ INJECT:pmg_training = {
 	}
 }
 
-# Public Housing (building_public_housing, extra_buildings.txt). Cost-only
+# Public Housing (building_public_housing, 07_zz_te_government.txt). Cost-only
 # methods, so most_productive as vanilla's government buildings; each method's
 # ai_value ranks it above the one before (scripting_best_practices.md
 # § Production Method `ai_value`).

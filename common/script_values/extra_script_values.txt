@@ -91,7 +91,7 @@ construction_cost_mega_high = 5000
 construction_cost_extreme = 10000
 construction_cost_space_mine = 20000
 
-# Repeatable Grand Monuments (common/buildings/grand_monuments.txt). A tenth of the
+# Repeatable Grand Monuments (common/buildings/08_zz_te_grand_monuments.txt). A tenth of the
 # old price (v2 §1, docs/superpowers/archive/specs/2026-10-05-grand-monuments-v2-design.md):
 # below one base-game monument (2,500), but a Grand Monument's first step is five
 # levels. The doubling curve stops spam -- the fifth step alone takes 80 levels

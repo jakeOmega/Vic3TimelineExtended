@@ -6709,7 +6709,7 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     "header_marker": True,
                 },
                 {
-                    "pattern": "common/buildings/carbon_capture_generated_injects.txt",
+                    "pattern": "common/buildings/zz_te_carbon_capture_injects.txt",
                     "owner": "gen_carbon_capture_pms.py",
                     "input": "merged building/PM graph + capture tiers, costs and exclusions",
                     "header_marker": True,

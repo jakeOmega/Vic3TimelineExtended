@@ -90,7 +90,7 @@ The big candidates are mostly addressed (see commits leading to and including th
 | ~~`common/scripted_buttons/st_res_buttons.txt`~~ | ~~Per-good increase/decrease rate buttons~~ | **Done differently (2026-09-17):** the 14 per-good buttons were deleted outright, not parameterized — the reserve inventory widget's row controls replaced them. Only the two shared buttons remain. | — |
 | [common/scripted_triggers/wonder_triggers.txt](../common/scripted_triggers/wonder_triggers.txt) | Repeated continent/building checks | Placeholder-friendly, but not as high leverage as SR | Medium |
 | [common/scripted_effects/legacy_modifier_cleanup.txt](../common/scripted_effects/legacy_modifier_cleanup.txt) | 207 inline `if has_modifier remove_modifier` patterns | Could use `remove_modifier_if_exists_effect` | **Skip**: temporary save-migration code, slated for deletion once no pre-migration saves exist |
-| [common/buildings/wonders.txt](../common/buildings/wonders.txt), synthetics plants in `extra_buildings.txt` | Repeated building boilerplate | 46 wonders + 11 synthetics share scaffolding | **Skip**: pure data, intentionally grep-friendly; would belong to a generator if scaled further |
+| [common/buildings/08_zz_te_wonders.txt](../common/buildings/08_zz_te_wonders.txt), synthetics plants in `01_zz_te_industry.txt` | Repeated building boilerplate | 46 wonders + 11 synthetics share scaffolding | **Skip**: pure data, intentionally grep-friendly; would belong to a generator if scaled further |
 
 ## Refactor Guidance
 

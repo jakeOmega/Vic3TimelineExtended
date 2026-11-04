@@ -5,7 +5,7 @@
 # founder, until it leaves the UN), and at most one building_un_headquarters
 # in the whole world, in the host's territory.
 #
-# The building's potential (common/buildings/wonders.txt) only stops the
+# The building's potential (common/buildings/08_zz_te_wonders.txt) only stops the
 # host from starting a second one. It cannot touch a building that already
 # stands: an HQ left behind in a country that stopped hosting keeps running,
 # country modifiers and all, because the engine never removes a building

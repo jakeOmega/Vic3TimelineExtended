@@ -11,7 +11,7 @@
 # The FINISHED monument (sites spec 2026-10-18 §3.1): always level 1, made only
 # by script, at dedication, on its dedication. Its size lives in its records
 # (gm_levels, gm_start_grandeur, gm_age); a player builds a
-# building_grand_monument_site (grand_monument_site.txt) and dedicates it. A
+# building_grand_monument_site (08_zz_te_grand_monument_site.txt) and dedicates it. A
 # state holds one; the monuments beside it are containers
 # (gm_monument_effects.txt).
 #

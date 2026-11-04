@@ -42,8 +42,8 @@ GATES = {
 
 # What each technology is there for: (file, entity, technology it names).
 REASONS = (
-    ("common/buildings/extra_buildings.txt", "REPLACE_OR_CREATE:building_renewable_energy_plant", "clean_energy_technologies"),
-    ("common/buildings/extra_buildings.txt", "REPLACE_OR_CREATE:building_synthetics_plant_coal", "carbon_capture_and_storage"),
+    ("common/buildings/06_zz_te_clean_power.txt", "building_renewable_energy_plant", "clean_energy_technologies"),
+    ("common/buildings/01_zz_te_industry.txt", "building_synthetics_plant_coal", "carbon_capture_and_storage"),
     ("common/production_methods/extra_pms.txt", "pm_multimodal_transit", "modern_urban_planning"),
 )
 

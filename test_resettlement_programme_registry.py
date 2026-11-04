@@ -25,7 +25,7 @@ RULES = "common/game_rules/extra_game_rules.txt"
 RULE_SETTINGS = ("internal_resettlement_enabled", "internal_resettlement_ai_voluntary",
                  "internal_resettlement_disabled")
 
-BUILDING_FILE = "common/buildings/resettlement.txt"
+BUILDING_FILE = "common/buildings/07_zz_te_resettlement.txt"
 PMG_FILE = "common/production_method_groups/resettlement_pmgs.txt"
 PM_FILE = "common/production_methods/resettlement_pms.txt"
 MODIFIER_TYPES = "common/modifier_type_definitions/mod_entity_modifier_types.txt"
