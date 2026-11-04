@@ -43,8 +43,7 @@
 #
 # The late ballots (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md)
 # add un_res_last_call (every AI member still without a vote casts now; see
-# un_vote.6), un_res_deferred (human members that chose to decide later) and
-# the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
+# un_vote.6) and the chamber's Delegations rows (un_res_delegates, un_deleg_row_0..23 and
 # their counts; un_chamber_display_effects.txt).
 #
 # Globals:
@@ -426,9 +425,11 @@ un_resolutions_monthly_update = {
 	#      (un_lobby_campaigns_monthly); then every member gets its un_vote.4:
 	#      its lean is written, and an AI member whose casting month has come
 	#      casts (un_vote_ai_cast_due).
-	#   c. A human member that chose to decide later is asked again at months 9
-	#      and 11 (un_vote.1 option D). Its trigger turns away one that has
-	#      voted since.
+	# A human member that chose to decide later is not asked again (owner,
+	# 2026-11-03): un_vote.1 fires once, from un_resolution_open, and the
+	# chamber's buttons take its vote after that. Until then it was re-sent at
+	# months 9 and 11 to the members on un_res_deferred, a list nothing writes
+	# now (a save's old copy is archived and destroyed with its resolution).
 	global_var:un_active_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
@@ -446,23 +447,6 @@ un_resolutions_monthly_update = {
 			# The AI's lobbying: start or let go of a campaign (un_lobby_effects.txt).
 			un_lobby_ai_monthly = yes
 			un_vote_refresh_leans = yes
-			if = {
-				limit = {
-					has_variable_list = un_res_deferred
-					OR = {
-						var:un_res_months = 9
-						var:un_res_months = 11
-					}
-				}
-				every_in_list = {
-					variable = un_res_deferred
-					limit = {
-						exists = this
-						is_ai = no
-					}
-					trigger_event = { id = un_vote.1 }
-				}
-			}
 		}
 	}
 	if = {

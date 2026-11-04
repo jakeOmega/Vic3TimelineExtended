@@ -166,7 +166,8 @@ class VetoBasisTest(unittest.TestCase):
 
 
 class DecideLaterTest(unittest.TestCase):
-    """§2: the human vote event can be put off, and comes back at months 9 and 11."""
+    """§2: the human vote event can be put off; it is the default, and the event
+    fires once per resolution (owner, 2026-11-03)."""
 
     @classmethod
     def setUpClass(cls):
@@ -180,20 +181,29 @@ class DecideLaterTest(unittest.TestCase):
         later = self.later[0]
         self.assertNotIn("un_vote_cast_", later)
         self.assertRegex(later, r"ai_chance\s*=\s*\{\s*base\s*=\s*0\s*\}")
-        self.assertIn("name = un_res_deferred", later)
+        self.assertNotIn("un_res_deferred", later)
 
-    def test_the_default_option_is_still_the_vote_in_favour(self):
+    def test_the_default_option_is_to_decide_later(self):
         defaults = [o for o in self.options if "default_option = yes" in o]
         self.assertEqual(len(defaults), 1)
-        self.assertIn("un_vote_cast_yes = yes", defaults[0])
+        self.assertIn("un_vote.1.later", defaults[0])
+        self.assertNotIn("un_vote_cast_", defaults[0])
 
-    def test_the_monthly_update_asks_again_at_nine_and_eleven(self):
+    def test_the_event_is_sent_only_when_the_resolution_opens(self):
+        sends = []
+        for top in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(top)):
+                for name in sorted(files):
+                    path = os.path.join(dirpath, name)
+                    if name.endswith(".txt") and re.search(r"id\s*=\s*un_vote\.1[\s}]", _read(path)):
+                        sends.append(path)
+        self.assertEqual(sends, [VOTE_EFFECTS])
+        opener = _block(_read(VOTE_EFFECTS), "un_resolution_open")
+        self.assertEqual(len(re.findall(r"id\s*=\s*un_vote\.1[\s}]", opener)), 1)
+        self.assertRegex(opener, r"trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.1\s+days\s*=\s*30\s*\}")
         monthly = _block(_read(VOTE_EFFECTS), "un_resolutions_monthly_update")
-        self.assertRegex(
-            monthly,
-            r"var:un_res_months\s*=\s*9\s+var:un_res_months\s*=\s*11[\s\S]*?"
-            r"variable\s*=\s*un_res_deferred[\s\S]*?trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.1\s*\}",
-        )
+        self.assertNotRegex(monthly, r"un_vote\.1[\s}]")
+        self.assertNotIn("un_res_deferred", monthly)
 
 
 

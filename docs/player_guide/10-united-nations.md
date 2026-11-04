@@ -277,9 +277,11 @@ vetoed, Our Record shows your veto record and the case for expelling you.
 
 The floor takes one resolution at a time, and each is open for a year. The
 proposer's own vote counts in favor. Human members can vote in the chamber at
-once and receive the UN General Assembly Vote event after 30 days. Its "We will
-decide later." option closes the event without voting, and it comes back in the
-ninth and eleventh months of the session. AI members vote late: each votes in the
+once and receive the UN General Assembly Vote event after 30 days, once per
+resolution. Its default option, "We will decide later.", closes the event without
+voting, so an event left to time out casts no vote. After that, the chamber's
+buttons are the only way to vote, and a member that never uses them abstains. AI
+members vote late: each votes in the
 ninth, tenth or eleventh month, drawn at random, by its lean at that time. An AI
 member that still has not voted (one that joined late, for example) votes in the
 last month of the session. After a year, General Assembly Vote Results applies the

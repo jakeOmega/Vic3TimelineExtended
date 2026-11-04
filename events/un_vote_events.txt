@@ -9,9 +9,9 @@
 # from a proposer event (un_events) or a JE button, and every event here gets
 # it as scope:un_resolution.
 #
-# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later (and
-#          again at months 9 and 11 to a member that chose to decide later);
-#          the AI votes in script by the itemised lean, late and staggered: the
+# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later, once
+#          per resolution (its default, and its timeout, is to decide later:
+#          the member votes in the chamber, or abstains); the AI votes in script by the itemised lean, late and staggered: the
 #          hidden un_vote.4 reaches every member from the day the resolution
 #          opens and every month after, and an AI member casts in its own at
 #          month 9, 10 or 11, or at the last call (un_vote.6) five days before
@@ -474,7 +474,6 @@ un_vote.1 = {
 			trigger = { always = yes }
 			text = un_vote.1.a
 		}
-		default_option = yes
 
 		# Everything this option does — the treaty-topic show_as_tooltip preview,
 		# the lobbying keep line, the recorded ballot, the target-acceptance branch
@@ -559,43 +558,20 @@ un_vote.1 = {
 		ai_chance = { base = 0 }
 	}
 
-	# Option D: Decide later (spec §2). Casts nothing: the member goes on the
-	# resolution's un_res_deferred list, and un_resolutions_monthly_update
-	# sends this event again at month 9 and at month 11 — unless the member has
-	# voted by then, which this event's own trigger checks when it fires. The
-	# chamber's vote buttons stay open throughout. The second line says which
-	# reminders are still to come.
+	# Option D: Decide later (spec §2), the default (owner, 2026-11-03), so an
+	# event left to time out casts nothing. Casts nothing and is not sent
+	# again: this event fires once per resolution (owner, 2026-11-03; it came
+	# back at months 9 and 11 until then). The chamber's vote buttons stay open
+	# until the results; a member that never uses them abstains.
+	# Vanilla gives default_option to a triggered option too
+	# (italian_unification.4.c, bulgaria_events.2.b).
 	option = {
 		name = un_vote.1.later
 		trigger = { is_ai = no }
+		default_option = yes
 
-		custom_tooltip = {
-			text = un_vote_decide_later_tt
-			scope:un_resolution ?= {
-				if = {
-					limit = {
-						NOT = {
-							AND = {
-								has_variable_list = un_res_deferred
-								is_target_in_variable_list = { name = un_res_deferred target = ROOT }
-							}
-						}
-					}
-					add_to_variable_list = { name = un_res_deferred target = ROOT }
-				}
-			}
-		}
-		if = {
-			limit = { scope:un_resolution ?= { var:un_res_months < 9 } }
-			custom_tooltip = un_vote_decide_later_both_tt
-		}
-		else_if = {
-			limit = { scope:un_resolution ?= { var:un_res_months < 11 } }
-			custom_tooltip = un_vote_decide_later_eleven_tt
-		}
-		else = {
-			custom_tooltip = un_vote_decide_later_none_tt
-		}
+		# REVIEWED 2026-11-03 (no_effect_option): deferring is the point; the vote is cast later in the chamber
+		custom_tooltip = un_vote_decide_later_tt
 
 		ai_chance = { base = 0 }
 	}
