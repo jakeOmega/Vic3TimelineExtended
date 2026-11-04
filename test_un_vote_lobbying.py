@@ -189,7 +189,8 @@ class DecideLaterTest(unittest.TestCase):
         self.assertIn("un_vote.1.later", defaults[0])
         self.assertNotIn("un_vote_cast_", defaults[0])
 
-    def test_the_event_is_sent_only_when_the_resolution_opens(self):
+    def test_the_event_is_sent_once_in_the_ninth_month(self):
+        # Owner, 2026-11-03: the ninth month (it was thirty days in), once.
         sends = []
         for top in ("common", "events"):
             for dirpath, _dirs, files in os.walk(_path(top)):
@@ -198,12 +199,25 @@ class DecideLaterTest(unittest.TestCase):
                     if name.endswith(".txt") and re.search(r"id\s*=\s*un_vote\.1[\s}]", _read(path)):
                         sends.append(path)
         self.assertEqual(sends, [VOTE_EFFECTS])
-        opener = _block(_read(VOTE_EFFECTS), "un_resolution_open")
-        self.assertEqual(len(re.findall(r"id\s*=\s*un_vote\.1[\s}]", opener)), 1)
-        self.assertRegex(opener, r"trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.1\s+days\s*=\s*30\s*\}")
+        self.assertNotRegex(_block(_read(VOTE_EFFECTS), "un_resolution_open"), r"un_vote\.1[\s}]")
         monthly = _block(_read(VOTE_EFFECTS), "un_resolutions_monthly_update")
-        self.assertNotRegex(monthly, r"un_vote\.1[\s}]")
+        self.assertEqual(len(re.findall(r"id\s*=\s*un_vote\.1[\s}]", monthly)), 1)
+        self.assertRegex(
+            monthly,
+            r"limit = \{ var:un_res_months = 9 \}\s*every_country = \{\s*limit = \{\s*is_ai = no\s*"
+            r"je:je_united_nations \?= \{ has_modifier = un_member_modifier \}\s*\}\s*"
+            r"trigger_event = \{ id = un_vote\.1 \}",
+        )
         self.assertNotIn("un_res_deferred", monthly)
+
+    def test_the_proposer_is_turned_away_by_its_own_ballot(self):
+        # The send names no proposer: its ballot is on un_res_yes from the
+        # start, and the event's trigger refuses a member that has voted.
+        opener = _block(_read(VOTE_EFFECTS), "un_resolution_open")
+        self.assertIn("add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }", opener)
+        event = _event("un_vote.1")
+        trigger = _braced(event, re.search(r"^\ttrigger\s*=\s*\{", event, re.M).end() - 1)
+        self.assertIn("NOT = { un_resolution_has_vote = { LIST = un_res_yes } }", trigger)
 
 
 
