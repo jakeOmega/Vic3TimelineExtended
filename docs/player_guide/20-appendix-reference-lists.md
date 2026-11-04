@@ -237,19 +237,28 @@ modifications](13-military.md#ships-and-ship-modifications).
 
 ## Ship utility modification list
 
-The eight utility modifications the mod adds to the ship designer, and the new
-ships that can mount them.
+The utility modifications the mod adds to the ship designer, each with the
+base-game (or earlier) modification it succeeds and can't be fitted alongside,
+and the new ships that can mount them. The battle-line ships are the Arsenal
+Ship, Stealth Battlecruiser, Hypersonic Missile Platform and Antimatter
+Battleship; the cruiser escorts the Networked Air Defense Cruiser, Pulsed Laser
+Escort and Swarm Coordination Vessel.
 
-| Utility modification | Technology | Effect | Mounted on |
-|---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | ASW Destroyer, the three new submarines |
-| Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
-| Underway Replenishment | Containerization | +100 supply capacity, +25% supply efficiency, +30% distance from port | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
-| Aegis Air Defense | Network Centric Warfare | +200 screening, +30% accuracy against Guided Missile Ships, +20% against Arsenal Ships | Guided Missile Ship, Networked Air Defense Cruiser |
-| Helicopter Pad | Rapid Deployment Forces | +0.1 marine capacity, +0.2 carrying capacity, +15% naval invasion efficiency | The five transports |
-| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
-| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
-| Composite Armor Plating | Modern Material Science | +200 armor, −15% hull damage and −20% critical hits taken | Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship |
+| Utility modification | Technology | Effect | Succeeds | Mounted on |
+|---|---|---|---|---|
+| Damage Control Teams | Naval Convoy Defense | −35% hull damage and −15% crew casualties taken | Fire Suppression | ASW Destroyer, the two carriers, the battle-line ships, Amphibious and Marine Assault Ships, Swarm Coordination Vessel, Orbital Support Mothership |
+| Composite Armor Plating | Modern Material Science | −45% hull damage and −40% critical hits taken, +20% armor | Damage Control Teams, Fire Suppression | The battle-line ships, Pulsed Laser Escort, Swarm Coordination Vessel |
+| Close-In Weapon System | Precision Guided Munitions | −20% accuracy of ships firing at it, −60% vulnerability | Torpedo Nets, Camouflage | Every new ship except the submarines |
+| Electronic Countermeasures | Electronic Warfare | −30% accuracy of ships firing at it, −40% visibility | Camouflage | The battle-line ships, Nuclear Supercarrier, Swarm Coordination Vessel, Orbital Support Mothership |
+| DEW Point Defense | Directed Energy Weapons | −35% accuracy of ships firing at it, −70% vulnerability, +200 screening | Close-In Weapon System, Torpedo Nets | The battle-line ships, Nuclear Supercarrier, Pulsed Laser Escort, Swarm Coordination Vessel, Orbital Support Mothership |
+| Precision Warheads | Guided Missiles | +75% critical hit chance, +40% crew damage | Advanced Explosives | The battle-line ships, the cruiser escorts, Guided Missile Ship, Autonomous Swarm Submarine, Orbital Support Mothership |
+| Ballistic Missile Bay | Precision Guided Munitions | +35% hull damage, +60% blockade strength | Large Carronades, Patrol Boats | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
+| Drone Complement | Swarm Technology | +40% accuracy, +40% screening, +200 detection | Range Finder | The battle-line ships, the cruiser escorts, Guided Missile Ship, Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, the two later submarines |
+| Aegis Air Defense | Network Centric Warfare | +20% readiness, +200 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
+| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +50% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
+| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | | ASW Destroyer, the three new submarines |
+| Helicopter Pad | Rapid Deployment Forces | +40% naval invasion efficiency, +25% marine and carrying capacity | Landing Skiffs | The five transports |
+| Underway Replenishment | Containerization | +40% supply capacity, +25% supply efficiency, +30% distance from port | | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
 
 ## Mobilization option list
 
