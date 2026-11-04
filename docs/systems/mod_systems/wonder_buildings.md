@@ -6,7 +6,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 
 > **Full design document:** `docs/vanilla/wonder_buildings_reference.md`
 
-The seven **megaprojects** use a two-phase construction pattern: a buildable construction site becomes the completed building through a scripted effect. (The ordinary wonders in `common/buildings/wonders.txt` are built through the normal construction queue and are not covered here.) All seven are era-12 technologies; their sites and buildings live in `common/buildings/extra_buildings.txt`.
+The seven **megaprojects** use a two-phase construction pattern: a buildable construction site becomes the completed building through a scripted effect. (The ordinary wonders in `common/buildings/08_zz_te_wonders.txt` are built through the normal construction queue and are not covered here.) All seven are era-12 technologies; their sites and buildings live in `common/buildings/extra_buildings.txt`.
 
 | Megaproject | Tech | Max level | Completed building does |
 |---|---|---|---|

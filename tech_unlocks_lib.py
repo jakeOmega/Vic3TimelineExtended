@@ -50,7 +50,7 @@ UNLOCK_SOURCES: list[tuple[str, str]] = [
 # Vic3 also uses Clausewitz merge-directive prefixes: `INJECT:foo = { … }`,
 # `REPLACE:foo = { … }`, `REPLACE_OR_CREATE:foo = { … }`. The engine resolves
 # them to the underlying entity `foo`, so the inverted index needs to do the
-# same — otherwise (e.g.) `REPLACE_OR_CREATE:building_synthetics_plant_rubber`
+# same — otherwise (e.g.) `REPLACE_OR_CREATE:building_space_program`
 # falls out of the walk and its `unlocking_technologies` is missed.
 _TOP_LEVEL_RE = re.compile(
     r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{",

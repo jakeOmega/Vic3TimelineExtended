@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# Military Base
+# ============================================================================
+# This file's name sets where its buildings appear in the building list,
+# whose default sort is the order building definitions load: file names in
+# ASCII order, vanilla's and the mod's in one list. 05_zz_te_military_base.txt sorts
+# right after vanilla's 05_military.txt, so these buildings follow its military buildings (after the Army Logistics Center).
+# Keep them bare definitions, not REPLACE_OR_CREATE: a directive applies
+# after every bare definition, so the entry it creates may land at the end.
+# Rule: docs/guides/scripting_best_practices.md § Load Order (probed
+# 2026-10-26), "Building list order"; test_building_list_order.py.
+# ============================================================================
+
+building_military_base = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_military_base.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	has_max_level = yes
+
+	unlocking_technologies = {
+		trench_works
+	}
+
+	production_method_groups = {
+		pmg_base_building_military_base
+		pmg_fortification_type
+		pmg_military_base_purpose
+		pmg_military_base_missile_defense
+	}
+
+	required_construction = construction_cost_very_high
+
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						is_at_war = yes
+						is_diplomatic_play_committed_participant = yes
+					}
+				}
+			}
+			add = 2000
+		}
+		if = {
+			limit = {
+				any_neighbouring_state = {
+					owner = {
+						is_country_type = unrecognized
+						NOT = { has_diplomatic_relevance = root.owner }
+					}
+				}
+			}
+			add = 500
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
+}

@@ -71,7 +71,10 @@ def _top_level_blocks(text):
 
 def _buildings():
     blocks = {}
-    for fn in ("extra_buildings.txt", "grand_monuments.txt", "te_construction_market_site.txt"):
+    for fn in ("01_zz_te_industry.txt", "03_zz_te_mines.txt", "05_zz_te_military_base.txt",
+               "06_zz_te_clean_power.txt", "07_zz_te_government.txt", "08_zz_te_grand_monuments.txt",
+               "08_zz_te_tourism.txt", "11_zz_te_infrastructure.txt", "extra_buildings.txt",
+               "te_construction_market_site.txt"):
         for name, body in _top_level_blocks(_read("common", "buildings", fn)).items():
             blocks[name] = blocks.get(name, "") + body
     return blocks

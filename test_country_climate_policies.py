@@ -147,9 +147,9 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         bg_power = json.loads((ROOT / "vanilla_parsed/common/building_groups.json").read_text(encoding="utf-8"))["bg_power"][1]
         for key in ("lens", "urbanization", "economy_of_scale_ai_factor", "infrastructure_usage_per_level"):
             self.assertEqual(group[key], bg_power[key][1], key)
-        buildings = load("common/buildings/extra_buildings.txt")
+        buildings = {**load("common/buildings/extra_buildings.txt"), **load("common/buildings/06_zz_te_clean_power.txt")}
         for name in ("hydro_plant", "nuclear_plant", "fusion_plant", "renewable_energy_plant"):
-            self.assertEqual(buildings[f"REPLACE_OR_CREATE:building_{name}"]["building_group"], "bg_clean_power", name)
+            self.assertEqual(buildings[f"building_{name}"]["building_group"], "bg_clean_power", name)
         # The mod leaves the coal and oil plant (and every other building) out of the child group,
         # and puts nothing in bg_power itself that the group should hold.
         self.assertEqual([name for name, block in buildings.items() if isinstance(block, dict)

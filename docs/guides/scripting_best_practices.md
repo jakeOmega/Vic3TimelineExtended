@@ -1517,7 +1517,7 @@ A `state_trigger` that asks whether the decree still helps must judge a held dec
 
 ## Grouping States by Market Area, Not by World Market Hub
 
-A market can span several **market areas**, its contiguous pieces (a country and its overseas colony share a market but are two areas). To group a country's states by area, compare states with `is_in_same_market_area = <state>` (state scope). Don't seed anything from `is_world_market_hub = yes`: a World Market Hub exists only for an area that has at least one port, it moves with port levels and GDP, and it can sit in another country's state (a subject or customs-union member's area hub may be the overlord's). A landlocked or portless country has none at all (vanilla `concept_world_market_hub_desc`). The power grid's placement rule and balancing use `is_in_same_market_area` (`common/buildings/power_grid.txt`, `te_grid_in_seed_region`).
+A market can span several **market areas**, its contiguous pieces (a country and its overseas colony share a market but are two areas). To group a country's states by area, compare states with `is_in_same_market_area = <state>` (state scope). Don't seed anything from `is_world_market_hub = yes`: a World Market Hub exists only for an area that has at least one port, it moves with port levels and GDP, and it can sit in another country's state (a subject or customs-union member's area hub may be the overlord's). A landlocked or portless country has none at all (vanilla `concept_world_market_hub_desc`). The power grid's placement rule and balancing use `is_in_same_market_area` (`common/buildings/06_zz_te_power_grid.txt`, `te_grid_in_seed_region`).
 
 ## V3 Market Pricing Model
 
@@ -3089,12 +3089,28 @@ How the engine loads a `common/` database, read in game: probes of paired files,
 
 **How these were read.** The validator's `jomini_effect.cpp:1139` / `:1135` lines (`Variable 'x' is used but is never set`, `… is set but is never used`) list every body the engine read: a REPLACEd one, an INJECT a REPLACE wiped, and both copies of a duplicate script value. So they show what was read, not what survived. Only a bare duplicate dropped with a `:378` line is never read. `Trigger section already read earlier` fires against an entry's state at the moment a directive applies, after every bare definition has been read (round 2's control base sat in `m_`, after the INJECT's `a_`), so it shows order. `on_game_started` runs when the bookmark reaches the lobby, with no root scope. There, `random_country = { debug_log = "…[SCOPE.ScriptValue('x')|0]" }` printed a script value without a game being started. A probe that needs a final value therefore needs only New Game, not an unpause. `external_mod_overlap.py` applies facts 3–10: `BARE_DUPLICATE_RULES`, and `DIRECTIVE_PHASES` in the `creations_first` reading. It simulates fact 10's open question both ways (`try_phase`, `KNOWN_TRY_PHASE`).
 
+
+**Building list order (2026-11-03).** The building browser's default sort and its Building Type column are `BuildingBrowserPanel.Sort('database_order')`: the order building definitions entered the database, which facts 1 and 2 make a matter of file names. So the mod files its new buildings by sector, as `common/buildings/NN_zz_te_<topic>.txt`, which loads right after vanilla's `NN_*.txt` (`zz` sorts after every lowercase vanilla stem; a `06_te_` name would sort before `06_urban_center.txt`):
+
+| File | Its buildings follow |
+|---|---|
+| `01_zz_te_industry.txt` | Munitions Plants: the synthetics and electrics variants, Semiconductors, Software, Robotics, Advanced Materials, Aerospace |
+| `03_zz_te_mines.txt` | Gold Fields: the discoverable mines, the Deep-Sea Mine |
+| `05_zz_te_*.txt` | the Army Logistics Center: Military Base, Ground-to-Orbit Battery, Space Command |
+| `06_zz_te_*.txt` | Power Plant: Hydro, Nuclear, Renewable and Fusion Plants, the grid stations |
+| `07_zz_te_*.txt` | Skyscrapers: State Youth Centers, Public Housing, Settlement Authority, Strategic Reserve |
+| `08_zz_te_*.txt` | the vanilla monuments: Grand Monuments, National Park, Tourism Industry, the wonders |
+| `11_zz_te_infrastructure.txt` | Financial Districts: Airport, Highway, Network Infrastructure |
+
+`company_buildings.txt` follows `14_companies.txt` (Company Headquarters), and the space buildings and megastructures in `extra_buildings.txt` close the list. A REPLACE keeps the vanilla building's place (Synthetic Dyes, Construction Sector), and an INJECT never moves one. Write a sector file's buildings as bare definitions: a `*_OR_CREATE` applies after every bare definition (facts 4 and 7), so the entry it creates may land at the end (unprobed, below). A bare copy that a later vanilla patch also defines loses to vanilla's, with a `:378` line (fact 3); a `REPLACE_OR_CREATE` would have replaced vanilla's without a word, so `building_copper_mine` (#558) is now the loud case. An INJECT also adds production method groups after the ones already there, in file order (fact 9), and the panel shows a building's groups in that order. So the generated carbon capture injects load last (`zz_te_carbon_capture_injects.txt`). Until 2026-11-03 they sorted before `extra_buildings.txt`, which put carbon capture ahead of Furniture's Marketing, the Chemical Plant's and Explosives Factory's automation, the Power Plant's automation, the Shipyard's focus and the Oil Rig's depth. `test_building_list_order.py` checks the file names, that a new building sits in a sector file, and that no production group follows a pollution control (a group that cuts pollution or greenhouse gas and makes no goods). In-game checks: `docs/testing/building-list-order-playtest.md`.
+
 Not probed:
 - which bare definition wins in the folders outside `inject_types.md` that weren't probed (`game_rules`, …);
 - whether TRY_INJECT and TRY_REPLACE apply among the INJECTs in file order or before them all (fact 10);
 - the order of two plain REPLACEs on one key (taken as file order), and of two `*_OR_CREATE`s;
 - whether an INJECT in the **same file** as its mod-only target applies (fact 8's control shows a cross-file one does);
 - how two mods' files at the same path resolve (the playset decides).
+- where an entry a `*_OR_CREATE` creates sits in database order, which the building list sorts by. The mod's listed buildings are bare definitions, so it doesn't matter for them.
 
 ## Top-Level Database Collisions: Use `INJECT:` Instead of Re-Declaring
 

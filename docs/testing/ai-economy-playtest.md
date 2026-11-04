@@ -108,7 +108,7 @@ one source); its own count stays beside it (`te_dg_unemp_walk`) for its self-che
 
 | Reader | Threshold | Effect |
 |---|---|---|
-| Settlement Authority `ai_value` (`common/buildings/resettlement.txt`) | any of the AI's states above 10% (5% until the owner raised it, 2026-10-17) | +300 on an open frontier |
+| Settlement Authority `ai_value` (`common/buildings/07_zz_te_resettlement.txt`) | any of the AI's states above 10% (5% until the owner raised it, 2026-10-17) | +300 on an open frontier |
 | Greenest Grass Campaign `ai_weight` (`common/decrees/extra_decrees.txt`) | 10% or more | × 0 |
 | Recruitment Drive `ai_weight` (the same file) | above 10% | +50 |
 | `migration_attraction_script_value` (`common/script_values/extra_script_values.txt`), the mass-migration destination's order | above 10% | × 0 |
@@ -196,7 +196,7 @@ Industry's freight is now local Transportation (× 50/30), Merchant Marine is bo
 
 ## Public Housing (2026-10-31)
 
-`building_public_housing` (`common/buildings/extra_buildings.txt`) raises its state's crowding threshold through Urban
+`building_public_housing` (`common/buildings/07_zz_te_government.txt`) raises its state's crowding threshold through Urban
 Engineering. Its `ai_value` is 0 until the state's `migration_crowding_ratio` passes 0.1, then 300 + 2,000 × the
 ratio, at most 4,300, and its group is `most_productive` with each method's `ai_value` double the last
 (`docs/systems/mod_systems/pops_and_migration.md` § Public Housing). No self-check: the modifier is the one the
@@ -208,4 +208,4 @@ technologies already grant, and the tile's breakdown shows it.
 | **The AI builds it.** Observer run to about 1900; count AI Public Housing levels in the states with the highest crowding ratio (`building="building_public_housing"` records under `building_manager` in a plain-text save). | Some levels in the most crowded states, none in states below their threshold. | None anywhere: the construction AI ignores the value (`scripting_best_practices.md` § AI and Cost-Only Buildings); add a monthly AI pass that queues a level in the most crowded state with `start_building_construction`, as the Grid Transfer Station's does. |
 | **The level cap (2026-11-02).** With Urban Planning but not Paved Roads, open the build menu's Government group and hover Paved Roads in the technology tree. | The building shows a maximum of 12 levels in each state, and Paved Roads' tooltip lists Public Housing Max Level +3. | No maximum, or no line: `state_building_public_housing_max_level_add` isn't registered (`mod_entity_modifier_types.txt`) or the building lacks `has_max_level = yes`. |
 | **The AI's method.** The same run, after Steel-Frame Buildings. | AI housing on the newest method it has the technology and goods for, not stuck on Model Dwellings. | It holds the first method: `most_productive` with cost-only methods doesn't follow `ai_value`; try `ai_selection` unset. |
-| **The icon (icon batch 8).** Open the building panel and the build menu's Government group. | Public Housing shows its own icon: a brick courtyard block of six-story apartment buildings with a pale concrete tower behind, not the Urban Center's. | The `icon` line in `extra_buildings.txt` or the DDS (`building_icons/building_public_housing.dds`). |
+| **The icon (icon batch 8).** Open the building panel and the build menu's Government group. | Public Housing shows its own icon: a brick courtyard block of six-story apartment buildings with a pale concrete tower behind, not the Urban Center's. | The `icon` line in `07_zz_te_government.txt` or the DDS (`building_icons/building_public_housing.dds`). |
