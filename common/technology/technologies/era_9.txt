@@ -629,7 +629,7 @@ LGBTQ_rights_movement = {
 }
 
 cybersecurity = {
-	# Strong Privacy Rights and Digital Currency laws
+	# Strong Privacy Rights law (Digital Currency moved to universal_digital_identity)
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/cybersecurity.dds"
 	category = society

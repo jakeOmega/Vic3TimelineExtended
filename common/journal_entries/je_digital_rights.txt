@@ -1,4 +1,11 @@
-﻿je_digital_rights = {
+﻿# The Digital Rights debate. It opens in era 9 with Automated Surveillance or
+# Cybersecurity, and succeeds on Strong Privacy Rights, which Cybersecurity unlocks
+# (Universal Digital Identity, era 11, until 2026-11-04: two eras past the opening,
+# so the debate nearly always timed out). The law also needs Guaranteed Liberties,
+# the slow half; the status line names whichever of the two is missing. It fails on
+# Intrusive Surveillance with the Ministry of Intelligence, and a timeout under
+# Moderate Data Privacy costs half the penalty and no radicals.
+je_digital_rights = {
 	icon = "gfx/interface/icons/event_icons/je_digital_rights.dds"
 	group = je_group_internal_affairs
 
@@ -13,12 +20,22 @@
 			has_technology_researched = cybersecurity
 		}
 		NOT = { is_country_type = decentralized }
+		# Rebels do not start their own debate mid-war (and, winning, keep a fresh
+		# outcome), as in je_morphological_freedom. Here, not in possible, so it can
+		# never touch an active record a revolution's winner inherits.
+		is_revolutionary = no
+		# Set by on_complete, on_fail and on_timeout. A revolution's winner gets a
+		# fresh record of an entry the loser had finished, and without this it would
+		# re-activate: a failed debate would fail again at once and replay its
+		# outcome event, and a timed-out one would run its twenty years again.
+		NOT = { has_variable = digital_rights_resolved }
 		NOT = {
 			has_law = law_type:law_strong_privacy_rights
 		}
 	}
 
 	possible = {
+		NOT = { has_variable = digital_rights_resolved }
 		OR = {
 			has_technology_researched = automated_surveillance
 			has_technology_researched = cybersecurity
@@ -44,6 +61,22 @@
 
 	status_desc = {
 		first_valid = {
+			# What stands between the country and Strong Privacy Rights comes first:
+			# the technology (an entry opened by Automated Surveillance may not have
+			# it), then the law it needs. The fail block's own tooltip carries the
+			# Intrusive Surveillance warning while either is missing.
+			triggered_desc = {
+				desc = je_digital_rights_status_needs_tech
+				trigger = {
+					NOT = { has_technology_researched = cybersecurity }
+				}
+			}
+			triggered_desc = {
+				desc = je_digital_rights_status_needs_liberties
+				trigger = {
+					NOT = { has_law = law_type:law_guaranteed_liberties }
+				}
+			}
 			triggered_desc = {
 				desc = je_digital_rights_status_surveillance
 				trigger = {
@@ -70,6 +103,7 @@
 	}
 
 	on_complete = {
+		set_variable = digital_rights_resolved
 		trigger_event = { id = surveillance_events.200 }
 	}
 
@@ -84,20 +118,38 @@
 	}
 
 	on_fail = {
+		set_variable = digital_rights_resolved
 		trigger_event = { id = surveillance_events.100 }
 	}
 
-	timeout = 5475
+	# 20 years, as the other debates settled by law have (15 until 2026-11-04).
+	timeout = 7300
 
 	on_timeout = {
-		add_radicals = {
-			value = small_radicals
-			pop_type = academics
+		set_variable = digital_rights_resolved
+		if = {
+			# Halfway there: a data protection regime, if not the constitutional right.
+			# Half the stagnation and no radicals.
+			limit = {
+				has_law = law_type:law_moderate_data_privacy
+			}
+			add_modifier = {
+				name = digital_rights_stagnation_modifier
+				days = long_modifier_time
+				multiplier = 0.5
+				is_decaying = yes
+			}
 		}
-		add_modifier = {
-			name = digital_rights_stagnation_modifier
-			days = long_modifier_time
-			is_decaying = yes
+		else = {
+			add_radicals = {
+				value = small_radicals
+				pop_type = academics
+			}
+			add_modifier = {
+				name = digital_rights_stagnation_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
 		}
 	}
 
