@@ -3631,18 +3631,18 @@ A static modifier definition in `common/static_modifiers/` is dead code unless i
 
 **Audit:** `grep -rln "name = my_modifier_name" common/ events/` should produce at least one hit per defined static modifier. Zero hits means the modifier exists in name only.
 
-## Vanilla Ship Slot Mods Are Referenced by Parent Type
+## Vanilla Ship Slot Mods Are Referenced by Parent Type, and Sized to It
 
-Vanilla ship modifications like `ship_mod_destroyer_armor_light/medium/high`, `ship_mod_aircraft_carrier_*`, `ship_mod_super_dreadnought_*` are keyed by **parent ship type**, not by the modded ship type. When a mod ship reuses a parent's `modifications` block, it gets the parent's mods verbatim — including their thematic mismatch (a 2010-era arsenal ship using "super dreadnought guns") and their construction goods (which scale with the parent's economy, not the modern ship's).
+Vanilla ship modifications like `ship_mod_destroyer_armor_light/medium/high`, `ship_mod_aircraft_carrier_*`, `ship_mod_super_dreadnought_*` are keyed by **parent ship type**, not by the modded ship type, and their flat values are **sized to that parent's hull**: on most vanilla hulls guns-high adds about 2× the hull's own damage and armor-high about 3× its armor, so going from light to high modules buys about +65% hull damage, +150% armor and +35% hit points. A mod ship that reuses a parent's `modifications` block, or copies its values onto a bigger hull, gets modules worth a few percent of the hull: before 2026-11-03 light to high bought +7% hull damage on the Antimatter Battleship, for five times the Super Dreadnought's goods. A shared set can't fit two hulls of different size either.
 
-To give a mod ship its own slot mods:
+To give a mod ship its slot mods:
 
-1. Create new mods in `common/ship_modifications/` keyed by the mod ship type — e.g. `ship_mod_arsenal_ship_armor_light`.
-2. Mirror the vanilla parent's modifier values to preserve combat balance (or retune deliberately).
-3. Scale construction goods proportionally to the modern ship's base cost — don't inherit vanilla's 19th-century goods totals.
+1. Create its own set in `common/ship_modifications/` keyed by the mod ship type, e.g. `ship_mod_arsenal_ship_armor_light`, one set per ship.
+2. Size it from the ship's vanilla class analogue: take the ship's total with medium modules for each stat (hull and crew damage, armor and hit points, supply capacity, power projection), split it between hull and module in the analogue's proportion, and give light and high the analogue's tier ratios. Header of `extra_ship_modifications.txt`; `test_ship_modules.py` checks every mod ship against its analogue.
+3. Scale construction goods with the modern ship's cost and use the era's goods; don't inherit vanilla's 19th-century goods or names.
 4. Update the ship's `modifications = { ... }` block to point at the new IDs.
 
-**Repo example:** `common/ship_modifications/extra_ship_modifications.txt` — 108 mods across 9 modern ships, with construction goods scaled 2×–4× over vanilla parent values.
+**Repo example:** `common/ship_modifications/extra_ship_modifications.txt`, one set for each of the 19 mod ships (design: `docs/superpowers/specs/2026-11-03-ship-module-scaling-design.md`).
 
 ## `ship_visibility_add` Doesn't Clamp ≥ 0 — Per-Modification Negatives Are a Mod-Only Pattern
 

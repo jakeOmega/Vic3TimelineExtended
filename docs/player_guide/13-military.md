@@ -105,11 +105,14 @@ Aircraft, the Troopship with Combined Arms, the Destroyer and Light Cruiser with
 Sonar, the Submarine with Advanced Submarine Technology and the Aircraft Carrier
 with Nuclear Energy.
 
-In the ship designer, nine of the new ships bring their own armor, guns,
-propulsion and range modifications in three tiers; the others reuse those of a
-related ship. Eight new utility modifications join the base game's, from the
-Sonar Suite (Sonar) to Composite Armor Plating (Modern Material Science); [Ship
-utility modification list](20-appendix-reference-lists.md#ship-utility-modification-list)
+In the ship designer, each new ship has its own armor, guns, propulsion and
+range modifications in three tiers, sized to the ship as the base game sizes its
+own: going from light to heavy modules buys about two-thirds more hull damage,
+two and a half times the armor and a third more hit points, as it does on a
+base-game ship of the same class. Eight new utility modifications join the base
+game's, from the Sonar Suite (Sonar) to Composite Armor Plating (Modern Material
+Science); [Ship utility modification
+list](20-appendix-reference-lists.md#ship-utility-modification-list)
 gives each one's technology and effect and the ships that mount it.
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
