@@ -9211,12 +9211,13 @@ types space_race_widget_types
 							}
 						}
 						### Base Room (UI pass design § 8, the parallel to Seabed's Long-haul):
-						### our Extraplanetary Base levels against our room, red once built and
-						### queued levels pass it; the grade the next level would work at; on
-						### hover the queued levels, the average now and the rule. Five-digit
-						### figures leave the word no room for the queued count. Shown once the building is ours to
-						### build. Levels, queue and room are read live; the grades come from the
-						### monthly refresh and the one when a base is built (space_race_events.110).
+						### our Extraplanetary Base levels, built and queued, against our room
+						### ("120 +20 / 400", or "140 / 400" once the figures run too long for the
+						### word to show them apart), red once they pass it; the grade the next
+						### level would work at; on hover the average now and the rule. Shown once
+						### the building is ours to build. Levels, queue and room are read live; the
+						### grades come from the monthly refresh and the one when a base is built
+						### (space_race_events.110).
 						### The row also holds the Earth alert's Hostile Fleet cell (§ 9), so it
 						### shows while either cell does.
 						flowcontainer = {
@@ -9239,13 +9240,23 @@ types space_race_widget_types
 									}
 								}
 								blockoverride "word" {
+									# Built and queued levels against the room: apart while they fit
+									# (sr_disp_ebase_split), their sum when not; red past the room.
 									te_banking_ov_word = {
-										visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) )]"
+										visible = "[And( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) ), Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_split'), '(CFixedPoint)1' ) ) )]"
 										text = "je_space_race_widget_ovc_ebase_word"
 									}
 									te_banking_ov_word = {
-										visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' )]"
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ), Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_split'), '(CFixedPoint)1' ) ) )]"
 										text = "je_space_race_widget_ovc_ebase_word_past"
+									}
+									te_banking_ov_word = {
+										visible = "[And( Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ) ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_split'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_ebase_word_split"
+									}
+									te_banking_ov_word = {
+										visible = "[And( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_past'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_ebase_split'), '(CFixedPoint)1' ) )]"
+										text = "je_space_race_widget_ovc_ebase_word_split_past"
 									}
 								}
 								blockoverride "third_line" {
