@@ -30,7 +30,7 @@ MODIFIERS = "common/static_modifiers/gm_modifiers.txt"
 CONCEPTS = "common/game_concepts/extra_concepts.txt"
 PMS = "common/production_methods/grand_monument_pms.txt"
 PMG = "common/production_method_groups/grand_monument_pmgs.txt"
-BUILDING = "common/buildings/grand_monuments.txt"
+BUILDING = "common/buildings/08_zz_te_grand_monuments.txt"
 EFFECTS = "common/scripted_effects/gm_effects.txt"
 ON_ACTIONS = "common/on_actions/monument_events_on_actions.txt"
 CIVIL_WAR_ON_ACTIONS = "common/on_actions/te_civil_war_on_actions.txt"
@@ -3357,7 +3357,7 @@ class PolicyTests(unittest.TestCase):
 
 # ==== v2 phase 2: typed names (§3.5) =================================================
 CARRIER_COMPANY = "common/company_types/gm_name_carrier_company.txt"
-CARRIER_BUILDING = "common/buildings/gm_name_carrier.txt"
+CARRIER_BUILDING = "common/buildings/08_zz_te_gm_name_carrier.txt"
 NAMING_SGUIS = ("gm_name_start_sgui", "gm_name_mark_old_sgui", "gm_name_use_sgui", "gm_name_cancel_sgui",
                 "gm_clear_name_sgui")
 
@@ -6358,7 +6358,7 @@ class OptionReasonTests(unittest.TestCase):
 
 # ---- Dedicate (owner, 2026-10-18) -------------------------------------------------------
 
-SITE_BUILDING = "common/buildings/grand_monument_site.txt"
+SITE_BUILDING = "common/buildings/08_zz_te_grand_monument_site.txt"
 
 
 class SiteBuildingTests(unittest.TestCase):

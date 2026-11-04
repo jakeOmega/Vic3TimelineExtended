@@ -1,6 +1,6 @@
 ﻿# State traits for the mod's custom mineable resources (GH #110).
 #
-# Mod custom mines (defined in common/buildings/extra_buildings.txt) need
+# Mod custom mines (defined in common/buildings/03_zz_te_mines.txt) need
 # regional quality/ease-of-mining bonuses analogous to vanilla traits like
 # state_trait_bergslagen (iron+lead) or state_trait_appalachian_coal. Deposit
 # size is already modelled by amounts in deposits_config.json; these traits

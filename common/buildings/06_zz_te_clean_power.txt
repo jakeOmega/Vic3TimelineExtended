@@ -1,0 +1,102 @@
+﻿# ============================================================================
+# Power plants the mod adds: hydro, nuclear, renewable, fusion
+# ============================================================================
+# This file's name sets where its buildings appear in the building list,
+# whose default sort is the order building definitions load: file names in
+# ASCII order, vanilla's and the mod's in one list. 06_zz_te_clean_power.txt sorts
+# right after vanilla's 06_urban_center.txt, so these buildings follow its Power Plant.
+# Keep them bare definitions, not REPLACE_OR_CREATE: a directive applies
+# after every bare definition, so the entry it creates may land at the end.
+# Rule: docs/guides/scripting_best_practices.md § Load Order (probed
+# 2026-10-26), "Building list order"; test_building_list_order.py.
+# ============================================================================
+
+building_hydro_plant = {
+	building_group = bg_clean_power
+	icon = "gfx/interface/icons/building_icons/building_hydro_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_hydro_power
+		pmg_power_automation
+		pmg_maintenance_heavy
+	}
+
+	unlocking_technologies = {
+		public_works_programs
+	}
+
+	required_construction = construction_cost_very_high
+
+	has_max_level = yes
+
+	possible = {
+		on_river = yes
+	}
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_nuclear_plant = {
+	building_group = bg_clean_power
+	icon = "gfx/interface/icons/building_icons/building_nuclear_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_nuclear_power
+		pmg_power_automation
+		pmg_maintenance_intensive
+	}
+
+	unlocking_technologies = {
+		nuclear_energy
+	}
+
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_renewable_energy_plant = {
+	building_group = bg_clean_power
+	icon = "gfx/interface/icons/building_icons/building_renewable_energy_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_renewable_power
+		pmg_power_automation
+		pmg_maintenance_heavy
+	}
+
+	unlocking_technologies = {
+		clean_energy_technologies
+	}
+
+	required_construction = construction_cost_super_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_fusion_plant = {
+	building_group = bg_clean_power
+	icon = "gfx/interface/icons/building_icons/building_fusion_plant.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	production_method_groups = {
+		pmg_base_building_fusion_power
+		pmg_power_automation
+		pmg_maintenance_intensive
+	}
+
+	unlocking_technologies = {
+		fusion_power
+	}
+
+	required_construction = construction_cost_extreme
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

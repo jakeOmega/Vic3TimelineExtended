@@ -7,7 +7,8 @@
 # common/ship_modifications/extra_ship_modifications.txt). Hull and module
 # split each stat as the ship's vanilla class analogue does (that file's
 # header has the rule), so the hull values below are the ship WITHOUT its
-# modules: about half its strength with the default medium ones.
+# modules: about half its damage, armor and supply with the default medium
+# ones, and most of its hit points and power projection.
 #
 # Era / tech mapping (covers all 4 roles every era 6-12 with 2-3 era overlap):
 #   era 6  bombing_aircraft             → fleet_carrier                     (capital)
@@ -42,14 +43,23 @@
 # analogue ratios (vanilla prestige / damage): super_dreadnought 0.065 for the
 # capital ships, light_cruiser 0.030 for the cruiser-group escorts, destroyer
 # 0.035 for asw_destroyer / guided_missile_ship, aircraft_carrier 0.021 for the
-# carriers, submarine 0.010 for the submarines. Rounded to 5. A successor never
-# projects less than the vanilla class it replaces, so asw_destroyer and the two
-# carriers sit at the analogue's own PP (200 / 275) where the formula gave 130-140
+# carriers, submarine 0.010 for the submarines. Rounded to 5. A successor's hull
+# never projected less than its vanilla class's hull, so asw_destroyer and the two
+# carriers sat at the analogue's own PP (200 / 275) where the formula gave 130-140
 # (their strength is armor, accuracy and screening, not hull damage). The five
 # troop ships set none, as vanilla's troop_ship and supply_ship do.
 # Since 2026-11-03 range modules carry part of it, as vanilla's do: each hull's
-# ship_power_projection_add is that derived PP less its medium range module's
-# share (the analogue's split), so a ship with medium modules projects what it did.
+# ship_power_projection_add is the ship's medium total before that date less its
+# medium range module's share (the analogue's split), so a ship with medium
+# modules projects what it did. (The Fleet Carrier and the Networked Air Defense
+# Cruiser had borrowed vanilla range modules that already carried PP, so their
+# totals were the derived figure plus that.)
+# With medium modules, a ship never projects less than its vanilla analogue or
+# the ship it succeeds (the same role, unlocked by the technology that obsoletes
+# it); test_ship_modules.py checks both. Two fell short until issue #1390: the
+# ASW Destroyer now takes the vanilla destroyer's own 200 + 0/33/56 (233 at
+# medium, was 200), and the Nuclear Supercarrier 330 at medium (was 275), a
+# step above the Fleet Carrier's 319 like vanilla's late successors (+4-7%).
 #
 # Accuracy (2026-11-03): a shot misses with chance 0.5 + 0.03 x (target speed -
 # target visibility / 15 - 5 x accuracy), clamped to 5-90% (NBattle defines), so
@@ -80,7 +90,7 @@ ship_type_asw_destroyer = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 172
+		ship_power_projection_add = 200
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 3675
 		ship_crew_max_add = 200
@@ -352,6 +362,7 @@ ship_type_guided_missile_ship = {
 ### NUCLEAR SUPERCARRIER — era 7, nuclear_energy
 ### Pre-update mod stats: 700 atk / 350 def — capital-class fleet flagship (~7x vanilla super_dreadnought)
 ### 1.13.1 rebalance: armor 360 → 200 (ratio 0.80) to match vanilla's new ~0.83 armor:damage target for late-game capitals.
+### (Hull armor then; since 2026-11-03 the hull carries part of it and the armor module the rest.)
 ship_type_nuclear_supercarrier = {
 	ship_group = ship_group_cruisers
 	ai_ship_category = ai_ship_category_carriers
@@ -367,7 +378,7 @@ ship_type_nuclear_supercarrier = {
 	}
 
 	modifier = {
-		ship_power_projection_add = 237
+		ship_power_projection_add = 284
 		ship_construction_progress_max_add = 25
 		ship_hit_points_max_add = 6450
 		ship_crew_max_add = 1500

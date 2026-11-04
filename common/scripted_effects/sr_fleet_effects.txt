@@ -460,13 +460,14 @@ sr_fl_country_month = {
 # Country scope, first in the fleets' month (owner, 2026-10-31): a nation runs
 # one Space Command. With buildings of a level or more in two states or more
 # (one comes with an annexed or formed country's land), it keeps the one with
-# the most levels, the market capital's on a tie (sr_sc_keeper_score), and
+# the most levels, the capital's on a tie (sr_sc_keeper_score), and
 # dismantles every other, before this month's construction (sr_sc_month) or
 # upkeep (sr_fl_upkeep_refresh) reaches it; a player hears of each
-# (sr_space_command_dismantled_notice, naming both states). Not the market
-# capital's alone, as the Space Program's rule is: that would demolish a
-# player's Space Command each time the capital moved. A new one built in a
-# moved capital is the smaller, so it goes when it reaches its first level.
+# (sr_space_command_dismantled_notice, naming both states). Not the capital's
+# alone, as the Space Program's rule is (sr_space_program_site): that would
+# demolish a player's Space Command each time the capital moved. A new one
+# built in a moved capital is the smaller, so it goes when it reaches its first
+# level.
 sr_sc_one_per_nation = {
 	if = {
 		limit = { sr_sc_buildings > 1 }

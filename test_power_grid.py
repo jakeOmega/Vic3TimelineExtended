@@ -29,7 +29,7 @@ import unittest
 REPO = os.path.dirname(os.path.abspath(__file__))
 COMMON = os.path.join(REPO, "common")
 GOODS = os.path.join(COMMON, "goods", "timeline_extended_extra_goods.txt")
-BUILDING = os.path.join(COMMON, "buildings", "power_grid.txt")
+BUILDING = os.path.join(COMMON, "buildings", "06_zz_te_power_grid.txt")
 PMGS = os.path.join(COMMON, "production_method_groups", "power_grid_pmgs.txt")
 PMS = os.path.join(COMMON, "production_methods", "power_grid_pms.txt")
 MODIFIERS = os.path.join(COMMON, "static_modifiers", "power_grid_modifiers.txt")

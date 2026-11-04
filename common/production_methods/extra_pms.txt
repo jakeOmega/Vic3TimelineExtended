@@ -22562,7 +22562,7 @@ pm_focus_wartime_mobilization = {
 }
 
 # ============================================================================
-# PUBLIC HOUSING (building_public_housing, extra_buildings.txt)
+# PUBLIC HOUSING (building_public_housing, 07_zz_te_government.txt)
 # ============================================================================
 # Each method grants its state Urban Engineering
 # (state_building_construction_sector_max_level_add, relocalized), which

@@ -1,0 +1,95 @@
+﻿# ============================================================================
+# Infrastructure the mod adds: Airport, Highway, Network Infrastructure
+# ============================================================================
+# This file's name sets where its buildings appear in the building list,
+# whose default sort is the order building definitions load: file names in
+# ASCII order, vanilla's and the mod's in one list. 11_zz_te_infrastructure.txt sorts
+# right after vanilla's 11_private_infrastructure.txt, so these buildings follow its private infrastructure (after Financial Districts).
+# Keep them bare definitions, not REPLACE_OR_CREATE: a directive applies
+# after every bare definition, so the entry it creates may land at the end.
+# Rule: docs/guides/scripting_best_practices.md § Load Order (probed
+# 2026-10-26), "Building list order"; test_building_list_order.py.
+# ============================================================================
+
+building_airport = {
+	building_group = bg_private_infrastructure
+	icon = "gfx/interface/icons/building_icons/building_airport.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	enable_air_connection = yes # does this do anything??
+	has_max_level = yes
+
+	unlocking_technologies = {
+		commercial_aviation
+	}
+
+	should_auto_expand = {
+		occupancy >= 0.8
+	}
+
+	production_method_groups = {
+		pmg_base_building_airport
+		pmg_maintenance_heavy
+	}
+
+	required_construction = construction_cost_super_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_highway = {
+	building_group = bg_private_infrastructure
+	icon = "gfx/interface/icons/building_icons/building_highway.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	has_max_level = yes
+
+	unlocking_technologies = {
+		paved_roads
+	}
+
+	should_auto_expand = {
+		occupancy >= 0.8
+	}
+
+	production_method_groups = {
+		pmg_base_building_highway
+		pmg_maintenance_heavy
+	}
+
+	required_construction = construction_cost_super_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}
+
+building_network_infrastructure = {
+	building_group = bg_private_infrastructure
+	icon = "gfx/interface/icons/building_icons/building_network_infrastructure.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	should_auto_expand = {
+		occupancy >= 0.8
+		state = {
+			sg:digital_access = {
+				state_goods_pricier > 0.5
+			}
+		}
+	}
+
+	production_method_groups = {
+		pmg_base_building_network
+		pmg_automation_building_network
+		pmg_maintenance_heavy
+	}
+
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

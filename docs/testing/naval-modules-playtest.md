@@ -22,8 +22,9 @@ commit that fixed it.
 |---|---|---|
 | **Totals.** Design an Arsenal Ship with medium modules in all four core slots; read hull damage, armor and hit points. | About 1,310 hull damage, 670 armor, 13,150 hit points (its pre-change strength). | A different total means the engine adds a module to the hull another way than the sum: compare with a base-game Super Dreadnought (170 + 210 = 380). |
 | **Spread.** Switch its guns from light to high. | Hull damage 980 → 1,635. | |
+| **Old ships.** Load a save from before the update that has a built Marine Assault Ship. Read its armor and supply, and whether its template asks for a retrofit. | About 140 armor and 440 supply, at once or after a retrofit. | About 70 armor and 255 supply: the ship kept the base-game Troopship's modules on its new, smaller hull. Ten ship types that used to borrow a set are exposed (the three troop ships worst, about half their armor); a retrofit should fix them, so say so in the release notes. If no retrofit is offered, note what the template shows. |
 | **Old templates.** Load a save with a mod ship designed before the update. | The ship keeps fighting; its template asks for a retrofit or shows the new modules. | A ship with no modules or a broken template: note which, and whether a retrofit fixes it. |
-| **AI.** Watch an AI at war in the 1990s or later. | Its late ships carry high-tier modules more often than before. | |
+| **AI.** Watch an AI at war in the 1990s or later; note which module tiers its late ships carry. | Medium or high, as before. Module `ai_weight` is unchanged (1/2/3 times the market multiplier), so the AI's choice shouldn't move. | Mostly light: AI late navies are now weaker than before, since a light module buys less than it did. |
 
 ## Utilities and accuracy (PR 2)
 

@@ -32,14 +32,12 @@ ranking, so in practice you race against the AI powers that hold those places.
 
 ### The Space Program building
 
-The Space Program is a monument in your market capital, and every milestone
-depends on it. It is a single, government-built building with a very high
-construction cost, but you don't have to build it: once you research Guided
-Missiles, the decision Found a Space Program places it in your market capital at
-once, with no construction cost, running Earth Orbit. Either way it can stand
-only in the capital of a market you lead, so a country in another country's
-market can't have one. It is removed if the state stops being your market
-capital, for example when you lose it in a war or join another market. It
+The Space Program is a monument in your capital, and every milestone depends on
+it. It is a single, government-built building with a very high construction
+cost, but you don't have to build it: once you research Guided Missiles, the
+decision Found a Space Program places it in your capital at once, with no
+construction cost, running Earth Orbit. It is removed if the state stops being
+your capital, for example when you lose it in a war or move your capital. It
 employs 40,000 engineers, academics and clerks and consumes Launch Capacity, the
 good your Aerospace Industry makes. That weekly bill is what the program really
 costs; the Budget panel's Breakdown tab lists it under Program Costs, in the
@@ -1074,7 +1072,7 @@ that line for every 10 points of strength at full, the reserve's included, so a
 fleet of 300 costs about 2.3 million a week. Switching the yards to a cheaper
 method or cutting levels doesn't lower it. If annexed or formed land brings a
 second Space Command, the smaller of the two is dismantled, whichever it is (on
-a tie, the one outside your market capital), and you are told. A large fleet
+a tie, the one outside your capital), and you are told. A large fleet
 makes Space Command dearer to run; it builds as fast while those goods can be
 bought.
 Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
