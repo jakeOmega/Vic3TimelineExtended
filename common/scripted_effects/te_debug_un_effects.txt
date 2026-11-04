@@ -111,7 +111,7 @@ te_debug_un_set_standing = {
 
 # Open a resolution on $TOPIC$ with $PROPOSER$ as its sponsor, so the player can
 # vote on it from the chamber card on day one instead of waiting for a proposer
-# event to fire and then thirty days for the un_vote.1 popup. $PROPOSER$ must be
+# event to fire and then nine months for the un_vote.1 popup. $PROPOSER$ must be
 # a UN member other than the player (run te_debug_un_setup first); the player is
 # then an ordinary voter with Vote in Favour / Vote Against live immediately,
 # and Veto too if the player holds a permanent seat and $TOPIC$ is binding.

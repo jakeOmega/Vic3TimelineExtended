@@ -1042,8 +1042,11 @@ REPLACE_OR_CREATE:building_space_program = {
 	}
 
 	possible = {
-		# ?=: a market with no capital state returns an invalid object.
-		owner.market_capital ?= THIS
+		# Our capital (space_race_triggers.txt).
+		custom_tooltip = {
+			text = sr_space_program_site_tt
+			sr_space_program_site = yes
+		}
 	}
 
 	required_construction = construction_cost_super_high

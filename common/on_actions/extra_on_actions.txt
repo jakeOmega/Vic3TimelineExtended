@@ -760,8 +760,9 @@ te_on_military_formation_created = {
 # ============================================================================
 # STATE OWNER CHANGE (Root = state)
 # When a state changes hands (e.g. conquest), remove building_space_program
-# if it exists and this state is not the new owner's market capital, and
-# bring the state-input treaty articles' effects in line with the new owner.
+# if it exists and this state is not the new owner's capital
+# (sr_space_program_site), and bring the state-input treaty articles' effects in line with
+# the new owner.
 # ============================================================================
 on_state_owner_change = {
 	on_actions = {
@@ -774,11 +775,11 @@ te_on_state_owner_change = {
 		if = {
 			limit = {
 				has_building = building_space_program
-				# Only when the owner's market capital is known to be elsewhere: the
-				# link can come back invalid (observer run, 2026-10-06), and a
-				# broken link is no reason to demolish the program.
-				exists = owner.market_capital
-				NOT = { owner.market_capital = THIS }
+				# Only when the owner's capital is known: a market-capital link once
+				# came back invalid (observer run, 2026-10-06), and a broken link
+				# is no reason to demolish the program.
+				exists = owner.capital
+				NOT = { sr_space_program_site = yes }
 			}
 			remove_building = building_space_program
 		}
@@ -963,11 +964,12 @@ remove_invalid_buildings = {
 		every_scope_state = {
 			limit = {
 				AND = {
-					# As in te_on_state_owner_change: only a market capital known to
-					# be elsewhere removes the program.
-					exists = owner.market_capital
-					NOT = { owner.market_capital = THIS }
 					has_building = building_space_program
+					# As in te_on_state_owner_change: only a known capital, with
+					# this state not the owner's capital, removes the program
+					# (sr_space_program_site, space_race_triggers.txt).
+					exists = owner.capital
+					NOT = { sr_space_program_site = yes }
 				}
 			}
 			remove_building = building_space_program

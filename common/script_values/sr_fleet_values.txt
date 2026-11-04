@@ -122,9 +122,10 @@ sr_sc_buildings = {
 }
 
 # State scope, the sweep's order: the Space Command kept is the one with the
-# most levels, and on a tie the market capital's (not the capital's alone, as
-# the Space Program's is: that would demolish a player's Space Command each
-# time the capital moved).
+# most levels, and on a tie the capital's, where the Space Program stands
+# (sr_space_program_site; the market capital's until 2026-11-03, when the
+# program moved to the capital). Only a tie-break: a rule keeping the capital's
+# alone would demolish a player's Space Command each time the capital moved.
 sr_sc_keeper_score = {
 	value = 0
 	if = {
@@ -133,10 +134,7 @@ sr_sc_keeper_score = {
 		multiply = 10
 	}
 	if = {
-		limit = {
-			exists = owner.market_capital
-			owner.market_capital = this
-		}
+		limit = { owner.capital ?= this }
 		add = 1
 	}
 }

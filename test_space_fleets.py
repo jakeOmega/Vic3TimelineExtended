@@ -464,7 +464,8 @@ class OneSpaceCommandTest(unittest.TestCase):
         self.assertRegex(score, r"limit = \{ has_building = building_space_command \}\s*"
                                 r"value = b:building_space_command\.level\s*multiply = 10")
         # A level outweighs the capital: 10 a level against 1.
-        self.assertRegex(score, r"limit = \{\s*exists = owner\.market_capital\s*owner\.market_capital = this\s*\}\s*add = 1\s*\}\s*$")
+        # The capital's, where the Space Program stands (owner, 2026-11-03).
+        self.assertRegex(score, r"limit = \{ owner\.capital \?= this \}\s*add = 1\s*\}\s*$")
 
     def test_every_other_one_is_removed(self):
         m = re.search(r"every_scope_state = \{\s*limit = \{\s*has_building = building_space_command\s*"
@@ -490,7 +491,8 @@ class OneSpaceCommandTest(unittest.TestCase):
         self.assertIn("[SCOPE.sState('sr_sc_keeper').GetName]", desc)
         # The tie goes to the market capital, which needn't have more levels
         # (review of #1287, M2).
-        self.assertIn("market capital", desc)
+        self.assertIn("the capital's", desc)
+        self.assertNotIn("market capital", desc)
         self.assertNotIn("the one with the most levels", desc)
         for suffix in ("_name", "_tooltip"):
             with self.subTest(key=suffix):
