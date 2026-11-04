@@ -69,8 +69,9 @@ SUCCESSORS = {
 # Base-game utilities no mod ship offers: obsolete by the mod's eras.
 PRUNED = ("torpedo_nets", "searchlights")
 # Stats whose reducers must not stack across utility slots on a mod ship.
-NO_STACK = ("ship_suffered_hull_damage_mult", "ship_suffered_accuracy_mult",
-            "ship_suffered_crit_chance_mult", "ship_vulnerability_mult")
+NO_STACK = ("ship_suffered_hull_damage_mult", "ship_suffered_crew_damage_mult",
+            "ship_suffered_accuracy_mult", "ship_suffered_crit_chance_mult",
+            "ship_vulnerability_mult")
 LATE_CAPITALS = ("arsenal_ship", "stealth_battlecruiser", "hypersonic_missile_platform", "antimatter_battleship")
 CARRIERS = ("fleet_carrier", "nuclear_supercarrier")
 
@@ -398,6 +399,16 @@ class TestShipUtilities(unittest.TestCase):
             with self.subTest(ship=ship):
                 accuracy = _modifier(types["ship_type_" + ship]).get("ship_accuracy_add", 0)
                 self.assertLessEqual(accuracy, 20 if ship in CARRIERS else 9)
+
+    def test_modules_carry_no_flat_accuracy(self):
+        """A flat ship_accuracy_add on a module undoes the hull ladder above (the
+        Guided Missile Ship's heavy guns took it from 7 to 32 and made every
+        countermeasure useless against it). The base game's modules carry none;
+        a module that sharpens aim uses ship_accuracy_mult."""
+        _, mods, _, mod_mods, _ = _state()
+        for name in sorted(mod_mods):
+            with self.subTest(module=name):
+                self.assertLessEqual(_modifier(mods[name]).get("ship_accuracy_add", 0), 0)
 
     def test_accuracy_budget(self):
         """No target-side accuracy term below -0.4, and an attacker's penalty

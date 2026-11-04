@@ -448,6 +448,7 @@ ship_type_nuclear_supercarrier = {
 		ship_mod_slot_utility_1 = {
 			utility_mod_fire_suppression
 			utility_mod_damage_control_teams
+			utility_mod_extended_sick_bay
 			utility_mod_camouflage
 			utility_mod_ciws
 			utility_mod_electronic_countermeasures
@@ -456,7 +457,6 @@ ship_type_nuclear_supercarrier = {
 		ship_mod_slot_utility_2 = {
 			utility_mod_drone_complement
 			utility_mod_underway_replenishment
-			utility_mod_extended_sick_bay
 		}
 	}
 }
@@ -1903,6 +1903,7 @@ ship_type_orbital_support_amphibious_mothership = {
 		ship_mod_slot_utility_1 = {
 			utility_mod_fire_suppression
 			utility_mod_damage_control_teams
+			utility_mod_extended_sick_bay
 			utility_mod_camouflage
 			utility_mod_ciws
 			utility_mod_electronic_countermeasures
@@ -1914,7 +1915,6 @@ ship_type_orbital_support_amphibious_mothership = {
 			utility_mod_drone_complement
 			utility_mod_landing_skiffs
 			utility_mod_helicopter_pad
-			utility_mod_extended_sick_bay
 		}
 	}
 }

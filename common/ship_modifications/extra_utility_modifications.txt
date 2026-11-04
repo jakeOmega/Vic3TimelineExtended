@@ -9,7 +9,8 @@
 # stay flat, because capitals carry 10-30 screening and escorts 250-700.
 #
 # Roles decide the slot a module goes in on a mod ship (extra_ship_types.txt):
-#   protection      hull and crew damage taken
+#   protection      hull and crew damage taken (the base game's Extended Sick
+#                   Bay too)
 #   countermeasures accuracy against the ship, vulnerability, visibility
 #   weapons, sensors, support (everything else)
 # A one-slot ship lists everything it mounts; a two-slot ship puts protection
@@ -23,7 +24,9 @@
 # defense plus its best countermeasure stays above -0.8. The engine's rule for
 # combining a target's suffered accuracy with the attacker's own bonuses is
 # undocumented; if it adds them and the sum went negative, the attacker would
-# miss 90% of the time with no log line.
+# miss 90% of the time with no log line. The budget holds in calm water: fog's
+# -40% on the attacker can still take the added sum below zero, as it can for
+# the base game's capitals against torpedo craft (1 - 0.66 - 0.40).
 # =============================================================================
 
 

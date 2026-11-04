@@ -440,7 +440,7 @@ ship_mod_guided_missile_ship_guns_high = {
 		ship_crew_damage_add = 55
 		ship_critical_hit_chance_add = 0.2
 		ship_vulnerability_add = 25
-		ship_accuracy_add = 25
+		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 38
