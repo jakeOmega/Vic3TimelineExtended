@@ -213,42 +213,34 @@ class SpaceMissionDecisionsTest(unittest.TestCase):
         pmg = block(strip_comments(read(PMGS)), "REPLACE_OR_CREATE:pmg_base_building_space_program")
         self.assertIn("ai_selection = most_productive", pmg)
 
-    def test_found_builds_in_our_market_capital_or_else_our_capital(self):
-        # Owner, 2026-11-03: a country in another country's market founds one
-        # in its own capital; a market leader keeps the market capital.
+    def test_found_builds_in_our_capital(self):
+        # Owner, 2026-11-03: the capital, for every country; it was the market
+        # capital of a market we led, which a customs-union member never had.
         body = block(self.decisions, "te_decision_found_space_program")
         possible = block(body, "possible")
         self.assertIn("has_technology_researched = guided_missiles", possible)
         self.assertNotIn("market_capital", possible)
         when = block(body, "when_taken")
-        self.assertRegex(
-            when,
-            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*market_capital \?= \{ owner = ROOT \}\s*\}\s*"
-            r"market_capital\s*=\s*\{\s*create_building",
-        )
-        self.assertRegex(block(when, "else"), r"^\s*capital\s*=\s*\{\s*create_building")
-        self.assertEqual(when.count("building = building_space_program"), 2)
-        self.assertEqual(len(re.findall(r"activate_production_methods\s*=\s*\{\s*pm_earth_orbit\s*\}", when)), 2)
+        self.assertNotIn("market_capital", when)
+        self.assertRegex(when, r"capital\s*=\s*\{\s*create_building")
+        self.assertEqual(when.count("building = building_space_program"), 1)
+        self.assertRegex(when, r"activate_production_methods\s*=\s*\{\s*pm_earth_orbit\s*\}")
         building = block(strip_comments(read(BUILDINGS)), "REPLACE_OR_CREATE:building_space_program")
         self.assertIn("sr_space_program_site = yes", block(building, "possible"))
         self.assertIn("guided_missiles", block(building, "unlocking_technologies"))
 
-    def test_the_site_is_the_led_market_capital_or_else_the_capital(self):
+    def test_the_site_is_the_capital(self):
         site = block(strip_comments(read(TRIGGERS)), "sr_space_program_site")
-        self.assertIn("owner.market_capital ?= THIS", site)
-        self.assertRegex(
-            site,
-            r"AND\s*=\s*\{\s*owner\.capital \?= THIS\s*NOT = \{ owner\.market_capital\.owner \?= owner \}\s*\}",
-        )
+        self.assertEqual(site.split(), ["owner.capital", "?=", "THIS"])
 
-    def test_both_removal_sweeps_spare_the_site(self):
+    def test_both_removal_sweeps_spare_the_capital(self):
         on_actions = strip_comments(read(ON_ACTIONS))
         for name in ("te_on_state_owner_change", "remove_invalid_buildings"):
             with self.subTest(on_action=name):
                 body = block(on_actions, name)
                 self.assertRegex(
                     body,
-                    r"exists = owner\.market_capital\s*NOT = \{ sr_space_program_site = yes \}[\s\S]*?"
+                    r"exists = owner\.capital\s*NOT = \{ sr_space_program_site = yes \}[\s\S]*?"
                     r"remove_building = building_space_program",
                 )
                 self.assertNotIn("owner.market_capital = THIS", body)

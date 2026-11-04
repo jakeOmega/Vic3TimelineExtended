@@ -461,15 +461,14 @@ te_decision_establish_strategic_reserve = {
 
 # ============================================================================
 # Found a Space Program (mod_systems/space_race.md § Space Race)
-# Places the Space Program at once, for free, on Earth Orbit, where the
-# building's possible lets it stand (sr_space_program_site,
-# space_race_triggers.txt): in our market capital when we lead our market, in
-# our capital when we are in another country's market. A member of another
-# country's market has a market capital in a foreign state, so the decision
-# must not build there. Until 2026-11-03 such a member could not found one at
-# all (owner: a country without its own market should still have a space
-# programme). Every country has one of the two, so `possible` asks only for
-# the technology, which create_building checks too. The programme's expense
+# Places the Space Program at once, for free, on Earth Orbit, in our capital,
+# the one state the building's possible allows (sr_space_program_site,
+# space_race_triggers.txt). Until 2026-11-03 it went in the market capital of
+# a market we led, so a member of another country's market could not found
+# one at all (owner: a country without its own market should still have a
+# space programme, and one rule, the capital, for everyone). Every country has
+# a capital, so `possible` asks only for the technology, which create_building
+# checks too. The programme's expense
 # is its weekly Launch Capacity bill, which climbs with every mission
 # (te_decision_space_mission_* below).
 #
@@ -496,23 +495,11 @@ te_decision_found_space_program = {
 	when_taken = {
 		custom_tooltip = {
 			text = te_decision_tt_create_space_program
-			if = {
-				limit = { market_capital ?= { owner = ROOT } }
-				market_capital = {
-					create_building = {
-						building = building_space_program
-						level = 1
-						activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-10-05: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
-					}
-				}
-			}
-			else = {
-				capital = {
-					create_building = {
-						building = building_space_program
-						level = 1
-						activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-11-03: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
-					}
+			capital = {
+				create_building = {
+					building = building_space_program
+					level = 1
+					activate_production_methods = { pm_earth_orbit } # REVIEWED 2026-10-05: a create_building parameter (effects.log 1.14.5 § create_building), not an effect
 				}
 			}
 		}

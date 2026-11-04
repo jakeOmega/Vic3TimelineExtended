@@ -53,10 +53,10 @@ The space race panel's share of the GUI and localization audit (`docs/audits/gui
 1. **Colors without underlines.** On the Solar System, Colonies (People, Defenses) and Fleets views, look at a red status word (Blockaded, Occupied, Battle), a grey Ruined, a highlighted figure (a colony's people, a fleet's strength) and a plain one (Δv, supply). Each keeps its color (red, grey, the value color) with no underline, and its hover still opens. If a word shows cream, its inline color lost to the textbox's format: put the color back in the textbox's `default_format`.
 2. **Approach tooltips.** Hover Safe and Ambitious on a running milestone: the line of framing, then the approach modifier's own lines (risk −50%, or progress +50%).
 
-## A Space Program outside your own market (2026-11-03)
+## The Space Program in the capital (2026-11-03)
 
-A member of another country's market can found the Space Program, in its own capital (`sr_space_program_site`, `space_race_triggers.txt`). The site test compares two scope chains, `owner.market_capital.owner ?= owner`, a form the mod hadn't used before.
+The Space Program now stands in its owner's capital (`sr_space_program_site`, `space_race_triggers.txt`: `owner.capital ?= THIS`), for every country. It was the market capital of a market the owner led, so a customs-union member could never found one.
 
-1. **Founding it as a customs-union member.** As a great or major power in another country's customs union, with Guided Missiles: Found a Space Program is possible, and the building appears in our capital, running Earth Orbit. If it lands nowhere, `capital` didn't resolve in `when_taken`; if the decision is greyed, `possible` still reads the market.
-2. **It survives the month.** Let two months pass: the program still stands (the monthly `remove_invalid_buildings` sweep spares it). If it vanishes on the first of a month, the trigger's capital branch failed in the sweep: check the `owner.market_capital.owner ?= owner` comparison and write it another way (`owner = { NOT = { market_capital ?= { owner = PREV } } }`) if it doesn't read.
-3. **A market leader is unchanged.** As the USA (market capital New York, capital Washington), found one: it stands in New York, not Washington, and the build menu lists only that state. The greyed reason on other states reads "Our market capital if we lead our market, otherwise our capital".
+1. **Founding it as a customs-union member.** As a great or major power in another country's customs union, with Guided Missiles: Found a Space Program is possible, and the building appears in our capital, running Earth Orbit, and still stands two months later (the monthly `remove_invalid_buildings` sweep spares it).
+2. **A market capital that is not the capital.** As the USA (market capital New York, capital Washington), found one: it stands in Washington. The build menu lists only the capital, and the greyed reason on other states reads "This state is our capital".
+3. **Space Command's tie.** With two Space Commands of the same size after an annexation, the one in the capital stays.
