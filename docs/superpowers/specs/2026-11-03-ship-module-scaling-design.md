@@ -40,7 +40,8 @@ calm water and in fog (348 of all 361 mod-against-mod pairings in calm water,
    to high buys what it does in the base game.
 2. Utilities: **successors**: each mod utility succeeds the base-game module on
    its stat, with a bigger percentage, more goods and `incompatible_with` its
-   predecessor. Add successors for Advanced Explosives and Fire Suppression, and
+   predecessor (since 2026-11-04 the shared slot does that job instead; see call
+   11). Add successors for Advanced Explosives and Fire Suppression, and
    size flat parts to late hulls or turn them into percentages. **Prune** a
    superseded base-game module from late hulls where it no longer makes sense
    (the owner's example: torpedo nets).
@@ -172,9 +173,13 @@ calm water and in fog (348 of all 361 mod-against-mod pairings in calm water,
     get no Close-In Weapon System, Electronic Countermeasures or DEW Point
     Defense: with the capitals' −60% against them, only Camouflage fits the
     accuracy budget. A successor shares its predecessor's slot on every mod
-    ship, so a ship can't fit both anyway and `incompatible_with` only records
-    the succession today; it would matter if a base-game hull listed a mod
-    utility, or a mod ship listed the pair in two slots.
+    ship, and a slot holds one module, so a ship can't fit both;
+    `test_ship_modules.py` checks it. The modules first also declared
+    `incompatible_with`, as the base game's documentation describes, but on a
+    ship modification the engine reads that form as an unclosed list and
+    swallows the modifier block after it: eleven of the thirteen utilities
+    showed goods and no effects in the first play-test (2026-11-04). The key is
+    gone, and a test rejects it.
 12. **Utility icons** use the base game's naval icons by role (armor for
     protection and point defense, damage for weapons, marines for the
     Helicopter Pad, supplies for Underway Replenishment) rather than the one
@@ -182,8 +187,8 @@ calm water and in fog (348 of all 361 mod-against-mod pairings in calm water,
 
 ## The utility roster
 
-Successors are `incompatible_with` their predecessor. "New" is added by this
-work.
+A successor shares its predecessor's utility slot on every mod ship, so the two
+can't both be fitted. "New" is added by this work.
 
 | Role | Module | Unlock | Effect | Succeeds |
 |---|---|---|---|---|

@@ -136,13 +136,6 @@ def _state():
 _EXTRA = {}
 
 
-def _values(raw):
-    """A key the entity repeats (incompatible_with) parses as a list."""
-    if raw is None:
-        return []
-    return [_body(x) for x in raw] if isinstance(raw, list) else [_body(raw)]
-
-
 def _goods_value(entity):
     _state()
     total = 0.0
@@ -328,12 +321,35 @@ class TestShipModules(unittest.TestCase):
 
 
 class TestShipUtilities(unittest.TestCase):
-    def test_successors_declare_incompatibility(self):
-        _, mods, _, _, _ = _state()
-        for succ, preds in SUCCESSORS.items():
-            with self.subTest(module=succ):
-                declared = set(_values(mods["utility_mod_" + succ].get("incompatible_with")))
-                self.assertEqual(declared, {"utility_mod_" + p for p in preds})
+    def test_no_incompatible_with_on_ship_modifications(self):
+        """On a ship modification the engine reads the documented bare
+        `incompatible_with = <key>` as an unclosed list: it swallows every
+        token up to the next closing brace, which is the modifier block, so the
+        module keeps its goods and loses all its effects (eleven utilities
+        shipped that way, 2026-11-04). This file's parser reads it fine, so no
+        other test sees it."""
+        folder = os.path.join(REPO, "common", "ship_modifications")
+        for name in sorted(os.listdir(folder)):
+            if not name.endswith(".txt"):
+                continue
+            with self.subTest(file=name):
+                with open(os.path.join(folder, name), encoding="utf-8-sig") as f:
+                    text = re.sub(r"#[^\n]*", "", f.read())
+                self.assertNotIn("incompatible_with", text)
+
+    def test_successor_shares_its_predecessors_slot(self):
+        """A slot holds one module, so listing a successor in the same utility
+        slot as its predecessor is what keeps a ship from fitting both."""
+        types, _, _, _, _ = _state()
+        for ship in ANALOGUE:
+            slots = _utility_slots(types["ship_type_" + ship])
+            where = {m: slot for slot, listed in slots.items() for m in listed}
+            for succ, preds in SUCCESSORS.items():
+                for pred in preds:
+                    a, b = where.get("utility_mod_" + succ), where.get("utility_mod_" + pred)
+                    if a and b:
+                        with self.subTest(ship=ship, module=succ, predecessor=pred):
+                            self.assertEqual(a, b)
 
     def test_successors_stronger_on_every_shared_stat(self):
         _, mods, _, _, _ = _state()
