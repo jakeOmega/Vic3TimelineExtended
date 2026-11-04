@@ -28,9 +28,10 @@ Suppression's −25%; DEW Point Defense −25% vulnerability against Torpedo Net
 
 **Accuracy.** The hit formula (1.14.5 defines): miss chance = 0.5 + 0.03 ×
 (target speed − target visibility / 15 − 5 × accuracy), clamped to 5–90%. Mod
-hulls carry accuracy 16–30 against target speeds of 27 or less, so 291 of the 361
-mod-against-mod pairings already hit 95% of the time in calm water and 243 in
-fog. Every accuracy bonus a module sells does nothing in a late war.
+hulls carry accuracy 16–30 against target speeds of 27 or less, so every one of
+the 144 pairings between the mod's twelve combat ships hits 95% of the time, in
+calm water and in fog (348 of all 361 mod-against-mod pairings in calm water,
+307 in fog). Every accuracy bonus a module sells does nothing in a late war.
 
 ## Decisions (the owner's)
 
@@ -77,13 +78,25 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
      work at sizes a player can read (−20% to −35%).
    - Target: capital against escort, capital against submarine and escort
      against escort leave the 95% cap; capital against capital may stay near it.
-     Measured with default (medium) designs and each era's naval technologies,
-     multiplicative reading: mod-against-mod pairings at the 5% miss floor go
-     from 333 of 361 to 279 in calm water (285 to 192 in fog), and the pairings
-     where a countermeasure moves miss chance by 10 points or more from 21 to
-     111 (17 to 200 in fog). Medians, without and with the target's best
-     countermeasure: capital against escort 23% / 57%, against destroyer
-     22% / 33%, against submarine 37% / 46%, escort against escort 22% / 62%.
+     Measured with default (medium) designs in a battle at the later ship's
+     era, the attacker holding every naval technology up to it (the
+     per-ship-type ones, such as Anti-Submarine Warfare, included), multiplicative
+     reading: of the 144 pairings between the mod's twelve combat ships, those
+     at the 5% miss floor go from all 144 to 103 in calm water (143 to 71 in
+     fog), and those where the target's best countermeasure moves miss chance by
+     10 points or more from none to 50 (1 to 74 in fog). Across all 361
+     mod-against-mod pairings, carriers and troop ships included: 348 → 298 at
+     the floor (307 → 232 in fog), 12 → 84 moved (53 → 166). Medians, without
+     and with the target's best countermeasure: capital against escort
+     17% / 55%, against destroyer 17% / 31%, against submarine 8% / 19%,
+     escort against escort 19% / 62%.
+   - Anti-Submarine Warfare (era 7, +30% accuracy against every submarine) takes
+     back most of the capitals' −60%: against submarines they miss 34% / 44%
+     without it, 8% / 19% with it, so a submarine facing a modern battle line
+     relies on Camouflage. That is the technology's purpose, so it stays; the
+     accuracy budget leaves no room for a bigger defense on the submarine side
+     (−0.6 − 0.15 of −0.8). If submarines should stay harder to hit, the lever
+     is the technology's +30%.
      The base game's era-5 fleet: capital against cruiser 29%, against
      destroyer 75%, against submarine 52%, cruiser against cruiser 29%.
    - Guards, because the engine's rule for combining a target's suffered
@@ -91,7 +104,10 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
      target-side term (a hull's built-in defense, a module) below −0.4, and no
      attacker/target pairing whose negative terms sum below −0.8 (if the engine
      adds them and the sum goes negative, the attacker misses 90% of the time
-     with no log line).
+     with no log line). That holds in calm water. Fog's −40% on the attacker can
+     still take the added sum below zero, as it already can for the base game's
+     capitals against torpedo craft (a Dreadnought firing at a submarine in
+     fog: 1 − 0.66 − 0.40 = −0.06).
 2. **The reshape uses each hull's base-game class analogue** (the same mapping
    the power projection derivation in `extra_ship_types.txt` uses): capital ships
    the Super Dreadnought, cruiser escorts the Light Cruiser, the ASW Destroyer and
@@ -132,7 +148,8 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
    in the other; a three-slot hull one slot each for protection,
    countermeasures and the rest. Each module appears in exactly one slot per
    hull, so no module can be fitted twice and no two damage-taken reducers
-   stack, whatever the engine allows.
+   stack, whatever the engine allows. The base game's Extended Sick Bay (crew
+   damage taken) counts as protection.
 7. **The four late capitals get a third utility slot** (Arsenal Ship, Stealth
    Battlecruiser, Hypersonic Missile Platform, Antimatter Battleship), as the
    Super Dreadnought has.
@@ -142,21 +159,26 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
    weaker option.
 9. **The Pulsed Laser Escort's guns-high +50 accuracy becomes +30% accuracy**;
    +50 is several whole base-game hulls' worth and would saturate once accuracy
-   matters.
+   matters. So does the Guided Missile Ship's guns-high +25, which took the ship
+   from 7 to 32 and made every countermeasure useless against it. The base
+   game's modules carry no accuracy, and no mod module now carries a flat one.
+10. **Flat parts:** screening and detection stay flat (capitals have 10–30
+    screening and escorts 250–700, so a percentage would do nothing on the ships
+    that need it most), sized to late hulls. Armor, supply capacity, carrying and
+    marine capacity become percentages.
 11. **Utility lists per ship** follow the old lists: the successor is added
     wherever its predecessor was listed, Torpedo Nets give way to the
     Close-In Weapon System and Searchlights to Surface Search Radar. Submarines
     get no Close-In Weapon System, Electronic Countermeasures or DEW Point
     Defense: with the capitals' −60% against them, only Camouflage fits the
-    accuracy budget.
+    accuracy budget. A successor shares its predecessor's slot on every mod
+    ship, so a ship can't fit both anyway and `incompatible_with` only records
+    the succession today; it would matter if a base-game hull listed a mod
+    utility, or a mod ship listed the pair in two slots.
 12. **Utility icons** use the base game's naval icons by role (armor for
     protection and point defense, damage for weapons, marines for the
     Helicopter Pad, supplies for Underway Replenishment) rather than the one
     accuracy icon every mod utility used.
-10. **Flat parts:** screening and detection stay flat (capitals have 10–30
-    screening and escorts 250–700, so a percentage would do nothing on the ships
-    that need it most), sized to late hulls. Armor, supply capacity, carrying and
-    marine capacity become percentages.
 
 ## The utility roster
 

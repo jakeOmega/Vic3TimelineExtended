@@ -117,8 +117,8 @@ Damage Control Teams succeed Fire Suppression and Composite Armor Plating
 succeeds both: a successor arrives later, does more, costs more and can't be
 fitted alongside what it succeeds. The new ships don't offer Torpedo Nets or
 Searchlights. On a new ship with two or three utility slots, protection
-(against hull damage) and countermeasures (against being hit) each keep to a
-slot of their own, so two of either can't be stacked. The four battle-line ships
+(against hull and crew damage) and countermeasures (against being hit) each keep
+to one slot, so two of either can't be stacked. The four battle-line ships
 have three utility slots. [Ship utility modification
 list](20-appendix-reference-lists.md#ship-utility-modification-list) gives each
 one's technology and effect, what it succeeds and the ships that mount it.
@@ -128,8 +128,9 @@ fire poorly at the new destroyers and submarines, as the base game's capital
 ships do at torpedo craft, and the cruiser escorts carry point defense that
 lowers the accuracy of every ship firing at them. A countermeasure lowers it
 further: an Antimatter Battleship hits a Pulsed Laser Escort with nearly every
-shot, and misses between a quarter and a half of them once the escort mounts DEW
-Point Defense. The new ships' own accuracy is close to the base game's, and naval
+shot, and misses a quarter to over half of them once the escort mounts DEW
+Point Defense. Anti-Submarine Warfare takes back most of the penalty against
+submarines, which then rely on Camouflage. The new ships' own accuracy is close to the base game's, and naval
 technologies add to it, so they still hit base-game ships with almost every
 shot.
 

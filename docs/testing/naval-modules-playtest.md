@@ -26,19 +26,20 @@ commit that fixed it.
 | **Old templates.** Load a save with a mod ship designed before the update. | The ship keeps fighting; its template asks for a retrofit or shows the new modules. | A ship with no modules or a broken template: note which, and whether a retrofit fixes it. |
 | **AI.** Watch an AI at war in the 1990s or later; note which module tiers its late ships carry. | Medium or high, as before. Module `ai_weight` is unchanged (1/2/3 times the market multiplier), so the AI's choice shouldn't move. | Mostly light: AI late navies are now weaker than before, since a light module buys less than it did. |
 
-## Utilities and accuracy (PR 2)
+## Utilities and accuracy (PR #1389)
 
 The load-bearing unknown: how the engine combines a target's `ship_suffered_accuracy_mult` (built-in defense plus a
 countermeasure) with the attacker's own accuracy bonuses. Multiplied, or added into one sum? The offline budget
-(`test_ship_modules.py`, `test_accuracy_budget`) keeps either reading safe; the battle log tells which it is. Counts
-assume calm water, medium propulsion on the target, and an attacker with Naval Fire Control Systems, Precision Guided
-Munitions and Network Centric Warfare (+25% accuracy).
+(`test_ship_modules.py`, `test_accuracy_budget`) keeps either reading safe in calm water; the battle log tells which it
+is. Counts assume calm water, medium propulsion on the target, and an attacker with Naval Fire Control Systems,
+Precision Guided Munitions and Network Centric Warfare (+25% accuracy). Anti-Submarine Warfare adds +30% against
+submarines, so the Submarine row gives both.
 
 | Check | Expect (multiplied / added) | If it fails |
 |---|---|---|
 | **Escort.** An Arsenal Ship fleet against Networked Air Defense Cruisers without a countermeasure; count the Arsenal Ships' misses in the log. | About 29% / 23% misses. | Nearly no misses: the built-in defense is ignored. Check the cruiser's tooltip shows the −25%. |
 | **Countermeasure.** The same, with the cruisers fitting the Close-In Weapon System. | About 51% / 41% misses. | The same as the row above: the module's suffered accuracy is ignored. |
-| **Submarine.** Arsenal Ships against Stealth Attack Submarines, then with the submarines on Camouflage. | About 40% misses, then 49% / 54%. | Near 90% misses: the sum went negative under the added reading; lower the capitals' −60% against submarines. |
+| **Submarine.** Arsenal Ships against Stealth Attack Submarines, then with the submarines on Camouflage. Note whether the attacker has Anti-Submarine Warfare. | Without it: about 40% misses, then 49% / 54%. With it: about 13%, then 26% / 27%. | About 5% either way: the capitals' −60% against submarines is ignored. Near 90%: the sum went negative under the added reading; lower the −60%. |
 | **Old fleet.** The Arsenal Ships against base-game ships. | Almost every shot hits. | |
-| **Successors.** Fit Fire Suppression in one slot, then try Damage Control Teams in another. | The designer refuses the second. | `incompatible_with` is one-way: declare it on the base-game module too (an INJECT into vanilla's utility file). |
-| **Slots.** Open an Antimatter Battleship's designer. | Three utility slots: protection, countermeasures, and weapons, sensors and support. | |
+| **Successors.** In an Antimatter Battleship's designer, hover Damage Control Teams; read debug.log after loading. | The tooltip names Fire Suppression as incompatible, and debug.log has no line about `incompatible_with`. | No tooltip line is harmless today: a successor shares its predecessor's slot on every mod ship, so the two can't both be fitted anyway. A load error means the engine doesn't read the key on ship modifications: drop it and keep the succession in the file header. |
+| **Slots.** Open an Antimatter Battleship's designer, then a Nuclear Supercarrier's. | Three utility slots on the battleship: protection, countermeasures, and weapons, sensors and support. Two on the carrier, with Extended Sick Bay among the protection and countermeasure modules. | |
