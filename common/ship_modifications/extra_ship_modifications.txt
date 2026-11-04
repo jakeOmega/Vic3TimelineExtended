@@ -2890,8 +2890,7 @@ ship_mod_amphibious_assault_ship_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_fabric_add = 34
-		goods_input_engines_add = 34
+		goods_input_engines_add = 45
 		goods_input_oil_add = 15
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
@@ -2904,8 +2903,7 @@ ship_mod_amphibious_assault_ship_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_fabric_add = 20
-		goods_input_engines_add = 68
+		goods_input_engines_add = 75
 		goods_input_oil_add = 26
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
@@ -3065,8 +3063,7 @@ ship_mod_marine_assault_ship_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_fabric_add = 43
-		goods_input_engines_add = 43
+		goods_input_engines_add = 57
 		goods_input_oil_add = 20
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
@@ -3079,8 +3076,7 @@ ship_mod_marine_assault_ship_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_fabric_add = 26
-		goods_input_engines_add = 87
+		goods_input_engines_add = 96
 		goods_input_oil_add = 33
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
@@ -3240,8 +3236,7 @@ ship_mod_expeditionary_fast_transport_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_fabric_add = 30
-		goods_input_engines_add = 30
+		goods_input_engines_add = 40
 		goods_input_oil_add = 14
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
@@ -3254,8 +3249,7 @@ ship_mod_expeditionary_fast_transport_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_fabric_add = 18
-		goods_input_engines_add = 60
+		goods_input_engines_add = 66
 		goods_input_oil_add = 23
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }

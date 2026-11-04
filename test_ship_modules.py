@@ -149,8 +149,29 @@ class TestShipModules(unittest.TestCase):
                         self.assertLessEqual(abs(hull + tiers[1] - want), max(0.03 * want, 3),
                                              f"medium total {hull + tiers[1]} vs {want}")
 
+    def test_hull_share_matches_analogue(self):
+        """The hull keeps the analogue's share of the medium total: hull =
+        T x h / (h + m), T the golden medium total, h and m the analogue's hull
+        and medium module. With the medium test, this pins the split, not only
+        its sum."""
+        types, mods, _, _, _ = _state()
+        for ship, golden in MEDIUM_TOTALS_BEFORE_RESHAPE.items():
+            analogue = ANALOGUE[ship]
+            for slot, stats in RESHAPED.items():
+                for stat in stats:
+                    with self.subTest(ship=ship, stat=stat):
+                        a_hull, a_tiers = _tier_values(types, mods, analogue, slot, stat)
+                        hull, _ = _tier_values(types, mods, ship, slot, stat)
+                        total = golden[stat[len("ship_"):-len("_add")]]
+                        if a_hull + a_tiers[1] == 0:
+                            continue
+                        want = total * a_hull / (a_hull + a_tiers[1])
+                        self.assertLessEqual(abs(hull - want), max(0.03 * total, 3),
+                                             f"hull {hull} vs {want:.1f} of {total}")
+
     def test_light_to_high_spread_matches_analogue(self):
-        """Light to high buys what it does on the vanilla analogue, within 12%."""
+        """Light to high buys what it does on the vanilla analogue, within 5%
+        (rounding moves the worst case, a small supply module, about 3%)."""
         types, mods, _, _, _ = _state()
         for ship, analogue in ANALOGUE.items():
             for slot, stats in RESHAPED.items():
@@ -163,7 +184,7 @@ class TestShipModules(unittest.TestCase):
                             continue
                         want = (a_hull + a_tiers[2]) / (a_hull + a_tiers[0])
                         got = (hull + tiers[2]) / (hull + tiers[0])
-                        self.assertLess(abs(got / want - 1), 0.12, f"light->high x{got:.2f}, analogue x{want:.2f}")
+                        self.assertLess(abs(got / want - 1), 0.05, f"light->high x{got:.2f}, analogue x{want:.2f}")
 
     def test_tiers_rise(self):
         types, mods, _, _, _ = _state()
