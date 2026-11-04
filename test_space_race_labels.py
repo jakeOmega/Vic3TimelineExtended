@@ -37,6 +37,7 @@ ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_ro
 FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")  # gen_space_fleets.py
 WINDOWS = os.path.join(REPO, "gui", "sr_launch_window_widgets.gui")  # Next Windows (colony management design § 6)
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
+DISPLAY_VALUES = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
 SITES_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_generated.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 # Banking's overview cell, which the colonization overview's cells reuse (audit SPC-6).
@@ -260,7 +261,8 @@ def _longest_figure(name):
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
              "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
              "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
-             "sr_disp_ebase_queued": EBASE_LEVELS, "sr_disp_ebase_next_grade": -75,
+             "sr_disp_ebase_queued": EBASE_LEVELS, "sr_disp_ebase_total": EBASE_LEVELS,
+             "sr_disp_ebase_next_grade": -75,
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
@@ -288,8 +290,9 @@ def _custom_options(name):
     return _CUSTOM[name]
 
 
-def _render(value):
-    """The loc value as the player reads it, every figure at its longest."""
+def _render(value, bounds=None):
+    """The loc value as the player reads it, every figure at its longest, or
+    at its bound in `bounds` for a word shown only under one."""
     for _ in range(5):
         value = re.sub(r"\$(\w+)\$", lambda m: _loc(m.group(1)), value)
     value = re.sub(r"\[[^\[\]]*GetCustom\('(\w+)'\)\]",
@@ -298,11 +301,13 @@ def _render(value):
     def figure(m):
         name, pct, fmt = m.group(1) or m.group(2), m.group(3), m.group(4)
         assert fmt is not None, f"a figure with no format: {m.group(0)}"
+        longest = (bounds or {}).get(name)
+        longest = _longest_figure(name) if longest is None else longest
         if fmt == "D":  # a whole number with thousands separators
-            return f"{_longest_figure(name):,.0f}"
+            return f"{longest:,.0f}"
         if pct:
-            return f"{_longest_figure(name) * 100:.{int(fmt)}f}%"
-        return f"{_longest_figure(name):.{int(fmt)}f}"
+            return f"{longest * 100:.{int(fmt)}f}%"
+        return f"{longest:.{int(fmt)}f}"
 
     value = re.sub(r"\[[^\[\]]*?(?:ScriptValue\('(\w+)'\)|Var\('(\w+)'\)\.GetValue)(?:\|(%?)(\d|D))?\]",
                    figure, value)
@@ -313,6 +318,20 @@ def _render(value):
     value = re.sub(r"#[A-Za-z_;]+ ", "", value)
     return value.replace("#!", "")
 
+
+
+def _ebase_split_bounds():
+    """The Base Room cell's split word ("built +queued / room") shows only
+    while sr_disp_ebase_split's limit holds, so each figure it bounds is
+    measured at its bound; a figure it leaves unbounded is measured at its
+    longest and fails the cell."""
+    limit = _block(_read(DISPLAY_VALUES), "sr_disp_ebase_split")
+    return {m.group(1): int(m.group(2)) - 1 for m in re.finditer(r"\b(sr_disp_ebase_\w+) < (\d+)", limit)}
+
+
+# Words the GUI shows only while a script value bounds their figures.
+BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bounds,
+                 "je_space_race_widget_ovc_ebase_word_split_past": _ebase_split_bounds}
 
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
@@ -673,7 +692,7 @@ class LabelBudgetTest(unittest.TestCase):
         cls.keys = _shown_keys(cls.gui + _read(ROWS) + _read(FLEET_ROWS))
 
     def _fits(self, key, width, font, lines=1):
-        text = _render(_loc(key))
+        text = _render(_loc(key), BOUNDED_WORDS[key]() if key in BOUNDED_WORDS else None)
         parts = text.split("\\n")
         self.assertLessEqual(len(parts), lines, f"{key} has more lines than its cell holds")
         for part in parts:
@@ -688,6 +707,17 @@ class LabelBudgetTest(unittest.TestCase):
             for key in keys:
                 with self.subTest(cell=cell, key=key):
                     self._fits(key, width, font, lines=TWO_LINE.get(type_name, 1))
+
+    def test_the_base_room_word_counts_the_queue(self):
+        """The Base Room cell's word counts queued levels, as its red and its
+        "next at" do (owner, 2026-11-04): apart while the split's bounds hold,
+        and their sum, at five digits, otherwise."""
+        bounds = _ebase_split_bounds()
+        self.assertEqual(bounds, {"sr_disp_ebase_queued": 999, "sr_disp_ebase_levels": 9999, "sr_disp_ebase_room": 9999})
+        self.assertEqual(_render(_loc("je_space_race_widget_ovc_ebase_word_split"), bounds), "9999 +999 / 9999")
+        self.assertEqual(_render(_loc("je_space_race_widget_ovc_ebase_word")), "99999 / 99999")
+        for key in ("je_space_race_widget_ovc_ebase_word_split", "je_space_race_widget_ovc_ebase_word_split_past"):
+            self.assertIn(key, self.keys)
 
     def test_the_panel_is_on_the_house_ladder(self):
         """Rows 17, headings 20, the overview 16, through the panel's own
