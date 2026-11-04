@@ -55,21 +55,37 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
    formula moves (effective accuracy about 1.5–7) would be −80% or more, and at
    that size a 5-point module halves what's left: the confusing knife edge the
    owner wanted to avoid. Instead:
-   - Mod hull accuracy comes down to a ladder that still rises with era and stays
-     above the base game's 5–7 (carriers keep the base game's high carrier
-     accuracy). Modern ships out-shoot the base game's and still hit them at the
-     cap.
+   - Mod hull accuracy comes down to the base game's level: 6–8 for the combat
+     ships, rising a little with era (capitals 6, 6, 7, 8; escorts 6, 7, 6;
+     submarines 7, 7, 8; the ASW Destroyer and Guided Missile Ship 7), carriers
+     unchanged at 18 and 20 (the base game's carrier has 20), troop ships
+     unchanged. The calibration showed a ladder of 8–11 still leaves almost
+     every pairing at the cap, because the mod's naval technologies add +10% to
+     +35% accuracy fleet-wide. That is where "modern ships are accurate" now
+     lives: modern ships still hit the base game's at the cap.
    - Mod capitals get the base game's own penalty for firing at small, fast
      ships, against the mod's torpedo craft: −50% (the Dreadnought carries −66%
      against torpedo craft and −50% against destroyers; −50% leaves room in the
-     budget below for a countermeasure). The ladder's numbers come from a
-     calibration run against these targets, recorded in PR 2.
+     budget below for a countermeasure), and −60% against submarines, which
+     leaves room for Camouflage. The attacker-side penalties some hulls carried
+     against the Pulsed Laser Escort and Swarm Coordination Vessel (up to −40%)
+     go: the escorts' own defense replaces them.
    - Cruiser escorts carry a modest built-in defense (`ship_suffered_accuracy_mult`
-     −20% to −30%, "point defense as standard"), so the Close-In Weapon System,
-     Electronic Countermeasures and DEW Point Defense work at sizes a player can
-     read (−20% to −35%).
+     −25% on the Networked Air Defense Cruiser, −30% on the Pulsed Laser Escort
+     and Swarm Coordination Vessel: "point defense as standard"), so the
+     Close-In Weapon System, Electronic Countermeasures and DEW Point Defense
+     work at sizes a player can read (−20% to −35%).
    - Target: capital against escort, capital against submarine and escort
      against escort leave the 95% cap; capital against capital may stay near it.
+     Measured with default (medium) designs and each era's naval technologies,
+     multiplicative reading: mod-against-mod pairings at the 5% miss floor go
+     from 333 of 361 to 279 in calm water (285 to 192 in fog), and the pairings
+     where a countermeasure moves miss chance by 10 points or more from 21 to
+     111 (17 to 200 in fog). Medians, without and with the target's best
+     countermeasure: capital against escort 23% / 57%, against destroyer
+     22% / 33%, against submarine 37% / 46%, escort against escort 22% / 62%.
+     The base game's era-5 fleet: capital against cruiser 29%, against
+     destroyer 75%, against submarine 52%, cruiser against cruiser 29%.
    - Guards, because the engine's rule for combining a target's suffered
      accuracy with an attacker's accuracy bonuses is undocumented: no single
      target-side term (a hull's built-in defense, a module) below −0.4, and no
@@ -117,6 +133,16 @@ fog. Every accuracy bonus a module sells does nothing in a late war.
 9. **The Pulsed Laser Escort's guns-high +50 accuracy becomes +30% accuracy**;
    +50 is several whole base-game hulls' worth and would saturate once accuracy
    matters.
+11. **Utility lists per ship** follow the old lists: the successor is added
+    wherever its predecessor was listed, Torpedo Nets give way to the
+    Close-In Weapon System and Searchlights to Surface Search Radar. Submarines
+    get no Close-In Weapon System, Electronic Countermeasures or DEW Point
+    Defense: with the capitals' −60% against them, only Camouflage fits the
+    accuracy budget.
+12. **Utility icons** use the base game's naval icons by role (armor for
+    protection and point defense, damage for weapons, marines for the
+    Helicopter Pad, supplies for Underway Replenishment) rather than the one
+    accuracy icon every mod utility used.
 10. **Flat parts:** screening and detection stay flat (capitals have 10–30
     screening and escorts 250–700, so a percentage would do nothing on the ships
     that need it most), sized to late hulls. Armor, supply capacity, carrying and
@@ -133,9 +159,9 @@ work.
 | Protection | Damage Control Teams (new) | Naval Convoy Defense (6) | −35% hull damage taken, −15% crew damage taken | Fire Suppression |
 | Protection | Composite Armor Plating | Modern Material Science (11) | −45% hull damage taken, −40% critical hits taken, +20% armor | Damage Control Teams, Fire Suppression |
 | Countermeasures | Camouflage (base) | — | −15% accuracy against the ship, −25% visibility | |
-| Countermeasures | Close-In Weapon System (new) | Precision Guided Munitions (8) | −20% accuracy against the ship, −50% vulnerability | Torpedo Nets, Camouflage |
+| Countermeasures | Close-In Weapon System (new) | Precision Guided Munitions (8) | −20% accuracy against the ship, −60% vulnerability | Torpedo Nets, Camouflage |
 | Countermeasures | Electronic Countermeasures (new) | Electronic Warfare (10) | −30% accuracy against the ship, −40% visibility | Camouflage |
-| Countermeasures | DEW Point Defense | Directed Energy Weapons (11) | −35% accuracy against the ship, −60% vulnerability, +200 screening | Close-In Weapon System, Torpedo Nets |
+| Countermeasures | DEW Point Defense | Directed Energy Weapons (11) | −35% accuracy against the ship, −70% vulnerability, +200 screening | Close-In Weapon System, Torpedo Nets |
 | Weapons | Advanced Explosives (base) | — | +50% critical hit chance, +25% crew damage | |
 | Weapons | Precision Warheads (new) | Guided Missiles (7) | +75% critical hit chance, +40% crew damage | Advanced Explosives |
 | Weapons | Ballistic Missile Bay | Precision Guided Munitions (8) | +35% hull damage, +60% blockade | Large Carronades, Patrol Boats |
@@ -172,7 +198,7 @@ Two PRs, both against `main`:
   moving utilities between slots can invalidate a template saved before the
   update.
 - One battle log against the expected hit rate for a named pairing, under the
-  multiplicative and the additive reading of `ship_suffered_accuracy_mult`
-  (numbers in PR 2).
+  multiplicative and the additive reading of `ship_suffered_accuracy_mult`:
+  `docs/testing/naval-modules-playtest.md`.
 - The AI designs late ships with high-tier modules more often than it did
   (its scoring sees the bigger module values).

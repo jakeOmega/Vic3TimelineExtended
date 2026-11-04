@@ -109,11 +109,29 @@ In the ship designer, each new ship has its own armor, guns, propulsion and
 range modifications in three tiers, sized to the ship as the base game sizes its
 own: going from light to heavy modules buys about two-thirds more hull damage,
 two and a half times the armor and a third more hit points, as it does on a
-base-game ship of the same class. Eight new utility modifications join the base
-game's, from the Sonar Suite (Sonar) to Composite Armor Plating (Modern Material
-Science); [Ship utility modification
-list](20-appendix-reference-lists.md#ship-utility-modification-list)
-gives each one's technology and effect and the ships that mount it.
+base-game ship of the same class.
+
+Thirteen new utility modifications join the base game's. All but the Sonar
+Suite and Underway Replenishment succeed an earlier utility on the same stat, as
+Damage Control Teams succeed Fire Suppression and Composite Armor Plating
+succeeds both: a successor arrives later, does more, costs more and can't be
+fitted alongside what it succeeds. The new ships don't offer Torpedo Nets or
+Searchlights. On a new ship with two or three utility slots, protection
+(against hull damage) and countermeasures (against being hit) each keep to a
+slot of their own, so two of either can't be stacked. The four battle-line ships
+have three utility slots. [Ship utility modification
+list](20-appendix-reference-lists.md#ship-utility-modification-list) gives each
+one's technology and effect, what it succeeds and the ships that mount it.
+
+Hit chances in a late war depend on what is shooting at what. Battle-line ships
+fire poorly at the new destroyers and submarines, as the base game's capital
+ships do at torpedo craft, and the cruiser escorts carry point defense that
+lowers the accuracy of every ship firing at them. A countermeasure lowers it
+further: an Antimatter Battleship hits a Pulsed Laser Escort with nearly every
+shot, and misses between a quarter and a half of them once the escort mounts DEW
+Point Defense. The new ships' own accuracy is close to the base game's, and naval
+technologies add to it, so they still hit base-game ships with almost every
+shot.
 
 Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
