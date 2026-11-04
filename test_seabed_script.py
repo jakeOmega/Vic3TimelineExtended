@@ -27,7 +27,7 @@ TYPES = "common/modifier_type_definitions/te_global_commons_seabed_modifier_type
 ON_ACTIONS = "common/on_actions/te_global_commons_seabed_on_actions.txt"
 HOOK_TRIGGERS = "common/scripted_triggers/te_seabed_un_hooks.txt"
 HOOK_EFFECTS = "common/scripted_effects/te_seabed_un_hooks.txt"
-BUILDINGS = "common/buildings/extra_buildings.txt"
+BUILDINGS = "common/buildings/03_zz_te_mines.txt"
 RULES = "common/game_rules/extra_game_rules.txt"
 
 
@@ -762,7 +762,7 @@ class PanelDataTest(unittest.TestCase):
 
 class GateTest(unittest.TestCase):
     def test_the_deep_sea_mine_reads_the_gate(self):
-        building = block(read(BUILDINGS), "REPLACE_OR_CREATE:building_ocean_mine")
+        building = block(read(BUILDINGS), "building_ocean_mine")
         possible = re.search(r"possible = \{(.*?)\n\t\}", building, re.S).group(1)
         self.assertIn("is_coastal = yes", possible)
         self.assertIn("te_seabed_gate = yes", possible)
@@ -895,7 +895,7 @@ class BlockadeTest(unittest.TestCase):
     throughput; unverified, so the play-test list names the fallback."""
 
     def test_the_deep_sea_mine_is_a_port_building(self):
-        body = block(read(BUILDINGS), "REPLACE_OR_CREATE:building_ocean_mine")
+        body = block(read(BUILDINGS), "building_ocean_mine")
         self.assertIn("city_type = port", body)
         self.assertNotIn("city_type = city", body)
         self.assertIn("levels_per_mesh = -1", body)

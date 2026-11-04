@@ -22,7 +22,7 @@ PMS = ROOT / "common/production_methods/extra_pms.txt"
 PMGS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
 JES = ROOT / "common/journal_entries/je_space_race.txt"
 VALUES = ROOT / "common/script_values/space_race_values.txt"
-HUB = ROOT / "common/buildings/strategic_reserve.txt"
+HUB = ROOT / "common/buildings/07_zz_te_strategic_reserve.txt"
 BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
 
 # decision -> (production method it activates, the method it builds on).

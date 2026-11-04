@@ -1719,7 +1719,7 @@ state_building_resettlement_colony_max_level_add = {
 	percent = no
 }
 
-# Public Housing's level cap, from technology (extra_buildings.txt)
+# Public Housing's level cap, from technology (07_zz_te_government.txt)
 state_building_public_housing_max_level_add = {
 	color = good
 	percent = no

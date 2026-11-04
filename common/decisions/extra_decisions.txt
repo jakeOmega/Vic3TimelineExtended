@@ -394,7 +394,7 @@ nd_taboo_resume_programme = {
 # raised around the call as st_res_relocate_hub_to_capital_effect does, and
 # the hub's one-per-country guard accepts it.
 #
-# ai_chance mirrors the hub's ai_value shape (common/buildings/strategic_reserve.txt):
+# ai_chance mirrors the hub's ai_value shape (common/buildings/07_zz_te_strategic_reserve.txt):
 # great and major powers, more at peace, and any country above
 # st_res_ai_hub_min_gdp whether at war or not. A smaller country gets 0, as
 # it gets no ai_value.

@@ -52,7 +52,7 @@ SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_action
 EXTRA_EFFECTS = ROOT / "common/scripted_effects/extra_effects.txt"
 TABOO_EFFECTS = ROOT / "common/scripted_effects/nuclear_taboo_effects.txt"
 EXTRA_VALUES = ROOT / "common/script_values/extra_script_values.txt"
-EXTRA_BUILDINGS = ROOT / "common/buildings/extra_buildings.txt"
+MILITARY_BASE_FILE = ROOT / "common/buildings/05_zz_te_military_base.txt"
 EXTRA_PM_GROUPS = ROOT / "common/production_method_groups/extra_pm_groups.txt"
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
 TABOO_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_taboo_triggers.txt"
@@ -384,7 +384,7 @@ class TestTacticalInstallationDamage(unittest.TestCase):
         return set(re.findall(r"\b(pm_\w+)", block(block(self.groups, group), "production_methods")))
 
     def test_military_base_list_is_every_method_of_every_group(self):
-        base = block(strip_comments(read(EXTRA_BUILDINGS)), "building_military_base")
+        base = block(strip_comments(read(MILITARY_BASE_FILE)), "building_military_base")
         groups = re.findall(r"\b(pmg_\w+)", block(base, "production_method_groups"))
         expected = set().union(*(self.group_pms(g) for g in groups))
         self.assertEqual(self.listed_pms("nuclear_strike_military_base_pms", "building_military_base"), expected)
@@ -401,7 +401,7 @@ class TestTacticalInstallationDamage(unittest.TestCase):
         self.assertIn("nuclear_tactical_strike_damage_installations = yes", block(self.effects, "nuclear_tactical_strike"))
 
     def test_base_rebuild_is_guarded_by_its_unlocking_tech(self):
-        base = block(strip_comments(read(EXTRA_BUILDINGS)), "building_military_base")
+        base = block(strip_comments(read(MILITARY_BASE_FILE)), "building_military_base")
         tech = re.findall(r"\b(\w+)", block(base, "unlocking_technologies"))
         self.assertEqual(len(tech), 1)
         body = block(self.effects, "nuclear_tactical_strike_damage_installations")

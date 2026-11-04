@@ -6,7 +6,7 @@
 # built, counted each month into its records (gm_state_count_site_levels,
 # gm_effects.txt). It has no upkeep and no effects. Dedicate (gm_dedicate_sgui)
 # removes it, and a finished building_grand_monument stands at level 1 with the
-# monument's size in its records (grand_monuments.txt). One per state.
+# monument's size in its records (08_zz_te_grand_monuments.txt). One per state.
 #
 # Group bg_grand_monuments, so monument_events.1 sees its levels finish; NOT
 # bg_monuments (extra_building_groups.txt).
@@ -47,7 +47,7 @@ building_grand_monument_site = {
 			gm_system_enabled = yes
 		}
 		# What a level built now adds (Plan B): a line the build tooltip always
-		# shows, the proven way to put a live number there (resettlement.txt).
+		# shows, the proven way to put a live number there (07_zz_te_resettlement.txt).
 		custom_tooltip = {
 			text = gm_site_rate_tt
 			always = yes
