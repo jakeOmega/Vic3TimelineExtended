@@ -21,7 +21,7 @@ described in [The mod's new laws](06-politics.md#the-mods-new-laws).
 | Civil Rights Movement | Civil Rights Movement (era 7), while an incorporated state holds pops below Provisional Acceptance | Movement Support reaches 100, or you enact Affirmative Action, or Universal Citizenship together with Protection | Movement Support falls to 0, or the Civil Rights political movement is gone | None |
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
 | Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom or Clade Citizenship | Natural Form still in force when time runs out, or Prescribed Form enacted | 20 years |
-| Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 15 years |
+| Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 20 years |
 | Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps still in force 10 years after the entry opens | 20 years |
 | Post-Scarcity Transition | Post-Work Society (era 12) | Post-Scarcity Economy law | Never | 30 years |
 
@@ -153,7 +153,7 @@ Outcome modifiers decay over ten years.
 |---|---|---|---|---|
 | Human Augmentation Debate | +5% innovation, +5% turmoil penalties | +10% innovation, +5% prestige | −10% innovation and −2% prestige, or +15% turmoil penalties and −5% prestige (your choice) | +15% turmoil penalties |
 | Morphological Freedom Debate | +5% Cultural Pull from Art, +5% turmoil penalties | +10% Cultural Pull from Art, +5% prestige | −10% Cultural Pull from Art and −5% migration pull, or +10% turmoil penalties and −2% prestige (your choice) | +10% turmoil penalties, under Licensed Modification |
-| Digital Rights & Surveillance | +50 Authority, +5% turmoil penalties | +5% prestige, +5% innovation | +150 Authority, −5% innovation, −5% prestige; or radicals | −25 prestige, +5% turmoil penalties |
+| Digital Rights & Surveillance | +50 Authority, +5% turmoil penalties | +5% prestige, +5% innovation | +150 Authority, −5% innovation, −5% prestige; or radicals | −25 prestige, +5% turmoil penalties and academic radicals; half that and no radicals under Moderate Data Privacy |
 | Mental Health Crisis | +3% mortality | −3% mortality, +5% prestige | +5% mortality, −5% prestige; or radicals | +5% mortality, −25 prestige |
 | Post-Scarcity Transition | +10% turmoil penalties | +15% prestige, +10% innovation | Can't fail | +15% turmoil penalties, −50 prestige |
 
@@ -187,8 +187,13 @@ no two of them within two years of each other.
 
 ### The digital rights debate
 
-The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
-Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
+Cybersecurity, the era 9 technology that opens the entry, unlocks Strong
+Privacy Rights; if Automated Surveillance opened it, research Cybersecurity
+first. The law also needs Guaranteed Liberties, which needs Right of Assembly or
+Protected Speech, and the Paternalistic, Patriotic and Traditionalist ideologies
+strongly oppose it, so the twenty years are mostly a political fight. The
+entry's status line names the step you are missing. Running out the clock under
+Moderate Data Privacy costs half the time-out penalty and no radicals.
 The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage. The first three are leaks, and no two of them
 come within two years of each other. With Covert Warfare on, the last follows
