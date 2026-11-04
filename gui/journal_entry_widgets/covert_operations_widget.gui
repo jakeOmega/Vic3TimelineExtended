@@ -46,6 +46,10 @@
 ### as the saved scope `iw_known` (see its header for why the buttons read
 ### GetPlayer rather than JournalEntry).
 ###
+### The Counterintelligence section's standing order (what happens to a
+### caught foreign operation) uses none either: one scripted GUI,
+### covert_catch_policy_sgui, cycles iw_catch_policy, root GetPlayer.
+###
 ### The per-row priority stepper also uses no op code: up and down are two
 ### scripted GUIs (covert_priority_up_sgui / _down_sgui), and the row's
 ### container travels as the saved scope `iw_op`. Fail-closed: see
@@ -2435,6 +2439,47 @@ types covert_operations_widget_types
 				}
 				blockoverride "row_value" {
 					text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_defense_ideological_display')|0]"
+				}
+			}
+
+			### The standing order for a caught foreign operation (owner,
+			### 2026-11-04): the button cycles Ask, Ask about severe ones only,
+			### Always expose, Always watch (covert_catch_policy_sgui, which
+			### sets iw_catch_policy). A value row's 320 + 140 cells, the
+			### value a button.
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				margin = { 4 1 }
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 320 -1 }
+					maximumsize = { 320 -1 }
+					parentanchor = vcenter
+					align = left|nobaseline
+					using = covert_fontsize_row
+					elide = right
+					tooltip = "je_iw_catch_policy_tt"
+					text = "je_iw_catch_policy_label"
+				}
+				button = {
+					using = default_button_action
+					size = { 140 28 }
+					parentanchor = vcenter
+					datacontext = "[GetScriptedGui('covert_catch_policy_sgui')]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					tooltip = "je_iw_catch_policy_tt"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 130
+						elide = right
+						using = covert_fontsize_row
+						text = "je_iw_catch_policy_value"
+					}
 				}
 			}
 

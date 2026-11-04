@@ -268,7 +268,7 @@ The sections below are open by default:
 | Operations | Open | A warning while funding is 0, or "No operations running" (hover it for how to launch one). Then the Detection Risk every operation shares (base risk, Funding Stealth, Efficiency Factor), and a row for each running operation: the target's flag, its icon, its name and target (hover it for what it does), its phase, its own Detection Risk (hover it for the breakdown), what its exposure would count as, the priority stepper and Stand down. |
 | Funding | Open | A line while funded with nothing running, the Level stepper, and the Funding Levels table: each level's Stealth, Capacity and weekly cost, with your level's row shaded gold. |
 | Agent Networks | Open, once you have a network | A table with a line for each network: the target's flag (hover it for the country, click it to open the country) and name, its strength with a bar and an arrow for growing or decaying, your operations there, the head start a new one would get, and what it reports (None, Partial or Full; hover it for the report). Hover the name for what the network adds to catching that country's operations. |
-| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; then Last Caught while an exposure stands. |
+| Counterintelligence | Open | Unused slots redirected, your funding bonus and your economic, military and ideological defense, each with its breakdown on hover; the standing order for caught foreign operations (Ask, Ask if severe, Expose or Watch; click to change it); then Last Caught while an exposure stands. |
 | Known Foreign Operations | Open, while you are watching an operation | A row for each foreign operation you caught and let run: its sponsor's flag and name, the operation, the months you have watched it and an Expose button. |
 
 The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Covert Warfare Works. It explains operations,
@@ -554,10 +554,26 @@ figures.
 
 A country that catches your operation decides first whether to expose it. If it
 runs a Covert Warfare journal entry of its own, a player gets an event, A
-Foreign Operation Uncovered, and chooses between "Expose them" and "Let it run,
-and watch"; a country without the entry exposes at once, and the AI chooses by
+Foreign Operation Uncovered, with three ways to expose it and "Let it run, and
+watch"; a country without the entry exposes at once, and the AI chooses by
 chance (see [How the AI runs covert
 operations](#how-the-ai-runs-covert-operations)).
+
+The three exposures differ in what follows once the exposure is settled:
+
+| Option | What follows |
+|---|---|
+| Expose them and shore up our counterintelligence | Counterintelligence Alert: +6 intelligence capacity and more separatism and coup resistance, fading over five years. A second exposure renews it rather than adding a second. |
+| Expose them and expel their diplomats | −25 relations; the sponsor's network inside your country loses another 25, and any network you run inside theirs loses 25 when they answer in kind. |
+| Expose them and turn it against them | A network of up to 25 inside the sponsor's country. Without a Covert Warfare journal entry by then, you shore up instead. |
+
+A notification reports the follow-up once it lands. If you would rather not be
+asked each time, the Counterintelligence section's standing order settles every
+catch for you: Ask (the event each time), Ask if severe (the event only for the
+severe operations, the rest exposed), Expose (every catch exposed, shoring up)
+or Watch (every catch let run, with a notification, and listed under Known
+Foreign Operations). The notifications sit in one group, Counterintelligence,
+which Message Settings can mute.
 
 Exposing makes the operation public: you answer for it as described under
 [Detection and exposure](#detection-and-exposure), and the operation ends. It
@@ -577,23 +593,20 @@ Known Foreign Operations, a section of its Covert Warfare journal entry and
 Covert tab that lists each operation it watches with your flag and name and the
 months watched. The exposure goes out at once; while another exposure of your
 operations is still open, the button is grayed until you have answered for it.
+When you expose from there yourself, the follow-up is shoring up your
+counterintelligence.
 
-A country that exposes your operation gets the Foreign Interference Detected
-event, which names you and the operation. It can shore up its
-counterintelligence (Counterintelligence Alert: +6 intelligence capacity and
-more separatism and coup resistance, fading over five years), retaliate in kind
-(a network of up to 25 inside your country, if it has a Covert Warfare journal
-entry of its own), or expel your diplomats (−25 relations; your network inside
-its country loses another 25, and any network it runs inside yours loses 25 when
-you answer in kind). The event fires at most once every two years per country,
-whether or not that country has a Covert Warfare journal entry.
+A country that exposed your operation without choosing a follow-up (one without
+a Covert Warfare journal entry, or an AI) gets the Foreign Interference Detected
+event, which names you and the operation, and offers the same three follow-ups.
+That event fires at most once every two years per country.
 
 When you are the target, the Spy Caught icon and the Last Caught line in the
 Counterintelligence section show the latest operation exposed against you, and
 who ran it, for ten years, and Known Foreign Operations names the sponsor of
 each operation you watch. Outside these two sections and the events A Foreign
-Operation Uncovered and Foreign Interference Detected, nothing names the country
-behind an operation. You can also see an operation's effects among your own
+Operation Uncovered and Foreign Interference Detected and the notifications that
+follow an exposure, nothing names the country behind an operation. You can also see an operation's effects among your own
 modifiers, get an unsigned Election Interference Detected notification with
 each confidence hit, and count the operations against you through a strong
 network of your own.

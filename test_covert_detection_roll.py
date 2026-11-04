@@ -179,7 +179,7 @@ class DetectionEventTests(unittest.TestCase):
         body = _text(EVENTS)
         ev = body[body.index("covert_warfare.1 = {"): body.index("covert_warfare.2 = {")]
         after = ev[ev.index("after = {"):]
-        guarded_block = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
+        guarded_block = after[: after.index("trigger_event = { id = covert_warfare.2 }")]
         self.assertNotIn("remove_variable = iw_burned_type_code", guarded_block)
         self.assertIn(
             "if = {\n\t\t\tlimit = { has_variable = iw_burned_type_code }\n"

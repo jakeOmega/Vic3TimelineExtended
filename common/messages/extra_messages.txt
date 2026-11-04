@@ -2126,6 +2126,44 @@ covert_severe_exposure_notice = {
 	color = bad
 }
 
+# Covert warfare, the defender's side (owner, 2026-11-04). An exposure the
+# defender ordered, with the follow-up it chose at the catch, posted by
+# covert_exposure_response_apply in place of covert_warfare.2: one message
+# per follow-up. And a catch the standing order watched without asking
+# (Always watch, covert_ops_roll_detection_all). All four sit in one group,
+# so Message Settings can mute them.
+covert_exposure_shored_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_exposure_expelled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_exposure_turned_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_catch_watched_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = neutral
+}
+
 # ---- Space Race: the Earth alert (UI pass design § 9, sr_earth_alert_step) ----
 # A fleet of a power at war with us has set out for Earth, or a war began while
 # it was on the way; once a leg. One that would change something on landing

@@ -467,6 +467,21 @@ covert_can_watch = {
 	has_journal_entry = je_covert_warfare
 }
 
+# The player's standing order for a caught operation is Always watch (owner,
+# 2026-11-04). The order is iw_catch_policy, set from the Counterintelligence
+# section (covert_catch_policy_sgui) and read where the roll hands a catch to
+# its target (covert_ops_roll_detection_all):
+#   0 or none  ask (covert_warfare.3)
+#   1          ask about severe operations only, expose the rest
+#   2          always expose
+#   3          always watch
+# Exposures it orders shore up our counterintelligence as their follow-up.
+# Scope: the target
+covert_catch_policy_watches = {
+	has_variable = iw_catch_policy
+	var:iw_catch_policy = 3
+}
+
 # One exposure in flight per attacker. covert_warfare.1 keeps the operation it
 # is resolving on the attacker itself (iw_burned_type_code and its siblings),
 # so a second one opened before the first closes would overwrite them. True

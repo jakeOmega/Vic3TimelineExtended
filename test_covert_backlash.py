@@ -467,7 +467,9 @@ class NamedLobbies(unittest.TestCase):
         ev = event(".3")
         immediate = strip_comments(block(ev, "immediate"))
         self.assertTrue(_pins(immediate, "iw_catcher_lobby", "scope:iw_catcher_attacker"))
-        opt = option(ev, "covert_warfare.3.a")
+        # The three Expose options share covert_catch_expose (owner,
+        # 2026-11-04: they differ only in the follow-up).
+        opt = scripted_effect("covert_catch_expose")
         line = _innermost_enclosing(opt, "custom_tooltip = covert_warfare.3.a_lobby_tt", "if = {")
         self.assertIn("exists = scope:iw_catcher_lobby", _limit_of(line))
         # Wartime sabotage exposed during the war is costless: no backlash.
