@@ -50,7 +50,7 @@ Reference for the gameplay systems the mod adds, one file per system in [`mod_sy
 
 | System | Covers | `##` sections |
 |---|---|---|
-| [Demographics](mod_systems/demographics.md) | The census by age and sex, Wealth Concentration, births and deaths, the workforce, the late game | Demographics (`demographics_rule`): the census (phase 1; phase 2 steps 1, 2 and 4; phase 3: event wave, late game and Family Limitation) |
+| [Demographics](mod_systems/demographics.md) | The census by age and sex, Dynastic Wealth, births and deaths, the workforce, the late game | Demographics (`demographics_rule`): the census (phase 1; phase 2 steps 1, 2 and 4; phase 3: event wave, late game and Family Limitation) |
 | [Pops, Migration and Resettlement](mod_systems/pops_and_migration.md) | Migration crowding and Public Housing, unemployment as a workforce share, homelands, resettlement, population transfer | Migration Crowding<br>Public Housing<br>Unemployment as a Share of the Workforce<br>Dynamic Homeland Progress<br>Internal Resettlement (Settlement Authority)<br>Population Transfer (Treaty Article) |
 | [Local Climate](mod_systems/local_climate.md) | Each region's climate record, the comfort penalty on migration attraction it sets, the technologies that ease it, and the Local Climate tile | The Climate Record<br>Comfort<br>Relief<br>The Modifier and Its Refresh<br>The Local Climate Tile<br>Calibration |
 | [Standard of Living Expectations](mod_systems/sol_expectations.md) | Adaptive standard-of-living expectations and their loyalist and radical effects | SoL Expectations System |

@@ -14,7 +14,7 @@ unverified engine fact, so there is no self-check.
 
 | # | Check | What to look for | If it fails |
 |---|---|---|---|
-| 1 | The Hidden Estates | Under State as Universal Heir, 20 years after enacting it. Auditing shows Estate Audits (authority cost, fading) and lowers every state's Wealth Concentration by 3; looking away raises it by 5 and shows Hidden Estates for ten years. | No event after 20 years: check `te_inh_law_recent` with `save_country_probe.py --var te_inh`. |
+| 1 | The Hidden Estates | Under State as Universal Heir, 20 years after enacting it. Auditing shows Estate Audits (authority cost, fading) and lowers every state's Dynastic Wealth by 3; looking away raises it by 5 and shows Hidden Estates for ten years. | No event after 20 years: check `te_inh_law_recent` with `save_country_probe.py --var te_inh`. |
 | 2 | The Empty Holding | Under Possession by Use. The commune's answer shows Repartitioned Holdings (agriculture −3%), the family's Holdings Kept in the Family (+5%) and displeases anarchist-led groups. | |
 | 3 | The First Cohort | Five years after the Birthright Endowment is attached (`te_inh_endowment_years` counts the years). It comes once; repeal the Endowment and attach it again, and after five more years it can come again. | It comes twice in one tenure: `te_inh_first_cohort_paid` didn't hold. |
-| 4 | Tooltips | Every answer that moves Wealth Concentration says by how much; no line shows a raw key. | |
+| 4 | Tooltips | Every answer that moves Dynastic Wealth says by how much; no line shows a raw key. | |

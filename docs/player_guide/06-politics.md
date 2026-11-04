@@ -419,7 +419,7 @@ yours loses approval the whole time. Every reform movement (liberal, radical,
 socialist and land reform) opposes Primogeniture & Entail and grows more radical
 while it stands, and the traditionalist movements defend it.
 
-| Law | Available | Wealth Concentration target | Also |
+| Law | Available | Dynastic Wealth target | Also |
 |---|---|---|---|
 | Primogeniture & Entail | From the start | +30 | In farming states, birth rate (outside the Demographics rule's Full setting) and migration up; tax capacity −10%; local administration costs 10% less bureaucracy |
 | Customary Inheritance | From the start | 0 | Tax capacity −5%; local administration costs 5% less bureaucracy |
@@ -435,8 +435,10 @@ as Universal Heir and moves to Possession by Use if it now has Cooperative
 Ownership, else to Forced Heirship if you have Egalitarianism, else to
 Customary Inheritance; Possession by Use falls the same way.
 
-**Wealth Concentration** measures, from 0 to 100, how much of your wealth sits
-in great family fortunes. Each state keeps its own score, which moves 3% of the
+**Dynastic Wealth** measures, from 0 to 100, how much of your wealth sits
+in great family fortunes that pass down whole. It is not the Gini coefficient,
+which measures how unequally this year's income is spread: a country can have
+very unequal incomes and few great fortunes, or the reverse. Each state keeps its own score, which moves 3% of the
 way to its own target each year, and your country's figure is the states'
 average, weighted by where property is held. A state's target starts at 50, and
 the law (the table above) and its amendments move it, together at most 50 either
@@ -491,10 +493,10 @@ that moves the scores reaches them within a year. A capital full of Financial
 Districts can carry Concentrated Property while your country as a whole sits
 below 50. The Inheritance group's description shows the score and where it is
 heading, and the Wealth section of the [Demographics tab](08-states.md#demographics)
-shows what sets the target. A state's Wealth Concentration tile, on the state
+shows what sets the target. A state's Dynastic Wealth tile, on the state
 panel, shows its own score and the modifiers it carries from it and from the
 inheritance law. With the census off (the rule's Disabled setting)
-the tab is gone, but Wealth Concentration and all
+the tab is gone, but Dynastic Wealth and all
 its effects still run and the group's description still shows the score.
 
 The farming effects follow the share of Peasants and Farmers in each state.
@@ -527,7 +529,7 @@ the score, a pop group or a modifier for up to ten years.
 
 With Mind Backups or Biological Immortality, Posthumous Title asks whether a
 person can outlive their estate. Recognizing continuity of title freezes
-Wealth Concentration where it stands, at a cost of 10% innovation and 10%
+Dynastic Wealth where it stands, at a cost of 10% innovation and 10%
 qualifications, and five years later the young who will never inherit
 organize. Declaring legal death lets estates pass and strengthens the
 Transhumanist movement for ten years.
@@ -666,10 +668,10 @@ bills change them (see [Taxation (experimental)](05-tax-code.md)).
 | Civilian Oversight | Local or Dedicated Police Force, Private Policing | Ministry of Public Safety costs 10% more bureaucracy; Legislative Override Capacity −0.5; radicalism rises 10% slower for Second-Rate Citizen and Open Prejudice pops; −5% turmoil penalties; the sponsoring group gains 10% political strength. The Intelligentsia sponsor it, and so does any group that approves of Guaranteed Liberties; the Who Watches the Watchmen event offers it |
 | Spoils System | Appointed or Elected Bureaucrats | The sponsoring group gains 15% political strength; tax capacity −10%. Groups in government sponsor it, and so does any group led by a Jacksonian Democrat. The To the Victor Belong the Spoils event offers it while either law is enacted, sponsored by the strongest group in government |
 | First Past the Post | Landed, Wealth or Census Voting, Universal Suffrage, Anarchy | Interest groups join the two largest parties far more readily than any other (see [Two-party politics](#two-party-politics)); 25% less legitimacy lost to disagreement inside the government; −5 legitimacy. Members of the two largest parties sponsor it once those parties hold most of the clout, and on the same condition The Winner Takes All event offers it while a voting law is enacted |
-| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
-| Perpetual Dynastic Trusts | Freedom of Testation | Wealth Concentration target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
-| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Wealth Concentration target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
-| Undivided Farm Succession | Forced Heirship, Customary Inheritance | Wealth Concentration target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
+| Estate Duties | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Dynastic Wealth target −30; no standing revenue. From Political Agitation; not with the Birthright Endowment. Interest groups judge it as they judge Graduated Taxation; the Death Duties event offers it |
+| Perpetual Dynastic Trusts | Freedom of Testation | Dynastic Wealth target +30; Capitalists invest 10% more. From Globalization. Judged as Laissez-Faire; the Industrialists sponsor it, and The Trust That Never Ends event offers it |
+| Birthright Endowment | Primogeniture & Entail, Customary Inheritance, Forced Heirship, Freedom of Testation | Dynastic Wealth target −20, since its duty pays the stakes; qualifications +10%, education access +5%, Laborers, Farmers and Shopkeepers invest 10% more; institutions cost 5% more bureaucracy. From Universal Basic Income. It levies the estate duty itself, so it replaces Estate Duties. Judged as Old Age Pension; the A Stake at Twenty-One event offers it |
+| Undivided Farm Succession | Forced Heirship, Customary Inheritance | Dynastic Wealth target +10; ends Forced Heirship's farming effects, and in farming states the siblings who don't inherit leave the land. Judged as Peasant Proprietorship; the Rural Folk sponsor it, and the One Heir to the Farm event offers it |
 | Suspension of Habeas Corpus | Statutory Courts, Constitutional Review | Suppression 25% cheaper; Judicial Independence ceiling −20%; −5 legitimacy. Only at war, and it lapses when the war ends. Judged as Secret Police; the Armed Forces ask for it |
 | Judicial Elections | Statutory Courts, Constitutional Review | +5 legitimacy; Judicial Independence ceiling −20. Under an elected government. Judged as Universal Suffrage; offered while either law is enacted |
 | Mixed Commercial Courts | Religious Courts, Executive Tribunals | Half a point off credit standing; ceiling +10; Devout −5% political strength. Judged as Free Trade; the Industrialists or Petite Bourgeoisie ask for it |

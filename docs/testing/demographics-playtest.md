@@ -623,10 +623,10 @@ script-only type on a carrier the census already reads (#892's fact), so no self
    notice, which names the government as a cause. Birth Limit and the Crash Campaign stay dimmed under every
    government.
 
-## The laws' census and Wealth Concentration lines (2026-10-17)
+## The laws' census and Dynastic Wealth lines (2026-10-17)
 
 Five more terms that read laws with `has_law` now read lines the laws carry, so each law's tooltip says what it does
-(`docs/systems/mod_systems/demographics.md` § Wealth Concentration, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
+(`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, § Phase 2 step 1, § Late Marriage and Birth Spacing, § Family
 Limitation). The values are the old ones, so no figure moves. Every engine fact but one is proven: a script-only state
 type on a law reaching the states (the augmentation laws' chronic treatment) and a script-only country type read with
 `modifier:` (the Banking panel's intervention points). The one that isn't, a state type on an amendment (Undivided Farm
@@ -635,12 +635,12 @@ Succession), is the `workforce_amendment_type` self-check's.
 1. **The tooltips.** Child Labor Allowed "Census: Children at Work +30%", Restricted Child Labor +10%; Primogeniture &
    Entail and Undivided Farm Succession "Late Marriage on the Farms +15%"; State Religion, the Millet System and People
    of the Book "Family Limitation Among the Literate −50%", Total Separation and State Atheism +50%; Serfdom and
-   Manorialism "Wealth Concentration: Land Tenure +15", Tenant Farmers and both Latifundias +5, Peasant Proprietorship
-   and Homesteading −10, Collectivized Agriculture −20; Graduated Taxation "Wealth Concentration: Taxes on Wealth −5";
-   Laissez-Faire "Wealth Concentration: Economic Laws +10", Extraction Economy, Guilds and Chartered Monopolies and
+   Manorialism "Dynastic Wealth: Land Tenure +15", Tenant Farmers and both Latifundias +5, Peasant Proprietorship
+   and Homesteading −10, Collectivized Agriculture −20; Graduated Taxation "Dynastic Wealth: Taxes on Wealth −5";
+   Laissez-Faire "Dynastic Wealth: Economic Laws +10", Extraction Economy, Guilds and Chartered Monopolies and
    Freedom of Contract +5, Interventionism, Antitrust Enforcement and Regulated Utilities −5. None shows a raw key, each
    hover gives its description, and `debug.log` holds no `Unknown modifier type` for them.
-2. **Wealth Concentration reads them (any rule).** The Demographics tab's Wealth section (Display only or Full) shows
+2. **Dynastic Wealth reads them (any rule).** The Demographics tab's Wealth section (Display only or Full) shows
    the Land Tenure, Taxes on Wealth and Economic Laws bars as before: a Serfdom country's Land Tenure bar is 15 × its
    farm share, a Laissez-Faire and Freedom of Contract one's Economic Laws bar +15. With the rule Disabled the
    Inheritance group's description shows the same national score as before the change.
@@ -766,7 +766,7 @@ only the game can show:
 7. **Type sizes.** Rows at 17, headings at 20, the overview at 16: nothing overlaps or elides at 1080p and at the UI
    scale the owner plays at.
 
-## The state's Wealth Concentration terms (2026-10-18)
+## The state's Dynastic Wealth terms (2026-10-18)
 
 The state subtab's Wealth section lists What Sets the Target under the score's bar, as the country tab does: the
 Inheritance law, land tenure, who owns capital, income inequality, taxes on wealth and the economic laws. Land tenure,
@@ -848,7 +848,7 @@ panel already shows, so no self-check. What only the game can show:
 5. **The outline.** The Demographics tab's twenty-year outline splits work deaths by its states' counts, not by the
    owner's law, so under Full it agrees with the states' own Causes of Death rows.
 
-## Wealth Concentration's remaining shocks, r > g and the Inequality effect (2026-10-19)
+## Dynastic Wealth's remaining shocks, r > g and the Inequality effect (2026-10-19)
 
 The financial boom (+5 once a banking cycle reaches Frenzy), the ownership shocks (a state's state-owned share of its
 capital moving 10 points or more in a year: half a point a point, at most ±10), land reform (−10 × each state's
@@ -860,7 +860,7 @@ the ownership term's walk, `has_law_or_variant` (the monetary system's), `on_sta
 banking triggers and the radicals type Concentrated Property carries, so no self-check. What only the game can show:
 
 1. **The boom (any rule, the banking rule on).** A country whose cycle reaches Frenzy: every state's Wealth
-   Concentration jumps 5 that month (a step in the History chart's Wealth Concentration bars, the state subtab's
+   Concentration jumps 5 that month (a step in the History chart's Dynastic Wealth bars, the state subtab's
    score). No second jump while the cycle stays in Boom or Frenzy; after it falls below Boom (a crash takes it to 40 or
    less), the next Frenzy jumps again. Two cases that are by design, not bugs: a Frenzy pulled back below Boom
    without a crash (a rescue with the cycle's tools) re-arms too, so its next Frenzy takes another +5 with no −5
@@ -1085,16 +1085,16 @@ the engine reads no new fact.
    `workforce_amendment_type` and `workforce_ig_trait_type` read `expected` at the new sizes (the laws' 0.014 or
    0.021, an amendment ±0.007) and 0.014, and still say OK.
 
-## No re-seed on a big move; the province line; Wealth Concentration's growth sample (2026-10-20)
+## No re-seed on a big move; the province line; Dynastic Wealth's growth sample (2026-10-20)
 
 The owner's call of 2026-10-20: a census no longer seeds a state again when its people move more than a quarter in a
 year (in the 2057 EU game that rule fired 8 times in 4 months, every time on migration, and threw away each state's
 year). Any move now goes through the step's booking: up to 5% in or 3% out of each class and sex by the profile, the
-rest flat over everyone as whole families. Wealth Concentration's ownership shock drops the same rule, and r > g's
+rest flat over everyone as whole families. Dynastic Wealth's ownership shock drops the same rule, and r > g's
 growth average takes each year's growth in log points (a fall and its recovery cancel; the hovers show it as a
 compound annual rate) and replaces its ±10 clamp on each year with a skip: a year in which the country gained or lost
 states and its GDP moved more than a tenth, or a GDP of 0 or below, takes no growth sample and re-bases the GDP. Both
-Wealth Concentration changes run under every Demographics rule. The engine has no merge or split on-action, so a
+Dynastic Wealth changes run under every Demographics rule. The engine has no merge or split on-action, so a
 `TE_INFO` line reports when a state's provinces change.
 `test_demographics_territory.py`, `test_demographics_wc_shocks.py` and
 `test_demographics_registry.py` (`test_a_big_move_is_stepped_and_booked_as_migration`) run the script. No self-check: the
@@ -1197,7 +1197,7 @@ game is the test: continue its last save on this build, run a year or two, and c
 
 ## The owner's follow-ups (2026-10-20)
 
-The hyperinflation crisis's Wealth Concentration shock (every Demographics rule), no cap on the Inequality effect, the
+The hyperinflation crisis's Dynastic Wealth shock (every Demographics rule), no cap on the Inequality effect, the
 Old Southwest and Florida in the 1836 frontier, a note on the state's Deaths Added on Top hover under Private Health
 Insurance and all six chronic carriers in the health bill (the last four under Full only, the frontier also under
 Display only). `docs/systems/mod_systems/demographics.md` § Demographics. `test_demographics_wc_shocks.py`,
@@ -1206,14 +1206,14 @@ new engine fact, so no self-check: the shock is the banking crash's `te_demog_wc
 the note's scripted GUI reads the owner's law as the panel's other state-scope GUIs do.
 
 1. **The hyperinflation shock (any rule, the banking rule on).** In the console, `event te_inflation.1` on your country
-   (or let a country's inflation reach 50%): every state's Wealth Concentration falls 5 at once (the state subtab's
+   (or let a country's inflation reach 50%): every state's Dynastic Wealth falls 5 at once (the state subtab's
    score, the History chart's bars), and the national figure follows. Each option's tooltip says so: the reform's
    "falls by 5 more", dollarisation's "takes nothing more", riding it out's "falls by 5 again" if the crisis returns.
    Take the currency reform: every state falls 5 more. Ride it out with inflation still at 50% or more: 24 months later
    the crisis fires again and takes another 5. Nothing in `debug.log` from `te_demog_wc_shock` or
    `te_inh_apply_concentration_modifiers`.
 2. **The Inequality effect has no cap (Full).** A state whose shown Gini is above 0.65 lists Census: Inequality above
-   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Wealth Concentration's remaining shocks").
+   +10% radicals from movements: +15% at 0.75 (play-test item 6 of "Dynastic Wealth's remaining shocks").
 3. **The Old Southwest and Florida (Display only or Full, a new 1836 game).** Mississippi, Alabama, Louisiana and the
    US's Florida open with more men than women aged 20-59 (about 127, 114, 134 and 144 per 100) and, under Full, Census:
    More Men; Georgia, Kentucky and Ohio open as before (item 1 of "Internal Resettlement in the census, and the US
@@ -1231,7 +1231,7 @@ the note's scripted GUI reads the owner's law as the panel's other state-scope G
 ## The state's Modifiers section (2026-10-21)
 
 The owner's request: the standing modifiers the census gives a state move out of the state panel's modifier rows and into
-a Modifiers section on the state's Demographics subtab, as the Wealth Concentration six moved to their tile. Nine of
+a Modifiers section on the state's Demographics subtab, as the Dynastic Wealth six moved to their tile. Nine of
 them: Census: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City
 and Provincial Neglect. `docs/systems/mod_systems/demographics.md`, item 6 of its opening list. `test_hidden_state_modifiers.py`
 and `test_demographics_layout.py` pin the script and the markup. No new engine fact, so no self-check; what only the
@@ -1258,14 +1258,14 @@ game shows is below.
    and the modifier stays on the state, hidden from the rows, until its next yearly pulse takes it off (the effect still
    applies for up to a year). Display only keeps the subtab, so there the section just reads "none" after the pulse.
 
-## Public goods: the health, school and IP laws' Wealth Concentration lines (2026-10-21)
+## Public goods: the health, school and IP laws' Dynastic Wealth lines (2026-10-21)
 
-An eighth term on Wealth Concentration's target (`docs/systems/mod_systems/demographics.md` § Wealth Concentration, "Public goods"):
+An eighth term on Dynastic Wealth's target (`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, "Public goods"):
 Private Health Insurance, Private Schools, Terakoya and Traditional IP Protection +5, Strict IP Protection +10, Public
 Health Insurance and Public Schools −5. It is a script-only country type read with `modifier:`, like the economic laws'
 term, so no engine fact is new. Offline the sums and the wiring are tested; the game shows the rest.
 
-1. **The tooltips.** Each of the seven laws shows "Wealth Concentration: Public Goods" with its value (+5, +10 or −5),
+1. **The tooltips.** Each of the seven laws shows "Dynastic Wealth: Public Goods" with its value (+5, +10 or −5),
    the type's hover gives its description, and `debug.log` holds no `Unknown modifier type` for it. Terakoya, Japan's
    variant of Private Schools, reads +5 like its parent.
 2. **The bar (any rule).** The Demographics tab's Wealth section lists a Public Goods bar between Economic Laws and Return
@@ -1280,13 +1280,13 @@ term, so no engine fact is new. Offline the sums and the wiring are tested; the 
    sign, re-centre the values rather than the start.
 5. **`debug.log`:** no error from `te_demog_wc_public_term` or `te_demog_wc_national`.
 
-## Slavery's Wealth Concentration line (2026-10-21)
+## Slavery's Dynastic Wealth line (2026-10-21)
 
 A ninth term on the target: Colonial Slavery, Legacy Slavery and Debt Slavery +10, Slave Trade +5, Slavery Banned 0
-(`docs/systems/mod_systems/demographics.md` § Wealth Concentration, "Slavery"). The same wiring as Public Goods (above), so no new
+(`docs/systems/mod_systems/demographics.md` § Dynastic Wealth, "Slavery"). The same wiring as Public Goods (above), so no new
 engine fact; the line is flat and national, so it counts the law in force and not the slaves.
 
-1. **The tooltips.** The four laws show "Wealth Concentration: Slavery" with +5 or +10, and Slavery Banned shows nothing.
+1. **The tooltips.** The four laws show "Dynastic Wealth: Slavery" with +5 or +10, and Slavery Banned shows nothing.
    `debug.log` holds no `Unknown modifier type` for it.
 2. **The bar (any rule).** The Demographics tab's Wealth section and a state's Wealth subtab list a Slavery bar between Public
    Goods and Return on Capital, and its hover names the four laws. Enact Debt Slavery (the console): +10; Slave Trade: +5;
@@ -1298,7 +1298,7 @@ engine fact; the line is flat and national, so it counts the law in force and no
    target at once (the "heading for" figure), and one that then moves to Slavery Banned loses 10; the scores follow by 3% of
    the gap a year.
 
-## The inheritance laws' Wealth Concentration line (2026-10-21)
+## The inheritance laws' Dynastic Wealth line (2026-10-21)
 
 The inheritance law and its amendments now carry their part of the target as a line,
 `country_wealth_concentration_inheritance_add`, where #822 read them with `has_law` and `has_amendment`; until now only
@@ -1307,7 +1307,7 @@ script-only country type on an amendment read with `modifier:` is vanilla's own 
 `country_two_spains_conservative_drift_add`, Tradition of Free Elections' `country_forbid_electoral_fraud_bool`), so no
 engine fact is new.
 
-1. **The tooltips.** Primogeniture & Entail shows "Wealth Concentration: Inheritance Law +30", Freedom of Testation +10,
+1. **The tooltips.** Primogeniture & Entail shows "Dynastic Wealth: Inheritance Law +30", Freedom of Testation +10,
    Forced Heirship −25, State as Universal Heir and Possession by Use −50; Customary Inheritance shows nothing. The
    amendments show it too: Estate Duties −30, the Birthright Endowment −20, Perpetual Dynastic Trusts +30, Undivided Farm
    Succession +10. The type's hover gives its description, the laws' on-enact texts no longer name a number, and
@@ -1363,13 +1363,13 @@ join the war dead, civilians of every age. The self-check `cause_tags_read` is i
 
 ## Stronger demographic effects (2026-10-22)
 
-The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Wealth Concentration
+The effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`): Dynastic Wealth
 (every rule setting) and the census's Inequality, urban pattern, metropolitan share, sex balance and youth bulge (Full),
 now worth about one vanilla law at their reference and rising past it. No self-check: every field is a registered type
 on a modifier with a multiplier, and the bubble line rests on the banking cycle's own scaled script-only modifiers
 (`scripting_best_practices.md`).
 
-1. **The tooltips show the new figures.** Any rule: a state's Wealth Concentration tile lists Concentrated Property at
+1. **The tooltips show the new figures.** Any rule: a state's Dynastic Wealth tile lists Concentrated Property at
    up to +20% investment, political strength from wealth +20%, qualifications −20%, education access −10% (at a score
    of 80); a Forced Heirship country (France) shows Dispersed Property with no investment line. Full: the Urban
    Pattern, Settlement, sex balance and Youth hovers give the new sizes.
@@ -1395,7 +1395,7 @@ on a modifier with a multiplier, and the bubble line rests on the banking cycle'
     provinces Provincial Neglect turmoil of about +28% and their capital about +37% Urban Center throughput. Check
     those countries stay governable; the levers are a lower cap than 2 on the primacy strength, or the reference back
     toward 60%.
-11. **Observer run to about 1950.** AI stability and law paths under the stronger Wealth Concentration (AI Britain's
+11. **Observer run to about 1950.** AI stability and law paths under the stronger Dynastic Wealth (AI Britain's
     reforms slower under more aristocratic clout, historically right until 1911), and the worst radicals and turmoil
     stacks (`demographics_harness.py effects SAVE`; an ordinary save works).
 

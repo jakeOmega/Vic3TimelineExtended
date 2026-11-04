@@ -25,7 +25,7 @@ tooltip breaks the numbers down.
 | Arable Land | Always | Total arable land, how much technologies and other regional effects add to the geographic base, and the arable-land multiplier. |
 | Migration Crowding | While the state is over its crowding threshold | Population, crowding threshold, crowding ratio with a bar, and the migration pull penalty. |
 | Local Climate | Always | The climate where most of the region's people live: its hottest days, summer humidity, winter temperature, water and malaria, and Comfort, what the climate costs or adds to the state's migration pull. |
-| Wealth Concentration | While the state carries a modifier from its wealth concentration or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
+| Dynastic Wealth | While the state carries a modifier from its Dynastic Wealth or the inheritance law | The state's score heading for its target, and the modifiers it carries from them (Concentrated or Dispersed Property, Land Hunger, and the inheritance law's farming effect), which the state's modifier icons leave out; see [Who inherits](06-politics.md#who-inherits). |
 | Solar Collector | In a state with a Solar Collector or a Solar Receiver | Your country's receiver slots available and generated (3 per staffed level); a receiver's build tooltip also gives the free slots. A megaproject; see [The extended timeline](02-timeline.md). |
 | Antimatter Facility | In a state with the Facility, an engine or a warhead plant | Your country's engine and warhead-plant slots available and generated (5 per staffed level). |
 | Seabed Licenses | On a coastal state, once your country has had its first share of seabed licenses | The state's ocean basin, the licenses its Deep-Sea Mine levels hold and how many are long-haul, your unused claims in that basin and the claim weight the state adds there; see [Seabed licenses](02-timeline.md#seabed-licenses). |
@@ -444,7 +444,7 @@ there, and so do the Old Southwest and Florida.
 
 Display only keeps the tabs and changes nothing: births, deaths and the workforce
 follow the base game's rules, and the tab reports what they produce. Disabled
-also removes the census and both tabs. Wealth Concentration and its
+also removes the census and both tabs. Dynastic Wealth and its
 effects on each state (see
 [Who inherits](06-politics.md#who-inherits)) keep working under all three.
 
@@ -455,16 +455,16 @@ them, and some break the figure down for your capital.
 
 | Section | What it shows |
 |---|---|
-| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Wealth Concentration and its target). Hover a reading for more. |
+| Overview | Eight readings, each with an icon and a figure beneath: natural change (births less deaths per 1,000 people), net migration, life expectancy (over 10,000 past 10,000 years; the share of infants who die), the leading cause of death and its share of deaths, children per woman, median age (the share aged 65 and over), the working-age share (the dependency ratio) and the Gini coefficient (Dynastic Wealth and its target). Hover a reading for more. |
 | Causes of Death | Last year's deaths per 1,000 people and a pie of those deaths by cause; see below. |
 | Population pyramid | Men per 100 women, then people by five-year age band (wider rows past 85 where many live past 100), with an outline twenty years ahead; once longevity care exists, a button shows the people in care at their biological ages. |
 | Work and Retirement | The workforce as the working-age share times the share of them at work, plus those still working past the working ages; old age from (the age with fifteen years of life left; None when no age has); under Old Age Pension the pension age with its five buttons, the pensioners and, under Full, the pension bill; then health need against 1836's, the men of fighting age with the conscription they give, and young adults where they are many while work is short, with up to ten of the states where they are, strongest first. |
 | Longevity | Once longevity care exists: Living to 100, the mean biological age beside the calendar one, the share of people within the care's reach, with the health system's part and the wealth from which the market brings it, and the longevity gap. |
 | Family Policy | Under Full, your Family & Reproductive Policy law and the measures it allows, each with its running cost, its term and a button; the measures only other laws allow, dimmed. See [Family policy measures](#family-policy-measures). |
-| History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Wealth Concentration. A mark over a year shows war dead, a famine or a demographic event. |
-| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Wealth Concentration target, with your most and least concentrated states; the arrow beside each opens it. |
+| History | Eight charts by year, over 5, 20 or 100 years: births and deaths per 1,000 people, net migration, life expectancy, children per woman, median age, deaths by cause, the Gini coefficient and Dynastic Wealth. A mark over a year shows war dead, a famine or a demographic event. |
+| Wealth | The Gini coefficient, the average income of each stratum, and what sets the Dynastic Wealth target, with your states highest and lowest in it; the arrow beside each opens it. |
 | Where people live | Urban share, the largest city's share of urban people, the effective number of cities, the urban pattern, how many of your states are Metropolises with up to ten of them listed, your largest cities (three, and up to ten under Show All), each a town named on the map with the people it is estimated to hold, and your three largest urban states. Under Full, the urban pattern's tooltip shows its effects. |
-| States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Wealth Concentration, and click it to open the state. Show All lists up to 40. |
+| States | Your ten largest states, with people, life expectancy, median age, children per woman and Gini; hover a row for its age shares, men per 100 women and Dynastic Wealth, and click it to open the state. Show All lists up to 40. |
 
 The "?" at the right of the tab's header opens the Help page, How Demographics
 Works, which explains the method, topic by topic, from the census to work and

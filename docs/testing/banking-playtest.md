@@ -185,7 +185,7 @@ the console event `te_debug_monetary.1` on the country in question.
 28. **Overshooting the target gains nothing with inflation on target** (fixed in review, PR #1086). With inflation
     near 2%, shift-click a manual target to 60 for a month: the rate moves 0.33 of a point, as it would toward any
     target. With inflation well off target it moves up to a sixth of how far inflation is off, never of the 60.
-29. **Wealth Concentration's r > g.** The real rate it reads should now spread both ways: in the 2057 autosave 72 of
+29. **Dynastic Wealth's r > g.** The real rate it reads should now spread both ways: in the 2057 autosave 72 of
     91 countries sat at its −5 floor; at 3–4% inflation the investigation expected about 47 at −5 and 34 at +5.
 
 ## A scare is shown once in two years (2026-10-22)

@@ -45,7 +45,7 @@
  setting_decolonization_enabled:0 "Decolonization Enabled"
  setting_decolonization_enabled_desc:0 "The colonial empire [concept_journal_entry] is active. Nations with overseas colonies face [concept_decolonization_system] pressures, [concept_colonial_stability] tracking, and related events after researching decolonization technology."
  setting_demographics_disabled:0 "Disabled"
- setting_demographics_disabled_desc:0 "No census and no Demographics panel. Wealth Concentration still works."
+ setting_demographics_disabled_desc:0 "No census and no Demographics panel. [concept_inheritance_concentration] still works."
  setting_demographics_display_only:0 "Display only"
  setting_demographics_display_only_desc:0 "Experimental. The census and its panel only: births and deaths follow the game's own rules."
  setting_demographics_full:0 "Full"
