@@ -5,14 +5,19 @@
 # ============================================================================
 # Who builds the most capable AI systems. A power structure group, the third
 # of the trio with Bodily Autonomy (human rights) and Automation Policy
-# (economy). Its laws trade innovation against exposure to covert technology
-# theft (economic covert defense, which covers industrial espionage), authority
-# and intelligence capacity:
+# (economy). Its laws trade research speed against exposure to covert
+# technology theft (economic covert defense, which covers industrial
+# espionage), authority and intelligence capacity. Research speed by tree, not
+# innovation: a major power researches at the innovation cap, where more
+# innovation only overflows into spread it doesn't need, and research speed
+# counts past the cap (owner, 2026-11-04). The general
+# country_tech_research_speed_mult stays off these laws
+# (test_frontier_ai_control.py, BUDGETED):
 #
 #   law_no_frontier_ai_policy        before AI Agents: nothing to govern
-#   law_private_ai_labs              the default once AI Agents exists; innovation
+#   law_private_ai_labs              the default once AI Agents exists; research
 #   law_national_ai_licensing        between
-#   law_state_ai_monopoly            authority, intelligence, defense; less innovation
+#   law_state_ai_monopoly            authority, intelligence, defense; military research
 #   law_international_ai_oversight   UN members only; UN Authority Target
 #   law_open_weights                 technology spread, for the world as well
 #
@@ -71,8 +76,10 @@ law_private_ai_labs = {
 	progressiveness = 50
 
 	modifier = {
-		# The most innovation: capital chases each new model.
-		country_weekly_innovation_mult = 0.1
+		# The fastest production research: capital chases each new model.
+		# Research speed, not innovation, so it still counts at the innovation
+		# cap, where a major power's research sits (owner, 2026-11-04).
+		country_production_tech_research_speed_mult = 0.1
 		# A company guards its weights only as well as a company can
 		# (No IP Protection's figure).
 		country_covert_defense_economic_add = -10
@@ -89,7 +96,7 @@ law_national_ai_licensing = {
 	progressiveness = 40
 
 	modifier = {
-		country_weekly_innovation_mult = 0.05
+		country_production_tech_research_speed_mult = 0.05
 		# Licensed labs meet the regulator's security standard.
 		country_covert_defense_economic_add = 5
 		country_intelligence_capacity_add = 1
@@ -107,8 +114,10 @@ law_state_ai_monopoly = {
 	progressiveness = 25
 
 	modifier = {
-		# Compartmented, cleared laboratories work more slowly.
-		country_weekly_innovation_mult = -0.05
+		# The state's laboratories serve its armed forces first; compartmented,
+		# cleared laboratories serve industry more slowly.
+		country_military_tech_research_speed_mult = 0.1
+		country_production_tech_research_speed_mult = -0.05
 		country_authority_add = 100
 		country_intelligence_capacity_add = 3
 		# Strict IP Protection's figure.
@@ -139,7 +148,7 @@ law_international_ai_oversight = {
 
 	modifier = {
 		# Shared evaluations and incident reports.
-		country_weekly_innovation_mult = 0.05
+		country_society_tech_research_speed_mult = 0.05
 		# Other countries trust a state whose laboratories are inspected
 		# (Limited War's figure is +3, War Crimes Forbidden's +2).
 		country_diplomatic_reputation_add = 2

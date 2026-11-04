@@ -753,6 +753,10 @@ te_nation_src_tax_views_count = {
 te_nation_src_automation_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = te_automation_displacement }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_automation_dividend }
 		add = 1
 	}
@@ -1286,6 +1290,10 @@ te_nation_types_governance_count = {
 	}
 	if = {
 		limit = { has_modifier = resettlement_special_settlements_politics }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_displacement }
 		add = 1
 	}
 	if = {
@@ -1955,6 +1963,10 @@ te_nation_group_interest_groups_count = {
 	}
 	if = {
 		limit = { has_modifier = resettlement_special_settlements_politics }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_displacement }
 		add = 1
 	}
 	if = {
@@ -2710,6 +2722,10 @@ te_nation_type_interest_group_ig_rural_folk_approval_add_count = {
 te_nation_type_interest_group_ig_trade_unions_approval_add_count = {
 	value = 0
 	if = {
+		limit = { has_modifier = te_automation_displacement }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_demog_lx_gap_politics }
 		add = 1
 	}
@@ -2905,6 +2921,10 @@ te_nation_types_society_count = {
 	}
 	if = {
 		limit = { has_modifier = sol_expectations_upper_strata_shift }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_displacement }
 		add = 1
 	}
 	if = {
@@ -3357,6 +3377,10 @@ te_nation_group_unrest_count = {
 		add = 1
 	}
 	if = {
+		limit = { has_modifier = te_automation_displacement }
+		add = 1
+	}
+	if = {
 		limit = { has_modifier = te_continuous_vote }
 		add = 1
 	}
@@ -3408,6 +3432,10 @@ te_nation_type_state_radicals_from_political_movements_mult_count = {
 	}
 	if = {
 		limit = { has_modifier = iron_fist_path_modifier }
+		add = 1
+	}
+	if = {
+		limit = { has_modifier = te_automation_displacement }
 		add = 1
 	}
 	if = {

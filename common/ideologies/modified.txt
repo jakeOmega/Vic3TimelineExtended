@@ -16,6 +16,7 @@ REPLACE:ideology_paternalistic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -207,6 +208,7 @@ REPLACE:ideology_particularist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_antitrust = {
 		law_guilds_chartered_monopolies = approve
@@ -315,6 +317,7 @@ REPLACE:ideology_patriotic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
@@ -450,6 +453,7 @@ REPLACE:ideology_liberal = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -649,6 +653,7 @@ REPLACE:ideology_liberal_modern = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -856,6 +861,7 @@ REPLACE:ideology_market_liberal = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_approve
@@ -1450,6 +1456,7 @@ REPLACE:ideology_traditionalist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -1745,6 +1752,7 @@ REPLACE:ideology_reformer = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -2084,6 +2092,7 @@ REPLACE:ideology_populist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -2210,6 +2219,7 @@ REPLACE:ideology_radical = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -2801,6 +2811,7 @@ REPLACE:ideology_social_democrat = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -3277,6 +3288,7 @@ REPLACE:ideology_vanguardist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = approve
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_disapprove
@@ -3946,6 +3958,7 @@ REPLACE:ideology_fascist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = strongly_approve
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -4646,6 +4659,7 @@ REPLACE:ideology_anarchist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_disapprove
@@ -5224,6 +5238,7 @@ REPLACE:ideology_laissez_faire = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_approve
@@ -5385,6 +5400,7 @@ REPLACE:ideology_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -5527,6 +5543,7 @@ INJECT:ideology_egalitarian = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -5555,6 +5572,7 @@ REPLACE:ideology_egalitarian_modern = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -5651,6 +5669,7 @@ REPLACE:ideology_meritocratic = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -5796,6 +5815,7 @@ REPLACE:ideology_jingoist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = approve
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -5898,6 +5918,7 @@ REPLACE:ideology_jingoist_leader = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = approve
 	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
@@ -6220,6 +6241,7 @@ REPLACE:ideology_individualist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -6317,6 +6339,7 @@ REPLACE:ideology_proletarian = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -6474,6 +6497,7 @@ REPLACE:ideology_communist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_disapprove
@@ -7269,6 +7293,7 @@ REPLACE:ideology_plutocratic = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_approve
@@ -7389,6 +7414,7 @@ REPLACE:ideology_patriarchal = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
@@ -7436,6 +7462,7 @@ REPLACE:ideology_patriarchal_suffrage = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
@@ -7475,6 +7502,7 @@ REPLACE:ideology_feminist = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -7751,6 +7779,7 @@ REPLACE:ideology_feminist_ig = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
@@ -7792,6 +7821,7 @@ REPLACE:ideology_humanitarian = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -8145,6 +8175,7 @@ REPLACE:ideology_humanitarian_royalist = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_minority_rights = {
 		law_minority_rights_violent_hostility = strongly_disapprove
@@ -8485,6 +8516,7 @@ REPLACE:ideology_reactionary = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = neutral
@@ -8656,6 +8688,7 @@ REPLACE:ideology_theocrat = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -8891,6 +8924,7 @@ REPLACE:ideology_republican = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -8942,6 +8976,7 @@ REPLACE:ideology_republican_paternalistic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
@@ -9042,6 +9077,7 @@ REPLACE:ideology_socialist = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_disapprove
@@ -9148,6 +9184,7 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_approve
@@ -9253,6 +9290,7 @@ REPLACE:ideology_junker_paternalistic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = approve
@@ -9353,6 +9391,7 @@ REPLACE:ideology_papal_paternalistic = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9461,6 +9500,7 @@ REPLACE:ideology_papal_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9509,6 +9549,7 @@ REPLACE:ideology_confucian = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_inheritance = {
 		law_primogeniture = strongly_approve
@@ -9617,6 +9658,7 @@ REPLACE:ideology_shinto_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9743,6 +9785,7 @@ REPLACE:ideology_buddhist_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9804,6 +9847,7 @@ REPLACE:ideology_hindu_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9874,6 +9918,7 @@ REPLACE:ideology_sikh_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -9938,6 +9983,7 @@ REPLACE:ideology_heavenly_kingdom_theocratic = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
@@ -10844,6 +10890,7 @@ REPLACE:ideology_republican_leader = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -11519,6 +11566,7 @@ REPLACE:ideology_positivist = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -11873,6 +11921,7 @@ REPLACE:ideology_russian_patriarch = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -11941,6 +11990,7 @@ REPLACE:ideology_orthodox_patriarch = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -12002,6 +12052,7 @@ REPLACE:ideology_oriental_orthodox_patriarch = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -12069,6 +12120,7 @@ REPLACE:ideology_authoritarian = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = approve
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -12435,6 +12487,7 @@ INJECT:ideology_ethno_nationalist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = strongly_approve
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -12462,6 +12515,7 @@ REPLACE:ideology_anti_clerical = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -12548,6 +12602,7 @@ INJECT:ideology_pious = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -12575,6 +12630,7 @@ REPLACE:ideology_isolationist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_ministry_of_refugee_affairs = {
 		law_no_ministry_of_refugee_affairs = approve
@@ -12706,6 +12762,7 @@ INJECT:ideology_agrarian = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -13072,6 +13129,7 @@ REPLACE:ideology_agrarian_jeffersonian = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_inheritance = {
 		law_primogeniture = disapprove
@@ -13150,6 +13208,7 @@ REPLACE:ideology_integralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_ministry_of_propaganda = {
 		law_no_ministry_of_propaganda = neutral
@@ -13659,6 +13718,7 @@ REPLACE:ideology_liberal_leader = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_disapprove
@@ -14681,6 +14741,7 @@ REPLACE:ideology_anarchist_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = strongly_disapprove
@@ -14935,6 +14996,7 @@ REPLACE:ideology_fascist_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = strongly_approve
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -15147,6 +15209,7 @@ REPLACE:ideology_liberal_movement = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -15267,6 +15330,7 @@ REPLACE:ideology_radical_movement = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = disapprove
@@ -15647,6 +15711,7 @@ REPLACE:ideology_feminist_movement = {
 		law_licensed_modification = approve
 		law_morphological_freedom = strongly_approve
 		law_clade_citizenship = strongly_approve
+		law_prescribed_form = strongly_disapprove
 	}
 	lawgroup_family_reproductive_policy = {
 		law_traditional_family_structure = strongly_disapprove
@@ -15687,6 +15752,7 @@ REPLACE:ideology_reactionary_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = strongly_approve
@@ -15793,6 +15859,7 @@ INJECT:ideology_modernizer = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 }
 
@@ -15837,6 +15904,7 @@ REPLACE:ideology_traditionalist_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_state_power = {
 		law_feudal_contracts = strongly_approve
@@ -15958,6 +16026,7 @@ INJECT:ideology_ethno_nationalist_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = strongly_approve
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral
@@ -16278,6 +16347,7 @@ REPLACE:ideology_hierarchic = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = approve
@@ -17468,6 +17538,7 @@ REPLACE:ideology_hindu_moralist_british_india = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -18808,6 +18879,7 @@ REPLACE:ideology_ibadi_imamate = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = disapprove
@@ -18843,6 +18915,7 @@ REPLACE:ideology_ibadi_shura = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_distribution_of_power = {
 		law_liquid_democracy = disapprove
@@ -18873,6 +18946,7 @@ REPLACE:ideology_integralist_movement = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_policing = {
 		law_private_policing = disapprove
@@ -18945,6 +19019,7 @@ REPLACE:ideology_montenegrin_moralist = {
 		law_licensed_modification = disapprove
 		law_morphological_freedom = strongly_disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_judiciary = {
 		law_executive_tribunals = neutral
@@ -19339,6 +19414,7 @@ REPLACE:ideology_technocratic = {
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
 		law_clade_citizenship = disapprove
+		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
 		law_unrestricted_automation = approve
@@ -20455,6 +20531,7 @@ INJECT:ideology_loyalist = {
 		law_licensed_modification = neutral
 		law_morphological_freedom = disapprove
 		law_clade_citizenship = strongly_disapprove
+		law_prescribed_form = neutral
 	}
 	lawgroup_frontier_ai_control = {
 		law_no_frontier_ai_policy = neutral

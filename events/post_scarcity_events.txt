@@ -346,6 +346,9 @@ post_scarcity_events.4 = {
 	trigger = {
 		has_technology_researched = universal_basic_income
 		NOT = { has_law = law_type:law_post-scarcity }
+		# Human Labor Quotas keeps the jobs the machines would take, so the
+		# movement has no cause (owner, 2026-11-04).
+		NOT = { has_law = law_type:law_human_labor_quotas }
 	}
 
 	immediate = {

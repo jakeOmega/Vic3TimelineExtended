@@ -2009,6 +2009,36 @@ covert_ops_roll_detection_all = {
 						covert_exposure_fire = yes
 					}
 				}
+				# A player: its standing order first (iw_catch_policy), else
+				# covert_warfare.3 asks.
+				else_if = {
+					limit = { scope:iw_catch_target = { covert_catch_policy_watches = yes } }
+					scope:iw_burned_op = { save_scope_as = iw_caught_op }
+					scope:iw_burned_op = {
+						scope:iw_catch_target = { set_variable = { name = iw_caught_type_code value = PREV.var:iw_type_code } }
+					}
+					scope:iw_catch_target = {
+						covert_watch_start = yes
+						post_notification = covert_catch_watched_notice
+					}
+				}
+				else_if = {
+					limit = {
+						scope:iw_catch_target = {
+							has_variable = iw_catch_policy
+							OR = {
+								var:iw_catch_policy = 2
+								AND = {
+									var:iw_catch_policy = 1
+									scope:iw_burned_op = {
+										NOT = { covert_code_tier_severe = { VAR = iw_type_code } }
+									}
+								}
+							}
+						}
+					}
+					covert_exposure_fire_with_response = { RESPONSE = 1 }
+				}
 				else = {
 					scope:iw_burned_op = { set_variable = { name = iw_catch_pending value = 1 } }
 					scope:iw_catch_target = { trigger_event = { id = covert_warfare.3 } }
@@ -2105,6 +2135,144 @@ covert_exposure_fire = {
 		}
 		set_variable = { name = iw_expose_inflight value = 1 }
 		trigger_event = { id = covert_warfare.1 }
+	}
+}
+
+# An exposure the defender ordered, with the follow-up it chose (owner,
+# 2026-11-04: the follow-up was a second event, covert_warfare.2, after the
+# player had already decided). The follow-up rides with the exposure as
+# iw_expose_response on the attacker, beside the lock, which keeps it to one
+# per attacker; covert_warfare.1's `after` applies it to the defender and
+# posts a notice instead of opening covert_warfare.2
+# (covert_exposure_response_apply). Set only when the exposure goes out, so a
+# refused one leaves no follow-up behind for another defender's exposure.
+#   $RESPONSE$  1 shore up our counterintelligence (the default: the panel's
+#               Expose and the standing order use it), 2 expel their
+#               diplomats, 3 turn it against them; a literal or a one-token
+#               value path
+# Scope: the attacker; scope:iw_burned_op = the operation
+covert_exposure_fire_with_response = {
+	if = {
+		limit = {
+			NOT = { covert_exposure_in_flight = yes }
+			exists = scope:iw_burned_op
+		}
+		set_variable = { name = iw_expose_response value = $RESPONSE$ }
+		covert_exposure_fire = yes
+	}
+}
+
+# covert_warfare.3's three Expose options (they differ only in the follow-up):
+# expose now, or, while another exposure of this attacker is in flight, watch
+# the operation with its exposure ordered and the follow-up on its record, and
+# try again in four days (covert_warfare.4), the monthly pass after that.
+# Tooltip lines are the option's: what exposing does, the wait when locked,
+# the public's reaction here (named, unless the exposure costs nothing).
+#   $RESPONSE$  as covert_exposure_fire_with_response
+# Scope: the target (covert_warfare.3's ROOT); scope:iw_caught_op,
+#        scope:iw_catcher_attacker, scope:iw_catcher_lobby (may not exist)
+covert_catch_expose = {
+	if = {
+		limit = {
+			exists = scope:iw_caught_op
+			scope:iw_catcher_attacker = { is_country_alive = yes }
+		}
+		if = {
+			limit = { scope:iw_catcher_attacker = { covert_exposure_in_flight = yes } }
+			custom_tooltip = covert_warfare.3.a_wait_tt
+			hidden_effect = {
+				covert_watch_start = yes
+				if = {
+					limit = { exists = scope:iw_new_rec }
+					scope:iw_new_rec = {
+						set_variable = { name = iw_expose_ordered value = 1 }
+						set_variable = { name = iw_expose_response value = $RESPONSE$ }
+					}
+				}
+				trigger_event = { id = covert_warfare.4 days = 4 }
+			}
+		}
+		else = {
+			custom_tooltip = covert_warfare.3.a_tt
+			hidden_effect = {
+				scope:iw_caught_op = { save_scope_as = iw_burned_op }
+				scope:iw_catcher_attacker = { covert_exposure_fire_with_response = { RESPONSE = $RESPONSE$ } }
+			}
+		}
+		# Now or once it goes out, the exposure turns our public on the
+		# attacker's friends here, named as vanilla's lobby events name
+		# them. Not for wartime sabotage while we are at war with them,
+		# which costs nothing (covert_exposure_is_costless, which reads
+		# copies that do not exist until covert_warfare.1 opens).
+		if = {
+			limit = {
+				exists = scope:iw_catcher_lobby
+				NOT = {
+					AND = {
+						covert_code_tier_war = { VAR = iw_caught_type_code }
+						has_war_with = scope:iw_catcher_attacker
+					}
+				}
+			}
+			custom_tooltip = covert_warfare.3.a_lobby_tt
+		}
+	}
+	else = {
+		custom_tooltip = covert_warfare.3.gone_tt
+	}
+}
+
+# Shore up our counterintelligence: a decaying boost to separatism and coup
+# resistance and +6 intelligence capacity, three times the unit
+# (covert_counterintelligence_alert). Its own modifier:
+# intelligence_capacity_defense at country scope is stripped every month by
+# legacy_je_modifier_cleanup_effect. Removed first: a same-name add_modifier
+# stacks, and with the follow-up chosen at the catch nothing holds it to once
+# in covert_warfare.2's 24 months any more, so a second exposure refreshes it.
+# Shown in an option as it is (covert_warfare.2.a) or under show_as_tooltip
+# (covert_warfare.3.a, which only orders it).
+# Scope: the defender
+covert_counterintel_alert_add = {
+	remove_modifier_if_exists_effect = { MODIFIER = covert_counterintelligence_alert }
+	add_modifier = {
+		name = covert_counterintelligence_alert
+		days = normal_modifier_time
+		is_decaying = yes
+		multiplier = 3
+	}
+}
+
+# The follow-up the defender chose at the catch, from covert_warfare.1's
+# `after` (ROOT the attacker, iw_expose_response its code), in place of
+# covert_warfare.2. Then the notice that says what happened, naming the
+# attacker (scope:iw_exposed_by) and the operation (the defender's exposure
+# record, which covert_op_burn has just written). Turning it against them
+# needs a covert service when it lands, and shores up instead without one.
+# Scope: the defender
+covert_exposure_response_apply = {
+	save_scope_as = iw_response_defender
+	ROOT = { save_scope_as = iw_exposed_by }
+	if = {
+		limit = { ROOT = { var:iw_expose_response = 2 } }
+		scope:iw_exposed_by = { covert_net_expel = { TARGET = scope:iw_response_defender } }
+		covert_net_expel = { TARGET = scope:iw_exposed_by }
+		change_relations = {
+			country = scope:iw_exposed_by
+			value = covert_expulsion_relations
+		}
+		post_notification = covert_exposure_expelled_notice
+	}
+	else_if = {
+		limit = {
+			ROOT = { var:iw_expose_response = 3 }
+			covert_can_watch = yes
+		}
+		covert_retaliation_seed_network = { TARGET = scope:iw_exposed_by }
+		post_notification = covert_exposure_turned_notice
+	}
+	else = {
+		covert_counterintel_alert_add = yes
+		post_notification = covert_exposure_shored_notice
 	}
 }
 
@@ -2362,7 +2530,23 @@ covert_watch_expose_record = {
 							limit = { covert_watch_op_matches = { DEFENDER = scope:iw_expose_defender CODE = scope:iw_expose_defender.var:iw_expose_code_staging } }
 							save_scope_as = iw_burned_op
 							scope:iw_expose_rec = { set_variable = { name = iw_expose_sent value = 1 } }
-							scope:iw_expose_attacker = { covert_exposure_fire = yes }
+							# A player's exposure carries its follow-up: the one
+							# covert_warfare.3 put on the record, else shoring up
+							# (the panel's Expose). An AI's goes to
+							# covert_warfare.2, whose options are its choice.
+							if = {
+								limit = { scope:iw_expose_defender = { is_player = yes } }
+								scope:iw_expose_rec = {
+									if = {
+										limit = { NOT = { has_variable = iw_expose_response } }
+										set_variable = { name = iw_expose_response value = 1 }
+									}
+								}
+								scope:iw_expose_attacker = { covert_exposure_fire_with_response = { RESPONSE = scope:iw_expose_rec.var:iw_expose_response } }
+							}
+							else = {
+								scope:iw_expose_attacker = { covert_exposure_fire = yes }
+							}
 						}
 					}
 				}
@@ -2527,6 +2711,10 @@ covert_watch_attacker_monthly = {
 		if = {
 			limit = { var:iw_expose_inflight >= 2 }
 			remove_variable = iw_expose_inflight
+			if = {
+				limit = { has_variable = iw_expose_response }
+				remove_variable = iw_expose_response
+			}
 		}
 		else = {
 			change_variable = { name = iw_expose_inflight add = 1 }
@@ -2559,6 +2747,10 @@ covert_watch_attacker_monthly = {
 			if = {
 				limit = { has_variable = iw_expose_inflight }
 				remove_variable = iw_expose_inflight
+			}
+			if = {
+				limit = { has_variable = iw_expose_response }
+				remove_variable = iw_expose_response
 			}
 			remove_variable = iw_burned_seen
 			if = {

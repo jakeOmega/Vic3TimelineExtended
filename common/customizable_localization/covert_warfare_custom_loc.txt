@@ -605,3 +605,35 @@ covert_tradecraft_last_reason = {
 		localization_key = iw_tradecraft_reason_0
 	}
 }
+
+# The standing order for a caught foreign operation (iw_catch_policy), for the
+# Counterintelligence section's button and its tooltip.
+covert_catch_policy_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 1
+		}
+		localization_key = iw_catch_policy_name_1
+	}
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 2
+		}
+		localization_key = iw_catch_policy_name_2
+	}
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 3
+		}
+		localization_key = iw_catch_policy_name_3
+	}
+	text = {
+		localization_key = iw_catch_policy_name_0
+	}
+}

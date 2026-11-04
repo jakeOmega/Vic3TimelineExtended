@@ -29,3 +29,17 @@ te_automation_dividend = {
 	state_middle_strata_standard_of_living_add = 1
 	state_capitalists_investment_pool_contribution_add = -0.1
 }
+
+# Displacement (owner, 2026-11-04): machines put people out of work faster
+# than new work takes them up, so the Trade Unions blame the government and
+# the displaced turn to movements. Written at a rise of 10 points of the
+# automated share in one year (TE_AP_DISPLACEMENT_FULL_RISE); the multiplier
+# is the year's rise over that, at most 3, times the
+# law's factor: 1 under Unrestricted Automation, 0.5 under Robot Tax, 0 under
+# Automation Dividend and Human Labor Quotas (te_ap_displacement_scale_value).
+# te_ap_law_displacement_tt quotes these figures.
+te_automation_displacement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	interest_group_ig_trade_unions_approval_add = -3
+	state_radicals_from_political_movements_mult = 0.1
+}

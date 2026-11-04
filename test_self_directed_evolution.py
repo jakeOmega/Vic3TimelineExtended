@@ -130,8 +130,9 @@ class LawTest(unittest.TestCase):
         self.text = _code(_read(LAWS))
         self.law = _top_level(self.text, "law_clade_citizenship")
 
-    def test_last_in_its_file_at_80_with_the_technology(self):
-        self.assertEqual(re.findall(r"(?m)^(law_\w+) = \{", self.text)[-1], "law_clade_citizenship")
+    def test_fourth_in_its_file_at_80_with_the_technology(self):
+        """Fourth of five: Prescribed Form (owner, 2026-11-04) came after it."""
+        self.assertEqual(re.findall(r"(?m)^(law_\w+) = \{", self.text)[3], "law_clade_citizenship")
         self.assertRegex(self.law, r"group = lawgroup_bodily_autonomy\b")
         self.assertRegex(self.law, r"progressiveness = 80\b")
         self.assertEqual(_sub(self.law, "unlocking_technologies").split(), ["self_directed_evolution"])
@@ -179,7 +180,7 @@ class StanceTest(unittest.TestCase):
     def test_every_list_and_block_names_clade_citizenship(self):
         for name, stances in im.BODILY_AUTONOMY_LISTS.items():
             with self.subTest(list=name):
-                self.assertEqual([law for law, _ in stances][-1], "law_clade_citizenship")
+                self.assertEqual([law for law, _ in stances][3], "law_clade_citizenship")
         hand = self._hand_written()
         self.assertEqual(len(hand), 10)
         for ideology, stances in hand.items():

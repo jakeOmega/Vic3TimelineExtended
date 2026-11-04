@@ -57,7 +57,17 @@
 # law_morphological_freedom or law_clade_citizenship and fails on
 # law_natural_form held to its end.
 #
-# A FIFTH LAW goes last in this file, with a stance in each
+# PRESCRIBED FORM, the fifth law (owner, 2026-11-04), is the dystopian end
+# of the group: the state sets a standard body and requires it. Nobody can be
+# told apart by looks, so it takes Clade Citizenship's heritage parity
+# (te_clade_parity_refresh) without its tolerance line: every heritage figure
+# rises to the highest in force and no further. Under the inclusive
+# citizenship laws that changes nothing; under Racialized Citizenship it is the
+# fastest end to heritage discrimination there is, equality by erasure. The
+# government chooses the form (authority) and its bureaucracy enforces it in
+# every state (the bureaucracy's cost per head of population).
+#
+# A SIXTH LAW goes last in this file, with a stance in each
 # BODILY_AUTONOMY_LISTS row in ideology_modifications.py and in the
 # hand-written blocks of common/ideologies/extra_ideologies.txt
 # (ideology_lawgroup_audit names any it misses), then
@@ -132,5 +142,40 @@ law_clade_citizenship = {
 		country_acceptance_no_shared_heritage_trait_add = 10
 		state_migration_pull_mult = 0.15
 		country_cultural_hegemony_art_mult = 0.05	# expressive freedom, as Morphological Freedom's
+	}
+}
+
+law_prescribed_form = {
+	group = lawgroup_bodily_autonomy
+
+	# Borrows Mandatory Augmentation's until icon batch 10 paints its own
+	# (scripts/image_pipeline/icon_prompts.py).
+	icon = "gfx/interface/icons/law_icons/law_mandatory_augmentation.dds"
+
+	unlocking_technologies = {
+		morphological_freedom
+	}
+
+	# Below Natural Form's 20: the most regressive law in the group.
+	progressiveness = 10
+
+	# The parity's lines are scaled modifiers a pulse applies, as Clade
+	# Citizenship's are, so the law's own block can't show them.
+	on_enact = {
+		custom_tooltip = te_prescribed_form_parity_tt
+	}
+
+	modifier = {
+		# The government chooses the form.
+		country_authority_add = 50
+		# Its bureaucracy enforces it, in proportion to the people it covers.
+		# The technologies add about +10.8 to this factor by era 12, where the
+		# law unlocks, so +1 is about 9% there (owner, 2026-11-04).
+		state_bureaucracy_population_base_cost_factor_mult = 1
+		# Looking alike, people take up the majority's ways faster.
+		state_assimilation_mult = 0.25
+		# What a body may express is set by decree.
+		country_cultural_hegemony_art_mult = -0.1
+		state_migration_pull_mult = -0.1
 	}
 }

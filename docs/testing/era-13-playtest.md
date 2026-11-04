@@ -144,6 +144,22 @@ ahead, raised if they fall short.
    leading great powers, the share at eras 11, 12 and 13, which Automation
    Policy law each holds, and its tax income and lower-strata standard of
    living beside a country under Unrestricted Automation.
+8. **Human Labor Quotas' own lines** (owner, 2026-11-04). The law's tooltip
+   lists Trade Unions +10% political strength and −10% radicals from
+   political movements, and the country's modifiers show both while it
+   holds. Neo-Luddite Terrorism (`post_scarcity_events.4`) never fires under
+   the quotas.
+9. **Displaced Workers** (owner, 2026-11-04). Under Unrestricted Automation,
+   move a few buildings onto robotic methods. Nothing shows until the twelfth
+   monthly count after the first; then the law group's tooltip quotes the
+   year's rise in points and, if it is above 0, the Nation tab's Economy list
+   shows Displaced Workers: −3 Trade Unions approval and +10% radicals at a
+   rise of 10 points, scaled by the rise, at most three times that. Enacting
+   Robot Tax halves it at the next month; the Dividend or the quotas remove
+   it. A save from before the change starts from its share as it stands, so
+   it shows no displacement for the first year. Record the AI's rises: if
+   great powers routinely rise 20 points or more a year, the full size may
+   want a larger rise.
 
 ## Phase 3: Morphological Freedom and Bodily Autonomy
 
@@ -530,10 +546,10 @@ at this month's pace (**i**).
 3. **The heritage parity.** Under Universal Citizenship with Civil Rights
    Movement and Social Justice Movements, enact Clade Citizenship and wait for
    the month's pulse.
-   - The Nation tab's Society section lists Clade Citizenship: Shared Heritage
-     Trait and Clade Citizenship: Shared Heritage Group, and its Acceptance
+   - The Nation tab's Society section lists Heritage Parity: Shared Heritage
+     Trait and Heritage Parity: Shared Heritage Group, and its Acceptance
      rows read 30 for all three heritage figures (each row's hover breaks it
-     down). No Clade Citizenship: No Shared Heritage shows, since no shared
+     down). No Heritage Parity: No Shared Heritage shows, since no shared
      heritage is already the highest at 30.
    - Read a pop's acceptance breakdown three ways: a culture that shares a
      heritage trait with a primary culture, one that shares only a heritage
@@ -552,6 +568,21 @@ at this month's pace (**i**).
 6. **The census** (Demographics rule at Full). A state's Work row in Causes of
    Death shows Safety ×0.05 after the technology (×0.10 before), and the
    hover lists Self-Directed Evolution among the technologies.
+7. **Prescribed Form** (owner, 2026-11-04). With Morphological Freedom, the
+   law is in the Bodily Autonomy group with Mandatory Augmentation's icon.
+   - Its tooltip lists +50 authority, the bureaucracy population cost line,
+     +25% assimilation, −10% Cultural Pull from Art and −10% migration pull,
+     and the parity line. Note the bureaucracy cost it adds in the budget at
+     era 12 (about 9% of the population part was the aim).
+   - Under Universal Citizenship with both technologies, enacting it changes
+     no heritage figure (all three already read 20). Under Racialized
+     Citizenship all three read 60 after the next pulse, and the Nation tab
+     lists the Heritage Parity rows.
+   - The Morphological Freedom Debate, if running, fails at once with no
+     event and does not come back.
+   - Interest groups: the fascist and ethno-nationalist leaders' groups back
+     it, the jingoist and authoritarian ones approve, the Intelligentsia and
+     the Devout oppose it.
 
 ### Self-checks
 

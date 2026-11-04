@@ -964,12 +964,17 @@ AUTOMATION_STANCES = {
 # higher than on the law in force, so no list here that strongly approves of
 # Morphological Freedom can back the step on to Clade Citizenship: the
 # transhumanists (extra_ideologies.txt) rank it above Morphological Freedom
-# and carry that step.
+# and carry that step. Prescribed Form (owner, 2026-11-04), the state's
+# standard body, is the fifth: the fascist and ethno-nationalist ideologies
+# carry it ("uniform"), the statist ones approve ("statist"), the Devout
+# want the body as given, not as the state makes it, and every group that
+# values self-expression strongly disapproves.
 _BODILY_AUTONOMY_LAWS = (
     "law_natural_form",
     "law_licensed_modification",
     "law_morphological_freedom",
     "law_clade_citizenship",
+    "law_prescribed_form",
 )
 
 
@@ -980,19 +985,26 @@ def bodily_autonomy_constructor(*codes):
 
 
 BODILY_AUTONOMY_LISTS = {
-    #                                                 Natural Licensed Freedom Clade
-    # The body as given (or as God made it): the Devout, the Rural Folk.
-    "traditional": bodily_autonomy_constructor("0", "-", "--", "--"),
+    #                                                 Natural Licensed Freedom Clade Prescribed
+    # The body as given (or as God made it): the Devout, the Rural Folk. Not
+    # as the state makes it either.
+    "traditional": bodily_autonomy_constructor("0", "-", "--", "--", "-"),
+    # One people, one form: the fascist and ethno-nationalist ideologies,
+    # traditional on the other laws.
+    "uniform": bodily_autonomy_constructor("0", "-", "--", "--", "++"),
     # Order and uniformity first: tolerate a licensed trade, not a right, and
-    # least of all citizens who are no longer built like the rest.
-    "cautious": bodily_autonomy_constructor("0", "0", "-", "--"),
+    # least of all citizens who are no longer built like the rest. A standard
+    # the state sets is more than order asks for.
+    "cautious": bodily_autonomy_constructor("0", "0", "-", "--", "0"),
+    # The cautious view, with a state that sets the standard itself.
+    "statist": bodily_autonomy_constructor("0", "0", "-", "--", "+"),
     # Safety and standards: licensed clinics, publicly overseen; a body plan of
-    # one's own is past what any standard covers.
-    "regulated": bodily_autonomy_constructor("0", "+", "0", "-"),
+    # one's own is past what any standard covers, and so is one body for all.
+    "regulated": bodily_autonomy_constructor("0", "+", "0", "-", "-"),
     # A person's body is their own to express: the Intelligentsia.
-    "liberal": bodily_autonomy_constructor("0", "+", "++", "++"),
+    "liberal": bodily_autonomy_constructor("0", "+", "++", "++", "--"),
     # No license needed to own oneself.
-    "libertarian": bodily_autonomy_constructor("0", "-", "++", "++"),
+    "libertarian": bodily_autonomy_constructor("0", "-", "++", "++", "--"),
 }
 
 BODILY_AUTONOMY_STANCES = {
@@ -1005,16 +1017,21 @@ BODILY_AUTONOMY_STANCES = {
         "ideology_ibadi_imamate", "ideology_ibadi_shura", "ideology_heavenly_kingdom_theocratic",
         "ideology_patriarchal", "ideology_patriarchal_suffrage", "ideology_traditionalist",
         "ideology_traditionalist_movement", "ideology_reactionary", "ideology_reactionary_movement",
-        "ideology_integralist", "ideology_integralist_movement", "ideology_fascist", "ideology_fascist_movement",
-        "ideology_ethno_nationalist", "ideology_ethno_nationalist_movement", "ideology_agrarian",
+        "ideology_integralist", "ideology_integralist_movement", "ideology_agrarian",
         "ideology_agrarian_jeffersonian", "ideology_isolationist",
+    )},
+    **{k: "uniform" for k in (
+        "ideology_fascist", "ideology_fascist_movement", "ideology_ethno_nationalist",
+        "ideology_ethno_nationalist_movement",
     )},
     **{k: "cautious" for k in (
         "ideology_paternalistic", "ideology_hierarchic", "ideology_republican_paternalistic",
         "ideology_scholar_paternalistic", "ideology_junker_paternalistic", "ideology_particularist",
-        "ideology_patriotic", "ideology_jingoist", "ideology_jingoist_leader", "ideology_loyalist",
-        "ideology_authoritarian", "ideology_populist", "ideology_proletarian", "ideology_communist",
-        "ideology_vanguardist",
+        "ideology_patriotic", "ideology_loyalist", "ideology_populist", "ideology_proletarian",
+        "ideology_communist",
+    )},
+    **{k: "statist" for k in (
+        "ideology_jingoist", "ideology_jingoist_leader", "ideology_authoritarian", "ideology_vanguardist",
     )},
     **{k: "regulated" for k in (
         "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat", "ideology_reformer",

@@ -22,6 +22,13 @@
 # everyone.
 TE_AP_DIVIDEND_WELFARE_FACTOR = 1.5
 
+# Displacement (owner, 2026-11-04): a rise of this much of the automated share
+# in one year gives te_automation_displacement at full size, and a faster rise
+# more, up to three times (the literal max in te_ap_displacement_scale_value).
+# Robot Tax pays for some of the workers' cost: half the displacement.
+TE_AP_DISPLACEMENT_FULL_RISE = 0.1
+TE_AP_DISPLACEMENT_ROBOT_TAX_FACTOR = 0.5
+
 # ----------------------------------------------------------------------------
 # The walk. Scope: country.
 # ----------------------------------------------------------------------------
@@ -94,5 +101,60 @@ te_ap_share_display = {
 	if = {
 		limit = { has_variable = te_automation_share }
 		value = var:te_automation_share
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Displacement. Scope: country. O(1).
+# ----------------------------------------------------------------------------
+
+# The automated share's rise since the count a year ago (te_ap_share_year_ago),
+# 0 when it fell or stayed. Read by te_ap_monthly_update at every twelfth
+# count, into te_ap_disp_rise.
+te_ap_disp_rise_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_automation_share
+			has_variable = te_ap_share_year_ago
+		}
+		value = var:te_automation_share
+		subtract = var:te_ap_share_year_ago
+	}
+	min = 0
+}
+
+# te_automation_displacement's multiplier: the last counted year's rise over a
+# full one (TE_AP_DISPLACEMENT_FULL_RISE), at most 3, times the law's factor. Worked out monthly, so a change of law shows at the
+# next count, while the rise itself is counted once a year.
+te_ap_displacement_scale_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_ap_disp_rise
+			var:te_ap_disp_rise > 0
+			OR = {
+				has_law = law_type:law_unrestricted_automation
+				has_law = law_type:law_robot_tax
+			}
+		}
+		value = var:te_ap_disp_rise
+		divide = TE_AP_DISPLACEMENT_FULL_RISE
+		max = 3
+		if = {
+			limit = { has_law = law_type:law_robot_tax }
+			multiply = TE_AP_DISPLACEMENT_ROBOT_TAX_FACTOR
+		}
+	}
+}
+
+# The last counted year's rise for loc, in points of the automated share: 0
+# before the first year is counted.
+te_ap_disp_rise_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_ap_disp_rise }
+		value = var:te_ap_disp_rise
+		multiply = 100
 	}
 }

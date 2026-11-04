@@ -129,3 +129,25 @@ operations by hand, or with `te_debug_covert.1`.
 | **Gate.** Fill every slot, then hover + on a row. | The button is greyed with a cross on "We have a free operation slot: each level of priority fills one more". − still works and frees a slot at once; a launch is refused for want of a free slot while they're all filled. | + stays clickable: `covert_possible_priority_up` isn't reading the live count. |
 | **Lost slots.** Drop a slot (`remove_modifier` on a slot source, or lose rank) with an operation at 3. | It stays at 3 and keeps running; + is greyed until a slot is free; nothing is stood down. | |
 | **AI.** Observer run, then switch to a great power at war with a rival. | Its overview never shows more slots in use than it holds, unless it lost slots while its operations stood higher. | |
+
+## Standing order and follow-ups (2026-11-04)
+
+The follow-up to an exposure is chosen in A Foreign Operation Uncovered, and the
+Counterintelligence section's standing order can settle a catch with no event
+(`covert_warfare.md` § Standing order and follow-ups). No self-check: every link
+reuses one proven above (the roll's saved scopes reaching the target, the lock,
+notices naming saved scopes). `te_debug_covert.7` option a catches every foreign
+operation against us now.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Three exposures.** Catch an operation and hover each option. | "Expose them and shore up our counterintelligence" (default) previews Counterintelligence Alert; "…and expel their diplomats" previews −25 relations and the network losses; "…and turn it against them" the network of up to 25. "Let it run, and watch" is last. | |
+| **No second event.** Pick each exposure in turn, on three catches. | The attacker's event resolves, then a feed notice names the attacker and the operation and says what followed: Operation Exposed (the alert shows among our modifiers), Operation Exposed, Diplomats Expelled (relations −25), Operation Exposed and Turned (a network inside them under Agent Networks). Foreign Interference Detected does not open. | A notice with raw keys or a blank name: the saved scope or `GetPlayer`'s record did not reach the notice. |
+| **The alert refreshes.** Expose two operations with shore up, a month apart. | One Counterintelligence Alert, renewed, not two. | |
+| **Locked.** Catch two operations of one attacker in a month (or expose one while its first exposure is open). | The second waits under Known Foreign Operations as ordered and goes out once the first settles, with the follow-up chosen for it. | |
+| **Panel Expose.** Watch an operation, then Expose it from Known Foreign Operations. | Operation Exposed, with the alert. | |
+| **Standing order.** Click the Counterintelligence section's button through its four settings. | Ask → Ask if severe → Expose → Watch → Ask; the tooltip names the current one and says what each does. | |
+| **Watch.** Set Watch and catch an operation. | No event: a feed notice, Foreign Operation Watched, names the attacker and operation, and the row appears under Known Foreign Operations. | |
+| **Expose / Ask if severe.** Set each and catch a mild operation, then (under Ask if severe) a severe one (regime change, nuclear sabotage). | The mild one is exposed with no event, then Operation Exposed; the severe one opens A Foreign Operation Uncovered. | |
+| **Mute.** Message Settings lists Counterintelligence. | Muting it hides all four notices. | |
+| **AI defender.** An AI that exposes a watched operation. | Its exposure still opens Foreign Interference Detected (its own choice); nothing changes for AI countries. | |
