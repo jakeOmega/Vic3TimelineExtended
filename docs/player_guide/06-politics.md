@@ -115,7 +115,7 @@ comes from transhumanist leaders and the Transhumanist movement.
 | Right to Information | State Secrets, Informal Government Secrecy, Freedom of Information, Open Government | Authority against legitimacy and cultural pull. |
 | Rules of War | Total War, Traditional Rules of War, War Crimes Forbidden, Humanitarian Regulations, Limited War | How you fight and what you promise the world: combat strength, occupation, war support, diplomatic standing and nuclear strikes. See [The rules of war](#the-rules-of-war). |
 | Internet Governance | No Internet Policy, Unregulated Internet, State-Controlled Internet, Net Neutrality | From the World Wide Web on: technology spread, radicalism, covert defense. |
-| Frontier AI Control | No Frontier AI Policy, Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights | Who builds the most capable AI, from AI Agents on: innovation against covert defense, authority and intelligence capacity. See [Who builds frontier AI](#who-builds-frontier-ai). |
+| Frontier AI Control | No Frontier AI Policy, Private Labs, National Licensing, State Monopoly, International Oversight, Open Weights | Who builds the most capable AI, from AI Agents on: research speed against covert defense, authority and intelligence capacity. See [Who builds frontier AI](#who-builds-frontier-ai). |
 
 In State Power, Unitary State gives 200 authority and faster incorporation.
 Federal System makes decrees 25% cheaper and calms movements but lowers tax
@@ -167,14 +167,15 @@ Economic Covert Defense raises the Detection Risk of a rival's Industrial
 Espionage, the operation that steals production technologies (see [Covert
 defense](11-influence.md#covert-defense)), so the group trades your research
 against what you keep from rivals and how firmly the state holds the
-technology.
+technology. The research lines are research speed, not innovation, so they
+still count when your innovation is at its cap.
 
 | Law | Gives | Costs |
 |---|---|---|
-| Private Labs | +10% innovation; the Industrialists gain political strength | −10 Economic Covert Defense |
-| National Licensing | +5% innovation, +5 Economic Covert Defense, +1 intelligence capacity | |
-| State Monopoly | 100 authority, +3 intelligence capacity, +10 Economic Covert Defense; the Armed Forces gain political strength | −5% innovation |
-| International Oversight | +5% innovation, +2 diplomatic reputation, +0.5 UN Authority Target | Needs membership of the United Nations |
+| Private Labs | +10% production research speed; the Industrialists gain political strength | −10 Economic Covert Defense |
+| National Licensing | +5% production research speed, +5 Economic Covert Defense, +1 intelligence capacity | |
+| State Monopoly | +10% military research speed, 100 authority, +3 intelligence capacity, +10 Economic Covert Defense; the Armed Forces gain political strength | −5% production research speed |
+| International Oversight | +5% society research speed, +2 diplomatic reputation, +0.5 UN Authority Target | Needs membership of the United Nations |
 | Open Weights | +10% technology spread; more Global Technological Development for every country; the Intelligentsia attract more pops | −10 Economic Covert Defense |
 
 Leaving the United Nations, or its dissolution, drops International Oversight

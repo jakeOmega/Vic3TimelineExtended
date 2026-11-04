@@ -64,7 +64,7 @@ SPEC_LAWS = {
     "law_private_ai_labs": {
         "progressiveness": "50",
         "modifier": {
-            "country_weekly_innovation_mult": "0.1",
+            "country_production_tech_research_speed_mult": "0.1",
             "country_covert_defense_economic_add": "-10",
             "interest_group_ig_industrialists_pol_str_mult": "0.1",
         },
@@ -72,7 +72,7 @@ SPEC_LAWS = {
     "law_national_ai_licensing": {
         "progressiveness": "40",
         "modifier": {
-            "country_weekly_innovation_mult": "0.05",
+            "country_production_tech_research_speed_mult": "0.05",
             "country_covert_defense_economic_add": "5",
             "country_intelligence_capacity_add": "1",
         },
@@ -80,7 +80,8 @@ SPEC_LAWS = {
     "law_state_ai_monopoly": {
         "progressiveness": "25",
         "modifier": {
-            "country_weekly_innovation_mult": "-0.05",
+            "country_military_tech_research_speed_mult": "0.1",
+            "country_production_tech_research_speed_mult": "-0.05",
             "country_authority_add": "100",
             "country_intelligence_capacity_add": "3",
             "country_covert_defense_economic_add": "10",
@@ -90,7 +91,7 @@ SPEC_LAWS = {
     "law_international_ai_oversight": {
         "progressiveness": "65",
         "modifier": {
-            "country_weekly_innovation_mult": "0.05",
+            "country_society_tech_research_speed_mult": "0.05",
             "country_diplomatic_reputation_add": "2",
             "country_un_authority_target_add": "0.5",
         },
@@ -106,7 +107,9 @@ SPEC_LAWS = {
 }
 
 # Calibrated budgets (scripting_best_practices.md § Calibrated modifier budgets):
-# no law here may touch them.
+# no law here may touch them. The laws' research lines are the per-tree
+# research speeds instead (owner, 2026-11-04), which count past the innovation
+# cap.
 BUDGETED = ("country_weekly_innovation_max_add", "country_tech_research_speed_mult")
 
 # Spec § 7.1's backers, by their interest groups' late-game ideologies.
