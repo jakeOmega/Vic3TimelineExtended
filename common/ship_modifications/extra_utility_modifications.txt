@@ -2,9 +2,15 @@
 # Vic3TimelineExtended — modern ship utility modifications
 # =============================================================================
 # Each is the successor of a base-game utility on the same stat: unlocked later,
-# stronger on every stat the two share, more goods, and incompatible_with its
-# predecessor (design: docs/superpowers/specs/2026-11-03-ship-module-scaling-design.md;
-# test_ship_modules.py checks all four). Effects are percentages wherever every
+# stronger on every stat the two share, and more goods (design:
+# docs/superpowers/specs/2026-11-03-ship-module-scaling-design.md;
+# test_ship_modules.py checks all three). A ship can't fit a successor beside its
+# predecessor because every mod ship lists the two in the same utility slot, and
+# a slot holds one module (the test checks that too). Don't use incompatible_with
+# here: on a ship modification the engine reads the documented bare form
+# (incompatible_with = <key>) as an unclosed list, swallows every token up to
+# the next closing brace (the modifier block) and logs "Failed to read key
+# reference" in debug.log; the module keeps its goods and loses its effects. Effects are percentages wherever every
 # ship that mounts the module has a proportional base; screening and detection
 # stay flat, because capitals carry 10-30 screening and escorts 250-700.
 #
@@ -38,7 +44,6 @@ utility_mod_damage_control_teams = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/armor_navy.dds"
 
 	unlocking_technologies = { naval_convoy_defense }
-	incompatible_with = utility_mod_fire_suppression
 
 	modifier = {
 		ship_suffered_hull_damage_mult = -0.35
@@ -63,8 +68,6 @@ utility_mod_composite_armor_plating = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/armor_navy.dds"
 
 	unlocking_technologies = { modern_material_science }
-	incompatible_with = utility_mod_fire_suppression
-	incompatible_with = utility_mod_damage_control_teams
 
 	modifier = {
 		ship_suffered_hull_damage_mult = -0.45
@@ -92,8 +95,6 @@ utility_mod_ciws = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/armor_navy.dds"
 
 	unlocking_technologies = { precision_guided_munitions }
-	incompatible_with = utility_mod_torpedo_nets
-	incompatible_with = utility_mod_camouflage
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.20
@@ -118,7 +119,6 @@ utility_mod_electronic_countermeasures = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
 
 	unlocking_technologies = { electronic_warfare }
-	incompatible_with = utility_mod_camouflage
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.30
@@ -143,8 +143,6 @@ utility_mod_dew_point_defense = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/armor_navy.dds"
 
 	unlocking_technologies = { directed_energy_weapons }
-	incompatible_with = utility_mod_ciws
-	incompatible_with = utility_mod_torpedo_nets
 
 	modifier = {
 		ship_suffered_accuracy_mult = -0.35
@@ -172,7 +170,6 @@ utility_mod_precision_warheads = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/average_damage_navy.dds"
 
 	unlocking_technologies = { guided_missiles }
-	incompatible_with = utility_mod_advanced_explosives
 
 	modifier = {
 		ship_critical_hit_chance_mult = 0.75
@@ -197,8 +194,6 @@ utility_mod_ballistic_missile_bay = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/average_damage_navy.dds"
 
 	unlocking_technologies = { precision_guided_munitions }
-	incompatible_with = utility_mod_large_carronades
-	incompatible_with = utility_mod_patrol_boats
 
 	modifier = {
 		ship_hull_damage_mult = 0.35
@@ -223,7 +218,6 @@ utility_mod_drone_complement = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
 
 	unlocking_technologies = { swarm_technology }
-	incompatible_with = utility_mod_range_finder
 
 	modifier = {
 		ship_accuracy_mult = 0.40
@@ -249,7 +243,6 @@ utility_mod_aegis_air_defense = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
 
 	unlocking_technologies = { network_centric_warfare }
-	incompatible_with = utility_mod_fire_control_system
 
 	modifier = {
 		ship_readiness_gain_mult = 0.20
@@ -279,7 +272,6 @@ utility_mod_surface_search_radar = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/accuracy.dds"
 
 	unlocking_technologies = { radar }
-	incompatible_with = utility_mod_searchlights
 
 	modifier = {
 		ship_battle_condition_accuracy_penalty_mult = -0.75
@@ -334,7 +326,6 @@ utility_mod_helicopter_pad = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/marine_capacity.dds"
 
 	unlocking_technologies = { rapid_deployment_forces }
-	incompatible_with = utility_mod_landing_skiffs
 
 	modifier = {
 		ship_naval_invasion_efficiency_mult = 0.40
