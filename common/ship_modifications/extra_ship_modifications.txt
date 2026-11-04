@@ -1293,7 +1293,7 @@ ship_mod_pulsed_laser_escort_guns_high = {
 		ship_crew_damage_add = 195
 		ship_critical_hit_chance_add = 0.2
 		ship_vulnerability_add = 3
-		ship_accuracy_add = 50
+		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 42
