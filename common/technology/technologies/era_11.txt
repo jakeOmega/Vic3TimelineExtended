@@ -545,7 +545,7 @@ lab-grown_food = {
 }
 
 universal_digital_identity = {
-	# Strong Privacy Rights and Digital Currency laws (re-routed from cybersecurity)
+	# Digital Currency law (re-routed from cybersecurity; Strong Privacy Rights went back to cybersecurity 2026-11-04)
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/universal_digital_identity.dds"
 	category = society
