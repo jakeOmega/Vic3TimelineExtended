@@ -92,8 +92,8 @@ one:
 | 0.15 | Containerized cargo and later | Container ports and later | No method |
 
 The rate follows the method by itself, up or down. Farms, plantations and urban
-centers pay none. The other mines (coal, iron, lead, sulfur and gold, and the
-bauxite, copper, graphite and similar mines that use the same equipment) pay
+centers pay none. The other mines (coal, iron, lead, copper, sulfur and gold,
+and the bauxite, graphite and similar mines that use the same equipment) pay
 none while they run picks and shovels or the atmospheric engine pump, and start
 paying when their equipment changes to a condensing engine pump or anything
 later; going back to the old equipment stops the upkeep. A few company buildings
@@ -830,9 +830,10 @@ price and sells into the spike), or both, before you go to war.
 
 ## New mineral deposits
 
-The mod adds fourteen mine types, from Copper and Bauxite Mines to Lithium, Rare
-Earth Metals and Platinum Group Metals Mines, and places their deposits in the
-regions that hold them in reality, such as copper in the Atacama and Katanga.
+The mod adds thirteen mine types, from Bauxite and Manganese Mines to Lithium,
+Rare Earth Metals and Platinum Group Metals Mines, and places their deposits in
+the regions that hold them in reality, such as lithium in the Atacama and cobalt
+in Katanga.
 They start undiscovered and turn up over time, as undiscovered resources do in
 the base game. Twenty-one state traits for famous mining regions, among them the
 Bushveld Igneous Complex, the Central African Copperbelt, the Sudbury Basin and
