@@ -1046,7 +1046,6 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_manganese_mine": {"subject": "a mine with a timber headframe and ore sheds on dark rocky ground, with a heap of lumpy black-brown manganese ore nodules in the foreground", "seed": 0},
         "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock, a processing plant and a long ore conveyor at its rim, loosely hand-painted with visible brush strokes", "seed": 2},
         "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe and ore bins, with a bundle of dull grey tungsten rods and dark metallic ore crystals in the foreground", "seed": 1},
-        "building_copper_mine": {"subject": "a huge stepped open-pit copper mine with terraced orange-brown walls and a turquoise pool at the bottom, with a stack of shiny reddish copper ingots in the foreground", "seed": 0},
         "building_bauxite_mine": {"subject": "an open-pit mine cut into deep red earth with trucks on its terraces, with a heap of red-brown bauxite ore pebbles in the foreground", "seed": 1},
         "building_precious_minor_base_metal_mine": {"subject": "a hillside mine entrance with a timber headframe and ore carts, with a stack of silver bars and dull grey tin ingots in the foreground", "seed": 0},
         "building_nickel_cobalt_mine": {"subject": "an open-pit mine with rust-orange earthen walls, with a heap of silvery nickel pellets and deep blue cobalt ore crystals in the foreground", "seed": 0},

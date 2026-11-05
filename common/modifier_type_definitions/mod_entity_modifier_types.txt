@@ -222,15 +222,6 @@ goods_output_digital_access_mult = {
 	}
 }
 
-goods_output_fine_art_mult = {
-	color = good
-	percent = yes
-
-	game_data = {
-		ai_value = 250
-	}
-}
-
 goods_output_clothes_mult = {
 	color = good
 	percent = yes
@@ -399,7 +390,7 @@ goods_output_iron_mult = {
 	}
 }
 
-goods_output_lead_mult = {
+goods_output_copper_mult = {
 	color = good
 	percent = yes
 
@@ -938,12 +929,6 @@ building_chromium_mine_throughput_add = {
 }
 
 building_specialty_alloy_metal_mine_throughput_add = {
-	color = good
-	percent = yes
-	decimals = 0
-}
-
-building_copper_mine_throughput_add = {
 	color = good
 	percent = yes
 	decimals = 0
