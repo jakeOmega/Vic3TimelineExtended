@@ -18,7 +18,7 @@ types goods_state_panel_types
 		
 		blockoverride "window_header_name"
 		{
-			raw_text = "#BOLD [GoodsStatePanel.GetGoods.GetNameNoIcon]#!"
+			raw_text = "#BOLD [GoodsStatePanel.GetGoods.GetName]#!"
 		}
 
 		blockoverride "window_header_name_line_two"
@@ -58,7 +58,7 @@ types goods_state_panel_types
 					tooltip = "[concept_world_market]"
 				} 
 				blockoverride "first_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsWorldMarketPanel( GoodsStatePanel.GetGoods.Self )]"
+					onclick = "[InformationPanelBar.SwitchToGoodsWorldMarketPanel( GoodsStatePanel.GetGoods.Self )]"
 				}
 				blockoverride "first_button_visibility_checked" {
 					visible = "[Not(GoodsStatePanel.GetGoods.IsLocal)]"
@@ -72,7 +72,7 @@ types goods_state_panel_types
 					tooltip = "[GoodsStatePanel.GetGoods.GetMarket.GetNameNoFormatting]"
 				}
 				blockoverride "second_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsPanel(GoodsStatePanel.GetGoods.GetMarket, GoodsStatePanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsPanel(GoodsStatePanel.GetGoods.GetMarket, GoodsStatePanel.GetGoods.Self)]"
 				}
 				blockoverride "second_button_visibility_checked" {
 					visible = "[And(GoodsStatePanel.GetGoods.HasMarketContext,Not(GoodsStatePanel.GetGoods.IsLocal))]"
@@ -98,7 +98,7 @@ types goods_state_panel_types
 					visible = "[GoodsStatePanel.GetGoods.HasMarketContext]"
 				}			
 				blockoverride "fourth_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsLocalPricesPanel(GoodsStatePanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsLocalPricesPanel(GoodsStatePanel.GetGoods.Self)]"
 				}					
 				
 				# usage / application
@@ -109,7 +109,7 @@ types goods_state_panel_types
 					tooltip = "USAGE"
 				}
 				blockoverride "fifth_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsUsagePanel(GoodsStatePanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsUsagePanel(GoodsStatePanel.GetGoods.Self)]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
 					visible = yes
@@ -168,6 +168,7 @@ types goods_state_panel_types
 					widget = {
 						size = { @panel_width 100 }
 						parentanchor = hcenter
+						datacontext = "[GoodsStatePanel.GetGoods.GetBaseGoods]"
 						
 						background = {
 							using = entry_bg_simple
@@ -222,73 +223,49 @@ types goods_state_panel_types
 						}
 					}
 
-					flowcontainer = {
-						visible = "[Not(IsDataModelEmpty(Goods.GetStatePrestigeGoods))]"
-						parentanchor = hcenter
-						direction = vertical
-						margin_bottom = 5
-						margin_top = 5
-
-						default_header = {
-							parentanchor = hcenter
-
-							blockoverride "text"
-							{
-								text = "concept_prestige_goods"
-							}
+					goods_prestige_goods_distribution = {
+						blockoverride "prestige_goods_distribution_datacontext" {
+							datacontext = "[GoodsStatePanel.GetGoods.GetBaseGoods]"
 						}
 
-						goods_prestige_goods_breakdown_list_item = {						
-							parentanchor = hcenter
-
-							blockoverride "prestige_goods_item_minimumsize" {
-								minimumsize = { 540 -1 }
-							}
-
-							blockoverride "prestige_goods_item_name_size" {
-								minimumsize = { 300 -1 }
-								maximumsize = { 300 -1 }
-							}
-
-							blockoverride "prestige_goods_item_text_1" {
-								raw_text = "BASE_GOODS_STATE_PRODUCTION"
-								alpha = "[TransparentIfZero(Goods.GetNonPrestigeGoodsStateProduction)]"
-							}
-
-							blockoverride "prestige_goods_item_text_2" {
-								raw_text = "BASE_GOODS_STATE_CONSUMPTION"
-								alpha = "[TransparentIfZero(Goods.GetNonPrestigeGoodsStateConsumption)]"
-
-							}
+						blockoverride "prestige_goods_distribution_visibility" {
+							visible = "[Not(IsDataModelEmpty(Goods.GetStatePrestigeGoods))]"
 						}
 
-						flowcontainer = {
-							direction = vertical
-							parentanchor = hcenter
+						blockoverride "prestige_goods_distribution_datamodel" {
 							datamodel = "[Goods.GetStatePrestigeGoods]"
-							
-							item = {
-								goods_prestige_goods_breakdown_list_item = {
-									blockoverride "prestige_goods_item_minimumsize" {
-										minimumsize = { 540 -1 }
-									}
+						}
 
-									blockoverride "prestige_goods_item_name_size" {
-										minimumsize = { 300 -1 }
-										maximumsize = { 300 -1 }
-									}
+						blockoverride "prestige_goods_not_selected_visibility" {
+							visible = "[Not(Goods.IsSameGoodsAs(GoodsStatePanel.GetGoods.Self))]"
+						}
 
-									blockoverride "prestige_goods_item_text_1" {
-										raw_text = "PRESTIGE_GOODS_STATE_PRODUCTION"
-										alpha = "[TransparentIfZero(Goods.GetStateProduction)]"
-									}
+						blockoverride "prestige_goods_selected_visibility" {
+							visible = "[Goods.IsSameGoodsAs(GoodsStatePanel.GetGoods.Self)]"
+						}
 
-									blockoverride "prestige_goods_item_text_2" {
-										raw_text = "PRESTIGE_GOODS_STATE_CONSUMPTION"
-										alpha = "[TransparentIfZero(Goods.GetStateConsumption)]"
-									}
-								}
-							}
+						blockoverride "prestige_goods_onclick" {
+							onclick = "[InformationPanelBar.SwitchToGoodsStatePanel(Goods.GetState, Goods.Self)]"
+						}
+
+						blockoverride "base_goods_item_text_1" {
+							alpha = "[TransparentIfZero(Goods.GetNonPrestigeGoodsStateProduction)]"
+							raw_text = "BASE_GOODS_STATE_PRODUCTION"
+						}
+
+						blockoverride "base_goods_item_text_2" {
+							alpha = "[TransparentIfZero(Goods.GetNonPrestigeGoodsStateConsumption)]"
+							raw_text = "BASE_GOODS_STATE_CONSUMPTION"
+						}
+
+						blockoverride "prestige_goods_variant_text_1" {
+							alpha = "[TransparentIfZero(Goods.GetStateProduction)]"
+							raw_text = "PRESTIGE_GOODS_STATE_PRODUCTION"
+						}
+
+						blockoverride "prestige_goods_variant_text_2" {
+							alpha = "[TransparentIfZero(Goods.GetStateConsumption)]"
+							raw_text = "PRESTIGE_GOODS_STATE_CONSUMPTION"
 						}
 					}
 
@@ -811,14 +788,14 @@ types goods_state_panel {
 								}
 
 								overlappingitembox = {
+									visible = "[Not(Goods.IsPrestigeGoods)]"
+									size = { 245 18 }
+									spacing = 5
+									righttoleft = yes
 
 									block "trade_center_provider" {
 										datamodel = "[Goods.GetExportersToState]"
 									}
-
-									size = { 245 18 }
-									righttoleft = yes
-									spacing = 5
 
 									item = {
 										small_market_flag = {}
