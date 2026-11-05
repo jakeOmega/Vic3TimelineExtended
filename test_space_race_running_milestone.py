@@ -17,6 +17,8 @@ import os
 import re
 import unittest
 
+from je_test_helpers import outcome_texts
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
@@ -140,9 +142,11 @@ class MoonBaseRetiredTests(unittest.TestCase):
             self.assertIn(f"remove_variable = {var}", c)
 
     def test_the_entry_is_never_shown_possible_completed_or_failed(self):
-        for name in ("is_shown_when_inactive", "possible", "complete", "fail"):
+        for name in ("is_shown_when_inactive", "possible"):
             with self.subTest(block=name):
                 self.assertEqual(_block(self.je, name).split(), ["always", "=", "no"])
+        # no outcome, so it can neither complete nor fail (1.15)
+        self.assertEqual(outcome_texts(self.je), [])
         # an old save's open copy can still drop out, and the cleanup follow it
         self.assertIn("can_deactivate = yes", self.je)
 

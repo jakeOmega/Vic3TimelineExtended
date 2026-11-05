@@ -14,6 +14,8 @@ import os
 import re
 import unittest
 
+from je_test_helpers import OLD_BLOCKS, old_block
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -65,7 +67,11 @@ MIRRORS = {
 
 
 def _je_block(name):
-    return _block(_block(_read(*JE), "je_civil_rights"), name, top_level=False)
+    """A block of the entry; an old completion block's name reads its 1.15 outcome (je_test_helpers)."""
+    entry = _block(_read(*JE), "je_civil_rights")
+    if name in OLD_BLOCKS:
+        return old_block(entry, name)
+    return _block(entry, name, top_level=False)
 
 
 def _param_calls(text, effect, param="MODIFIER"):
@@ -421,7 +427,7 @@ class OtherDebatesTests(unittest.TestCase):
             body = _block(_read(*parts), je)
             for hook in ("on_complete", "on_fail", "on_timeout"):
                 with self.subTest(je=je, hook=hook):
-                    self.assertRegex(_block(body, hook, top_level=False), r"set_variable\s*=\s*" + var + r"\b")
+                    self.assertRegex(old_block(body, hook), r"set_variable\s*=\s*" + var + r"\b")
             for gate in ("is_shown_when_inactive", "possible"):
                 with self.subTest(je=je, gate=gate):
                     self.assertRegex(_block(body, gate, top_level=False),

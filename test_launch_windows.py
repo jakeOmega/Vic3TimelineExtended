@@ -27,6 +27,8 @@ import sys
 import unittest
 from datetime import datetime
 
+from je_test_helpers import old_block
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 
@@ -1017,7 +1019,7 @@ class StagedBankTest(unittest.TestCase):
         immediate = _block(self.entry, "\timmediate")
         self.assertLess(immediate.index("sr_launch_bank_staged_fleets = yes"),
                         immediate.index("set_variable = { name = sr_progress_solar_colonization value = 0 }"))
-        on_fail = _block(self.entry, "\ton_fail")
+        on_fail = old_block(self.entry, "on_fail")
         self.assertLess(on_fail.index("sr_launch_bank_staged_fleets = yes"),
                         on_fail.index("sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }"))
         effects = _strip(_raw("common", "scripted_effects", "space_race_effects.txt"))

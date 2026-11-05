@@ -12,6 +12,8 @@ import re
 import unittest
 from pathlib import Path
 
+from je_test_helpers import entry_text, field
+
 ROOT = Path(__file__).resolve().parent
 TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
 VALUES = ROOT / "common/script_values/covert_warfare_script_values.txt"
@@ -187,8 +189,7 @@ class MonthlyTests(unittest.TestCase):
         self.assertIn("covert_tradecraft_refresh_bonus = yes", block)
 
     def test_immediate_seeds(self):
-        je = _text(JE)
-        immediate = je[je.index("immediate = {"):je.index("complete = {")]
+        immediate = field(entry_text(_text(JE), "je_covert_warfare"), "immediate")
         self.assertIn("covert_tradecraft_init = yes", immediate)
 
     def test_bonus_modifier(self):

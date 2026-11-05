@@ -17,6 +17,7 @@ import unittest
 from collections import namedtuple
 from pathlib import Path
 
+from je_test_helpers import entry_text, old_block
 from mod_state import split_loc_line
 
 ROOT = Path(__file__).resolve().parent
@@ -880,7 +881,7 @@ class NationalTests(unittest.TestCase):
         shown = squash(block(je, "is_shown_when_inactive"))
         self.assertIn("gm_system_enabled = yes", shown)
         self.assertIn("any_scope_state = { has_building = building_grand_monument }", shown)
-        invalid = squash(block(je, "invalid"))
+        invalid = squash(old_block(entry_text(je, "je_grand_monuments"), "invalid"))
         self.assertIn("gm_system_enabled = no", invalid)
         self.assertIn("gm_ledgers_idle = yes", invalid)
         self.assertIn("NOT = { any_scope_state = { has_variable = gm_seen } }", invalid)
@@ -2510,7 +2511,7 @@ class CommissionLifeTests(unittest.TestCase):
         clause = "has_variable = gm_com_open has_variable = gm_com_offered"
         for name in ("is_shown_when_inactive", "possible"):
             self.assertIn(clause, squash(block(je, name)), name)
-        invalid = squash(block(je, "invalid"))
+        invalid = squash(old_block(entry_text(je, "je_grand_monuments"), "invalid"))
         self.assertIn("NOT = { has_variable = gm_com_open } NOT = { has_variable = gm_com_offered }", invalid)
         self.assertIn(clause, squash(block(read(TRIGGERS), "gm_entry_unlocked")))
         self.assertIn(clause, squash(block(read(EFFECTS), "gm_country_refresh")))

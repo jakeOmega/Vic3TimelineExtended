@@ -15,6 +15,7 @@ import re
 import unittest
 
 import ideology_modifications as im
+from je_test_helpers import entry_text, old_block
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 ERA_12 = os.path.join(REPO, "common", "technology", "technologies", "era_12.txt")
@@ -179,16 +180,16 @@ class DebateTest(unittest.TestCase):
         self.assertNotIn("is_revolutionary", possible)
 
     def test_every_ending_sets_the_resolved_variable(self):
-        for block in ("on_complete", "on_timeout"):
-            self.assertIn("set_variable = morphological_freedom_resolved", _sub(self.je, block))
+        for block in ("on_complete", "on_fail", "on_timeout"):
+            self.assertIn("set_variable = morphological_freedom_resolved", old_block(self.je, block))
 
     def test_twenty_years_succeeds_on_the_law_fails_on_natural_form(self):
         self.assertRegex(self.je, r"timeout = 7300\b")
-        complete = _sub(_sub(self.je, "complete"), "OR")
+        complete = _sub(old_block(self.je, "complete"), "OR")
         self.assertIn("has_law = law_type:law_morphological_freedom", complete)
         self.assertIn("has_law = law_type:law_clade_citizenship", complete)
-        self.assertIn("morphological_freedom_events.200", _sub(self.je, "on_complete"))
-        timeout = _sub(self.je, "on_timeout")
+        self.assertIn("morphological_freedom_events.200", old_block(self.je, "on_complete"))
+        timeout = old_block(self.je, "on_timeout")
         failed = _sub(timeout, "if")
         self.assertIn("has_law = law_type:law_natural_form", failed)
         self.assertIn("morphological_freedom_events.100", failed)
@@ -286,8 +287,9 @@ class PrescribedFormTest(unittest.TestCase):
 
     def test_the_debate_fails_on_it(self):
         je = _code(_read(JE))
-        self.assertIn("has_law = law_type:law_prescribed_form", _sub(je, "fail"))
-        self.assertIn("set_variable = morphological_freedom_resolved", _sub(je, "on_fail"))
+        entry = entry_text(_read(JE), "je_morphological_freedom")
+        self.assertIn("has_law = law_type:law_prescribed_form", old_block(entry, "fail"))
+        self.assertIn("set_variable = morphological_freedom_resolved", old_block(entry, "on_fail"))
         self.assertIn("je_morphological_freedom_status_prescribed", je)
 
     def test_the_fascists_carry_it_and_self_expression_opposes_it(self):
