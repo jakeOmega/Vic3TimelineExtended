@@ -86,6 +86,14 @@ class CheckQuotedExpansionTests(unittest.TestCase):
     def test_plain_expansion_not_flagged(self):
         self.assertEqual(self._issues("[Concept('concept_x','$plain_name$')]"), [])
 
+    def test_quote_escaped_reference_still_checked(self):
+        # 1.15 makes every quoted-argument `$key$` carry `|q`; the check must
+        # still read the key through the flag.
+        self.assertEqual(
+            self._issues("Applies [Concept('concept_x','$linked_name|q$')]"),
+            ["quoted_arg_expansion"])
+        self.assertEqual(self._issues("[Concept('concept_x','$plain_name|q$')]"), [])
+
     def test_top_level_reference_not_flagged(self):
         # Outside a data expression the expansion renders normally.
         self.assertEqual(self._issues("Applies $linked_name$ (+5%)"), [])

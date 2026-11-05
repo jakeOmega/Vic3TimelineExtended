@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.15.0",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "4852fdf1454c1204",
- "built_at": "2026-11-05T15:31:47+00:00",
+ "parser_fingerprint": "c6d35a843fbf0b8b",
+ "built_at": "2026-11-05T16:10:36+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -284,6 +284,21 @@
    "dir": "game/common/game_concepts",
    "file": "common/game_concepts.json",
    "entities": 619
+  },
+  "Glossary": {
+   "dir": "game/common/glossary",
+   "file": "common/glossary.json",
+   "entities": 20
+  },
+  "Regional Exile Pools": {
+   "dir": "game/common/regional_exile_pools",
+   "file": "common/regional_exile_pools.json",
+   "entities": 1
+  },
+  "AI Ship Categories": {
+   "dir": "game/common/ai_ship_categories",
+   "file": "common/ai_ship_categories.json",
+   "entities": 7
   }
  },
  "localization": {
@@ -293,6 +308,10 @@
  },
  "parse_failures": [],
  "sources": {
+  "game/common/ai_ship_categories/00_ai_ship_categories.txt": {
+   "size": 451,
+   "sha256": "6ab66ae0cf181e3bec27f5f3a9fc7f84fc0f27339f58f8c150bab5a06db4806e"
+  },
   "game/common/amendments/00_amendments_content_04.txt": {
    "size": 6188,
    "sha256": "1c445abca6c91c2d13019544f975147161879595a40d275084b4ebe2f31c0953"
@@ -916,6 +935,10 @@
   "game/common/game_concepts/01_additional_game_concepts.txt": {
    "size": 448,
    "sha256": "9d62feb4195c96e3a8b71cf631ae41fa0a8e83584cf5a7f3f9dfd9c6a82f8631"
+  },
+  "game/common/glossary/00_glossary.txt": {
+   "size": 702,
+   "sha256": "442a4e3420f3b7b3824a53d1b546805616294be044b782ddbb12190fd9f03e26"
   },
   "game/common/goods/00_goods.txt": {
    "size": 10584,
@@ -2304,6 +2327,10 @@
   "game/common/production_methods/15_special.txt": {
    "size": 1197,
    "sha256": "5346614d747c63d2149a23df424365f387034fbc01a8487c5d69386188da8b1b"
+  },
+  "game/common/regional_exile_pools/00_regional_exile_pools.txt": {
+   "size": 459,
+   "sha256": "4e2c9339566273a28d45dfcdccf0bb13fe126c9558ec7de0d7d21977325bcb25"
   },
   "game/common/religions/religion.txt": {
    "size": 2306,

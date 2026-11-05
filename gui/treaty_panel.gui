@@ -1,4 +1,7 @@
-﻿# COPY-PASTED FOR NOW
+﻿# TE override of vanilla treaty_panel.gui (1.15.0): vanilla's file plus the article inputs vanilla shows
+# only for its own articles: a quantity for any article (#542), a company and a building type (TE).
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+# COPY-PASTED FOR NOW
 @panel_width_minus_10 = 530			# used to be 450
 @panel_width = 540  				# used to be 460
 @panel_width_half = 270				# used to be 230
@@ -220,12 +223,23 @@ types treaty_panel_types
 					block "binding_period_textboxes" {
 						### BINDING PERIOD
 						treaty_textbox = {
-							visible = "[NotZero(Treaty.GetBindingDaysLeft)]"
+							visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Not(Treaty.IsBindingPeriodPending))]"
 							align = nobaseline
 							autoresize = yes
-							max_width = 230
+							max_width = 200
 							using = elide_fontsize_min
 							text = "TREATY_BINDING_PERIOD_REMAINING_NO_CONCEPT"
+						}
+
+						### BINDING PERIOD PENDING
+						treaty_textbox = {
+							visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Treaty.IsBindingPeriodPending)]"
+							align = nobaseline
+							autoresize = yes
+							max_width = 200
+							using = elide_fontsize_min
+							tooltip = "TREATY_BINDING_PERIOD_PENDING_TOOLTIP"
+							text = "TREATY_BINDING_PERIOD_PENDING_NO_CONCEPT"
 						}
 
 						### BINDING PERIOD HAS ENDED
@@ -233,7 +247,7 @@ types treaty_panel_types
 							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), NotZero(Treaty.GetBindingDays))]"
 							align = nobaseline
 							autoresize = yes
-							max_width = 230
+							max_width = 200
 							using = elide_fontsize_min
 							text = "TREATY_BINDING_PERIOD_HAS_ENDED_SHORT_NO_CONCEPT"
 						}
@@ -243,7 +257,7 @@ types treaty_panel_types
 							visible = "[And(IsZero(Treaty.GetBindingDaysLeft), IsZero(Treaty.GetBindingDays))]"
 							align = nobaseline
 							autoresize = yes
-							max_width = 230
+							max_width = 200
 							using = elide_fontsize_min
 							text = "TREATY_NO_BINDING_PERIOD_NO_CONCEPT"
 						}
@@ -295,6 +309,49 @@ types treaty_panel_types
 
 			widget = {
 				size = { 15 15 }
+			}
+		}
+
+		### AUTOMATIC WITHDRAWAL
+		widget = {
+			visible = "[And(IsValid(Treaty.ToggleAutomaticWithdrawal),NotZero(Treaty.GetBindingDaysLeft))]" 
+			size = { 500 40 }
+			using = tooltip_se
+
+			block "treaty_automatic_withdrawal_tooltip" {
+				tooltip = "[SelectLocalization(Treaty.IsBindingPeriodPending, 'TREATY_AUTOMATIC_WITHDRAWAL_PENDING_TOOLTIP', 'TREATY_AUTOMATIC_WITHDRAWAL_TOOLTIP')]"
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 5
+
+				background = {
+					using = frame_decorative_light_bg
+				}
+
+				expand = {}
+
+				widget = {
+					size = { 25 25 }
+
+					checkbutton = {
+						using = check_button
+						size = { 100% 100% }
+						onclick = "[Execute(Treaty.ToggleAutomaticWithdrawal)]"
+						checked = "[Treaty.WillAutomaticallyWithdraw(GetPlayer.Self)]"
+					}
+				}
+
+				treaty_textbox = {
+					align = nobaseline
+					autoresize = yes
+					max_width = 420
+					using = elide_fontsize_min
+					text = "AUTOMATIC_WITHDRAWAL"
+				}
+
+				expand = {}
 			}
 		}
 
@@ -391,8 +448,22 @@ types treaty_panel_types
 					alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
 
 					item = {
-						article = {
-							using = tooltip_ws
+						vbox = {
+							visible = "[Or(Treaty.IsFirstInShipTransferBundle(Article.Self), Not(Treaty.IsInShipTransferBundle(Article.Self)))]"
+							layoutpolicy_horizontal = expanding
+
+							ship_transfer_bundle = {
+								visible = "[Treaty.IsFirstInShipTransferBundle(Article.Self)]"
+
+								blockoverride "bundled_article" {
+									using = tooltip_ws
+								}
+							}
+
+							article = {
+								visible = "[Not(Treaty.IsInShipTransferBundle(Article.Self))]"
+								using = tooltip_ws
+							}
 						}
 					}
 				}
@@ -478,7 +549,18 @@ types treaty_panel_types
 					alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
 
 					item = {
-						article = {}
+						vbox = {
+							visible = "[Or(Treaty.IsFirstInShipTransferBundle(Article.Self), Not(Treaty.IsInShipTransferBundle(Article.Self)))]"
+							layoutpolicy_horizontal = expanding
+
+							ship_transfer_bundle = {
+								visible = "[Treaty.IsFirstInShipTransferBundle(Article.Self)]"
+							}
+
+							article = {
+								visible = "[Not(Treaty.IsInShipTransferBundle(Article.Self))]"
+							}
+						}
 					}
 				}
 
@@ -807,6 +889,84 @@ types treaty_panel_types
 		}
 	}
 
+	type ship_transfer_bundle = vbox {
+		layoutpolicy_horizontal = expanding
+		spacing = 5
+
+		### BUNDLE HEADER
+		button = {
+			layoutpolicy_horizontal = expanding
+			size = { 0 34 }
+			onclick = "[GetVariableSystem.Toggle(Concatenate('ship_transfer_bundle_treaty_', Article.GetFirstOrSourceCountry.GetIDString))]"
+			using = expand_button_bg_no_fade
+
+			hbox = {
+				size = { 100% 100% }
+				margin = { 5 0 }
+				spacing = 5
+
+				### EXPAND ARROW
+				widget = {
+					size = { 25 25 }
+
+					button = {
+						visible = "[Not(GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_treaty_', Article.GetFirstOrSourceCountry.GetIDString)))]"
+						size = { 100% 100% }
+						alwaystransparent = yes
+						using = expand_arrow
+					}
+
+					button = {
+						visible = "[GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_treaty_', Article.GetFirstOrSourceCountry.GetIDString))]"
+						size = { 100% 100% }
+						alwaystransparent = yes
+						using = expand_arrow_expanded
+					}
+				}
+
+				### TYPE ICON
+				icon = {
+					size = { 28 28 }
+					texture = "[Article.GetIcon]"
+				}
+
+				### NAME
+				textbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					align = nobaseline
+					default_format = "#white"
+					using = elide_fontsize_min
+					text = "SHIP_TRANSFER_BUNDLE_NAME"
+				}
+
+				### SHIP COUNT
+				treaty_textbox = {
+					margin_right = 5
+					align = nobaseline
+					autoresize = yes
+					using = elide_fontsize_min
+					tooltip = "[Treaty.GetShipTransferBundleShipsDesc(Article.Self)]"
+					raw_text = "#v [GetDataModelSize(Treaty.GetShipTransferBundle(Article.Self))]#!"
+				}
+			}
+		}
+
+		### BUNDLED ARTICLES
+		vbox = {
+			visible = "[GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_treaty_', Article.GetFirstOrSourceCountry.GetIDString))]"
+			layoutpolicy_horizontal = expanding
+			spacing = 5
+			datamodel = "[Treaty.GetShipTransferBundle(Article.Self)]"
+
+			item = {
+				article = {
+					block "bundled_article" {}
+				}
+			}
+		}
+	}
+
 	type article = vbox {
 		layoutpolicy_horizontal = expanding
 
@@ -881,6 +1041,13 @@ types treaty_panel_types
 					using = elide_fontsize_min
 					default_format = "#white"
 					text = "[Article.GetNameNoFormatting]"
+				}
+
+				### CANNOT WITHDRAW
+				icon = {
+					visible = "[Not(And(Article.CanWithdraw(Article.GetFirstOrSourceCountry.Self), Article.CanWithdraw(Article.GetSecondOrTargetCountry.Self)))]"
+					size = { 22 22 }
+					texture = "gfx/interface/icons/generic_icons/map_list_lock.dds"
 				}
 
 				### LIST NUMBER

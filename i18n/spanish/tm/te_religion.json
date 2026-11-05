@@ -952,7 +952,7 @@
   "es": "Aumento mensual de fervor"
  },
  "state_war_support_monthly_add_religion_desc": {
-  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
-  "es": "[concept_war_support] que se añade cada mes, multiplicado por el [concept_clout|l] de [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Cada [Concept('concept_state','$concept_state$')|l] aporta su parte según su población. Se muestra en las descripciones emergentes de los eventos como «Por eventos»."
+  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state|q$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
+  "es": "[concept_war_support] que se añade cada mes, multiplicado por el [concept_clout|l] de [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Cada [Concept('concept_state','$concept_state|q$')|l] aporta su parte según su población. Se muestra en las descripciones emergentes de los eventos como «Por eventos»."
  }
 }

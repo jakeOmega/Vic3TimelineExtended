@@ -44,9 +44,13 @@ template te_own_country_only {
 types te_system_tab_widgets
 {
 	### The entry's scripted progress bars (JournalEntry.GetScriptedProgressBars),
-	### in vanilla's markup (gui/journal_entry.gui) at 480 px. Only the variants the
-	### mod's entries use are reproduced (default_green, default_bad,
-	### double_sided_gold); a bar of another kind needs its variant added here.
+	### in vanilla 1.15's markup (gui/journal_entry.gui, the item of the
+	### GetScriptedProgressBars block) at 480 px: all four looks, the three
+	### ready-made ones (default, default_bad, default_green) and the one a bar
+	### defines in script (IsDynamic: progress_texture, background_texture, the
+	### glows, color, marker, left_icon/right_icon), so a bar of any look draws
+	### here as it does in the journal. Only the widths are the mod's (504 -> 480;
+	### the IsDynamic row 520 -> 480 and its bar 430 -> 390, the row less two icons).
 	type te_je_scripted_bars = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
@@ -57,9 +61,34 @@ types te_system_tab_widgets
 
 		item = {
 			container = {
+
+				# Default
+				default_progressbar_horizontal = {
+					visible = "[ScriptedProgressBar.IsDefault]"
+					block "progressbar_size" {
+						size = { 480 30 }
+					}
+					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+					blockoverride "values" {
+						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+						min = 0
+						max = 1
+					}
+					textbox = {
+						text = "[ScriptedProgressBar.GetDesc]"
+						autoresize = yes
+						align = nobaseline
+						margin_left = 10
+						parentanchor = vcenter
+					}
+				}
+
+				# Default Bad
 				bad_progressbar_horizontal = {
 					visible = "[ScriptedProgressBar.IsDefaultBad]"
-					size = { 480 30 }
+					block "progressbar_size" {
+						size = { 480 30 }
+					}
 					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
 					blockoverride "values" {
 						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
@@ -75,9 +104,13 @@ types te_system_tab_widgets
 					}
 				}
 
+				#Default Green
 				green_progressbar_horizontal = {
 					visible = "[ScriptedProgressBar.IsDefaultGreen]"
-					size = { 480 30 }
+					block "progressbar_size" {
+						size = { 480 30 }
+					}
+
 					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
 					blockoverride "values" {
 						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
@@ -91,71 +124,59 @@ types te_system_tab_widgets
 						margin_left = 10
 						parentanchor = vcenter
 					}
+					textbox = {
+						text = "[ScriptedProgressBar.GetSecondDesc]"
+						autoresize = yes
+						align = right|nobaseline
+						margin_right = 10
+						parentanchor = right|vcenter
+					}
 				}
 
+				# Look defined in script
 				widget = {
-					size = { 480 34 }
-					visible = "[ScriptedProgressBar.IsDoubleSidedGold]"
+					size = { 480 45 }
+					parentanchor = center
+					visible = "[ScriptedProgressBar.IsDynamic]"
 
-					default_progressbar_horizontal = {
-						parentanchor = center
-						size = { 480 30 }
+					hbox = {
+						size = { 100% 100% }
+						spacing = 5
 
-						blockoverride "noprogresstexture" {
-							noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+						icon = {
+							size = { 40 40 }
+							visible = "[ScriptedProgressBar.HasLeftIcon]"
+							texture = "[ScriptedProgressBar.GetLeftIcon]"
 						}
 
-						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-						blockoverride "values" {
-							value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
-							min = 0
-							max = 1
-						}
-						textbox = {
-							text = "[ScriptedProgressBar.GetDesc]"
-							autoresize = yes
-							align = nobaseline
-							margin_left = 10
-							parentanchor = vcenter
-						}
-						textbox = {
-							text = "[ScriptedProgressBar.GetSecondDesc]"
-							autoresize = yes
-							align = right|nobaseline
-							margin_right = 10
-							parentanchor = right|vcenter
-						}
+						scripted_progressbar_dynamic = {
+							layoutpolicy_horizontal = expanding
+							tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
 
-						blockoverride "on_top_of_the_progressbar" {
-							progressbar = {
-								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-								size = { 100% 100% }
-								spriteType = Corneredtiled
-								spriteborder = { 4 4 }
-								texture_density = 2
-								skip_initial_animation = yes
-
-								block "values" {}
-								block "direction" {
-									direction = horizontal
-								}
-								block "progress_changed_animation" {
-									using = progressbar_changed_animation
-								}
-								block "animate_negative_change" {
-									animate_negative_changes = yes
-								}
-								marker = {
-									icon = {
-										size = { 65 33 }
-										parentanchor = vcenter
-										widgetanchor = center
-										texture = "gfx/interface/progressbar/progressbar_marker.dds"
-										using = shimmer
-									}
-								}
+							block "progressbar_size" {
+								size = { 390 30 }
 							}
+
+							textbox = {
+								text = "[ScriptedProgressBar.GetDesc]"
+								autoresize = yes
+								align = nobaseline
+								margin_left = 10
+								parentanchor = vcenter
+							}
+							textbox = {
+								text = "[ScriptedProgressBar.GetSecondDesc]"
+								autoresize = yes
+								align = right|nobaseline
+								margin_right = 10
+								parentanchor = right|vcenter
+							}
+						}
+
+						icon = {
+							size = { 40 40 }
+							visible = "[ScriptedProgressBar.HasRightIcon]"
+							texture = "[ScriptedProgressBar.GetRightIcon]"
 						}
 					}
 				}
@@ -164,17 +185,19 @@ types te_system_tab_widgets
 	}
 
 	### The entry's goal bar (`progressbar = yes`, from current_value and
-	### goal_add_value), as vanilla's panel draws it (gui/journal_entry.gui, above
-	### custom_widget_container_4), at 480 px like the scripted bars. All four of
+	### goal_add_value), in vanilla 1.15's markup (gui/journal_entry.gui, the block
+	### under the scripted bars), at 480 px like the scripted bars. All four of
 	### vanilla's texts, so an entry whose bar counts time works too. First used
 	### by the Military panel's Nuclear tab: progress toward the next warhead.
 	type te_je_goal_bar = flowcontainer {
 		parentanchor = hcenter
-		visible = "[And( JournalEntry.HasProgressBar, JournalEntry.IsActive )]"
+		visible = "[And(JournalEntry.HasProgressBar, JournalEntry.IsActive)]"
 		margin = { 0 5 }
 
 		default_progressbar_horizontal = {
-			size = { 480 30 }
+			block "progressbar_size" {
+				size = { 480 30 }
+			}
 			blockoverride "values" {
 				value = "[FixedPointToFloat(JournalEntry.GetGoalProgressPercent)]"
 				min = 0

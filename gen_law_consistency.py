@@ -235,6 +235,27 @@ VARIANT_CANDIDATE_GATES = {
     "law_people_of_the_book":    ["country_is_islamic = yes", "NOT = { c:TUR ?= this }"],
     "law_millet_system":         ["c:TUR ?= this"],
 
+    # Russia (1.15). Third Section's NAND with its own `has_law` reduces to the
+    # tech clause, since the walk only activates it when another law is active.
+    "law_okhrana":               ["c:RUS ?= this", "country_has_monarchy_law = yes"],
+    "law_third_section":         [
+        "c:RUS ?= this",
+        "country_has_monarchy_law = yes",
+        "NOT = { has_technology_researched = central_archives }",
+    ],
+    "law_caesaropapism":         [
+        "OR = {",
+        "\tc:RUS ?= this",
+        "\tAND = {",
+        "\t\texists = c:RUS",
+        "\t\tis_subject_of = c:RUS",
+        "\t\tcountry_is_subject_type_valid_for_caesaropapism = yes",
+        "\t}",
+        "}",
+        "NOT = { has_law_or_variant = law_type:law_theocracy }",
+    ],
+    "law_official_nationality":  ["c:RUS ?= this"],
+
     # Mongolia
     "law_chiefs_distribute_aid": ["c:MON ?= this"],
     "law_women_in_the_fields":   ["c:MON ?= this"],  # NOR of same-group women's-rights laws stripped (mutex)

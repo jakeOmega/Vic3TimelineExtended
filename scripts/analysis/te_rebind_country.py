@@ -279,7 +279,7 @@ def _closure_with_source(roots, loc, custom):
             continue
         out[key] = source
         value = h._OWN_BRANCH.sub(r"\1''", loc[key])
-        todo.extend((k, source) for k in re.findall(r"\$([\w.\-]+)\$", value))
+        todo.extend((k, source) for k in re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
         todo.extend((k, source) for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
         todo.extend((k, source) for k in h.custom_keys(value, custom))
     return out

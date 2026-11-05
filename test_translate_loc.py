@@ -55,6 +55,13 @@ class MarkupCheckAcceptsTests(unittest.TestCase):
 
 
 class MarkupCheckRejectsTests(unittest.TestCase):
+    def test_unescaped_reference_in_a_quoted_argument(self):
+        # 1.15: a $key$ inside a loc function's quoted argument needs |q.
+        en = "[Concept('concept_state', '$concept_states|q$')] grow"
+        errors = _errors(en, "[Concept('concept_state', '$concept_states$')] wachsen")
+        self.assertTrue(any("quote-escaping" in e for e in errors), errors)
+        self.assertEqual(_errors(en, "[Concept('concept_state', '$concept_states|q$')] wachsen"), [])
+
     def test_dropped_concept_link(self):
         errors = _errors("Raises [concept_legitimacy]", "Erhöht die Legitimität")
         self.assertTrue(any("concept links" in e for e in errors), errors)
@@ -231,6 +238,10 @@ class ChunkingTests(unittest.TestCase):
 
 
 class GlossarySelectionTests(unittest.TestCase):
+    def test_referenced_keys_read_through_format_flags(self):
+        keys = t.referenced_keys("[Concept('concept_ship_group', '$ship_group_cruisers|q$')] $iron$")
+        self.assertTrue({"ship_group_cruisers", "iron", "concept_ship_group"} <= keys, keys)
+
     def test_names_are_selected_descriptions_are_not(self):
         self.assertTrue(t.is_glossary_entry(t.Entry("te_laws_l_english.yml", "law_x", "Ancestral Citizenship")))
         self.assertFalse(t.is_glossary_entry(t.Entry("te_laws_l_english.yml", "law_x_desc", "Citizenship is…")))

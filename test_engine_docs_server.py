@@ -504,7 +504,12 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
             mock.patch.object(mss, "engine_docs_source_label", ""),
             mock.patch.object(mss, "_engine_docs_warnings", []),
             mock.patch.object(mss, "_last_validation_report", None),
+            # Neither a vanilla_parsed snapshot nor a game install unless a
+            # test sets one (the newer-source check).
+            mock.patch.object(mss, "_vanilla_reference_versions",
+                              lambda: self.reference_versions),
         ]
+        self.reference_versions = (None, None)
         for name in ("_union_vanilla_modifier_decimals", "_union_mod_modifier_types",
                      "_union_mod_custom_localization", "_refresh_pattern_state"):
             patches.append(mock.patch.object(mss, name))
@@ -575,11 +580,46 @@ class EngineDocsRenderGuardTests(unittest.TestCase):
         mss._load_engine_docs()
         self.render.assert_called_once()
 
+    def test_newer_than_snapshot_and_game_skips_render(self):
+        # The 1.15 digest on a 1.14.5 machine (prep doc § 3.11).
+        self.reference_versions = ("1.14.5", None)
+        self._use_logs("1.15.0")
+        mss._load_engine_docs()
+        warning = self._assert_skipped()
+        self.assertNotIn("missing", warning)
+        self.assertEqual((warning["source_version"], warning["snapshot_version"],
+                          warning["game_version"]), ("1.15.0", "1.14.5", None))
+        self.assertIn("newer than vanilla 1.14.5", warning["detail"])
+        self.assertIn("vanilla_parsed.py build", warning["detail"])
+
+    def test_newer_check_reads_the_newest_of_snapshot_and_game(self):
+        self._use_logs("1.15.0")
+        for refs, renders in (((None, "1.14.5"), False),
+                              (("1.14.5", "1.15.0"), True),
+                              (("1.15.0", "1.14.5"), True),
+                              (("1.15.0", None), True)):
+            with self.subTest(refs=refs):
+                self.render.reset_mock()
+                self.reference_versions = refs
+                mss._load_engine_docs()
+                self.assertEqual(self.render.called, renders)
+
     def test_engine_only_reload_reports_the_skip(self):
         warnings = mss._reload_engine_only()
         self.assertEqual(
             [w["label"] for w in warnings], ["engine_docs_render_skipped"]
         )
+
+
+class VanillaReferenceVersionsTest(unittest.TestCase):
+    def test_reads_the_committed_snapshot_and_the_install(self):
+        import vanilla_parsed
+        manifest = vanilla_parsed.read_manifest(vanilla_parsed.DEFAULT_DIR)
+        with mock.patch.object(mss, "_read_live_game_version", return_value="1.15.0"):
+            self.assertEqual(mss._vanilla_reference_versions(),
+                             (manifest["game_version"], "1.15.0"))
+        with mock.patch.object(mss, "_read_live_game_version", return_value=None):
+            self.assertEqual(mss._vanilla_reference_versions()[1], None)
 
 
 if __name__ == "__main__":

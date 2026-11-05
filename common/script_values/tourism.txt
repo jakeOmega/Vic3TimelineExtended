@@ -2016,10 +2016,6 @@
 		value = 65 # Finnish Lakeland district, vast numbers of lakes and forests.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_CHUKOTKA }
-		value = 30 # Extremely remote Siberian peninsula.
-	}
-	else_if = {
 		limit = { state_region = s:STATE_NENETSIA }
 		value = 25 # Arctic tundra.
 	}
@@ -2032,7 +2028,7 @@
 		value = 50 # Solovetsky Islands have major historical/religious importance. Otherwise remote taiga.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_TARTARIA }
+		limit = { state_region = s:STATE_SARATOV }
 		value = 45 # Volga river is the main feature, otherwise steppe.
 	}
 	else_if = {
@@ -2073,7 +2069,7 @@
 	}
 	else_if = {
 		limit = { state_region = s:STATE_KAMCHATKA }
-		value = 85 # "Land of Volcanoes." One of the most volcanically active and dramatic landscapes on Earth.
+		value = 85 # "Land of Volcanoes." One of the most volcanically active and dramatic landscapes on Earth. Takes in Chukotka since 1.15.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_OKHOTSK }
@@ -2124,7 +2120,7 @@
 		value = 50 # Foothills of the Urals.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_GALICH }
+		limit = { state_region = s:STATE_VOLOGDA }
 		value = 50 # Vast northern forests and lake systems.
 	}
 	else_if = {
@@ -2532,7 +2528,7 @@
 		value = 75 # Largest city in the Baltics with a major historic center.
 	}
 	else_if = {
-		limit = { state_region = s:STATE_KAUNAS }
+		limit = { state_region = s:STATE_LITHUANIA }
 		value = 60 # Second city of Lithuania, located at the confluence of two rivers.
 	}
 	else_if = {
@@ -2586,6 +2582,10 @@
 	else_if = {
 		limit = { state_region = s:STATE_NIZHNY_NOVGOROD }
 		value = 70 # Major historic city on the Volga with a kremlin.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_KOSTROMA }
+		value = 70 # Golden Ring city on the Volga, the Ipatiev Monastery. Split from Yaroslavl, Nizhny Novgorod and Galich in 1.15, which score 70, 70 and 50.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_VYATKA }
@@ -2646,6 +2646,10 @@
 	else_if = {
 		limit = { state_region = s:STATE_ORYOL }
 		value = 40 # Central Russian Upland.
+	}
+	else_if = {
+		limit = { state_region = s:STATE_TULA }
+		value = 40 # Central Russian Upland: Tula's kremlin and arms works, Tolstoy's Yasnaya Polyana. Split from Oryol in 1.15.
 	}
 	else_if = {
 		limit = { state_region = s:STATE_ELIZAVETPOL }

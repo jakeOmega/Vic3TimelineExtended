@@ -414,7 +414,7 @@ extra_law_events.5 = {
 		name = extra_law_events.5.c
 		trigger = {
 			OR = {
-				has_law = law_type:law_secret_police
+				has_law_or_variant = law_type:law_secret_police
 				has_law = law_type:law_ministry_of_intelligence_and_security
 			}
 		}
@@ -1548,7 +1548,7 @@ extra_law_events.20 = {
 		name = extra_law_events.20.c
 		trigger = {
 			OR = {
-				has_law = law_type:law_secret_police
+				has_law_or_variant = law_type:law_secret_police
 				has_law = law_type:law_ministry_of_intelligence_and_security
 			}
 		}

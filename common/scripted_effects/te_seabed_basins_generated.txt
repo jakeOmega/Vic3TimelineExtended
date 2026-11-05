@@ -8,7 +8,7 @@
 # (te_global_commons_seabed_effects.txt) for coastal states without the
 # variable: the yearly pass and any recording that meets one (conquest and
 # splits make new state scopes).
-# 372 coastal state regions: Pacific 91, Atlantic 216, Indian 45, Arctic 9, Southern 11.
+# 371 coastal state regions: Pacific 90, Atlantic 216, Indian 45, Arctic 9, Southern 11.
 te_seabed_set_state_basin = {
 	if = {
 		limit = {  # Pacific
@@ -32,7 +32,6 @@ te_seabed_set_state_basin = {
 				state_region = s:STATE_CENTRAL_JAVA
 				state_region = s:STATE_CHIAPAS
 				state_region = s:STATE_CHUGOKU
-				state_region = s:STATE_CHUKOTKA
 				state_region = s:STATE_EASTERN_NEW_GUINEA
 				state_region = s:STATE_EAST_BORNEO
 				state_region = s:STATE_EAST_JAVA
@@ -207,7 +206,6 @@ te_seabed_set_state_basin = {
 				state_region = s:STATE_JUTLAND
 				state_region = s:STATE_KARS
 				state_region = s:STATE_KASTAMONU
-				state_region = s:STATE_KAUNAS
 				state_region = s:STATE_KONYA
 				state_region = s:STATE_KUBAN
 				state_region = s:STATE_LANCASHIRE
@@ -217,6 +215,7 @@ te_seabed_set_state_basin = {
 				state_region = s:STATE_LEINSTER
 				state_region = s:STATE_LIBERIA
 				state_region = s:STATE_LIBYA
+				state_region = s:STATE_LITHUANIA
 				state_region = s:STATE_LOUISIANA
 				state_region = s:STATE_LOWER_ANDALUSIA
 				state_region = s:STATE_LOWER_EGYPT

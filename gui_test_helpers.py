@@ -544,7 +544,7 @@ def loc_closure(keys, loc, own=True, custom=None):
             continue
         seen.add(key)
         value = loc[key] if own else _OWN_BRANCH.sub(r"\1''", loc[key])
-        stack.extend(re.findall(r"\$([\w.\-]+)\$", value))
+        stack.extend(re.findall(r"\$([\w.\-]+)(?:\|[^$]*)?\$", value))
         stack.extend(k for k in re.findall(r"'([\w.\-]+)'", value) if k in loc)
         stack.extend(custom_keys(value, custom))
     return seen

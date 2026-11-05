@@ -154,7 +154,7 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
             P.CHILD_WORK_TYPE: {"law_child_labor_allowed": 0.3, "law_restricted_child_labor": 0.1},
             P.LM_FARMS_TYPE: {"law_primogeniture": 0.15, "amendment_undivided_farm_succession": 0.15},
             P.FL_LITERACY_TYPE: {"law_state_religion": -0.5, "law_millet_system": -0.5, "law_people_of_the_book": -0.5,
-                                 "law_total_separation": 0.5, "law_state_atheism": 0.5}})
+                                 "law_caesaropapism": -0.5, "law_total_separation": 0.5, "law_state_atheism": 0.5}})
 
     def test_the_migrant_profiles_input_sits_on_the_transport_techs(self):
         """Stage 3 (2026-10-19): a technology ladder until then. The transport technologies carry their old figures plus

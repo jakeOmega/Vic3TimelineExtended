@@ -43,13 +43,13 @@ BASINS = {1: "pacific", 2: "atlantic", 3: "indian", 4: "arctic", 5: "southern"}
 
 # Every sea region in 99_seas.txt -> basin key. The spec (§ 2.1) fixes the
 # named seas; the rest follow the real ocean. "unused" = no land state names
-# it as its naval exit (85 of the 106 are used), so its basin decides nothing
+# it as its naval exit (84 of the 106 are used), so its basin decides nothing
 # today; it is listed so that a map change that starts using it is mapped.
 #
 # Borderline calls, checked against the states that use each sea:
-# - BERING_SEA (Chukotka): a marginal sea of the Pacific, not one of the
-#   spec's Arctic seas, so Pacific, though Chukotka's real coast is mostly
-#   Arctic. The naval exit decides.
+# - BERING_SEA (unused since 1.15 merged Chukotka, its one user, into
+#   Kamchatka, which exits to the Northwest Pacific): a marginal sea of the
+#   Pacific, not one of the spec's Arctic seas, so Pacific.
 # - HUDSON_BAY (Ontario, Manitoba, Nunavut): Arctic, as the spec says. The
 #   game gives Ontario its naval exit there, so Ontario is an Arctic state.
 # - DAVIS_STRAIT (Greenland), NORWEGIAN_SEA (Northern Norway), BARENTS_SEA
@@ -94,7 +94,7 @@ SEA_BASIN = {
     "STATE_NORTHWEST_PACIFIC_OCEAN": "pacific",
     "STATE_SOUTH_PACIFIC_OCEAN": "pacific",             # unused
     "STATE_GALAPAGOS_RISE": "pacific",
-    "STATE_BERING_SEA": "pacific",
+    "STATE_BERING_SEA": "pacific",                      # unused
     "STATE_GULF_OF_ALASKA": "pacific",
     "STATE_INSIDE_PASSAGE": "pacific",
     "STATE_PACIFIC_SEABOARD": "pacific",

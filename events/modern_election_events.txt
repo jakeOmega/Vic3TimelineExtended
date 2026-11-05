@@ -566,7 +566,7 @@ modern_election_events.6 = {
 		ai_chance = {
 			base = 4
 			modifier = { trigger = { has_law = law_type:law_state_secrets } add = 3 }
-			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_secret_police } add = 3 }
 		}
 	}
 }
@@ -1264,6 +1264,7 @@ modern_election_events.14 = {
 		any_interest_group = {
 			OR = {
 				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_communist_leader
 				has_ideology = ideology:ideology_vanguardist
 			}
 		}
@@ -1885,7 +1886,7 @@ modern_election_events.20 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_no_womens_rights } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 3 }
 		}
 	}
 
@@ -2151,7 +2152,7 @@ modern_election_events.23 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_ban_on_genetic_modification } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 3 }
 		}
 	}
 
@@ -2224,7 +2225,7 @@ modern_election_events.24 = {
 			base = 5
 			modifier = { trigger = { is_at_war = yes } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_militarized_police } add = 3 }
-			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_secret_police } add = 3 }
 		}
 	}
 
@@ -2320,7 +2321,7 @@ modern_election_events.25 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_intrusive_surveillance } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_secret_police } add = 3 }
 		}
 	}
 
@@ -2805,7 +2806,7 @@ modern_election_events.30 = {
 		ai_chance = {
 			base = 4
 			modifier = { trigger = { ig:ig_armed_forces = { is_in_government = yes } } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_secret_police } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_secret_police } add = 3 }
 		}
 	}
 }
@@ -2876,7 +2877,7 @@ modern_election_events.31 = {
 			base = 5
 			modifier = { trigger = { has_law = law_type:law_no_augmentation } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_ban_on_genetic_modification } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 3 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 3 }
 		}
 	}
 

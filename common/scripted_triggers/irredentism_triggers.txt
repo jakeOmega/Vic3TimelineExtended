@@ -128,7 +128,7 @@ irredentist_unifier_can_act = {
 				leader = { has_ideology = ideology:ideology_jingoist_leader }
 				leader = { has_ideology = ideology:ideology_fascist }
 				leader = { has_ideology = ideology:ideology_ethno_nationalist }
-				leader = { has_ideology = ideology:ideology_communist }
+				leader = { has_ideology = ideology:ideology_communist_leader }
 				leader = { has_ideology = ideology:ideology_vanguardist }
 				leader = { has_ideology = ideology:ideology_market_liberal }
 				leader = { has_ideology = ideology:ideology_humanitarian }

@@ -32,6 +32,12 @@ argument is a plain string literal and substituted text is not escaped, so a
   "Women's Integration" ended the literal. Write `’` (U+2019), as vanilla does.
 
 Both fixed 2026-09-25 (20 instances); both are mod-clean regression guards.
+From 1.15 every `$key$` in a quoted argument must carry the `q` flag
+(`$key|q$`, check 9 of `scripts/analysis/check_localization_files.py`), which
+presumably escapes what it pastes. Whether that makes a `[` or `'` safe is not
+yet seen in game, so both checks stay. Vanilla 1.15's add-modifier tooltip
+also moved the name out of the quotes
+(`GetRawTextTooltipTag('$ADD_MODIFIER_BREAKDOWN|q$')] $MODIFIER_NAME$`).
 
 **Article-instance scope in a treaty article's type text**
 (`article_desc_scope`) — `[SOURCE_COUNTRY…]`, `[TARGET_COUNTRY…]`,
@@ -128,7 +134,8 @@ def _nested_bracket_offsets(value: str) -> list[int]:
     return offsets
 
 
-_LOC_REF_RE = re.compile(r"\$([A-Za-z0-9_.]+)\$")
+# `$key$`, or `$key|flags$` (`$key|q$` in a quoted argument from 1.15).
+_LOC_REF_RE = re.compile(r"\$([A-Za-z0-9_.]+)(?:\|[^$]*)?\$")
 _CONCEPT_DISPLAY_RE = re.compile(
     r"\[Concept\(\s*'[^']*'\s*,\s*'([^']*)'\s*\)\]"
 )

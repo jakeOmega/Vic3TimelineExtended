@@ -296,8 +296,8 @@
   "de": "Anführer kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen"
  },
  "power_bloc_can_use_diplomatic_alignment_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen, um die Außenpolitik eines [concept_country] an den [concept_power_bloc] anzugleichen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann die [concept_diplomatic_action] Diplomatische Angleichung nutzen, um die Außenpolitik eines [concept_country] an den [concept_power_bloc] anzugleichen."
  },
  "principle_diplomacy_1_desc": {
   "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",

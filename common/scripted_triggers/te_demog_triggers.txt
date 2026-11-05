@@ -84,6 +84,7 @@ te_demog_rural_workplace = {
 		is_building_group = bg_extraction
 		is_building_group = bg_subsistence_agriculture
 		is_building_group = bg_subsistence_ranching
+		is_building_group = bg_cossack_host # 1.15, a child of bg_ranching like the line above (farmers and laborers)
 	}
 }
 

@@ -45,6 +45,7 @@ sys.path.insert(0, REPO_ROOT)
 sys.path.insert(0, os.path.join(REPO_ROOT, "scripts", "analysis"))
 
 from check_loc_spelling import americanize_value  # noqa: E402
+from check_localization_files import unescaped_quoted_splices  # noqa: E402
 from mod_state import split_loc_line  # noqa: E402
 
 ENGLISH_DIR = os.path.join(REPO_ROOT, "localization", "english")
@@ -374,6 +375,10 @@ def check_translation(en: str, translated: str, language: str = "german") -> tup
             if added:
                 detail.append("extra " + ", ".join(f"{k}×{n}" for k, n in added.items()))
             errors.append(f"{name}: " + "; ".join(detail))
+    unescaped = unescaped_quoted_splices(translated)
+    if unescaped:
+        # 1.15 logs "missing required quote-escaping" for each one.
+        errors.append("quote-escaping: " + ", ".join(unescaped) + " inside a quoted argument needs |q")
     # Characters, not words: German fuses compounds ("Ministry of Health" is
     # three words, "Gesundheitsministerium" one).
     en_plain, tr_plain = plain_text(en).strip(), plain_text(translated).strip()
@@ -532,7 +537,7 @@ class VanillaTerms:
 
 def referenced_keys(text: str) -> set[str]:
     keys = set(re.findall(r"concept_\w+", text))
-    keys |= {m for m in re.findall(r"\$([a-z][a-z0-9_]*)\$", text)}
+    keys |= {m for m in re.findall(r"\$([a-z][a-z0-9_]*)(?:\|[^$]*)?\$", text)}
     keys |= set(re.findall(r"Get\w*Type\('(\w+)'\)", text))
     return keys
 

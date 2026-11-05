@@ -296,8 +296,8 @@
   "es": "El líder puede usar la [concept_diplomatic_action|l] Alineamiento diplomático"
  },
  "power_bloc_can_use_diplomatic_alignment_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
-  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede usar la [concept_diplomatic_action|l] Alineamiento diplomático para alinear la política exterior de un [concept_country|l] con el [concept_power_bloc|l]."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')|l] puede usar la [concept_diplomatic_action|l] Alineamiento diplomático para alinear la política exterior de un [concept_country|l] con el [concept_power_bloc|l]."
  },
  "principle_diplomacy_1_desc": {
   "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",

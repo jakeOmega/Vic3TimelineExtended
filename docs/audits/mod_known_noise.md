@@ -31,7 +31,7 @@ Couldn't find any animation state for harvest condition type
 
 Mod adds `bull_market` / `bear_market` / `market_downturn` / `financial_panic` as harvest condition types in `common/harvest_condition_types/extra_harvest_condition_types.txt` for banking-cycle visualization. Vanilla `harvest_condition_sound_entity` has no matching states. Functional impact: silent — engine just doesn't play a sound. Fix recipe in `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`.
 
-### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:293 - Could not find template 'vertical_scrollbar'`
+### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:328 - Could not find template 'vertical_scrollbar'`
 - source: `pdx_gui_factory.cpp:628`
 - tracked: `docs/audits/open_issues.md#l8-mod-tooltipgui-vertical-scrollbar-template-warning`
 

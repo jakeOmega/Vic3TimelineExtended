@@ -1,7 +1,7 @@
 """The Timeline Extended window's full-screen frame, te_fullscreen_block_window
 (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md § 4.1).
 
-Vanilla's fullscreen_block_window (gui/block_windows.gui), as 1.14 has it:
+Vanilla's fullscreen_block_window (gui/block_windows.gui), as 1.14 and 1.15 have it:
 - a 100% x 100% widget, a clickthrough_blocker, laid out from the screen's
   origin: its own 78 px top filler (the top bar's art, which the real top bar
   draws over) and its content vbox at margin_top = 100, margin_left = 50,

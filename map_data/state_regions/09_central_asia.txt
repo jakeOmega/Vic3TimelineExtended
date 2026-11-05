@@ -2,11 +2,12 @@
     id = 433
     subsistence_building = "building_subsistence_farm"
     provinces = { "x01D041" "x0F3A99" "x3B6A9E" "x4C6398" "x537501" "x72A1AB" "x84A24F" "x8FD393" "x9F1D8F" "xBD38C5" "xC01040" "xC09041" "xDA5ABE" }
+    prime_land = { "x72A1AB" }
     city = "x72A1AB"
     farm = "x0F3A99"
     mine = "xDA5ABE"
     wood = "x01D041"
-    arable_land = 25
+    arable_land = 30
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" "building_tea_plantation" "building_vineyard" }
     capped_resources = {
         building_logging_camp = 10
@@ -16,6 +17,8 @@
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.35
 }
 
 STATE_KUBAN = {
@@ -42,6 +45,8 @@ STATE_KUBAN = {
         undiscovered_amount = 30
     }
     naval_exit_id = 3094
+    min_cold_effect = 0.00
+    max_cold_effect = 0.40
 }
 
 STATE_ARMENIA = {
@@ -57,8 +62,11 @@ STATE_ARMENIA = {
     capped_resources = {
         building_iron_mine = 27
         building_lead_mine = 21
+        building_copper_mine = 6
         building_logging_camp = 2
     }
+    min_cold_effect = 0.08
+    max_cold_effect = 0.55
 }
 
 STATE_AZERBAIJAN = {
@@ -79,19 +87,22 @@ STATE_AZERBAIJAN = {
         type = "building_oil_rig"
         undiscovered_amount = 100
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.28
 }
 
 STATE_GREATER_CAUCASUS = {
     id = 437
     subsistence_building = "building_subsistence_farm"
     provinces = { "x011141" "x3537D5" "x40D001" "x4A4DF9" "x73A639" "x74A861" "x801000" "x85DCE4" "x9BC69B" "xC0CF80" "xC27075" "xC9B445" "xD15CBD" "xD1A8AF" "xD62036" "xD65AC8" "xF0E0DF" "xFB38B0" "xFB53B8" }
+    prime_land = { "xD1A8AF" }
     traits = { "state_trait_caucasus_mountains" "state_trait_chiatura_manganese" }
     city = "x3537D5"
     port = "x011141"
     farm = "x40D001"
     mine = "x4A4DF9"
     wood = "xD62036"
-    arable_land = 75
+    arable_land = 85
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" "building_silk_plantation" "building_tea_plantation" "building_vineyard" }
     capped_resources = {
         building_coal_mine = 40
@@ -107,15 +118,17 @@ STATE_GREATER_CAUCASUS = {
         undiscovered_amount = 115
     }
     naval_exit_id = 3094
+    min_cold_effect = 0.12
+    max_cold_effect = 0.62
 }
 
 STATE_SAMARA = {
     id = 438
     subsistence_building = "building_subsistence_farm"
-    provinces = { "x024868" "x0DFFD3" "x115723" "x11EA2C" "x16B7FE" "x1C1FB7" "x1CF34F" "x1E5008" "x20D17F" "x21DFA0" "x2505DB" "x250FCA" "x28AD29" "x2FE543" "x32A08B" "x340E79" "x37CD87" "x3F987B" "x3F9C38" "x42401C" "x434D42" "x51CA06" "x53AFD2" "x59D2D4" "x5B392A" "x610EC7" "x6364BE" "x658056" "x71BA78" "x795854" "x7C8665" "x7EA5A3" "x7F204D" "x8840E2" "x8F80BA" "x90C19D" "x915A42" "x93546F" "x942629" "x96058F" "x9F49D5" "xA06020" "xA0DFA0" "xA0E021" "xA121CB" "xA46A6B" "xA4990C" "xA7620E" "xA7B747" "xAC95C4" "xB52DF6" "xB53431" "xB70239" "xB7AA35" "xB921A7" "xBF7060" "xC45745" "xCEF631" "xCF5257" "xCF6246" "xD49810" "xD4F3FD" "xD914CA" "xD9B952" "xDADB41" "xE0856C" "xE41C9D" "xE44235" "xE6ED05" "xE9B9FB" "xE9FFBB" "xEE1033" "xEF1983" "xFA8D56" "xFBE9D0" "xFE5E9D" }
+    provinces = { "x024868" "x0DFFD3" "x115723" "x11EA2C" "x16B7FE" "x1C1FB7" "x1CF34F" "x1E5008" "x20D17F" "x21DFA0" "x2505DB" "x250FCA" "x28AD29" "x2FE543" "x32A08B" "x340E79" "x37CD87" "x3F987B" "x3F9C38" "x42401C" "x434D42" "x51CA06" "x53AFD2" "x59D2D4" "x5B392A" "x610EC7" "x6364BE" "x658056" "x71BA78" "x795854" "x7C8665" "x7EA5A3" "x7F204D" "x8840E2" "x8F80BA" "x90C19D" "x915A42" "x93546F" "x942629" "x96058F" "x9F49D5" "xA06020" "xA0DFA0" "xA0E021" "xA121CB" "xA46A6B" "xA4990C" "xA7620E" "xA7B747" "xAC95C4" "xB42F67" "xB52DF6" "xB53431" "xB70239" "xB7AA35" "xB921A7" "xBF7060" "xC45745" "xCEF631" "xCF5257" "xCF6246" "xD49810" "xD4F3FD" "xD914CA" "xD9B952" "xDADB41" "xDFE045" "xE0856C" "xE41C9D" "xE44235" "xE6ED05" "xE9B9FB" "xE9FFBB" "xEE1033" "xEF1983" "xFA8D56" "xFBE9D0" "xFE5E9D" }
     traits = { "state_trait_volga_river" "state_trait_western_steppe" }
     city = "xBF7060"
-    farm = "xE9B9FB"
+    farm = "x37CD87"
     mine = "x51CA06"
     wood = "x1C1FB7"
     arable_land = 95
@@ -130,9 +143,11 @@ STATE_SAMARA = {
         type = "building_oil_rig"
         undiscovered_amount = 90
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.61
 }
 
-STATE_TARTARIA = {
+STATE_SARATOV = {
     #Saratov
     id = 440
     subsistence_building = "building_subsistence_farm"
@@ -152,6 +167,8 @@ STATE_TARTARIA = {
         type = "building_oil_rig"
         undiscovered_amount = 15
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.60
 }
 
 STATE_ASTRAKHAN = {
@@ -174,6 +191,8 @@ STATE_ASTRAKHAN = {
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.47
 }
 
 STATE_UZBEKIA = {
@@ -189,6 +208,8 @@ STATE_UZBEKIA = {
     capped_resources = {
         building_logging_camp = 6
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.30
 }
 
 STATE_TAJIKISTAN = {
@@ -205,6 +226,8 @@ STATE_TAJIKISTAN = {
         building_coal_mine = 36
         building_logging_camp = 2
     }
+    min_cold_effect = 0.20
+    max_cold_effect = 0.75
 }
 
 STATE_KIRGHIZIA = {
@@ -221,6 +244,8 @@ STATE_KIRGHIZIA = {
         building_coal_mine = 32
         building_logging_camp = 6
     }
+    min_cold_effect = 0.15
+    max_cold_effect = 0.70
 }
 
 STATE_TURKMENIA = {
@@ -241,6 +266,8 @@ STATE_TURKMENIA = {
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.27
 }
 
 STATE_PASHTUNISTAN = {
@@ -258,6 +285,8 @@ STATE_PASHTUNISTAN = {
         building_logging_camp = 6
         building_lead_mine = 4
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.15
 }
 
 STATE_CENTRAL_HIGHLANDS = {
@@ -275,6 +304,8 @@ STATE_CENTRAL_HIGHLANDS = {
         building_lead_mine = 8
         building_logging_camp = 4
     }
+    min_cold_effect = 0.14
+    max_cold_effect = 0.65
 }
 
 STATE_NORTHERN_BALUCHISTAN = {
@@ -291,6 +322,8 @@ STATE_NORTHERN_BALUCHISTAN = {
     capped_resources = {
         building_coal_mine = 3
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.09
 }
 
 STATE_HERAT = {
@@ -306,7 +339,10 @@ STATE_HERAT = {
     capped_resources = {
         building_iron_mine = 6
         building_lead_mine = 8
+        building_copper_mine = 4
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.14
 }
 
 STATE_BALKH = {
@@ -324,6 +360,8 @@ STATE_BALKH = {
         building_iron_mine = 14
         building_logging_camp = 7
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.20
 }
 
 STATE_QUETTA = {
@@ -341,6 +379,8 @@ STATE_QUETTA = {
         building_lead_mine = 8
         building_logging_camp = 2
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 }
 
 STATE_KANDAHAR = {
@@ -359,6 +399,8 @@ STATE_KANDAHAR = {
         building_coal_mine = 4
         building_iron_mine = 5
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.12
 }
 
 STATE_KABUL = {
@@ -375,8 +417,11 @@ STATE_KABUL = {
     capped_resources = {
         building_coal_mine = 6
         building_iron_mine = 10
+        building_copper_mine = 4
         building_logging_camp = 4
     }
+    min_cold_effect = 0.08
+    max_cold_effect = 0.50
 }
 
 STATE_BALUCHISTAN = {
@@ -394,10 +439,13 @@ STATE_BALUCHISTAN = {
     capped_resources = {
         building_iron_mine = 20
         building_lead_mine = 10
+        building_copper_mine = 4
         building_logging_camp = 1
         building_fishing_wharf = 5
     }
     naval_exit_id = 3048
+    min_cold_effect = 0.00
+    max_cold_effect = 0.06
 }
 
 STATE_LHASA = {
@@ -414,12 +462,10 @@ STATE_LHASA = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_logging_camp = 20
+        building_copper_mine = 370
     }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 370
-    }
+    min_cold_effect = 0.32
+    max_cold_effect = 0.85
 }
 
 STATE_NGARI = {
@@ -437,6 +483,8 @@ STATE_NGARI = {
     capped_resources = {
         building_logging_camp = 11
     }
+    min_cold_effect = 0.40
+    max_cold_effect = 0.90
 
     resource = {
         type = "building_lithium_mine"
@@ -461,6 +509,8 @@ STATE_HIMALAYAS = {
         building_lead_mine = 8
         building_iron_mine = 8
     }
+    min_cold_effect = 0.45
+    max_cold_effect = 0.95
 }
 
 STATE_EASTERN_HIMALAYAS = {
@@ -480,4 +530,6 @@ STATE_EASTERN_HIMALAYAS = {
         building_logging_camp = 3
         building_coal_mine = 3
     }
+    min_cold_effect = 0.28
+    max_cold_effect = 0.80
 }

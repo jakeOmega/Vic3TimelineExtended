@@ -118,6 +118,23 @@ types te_country_panel_information
 
 					#RULER PORTRAIT
 					character_portrait_large_torso = {
+						visible = "[Not(Character.IsHistorical)]"
+						parentanchor = bottom
+						datacontext = "[Country.AccessRuler]"
+						blockoverride "show_hat" {}
+						blockoverride "highlight" {}
+					}
+
+					character_portrait_large_torso_historical_info_link = {
+						visible = "[And( Character.IsHistorical, Not(StringIsEmpty(Character.GetHistoricalUrl)) )]"
+						parentanchor = bottom
+						datacontext = "[Country.AccessRuler]"
+						blockoverride "show_hat" {}
+						blockoverride "highlight" {}
+					}
+
+					character_portrait_large_torso_historical_no_info_link = {
+						visible = "[And( Character.IsHistorical, StringIsEmpty(Character.GetHistoricalUrl) )]"
 						parentanchor = bottom
 						datacontext = "[Country.AccessRuler]"
 						blockoverride "show_hat" {}
@@ -245,13 +262,16 @@ types te_country_panel_information
 						autoresize = yes
 						visible = "[Not(CountryPanel.GetCountry.IsColonizable)]"
 						raw_text = "#variable @ships! [Country.GetNumShips|0]#!"
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
 						using = fontsize_mega
 						minimumsize = { 60 -1 }
 						align = right|nobaseline
 						parentanchor = right
 						margin_left = 10
 						margin_right = 5
+
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 					}
 				}
 			}
@@ -524,7 +544,9 @@ types te_country_panel_information
 				country_stats_entry = {
 					alpha = "[TransparentIfZero_int32(Country.GetNumShips)]"
 					blockoverride "stats_tooltip" {
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 					}
 					blockoverride "information_icon" {
 						texture = "gfx/interface/icons/generic_icons/flotillas.dds"

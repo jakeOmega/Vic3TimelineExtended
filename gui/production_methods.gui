@@ -283,6 +283,8 @@ types production_methods
 						military_building_combat_unit_summary = {
 							parentanchor = right|vcenter
 
+							blockoverride "combat_stats" {}
+
 							blockoverride "icon_size" {
 								size = { 50 50 }
 							}
@@ -761,7 +763,7 @@ types production_methods
 												autoresize = yes
 												align = right|nobaseline
 												visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingProductionMethodsEntry.GetBuildingType), '(int32)1')]"
-												tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+												tooltip = "PRODUCTION_METHOD_OPTIONS_BULK_ENTRY"
 												using = tooltip_above
 												using = fontsize_small
 
