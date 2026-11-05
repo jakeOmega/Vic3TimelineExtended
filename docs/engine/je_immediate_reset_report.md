@@ -213,8 +213,6 @@ removed while this variable was kept.
 - `je_space_race_probe` (inherited): `set_variable` `sr_fuzz_probe` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:555) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_probe` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
 - `je_space_race_solar_colonization` (inherited): `set_variable` `sr_fuzz_solar_colonization` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:1334) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_solar_colonization` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
 - `je_space_race_suborbital` (inherited): `set_variable` `sr_fuzz_suborbital` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:89) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_suborbital` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
-- `te_probe_115` (not inherited): `set_variable` `te_probe_115_step` = `0` at `common/journal_entries/te_probe_115_probes.txt:50` — runs only while `te_probe_115_claimed` is missing (`common/journal_entries/te_probe_115_probes.txt:47`)
-- `te_probe_115` (not inherited): `set_variable` `te_probe_115_c7_scale` = `0` at `common/journal_entries/te_probe_115_probes.txt:51` — runs only while `te_probe_115_claimed` is missing (`common/journal_entries/te_probe_115_probes.txt:47`)
 
 ## Coverage
 
@@ -224,5 +222,5 @@ removed while this variable was kept.
 - exempted: 541 (261)
 - progress-bar inputs: 27 (27)
 - pulse refreshes: 379 (379)
-- guarded by another variable: 94 (94)
+- guarded by another variable: 92 (92)
 

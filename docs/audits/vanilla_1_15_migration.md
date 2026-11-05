@@ -115,8 +115,9 @@ unions in for its endpoints, and a test of a script-only type caught it.
 
 **Script sweep and defines.** The mod's three devastation overrides go, for 1.15's battle-based devastation;
 `INCOHERENCE_FACTOR` stays at 2 (vanilla went from 5 to 2.5). No `$ARG$` is left inside a `debug_log` string: 20
-lines in 12 helpers pass their arguments through `te_log_args_set` (`te_debug_log_arg_effects.txt`), and
-`test_debug_log_arguments.py` keeps it so. 1.15 re-runs `on_entry_into_force` with `scope:is_renegotiation` set,
+lines in 12 helpers pass their arguments through `te_log_args_set` (`te_debug_log_arg_effects.txt`). The C19
+probe then showed 1.15 substitutes `$ARG$` in quotes correctly, so the test that kept it so was retired (#1408).
+1.15 re-runs `on_entry_into_force` with `scope:is_renegotiation` set,
 for an article carried over and for one a renegotiation adds. Intelligence Sharing skips its +1 infamy then (an
 added one charges none, accepted), Seize and Disband Company rely on `exists = input_company` (a carried-over
 copy's company is gone, while an added one must still run), and state-modifier articles remove before they re-add. The UN docket counts a war victim by `enemy_occupation > 0.25`, and its strike lists
@@ -130,8 +131,8 @@ old-save repairs marked for 1.15 are retired, as 1.15 saves don't carry over. Tw
 onto the census's script-only types: the Extraordinary Commission's wealth mortality and Social Revolution's
 working-adult share. The known-noise registries carry 1.15's source lines.
 
-**Probes.** A hidden journal entry on one AI major power answers C3, C5, C7, C19, C20 and part of C21 within four
-months of any game (`TE_PROBE_115` lines). The play-test list says how to read them and what to delete afterwards.
+**Probes.** A hidden journal entry on one AI major power answered C3, C5, C7, C19, C20 and part of C21 in the first
+observer game (`TE_PROBE_115` lines, 2026-11-05; § 4 below). It was deleted once answered (#1408).
 
 ## 4. Release-day answers, and where the prep was wrong
 
@@ -142,8 +143,9 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
   `conclusion_desc`. Invalid is `flags = { hidden invalid_outcome }` and timeout `flags = { timeout }` with no
   trigger, at most one each, a timeout outcome being required when `timeout = N` is set.
   `event_outcome_activated_*` stays at entry level. An entry with no outcome never concludes.
-- **C3, precedence between two outcomes true at once:** undocumented, and vanilla's own orders vary. The mod puts
-  success first; the probe settles it.
+- **C3, precedence between two outcomes true at once:** undocumented, and vanilla's own orders vary. The probe
+  (2026-11-05) settled it: the first declared outcome concludes the entry and only its effect runs. The mod puts
+  success first, so success wins a tie.
 - **C4, the panel:** outcomes come from `JournalEntry.GetOutcomes` and `JournalEntryOutcome.*`; all eight custom
   widget containers survive, `custom_widget_container_buttons` is new and hides the scripted-button grid, `_4`
   moved into the description column. The tooltip nesting the prep rated high risk lives in loc, so it carried over.
@@ -154,8 +156,13 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
   are on 525 of 676 land states and 28 of 106 seas, not every state as the prep assumed. File names, strategic
   regions and straits are unchanged; 1.15 kept the same 106 sea regions.
 - **C17:** see Politics above. The Nomenklatura is the Intelligentsia reorganized, not a ninth interest group.
-- **C19:** the `|q` errors fired as the prep expected. No `$ARG$`-in-quotes line fired in the two months run, so
-  whether 1.15 substitutes inside quotes is the probe's to answer.
+- **C19:** the `|q` errors fired as the prep expected. The probe answered the quoting question: 1.15 substitutes
+  `$ARG$` inside a quoted string correctly, so the rule against it is retired.
+- **C5, C7, C20, C21 (probe, 2026-11-05):** a bar's script-value minimum runs with the owner as root; scaling
+  modifiers scale, follow country-only reads within days, take negatives and leave the entry at 0, and
+  `has_modifier` can't see them; `fire_only_once` is per country and `fire_only_once_globally` once a game; two
+  countries meeting `possible` on one pass both activate a one-country entry. The prep doc's § 2 has each answer.
+  The probe files are deleted (#1408).
 - **Not as planned:** the prep's 49 conclusion texts were 46 (above); the mod's copper deposits would have opened
   10,714 capped copper levels in 1836 against vanilla's 609 had the mine stayed in vanilla's capped group.
 
@@ -163,8 +170,8 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
 
 - **Copper deposits discoverable.** The mine moved into the mod's discoverable group so the mod's endowments arrive
   through discovery, as its other mines' do; vanilla's caps are the discovered part. Left capped they would all
-  be open in 1836. Unverified in game: a once-a-game `TE_SELF_CHECK OK|BROKEN copper_mine_discoverable` line
-  answers it, and the fallback is a `TRY_REPLACE` of vanilla's entry (play-test list).
+  be open in 1836. The INJECT took in game: the first observer game logged `TE_SELF_CHECK OK
+  copper_mine_discoverable` (2026-11-05), and the check is deleted (#1408).
 - **Communal Administration's old extras** (Trade Unions and Rural Folk +10% political strength, -5% radicalism,
   -10% tax capacity) were left off; vanilla's law has its own balance. Restoring them is three lines.
 - **BHP's Broken Hill** stays on lead (it is silver, lead and zinc), though vanilla moved BHP's company to copper.

@@ -181,6 +181,14 @@ Added 2026-10-30, from the changelog and digest:
 - Whether the Five-Year Plan pays through investment-pool income.
 - Whether the Electoral Confidence notification fires on scripted changes.
 
+**Answered in game, 2026-11-05.** The `te_probe_115` journal entry ran in the first observer game on the merged migration and reported every line (`TE_PROBE_115 done`). The engine facts are in `scripting_best_practices.md` § "1.15 journal entries, scaling modifiers and once-only events (probed)":
+- **C3:** of two outcomes true on the same update, the **first declared** concludes the entry, and only its effect runs. The converter puts success first, which settles the Space Race and the four movement entries that way.
+- **C5:** a script-value `min_value` runs with the **owning country** as root and reads its variables, and the bar's start value is clamped to it when the entry activates.
+- **C7:** `scaling_modifiers_while_active` scales by its `value` (a constant 4 read 4 × 0.25). A country-only read in `value` works, and a change showed in a `modifier:` read 2 to 5 days later. A negative value works. At 0 the modifier is off the entry, whether 0 from the start or after a non-zero value, and it reads 0. `has_modifier` finds a scaling modifier on neither the entry nor the country, so script tests the value's inputs instead. Whether the panel shows a zero row, and whether a revolution's winner keeps it, still need a player.
+- **C19:** 1.15 **substitutes** `$ARG$` inside a quoted string: `"number=$N$ word=$WORD$ end"` logged `number=7 word=probe end` and `"(kind $WORD$)"` logged `(kind probe)`. The 1.14.5 garbling is fixed.
+- **C20:** `fire_only_once` is per country. A try whose trigger fails doesn't use it up, and a second firing is stopped. `fire_only_once_globally` fired once across two countries and three tries.
+- **C21 (the journal entry part):** two countries that meet `possible` on the same pass both activate a one-country entry, because every inactive record is checked before any activation's `immediate` runs. A claim set in `immediate` can't stop the second; nine extra countries took it (no mod entry relies on such a claim). `scope:journal_entry` is set in `on_weekly_pulse` and in an outcome's `effect`, and `has_journal_entry` still holds inside that effect. Three days after an entry concludes, `has_journal_entry`, `exists = je:<key>` and `has_inactive_journal_entry` are all false. `disable_evaluation` removes another country's inactive record.
+
 ## 3. What has to change
 
 ### 3.1 Mod journal entries to outcomes

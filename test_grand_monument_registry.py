@@ -4222,7 +4222,7 @@ class LandmarkTests(unittest.TestCase):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
         self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", body, "no vanity for its own level")
         self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", body)
-        # The landmark's key reaches debug_log through te_log_args_set: no $ARG$ inside a debug_log string (test_debug_log_arguments).
+        # The landmark's key reaches debug_log through te_log_args_set (the 1.15 migration's pattern, from before 1.15 was seen to substitute $ARG$ in quotes).
         self.assertIn("te_log_args_set = { A = $KEY$ B = $STATE$ C = $TAG$", body)
         self.assertIn('debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable(\'te_log_arg_1\').GetFlagName] not placed', body)
 
@@ -4797,7 +4797,7 @@ class ColocatedLandmarkTests(unittest.TestCase):
                       "s:$STATE$.region_state:$TAG$ = { gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ "
                       "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ BUILT = $BUILT$ } } }", body)
         # The old else is still the one that says nothing was placed.
-        # The landmark's key reaches debug_log through te_log_args_set: no $ARG$ inside a debug_log string (test_debug_log_arguments).
+        # The landmark's key reaches debug_log through te_log_args_set (the 1.15 migration's pattern, from before 1.15 was seen to substitute $ARG$ in quotes).
         self.assertIn("te_log_args_set = { A = $KEY$ B = $STATE$ C = $TAG$", body)
         self.assertIn('debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable(\'te_log_arg_1\').GetFlagName] not placed', body)
 

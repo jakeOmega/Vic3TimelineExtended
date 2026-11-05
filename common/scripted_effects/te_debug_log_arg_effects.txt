@@ -1,11 +1,10 @@
 ﻿# ============================================================================
 # DEBUG LOG ARGUMENTS — a scripted effect's arguments, copied for its debug_log
 # ============================================================================
-# A `$X$` inside a quoted string is not substituted reliably: vanilla 1.14.5
-# substituted it but dropped the character before it ("(kind $KIND$)" logged
-# "(kind1$)"), and vanilla 1.15 "fixed script arguments being substituted
-# inside quoted strings" without saying which way. So no debug_log string names
-# an argument (test_debug_log_arguments.py fails on one). A line prints a value
+# Vanilla 1.14.5 garbled a `$X$` inside a quoted string ("(kind $KIND$)"
+# logged "(kind1$)"), so the 1.15 migration moved every debug_log argument
+# here. 1.15 substitutes it correctly (C19 probe, 2026-11-05), so a new line
+# can name `$X$` directly; these copies still work. A line prints a value
 # the effect already stored where it can (THIS.Var('gm_landmark').GetFlagName),
 # and otherwise reads these copies, which hold each argument as a flag (a token)
 # or a value:
