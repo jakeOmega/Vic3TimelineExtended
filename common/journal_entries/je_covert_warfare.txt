@@ -75,10 +75,6 @@ je_covert_warfare = {
 		covert_tradecraft_init = yes
 	}
 
-	complete = {
-		always = no
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			# ---- AI Funding Management ----

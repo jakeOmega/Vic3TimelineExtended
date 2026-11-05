@@ -21,6 +21,8 @@ import os
 import re
 import unittest
 
+from je_test_helpers import entry_text, old_block
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -208,7 +210,7 @@ class ScriptShapeTests(unittest.TestCase):
 
     def test_the_voluntary_end_waits_for_the_cache(self):
         je = _read("common", "journal_entries", "je_colonial_empire.txt")
-        fail = _block(je, "fail")
+        fail = old_block(entry_text(je, "je_colonial_empire"), "fail")
         self.assertRegex(fail, r"je_colonial_empire_voluntary_fail_tt\s*has_variable = ce_separation_cached")
 
     def test_only_the_wonder_reads_the_macro_regions(self):

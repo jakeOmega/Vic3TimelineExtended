@@ -26,19 +26,25 @@
 		}
 	}
 
-	# Never true, by design since the entry was written (a87e88ab): the weekly
-	# pulse below resets the counter in the same effect that raises it to 52,
-	# so the entry never completes. It is a cycle: each year that average SoL
-	# stays below 4 ends in a collapse, and can_deactivate = yes returns the
-	# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
-	# entry has a native progressbar without a complete trigger, so dropping
-	# it would be untested.
-	# The goal line says what the bar counts toward, not the raw variable
-	# (GUI audit JE-1).
-	complete = {
-		custom_tooltip = {
-			text = je_state_collapse_complete_tt
-			ROOT.var:state_collapse_progress >= 52
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_state_collapse_complete_conclusion_desc
+		# Never true, by design since the entry was written (a87e88ab): the weekly
+		# pulse below resets the counter in the same effect that raises it to 52,
+		# so the entry never completes. It is a cycle: each year that average SoL
+		# stays below 4 ends in a collapse, and can_deactivate = yes returns the
+		# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
+		# entry has a native progressbar without an outcome, so dropping
+		# it would be untested.
+		# The goal line says what the bar counts toward, not the raw variable
+		# (GUI audit JE-1).
+		trigger = {
+			custom_tooltip = {
+				text = je_state_collapse_complete_tt
+				ROOT.var:state_collapse_progress >= 52
+			}
 		}
 	}
 
@@ -282,8 +288,14 @@ je_create_new_religion = {
 		}
 	}
 
-	complete = {
-		country_has_any_custom_religion = yes
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_create_new_religion_complete_conclusion_desc
+		trigger = {
+			country_has_any_custom_religion = yes
+		}
 	}
 
 	# Where the builder is: which of the four steps, and how many picks it has

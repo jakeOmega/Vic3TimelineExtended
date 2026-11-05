@@ -9,6 +9,7 @@ import unittest
 
 import gui_test_helpers
 from gui_test_helpers import assert_wide_matches_narrow
+from je_test_helpers import entry_text, old_block
 from scripts.generators import gen_te_systems_window as window_gen
 
 REPO = os.path.dirname(os.path.abspath(__file__))
@@ -1011,15 +1012,16 @@ class LiveBandTest(unittest.TestCase):
 
 
 class QuietTooltipsTest(unittest.TestCase):
-    """Play-test round 1 (2026-09-29): the journal panel renders on_complete and
-    on_fail as tooltips every frame, so a bare var: read of a counter that does
+    """Play-test round 1 (2026-09-29): the journal panel renders the outcomes'
+    effects as tooltips every frame, so a bare var: read of a counter that does
     not exist yet, or a remove_modifier of a modifier the scope lacks, logged an
     error per frame."""
 
     def test_no_bare_read_of_the_programme_months(self):
         je = _read(JE)
         decol = _read(DECOLONIZATION)
-        for name, body in (("on_complete", _block_in(je, "on_complete")), ("on_fail", _block_in(je, "on_fail")),
+        entry = entry_text(je, "je_colonial_empire")
+        for name, body in (("on_complete", old_block(entry, "on_complete")), ("on_fail", old_block(entry, "on_fail")),
                            ("decol_path_legacy", _block(decol, "decol_path_legacy"))):
             with self.subTest(block=name):
                 self.assertNotRegex(body, r"var:colonial_(invest|garrison|assimilate)_months")
@@ -1066,7 +1068,7 @@ class CompletionClocksTest(unittest.TestCase):
     def test_the_targets_are_shared_and_unchanged(self):
         self.assertRegex(self.values, r"(?m)^colonial_empire_completion_months = 60$")
         self.assertRegex(self.values, r"(?m)^colonial_empire_federation_months = 36$")
-        complete = _block_in(_read(JE), "complete")
+        complete = old_block(entry_text(_read(JE), "je_colonial_empire"), "complete")
         self.assertIn("var:colonial_at_100_months >= colonial_empire_completion_months", complete)
         self.assertNotRegex(complete, r">= 60\b")
         decisions = _read(DECISIONS)

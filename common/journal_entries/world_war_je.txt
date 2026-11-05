@@ -158,47 +158,57 @@ je_world_war = {
 
 	immediate = { }
 
-	complete = {
-		has_variable = ww_fully_resolved
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_world_war_complete_conclusion_desc
+		trigger = {
+			has_variable = ww_fully_resolved
+		}
+		effect = {
+			# Clean up all world war variables
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			remove_variable = ww_peace_concluded
+			remove_variable = ww_peace_months
+			remove_variable = ww_fully_resolved
+			ww_clear_outcome_latches = yes
+			# Clean up any lingering modifiers
+			if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+			if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+			if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
+		}
 	}
 
-	on_complete = {
-		# Clean up all world war variables
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		remove_variable = ww_peace_concluded
-		remove_variable = ww_peace_months
-		remove_variable = ww_fully_resolved
-		ww_clear_outcome_latches = yes
-		# Clean up any lingering modifiers
-		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
-	}
-
-	fail = {
-		# Failed if no longer a great power
-		country_rank < rank_value:great_power
-	}
-
-	on_fail = {
-		remove_variable = ww_active_phase
-		remove_variable = ww_aggressor_side
-		remove_variable = ww_defender_side
-		remove_variable = ww_years_elapsed
-		remove_variable = ww_months_counter
-		remove_variable = ww_peace_concluded
-		remove_variable = ww_peace_months
-		remove_variable = ww_fully_resolved
-		remove_variable = ww_war_began
-		# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
-		# ww_peace_terms_received) are kept on purpose: a defeated power often drops
-		# below great power before the victors' peace conference fires, and the
-		# victors find the powers they beat by these latches. The next outbreak
-		# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_world_war_fail_conclusion_desc
+		trigger = {
+			# Failed if no longer a great power
+			country_rank < rank_value:great_power
+		}
+		effect = {
+			remove_variable = ww_active_phase
+			remove_variable = ww_aggressor_side
+			remove_variable = ww_defender_side
+			remove_variable = ww_years_elapsed
+			remove_variable = ww_months_counter
+			remove_variable = ww_peace_concluded
+			remove_variable = ww_peace_months
+			remove_variable = ww_fully_resolved
+			remove_variable = ww_war_began
+			# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
+			# ww_peace_terms_received) are kept on purpose: a defeated power often drops
+			# below great power before the victors' peace conference fires, and the
+			# victors find the powers they beat by these latches. The next outbreak
+			# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
+		}
 	}
 
 	on_monthly_pulse = {

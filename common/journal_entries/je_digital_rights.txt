@@ -24,7 +24,7 @@ je_digital_rights = {
 		# outcome), as in je_morphological_freedom. Here, not in possible, so it can
 		# never touch an active record a revolution's winner inherits.
 		is_revolutionary = no
-		# Set by on_complete, on_fail and on_timeout. A revolution's winner gets a
+		# Set by the success, failure and timeout outcomes. A revolution's winner gets a
 		# fresh record of an entry the loser had finished, and without this it would
 		# re-activate: a failed debate would fail again at once and replay its
 		# outcome event, and a timed-out one would run its twenty years again.
@@ -63,7 +63,7 @@ je_digital_rights = {
 		first_valid = {
 			# What stands between the country and Strong Privacy Rights comes first:
 			# the technology (an entry opened by Automated Surveillance may not have
-			# it), then the law it needs. The fail block's own tooltip carries the
+			# it), then the law it needs. The failure outcome's own tooltip carries the
 			# Intrusive Surveillance warning while either is missing.
 			triggered_desc = {
 				desc = je_digital_rights_status_needs_tech
@@ -98,60 +98,80 @@ je_digital_rights = {
 		}
 	}
 
-	complete = {
-		has_law = law_type:law_strong_privacy_rights
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_digital_rights_complete_conclusion_desc
+		trigger = {
+			has_law = law_type:law_strong_privacy_rights
+		}
+		effect = {
+			set_variable = digital_rights_resolved
+			trigger_event = { id = surveillance_events.200 }
+		}
 	}
 
-	on_complete = {
-		set_variable = digital_rights_resolved
-		trigger_event = { id = surveillance_events.200 }
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_digital_rights_fail_conclusion_desc
+		trigger = {
+			has_law = law_type:law_intrusive_surveillance
+			has_law = law_type:law_ministry_of_intelligence_and_security
+			# Full surveillance state established
+		}
+		effect = {
+			set_variable = digital_rights_resolved
+			trigger_event = { id = surveillance_events.100 }
+		}
 	}
 
-	invalid = {
-		is_country_type = decentralized
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_digital_rights_invalid_conclusion_desc
+		trigger = {
+			is_country_type = decentralized
+		}
 	}
 
-	fail = {
-		has_law = law_type:law_intrusive_surveillance
-		has_law = law_type:law_ministry_of_intelligence_and_security
-		# Full surveillance state established
-	}
-
-	on_fail = {
-		set_variable = digital_rights_resolved
-		trigger_event = { id = surveillance_events.100 }
+	outcome = {
+		header = JOURNAL_ENTRY_TIMEOUT
+		effect_header = JOURNAL_ENTRY_ON_TIMEOUT
+		flags = { timeout }
+		conclusion_desc = je_digital_rights_timeout_conclusion_desc
+		effect = {
+			set_variable = digital_rights_resolved
+			if = {
+				# Halfway there: a data protection regime, if not the constitutional right.
+				# Half the stagnation and no radicals.
+				limit = {
+					has_law = law_type:law_moderate_data_privacy
+				}
+				add_modifier = {
+					name = digital_rights_stagnation_modifier
+					days = long_modifier_time
+					multiplier = 0.5
+					is_decaying = yes
+				}
+			}
+			else = {
+				add_radicals = {
+					value = small_radicals
+					pop_type = academics
+				}
+				add_modifier = {
+					name = digital_rights_stagnation_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
 	}
 
 	# 20 years, as the other debates settled by law have (15 until 2026-11-04).
 	timeout = 7300
-
-	on_timeout = {
-		set_variable = digital_rights_resolved
-		if = {
-			# Halfway there: a data protection regime, if not the constitutional right.
-			# Half the stagnation and no radicals.
-			limit = {
-				has_law = law_type:law_moderate_data_privacy
-			}
-			add_modifier = {
-				name = digital_rights_stagnation_modifier
-				days = long_modifier_time
-				multiplier = 0.5
-				is_decaying = yes
-			}
-		}
-		else = {
-			add_radicals = {
-				value = small_radicals
-				pop_type = academics
-			}
-			add_modifier = {
-				name = digital_rights_stagnation_modifier
-				days = long_modifier_time
-				is_decaying = yes
-			}
-		}
-	}
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes

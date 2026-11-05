@@ -88,10 +88,6 @@ je_cultural_hegemony = {
 		}
 	}
 
-	complete = {
-		always = no
-	}
-
 	on_monthly_pulse = {
 		effect = {
 			# Losing the Ministry of Culture shuts every cultural programme down.

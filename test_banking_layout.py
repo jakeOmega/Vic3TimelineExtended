@@ -1316,7 +1316,8 @@ class PrivateTest(unittest.TestCase):
                 self.assertNotIn((0, len(types[name].body)), view.skip[name], "guarded on its root")
         # every bar and every Active Policies row, not just their types
         bars = types["te_banking_bars"].body
-        self.assertEqual(len(re.findall(r"ScriptValue\('banking_disp_bar_\w+'\)", bars)), 4)
+        # four bars; the two with a marker read their value twice (1.15's markup)
+        self.assertEqual(len(set(re.findall(r"ScriptValue\('(banking_disp_bar_\w+)'\)", bars))), 4)
         self.assertEqual(view.skip["te_banking_bars"], [])
         active = types["te_banking_sec_active"].body
         rows = [m.end() - 1 for m in re.finditer(r"\bbanking_dash_policy_row\s*=\s*\{", active)]
@@ -1412,9 +1413,18 @@ class BlocLeaderRowTest(unittest.TestCase):
 
 PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")
 BAR_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "banking_cycle_effects.txt")
-# The entry's bar variant -> the progress bar te_je_scripted_bars draws it with.
-BAR_VARIANTS = {"default_green": "green_progressbar_horizontal", "default_bad": "bad_progressbar_horizontal",
-                "double_sided_gold": "default_progressbar_horizontal"}
+# The entry's bar look -> the progress bar te_banking_bars draws it with: a ready-made
+# look (default_green = yes, default_bad = yes) or, for a bar that declares its own
+# textures (1.15), the bar type whose fill is its progress_texture.
+BAR_VARIANTS = {"default_green": "green_progressbar_horizontal", "default_bad": "bad_progressbar_horizontal"}
+PROGRESS_TEXTURE_BARS = {
+    "gfx/interface/progressbar/progressbar_default.dds": "default_progressbar_horizontal",
+    "gfx/interface/progressbar/progressbar_green.dds": "green_progressbar_horizontal",
+    "gfx/interface/progressbar/progressbar_bad.dds": "bad_progressbar_horizontal",
+    "gfx/interface/progressbar/progressbar_gold.dds": "gold_progressbar_horizontal",
+    "gfx/interface/progressbar/progressbar_white.dds": "white_progressbar_horizontal",
+}
+DRAWN_BARS = set(BAR_VARIANTS.values()) | set(PROGRESS_TEXTURE_BARS.values())
 
 
 def _num(x):
@@ -1436,8 +1446,14 @@ class BarsTest(unittest.TestCase):
         for m in re.finditer(r"(?m)^(\w+) = \{", text):
             body = _block_from(text, m.end() - 1)
             get = lambda key: (re.search(rf"\b{key}\s*=\s*\"?([\w.\-]+)\"?", body) or [None, None])[1]
+            texture = lambda key: (re.search(rf'\b{key}\s*=\s*"([^"]+)"', body) or [None, None])[1]
+            variant = [v for v in BAR_VARIANTS if re.search(rf"\b{v}\s*=\s*yes", body)]
+            if texture("progress_texture"):
+                variant.append("own_look")
             cls.defs[m.group(1)] = {
-                "variant": [v for v in BAR_VARIANTS if re.search(rf"\b{v}\s*=\s*yes", body)],
+                "variant": variant,
+                "progress": texture("progress_texture"), "background": texture("background_texture"),
+                "marker": bool(re.search(r"\bmarker\s*=\s*yes", body)),
                 "start": _num(get("start_value")), "min": _num(get("min_value")), "max": _num(get("max_value")),
                 "desc": get("desc"), "second": get("second_desc")}
         cls.order = re.findall(r"scripted_progress_bar = (\w+)", _strip_comments(_read(JE)))
@@ -1460,13 +1476,18 @@ class BarsTest(unittest.TestCase):
             d = self.defs[bar]
             with self.subTest(bar=bar, position=i):
                 self.assertEqual(len(d["variant"]), 1)
-                drawn = [v for v in BAR_VARIANTS.values() if re.search(rf"\b{v}\s*=\s*\{{", box)]
-                self.assertEqual(drawn, [BAR_VARIANTS[d["variant"][0]]], "the bar's variant")
-                if d["variant"] == ["double_sided_gold"]:
-                    self.assertIn("progressbar_gold.dds", box)
-                    self.assertIn("progressbar_marker.dds", box)
+                drawn = [v for v in sorted(DRAWN_BARS) if re.search(rf"\b{v}\s*=\s*\{{", box)]
+                if d["variant"] == ["own_look"]:
+                    self.assertEqual(drawn, [PROGRESS_TEXTURE_BARS[d["progress"]]], "the bar's fill")
+                    if d["background"]:
+                        self.assertIn(f'noprogresstexture = "{d["background"]}"', box)
+                    self.assertEqual("progressbar_marker.dds" in box, d["marker"], "the marker")
+                else:
+                    self.assertEqual(drawn, [BAR_VARIANTS[d["variant"][0]]], "the bar's look")
+                    self.assertNotIn("progressbar_marker.dds", box)
                 self.assertEqual(re.findall(r'text = "([\w.\-]+)"', box), [d["desc"]] + ([d["second"]] if d["second"] else []))
-                values = re.findall(r"ScriptValue\('(banking_disp_bar_\w+)'\)", box)
+                # the marker overlay reads the bar's value too (1.15's markup)
+                values = sorted(set(re.findall(r"ScriptValue\('(banking_disp_bar_\w+)'\)", box)))
                 self.assertEqual(len(values), 1)
                 used.append(values[0])
                 self._check_value(values[0], d, self.sets[bar])

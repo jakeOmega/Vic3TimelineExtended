@@ -13,6 +13,8 @@ import os
 import re
 import unittest
 
+from je_test_helpers import old_block
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 BUTTONS = os.path.join("common", "scripted_buttons", "civil_rights_buttons.txt")
@@ -158,7 +160,7 @@ class ThresholdTests(unittest.TestCase):
                 self.assertIn(f"#v {months}#!", self.loc[key])
 
     def test_ending_threshold(self):
-        hooks = _block(self.je, "on_complete", top_level=False) + _block(self.je, "on_fail", top_level=False)
+        hooks = old_block(self.je, "on_complete") + old_block(self.je, "on_fail")
         thresholds = set(re.findall(r"var:cr_\w+_months\s*>\s*(\d+)", hooks))
         self.assertEqual(len(thresholds), 1, thresholds)
         months = thresholds.pop()

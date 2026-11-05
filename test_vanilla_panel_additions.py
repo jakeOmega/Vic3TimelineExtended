@@ -7,7 +7,7 @@
 - The Homeland Dynamics tile shows only where a homeland can change (VAN-6c,
   owner decision 2026-10-27).
 - Civil Rights' status names the ending the movement would reach now (JE-4),
-  through script values that mirror the entry's on_complete and on_fail.
+  through script values that mirror the entry's success and failure effects.
 - Heir Education's skill buttons preview the innovation cost each advance
   applies, at the duration the advance applies it for (JE-5).
 - The Ocean Basin tile (VAN-8b, owner 2026-10-27) shows a coastal state's
@@ -19,6 +19,8 @@ import json
 import os
 import re
 import unittest
+
+from je_test_helpers import entry_text, old_block
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 CONSTRUCTION = os.path.join(REPO, "gui", "construction_panel.gui")
@@ -174,8 +176,8 @@ class HomelandTileTest(unittest.TestCase):
 
 
 class CivilRightsEndingMirrorTest(unittest.TestCase):
-    """cr_win_ending_now / cr_fail_ending_now take the branches of on_complete
-    / on_fail in the same order, over the display copies of the counters."""
+    """cr_win_ending_now / cr_fail_ending_now take the branches of the success and
+    failure outcomes' effects in the same order, over the display copies of the counters."""
 
     @staticmethod
     def limits(block):
@@ -186,9 +188,7 @@ class CivilRightsEndingMirrorTest(unittest.TestCase):
         return out
 
     def check(self, dispatcher, value):
-        je = _read(CIVIL_RIGHTS)
-        m = re.search(r"(?m)^\t%s = \{" % dispatcher, je)
-        script = self.limits(_block_from(je, m.end() - 1))
+        script = self.limits(old_block(entry_text(_read(CIVIL_RIGHTS), "je_civil_rights"), dispatcher))
         values = _read(CR_VALUES)
         m = re.search(r"(?m)^%s = \{" % value, values)
         mirror = self.limits(_block_from(values, m.end() - 1))

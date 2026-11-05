@@ -32,6 +32,8 @@ import os
 import re
 import unittest
 
+from je_test_helpers import old_block
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -91,7 +93,7 @@ GEO_ON_ACTIONS = _read("common", "on_actions", "colonial_geography_on_actions.tx
 EVENTS = _read("events", "decolonization_events.txt")
 PLAYTEST = _raw("docs", "testing", "colonial-holdings-playtest.md")
 
-# The entry's endings: on_complete's six events and on_fail's three.
+# The entry's endings: its success outcome's six events and its failure outcome's three.
 END_EVENTS = ["decolonization_events.%d" % n for n in (200, 201, 202, 203, 204, 205, 206, 300, 301)]
 
 
@@ -246,8 +248,8 @@ class SecondEndingTests(unittest.TestCase):
     """A second run means a second ending, and a same-name add_modifier stacks."""
 
     def _blocks(self):
-        yield "on_fail", _block(ENTRY, "on_fail")
-        yield "on_complete", _block(ENTRY, "on_complete")
+        yield "on_fail", old_block(ENTRY, "on_fail")
+        yield "on_complete", old_block(ENTRY, "on_complete")
         for event in END_EVENTS:
             yield event, _block(EVENTS, event)
         yield "decol_grant_permanent_modifier", _block(EFFECTS, "decol_grant_permanent_modifier")
@@ -276,7 +278,7 @@ class SecondEndingTests(unittest.TestCase):
 
 class VoluntaryHoldTests(unittest.TestCase):
     def setUp(self):
-        self.on_fail = _block(ENTRY, "on_fail")
+        self.on_fail = old_block(ENTRY, "on_fail")
         self.voluntary = _branch(self.on_fail, 'scope:journal_entry = { '
                                                '"scripted_bar_progress(colonial_stability_bar)" > 0 }')
 

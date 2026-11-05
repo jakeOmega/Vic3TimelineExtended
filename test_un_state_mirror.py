@@ -106,8 +106,10 @@ EXEMPT_DEFINITIONS = {
     "te_debug_un_wipe_entry": "does what a revolution does: modifiers go, mirrors stay",
     "te_debug_un_drop": "the wipe's helper",
 }
-# Blocks whose effects are never run.
-DISPLAY_ONLY_BLOCKS = {"show_as_tooltip", "event_outcome_activated_effect_desc"}
+# Blocks whose effects are never run: an outcome's event_outcome_effect_desc and
+# a map mode's map_tooltip (both 1.15) only describe.
+DISPLAY_ONLY_BLOCKS = {"show_as_tooltip", "event_outcome_activated_effect_desc", "event_outcome_effect_desc",
+                       "map_tooltip"}
 # Blocks that wrap a single write and are not the site's own statement list.
 WRAPPER_BLOCKS = {"je:je_united_nations", "add_modifier"}
 

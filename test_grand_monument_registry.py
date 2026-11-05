@@ -17,6 +17,7 @@ import unittest
 from collections import namedtuple
 from pathlib import Path
 
+from je_test_helpers import entry_text, old_block
 from mod_state import split_loc_line
 
 ROOT = Path(__file__).resolve().parent
@@ -880,7 +881,7 @@ class NationalTests(unittest.TestCase):
         shown = squash(block(je, "is_shown_when_inactive"))
         self.assertIn("gm_system_enabled = yes", shown)
         self.assertIn("any_scope_state = { has_building = building_grand_monument }", shown)
-        invalid = squash(block(je, "invalid"))
+        invalid = squash(old_block(entry_text(je, "je_grand_monuments"), "invalid"))
         self.assertIn("gm_system_enabled = no", invalid)
         self.assertIn("gm_ledgers_idle = yes", invalid)
         self.assertIn("NOT = { any_scope_state = { has_variable = gm_seen } }", invalid)
@@ -2510,7 +2511,7 @@ class CommissionLifeTests(unittest.TestCase):
         clause = "has_variable = gm_com_open has_variable = gm_com_offered"
         for name in ("is_shown_when_inactive", "possible"):
             self.assertIn(clause, squash(block(je, name)), name)
-        invalid = squash(block(je, "invalid"))
+        invalid = squash(old_block(entry_text(je, "je_grand_monuments"), "invalid"))
         self.assertIn("NOT = { has_variable = gm_com_open } NOT = { has_variable = gm_com_offered }", invalid)
         self.assertIn(clause, squash(block(read(TRIGGERS), "gm_entry_unlocked")))
         self.assertIn(clause, squash(block(read(EFFECTS), "gm_country_refresh")))
@@ -7036,8 +7037,25 @@ class SitePanelTests(unittest.TestCase):
         self.assertIn(site, squash(block(read(TRIGGERS), "gm_entry_unlocked")))
         self.assertIn(site, squash(block(read(JE), "is_shown_when_inactive")))
         refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
-        self.assertIn("NOT = { has_journal_entry = je_grand_monuments } OR = { any_scope_state = { "
+        self.assertIn("NOT = { has_journal_entry = je_grand_monuments } "
+                      "NOT = { has_inactive_journal_entry = je_grand_monuments } OR = { any_scope_state = { "
                       "has_building = building_grand_monument } " + site, refresh)
+
+    def test_no_add_over_an_entry_shown_but_inactive(self):
+        """has_journal_entry reads active entries only (vanilla 1.15), so each add of
+        je_grand_monuments also skips a country whose entry is shown but not yet
+        active; adding over it logged "already has a journal entry"."""
+        adds = 0
+        for path in sorted(ROOT.glob("common/scripted_effects/*.txt")):
+            text = re.sub(r"#[^\n]*", "", read(path.relative_to(ROOT).as_posix()))
+            for m in re.finditer(r"add_journal_entry\s*=\s*\{\s*type\s*=\s*je_grand_monuments\b", text):
+                adds += 1
+                guard = text[max(0, m.start() - 1500):m.start()]
+                guard = guard[guard.rfind("limit"):]
+                with self.subTest(file=path.name, at=m.start()):
+                    self.assertIn("has_journal_entry = je_grand_monuments", guard)
+                    self.assertIn("has_inactive_journal_entry = je_grand_monuments", guard)
+        self.assertEqual(adds, 2)
 
 
 class WalkedRefreshTests(unittest.TestCase):

@@ -165,24 +165,6 @@ je_nuclear_program = {
 		}
 	}
 
-	complete = {
-		always = no
-	}
-
-	on_complete = {
-		if = {
-			limit = { var:nuclear_weapons_program_first_nuke_done > 0 }
-			custom_tooltip = {
-				text = "ADDITIONAL_NUKE_CREATED"
-			}
-		}
-		else = {
-			custom_tooltip = {
-				text = "FIRST_NUKE_CREATED"
-			}
-		}
-	}
-
 	on_weekly_pulse = {
 		effect = {
 			# Once per activation, and once for a save made while posture had
