@@ -17,11 +17,7 @@ types goods_panel_types
 
 		blockoverride "window_header_name"
 		{
-			text = "[LabelingHelper.CapitalizeOnlyFirst(GoodsPanel.GetGoods.GetNameNoFormatting)]"
-
-			tooltipwidget = {
-				FancyTooltip_Goods = {}
-			}
+			raw_text = "#BOLD [GoodsPanel.GetGoods.GetName]#!"
 		}
 
 		blockoverride "window_header_name_line_two"
@@ -78,7 +74,7 @@ types goods_panel_types
 					tooltip = "[concept_world_market]"
 				} 
 				blockoverride "first_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsWorldMarketPanel( GoodsPanel.GetGoods.Self )]"
+					onclick = "[InformationPanelBar.SwitchToGoodsWorldMarketPanel( GoodsPanel.GetGoods.Self )]"
 				}
 				blockoverride "first_button_visibility_checked" {
 					visible = "[Not(GoodsPanel.GetGoods.IsLocal)]"
@@ -103,7 +99,7 @@ types goods_panel_types
 					visible = "[GoodsPanel.GetGoods.HasStateContext]"
 				}
 				blockoverride "third_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsStatePanel(GoodsPanel.GetGoods.GetState, GoodsPanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsStatePanel(GoodsPanel.GetGoods.GetState, GoodsPanel.GetGoods.Self)]"
 				}
 
 				# states in market
@@ -117,7 +113,7 @@ types goods_panel_types
 					visible = "[GoodsPanel.GetGoods.HasMarketContext]"
 				}			
 				blockoverride "fourth_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsLocalPricesPanel(GoodsPanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsLocalPricesPanel(GoodsPanel.GetGoods.Self)]"
 				}	
 				
 				# usage / application
@@ -125,7 +121,7 @@ types goods_panel_types
 					text = USAGE
 				}
 				blockoverride "fifth_button_click" {
-					onclick = "[InformationPanelBar.OpenGoodsUsagePanel(GoodsPanel.GetGoods.Self)]"
+					onclick = "[InformationPanelBar.SwitchToGoodsUsagePanel(GoodsPanel.GetGoods.Self)]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
 					visible = yes
@@ -185,6 +181,7 @@ types goods_panel_types
 					widget = {
 						size = { @panel_width 110 }
 						parentanchor = hcenter
+						datacontext = "[GoodsPanel.GetGoods.GetBaseGoods]"
 						#visible = no
 
 						hbox = {
@@ -341,57 +338,21 @@ types goods_panel_types
 						}
 					}
 
-					flowcontainer = {
-						visible = "[Not(IsDataModelEmpty(Goods.GetMarketPrestigeGoods))]"
-						parentanchor = hcenter
-						direction = vertical
-						margin_bottom = 5
-						margin_top = 5
-
-						default_header = {
-							parentanchor = hcenter
-
-							blockoverride "text"
-							{
-								text = "GOODS_AND_PRESTIGE_GOODS_DISTRIBUTION_HEADER"
-							}
-
-							blockoverride "text_max_width" {
-								max_width = 530
-							}
+					goods_prestige_goods_distribution = {
+						blockoverride "prestige_goods_distribution_datacontext" {
+							datacontext = "[GoodsPanel.GetGoods.GetBaseGoods]"
 						}
 
-						goods_prestige_goods_breakdown_list_item = {						
-							parentanchor = hcenter
-
-							blockoverride "prestige_goods_item_name_size" {
-								minimumsize = { 300 -1 }
-								maximumsize = { 300 -1 }
-							}
-
-							blockoverride "prestige_goods_item_text_1" {
-								raw_text = "BASE_GOODS_MARKET_SELL_ORDERS"
-							}
-
-							blockoverride "prestige_goods_item_text_2" {
-								raw_text = "BASE_GOODS_MARKET_BUY_ORDERS"
-							}
+						blockoverride "prestige_goods_not_selected_visibility" {
+							visible = "[Not(Goods.IsSameGoodsAs(GoodsPanel.GetGoods.Self))]"
 						}
 
-						flowcontainer = {
-							direction = vertical
-							parentanchor = hcenter
-							datamodel = "[Goods.GetMarketPrestigeGoods]"
+						blockoverride "prestige_goods_selected_visibility" {
+							visible = "[Goods.IsSameGoodsAs(GoodsPanel.GetGoods.Self)]"
+						}
 
-							item = {
-								goods_prestige_goods_breakdown_list_item = {
-
-									blockoverride "prestige_goods_item_name_size" {
-										minimumsize = { 260 -1 }
-										maximumsize = { 260 -1 }
-									}
-								}
-							}
+						blockoverride "prestige_goods_onclick" {
+							onclick = "[InformationPanelBar.SwitchToGoodsPanel(Goods.GetMarket, Goods.Self)]"
 						}
 					}
 
@@ -439,10 +400,127 @@ types goods_panel_types
 
 types "production_method_items" {
 	
+	type goods_prestige_goods_distribution = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		margin_top = 5
+		margin_bottom = 5
+
+		block "prestige_goods_distribution_datacontext" {}
+
+		block "prestige_goods_distribution_visibility" {
+			visible = "[Not(IsDataModelEmpty(Goods.GetMarketPrestigeGoods))]"
+		}
+
+		default_header = {
+			parentanchor = hcenter
+
+			blockoverride "text"
+			{
+				text = "GOODS_AND_PRESTIGE_GOODS_DISTRIBUTION_HEADER"
+			}
+
+			blockoverride "text_max_width" {
+				max_width = 530
+			}
+		}
+
+		goods_prestige_goods_breakdown_list_item = {
+			parentanchor = hcenter
+
+			block "prestige_goods_not_selected_visibility" {}
+
+			blockoverride "prestige_goods_item_text_1" {
+				block "base_goods_item_text_1" {
+					raw_text = "BASE_GOODS_MARKET_SELL_ORDERS"
+				}
+			}
+
+			blockoverride "prestige_goods_item_text_2" {
+				block "base_goods_item_text_2" {
+					raw_text = "BASE_GOODS_MARKET_BUY_ORDERS"
+				}
+			}
+		}
+
+		goods_prestige_goods_breakdown_list_item_selected = {
+			parentanchor = hcenter
+
+			block "prestige_goods_selected_visibility" {
+				visible = no
+			}
+
+			blockoverride "prestige_goods_item_text_1" {
+				block "base_goods_item_text_1" {
+					raw_text = "BASE_GOODS_MARKET_SELL_ORDERS"
+				}
+			}
+
+			blockoverride "prestige_goods_item_text_2" {
+				block "base_goods_item_text_2" {
+					raw_text = "BASE_GOODS_MARKET_BUY_ORDERS"
+				}
+			}
+		}
+
+		flowcontainer = {
+			direction = vertical
+			parentanchor = hcenter
+
+			block "prestige_goods_distribution_datamodel" {
+				datamodel = "[Goods.GetMarketPrestigeGoods]"
+			}
+
+			item = {
+				flowcontainer = {
+					direction = vertical
+
+					goods_prestige_goods_breakdown_list_item = {
+						block "prestige_goods_not_selected_visibility" {}
+
+						blockoverride "prestige_goods_item_text_1" {
+							block "prestige_goods_variant_text_1" {
+								alpha = "[TransparentIfZero(Goods.GetMarketSellOrders)]"
+								raw_text = "PRESTIGE_GOODS_MARKET_SELL_ORDERS"
+							}
+						}
+
+						blockoverride "prestige_goods_item_text_2" {
+							block "prestige_goods_variant_text_2" {
+								alpha = "[TransparentIfZero(Goods.GetMarketBuyOrders)]"
+								raw_text = "PRESTIGE_GOODS_MARKET_BUY_ORDERS"
+							}
+						}
+					}
+
+					goods_prestige_goods_breakdown_list_item_selected = {
+						block "prestige_goods_selected_visibility" {
+							visible = no
+						}
+
+						blockoverride "prestige_goods_item_text_1" {
+							block "prestige_goods_variant_text_1" {
+								alpha = "[TransparentIfZero(Goods.GetMarketSellOrders)]"
+								raw_text = "PRESTIGE_GOODS_MARKET_SELL_ORDERS"
+							}
+						}
+
+						blockoverride "prestige_goods_item_text_2" {
+							block "prestige_goods_variant_text_2" {
+								alpha = "[TransparentIfZero(Goods.GetMarketBuyOrders)]"
+								raw_text = "PRESTIGE_GOODS_MARKET_BUY_ORDERS"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### ICON + PRICE
 	type good_icon_and_prize = container {
 		minimumsize = { 480 180 }
-		maximumsize = { 480 -1 }
+		maximumsize = { 540 -1 }
 
 		button = {
 			texture = "gfx/interface/market_view/trade_good_icon_bg.dds"
@@ -488,12 +566,12 @@ types "production_method_items" {
 
 			textbox = {
 				visible = "[Not(Goods.IsLocal)]"
-				text = GOODS_LEADERBOARD_STATUS
+				maximumsize = { 370 -1 }
+				minimumsize = { 320 -1 }
 				autoresize = yes
 				multiline = yes
-				maximumsize = { 320 -1 }
-				minimumsize = { 320 -1 }
 				align = nobaseline
+				text = GOODS_LEADERBOARD_STATUS
 			}
 
 			flowcontainer = {
@@ -1381,10 +1459,10 @@ types "production_method_items" {
 		
 		button = {
 			visible = "[BuildingType.IsBuildable]"
-			using = default_button
-			parentanchor = center
 			size = { 100 105 }
+			parentanchor = center
 			onclick = "[BuildingType.ActivateExpansionLens]"
+			using = default_button_map_interaction
 		}
 		
 		icon = {
@@ -1526,9 +1604,7 @@ types "production_method_items" {
 			item = {
 				flowcontainer = {
 					direction = vertical
-
 					using = market_goods_orders_with_table
-					using = tooltip_above
 
 					background = {
 						visible = "[IsEven_int32(PdxGuiWidget.GetIndexInDataModel)]"
@@ -1613,15 +1689,14 @@ types "production_method_items" {
 						margin_left = 12
 
 						overlappingitembox = {
-							visible = "[ObjectsEqual(GoodsPanelValue.GetBuildingType.Self, GetBuildingType('building_trade_center').Self)]"
+							visible = "[And(ObjectsEqual(GoodsPanelValue.GetBuildingType.Self, GetBuildingType('building_trade_center').Self), Not(Goods.IsPrestigeGoods))]"
+							size = { 252 18 }
+							spacing = 5
+							righttoleft = yes
 
 							block "trade_center_provider" {
 								datamodel = "[Goods.GetExportersToMarket]"
 							}
-
-							size = { 252 18 }
-							righttoleft = yes
-							spacing = 5
 
 							item = {
 								small_market_flag = {}
@@ -1963,7 +2038,7 @@ types "production_method_items" {
 			}
 			
 			blockoverride "balance_tooltip" {
-				tooltip = "STATE_GOODS_BALANCE_TOOLTIP"
+				tooltip = "STATE_PRICE_CARD_BALANCE_TOOLTIP"
 			}
 
 			blockoverride "balance_neutral" {
@@ -2086,7 +2161,7 @@ types "production_method_items" {
 			}
 
 			blockoverride "balance_tooltip" {
-				tooltip = "MARKET_GOODS_BALANCE_TOOLTIP"
+				tooltip = "MARKET_PRICE_CARD_BALANCE_TOOLTIP"
 			}
 
 			blockoverride "balance_neutral" {
