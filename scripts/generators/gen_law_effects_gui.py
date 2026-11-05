@@ -19,7 +19,8 @@ builds a nested tooltip's text only while the player hovers it. Since 1.15 the
 selected law in the change-law panel also has an All effects / Comparative
 effects toggle, whose `visible` builds the text too, and a comparison with the
 current law (GetDeltaEffectDesc), which prices the taxes at the current level:
-there the toggle and the comparison go in the container as well, and a taxation
+there the toggle and the comparison go in the container as well (a vbox there, since
+the toggle is an hbox and a flowcontainer can't hold one), and a taxation
 law shows the toggle and the two headers with a line each
 (te_law_tax_delta_effects for the comparison). Both facts were
 checked in game on 2026-10-18 (scripting_best_practices.md, "Script
@@ -169,22 +170,32 @@ def redefine(body, name, country, link, delta_link=None):
     for start, end in widgets:
         copies += _tax_copy(body[start:end + 1], country, link, delta_link, f"{name}'s effects") + [""]
     first, last = widgets[0][0], widgets[-1][1]
+    indent = body[first][:len(body[first]) - len(body[first].lstrip())]
     if len(widgets) == 2:
         what = "header and text"
         shown = ["a taxation law shows the header and one line, whose hover holds the",
                  f"text ({link}), built only while the player hovers it"]
+        wrapper = [
+            f"{indent}### frame, so vanilla's {what} go in a container hidden for one",
+            f"{indent}flowcontainer = {{",
+            f"{indent}\tdirection = vertical",
+        ]
     else:
         what = "view toggle, headers and texts"
         shown = ["a taxation law shows the toggle and the headers, and a line for each text whose",
                  f"hover holds it ({link}, {delta_link}), built only while the player hovers it"]
+        # The toggle is an hbox, and a flowcontainer can't have an hbox/vbox as a direct child:
+        # building it overflowed the stack and crashed the game (gui_modding_guide.md gotcha #48).
+        wrapper = [
+            f"{indent}### frame, so vanilla's {what} go in a vbox hidden for one. Not a",
+            f"{indent}### flowcontainer: it can't hold the toggle's hbox, and building that overflowed the stack (2026-11-05)",
+            f"{indent}vbox = {{",
+        ]
 
-    indent = body[first][:len(body[first]) - len(body[first].lstrip())]
     out = body[:first]
+    out += [f"{indent}{MOD_OPEN}: a taxation law's effects text prices its revenue at every tax level each"]
+    out += wrapper
     out += [
-        f"{indent}{MOD_OPEN}: a taxation law's effects text prices its revenue at every tax level each",
-        f"{indent}### frame, so vanilla's {what} go in a container hidden for one",
-        f"{indent}flowcontainer = {{",
-        f"{indent}\tdirection = vertical",
         f'{indent}\tvisible = "[Not({IS_TAX})]"',
         f"{indent}{MOD_CLOSE}",
     ]
