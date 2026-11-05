@@ -57,6 +57,8 @@ git -C <clone> commit -m "<version> (<codename>)"                          # loc
 
 Check `git diff --cached --ignore-cr-at-eol --shortstat` matches the plain one (no line-ending churn) before committing.
 
+**Keep the clone current as each version lands, hotfixes included.** Steam keeps only the installed files, so a version nobody committed can't be recovered later: the clone went from 1.13.9 straight to 1.15.0, and the 1.15 GUI overrides had no 1.14.5 base to merge on (§ 5). Since 2026-11-05 Claude owns this (the owner's request): whenever `launcher/launcher-settings.json`'s `rawVersion` is newer than the clone's last commit, rsync as above, commit and push. The clone's `.gitignore` also leaves out `*.psd`: 1.15's `ui_pause_frame_ep2.psd` is 150 MB, over GitHub's 100 MB push limit, so run `find game -size +90M` before pushing.
+
 **Vanilla renames files, not just identifiers.** 1.14 renamed 224 files (laws `00_*` → `01_`/`02_*`, per-language loc). That silently breaks two things: a mod file overriding vanilla *by same path* stops overriding and starts duplicating keys, and any at-risk list built from the new patch's file names misses targets whose old file had a different name. Check both against the real rename list:
 
 ```bash
@@ -213,7 +215,7 @@ done
 
 In the 1.13.5 migration, an exploration agent reported 2 at-risk GUI files; the shell loop above found 5. The missed three included `military_formation_panel.gui`, whose unrebased override silently broke the move-formation button because vanilla renamed `ToggleArmyMovement` → `ToggleArmyAdditionalActions` and `MOVE_MILITARY_FORMATION` → `ADDITIONAL_ACTIONS_MILITARY_FORMATION` in the onclick handler.
 
-For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
+For each at-risk file, run a 3-way merge with vanilla's pre- and post-patch versions. **When the clone lacks the pre-patch version** (1.15: no 1.14.5), don't merge on an older base: a base older than the one the override was built on can drop vanilla lines without a conflict. Rebuild instead: take the new vanilla file and apply again each hunk of `diff(new vanilla, override)` that `git blame` attributes to a mod commit, then prove it as below against the new file (`gui_modding_guide.md` § "GUI 3-way merge across vanilla patches", the 1.15 paragraph). See `docs/guides/gui_modding_guide.md` § "GUI 3-way merge across vanilla patches" for the exact `git merge-file` command. In the 1.13 migration this resolved 14 of 17 GUI overrides cleanly with 5 manual conflicts.
 
 **Prove each merge preserved the mod's delta.** Strip BOM/CR from all three inputs, merge, then compare the set of non-blank changed lines of `diff(OLD, mod)` against `diff(NEW, merged)` — they must be identical (0 lost, 0 extra). This catches both a mod edit the merge dropped and a stale pre-patch vanilla line the merge kept. In 1.14 all 11 merges passed; the only 2 conflicts were mod-side trailing whitespace. Restore each file's BOM when copying back.
 
