@@ -203,6 +203,18 @@ types TooltipTypes
 				text = "TREATY_BINDING_PERIOD_REMAINING"
 			}
 
+			### BINDING PERIOD PENDING
+			custom_tooltip_textbox = {
+				visible = "[And(Treaty.IsBindingPeriodPending, NotZero(Treaty.GetBindingDaysLeft))]"
+				text = "TREATY_BINDING_PERIOD_PENDING_TOOLTIP"
+			}
+
+			### AUTOMATIC WITHDRAWAL
+			custom_tooltip_textbox = {
+				visible = "[And(Treaty.WillAutomaticallyWithdraw(GetPlayer.Self), NotZero(Treaty.GetBindingDaysLeft))]"
+				text = "TREATY_AUTOMATIC_WITHDRAWAL_FANCY_TOOLTIP"
+			}
+
 			### BINDING PERIOD FOR DRAFTS
 			custom_tooltip_textbox = {
 				visible = "[And(Treaty.IsDraft, NotZero(Treaty.GetBindingDays))]"
@@ -1034,6 +1046,8 @@ types TooltipTypes
 				text = "ARTICLE_TYPE_EFFECTS"
 			}
 
+			block "article_type_modifiers" {}
+
 			tooltip_divider = {
 				visible = "[Not(StringIsEmpty(ArticleType.GetDesc))]"
 			}
@@ -1042,6 +1056,55 @@ types TooltipTypes
 				visible = "[Not(StringIsEmpty(ArticleType.GetDesc))]"
 				default_format = "#lore"
 				text = "[ArticleType.GetDesc]"
+			}
+		}
+	}
+
+	type FancyTooltip_ArticleTypeInDraft = FancyTooltip_ArticleType {
+		blockoverride "article_type_modifiers" {
+			custom_tooltip_newline = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetMutualModifierDesc))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetMutualModifierDesc))]"
+				text = "ARTICLE_DRAFT_MUTUAL_MODIFIERS_TITLE"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetMutualModifierDesc))]"
+				margin_left = 10
+				text = "ARTICLE_TYPE_MUTUAL_MODIFIERS"
+			}
+
+			custom_tooltip_newline = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetSourceModifierDesc))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetSourceModifierDesc))]"
+				text = "ARTICLE_DRAFT_SOURCE_MODIFIERS_TITLE"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetSourceModifierDesc))]"
+				margin_left = 10
+				text = "ARTICLE_TYPE_SOURCE_MODIFIERS"
+			}
+
+			custom_tooltip_newline = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetTargetModifierDesc))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetTargetModifierDesc))]"
+				text = "ARTICLE_DRAFT_TARGET_MODIFIERS_TITLE"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleType.GetTargetModifierDesc))]"
+				margin_left = 10
+				text = "ARTICLE_TYPE_TARGET_MODIFIERS"
 			}
 		}
 	}
@@ -1221,6 +1284,12 @@ types TooltipTypes
 				visible = "[And( Article.HasKind('directed'), Not(Article.HasType('free_text')))]"
 				alpha = "[TransparentIfTrue(Treaty.IsFrozenFor(Country.Self))]"
 				text = "ARTICLE_INFLUENCE_COST_TOOLTIP_DIRECTED"
+			}
+
+			### CANNOT WITHDRAW
+			custom_tooltip_textbox_with_empty_line = {
+				visible = "[Not(StringIsEmpty(Article.GetCannotWithdrawDesc))]"
+				text = "[Article.GetCannotWithdrawDesc]"
 			}
 
 			### FREE TEXT
@@ -1478,10 +1547,17 @@ types TooltipTypes
 				}
 
 				icon = {
-					visible = "[LessThanOrEqualTo_int32(ArticleDraft.GetAcceptance(TreatyDraft.GetRightCountry.Self), '(int32)0')]"
+					visible = "[LessThan_int32(ArticleDraft.GetAcceptance(TreatyDraft.GetRightCountry.Self), '(int32)0')]"
 					size = { 22 22 }
 					parentanchor = vcenter
 					texture = "gfx/interface/icons/generic_icons/disapproval_icon.dds"
+				}
+
+				icon = {
+					visible = "[EqualTo_int32(ArticleDraft.GetAcceptance(TreatyDraft.GetRightCountry.Self), '(int32)0')]"
+					size = { 22 22 }
+					parentanchor = vcenter
+					texture = "gfx/interface/icons/generic_icons/maybe_icon.dds"
 				}
 
 				custom_tooltip_textbox = {
@@ -1489,6 +1565,12 @@ types TooltipTypes
 					max_width = 500
 					text = "ARTICLE_DRAFT_ACCEPTANCE_WITH_LABEL"
 				}
+			}
+
+			### CANNOT WITHDRAW
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(ArticleDraft.GetCannotWithdrawDesc))]"
+				text = "[ArticleDraft.GetCannotWithdrawDesc]"
 			}
 
 			custom_tooltip_newline = {}
@@ -1896,11 +1978,6 @@ types TooltipTypes
 				custom_tooltip_textbox_with_empty_line = {
 					visible = "[WarGoal.IsPartOfWar]"
 					text = "WAR_GOAL_CONTESTED_DESC_SHORT"
-				}
-
-				custom_tooltip_textbox_with_empty_line = {
-					visible = "[WarGoal.IsAtRiskOfBeingDroppedForBeingUncontested]"
-					text = "WAR_GOAL_AT_RISK_OF_BEING_DROPPED_DESC"
 				}
 
 				custom_tooltip_textbox_with_empty_line = {
@@ -2437,9 +2514,12 @@ types TooltipTypes
 				text = "DATA_LAW_TOOLTIP_NOT_SUPPORTED"
 			}
 
-			custom_tooltip_newline = {}
+			custom_tooltip_newline = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
+			}
 
 			custom_tooltip_textbox = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
 				text = "DATA_LAW_MOVEMENT_AND_AGITATORS_TITLE"
 			}
 
@@ -4470,6 +4550,28 @@ types TooltipTypes
 		}
 	}
 
+	type FancyTooltip_GlossaryType = FancyTooltipGlossaryWidgetType {
+		blockoverride "text" {}
+
+		blockoverride "name" {
+			text = "[GlossaryType.GetTitle]"
+		}
+
+		blockoverride "type" {
+			text = "TOOLTIP_TYPE_GLOSSARY"
+		}
+
+		blockoverride "icon_texture" {
+			texture = "[GlossaryType.GetIcon]"
+		}
+
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox = {
+				text = "[GlossaryType.GetDescNoFormatting]"
+			}
+		}
+	}
+
 	type FancyTooltip_LawGroup = FancyTooltipWidgetType {
 		blockoverride "text" {
 			text = "DATA_LAW_GROUP_NAME_TOOLTIP"
@@ -6215,6 +6317,13 @@ types TooltipTypes
 
 			world_market_access_info = {}
 
+			custom_tooltip_textbox = {
+				visible = "[State.GetStateRegion.HasModerateOrSevereCold]"
+				using = tooltip_segment_margin
+				tooltip = "[State.GetColdDesc]"
+				text = "STATE_TT_COLD_INTENSITY"
+			}
+
 			custom_tooltip_2_columns = {
 				blockoverride "left_column" {
 					custom_tooltip_textbox_column_width = {
@@ -6785,6 +6894,18 @@ types TooltipTypes
 				text = "DATA_BUILDING_NAME_TOOLTIP"
 			}
 
+			# Description
+			tooltip_divider = {
+				visible = "[Not(StringIsEmpty(Building.GetBuildingType.GetDesc))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(Building.GetBuildingType.GetDesc))]"
+				default_format = "#lore"
+				text = "DATA_BUILDING_DESCRIPTION_TOOLTIP"
+			}
+
+			# Debug
 			custom_tooltip_textbox = {
 				visible = "[InDebugMode]"
 				raw_text = "[Building.GetDebugTooltip]"
@@ -6809,6 +6930,18 @@ types TooltipTypes
 	type FancyTooltip_BuildingType = FancyTooltipWidgetType {
 		blockoverride "text" {
 			text = "DATA_BUILDING_TYPE_NAME_TOOLTIP"
+		}
+
+		blockoverride "tooltip_content_after" {
+			tooltip_divider = {
+				visible = "[Not(StringIsEmpty(BuildingType.GetDesc))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(BuildingType.GetDesc))]"
+				default_format = "#lore"
+				text = "DATA_BUILDING_TYPE_DESCRIPTION_TOOLTIP"
+			}
 		}
 
 		blockoverride "icon_texture" {
@@ -7215,6 +7348,7 @@ types TooltipTypes
 
 		blockoverride "tooltip_content_after" {
 			datacontext = "[AcceptanceStatusSegment.GetStatus]"
+			datacontext = "[AcceptanceStatusSegment.GetCountry]"
 
 			custom_tooltip_textbox = {
 				text = "ACCEPTANCE_STATUS_THRESHOLDS_DESC"
@@ -7729,7 +7863,9 @@ types TooltipTypes
 			}
 
 			### Main Stats
-			ship_modifier_stats_list = {}
+			ship_modifier_stats_list = {
+				blockoverride "ship_hit_points_and_crew" {}
+			}
 
 			### Battle Against Ship Type Stats
 			flowcontainer = {
@@ -7835,6 +7971,98 @@ types TooltipTypes
 				default_format = "#lore"
 				max_width = 382
 				text = "[ShipGroup.GetDescription]"
+			}
+		}
+	}
+
+	type ship_type_obsolete_tooltip_line = custom_tooltip_textbox {
+		visible = "[And(Not(GetMetaPlayer.IsObserver), ShipType.IsObsolete(GetPlayer.Self))]"
+		text = "SHIP_TYPE_OBSOLETE"
+	}
+
+	type RegularTooltip_ShipTypeSupersededBy = RegularTooltip {
+		blockoverride "tooltip_content_after" {
+			flowcontainer = {
+				margin_top = 2
+				spacing = 2
+				wrap_count = 2
+				datamodel = "[ShipTemplateList.GetTypesSupersedingType(ShipType.Self)]"
+
+				item = {
+					ship_silhouette_for_tooltips = {
+						blockoverride "ship_type_name" {
+							text = "[ShipType.GetNameNoFormatting]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	type RegularTooltip_ShipTemplateConstruction = RegularTooltip {
+		blockoverride "tooltip_content_after" {
+			datacontext = "[AccessPlayer]"
+
+			custom_tooltip_textbox = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_HEADER"
+			}
+
+			custom_tooltip_textbox = {
+				block "construction_command_desc" {
+					visible = "[Not(StringIsEmpty(GetDesc(ShipTemplate.QueueConstruction)))]"
+					text = "[GetDesc(ShipTemplate.QueueConstruction)]"
+				}
+			}
+
+			block "destination" {
+				custom_tooltip_textbox = {
+					text = "SHIP_TEMPLATE_BUILD_TOOLTIP_JOINS_NEW_FLEET"
+				}
+			}
+
+			ship_type_obsolete_tooltip_line = {}
+
+			tooltip_divider = {}
+
+			custom_tooltip_textbox_with_empty_line = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_CONSTRUCTION"
+			}
+
+			custom_tooltip_textbox = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_CONSTRUCTION_GOODS"
+			}
+
+			custom_tooltip_textbox_with_empty_line = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_UPKEEP_GOODS"
+			}
+
+			custom_tooltip_textbox = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_SAILORS"
+			}
+
+			tooltip_divider = {}
+
+			custom_tooltip_textbox = {
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_SHORTCUTS"
+			}
+		}
+	}
+
+	type RegularTooltip_FleetShipTemplateConstruction = RegularTooltip_ShipTemplateConstruction {
+		blockoverride "construction_command_desc" {
+			visible = "[Not(StringIsEmpty(GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))))]"
+			text = "[GetDesc(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
+		}
+
+		blockoverride "destination" {
+			custom_tooltip_textbox = {
+				visible = "[MilitaryFormation.CanReceiveNewShips]"
+				text = "SHIP_TEMPLATE_BUILD_TOOLTIP_JOINS_FLEET"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(MilitaryFormation.CanReceiveNewShips)]"
+				text = "FLEET_SHIP_CONSTRUCTION_NOT_DELIVERED_WARNING"
 			}
 		}
 	}
@@ -8085,6 +8313,14 @@ types TooltipTypes
 		wrap_count = 2
 		datacontext = "[ShipTemplate.GetModifier]"
 
+		ship_template_stat_hit_points = {
+			size = { 245 36 }
+		}
+
+		ship_template_stat_crew_max = {
+			size = { 245 36 }
+		}
+
 		### Maintenance
 		ship_stat = {
 			size = { 245 36 }
@@ -8189,6 +8425,15 @@ types TooltipTypes
 			datacontext = "[Ship.GetModifier]"
 		}
 
+		block "ship_hit_points_and_crew" {
+			ship_modifier_stat_hit_points = {
+				size = { 245 36 }
+			}
+
+			ship_modifier_stat_crew_max = {
+				size = { 245 36 }
+			}
+		}
 
 		block "ship_template_maintenance" {
 			### Maintenance
@@ -8446,6 +8691,30 @@ types TooltipTypes
 					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_hull_damage_mult'))]"
 				}
 
+				ship_modifier_crew_damage_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_crew_damage_mult'))]"
+				}
+
+				ship_modifier_detection_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_detection_mult'))]"
+				}
+
+				ship_modifier_readiness_gain_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_readiness_gain_mult'))]"
+				}
+
+				ship_modifier_screening_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_screening_mult'))]"
+				}
+
+				ship_modifier_visibility_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_visibility_mult'))]"
+				}
+
+				ship_modifier_vulnerability_mult = {
+					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_vulnerability_mult'))]"
+				}
+
 				ship_modifier_naval_invasion_efficiency = {
 					visible = "[NotZero_CFixedPoint(Modifier.GetValueFor('ship_naval_invasion_efficiency_mult'))]"
 				}
@@ -8544,6 +8813,25 @@ types TooltipTypes
 						}
 					}
 				}
+			}
+		}
+	}
+
+	type RegularTooltip_CountryShips = RegularTooltip {
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox = {
+				text = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP_SUMMARY"
+			}
+
+			country_ship_types = {
+				visible = "[NotZero(Country.GetNumShips)]"
+				margin_top = 10
+			}
+
+			custom_tooltip_newline = {}
+
+			custom_tooltip_textbox = {
+				text = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP_FLEETS"
 			}
 		}
 	}
@@ -8812,6 +9100,62 @@ types TooltipTypes
 			max_width = 110
 			using = elide_fontsize_min
 			text = "COASTAL_BUILDING_MARKER_THROUGHPUT"
+		}
+	}
+
+	type RegularTooltip_SupplyOriginMarker = RegularTooltip {
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox = {
+				default_format = "#header"
+				text = "SUPPLY_ORIGIN_MARKER_HEADER"
+			}
+
+			custom_tooltip_textbox = {
+				text = "SUPPLY_ORIGIN_MARKER_DESC"
+			}
+
+			tooltip_divider = {}
+
+			custom_tooltip_textbox = {
+				visible = "[Not(Building.IsNavalLogisticsCenter)]"
+				default_format = "#title"
+				text = "SUPPLY_ORIGIN_MARKER_COUNT_ARMIES"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[Building.IsNavalLogisticsCenter]"
+				default_format = "#title"
+				text = "SUPPLY_ORIGIN_MARKER_COUNT_NAVIES"
+			}
+
+			flowcontainer = {
+				visible = "[LessThanOrEqualTo_int32(GetDataModelSize(Building.GetSuppliedFormations), '(int32)10')]"
+				direction = vertical
+				datamodel = "[Building.GetSuppliedFormations]"
+
+				item = {
+					custom_tooltip_textbox = {
+						text = "SUPPLY_ORIGIN_MARKER_ITEM"
+					}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[GreaterThan_int32(GetDataModelSize(Building.GetSuppliedFormations), '(int32)10')]"
+				direction = vertical
+				datamodel = "[DataModelFirst(Building.GetSuppliedFormations, '(int32)10')]"
+
+				item = {
+					custom_tooltip_textbox = {
+						text = "SUPPLY_ORIGIN_MARKER_ITEM"
+					}
+				}
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[GreaterThan_int32(GetDataModelSize(Building.GetSuppliedFormations), '(int32)10')]"
+				text = "SUPPLY_ORIGIN_MARKER_MORE"
+			}
 		}
 	}
 
@@ -10461,6 +10805,120 @@ types TooltipTypes
 		}
 	}
 
+	type regional_objective_target_grid = dynamicgridbox {
+		flipdirection = yes
+		datamodel_wrap = 2
+
+		item = {
+			widget = {
+				size = { 260 25 }
+
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					align = nobaseline
+					max_width = 250
+					elide = right
+					fontsize_min = 12
+
+					block "target_text" {}
+				}
+			}
+		}
+	}
+
+	type regional_objective_targets = flowcontainer {
+		visible = "[AIRegionalObjective.HasTargets]"
+		direction = vertical
+		spacing = 5
+
+		custom_tooltip_textbox = {
+			text = "REGIONAL_OBJECTIVE_TARGETS_TITLE"
+		}
+
+		regional_objective_target_grid = {
+			block "target_list_anchor" {
+				parentanchor = hcenter
+			}
+
+			visible = "[Not(IsDataModelEmpty(AIRegionalObjective.GetTargetCountries))]"
+			datamodel = "[DataModelFirst(AIRegionalObjective.GetTargetCountries, GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+
+			blockoverride "target_text" {
+				text = "REGIONAL_OBJECTIVE_TARGET_COUNTRY"
+			}
+		}
+
+		textbox = {
+			block "target_list_anchor" {
+				parentanchor = hcenter
+			}
+
+			visible = "[GreaterThan_int32(GetDataModelSize(AIRegionalObjective.GetTargetCountries), GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+			autoresize = yes
+			align = nobaseline
+			fontsize_min = 12
+			default_format = "#tooltippable"
+			text = "REGIONAL_OBJECTIVE_ADDITIONAL_TARGET_COUNTRIES"
+
+			tooltipwidget = {
+				RegularTooltip = {
+					blockoverride "tooltip_content" {
+						regional_objective_target_grid = {
+							parentanchor = hcenter
+							datamodel = "[DataModelSkipFirst(AIRegionalObjective.GetTargetCountries, GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+
+							blockoverride "target_text" {
+								text = "REGIONAL_OBJECTIVE_TARGET_COUNTRY"
+							}
+						}
+					}
+				}
+			}
+		}
+
+		regional_objective_target_grid = {
+			block "target_list_anchor" {
+				parentanchor = hcenter
+			}
+
+			visible = "[Not(IsDataModelEmpty(AIRegionalObjective.GetTargetStates))]"
+			datamodel = "[DataModelFirst(AIRegionalObjective.GetTargetStates, GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+
+			blockoverride "target_text" {
+				text = "REGIONAL_OBJECTIVE_TARGET_STATE"
+			}
+		}
+
+		textbox = {
+			block "target_list_anchor" {
+				parentanchor = hcenter
+			}
+
+			visible = "[GreaterThan_int32(GetDataModelSize(AIRegionalObjective.GetTargetStates), GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+			autoresize = yes
+			align = nobaseline
+			fontsize_min = 12
+			default_format = "#tooltippable"
+			text = "REGIONAL_OBJECTIVE_ADDITIONAL_TARGET_STATES"
+
+			tooltipwidget = {
+				RegularTooltip = {
+					blockoverride "tooltip_content" {
+						regional_objective_target_grid = {
+							parentanchor = hcenter
+							datamodel = "[DataModelSkipFirst(AIRegionalObjective.GetTargetStates, GetDefine('NGUI', 'REGIONAL_OBJECTIVE_MAX_TARGETS_SHOWN'))]"
+
+							blockoverride "target_text" {
+								text = "REGIONAL_OBJECTIVE_TARGET_STATE"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	type FancyTooltip_AIRegionalObjectiveType = FancyTooltipWidgetType {
 		blockoverride "text" {} # Fully replaced by everything in tooltip_content_after
 
@@ -10521,6 +10979,16 @@ types TooltipTypes
 				}
 			}
 
+			### WHO OR WHAT IT TARGETS
+			flowcontainer = {
+				visible = "[AIRegionalObjective.HasTargets]"
+				direction = vertical
+
+				custom_tooltip_newline = {}
+
+				regional_objective_targets = {}
+			}
+
 			### WHEN IT WAS TAKEN UP AND WHETHER IT IS DONE
 			flowcontainer = {
 				visible = "[AIRegionalObjective.IsValid]"
@@ -10541,6 +11009,12 @@ types TooltipTypes
 				custom_tooltip_textbox = {
 					visible = "[AIRegionalObjective.IsFailed]"
 					text = "REGIONAL_OBJECTIVE_FAILED"
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[Not(AIRegionalObjective.IsActive)]"
+					max_width = 510
+					text = "REGIONAL_OBJECTIVE_CONCLUDED"
 				}
 			}
 		}
@@ -10644,12 +11118,38 @@ types TooltipTypes
 				custom_tooltip_newline = {}
 
 				custom_tooltip_textbox = {
+					visible = "[Country.GetRegionalObjectiveIn(StrategicRegion.Self).IsActive]"
 					text = "STRATEGIC_REGION_AI_STANCE_OBJECTIVE_TITLE"
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[Country.GetRegionalObjectiveIn(StrategicRegion.Self).IsCompleted]"
+					text = "STRATEGIC_REGION_AI_STANCE_OBJECTIVE_COMPLETED_TITLE"
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[Country.GetRegionalObjectiveIn(StrategicRegion.Self).IsFailed]"
+					text = "STRATEGIC_REGION_AI_STANCE_OBJECTIVE_FAILED_TITLE"
 				}
 
 				custom_tooltip_textbox = {
 					margin_left = 10
 					text = "STRATEGIC_REGION_AI_STANCE_OBJECTIVE_ENTRY"
+				}
+
+				regional_objective_targets = {
+					datacontext = "[Country.GetRegionalObjectiveIn(StrategicRegion.Self)]"
+					margin_top = 5
+					margin_left = 10
+
+					blockoverride "target_list_anchor" {}
+				}
+
+				custom_tooltip_textbox = {
+					visible = "[Not(Country.GetRegionalObjectiveIn(StrategicRegion.Self).IsActive)]"
+					margin_left = 10
+					max_width = 510
+					text = "STRATEGIC_REGION_AI_STANCE_OBJECTIVE_CONCLUDED"
 				}
 			}
 
@@ -11379,10 +11879,6 @@ types TooltipTypes
 
 
 	type FancyTooltip_JournalEntry = FancyTooltipWidgetType {
-		blockoverride "text" {
-			text = "JOURNAL_ENTRY_TOOLTIP"
-		}
-
 		blockoverride "icon_texture" {
 			texture = "[JournalEntry.GetIcon]"
 		}
@@ -11393,6 +11889,172 @@ types TooltipTypes
 
 		blockoverride "type" {
 			text = "JOURNAL_ENTRY_WITH_GROUP"
+		}
+
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox_with_empty_line = {
+				visible = "[And(JournalEntry.IsActive, Not(StringIsEmpty(JournalEntry.GetStatusDesc)))]"
+				text = "[JournalEntry.GetStatusDesc]"
+			}
+
+			custom_tooltip_textbox_with_empty_line = {
+				visible = "[JournalEntry.WillBeActivated]"
+				text = "JOURNAL_ENTRY_WILL_BE_ACTIVATED"
+			}
+
+			custom_tooltip_textbox = {
+				text = "[JournalEntry.GetTooltip]"
+			}
+
+			custom_tooltip_newline = {
+				visible = "[And(JournalEntry.IsActive, Or(Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers)), Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers))))]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[And(JournalEntry.IsActive, Or(Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers)), Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers))))]"
+				text = "JOURNAL_ENTRY_MODIFIERS_HEADER"
+			}
+
+			flowcontainer = {
+				visible = "[Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))]"
+				wrap_count = 2
+				spacing = 5
+				margin_top = 5
+				datamodel = "[JournalEntry.GetScalingModifiers]"
+
+				item = {
+					flowcontainer = {
+						spacing = 5
+						margin = { 10 5 }
+						minimumsize = { 250 -1 }
+						using = tooltip_ne
+						tooltip = "[ScalingModifier.GetTooltip]"
+
+						background = {
+							using = entry_bg
+						}
+
+						icon = {
+							size = { 23 23 }
+							parentanchor = vcenter
+							texture = "[ScalingModifier.GetIcon]"
+						}
+
+						custom_tooltip_textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							align = nobaseline
+							default_format = "#v"
+							max_width = 202
+							using = elide_fontsize_min
+							text = "[ScalingModifier.GetName]"
+						}
+					}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[And(JournalEntry.IsActive, Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)))]"
+				wrap_count = 2
+				spacing = 5
+				margin_top = 5
+				datamodel = "[JournalEntry.GetTimedModifiers]"
+
+				item = {
+					flowcontainer = {
+						spacing = 5
+						margin = { 10 5 }
+						minimumsize = { 250 -1 }
+						using = tooltip_ne
+						tooltip = "[TimedModifier.GetTooltip]"
+
+						background = {
+							using = entry_bg
+						}
+
+						icon = {
+							size = { 23 23 }
+							parentanchor = vcenter
+							texture = "[TimedModifier.GetIcon]"
+						}
+
+						custom_tooltip_textbox = {
+							parentanchor = vcenter
+							autoresize = yes
+							align = nobaseline
+							default_format = "#v"
+							max_width = 202
+							using = elide_fontsize_min
+							text = "[TimedModifier.GetName]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	type FancyTooltip_JournalEntryType = FancyTooltipWidgetType {
+		blockoverride "text" {}
+
+		blockoverride "icon_texture" {
+			texture = "[JournalEntryType.GetIcon]"
+		}
+
+		blockoverride "name" {
+			text = "[JournalEntryType.GetName]"
+		}
+
+		blockoverride "type" {
+			text = "JOURNAL_ENTRY_TYPE_WITH_GROUP"
+		}
+
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox = {
+				visible = "[Not(StringIsEmpty(JournalEntryType.GetDesc))]"
+				text = "[JournalEntryType.GetDesc]"
+			}
+
+			custom_tooltip_newline = {
+				visible = "[And(Not(StringIsEmpty(JournalEntryType.GetDesc)), JournalEntryType.HasActivationDesc)]"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[JournalEntryType.HasActivationDesc]"
+				text = "JOURNAL_ENTRY_ACTIVATION_DESC_HEADER"
+			}
+
+			custom_tooltip_textbox = {
+				visible = "[JournalEntryType.HasActivationDesc]"
+				text = "[JournalEntryType.GetActivationDesc(GetPlayer.Self)]"
+			}
+		}
+	}
+
+	type FancyTooltip_ConcludedJournalEntry = FancyTooltipWidgetType {
+		blockoverride "text" {}
+
+		blockoverride "icon_texture" {
+			texture = "[ConcludedJournalEntry.GetType.GetIcon]"
+		}
+
+		blockoverride "name" {
+			text = "[ConcludedJournalEntry.GetName]"
+		}
+
+		blockoverride "type" {
+			text = "CONCLUDED_JOURNAL_ENTRY_WITH_GROUP"
+		}
+
+		blockoverride "tooltip_content_after" {
+			custom_tooltip_textbox = {
+				text = "JOURNAL_ENTRY_CONCLUDED_LABEL"
+			}
+
+			custom_tooltip_newline = {}
+
+			custom_tooltip_textbox = {
+				text = "[ConcludedJournalEntry.GetConclusionDesc]"
+			}
 		}
 	}
 
@@ -11420,7 +12082,7 @@ types TooltipTypes
         }
 
         blockoverride "icon_texture" {
-            texture = "[MobilizationOptionGroup.GetIcon]"
+            texture = "[MobilizationOptionGroup.GetBackground]"
         }
 
         blockoverride "name" {
@@ -12269,7 +12931,8 @@ types TooltipTypes
 							parentanchor = vcenter
 							align = nobaseline
 							autoresize = yes
-							multiline = yes
+							max_width = @tooltip_fixed_column_width_minus_16
+							using = elide_fontsize_min
 							fonttintcolor = "[TooltipInfo.GetTintColor]"
 							text = "DATA_MILITARY_FORMATION_MANPOWER"
 						}
@@ -12299,7 +12962,8 @@ types TooltipTypes
 							parentanchor = vcenter
 							align = nobaseline
 							autoresize = yes
-							multiline = yes
+							max_width = @tooltip_fixed_column_width_minus_16
+							using = elide_fontsize_min
 							fonttintcolor = "[TooltipInfo.GetTintColor]"
 							text = "DATA_MILITARY_FORMATION_SHIP_HITPOINTS"
 						}
@@ -12321,7 +12985,8 @@ types TooltipTypes
 							parentanchor = vcenter
 							align = nobaseline
 							autoresize = yes
-							multiline = yes
+							max_width = @tooltip_fixed_column_width_minus_16
+							using = elide_fontsize_min
 							fonttintcolor = "[TooltipInfo.GetTintColor]"
 							text = "DATA_MILITARY_FORMATION_SHIP_CREW"
 						}
@@ -12350,7 +13015,8 @@ types TooltipTypes
 							parentanchor = vcenter
 							align = nobaseline
 							autoresize = yes
-							multiline = yes
+							max_width = @tooltip_fixed_column_width_minus_16
+							using = elide_fontsize_min
 							fonttintcolor = "[TooltipInfo.GetTintColor]"
 							text = "DATA_MILITARY_FORMATION_ORGANIZATION"
 						}
@@ -12379,7 +13045,8 @@ types TooltipTypes
 							parentanchor = vcenter
 							align = nobaseline
 							autoresize = yes
-							multiline = yes
+							max_width = @tooltip_fixed_column_width_minus_16
+							using = elide_fontsize_min
 							fonttintcolor = "[TooltipInfo.GetTintColor]"
 							text = "DATA_MILITARY_FORMATION_MORALE"
 						}
@@ -12389,16 +13056,63 @@ types TooltipTypes
 				blockoverride "right_column" {
 					maximumsize = { 305 -1 }
 
-					custom_tooltip_textbox_column_width = {
+					DefaultTooltipTextBox = {
 						visible = "[MilitaryFormation.IsArmy]"
-						maximumsize = { 305 -1 }
-						text = "DATA_MILITARY_FORMATION_COLUMN_ONE_ARMY"
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_OFFENSE"
 					}
 
-					custom_tooltip_textbox_column_width = {
+					DefaultTooltipTextBox = {
+						visible = "[MilitaryFormation.IsArmy]"
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_DEFENSE"
+					}
+
+					DefaultTooltipTextBox = {
+						visible = "[MilitaryFormation.IsArmy]"
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_ATTRITION_VALUE"
+					}
+
+					DefaultTooltipTextBox = {
 						visible = "[MilitaryFormation.IsFleet]"
-						maximumsize = { 305 -1 }
-						text = "DATA_MILITARY_FORMATION_COLUMN_ONE_FLEET"
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_ATTACK_DAMAGE"
+					}
+
+					DefaultTooltipTextBox = {
+						visible = "[MilitaryFormation.IsFleet]"
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_SHIP_ARMOR"
+					}
+
+					DefaultTooltipTextBox = {
+						align = nobaseline
+						autoresize = yes
+						max_width = @tooltip_fixed_column_width
+						using = elide_fontsize_min
+						fonttintcolor = "[TooltipInfo.GetTintColor]"
+						text = "DATA_MILITARY_FORMATION_POWER_PROJECTION"
 					}
 				}
 			}
@@ -12429,6 +13143,7 @@ types TooltipTypes
 					visible = "[Not(IsDataModelEmpty(MilitaryFormation.GetCombatUnitEntries))]"
 					spacing = 3
 					margin_left = -2
+					wrap_count = 6
 					datamodel = "[MilitaryFormation.GetCombatUnitEntries]"
 
 					item = {
@@ -13229,6 +13944,8 @@ types TooltipTypes
 						datacontext = "[Strait.GetFirstController]"
 
 						custom_tooltip_textbox_column_width = {
+							multiline = no
+							using = elide_fontsize_min
 							raw_text = "#b [State.GetController.GetFlagTextIcon] [State.GetName]#!"
 						}
 
@@ -13397,6 +14114,8 @@ types TooltipTypes
 						datacontext = "[Strait.GetSecondController]"
 
 						custom_tooltip_textbox_column_width = {
+							multiline = no
+							using = elide_fontsize_min
 							raw_text = "#b [State.GetController.GetFlagTextIcon] [State.GetName]#!"
 						}
 

@@ -242,9 +242,12 @@ types te_law_effects_tooltips
 				text = "DATA_LAW_TOOLTIP_NOT_SUPPORTED"
 			}
 
-			custom_tooltip_newline = {}
+			custom_tooltip_newline = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
+			}
 
 			custom_tooltip_textbox = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
 				text = "DATA_LAW_MOVEMENT_AND_AGITATORS_TITLE"
 			}
 
