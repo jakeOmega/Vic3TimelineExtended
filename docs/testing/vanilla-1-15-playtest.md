@@ -33,7 +33,7 @@ migration record that doc becomes), and an engine fact in `docs/guides/scripting
   `common/scripted_effects/te_probe_115_c5_effects.txt`, `common/scripted_progress_bars/te_probe_115_bars.txt`,
   `events/te_probe_115_events.txt`, `test_te_probe_115.py`, the four loc keys `te_probe_115`, `te_probe_115_reason`,
   `te_probe_115_c5_bar_name` and `te_probe_115_c5_bar_text` (organize_loc files them in `te_miscellaneous_l_english.yml`),
-  and the Self-checks section below.
+  `te_probe_115` in `test_icon_pipeline.py`'s journal-entry exemption, and the Self-checks section below.
 
 ## Self-checks (the te_probe_115 probes)
 
