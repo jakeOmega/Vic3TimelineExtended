@@ -152,6 +152,9 @@ or Spanish game.
 - Katanga or Zambia: copper shows as a discoverable resource with vanilla's cap available from 1836. If the
   INJECTed `building_group` didn't take, the mine stays capped with no caps left, no copper mine can be built, and
   `debug.log` says "can only support 0"; the fallback is a `TRY_REPLACE` of vanilla's entry with the group changed.
+  The first year's `TE_SELF_CHECK OK|BROKEN copper_mine_discoverable` line answers it: OK, BROKEN with copper mines
+  in the wrong group, or BROKEN with no copper mine left anywhere (vanilla's 1836 history has 15). The check is
+  `common/on_actions/te_copper_mine_selfcheck_on_actions.txt`; delete the file once it reads OK.
 - Copper mines climb the late tiers and switch to mechanized maintenance at the condensing pump.
 - Tooltips say Conductive Metals and Base Metals, including through the `$copper$` splices; Mount Whaleback and
   Sumitomo show their copper bonuses.
@@ -166,11 +169,11 @@ or Spanish game.
 **Defines, treaties, the UN and ships**
 - Devastation without the mod's overrides, and whether the UN docket's `un_docket_war_devastation` (0.3) is still
   reachable under per-battle devastation; the docket's 0.25 occupation threshold.
+- Renegotiate a treaty to add Seize Company or Disband Company, or point one at another company: it takes effect.
+  A copy carried over from the old treaty doesn't seize or disband a second time.
 - A demilitarized zone renegotiated, and a seabed lease's quantity on renegotiation; the money transfer's
   contextual score.
 - Decolonization: a subject's war against the overlord's own revolutionaries or secessionists isn't tracked.
-- Renegotiate a treaty to add Seize Company or Disband Company, or point one at another company: it takes effect.
-  A copy carried over from the old treaty doesn't seize or disband a second time.
 - The first 1.15 new game: `TE_SELF_CHECK gm_world_base` (the `gm_world_gdp_1836` reset).
 - Ships: module costs in the ship designer; AI submarines built only under Jeune École or Merchant Navy and sailing
   in `submarine_raiding_fleet`.
