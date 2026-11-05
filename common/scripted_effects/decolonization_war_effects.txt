@@ -602,7 +602,13 @@ decol_iw_end_talks = {
 	if = {
 		limit = { NOT = { has_global_variable = te_selfcheck_decol_iw_talks_peace } }
 		set_global_variable = te_selfcheck_decol_iw_talks_peace
-		debug_log = "TE_SELF_CHECK OK decol_iw_talks_peace metropole=[SCOPE.sCountry('decol_iw_end_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_end_rebels').GetNameNoFormatting] talks_months=[THIS.GetVariable('decol_iw_talks_$N$').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		# the slot's talks counter, copied: no $N$ inside the string (te_debug_log_arg_effects.txt)
+		if = {
+			limit = { has_variable = decol_iw_talks_$N$ }
+			set_global_variable = { name = te_log_value value = var:decol_iw_talks_$N$ }
+		}
+		debug_log = "TE_SELF_CHECK OK decol_iw_talks_peace metropole=[SCOPE.sCountry('decol_iw_end_metropole').GetNameNoFormatting] rebels=[SCOPE.sCountry('decol_iw_end_rebels').GetNameNoFormatting] talks_months=[GetGlobalVariable('te_log_value').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		te_log_args_clear = yes
 	}
 	trigger_event = { id = decolonization_events.76 }
 	decol_iw_post_end_notices = yes

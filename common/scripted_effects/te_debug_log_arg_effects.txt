@@ -1,0 +1,36 @@
+﻿# ============================================================================
+# DEBUG LOG ARGUMENTS — a scripted effect's arguments, copied for its debug_log
+# ============================================================================
+# A `$X$` inside a quoted string is not substituted reliably: vanilla 1.14.5
+# substituted it but dropped the character before it ("(kind $KIND$)" logged
+# "(kind1$)"), and vanilla 1.15 "fixed script arguments being substituted
+# inside quoted strings" without saying which way. So no debug_log string names
+# an argument (test_debug_log_arguments.py fails on one). A line prints a value
+# the effect already stored where it can (THIS.Var('gm_landmark').GetFlagName),
+# and otherwise reads these copies, which hold each argument as a flag (a token)
+# or a value:
+#   [GetGlobalVariable('te_log_arg_1').GetFlagName] ... te_log_arg_5
+#   [GetGlobalVariable('te_log_value').GetValue|0]
+# A line renders when it runs, so te_log_args_clear right after it is safe.
+# Pass `none` for a slot a line doesn't use.
+
+# Any scope.
+te_log_args_set = {
+	set_global_variable = { name = te_log_arg_1 value = flag:$A$ }
+	set_global_variable = { name = te_log_arg_2 value = flag:$B$ }
+	set_global_variable = { name = te_log_arg_3 value = flag:$C$ }
+	set_global_variable = { name = te_log_arg_4 value = flag:$D$ }
+	set_global_variable = { name = te_log_arg_5 value = flag:$E$ }
+}
+
+# Any scope. The has_global_variable guards are also what makes the copies
+# "used" for the engine's parse-time variable check (a read in localization
+# doesn't count).
+te_log_args_clear = {
+	if = { limit = { has_global_variable = te_log_arg_1 } remove_global_variable = te_log_arg_1 }
+	if = { limit = { has_global_variable = te_log_arg_2 } remove_global_variable = te_log_arg_2 }
+	if = { limit = { has_global_variable = te_log_arg_3 } remove_global_variable = te_log_arg_3 }
+	if = { limit = { has_global_variable = te_log_arg_4 } remove_global_variable = te_log_arg_4 }
+	if = { limit = { has_global_variable = te_log_arg_5 } remove_global_variable = te_log_arg_5 }
+	if = { limit = { has_global_variable = te_log_value } remove_global_variable = te_log_value }
+}

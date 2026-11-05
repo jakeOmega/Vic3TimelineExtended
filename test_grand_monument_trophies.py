@@ -882,7 +882,8 @@ class Trophies1836Tests(unittest.TestCase):
         # Taken before the game began: none of a taking's consequences.
         for line in ("change_infamy", "change_relations", "post_notification", "add_war_war_support"):
             self.assertNotIn(line, body, line)
-        self.assertIn('else = { debug_log = "TE_MONUMENTS: trophy $LANDMARK$ not placed', body)
+        self.assertIn('else = { te_log_args_set = { A = $LANDMARK$ B = $ORIGIN$ C = $ORIGIN_TAG$ D = $SITE$ E = $SITE_TAG$ } '
+                      'debug_log = "TE_MONUMENTS: trophy [GetGlobalVariable(\'te_log_arg_1\').GetFlagName] not placed', body)
 
     def test_seeded_after_the_landmarks_and_from_the_debug_event(self):
         on = squash(block(read("common/on_actions/monument_events_on_actions.txt"),
