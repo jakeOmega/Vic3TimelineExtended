@@ -7,6 +7,10 @@ way. Twenty such lines in twelve helpers printed garbled `TE_SELF_CHECK` names (
 migration rewrote them to read a record the effect keeps, a literal per argument, or the copies in
 `common/scripted_effects/te_debug_log_arg_effects.txt`. This keeps it that way.
 
+One exemption: the 1.15 probe's `TE_PROBE_115 c19_quoted_arg_*` lines
+(`common/scripted_effects/te_probe_115_effects.txt`) quote an argument on purpose, to read in game which way 1.15
+substitutes it (C19). A string that starts `TE_PROBE_115 c19_` is skipped (`EXEMPT`).
+
 Run: python3 test_debug_log_arguments.py
 """
 
@@ -19,6 +23,8 @@ SCAN = ("common", "events")
 # debug_log = "<string>": the string runs to its closing quote on the same line
 LINE = re.compile(r'\bdebug_log\s*=\s*"([^"\n]*)"')
 ARG = re.compile(r"\$[A-Za-z_][A-Za-z0-9_]*\$")
+# the C19 probe's lines, which quote an argument to test the substitution itself
+EXEMPT = "TE_PROBE_115 c19_"
 COPIES = ROOT / "common" / "scripted_effects" / "te_debug_log_arg_effects.txt"
 
 
@@ -31,6 +37,8 @@ def offenders(root=ROOT):
                 if line.lstrip().startswith("#"):
                     continue
                 for m in LINE.finditer(line):
+                    if m.group(1).startswith(EXEMPT):
+                        continue
                     for arg in ARG.findall(m.group(1)):
                         found.append((str(path.relative_to(root)), n, arg))
     return found
@@ -41,7 +49,8 @@ class TestDebugLogArguments(unittest.TestCase):
         self.assertEqual(offenders(), [], "print a stored record, a literal per argument, or te_log_args_set's copies")
 
     def test_the_scan_sees_one(self):
-        """The check itself: a quoted $X$ is found, a commented-out line and an unquoted argument are not."""
+        """The check itself: a quoted $X$ is found; a commented-out line, an unquoted argument and the C19 probe's
+        line are not."""
         import tempfile
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp) / "common" / "scripted_effects"
@@ -53,6 +62,7 @@ class TestDebugLogArguments(unittest.TestCase):
                 '\t# debug_log = "old $KEY$"\n'
                 '\tset_variable = { name = z value = flag:$KEY$ }\n'
                 '\tdebug_log = "fine [GetGlobalVariable(\'te_log_arg_1\').GetFlagName]"\n'
+                '\tdebug_log = "TE_PROBE_115 c19_quoted_arg_a kind=$KIND$"\n'
                 '}\n', encoding="utf-8")
             self.assertEqual(offenders(Path(tmp)), [("common/scripted_effects/x.txt", 2, "$CODE$")])
 
