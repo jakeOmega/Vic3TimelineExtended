@@ -422,6 +422,7 @@ ideology_anti_colonialist = {
 		law_colonial_exploitation = strongly_disapprove
 		law_frontier_colonization = disapprove
 		law_neocolonialism = neutral
+		law_internal_colonization = disapprove
 	}
 }
 
@@ -444,6 +445,7 @@ ideology_anti_colonialist_leader = {
 		law_colonial_exploitation = strongly_disapprove
 		law_frontier_colonization = disapprove
 		law_neocolonialism = neutral
+		law_internal_colonization = disapprove
 	}
 
 	country_trigger = {
@@ -567,6 +569,7 @@ ideology_optimist_transhumanist = {
 		law_algorithmic_governance = strongly_approve
 		law_liquid_democracy = approve
 		law_elder_council = neutral
+		law_labour_suffrage = neutral
 	}
 
 	lawgroup_bureaucracy = {
@@ -576,6 +579,7 @@ ideology_optimist_transhumanist = {
 		law_hereditary_bureaucrats = disapprove
 		law_communal_administration = neutral
 		law_contracted_administration = neutral
+		law_military_bureaucrats = neutral
 	}
 
 	lawgroup_internet_governance = {
@@ -781,6 +785,7 @@ ideology_corporate = {
 		law_elected_bureaucrats = disapprove
 		law_hereditary_bureaucrats = strongly_disapprove
 		law_automated_bureaucracy = approve
+		law_military_bureaucrats = disapprove
 	}
 
 	lawgroup_policing = {
@@ -1239,7 +1244,7 @@ ideology_custom_religion_social_democratic_economy = {
 }
 
 ideology_custom_religion_imperial_cult_economy = {
-	icon = "gfx/interface/icons/ideology_icons/authoritarian.dds"
+	icon = "gfx/interface/icons/ideology_icons/militarist.dds"
 
 	lawgroup_economic_system = {
 		law_cooperative_ownership = strongly_disapprove
@@ -1522,6 +1527,7 @@ ideology_custom_religion_traditionalist_society = {
 		law_national_guard = neutral
 		law_no_home_affairs = neutral
 		law_guaranteed_liberties = strongly_disapprove
+		law_extraordinary_commission = strongly_disapprove
 	}
 
 	lawgroup_migration = {
@@ -1629,6 +1635,7 @@ ideology_custom_religion_inclusive_society = {
 		law_national_guard = neutral
 		law_no_home_affairs = neutral
 		law_guaranteed_liberties = strongly_approve
+		law_extraordinary_commission = strongly_disapprove
 	}
 
 	lawgroup_migration = {
@@ -1647,7 +1654,7 @@ ideology_custom_religion_inclusive_society = {
 }
 
 ideology_custom_religion_totalitarian_society = {
-	icon = "gfx/interface/icons/ideology_icons/authoritarian.dds"
+	icon = "gfx/interface/icons/ideology_icons/militarist.dds"
 
 	lawgroup_citizenship = {
 		law_ethnostate = strongly_approve
@@ -1736,6 +1743,7 @@ ideology_custom_religion_totalitarian_society = {
 		law_national_guard = approve
 		law_no_home_affairs = disapprove
 		law_guaranteed_liberties = strongly_disapprove
+		law_extraordinary_commission = approve
 	}
 
 	lawgroup_migration = {
@@ -1843,6 +1851,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_national_guard = strongly_approve
 		law_no_home_affairs = neutral
 		law_guaranteed_liberties = approve
+		law_extraordinary_commission = strongly_disapprove
 	}
 
 	lawgroup_migration = {
@@ -1861,7 +1870,7 @@ ideology_custom_religion_meritocratic_society = {
 }
 
 ideology_custom_religion_imperial_cult_society = {
-	icon = "gfx/interface/icons/ideology_icons/authoritarian.dds"
+	icon = "gfx/interface/icons/ideology_icons/militarist.dds"
 
 	lawgroup_citizenship = {
 		law_ethnostate = neutral
@@ -1950,6 +1959,7 @@ ideology_custom_religion_imperial_cult_society = {
 		law_national_guard = approve
 		law_no_home_affairs = neutral
 		law_guaranteed_liberties = approve
+		law_extraordinary_commission = disapprove
 	}
 
 	lawgroup_migration = {
@@ -2057,6 +2067,7 @@ ideology_custom_religion_theocratic_society = {
 		law_national_guard = approve
 		law_no_home_affairs = neutral
 		law_guaranteed_liberties = disapprove
+		law_extraordinary_commission = strongly_disapprove
 	}
 
 	lawgroup_migration = {
@@ -2113,6 +2124,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_algorithmic_governance = disapprove
 		law_liquid_democracy = strongly_disapprove
 		law_elder_council = approve
+		law_labour_suffrage = strongly_disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2122,6 +2134,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_automated_bureaucracy = disapprove
 		law_contracted_administration = disapprove
 		law_communal_administration = disapprove
+		law_military_bureaucrats = neutral
 	}
 
 	lawgroup_privacy_rights = {
@@ -2211,6 +2224,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_algorithmic_governance = strongly_approve
 		law_liquid_democracy = strongly_disapprove
 		law_elder_council = disapprove
+		law_labour_suffrage = strongly_disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2220,6 +2234,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_automated_bureaucracy = strongly_approve
 		law_contracted_administration = disapprove
 		law_communal_administration = disapprove
+		law_military_bureaucrats = neutral
 	}
 
 	lawgroup_privacy_rights = {
@@ -2309,6 +2324,7 @@ ideology_custom_religion_republican_governance = {
 		law_algorithmic_governance = disapprove
 		law_liquid_democracy = approve
 		law_elder_council = disapprove
+		law_labour_suffrage = disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2318,6 +2334,7 @@ ideology_custom_religion_republican_governance = {
 		law_automated_bureaucracy = neutral
 		law_communal_administration = approve
 		law_contracted_administration = neutral
+		law_military_bureaucrats = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2415,6 +2432,7 @@ ideology_custom_religion_corporate_governance = {
 		law_algorithmic_governance = approve
 		law_liquid_democracy = disapprove
 		law_elder_council = disapprove
+		law_labour_suffrage = strongly_disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2424,6 +2442,7 @@ ideology_custom_religion_corporate_governance = {
 		law_automated_bureaucracy = approve
 		law_contracted_administration = strongly_approve
 		law_communal_administration = disapprove
+		law_military_bureaucrats = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2513,6 +2532,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_algorithmic_governance = disapprove
 		law_liquid_democracy = strongly_disapprove
 		law_elder_council = disapprove
+		law_labour_suffrage = strongly_disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2522,6 +2542,7 @@ ideology_custom_religion_imperial_cult_governance = {
 		law_automated_bureaucracy = disapprove
 		law_contracted_administration = disapprove
 		law_communal_administration = disapprove
+		law_military_bureaucrats = approve
 	}
 
 	lawgroup_privacy_rights = {
@@ -2611,6 +2632,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_algorithmic_governance = disapprove
 		law_liquid_democracy = disapprove
 		law_elder_council = neutral
+		law_labour_suffrage = strongly_disapprove
 	}
 
 	lawgroup_bureaucracy = {
@@ -2620,6 +2642,7 @@ ideology_custom_religion_theocratic_governance = {
 		law_automated_bureaucracy = disapprove
 		law_communal_administration = disapprove
 		law_contracted_administration = disapprove
+		law_military_bureaucrats = disapprove
 	}
 
 	lawgroup_privacy_rights = {
@@ -2689,6 +2712,7 @@ ideology_custom_religion_pacifist_outlook = {
 		law_national_militia = strongly_approve
 		law_mass_conscription = neutral
 		law_private_military_contractors = strongly_disapprove
+		law_revolutionary_guard = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2715,6 +2739,7 @@ ideology_custom_religion_pacifist_outlook = {
 		law_colonial_resettlement = disapprove
 		law_colonial_exploitation = disapprove
 		law_neocolonialism = neutral
+		law_internal_colonization = disapprove
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {
@@ -2737,6 +2762,7 @@ ideology_custom_religion_militarist_outlook = {
 		law_national_militia = disapprove
 		law_mass_conscription = strongly_approve
 		law_private_military_contractors = disapprove
+		law_revolutionary_guard = disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2763,6 +2789,7 @@ ideology_custom_religion_militarist_outlook = {
 		law_colonial_resettlement = strongly_approve
 		law_colonial_exploitation = strongly_approve
 		law_neocolonialism = neutral
+		law_internal_colonization = approve
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {
@@ -2785,6 +2812,7 @@ ideology_custom_religion_isolationist_outlook = {
 		law_national_militia = neutral
 		law_mass_conscription = disapprove
 		law_private_military_contractors = strongly_disapprove
+		law_revolutionary_guard = neutral
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2811,6 +2839,7 @@ ideology_custom_religion_isolationist_outlook = {
 		law_colonial_resettlement = disapprove
 		law_colonial_exploitation = strongly_disapprove
 		law_neocolonialism = neutral
+		law_internal_colonization = approve
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {
@@ -2833,6 +2862,7 @@ ideology_custom_religion_exploitative_outlook = {
 		law_national_militia = neutral
 		law_mass_conscription = neutral
 		law_private_military_contractors = approve
+		law_revolutionary_guard = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2859,6 +2889,7 @@ ideology_custom_religion_exploitative_outlook = {
 		law_colonial_resettlement = neutral
 		law_colonial_exploitation = approve
 		law_neocolonialism = approve
+		law_internal_colonization = neutral
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {
@@ -2881,6 +2912,7 @@ ideology_custom_religion_imperialist_outlook = {
 		law_national_militia = disapprove
 		law_mass_conscription = strongly_approve
 		law_private_military_contractors = neutral
+		law_revolutionary_guard = disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2907,6 +2939,7 @@ ideology_custom_religion_imperialist_outlook = {
 		law_colonial_resettlement = strongly_approve
 		law_colonial_exploitation = strongly_approve
 		law_neocolonialism = neutral
+		law_internal_colonization = approve
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {
@@ -2929,6 +2962,7 @@ ideology_custom_religion_theocratic_outlook = {
 		law_national_militia = approve
 		law_mass_conscription = disapprove
 		law_private_military_contractors = disapprove
+		law_revolutionary_guard = strongly_disapprove
 	}
 
 	lawgroup_ministry_of_foreign_affairs = {
@@ -2955,6 +2989,7 @@ ideology_custom_religion_theocratic_outlook = {
 		law_colonial_resettlement = disapprove
 		law_colonial_exploitation = disapprove
 		law_neocolonialism = neutral
+		law_internal_colonization = neutral
 	}
 
 	lawgroup_ministry_of_refugee_affairs = {

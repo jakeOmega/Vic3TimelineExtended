@@ -702,7 +702,7 @@ amendment_small_donor_matching = {
 			leader ?= {
 				OR = {
 					has_ideology = ideology:ideology_radical
-					has_ideology = ideology:ideology_social_democrat
+					has_ideology = ideology:ideology_state_socialist
 				}
 			}
 		}

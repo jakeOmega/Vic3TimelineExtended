@@ -1153,7 +1153,7 @@ social_tensions_events.13 = {
 		add_radicals = { value = very_small_radicals pop_type = academics }
 		ai_chance = {
 			base = 3
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 5 }
 		}
 	}
 
@@ -1226,7 +1226,7 @@ social_tensions_events.14 = {
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = {
 			base = 3
-			modifier = { trigger = { has_law = law_type:law_state_religion } add = 5 }
+			modifier = { trigger = { has_law_or_variant = law_type:law_state_religion } add = 5 }
 		}
 	}
 

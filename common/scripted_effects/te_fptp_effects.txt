@@ -113,8 +113,8 @@ te_fptp_mark_major_party = {
 		scope:te_fptp_country = { set_variable = te_fptp_major_religious_party }
 	}
 	else_if = {
-		limit = { is_party_type = social_democrat_party }
-		scope:te_fptp_country = { set_variable = te_fptp_major_social_democrat_party }
+		limit = { is_party_type = socialist_party }
+		scope:te_fptp_country = { set_variable = te_fptp_major_socialist_party }
 	}
 	else_if = {
 		limit = { is_party_type = green_party }
@@ -143,7 +143,7 @@ te_fptp_clear_major_marks = {
 	remove_variable = te_fptp_major_military_party
 	remove_variable = te_fptp_major_radical_party
 	remove_variable = te_fptp_major_religious_party
-	remove_variable = te_fptp_major_social_democrat_party
+	remove_variable = te_fptp_major_socialist_party
 	remove_variable = te_fptp_major_green_party
 	remove_variable = te_fptp_major_populist_party
 	remove_variable = te_fptp_major_technocratic_party

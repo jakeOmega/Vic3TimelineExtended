@@ -29,6 +29,7 @@ amendment_first_past_the_post = {
 		law_census_voting
 		law_universal_suffrage
 		law_anarchy
+		law_labour_suffrage # 1.15: calls elections, with parties
 	}
 
 	modifier = {

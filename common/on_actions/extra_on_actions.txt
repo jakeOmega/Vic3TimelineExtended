@@ -2932,9 +2932,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = rre_revival_1_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -2957,9 +2955,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = rre_revival_2_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -2981,9 +2977,7 @@ society_technology_events_on_action = {
 					has_technology_researched = civil_rights_movement
 					NOT = { has_variable = rre_revival_3_fired }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -3006,9 +3000,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = rre_revival_4_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -3031,9 +3023,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = rre_revival_5_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -3056,9 +3046,7 @@ society_technology_events_on_action = {
 					NOT = { has_variable = rre_revival_6_fired }
 					NOT = { has_law = law_type:law_state_atheism }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
@@ -3080,9 +3068,7 @@ society_technology_events_on_action = {
 					has_technology_researched = social_justice_movements
 					NOT = { has_variable = rre_revival_7_fired }
 					NOR = {
-						has_law = law_type:law_state_religion
-						has_law = law_type:law_millet_system
-						has_law = law_type:law_people_of_the_book
+						has_law_or_variant = law_type:law_state_religion
 					}
 					NOR = {
 						has_law = law_type:law_autocracy
