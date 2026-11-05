@@ -1,0 +1,160 @@
+﻿### Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md), first pass, 2026-11-05.
+### A journal entry's map shows (the engine switches to it from code) when its page opens, so a "show on the map" button
+### is a button that opens the page. Two are wired:
+###   - te_jmap_demog_map_button, in the Demographics tab's header (te_demog_window_body): Demographics has no entry, so
+###     it borrows je_te_map_host, which stays out of the journal until this button adds it (first click) and then
+###     opens it on life expectancy (once the entry is in the journal);
+###   - te_jmap_banking_map_button, in the Banking tab's header (te_banking_tab_body): opens je_banking_cycle.
+### Both sit left of the header's "?" (te_help_button, 10 in from the right; this one 45 in), hidden for an observer.
+###
+### te_jmap_test_strip is the play-test's harness (docs/testing/journal-map-modes-playtest.md), in debug mode only
+### (InDebugMode, the -debug_mode launch the console's `event` command already needs), on the Demographics tab above
+### its sections. It goes once the questions are answered.
+
+types te_map_widgets
+{
+	### The round map button: vanilla's States map mode icon on the small round button the "?" uses.
+	type te_map_button = button_icon_round {
+		blockoverride "size" {
+			size = { 29 29 }
+		}
+		blockoverride "icon" {
+			texture = "gfx/interface/icons/map_mode_icons/states.dds"
+		}
+	}
+
+	### Demographics. Two buttons in one place: Add while the host entry is out of the journal, Open once it is in.
+	### The add runs through a scripted GUI, which the engine applies after the click, so the same click cannot open
+	### an entry that does not exist yet; the test strip's one-click button checks whether it can.
+	type te_jmap_demog_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		te_map_button = {
+			visible = "[Not( GetScriptedGui('te_jmap_host_active_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			tooltip = "te_jmap_demog_button_add_tt"
+			onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		# The gate on a parent and the entry on the child, as vanilla's Meiji button has them, so the datacontext is
+		# never asked for an entry that is not there.
+		widget = {
+			size = { 29 29 }
+			visible = "[GetScriptedGui('te_jmap_host_active_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+
+			te_map_button = {
+				datacontext = "[GetPlayerJournalEntry('je_te_map_host')]"
+				tooltip = "te_jmap_demog_button_open_tt"
+				onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+			}
+		}
+	}
+
+	### Banking: every country holds the entry, so the button only opens it (vanilla's own pattern, states_panel.gui's
+	### Meiji domain button: the entry as datacontext, then OpenJournalEntryPanel).
+	type te_jmap_banking_map_button = widget {
+		size = { 29 29 }
+		parentanchor = right|vcenter
+		position = { -45 0 }
+		visible = "[Not( GetMetaPlayer.IsObserver )]"
+
+		te_map_button = {
+			datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
+			visible = "[JournalEntry.IsActive]"
+			tooltip = "te_jmap_banking_button_tt"
+			onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+		}
+	}
+
+	### The test strip. Each button is one check in the play-test list; its tooltip says what to watch.
+	type te_jmap_test_strip = flowcontainer {
+		visible = "[And( InDebugMode, Not( GetMetaPlayer.IsObserver ) )]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+		minimumsize = { 520 -1 }
+		maximumsize = { 520 -1 }
+
+		textbox = {
+			parentanchor = hcenter
+			autoresize = yes
+			multiline = yes
+			max_width = 500
+			align = center|nobaseline
+			text = "te_jmap_strip_heading"
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			spacing = 4
+
+			# Add the host and open it in the same click (no datacontext: the entry may not exist when this runs).
+			button = {
+				using = default_button
+				size = { 126 32 }
+				text = "te_jmap_strip_one_click"
+				tooltip = "te_jmap_strip_one_click_tt"
+				onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_te_map_host'))]"
+			}
+
+			# The activation-trigger route: set the variable only.
+			button = {
+				using = default_button
+				size = { 126 32 }
+				text = "te_jmap_strip_request"
+				tooltip = "te_jmap_strip_request_tt"
+				onclick = "[GetScriptedGui('te_jmap_request_host_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			# Close from outside the entry.
+			button = {
+				using = default_button
+				size = { 126 32 }
+				text = "te_jmap_strip_close"
+				tooltip = "te_jmap_strip_close_tt"
+				onclick = "[GetScriptedGui('te_jmap_close_host_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			}
+
+			# The contextless entry nobody is involved in.
+			button = {
+				using = default_button
+				size = { 126 32 }
+				datacontext = "[GetPlayerJournalEntry('je_te_map_hidden_world')]"
+				text = "te_jmap_strip_hidden"
+				tooltip = "te_jmap_strip_hidden_tt"
+				onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
+			}
+		}
+
+		flowcontainer = {
+			direction = horizontal
+			parentanchor = hcenter
+			spacing = 4
+
+			# Hover previews: vanilla's hidden journal entry map, then the mod's listed copy (gfx/map/map_modes/te_map_modes.txt).
+			button = {
+				using = default_button
+				size = { 254 32 }
+				text = "te_jmap_strip_hover_vanilla"
+				tooltip = "te_jmap_strip_hover_vanilla_tt"
+				onmousehierarchyenter = "[SetTempMapModeByKey('mm_journal_entry_map_data')]"
+				onmousehierarchyleave = "[RemoveTempMapMode]"
+			}
+
+			button = {
+				using = default_button
+				size = { 254 32 }
+				text = "te_jmap_strip_hover_mod"
+				tooltip = "te_jmap_strip_hover_mod_tt"
+				onmousehierarchyenter = "[SetTempMapModeByKey('mm_te_journal_entry_map')]"
+				onmousehierarchyleave = "[RemoveTempMapMode]"
+			}
+		}
+	}
+}

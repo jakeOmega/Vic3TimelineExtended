@@ -1,0 +1,45 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). The map buttons outside the
+# journal: the Demographics tab's header and the map test strip (gui/te_map_widgets.gui). The effects are in
+# common/scripted_effects/te_journal_map_effects.txt. The AI never uses these: the map is a player's view.
+
+# The Demographics tab's map button: add the host entry (or keep it) and show life expectancy.
+te_jmap_show_demographics_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { is_player = yes }
+	effect = {
+		te_jmap_open_host = { SEL = 3 }
+	}
+}
+
+# The test strip's activation-trigger route: set the variable and wait for the engine to activate the entry.
+te_jmap_request_host_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { is_player = yes }
+	effect = {
+		te_jmap_request_host = { SEL = 1 }
+	}
+}
+
+# The test strip's close: the same as the entry's own Close button, from outside the entry.
+te_jmap_close_host_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { has_variable = te_jmap_host_on }
+	effect = {
+		te_jmap_close_host = yes
+	}
+}
+
+# Read-only: whether the host entry is in the journal, so the map button can offer Open rather than Add.
+te_jmap_host_active_sgui = {
+	scope = country
+	is_shown = { has_journal_entry = je_te_map_host }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

@@ -1,0 +1,100 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). je_te_map_host's buttons: one
+# per map, each writing the selector its map_color branches on, and Close. Root: the entry's owner, the player's
+# country. The AI never holds the entry (only a player's button adds it), so every ai_chance is 0.
+
+te_jmap_pick_turmoil = {
+	name = "te_jmap_pick_turmoil"
+	desc = "te_jmap_pick_turmoil_desc"
+	visible = { always = yes }
+	selected = { var:te_jmap_sel ?= 1 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 1 }
+	}
+}
+
+te_jmap_pick_literacy = {
+	name = "te_jmap_pick_literacy"
+	desc = "te_jmap_pick_literacy_desc"
+	visible = { always = yes }
+	selected = { var:te_jmap_sel ?= 2 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 2 }
+	}
+}
+
+# The Demographics maps read the census's state figures, so they are offered only while the census runs.
+te_jmap_pick_life_expectancy = {
+	name = "te_jmap_pick_life_expectancy"
+	desc = "te_jmap_pick_life_expectancy_desc"
+	visible = { te_demog_cohorts_run = yes }
+	selected = { var:te_jmap_sel ?= 3 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 3 }
+	}
+}
+
+te_jmap_pick_fertility = {
+	name = "te_jmap_pick_fertility"
+	desc = "te_jmap_pick_fertility_desc"
+	visible = { te_demog_cohorts_run = yes }
+	selected = { var:te_jmap_sel ?= 4 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 4 }
+	}
+}
+
+te_jmap_pick_median_age = {
+	name = "te_jmap_pick_median_age"
+	desc = "te_jmap_pick_median_age_desc"
+	visible = { te_demog_cohorts_run = yes }
+	selected = { var:te_jmap_sel ?= 5 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 5 }
+	}
+}
+
+# The two test maps (docs/testing/journal-map-modes-playtest.md). They go once the questions are answered.
+te_jmap_pick_scope_probe = {
+	name = "te_jmap_pick_scope_probe"
+	desc = "te_jmap_pick_scope_probe_desc"
+	visible = { always = yes }
+	selected = { var:te_jmap_sel ?= 6 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 6 }
+	}
+}
+
+te_jmap_pick_refresh_tick = {
+	name = "te_jmap_pick_refresh_tick"
+	desc = "te_jmap_pick_refresh_tick_desc"
+	visible = { always = yes }
+	selected = { var:te_jmap_sel ?= 7 }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_set_selector = { SEL = 7 }
+	}
+}
+
+te_jmap_close = {
+	name = "te_jmap_close"
+	desc = "te_jmap_close_desc"
+	visible = { always = yes }
+	possible = { always = yes }
+	ai_chance = { value = 0 }
+	effect = {
+		te_jmap_close_host = yes
+	}
+}

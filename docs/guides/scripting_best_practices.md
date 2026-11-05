@@ -5405,3 +5405,17 @@ When a generator numbers its rows by position (Solar System Colonization's `gen_
 ### 1.15: new law variants, and what a variant takes from its parent
 
 1.15 adds four `parent =` variants: Okhrana and Third Section (of `law_secret_police`), Caesaropapism (of `law_state_religion`) and Official Nationality (of `law_subjecthood`), all for Russia. A variant takes its parent's ideology stances (vanilla's own comment: "Inherits ideological stances from parent") and nothing else: vanilla restates every modifier on each variant, and the mod's `INJECT:law_<parent>` lines don't reach it. So each parent INJECT needs a twin on each variant (cultural pull, Legislative Override Capacity, tourism, intelligence, colonial and census lines; `law_shinsengumi` was the precedent), a parent named in an `unlocking_laws` list needs its variants beside it (§ "Law Tests"), and a plain `has_law` read of the parent misses them. `gen_law_consistency.py` warns about a variant with no `VARIANT_CANDIDATE_GATES` row and leaves it out of the walk until it has one (the row is the variant's `is_visible`, without same-group mutex clauses).
+
+## Journal Entry Map Modes
+
+1.15's `map_color`, `map_color_second` (stripes) and `map_tooltip` on a journal entry run with **the state being painted
+as root**, once per state in the world. So `owner` is that state's country, not the player or the entry's owner: a map of
+the player's data, or a map whose look the player picks, needs a read every state can make. A global variable always
+works (and one player sets it for all); `scope:journal_entry.owner` may, and the Map Room's scope probe answers whether
+(`docs/testing/journal-map-modes-playtest.md`, check 3). `map_color` takes `if` / `else_if` and inline factor blocks
+(`factor = { value = this.turmoil multiply = 2 }`, vanilla's Forest of Bayonets); a branch that matches nothing leaves
+the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`. No `.gui` switches the map on: vanilla's
+`mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. There is
+no `remove_journal_entry` effect: an entry leaves the journal by concluding, or by `can_deactivate = yes` with its
+`possible` failing and `is_shown_when_inactive` false. Read stored variables only, never walk pops, until the play-test
+says how often the map is evaluated. The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.

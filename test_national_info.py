@@ -698,6 +698,11 @@ class ReadoutTest(unittest.TestCase):
             with self.subTest(tab=t.key):
                 if t.key == "strategic_reserve":
                     continue   # its tab_before_gate is the other-market note, which needs the entry's market
+                if t.key == "demographics":
+                    # its tab_before_gate is the debug-mode map test strip (te_jmap_test_strip, docs/testing/
+                    # journal-map-modes-playtest.md): it adds and opens the Map Room on the player's own country,
+                    # so another country's tab in National Info has nothing to show for it
+                    continue
                 self.assertIsNotNone(t.readout, f"{t.key}: its frame draws something before the gate")
 
 
