@@ -150,7 +150,16 @@ _party_catalog_cache: tuple[ModState, list[dict]] | None = None
 LOC_KEY_FAMILIES: dict[str, list[tuple[str, str]]] = {
     "Treaty Articles":   [("name", ""), ("desc", "_desc"), ("article_short_desc", "_article_short_desc"), ("effects_desc", "_effects_desc")],
     "Decisions":         [("name", ""), ("desc", "_desc")],
-    "Journal Entries":   [("name", ""), ("desc", "_desc"), ("reason", "_reason"), ("goal", "_goal")],
+    # 1.15: `_concluded` is the static name a concluded entry shows when its
+    # name reads scoped data (journal_entries.md); the four conclusion texts
+    # follow the converter's naming (vanilla's own custom keys). The keys an
+    # entry's outcomes actually name are added from its body (_loc_keys_for).
+    "Journal Entries":   [("name", ""), ("desc", "_desc"), ("reason", "_reason"), ("goal", "_goal"),
+                          ("concluded", "_concluded"),
+                          ("complete_conclusion", "_complete_conclusion_desc"),
+                          ("fail_conclusion", "_fail_conclusion_desc"),
+                          ("timeout_conclusion", "_timeout_conclusion_desc"),
+                          ("invalid_conclusion", "_invalid_conclusion_desc")],
     "Decrees":           [("name", ""), ("desc", "_desc")],
     "Diplomatic Actions":[("name", ""), ("desc", "_desc")],
     "Diplomatic Plays":  [("name", ""), ("desc", "_desc"), ("goal", "_goal")],
@@ -211,9 +220,12 @@ FIELD_TO_METHODS: dict[str, set[str]] = {
 }
 
 
-def _loc_keys_for(etype: str, eid: str, loc_dict: dict[str, str]) -> dict:
+def _loc_keys_for(etype: str, eid: str, loc_dict: dict[str, str], body=None) -> dict:
     """Pure helper for the /loc-keys endpoint — no ms dependency, so unit tests
-    can pass a hand-built loc dict."""
+    can pass a hand-built loc dict. With the entity's parsed `body`, a 1.15
+    journal entry also lists the keys its outcomes name, as
+    `outcome<N>_header`, `outcome<N>_effect_header` and
+    `outcome<N>_conclusion_desc`."""
     family = LOC_KEY_FAMILIES.get(etype)
     if family is None:
         return {
@@ -222,8 +234,14 @@ def _loc_keys_for(etype: str, eid: str, loc_dict: dict[str, str]) -> dict:
             "hint": "Add an entry to LOC_KEY_FAMILIES in mod_state_server.py to extend.",
         }
     keys: dict[str, dict] = {}
-    for role, suffix in family:
-        full_key = eid + suffix
+    roles = [(role, eid + suffix) for role, suffix in family]
+    if etype == "Journal Entries" and body is not None:
+        from loc_coverage_audit import je_outcomes
+        for i, outcome in enumerate(je_outcomes(body), 1):
+            for fld in ("header", "effect_header", "conclusion_desc"):
+                if outcome[fld]:
+                    roles.append((f"outcome{i}_{fld}", outcome[fld]))
+    for role, full_key in roles:
         found = full_key in loc_dict
         keys[role] = {
             "key": full_key,
@@ -7159,7 +7177,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "Usage: /loc-keys/<EntityType>/<id>",
                 known_types=sorted(LOC_KEY_FAMILIES.keys()),
             )
-        result = _loc_keys_for(parts[0], parts[1], ms.localization)
+        parser = ms.mod_parsers.get(parts[0])
+        body = parser.data.get(parts[1]) if parser is not None else None
+        result = _loc_keys_for(parts[0], parts[1], ms.localization, body)
         # The helper reports an unseeded entity type in-band (its own callers
         # rely on that shape); surface it as a 404 over HTTP. (#254)
         if isinstance(result, dict) and "error" in result:

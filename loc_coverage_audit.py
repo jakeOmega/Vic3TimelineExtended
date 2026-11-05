@@ -25,7 +25,13 @@ goods, government types, game concepts,
 company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions (name
 plus the notification family their flags select), pop needs, decisions,
-amendments, messages, treaty articles, events. Skips scripted_effects/triggers, on_actions, modifier
+amendments, messages, treaty articles, events, glossary entries and regional
+exile pools (1.15). Journal entry outcomes (1.15) get a structural check of
+their own, on every journal entry the mod defines or overrides (a `REPLACE:` of
+a vanilla one included): each outcome names a `conclusion_desc`, and each one
+not flagged `hidden` a `header` and an `effect_header` (journal_entries.md:
+"required"), and every key it names resolves. An entry with no outcome passes.
+Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -108,6 +114,60 @@ def _je_keys(name: str, body) -> list[tuple[str, bool, str]]:
         (name, True, "title"),
         (f"{name}_reason", reason_required, "reason"),
     ]
+
+
+def _entries(value) -> list:
+    """A field's entries, unwrapped: one per appearance (a repeated key parses
+    as a list of `(op, value)` tuples, a single one as one tuple)."""
+    if value is None:
+        return []
+    items = value if isinstance(value, list) else [value]
+    return [_unwrap(v) for v in items]
+
+
+def je_outcomes(body) -> list[dict]:
+    """A 1.15 journal entry's outcomes, in order: for each, `hidden` (its
+    `flags` hold `hidden`) and the keys it names, `header`, `effect_header`
+    and `conclusion_desc` (None when the field is absent). Shared with the
+    server's /loc-keys."""
+    body = _unwrap(body)
+    if not isinstance(body, dict):
+        return []
+    out = []
+    for outcome in _entries(body.get("outcome")):
+        if not isinstance(outcome, dict):
+            continue
+        flags = _unwrap(outcome.get("flags"))
+        if isinstance(flags, str):
+            flags = [flags]
+        entry = {"hidden": isinstance(flags, list) and "hidden" in flags}
+        for fld in ("header", "effect_header", "conclusion_desc"):
+            value = _strip_quotes(_unwrap(outcome.get(fld))) if fld in outcome else None
+            entry[fld] = value if isinstance(value, str) and value else None
+        out.append(entry)
+    return out
+
+
+def _je_outcome_problems(body, has_loc: Callable[[str], bool]) -> list[str]:
+    """What a journal entry's outcomes lack: a missing field as `outcome N: no
+    <field>`, a named key no loc defines as the key itself."""
+    problems: list[str] = []
+    for i, outcome in enumerate(je_outcomes(body), 1):
+        fields = ["conclusion_desc"]
+        if not outcome["hidden"]:
+            fields = ["header", "effect_header", "conclusion_desc"]
+        for fld in fields:
+            key = outcome[fld]
+            if key is None:
+                problems.append(f"outcome {i}: no {fld}")
+            elif not has_loc(key) and key not in problems:
+                problems.append(key)
+        # A hidden outcome may still name a header; it must resolve too.
+        for fld in ("header", "effect_header"):
+            key = outcome[fld]
+            if outcome["hidden"] and key and not has_loc(key) and key not in problems:
+                problems.append(key)
+    return problems
 
 
 def _message_keys(name: str, body) -> list[tuple[str, bool, str]]:
@@ -210,6 +270,13 @@ def _institution_keys(name: str, body) -> list[tuple[str, bool, str]]:
     return [(name, True, "name"), (f"{name}_desc", True, "desc")]
 
 
+def _glossary_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """1.15 glossary entries need both `<key>` and `<key>_desc`
+    (common/glossary/glossary.md): the tooltip and the encyclopedia show
+    both."""
+    return [(name, True, "name"), (f"{name}_desc", True, "desc")]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -275,6 +342,9 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Decisions":              _name_and_desc,
     "Amendments":             _name_and_desc,
     "Treaty Articles":        _treaty_article_keys,
+    # 1.15. An exile pool's name is its tab in the Invite Exile screen.
+    "Glossary":               _glossary_keys,
+    "Regional Exile Pools":   _simple_name,
 }
 
 
@@ -310,8 +380,13 @@ _DIR_MAP: dict[str, str] = {
     "Decisions":              "common/decisions",
     "Amendments":             "common/amendments",
     "Treaty Articles":        "common/treaty_articles",
+    "Glossary":               "common/glossary",
+    "Regional Exile Pools":   "common/regional_exile_pools",
     "Events":                 "events",
 }
+
+# The structural check's category (_scan_je_outcomes).
+JE_OUTCOMES = "Journal Entry Outcomes"
 
 
 def _event_loc_keys(event_id: str, event_body) -> list[tuple[str, bool, str]]:
@@ -356,16 +431,23 @@ def _event_loc_keys(event_id: str, event_body) -> list[tuple[str, bool, str]]:
 _OPENING_LINE_RE = re.compile(
     r"^[ \t]*(?P<name>[A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{(?P<comment>\s*#.*)?\s*$"
 )
+# The same, for an entity the mod overrides: `REPLACE:je_x = {` and kin.
+_OVERRIDE_OPENING_LINE_RE = re.compile(
+    r"^[ \t]*(?:(?:TRY_)?(?:REPLACE|INJECT)(?:_OR_CREATE)?:)?"
+    r"(?P<name>[A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{(?P<comment>\s*#.*)?\s*$"
+)
 
 
 def _build_entity_locations(
-    mod_path: str, dir_rel: str, entity_names: set[str]
+    mod_path: str, dir_rel: str, entity_names: set[str], overrides: bool = False,
 ) -> dict[str, tuple[str, int, str | None]]:
     """For each entity name, find (rel_path, line, opening_line_comment).
 
     Walks `<mod_path>/<dir_rel>` recursively. Comment carries the trailing
-    `# ...` on the entity-opening line, used for REVIEWED suppression.
+    `# ...` on the entity-opening line, used for REVIEWED suppression. With
+    `overrides`, a `REPLACE:` / `INJECT:` opening line counts as well.
     """
+    opening_re = _OVERRIDE_OPENING_LINE_RE if overrides else _OPENING_LINE_RE
     abs_dir = os.path.join(mod_path, dir_rel)
     locations: dict[str, tuple[str, int, str | None]] = {}
     if not os.path.isdir(abs_dir):
@@ -379,7 +461,7 @@ def _build_entity_locations(
             try:
                 with open(abs_p, encoding="utf-8-sig", errors="replace") as fh:
                     for i, line in enumerate(fh, start=1):
-                        m = _OPENING_LINE_RE.match(line.rstrip("\n"))
+                        m = opening_re.match(line.rstrip("\n"))
                         if not m:
                             continue
                         name = m.group("name")
@@ -443,6 +525,38 @@ def _scan_category(
     return flags, files_seen
 
 
+def _scan_je_outcomes(ms, mod_path: str) -> tuple[list[LocFlag], set[str]]:
+    """The outcome check, over every journal entry the mod defines or
+    overrides: new ones, and vanilla ones whose loaded body differs from
+    vanilla's (a `REPLACE:` restates a vanilla entry with the mod's
+    outcomes, which the engine reads like any other)."""
+    category = "Journal Entries"
+    base = ms.base_parsers.get(category)
+    mod = ms.mod_parsers.get(category)
+    if mod is None:
+        return [], set()
+    base_data = base.data if base else {}
+    names = {
+        k for k, v in mod.data.items()
+        if k not in base_data or base_data[k] != v
+    }
+    problems = {}
+    for name in sorted(names):
+        found = _je_outcome_problems(mod.data.get(name), ms.has_localization)
+        if found:
+            problems[name] = found
+    if not problems:
+        return [], set()
+    locations = _build_entity_locations(mod_path, _DIR_MAP[category], set(problems), overrides=True)
+    flags = []
+    for name, found in problems.items():
+        if name not in locations:
+            continue
+        rel_p, line, comment = locations[name]
+        flags.append(LocFlag(JE_OUTCOMES, name, found, rel_p, line, _parse_reviewed(comment)))
+    return flags, {loc[0] for loc in locations.values()}
+
+
 def audit(ms, mod_path: str | None = None) -> AuditResult:
     if mod_path is None:
         from path_constants import mod_path as _default
@@ -462,6 +576,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
     flags, files_seen = _scan_category(ms, mod_path, "Events", None)
     if flags:
         by_category["Events"] = len(flags)
+    all_flags.extend(flags)
+    all_files |= files_seen
+
+    flags, files_seen = _scan_je_outcomes(ms, mod_path)
+    if flags:
+        by_category[JE_OUTCOMES] = len(flags)
     all_flags.extend(flags)
     all_files |= files_seen
 
@@ -506,7 +626,12 @@ def render_report(result: AuditResult) -> str:
         "message name; for diplomatic actions the `_action_notification_*`",
         "keys (the `_third_party_*` pair when `should_notify_third_parties =",
         "yes`, the `_break_*` pairs with a `pact`) or, for",
-        "`requires_approval = yes`, the `_proposal_*` keys.",
+        "`requires_approval = yes`, the `_proposal_*` keys; for a glossary",
+        "entry `glossary_x` and `glossary_x_desc`. A **Journal Entry",
+        "Outcomes** flag is a 1.15 outcome with no `conclusion_desc` (or, not",
+        "`hidden`, no `header` / `effect_header`), listed as `outcome N: no",
+        "<field>`, or naming a key no loc defines; it covers the mod's",
+        "`REPLACE:`s of vanilla entries too.",
         "",
         "Suppress an intentional missing key with a same-line comment on the",
         "entity's opening line:",
