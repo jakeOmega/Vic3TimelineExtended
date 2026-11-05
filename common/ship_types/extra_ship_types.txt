@@ -176,9 +176,12 @@ ship_type_asw_destroyer = {
 
 ### NUCLEAR SUBMARINE — era 7, advanced_submarine_technology
 ### Pre-update mod stats: 120 atk / 80 def — silent-killer sub w/ unmatched anti-capital damage
+### AI category: the three submarines take ai_ship_category_submarines, the category vanilla 1.15
+### moved its own submarine into (from torpedo_craft): a navy wants them only under Jeune Ecole or
+### Merchant Navy, and they sail in its submarine_raiding_fleet (00_default_strategy.txt).
 ship_type_nuclear_submarine = {
 	ship_group = ship_group_torpedo_craft
-	ai_ship_category = ai_ship_category_torpedo_craft
+	ai_ship_category = ai_ship_category_submarines
 	modification_construction_cost = 140
 
 	is_obsolete = {
@@ -1553,7 +1556,7 @@ ship_type_networked_air_defense_cruiser = {
 ### Raider. AIP/stealth boat. Successor to nuclear_submarine.
 ship_type_stealth_attack_submarine = {
 	ship_group = ship_group_torpedo_craft
-	ai_ship_category = ai_ship_category_torpedo_craft
+	ai_ship_category = ai_ship_category_submarines
 	modification_construction_cost = 180
 
 	is_obsolete = {
@@ -1642,7 +1645,7 @@ ship_type_stealth_attack_submarine = {
 ### Raider, terminal. Unmanned drone wolfpack — very low crew, very high crit.
 ship_type_autonomous_swarm_submarine = {
 	ship_group = ship_group_torpedo_craft
-	ai_ship_category = ai_ship_category_torpedo_craft
+	ai_ship_category = ai_ship_category_submarines
 	modification_construction_cost = 220
 
 	modifier = {
