@@ -327,7 +327,7 @@ rule](#machine-administration-and-machine-rule).
 
 | | Contracted Administration | Communal Administration | Automated Bureaucracy |
 |---|---|---|---|
-| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | From Socialism, with a Council Republic or Factory Councils (the base game's rule), or under Anarchy or Collective Governance; not with Technocracy, Elder Council or Algorithmic Governance | From AI Agents |
+| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | From Socialism; in a Council Republic or with Factory Councils (the base game's rule), or under Anarchy or Collective Governance; not with Technocracy, Elder Council or Algorithmic Governance | From AI Agents |
 | Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Communal Representatives: 250 bureaucrats and 500 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
 | You gain | Institutions change size 25% faster; capitalists +15% political strength | Bureaucracy cost from population −25%; government wages −15% | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
 | You pay | Institutions cost 5% more bureaucracy | Legislative Override Capacity −2 | Nothing beyond the staffing |
