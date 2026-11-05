@@ -51,7 +51,7 @@ class _CountryEngine(_OwnerEngine):
 
     def _test(self, key, op, arg):
         if key == "has_law_or_variant":
-            variants = {"law_state_religion": {"law_millet_system", "law_people_of_the_book"}}.get(arg[9:], set())
+            variants = {"law_state_religion": {"law_millet_system", "law_people_of_the_book", "law_caesaropapism"}}.get(arg[9:], set())
             return arg[9:] in self.laws or bool(variants & self.laws)
         if key == "exists" and arg == "global_var:ch_rank_1":
             return self.hegemon is not None
@@ -122,7 +122,7 @@ class TestFamilyLimitationModel(unittest.TestCase):
                              ({"law_total_separation"}, 1.5), ({"law_state_atheism"}, 1.5)):
             with self.subTest(laws=sorted(laws)):
                 self.assertAlmostEqual(M.fl_target(0.0, 1.0, laws, literacy_mult=_church(laws)), P.FL_LITERACY * weight)
-        for variant in ("law_millet_system", "law_people_of_the_book"):
+        for variant in ("law_millet_system", "law_people_of_the_book", "law_caesaropapism"):
             self.assertEqual(_church({variant}), _church({"law_state_religion"}), f"{variant} carries its parent's")
         self.assertEqual(M.fl_church(-1.5), 0.0, "the weight is at least 0")
         self.assertEqual(M.fl_target(1.0, 1.0, heir | {"law_total_separation"},
