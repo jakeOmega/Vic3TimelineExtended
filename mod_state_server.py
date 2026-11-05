@@ -3896,8 +3896,9 @@ def _engine_docs_render_blockers(
     vanilla_parsed snapshot and the installed game (the digest publishes a
     patch before the game updates), the audits would judge the mod by names the
     game doesn't have yet. Either way the audits that read those files change
-    their verdicts. Rendering from a version in between still goes ahead: the
-    mod's own modifier types are unioned in.
+    their verdicts. Rendering from a version in between still goes ahead. The
+    files list the engine's entries only: render_all drops the mod's own
+    modifier types and custom localization, which the endpoints still serve.
 
     `reference_versions` is (snapshot game_version, live game version), read
     by `_vanilla_reference_versions` when not given; with neither known the
