@@ -6,7 +6,7 @@ checks don't gate the merge (CLAUDE.md, "In-game checks"); this list collects
 what only the game can show. Phases 1 (the split) and 2 (the AI wave) are in.
 Phase 3's items add their own checks here as they land.
 
-Grep `debug.log` for `TE_ERA13_TECH_REPAIR` after loading an old save.
+The old-save repair (`TE_ERA13_TECH_REPAIR`) was retired in the vanilla 1.15 migration: saves from 1.14.5 don't carry over.
 
 ## Phase 1: the split
 
