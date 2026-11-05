@@ -93,6 +93,8 @@ absorbed part, and before or after the merge; and what colonizing a decentralize
 
 **2026-10-25: a civil war's winner.** `monument_merge_kept` read BROKEN when the Haitian Liberal Revolt won (1861): Sans Souci Palace's shadow was lost (5 levels recorded, no building in Haiti). The revolt's part of the state held a copy of the building, which the stray pass removed while the loser's part still existed. The two parts then merged and the loser's part went, and the shadow looked for its last owner's part (`gm_sh_owner`): the loser, dead. `gm_repair_after_civil_war` now repoints a dead loser's shadows' last owner to the winner too, so the winner's merged part raises the monument again (`gm_state_raise_orphan`: a new building, its records put back). Check: a revolt that takes part of a monument's state and wins (Haiti, or the Paris Commune); the monument stands again in the winner's state within a month, and `monument_merge_kept` reads OK.
 
+**2026-11-05: the first 1.15 game.** `monument_merge_kept` read BROKEN in February 1848 (6 levels, no building in the region), a week after the stray pass removed a revolt's copy of a building. The saves either side show no monument missing: every building, shadow and landmark of 1848.1.1 is still there in 1849.1.1, so the shadow lost was made and dropped within the month. The log line doesn't name the monument; issue #1409 has the evidence and the next steps.
+
 ## Dedicate (owner, 2026-10-18)
 
 | Check | Expect | If it fails |
