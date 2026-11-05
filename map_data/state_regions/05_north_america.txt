@@ -201,7 +201,6 @@ STATE_IDAHO = {
     arable_land = 60
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" }
     capped_resources = {
-        building_copper_mine = 6
         building_logging_camp = 16
     }
     min_cold_effect = 0.04
@@ -215,6 +214,11 @@ STATE_IDAHO = {
     resource = {
         type = "building_phosphate_mine"
         undiscovered_amount = 45
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -293,7 +297,6 @@ STATE_MONTANA = {
     capped_resources = {
         building_coal_mine = 80
         building_iron_mine = 33
-        building_copper_mine = 12
         building_logging_camp = 17
     }
     resource = {
@@ -306,6 +309,11 @@ STATE_MONTANA = {
     resource = {
         type = "building_platinum_group_metals_mine"
         undiscovered_amount = 80
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 12
     }
 }
 
@@ -577,11 +585,15 @@ STATE_MICHIGAN = {
     capped_resources = {
         building_iron_mine = 60
         building_sulfur_mine = 32
-        building_copper_mine = 36
         building_logging_camp = 50
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.44
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 36
+    }
 }
 
 STATE_OHIO = {
@@ -641,11 +653,15 @@ STATE_TENNESSEE = {
     arable_resources = { "building_maize_farm" "building_livestock_ranch" "building_cotton_plantation" "building_tobacco_plantation" }
     capped_resources = {
         building_iron_mine = 30
-        building_copper_mine = 6
         building_logging_camp = 17
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.18
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_MISSISSIPPI = {
@@ -1016,11 +1032,15 @@ STATE_VERMONT = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_tobacco_plantation" }
     capped_resources = {
         building_iron_mine = 18
-        building_copper_mine = 6
         building_logging_camp = 14
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.43
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_MAINE = {
@@ -1080,7 +1100,6 @@ STATE_UTAH = {
     arable_resources = { "building_maize_farm" "building_livestock_ranch" }
     capped_resources = {
         building_iron_mine = 30
-        building_copper_mine = 615
         building_logging_camp = 6
     }
     resource = {
@@ -1089,6 +1108,12 @@ STATE_UTAH = {
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.45
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 609
+        discovered_amount = 6
+    }
 
     resource = {
         type = "building_industrial_mineral_salt_mine"
@@ -1154,12 +1179,17 @@ STATE_ONTARIO = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_tobacco_plantation" "building_vineyard" }
     capped_resources = {
         building_sulfur_mine = 48
-        building_copper_mine = 370
         building_logging_camp = 90
     }
     resource = {
         type = "building_oil_rig"
         undiscovered_amount = 60
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 364
+        discovered_amount = 6
     }
 
     resource = {
@@ -1219,7 +1249,6 @@ STATE_QUEBEC = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_tobacco_plantation" }
     capped_resources = {
         building_iron_mine = 60
-        building_copper_mine = 6
         building_logging_camp = 100
         building_whaling_station = 4
         building_fishing_wharf = 8
@@ -1233,6 +1262,11 @@ STATE_QUEBEC = {
     resource = {
         type = "building_nickel_cobalt_mine"
         undiscovered_amount = 30
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3045
     blockade_locator = {
@@ -1262,7 +1296,11 @@ STATE_NEWFOUNDLAND = {
         building_logging_camp = 24
         building_whaling_station = 6
         building_fishing_wharf = 10
-        building_copper_mine = 615
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 615
     }
     naval_exit_id = 3071
     min_cold_effect = 0.02
@@ -1308,7 +1346,6 @@ STATE_BRITISH_COLUMBIA = {
     capped_resources = {
         building_coal_mine = 28
         building_sulfur_mine = 36
-        building_copper_mine = 285
         building_logging_camp = 90
         building_whaling_station = 6
         building_fishing_wharf = 9
@@ -1317,6 +1354,12 @@ STATE_BRITISH_COLUMBIA = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 8
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 281
+        discovered_amount = 4
     }
     naval_exit_id = 3154
     min_cold_effect = 0.00
@@ -1540,7 +1583,6 @@ STATE_ARIZONA = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" }
     capped_resources = {
         building_iron_mine = 21
-        building_copper_mine = 615
         building_logging_camp = 2
     }
     resource = {
@@ -1550,6 +1592,12 @@ STATE_ARIZONA = {
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.15
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 597
+        discovered_amount = 18
+    }
 }
 
 STATE_NEW_MEXICO = {
@@ -1566,7 +1614,6 @@ STATE_NEW_MEXICO = {
     capped_resources = {
         building_coal_mine = 20
         building_logging_camp = 6
-        building_copper_mine = 6
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.15
@@ -1574,6 +1621,11 @@ STATE_NEW_MEXICO = {
     resource = {
         type = "building_potash_mine"
         undiscovered_amount = 50
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -1634,7 +1686,6 @@ STATE_SONORA = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" }
     capped_resources = {
         building_iron_mine = 27
-        building_copper_mine = 475
         building_logging_camp = 4
         building_fishing_wharf = 7
     }
@@ -1642,6 +1693,12 @@ STATE_SONORA = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 6
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 469
+        discovered_amount = 6
     }
     naval_exit_id = 3153
     min_cold_effect = 0.00
@@ -1705,12 +1762,16 @@ STATE_DURANGO = {
     arable_resources = { "building_maize_farm" "building_livestock_ranch" }
     capped_resources = {
         building_iron_mine = 17
-        building_copper_mine = 6
         building_logging_camp = 4
         building_fishing_wharf = 5
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.04
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_SINALOA = {
@@ -1980,10 +2041,15 @@ STATE_BAJA_CALIFORNIA = {
     arable_land = 20
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_coffee_plantation" "building_cotton_plantation" "building_tobacco_plantation" "building_vineyard" }
     capped_resources = {
-        building_copper_mine = 170
         building_logging_camp = 2
         building_fishing_wharf = 6
         building_whaling_station = 4
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 164
+        discovered_amount = 6
     }
     naval_exit_id = 3153
     min_cold_effect = 0.00

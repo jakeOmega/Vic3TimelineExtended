@@ -1084,12 +1084,17 @@ STATE_KATANGA = {
     arable_resources = { "building_millet_farm" "building_livestock_ranch" "building_coffee_plantation" "building_cotton_plantation" "building_dye_plantation" "building_tea_plantation" "building_sugar_plantation" "building_banana_plantation" }
     capped_resources = {
         building_iron_mine = 27
-        building_copper_mine = 800
         building_logging_camp = 18
     }
     resource = {
         type = "building_rubber_plantation"
         undiscovered_amount = 20
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 770
+        discovered_amount = 30
     }
 
     resource = {
@@ -1145,12 +1150,17 @@ STATE_ZAMBIA = {
     capped_resources = {
         building_coal_mine = 36
         building_lead_mine = 33
-        building_copper_mine = 475
         building_logging_camp = 17
     }
     resource = {
         type = "building_rubber_plantation"
         undiscovered_amount = 20
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 457
+        discovered_amount = 18
     }
 }
 
@@ -1232,7 +1242,6 @@ STATE_NAMAQUALAND = {
     arable_resources = { "building_livestock_ranch" }
     capped_resources = {
         building_coal_mine = 32
-        building_copper_mine = 6
         building_logging_camp = 4
         building_fishing_wharf = 7
     }
@@ -1240,6 +1249,11 @@ STATE_NAMAQUALAND = {
     resource = {
         type = "building_industrial_mineral_salt_mine"
         undiscovered_amount = 65
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3104
     min_cold_effect = 0.00

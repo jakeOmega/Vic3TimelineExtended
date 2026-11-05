@@ -321,7 +321,6 @@ STATE_EASTERN_CUBA = {
         building_iron_mine = 21
         building_lead_mine = 4
         building_sulfur_mine = 3
-        building_copper_mine = 6
         building_logging_camp = 8
         building_fishing_wharf = 3
     }
@@ -334,6 +333,11 @@ STATE_EASTERN_CUBA = {
     resource = {
         type = "building_nickel_cobalt_mine"
         undiscovered_amount = 95
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3026
     min_cold_effect = 0.00

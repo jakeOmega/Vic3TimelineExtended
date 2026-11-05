@@ -15,7 +15,6 @@
         building_coal_mine = 84
         building_iron_mine = 96
         building_lead_mine = 81
-        building_copper_mine = 6
         building_gold_mine = 2
         building_logging_camp = 27
     }
@@ -26,6 +25,11 @@
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.67
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_TOMSK = {
@@ -112,7 +116,6 @@ STATE_UPPER_YENISEYSK = {
     capped_resources = {
         building_coal_mine = 15
         building_iron_mine = 10
-        building_copper_mine = 6
         building_logging_camp = 48
     }
     min_cold_effect = 0.17
@@ -126,6 +129,11 @@ STATE_UPPER_YENISEYSK = {
     resource = {
         type = "building_platinum_group_metals_mine"
         undiscovered_amount = 125
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -261,7 +269,6 @@ STATE_TRANS_BAIKAL = {
         building_lead_mine = 28
         building_sulfur_mine = 44
         building_logging_camp = 24
-        building_copper_mine = 615
     }
     resource = {
         type = "building_oil_rig"
@@ -269,6 +276,11 @@ STATE_TRANS_BAIKAL = {
     }
     min_cold_effect = 0.05
     max_cold_effect = 0.69
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 615
+    }
 }
 
 STATE_IRKUTSK = {

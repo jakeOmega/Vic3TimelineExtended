@@ -921,7 +921,6 @@ STATE_SYRDARYA = {
     capped_resources = {
         building_iron_mine = 15
         building_lead_mine = 60
-        building_copper_mine = 6
         building_logging_camp = 6
     }
     min_cold_effect = 0.00
@@ -930,6 +929,11 @@ STATE_SYRDARYA = {
     resource = {
         type = "building_phosphate_mine"
         undiscovered_amount = 20
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -1357,7 +1361,6 @@ STATE_CHELYABINSK = {
     capped_resources = {
         building_iron_mine = 95
         building_coal_mine = 25
-        building_copper_mine = 6
         building_logging_camp = 16
         building_gold_mine = 3
     }
@@ -1368,6 +1371,11 @@ STATE_CHELYABINSK = {
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.63
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 

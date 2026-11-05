@@ -62,11 +62,15 @@ STATE_ARMENIA = {
     capped_resources = {
         building_iron_mine = 27
         building_lead_mine = 21
-        building_copper_mine = 6
         building_logging_camp = 2
     }
     min_cold_effect = 0.08
     max_cold_effect = 0.55
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_AZERBAIJAN = {
@@ -339,10 +343,14 @@ STATE_HERAT = {
     capped_resources = {
         building_iron_mine = 6
         building_lead_mine = 8
-        building_copper_mine = 4
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.14
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_BALKH = {
@@ -417,11 +425,15 @@ STATE_KABUL = {
     capped_resources = {
         building_coal_mine = 6
         building_iron_mine = 10
-        building_copper_mine = 4
         building_logging_camp = 4
     }
     min_cold_effect = 0.08
     max_cold_effect = 0.50
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_BALUCHISTAN = {
@@ -439,9 +451,13 @@ STATE_BALUCHISTAN = {
     capped_resources = {
         building_iron_mine = 20
         building_lead_mine = 10
-        building_copper_mine = 4
         building_logging_camp = 1
         building_fishing_wharf = 5
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3048
     min_cold_effect = 0.00
@@ -462,10 +478,14 @@ STATE_LHASA = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_logging_camp = 20
-        building_copper_mine = 370
     }
     min_cold_effect = 0.32
     max_cold_effect = 0.85
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 370
+    }
 }
 
 STATE_NGARI = {

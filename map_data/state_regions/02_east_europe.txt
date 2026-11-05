@@ -32,11 +32,15 @@ STATE_LOWER_SILESIA = {
         building_iron_mine = 20
         building_lead_mine = 4
         building_sulfur_mine = 9
-        building_copper_mine = 10
         building_logging_camp = 10
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.52
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 10
+    }
 }
 
 STATE_UPPER_SILESIA = {
@@ -56,10 +60,14 @@ STATE_UPPER_SILESIA = {
         building_lead_mine = 50
         building_sulfur_mine = 31
         building_logging_camp = 4
-        building_copper_mine = 475
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.50
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 475
+    }
 }
 
 STATE_GREATER_POLAND = {
@@ -226,7 +234,6 @@ STATE_CENTRAL_HUNGARY = {
     capped_resources = {
         building_coal_mine = 20
         building_iron_mine = 30
-        building_copper_mine = 4
         building_logging_camp = 6
     }
     min_cold_effect = 0.00
@@ -235,6 +242,11 @@ STATE_CENTRAL_HUNGARY = {
     resource = {
         type = "building_bauxite_mine"
         undiscovered_amount = 30
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
 }
 
@@ -329,11 +341,15 @@ STATE_SLOVAKIA = {
     capped_resources = {
         building_coal_mine = 44
         building_iron_mine = 63
-        building_copper_mine = 6
         building_logging_camp = 8
     }
     min_cold_effect = 0.02
     max_cold_effect = 0.53
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_RUTHENIA = {
@@ -368,11 +384,15 @@ STATE_SOUTHERN_TRANSYLVANIA = {
     capped_resources = {
         building_iron_mine = 45
         building_lead_mine = 45
-        building_copper_mine = 4
         building_logging_camp = 17
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.42
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_NORTHERN_TRANSYLVANIA = {

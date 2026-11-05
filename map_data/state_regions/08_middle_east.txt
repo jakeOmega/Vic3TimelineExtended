@@ -171,8 +171,12 @@ STATE_CYPRUS = {
     capped_resources = {
         building_logging_camp = 2
         building_fishing_wharf = 5
-        building_copper_mine = 6
         building_sulfur_mine = 5
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3034
     min_cold_effect = 0.00
@@ -554,11 +558,15 @@ STATE_ISFAHAN = {
         building_coal_mine = 22
         building_iron_mine = 51
         building_lead_mine = 28
-        building_copper_mine = 4
         building_logging_camp = 4
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.12
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_MAZANDARAN = {
@@ -638,11 +646,15 @@ STATE_TABRIZ = {
         building_coal_mine = 20
         building_iron_mine = 20
         building_lead_mine = 25
-        building_copper_mine = 6
         building_logging_camp = 5
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.22
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_URMIA = {
@@ -806,7 +818,6 @@ STATE_KASTAMONU = {
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" "building_tea_plantation" "building_tobacco_plantation" "building_opium_plantation" "building_vineyard" }
     capped_resources = {
         building_coal_mine = 72
-        building_copper_mine = 6
         building_logging_camp = 11
         building_fishing_wharf = 10
     }
@@ -814,6 +825,11 @@ STATE_KASTAMONU = {
     resource = {
         type = "building_rare_earth_metals_mine"
         undiscovered_amount = 6
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3036
     min_cold_effect = 0.00
@@ -832,7 +848,6 @@ STATE_DIYARBAKIR = {
     arable_land = 40
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" "building_tea_plantation" "building_tobacco_plantation" "building_vineyard" }
     capped_resources = {
-        building_copper_mine = 6
         building_coal_mine = 32
     }
     min_cold_effect = 0.00
@@ -841,6 +856,11 @@ STATE_DIYARBAKIR = {
     resource = {
         type = "building_chromium_mine"
         undiscovered_amount = 30
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -938,9 +958,13 @@ STATE_KARS = {
     arable_land = 10
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" "building_tea_plantation" "building_tobacco_plantation" }
     capped_resources = {
-        building_copper_mine = 6
         building_logging_camp = 9
         building_fishing_wharf = 5
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3094
     min_cold_effect = 0.00

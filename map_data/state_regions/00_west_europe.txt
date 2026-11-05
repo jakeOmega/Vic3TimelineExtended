@@ -13,9 +13,13 @@
     capped_resources = {
         building_iron_mine = 60
         building_lead_mine = 18
-        building_copper_mine = 6
         building_logging_camp = 45
         building_fishing_wharf = 11
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3000
     min_cold_effect = 0.04
@@ -194,10 +198,14 @@ STATE_NORTHERN_NORWAY = {
     capped_resources = {
         building_iron_mine = 18
         building_sulfur_mine = 20
-        building_copper_mine = 6
         building_logging_camp = 24
         building_whaling_station = 10
         building_fishing_wharf = 10
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3020
     blockade_locator = {
@@ -321,7 +329,6 @@ STATE_LANCASHIRE = {
         building_coal_mine = 100
         building_iron_mine = 60
         building_lead_mine = 45
-        building_copper_mine = 4
         building_logging_camp = 9
         building_fishing_wharf = 15
     }
@@ -338,6 +345,11 @@ STATE_LANCASHIRE = {
     resource = {
         type = "building_industrial_mineral_salt_mine"
         undiscovered_amount = 40
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3030
     min_cold_effect = 0.00
@@ -358,9 +370,13 @@ STATE_WALES = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_coal_mine = 80
-        building_copper_mine = 6
         building_logging_camp = 14
         building_fishing_wharf = 4
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3077
     min_cold_effect = 0.00
@@ -480,7 +496,6 @@ STATE_WEST_COUNTRY = {
         building_lead_mine = 60
         building_logging_camp = 6
         building_fishing_wharf = 9
-        building_copper_mine = 12
     }
 
     resource = {
@@ -491,6 +506,11 @@ STATE_WEST_COUNTRY = {
     resource = {
         type = "building_precious_minor_base_metal_mine"
         undiscovered_amount = 55
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 12
     }
     naval_exit_id = 3028
     min_cold_effect = 0.00
@@ -558,9 +578,13 @@ STATE_MUNSTER = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_lead_mine = 24
-        building_copper_mine = 6
         building_logging_camp = 4
         building_fishing_wharf = 12
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3077
     min_cold_effect = 0.00
@@ -581,9 +605,13 @@ STATE_LEINSTER = {
     capped_resources = {
         building_iron_mine = 33
         building_lead_mine = 27
-        building_copper_mine = 6
         building_logging_camp = 6
         building_fishing_wharf = 6
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3030
     min_cold_effect = 0.00
@@ -1345,7 +1373,6 @@ STATE_ANHALT = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_coal_mine = 44
-        building_copper_mine = 6
         building_logging_camp = 20
     }
     min_cold_effect = 0.00
@@ -1359,6 +1386,11 @@ STATE_ANHALT = {
     resource = {
         type = "building_potash_mine"
         undiscovered_amount = 50
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -1413,11 +1445,15 @@ STATE_BRANDENBURG = {
     arable_resources = { "building_rye_farm" "building_livestock_ranch" }
     capped_resources = {
         building_coal_mine = 44
-        building_copper_mine = 6
         building_logging_camp = 6
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.55
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_SCHLESWIG_HOLSTEIN = {
@@ -1523,7 +1559,6 @@ STATE_BRUNSWICK = {
         building_coal_mine = 40
         building_iron_mine = 45
         building_lead_mine = 35
-        building_copper_mine = 6
         building_logging_camp = 6
     }
     min_cold_effect = 0.00
@@ -1532,6 +1567,11 @@ STATE_BRUNSWICK = {
     resource = {
         type = "building_industrial_mineral_salt_mine"
         undiscovered_amount = 55
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -1590,11 +1630,15 @@ STATE_SAXONY = {
         building_coal_mine = 80
         building_iron_mine = 30
         building_sulfur_mine = 80
-        building_copper_mine = 6
         building_logging_camp = 6
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.51
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_HESSE = {
@@ -1612,11 +1656,15 @@ STATE_HESSE = {
         building_coal_mine = 60
         building_iron_mine = 30
         building_sulfur_mine = 40
-        building_copper_mine = 4
         building_logging_camp = 8
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.51
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_MECKLENBURG = {

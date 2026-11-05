@@ -12,11 +12,15 @@
     capped_resources = {
         building_coal_mine = 81
         building_iron_mine = 30
-        building_copper_mine = 4
         building_logging_camp = 17
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.04
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_WEST_BENGAL = {
@@ -316,7 +320,6 @@ STATE_CENTRAL_PROVINCES = {
     capped_resources = {
         building_iron_mine = 22
         building_coal_mine = 21
-        building_copper_mine = 4
         building_logging_camp = 12
     }
     min_cold_effect = 0.00
@@ -325,6 +328,11 @@ STATE_CENTRAL_PROVINCES = {
     resource = {
         type = "building_manganese_mine"
         undiscovered_amount = 55
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
 }
 
@@ -365,11 +373,15 @@ STATE_RAJPUTANA = {
         building_iron_mine = 24
         building_lead_mine = 6
         building_sulfur_mine = 3
-        building_copper_mine = 4
         building_logging_camp = 2
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.06
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
 }
 
 STATE_CEYLON = {
@@ -681,7 +693,6 @@ STATE_KACHIN = {
     capped_resources = {
         building_logging_camp = 24
         building_iron_mine = 7
-        building_copper_mine = 4
         building_gold_mine = 3
     }
     min_cold_effect = 0.03
@@ -690,6 +701,11 @@ STATE_KACHIN = {
     resource = {
         type = "building_rare_earth_metals_mine"
         undiscovered_amount = 20
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
 }
 

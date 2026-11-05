@@ -14,7 +14,6 @@
         building_coal_mine = 80
         building_lead_mine = 24
         building_iron_mine = 36
-        building_copper_mine = 285
         building_logging_camp = 7
         building_whaling_station = 4
         building_fishing_wharf = 8
@@ -27,6 +26,12 @@
     resource = {
         type = "building_oil_rig"
         undiscovered_amount = 30
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 278
+        discovered_amount = 7
     }
 
     resource = {
@@ -81,7 +86,6 @@ STATE_TASMANIA = {
     capped_resources = {
         building_iron_mine = 15
         building_lead_mine = 15
-        building_copper_mine = 4
         building_logging_camp = 8
         building_whaling_station = 2
         building_fishing_wharf = 6
@@ -90,6 +94,11 @@ STATE_TASMANIA = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 6
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3122
     min_cold_effect = 0.00
@@ -113,7 +122,6 @@ STATE_QUEENSLAND = {
     capped_resources = {
         building_iron_mine = 45
         building_lead_mine = 45
-        building_copper_mine = 7
         building_logging_camp = 5
         building_whaling_station = 3
         building_fishing_wharf = 12
@@ -122,6 +130,11 @@ STATE_QUEENSLAND = {
     resource = {
         type = "building_bauxite_mine"
         undiscovered_amount = 150
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 7
     }
     naval_exit_id = 3129
     min_cold_effect = 0.00
@@ -146,9 +159,14 @@ STATE_SOUTH_AUSTRALIA = {
         building_iron_mine = 30
         building_lead_mine = 36
         building_sulfur_mine = 60
-        building_copper_mine = 615
         building_whaling_station = 2
         building_fishing_wharf = 8
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 601
+        discovered_amount = 14
     }
     naval_exit_id = 3121
     blockade_locator = {

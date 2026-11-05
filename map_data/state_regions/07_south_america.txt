@@ -133,7 +133,6 @@ STATE_BOLIVAR = {
         building_iron_mine = 30
         building_logging_camp = 25
         building_fishing_wharf = 3
-        building_copper_mine = 170
     }
     resource = {
         type = "building_rubber_plantation"
@@ -142,6 +141,11 @@ STATE_BOLIVAR = {
     resource = {
         type = "building_oil_rig"
         undiscovered_amount = 50
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 170
     }
     naval_exit_id = 3025
 }
@@ -296,9 +300,14 @@ STATE_TARAPACA = {
     capped_resources = {
         building_iron_mine = 18
         building_sulfur_mine = 24
-        building_copper_mine = 615
         building_whaling_station = 3
         building_fishing_wharf = 5
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 597
+        discovered_amount = 18
     }
 
     resource = {
@@ -325,13 +334,18 @@ STATE_ANTOFAGASTA = {
     capped_resources = {
         building_iron_mine = 30
         building_sulfur_mine = 48
-        building_copper_mine = 800
         building_fishing_wharf = 5
     }
     resource = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 10
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 770
+        discovered_amount = 30
     }
 
     resource = {
@@ -386,7 +400,6 @@ STATE_LA_PAZ = {
     capped_resources = {
         building_logging_camp = 20
         building_gold_mine = 4
-        building_copper_mine = 6
     }
     resource = {
         type = "building_rubber_plantation"
@@ -403,6 +416,11 @@ STATE_LA_PAZ = {
         type = "building_specialty_alloy_metal_mine"
         undiscovered_amount = 20
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_POTOSI = {
@@ -418,7 +436,6 @@ STATE_POTOSI = {
     arable_resources = { "building_rice_farm" "building_livestock_ranch" "building_coffee_plantation" "building_dye_plantation" "building_tobacco_plantation" "building_banana_plantation" }
     capped_resources = {
         building_lead_mine = 6
-        building_copper_mine = 7
         building_logging_camp = 9
         building_gold_mine = 4
     }
@@ -438,6 +455,11 @@ STATE_POTOSI = {
     resource = {
         type = "building_industrial_mineral_salt_mine"
         undiscovered_amount = 200
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 7
     }
 }
 
@@ -493,7 +515,11 @@ STATE_LIMA = {
         building_logging_camp = 11
         building_whaling_station = 5
         building_fishing_wharf = 7
-        building_copper_mine = 130
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 130
     }
     naval_exit_id = 3024
 }
@@ -515,7 +541,11 @@ STATE_ICA = {
         building_sulfur_mine = 32
         building_logging_camp = 11
         building_fishing_wharf = 4
-        building_copper_mine = 130
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 130
     }
     naval_exit_id = 3152
 }
@@ -535,9 +565,14 @@ STATE_AREQUIPA = {
     capped_resources = {
         building_iron_mine = 21
         building_sulfur_mine = 32
-        building_copper_mine = 475
         building_logging_camp = 4
         building_fishing_wharf = 5
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 469
+        discovered_amount = 6
     }
     naval_exit_id = 3152
     min_cold_effect = 0.10
@@ -586,10 +621,14 @@ STATE_JUJUY = {
         building_lead_mine = 18
         building_logging_camp = 8
         building_gold_mine = 3
-        building_copper_mine = 370
     }
     min_cold_effect = 0.10
     max_cold_effect = 0.35
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 370
+    }
 
     resource = {
         type = "building_lithium_mine"
@@ -709,10 +748,14 @@ STATE_RIO_NEGRO = {
     capped_resources = {
         building_coal_mine = 40
         building_sulfur_mine = 52
-        building_copper_mine = 220
     }
     min_cold_effect = 0.00
     max_cold_effect = 0.11
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 220
+    }
 
     resource = {
         type = "building_precious_minor_base_metal_mine"
@@ -846,10 +889,14 @@ STATE_SANTIAGO = {
         building_gold_mine = 5
         building_iron_mine = 33
         building_sulfur_mine = 36
-        building_copper_mine = 6
         building_logging_camp = 6
         building_whaling_station = 2
         building_fishing_wharf = 8
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3152
     min_cold_effect = 0.00

@@ -85,7 +85,6 @@ STATE_YUNNAN = {
     capped_resources = {
         building_coal_mine = 40
         building_iron_mine = 60
-        building_copper_mine = 6
         building_logging_camp = 17
     }
     min_cold_effect = 0.00
@@ -94,6 +93,11 @@ STATE_YUNNAN = {
     resource = {
         type = "building_precious_minor_base_metal_mine"
         undiscovered_amount = 90
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
 }
 
@@ -866,11 +870,15 @@ STATE_ULIASTAI = {
     capped_resources = {
         building_coal_mine = 36
         building_iron_mine = 33
-        building_copper_mine = 6
         building_logging_camp = 5
     }
     min_cold_effect = 0.05
     max_cold_effect = 0.57
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_URGA = {
@@ -888,10 +896,14 @@ STATE_URGA = {
         building_coal_mine = 36
         building_iron_mine = 45
         building_logging_camp = 4
-        building_copper_mine = 370
     }
     min_cold_effect = 0.05
     max_cold_effect = 0.55
+
+    resource = {
+        type = "building_copper_mine"
+        undiscovered_amount = 370
+    }
 }
 
 STATE_CAMBODIA = {
@@ -1140,7 +1152,6 @@ STATE_HOKKAIDO = {
         building_coal_mine = 59
         building_iron_mine = 4
         building_lead_mine = 5
-        building_copper_mine = 4
         building_sulfur_mine = 22
         building_logging_camp = 9
         building_whaling_station = 8
@@ -1150,6 +1161,11 @@ STATE_HOKKAIDO = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 4
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3059
     min_cold_effect = 0.00
@@ -1173,7 +1189,6 @@ STATE_TOHOKU = {
         building_gold_mine = 2
         building_sulfur_mine = 51
         building_lead_mine = 20
-        building_copper_mine = 7
         building_logging_camp = 15
         building_whaling_station = 5
         building_fishing_wharf = 15
@@ -1182,6 +1197,11 @@ STATE_TOHOKU = {
         # Akita Oil Fields. Oil struck in 1935, and would later become a big supplier, but production was more limited before 1936
         type = "building_oil_rig"
         undiscovered_amount = 4
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 7
     }
     naval_exit_id = 3059
     min_cold_effect = 0.00
@@ -1204,11 +1224,15 @@ STATE_KANTO = {
     capped_resources = {
         building_iron_mine = 3
         building_lead_mine = 4
-        building_copper_mine = 10
         building_sulfur_mine = 21
         building_logging_camp = 9
         building_whaling_station = 2
         building_fishing_wharf = 10
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 10
     }
     naval_exit_id = 3086
     blockade_locator = {
@@ -1295,10 +1319,14 @@ STATE_KANSAI = {
     capped_resources = {
         building_gold_mine = 1
         building_lead_mine = 13
-        building_copper_mine = 4
         building_logging_camp = 9
         building_fishing_wharf = 10
         building_whaling_station = 6
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3086
     blockade_locator = {
@@ -1351,10 +1379,14 @@ STATE_KYUSHU = {
         building_coal_mine = 52
         building_logging_camp = 7
         building_lead_mine = 6
-        building_copper_mine = 4
         building_sulfur_mine = 31
         building_fishing_wharf = 18
         building_gold_mine = 1
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3058
     min_cold_effect = 0.00
@@ -1399,10 +1431,14 @@ STATE_CHUGOKU = {
         building_iron_mine = 16
         building_coal_mine = 8
         building_lead_mine = 5
-        building_copper_mine = 7
         building_logging_camp = 20
         building_fishing_wharf = 12
         building_whaling_station = 3
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 7
     }
     naval_exit_id = 3086
     blockade_locator = {
@@ -1428,9 +1464,13 @@ STATE_SHIKOKU = {
     capped_resources = {
         building_iron_mine = 4
         building_lead_mine = 4
-        building_copper_mine = 8
         building_logging_camp = 11
         building_fishing_wharf = 9
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 8
     }
     naval_exit_id = 3086
     min_cold_effect = 0.00
@@ -1484,10 +1524,14 @@ STATE_BUSAN = {
         building_iron_mine = 5
         building_coal_mine = 6
         building_lead_mine = 12
-        building_copper_mine = 6
         building_logging_camp = 7
         building_whaling_station = 7
         building_fishing_wharf = 11
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
     }
     naval_exit_id = 3058
     min_cold_effect = 0.00
