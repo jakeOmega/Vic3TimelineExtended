@@ -82,4 +82,83 @@ Each row's first answer is the expected one.
 
 ## Panels and systems
 
-<!-- The controller fills this from the other streams' play-test items. -->
+What the migration changed that only a game shows, by area. Any game will do unless a line names a country or a
+save. Load-time first: `debug.log` should carry no `Unexpected token` from a mod journal entry, progress bar or
+mobilization group, no `Duplicated key` for `law_communal_administration`, `building_copper_mine`,
+`building_copper_mine_throughput_add` or `goods_output_fine_art_mult`, no `Province crossing multiple state
+regions`, and `grep -c "quote-escaping" debug.log` should be 0 (283 on the first launch), in English and in a German
+or Spanish game.
+
+**Journal entries** (`docs/audits/vanilla_1_15_migration.md` § 3)
+- Every mod entry's panel opens and lists its outcomes with headers, colors and effect previews; when one concludes,
+  its effect runs and the concluded page shows its `conclusion_desc` (C2).
+- C3 in practice, which outcome wins when two come true on one update (the mod puts success first): Colonial
+  Empire's bar reaching 0 on the day a capstone completes; Civil Rights' movement disappearing as its bar reaches 100.
+- A 1.14.5 save with active and concluded mod entries (C14): active ones stay active and can still conclude. Note
+  what a page concluded under 1.14.5 shows.
+- Grand Monuments: day one logs no `already has a journal entry of type je_grand_monuments`, and a country with a
+  monument still gets the entry active within weeks.
+- Banking: momentum and stance draw as two-pole bars with a sliding marker, in the panel and in the `te_banking_bars`
+  overlays.
+- Art: the Soft Power and Covert Warfare groups show their illustrations, Global Warming sits in Internal Affairs,
+  and the training mobilization group shows its background card in the military panel.
+- The Opium Trade isn't offered after 1912-01-23, and one still open then fails with the mod's text. Turtle Island
+  is hidden for a North American union and goes invalid, with its cleanup, if one forms. The three vanilla tax
+  entries complete under the Tax Code rule.
+- How the panel shows an `INJECT:`ed outcome: listed as one more, merged, or dropped (the parser assumes one more).
+
+**The journal panel and tooltips**
+- Every journal entry panel opens, and the concluded page too. No duplicate bars under the bars-on-top marker
+  (Global Warming, Strategic Reserve, UN, Climate Engineering); the Nuclear entry's container-4 sections sit
+  sensibly now that `_4` is in the description column.
+- Tooltips are not clipped and scroll at 835 px; glossary tooltips are 600 wide. `gui.log` no longer reports
+  `FancyTooltipGlossaryWidgetType` or `elide_fontsize_min` from vanilla's `custom_tooltip.gui`.
+
+**Economy panels**
+- Budget, Taxes tab: 1.15's per-state Unrealized Taxes list and its sort, a relieved state listed; the Banking, Tax
+  Code and Breakdown tabs.
+- Goods views: the prestige breakdown, and the consumption-tax toggle greyed under the Tax Code rule.
+- Market: the six tabs, charts and partners; the prestige list's new name.
+- Building details: the Grid Transfer Station's Power Grid section; a building with five or more PM groups (its
+  290 px strip beside 1.15's 300×80 extra-items widget: do they overlap?). PM strips scroll and hide maintenance
+  groups.
+- States: vanilla's Cold tile before the TE tiles, the header's cold icon, Cossack Host tiles on a Russian state, the
+  market tile's go-to tooltip, the Demographics subtab. Population: the Demographics tab.
+- The Construction Sector's expand hover in a market game: Earnings header, lore section, efficiency warning.
+- The Mitsui Trading House description: a hoverable "Zaibatsu" glossary link.
+
+**Military, diplomacy and politics panels**
+- Right-click a selected army and a selected fleet: Invasion, Rehome (now greyed by `CanRehome`), Deploy to Front,
+  the transport fleet list, the fleet's ship-template construction tooltips.
+- Treaty designer: Nuclear Arms Limitation's warhead quantity (right-click input, draft button, signed display), a
+  generic company article, Cede Colony's building-type and colony lists, beside 1.15's ship-transfer bundles and
+  automatic-withdrawal checkbox.
+- Law panel with a taxation law selected: All effects shows the header and hover line, Comparative effects shows
+  "Effects compared to current law:" and its hover line; frame rate stays normal in both. A non-tax law shows
+  vanilla's text in both views; its view toggle may sit further left than vanilla draws it.
+- Military panel: mobilization groups one card a row with their backgrounds; the Nuclear and Covert tabs.
+- Power bloc panel: principle slots 5-8 and the remove button; the formation panel's primary principles one a row.
+- Politics overview: the ruler's aptitude traits in the featured slots.
+
+**Politics**
+- Russia at start: Okhrana, Third Section, Official Nationality and Caesaropapism stand where Secret Police,
+  Subjecthood and State Religion would, and their tooltips show the mod's lines.
+- A council republic can enact Labour Suffrage, then Elected Bureaucrats or Communal Administration; Electoral
+  Finance moves off No Campaign Finance Laws, and the First Past the Post petition can fire.
+- Communal Administration under Anarchy or Collective Governance (with Socialism) is enactable, and Government
+  Administrations switch to Communal Representatives. Under Algorithmic Governance, Military Bureaucrats isn't.
+
+**Copper and lead**
+- Katanga or Zambia: copper shows as a discoverable resource with vanilla's cap available from 1836. If the
+  INJECTed `building_group` didn't take, the mine stays capped with no caps left, no copper mine can be built, and
+  `debug.log` says "can only support 0"; the fallback is a `TRY_REPLACE` of vanilla's entry with the group changed.
+- Copper mines climb the late tiers and switch to mechanized maintenance at the condensing pump.
+- Tooltips say Conductive Metals and Base Metals, including through the `$copper$` splices; Mount Whaleback and
+  Sumitomo show their copper bonuses.
+- An old save: the mod's old copper mines and renamed carbon-capture variants fall back to their groups' defaults.
+- Copper discovery pacing over a few decades; one copper belt each in Katanga, Zambia and Antofagasta.
+
+**The map**
+- TULA, KOSTROMA and the renamed states (LITHUANIA, SARATOV, VOLOGDA) have tourism, a Local Climate tile, an area,
+  Planned Capital, capital bloc names and a seabed basin where coastal; KAMCHATKA holds the old Chukotka.
+- A Cossack Host reads as cooperative in the Demographics rural-work split.
