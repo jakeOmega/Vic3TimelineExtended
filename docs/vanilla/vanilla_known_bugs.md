@@ -1870,12 +1870,14 @@ Plain startup instrumentation ("Starting/Done pre-enumerating '<dir>'…") misca
 ### `jomini_trigger.cpp:102` — trigger added after PostInitAndValidate
 - source: `jomini_trigger.cpp:102`
 - source: `jomini_trigger.cpp:103`
+- source: `jomini_effect.cpp:160`
 
 ```
 Adding trigger after PostInitAndValidate
+Adding effect after PostInitAndValidate
 ```
 
-Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect.
+Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05).
 
 ### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
 - source: `power_bloc_statue_hero_type.cpp:141`
@@ -2053,9 +2055,10 @@ An engine assertion with no script frame, about once a session: eight seconds af
 
 ```
 GameStateAccess._Value == EGameStateAccess::Interface
+GetCurrentIdlerType() == EJominiIdler::INGAME
 ```
 
-An engine assertion with no script frame, once, a few seconds after the observer harness ran its first console command (2026-10-10). Not actionable from script.
+An engine assertion with no script frame, once, a few seconds after the observer harness ran its first console command (2026-10-10). Not actionable from script. On 1.15 it comes with an idler assert on the line before it, at the game's start, in every launch (2026-11-05).
 
 ### `pdx_assert.cpp:641` — pop employment and building placement bookkeeping asserts
 - source: `pdx_assert.cpp:641`
