@@ -6,8 +6,7 @@
 
 # A new game: history has set every court. The scores are seeded at the
 # first monthly pulse (te_jud_monthly), where the laws' modifier sums are
-# certainly in place; this only marks the world as seeded, so the old-save
-# repair (te_old_save_repairs.txt) never runs.
+# certainly in place; this only marks the world as seeded.
 on_game_started = {
 	on_actions = {
 		te_jud_on_game_started
