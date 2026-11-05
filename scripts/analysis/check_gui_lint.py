@@ -22,6 +22,9 @@ ERROR (exit 1):
     Glossary('x', ..) or [glossary_x] with no 1.15 glossary entry x
   - margin / margin_<side> directly on a plain widget or icon, which the engine
     does not handle (a WARN when the same line is already on --base)
+  - an hbox or vbox directly inside a flowcontainer, which crashed the game
+    (stack overflow) when the law panel built one; test_check_gui_lint.py
+    also checks every .gui in the repository for it, so CI gates it
 WARN:
   - "unproven": a widget type, property, blockoverride name, data function,
     .Method or texture path that no .gui on --base uses and no .gui here
@@ -141,6 +144,50 @@ def margin_on_plain_widget(text):
     return hits
 
 
+def gui_type_bases(text):
+    """{type name: the widget or type it is declared on}, for every
+    `type X = Y {` in comment-stripped text."""
+    return dict(re.findall(r"\btype\s+(\w+)\s*=\s*(\w+)\s*\{", collapse_strings(text)))
+
+
+def box_in_flowcontainer(text, type_bases=None):
+    """(line, child, kind) for each hbox or vbox whose parent block is a
+    flowcontainer. Takes comment-stripped text. The engine logs "A
+    (flow)container can't have an hbox/vbox as a direct child" when it builds
+    one, and building one in the law panel overflowed the stack and crashed
+    the game on its first launch (#1402's tax-law wrapper, 2026-11-05).
+
+    A type declared in `type_bases` (gui_type_bases of the mod's .gui files)
+    is followed to its widget, so a mod type on a flowcontainer or hbox
+    counts. A vanilla type isn't: its declaration isn't in the repository. A
+    child inside a block or blockoverride body is not judged, since its
+    parent isn't known here."""
+    type_bases = type_bases or {}
+
+    def kind(name):
+        seen = set()
+        while name in type_bases and name not in seen:
+            seen.add(name)
+            name = type_bases[name]
+        return name
+
+    nostr = collapse_strings(text)
+    stack, hits = [], []
+    for m in GUI_TOKEN.finditer(nostr):
+        name, base, brace, bare_open, close = m.groups()
+        if close:
+            if stack:
+                stack.pop()
+        elif bare_open:
+            stack.append("")
+        elif name and brace:
+            k = kind(base or name)
+            if k in ("hbox", "vbox") and stack and stack[-1] == "flowcontainer":
+                hits.append((nostr.count("\n", 0, m.start()) + 1, base or name, k))
+            stack.append(k)
+    return hits
+
+
 def bare_vector_expressions(text):
     """Reject bare bindings the engine tokenizes as extra vector components.
 
@@ -205,6 +252,7 @@ class Linter:
         self.tracked = set(self.git("ls-files").split("\n")) | set(
             self.git("ls-tree", "-r", "--name-only", self.base).split("\n"))
 
+        self.type_bases = gui_type_bases(self.cur_gui_text)
         self.known_brace = (set(IDENT_BRACE.findall(base_gui_text)) | set(TYPEDEF.findall(self.cur_gui_text))
                             | ALWAYS_KNOWN)
         self.known_prop = set(IDENT_PROP.findall(base_gui_text))
@@ -334,6 +382,11 @@ class Linter:
                                        "setting properties\" for the widget (#633's history chart shipped one). Inset "
                                        "with position (parentanchor = right + position = { -8 0 }), or put the "
                                        "margin on a flowcontainer, hbox or vbox")
+        for ln, child, kind in box_in_flowcontainer(text, self.type_bases):
+            self.report("ERROR", path, ln, f"'{child}' ({kind}) directly inside a flowcontainer: the engine logs "
+                                           "\"A (flow)container can't have an hbox/vbox as a direct child\", and "
+                                           "building one in the law panel overflowed the stack and crashed the game "
+                                           "(2026-11-05). Make the parent a vbox or hbox, or the child a flowcontainer")
         for ln, prop in bare_vector_expressions(text):
             self.report("ERROR", path, ln, f"unquoted data expression inside '{prop}' brace vector; "
                         "the engine reads its tokens as extra numeric components. Use literal "
