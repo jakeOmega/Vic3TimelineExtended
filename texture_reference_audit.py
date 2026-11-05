@@ -253,7 +253,7 @@ ERROR_KINDS = ("missing", "case_mismatch", "unknown_media_alias", "unrooted",
 # (fields, evidence)}. A field is a key in the entity's block, or a `/` path
 # into a nested one. Only `buildings` and `static_modifiers` have a log line
 # behind them; the rest are vanilla convention (counts: vanilla's entities
-# that declare it, 1.14.5), and an entity that is never shown opts out with a
+# that declare it, 1.14.5 unless marked 1.15), and an entity that is never shown opts out with a
 # `(texture_reference)` tag. The module docstring says what was checked and
 # what was left out.
 _ALL = "vanilla convention, on every vanilla entity of its type"
@@ -262,7 +262,7 @@ DECLARED_FIELDS: dict[str, tuple[tuple[str, ...], str]] = {
                   "the building panel's art, on every vanilla building (115); one without logs "
                   "`Database type <key> has missing texture` at load (#1108, #1143)"),
     "static_modifiers": (("icon",),
-                         "on 6,096 of vanilla's 6,128 (the rest exempt by name); one without logs "
+                         "on 6,096 of vanilla's 6,128 (1.14.5; the rest exempt by name); one without logs "
                          "an empty-path `VFSOpen Error` whenever a modifier list draws it"),
     "production_methods": (("texture",), "vanilla convention, on 435 of vanilla's 436 (not `pm_dummy`)"),
     "production_method_groups": (("texture",),
@@ -296,11 +296,16 @@ DECLARED_FIELDS: dict[str, tuple[tuple[str, ...], str]] = {
     "liberty_desire_levels": (("background_texture",), f"{_ALL} (3)"),
     "messages": (("texture",), f"{_ALL} (475)"),
     "military_formation_flags": (("icon",), f"{_ALL} (30)"),
-    "mobilization_option_groups": (("icon",), f"{_ALL} (6)"),
+    # 1.15: the group's art is a background illustration (780x224); 1.14.5's
+    # `icon` is gone from all six vanilla groups.
+    "mobilization_option_groups": (("background",), f"{_ALL} (6, 1.15)"),
+    # 1.15: the journal's group banner (1108x200), shown in the entry panel.
+    "journal_entry_groups": (("illustration",), f"{_ALL} (31, 1.15)"),
     "mobilization_options": (("texture",), f"{_ALL} (18)"),
     "naval_battle_conditions": (("icon",), f"{_ALL} (7)"),
     "naval_mission_types": (("icon", "map_texture"), f"{_ALL} (9)"),
-    "objectives": (("icon", "enabled_background"), f"{_ALL} (5)"),
+    "objectives": (("icon", "enabled_background", "illustration"),
+                   f"{_ALL} (5; illustration on all 4 of 1.15's)"),
     "parties": (("icon",), f"{_ALL} (12)"),
     "political_lobbies": (("texture",), f"{_ALL} (4)"),
     "political_movement_categories": (("icon",), f"{_ALL} (5)"),
@@ -737,7 +742,7 @@ def json_declares(body, field_path: str) -> bool:
 class VanillaSnapshot:
     """What the declaration check knows of vanilla, for each `DECLARED_FIELDS`
     folder `vanilla_parsed/` holds: `names`, its entities; `gaps`, {field:
-    the entities that don't declare it}. 23 of the 55 folders aren't in the
+    the entities that don't declare it}. 23 of the 56 folders aren't in the
     snapshot (`uncovered`)."""
     names: dict[str, frozenset[str]] = field(default_factory=dict)
     gaps: dict[str, dict[str, frozenset[str]]] = field(default_factory=dict)
