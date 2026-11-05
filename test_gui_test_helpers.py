@@ -11,7 +11,7 @@ so a case can't pass on some other failure.
 """
 import unittest
 
-from gui_test_helpers import _children, assert_wide_matches_narrow
+from gui_test_helpers import _children, assert_wide_matches_narrow, loc_closure
 
 NARROW = """
 types fixture {
@@ -526,6 +526,13 @@ class ChildrenTest(unittest.TestCase):
     def test_a_quoted_value_with_spaces(self):
         self.assertEqual(_children('visible = "[Not( X )]" text = "a b"\n'),
                          [("property", "visible", '"[Not( X )]"'), ("property", "text", '"a b"')])
+
+
+class LocClosureTest(unittest.TestCase):
+    def test_a_formatted_splice_is_followed(self):
+        """1.15 escapes a spliced key as `$key|q$`; the closure still reaches it."""
+        loc = {"a": "see $b|q$ and $c$", "b": "B", "c": "C"}
+        self.assertEqual(loc_closure({"a"}, loc), {"a", "b", "c"})
 
 
 if __name__ == "__main__":

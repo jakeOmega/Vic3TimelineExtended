@@ -579,6 +579,81 @@ class ParserSemanticsTests(unittest.TestCase):
             "ai_will_do": ("=", {"value": ("=", "3")}),
         }))
 
+    # -- INJECT an outcome into a 1.15 journal entry -------------------------
+    JE_ONE = (
+        "je_x = {\n\tgroup = g\n"
+        "\toutcome = { header = a trigger = { x = yes } }\n}\n"
+    )
+    JE_TWO = (
+        "je_x = {\n\tgroup = g\n"
+        "\toutcome = { header = a }\n\toutcome = { header = b }\n}\n"
+    )
+
+    def _outcome_headers(self, *texts, mod_state_flow):
+        data = self._merged(*texts, mod_state_flow=mod_state_flow)
+        body = data["je_x"][1]
+        self.assertEqual(body["group"], ("=", "g"))  # the rest of the entry survives
+        entries = body["outcome"]
+        if not isinstance(entries, list):
+            entries = [entries]
+        return [e[1]["header"][1] for e in entries]
+
+    def test_injected_outcome_is_another_outcome(self):
+        """`outcome` is one entry per block (REPEATED_ENTRY_FIELDS): an
+        injected one joins the entry's, whether it had one outcome (which the
+        merge used to rewrite: header a became c and kept a's trigger) or
+        several (which the injected one used to replace)."""
+        one = "INJECT:je_x = { outcome = { header = c } }\n"
+        two = "INJECT:je_x = { outcome = { header = c } outcome = { header = d } }\n"
+        cases = [
+            (self.JE_ONE, one, ["a", "c"]),
+            (self.JE_ONE, two, ["a", "c", "d"]),
+            (self.JE_TWO, one, ["a", "b", "c"]),
+            (self.JE_TWO, two, ["a", "b", "c", "d"]),
+        ]
+        for base, inject, expected in cases:
+            for mod_state_flow in (False, True):
+                with self.subTest(base=base, inject=inject, mod_state_flow=mod_state_flow):
+                    self.assertEqual(
+                        self._outcome_headers(base, inject, mod_state_flow=mod_state_flow),
+                        expected,
+                    )
+        # The first outcome keeps its own fields.
+        data = self._merged(self.JE_ONE, one, mod_state_flow=True)
+        self.assertIn("trigger", data["je_x"][1]["outcome"][0][1])
+        self.assertNotIn("trigger", data["je_x"][1]["outcome"][1][1])
+
+    def test_injected_outcome_in_the_same_file(self):
+        self.assertEqual(
+            self._outcome_headers(
+                self.JE_ONE + "INJECT:je_x = { outcome = { header = c } }\n",
+                mod_state_flow=False,
+            ),
+            ["a", "c"],
+        )
+
+    def test_replace_of_outcome_still_replaces(self):
+        self.assertEqual(
+            self._outcome_headers(
+                self.JE_TWO, "INJECT:je_x = { REPLACE:outcome = { header = c } }\n",
+                mod_state_flow=True,
+            ),
+            ["c"],
+        )
+
+    def test_inject_block_with_a_repeated_key_keeps_the_entity(self):
+        """parse_file's own directive pass hands the INJECT's body over
+        un-normalized when a key repeats in it; that used to replace the
+        whole entity (`group` was lost)."""
+        data = self._merged(
+            self.JE_ONE,
+            "INJECT:je_x = { scripted_button = s1 scripted_button = s2 }\n",
+            mod_state_flow=False,
+        )
+        body = data["je_x"][1]
+        self.assertEqual(body["group"], ("=", "g"))
+        self.assertEqual(body["scripted_button"], [("=", "s1"), ("=", "s2")])
+
     # -- INJECT into a script value -------------------------------------------
     SV_VANILLA = (
         "sv_x = {\n"

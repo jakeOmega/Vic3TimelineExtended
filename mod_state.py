@@ -169,6 +169,13 @@ VANILLA_COMMON_DIRS = {
     "Pop Types": "pop_types",
     "Terrains": "terrain",
     "Game Concepts": "game_concepts",
+    # 1.15: glossary entries (`[glossary_x]` / `Glossary('glossary_x', …)`
+    # links, read by concept_reference_audit and check_gui_lint), regional
+    # exile pools (`exile_character = { exile_pool = … }`), and the AI ship
+    # categories every ship type must name (`ai_ship_category`).
+    "Glossary": "glossary",
+    "Regional Exile Pools": "regional_exile_pools",
+    "AI Ship Categories": "ai_ship_categories",
 }
 
 # Entity types ModState reads from the mod alone, as {entity_type: directory

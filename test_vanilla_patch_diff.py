@@ -142,5 +142,36 @@ class ModUsesTest(unittest.TestCase):
         self.assertEqual(hits["removed_thing"], {"code": ["common/a.txt:2"], "comment": 1})
 
 
+class RemovedFieldsTest(unittest.TestCase):
+    """1.15 dropped `on_complete` & co. from every journal entry: `parsed
+    --mod-uses` names the mod's entries that still set one."""
+
+    def test_a_field_no_new_entity_sets_is_reported_with_the_mods_uses(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            old, new = os.path.join(tmp, "old"), os.path.join(tmp, "new")
+            _write(os.path.join(old, "common", "journal_entries.json"), json.dumps({
+                "je_a": ["=", {"on_complete": ["=", {"x": ["=", "1"]}], "weight": ["=", "1"]}],
+                "je_b": ["=", {"weight": ["=", "2"]}],
+            }))
+            _write(os.path.join(new, "common", "journal_entries.json"), json.dumps({
+                "je_a": ["=", {"outcome": ["=", {"x": ["=", "1"]}], "weight": ["=", "1"]}],
+                "je_b": ["=", {"weight": ["=", "2"]}],
+            }))
+            _write(os.path.join(new, "manifest.json"), json.dumps({"entity_types": {
+                "Journal Entries": {"dir": "game/common/journal_entries",
+                                    "file": "common/journal_entries.json"}}}))
+            fields = {}
+            vpd.diff_parsed(new, old_dir=old, fields_out=fields)
+            self.assertEqual(fields, {os.path.join("common", "journal_entries.json"): ["on_complete"]})
+            mod = os.path.join(tmp, "mod")
+            subprocess.run(["git", "init", "-q", mod], check=True)
+            _write(os.path.join(mod, "common", "journal_entries", "j.txt"),
+                   "je_x = {\n\ton_complete = { }\n\tscripted = {\n\t\ton_complete = { }\n\t}\n}\n")
+            subprocess.run(["git", "add", "-A"], cwd=mod, check=True)
+            hits = vpd.mod_field_uses(fields, new, repo=mod)
+        self.assertEqual(hits, {("common/journal_entries", "on_complete"):
+                                ["common/journal_entries/j.txt:2"]})
+
+
 if __name__ == "__main__":
     unittest.main()

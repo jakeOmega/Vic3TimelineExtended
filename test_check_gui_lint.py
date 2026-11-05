@@ -56,6 +56,24 @@ NEW_GUI = BOM + """types t {
 	}
 """
 
+# Long strings above an unproven widget and property: their offsets in the
+# string-collapsed text sit lines earlier than in the file (a widget at :520
+# was reported at :356).
+LINES_GUI = BOM + """types lines {
+	type te_lines_row = flowcontainer {
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, one" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, two" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, three" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, four" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, five" }
+		textbox = { tooltip = "a string that runs
+over two lines" }
+		lines_fancywidget = {}
+		lines_typo_prop = left
+	}
+}
+"""
+
 INHERITED_GUI = BOM + """types inherited {
 	type inherited_row = flowcontainer {
 		widget = {
@@ -92,6 +110,8 @@ class LintTest(unittest.TestCase):
             f.write(NEW_GUI)
         with open(os.path.join(repo, "gui", "inherited.gui"), "w", encoding="utf-8") as f:
             f.write(INHERITED_GUI.replace("margin_top = 5", "margin_top = 5\n\t\t\tsize = { 10 10 }"))
+        with open(os.path.join(repo, "gui", "lines.gui"), "w", encoding="utf-8") as f:
+            f.write(LINES_GUI)
         with open(os.path.join(repo, "gui", "clean.gui"), "w", encoding="utf-8") as f:
             f.write(BASE_GUI.replace("types base", "types clean").replace("proven_row", "clean_row"))
         linter = lint.Linter(repo, "HEAD")
@@ -108,7 +128,8 @@ class LintTest(unittest.TestCase):
         return [m for s, p, _, m in self.findings if p == path and (sev is None or s == sev)]
 
     def test_untracked_files_are_linted(self):
-        self.assertEqual(sorted(self.changed), ["gui/clean.gui", "gui/inherited.gui", "gui/new.gui"])
+        self.assertEqual(sorted(self.changed),
+                         ["gui/clean.gui", "gui/inherited.gui", "gui/lines.gui", "gui/new.gui"])
 
     def test_clean_file_has_no_findings(self):
         self.assertEqual(self.msgs("gui/clean.gui"), [])
@@ -161,12 +182,57 @@ class LintTest(unittest.TestCase):
         self.assertNotIn("vanilla_icon", warns)
         self.assertIn("te_new_details should end _open", warns)
 
+    def test_unproven_warnings_name_their_own_line(self):
+        lines = {m: ln for s, p, ln, m in self.findings if p == "gui/lines.gui" and s == "WARN"}
+        widget = next(ln for m, ln in lines.items() if "'lines_fancywidget'" in m)
+        prop = next(ln for m, ln in lines.items() if "'lines_typo_prop'" in m)
+        self.assertEqual((widget, prop), (10, 11))
+
     def test_loc_args(self):
         self.assertEqual(lint.loc_args("Localize('te_tt_break')"), ["te_tt_break"])
         expr = ("SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('v'), "
                 "'(CFixedPoint)1' ), 'key_a', 'key_b' )")
         self.assertEqual(lint.loc_args(expr), ["key_a", "key_b"])
 
+
+
+class GlossaryLintTest(unittest.TestCase):
+    """1.15 glossary links, in a .gui expression and in added loc, resolve
+    against common/glossary/ and vanilla_parsed/common/glossary.json."""
+
+    def test_glossary_links(self):
+        with tempfile.TemporaryDirectory() as repo:
+            files = {
+                "gui/base.gui": BASE_GUI,
+                "common/glossary/g.txt": BOM + "glossary_mod_entry = {}\n",
+                "vanilla_parsed/common/glossary.json": '{"glossary_zaibatsu": ["=", {}]}',
+                "localization/english/x_l_english.yml": BOM + 'l_english:\n known_key: "Known"\n',
+            }
+            for rel, text in files.items():
+                os.makedirs(os.path.dirname(os.path.join(repo, rel)), exist_ok=True)
+                with open(os.path.join(repo, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            _git(repo, "init", "-q")
+            _git(repo, "add", "-A")
+            _git(repo, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+            with open(os.path.join(repo, "gui", "g.gui"), "w", encoding="utf-8") as f:
+                f.write(BOM + "types g {\n\ttype g_row = proven_row {\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_zaibatsu','zaibatsu')]\" }\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_gone','gone')]\" }\n"
+                        "\t}\n}\n")
+            with open(os.path.join(repo, "localization/english/x_l_english.yml"), "a", encoding="utf-8") as f:
+                f.write(' k_ok: "[glossary_mod_entry] [Glossary(\'glossary_zaibatsu\',\'z\')]"\n'
+                        ' k_bad: "[glossary_missing] [Glossary(\'glossary_absent\',\'a\')]"\n')
+            linter = lint.Linter(repo, "HEAD")
+            for p in linter.changed_gui():
+                linter.lint_file(p)
+            linter.lint_added_loc()
+            errs = [m for s, _p, _ln, m in linter.findings if s == "ERROR" and "glossary" in m]
+            self.assertEqual(sorted(errs), [
+                "glossary entry glossary_gone is not defined",
+                "k_bad: glossary entry glossary_absent is not defined",
+                "k_bad: glossary entry glossary_missing is not defined",
+            ])
 
 
 class DefinitionRuleTest(unittest.TestCase):
