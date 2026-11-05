@@ -613,7 +613,6 @@
  je_grand_monuments_invalid_conclusion_desc:0 "The $concept_journal_entry$ ended with no #b $building_grand_monument$#! left in our hands"
  je_grand_monuments_reason:0 "A monument says something about the government that raised it. While its crown, republic, revolution or leader still stands, it lends legitimacy; every monument that is not contested lends prestige, and each pleases the interest groups that share its message. When that falls, the next government must decide what to do with it. Everything here grows with [concept_grandeur]."
  je_group_covert_warfare:0 "Covert Warfare"
- je_group_environment:0 "Environment"
  je_group_soft_power:0 "Soft Power"
  je_heir_education:0 "Heir Education"
  je_heir_education_complete_conclusion_desc:0 "The $concept_journal_entry$ concluded with our heir #b of age#!"

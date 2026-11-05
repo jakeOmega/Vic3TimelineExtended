@@ -1,11 +1,17 @@
-﻿je_group_environment = {
-	context = country
-}
+﻿# The mod's own journal entry groups. 1.15 requires an illustration on
+# every group (1108x200, shown in each member entry's header); until the mod
+# has its own art these borrow vanilla's (owner, 2026-11-05). Neither is
+# themed: a one-entry group gains nothing from a section of its own in the
+# journal list, and vanilla's generic groups are not themed either.
 
+# je_cultural_hegemony. The newsroom: soft power travels by print and wire.
 je_group_soft_power = {
 	context = country
+	illustration = "gfx/interface/illustrations/journal/je_group_illu_international_situations.dds"
 }
 
+# je_covert_warfare. A desk of notes, ink and a blade: cloak and dagger.
 je_group_covert_warfare = {
 	context = country
+	illustration = "gfx/interface/illustrations/journal/je_group_illu_historical_content.dds"
 }

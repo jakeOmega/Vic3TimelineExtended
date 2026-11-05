@@ -30,7 +30,7 @@ Part of the [mod systems reference](../mod_systems.md), which indexes every syst
 - **Disabled rule = no climate change.** `global_warming_update_on_action` accumulates emissions only under `global_warming_enabled`, and `global_warming_events_on_action` runs the display snapshots and the threshold events (`.1`–`.4`, `.22`, `.17`–`.21`, `.23`) only then. Its `else` holds `global_var:greenhouse_gas_emissions` at 0, which also clears the warming an older disabled-rule save built up, so every outside reader of `temperature_anomaly_display` (UN docket, election events, movements, treaty article 109) sees 0. The JE activates only for a country holding a restrictive Resource Transition law, and then shows only its Fossil Transition section (the climate sections gate on `gw_rule_enabled_sgui`); every recurring event also needs the `global_warming` modifier or warming, so none fires. `.7` (pollution scandal) is about pollution, not warming, and fires under both settings. There are no `*_no_gw_modifier` fallbacks any more.
 - `.13` (climate summit) is the fallback for a world without a UN. It needs `united_nations_disabled` or no `un_founded`, because while a UN exists the accord is `un_events.17`.
 - Test console: `event te_debug_gw.1` (`events/te_debug_gw_events.txt`).
-- The JE sits in `je_group_internal_affairs`. A `je_group_environment` is declared in `common/journal_entry_groups/timeline_extended_je_groups.txt` and unused; moving this entry there was deliberately left out of scope.
+- The JE sits in `je_group_internal_affairs`. The unused `je_group_environment` was deleted with vanilla 1.15, which requires an illustration on every group.
 
 ## Geoengineering (Stratospheric Aerosol Injection)
 
