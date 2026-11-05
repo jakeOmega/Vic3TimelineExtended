@@ -67,6 +67,10 @@ VANILLA_FRAMES = ROOT / "test_fixtures" / "vanilla_gui" / "block_windows.gui"
 STORED = "te_systems_window_tab"
 BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
+# A strip of six (the window's own systems, since Power Grids: owner,
+# 2026-11-05) is te_tab_buttons_six (gui/te_system_tab_widgets.gui), vanilla's
+# tab_buttons with a sixth slot, as the Budget, Diplomacy and Market panels use.
+SLOTS_SIX = SLOTS + ["sixth"]
 
 
 # --- expressions: the exact GUI text the templates and the strip use ---------
@@ -272,6 +276,13 @@ TABS: list[Tab] = [
     _system("seabed", "te_seabed_tab_body", "te_seabed_tab_layout", met="te_window_tab_seabed_met_tt",
             wide="te_seabed_wide_sections",
             public=True),
+    # No journal entry and no game rule: open once the country has a Grid
+    # Transfer Station, built or queued; always on the strip (no rule), its
+    # checklist te_window_power_grids_tab_unlock_sgui's. The strip's sixth
+    # (owner, 2026-11-05).
+    replace(_system("power_grids", "te_grid_tab_body", "te_grid_tab_layout", wide="te_grid_wide_sections"),
+            strip=None,
+            public=True),
 
     # The Budget and Market panels' tabs (strip 2). Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
@@ -419,9 +430,10 @@ WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
 
 
 def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
-    assert len(tabs) <= len(SLOTS), "vanilla's tab_buttons has five slots"
-    out = ["tab_buttons = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
-    for i, (slot, tab) in enumerate(zip(SLOTS, tabs)):
+    assert len(tabs) <= len(SLOTS_SIX), "te_tab_buttons_six has six slots"
+    six = len(tabs) > len(SLOTS)
+    out = [("te_tab_buttons_six" if six else "tab_buttons") + " = {"] + ([f"\t{ln}" for ln in WIDE_STRIP] + [""] if wide else [])
+    for i, (slot, tab) in enumerate(zip(SLOTS_SIX, tabs)):
         if i:
             out.append("")
         out.append(f"\t### {tab.key}")
@@ -453,7 +465,8 @@ def _tax_probes_strip(wide: bool = False) -> list[str]:
 
 def strips_narrow() -> list[str]:
     out = ["### The strips, in fixed_top: vanilla's five-slot strip (as the Military",
-           "### and Diplomacy panels use it) per row of the registry. tab_buttons",
+           "### and Diplomacy panels use it) per row of the registry, or for a row of",
+           "### six te_tab_buttons_six (the window's own systems'). tab_buttons",
            "### derives from hbox, and a flowcontainer cannot own box layouts, so this",
            "### is a vbox.",
            "type te_systems_window_strips_narrow = vbox {",
@@ -470,8 +483,8 @@ def strips_narrow() -> list[str]:
 
 def strips_wide() -> list[str]:
     out = ["### The full-screen frame's strips: the narrow strips side by side in one",
-           "### centered row, each at its narrow width, so one strip of up to fifteen",
-           "### tabs at the narrow slot width; then the developer strip.",
+           "### centered row, each at its narrow width, so one strip of up to sixteen",
+           "### tabs at their narrow slot widths; then the developer strip.",
            "type te_systems_window_strips_wide = vbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",
@@ -792,7 +805,7 @@ NI_PREFIX = "te_ni"
 # a strip. A public tab not listed here fails _validate_ni.
 NI_ORDER = ["pops", "demographics", "nation", "banking", "tax_code",
             "grand_monuments", "colonial_empire", "seabed", "cultural_hegemony", "space_race",
-            "nuclear_weapons"]
+            "nuclear_weapons", "power_grids"]
 NI_PER_STRIP = len(SLOTS)
 # The Pops tab: vanilla's window, always open.
 NI_POPS_LABEL = "te_pop_browser_tab_pops"

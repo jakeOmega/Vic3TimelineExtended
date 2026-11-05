@@ -119,7 +119,7 @@ types te_systems_window_types
 		###
 		### No tab carries an icon, as vanilla's tabs and the mod's other tabs
 		### don't (owner, 2026-09-30), so each tab shows the system's full name.
-		### Each strip holds five, as vanilla's Diplomacy panel puts its five
+		### A strip holds five, as vanilla's Diplomacy panel puts its five
 		### (diplomatic_overview.gui: Overview, Subjects, Release Subject, Nation
 		### Formation, Countries) on plain tab_buttons in this same 540 window,
 		### with no size or height override. A slot is 104.8 wide ((540 - 2 x 3
@@ -131,7 +131,10 @@ types te_systems_window_types
 		### words stack. "Monuments" is no longer than vanilla's "Formation".
 		### Until 2026-10-17 the Colonial Empire and the Seabed sat on a second
 		### strip so the names kept one line (owner: two levels for five tabs
-		### was a bit silly when the other windows hold up to six on one).
+		### was a bit silly when the other windows hold up to six on one). The
+		### window's own systems' strip holds six since Power Grids (owner,
+		### 2026-11-05), on te_tab_buttons_six: a slot of 87.3, a name 67.3,
+		### and still every word fits one line at fontsize_min.
 		blockoverride "fixed_top" {
 			vbox = {
 				layoutpolicy_horizontal = expanding

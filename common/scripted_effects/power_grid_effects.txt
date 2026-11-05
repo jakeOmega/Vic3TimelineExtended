@@ -62,6 +62,9 @@
 #   te_grid_region_size / te_grid_region_ratio / te_grid_hub  the grid's
 #                    stations, its supply-to-demand ratio without them and its
 #                    hub (largest producer, a state), for the state panel tile
+#   te_grid_region_demand  the grid's demand without its stations (the ratio's
+#                    denominator: 0, and the ratio 0, on a grid nothing uses
+#                    power on), for the building panel's Supply row
 #   te_grid_price_target  the Electricity price, over its base, the flow set
 #                    brings the state to (0 when it moves nothing)
 #   te_grid_ratio_in  briefly, the sell/buy ratio te_grid_price_at_ratio_value
@@ -230,11 +233,15 @@ te_grid_record_clear_effect = {
 		te_grid_clear_record_effect = yes
 	}
 	clear_global_variable_list = te_grid_record_hubs
+	# Its cable reach too: the country pass clears it for a country still in
+	# it, but one that has left (its last station gone) has no cable to reach
+	# with, and the tab's In reach would keep counting what it had.
 	every_in_global_list = {
 		variable = te_grid_record_countries
 		limit = { exists = this }
 		clear_variable_list = te_grid_hubs
 		clear_variable_list = te_grid_stations
+		clear_variable_list = te_grid_cable_reach
 	}
 	clear_global_variable_list = te_grid_record_countries
 }
@@ -834,6 +841,7 @@ te_grid_balance_region_effect = {
 		te_grid_set_price_target_effect = yes
 		set_variable = { name = te_grid_region_size value = local_var:te_grid_members }
 		set_variable = { name = te_grid_region_ratio value = global_var:te_grid_ratio }
+		set_variable = { name = te_grid_region_demand value = local_var:te_grid_sum_consumption }
 		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
 	}
 
@@ -1189,6 +1197,10 @@ te_grid_idle_station_effect = {
 		remove_variable = te_grid_region_ratio
 	}
 	if = {
+		limit = { has_variable = te_grid_region_demand }
+		remove_variable = te_grid_region_demand
+	}
+	if = {
 		limit = { has_variable = te_grid_price_target }
 		remove_variable = te_grid_price_target
 	}
@@ -1365,6 +1377,10 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_region_ratio }
 		remove_variable = te_grid_region_ratio
+	}
+	if = {
+		limit = { has_variable = te_grid_region_demand }
+		remove_variable = te_grid_region_demand
 	}
 	if = {
 		limit = { has_variable = te_grid_price_target }

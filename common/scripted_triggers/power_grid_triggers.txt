@@ -228,3 +228,15 @@ te_grid_chk_price_above_base = {
 	te_grid_chk_now_ratio_value >= 0.28
 	te_grid_chk_now_ratio_value <= 0.48
 }
+
+# Country scope: the Power Grids tab's checklist (te_window_power_grids_tab_unlock_sgui),
+# its open gate as one line (an OR stays one custom_tooltip: style guide rule 9).
+te_grid_tab_unlocked = {
+	custom_tooltip = {
+		text = te_grid_tab_unlock_tech_tt
+		OR = {
+			has_technology_researched = electrical_capacitors
+			any_scope_state = { has_building = building_grid_transfer_station }
+		}
+	}
+}

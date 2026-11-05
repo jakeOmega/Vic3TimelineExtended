@@ -107,6 +107,9 @@ PAGES = [
     Page("global_warming", "gw_how_header", ("gw_how_open", "rt_how_open"), ("te_gw_tab_body",),
          ("je_global_warming",),
          popup_title="text = \"[SelectLocalization( GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'gw_how_header', 'rt_how_header' )]\""),
+    # no journal entry: the window's tab and National Info; the station's
+    # building panel links to the tab
+    Page("power_grids", "te_grid_how_header", (), ("te_grid_tab_body",)),
 ]
 
 # The vanilla panels' tabs that show a system, each the type it mounts: a tab body

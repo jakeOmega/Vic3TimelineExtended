@@ -660,6 +660,16 @@ te_grid_region_ratio_disp = {
 	}
 }
 
+# The grid's demand without its stations: 0 on a grid nothing uses power on,
+# whose ratio is 0 too (te_grid_region_demand).
+te_grid_region_demand_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_region_demand }
+		value = var:te_grid_region_demand
+	}
+}
+
 # The Electricity price the flow set brings the state to, over its base
 # (te_grid_price_target); 0 for a station that moves nothing.
 te_grid_price_target_disp = {
@@ -760,6 +770,244 @@ te_grid_import_disp = {
 		limit = { has_variable = te_grid_import }
 		value = var:te_grid_import
 		multiply = te_grid_power_rate_value
+	}
+}
+
+# --- Power Grids tab (read every frame, so every read is guarded) -------------
+#
+# The tab (gui/te_grid_widgets.gui) and the station's building panel read the
+# grid's record (te_grid_record_effect, power_grid_effects.txt): the country's
+# lists te_grid_hubs and te_grid_stations and the hub's te_grid_rec_*. Country
+# scope unless marked state.
+
+# The country's stations, built (has_building misses a queued one). Live,
+# where the lists below are as of the last run.
+te_grid_tab_stations_disp = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_grid_transfer_station }
+		add = 1
+	}
+}
+
+# Its stations on a grid at the last run (te_grid_hub: an idle station has
+# none).
+te_grid_tab_on_grid_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			has_variable = te_grid_hub
+		}
+		add = 1
+	}
+}
+
+# Its stations still being built: a queued building exists at level 0.
+te_grid_tab_queued_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			any_scope_building = {
+				is_building_type = building_grid_transfer_station
+				level < 1
+			}
+		}
+		add = 1
+	}
+}
+
+# The grids its stations are on, and how many stations those grids join in
+# all, the other countries' among them.
+te_grid_tab_grids_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_hubs }
+		every_in_list = {
+			variable = te_grid_hubs
+			add = 1
+		}
+	}
+}
+
+te_grid_tab_grid_stations_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_hubs }
+		every_in_list = {
+			variable = te_grid_hubs
+			add = te_grid_region_size_disp
+		}
+	}
+}
+
+# What its sending stations send a week, and how many send; what its
+# receiving stations deliver after losses, and how many receive (the tile's
+# mode and Flow, te_grid_mode_disp and te_grid_electricity_moved_disp).
+te_grid_tab_sent_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 1
+		}
+		add = te_grid_electricity_moved_disp
+	}
+}
+
+te_grid_tab_senders_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 1
+		}
+		add = 1
+	}
+}
+
+te_grid_tab_received_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 2
+		}
+		add = te_grid_electricity_moved_disp
+	}
+}
+
+te_grid_tab_receivers_disp = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			te_grid_mode_disp = 2
+		}
+		add = 1
+	}
+}
+
+# The country's transmission efficiency, as each of its states uses it
+# (te_grid_state_efficiency_value's clamp).
+te_grid_tab_efficiency_disp = {
+	value = modifier:country_grid_transmission_efficiency_add
+	min = 0.1
+	max = 1
+}
+
+# The share lost on the way.
+te_grid_tab_loss_disp = {
+	value = 1
+	subtract = te_grid_tab_efficiency_disp
+}
+
+# Its Grid Interconnection Agreements, counted live from its treaties as
+# te_grid_refresh_partners_effect reads them (its te_grid_partners list is
+# refreshed only while it has a station), and the countries whose undersea
+# cables reach its own, or are reached by them, with no agreement yet
+# (te_grid_cable_reach; each of those has a station, so its partner list is
+# fresh, and the lists are mutual, so the other side's is read).
+te_grid_tab_partners_disp = {
+	value = 0
+	every_scope_treaty = {
+		limit = {
+			any_scope_article = { has_type = grid_interconnection_agreement }
+		}
+		add = 1
+	}
+}
+
+te_grid_tab_reach_disp = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_grid_cable_reach }
+		every_in_list = {
+			variable = te_grid_cable_reach
+			limit = {
+				exists = this
+				NOT = { is_target_in_variable_list = { name = te_grid_partners target = root } }
+			}
+			add = 1
+		}
+	}
+}
+
+# State scope, a hub: the grid's sending price, over Electricity's base.
+te_grid_rec_price_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_price }
+		value = var:te_grid_rec_price
+	}
+}
+
+# State scope, a hub: what the grid's stations send a week, what its
+# receivers deliver after losses, and the difference, the losses.
+te_grid_rec_sent_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_sent }
+		value = var:te_grid_rec_sent
+	}
+}
+
+te_grid_rec_delivered_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_delivered }
+		value = var:te_grid_rec_delivered
+	}
+}
+
+te_grid_rec_losses_disp = {
+	value = te_grid_rec_sent_disp
+	subtract = te_grid_rec_delivered_disp
+	min = 0
+}
+
+# State scope, a hub: the grid's members' Electricity made and used a week,
+# without their stations (the ratio's two sides).
+te_grid_rec_supply_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_supply }
+		value = var:te_grid_rec_supply
+	}
+}
+
+te_grid_rec_demand_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_demand }
+		value = var:te_grid_rec_demand
+	}
+}
+
+# State scope, a hub: how many countries own a station on the grid, and how
+# many markets it crosses.
+te_grid_rec_countries_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_countries }
+		value = var:te_grid_rec_countries
+	}
+}
+
+te_grid_rec_markets_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_rec_markets }
+		value = var:te_grid_rec_markets
+	}
+}
+
+# State scope, a station: its staffing, 0 to 1, for the Stations table.
+te_grid_station_staffing_disp = {
+	value = 0
+	every_scope_building = {
+		limit = { is_building_type = building_grid_transfer_station }
+		add = occupancy
 	}
 }
 

@@ -580,3 +580,32 @@ te_window_seabed_tab_unlock_sgui = {
 	is_valid = { te_seabed_tab_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Power Grids (power_grid_*.txt). No journal entry and no game rule: open once
+# the country has researched Electrical Capacitors, or holds a station without
+# it (a conquered one), and always on the strip. The gate is read several times
+# a frame while the window is open, so it asks nothing that walks buildings:
+# te_grid_state_has_station's any_scope_building would, in every state of a
+# country with no station (review of the tab's PR, 2026-11-05).
+# ---------------------------------------------------------------------------
+te_window_power_grids_tab_sgui = {
+	scope = country
+	is_shown = {
+		OR = {
+			has_technology_researched = electrical_capacitors
+			any_scope_state = { has_building = building_grid_transfer_station }
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_power_grids_tab_unlock_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_grid_tab_unlocked = yes }
+	effect = { }
+}
