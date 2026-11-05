@@ -1,5 +1,5 @@
 # AUTO-GENERATED vanilla asset path catalog for texture_reference_audit.py.
-# Game version 1.14.5. Regenerate on a vanilla bump:
+# Game version 1.15.0. Regenerate on a vanilla bump:
 #   python3 texture_reference_audit.py --bootstrap
 # Every file under game/gfx, jomini/gfx, clausewitz/gfx and game/dlc/*/gfx
 # with one of the extensions .dds .png .tga .jpg .jpeg .bk2 .shader .fxh .txt .settings, as the engine
@@ -60,6 +60,7 @@ gfx/FX/cw/particle2_erosion.shader
 gfx/FX/cw/particle2_functions.fxh
 gfx/FX/cw/particle2_harvestconditions.shader
 gfx/FX/cw/particle2_pyro.shader
+gfx/FX/cw/particle2_seasons.shader
 gfx/FX/cw/particle2_states.fxh
 gfx/FX/cw/pdx_blit.fxh
 gfx/FX/cw/pdx_blit.shader
@@ -101,7 +102,9 @@ gfx/FX/dynamic_masks.fxh
 gfx/FX/edgeofworld.fxh
 gfx/FX/edgeofworld.shader
 gfx/FX/fog_of_war.fxh
+gfx/FX/glass.fxh
 gfx/FX/grid/grid.shader
+gfx/FX/gui_blur.shader
 gfx/FX/gui_flag_3d.shader
 gfx/FX/gui_progresspie.shader
 gfx/FX/gui_war_arrow.shader
@@ -172,6 +175,7 @@ gfx/FX/jomini/texture_decals_base.fxh
 gfx/FX/lowspec_terrain.fxh
 gfx/FX/lowspec_water.fxh
 gfx/FX/mapname.shader
+gfx/FX/material_debug.fxh
 gfx/FX/naval_route.shader
 gfx/FX/particle.shader
 gfx/FX/pdxbink.shader
@@ -207,6 +211,10 @@ gfx/FX/pdxwater_game.fxh
 gfx/FX/river_bottom.shader
 gfx/FX/river_surface.shader
 gfx/FX/road_mulpass.shader
+gfx/FX/seasons.fxh
+gfx/FX/seasons_coverage.fxh
+gfx/FX/seasons_ice.fxh
+gfx/FX/seasons_noise_bake.shader
 gfx/FX/shader_customizable.settings
 gfx/FX/sharedconstants.fxh
 gfx/FX/ssao_struct.fxh
@@ -223,10 +231,12 @@ gfx/coat_of_arms/colored_emblems/ce_ahom_winged_lion.dds
 gfx/coat_of_arms/colored_emblems/ce_alaska_big_dipper.dds
 gfx/coat_of_arms/colored_emblems/ce_angkor_vat.dds
 gfx/coat_of_arms/colored_emblems/ce_armillary_sphere.dds
+gfx/coat_of_arms/colored_emblems/ce_armssr.dds
 gfx/coat_of_arms/colored_emblems/ce_arrow_cross.dds
 gfx/coat_of_arms/colored_emblems/ce_ashanti_golden_stool.dds
 gfx/coat_of_arms/colored_emblems/ce_asturian_cross.dds
 gfx/coat_of_arms/colored_emblems/ce_aurochs_head.dds
+gfx/coat_of_arms/colored_emblems/ce_azssr.dds
 gfx/coat_of_arms/colored_emblems/ce_balkenkreuz.dds
 gfx/coat_of_arms/colored_emblems/ce_banner_escutcheon.dds
 gfx/coat_of_arms/colored_emblems/ce_banner_wurttemberg.dds
@@ -259,8 +269,13 @@ gfx/coat_of_arms/colored_emblems/ce_border_of_3_sikkim.dds
 gfx/coat_of_arms/colored_emblems/ce_border_of_3_thin.dds
 gfx/coat_of_arms/colored_emblems/ce_border_orle.dds
 gfx/coat_of_arms/colored_emblems/ce_border_overlord.dds
+gfx/coat_of_arms/colored_emblems/ce_border_russian_regimental_flag.dds
+gfx/coat_of_arms/colored_emblems/ce_border_russian_regimental_flag_2knots.dds
+gfx/coat_of_arms/colored_emblems/ce_border_russian_regimental_flag_3knots.dds
+gfx/coat_of_arms/colored_emblems/ce_border_russian_regimental_flag_corner_knots.dds
 gfx/coat_of_arms/colored_emblems/ce_border_sikkim.dds
 gfx/coat_of_arms/colored_emblems/ce_border_thin.dds
+gfx/coat_of_arms/colored_emblems/ce_bssr.dds
 gfx/coat_of_arms/colored_emblems/ce_buddha.dds
 gfx/coat_of_arms/colored_emblems/ce_buf_emblem.dds
 gfx/coat_of_arms/colored_emblems/ce_buffalo.dds
@@ -308,6 +323,7 @@ gfx/coat_of_arms/colored_emblems/ce_coa_frame_austria.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_frame_ceylon.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_frame_costa_rica.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_frame_ddr.dds
+gfx/coat_of_arms/colored_emblems/ce_coa_frame_kazakh.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_frame_mexico.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_frame_natal.dds
 gfx/coat_of_arms/colored_emblems/ce_coa_haiti.dds
@@ -353,6 +369,7 @@ gfx/coat_of_arms/colored_emblems/ce_crescent_voided.dds
 gfx/coat_of_arms/colored_emblems/ce_crest_helmet.dds
 gfx/coat_of_arms/colored_emblems/ce_crest_mysore.dds
 gfx/coat_of_arms/colored_emblems/ce_crest_torse.dds
+gfx/coat_of_arms/colored_emblems/ce_crimea_ssr.dds
 gfx/coat_of_arms/colored_emblems/ce_crocodile.dds
 gfx/coat_of_arms/colored_emblems/ce_cross_auseklis.dds
 gfx/coat_of_arms/colored_emblems/ce_cross_burgundy.dds
@@ -471,7 +488,10 @@ gfx/coat_of_arms/colored_emblems/ce_galley.dds
 gfx/coat_of_arms/colored_emblems/ce_gandaberunda.dds
 gfx/coat_of_arms/colored_emblems/ce_golden_fishes.dds
 gfx/coat_of_arms/colored_emblems/ce_golden_fleece.dds
+gfx/coat_of_arms/colored_emblems/ce_gssr.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_and_sickle.dds
+gfx/coat_of_arms/colored_emblems/ce_hammer_and_sickle_1923.dds
+gfx/coat_of_arms/colored_emblems/ce_hammer_and_sickle_1924.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_and_sickle_round.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_compass_ddr.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_ddr.dds
@@ -487,6 +507,8 @@ gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_spain_wreath.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_spain_wreath_star.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_star_cogwheel.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_star_ussr.dds
+gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_star_ussr_1923.dds
+gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_star_ussr_1924.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_star_wreath.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_wreath.dds
 gfx/coat_of_arms/colored_emblems/ce_hammer_sickle_wreath_pcdi.dds
@@ -526,6 +548,8 @@ gfx/coat_of_arms/colored_emblems/ce_kolovrat.dds
 gfx/coat_of_arms/colored_emblems/ce_korea_kwae.dds
 gfx/coat_of_arms/colored_emblems/ce_korea_taegeuk.dds
 gfx/coat_of_arms/colored_emblems/ce_koru.dds
+gfx/coat_of_arms/colored_emblems/ce_kssr.dds
+gfx/coat_of_arms/colored_emblems/ce_kyrssr.dds
 gfx/coat_of_arms/colored_emblems/ce_labrys.dds
 gfx/coat_of_arms/colored_emblems/ce_labrys_petain.dds
 gfx/coat_of_arms/colored_emblems/ce_labrys_ppf.dds
@@ -658,6 +682,7 @@ gfx/coat_of_arms/colored_emblems/ce_rhombus.dds
 gfx/coat_of_arms/colored_emblems/ce_ribbon.dds
 gfx/coat_of_arms/colored_emblems/ce_rising_sun.dds
 gfx/coat_of_arms/colored_emblems/ce_royal_mantle.dds
+gfx/coat_of_arms/colored_emblems/ce_rsfsr.dds
 gfx/coat_of_arms/colored_emblems/ce_rune_algiz.dds
 gfx/coat_of_arms/colored_emblems/ce_rune_hagal.dds
 gfx/coat_of_arms/colored_emblems/ce_rune_tiwaz.dds
@@ -724,6 +749,7 @@ gfx/coat_of_arms/colored_emblems/ce_star_05_circle.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_hollow.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_morocco.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_pinwheeled.dds
+gfx/coat_of_arms/colored_emblems/ce_star_05_rays.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_ring.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_safcp.dds
 gfx/coat_of_arms/colored_emblems/ce_star_05_tilted.dds
@@ -785,6 +811,7 @@ gfx/coat_of_arms/colored_emblems/ce_sun_face_gwalior.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_face_idar.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_face_india_jeypore.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_frame_kyrgyz.dds
+gfx/coat_of_arms/colored_emblems/ce_sun_long_rays.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_of_may.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_peru.dds
 gfx/coat_of_arms/colored_emblems/ce_sun_philippines.dds
@@ -800,6 +827,7 @@ gfx/coat_of_arms/colored_emblems/ce_sword_tulwar_bend.dds
 gfx/coat_of_arms/colored_emblems/ce_takbir.dds
 gfx/coat_of_arms/colored_emblems/ce_tamga_idel_ural.dds
 gfx/coat_of_arms/colored_emblems/ce_tamga_tatar.dds
+gfx/coat_of_arms/colored_emblems/ce_tamga_tore.dds
 gfx/coat_of_arms/colored_emblems/ce_tao_people.dds
 gfx/coat_of_arms/colored_emblems/ce_temple_thai.dds
 gfx/coat_of_arms/colored_emblems/ce_terra_liberdade.dds
@@ -808,6 +836,7 @@ gfx/coat_of_arms/colored_emblems/ce_thunderbird.dds
 gfx/coat_of_arms/colored_emblems/ce_tiger_passant.dds
 gfx/coat_of_arms/colored_emblems/ce_tomoe.dds
 gfx/coat_of_arms/colored_emblems/ce_torch.dds
+gfx/coat_of_arms/colored_emblems/ce_torch_and_handshake.dds
 gfx/coat_of_arms/colored_emblems/ce_totem_kanak.dds
 gfx/coat_of_arms/colored_emblems/ce_tree_new_england.dds
 gfx/coat_of_arms/colored_emblems/ce_triangle.dds
@@ -826,10 +855,15 @@ gfx/coat_of_arms/colored_emblems/ce_triskel.dds
 gfx/coat_of_arms/colored_emblems/ce_triskel_wolfsangel.dds
 gfx/coat_of_arms/colored_emblems/ce_triskelion_double.dds
 gfx/coat_of_arms/colored_emblems/ce_triskelion_sicily.dds
+gfx/coat_of_arms/colored_emblems/ce_tssr.dds
 gfx/coat_of_arms/colored_emblems/ce_tunduk.dds
+gfx/coat_of_arms/colored_emblems/ce_turkmen_ssr.dds
+gfx/coat_of_arms/colored_emblems/ce_ukrssr.dds
 gfx/coat_of_arms/colored_emblems/ce_umbrella.dds
 gfx/coat_of_arms/colored_emblems/ce_umbrella_champasak.dds
 gfx/coat_of_arms/colored_emblems/ce_unicorn.dds
+gfx/coat_of_arms/colored_emblems/ce_uzbssr.dds
+gfx/coat_of_arms/colored_emblems/ce_vive_la_commune.dds
 gfx/coat_of_arms/colored_emblems/ce_vlajka_emblem.dds
 gfx/coat_of_arms/colored_emblems/ce_wagon.dds
 gfx/coat_of_arms/colored_emblems/ce_walknut.dds
@@ -1069,6 +1103,7 @@ gfx/coat_of_arms/patterns/pattern_border_of_3_decorated.dds
 gfx/coat_of_arms/patterns/pattern_border_of_3_double.dds
 gfx/coat_of_arms/patterns/pattern_border_of_4.dds
 gfx/coat_of_arms/patterns/pattern_border_outlined_thin.dds
+gfx/coat_of_arms/patterns/pattern_border_russian_regimental.dds
 gfx/coat_of_arms/patterns/pattern_border_triangles.dds
 gfx/coat_of_arms/patterns/pattern_border_triangles_morocco.dds
 gfx/coat_of_arms/patterns/pattern_border_two_stripes.dds
@@ -1182,6 +1217,7 @@ gfx/coat_of_arms/textured_emblems/te_coa_proletarier_aller_lander.dds
 gfx/coat_of_arms/textured_emblems/te_coa_schleswig_holstein.dds
 gfx/coat_of_arms/textured_emblems/te_coa_spain.dds
 gfx/coat_of_arms/textured_emblems/te_coa_spanish_republic.dds
+gfx/coat_of_arms/textured_emblems/te_coa_ssr_tajikistan.dds
 gfx/coat_of_arms/textured_emblems/te_coa_tuscany.dds
 gfx/coat_of_arms/textured_emblems/te_coa_two_sicilies.dds
 gfx/coat_of_arms/textured_emblems/te_coa_uruguay.dds
@@ -1252,6 +1288,7 @@ gfx/cursors/diplomatic_play.png
 gfx/cursors/diplomatic_play_cant.png
 gfx/cursors/establish_colony.png
 gfx/cursors/establish_colony_cant.png
+gfx/cursors/establish_cossack_host.png
 gfx/cursors/formation_order_invasion_cant.png
 gfx/cursors/formation_order_land_invasion.png
 gfx/cursors/formation_order_naval_invasion.png
@@ -1544,6 +1581,8 @@ gfx/event_pictures/1character_4flags_mask.dds
 gfx/event_pictures/1character_banner.dds
 gfx/event_pictures/1character_banner_halloween.dds
 gfx/event_pictures/1character_banner_halloween_mask.dds
+gfx/event_pictures/1character_banner_halloween_mask_nemo.dds
+gfx/event_pictures/1character_banner_halloween_nemo.dds
 gfx/event_pictures/1character_banner_mask.dds
 gfx/event_pictures/2characters.dds
 gfx/event_pictures/2characters_halloween.dds
@@ -1621,6 +1660,10 @@ gfx/event_pictures/ip4_abdication.bk2	dlc016_ip4
 gfx/event_pictures/ip4_colonial_exploitation_going_well.bk2	dlc016_ip4
 gfx/event_pictures/ip4_mining_scene.bk2	dlc016_ip4
 gfx/event_pictures/ip4_university_lecture.bk2	dlc016_ip4
+gfx/event_pictures/ip5_countryside_procession.bk2	dlc019_ip5
+gfx/event_pictures/ip5_harsh_winter.bk2	dlc019_ip5
+gfx/event_pictures/ip5_soviet_deliberation.bk2	dlc019_ip5
+gfx/event_pictures/ip5_theater.bk2	dlc019_ip5
 gfx/event_pictures/middleeast_battlefield_trenches.bk2
 gfx/event_pictures/middleeast_courtroom_upheaval.bk2
 gfx/event_pictures/middleeast_engineer_blueprint.bk2
@@ -1839,6 +1882,7 @@ gfx/interface/backgrounds/not_yet_initialized.dds
 gfx/interface/backgrounds/paper_bg.dds
 gfx/interface/backgrounds/paper_bg_dark.dds
 gfx/interface/backgrounds/paper_bg_light.dds
+gfx/interface/backgrounds/paper_card_bg.dds
 gfx/interface/backgrounds/paper_texture.dds
 gfx/interface/backgrounds/player_liberty_desire_bar.dds
 gfx/interface/backgrounds/player_liberty_desire_frame.dds
@@ -1887,6 +1931,7 @@ gfx/interface/banners/dlc_banners/dlc013.dds
 gfx/interface/banners/dlc_banners/dlc014.dds
 gfx/interface/banners/dlc_banners/dlc016.dds
 gfx/interface/banners/dlc_banners/dlc018.dds
+gfx/interface/banners/dlc_banners/dlc019.dds
 gfx/interface/budget/budget_set_high.dds
 gfx/interface/budget/budget_set_low.dds
 gfx/interface/budget/budget_set_medium.dds
@@ -1994,6 +2039,9 @@ gfx/interface/buttons/sort_button_icons/sort_imports.dds
 gfx/interface/buttons/sort_button_icons/sort_production.dds
 gfx/interface/buttons/sort_button_icons/sort_sell_orders.dds
 gfx/interface/character_panel/backgrounds/char_role_admiral.dds
+gfx/interface/character_panel/backgrounds/char_role_admiral_nemo.dds
+gfx/interface/character_panel/backgrounds/char_role_admiral_nemo_bg_mask.dds
+gfx/interface/character_panel/backgrounds/char_role_admiral_nemo_frame_overlay.dds
 gfx/interface/character_panel/backgrounds/char_role_agitator.dds
 gfx/interface/character_panel/backgrounds/char_role_executive.dds
 gfx/interface/character_panel/backgrounds/char_role_general.dds
@@ -2002,6 +2050,7 @@ gfx/interface/character_panel/backgrounds/char_role_politician.dds
 gfx/interface/character_panel/backgrounds/char_role_ruler.dds
 gfx/interface/character_panel/backgrounds/char_role_ruler_japan_post_meiji.dds
 gfx/interface/character_panel/backgrounds/char_role_ruler_japan_pre_meiji.dds
+gfx/interface/character_panel/backgrounds/char_role_ruler_russia.dds
 gfx/interface/character_panel/backgrounds/char_role_rulergeneral.dds
 gfx/interface/character_panel/backgrounds/company_panel_bg.dds
 gfx/interface/character_panel/ceo_character_frame.dds
@@ -2067,6 +2116,7 @@ gfx/interface/dividers/unused/standard_divider_01.dds
 gfx/interface/dividers/unused/standard_divider_02.dds
 gfx/interface/dividers/unused/standard_divider_03.dds
 gfx/interface/error_deer.dds
+gfx/interface/error_lion.dds
 gfx/interface/error_manul.dds
 gfx/interface/event_window/event_inner_frame.dds
 gfx/interface/flag/fancy_flag_cloth.dds
@@ -2176,6 +2226,10 @@ gfx/interface/icons/achievements/achievement_cosmopolitan.dds
 gfx/interface/icons/achievements/achievement_cosmopolitan.jpg
 gfx/interface/icons/achievements/achievement_cosmopolitan_notachieved.dds
 gfx/interface/icons/achievements/achievement_cosmopolitan_notachieved.jpg
+gfx/interface/icons/achievements/achievement_crime_and_punishment.dds
+gfx/interface/icons/achievements/achievement_crime_and_punishment.jpg
+gfx/interface/icons/achievements/achievement_crime_and_punishment_notachieved.dds
+gfx/interface/icons/achievements/achievement_crime_and_punishment_notachieved.jpg
 gfx/interface/icons/achievements/achievement_crush_the_commune.dds
 gfx/interface/icons/achievements/achievement_crush_the_commune.jpg
 gfx/interface/icons/achievements/achievement_crush_the_commune_notachieved.dds
@@ -2208,6 +2262,10 @@ gfx/interface/icons/achievements/achievement_diplomatic_victory.dds
 gfx/interface/icons/achievements/achievement_diplomatic_victory.jpg
 gfx/interface/icons/achievements/achievement_diplomatic_victory_notachieved.dds
 gfx/interface/icons/achievements/achievement_diplomatic_victory_notachieved.jpg
+gfx/interface/icons/achievements/achievement_dont_trust_the_liberals.dds
+gfx/interface/icons/achievements/achievement_dont_trust_the_liberals.jpg
+gfx/interface/icons/achievements/achievement_dont_trust_the_liberals_notachieved.dds
+gfx/interface/icons/achievements/achievement_dont_trust_the_liberals_notachieved.jpg
 gfx/interface/icons/achievements/achievement_duran_duran.dds
 gfx/interface/icons/achievements/achievement_duran_duran.jpg
 gfx/interface/icons/achievements/achievement_duran_duran_notachieved.dds
@@ -2292,6 +2350,10 @@ gfx/interface/icons/achievements/achievement_im_the_captain_now.dds
 gfx/interface/icons/achievements/achievement_im_the_captain_now.jpg
 gfx/interface/icons/achievements/achievement_im_the_captain_now_notachieved.dds
 gfx/interface/icons/achievements/achievement_im_the_captain_now_notachieved.jpg
+gfx/interface/icons/achievements/achievement_imagine.dds
+gfx/interface/icons/achievements/achievement_imagine.jpg
+gfx/interface/icons/achievements/achievement_imagine_notachieved.dds
+gfx/interface/icons/achievements/achievement_imagine_notachieved.jpg
 gfx/interface/icons/achievements/achievement_iranzamin.dds
 gfx/interface/icons/achievements/achievement_iranzamin.jpg
 gfx/interface/icons/achievements/achievement_iranzamin_notachieved.dds
@@ -2316,6 +2378,10 @@ gfx/interface/icons/achievements/achievement_lallemagne_cest_rien.dds
 gfx/interface/icons/achievements/achievement_lallemagne_cest_rien.jpg
 gfx/interface/icons/achievements/achievement_lallemagne_cest_rien_notachieved.dds
 gfx/interface/icons/achievements/achievement_lallemagne_cest_rien_notachieved.jpg
+gfx/interface/icons/achievements/achievement_lover_of_the_russian_queen.dds
+gfx/interface/icons/achievements/achievement_lover_of_the_russian_queen.jpg
+gfx/interface/icons/achievements/achievement_lover_of_the_russian_queen_notachieved.dds
+gfx/interface/icons/achievements/achievement_lover_of_the_russian_queen_notachieved.jpg
 gfx/interface/icons/achievements/achievement_magnanimous.dds
 gfx/interface/icons/achievements/achievement_magnanimous.jpg
 gfx/interface/icons/achievements/achievement_magnanimous_notachieved.dds
@@ -2328,6 +2394,11 @@ gfx/interface/icons/achievements/achievement_meiji_restoration.dds
 gfx/interface/icons/achievements/achievement_meiji_restoration.jpg
 gfx/interface/icons/achievements/achievement_meiji_restoration_notachieved.dds
 gfx/interface/icons/achievements/achievement_meiji_restoration_notachieved.jpg
+gfx/interface/icons/achievements/achievement_micromanage.jpg
+gfx/interface/icons/achievements/achievement_micromanager.dds
+gfx/interface/icons/achievements/achievement_micromanager.jpg
+gfx/interface/icons/achievements/achievement_micromanager_notachieved.dds
+gfx/interface/icons/achievements/achievement_micromanager_notachieved.jpg
 gfx/interface/icons/achievements/achievement_mikasa_es_su_casa.dds
 gfx/interface/icons/achievements/achievement_mikasa_es_su_casa.jpg
 gfx/interface/icons/achievements/achievement_mikasa_es_su_casa_notachieved.dds
@@ -2344,10 +2415,18 @@ gfx/interface/icons/achievements/achievement_new_order.dds
 gfx/interface/icons/achievements/achievement_new_order.jpg
 gfx/interface/icons/achievements/achievement_new_order_notachieved.dds
 gfx/interface/icons/achievements/achievement_new_order_notachieved.jpg
+gfx/interface/icons/achievements/achievement_no_truce_with_the_furies.dds
+gfx/interface/icons/achievements/achievement_no_truce_with_the_furies.jpg
+gfx/interface/icons/achievements/achievement_no_truce_with_the_furies_notachieved.dds
+gfx/interface/icons/achievements/achievement_no_truce_with_the_furies_notachieved.jpg
 gfx/interface/icons/achievements/achievement_nobody_did_their_duty.dds
 gfx/interface/icons/achievements/achievement_nobody_did_their_duty.jpg
 gfx/interface/icons/achievements/achievement_nobody_did_their_duty_notachieved.dds
 gfx/interface/icons/achievements/achievement_nobody_did_their_duty_notachieved.jpg
+gfx/interface/icons/achievements/achievement_not_those_reds.dds
+gfx/interface/icons/achievements/achievement_not_those_reds.jpg
+gfx/interface/icons/achievements/achievement_not_those_reds_notachieved.dds
+gfx/interface/icons/achievements/achievement_not_those_reds_notachieved.jpg
 gfx/interface/icons/achievements/achievement_not_yet_lost.dds
 gfx/interface/icons/achievements/achievement_not_yet_lost.jpg
 gfx/interface/icons/achievements/achievement_not_yet_lost_notachieved.dds
@@ -2388,6 +2467,10 @@ gfx/interface/icons/achievements/achievement_prussia_of_the_balkans.dds
 gfx/interface/icons/achievements/achievement_prussia_of_the_balkans.jpg
 gfx/interface/icons/achievements/achievement_prussia_of_the_balkans_notachieved.dds
 gfx/interface/icons/achievements/achievement_prussia_of_the_balkans_notachieved.jpg
+gfx/interface/icons/achievements/achievement_quiet_flows_the_yukon.dds
+gfx/interface/icons/achievements/achievement_quiet_flows_the_yukon.jpg
+gfx/interface/icons/achievements/achievement_quiet_flows_the_yukon_notachieved.dds
+gfx/interface/icons/achievements/achievement_quiet_flows_the_yukon_notachieved.jpg
 gfx/interface/icons/achievements/achievement_railroad_taikun.dds
 gfx/interface/icons/achievements/achievement_railroad_taikun.jpg
 gfx/interface/icons/achievements/achievement_railroad_taikun_notachieved.dds
@@ -2448,6 +2531,10 @@ gfx/interface/icons/achievements/achievement_thanks_obama.dds
 gfx/interface/icons/achievements/achievement_thanks_obama.jpg
 gfx/interface/icons/achievements/achievement_thanks_obama_notachieved.dds
 gfx/interface/icons/achievements/achievement_thanks_obama_notachieved.jpg
+gfx/interface/icons/achievements/achievement_the_could_have_been_king.dds
+gfx/interface/icons/achievements/achievement_the_could_have_been_king.jpg
+gfx/interface/icons/achievements/achievement_the_could_have_been_king_notachieved.dds
+gfx/interface/icons/achievements/achievement_the_could_have_been_king_notachieved.jpg
 gfx/interface/icons/achievements/achievement_the_man_who_would_be_king.dds
 gfx/interface/icons/achievements/achievement_the_man_who_would_be_king.jpg
 gfx/interface/icons/achievements/achievement_the_man_who_would_be_king_notachieved.dds
@@ -2460,6 +2547,10 @@ gfx/interface/icons/achievements/achievement_the_real_movement.dds
 gfx/interface/icons/achievements/achievement_the_real_movement.jpg
 gfx/interface/icons/achievements/achievement_the_real_movement_notachieved.dds
 gfx/interface/icons/achievements/achievement_the_real_movement_notachieved.jpg
+gfx/interface/icons/achievements/achievement_the_wide_dniepr_roars.dds
+gfx/interface/icons/achievements/achievement_the_wide_dniepr_roars.jpg
+gfx/interface/icons/achievements/achievement_the_wide_dniepr_roars_notachieved.dds
+gfx/interface/icons/achievements/achievement_the_wide_dniepr_roars_notachieved.jpg
 gfx/interface/icons/achievements/achievement_thing_japan.dds
 gfx/interface/icons/achievements/achievement_thing_japan.jpg
 gfx/interface/icons/achievements/achievement_thing_japan_notachieved.dds
@@ -2468,6 +2559,10 @@ gfx/interface/icons/achievements/achievement_three_mountains.dds
 gfx/interface/icons/achievements/achievement_three_mountains.jpg
 gfx/interface/icons/achievements/achievement_three_mountains_notachieved.dds
 gfx/interface/icons/achievements/achievement_three_mountains_notachieved.jpg
+gfx/interface/icons/achievements/achievement_trans_siberian_express.dds
+gfx/interface/icons/achievements/achievement_trans_siberian_express.jpg
+gfx/interface/icons/achievements/achievement_trans_siberian_express_notachieved.dds
+gfx/interface/icons/achievements/achievement_trans_siberian_express_notachieved.jpg
 gfx/interface/icons/achievements/achievement_unanimity.dds
 gfx/interface/icons/achievements/achievement_unanimity.jpg
 gfx/interface/icons/achievements/achievement_unanimity_notachieved.dds
@@ -2701,6 +2796,7 @@ gfx/interface/icons/ai_strategy_icons/agricultural_expansion.dds
 gfx/interface/icons/ai_strategy_icons/armed_isolationism.dds
 gfx/interface/icons/ai_strategy_icons/colonial_expansion.dds
 gfx/interface/icons/ai_strategy_icons/conservative_agenda.dds
+gfx/interface/icons/ai_strategy_icons/consolidate_the_state.dds
 gfx/interface/icons/ai_strategy_icons/economic_imperialism.dds
 gfx/interface/icons/ai_strategy_icons/egalitarian_agenda.dds
 gfx/interface/icons/ai_strategy_icons/industrial_expansion.dds
@@ -2709,6 +2805,7 @@ gfx/interface/icons/ai_strategy_icons/nationalist_agenda.dds
 gfx/interface/icons/ai_strategy_icons/placate_population.dds
 gfx/interface/icons/ai_strategy_icons/progressive_agenda.dds
 gfx/interface/icons/ai_strategy_icons/protect_region.dds
+gfx/interface/icons/ai_strategy_icons/pursue_revolutionary_confrontation.dds
 gfx/interface/icons/ai_strategy_icons/reactionary_agenda.dds
 gfx/interface/icons/ai_strategy_icons/resource_expansion.dds
 gfx/interface/icons/ai_strategy_icons/revolutionary.dds
@@ -2774,6 +2871,7 @@ gfx/interface/icons/alert_icons/unused/secession_possible.dds
 gfx/interface/icons/alert_icons/unused/suboptimal_navy.dds
 gfx/interface/icons/alert_icons/unused_interests.dds
 gfx/interface/icons/alert_icons/vulnerable_front.dds
+gfx/interface/icons/alert_icons/war_stalemate.dds
 gfx/interface/icons/alert_icons/wasted_construction.dds
 gfx/interface/icons/battle_conditions/battle_condition_aggressive_maneuver.dds
 gfx/interface/icons/battle_conditions/battle_condition_blunder.dds
@@ -2872,6 +2970,8 @@ gfx/interface/icons/building_icons/chemicals_industry.dds
 gfx/interface/icons/building_icons/coal_mine.dds
 gfx/interface/icons/building_icons/coffee_plantation.dds
 gfx/interface/icons/building_icons/construction_camp.dds
+gfx/interface/icons/building_icons/copper_mine.dds
+gfx/interface/icons/building_icons/cossack_host.dds
 gfx/interface/icons/building_icons/cotton_plantation.dds
 gfx/interface/icons/building_icons/dye_plantation.dds
 gfx/interface/icons/building_icons/eiffel_tower.dds
@@ -2952,9 +3052,11 @@ gfx/interface/icons/central_identity_pillars_icons/unused/research_conglomerate.
 gfx/interface/icons/character_role_icons/admiral.dds
 gfx/interface/icons/character_role_icons/agitator.dds
 gfx/interface/icons/character_role_icons/executive.dds
+gfx/interface/icons/character_role_icons/favorite.dds
 gfx/interface/icons/character_role_icons/general.dds
 gfx/interface/icons/character_role_icons/heir.dds
 gfx/interface/icons/character_role_icons/magnate.dds
+gfx/interface/icons/character_role_icons/notable.dds
 gfx/interface/icons/character_role_icons/politician.dds
 gfx/interface/icons/character_role_icons/ruler.dds
 gfx/interface/icons/character_trait_icons/aesthete.dds
@@ -2975,6 +3077,7 @@ gfx/interface/icons/character_trait_icons/bigoted.dds
 gfx/interface/icons/character_trait_icons/brave.dds
 gfx/interface/icons/character_trait_icons/cancer.dds
 gfx/interface/icons/character_trait_icons/cautious.dds
+gfx/interface/icons/character_trait_icons/cavalry_commander.dds
 gfx/interface/icons/character_trait_icons/celebrity_commander.dds
 gfx/interface/icons/character_trait_icons/charismatic.dds
 gfx/interface/icons/character_trait_icons/cocaine_addiction.dds
@@ -2995,6 +3098,7 @@ gfx/interface/icons/character_trait_icons/engineer.dds
 gfx/interface/icons/character_trait_icons/erudite.dds
 gfx/interface/icons/character_trait_icons/expensive_tastes.dds
 gfx/interface/icons/character_trait_icons/experienced_artillery_commander.dds
+gfx/interface/icons/character_trait_icons/experienced_cavalry_commander.dds
 gfx/interface/icons/character_trait_icons/experienced_colonial_administrator.dds
 gfx/interface/icons/character_trait_icons/experienced_convoy_raider.dds
 gfx/interface/icons/character_trait_icons/experienced_defensive_strategist.dds
@@ -3004,6 +3108,7 @@ gfx/interface/icons/character_trait_icons/experienced_naval_commander.dds
 gfx/interface/icons/character_trait_icons/experienced_offensive_planner.dds
 gfx/interface/icons/character_trait_icons/experienced_political_operator.dds
 gfx/interface/icons/character_trait_icons/expert_artillery_commander.dds
+gfx/interface/icons/character_trait_icons/expert_cavalry_commander.dds
 gfx/interface/icons/character_trait_icons/expert_colonial_administrator.dds
 gfx/interface/icons/character_trait_icons/expert_convoy_raider.dds
 gfx/interface/icons/character_trait_icons/expert_defensive_strategist.dds
@@ -3016,6 +3121,7 @@ gfx/interface/icons/character_trait_icons/firebrand_orator3.dds
 gfx/interface/icons/character_trait_icons/forest_commander.dds
 gfx/interface/icons/character_trait_icons/grifter.dds
 gfx/interface/icons/character_trait_icons/hedonist.dds
+gfx/interface/icons/character_trait_icons/hemophilia.dds
 gfx/interface/icons/character_trait_icons/honorable.dds
 gfx/interface/icons/character_trait_icons/imperious.dds
 gfx/interface/icons/character_trait_icons/imposing.dds
@@ -3043,6 +3149,7 @@ gfx/interface/icons/character_trait_icons/reserved.dds
 gfx/interface/icons/character_trait_icons/resupply_commander.dds
 gfx/interface/icons/character_trait_icons/romantic.dds
 gfx/interface/icons/character_trait_icons/ruthless.dds
+gfx/interface/icons/character_trait_icons/scandalous.dds
 gfx/interface/icons/character_trait_icons/scarred.dds
 gfx/interface/icons/character_trait_icons/senile.dds
 gfx/interface/icons/character_trait_icons/shellshocked.dds
@@ -3072,6 +3179,7 @@ gfx/interface/icons/character_trait_icons/stalwart_defender.dds
 gfx/interface/icons/character_trait_icons/surveyor.dds
 gfx/interface/icons/character_trait_icons/syphilis.dds
 gfx/interface/icons/character_trait_icons/tactful.dds
+gfx/interface/icons/character_trait_icons/tolerant.dds
 gfx/interface/icons/character_trait_icons/traditionalist_commander.dds
 gfx/interface/icons/character_trait_icons/trait_child.dds
 gfx/interface/icons/character_trait_icons/trench_rat.dds
@@ -3200,28 +3308,35 @@ gfx/interface/icons/company_icons/historical_company_icons/company_companhia_ger
 gfx/interface/icons/company_icons/historical_company_icons/company_companhia_uniao_fabril.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_compania_sansinena_de_carnes_congeladas.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_de_beers.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_dobrushskaya_pische_bumazhnaya_fabrika.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_elso_budapesti_gozmalom.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_erste_brunner.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_ferranti_ltd.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_fiskars_aktiebolag.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_gebruder_thonet.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_getzner_mutter.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_guthrie.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_ik_poznanski_cotton_products.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_imperial_ethiopian_railways.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_jakub_klein.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_jiangnan_weaving_bureaus.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_john_holt.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_kharitonenko_i_sin.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_kinkozan_sobei.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_klanicko_drustvo.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_konigliche_porzellan_manufaktur_meissen.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_kreenholmi_manufaktuur.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_la_gran_azucarera.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_la_hispano_suiza.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_lanfang_kongsi.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_lee_wilson.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_ludwig_moser_and_sons.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_maison_worth.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_malaxa.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_mantero_seta.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_maple_and_co.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_maschinenfabrik_oerlikon.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_maslosoyuz.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_massey_harris.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_mate_gavrilovic.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_nhm.dds
@@ -3236,13 +3351,16 @@ gfx/interface/icons/company_icons/historical_company_icons/company_pedro_domecq.
 gfx/interface/icons/company_icons/historical_company_icons/company_ramirez.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_romeo_y_julieta.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_russian_american_company.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_russisch_baltische_waggon_fabrik.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_siam_electrical_company_limited.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_sociedad_espanola_de_construccion_naval.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_societe_francaise_charbonnages_du_tonkin.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_stabilimento_tecnico_di_fiume.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_sumitomo.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_tabachnaya_manufaktura_leyba_shereshevskogo.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_tokyo_electric_light_company.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_united_tobacco_factories.dds
+gfx/interface/icons/company_icons/historical_company_icons/company_uzinele_de_fier_si_domeniile_resita.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_van_vlissingen_en_dudok_van_heel.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_white_star_line.dds
 gfx/interface/icons/company_icons/historical_company_icons/company_witkowitzer_bergbau_und_huttengewerkschaft.dds
@@ -3377,6 +3495,7 @@ gfx/interface/icons/diplomatic_action_icons/da_decrease_autonomy.dds
 gfx/interface/icons/diplomatic_action_icons/da_grant_investment_rights.dds
 gfx/interface/icons/diplomatic_action_icons/da_increase_autonomy.dds
 gfx/interface/icons/diplomatic_action_icons/da_request_investment_rights.dds
+gfx/interface/icons/diplomatic_action_icons/da_tsarpoints_install_subject_ruler.dds
 gfx/interface/icons/diplomatic_action_icons/decrease_payments.dds
 gfx/interface/icons/diplomatic_action_icons/diplomatic_action_backgrounds/subject_liberty_high.dds
 gfx/interface/icons/diplomatic_action_icons/diplomatic_action_backgrounds/subject_liberty_low.dds
@@ -3408,6 +3527,7 @@ gfx/interface/icons/diplomatic_action_icons/request_recognition.dds
 gfx/interface/icons/diplomatic_action_icons/requestion market control_obligation.dds
 gfx/interface/icons/diplomatic_action_icons/revoke_exempt_from_service.dds
 gfx/interface/icons/diplomatic_action_icons/revoke_market_independence.dds
+gfx/interface/icons/diplomatic_action_icons/seek_royal_marriage.dds
 gfx/interface/icons/diplomatic_action_icons/support_independence_break.dds
 gfx/interface/icons/diplomatic_action_icons/support_independence_obligation.dds
 gfx/interface/icons/diplomatic_action_icons/support_regime.dds
@@ -3460,12 +3580,14 @@ gfx/interface/icons/dlc_icons/dlc014.dds
 gfx/interface/icons/dlc_icons/dlc015.dds
 gfx/interface/icons/dlc_icons/dlc016.dds
 gfx/interface/icons/dlc_icons/dlc018.dds
+gfx/interface/icons/dlc_icons/dlc019.dds
 gfx/interface/icons/dlc_icons/dynamic_countries.dds
 gfx/interface/icons/event_icons/bicorne_hat.dds
 gfx/interface/icons/event_icons/event_carlist_beret.dds
 gfx/interface/icons/event_icons/event_default.dds
 gfx/interface/icons/event_icons/event_election.dds
 gfx/interface/icons/event_icons/event_fire.dds
+gfx/interface/icons/event_icons/event_imperial_eagle.dds
 gfx/interface/icons/event_icons/event_industry.dds
 gfx/interface/icons/event_icons/event_map.dds
 gfx/interface/icons/event_icons/event_military.dds
@@ -3473,6 +3595,7 @@ gfx/interface/icons/event_icons/event_newspaper.dds
 gfx/interface/icons/event_icons/event_portrait.dds
 gfx/interface/icons/event_icons/event_protest.dds
 gfx/interface/icons/event_icons/event_raiding.dds
+gfx/interface/icons/event_icons/event_revolutionary_flag.dds
 gfx/interface/icons/event_icons/event_scales.dds
 gfx/interface/icons/event_icons/event_skull.dds
 gfx/interface/icons/event_icons/event_trade.dds
@@ -3539,6 +3662,7 @@ gfx/interface/icons/generic_icons/coin_icon_10.dds
 gfx/interface/icons/generic_icons/coin_icon_11.dds
 gfx/interface/icons/generic_icons/coin_icon_12.dds
 gfx/interface/icons/generic_icons/coin_icon_13.dds
+gfx/interface/icons/generic_icons/cold_value.dds
 gfx/interface/icons/generic_icons/company_prosperity.dds
 gfx/interface/icons/generic_icons/conscripts.dds
 gfx/interface/icons/generic_icons/conscripts_100.dds
@@ -3569,6 +3693,7 @@ gfx/interface/icons/generic_icons/flotillas_44.dds
 gfx/interface/icons/generic_icons/gdp.dds
 gfx/interface/icons/generic_icons/generic_concept_icon.dds
 gfx/interface/icons/generic_icons/generic_goods.dds
+gfx/interface/icons/generic_icons/golden_rose.dds
 gfx/interface/icons/generic_icons/goods_shortage.dds
 gfx/interface/icons/generic_icons/government_building_icon.dds
 gfx/interface/icons/generic_icons/green_checkmark.dds
@@ -3718,6 +3843,7 @@ gfx/interface/icons/goods_icons/clippers.dds
 gfx/interface/icons/goods_icons/clothes.dds
 gfx/interface/icons/goods_icons/coal.dds
 gfx/interface/icons/goods_icons/coffee.dds
+gfx/interface/icons/goods_icons/copper.dds
 gfx/interface/icons/goods_icons/dye.dds
 gfx/interface/icons/goods_icons/electricity.dds
 gfx/interface/icons/goods_icons/explosives.dds
@@ -3768,6 +3894,7 @@ gfx/interface/icons/goods_icons/prestige_goods/como_silk_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/english_upholstery_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/ericsson_apparatus_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/ferranti_radios_prestige.dds
+gfx/interface/icons/goods_icons/prestige_goods/fiskars_tools.dds
 gfx/interface/icons/goods_icons/prestige_goods/ford_automobiles_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/generic_artillery_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/generic_clothes_prestige.dds
@@ -3793,6 +3920,7 @@ gfx/interface/icons/goods_icons/prestige_goods/haute_couture_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/java_coffee_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/kikkoman_soy_sauce.dds
 gfx/interface/icons/goods_icons/prestige_goods/krupp_guns_prestige.dds
+gfx/interface/icons/goods_icons/prestige_goods/maslosoyuz_butter.dds
 gfx/interface/icons/goods_icons/prestige_goods/meissen_porcelain_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/mit_afifi_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/oerlikon_engines_prestige.dds
@@ -3804,6 +3932,7 @@ gfx/interface/icons/goods_icons/prestige_goods/river_plate_beef_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/rosewood_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/russia_iron_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/saint_etienne_rifles_prestige.dds
+gfx/interface/icons/goods_icons/prestige_goods/sateen_clothes.dds
 gfx/interface/icons/goods_icons/prestige_goods/satsuma_ware_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/schichau_engines_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/schneider_guns_prestige.dds
@@ -3811,6 +3940,7 @@ gfx/interface/icons/goods_icons/prestige_goods/sea_island_cotton_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/sheffield_steel_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/sherry_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/sicilian_sulfur_prestige.dds
+gfx/interface/icons/goods_icons/prestige_goods/sikorsky_aeroplanes.dds
 gfx/interface/icons/goods_icons/prestige_goods/smirnoff_vodka_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/suzhou_silk_prestige.dds
 gfx/interface/icons/goods_icons/prestige_goods/swedish_bar_iron_prestige.dds
@@ -3861,7 +3991,6 @@ gfx/interface/icons/ideology_icons/abolitionist.dds
 gfx/interface/icons/ideology_icons/agrarian.dds
 gfx/interface/icons/ideology_icons/anarchist.dds
 gfx/interface/icons/ideology_icons/anti_clerical.dds
-gfx/interface/icons/ideology_icons/authoritarian.dds
 gfx/interface/icons/ideology_icons/bakufu.dds
 gfx/interface/icons/ideology_icons/bonapartist.dds
 gfx/interface/icons/ideology_icons/buddhist_moralist.dds
@@ -3872,6 +4001,7 @@ gfx/interface/icons/ideology_icons/communist.dds
 gfx/interface/icons/ideology_icons/confucian.dds
 gfx/interface/icons/ideology_icons/coptic_patriarch.dds
 gfx/interface/icons/ideology_icons/corporatist.dds
+gfx/interface/icons/ideology_icons/defensist.dds
 gfx/interface/icons/ideology_icons/despotic_utopian.dds
 gfx/interface/icons/ideology_icons/egalitarian.dds
 gfx/interface/icons/ideology_icons/enclavist.dds
@@ -3880,6 +4010,7 @@ gfx/interface/icons/ideology_icons/fascist.dds
 gfx/interface/icons/ideology_icons/frontier_expansionist.dds
 gfx/interface/icons/ideology_icons/hierarchic.dds
 gfx/interface/icons/ideology_icons/hindu_moralist.dds
+gfx/interface/icons/ideology_icons/humanitarism.dds
 gfx/interface/icons/ideology_icons/ibadi_imamate.dds
 gfx/interface/icons/ideology_icons/ibadi_shura.dds
 gfx/interface/icons/ideology_icons/ideology_leader/authoritarian.dds
@@ -3887,6 +4018,7 @@ gfx/interface/icons/ideology_icons/ideology_leader/child.dds
 gfx/interface/icons/ideology_icons/ideology_leader/exp_ideology_leader_protectionism.dds
 gfx/interface/icons/ideology_icons/ideology_leader/idealogy_leader_modernizer.dds
 gfx/interface/icons/ideology_icons/ideology_leader/idealogy_leader_technocratic.dds
+gfx/interface/icons/ideology_icons/ideology_leader/idealogy_leader_tsarist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_abolitionist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_anarchist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_bonapartist.dds
@@ -3900,6 +4032,7 @@ gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarian_
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_humanitarism.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_ilustrado.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_integralist.dds
+gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_internationalist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_jingoist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_land_reformer.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_legitimist.dds
@@ -3918,6 +4051,7 @@ gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_republican.dd
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_royalist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_slaver.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_social_democrat.dds
+gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_socialist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_sovereignist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_theocrat.dds
 gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_traditionalist.dds
@@ -3967,11 +4101,11 @@ gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_republ
 gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_russian_patriarch.dds
 gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_scholar_paternalistic.dds
 gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_sikh_moralist.dds
-gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_socialist.dds
 gfx/interface/icons/ideology_icons/ideology_leader/unused/ideology_leader_stratocratic.dds
 gfx/interface/icons/ideology_icons/ilustrado.dds
 gfx/interface/icons/ideology_icons/individualist.dds
 gfx/interface/icons/ideology_icons/integralist.dds
+gfx/interface/icons/ideology_icons/internationalist.dds
 gfx/interface/icons/ideology_icons/isolationist.dds
 gfx/interface/icons/ideology_icons/jingoist.dds
 gfx/interface/icons/ideology_icons/junker_paternalistic.dds
@@ -3984,6 +4118,7 @@ gfx/interface/icons/ideology_icons/malthusian.dds
 gfx/interface/icons/ideology_icons/market_liberal.dds
 gfx/interface/icons/ideology_icons/meritocratic.dds
 gfx/interface/icons/ideology_icons/miguelist.dds
+gfx/interface/icons/ideology_icons/militarist.dds
 gfx/interface/icons/ideology_icons/modernizer.dds
 gfx/interface/icons/ideology_icons/moralist.dds
 gfx/interface/icons/ideology_icons/nihilist.dds
@@ -4016,8 +4151,8 @@ gfx/interface/icons/ideology_icons/socialist.dds
 gfx/interface/icons/ideology_icons/sovereignist.dds
 gfx/interface/icons/ideology_icons/technocratic.dds
 gfx/interface/icons/ideology_icons/traditionalist.dds
+gfx/interface/icons/ideology_icons/tsarist.dds
 gfx/interface/icons/ideology_icons/unused/atheist.dds
-gfx/interface/icons/ideology_icons/unused/authoritarian.dds
 gfx/interface/icons/ideology_icons/unused/bonapartist.dds
 gfx/interface/icons/ideology_icons/unused/ethno_nationalist.dds
 gfx/interface/icons/ideology_icons/unused/fascist.dds
@@ -4296,6 +4431,7 @@ gfx/interface/icons/law_icons/anti_strike_laws.dds
 gfx/interface/icons/law_icons/appointed_bureaucrats.dds
 gfx/interface/icons/law_icons/autocracy.dds
 gfx/interface/icons/law_icons/bakufu.dds
+gfx/interface/icons/law_icons/caesaropapism.dds
 gfx/interface/icons/law_icons/censorship.dds
 gfx/interface/icons/law_icons/census_voting.dds
 gfx/interface/icons/law_icons/charitable_health_system.dds
@@ -4310,6 +4446,7 @@ gfx/interface/icons/law_icons/colonial_slavery.dds
 gfx/interface/icons/law_icons/combination_acts.dds
 gfx/interface/icons/law_icons/command_economy.dds
 gfx/interface/icons/law_icons/commercial_agriculture.dds
+gfx/interface/icons/law_icons/communal_administration.dds
 gfx/interface/icons/law_icons/compulsory_primary_school.dds
 gfx/interface/icons/law_icons/consumption_based_taxation.dds
 gfx/interface/icons/law_icons/cooperative_ownership.dds
@@ -4325,6 +4462,7 @@ gfx/interface/icons/law_icons/elder_council.dds
 gfx/interface/icons/law_icons/elected_bureaucrats.dds
 gfx/interface/icons/law_icons/ethnostate.dds
 gfx/interface/icons/law_icons/extraction_economy.dds
+gfx/interface/icons/law_icons/extraordinary_commission.dds
 gfx/interface/icons/law_icons/factory_councils.dds
 gfx/interface/icons/law_icons/free_trade.dds
 gfx/interface/icons/law_icons/freedom_of_conscience.dds
@@ -4336,8 +4474,10 @@ gfx/interface/icons/law_icons/guild_system.dds
 gfx/interface/icons/law_icons/hereditary_bureaucrats.dds
 gfx/interface/icons/law_icons/imperial_subjecthood.dds
 gfx/interface/icons/law_icons/industry_banned.dds
+gfx/interface/icons/law_icons/internal_colonization.dds
 gfx/interface/icons/law_icons/interventionism.dds
 gfx/interface/icons/law_icons/isolationism.dds
+gfx/interface/icons/law_icons/labour_suffrage.dds
 gfx/interface/icons/law_icons/laissez_faire.dds
 gfx/interface/icons/law_icons/land_based_taxation.dds
 gfx/interface/icons/law_icons/landed_voting.dds
@@ -4391,6 +4531,7 @@ gfx/interface/icons/law_icons/mercantilism.dds
 gfx/interface/icons/law_icons/merchant_fleet.dds
 gfx/interface/icons/law_icons/migration_controls.dds
 gfx/interface/icons/law_icons/militarized_police.dds
+gfx/interface/icons/law_icons/military_bureaucrats.dds
 gfx/interface/icons/law_icons/monarchy.dds
 gfx/interface/icons/law_icons/multicultural.dds
 gfx/interface/icons/law_icons/national_guard.dds
@@ -4407,6 +4548,8 @@ gfx/interface/icons/law_icons/no_social_security.dds
 gfx/interface/icons/law_icons/no_womens_rights.dds
 gfx/interface/icons/law_icons/no_workers_rights.dds
 gfx/interface/icons/law_icons/ocean_domination.dds
+gfx/interface/icons/law_icons/official_nationality.dds
+gfx/interface/icons/law_icons/okhrana.dds
 gfx/interface/icons/law_icons/old_age_pension.dds
 gfx/interface/icons/law_icons/oligarchy.dds
 gfx/interface/icons/law_icons/organic_regulation.dds
@@ -4430,6 +4573,7 @@ gfx/interface/icons/law_icons/racial_segregation.dds
 gfx/interface/icons/law_icons/regulatory_bodies.dds
 gfx/interface/icons/law_icons/religious_schools.dds
 gfx/interface/icons/law_icons/restricted_child_labor.dds
+gfx/interface/icons/law_icons/revolutionary_guard.dds
 gfx/interface/icons/law_icons/right_of_assembly.dds
 gfx/interface/icons/law_icons/right_to_associate.dds
 gfx/interface/icons/law_icons/sakoku.dds
@@ -4530,6 +4674,7 @@ gfx/interface/icons/lens_toolbar_icons/enforce_military_access break.dds
 gfx/interface/icons/lens_toolbar_icons/enforce_military_access obligation.dds
 gfx/interface/icons/lens_toolbar_icons/enforce_military_access.dds
 gfx/interface/icons/lens_toolbar_icons/establish_colony.dds
+gfx/interface/icons/lens_toolbar_icons/establish_cossack_host.dds
 gfx/interface/icons/lens_toolbar_icons/exempt_from_service.dds
 gfx/interface/icons/lens_toolbar_icons/expel_diplomats.dds
 gfx/interface/icons/lens_toolbar_icons/force_become_subject.dds
@@ -4560,6 +4705,7 @@ gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_diplomatic_lens_diplomatic
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_diplomatic_lens_diplomatic_plays.dds
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_diplomatic_lens_diplomatic_subjects_actions.dds
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_diplomatic_lens_interests.dds
+gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_diplomatic_lens_treaty_articles.dds
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_military_lens_military.dds
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_political_lens_decrees.dds
 gfx/interface/icons/lens_toolbar_icons/lens_tabs/icon_political_lens_state_actions.dds
@@ -4617,6 +4763,7 @@ gfx/interface/icons/lens_toolbar_icons/revoke_exempt_from_service.dds
 gfx/interface/icons/lens_toolbar_icons/revoke_market_independence.dds
 gfx/interface/icons/lens_toolbar_icons/rivalry.dds
 gfx/interface/icons/lens_toolbar_icons/rivalry_break.dds
+gfx/interface/icons/lens_toolbar_icons/seek_royal_marriage.dds
 gfx/interface/icons/lens_toolbar_icons/support_independence.dds
 gfx/interface/icons/lens_toolbar_icons/support_independence_break.dds
 gfx/interface/icons/lens_toolbar_icons/support_independence_obligation.dds
@@ -4675,6 +4822,7 @@ gfx/interface/icons/map_mode_icons/all_powerblocs.dds
 gfx/interface/icons/map_mode_icons/attitude.dds
 gfx/interface/icons/map_mode_icons/budget.dds
 gfx/interface/icons/map_mode_icons/building_relationships.dds
+gfx/interface/icons/map_mode_icons/cold_value.dds
 gfx/interface/icons/map_mode_icons/consumption.dds
 gfx/interface/icons/map_mode_icons/countries_at_peace.dds
 gfx/interface/icons/map_mode_icons/countries_in_conflict.dds
@@ -4688,6 +4836,7 @@ gfx/interface/icons/map_mode_icons/global_population.dds
 gfx/interface/icons/map_mode_icons/harvest_conditions.dds
 gfx/interface/icons/map_mode_icons/infamy.dds
 gfx/interface/icons/map_mode_icons/interests.dds
+gfx/interface/icons/map_mode_icons/journal_entry.dds
 gfx/interface/icons/map_mode_icons/literacy.dds
 gfx/interface/icons/map_mode_icons/loyalists.dds
 gfx/interface/icons/map_mode_icons/market_areas.dds
@@ -4903,7 +5052,8 @@ gfx/interface/icons/political_parties/military.dds
 gfx/interface/icons/political_parties/radical.dds
 gfx/interface/icons/political_parties/religious.dds
 gfx/interface/icons/political_parties/revolutionary.dds
-gfx/interface/icons/political_parties/social_democrats.dds
+gfx/interface/icons/political_parties/socialist.dds
+gfx/interface/icons/political_parties/unused/social_democrats.dds
 gfx/interface/icons/politics_icons/radicalized.dds
 gfx/interface/icons/politics_icons/revolution.dds
 gfx/interface/icons/pops_icons/academics.dds
@@ -5024,6 +5174,8 @@ gfx/interface/icons/production_method_icons/coffee_plantation_wet_process_manual
 gfx/interface/icons/production_method_icons/coffee_plantation_wet_process_mechanical.dds
 gfx/interface/icons/production_method_icons/combustion_derricks.dds
 gfx/interface/icons/production_method_icons/commerce_raiders.dds
+gfx/interface/icons/production_method_icons/communal_administration.dds
+gfx/interface/icons/production_method_icons/communal_representatives.dds
 gfx/interface/icons/production_method_icons/compression_ignition_tractors.dds
 gfx/interface/icons/production_method_icons/condensing_engine_pump.dds
 gfx/interface/icons/production_method_icons/corvee_labor.dds
@@ -5100,11 +5252,11 @@ gfx/interface/icons/production_method_icons/mahanian_thought.dds
 gfx/interface/icons/production_method_icons/man_o_wars.dds
 gfx/interface/icons/production_method_icons/market_squares.dds
 gfx/interface/icons/production_method_icons/market_stalls.dds
-gfx/interface/icons/production_method_icons/mass_automobiles_production.dds
 gfx/interface/icons/production_method_icons/mechanized_looms.dds
 gfx/interface/icons/production_method_icons/mechanized_slaughtering.dds
 gfx/interface/icons/production_method_icons/mechanized_workshops.dds
 gfx/interface/icons/production_method_icons/merchant_guilds.dds
+gfx/interface/icons/production_method_icons/military_bureaucrats.dds
 gfx/interface/icons/production_method_icons/military_shipbuilding_steam.dds
 gfx/interface/icons/production_method_icons/military_shipbuilding_steam_2.dds
 gfx/interface/icons/production_method_icons/military_shipbuilding_wooden.dds
@@ -5430,6 +5582,7 @@ gfx/interface/icons/ships/ship_types/silhouette_coastal_defense_ship.dds
 gfx/interface/icons/ships/ship_types/silhouette_destroyer.dds
 gfx/interface/icons/ships/ship_types/silhouette_dreadnought.dds
 gfx/interface/icons/ships/ship_types/silhouette_early_ironclad.dds
+gfx/interface/icons/ships/ship_types/silhouette_early_troop_ship.dds
 gfx/interface/icons/ships/ship_types/silhouette_frigate.dds
 gfx/interface/icons/ships/ship_types/silhouette_iron_frigate.dds
 gfx/interface/icons/ships/ship_types/silhouette_light_cruiser.dds
@@ -5461,6 +5614,7 @@ gfx/interface/icons/sol_icons/wealthy.dds
 gfx/interface/icons/state_status_icons/blockaded.dds
 gfx/interface/icons/state_status_icons/colonizable.dds
 gfx/interface/icons/state_status_icons/colony.dds
+gfx/interface/icons/state_status_icons/establish_cossack_host.dds
 gfx/interface/icons/state_status_icons/has_claims.dds
 gfx/interface/icons/state_status_icons/has_construction.dds
 gfx/interface/icons/state_status_icons/has_construction_paused.dds
@@ -5596,6 +5750,9 @@ gfx/interface/icons/trade_icons/production.dds
 gfx/interface/icons/trade_icons/sell_orders.dds
 gfx/interface/icons/trade_icons/trade_potential.dds
 gfx/interface/icons/trade_icons/unused/arrow_outbound.dds
+gfx/interface/icons/tsarpoint_icons/repeatable_action.dds
+gfx/interface/icons/tsarpoint_icons/single_use_action.dds
+gfx/interface/icons/tsarpoint_icons/tsarpoints.dds
 gfx/interface/icons/war_goals/annex_country.dds
 gfx/interface/icons/war_goals/ban_slavery.dds
 gfx/interface/icons/war_goals/colonization_rights.dds
@@ -5634,7 +5791,7 @@ gfx/interface/icons/war_goals/war_reparations.dds
 gfx/interface/illustrations/diplomatic_plays/phase_countdown_to_war_big.dds
 gfx/interface/illustrations/diplomatic_plays/phase_diplomatic_maneuvers_big.dds
 gfx/interface/illustrations/diplomatic_plays/phase_opening_moves_big.dds
-gfx/interface/illustrations/frontend/menu_video.bk2	base,dlc004_voice_of_the_people,dlc010_ep1,dlc013_mp1,dlc018_ep2
+gfx/interface/illustrations/frontend/menu_video.bk2	base,dlc004_voice_of_the_people,dlc010_ep1,dlc013_mp1,dlc018_ep2,dlc019_ip5
 gfx/interface/illustrations/frontend/menu_video_og.bk2
 gfx/interface/illustrations/government/government_illustration.dds
 gfx/interface/illustrations/institutions/colonization.dds
@@ -5645,11 +5802,51 @@ gfx/interface/illustrations/institutions/police.dds
 gfx/interface/illustrations/institutions/schools.dds
 gfx/interface/illustrations/institutions/social_security.dds
 gfx/interface/illustrations/institutions/workplace_safety.dds
+gfx/interface/illustrations/journal/game_obj_illu_economic_dominance.dds
+gfx/interface/illustrations/journal/game_obj_illu_egalitarian_society.dds
+gfx/interface/illustrations/journal/game_obj_illu_hegemony.dds
+gfx/interface/illustrations/journal/game_obj_illu_the_great_game.dds
+gfx/interface/illustrations/journal/game_obj_illu_tutorial.dds
+gfx/interface/illustrations/journal/je_group_illu_american_civil_war.dds
+gfx/interface/illustrations/journal/je_group_illu_brazil.dds
+gfx/interface/illustrations/journal/je_group_illu_brazil_pedro.dds
+gfx/interface/illustrations/journal/je_group_illu_british_india.dds
+gfx/interface/illustrations/journal/je_group_illu_crises.dds
+gfx/interface/illustrations/journal/je_group_illu_expeditions.dds
+gfx/interface/illustrations/journal/je_group_illu_foreign_affairs.dds
+gfx/interface/illustrations/journal/je_group_illu_france_divided_monarchies.dds
+gfx/interface/illustrations/journal/je_group_illu_france_expansion.dds
+gfx/interface/illustrations/journal/je_group_illu_german_unification.dds
+gfx/interface/illustrations/journal/je_group_illu_great_game.dds
+gfx/interface/illustrations/journal/je_group_illu_historical_content.dds
+gfx/interface/illustrations/journal/je_group_illu_iberia.dds
+gfx/interface/illustrations/journal/je_group_illu_internal_affairs.dds
+gfx/interface/illustrations/journal/je_group_illu_international_situations.dds
+gfx/interface/illustrations/journal/je_group_illu_manifest_destiny.dds
+gfx/interface/illustrations/journal/je_group_illu_meiji_restoration.dds
+gfx/interface/illustrations/journal/je_group_illu_objectives.dds
+gfx/interface/illustrations/journal/je_group_illu_poland.dds
+gfx/interface/illustrations/journal/je_group_illu_qing.dds
+gfx/interface/illustrations/journal/je_group_illu_russia_expansion.dds
+gfx/interface/illustrations/journal/je_group_illu_russia_great_reformer.dds
+gfx/interface/illustrations/journal/je_group_illu_socialism.dds
+gfx/interface/illustrations/journal/je_group_illu_spa_economic_regeneration.dds
+gfx/interface/illustrations/journal/je_group_illu_tanzimat.dds
+gfx/interface/illustrations/journal/je_group_illu_technology.dds
+gfx/interface/illustrations/journal/je_group_illu_tsarpoints.dds
+gfx/interface/illustrations/journal/je_group_illu_tutorial.dds
 gfx/interface/illustrations/journal/top_illu_journal_entries.dds
 gfx/interface/illustrations/military_panel/army_illu.dds
 gfx/interface/illustrations/military_panel/marine_illu.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_medical_support.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_reconaissance.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_supplements.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_supplies.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_support_equipment.dds
+gfx/interface/illustrations/mobilization_options/mobilisation_transportation.dds
 gfx/interface/illustrations/music_player/melodies_for_the_masses.dds
 gfx/interface/illustrations/music_player/songs_of_the_homeland.dds
+gfx/interface/illustrations/music_player/state_and_revolution.dds
 gfx/interface/illustrations/music_player/the_great_wave.dds
 gfx/interface/illustrations/music_player/victoria_3_preorder.dds
 gfx/interface/illustrations/music_player/victoria_3_soundtrack.dds
@@ -5674,6 +5871,8 @@ gfx/interface/illustrations/top_illus/top_illu_political_movement.dds
 gfx/interface/illustrations/top_illus/top_illu_population.dds
 gfx/interface/illustrations/top_illus/top_illu_revolutionary_movement.dds
 gfx/interface/illustrations/top_illus/top_illu_searoutes.dds
+gfx/interface/illustrations/top_illus/unused/je_illu_protest_1.dds
+gfx/interface/illustrations/top_illus/unused/je_illu_raiding_1.dds
 gfx/interface/illustrations/top_illus/unused/top_illu_fronts.dds
 gfx/interface/illustrations/treaties/diplomacy_bg.png
 gfx/interface/illustrations/war/defeat.dds
@@ -5820,6 +6019,7 @@ gfx/interface/masks/fade_vertical_bottom.dds
 gfx/interface/masks/fade_vertical_center.dds
 gfx/interface/masks/fade_vertical_center_inverted.dds
 gfx/interface/masks/fade_vertical_top.dds
+gfx/interface/masks/illus_top_shadow_bottom_fade.dds
 gfx/interface/masks/unused/fade_horizontal_right_stronger.dds
 gfx/interface/masks/unused/fade_state_image.dds
 gfx/interface/masks/unused/mask_rough_edges_down_right.dds
@@ -5856,6 +6056,9 @@ gfx/interface/navy/points_to_military_2.dds
 gfx/interface/navy/points_to_military_supply.dds
 gfx/interface/navy/points_to_supply_1.dds
 gfx/interface/navy/points_to_supply_2.dds
+gfx/interface/navy/supply_line_filter_allies.dds
+gfx/interface/navy/supply_line_filter_enemy.dds
+gfx/interface/navy/supply_line_filter_own.dds
 gfx/interface/new_game_panel/frame_start_menu_top.dds
 gfx/interface/new_game_panel/victoria3_newgamepanel.dds
 gfx/interface/notifications/dec_frame.dds
@@ -5889,22 +6092,31 @@ gfx/interface/population/pop_culture.dds
 gfx/interface/population/pop_icon_bg.dds
 gfx/interface/population/pop_religion.dds
 gfx/interface/population/pop_type.dds
+gfx/interface/portraits/pop_portrait_mask_panel.dds
 gfx/interface/portraits/portrait_frame_head.dds
 gfx/interface/portraits/portrait_frame_head_historical_info_link.dds
-gfx/interface/portraits/portrait_frame_head_historical_laurel_info_link.dds
-gfx/interface/portraits/portrait_frame_head_historical_laurel_no_info_link.dds
+gfx/interface/portraits/portrait_frame_head_historical_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_head_historical_no_info_link.dds
+gfx/interface/portraits/portrait_frame_head_historical_no_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_head_mask.dds
 gfx/interface/portraits/portrait_frame_head_mask_historical.dds
+gfx/interface/portraits/portrait_frame_head_mask_historical_tsarpoint.dds
+gfx/interface/portraits/portrait_frame_head_mask_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_head_small.dds
 gfx/interface/portraits/portrait_frame_head_small_historical_info_link.dds
+gfx/interface/portraits/portrait_frame_head_small_historical_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_head_small_historical_no_info_link.dds
+gfx/interface/portraits/portrait_frame_head_small_historical_no_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_torso.dds
 gfx/interface/portraits/portrait_frame_torso_historical_info_link.dds
-gfx/interface/portraits/portrait_frame_torso_historical_laurel_info_link.dds
-gfx/interface/portraits/portrait_frame_torso_historical_laurel_no_info_link.dds
+gfx/interface/portraits/portrait_frame_torso_historical_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_torso_historical_no_info_link.dds
+gfx/interface/portraits/portrait_frame_torso_historical_no_info_link_tsarpoint.dds
 gfx/interface/portraits/portrait_frame_torso_mask.dds
+gfx/interface/portraits/portrait_frame_torso_mask_historical.dds
+gfx/interface/portraits/portrait_frame_torso_mask_historical_no_info_link.dds
+gfx/interface/portraits/portrait_frame_torso_mask_tsarpoint.dds
+gfx/interface/portraits/portrait_frame_torso_tsarpoint.dds
 gfx/interface/portraits/portrait_mask_default.dds
 gfx/interface/portraits/portrait_mask_no_fade_bottom.dds
 gfx/interface/portraits/portrait_mask_small_fade_bottom.dds
@@ -5997,7 +6209,6 @@ gfx/interface/selections/highlighted_square_selection_anim.dds
 gfx/interface/selections/selected_square_selection.dds
 gfx/interface/ship_designer/graph_background.dds
 gfx/interface/ship_designer/ship_designer_popup_frame_decoration.dds
-gfx/interface/strait_placeholder_icon.png
 gfx/interface/tabs/tab_button_1.dds
 gfx/interface/tabs/tab_button_1_selected.dds
 gfx/interface/tabs/tab_button_frontend.dds
@@ -6086,7 +6297,6 @@ gfx/lines/line_diffuse_10.dds
 gfx/lines/line_mask.dds
 gfx/lines/line_mask_10.dds
 gfx/lines/strategic_objective_arrow.dds
-gfx/lines/strategic_objective_arrow_inner.dds
 gfx/lines/white.dds
 gfx/load_settings.settings
 gfx/loadingscreens/ap1_victoria3_load_1.dds	dlc007_ap1
@@ -6101,6 +6311,9 @@ gfx/loadingscreens/ip3_victoria3_load_1.dds	dlc014_ip3
 gfx/loadingscreens/ip3_victoria3_load_2.dds	dlc014_ip3
 gfx/loadingscreens/ip4_victoria3_load_1.dds	dlc016_ip4
 gfx/loadingscreens/ip4_victoria3_load_2.dds	dlc016_ip4
+gfx/loadingscreens/ip5_victoria3_load_1.dds	dlc019_ip5
+gfx/loadingscreens/ip5_victoria3_load_2.dds	dlc019_ip5
+gfx/loadingscreens/loadingscreen_settings.txt
 gfx/loadingscreens/mp1_victoria3_load_1.dds	dlc013_mp1
 gfx/loadingscreens/rp1_victoria3_load_1.dds	dlc008_rp1
 gfx/loadingscreens/victoria3_load_0.dds
@@ -6117,6 +6330,7 @@ gfx/loadingscreens/votp_victoria3_load_1.dds	dlc004_voice_of_the_people
 gfx/loadingscreens/votp_victoria3_load_2.dds	dlc004_voice_of_the_people
 gfx/map/air_graphics/00_example.txt
 gfx/map/air_graphics/01_zeppelin.txt
+gfx/map/air_graphics/02_birds.txt
 gfx/map/army_dioramas/military_diorama_battle.txt
 gfx/map/army_dioramas/military_diorama_frontline.txt
 gfx/map/borders/border_country.dds
@@ -6150,6 +6364,7 @@ gfx/map/building_config/default.txt
 gfx/map/building_config/french_culturepack.txt	dlc004_voice_of_the_people
 gfx/map/building_config/indian_culturepack.txt	dlc011_ip2
 gfx/map/building_config/japan_culturepack.txt	dlc018_ep2
+gfx/map/building_config/russian_culturepack.txt	dlc019_ip5
 gfx/map/city_data/city_building_vfx/default.txt
 gfx/map/city_data/city_centerpiece/balkan_centerpieces.txt	dlc014_ip3
 gfx/map/city_data/city_centerpiece/cities.txt
@@ -6159,6 +6374,7 @@ gfx/map/city_data/city_centerpiece/indian_centerpieces.txt	dlc011_ip2
 gfx/map/city_data/city_centerpiece/japan_centerpieces.txt	dlc018_ep2
 gfx/map/city_data/city_centerpiece/mines.txt
 gfx/map/city_data/city_centerpiece/ports.txt
+gfx/map/city_data/city_centerpiece/russian_centerpieces.txt	dlc019_ip5
 gfx/map/city_data/city_centerpiece/wood.txt
 gfx/map/city_data/city_graphics_data.settings
 gfx/map/city_data/city_types/00_example.txt
@@ -6209,6 +6425,11 @@ gfx/map/city_data/city_types/latin_farm.txt
 gfx/map/city_data/city_types/latin_mine.txt
 gfx/map/city_data/city_types/latin_port.txt
 gfx/map/city_data/city_types/latin_wood.txt
+gfx/map/city_data/city_types/russian_city.txt	dlc019_ip5
+gfx/map/city_data/city_types/russian_farm.txt	dlc019_ip5
+gfx/map/city_data/city_types/russian_mine.txt	dlc019_ip5
+gfx/map/city_data/city_types/russian_port.txt	dlc019_ip5
+gfx/map/city_data/city_types/russian_wood.txt	dlc019_ip5
 gfx/map/city_data/city_types/southasian_city.txt
 gfx/map/city_data/city_types/southasian_farm.txt
 gfx/map/city_data/city_types/southasian_mine.txt
@@ -6239,6 +6460,9 @@ gfx/map/environment/environment_accurate.txt
 gfx/map/environment/environment_backsun.txt
 gfx/map/environment/environment_game.txt
 gfx/map/environment/environment_greyscale.txt
+gfx/map/environment/season_settings.txt
+gfx/map/environment/season_vfx/00_season_vfx.txt
+gfx/map/environment/tree_autumn_ramp.dds
 gfx/map/environment/ui_flag_environment.txt
 gfx/map/environment/ui_power_bloc_statues_environment.txt
 gfx/map/environment/ui_ship_viewer_environment.txt
@@ -6247,6 +6471,7 @@ gfx/map/fleet_dioramas/fleet_dioramas.txt
 gfx/map/fleet_dioramas/mission_dioramas.txt
 gfx/map/fleet_entities/01_fleet_entities.txt
 gfx/map/fleet_entities/02_dlc017_fleet_entities.txt	dlc017_warships_bonus_pack
+gfx/map/fleet_entities/02_nautilus_fleet_entities.txt
 gfx/map/fog_of_war/cloud.dds
 gfx/map/fog_of_war/cloud_normal.dds
 gfx/map/fog_of_war/fog_of_war.settings
@@ -6348,6 +6573,7 @@ gfx/map/map_object_data/generated_map_object_locators_port.txt
 gfx/map/map_object_data/generated_map_object_locators_wood.txt
 gfx/map/map_object_data/ip3_wonders_mapobjects.txt	dlc014_ip3
 gfx/map/map_object_data/ip4_wonders_mapobjects.txt	dlc016_ip4
+gfx/map/map_object_data/ip5_wonders_mapobjects.txt	dlc019_ip5
 gfx/map/map_object_data/lakes.txt
 gfx/map/map_object_data/layers.txt
 gfx/map/map_object_data/papermap_coin_ap1.txt	dlc007_ap1
@@ -6355,6 +6581,7 @@ gfx/map/map_object_data/papermap_coin_ep2.txt	dlc018_ep2
 gfx/map/map_object_data/papermap_coin_ip2.txt	dlc011_ip2
 gfx/map/map_object_data/papermap_coin_ip3.txt	dlc014_ip3
 gfx/map/map_object_data/papermap_coin_ip4.txt	dlc016_ip4
+gfx/map/map_object_data/papermap_coin_ip5.txt	dlc019_ip5
 gfx/map/map_object_data/papermap_coin_mp1.txt	dlc013_mp1
 gfx/map/map_object_data/papermap_coin_rp1.txt	dlc008_rp1
 gfx/map/map_object_data/papermap_coin_votp.txt	dlc004_voice_of_the_people
@@ -6367,6 +6594,7 @@ gfx/map/map_object_data/papermap_table_ip2_locators.txt
 gfx/map/map_object_data/papermap_table_ip3_locators.txt
 gfx/map/map_object_data/papermap_table_ip4_locators.txt
 gfx/map/map_object_data/sandstone_monument.txt
+gfx/map/map_object_data/seasonal_effects.txt
 gfx/map/map_object_data/static.txt
 gfx/map/map_object_data/unique_buildings.txt
 gfx/map/map_object_data/wonder_great_wall_of_china.txt
@@ -6461,12 +6689,19 @@ gfx/map/map_painting/this_is_you.dds
 gfx/map/map_painting/wary.dds
 gfx/map/map_painting/you_military.dds
 gfx/map/map_painting/you_warleader.dds
+gfx/map/masks/coast_distance.dds
 gfx/map/masks/mask_dynamic_farmland.png
 gfx/map/masks/mask_dynamic_forestry.png
 gfx/map/masks/mask_dynamic_mining.png
+gfx/map/masks/season_noise.dds
+gfx/map/masks/season_placement_mask.dds
+gfx/map/masks/season_terrain_noise.dds
+gfx/map/masks/snow_carve_mask.png
 gfx/map/movement_arrows/movearrow_move.dds
+gfx/map/movement_arrows/movearrow_supply_ally.dds
+gfx/map/movement_arrows/movearrow_supply_enemy.dds
+gfx/map/movement_arrows/movearrow_supply_player.dds
 gfx/map/movement_arrows/reinforce_arrow_color.dds
-gfx/map/movement_arrows/supply_arrow_color.dds
 gfx/map/post_effects/colorcorrection_neutral.tga
 gfx/map/post_effects/colorcorrection_night.tga
 gfx/map/post_effects/posteffect_volumes.txt
@@ -6649,6 +6884,7 @@ gfx/map/terrain/mask_grasslands_05.png
 gfx/map/terrain/mask_grasslands_06.png
 gfx/map/terrain/mask_grasslands_07.png
 gfx/map/terrain/mask_grasslands_08.png
+gfx/map/terrain/mask_harvest_frost.png
 gfx/map/terrain/mask_marchlands_01.png
 gfx/map/terrain/mask_marchlands_02.png
 gfx/map/terrain/mask_marchlands_03.png
@@ -6660,7 +6896,11 @@ gfx/map/terrain/mask_pollution_01.png
 gfx/map/terrain/mask_rocks_01.png
 gfx/map/terrain/mask_savanna_01.png
 gfx/map/terrain/mask_savanna_03.png
-gfx/map/terrain/mask_snow_02.png
+gfx/map/terrain/mask_seasons_autumn.png
+gfx/map/terrain/mask_seasons_ice.png
+gfx/map/terrain/mask_seasons_snow.png
+gfx/map/terrain/mask_seasons_spring.png
+gfx/map/terrain/mask_snow.png
 gfx/map/terrain/mask_woodlands_01.png
 gfx/map/terrain/mask_woodlands_02.png
 gfx/map/terrain/mask_woodlands_03.png
@@ -6680,9 +6920,24 @@ gfx/map/terrain/pollution_01_properties.dds
 gfx/map/terrain/rocks_01_diffuse.dds
 gfx/map/terrain/rocks_01_normal.dds
 gfx/map/terrain/rocks_01_properties.dds
+gfx/map/terrain/seasons_autumn_diffuse.dds
+gfx/map/terrain/seasons_autumn_normal.dds
+gfx/map/terrain/seasons_autumn_properties.dds
+gfx/map/terrain/seasons_ice_diffuse.dds
+gfx/map/terrain/seasons_ice_normal.dds
+gfx/map/terrain/seasons_ice_properties.dds
+gfx/map/terrain/seasons_snow_diffuse.dds
+gfx/map/terrain/seasons_snow_normal.dds
+gfx/map/terrain/seasons_snow_properties.dds
+gfx/map/terrain/seasons_spring_diffuse.dds
+gfx/map/terrain/seasons_spring_normal.dds
+gfx/map/terrain/seasons_spring_properties.dds
 gfx/map/terrain/snow_02_diffuse.dds
 gfx/map/terrain/snow_02_normal.dds
 gfx/map/terrain/snow_02_properties.dds
+gfx/map/terrain/terrain_snow_diffuse.dds
+gfx/map/terrain/terrain_snow_normal.dds
+gfx/map/terrain/terrain_snow_properties.dds
 gfx/map/terrain/woodlands_01_diffuse.dds
 gfx/map/terrain/woodlands_01_normal.dds
 gfx/map/terrain/woodlands_01_properties.dds
@@ -6709,6 +6964,7 @@ gfx/map/textures/flatmap_ip2.dds	dlc011_ip2
 gfx/map/textures/flatmap_ip3.dds	dlc014_ip3
 gfx/map/textures/flatmap_ip4_portugal.dds	dlc016_ip4
 gfx/map/textures/flatmap_ip4_spain.dds	dlc016_ip4
+gfx/map/textures/flatmap_ip5.dds	dlc019_ip5
 gfx/map/textures/flatmap_newsletter_bonus.dds
 gfx/map/textures/flatmap_noise.dds	base,dlc018_ep2
 gfx/map/textures/flatmap_overlay.dds
@@ -6718,6 +6974,7 @@ gfx/map/textures/flatmap_overlay_ep2.dds	dlc018_ep2
 gfx/map/textures/flatmap_overlay_ip2.dds	dlc011_ip2
 gfx/map/textures/flatmap_overlay_ip3.dds	dlc014_ip3
 gfx/map/textures/flatmap_overlay_ip4.dds	dlc016_ip4
+gfx/map/textures/flatmap_overlay_ip5.dds	dlc019_ip5
 gfx/map/textures/flatmap_overlay_newsletter_bonus.dds
 gfx/map/textures/flatmap_overlay_votp.dds	dlc004_voice_of_the_people
 gfx/map/textures/flatmap_votp.dds	dlc004_voice_of_the_people
@@ -6734,6 +6991,7 @@ gfx/map/textures/maptextures_ip2.settings	dlc011_ip2
 gfx/map/textures/maptextures_ip3.settings	dlc014_ip3
 gfx/map/textures/maptextures_ip4_portugal.settings	dlc016_ip4
 gfx/map/textures/maptextures_ip4_spain.settings	dlc016_ip4
+gfx/map/textures/maptextures_ip5.settings	dlc019_ip5
 gfx/map/textures/maptextures_newsletter_bonus.settings
 gfx/map/textures/maptextures_votp.settings	dlc004_voice_of_the_people
 gfx/map/textures/rain_mask.dds
@@ -6773,9 +7031,6 @@ gfx/models/buildings/african/african_city/african_city_centerpiece_decal_01_prop
 gfx/models/buildings/african/african_city/african_city_centerpiece_skyscraper_01_diffuse.dds
 gfx/models/buildings/african/african_city/african_city_centerpiece_skyscraper_01_normal.dds
 gfx/models/buildings/african/african_city/african_city_centerpiece_skyscraper_01_properties.dds
-gfx/models/buildings/african/african_city/african_city_decal_diffuse.dds
-gfx/models/buildings/african/african_city/african_city_decal_normal.dds
-gfx/models/buildings/african/african_city/african_city_decal_properties.dds
 gfx/models/buildings/african/african_city/african_city_financialdistrict_01_diffuse.dds
 gfx/models/buildings/african/african_city/african_city_financialdistrict_01_normal.dds
 gfx/models/buildings/african/african_city/african_city_financialdistrict_01_properties.dds
@@ -6799,6 +7054,9 @@ gfx/models/buildings/african/african_city/african_city_university_01_properties.
 gfx/models/buildings/african/african_city/african_city_university_decal_01_diffuse.dds
 gfx/models/buildings/african/african_city/african_city_university_decal_01_normal.dds
 gfx/models/buildings/african/african_city/african_city_university_decal_01_properties.dds
+gfx/models/buildings/african/african_city/african_city_worlddecal_diffuse.dds
+gfx/models/buildings/african/african_city/african_city_worlddecal_normal.dds
+gfx/models/buildings/african/african_city/african_city_worlddecal_properties.dds
 gfx/models/buildings/african/african_farm/african_farm_centerpiece_01_diffuse.dds
 gfx/models/buildings/african/african_farm/african_farm_centerpiece_01_normal.dds
 gfx/models/buildings/african/african_farm/african_farm_centerpiece_01_properties.dds
@@ -6826,6 +7084,9 @@ gfx/models/buildings/african/african_farm/african_farm_scatter_decal_01_properti
 gfx/models/buildings/african/african_farm/african_farm_scatter_decal_02_diffuse.dds
 gfx/models/buildings/african/african_farm/african_farm_scatter_decal_02_normal.dds
 gfx/models/buildings/african/african_farm/african_farm_scatter_decal_02_properties.dds
+gfx/models/buildings/african/african_mining/african_mining_trimsheet_diffuse.dds
+gfx/models/buildings/african/african_mining/african_mining_trimsheet_normal.dds
+gfx/models/buildings/african/african_mining/african_mining_trimsheet_properties.dds
 gfx/models/buildings/african/african_port/african_port_centerpiece_01_diffuse.dds
 gfx/models/buildings/african/african_port/african_port_centerpiece_01_normal.dds
 gfx/models/buildings/african/african_port/african_port_centerpiece_01_properties.dds
@@ -6939,9 +7200,6 @@ gfx/models/buildings/arabic/arabic_city/arabic_city_barracks_01_tint.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_barracks_decal_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_barracks_decal_01_normal.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_barracks_decal_01_properties.dds
-gfx/models/buildings/arabic/arabic_city/arabic_city_decal_diffuse.dds
-gfx/models/buildings/arabic/arabic_city/arabic_city_decal_normal.dds
-gfx/models/buildings/arabic/arabic_city/arabic_city_decal_properties.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_financialdistrict_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_financialdistrict_01_normal.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_financialdistrict_01_properties.dds
@@ -6964,6 +7222,9 @@ gfx/models/buildings/arabic/arabic_city/arabic_city_university_01_properties.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_university_decal_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_university_decal_01_normal.dds
 gfx/models/buildings/arabic/arabic_city/arabic_city_university_decal_01_properties.dds
+gfx/models/buildings/arabic/arabic_city/arabic_city_worlddecal_diffuse.dds
+gfx/models/buildings/arabic/arabic_city/arabic_city_worlddecal_normal.dds
+gfx/models/buildings/arabic/arabic_city/arabic_city_worlddecal_properties.dds
 gfx/models/buildings/arabic/arabic_city/arabic_port_navalbase_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_city/arabic_port_navalbase_01_normal.dds
 gfx/models/buildings/arabic/arabic_city/arabic_port_navalbase_01_properties.dds
@@ -7007,6 +7268,9 @@ gfx/models/buildings/arabic/arabic_farm/arabic_rural_farm_centerpiece_decal_01_p
 gfx/models/buildings/arabic/arabic_farm/arabic_rural_farm_centerpiece_tree_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_farm/arabic_rural_farm_centerpiece_tree_01_normal.dds
 gfx/models/buildings/arabic/arabic_farm/arabic_rural_farm_centerpiece_tree_01_properties.dds
+gfx/models/buildings/arabic/arabic_mining/arabic_mining_trimsheet_diffuse.dds
+gfx/models/buildings/arabic/arabic_mining/arabic_mining_trimsheet_normal.dds
+gfx/models/buildings/arabic/arabic_mining/arabic_mining_trimsheet_properties.dds
 gfx/models/buildings/arabic/arabic_port/arabic_port_centerpiece_01_diffuse.dds
 gfx/models/buildings/arabic/arabic_port/arabic_port_centerpiece_01_normal.dds
 gfx/models/buildings/arabic/arabic_port/arabic_port_centerpiece_01_properties.dds
@@ -7126,9 +7390,9 @@ gfx/models/buildings/asian/asian_city/asian_city_centerpiece_skyscraper_01/asian
 gfx/models/buildings/asian/asian_city/asian_city_centerpiece_skyscraper_01/asian_city_centerpiece_skyscraper_01_normal.dds
 gfx/models/buildings/asian/asian_city/asian_city_centerpiece_skyscraper_01/asian_city_centerpiece_skyscraper_01_properties.dds
 gfx/models/buildings/asian/asian_city/asian_city_centerpiece_skyscraper_01/asian_city_centerpiece_skyscraper_decal_01_diffuse.dds
-gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_decal_diffuse.dds
-gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_decal_normal.dds
-gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_decal_properties.dds
+gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_worlddecal_diffuse.dds
+gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_worlddecal_normal.dds
+gfx/models/buildings/asian/asian_city/asian_city_decal/asian_city_worlddecal_properties.dds
 gfx/models/buildings/asian/asian_city/asian_city_financialdistrict_01/asian_city_financialdistrict_01_diffuse.dds
 gfx/models/buildings/asian/asian_city/asian_city_financialdistrict_01/asian_city_financialdistrict_01_normal.dds
 gfx/models/buildings/asian/asian_city/asian_city_financialdistrict_01/asian_city_financialdistrict_01_properties.dds
@@ -7185,6 +7449,9 @@ gfx/models/buildings/asian/asian_farm/asian_rural_plantation_01/asian_rural_plan
 gfx/models/buildings/asian/asian_farm/asian_rural_ranch_01/asian_rural_ranch_decal_01_diffuse.dds
 gfx/models/buildings/asian/asian_farm/asian_rural_ranch_01/asian_rural_ranch_decal_01_normal.dds
 gfx/models/buildings/asian/asian_farm/asian_rural_ranch_01/asian_rural_ranch_decal_01_properties.dds
+gfx/models/buildings/asian/asian_mining/asian_mining_trimsheet_diffuse.dds
+gfx/models/buildings/asian/asian_mining/asian_mining_trimsheet_normal.dds
+gfx/models/buildings/asian/asian_mining/asian_mining_trimsheet_properties.dds
 gfx/models/buildings/asian/asian_port/asian_port_01_diffuse.dds
 gfx/models/buildings/asian/asian_port/asian_port_01_normal.dds
 gfx/models/buildings/asian/asian_port/asian_port_01_properties.dds
@@ -7433,6 +7700,13 @@ gfx/models/buildings/canals/suezcanal_01_properties.dds
 gfx/models/buildings/canals/suezcanalbuildings_01_diffuse.dds
 gfx/models/buildings/canals/suezcanalbuildings_01_normal.dds
 gfx/models/buildings/canals/suezcanalbuildings_01_properties.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_diffuse.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_normal.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_properties.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_diffuse.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_normal.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_properties.dds
+gfx/models/buildings/european/OLD_european_mining/european_mining_centerpiece_01/mininghub_centerpiece_sandstone_diffuse.dds
 gfx/models/buildings/european/european_city/european_city_academy_01/european_city_academy_01_diffuse.dds
 gfx/models/buildings/european/european_city/european_city_academy_01/european_city_academy_01_normal.dds
 gfx/models/buildings/european/european_city/european_city_academy_01/european_city_academy_01_properties.dds
@@ -7504,13 +7778,10 @@ gfx/models/buildings/european/european_forestry/european_forestry_centerpiece_01
 gfx/models/buildings/european/european_forestry/european_forestry_centerpiece_01/european_forestry_centerpiece_decal_01_diffuse.dds
 gfx/models/buildings/european/european_forestry/european_forestry_centerpiece_01/european_forestry_centerpiece_decal_01_normal.dds
 gfx/models/buildings/european/european_forestry/european_forestry_centerpiece_01/european_forestry_centerpiece_decal_01_properties.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_diffuse.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_normal.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_decal_properties.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_diffuse.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_normal.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_properties.dds
-gfx/models/buildings/european/european_mining/european_mining_centerpiece_01/mininghub_centerpiece_sandstone_diffuse.dds
+gfx/models/buildings/european/european_mining/european_mining_trimsheet_colormask.dds
+gfx/models/buildings/european/european_mining/european_mining_trimsheet_diffuse.dds
+gfx/models/buildings/european/european_mining/european_mining_trimsheet_normal.dds
+gfx/models/buildings/european/european_mining/european_mining_trimsheet_properties.dds
 gfx/models/buildings/european/european_port/european_port_centerpiece/european_port_01_diffuse.dds
 gfx/models/buildings/european/european_port/european_port_centerpiece/european_port_01_normal.dds
 gfx/models/buildings/european/european_port/european_port_centerpiece/european_port_01_properties.dds
@@ -7539,9 +7810,9 @@ gfx/models/buildings/european/european_rural_residential/european_rural_resident
 gfx/models/buildings/european/european_rural_residential/european_rural_residential_rich_01/european_rural_building_rich_01_diffuse.dds
 gfx/models/buildings/european/european_rural_residential/european_rural_residential_rich_01/european_rural_building_rich_01_normal.dds
 gfx/models/buildings/european/european_rural_residential/european_rural_residential_rich_01/european_rural_building_rich_01_properties.dds
-gfx/models/buildings/european/european_urban_city_decal/european_decal_city_diffuse.dds
-gfx/models/buildings/european/european_urban_city_decal/european_decal_city_normal.dds
-gfx/models/buildings/european/european_urban_city_decal/european_decal_city_properties.dds
+gfx/models/buildings/european/european_urban_city_decal/european_city_worlddecal_diffuse.dds
+gfx/models/buildings/european/european_urban_city_decal/european_city_worlddecal_normal.dds
+gfx/models/buildings/european/european_urban_city_decal/european_city_worlddecal_properties.dds
 gfx/models/buildings/european/european_urban_residential/decal_urban_residential_01_diffuse.dds
 gfx/models/buildings/european/european_urban_residential/decal_urban_residential_01_normal.dds
 gfx/models/buildings/european/european_urban_residential/decal_urban_residential_01_properties.dds
@@ -7581,12 +7852,18 @@ gfx/models/buildings/foliage/balkan_foliage/balkan_foliage_properties.dds
 gfx/models/buildings/foliage/generic_foliage/generic_foliage_diffuse.dds
 gfx/models/buildings/foliage/generic_foliage/generic_foliage_normal.dds
 gfx/models/buildings/foliage/generic_foliage/generic_foliage_properties.dds
+gfx/models/buildings/foliage/hub_foliage_atlas/hub_foliage_atlas_diffuse.dds
+gfx/models/buildings/foliage/hub_foliage_atlas/hub_foliage_atlas_normal.dds
+gfx/models/buildings/foliage/hub_foliage_atlas/hub_foliage_atlas_properties.dds
 gfx/models/buildings/foliage/indian_foliage/indian_city_centerpiece_foliage_diffuse.dds
 gfx/models/buildings/foliage/indian_foliage/indian_city_centerpiece_foliage_normal.dds
 gfx/models/buildings/foliage/indian_foliage/indian_city_centerpiece_foliage_properties.dds
 gfx/models/buildings/foliage/japan_foliage/japan_foliage_diffuse.dds
 gfx/models/buildings/foliage/japan_foliage/japan_foliage_normal.dds
 gfx/models/buildings/foliage/japan_foliage/japan_foliage_properties.dds
+gfx/models/buildings/foliage/russian_foliage/russian_foliage_diffuse.dds
+gfx/models/buildings/foliage/russian_foliage/russian_foliage_normal.dds
+gfx/models/buildings/foliage/russian_foliage/russian_foliage_properties.dds
 gfx/models/buildings/french/french_city/french_city_academy_01_tint.dds	dlc004_voice_of_the_people
 gfx/models/buildings/french/french_city/french_city_academy_decal_01_diffuse.dds	dlc004_voice_of_the_people
 gfx/models/buildings/french/french_city/french_city_academy_decal_01_normal.dds	dlc004_voice_of_the_people
@@ -7877,105 +8154,105 @@ gfx/models/buildings/french/french_urban_residential/french_urban_residential_ri
 gfx/models/buildings/french/french_urban_residential/french_urban_residential_rich_decal_03_diffuse.dds	dlc004_voice_of_the_people
 gfx/models/buildings/french/french_urban_residential/french_urban_residential_rich_decal_03_normal.dds	dlc004_voice_of_the_people
 gfx/models/buildings/french/french_urban_residential/french_urban_residential_rich_decal_03_properties.dds	dlc004_voice_of_the_people
-gfx/models/buildings/generic/decals/decal_city_mask_01.dds
-gfx/models/buildings/generic/decals/decal_rural_farm_hub_diffuse.dds
-gfx/models/buildings/generic/decals/decal_rural_farm_hub_normal.dds
-gfx/models/buildings/generic/decals/decal_rural_farm_hub_properties.dds
-gfx/models/buildings/generic/decals/decal_rural_forestry_hub_diffuse.dds
-gfx/models/buildings/generic/decals/decal_rural_forestry_hub_normal.dds
-gfx/models/buildings/generic/decals/decal_rural_forestry_hub_properties.dds
-gfx/models/buildings/generic/decals/decal_rural_mine_hub_diffuse.dds
-gfx/models/buildings/generic/decals/decal_rural_mine_hub_normal.dds
-gfx/models/buildings/generic/decals/decal_rural_mine_hub_properties.dds
+gfx/models/buildings/generic/decals/generic_forestry_worlddecal_diffuse.dds
+gfx/models/buildings/generic/decals/generic_forestry_worlddecal_normal.dds
+gfx/models/buildings/generic/decals/generic_forestry_worlddecal_properties.dds
+gfx/models/buildings/generic/decals/generic_mining_worlddecal_diffuse.dds
+gfx/models/buildings/generic/decals/generic_mining_worlddecal_normal.dds
+gfx/models/buildings/generic/decals/generic_mining_worlddecal_properties.dds
+gfx/models/buildings/generic/decals/generic_rural_farm_worlddecal_diffuse.dds
+gfx/models/buildings/generic/decals/generic_rural_farm_worlddecal_normal.dds
+gfx/models/buildings/generic/decals/generic_rural_farm_worlddecal_properties.dds
+gfx/models/buildings/generic/decals/worlddecal_mask_01.dds
 gfx/models/buildings/generic/factory/factories_01_m_generic_manufactory_diffuse.dds
 gfx/models/buildings/generic/factory/factories_01_m_generic_manufactory_normal.dds
 gfx/models/buildings/generic/factory/factories_01_m_generic_manufactory_properties.dds
 gfx/models/buildings/generic/factory/factories_01_m_generic_manufactory_sandstone_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_arms_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_arms_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_arms_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_arms_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_arms_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_arms_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_arms_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_chemical_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_chemical_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_chemical_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_chemical_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_chemical_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_chemical_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_chemical_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_construction_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_construction_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_construction_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_construction_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_construction_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_construction_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_construction_01_tint.dds
 gfx/models/buildings/generic/factory/generic_factory_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_food_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_food_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_food_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_food_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_food_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_food_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_food_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_furniture_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_furniture_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_furniture_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_furniture_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_furniture_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_furniture_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_furniture_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_glass_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_glass_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_glass_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_glass_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_glass_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_glass_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_glass_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_munition_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_munition_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_munition_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_munition_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_munition_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_munition_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_munition_01_tint.dds
 gfx/models/buildings/generic/factory/generic_factory_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_papermill_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_papermill_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_papermill_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_papermill_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_papermill_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_papermill_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_papermill_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_powerplant_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_powerplant_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_powerplant_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_powerplant_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_powerplant_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_powerplant_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_powerplant_01_tint.dds
 gfx/models/buildings/generic/factory/generic_factory_properties.dds
-gfx/models/buildings/generic/factory/generic_factory_steel_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_steel_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_steel_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_steel_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_steel_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_steel_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_steel_01_tint.dds
 gfx/models/buildings/generic/factory/generic_factory_steel_pile_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_tech_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_tech_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_tech_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_tech_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_tech_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_tech_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_tech_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_textilemill_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_textilemill_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_textilemill_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_textilemill_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_textilemill_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_textilemill_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_textilemill_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_tools_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_tools_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_tools_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_tools_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_tools_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_tools_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_tools_01_tint.dds
-gfx/models/buildings/generic/factory/generic_factory_warmachine_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/generic_factory_warmachine_01_decal_normal.dds
-gfx/models/buildings/generic/factory/generic_factory_warmachine_01_decal_properties.dds
+gfx/models/buildings/generic/factory/generic_factory_warmachine_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/generic_factory_warmachine_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/generic_factory_warmachine_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/generic_factory_warmachine_01_tint.dds
 gfx/models/buildings/generic/factory/generic_mining_coaldepot_01_pile_diffuse.dds
 gfx/models/buildings/generic/factory/generic_mining_coaldepot_01_pile_normal.dds
 gfx/models/buildings/generic/factory/generic_mining_coaldepot_01_pile_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_01_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_01_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_01_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_02_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_02_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_02_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_03_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_03_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_03_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_04_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_04_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_04_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_05_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_05_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_05_properties.dds
-gfx/models/buildings/generic/factory/m_decal_factory_06_diffuse.dds
-gfx/models/buildings/generic/factory/m_decal_factory_06_normal.dds
-gfx/models/buildings/generic/factory/m_decal_factory_06_properties.dds
-gfx/models/buildings/generic/factory/war_machines_manufactory_01_decal_diffuse.dds
-gfx/models/buildings/generic/factory/war_machines_manufactory_01_decal_normal.dds
-gfx/models/buildings/generic/factory/war_machines_manufactory_01_decal_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_01_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_01_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_01_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_02_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_02_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_02_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_03_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_03_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_03_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_04_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_04_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_04_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_05_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_05_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_05_properties.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_06_diffuse.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_06_normal.dds
+gfx/models/buildings/generic/factory/m_localdecal_factory_06_properties.dds
 gfx/models/buildings/generic/factory/war_machines_manufactory_01_diffuse.dds
+gfx/models/buildings/generic/factory/war_machines_manufactory_01_localdecal_diffuse.dds
+gfx/models/buildings/generic/factory/war_machines_manufactory_01_localdecal_normal.dds
+gfx/models/buildings/generic/factory/war_machines_manufactory_01_localdecal_properties.dds
 gfx/models/buildings/generic/factory/war_machines_manufactory_01_normal.dds
 gfx/models/buildings/generic/factory/war_machines_manufactory_01_properties.dds
 gfx/models/buildings/generic/farm/generic_farm_vineyard_localdecal_diffuse.dds
@@ -8012,6 +8289,10 @@ gfx/models/buildings/generic/generic_mining/generic_mining_centerpiece_localdeca
 gfx/models/buildings/generic/generic_mining/generic_mining_coal_localdecal_diffuse.dds
 gfx/models/buildings/generic/generic_mining/generic_mining_coal_localdecal_normal.dds
 gfx/models/buildings/generic/generic_mining/generic_mining_coal_localdecal_properties.dds
+gfx/models/buildings/generic/generic_mining/generic_mining_copper_localdecal_diffuse.dds
+gfx/models/buildings/generic/generic_mining/generic_mining_copper_localdecal_normal.dds
+gfx/models/buildings/generic/generic_mining/generic_mining_copper_localdecal_properties.dds
+gfx/models/buildings/generic/generic_mining/generic_mining_copper_tint.dds
 gfx/models/buildings/generic/generic_mining/generic_mining_gold_localdecal_diffuse.dds
 gfx/models/buildings/generic/generic_mining/generic_mining_gold_localdecal_normal.dds
 gfx/models/buildings/generic/generic_mining/generic_mining_gold_localdecal_properties.dds
@@ -8364,9 +8645,6 @@ gfx/models/buildings/latin/latin_city/latin_city_barracks_01_properties.dds
 gfx/models/buildings/latin/latin_city/latin_city_barracks_decal_01_diffuse.dds
 gfx/models/buildings/latin/latin_city/latin_city_barracks_decal_01_normal.dds
 gfx/models/buildings/latin/latin_city/latin_city_barracks_decal_01_properties.dds
-gfx/models/buildings/latin/latin_city/latin_city_decal_diffuse.dds
-gfx/models/buildings/latin/latin_city/latin_city_decal_normal.dds
-gfx/models/buildings/latin/latin_city/latin_city_decal_properties.dds
 gfx/models/buildings/latin/latin_city/latin_city_financialdistrict_01_diffuse.dds
 gfx/models/buildings/latin/latin_city/latin_city_financialdistrict_01_normal.dds
 gfx/models/buildings/latin/latin_city/latin_city_financialdistrict_01_properties.dds
@@ -8383,6 +8661,9 @@ gfx/models/buildings/latin/latin_city/latin_city_university_01_properties.dds
 gfx/models/buildings/latin/latin_city/latin_city_university_decal_01_diffuse.dds
 gfx/models/buildings/latin/latin_city/latin_city_university_decal_01_normal.dds
 gfx/models/buildings/latin/latin_city/latin_city_university_decal_01_properties.dds
+gfx/models/buildings/latin/latin_city/latin_city_worlddecal_diffuse.dds
+gfx/models/buildings/latin/latin_city/latin_city_worlddecal_normal.dds
+gfx/models/buildings/latin/latin_city/latin_city_worlddecal_properties.dds
 gfx/models/buildings/latin/latin_city/latin_urban_city_centerpiece_01_diffuse.dds
 gfx/models/buildings/latin/latin_city/latin_urban_city_centerpiece_01_normal.dds
 gfx/models/buildings/latin/latin_city/latin_urban_city_centerpiece_01_properties.dds
@@ -8426,6 +8707,9 @@ gfx/models/buildings/latin/latin_farm/latin_rural_farm_centerpiece_01_properties
 gfx/models/buildings/latin/latin_farm/latin_rural_farm_centerpiece_decal_01_diffuse.dds
 gfx/models/buildings/latin/latin_farm/latin_rural_farm_centerpiece_decal_01_normal.dds
 gfx/models/buildings/latin/latin_farm/latin_rural_farm_centerpiece_decal_01_properties.dds
+gfx/models/buildings/latin/latin_mining/latin_mining_trimsheet_diffuse.dds
+gfx/models/buildings/latin/latin_mining/latin_mining_trimsheet_normal.dds
+gfx/models/buildings/latin/latin_mining/latin_mining_trimsheet_properties.dds
 gfx/models/buildings/latin/latin_port/latin_port_centerpiece_01_diffuse.dds
 gfx/models/buildings/latin/latin_port/latin_port_centerpiece_01_normal.dds
 gfx/models/buildings/latin/latin_port/latin_port_centerpiece_01_properties.dds
@@ -8585,6 +8869,152 @@ gfx/models/buildings/monuments/wat_arun/monument_watarun_tint.dds	dlc007_ap1
 gfx/models/buildings/monuments/wat_arun/watarun_decal_diffuse.dds	dlc007_ap1
 gfx/models/buildings/monuments/wat_arun/watarun_decal_normal.dds	dlc007_ap1
 gfx/models/buildings/monuments/wat_arun/watarun_decal_properties.dds	dlc007_ap1
+gfx/models/buildings/russian/russian_city/russian_city_academy_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_academy_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_academy_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_barracks_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_barracks_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_barracks_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_buildings_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_centerpiece_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_centerpiece_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_centerpiece_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_financialdistrict_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_financialdistrict_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_financialdistrict_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_govadmin_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_govadmin_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_govadmin_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_navaladmin_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_navaladmin_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_navaladmin_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_tradecenter_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_tradecenter_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_tradecenter_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_university_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_university_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_city/russian_city_university_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_factory/russian_factory_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_factory/russian_factory_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_factory/russian_factory_trimsheet_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_centerpiece_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_centerpiece_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_centerpiece_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_centerpiece_01_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_manorhouse_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_manorhouse_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_manorhouse_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_manorhouse_01_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_cotton_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_cotton_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_cotton_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_silk_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_silk_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_silk_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_vineyard_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_vineyard_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_plantation_vineyard_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_ranch_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_ranch_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_ranch_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_ranch_01_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rice_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rice_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rice_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rye_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rye_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_rye_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_wheat_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_wheat_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_farm_wheat_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_farm/russian_windmill_01_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_forestry/russian_forestry_buildings_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_forestry/russian_forestry_buildings_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_forestry/russian_forestry_buildings_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_mining/russian_mining_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_mining/russian_mining_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_mining/russian_mining_trimsheet_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_port/russian_port_platform_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_port/russian_port_platform_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_port/russian_port_platform_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_port/russian_port_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/decal_rural_farm_hub_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_02_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_02_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_02_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_03_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_03_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_mid_03_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_02_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_02_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_02_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_03_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_03_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_03_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_04_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_04_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_poor_04_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_01_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_01_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_01_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_02_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_02_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_02_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_03_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_03_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_rich_03_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_rural_residential/russian_rural_residential_tint.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_trimsheet_colormask.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_trimsheet_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_01_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_01_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_01_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_02_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_02_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_02_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_03_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_03_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_03_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_04_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_04_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_mid_localdecal_04_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_01_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_01_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_01_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_02_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_02_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_02_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_03_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_03_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_03_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_04_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_04_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_poor_localdecal_04_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_01_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_01_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_01_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_02_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_02_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_02_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_03_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_03_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_03_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_04_diffuse.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_04_normal.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_rich_localdecal_04_properties.dds	dlc019_ip5
+gfx/models/buildings/russian/russian_urban_residential/russian_urban_residential_tint.dds	dlc019_ip5
 gfx/models/buildings/wonders/angkorwat_01/angkorwat_01_diffuse.dds
 gfx/models/buildings/wonders/angkorwat_01/angkorwat_01_normal.dds
 gfx/models/buildings/wonders/angkorwat_01/angkorwat_01_properties.dds
@@ -8755,6 +9185,7 @@ gfx/models/buildings/wonders/taj_mahal_01/monument_tajmahal_tint.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_01_diffuse.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_01_normal.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_01_properties.dds
+gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_01_trees_properties.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_decal_01_diffuse.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_decal_01_normal.dds
 gfx/models/buildings/wonders/vatican_city/wonder_vatican_city_decal_01_properties.dds
@@ -8767,6 +9198,21 @@ gfx/models/buildings/wonders/white_house_01/wonder_white_house_01_properties.dds
 gfx/models/buildings/wonders/white_house_01/wonder_white_house_decal_01_diffuse.dds
 gfx/models/buildings/wonders/white_house_01/wonder_white_house_decal_01_normal.dds
 gfx/models/buildings/wonders/white_house_01/wonder_white_house_decal_01_properties.dds
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_cathedral_tint.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_cathedral_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_cathedral_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_cathedral_trimsheet_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_christthesaviour/christ_the_saviour_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_clock_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_tint.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_grandkremlin/grand_kremlin_trimsheet_properties.dds	dlc019_ip5
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_colormask.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_decal_diffuse.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_decal_normal.dds	dlc014_ip3
@@ -8775,6 +9221,20 @@ gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_diffuse.dds	
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_normal.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_properties.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_hagia_sophia_02/hagia_sophia_02_tint.dds	dlc014_ip3
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_tint.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_kizhipogost/kizhi_pogost_trimsheet_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_tint.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_stisaac/st_isaac_trimsheet_properties.dds	dlc019_ip5
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_alt_tint.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_diffuse.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_localdecal_diffuse.dds	dlc014_ip3
@@ -8791,6 +9251,13 @@ gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_stage
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_stage2_localdecal_properties.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_stage2_tint.dds	dlc014_ip3
 gfx/models/buildings/wonders/wonder_the_kaiserforum/wonder_the_kaiserforum_tint.dds	dlc014_ip3
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_localdecal_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_localdecal_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_localdecal_properties.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_tint.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_trimsheet_diffuse.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_trimsheet_normal.dds	dlc019_ip5
+gfx/models/buildings/wonders/wonder_winterpalace/winterpalace_trimsheet_properties.dds	dlc019_ip5
 gfx/models/debug/21_shades_of_fixed_spec_roughness.dds
 gfx/models/debug/21_shades_of_metalness_roughness.dds
 gfx/models/debug/21_shades_of_spec_gloss.dds
@@ -8882,6 +9349,9 @@ gfx/models/debug/test_diffuse.dds
 gfx/models/debug/test_fighter_diffuse.dds
 gfx/models/debug/test_fighter_normals.dds
 gfx/models/debug/test_height_diffuse.dds
+gfx/models/environment/animals/bird_canadagoose_01/bird_canadagoose_diffuse.dds
+gfx/models/environment/animals/bird_canadagoose_01/bird_canadagoose_normal.dds
+gfx/models/environment/animals/bird_canadagoose_01/bird_canadagoose_properties.dds
 gfx/models/environment/animals/eagle_01/birds_01_diffuse.dds
 gfx/models/environment/animals/eagle_01/birds_01_normal.dds
 gfx/models/environment/animals/eagle_01/birds_01_properties.dds
@@ -8922,6 +9392,9 @@ gfx/models/environment/icebergs/icefloe_properties.dds
 gfx/models/environment/icebergs/icerberg_diffuse.dds
 gfx/models/environment/icebergs/icerberg_normal.dds
 gfx/models/environment/icebergs/icerberg_properties.dds
+gfx/models/environment/naval_conditions/ice/naval_condition_ice_diffuse.dds
+gfx/models/environment/naval_conditions/ice/naval_condition_ice_normal.dds
+gfx/models/environment/naval_conditions/ice/naval_condition_ice_properties.dds
 gfx/models/environment/rockformation/rockformation_06_diffuse.dds
 gfx/models/environment/rockformation/rockformation_06_normal.dds
 gfx/models/environment/rockformation/rockformation_06_properties.dds
@@ -9005,6 +9478,9 @@ gfx/models/holiday/halloween_castledracula/halloween_castledracula_localdecal_pr
 gfx/models/holiday/halloween_castledracula/halloween_castledracula_mountain_diffuse.dds
 gfx/models/holiday/halloween_castledracula/halloween_castledracula_mountain_normal.dds
 gfx/models/holiday/halloween_castledracula/halloween_castledracula_mountain_properties.dds
+gfx/models/holiday/halloween_nautilus/military_navy_skin_nautilus_diffuse.dds
+gfx/models/holiday/halloween_nautilus/military_navy_skin_nautilus_normal.dds
+gfx/models/holiday/halloween_nautilus/military_navy_skin_nautilus_properties.dds
 gfx/models/infrastructure/bridges/bridges_diffuse.dds
 gfx/models/infrastructure/bridges/bridges_normal.dds
 gfx/models/infrastructure/bridges/bridges_properties.dds
@@ -9633,6 +10109,25 @@ gfx/models/military/navy_modular/earlyironclad/ship_earlyironclad_hull_medium_pr
 gfx/models/military/navy_modular/earlyironclad/ship_earlyironclad_sail_diffuse.dds
 gfx/models/military/navy_modular/earlyironclad/ship_earlyironclad_sail_normal.dds
 gfx/models/military/navy_modular/earlyironclad/ship_earlyironclad_sail_properties.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_base_colormask.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_base_diffuse.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_base_normal.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_base_properties.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_heavy_colormask.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_heavy_diffuse.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_heavy_normal.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_heavy_properties.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_light_colormask.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_light_diffuse.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_light_normal.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_light_properties.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_medium_colormask.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_medium_diffuse.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_medium_normal.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_hull_medium_properties.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_sail_diffuse.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_sail_normal.dds
+gfx/models/military/navy_modular/earlytroopship/ship_earlytroopship_sail_properties.dds
 gfx/models/military/navy_modular/figureheads/figureheads_diffuse.dds
 gfx/models/military/navy_modular/figureheads/figureheads_normal.dds
 gfx/models/military/navy_modular/figureheads/figureheads_properties.dds
@@ -9665,6 +10160,7 @@ gfx/models/military/navy_modular/guns/ship_guns_normal.dds
 gfx/models/military/navy_modular/guns/ship_guns_properties.dds
 gfx/models/military/navy_modular/hull_damage/hull_damage_int_metal_diffuse.dds
 gfx/models/military/navy_modular/hull_damage/hull_damage_int_wood_diffuse.dds
+gfx/models/military/navy_modular/hull_damage/ship_sail_damage_mask.dds
 gfx/models/military/navy_modular/ironfrigate/ship_ironfrigate_base_colormask.dds
 gfx/models/military/navy_modular/ironfrigate/ship_ironfrigate_base_diffuse.dds
 gfx/models/military/navy_modular/ironfrigate/ship_ironfrigate_base_normal.dds
@@ -9975,6 +10471,11 @@ gfx/models/papermap/candle_flame_color_02.dds	dlc007_ap1
 gfx/models/papermap/candle_flame_normal.dds	dlc007_ap1
 gfx/models/papermap/carlist_beret_diffuse.dds	dlc016_ip4
 gfx/models/papermap/carlist_beret_shadow_diffuse.dds	dlc016_ip4
+gfx/models/papermap/cigarettes_diffuse.dds	dlc019_ip5
+gfx/models/papermap/cigarettes_liquid_diffuse.dds	dlc019_ip5
+gfx/models/papermap/cigarettes_liquid_normal.dds	dlc019_ip5
+gfx/models/papermap/cigarettes_liquid_properties.dds	dlc019_ip5
+gfx/models/papermap/cigarettes_shadow_diffuse.dds	dlc019_ip5
 gfx/models/papermap/cubancigar_diffuse.dds	dlc016_ip4
 gfx/models/papermap/cubancigar_shadow_diffuse.dds	dlc016_ip4
 gfx/models/papermap/dango_diffuse.dds	dlc018_ep2
@@ -9999,9 +10500,14 @@ gfx/models/papermap/ip3_coin/ip3_coin_diffuse.dds	dlc014_ip3
 gfx/models/papermap/ip3_coin/ip3_coin_shadow_diffuse.dds	dlc014_ip3
 gfx/models/papermap/ip4_coin_diffuse.dds	dlc016_ip4
 gfx/models/papermap/ip4_coin_shadow_diffuse.dds	dlc016_ip4
+gfx/models/papermap/ip5_coin_diffuse.dds	dlc019_ip5
+gfx/models/papermap/ip5_coin_shadow_diffuse.dds	dlc019_ip5
 gfx/models/papermap/kolbasz_dropshadow_diffuse.dds	dlc014_ip3
 gfx/models/papermap/lacquered_dropshadow_diffuse.dds	dlc018_ep2
 gfx/models/papermap/lacqueredbox_diffuse.dds	dlc018_ep2
+gfx/models/papermap/m_lenses_diffuse.dds	dlc019_ip5
+gfx/models/papermap/m_lenses_normal.dds	dlc019_ip5
+gfx/models/papermap/m_lenses_properties.dds	dlc019_ip5
 gfx/models/papermap/m_papermap_items_ap1_diffuse.dds	dlc007_ap1
 gfx/models/papermap/mp1_coin_diffuse.dds	dlc013_mp1
 gfx/models/papermap/mp1_coin_shadow_diffuse.dds	dlc013_mp1
@@ -10030,6 +10536,7 @@ gfx/models/papermap/papermap_extension_bottom_ip2.dds	dlc011_ip2
 gfx/models/papermap/papermap_extension_bottom_ip3.dds	dlc014_ip3
 gfx/models/papermap/papermap_extension_bottom_ip4_portugal.dds	dlc016_ip4
 gfx/models/papermap/papermap_extension_bottom_ip4_spain.dds	dlc016_ip4
+gfx/models/papermap/papermap_extension_bottom_ip5.dds	dlc019_ip5
 gfx/models/papermap/papermap_extension_bottom_newsletter_bonus.dds
 gfx/models/papermap/papermap_extension_bottom_votp.dds	dlc004_voice_of_the_people
 gfx/models/papermap/papermap_extension_top.dds
@@ -10039,6 +10546,7 @@ gfx/models/papermap/papermap_extension_top_ep2.dds	dlc018_ep2
 gfx/models/papermap/papermap_extension_top_ip2.dds	dlc011_ip2
 gfx/models/papermap/papermap_extension_top_ip3.dds	dlc014_ip3
 gfx/models/papermap/papermap_extension_top_ip4.dds	dlc016_ip4
+gfx/models/papermap/papermap_extension_top_ip5.dds	dlc019_ip5
 gfx/models/papermap/papermap_extension_top_newsletter_bonus.dds
 gfx/models/papermap/papermap_extension_top_votp.dds	dlc004_voice_of_the_people
 gfx/models/papermap/papermap_french_coin_diffuse.dds	dlc004_voice_of_the_people
@@ -10085,12 +10593,14 @@ gfx/models/papermap/papermap_table_ep2_diffuse.dds	dlc018_ep2
 gfx/models/papermap/papermap_table_ip2_diffuse.dds	dlc011_ip2
 gfx/models/papermap/papermap_table_ip3_diffuse.dds	dlc014_ip3
 gfx/models/papermap/papermap_table_ip4_diffuse.dds	dlc016_ip4
+gfx/models/papermap/papermap_table_ip5_diffuse.dds	dlc019_ip5
 gfx/models/papermap/papermap_table_trim_ap1_diffuse.dds	dlc007_ap1
 gfx/models/papermap/papermap_table_trim_ip2_diffuse.dds	dlc011_ip2
 gfx/models/papermap/papermap_tabletrim_ep2_diffuse.dds	dlc018_ep2
 gfx/models/papermap/papermap_tabletrim_ep2_normal.dds	dlc018_ep2
 gfx/models/papermap/papermap_tabletrim_ep2_properties.dds	dlc018_ep2
 gfx/models/papermap/papermap_tabletrim_ip3_diffuse.dds	dlc014_ip3
+gfx/models/papermap/papermap_tabletrim_ip5_diffuse.dds	dlc019_ip5
 gfx/models/papermap/papermap_walthamwatch_diffuse.dds	dlc007_ap1
 gfx/models/papermap/papermap_walthamwatch_dropshadow_diffuse.dds	dlc007_ap1
 gfx/models/papermap/papermap_yali_makara_diffuse.dds	dlc011_ip2
@@ -10102,8 +10612,16 @@ gfx/models/papermap/portuguese_sardines_dropshadow_diffuse.dds	dlc016_ip4
 gfx/models/papermap/table_texture_diffuse.dds
 gfx/models/papermap/table_texture_diffuse_votp.dds	dlc004_voice_of_the_people
 gfx/models/papermap/table_texture_normal.dds
+gfx/models/papermap/tableasseet_caviar_diffuse.dds	dlc019_ip5
+gfx/models/papermap/tableasseet_caviar_dropshadow_diffuse.dds	dlc019_ip5
+gfx/models/papermap/tableasset_imperialcoronationegg_diffuse.dds	dlc019_ip5
+gfx/models/papermap/tableasset_imperialcoronationegg_dropshadow_diffuse.dds	dlc019_ip5
+gfx/models/papermap/tableasset_imperialcoronationegg_normal.dds	dlc019_ip5
+gfx/models/papermap/tableasset_imperialcoronationegg_properties.dds	dlc019_ip5
 gfx/models/papermap/taino_shadow_diffuse.dds	dlc007_ap1
 gfx/models/papermap/tainostatue_diffuse.dds	dlc007_ap1
+gfx/models/papermap/telegram_ip5_diffuse.dds	dlc019_ip5
+gfx/models/papermap/telegram_ip5_shadow_diffuse.dds	dlc019_ip5
 gfx/models/particles/hammer_anvil/hammer_anvil_diffuse.dds
 gfx/models/particles/hammer_anvil/hammer_anvil_normal.dds
 gfx/models/particles/hammer_anvil/hammer_anvil_properties.dds
@@ -10296,6 +10814,10 @@ gfx/models/portraits/attachments/female_headgear/portuguese/female_headgear_port
 gfx/models/portraits/attachments/female_headgear/portuguese/female_headgear_portuguese_01/female_headgear_portuguese_01_masks.dds
 gfx/models/portraits/attachments/female_headgear/portuguese/female_headgear_portuguese_01/female_headgear_portuguese_01_normal.dds
 gfx/models/portraits/attachments/female_headgear/portuguese/female_headgear_portuguese_01/female_headgear_portuguese_01_properties.dds
+gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_common_01/female_headgear_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_common_01/female_headgear_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_common_01/female_headgear_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_common_01/female_headgear_slavic_common_01_properties.dds
 gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_kokoshnik_01/female_headgear_slavic_kokoshnik_01_diffuse.dds
 gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_kokoshnik_01/female_headgear_slavic_kokoshnik_01_masks.dds
 gfx/models/portraits/attachments/female_headgear/slavic/female_headgear_slavic_kokoshnik_01/female_headgear_slavic_kokoshnik_01_normal.dds
@@ -10390,6 +10912,18 @@ gfx/models/portraits/attachments/female_outfits/central_asian/female_outfit_cent
 gfx/models/portraits/attachments/female_outfits/central_asian/female_outfit_central_asian_01_low/female_outfit_central_asian_01_low_masks.dds
 gfx/models/portraits/attachments/female_outfits/central_asian/female_outfit_central_asian_01_low/female_outfit_central_asian_01_low_normal.dds
 gfx/models/portraits/attachments/female_outfits/central_asian/female_outfit_central_asian_01_low/female_outfit_central_asian_01_low_properties.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_east_01/female_outfit_children_common_east_01_diffuse.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_east_01/female_outfit_children_common_east_01_masks.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_east_01/female_outfit_children_common_east_01_normal.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_east_01/female_outfit_children_common_east_01_properties.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_south_01/female_outfit_children_common_south_01_diffuse.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_south_01/female_outfit_children_common_south_01_masks.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_south_01/female_outfit_children_common_south_01_normal.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_south_01/female_outfit_children_common_south_01_properties.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_west_01/female_outfit_children_common_west_01_diffuse.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_west_01/female_outfit_children_common_west_01_masks.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_west_01/female_outfit_children_common_west_01_normal.dds
+gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_common_west_01/female_outfit_children_common_west_01_properties.dds
 gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_royal_01/female_outfit_children_royal_01_diffuse.dds
 gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_royal_01/female_outfit_children_royal_01_masks.dds
 gfx/models/portraits/attachments/female_outfits/children/female_outfit_children_royal_01/female_outfit_children_royal_01_normal.dds
@@ -10511,6 +11045,10 @@ gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_01_m
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_01_mid/female_outfit_slavic_01_mid_masks.dds
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_01_mid/female_outfit_slavic_01_mid_normal.dds
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_01_mid/female_outfit_slavic_01_mid_properties.dds
+gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_common_01/female_outfit_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_common_01/female_outfit_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_common_01/female_outfit_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_common_01/female_outfit_slavic_common_01_properties.dds
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_kokoshnik_01/female_outfit_slavic_kokoshnik_01_diffuse.dds
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_kokoshnik_01/female_outfit_slavic_kokoshnik_01_masks.dds
 gfx/models/portraits/attachments/female_outfits/slavic/female_outfit_slavic_kokoshnik_01/female_outfit_slavic_kokoshnik_01_normal.dds
@@ -10575,6 +11113,10 @@ gfx/models/portraits/attachments/female_top_layers/native_american/female_top_la
 gfx/models/portraits/attachments/female_top_layers/native_american/female_top_layer_native_american_01/female_top_layer_native_american_01_masks.dds
 gfx/models/portraits/attachments/female_top_layers/native_american/female_top_layer_native_american_01/female_top_layer_native_american_01_normal.dds
 gfx/models/portraits/attachments/female_top_layers/native_american/female_top_layer_native_american_01/female_top_layer_native_american_01_properties.dds
+gfx/models/portraits/attachments/female_top_layers/slavic/female_top_layer_slavic_common_01/female_top_layer_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/female_top_layers/slavic/female_top_layer_slavic_common_01/female_top_layer_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/female_top_layers/slavic/female_top_layer_slavic_common_01/female_top_layer_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/female_top_layers/slavic/female_top_layer_slavic_common_01/female_top_layer_slavic_common_01_properties.dds
 gfx/models/portraits/attachments/male_aiguillettes/01/male_aiguillettes_01_diffuse.dds
 gfx/models/portraits/attachments/male_aiguillettes/01/male_aiguillettes_01_normal.dds
 gfx/models/portraits/attachments/male_aiguillettes/01/male_aiguillettes_01_properties.dds
@@ -10912,6 +11454,10 @@ gfx/models/portraits/attachments/male_coats/male_coat_indian_maharaja_singh_01/m
 gfx/models/portraits/attachments/male_coats/male_coat_indian_maharaja_singh_01/male_coat_indian_maharaja_singh_01_masks.dds
 gfx/models/portraits/attachments/male_coats/male_coat_indian_maharaja_singh_01/male_coat_indian_maharaja_singh_01_normal.dds
 gfx/models/portraits/attachments/male_coats/male_coat_indian_maharaja_singh_01/male_coat_indian_maharaja_singh_01_properties.dds
+gfx/models/portraits/attachments/male_coats/russian/male_coat_bolshevik_01/male_coat_bolshevik_01_diffuse.dds
+gfx/models/portraits/attachments/male_coats/russian/male_coat_bolshevik_01/male_coat_bolshevik_01_masks.dds
+gfx/models/portraits/attachments/male_coats/russian/male_coat_bolshevik_01/male_coat_bolshevik_01_normal.dds
+gfx/models/portraits/attachments/male_coats/russian/male_coat_bolshevik_01/male_coat_bolshevik_01_properties.dds
 gfx/models/portraits/attachments/male_coats/russian/military_01/male_coat_russian_military_01_diffuse.dds
 gfx/models/portraits/attachments/male_coats/russian/military_01/male_coat_russian_military_01_masks.dds
 gfx/models/portraits/attachments/male_coats/russian/military_01/male_coat_russian_military_01_normal.dds
@@ -11228,6 +11774,10 @@ gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_a
 gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_austrian_military_cap_02/male_headgear_austrian_military_cap_02_masks.dds
 gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_austrian_military_cap_02/male_headgear_austrian_military_cap_02_normal.dds
 gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_austrian_military_cap_02/male_headgear_austrian_military_cap_02_properties.dds
+gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_polish_military_01/male_headgear_polish_military_01_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_polish_military_01/male_headgear_polish_military_01_masks.dds
+gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_polish_military_01/male_headgear_polish_military_01_normal.dds
+gfx/models/portraits/attachments/male_headgear/european_military/male_headgear_polish_military_01/male_headgear_polish_military_01_properties.dds
 gfx/models/portraits/attachments/male_headgear/european_military/military_cap_01/male_headgear_european_military_cap_01_diffuse.dds
 gfx/models/portraits/attachments/male_headgear/european_military/military_cap_01/male_headgear_european_military_cap_01_masks.dds
 gfx/models/portraits/attachments/male_headgear/european_military/military_cap_01/male_headgear_european_military_cap_01_normal.dds
@@ -11334,6 +11884,14 @@ gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_balkan_fur_0
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_balkan_fur_01/male_headgear_balkan_fur_01_masks.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_balkan_fur_01/male_headgear_balkan_fur_01_normal.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_balkan_fur_01/male_headgear_balkan_fur_01_properties.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_01/male_headgear_bolshevik_01_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_01/male_headgear_bolshevik_01_masks.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_01/male_headgear_bolshevik_01_normal.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_01/male_headgear_bolshevik_01_properties.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_02/male_headgear_bolshevik_02_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_02/male_headgear_bolshevik_02_masks.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_02/male_headgear_bolshevik_02_normal.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_bolshevik_02/male_headgear_bolshevik_02_properties.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_russian_military_01/male_headgear_russian_military_01_diffuse.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_russian_military_01/male_headgear_russian_military_01_masks.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_russian_military_01/male_headgear_russian_military_01_normal.dds
@@ -11342,6 +11900,18 @@ gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_agita
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_agitator_lenin/male_headgear_slavic_agitator_lenin_masks.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_agitator_lenin/male_headgear_slavic_agitator_lenin_normal.dds
 gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_agitator_lenin/male_headgear_slavic_agitator_lenin_properties.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_01/male_headgear_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_01/male_headgear_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_01/male_headgear_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_01/male_headgear_slavic_common_01_properties.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_02/male_headgear_slavic_common_02_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_02/male_headgear_slavic_common_02_masks.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_02/male_headgear_slavic_common_02_normal.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_common_02/male_headgear_slavic_common_02_properties.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_orthodox_01/male_headgear_slavic_orthodox_01_diffuse.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_orthodox_01/male_headgear_slavic_orthodox_01_masks.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_orthodox_01/male_headgear_slavic_orthodox_01_normal.dds
+gfx/models/portraits/attachments/male_headgear/slavic/male_headgear_slavic_orthodox_01/male_headgear_slavic_orthodox_01_properties.dds
 gfx/models/portraits/attachments/male_headgear/south_american/male_headgear_south_american_agitator_01/male_headgear_south_american_agitator_01_diffuse.dds
 gfx/models/portraits/attachments/male_headgear/south_american/male_headgear_south_american_agitator_01/male_headgear_south_american_agitator_01_masks.dds
 gfx/models/portraits/attachments/male_headgear/south_american/male_headgear_south_american_agitator_01/male_headgear_south_american_agitator_01_normal.dds
@@ -11431,6 +12001,10 @@ gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_01_low/
 gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_01_low/male_legwear_slavic_01_low_masks.dds
 gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_01_low/male_legwear_slavic_01_low_normal.dds
 gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_01_low/male_legwear_slavic_01_low_properties.dds
+gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_common_01/male_legwear_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_common_01/male_legwear_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_common_01/male_legwear_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/male_legwear/slavic/male_legwear_slavic_common_01/male_legwear_slavic_common_01_properties.dds
 gfx/models/portraits/attachments/male_legwear/south_american/male_legwear_south_american_01_low/male_legwear_south_american_01_low_diffuse.dds
 gfx/models/portraits/attachments/male_legwear/south_american/male_legwear_south_american_01_low/male_legwear_south_american_01_low_masks.dds
 gfx/models/portraits/attachments/male_legwear/south_american/male_legwear_south_american_01_low/male_legwear_south_american_01_low_normal.dds
@@ -11604,6 +12178,10 @@ gfx/models/portraits/attachments/male_necklaces/polynesian/male_necklace_polynes
 gfx/models/portraits/attachments/male_necklaces/polynesian/male_necklace_polynesian_01_low/male_necklace_polynesian_01_low_masks.dds
 gfx/models/portraits/attachments/male_necklaces/polynesian/male_necklace_polynesian_01_low/male_necklace_polynesian_01_low_normal.dds
 gfx/models/portraits/attachments/male_necklaces/polynesian/male_necklace_polynesian_01_low/male_necklace_polynesian_01_low_properties.dds
+gfx/models/portraits/attachments/male_necklaces/slavic/male_necklace_slavic_orthodox_01/male_necklace_slavic_orthodox_01_diffuse.dds
+gfx/models/portraits/attachments/male_necklaces/slavic/male_necklace_slavic_orthodox_01/male_necklace_slavic_orthodox_01_masks.dds
+gfx/models/portraits/attachments/male_necklaces/slavic/male_necklace_slavic_orthodox_01/male_necklace_slavic_orthodox_01_normal.dds
+gfx/models/portraits/attachments/male_necklaces/slavic/male_necklace_slavic_orthodox_01/male_necklace_slavic_orthodox_01_properties.dds
 gfx/models/portraits/attachments/male_outfits/african/common_01/male_outfit_african_common_01_blendshapes.jpg
 gfx/models/portraits/attachments/male_outfits/african/common_01/male_outfit_african_common_01_diffuse.dds
 gfx/models/portraits/attachments/male_outfits/african/common_01/male_outfit_african_common_01_masks.dds
@@ -11645,6 +12223,18 @@ gfx/models/portraits/attachments/male_outfits/central_asian/male_outfit_central_
 gfx/models/portraits/attachments/male_outfits/central_asian/male_outfit_central_asian_01_low/male_outfit_central_asian_01_low_masks.dds
 gfx/models/portraits/attachments/male_outfits/central_asian/male_outfit_central_asian_01_low/male_outfit_central_asian_01_low_normal.dds
 gfx/models/portraits/attachments/male_outfits/central_asian/male_outfit_central_asian_01_low/male_outfit_central_asian_01_low_properties.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_east_01/male_outfit_children_common_east_01_diffuse.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_east_01/male_outfit_children_common_east_01_masks.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_east_01/male_outfit_children_common_east_01_normal.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_east_01/male_outfit_children_common_east_01_properties.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_south_01/male_outfit_children_common_south_01_diffuse.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_south_01/male_outfit_children_common_south_01_masks.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_south_01/male_outfit_children_common_south_01_normal.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_south_01/male_outfit_children_common_south_01_properties.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_west_01/male_outfit_children_common_west_01_diffuse.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_west_01/male_outfit_children_common_west_01_masks.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_west_01/male_outfit_children_common_west_01_normal.dds
+gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_common_west_01/male_outfit_children_common_west_01_properties.dds
 gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_royal_01/male_outfit_children_royal_01_diffuse.dds
 gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_royal_01/male_outfit_children_royal_01_masks.dds
 gfx/models/portraits/attachments/male_outfits/children/male_outfit_children_royal_01/male_outfit_children_royal_01_normal.dds
@@ -11773,6 +12363,14 @@ gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_01_low/m
 gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_01_low/male_outfit_slavic_01_low_masks.dds
 gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_01_low/male_outfit_slavic_01_low_normal.dds
 gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_01_low/male_outfit_slavic_01_low_properties.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_common_01/male_outfit_slavic_common_01_diffuse.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_common_01/male_outfit_slavic_common_01_masks.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_common_01/male_outfit_slavic_common_01_normal.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_common_01/male_outfit_slavic_common_01_properties.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_orthodox_01/male_outfit_slavic_orthodox_01_diffuse.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_orthodox_01/male_outfit_slavic_orthodox_01_masks.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_orthodox_01/male_outfit_slavic_orthodox_01_normal.dds
+gfx/models/portraits/attachments/male_outfits/slavic/male_outfit_slavic_orthodox_01/male_outfit_slavic_orthodox_01_properties.dds
 gfx/models/portraits/attachments/male_outfits/south_american/male_outfit_south_american_01_low/male_outfit_south_american_01_low_diffuse.dds
 gfx/models/portraits/attachments/male_outfits/south_american/male_outfit_south_american_01_low/male_outfit_south_american_01_low_masks.dds
 gfx/models/portraits/attachments/male_outfits/south_american/male_outfit_south_american_01_low/male_outfit_south_american_01_low_normal.dds
@@ -12174,27 +12772,23 @@ gfx/models/portraits/decals/male_head/decal_male_head_surprise_03_diffuse.dds
 gfx/models/portraits/decals/male_head/decal_male_head_surprise_03_normal.dds
 gfx/models/portraits/decals/male_head/decal_male_head_surprise_04_diffuse.dds
 gfx/models/portraits/decals/male_head/decal_male_head_surprise_04_normal.dds
-gfx/models/portraits/decals/visual_traits/decal_wounded_1_diffuse.dds
-gfx/models/portraits/decals/visual_traits/decal_wounded_1_normal.dds
-gfx/models/portraits/decals/visual_traits/decal_wounded_1_properties.dds
-gfx/models/portraits/decals/visual_traits/face_01_diffuse.dds
 gfx/models/portraits/decals/visual_traits/face_01_normal.dds
-gfx/models/portraits/decals/visual_traits/face_02_diffuse.dds
 gfx/models/portraits/decals/visual_traits/face_02_normal.dds
-gfx/models/portraits/decals/visual_traits/face_03_diffuse.dds
 gfx/models/portraits/decals/visual_traits/face_03_normal.dds
-gfx/models/portraits/decals/visual_traits/face_04_diffuse.dds
 gfx/models/portraits/decals/visual_traits/face_04_normal.dds
+gfx/models/portraits/decals/visual_traits/face_05_normal.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_01_diffuse.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_01_normal.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_02_diffuse.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_02_normal.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_03_diffuse.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_03_normal.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_04_diffuse.dds
+gfx/models/portraits/decals/visual_traits/face_wounded_04_normal.dds
 gfx/models/portraits/female_body/female_body_01_diffuse.dds
 gfx/models/portraits/female_body/female_body_01_normal.dds
 gfx/models/portraits/female_body/female_body_01_properties.dds
 gfx/models/portraits/female_body/female_body_01_ssao_color.dds
-gfx/models/portraits/female_head/female_eyelashes/female_eyelashes_diffuse.dds
-gfx/models/portraits/female_head/female_eyelashes/female_eyelashes_normal.dds
-gfx/models/portraits/female_head/female_eyelashes/female_eyelashes_properties.dds
-gfx/models/portraits/female_head/female_eyes/female_eyes_diffuse.dds
-gfx/models/portraits/female_head/female_eyes/female_eyes_normal.dds
-gfx/models/portraits/female_head/female_eyes/female_eyes_properties.dds
 gfx/models/portraits/female_head/female_head_01_diffuse.dds
 gfx/models/portraits/female_head/female_head_01_normal.dds
 gfx/models/portraits/female_head/female_head_01_properties.dds
@@ -12210,9 +12804,6 @@ gfx/models/portraits/male_body/male_body_01_normal.dds
 gfx/models/portraits/male_body/male_body_01_properties.dds
 gfx/models/portraits/male_body/male_body_01_ssao_color.dds
 gfx/models/portraits/male_body/male_body_ssao_color.dds
-gfx/models/portraits/male_head/male_eyelashes/male_eyelashes_diffuse.dds
-gfx/models/portraits/male_head/male_eyelashes/male_eyelashes_normal.dds
-gfx/models/portraits/male_head/male_eyelashes/male_eyelashes_properties.dds
 gfx/models/portraits/male_head/male_eyes/male_eyes_diffuse.dds
 gfx/models/portraits/male_head/male_eyes/male_eyes_normal.dds
 gfx/models/portraits/male_head/male_eyes/male_eyes_properties.dds
@@ -12350,6 +12941,9 @@ gfx/models/utility/flat_dark_diffuse.dds
 gfx/models/utility/flat_grey_diffuse.dds
 gfx/models/utility/flat_grey_normal.dds
 gfx/models/utility/flat_grey_properties.dds
+gfx/models/utility/ropes_diffuse.dds
+gfx/models/utility/ropes_normal.dds
+gfx/models/utility/ropes_properties.dds
 gfx/models/zzz_clones/info.txt
 gfx/node_editor/line_mask.dds
 gfx/node_editor/line_white.dds
@@ -12461,6 +13055,7 @@ gfx/particles/textures/debug/6point_debug_tex.dds
 gfx/particles/textures/debug_tex_01.dds
 gfx/particles/textures/dirt_blast_01.dds
 gfx/particles/textures/dirt_splash.dds
+gfx/particles/textures/dry_leaves_01.dds
 gfx/particles/textures/dust_particles_01.dds
 gfx/particles/textures/eclipse.dds
 gfx/particles/textures/embers_02.dds
@@ -12490,6 +13085,7 @@ gfx/particles/textures/flipbooks/chimney_smoke_02.dds
 gfx/particles/textures/flipbooks/chimney_smoke_03.dds
 gfx/particles/textures/flipbooks/coffee_steam_01.dds
 gfx/particles/textures/flipbooks/coffee_steam_02.dds
+gfx/particles/textures/flipbooks/cyclone_pm_01.dds
 gfx/particles/textures/flipbooks/dreyse_needle_smoke_01.dds
 gfx/particles/textures/flipbooks/explosion_side_6p_01.dds
 gfx/particles/textures/flipbooks/explosion_top_6p_01.dds
@@ -12544,6 +13140,7 @@ gfx/particles/textures/god_rays_thin_01.dds
 gfx/particles/textures/godrays_color.dds
 gfx/particles/textures/halo.dds
 gfx/particles/textures/hexagon.dds
+gfx/particles/textures/insects/butterfly_01.dds
 gfx/particles/textures/laurel_01.dds
 gfx/particles/textures/laurel_02.dds
 gfx/particles/textures/leaf_multiple.dds
@@ -12569,6 +13166,13 @@ gfx/particles/textures/muzzle_flash_2.dds
 gfx/particles/textures/muzzle_flash_3.dds
 gfx/particles/textures/muzzle_flash_4.dds
 gfx/particles/textures/muzzle_flash_5.dds
+gfx/particles/textures/nautilus_fish_small.dds
+gfx/particles/textures/nautilus_fish_small_many.dds
+gfx/particles/textures/nautilus_fish_swordfish.dds
+gfx/particles/textures/nemo_fish_01.dds
+gfx/particles/textures/nemo_fish_02.dds
+gfx/particles/textures/nemo_fish_03.dds
+gfx/particles/textures/nemo_fish_04.dds
 gfx/particles/textures/petty_bourgeoisie.dds
 gfx/particles/textures/pollen_circles_01.dds
 gfx/particles/textures/principles_frame_03.dds
@@ -12744,6 +13348,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_korean_emperess_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_lakshmibai_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_portuguese_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_slavic_common_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_slavic_kokoshnik_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_headgear_vivandiere_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_legwear_lakshmibai_01.dds
@@ -12763,6 +13368,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_01_high.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_01_low.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_01_mid.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_common_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_kokoshnik_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_slavic_midsummer_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_outfit_south_american_01_high.dds
@@ -12794,6 +13400,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_top_layer_indian_common_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_top_layer_indian_high_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_top_layer_japanese_common_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_female_top_layer_slavic_common_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_flowers_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_frankenstein.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_french_uniform.dds
@@ -12831,6 +13438,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_gr
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_hungarian.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_hungarian_black.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_montenegrin.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_polish_coat.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_portuguese.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_portuguese_headgear.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_late_romanian.dds
@@ -12848,11 +13456,16 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_be
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_japanese_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_late_military_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_late_military_01_portuguese.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_late_military_01_silver.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_military_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_military_01_silver.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belt_polish.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belts_cossack_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belts_cuirass_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belts_gandhi_watch_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_belts_greek_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_bolshevik_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_bolshevik_01_leather.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_civilian_coat_european_02_black.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_civilian_coat_european_comte.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_civilian_coat_european_grey_01.dds
@@ -12864,6 +13477,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_co
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_ceo.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_ceo_02.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_european_cossack_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_european_cossack_01_polish.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_european_greatcoat_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_european_military_collar_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coat_fancy_single_breasted_02.dds
@@ -12898,6 +13512,8 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_co
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coats_hungarian_red.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coats_hungarian_white.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coats_persian_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coats_polish_03.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_coats_polish_insurgent.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_dwarkanath_tagore.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_epaulettes_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_epaulettes_01_silver.dds
@@ -12922,11 +13538,13 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_he
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_beret_hat_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_beret_hat_01_carlist_colours.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_beret_hat_01_colours.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_bolshevik_02_leather.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_central_asian_low.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_cossack_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_cossack_01_bulgarian.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_late_military_04.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_late_military_04_greek.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_late_military_04_polish.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_military_02.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_military_02_black.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_european_military_02_blue.dds
@@ -12951,6 +13569,9 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_he
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_japanese_imperial_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_maharaja_singh_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_native_american_common_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_polish_military_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_polish_military_01_late.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_polish_military_02.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_royalty_02.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_royalty_03.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_headgear_serbian_military_cap_01.dds
@@ -13003,6 +13624,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_ne
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_necklace_persian_royal_jewelry.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_necklace_power_bloc_cape_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_necklace_power_bloc_trade_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_necklace_slavic_orthodox_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_necklace_tatya_tope.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_arabic_royal_02.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_children_royal_01.dds
@@ -13019,6 +13641,8 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_ou
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_slavic_01_high.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_slavic_01_low.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_slavic_01_royal.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_slavic_common_01.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_slavic_orthodox_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_south_american_01_camicie_rosse.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_south_american_01_late_american.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_male_outfit_south_american_01_low.dds
@@ -13183,6 +13807,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_militar
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_military_greatcoat_serbian_grey.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_moldavia_soldier_uniform.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_moldavia_uniform.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_outfit_children_common.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_parka_01.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_persian_uniform.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_portuguese_officer_early.dds
@@ -13249,6 +13874,7 @@ gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoa
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_generic.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_greek.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_moldavian.dds
+gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_polish.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_portuguese.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_portuguese_colours.dds
 gfx/portraits/accessory_variations/textures/color_palettes/color_palette_tailcoat_single_breasted_russian.dds
@@ -13499,6 +14125,9 @@ gfx/portraits/accessory_variations/textures/patterns/generic/generic_gold_trim_0
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_01_masks.dds
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_01_normal.dds
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_01_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_02_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_02_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_fine_02_properties.dds
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_plain_01_masks.dds
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_plain_01_normal.dds
 gfx/portraits/accessory_variations/textures/patterns/generic/generic_leather_standard_plain_01_properties.dds
@@ -13606,15 +14235,37 @@ gfx/portraits/accessory_variations/textures/patterns/polynesian/polynesian_trim_
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_brocade_01_masks.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_brocade_01_normal.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_brocade_01_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_01_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_01_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_01_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_02_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_02_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_brocade_02_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_standard_fine_01_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_standard_fine_01_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_cotton_standard_fine_01_properties.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_01_masks.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_01_normal.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_01_properties.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_02_masks.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_02_normal.dds
 gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_pattern_02_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_trims_01_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_trims_01_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_trims_01_properties.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_wool_standard_plaid_01_masks.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_wool_standard_plaid_01_normal.dds
+gfx/portraits/accessory_variations/textures/patterns/slavic/slavic_wool_standard_plaid_01_properties.dds
 gfx/portraits/cameras/portrait_cameras.txt
 gfx/portraits/environments/castle_interior_01.dds
 gfx/portraits/environments/castle_interior_01_fire.dds
+gfx/portraits/environments/cubemap_char_role_admiral.dds
+gfx/portraits/environments/cubemap_char_role_agitator.dds
+gfx/portraits/environments/cubemap_char_role_executive.dds
+gfx/portraits/environments/cubemap_char_role_general.dds
+gfx/portraits/environments/cubemap_char_role_politician.dds
+gfx/portraits/environments/cubemap_char_role_ruler.dds
+gfx/portraits/environments/cubemap_char_role_rulergeneral.dds
 gfx/portraits/environments/events_battlefield_01.dds
 gfx/portraits/environments/events_farms_01.dds
 gfx/portraits/environments/events_fp1_runestone_circle.dds
@@ -13649,6 +14300,7 @@ gfx/portraits/portrait_modifiers/01_accessories.txt
 gfx/portraits/portrait_modifiers/01_animation_props.txt
 gfx/portraits/portrait_modifiers/01_beards.txt
 gfx/portraits/portrait_modifiers/01_clothes.txt
+gfx/portraits/portrait_modifiers/01_decals.txt
 gfx/portraits/portrait_modifiers/01_hairstyles.txt
 gfx/portraits/portrait_modifiers/01_headgear.txt
 gfx/portraits/portrait_modifiers/01_shrink_body.txt
@@ -14066,6 +14718,70 @@ gfx/skins/ip4/tabs/tab_button_frontend.dds	dlc016_ip4
 gfx/skins/ip4/tabs/tab_button_vertical.dds	dlc016_ip4
 gfx/skins/ip4/tabs/tab_divider.dds	dlc016_ip4
 gfx/skins/ip4/textures/cloth_texture.dds	dlc016_ip4
+gfx/skins/ip5/backgrounds/bg_frame_small.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/bg_frame_small_mask.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/bg_frame_small_mask_top.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/bg_tiling_pattern.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/default_bg.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/entry_bg_unit_dark.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fancy_pattern.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fancy_pattern_2.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fullscreen_header_behind.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fullscreen_header_dec.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fullscreen_header_frame.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fullscreen_header_title_mask.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/fullscreen_header_title_mask_half.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/header_bg_dec.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/header_borders.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/header_color.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/popup_bg_frame.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/popup_bg_frame_frontend.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/popup_bg_frame_mask.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/side_frame.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/sidepanel_filler.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/simple_frame.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/top_header_dec.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/top_header_frame.dds	dlc019_ip5
+gfx/skins/ip5/backgrounds/top_header_frame_mask.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_bg.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_bg_action.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_bg_map_interaction.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_frame.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_frame_fancy_big.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_frame_fancy_small.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_frame_map_interaction.dds	dlc019_ip5
+gfx/skins/ip5/buttons/default_button_mouseover.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_big_frame.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_big_wood.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_big_wood_action.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_big_wood_map_interaction.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_small_frame.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_small_wood.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_small_wood_action.dds	dlc019_ip5
+gfx/skins/ip5/buttons/round_button_small_wood_map_interaction.dds	dlc019_ip5
+gfx/skins/ip5/character_panel/char_bg_frame.dds	dlc019_ip5
+gfx/skins/ip5/current_situations/current_situation_button.dds	dlc019_ip5
+gfx/skins/ip5/current_situations/current_situation_button_frame.dds	dlc019_ip5
+gfx/skins/ip5/current_situations/current_situation_button_unread.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/lens_toolbar_bg.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/sidebar_skin_bg_1.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/sidebar_skin_bg_2.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/sidebar_skin_bg_3.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/sidebar_skin_bg_4.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/sidebar_skin_bg_5.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/speedometer_bg.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/speedometer_bg_behind.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/topbar_bg.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/topbar_side_dec.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/topbar_side_dec_simple.dds	dlc019_ip5
+gfx/skins/ip5/main_hud/ui_paus_frame.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_1.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_1_selected.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_frontend.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_outliner_not_selected.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_outliner_selected.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_button_vertical.dds	dlc019_ip5
+gfx/skins/ip5/tabs/tab_divider.dds	dlc019_ip5
 gfx/skins/votp/backgrounds/bg_frame_small.dds	dlc004_voice_of_the_people
 gfx/skins/votp/backgrounds/bg_frame_small_mask.dds	dlc004_voice_of_the_people
 gfx/skins/votp/backgrounds/bg_frame_small_mask_top.dds	dlc004_voice_of_the_people
@@ -14483,6 +15199,10 @@ media_alias:ip4_bomb_throwing_anarchist
 media_alias:ip4_colonial_exploitation_going_well
 media_alias:ip4_mining_scene
 media_alias:ip4_university_lecture
+media_alias:ip5_countryside_procession
+media_alias:ip5_harsh_winter
+media_alias:ip5_soviet_deliberation
+media_alias:ip5_theater
 media_alias:middleeast_battlefield_trenches
 media_alias:middleeast_courtroom_upheaval
 media_alias:middleeast_engineer_blueprint
