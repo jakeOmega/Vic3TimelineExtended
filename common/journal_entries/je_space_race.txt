@@ -123,62 +123,66 @@ je_space_race_suborbital = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_suborbital
-		var:sr_progress_suborbital >= sr_suborbital_goal
-	}
-
-	on_complete = {
-		sr_complete_suborbital_effect = yes
-		remove_variable = sr_active_suborbital
-		trigger_event = { id = space_race_events.1 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+	outcome = {
+		header = je_space_race_suborbital_completion_header
+		effect_header = je_space_race_suborbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_suborbital_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_suborbital
+			var:sr_progress_suborbital >= sr_suborbital_goal
+		}
+		effect = {
+			sr_complete_suborbital_effect = yes
+			remove_variable = sr_active_suborbital
+			trigger_event = { id = space_race_events.1 }
+		}
+		# Outcome previews — engine auto-tooltips the effect block; effects do not run.
+		event_outcome_effect_desc = {
+			header = je_space_race_suborbital_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_suborbital_first_outcome_tt
+				add_modifier = { name = sr_first_suborbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_suborbital_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_suborbital_subsequent_outcome_tt
+				add_modifier = { name = sr_suborbital }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = suborbital }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = suborbital }
+	outcome = {
+		header = je_space_race_suborbital_failure_header
+		effect_header = je_space_race_suborbital_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_suborbital_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = suborbital }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = suborbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_suborbital_setback_header
+			effect = {
+				custom_tooltip = je_space_race_suborbital_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = suborbital } }
 	}
-
-	# Outcome previews — engine auto-tooltips the effect block; effects do not run.
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_suborbital_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_first_outcome_tt
-			add_modifier = { name = sr_first_suborbital }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_suborbital_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_subsequent_outcome_tt
-			add_modifier = { name = sr_suborbital }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_suborbital_setback_header
-		effect = {
-			custom_tooltip = je_space_race_suborbital_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_suborbital_completion_header
-	custom_failure_header       = je_space_race_suborbital_failure_header
-	custom_on_completion_header = je_space_race_suborbital_on_completion_header
-	custom_on_failure_header    = je_space_race_suborbital_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -276,61 +280,65 @@ je_space_race_orbital = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_orbital
-		var:sr_progress_orbital >= sr_orbital_goal
-	}
-
-	on_complete = {
-		sr_complete_orbital_effect = yes
-		remove_variable = sr_active_orbital
-		trigger_event = { id = space_race_events.2 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+	outcome = {
+		header = je_space_race_orbital_completion_header
+		effect_header = je_space_race_orbital_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_orbital_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_orbital
+			var:sr_progress_orbital >= sr_orbital_goal
+		}
+		effect = {
+			sr_complete_orbital_effect = yes
+			remove_variable = sr_active_orbital
+			trigger_event = { id = space_race_events.2 }
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_orbital_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_orbital_first_outcome_tt
+				add_modifier = { name = sr_first_orbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_orbital_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_orbital_subsequent_outcome_tt
+				add_modifier = { name = sr_orbital }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = orbital }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = orbital }
+	outcome = {
+		header = je_space_race_orbital_failure_header
+		effect_header = je_space_race_orbital_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_orbital_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_earth_orbit_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = orbital }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = orbital }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_orbital_setback_header
+			effect = {
+				custom_tooltip = je_space_race_orbital_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = orbital } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_orbital_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_first_outcome_tt
-			add_modifier = { name = sr_first_orbital }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_orbital_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_subsequent_outcome_tt
-			add_modifier = { name = sr_orbital }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_orbital_setback_header
-		effect = {
-			custom_tooltip = je_space_race_orbital_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_orbital_completion_header
-	custom_failure_header       = je_space_race_orbital_failure_header
-	custom_on_completion_header = je_space_race_orbital_on_completion_header
-	custom_on_failure_header    = je_space_race_orbital_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -429,61 +437,65 @@ je_space_race_moon_landing = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_moon_landing
-		var:sr_progress_moon_landing >= sr_moon_landing_goal
-	}
-
-	on_complete = {
-		sr_complete_moon_landing_effect = yes
-		remove_variable = sr_active_moon_landing
-		trigger_event = { id = space_race_events.3 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_moon_landing_completion_header
+		effect_header = je_space_race_moon_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_moon_landing_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_moon_landing
+			var:sr_progress_moon_landing >= sr_moon_landing_goal
+		}
+		effect = {
+			sr_complete_moon_landing_effect = yes
+			remove_variable = sr_active_moon_landing
+			trigger_event = { id = space_race_events.3 }
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_moon_landing_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_first_outcome_tt
+				add_modifier = { name = sr_first_moon_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_moon_landing_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_subsequent_outcome_tt
+				add_modifier = { name = sr_moon_landing }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = moon_landing }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_landing }
+	outcome = {
+		header = je_space_race_moon_landing_failure_header
+		effect_header = je_space_race_moon_landing_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_moon_landing_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = moon_landing }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = moon_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_moon_landing_setback_header
+			effect = {
+				custom_tooltip = je_space_race_moon_landing_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = moon_landing } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_landing_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_first_outcome_tt
-			add_modifier = { name = sr_first_moon_landing }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_landing_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_subsequent_outcome_tt
-			add_modifier = { name = sr_moon_landing }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_moon_landing_setback_header
-		effect = {
-			custom_tooltip = je_space_race_moon_landing_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_moon_landing_completion_header
-	custom_failure_header       = je_space_race_moon_landing_failure_header
-	custom_on_completion_header = je_space_race_moon_landing_on_completion_header
-	custom_on_failure_header    = je_space_race_moon_landing_on_failure_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -583,61 +595,65 @@ je_space_race_probe = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_probe
-		var:sr_progress_probe >= sr_probe_goal
-	}
-
-	on_complete = {
-		sr_complete_probe_effect = yes
-		remove_variable = sr_active_probe
-		trigger_event = { id = space_race_events.4 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_probe_completion_header
+		effect_header = je_space_race_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_probe_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_probe
+			var:sr_progress_probe >= sr_probe_goal
+		}
+		effect = {
+			sr_complete_probe_effect = yes
+			remove_variable = sr_active_probe
+			trigger_event = { id = space_race_events.4 }
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_probe_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_probe_first_outcome_tt
+				add_modifier = { name = sr_first_probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_probe_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_probe_subsequent_outcome_tt
+				add_modifier = { name = sr_probe }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = probe }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = probe }
+	outcome = {
+		header = je_space_race_probe_failure_header
+		effect_header = je_space_race_probe_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_probe_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_moon_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = probe }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_probe_setback_header
+			effect = {
+				custom_tooltip = je_space_race_probe_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = probe } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_probe_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_probe_first_outcome_tt
-			add_modifier = { name = sr_first_probe }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_probe_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_probe_subsequent_outcome_tt
-			add_modifier = { name = sr_probe }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_probe_setback_header
-		effect = {
-			custom_tooltip = je_space_race_probe_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_probe_completion_header
-	custom_failure_header       = je_space_race_probe_failure_header
-	custom_on_completion_header = je_space_race_probe_on_completion_header
-	custom_on_failure_header    = je_space_race_probe_on_failure_header
 
 	weight = 90
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -739,24 +755,8 @@ je_space_race_moon_base = {
 		}
 	}
 
-	# Retired: an old save's copy that lingers active neither completes nor fails.
-	complete = { always = no }
-
-	on_complete = {
-		sr_complete_moon_base_effect = yes
-		remove_variable = sr_active_moon_base
-		trigger_event = { id = space_race_events.6 }
-	}
-
-	fail = { always = no }
-
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = moon_base }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_base }
-		}
-	}
+	# Retired: no outcomes, so an old save's copy that lingers active neither
+	# completes nor fails.
 
 	# Retired: only while an old save's copy still carries its active flag,
 	# which the carry removes (sr_lunar_carry_moon_base), so a copy that lingers
@@ -772,32 +772,6 @@ je_space_race_moon_base = {
 			}
 		}
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_base_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_first_outcome_tt
-			add_modifier = { name = sr_first_moon_base }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_moon_base_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_subsequent_outcome_tt
-			add_modifier = { name = sr_moon_base }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_moon_base_setback_header
-		effect = {
-			custom_tooltip = je_space_race_moon_base_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_moon_base_completion_header
-	custom_failure_header       = je_space_race_moon_base_failure_header
-	custom_on_completion_header = je_space_race_moon_base_on_completion_header
-	custom_on_failure_header    = je_space_race_moon_base_on_failure_header
 
 	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -897,61 +871,65 @@ je_space_race_mars_landing = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_mars_landing
-		var:sr_progress_mars_landing >= sr_mars_landing_goal
-	}
-
-	on_complete = {
-		sr_complete_mars_landing_effect = yes
-		remove_variable = sr_active_mars_landing
-		trigger_event = { id = space_race_events.7 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_mars_landing_completion_header
+		effect_header = je_space_race_mars_landing_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_mars_landing_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_mars_landing
+			var:sr_progress_mars_landing >= sr_mars_landing_goal
+		}
+		effect = {
+			sr_complete_mars_landing_effect = yes
+			remove_variable = sr_active_mars_landing
+			trigger_event = { id = space_race_events.7 }
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_mars_landing_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_first_outcome_tt
+				add_modifier = { name = sr_first_mars_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_mars_landing_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_subsequent_outcome_tt
+				add_modifier = { name = sr_mars_landing }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = mars_landing }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = mars_landing }
+	outcome = {
+		header = je_space_race_mars_landing_failure_header
+		effect_header = je_space_race_mars_landing_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_mars_landing_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_mars_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = mars_landing }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = mars_landing }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_mars_landing_setback_header
+			effect = {
+				custom_tooltip = je_space_race_mars_landing_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = mars_landing } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_mars_landing_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_first_outcome_tt
-			add_modifier = { name = sr_first_mars_landing }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_mars_landing_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_subsequent_outcome_tt
-			add_modifier = { name = sr_mars_landing }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_mars_landing_setback_header
-		effect = {
-			custom_tooltip = je_space_race_mars_landing_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_mars_landing_completion_header
-	custom_failure_header       = je_space_race_mars_landing_failure_header
-	custom_on_completion_header = je_space_race_mars_landing_on_completion_header
-	custom_on_failure_header    = je_space_race_mars_landing_on_failure_header
 
 	weight = 95
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -1051,61 +1029,65 @@ je_space_race_interstellar_probe = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_progress_interstellar_probe
-		var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
-	}
-
-	on_complete = {
-		sr_complete_interstellar_probe_effect = yes
-		remove_variable = sr_active_interstellar_probe
-		trigger_event = { id = space_race_events.8 }
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+	outcome = {
+		header = je_space_race_interstellar_probe_completion_header
+		effect_header = je_space_race_interstellar_probe_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_interstellar_probe_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_progress_interstellar_probe
+			var:sr_progress_interstellar_probe >= sr_interstellar_probe_goal
+		}
+		effect = {
+			sr_complete_interstellar_probe_effect = yes
+			remove_variable = sr_active_interstellar_probe
+			trigger_event = { id = space_race_events.8 }
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_probe_first_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_first_outcome_tt
+				add_modifier = { name = sr_first_interstellar_probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_probe_subsequent_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_subsequent_outcome_tt
+				add_modifier = { name = sr_interstellar_probe }
+			}
 		}
 	}
 
-	on_fail = {
-		sr_report_program_loss = { MILESTONE = interstellar_probe }
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			sr_cleanup_milestone_variables_effect = { MILESTONE = interstellar_probe }
+	outcome = {
+		header = je_space_race_interstellar_probe_failure_header
+		effect_header = je_space_race_interstellar_probe_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_interstellar_probe_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_interstellar_mission_program_bool = yes }
+			}
+		}
+		effect = {
+			sr_report_program_loss = { MILESTONE = interstellar_probe }
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				sr_cleanup_milestone_variables_effect = { MILESTONE = interstellar_probe }
+			}
+		}
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_probe_setback_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_probe_setback_tt
+			}
 		}
 	}
 
 	on_monthly_pulse = {
 		effect = { sr_monthly_progress_update_effect = { MILESTONE = interstellar_probe } }
 	}
-
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_probe_first_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_first_outcome_tt
-			add_modifier = { name = sr_first_interstellar_probe }
-		}
-	}
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_probe_subsequent_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_subsequent_outcome_tt
-			add_modifier = { name = sr_interstellar_probe }
-		}
-	}
-	event_outcome_failed_effect_desc = {
-		header = je_space_race_interstellar_probe_setback_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_probe_setback_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_interstellar_probe_completion_header
-	custom_failure_header       = je_space_race_interstellar_probe_failure_header
-	custom_on_completion_header = je_space_race_interstellar_probe_on_completion_header
-	custom_on_failure_header    = je_space_race_interstellar_probe_on_failure_header
 
 	weight = 90
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -1180,15 +1162,30 @@ je_space_race_interstellar_results = {
 		}
 	}
 
-	complete = {
-		has_variable = sr_interstellar_transit_progress
-		var:sr_interstellar_transit_progress >= 132
-	}
-
-	on_complete = {
-		set_variable = { name = sr_interstellar_results_received value = yes }
-		remove_variable = sr_active_interstellar_results
-		trigger_event = { id = space_race_events.60 }
+	outcome = {
+		header = je_space_race_interstellar_results_completion_header
+		effect_header = je_space_race_interstellar_results_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_space_race_interstellar_results_complete_conclusion_desc
+		trigger = {
+			has_variable = sr_interstellar_transit_progress
+			var:sr_interstellar_transit_progress >= 132
+		}
+		effect = {
+			set_variable = { name = sr_interstellar_results_received value = yes }
+			remove_variable = sr_active_interstellar_results
+			trigger_event = { id = space_race_events.60 }
+		}
+		# When the probe finishes its 132-month transit, what it sends back is
+		# random across 30+ flavor sub-events (space_race_events.601–630) covering
+		# dead worlds, astrophysical wonders, exotic phenomena, and rare contact
+		# scenarios. No single reward modifier — preview narrates the uncertainty.
+		event_outcome_effect_desc = {
+			header = je_space_race_interstellar_results_outcome_header
+			effect = {
+				custom_tooltip = je_space_race_interstellar_results_outcome_tt
+			}
+		}
 	}
 
 	on_monthly_pulse = {
@@ -1196,20 +1193,6 @@ je_space_race_interstellar_results = {
 			change_variable = { name = sr_interstellar_transit_progress add = 1 }
 		}
 	}
-
-	# When the probe finishes its 132-month transit, what it sends back is
-	# random across 30+ flavor sub-events (space_race_events.601–630) covering
-	# dead worlds, astrophysical wonders, exotic phenomena, and rare contact
-	# scenarios. No single reward modifier — preview narrates the uncertainty.
-	event_outcome_completed_effect_desc = {
-		header = je_space_race_interstellar_results_outcome_header
-		effect = {
-			custom_tooltip = je_space_race_interstellar_results_outcome_tt
-		}
-	}
-
-	custom_completion_header    = je_space_race_interstellar_results_completion_header
-	custom_on_completion_header = je_space_race_interstellar_results_on_completion_header
 
 	weight = 100
 	should_be_pinned_by_default_uninvolved_or_context = yes
@@ -1413,46 +1396,40 @@ je_space_race_solar_colonization = {
 		}
 	}
 
-	complete = {
-		# Never completes through the bar - completion is handled in on_monthly_pulse
-		# This allows the JE to stay open for repeating colony establishment
-		always = no
-	}
-
-	on_complete = {
-		# Display-only: never fires because complete = always = no
-		custom_tooltip = {
-			text = sr_solar_colony_established_tt
-		}
-	}
-
-	fail = {
-		custom_tooltip = {
-			text = sr_space_program_incompatible_tt
-			NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
-		}
-		# Only close if no colonies were established (otherwise JE stays to hold modifiers)
-		custom_tooltip = {
-			text = sr_no_colonies_to_maintain_tt
-			OR = {
-				NOT = { has_variable = sr_colony_count }
-				var:sr_colony_count < 1
+	# No success outcome: each colony is established in on_monthly_pulse, so the
+	# entry stays open for the next one.
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_space_race_solar_colonization_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = sr_space_program_incompatible_tt
+				NOT = { modifier:country_sr_solar_colonization_program_bool = yes }
+			}
+			# Only close if no colonies were established (otherwise JE stays to hold modifiers)
+			custom_tooltip = {
+				text = sr_no_colonies_to_maintain_tt
+				OR = {
+					NOT = { has_variable = sr_colony_count }
+					var:sr_colony_count < 1
+				}
 			}
 		}
-	}
-
-	on_fail = {
-		# Only a programme the country could run: a country that held only a
-		# colony it was given (no Moon Landing) has none to lose.
-		if = {
-			limit = { sr_solar_colonization_qualified = yes }
-			sr_report_program_loss = { MILESTONE = solar_colonization }
-		}
-		custom_tooltip = {
-			text = sr_milestone_fail_cleanup_tt
-			# Fleets staged in orbit wait for the programme to restart.
-			sr_launch_bank_staged_fleets = yes
-			sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
+		effect = {
+			# Only a programme the country could run: a country that held only a
+			# colony it was given (no Moon Landing) has none to lose.
+			if = {
+				limit = { sr_solar_colonization_qualified = yes }
+				sr_report_program_loss = { MILESTONE = solar_colonization }
+			}
+			custom_tooltip = {
+				text = sr_milestone_fail_cleanup_tt
+				# Fleets staged in orbit wait for the programme to restart.
+				sr_launch_bank_staged_fleets = yes
+				sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
+			}
 		}
 	}
 

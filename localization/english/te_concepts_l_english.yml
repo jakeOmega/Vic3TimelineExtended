@@ -3,7 +3,6 @@
 #
 # CONCEPTS
 #
- ADDITIONAL_NUKE_CREATED:0 "Additional Nuclear Weapon Created and Stockpiled"
  AI_ALREADY_MULTICULTURAL:0 "from already having multicultural laws"
  AI_ANTAGONISTIC_ATTITUDE:0 "from antagonistic relations"
  AI_BAD_RELATIONS:0 "from poor relations"
@@ -114,7 +113,6 @@
  DESELECT_MUSLIM:0 "@red_cross! Muslim"
  DESELECT_MUSLIM_DESC:0 "Remove Islamic beliefs and traditions from our new religion."
  DESELECT_NAME_DESC:0 "Deselect this name for your custom religion."
- FIRST_NUKE_CREATED:0 "First Nuclear Weapon Created and Stockpiled. Future weapons will be created more quickly."
  GDPPERCAPITA:0 "$GDP_SHORT$ per Capita:\n     Local/National\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
  GDP_per_capita:0 "[State.MakeScope.ScriptValue('gdp_per_capita')|2*]"
  GM_ARCH_SUBJECT:0 "from being their subject"

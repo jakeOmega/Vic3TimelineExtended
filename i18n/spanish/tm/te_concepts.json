@@ -1,8 +1,4 @@
 {
- "ADDITIONAL_NUKE_CREATED": {
-  "en": "Additional Nuclear Weapon Created and Stockpiled",
-  "es": "Arma nuclear adicional creada y almacenada"
- },
  "AI_ALREADY_MULTICULTURAL": {
   "en": "from already having multicultural laws",
   "es": "por tener ya leyes multiculturales"
@@ -442,10 +438,6 @@
  "DESELECT_NAME_DESC": {
   "en": "Deselect this name for your custom religion.",
   "es": "Deselecciona este nombre para tu religión personalizada."
- },
- "FIRST_NUKE_CREATED": {
-  "en": "First Nuclear Weapon Created and Stockpiled. Future weapons will be created more quickly.",
-  "es": "Primera arma nuclear creada y almacenada. Las armas futuras se crearán más rápido."
  },
  "GDPPERCAPITA": {
   "en": "$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!",

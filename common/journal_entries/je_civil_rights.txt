@@ -13,7 +13,7 @@
 		# stops being revolutionary (vanilla gates power-bloc invites, obligations
 		# and coups on it).
 		is_revolutionary = no
-		# Set by on_complete / on_fail. A revolution's winner gets a fresh record
+		# Set by the success and failure outcomes. A revolution's winner gets a fresh record
 		# of a resolved entry; without this it would start the struggle over
 		# (civil_rights_effects.txt § REVOLUTION CONTINUITY).
 		NOT = { has_variable = civil_rights_resolved }
@@ -36,7 +36,7 @@
 	# cross-compatible with anti buttons (the historical "coopt moderates,
 	# jail radicals" stance). Each pair toggles a country modifier, mirrored in a
 	# cr_policy_* variable so a revolution's winner can have it back; months
-	# active per modifier feed the path-dependent on_complete / on_fail.
+	# active per modifier feed the path-dependent success and failure effects.
 	scripted_button = cr_grassroots_organizing
 	scripted_button = cr_remove_grassroots_organizing
 	scripted_button = cr_federal_protection
@@ -121,136 +121,149 @@
 		}
 	}
 
-	complete = {
-		OR = {
-			custom_tooltip = {
-				text = je_civil_rights_complete_bar_tt
-				scope:journal_entry = {
-					"scripted_bar_progress(civil_rights_support_bar)" >= 100
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_civil_rights_complete_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = je_civil_rights_complete_bar_tt
+					scope:journal_entry = {
+						"scripted_bar_progress(civil_rights_support_bar)" >= 100
+					}
+				}
+				has_law = law_type:law_minority_rights_affirmative_action
+				AND = {
+					has_law = law_type:law_multicultural
+					has_law = law_type:law_minority_rights_protection
 				}
 			}
-			has_law = law_type:law_minority_rights_affirmative_action
-			AND = {
-				has_law = law_type:law_multicultural
-				has_law = law_type:law_minority_rights_protection
+		}
+		# Path-dependent victory: dispatch on whichever policy track was dominant
+		# for at least 18 months. Falls through to the existing generic .200 event
+		# when no track took clear lead (e.g. fast law-passage with little policy use).
+		#
+		# Hollow-victory check FIRST: if the bar filled but the regime kept its
+		# discriminatory laws in place, the movement's "victory" is purely on paper.
+		# Fire a separate event so an actively oppressive government doesn't get
+		# the victory-coded rewards (issue #14).
+		#
+		# civil_rights_resolved keeps this entry from starting over on a revolution's
+		# winner; the event option records which outcome modifier it granted
+		# (cr_record_outcome_modifier) so on_civil_war_won can give it back.
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			if = {
+				limit = { has_discriminatory_minority_law = yes }
+				trigger_event = { id = movement_events_te.240 } # Hollow Victory
 			}
+			else_if = {
+				limit = {
+					var:cr_federal_months >= var:cr_grassroots_months
+					var:cr_federal_months >= var:cr_gradualist_months
+					var:cr_federal_months > 18
+				}
+				trigger_event = { id = movement_events_te.220 } # Federal Mandate
+			}
+			else_if = {
+				limit = {
+					var:cr_grassroots_months >= var:cr_gradualist_months
+					var:cr_grassroots_months > 18
+				}
+				trigger_event = { id = movement_events_te.221 } # Grassroots Triumph
+			}
+			else_if = {
+				limit = { var:cr_gradualist_months > 18 }
+				trigger_event = { id = movement_events_te.222 } # Negotiated Settlement
+			}
+			else_if = {
+				limit = { var:cr_cooptation_months > 18 }
+				trigger_event = { id = movement_events_te.223 } # Coopted Reform (bittersweet)
+			}
+			else = {
+				trigger_event = { id = movement_events_te.200 } # generic fallback
+			}
+
+			# Strip the six path modifiers (cr_grassroots/federal/gradualist/cooptation/
+			# suppression/segregationist) and the timed cooptation-expired marker. They
+			# are country-scope and survive the JE's end unless explicitly removed.
+			cr_je_cleanup_effect = yes
 		}
 	}
 
-	# Path-dependent victory: dispatch on whichever policy track was dominant
-	# for at least 18 months. Falls through to the existing generic .200 event
-	# when no track took clear lead (e.g. fast law-passage with little policy use).
-	#
-	# Hollow-victory check FIRST: if the bar filled but the regime kept its
-	# discriminatory laws in place, the movement's "victory" is purely on paper.
-	# Fire a separate event so an actively oppressive government doesn't get
-	# the victory-coded rewards (issue #14).
-	#
-	# civil_rights_resolved keeps this entry from starting over on a revolution's
-	# winner; the event option records which outcome modifier it granted
-	# (cr_record_outcome_modifier) so on_civil_war_won can give it back.
-	on_complete = {
-		set_variable = civil_rights_resolved
-		cr_ensure_tracker_vars_effect = yes
-		if = {
-			limit = { has_discriminatory_minority_law = yes }
-			trigger_event = { id = movement_events_te.240 } # Hollow Victory
-		}
-		else_if = {
-			limit = {
-				var:cr_federal_months >= var:cr_grassroots_months
-				var:cr_federal_months >= var:cr_gradualist_months
-				var:cr_federal_months > 18
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_civil_rights_fail_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = { has_active_civil_rights_movement = yes }
+				scope:journal_entry = {
+					"scripted_bar_progress(civil_rights_support_bar)" <= 0
+				}
 			}
-			trigger_event = { id = movement_events_te.220 } # Federal Mandate
 		}
-		else_if = {
-			limit = {
-				var:cr_grassroots_months >= var:cr_gradualist_months
-				var:cr_grassroots_months > 18
+		# Path-dependent failure: distinguish suppression (oppressive aftermath),
+		# cooptation (movement demobilized by token reform), gradualist drift, and a
+		# movement that simply lost momentum with no track dominant (.232).
+		effect = {
+			set_variable = civil_rights_resolved
+			cr_ensure_tracker_vars_effect = yes
+			if = {
+				limit = {
+					OR = {
+						var:cr_suppression_months > var:cr_segregationist_months
+						var:cr_segregationist_months > 18
+						has_discriminatory_minority_law = yes
+					}
+				}
+				trigger_event = { id = movement_events_te.100 } # existing oppressive aftermath
 			}
-			trigger_event = { id = movement_events_te.221 } # Grassroots Triumph
-		}
-		else_if = {
-			limit = { var:cr_gradualist_months > 18 }
-			trigger_event = { id = movement_events_te.222 } # Negotiated Settlement
-		}
-		else_if = {
-			limit = { var:cr_cooptation_months > 18 }
-			trigger_event = { id = movement_events_te.223 } # Coopted Reform (bittersweet)
-		}
-		else = {
-			trigger_event = { id = movement_events_te.200 } # generic fallback
-		}
+			else_if = {
+				limit = { var:cr_cooptation_months > 18 }
+				trigger_event = { id = movement_events_te.230 } # demobilized by tokenism
+			}
+			else_if = {
+				limit = { var:cr_gradualist_months > 18 }
+				trigger_event = { id = movement_events_te.231 } # gradualist stagnation
+			}
+			else = {
+				trigger_event = { id = movement_events_te.232 } # lost momentum, no dominant track
+			}
 
-		# Strip the six path modifiers (cr_grassroots/federal/gradualist/cooptation/
-		# suppression/segregationist) and the timed cooptation-expired marker. They
-		# are country-scope and survive the JE's end unless explicitly removed.
-		cr_je_cleanup_effect = yes
+			cr_je_cleanup_effect = yes
+		}
 	}
 
-	invalid = {
-		OR = {
-			is_country_type = decentralized
-			NOT = {
-				any_scope_state = {
-					is_incorporated = yes
-					any_scope_pop = {
-						pop_acceptance < acceptance_status_4
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_civil_rights_invalid_conclusion_desc
+		trigger = {
+			OR = {
+				is_country_type = decentralized
+				NOT = {
+					any_scope_state = {
+						is_incorporated = yes
+						any_scope_pop = {
+							pop_acceptance < acceptance_status_4
+						}
 					}
 				}
 			}
 		}
-	}
-
-	on_invalid = {
-		# JE invalidated without victory/defeat -- still strip the path modifiers
-		# so they don't persist on the country after the political pretext for
-		# the movement disappeared. Deliberately does not set
-		# civil_rights_resolved: no outcome was reached and nothing was granted,
-		# so there is nothing to replay, and if the grievance returns the
-		# struggle may too. The cleanup ends the run, so that one starts clean.
-		cr_je_cleanup_effect = yes
-	}
-
-	fail = {
-		OR = {
-			NOT = { has_active_civil_rights_movement = yes }
-			scope:journal_entry = {
-				"scripted_bar_progress(civil_rights_support_bar)" <= 0
-			}
+		effect = {
+			# JE invalidated without victory/defeat -- still strip the path modifiers
+			# so they don't persist on the country after the political pretext for
+			# the movement disappeared. Deliberately does not set
+			# civil_rights_resolved: no outcome was reached and nothing was granted,
+			# so there is nothing to replay, and if the grievance returns the
+			# struggle may too. The cleanup ends the run, so that one starts clean.
+			cr_je_cleanup_effect = yes
 		}
-	}
-
-	# Path-dependent failure: distinguish suppression (oppressive aftermath),
-	# cooptation (movement demobilized by token reform), gradualist drift, and a
-	# movement that simply lost momentum with no track dominant (.232).
-	on_fail = {
-		set_variable = civil_rights_resolved
-		cr_ensure_tracker_vars_effect = yes
-		if = {
-			limit = {
-				OR = {
-					var:cr_suppression_months > var:cr_segregationist_months
-					var:cr_segregationist_months > 18
-					has_discriminatory_minority_law = yes
-				}
-			}
-			trigger_event = { id = movement_events_te.100 } # existing oppressive aftermath
-		}
-		else_if = {
-			limit = { var:cr_cooptation_months > 18 }
-			trigger_event = { id = movement_events_te.230 } # demobilized by tokenism
-		}
-		else_if = {
-			limit = { var:cr_gradualist_months > 18 }
-			trigger_event = { id = movement_events_te.231 } # gradualist stagnation
-		}
-		else = {
-			trigger_event = { id = movement_events_te.232 } # lost momentum, no dominant track
-		}
-
-		cr_je_cleanup_effect = yes
 	}
 
 	on_monthly_pulse = {

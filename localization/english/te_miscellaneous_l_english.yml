@@ -6776,7 +6776,6 @@
  sr_site_notice_where_tt:0 "Solar System Colonization's Solar System list shows every site and who holds it."
  sr_site_short_shackleton:0 "Shackleton"
  sr_site_short_venus:0 "Venus Habitat"
- sr_solar_colony_established_tt:0 "A new colony has been established in the solar system."
  sr_solar_system_trade:0 "Interplanetary Trade Networks"
  sr_space_command_paused:0 "Construction Paused"
  sr_space_dividend_tt:0 "#b Commercial Space Industry#!: each point of monthly [concept_space_race] progress our sources still give (the Space Elevator, companies, technologies, colony specializations) now adds #G +5%#! $building_space_mine$ [concept_throughput], up to #G +[ROOT.GetCountry.MakeScope.ScriptValue('sr_space_dividend_max_pct')|0]%#!. Funding and progress bonuses do not count. Now: #G +[ROOT.GetCountry.MakeScope.ScriptValue('sr_space_dividend_pct')|0]%#!, recalculated every month."
