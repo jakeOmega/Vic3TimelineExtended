@@ -833,9 +833,11 @@ price and sells into the spike), or both, before you go to war.
 The mod adds thirteen mine types, from Bauxite and Manganese Mines to Lithium,
 Rare Earth Metals and Platinum Group Metals Mines, and places their deposits in
 the regions that hold them in reality, such as lithium in the Atacama and cobalt
-in Katanga.
-They start undiscovered and turn up over time, as undiscovered resources do in
-the base game. Twenty-one state traits for famous mining regions, among them the
+in Katanga. The mod's deposits start undiscovered and turn up over time, as
+undiscovered resources do in the base game. Copper works the same way, though
+the Copper Mine is the base game's: a state keeps the copper the base game gives
+it from the start, and the rest of its deposit starts undiscovered.
+Twenty-one state traits for famous mining regions, among them the
 Bushveld Igneous Complex, the Central African Copperbelt, the Sudbury Basin and
 Bayan Obo, raise the throughput of the mines there. The goods these mines
 produce are covered in [The extended timeline](02-timeline.md).

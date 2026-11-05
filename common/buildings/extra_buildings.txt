@@ -622,8 +622,14 @@ INJECT:building_gold_mine = {
 	}
 }
 
-# Vanilla's copper mine (1.15), which replaced the mod's discoverable one
+# Vanilla's copper mine (1.15), which replaced the mod's own. It joins the mod's
+# discoverable mines (bg_discoverable_mining, a child of bg_mining), so the
+# deposits resources.py writes start undiscovered past vanilla's own caps, which
+# it keeps as each state's discovered amount. Left capped, the mod's deposit
+# scores would open about 10,700 copper levels in 1836, where vanilla has 609.
 INJECT:building_copper_mine = {
+	building_group = bg_discoverable_mining
+
 	production_method_groups = {
 		pmg_tailings_wastewater_management
 		pmg_maintenance_mine

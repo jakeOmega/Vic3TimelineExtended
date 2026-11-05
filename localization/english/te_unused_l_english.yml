@@ -121,6 +121,7 @@
  building_bauxite_mine_discovered_resource:0 "Bauxite"
  building_car_industry:0 "Automobile Industries"
  building_chromium_mine_discovered_resource:0 "Chromium"
+ building_copper_mine_discovered_resource:0 "Copper"
  building_graphite_mine_discovered_resource:0 "Graphite"
  building_heavy_industry:0 "Heavy Industry"
  building_industrial_mineral_salt_mine_discovered_resource:0 "Industrial Minerals & Salts"
