@@ -227,6 +227,8 @@ Battalion selection prefers the strongest units on the front (manpower × morale
 
 Combat ticks four times daily, exchanging manpower and morale damage. Combat width again caps how many of the fielded battalions actually engage each tick. No reinforcement and no early retreat once started. The side that runs out of morale or manpower first retreats; the other side gets occupation progress.
 
+Kill rate (`unit_kill_rate_add`) decides how many of the opponent's casualties die rather than recover. Before 1.15 the engine counted every kill-rate modifier twice in battle; 1.15 counts it once, without raising the units' own values, so every kill-rate source hits half as hard as it did on 1.14.5.
+
 ### Occupation
 
 Battle wins yield occupation score scaled by terrain and infrastructure. A state takes 2–4 consecutive wins to fully occupy. Occupation only matters for war-goal control during the war; buildings continue to function and supply their domestic market while occupied. Since 1.13.9, a state that is ≥50% occupied counts as occupied for war-goal control, and controlling half of the enemy's incorporated states contests their capital-based war goals.
