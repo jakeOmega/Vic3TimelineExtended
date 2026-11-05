@@ -40,9 +40,10 @@ mobilization group, no `Duplicated key` for `law_communal_administration`, `buil
 regions`, and `grep -c "quote-escaping" debug.log` should be 0 (283 on the first launch), in English and in a German
 or Spanish game.
 - **A new game's starting laws** (#1408): `error.log` has no `set_institution_investment_level … invalid institution
-  type` line, and Britain, Bavaria and Switzerland hold Religious Schools with a schools level, not No Schools. The
-  north German states (Saxony, Brunswick, Hamburg) keep Civic Monolingualism. The first 1.15 game had 53 countries
-  on No Schools from the law sweep running mid-history.
+  type` line, and Britain, Bavaria and Switzerland hold Religious Schools with a schools level, not No Schools.
+  Britain, France and Baden hold Interventionism, not Agrarianism. The north German states (Saxony, Brunswick,
+  Hamburg) keep Civic Monolingualism. The first 1.15 game had 36 countries on No Schools and 46 on Agrarianism from
+  the law sweep running mid-history.
 
 **Journal entries** (`docs/audits/vanilla_1_15_migration.md` § 3)
 - Every mod entry's panel opens and lists its outcomes with headers, colors and effect previews; when one concludes,

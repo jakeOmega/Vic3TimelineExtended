@@ -1809,10 +1809,10 @@ fix_incompatible_laws = {
 #
 # Not on the start date. History's activate_law lines fire on_law_activated too,
 # and a group history hasn't reached yet still holds its first law (Serfdom in
-# Land Reform). Swept then, Religious Schools read as barred by Serfdom and 53
-# countries, Britain among them, started with No Schools; 20 north German states
-# then lost Civic Monolingualism, which bars No Schools (first 1.15 game,
-# 2026-11-05). The monthly pulse (te_fix_inconsistent_laws_country_pulse) sweeps
+# Land Reform). Swept then, both read as barred by Serfdom: 36 countries started
+# with No Schools instead of Religious Schools and 46 with Agrarianism instead of
+# Interventionism, Britain in both; 20 north German states then lost Civic
+# Monolingualism, which bars No Schools (first 1.15 game's 1841 save, 2026-11-05). The monthly pulse (te_fix_inconsistent_laws_country_pulse) sweeps
 # once every history law is set. Vanilla tells the start apart the same way
 # (game_date > 1836.1.1, 01_character_ideologies.txt).
 te_fix_inconsistent_laws_from_law_scope = {

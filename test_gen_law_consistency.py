@@ -359,7 +359,7 @@ class PrerequisiteHoldableTest(unittest.TestCase):
 class StartDateGateTest(unittest.TestCase):
     def test_on_law_activated_sweep_skips_the_start_date(self):
         """History's activate_law fires on_law_activated while later groups still hold their first law, so a sweep
-        then took Religious Schools from 53 countries (Serfdom read as barring it). The wrapper must skip 1836.1.1."""
+        then took Religious Schools from 36 countries and Interventionism from 46 (Serfdom bars both). The wrapper must skip 1836.1.1."""
         import re
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "common", "on_actions", "extra_on_actions.txt")
         with open(path, encoding="utf-8-sig") as f:
