@@ -97,7 +97,7 @@ irredentist_war_tilt = {
 			any_interest_group = {
 				is_in_government = yes
 				OR = {
-					leader = { has_ideology = ideology:ideology_communist }
+					leader = { has_ideology = ideology:ideology_communist_leader }
 					leader = { has_ideology = ideology:ideology_vanguardist }
 				}
 			}

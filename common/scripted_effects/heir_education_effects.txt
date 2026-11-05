@@ -438,9 +438,9 @@ heir_education_resolve_effect = {
 			random_list = {
 				35 = { trigger = { owner = { heir_ed_country_allows_ideology_reformer = yes } } set_ideology = ideology:ideology_reformer }
 				25 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
-				20 = { trigger = { owner = { heir_ed_country_allows_ideology_social_democrat = yes } } set_ideology = ideology:ideology_social_democrat }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_state_socialist = yes } } set_ideology = ideology:ideology_state_socialist }
 				10 = { trigger = { owner = { heir_ed_country_allows_ideology_humanitarian = yes } } set_ideology = ideology:ideology_humanitarian }
-				5 = { trigger = { owner = { heir_ed_country_allows_ideology_communist = yes } } set_ideology = ideology:ideology_communist }
+				5 = { trigger = { owner = { heir_ed_country_allows_ideology_communist_leader = yes } } set_ideology = ideology:ideology_communist_leader }
 				3 = { trigger = { owner = { heir_ed_country_allows_ideology_vanguardist = yes } } set_ideology = ideology:ideology_vanguardist }
 				8 = { trigger = { owner = { heir_ed_country_allows_ideology_radical = yes } } set_ideology = ideology:ideology_radical }
 				2 = { set_ideology = ideology:ideology_moderate }
@@ -455,7 +455,7 @@ heir_education_resolve_effect = {
 				30 = { trigger = { owner = { heir_ed_country_allows_ideology_reformer = yes } } set_ideology = ideology:ideology_reformer }
 				20 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
 				15 = { trigger = { owner = { heir_ed_country_allows_ideology_humanitarian = yes } } set_ideology = ideology:ideology_humanitarian }
-				5 = { trigger = { owner = { heir_ed_country_allows_ideology_social_democrat = yes } } set_ideology = ideology:ideology_social_democrat }
+				5 = { trigger = { owner = { heir_ed_country_allows_ideology_state_socialist = yes } } set_ideology = ideology:ideology_state_socialist }
 				30 = { set_ideology = ideology:ideology_moderate }
 			}
 		}

@@ -629,7 +629,7 @@ irredentism.7 = {
 							OR = {
 								leader = { has_ideology = ideology:ideology_jingoist_leader }
 								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist }
+								leader = { has_ideology = ideology:ideology_communist_leader }
 								leader = { has_ideology = ideology:ideology_vanguardist }
 								leader = { has_ideology = ideology:ideology_ethno_nationalist }
 							}
@@ -641,7 +641,7 @@ irredentism.7 = {
 							OR = {
 								leader = { has_ideology = ideology:ideology_jingoist_leader }
 								leader = { has_ideology = ideology:ideology_fascist }
-								leader = { has_ideology = ideology:ideology_communist }
+								leader = { has_ideology = ideology:ideology_communist_leader }
 								leader = { has_ideology = ideology:ideology_vanguardist }
 								leader = { has_ideology = ideology:ideology_ethno_nationalist }
 							}

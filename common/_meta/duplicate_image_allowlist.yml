@@ -124,13 +124,15 @@ diplomatic_actions:
   - force_cultural_adoption
   reason: a deliberate "use" pick in icon_prompts.py, vanilla's culture crest in place of the religion crest it borrowed; reviewed 2026-10-11
 ideologies:
-- image: gfx/interface/icons/ideology_icons/authoritarian.dds
+- image: gfx/interface/icons/ideology_icons/militarist.dds
   entities:
   - ideology_custom_religion_imperial_cult_economy
   - ideology_custom_religion_imperial_cult_society
   - ideology_custom_religion_totalitarian_society
+  - ideology_militant
+  - ideology_militarist
   - ideology_military_absolutist
-  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
+  reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); vanilla 1.15 removed authoritarian.dds and moved Military Absolutist to militarist.dds, the same figure, which its new Militarist and Militant share; reviewed 2026-10-11, icon moved 2026-11-05
 - image: gfx/interface/icons/ideology_icons/colonialist.dds
   entities:
   - ideology_colonialist
@@ -223,8 +225,8 @@ ideologies:
 - image: gfx/interface/icons/ideology_icons/socialist.dds
   entities:
   - ideology_custom_religion_social_democratic_economy
-  - ideology_socialist
   - ideology_socialist_movement
+  - ideology_state_socialist_movement
   reason: custom-religion variants keep their base ideology's icon, as vanilla's variants do (papal_paternalistic on paternalistic.dds); reviewed 2026-10-11
 - image: gfx/interface/icons/ideology_icons/technocratic.dds
   entities:

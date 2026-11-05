@@ -67,7 +67,7 @@ te_fptp_party_is_major = {
 		AND = { is_party_type = military_party scope:te_fptp_country = { has_variable = te_fptp_major_military_party } }
 		AND = { is_party_type = radical_party scope:te_fptp_country = { has_variable = te_fptp_major_radical_party } }
 		AND = { is_party_type = religious_party scope:te_fptp_country = { has_variable = te_fptp_major_religious_party } }
-		AND = { is_party_type = social_democrat_party scope:te_fptp_country = { has_variable = te_fptp_major_social_democrat_party } }
+		AND = { is_party_type = socialist_party scope:te_fptp_country = { has_variable = te_fptp_major_socialist_party } }
 		AND = { is_party_type = green_party scope:te_fptp_country = { has_variable = te_fptp_major_green_party } }
 		AND = { is_party_type = populist_party scope:te_fptp_country = { has_variable = te_fptp_major_populist_party } }
 		AND = { is_party_type = technocratic_party scope:te_fptp_country = { has_variable = te_fptp_major_technocratic_party } }
