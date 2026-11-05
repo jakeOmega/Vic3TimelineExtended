@@ -1831,14 +1831,6 @@
   "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @fertilizer! $fertilizer$ von Gebäuden produziert wird"
  },
- "goods_output_fine_art_mult": {
-  "en": "Building @fine_art! $fine_art$ output",
-  "de": "Gebäude-Ausstoß: @fine_art! $fine_art$"
- },
- "goods_output_fine_art_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings",
-  "de": "Ein Bonus oder Malus darauf, wie viel @fine_art! $fine_art$ von Gebäuden produziert wird"
- },
  "goods_output_fish_mult": {
   "en": "Building @fish! $fish$ output",
   "de": "Gebäude-Ausstoß: @fish! $fish$"
