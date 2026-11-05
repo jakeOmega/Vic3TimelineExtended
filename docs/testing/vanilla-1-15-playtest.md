@@ -39,6 +39,10 @@ mobilization group, no `Duplicated key` for `law_communal_administration`, `buil
 `building_copper_mine_throughput_add` or `goods_output_fine_art_mult`, no `Province crossing multiple state
 regions`, and `grep -c "quote-escaping" debug.log` should be 0 (283 on the first launch), in English and in a German
 or Spanish game.
+- **A new game's starting laws** (#1408): `error.log` has no `set_institution_investment_level … invalid institution
+  type` line, and Britain, Bavaria and Switzerland hold Religious Schools with a schools level, not No Schools. The
+  north German states (Saxony, Brunswick, Hamburg) keep Civic Monolingualism. The first 1.15 game had 53 countries
+  on No Schools from the law sweep running mid-history.
 
 **Journal entries** (`docs/audits/vanilla_1_15_migration.md` § 3)
 - Every mod entry's panel opens and lists its outcomes with headers, colors and effect previews; when one concludes,
