@@ -941,7 +941,7 @@ je_space_race_mars_landing = {
 # ===========================================
 # 7. INTERSTELLAR PROBE
 # Prereq: Outer System Probe + Mars Landing + aneutronic_fusion tech + Interstellar Mission PM
-# (compact_fusion_reactors until era 13 spec phase 3, 2026-10-31; old saves: te_repair_era_13_technologies)
+# (compact_fusion_reactors until era 13 spec phase 3, 2026-10-31)
 # The culminating probe mission, requires the most advanced space program tier
 # ===========================================
 je_space_race_interstellar_probe = {

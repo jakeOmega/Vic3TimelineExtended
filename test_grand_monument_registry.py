@@ -4222,7 +4222,9 @@ class LandmarkTests(unittest.TestCase):
             self.assertIn(f"set_variable = {{ {record} }}", body, record)
         self.assertIn("set_variable = { name = gm_rebuilding days = 1 }", body, "no vanity for its own level")
         self.assertIn("owner = { trigger_event = { id = monument_events.20 } }", body)
-        self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
+        # The landmark's key reaches debug_log through te_log_args_set: no $ARG$ inside a debug_log string (test_debug_log_arguments).
+        self.assertIn("te_log_args_set = { A = $KEY$ B = $STATE$ C = $TAG$", body)
+        self.assertIn('debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable(\'te_log_arg_1\').GetFlagName] not placed', body)
 
     def test_the_lock_triggers(self):
         t = read(TRIGGERS)
@@ -4795,7 +4797,9 @@ class ColocatedLandmarkTests(unittest.TestCase):
                       "s:$STATE$.region_state:$TAG$ = { gm_seed_landmark_beside = { KEY = $KEY$ FORM = $FORM$ "
                       "DEDICATION = $DEDICATION$ LEVEL = $LEVEL$ BUILT = $BUILT$ } } }", body)
         # The old else is still the one that says nothing was placed.
-        self.assertIn('else = { debug_log = "TE_MONUMENTS: landmark $KEY$ not placed', body)
+        # The landmark's key reaches debug_log through te_log_args_set: no $ARG$ inside a debug_log string (test_debug_log_arguments).
+        self.assertIn("te_log_args_set = { A = $KEY$ B = $STATE$ C = $TAG$", body)
+        self.assertIn('debug_log = "TE_MONUMENTS: landmark [GetGlobalVariable(\'te_log_arg_1\').GetFlagName] not placed', body)
 
     def test_the_beside_seed_is_a_monument_container_with_the_landmarks_records(self):
         body = squash(block(read(MON_EFFECTS), "gm_seed_landmark_beside"))

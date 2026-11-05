@@ -19254,8 +19254,7 @@ pm_deep_space_exploration = {
 pm_interstellar_mission = {
 	texture = "gfx/interface/icons/production_method_icons/pm_interstellar_mission.dds"
 
-	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31); old saves:
-	# te_repair_era_13_technologies (te_old_save_repairs.txt)
+	# Compact Fusion Reactors until era 13 spec phase 3 (2026-10-31)
 	unlocking_technologies = {
 		aneutronic_fusion
 	}
