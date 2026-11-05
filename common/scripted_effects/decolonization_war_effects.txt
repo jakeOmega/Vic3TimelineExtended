@@ -1069,7 +1069,10 @@ decol_iw_backer_monthly = {
 
 # A colonial subject at war with us for its independence takes a record
 # (kind 2), so the war counts as a colonial war. From the monthly settle,
-# before the slots settle.
+# before the slots settle. From vanilla 1.15 a subject takes a side in its
+# overlord's civil war, so one backing our revolutionaries or secessionists is
+# at war with us too; only a war of its against us that none of them fights
+# in counts.
 decol_iw_track_subject_wars = {
 	save_scope_as = decol_iw_self
 	every_subject_or_below = {
@@ -1078,6 +1081,19 @@ decol_iw_track_subject_wars = {
 			is_qualifying_colonial_subject = yes
 			has_war_with = scope:decol_iw_self
 			NOT = { var:decol_iw_metropole ?= scope:decol_iw_self }
+			save_temporary_scope_as = decol_iw_subject_at_war
+			any_scope_war = {
+				is_fighting_overlord_in_war = scope:decol_iw_subject_at_war
+				NOT = {
+					any_war_participant = {
+						OR = {
+							is_revolutionary = yes
+							is_secessionist = yes
+						}
+						civil_war_origin_country ?= scope:decol_iw_self
+					}
+				}
+			}
 		}
 		if = {
 			limit = { scope:decol_iw_self = { decol_iw_has_free_slot = yes } }
