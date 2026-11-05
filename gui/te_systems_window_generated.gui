@@ -2014,8 +2014,11 @@ types te_systems_window_generated_types
 						ignoreinvisible = yes
 						spacing = 10
 
-						te_sr_solar_colonization_status = {
-							blockoverride "sr_debris" {}
+						### Full screen, in a column of their own (te_sr_window_solar_colonization_live).
+						block "sr_window_solar_colonization_live" {
+							te_sr_solar_colonization_status = {
+								blockoverride "sr_debris" {}
+							}
 						}
 						button = {
 							visible = "[JournalEntry.IsActive]"
@@ -2030,6 +2033,35 @@ types te_systems_window_generated_types
 				}
 			}
 			blockoverride "tab_open_journal" {}
+		}
+	}
+
+	### solar_colonization's live sections in a full-screen column of their own
+	### (te_sr_wide_sections), which empties the frame's sr_window_solar_colonization_live
+	### block in column 1: under the frame's gates, the player's own.
+	type te_sr_window_solar_colonization_live = flowcontainer {
+		visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+		minimumsize = { 520 -1 }
+
+		flowcontainer = {
+			using = te_own_country_only
+			parentanchor = hcenter
+			direction = vertical
+			ignoreinvisible = yes
+
+			flowcontainer = {
+				datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+				parentanchor = hcenter
+				direction = vertical
+				ignoreinvisible = yes
+
+				te_sr_solar_colonization_status = {
+					blockoverride "sr_debris" {}
+				}
+			}
 		}
 	}
 }

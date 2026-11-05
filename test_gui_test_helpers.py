@@ -296,6 +296,63 @@ class WideMatchesNarrowTest(unittest.TestCase):
     def test_an_extra_the_layout_no_longer_has(self):
         self.fails(r"extra names \['te_x_divider'\]", GOOD, extra=("te_x_divider",))
 
+    # The Space Race's solar colonization tabs (owner, 2026-11-05): a part the
+    # narrow layout draws inside one section (te_x_sec_b here), in a column of
+    # its own full screen.
+    SPLIT = """
+	type te_x_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_x_overview = {}
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_a = {}
+				flowcontainer = {
+					visible = "[Not( IsLight )]"
+					te_x_sec_b = {}
+					te_x_summary = {}
+				}
+			}
+		}
+		blockoverride "column_2_visible" {
+			visible = "[And( JournalEntry.IsActive, Not( IsLight ) )]"
+		}
+		blockoverride "column_2" {
+			te_x_part = {}
+		}
+		blockoverride "column_3" {
+			flowcontainer = {
+				visible = "[JournalEntry.IsActive]"
+				te_x_sec_c = { visible = "[HasC]" }
+			}
+			te_x_sec_how = {}
+		}
+	}
+"""
+    SPLIT_COLUMNS = [["te_x_overview", "te_x_sec_a", "te_x_sec_b", "te_x_summary"], ["te_x_part"],
+                     ["te_x_sec_c", "te_x_sec_how"]]
+
+    def test_split_gives_a_part_a_column_of_its_own(self):
+        self.fails("the narrow layout's sections", self.SPLIT)
+        self.fails("column_2 is empty", self.SPLIT, extra=("te_x_part",))
+        self.assertEqual(self.check(self.SPLIT, split={"te_x_part": "te_x_sec_b"}), self.SPLIT_COLUMNS)
+        self.assertEqual(self.check(self.SPLIT, split={"te_x_part": "te_x_sec_b"}, columns=self.SPLIT_COLUMNS),
+                         self.SPLIT_COLUMNS)
+
+    def test_a_split_part_keeps_its_sections_gates(self):
+        """It may carry more (te_x_sec_b has no HasC), but not fewer."""
+        more = self.SPLIT.replace("[And( JournalEntry.IsActive, Not( IsLight ) )]",
+                                  "[And( JournalEntry.IsActive, And( Not( IsLight ), HasC ) )]")
+        self.check(more, split={"te_x_part": "te_x_sec_b"})
+        fewer = self.SPLIT.replace("[And( JournalEntry.IsActive, Not( IsLight ) )]", "[JournalEntry.IsActive]")
+        self.fails(r"te_x_part shows in the narrow layout, inside te_x_sec_b, only while \['Not\(IsLight\)'\]",
+                   fewer, split={"te_x_part": "te_x_sec_b"})
+
+    def test_a_split_the_layout_no_longer_has(self):
+        self.fails("split names te_x_gone, which it doesn't place", GOOD, split={"te_x_gone": "te_x_sec_b"})
+        self.fails("split out of te_x_nowhere, which the narrow layout doesn't place", self.SPLIT,
+                   split={"te_x_part": "te_x_nowhere"})
+        self.fails("split names te_x_sec_a, which the narrow layout places", GOOD, split={"te_x_sec_a": "te_x_sec_b"})
+
     def test_composers_names_what_expands(self):
         """By default a type named *_sections is a composer, on either side; others are sections."""
         self.fails("the narrow layout's sections", GOOD, composers=("te_x_status_sections",))

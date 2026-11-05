@@ -25,6 +25,9 @@ launcher and the root, and instances what this writes:
     te_sr_window_milestones          the Space Race body's entries: a note
                                      while none runs, then one
                                      te_system_tab_frame per milestone
+    te_sr_window_<m>_live            an SR_OWN_COLUMN milestone's live
+                                     sections, for the full-screen column
+                                     te_sr_wide_sections gives them
 
 WHICH TAB IS SHOWN. U = the tab is open (its `open_` gate: for a system tab,
 te_window_<system>_tab_sgui, or a mirrored tab's host gate (te_<host>_<system>_
@@ -328,6 +331,13 @@ SR_TRANSIT = {"interstellar_results"}
 # overview: solar colonization's colonies, to read (te_sr_sec_colonies_brief,
 # which shows only for another country).
 SR_FOREIGN = {"solar_colonization": "te_sr_sec_colonies_brief"}
+# The milestones whose live sections take a column of their own full screen
+# (owner, 2026-11-05): solar colonization's, its four tabs (Mission Control,
+# Fleets, Colonies, Solar System), which run far longer than its overview. The
+# frame draws them in a block, sr_window_<m>_live, that te_sr_wide_sections
+# empties in its first column, and te_sr_window_<m>_live draws them for its
+# second, under the frame's gates. The side panel keeps them in the frame.
+SR_OWN_COLUMN = ["solar_colonization"]
 
 TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
@@ -575,6 +585,32 @@ SR_OPEN_JOURNAL = ["button = {",
                    "}"]
 
 
+def _sr_status(m: str) -> list[str]:
+    """A milestone's live sections, the debris row overridden out (Orbit
+    shows it once)."""
+    return [f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
+
+
+def _sr_own(m: str, inner: list[str], spacing: bool = True) -> list[str]:
+    """The player's own part of a milestone: te_own_country_only, then the
+    entry's datacontext on a child of the guard (gotcha #29), holding inner."""
+    return (["flowcontainer = {",
+             "\tusing = te_own_country_only",
+             "\tparentanchor = hcenter",
+             "\tdirection = vertical",
+             "\tignoreinvisible = yes",
+             "",
+             "\tflowcontainer = {",
+             f"\t\tdatacontext = \"[GetPlayerJournalEntry('je_space_race_{m}')]\"",
+             "\t\tparentanchor = hcenter",
+             "\t\tdirection = vertical",
+             "\t\tignoreinvisible = yes"]
+            + (["\t\tspacing = 10"] if spacing else [])
+            + [""]
+            + [f"\t\t{ln}" for ln in inner]
+            + ["\t}", "}"])
+
+
 def _milestone(m: str) -> list[str]:
     """One entry's frame (spec 2026-11-02-charts-help-national-info § 6.4).
     It reads the Country its mount supplies (tab_country overridden empty, so
@@ -591,22 +627,12 @@ def _milestone(m: str) -> list[str]:
         overview, status = "te_sr_overview_transit = {}", []
     else:
         overview = f"te_sr_{m}_overview = {{}}"
-        status = [f"te_sr_{m}_status = {{", '\tblockoverride "sr_debris" {}', "}"]
-    own = (["flowcontainer = {",
-            "\tusing = te_own_country_only",
-            "\tparentanchor = hcenter",
-            "\tdirection = vertical",
-            "\tignoreinvisible = yes",
-            "",
-            "\tflowcontainer = {",
-            f"\t\tdatacontext = \"[GetPlayerJournalEntry('{entry}')]\"",
-            "\t\tparentanchor = hcenter",
-            "\t\tdirection = vertical",
-            "\t\tignoreinvisible = yes",
-            "\t\tspacing = 10",
-            ""]
-           + [f"\t\t{ln}" for ln in status + SR_OPEN_JOURNAL]
-           + ["\t}", "}"])
+        status = _sr_status(m)
+    if m in SR_OWN_COLUMN:
+        status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
+                   f'block "sr_window_{m}_live" {{']
+                  + [f"\t{ln}" for ln in status] + ["}"])
+    own = _sr_own(m, status + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',
@@ -676,7 +702,29 @@ def sr_milestones() -> list[str]:
     for m in SR_MILESTONES:
         out.append("")
         out += [f"\t{ln}" if ln else "" for ln in _milestone(m)]
-    return out + ["}"]
+    out.append("}")
+    for m in SR_OWN_COLUMN:
+        out += [""] + _sr_live(m)
+    return out
+
+
+def _sr_live(m: str) -> list[str]:
+    """A milestone's live sections for a full-screen column of their own
+    (SR_OWN_COLUMN): what its frame's sr_window_<m>_live block draws, under the
+    frame's gates (the entry shown for the Country, then the player's own). No
+    header and no Open Journal Entry: both stay in the frame, in column 1."""
+    return ([f"### {m}'s live sections in a full-screen column of their own",
+             f"### (te_sr_wide_sections), which empties the frame's sr_window_{m}_live",
+             "### block in column 1: under the frame's gates, the player's own.",
+             f"type te_sr_window_{m}_live = flowcontainer {{",
+             f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui", COUNTRY_ROOT)}]"',
+             "\tparentanchor = hcenter",
+             "\tdirection = vertical",
+             "\tignoreinvisible = yes",
+             "\tminimumsize = { 520 -1 }",
+             ""]
+            + [f"\t{ln}" if ln else "" for ln in _sr_own(m, _sr_status(m), spacing=False)]
+            + ["}"])
 
 
 # --- the full-screen frame ----------------------------------------------------
