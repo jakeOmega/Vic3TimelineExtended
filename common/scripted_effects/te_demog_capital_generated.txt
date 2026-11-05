@@ -127,7 +127,6 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CHIHUAHUA } } set_capital = STATE_CHIHUAHUA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CHONGQING } } set_capital = STATE_CHONGQING }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CHUGOKU } } set_capital = STATE_CHUGOKU }
-	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CHUKOTKA } } set_capital = STATE_CHUKOTKA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CHUVASHIA } } set_capital = STATE_CHUVASHIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_CIRCARS } } set_capital = STATE_CIRCARS }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_COLORADO } } set_capital = STATE_COLORADO }
@@ -206,7 +205,6 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_FRIESLAND } } set_capital = STATE_FRIESLAND }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_FUJIAN } } set_capital = STATE_FUJIAN }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_GABON } } set_capital = STATE_GABON }
-	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_GALICH } } set_capital = STATE_GALICH }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_GALICIA } } set_capital = STATE_GALICIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_GANSU } } set_capital = STATE_GANSU }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_GELRE } } set_capital = STATE_GELRE }
@@ -289,7 +287,6 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KASHMIR } } set_capital = STATE_KASHMIR }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KASTAMONU } } set_capital = STATE_KASTAMONU }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KATANGA } } set_capital = STATE_KATANGA }
-	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KAUNAS } } set_capital = STATE_KAUNAS }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KAZAN } } set_capital = STATE_KAZAN }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KAZEMBE } } set_capital = STATE_KAZEMBE }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KENTUCKY } } set_capital = STATE_KENTUCKY }
@@ -306,6 +303,7 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KONYA } } set_capital = STATE_KONYA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KORDOFAN } } set_capital = STATE_KORDOFAN }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KOSOVO } } set_capital = STATE_KOSOVO }
+	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KOSTROMA } } set_capital = STATE_KOSTROMA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KRASNOYARSK } } set_capital = STATE_KRASNOYARSK }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KUBAN } } set_capital = STATE_KUBAN }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_KUOPIO } } set_capital = STATE_KUOPIO }
@@ -330,6 +328,7 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LIBYAN_DESERT } } set_capital = STATE_LIBYAN_DESERT }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LIMA } } set_capital = STATE_LIMA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LINDI } } set_capital = STATE_LINDI }
+	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LITHUANIA } } set_capital = STATE_LITHUANIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LOMBARDY } } set_capital = STATE_LOMBARDY }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LORRAINE } } set_capital = STATE_LORRAINE }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_LOS_RIOS } } set_capital = STATE_LOS_RIOS }
@@ -507,6 +506,7 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SANTO_DOMINGO } } set_capital = STATE_SANTO_DOMINGO }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SAN_SALVADOR } } set_capital = STATE_SAN_SALVADOR }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SAO_PAULO } } set_capital = STATE_SAO_PAULO }
+	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SARATOV } } set_capital = STATE_SARATOV }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SARDINIA } } set_capital = STATE_SARDINIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SARIWON } } set_capital = STATE_SARIWON }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_SASKATCHEWAN } } set_capital = STATE_SASKATCHEWAN }
@@ -567,7 +567,6 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TAMBOV } } set_capital = STATE_TAMBOV }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TANGANYIKA } } set_capital = STATE_TANGANYIKA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TARAPACA } } set_capital = STATE_TARAPACA }
-	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TARTARIA } } set_capital = STATE_TARTARIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TARTU } } set_capital = STATE_TARTU }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TASMANIA } } set_capital = STATE_TASMANIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TAURIDA } } set_capital = STATE_TAURIDA }
@@ -592,6 +591,7 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TRAVANCORE } } set_capital = STATE_TRAVANCORE }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TRIPOLI } } set_capital = STATE_TRIPOLI }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TUCUMAN } } set_capital = STATE_TUCUMAN }
+	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TULA } } set_capital = STATE_TULA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TUNISIA } } set_capital = STATE_TUNISIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TURKMENIA } } set_capital = STATE_TURKMENIA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_TUSCANY } } set_capital = STATE_TUSCANY }
@@ -627,6 +627,7 @@ te_demog_pc_set_capital = {
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VISAYAS } } set_capital = STATE_VISAYAS }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VITEBSK } } set_capital = STATE_VITEBSK }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VOLHYNIA } } set_capital = STATE_VOLHYNIA }
+	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VOLOGDA } } set_capital = STATE_VOLOGDA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VOLTA } } set_capital = STATE_VOLTA }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VRYSTAAT } } set_capital = STATE_VRYSTAAT }
 	else_if = { limit = { scope:te_pc_site = { state_region = s:STATE_VYATKA } } set_capital = STATE_VYATKA }
