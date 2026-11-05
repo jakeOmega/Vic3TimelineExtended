@@ -153,7 +153,9 @@ _ENTITY_GATES: frozenset[str] = frozenset({
 # directories too, and an unknown keyword there (a deleted scripted effect still
 # called from a button, a trigger vanilla removed) was previously invisible.
 SCAN_ROOTS: tuple[ScanRoot, ...] = (
-    ScanRoot("events"),
+    # 1.15 event fields (changes_features.md, "One Time Events") that no
+    # vanilla event sets, so the bootstrap can't harvest them.
+    ScanRoot("events", extra_valid=frozenset({"fire_only_once", "fire_only_once_globally"})),
     ScanRoot(os.path.join("common", "scripted_effects"), body_context=CTX_EFFECT),
     ScanRoot(os.path.join("common", "scripted_triggers"), body_context=CTX_TRIGGER),
     ScanRoot(os.path.join("common", "on_actions")),

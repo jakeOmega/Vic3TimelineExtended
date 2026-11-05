@@ -334,6 +334,22 @@ class JournalEntry115SchemaTests(unittest.TestCase):
         self.assertEqual({(f.keyword, f.kind) for f in result.flags},
                          {("double_sided_gold", "unresolved-helper-call")})
 
+    def test_115_one_time_event_fields_pass(self):
+        # 1.15's `fire_only_once_globally` (and `fire_only_once`): no vanilla
+        # event sets them, so they live in the events root's extras.
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"events/e.txt": (
+            "namespace = e\n"
+            "e.1 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once_globally = yes\n\timmediate = { add_treasury = 1 }\n}\n"
+            "e.2 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once = yes\n\tfire_only_once_forever = yes\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual({(f.keyword, f.kind) for f in result.flags},
+                         {("fire_only_once_forever", "unresolved-helper-call")})
+
     @unittest.skipUnless(_install_dir("journal_entries"), "needs the game install")
     def test_vanilla_115_entries_and_bars_are_clean(self):
         # The audit's 1.15 reading against vanilla's own 1.15 files.
