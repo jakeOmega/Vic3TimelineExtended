@@ -169,8 +169,8 @@ ahead, raised if they fall short.
     Research) has no such line. Grep `debug.log` for
     `TE_SELF_CHECK OK|BROKEN automation_marker` (below).
 11. **Autonomous Logistics** (owner, 2026-11-05). A Trade Center of level 5 or
-    more on Autonomous Logistics (Smart Grids) employs about 1,000 engineers
-    and no clerks or shopkeepers, at any level; on Just-in-Time Logistics it
+    more on Autonomous Logistics (Smart Grids) employs about 1,000 clerks
+    and no shopkeepers, at any level; on Just-in-Time Logistics it
     employs 800 clerks and 200 shopkeepers a level, as before. Its Merchant
     Marine input and weekly trades still grow with its level once the crew is
     hired. Its levels count toward the automated share. Under Human Labor

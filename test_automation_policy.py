@@ -359,7 +359,8 @@ class MarkerTest(unittest.TestCase):
             self.assertEqual({k: -v for k, v in staff.items()},
                              {k: v for k, v in level.items() if k.startswith("building_employment_")}, base)
         unscaled = _body(modifiers["unscaled"])
-        self.assertGreater(float(_body(unscaled["building_employment_engineers_add"])), 0)
+        # A crew of clerks, International Trading's own trade (owner, 2026-11-05).
+        self.assertGreater(float(_body(unscaled["building_employment_clerks_add"])), 0)
 
 
 class ScaledModifierTest(unittest.TestCase):

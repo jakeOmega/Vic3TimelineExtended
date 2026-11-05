@@ -19758,8 +19758,9 @@ pm_trade_center_trade_quantity_advanced_4 = {
 		}
 
 		unscaled = {
-			building_employment_engineers_add = 1000
-			# +500%, as pm_grid_transfer_base: engineers take the crew over
+			# Clerks, International Trading's own trade (owner, 2026-11-05).
+			building_employment_clerks_add = 1000
+			# +500%, as pm_grid_transfer_base: clerks take the crew over
 			# other jobs, and an employed pop's job satisfaction grows with it.
 			building_job_attractiveness_mult = 5
 			building_robotic_or_ai_managed_bool = yes
