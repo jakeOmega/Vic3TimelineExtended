@@ -133,6 +133,7 @@ STATE_BOLIVAR = {
         building_iron_mine = 30
         building_logging_camp = 25
         building_fishing_wharf = 3
+        building_copper_mine = 170
     }
     resource = {
         type = "building_rubber_plantation"
@@ -141,11 +142,6 @@ STATE_BOLIVAR = {
     resource = {
         type = "building_oil_rig"
         undiscovered_amount = 50
-    }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 170
     }
     naval_exit_id = 3025
 }
@@ -218,6 +214,8 @@ STATE_CUNDINAMARCA = {
         type = "building_rubber_plantation"
         undiscovered_amount = 10
     }
+    min_cold_effect = 0.04
+    max_cold_effect = 0.10
 }
 
 STATE_CAUCA = {
@@ -253,6 +251,8 @@ STATE_CAUCA = {
         undiscovered_amount = 6
     }
     naval_exit_id = 3024
+    min_cold_effect = 0.03
+    max_cold_effect = 0.08
 }
 
 STATE_PASTAZA = {
@@ -296,13 +296,9 @@ STATE_TARAPACA = {
     capped_resources = {
         building_iron_mine = 18
         building_sulfur_mine = 24
+        building_copper_mine = 615
         building_whaling_station = 3
         building_fishing_wharf = 5
-    }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 615
     }
 
     resource = {
@@ -310,13 +306,15 @@ STATE_TARAPACA = {
         undiscovered_amount = 135
     }
     naval_exit_id = 3152
+    min_cold_effect = 0.05
+    max_cold_effect = 0.18
 }
 
 STATE_ANTOFAGASTA = {
     id = 362
     subsistence_building = "building_subsistence_farm"
     provinces = { "x1B2EC2" "x2000F0" "x208070" "x20E574" "x291C71" "x2DF128" "x3FDC05" "x40D35C" "x4DCF72" "x694D06" "x6B33D0" "x71C02C" "x7984DF" "x8238EF" "x82A274" "x8BA717" "x8F918A" "xCAECEF" "xCC472E" "xCE7F3B" "xDE43F7" "xE96CF4" "xEE0067" "xF39FDA" "xF5E20E" }
-    traits = { "state_trait_andes" "state_trait_atacama_desert" "state_trait_atacama_copper_belt" }
+    traits = { "state_trait_andes" "state_trait_atacama_desert" "state_trait_domeyko_fault" "state_trait_atacama_copper_belt" }
     city = "x7984DF"
     port = "x2000F0"
     farm = "x694D06"
@@ -327,17 +325,13 @@ STATE_ANTOFAGASTA = {
     capped_resources = {
         building_iron_mine = 30
         building_sulfur_mine = 48
+        building_copper_mine = 800
         building_fishing_wharf = 5
     }
     resource = {
         type = "building_gold_field"
         depleted_type = "building_gold_mine"
         undiscovered_amount = 10
-    }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 800
     }
 
     resource = {
@@ -350,6 +344,8 @@ STATE_ANTOFAGASTA = {
         undiscovered_amount = 135
     }
     naval_exit_id = 3152
+    min_cold_effect = 0.05
+    max_cold_effect = 0.20
 }
 
 STATE_SANTA_CRUZ = {
@@ -390,6 +386,7 @@ STATE_LA_PAZ = {
     capped_resources = {
         building_logging_camp = 20
         building_gold_mine = 4
+        building_copper_mine = 6
     }
     resource = {
         type = "building_rubber_plantation"
@@ -399,6 +396,8 @@ STATE_LA_PAZ = {
         type = "building_oil_rig"
         undiscovered_amount = 50
     }
+    min_cold_effect = 0.18
+    max_cold_effect = 0.40
 
     resource = {
         type = "building_specialty_alloy_metal_mine"
@@ -418,10 +417,13 @@ STATE_POTOSI = {
     arable_land = 20
     arable_resources = { "building_rice_farm" "building_livestock_ranch" "building_coffee_plantation" "building_dye_plantation" "building_tobacco_plantation" "building_banana_plantation" }
     capped_resources = {
-        building_lead_mine = 12
+        building_lead_mine = 6
+        building_copper_mine = 7
         building_logging_camp = 9
         building_gold_mine = 4
     }
+    min_cold_effect = 0.20
+    max_cold_effect = 0.45
 
     resource = {
         type = "building_precious_minor_base_metal_mine"
@@ -467,6 +469,8 @@ STATE_CAJAMARCA = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3024
+    min_cold_effect = 0.06
+    max_cold_effect = 0.20
 }
 
 STATE_LIMA = {
@@ -489,11 +493,7 @@ STATE_LIMA = {
         building_logging_camp = 11
         building_whaling_station = 5
         building_fishing_wharf = 7
-    }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 130
+        building_copper_mine = 130
     }
     naval_exit_id = 3024
 }
@@ -515,11 +515,7 @@ STATE_ICA = {
         building_sulfur_mine = 32
         building_logging_camp = 11
         building_fishing_wharf = 4
-    }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 130
+        building_copper_mine = 130
     }
     naval_exit_id = 3152
 }
@@ -539,15 +535,13 @@ STATE_AREQUIPA = {
     capped_resources = {
         building_iron_mine = 21
         building_sulfur_mine = 32
+        building_copper_mine = 475
         building_logging_camp = 4
         building_fishing_wharf = 5
     }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 475
-    }
     naval_exit_id = 3152
+    min_cold_effect = 0.10
+    max_cold_effect = 0.28
 }
 
 STATE_URUGUAY = {
@@ -572,6 +566,8 @@ STATE_URUGUAY = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3065
+    min_cold_effect = 0.00
+    max_cold_effect = 0.08
 }
 
 STATE_JUJUY = {
@@ -590,12 +586,10 @@ STATE_JUJUY = {
         building_lead_mine = 18
         building_logging_camp = 8
         building_gold_mine = 3
+        building_copper_mine = 370
     }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 370
-    }
+    min_cold_effect = 0.10
+    max_cold_effect = 0.35
 
     resource = {
         type = "building_lithium_mine"
@@ -626,6 +620,8 @@ STATE_ALTO_PARAGUAY = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_BAJO_PARAGUAY = {
@@ -647,6 +643,8 @@ STATE_BAJO_PARAGUAY = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }
 
 STATE_BUENOS_AIRES = {
@@ -666,6 +664,8 @@ STATE_BUENOS_AIRES = {
         building_fishing_wharf = 12
     }
     naval_exit_id = 3065
+    min_cold_effect = 0.00
+    max_cold_effect = 0.12
 }
 
 STATE_PATAGONIA = {
@@ -690,6 +690,8 @@ STATE_PATAGONIA = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3066
+    min_cold_effect = 0.10
+    max_cold_effect = 0.42
 }
 
 STATE_RIO_NEGRO = {
@@ -707,12 +709,10 @@ STATE_RIO_NEGRO = {
     capped_resources = {
         building_coal_mine = 40
         building_sulfur_mine = 52
+        building_copper_mine = 220
     }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 220
-    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.11
 
     resource = {
         type = "building_precious_minor_base_metal_mine"
@@ -734,6 +734,8 @@ STATE_LA_PAMPA = {
     capped_resources = {
         building_logging_camp = 13
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.08
 }
 
 STATE_SANTA_FE = {
@@ -757,6 +759,8 @@ STATE_SANTA_FE = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3065
+    min_cold_effect = 0.00
+    max_cold_effect = 0.06
 }
 
 STATE_CORRIENTES = {
@@ -777,6 +781,8 @@ STATE_CORRIENTES = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_TUCUMAN = {
@@ -796,6 +802,8 @@ STATE_TUCUMAN = {
         building_gold_mine = 3
         building_logging_camp = 6
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 
     resource = {
         type = "building_lithium_mine"
@@ -817,6 +825,8 @@ STATE_CHACO = {
     capped_resources = {
         building_logging_camp = 13
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_SANTIAGO = {
@@ -836,11 +846,14 @@ STATE_SANTIAGO = {
         building_gold_mine = 5
         building_iron_mine = 33
         building_sulfur_mine = 36
+        building_copper_mine = 6
         building_logging_camp = 6
         building_whaling_station = 2
         building_fishing_wharf = 8
     }
     naval_exit_id = 3152
+    min_cold_effect = 0.00
+    max_cold_effect = 0.05
 }
 
 STATE_LOS_RIOS = {
@@ -894,6 +907,8 @@ STATE_ARAUCANIA = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3151
+    min_cold_effect = 0.01
+    max_cold_effect = 0.16
 }
 
 STATE_SOUTH_ATLANTIC_ISLANDS = {
@@ -915,6 +930,8 @@ STATE_SOUTH_ATLANTIC_ISLANDS = {
         building_fishing_wharf = 2
     }
     naval_exit_id = 3066
+    min_cold_effect = 0.12
+    max_cold_effect = 0.40
 }
 
 STATE_PARA = {
@@ -949,6 +966,10 @@ STATE_PARA = {
         undiscovered_amount = 150
     }
     naval_exit_id = 3142
+    blockade_locator = {
+        position = { 2930 0 1510 }
+        yaw = -118
+    }
 }
 
 STATE_MARANHAO = {
@@ -1089,6 +1110,8 @@ STATE_RIO_GRANDE_DO_SUL = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3064
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 }
 
 STATE_PARANA = {
@@ -1110,6 +1133,8 @@ STATE_PARANA = {
         building_whaling_station = 2
     }
     naval_exit_id = 3064
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }
 
 STATE_SANTA_CATARINA = {
@@ -1131,6 +1156,8 @@ STATE_SANTA_CATARINA = {
         building_whaling_station = 2
     }
     naval_exit_id = 3064
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_SAO_PAULO = {
@@ -1158,6 +1185,8 @@ STATE_SAO_PAULO = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3064
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_MINAS_GERAIS = {
@@ -1223,6 +1252,8 @@ STATE_RIO_DE_JANEIRO = {
         discovered_amount = 7
     }
     naval_exit_id = 3064
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_BAHIA = {
