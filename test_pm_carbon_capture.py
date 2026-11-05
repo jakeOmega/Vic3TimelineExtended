@@ -146,7 +146,7 @@ class CaptureGeneratorTest(unittest.TestCase):
                 if energy_loss:
                     self.assertGreater(Decimal(body(capture.workforce(self.methods[pm]), "goods_output_electricity_add")) + energy_loss, 0)
             self.assertTrue(any(k.startswith("goods_input_") for k in workforce(method)))
-        self.assertEqual(tiers, 351)
+        self.assertEqual(tiers, 360)
 
     def test_modern_coal_tier_two_costs_follow_design_anchors(self):
         pm = self.methods["pm_carbon_capture_2_base_building_power_plant_coal25_oil0"]

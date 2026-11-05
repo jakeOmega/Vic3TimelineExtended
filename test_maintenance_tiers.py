@@ -20,11 +20,11 @@ TIERS = {
 }
 MINE_GROUP = "pmg_maintenance_mine"
 MINE_PMS = ["pm_maintenance_traditional", "pm_maintenance_mechanized_mine"]
-MINE_TYPES = ["coal", "iron", "lead", "sulfur", "gold"]
+MINE_TYPES = ["coal", "iron", "lead", "sulfur", "gold", "copper"]
 # Discoverable mines that run one of those mines' equipment groups, picks and shovels
 # included, so they take the same group. The tech metals mines (no hand-worked method)
 # stay on pmg_maintenance_light.
-DISCOVERABLE_ON_MINE_GROUP = ["manganese", "chromium", "specialty_alloy_metal", "copper", "bauxite",
+DISCOVERABLE_ON_MINE_GROUP = ["manganese", "chromium", "specialty_alloy_metal", "bauxite",
                               "precious_minor_base_metal", "graphite", "phosphate", "potash",
                               "industrial_mineral_salt"]
 TECH_METALS_MINES = ["lithium", "nickel_cobalt", "rare_earth_metals", "platinum_group_metals"]
@@ -144,7 +144,7 @@ class MaintenanceTiers(unittest.TestCase):
         for pm in unlocked:
             with self.subTest(pm=pm):
                 self.assertIn(pm, known)
-        # the five original mines use it, and each of their equipment groups lists those PMs
+        # the vanilla mines use it (copper since 1.15), and each of their equipment groups lists those PMs
         buildings = _buildings()
         for t in MINE_TYPES:
             with self.subTest(mine=t):
