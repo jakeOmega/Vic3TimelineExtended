@@ -58,8 +58,6 @@
  goods_input_fertilizer_add_desc:0 "The amount of @fertilizer! $fertilizer$ consumed by buildings"
  goods_output_radios_mult:0 "Building @radios! $radios$ output"
  goods_output_radios_mult_desc:0 "A bonus or penalty to the amount of @radios! $radios$ produced by buildings"
- goods_output_fine_art_mult:0 "Building @fine_art! $fine_art$ output"
- goods_output_fine_art_mult_desc:0 "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings"
  pmg_fertilizer_production:0 "Chemicals Production"
  pm_artificial_fertilizers:0 "Basic Chemical Production"
  pm_improved_fertilizer:0 "Refined Chemical Processes"
