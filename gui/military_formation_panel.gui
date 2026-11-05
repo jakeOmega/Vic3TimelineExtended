@@ -1,8 +1,11 @@
-﻿# TE override of vanilla military_formation_panel.gui (1.14.5). Everything else is vanilla; re-diff against
+﻿# TE override of vanilla military_formation_panel.gui (1.15.0). Everything else is vanilla; re-diff against
 # the installed file on every vanilla patch. Deviations kept from the mod's older copy (each a few lines):
-#   1. mobilization option groups listed in one column (datamodel_wrap = 1 on GetMobilizationOptionGroups)
+#   1. mobilization option groups listed in one column for selected armies (datamodel_wrap = 1 on
+#      GetMobilizationOptionGroups): with the mod's options a group holds up to ten (special_weapons),
+#      50 px each, too wide for vanilla's three a row
 #   2. the formation settings section (borrow / lending) shown for armies only (two MilitaryFormation.IsArmy gates)
 #   3. the Raise Conscripts and Mobilize icons are not disabled by IsValid(...) (two `enabled` lines removed)
+#   4. the name-units-after-state buttons read STATE_NAME: vanilla's STATE key doesn't exist (#635)
 @panel_width_minus_30 = 510
 @panel_width_minus_20 = 520
 @panel_width_minus_10 = 530			# used to be 450
@@ -1734,6 +1737,21 @@ types military_formation_panel_types
 		}
 
 		flowcontainer = {
+			visible = "[And(MilitaryFormation.IsFleet, Not(MilitaryFormation.CanReceiveNewShips))]"
+			direction = vertical
+			parentanchor = hcenter
+
+			textbox = {
+				max_width = @panel_width_minus_10
+				margin = { 1 10}
+				autoresize = yes
+				multiline = yes
+				align = nobaseline
+				text = "FLEET_SHIP_CONSTRUCTION_NOT_DELIVERED_WARNING"
+			}
+		}
+
+		flowcontainer = {
 			visible = "[MilitaryFormation.IsFleet]"
 			parentanchor = hcenter
 			direction = vertical
@@ -1775,10 +1793,7 @@ types military_formation_panel_types
 					using = default_button
 					onclick = "[InformationPanelBar.OpenGoodsPanel( MilitaryFormation.GetCountry.GetMarket.Self, Goods.Self )]"
 					onrightclick = "[RightClickMenuManager.ShowForGoods( Goods.AccessSelf )]"
-
-					tooltipwidget = {
-						FancyTooltip_Goods = {}
-					}
+					tooltip = "[MilitaryFormation.GetPilferedGoodsAmountDesc( Goods.Self )]"
 
 					icon = {
 						size = { 34 34 }
@@ -2326,6 +2341,99 @@ types military_formation_panel_types
 			}
 		}
 
+		### PROJECT POWER
+		default_header_2texts = {
+			visible = "[MilitaryFormation.IsOnProjectPowerMission]"
+			using = default_fade_in_out
+
+			blockoverride "text1" {
+				text = "FLEET_PROJECT_POWER_HEADER"
+			}
+
+			blockoverride "right" {
+				flowcontainer = {
+					parentanchor = right|vcenter
+					spacing = 2
+					position = { -12 0 }
+
+					icon = {
+						size = { 30 30 }
+						texture = "gfx/interface/icons/commander_order_icons/project_power.dds"
+					}
+
+					textbox = {
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						max_width = @panel_width_minus_10
+						using = elide_fontsize_min
+						tooltip = "FLEET_PROJECT_POWER_INVOLVEMENT_TOOLTIP"
+						text = "FLEET_PROJECT_POWER_INVOLVEMENT"
+					}
+				}
+			}
+		}
+
+		flowcontainer = {
+			visible = "[And( MilitaryFormation.IsGeneratingInvolvement, Not( IsDataModelEmpty( MilitaryFormation.GetProjectPowerRegions ) ) )]"
+			parentanchor = hcenter
+			direction = vertical
+			spacing = 2
+			datamodel = "[MilitaryFormation.GetProjectPowerRegions]"
+
+			item = {
+				button = {
+					size = { 540 40 }
+					datacontext = "[MilitaryFormation.GetCountry]"
+					onclick = "[InformationPanelBar.OpenStrategicRegionPanel(StrategicRegion.Self)]"
+					onmousehierarchyenter = "[AccessHighlightManager.HighlightStrategicRegion(StrategicRegion.Self)]"
+					onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+					using = default_button
+					tooltip = "FLEET_PROJECT_POWER_REGION_TOOLTIP"
+
+					background = {
+						using = entry_bg_simple
+					}
+
+					hbox = {
+						margin = { 10 0 }
+						spacing = 5
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+
+						textbox = {
+							layoutpolicy_horizontal = expanding
+							size = { 0 20 }
+							align = nobaseline
+							using = elide_fontsize_min
+							text = "[StrategicRegion.GetNameNoFormatting]"
+						}
+
+						expand = {}
+
+						textbox = {
+							autoresize = yes
+							align = right|nobaseline
+							using = elide_fontsize_min
+							using = tooltip_se
+							datacontext = "[MilitaryFormation.GetTargetInterestTierTypeInRegion(StrategicRegion.Self)]"
+							tooltip = "COUNTRY_INTEREST_TOOLTIP"
+							text = "FLEET_PROJECT_POWER_REGION_TIER"
+						}
+					}
+				}
+			}
+		}
+
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[And( MilitaryFormation.IsOnProjectPowerMission, Or( Not( MilitaryFormation.IsGeneratingInvolvement ), IsDataModelEmpty( MilitaryFormation.GetProjectPowerRegions ) ) )]"
+			}
+			blockoverride "text" {
+				text = "FLEET_PROJECT_POWER_NOT_ON_STATION"
+			}
+		}
+
 		### BLOCKADE
 		default_header_2texts = {
 			visible = "[MilitaryFormation.HasBlockadeMission]"
@@ -2409,7 +2517,7 @@ types military_formation_panel_types
 							autoresize = yes
 							align = right|nobaseline
 							using = elide_fontsize_min
-							raw_text = "#v [State.GetBlockadeLevel|%0]#!"
+							text = "CURRENT_BLOCKADE_EFFICIENCY_TO_MAX"
 						}
 					}
 				}
@@ -2823,14 +2931,6 @@ types military_formation_panel_types
 
 				expand = {}
 
-				### Admiral Repairing
-				icon = {
-					size = { 30 30 }
-					visible = "[And( Character.IsAdmiral, Character.IsDefeated )]"
-					texture = "[Character.GetRepairingTexture]"
-					tooltip = "ADMIRAL_REPAIRING_DATE_TOOLTIP"
-				}
-
 				### Travelling Commander
 				icon = {
 					size = { 30 30 }
@@ -3036,14 +3136,6 @@ types military_formation_panel_types
 					block "additional_info_to_the_right" {
 						vbox = {
 							layoutpolicy_vertical = expanding
-
-							### Admiral Repairing
-							icon = {
-								size = { 30 30 }
-								visible = "[And( Character.IsAdmiral, Character.IsDefeated )]"
-								texture = "[Character.GetRepairingTexture]"
-								tooltip = "ADMIRAL_REPAIRING_DATE_TOOLTIP"
-							}
 
 							### Travelling Commander
 							icon = {
@@ -4081,10 +4173,6 @@ types military_formation_panel_types
 					unit_group_default_unit_button = {
 						visible = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
 
-						block "text_max_width" {
-							max_width = 250
-						}
-
 						blockoverride "size" {
 							size = { 250 40 }
 						}
@@ -4118,15 +4206,10 @@ types military_formation_panel_types
 		}
 
 		textbox = {
-			parentanchor = center
-			align = nobaseline
-			autoresize = yes
-			elide = right
-			fontsize_min = 14
-
-			block "text_max_width" {
-				max_width = 150
-			}
+			size = { 100% 100% }
+			margin = { 5 0 }
+			align = hcenter|nobaseline
+			using = elide_fontsize_min
 
 			block "default_unit_type_button_text" {
 				text = "[MilitaryFormation.GetSelectedUnitTypeForGroup(CombatUnitGroup.Self).GetNameNoFormatting]"
@@ -4324,7 +4407,7 @@ types military_formation_panel_types
 					raw_text = "[CombatUnitType.GetNameNoFormatting]"
 					using = fontsize_large
 					max_width = 150
-					fontsize_min = 14
+					using = elide_fontsize_min
 				}
 
 				offense_defense_info_text = {}
@@ -6226,6 +6309,26 @@ types military_formation_panel_types
 				}
 			}
 
+			### Formation Repairing
+			widget = {
+				visible = "[MilitaryFormation.IsDefeated]"
+				size = { 30 30 }
+
+				# Background
+				icon = {
+					size = { 100% 100% }
+					texture = "gfx/interface/backgrounds/round_button_bg.dds"
+				}
+
+				# Repair-icon
+				icon = {
+					size = { 100% 100% }
+					parentanchor = center
+					texture = "gfx/interface/icons/commander_order_icons/admiral_repairing.dds"
+					tooltip = "FORMATION_FULLY_DEFEATED"
+				}
+			}
+
 			### DELETE FORMATION
 			button_icon_round_action = {
 				blockoverride "icon_size" { size = { 65% 65% } }
@@ -6968,6 +7071,7 @@ types military_formation_panel_types
 				parentanchor = vcenter
 				tooltip = "MILITARY_FORMATION_TRANSFER_UNIT_TOOLTIP"
 				using = tooltip_ne
+				enabled = "[Not(MilitaryFormation.IsDefeated)]"
 				onclick = "[PopupManager.ShowTransferFormation( MilitaryFormation.AccessSelf )]"
 				
 				blockoverride "icon_size" {
