@@ -89,6 +89,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 3
 				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
 				te_jmap_e0_factor < 0.5
 			}
 			lerp = {
@@ -101,6 +102,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 3
 				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
 			}
 			lerp = {
 				min_color = "te_jmap_e0_mid"
@@ -113,6 +115,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 4
 				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
 				var:te_dg_tfr < 2.1
 			}
 			lerp = {
@@ -125,6 +128,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 4
 				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
 			}
 			lerp = {
 				min_color = "te_jmap_tfr_mid"
@@ -137,6 +141,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 5
 				has_variable = te_dg_median
+				var:te_dg_median > 0
 				var:te_dg_median < 30
 			}
 			lerp = {
@@ -149,6 +154,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 5
 				has_variable = te_dg_median
+				var:te_dg_median > 0
 			}
 			lerp = {
 				min_color = "te_jmap_median_mid"
@@ -156,7 +162,7 @@ je_te_map_host = {
 				factor = te_jmap_median_factor_upper
 			}
 		}
-		# The Demographics maps, a state with no census yet (or the rule off).
+		# The Demographics maps, a state with no census yet, no people to count, or the rule off.
 		else_if = {
 			limit = {
 				OR = {
@@ -227,6 +233,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 3
 				has_variable = te_dg_e0
+				var:te_dg_e0 > 0
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy
 		}
@@ -234,6 +241,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 4
 				has_variable = te_dg_tfr
+				var:te_dg_tfr > 0
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_fertility
 		}
@@ -241,6 +249,7 @@ je_te_map_host = {
 			limit = {
 				te_jmap_selector = 5
 				has_variable = te_dg_median
+				var:te_dg_median > 0
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_median_age
 		}
