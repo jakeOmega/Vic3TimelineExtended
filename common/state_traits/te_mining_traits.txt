@@ -27,6 +27,8 @@ state_trait_bushveld_complex = {
 	}
 }
 
+# For Katanga. Zambia takes vanilla 1.15's state_trait_african_copper_belt
+# (+20% copper mines), which the INJECT at the end extends with this cobalt line.
 state_trait_copperbelt = {
 	icon = "gfx/interface/icons/state_trait_icons/resources_ore.dds"
 	modifier = {
@@ -193,5 +195,13 @@ INJECT:state_trait_atacama_desert = {
 INJECT:state_trait_bone_valley = {
 	modifier = {
 		building_phosphate_mine_throughput_add = 0.2
+	}
+}
+
+# Vanilla 1.15 gives Zambia the African Copper Belt (+20% copper mines); this
+# adds the Copperbelt's cobalt, so Zambia needs no second trait.
+INJECT:state_trait_african_copper_belt = {
+	modifier = {
+		building_nickel_cobalt_mine_throughput_add = 0.1
 	}
 }
