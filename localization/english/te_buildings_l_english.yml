@@ -482,6 +482,8 @@
  building_resettlement_transit_deaths_add_desc:0 "People recruited for this Settlement Authority last month who died before they arrived."
  building_rheinmetall_unterluss_proving_ground:0 "Rheinmetall Unterlüss Proving Ground"
  building_ricordi_galleria_vittorio_emanuele:0 "Ricordi Galleria Publishing House"
+ building_robotic_or_ai_managed_bool:0 "Robotic or AI-Managed"
+ building_robotic_or_ai_managed_bool_desc:0 "Robots or AI do the work people did in this building. Its levels count toward our automated share, on which $law_robot_tax$ and $law_automation_dividend$ pay out, and $law_human_labor_quotas$ withdraws the [concept_production_method]."
  building_robotics_industry:0 "Robotics Industry"
  building_robotics_industry_throughput_add:0 "Robotics Industry [concept_throughput]"
  building_robotics_industry_throughput_add_desc:0 "Robotics Industry [concept_throughput]"

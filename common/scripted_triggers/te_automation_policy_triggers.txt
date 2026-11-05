@@ -7,10 +7,16 @@
 # WHICH METHODS COUNT AS ROBOTIC OR AI-MANAGED. A method counts where robots
 # or AI do work people did: in each group, the first robotic or AI-run tier
 # and every tier above it, so Human Labor Quotas never moves a building to a
-# method that employs fewer people. Each listed method carries
-# `disallowing_laws = { law_human_labor_quotas }`, and each group keeps an
-# ungated first method, so no building is left without one
-# (test_automation_policy.py checks both against this list).
+# method that employs fewer people. Each such method marks itself with two
+# lines: `building_robotic_or_ai_managed_bool = yes` in its
+# building_modifiers' `unscaled` block (the type is in
+# common/modifier_type_definitions/te_automation_policy_modifier_types.txt),
+# which te_ap_runs_automated_method reads, and
+# `disallowing_laws = { law_human_labor_quotas }`. Each group keeps an
+# ungated first method, so no building is left without one. A new method
+# takes both lines, and its building joins te_ap_automatable_building;
+# test_automation_policy.py checks the two lines name the same methods, the
+# ladder, every group's fallback and the building list. The 40 methods:
 #
 #   Factory automation, the robotic tier up (Robotics, era 8, and later):
 #     Tooling Workshop, Furniture Manufactory, Motor Industry: Robotic
@@ -25,7 +31,9 @@
 #     the Synthetics Plants, Explosives Factory, Electronics (the fab), Textile
 #     Mill.
 #   AI-run infrastructure: the AI-managed Power Plant trio and its Aneutronic
-#     Fusion variant (Smart Grids),
+#     Fusion variant (Smart Grids), Autonomous Logistics at the Trade Center
+#     (Smart Grids, with a flat crew in place of International Trading's
+#     per-level staff),
 #     Autonomous Networks (Smart Grids), Fully Automated Content Creation (AI
 #     Agents) and AI-Mediated Mind Sharing (Telepathic Communities) in the
 #     Software Industry, Automated Labs at the University and the automated
@@ -56,196 +64,37 @@
 # ============================================================================
 
 # Building scope. The building runs one of the robotic or AI-managed methods
-# above. Its levels count toward the automated share. Each method is checked
-# only on the building types whose group holds it, as vanilla always pairs
-# has_active_production_method with is_building_type; one block per group
-# (or per set of groups with the same methods).
+# above: one of its active methods carries the marker. Its levels count toward
+# the automated share. The line sits in `unscaled`, so it holds at any
+# staffing, and a building counts once however many of its groups run one.
+# Only production methods carry it: a building's modifier: read also carries
+# its country's lines (scripting_best_practices.md), so one on a law or a
+# technology would mark every building. Whether a method's line reaches the
+# read is the self-check automation_marker (te_ap_marker_selfcheck,
+# common/scripted_effects/te_automation_policy_effects.txt).
 te_ap_runs_automated_method = {
+	modifier:building_robotic_or_ai_managed_bool = yes
+}
+
+# Building scope. TEMPORARY, for the automation_marker self-check only: the
+# building runs one of three sample methods, named directly as
+# te_ap_runs_automated_method named all of them before the marker. Robotic
+# Assembly Lines in a Tooling Workshop (a per-level staff), Robotic Service
+# Providers in an Urban Center, and Autonomous Logistics in a Trade Center (a
+# flat crew).
+te_ap_marker_sample = {
 	OR = {
-		# pmg_automation_building_tooling_workshop
 		AND = {
 			is_building_type = building_tooling_workshop
-			OR = {
-				has_active_production_method = pm_robotic_assembly_lines_building_tooling_workshop
-				has_active_production_method = pm_ai_managed_building_tooling_workshop
-				has_active_production_method = pm_ai_managed_building_tooling_workshop_handling
-			}
+			has_active_production_method = pm_robotic_assembly_lines_building_tooling_workshop
 		}
-		# pmg_automation_building_furniture_manufactory
-		AND = {
-			is_building_type = building_furniture_manufactory
-			OR = {
-				has_active_production_method = pm_robotic_assembly_lines_building_furniture_manufactory
-				has_active_production_method = pm_ai_managed_building_furniture_manufactory
-			}
-		}
-		# pmg_automation_building_motor_industry
-		AND = {
-			is_building_type = building_motor_industry
-			OR = {
-				has_active_production_method = pm_robotic_assembly_lines_building_motor_industry
-				has_active_production_method = pm_ai_managed_building_motor_industry
-				has_active_production_method = pm_ai_managed_building_motor_industry_turbine
-			}
-		}
-		# pmg_automation_building_automotive_industry
-		AND = {
-			is_building_type = building_automotive_industry
-			OR = {
-				has_active_production_method = pm_robotic_assembly_lines
-				has_active_production_method = pm_intelligent_manufacturing_systems
-				has_active_production_method = pm_self_optimizing_production
-			}
-		}
-		# pmg_automation_building_aerospace_industry
-		AND = {
-			is_building_type = building_aerospace_industry
-			OR = {
-				has_active_production_method = pm_robotic_assembly_handling
-				has_active_production_method = pm_ai_optimized_operations
-			}
-		}
-		# pmg_automation_building_arms_industry
-		AND = {
-			OR = {
-				is_building_type = building_arms_industry
-				is_building_type = building_artillery_foundry
-			}
-			OR = {
-				has_active_production_method = pm_ai_managed_building_arms_industry
-				has_active_production_method = pm_ai_managed_building_artillery_foundry
-			}
-		}
-		# pmg_automation_building_munition_plant
-		AND = {
-			is_building_type = building_munition_plant
-			OR = {
-				has_active_production_method = pm_ai_managed_building_munition_plant
-				has_active_production_method = pm_ai_managed_building_munition_plant_shells
-			}
-		}
-		# pmg_automation_building_chemical_plant
-		AND = {
-			OR = {
-				is_building_type = building_chemical_plant
-				is_building_type = building_synthetics_plant
-				is_building_type = building_synthetics_plant_biomass
-				is_building_type = building_synthetics_plant_coal
-				is_building_type = building_synthetics_plant_drinks
-				is_building_type = building_synthetics_plant_fruit
-				is_building_type = building_synthetics_plant_meat
-				is_building_type = building_synthetics_plant_oil
-				is_building_type = building_synthetics_plant_opium
-				is_building_type = building_synthetics_plant_rubber
-				is_building_type = building_synthetics_plant_silk
-				is_building_type = building_synthetics_plant_sugar
-				is_building_type = building_synthetics_plant_wood
-			}
-			has_active_production_method = pm_ai_managed_chemical_plant
-		}
-		# pmg_automation_building_explosives_factory
-		AND = {
-			is_building_type = building_explosives_factory
-			has_active_production_method = pm_ai_managed_explosives_factory
-		}
-		# pmg_automation_building_electronic_components
-		AND = {
-			OR = {
-				is_building_type = building_electrics_industry
-				is_building_type = building_electrics_industry_appliances
-				is_building_type = building_electrics_industry_radio
-				is_building_type = building_electronic_components_and_semiconductor_industry
-				is_building_type = building_robotics_industry
-			}
-			has_active_production_method = pm_ai_managed_fab
-		}
-		# pmg_automation_building_textile_mill
-		AND = {
-			is_building_type = building_textile_mill
-			has_active_production_method = pm_ai_managed_textile_factory
-		}
-		# pmg_automation_building_food_industry
-		AND = {
-			is_building_type = building_food_industry
-			has_active_production_method = pm_robotic_food_processing
-		}
-		# pmg_automation_building_software
-		AND = {
-			is_building_type = building_software_industry
-			OR = {
-				has_active_production_method = pm_fully_automated_content_creation
-				has_active_production_method = pm_ai_mediated_mind_sharing
-			}
-		}
-		# pmg_automation_building_network
-		AND = {
-			is_building_type = building_network_infrastructure
-			has_active_production_method = pm_autonomous_networks
-		}
-		# pmg_power_automation
-		AND = {
-			OR = {
-				is_building_type = building_fusion_plant
-				is_building_type = building_hydro_plant
-				is_building_type = building_nuclear_plant
-				is_building_type = building_power_plant
-				is_building_type = building_renewable_energy_plant
-			}
-			OR = {
-				has_active_production_method = pm_ai_managed_power_plant
-				has_active_production_method = pm_ai_managed_power_plant_reactor
-				has_active_production_method = pm_ai_managed_power_plant_hydro
-				has_active_production_method = pm_ai_managed_power_plant_aneutronic
-			}
-		}
-		# pmg_amenities
 		AND = {
 			is_building_type = building_urban_center
-			OR = {
-				has_active_production_method = pm_drone_delivery_systems
-				has_active_production_method = pm_robotic_service_providers
-			}
+			has_active_production_method = pm_robotic_service_providers
 		}
-		# pmg_base_building_railway
 		AND = {
-			is_building_type = building_railway
-			OR = {
-				has_active_production_method = pm_autonomous_trains
-				has_active_production_method = pm_vactrain_freight # driverless, and above Autonomous Trains (Vactrains, #1290)
-			}
-		}
-		# pmg_base_building_highway
-		AND = {
-			is_building_type = building_highway
-			has_active_production_method = pm_autonomous_highway
-		}
-		# pmg_harvesting_process_building_rye_farm, pmg_harvesting_process_building_wheat_farm, pmg_harvesting_process_building_maize_farm, pmg_harvesting_process_building_millet_farm
-		AND = {
-			OR = {
-				is_building_type = building_maize_farm
-				is_building_type = building_millet_farm
-				is_building_type = building_rye_farm
-				is_building_type = building_wheat_farm
-			}
-			has_active_production_method = pm_automated_harvesters_and_planters
-		}
-		# pmg_harvesting_process_building_rice_farm
-		AND = {
-			is_building_type = building_rice_farm
-			has_active_production_method = pm_automated_harvesters_and_planters_building_rice_farm
-		}
-		# pmg_university_academia
-		AND = {
-			is_building_type = building_university
-			has_active_production_method = pm_automated_labs
-		}
-		# pmg_base_building_ocean_mine
-		AND = {
-			is_building_type = building_ocean_mine
-			OR = {
-				has_active_production_method = pm_automated_ocean_mine
-				has_active_production_method = pm_automated_ocean_mine_uncapped
-			}
+			is_building_type = building_trade_center
+			has_active_production_method = pm_trade_center_trade_quantity_advanced_4
 		}
 	}
 }
@@ -300,6 +149,7 @@ te_ap_automatable_building = {
 		is_building_type = building_maize_farm
 		is_building_type = building_millet_farm
 		is_building_type = building_rice_farm
+		is_building_type = building_trade_center
 	}
 }
 
