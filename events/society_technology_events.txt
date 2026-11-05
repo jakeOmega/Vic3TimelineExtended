@@ -215,7 +215,7 @@ society_technology_events.3 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_theocracy
 					}
 				}
@@ -313,7 +313,7 @@ society_technology_events.4 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_theocracy
 					}
 				}
@@ -378,7 +378,7 @@ society_technology_events.5 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { has_law = law_type:law_state_religion }
+				trigger = { has_law_or_variant = law_type:law_state_religion }
 				add = 2
 			}
 		}
@@ -454,7 +454,7 @@ society_technology_events.6 = {
 			modifier = {
 				trigger = {
 					OR = {
-						has_law = law_type:law_state_religion
+						has_law_or_variant = law_type:law_state_religion
 						has_law = law_type:law_outlawed_dissent
 					}
 				}
@@ -2966,7 +2966,7 @@ society_technology_events.36 = {
 				trigger = {
 					OR = {
 						has_law = law_type:law_single_party_state
-						has_law = law_type:law_secret_police
+						has_law_or_variant = law_type:law_secret_police
 						has_law = law_type:law_outlawed_dissent
 					}
 				}
