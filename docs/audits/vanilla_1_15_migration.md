@@ -107,7 +107,20 @@ engine docs newer than both the snapshot and the installed game. `docs/engine/` 
 modifier types and custom loc: the foundation render had committed 925 of the mod's types, which the server
 unions in for its endpoints, and a test of a script-only type caught it.
 
-**Script sweep and defines.** *(The sweep stream's results go here.)*
+**Script sweep and defines.** The mod's three devastation overrides go, for 1.15's battle-based devastation;
+`INCOHERENCE_FACTOR` stays at 2 (vanilla went from 5 to 2.5). No `$ARG$` is left inside a `debug_log` string: 20
+lines in 12 helpers pass their arguments through `te_log_args_set` (`te_debug_log_arg_effects.txt`), and
+`test_debug_log_arguments.py` keeps it so. Treaty articles gained renegotiation guards, and state-modifier articles
+remove before they re-add. The UN docket counts a war victim by `enemy_occupation > 0.25`, and its strike lists
+follow 1.15's new plays. Decolonization's subject-war tracker skips wars with the overlord's own revolutionaries.
+The mod's ships take 1.15's construction goods in their modules, and its submarines use
+`ai_ship_category_submarines`. The Subjugate replacement ports 1.15's checks, the scripted rules were re-copied,
+the Imperial Circle bloc-name replacement went (vanilla now gates it itself), and `formation.17` was re-synced.
+Labour Suffrage joins the lists that mean "holds elections", and Religious Mission Rights reads State Religion
+with its variants. Global Warming reads its temperature global only once it exists (the 582 log lines). The four
+old-save repairs marked for 1.15 are retired, as 1.15 saves don't carry over. Two new vanilla engine lines moved
+onto the census's script-only types: the Extraordinary Commission's wealth mortality and Social Revolution's
+working-adult share. The known-noise registries carry 1.15's source lines.
 
 **Probes.** A hidden journal entry on one AI major power answers C3, C5, C7, C19, C20 and part of C21 within four
 months of any game (`TE_PROBE_115` lines). The play-test list says how to read them and what to delete afterwards.
@@ -150,9 +163,23 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
 - **The states panel:** vanilla's new Cold tile sits beside the mod's Local Climate tile. **The market panel:**
   vanilla's Monthly Price Report stays out, where the mod's trade charts stand (the mod's copy never had it).
 - **The tooltip header** lost vanilla's `margin_top = 5` in the rebuilt `tooltip.gui`, as the mod's copy had.
-- **Design calls from the new laws:** whether a council republic counts as democratic in the world war triggers,
+- **Battle and growth numbers 1.15 moved under the mod.** Fixing the double-counted kill rate halves every one of
+  the mod's 29 kill-rate sources, so battle deaths (and the census's war deaths) roughly halve: scale them up?
+  Base literacy growth went from 0.0005 to 0.002, so the mod's 17 literacy-growth adds went from about a tenth of
+  it to a fortieth: retune? `military_formation_interest_gain_mult` now applies, up to +90% at the mod's
+  investment cap. The mod's 32 `unit_devastation_mult` values meet the battle-only model. `INCOHERENCE_FACTOR`
+  stays at 2, still cheaper than vanilla's 2.5.
+- **Ship costs.** The mod's ships follow 1.15's move of goods into modules at the same multiple of their vanilla
+  analogue, which raises them about 20% (carriers 42%); holding totals flat would have priced the Fleet Carrier
+  below the vanilla carrier it succeeds.
+- **Collective Governance under Labour Suffrage** gets no amendment until Labour Suffrage joins both
+  `collective_governance_is_popular` and Collective Governance's `unlocking_laws`, which a test pins equal; adding
+  it changes who may enact the law.
+- **Design calls from the new laws**, with the sweep's recommendation: whether a council republic counts as democratic in the world war triggers,
   whether Internal Colonization joins the colonization-law lists, and whether Revolutionary Guard unlocks the
-  reserve cadre.
+  reserve cadre. Leave the first (Labour Suffrage needs a Council Republic, which the communist check already
+  catches), don't add the second (it settles an internal frontier, like Frontier Colonization, which the lists
+  leave out), and yes to the third (a militia and conscription army, like the two laws that unlock it now).
 
 ## 6. Follow-ups
 

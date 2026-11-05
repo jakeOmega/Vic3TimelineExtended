@@ -162,3 +162,17 @@ or Spanish game.
 - TULA, KOSTROMA and the renamed states (LITHUANIA, SARATOV, VOLOGDA) have tourism, a Local Climate tile, an area,
   Planned Capital, capital bloc names and a seabed basin where coastal; KAMCHATKA holds the old Chukotka.
 - A Cossack Host reads as cooperative in the Demographics rural-work split.
+
+**Defines, treaties, the UN and ships**
+- Devastation without the mod's overrides, and whether the UN docket's `un_docket_war_devastation` (0.3) is still
+  reachable under per-battle devastation; the docket's 0.25 occupation threshold.
+- A demilitarized zone renegotiated, and a seabed lease's quantity on renegotiation; the money transfer's
+  contextual score.
+- Decolonization: a subject's war against the overlord's own revolutionaries or secessionists isn't tracked.
+- The first 1.15 new game: `TE_SELF_CHECK gm_world_base` (the `gm_world_gdp_1836` reset).
+- Ships: module costs in the ship designer; AI submarines built only under Jeune École or Merchant Navy and sailing
+  in `submarine_raiding_fleet`.
+- The population transfer's timed modifiers decay (1.15 fixed scaled effects that read a saved scope).
+- A marginal interest group's halved trait line; Foreign Affairs' formation-interest gain; literacy curves; war
+  deaths in the census (all moved by vanilla, § 5 of the migration record).
+- `debug_log` lines that pass arguments through `te_log_args_set` print the names, not blanks.
