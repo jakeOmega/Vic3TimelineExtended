@@ -4010,7 +4010,7 @@ Grid Transfer Station (bg_private_infrastructure):
 		No Maintenance
 
 HVDC Undersea Interconnector (bg_public_infrastructure):
-	Lays a high-voltage direct-current cable across the sea from this state's $building_grid_transfer_station$. It joins the station's [concept_power_grid] to that of any station with a cable of its own within reach, counted in [Concept('concept_sea_node', '$concept_sea_nodes$')] by its $building_grid_undersea_cable_range_add$: one of ours, or one of a country we have a $grid_interconnection_agreement$ with. Two cables join when either one's range reaches the other. Needs a $building_grid_transfer_station$ in the state, and joins nothing without one. One per state, on a coast.
+	Lays a high-voltage direct-current cable across the sea from this state's $building_grid_transfer_station$. It joins the station's [concept_power_grid] to that of any station with a cable of its own within reach, counted in [Concept('concept_sea_node', '$concept_sea_nodes|q$')] by its $building_grid_undersea_cable_range_add$: one of ours, or one of a country we have a $grid_interconnection_agreement$ with. Two cables join when either one's range reaches the other. Needs a $building_grid_transfer_station$ in the state, and joins nothing without one. One per state, on a coast.
 	Unlocking Technology: Clean Energy Technologies
 	Interconnector:
 		HVDC Cable
@@ -4759,7 +4759,7 @@ GE Schenectady Works (bg_company_buildings):
 		GE Schenectady Works
 
 Mitsui Trading House (bg_company_buildings):
-	The Mitsui [concept_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.
+	The Mitsui [glossary_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.
 	Mitsui Trading House:
 		Mitsui Trading House
 

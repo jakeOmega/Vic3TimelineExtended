@@ -872,13 +872,13 @@ JUDICIARY_STANCES = {
         "ideology_liberal_modern", "ideology_egalitarian_modern", "ideology_humanitarian", "ideology_feminist",
     )},
     **{k: "labour" for k in (
-        "ideology_proletarian", "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat",
+        "ideology_proletarian", "ideology_egalitarian", "ideology_communist", "ideology_state_socialist",
         "ideology_socialist_movement",
     )},
     **{k: "populist" for k in ("ideology_populist", "ideology_agrarian", "ideology_jacksonian_democrat")},
     **{k: "vanguard" for k in (
-        "ideology_communist", "ideology_communist_movement", "ideology_vanguardist",
-        "ideology_vanguardist_movement", "ideology_fascist", "ideology_fascist_movement",
+        "ideology_communist_leader", "ideology_communist_movement", "ideology_vanguardist",
+        "ideology_revolutionary_socialist_movement", "ideology_fascist", "ideology_fascist_movement",
     )},
     **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_meritocratic")},
 }
@@ -934,7 +934,7 @@ AUTOMATION_STANCES = {
     **{k: "tax" for k in ("ideology_liberal_modern", "ideology_reformer", "ideology_corporatist")},
     **{k: "technocratic" for k in ("ideology_technocratic", "ideology_positivist", "ideology_jingoist")},
     **{k: "labor" for k in (
-        "ideology_proletarian", "ideology_populist", "ideology_proletarian_movement", "ideology_fascist",
+        "ideology_proletarian", "ideology_populist", "ideology_labor_movement", "ideology_fascist",
         "ideology_fascist_movement",
     )},
     **{k: "traditional" for k in (
@@ -942,12 +942,12 @@ AUTOMATION_STANCES = {
         "ideology_traditionalist", "ideology_reactionary",
     )},
     **{k: "welfare" for k in (
-        "ideology_social_democrat", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_radical",
+        "ideology_state_socialist", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_radical",
         "ideology_radical_movement", "ideology_humanitarian",
     )},
     **{k: "socialist" for k in (
-        "ideology_socialist", "ideology_socialist_movement", "ideology_communist", "ideology_communist_movement",
-        "ideology_vanguardist", "ideology_vanguardist_movement", "ideology_anarchist",
+        "ideology_communist", "ideology_socialist_movement", "ideology_communist_leader", "ideology_communist_movement",
+        "ideology_vanguardist", "ideology_revolutionary_socialist_movement", "ideology_anarchist",
         "ideology_anarchist_movement", "ideology_utopian",
     )},
 }
@@ -1028,13 +1028,13 @@ BODILY_AUTONOMY_STANCES = {
         "ideology_paternalistic", "ideology_hierarchic", "ideology_republican_paternalistic",
         "ideology_scholar_paternalistic", "ideology_junker_paternalistic", "ideology_particularist",
         "ideology_patriotic", "ideology_loyalist", "ideology_populist", "ideology_proletarian",
-        "ideology_communist",
+        "ideology_communist_leader",
     )},
     **{k: "statist" for k in (
         "ideology_jingoist", "ideology_jingoist_leader", "ideology_authoritarian", "ideology_vanguardist",
     )},
     **{k: "regulated" for k in (
-        "ideology_egalitarian", "ideology_socialist", "ideology_social_democrat", "ideology_reformer",
+        "ideology_egalitarian", "ideology_communist", "ideology_state_socialist", "ideology_reformer",
         "ideology_plutocratic", "ideology_technocratic", "ideology_positivist", "ideology_meritocratic",
         "ideology_modernizer",
     )},
@@ -1129,12 +1129,12 @@ FRONTIER_AI_STANCES = {
     )},
     **{k: "internationalist" for k in ("ideology_humanitarian", "ideology_pacifist")},
     **{k: "labour" for k in (
-        "ideology_proletarian", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_socialist",
-        "ideology_social_democrat", "ideology_proletarian_movement", "ideology_socialist_movement",
+        "ideology_proletarian", "ideology_egalitarian", "ideology_egalitarian_modern", "ideology_communist",
+        "ideology_state_socialist", "ideology_labor_movement", "ideology_socialist_movement",
     )},
     **{k: "vanguard" for k in (
-        "ideology_communist", "ideology_vanguardist", "ideology_communist_movement",
-        "ideology_vanguardist_movement",
+        "ideology_communist_leader", "ideology_vanguardist", "ideology_communist_movement",
+        "ideology_revolutionary_socialist_movement",
     )},
     **{k: "totalitarian" for k in ("ideology_fascist", "ideology_fascist_movement")},
     **{k: "religious" for k in (
@@ -1168,6 +1168,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_navy_model": navy_imperialist + [
             ("law_merchant_navy", "neutral"),
@@ -1223,7 +1224,6 @@ modifications = {
         "lawgroup_antitrust": antitrust_dirigiste,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove,
@@ -1280,6 +1280,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "approve"),
             ("law_mass_conscription", "approve"),
+            ("law_revolutionary_guard", "disapprove"),
         ],
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -1448,6 +1449,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "approve"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": reform_privacy_entry,
@@ -1493,6 +1495,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "disapprove"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
     },
     "ideology_traditionalist": {
@@ -1501,6 +1504,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_privacy_rights": trad_privacy_entry,
         "lawgroup_human_augmentation": anti_augmentation,
@@ -1567,10 +1571,7 @@ modifications = {
         "lawgroup_minority_rights": minority_like,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_appointed_bureaucrats", "neutral"),
-            ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
-            ("law_communal_administration", "neutral"),
             ("law_contracted_administration", "disapprove"),
         ],
     },
@@ -1607,6 +1608,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "disapprove"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "neutral"),
@@ -1615,12 +1617,13 @@ modifications = {
             ("law_militarized_police", "strongly_disapprove"),
         ],
     },
-    "ideology_social_democrat": {
+    "ideology_state_socialist": {
         "lawgroup_army_model": pmc_disapprove + [
             ("law_peasant_levies", "disapprove"),
             ("law_national_militia", "approve"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "neutral"),
+            ("law_revolutionary_guard", "neutral"),
         ],
         "lawgroup_navy_model": navy_defensive + [
             ("law_merchant_navy", "approve"),
@@ -1685,6 +1688,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "neutral"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "disapprove"),
@@ -1699,6 +1703,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "strongly_approve"),
+            ("law_revolutionary_guard", "approve"),
         ],
         "lawgroup_navy_model": navy_defensive + [
             ("law_merchant_navy", "neutral"),
@@ -1753,6 +1758,7 @@ modifications = {
             ("law_appointed_bureaucrats", "strongly_approve"),
             ("law_elected_bureaucrats", "disapprove"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
+            ("law_military_bureaucrats", "strongly_disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "strongly_disapprove"),
@@ -1844,6 +1850,7 @@ modifications = {
             ("law_national_militia", "strongly_approve"),
             ("law_professional_army", "disapprove"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "approve"),
         ],
         "lawgroup_navy_model": navy_defensive + [
             ("law_merchant_navy", "neutral"),
@@ -1908,9 +1915,7 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
             ("law_contracted_administration", "disapprove"),
-            ("law_communal_administration", "strongly_approve"),
             ("law_appointed_bureaucrats", "disapprove"),
-            ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
         ],
         "lawgroup_policing": private_policing_strongly_disapprove,
@@ -1921,6 +1926,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "approve"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_ministry_of_commerce": ministry_constructor(
@@ -1979,6 +1985,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "disapprove"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
     },
     "ideology_moralist": {
@@ -1987,6 +1994,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "neutral"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_human_augmentation": anti_augmentation,
         "lawgroup_ministry_of_religion": ministry_constructor(
@@ -2081,7 +2089,6 @@ modifications = {
         "lawgroup_inheritance": moderate_inheritance,
         "lawgroup_financial_regulation": finreg_meritocratic,
         "lawgroup_bureaucracy": [
-            ("law_communal_administration", "disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
         ],
@@ -2161,6 +2168,7 @@ modifications = {
             ("law_national_militia", "neutral"),
             ("law_professional_army", "approve"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_human_augmentation": unregulated_augmentation,
         "lawgroup_welfare": [
@@ -2186,6 +2194,7 @@ modifications = {
             ("law_national_militia", "approve"),
             ("law_professional_army", "neutral"),
             ("law_mass_conscription", "neutral"),
+            ("law_revolutionary_guard", "approve"),
         ],
         "lawgroup_navy_model": navy_defensive + [
             ("law_merchant_navy", "neutral"),
@@ -2230,6 +2239,7 @@ modifications = {
             ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "disapprove"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "neutral"),
@@ -2238,12 +2248,9 @@ modifications = {
             ("law_militarized_police", "strongly_disapprove"),
         ],
     },
-    "ideology_communist": {
+    "ideology_communist_leader": {
         "lawgroup_army_model": pmc_strongly_disapprove + [
             ("law_peasant_levies", "strongly_disapprove"),
-            ("law_national_militia", "approve"),
-            ("law_professional_army", "neutral"),
-            ("law_mass_conscription", "approve"),
         ],
         "lawgroup_navy_model": navy_defensive + [
             ("law_merchant_navy", "neutral"),
@@ -2282,8 +2289,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_contracted_administration", "disapprove"),
             ("law_communal_administration", "approve"),
-            ("law_appointed_bureaucrats", "neutral"),
-            ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
         ],
@@ -2292,6 +2297,10 @@ modifications = {
             ("law_local_police", "approve"),
             ("law_dedicated_police", "neutral"),
             ("law_militarized_police", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "disapprove"),
         ],
     },
     "ideology_pacifist": {
@@ -2310,6 +2319,7 @@ modifications = {
             ("law_national_militia", "disapprove"),
             ("law_professional_army", "approve"),
             ("law_mass_conscription", "disapprove"),
+            ("law_revolutionary_guard", "strongly_disapprove"),
         ],
         "lawgroup_navy_model": navy_imperialist + [
             ("law_merchant_navy", "strongly_approve"),
@@ -2345,6 +2355,7 @@ modifications = {
             ("law_elected_bureaucrats", "disapprove"),
             ("law_hereditary_bureaucrats", "disapprove"),
             ("law_automated_bureaucracy", "neutral"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
     },
     "ideology_patriarchal": {
@@ -2575,12 +2586,11 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "neutral"),
         ],
         "lawgroup_policing": private_policing_disapprove,
     },
-    "ideology_socialist": {
+    "ideology_communist": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "neutral"),
@@ -2615,6 +2625,7 @@ modifications = {
             ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
+            ("law_military_bureaucrats", "strongly_disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "neutral"),
@@ -2622,6 +2633,11 @@ modifications = {
             ("law_dedicated_police", "neutral"),
             ("law_militarized_police", "strongly_disapprove"),
         ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
+        ],
+        "lawgroup_army_model": pmc_strongly_disapprove,
     },
     "ideology_scholar_paternalistic": {
         "lawgroup_monetary_policy": simple_currency,
@@ -2706,7 +2722,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove,
@@ -2750,7 +2765,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove,
@@ -2812,7 +2826,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "disapprove"),
         ],
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
@@ -2839,7 +2852,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
     },
@@ -2865,7 +2877,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
     },
@@ -2943,7 +2954,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "neutral"),
         ],
     },
     "ideology_royalist": {
@@ -2963,7 +2973,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "neutral"),
             ("law_contracted_administration", "disapprove"),
         ],
     },
@@ -2986,7 +2995,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "strongly_approve"),
             ("law_contracted_administration", "disapprove"),
-            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_russian_patriarch": {
@@ -3047,7 +3055,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "neutral"),
         ],
     },
     "ideology_pious": {
@@ -3191,7 +3198,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "neutral"),
         ],
     },
     "ideology_despotic_utopian": {
@@ -3207,6 +3213,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "disapprove"),
             ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
+            ("law_military_bureaucrats", "neutral"),
         ],
     },
     "ideology_absolutist_movement": {
@@ -3220,7 +3227,6 @@ modifications = {
         ],
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
     },
@@ -3230,7 +3236,7 @@ modifications = {
             ("law_direct_democracy", "disapprove"),
         ],
     },
-    "ideology_proletarian_movement": {
+    "ideology_labor_movement": {
         "lawgroup_welfare": [
             ("law_no_social_security", "strongly_disapprove"),
             ("law_poor_laws", "strongly_disapprove"),
@@ -3263,17 +3269,17 @@ modifications = {
             ("law_dedicated_police", "neutral"),
             ("law_militarized_police", "strongly_disapprove"),
         ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "approve"),
+        ],
     },
+    # 1.15 took the welfare block off the Socialist movement (its reformist
+    # and revolutionary cores, State Socialist and Revolutionary Socialist,
+    # carry the economics), so the mod's welfare stances moved to the State
+    # Socialist core below.
     "ideology_socialist_movement": {
         "lawgroup_inheritance": socialist_movement_inheritance,
-        "lawgroup_welfare": [
-            ("law_no_social_security", "strongly_disapprove"),
-            ("law_poor_laws", "strongly_disapprove"),
-            ("law_wage_subsidies", "disapprove"),
-            ("law_old_age_pension", "neutral"),
-            ("law_universal_basic_income", "approve"),
-            ("law_post-scarcity", "strongly_approve"),
-        ],
         "lawgroup_ministry_of_labor": ministry_constructor_typed(
             "ministry_of_labor", ["pro_labor", "pro_capital"], ["++", "--"]
         ),
@@ -3303,6 +3309,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_communal_administration", "approve"),
+            ("law_military_bureaucrats", "strongly_disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "neutral"),
@@ -3310,6 +3317,11 @@ modifications = {
             ("law_dedicated_police", "neutral"),
             ("law_militarized_police", "strongly_disapprove"),
         ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "approve"),
+        ],
+        "lawgroup_army_model": pmc_strongly_disapprove,
     },
     "ideology_communist_movement": {
         "lawgroup_governance_principles": [
@@ -3336,6 +3348,15 @@ modifications = {
             ("law_dedicated_police", "neutral"),
             ("law_militarized_police", "disapprove"),
         ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "disapprove"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "neutral"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+        "lawgroup_army_model": pmc_strongly_disapprove,
     },
     "ideology_anarchist_movement": {
         "lawgroup_governance_principles": [
@@ -3364,16 +3385,14 @@ modifications = {
         "lawgroup_antitrust": antitrust_command_coop,
         "lawgroup_criminal_justice": progressive_criminal_justice,
         "lawgroup_bureaucracy": [
-            ("law_communal_administration", "strongly_approve"),
             ("law_appointed_bureaucrats", "disapprove"),
-            ("law_elected_bureaucrats", "approve"),
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_policing": private_policing_strongly_disapprove,
     },
-    "ideology_vanguardist_movement": {
+    "ideology_revolutionary_socialist_movement": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
             ("law_direct_democracy", "disapprove"),
@@ -3403,6 +3422,11 @@ modifications = {
             ("law_dedicated_police", "approve"),
             ("law_militarized_police", "approve"),
         ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "neutral"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+        "lawgroup_army_model": pmc_strongly_disapprove,
     },
     "ideology_fascist_movement": {
         "lawgroup_ministry_of_propaganda": ministry_constructor(
@@ -3485,7 +3509,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "neutral"),
         ],
     },
     "ideology_radical_movement": {
@@ -3524,6 +3547,7 @@ modifications = {
             ("law_hereditary_bureaucrats", "strongly_disapprove"),
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "disapprove"),
+            ("law_military_bureaucrats", "disapprove"),
         ],
         "lawgroup_policing": private_policing_disapprove + [
             ("law_no_police", "neutral"),
@@ -3538,7 +3562,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "neutral"),
         ],
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
@@ -3587,7 +3610,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "strongly_approve"),
             ("law_contracted_administration", "disapprove"),
-            ("law_communal_administration", "disapprove"),
         ],
     },
     "ideology_feminist_movement": {
@@ -3818,7 +3840,6 @@ modifications = {
         "lawgroup_monetary_policy": simple_currency,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_governance_principles": [
@@ -3837,7 +3858,6 @@ modifications = {
         "lawgroup_monetary_policy": simple_currency,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_governance_principles": [
@@ -3875,7 +3895,6 @@ modifications = {
         "lawgroup_monetary_policy": simple_currency,
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_governance_principles": [
@@ -4010,7 +4029,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "disapprove"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "neutral"),
@@ -4021,7 +4039,6 @@ modifications = {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "neutral"),
             ("law_contracted_administration", "neutral"),
-            ("law_communal_administration", "disapprove"),
         ],
         "lawgroup_governance_principles": [
             ("law_neocameralism", "neutral"),
@@ -4038,7 +4055,6 @@ modifications = {
     "ideology_hindu_moralist_british_india": {
         "lawgroup_bureaucracy": [
             ("law_automated_bureaucracy", "disapprove"),
-            ("law_communal_administration", "disapprove"),
             ("law_contracted_administration", "disapprove"),
         ],
         "lawgroup_governance_principles": [
@@ -4227,6 +4243,7 @@ modifications = {
         "lawgroup_policing": [
             ("law_private_policing", "disapprove"),
         ],
+        "lawgroup_navy_model": navy_imperialist,
     },
     "ideology_colonialist": {
         "lawgroup_colonization": [
@@ -4307,6 +4324,158 @@ modifications = {
             ("law_private_policing", "disapprove"),
         ],
     },
+    # --- Vanilla 1.15's new ideologies ---
+    # Each names the mod's laws in the law groups its vanilla blocks cover
+    # (the ideology_lawgroup audit). The stances follow the ideology's own
+    # vanilla stances in the group and its nearest older ideology here.
+    # Russian state socialists, set as a socialist movement's core after a
+    # reformist victory: the welfare state the mod's Socialist movement backed
+    # until 1.15 moved its welfare block here.
+    "ideology_state_socialist_movement": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "approve"),
+        ],
+        "lawgroup_welfare": [
+            ("law_universal_basic_income", "approve"),
+            ("law_post-scarcity", "strongly_approve"),
+        ],
+    },
+    # The Tsarist and Autocratic ideologies (the Armed Forces and the
+    # Intelligentsia in Russia) and the two Tsarist movements: the
+    # absolutist movement's stances on the mod's governance laws.
+    "ideology_tsarist": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
+        ],
+    },
+    "ideology_autocratic": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
+        ],
+    },
+    "ideology_tsarist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "strongly_disapprove"),
+        ],
+    },
+    # Constitutional tsarists accept landed and wealth voting: the
+    # constitutional monarchists' (Orleanist) stances.
+    "ideology_tsarist_constitutional_movement": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "disapprove"),
+        ],
+    },
+    # Monarchist frontier hosts who settle the internal frontier.
+    "ideology_cossack_movement": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_colonization": [
+            ("law_neocolonialism", "neutral"),
+        ],
+    },
+    # Liberal and conservative anti-communists: for elections and private
+    # enterprise, against councils.
+    "ideology_anti_communist_movement": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "neutral"),
+            ("law_direct_democracy", "strongly_disapprove"),
+        ],
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "disapprove"),
+            ("law_liquid_democracy", "neutral"),
+        ],
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "neutral"),
+            ("law_contracted_administration", "approve"),
+        ],
+        "lawgroup_army_model": pmc_disapprove,
+    },
+    # The Nomenklatura's three (the Intelligentsia under a council republic)
+    # and the Militant and Disciplinarian ideologies of the communist
+    # paths: the party-state's stances.
+    "ideology_defensist": {
+        "lawgroup_distribution_of_power": [
+            ("law_algorithmic_governance", "neutral"),
+            ("law_liquid_democracy", "strongly_disapprove"),
+        ],
+    },
+    "ideology_managerial": {
+        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "approve"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+        "lawgroup_army_model": pmc_disapprove,
+    },
+    "ideology_disciplinarian": {
+        "lawgroup_army_model": pmc_disapprove,
+        "lawgroup_navy_model": navy_defensive,
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "neutral"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+    },
+    "ideology_militant": {
+        "lawgroup_governance_principles": [
+            ("law_neocameralism", "strongly_disapprove"),
+            ("law_direct_democracy", "disapprove"),
+        ],
+        "lawgroup_policing": private_policing_strongly_disapprove,
+    },
+    # The Trade Unions' ideology under Factory Councils.
+    "ideology_internationalist": {
+        "lawgroup_colonization": [
+            ("law_neocolonialism", "strongly_disapprove"),
+        ],
+    },
+    # 1.15 gave the Armed Forces' Loyalist a bureaucracy block.
+    "ideology_loyalist": {
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+    },
+    # A religious revival's ideology (the Devout).
+    "ideology_spiritual": {
+        "lawgroup_bureaucracy": [
+            ("law_automated_bureaucracy", "disapprove"),
+            ("law_contracted_administration", "disapprove"),
+        ],
+        "lawgroup_army_model": pmc_disapprove,
+    },
+    # The Intelligentsia's Universalist (1848) and its modern form: the
+    # liberal stances.
+    "ideology_universalist": {
+        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+    },
+    "ideology_universalist_modern": {
+        "lawgroup_policing": private_policing_disapprove,
+        "lawgroup_rights_of_women": [("law_protected_class", "disapprove")],
+    },
 }
 
 for _ideology, _list in JUDICIARY_STANCES.items():
@@ -4318,3 +4487,15 @@ for _ideology, _list in BODILY_AUTONOMY_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_bodily_autonomy"] = BODILY_AUTONOMY_LISTS[_list]
 for _ideology, _list in FRONTIER_AI_STANCES.items():
     modifications.setdefault(_ideology, {})["lawgroup_frontier_ai_control"] = FRONTIER_AI_LISTS[_list]
+
+# Vanilla 1.15 gave two interest groups a successor ideology: the Armed Forces
+# hold Militarist where they held Patriotic (the Petty Bourgeoisie keep
+# Patriotic), and Russia's Landowners trade Patriarchal for Domostroy
+# (ideology_russian_patriarchal). Each successor takes a copy of the stances
+# the mod gives the ideology it replaces, so those groups keep them.
+for _successor, _source in (
+    ("ideology_militarist", "ideology_patriotic"),
+    ("ideology_russian_patriarchal", "ideology_patriarchal"),
+):
+    assert _successor not in modifications, _successor
+    modifications[_successor] = {group: list(lines) for group, lines in modifications[_source].items()}

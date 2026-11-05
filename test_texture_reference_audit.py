@@ -631,7 +631,9 @@ class DeclarationTests(_Fixture):
         # snapshot holds; the uncovered ones are the install test's below.
         root = os.path.dirname(os.path.abspath(__file__))
         v = tra.load_vanilla_snapshot(root)
-        expected = {("static_modifiers", "icon"): 32, ("production_methods", "texture"): 1,
+        # 1.15 split war_support_battle_effects into _army and _navy, neither
+        # with an icon (32 -> 33).
+        expected = {("static_modifiers", "icon"): 33, ("production_methods", "texture"): 1,
                     ("production_method_groups", "texture"): 1}
         got = {(folder, f): len(names) for folder, d in v.gaps.items() for f, names in d.items() if names}
         self.assertEqual(got, expected,

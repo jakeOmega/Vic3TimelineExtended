@@ -16,6 +16,8 @@
         building_fishing_wharf = 6
     }
     naval_exit_id = 3034
+    min_cold_effect = 0.00
+    max_cold_effect = 0.09
 }
 
 STATE_UPPER_EGYPT = {
@@ -40,6 +42,8 @@ STATE_UPPER_EGYPT = {
         undiscovered_amount = 65
     }
     naval_exit_id = 3047
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 }
 
 STATE_MIDDLE_EGYPT = {
@@ -59,6 +63,8 @@ STATE_MIDDLE_EGYPT = {
         building_fishing_wharf = 4
     }
     naval_exit_id = 3047
+    min_cold_effect = 0.00
+    max_cold_effect = 0.07
 }
 
 STATE_EGYPTIAN_DESERT = {
@@ -73,6 +79,8 @@ STATE_EGYPTIAN_DESERT = {
     wood = "xBD5993"
     arable_land = 5
     arable_resources = { "building_livestock_ranch" }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 }
 
 STATE_MATRUH = {
@@ -81,7 +89,7 @@ STATE_MATRUH = {
     provinces = { "x05BD60" "x05FF42" "x06DF39" "x0C6712" "x0D56B2" "x0EE79F" "x20CF20" "x20D0A0" "x246457" "x252184" "x25523D" "x272AAD" "x3955E4" "x3DCE56" "x45DB44" "x48B0D1" "x53834E" "x5713ED" "x5E1EA3" "x69BCDD" "x6EB0BA" "x7F64AC" "x80A9AC" "x87D6C4" "x8A68C1" "x8AC4E0" "x8E30B0" "x908947" "x93D215" "x98DFE2" "xA05020" "xA0ECF8" "xB5420C" "xB5969E" "xBB2E89" "xBE3AC5" "xBFC9C0" "xC1822C" "xC2176F" "xD83883" "xDF5EBB" "xE0D021" "xE68265" "xEBB23F" "xEC728B" "xF901CB" "xF942C3" }
     traits = { "state_trait_sahara_desert" }
     city = "x87D6C4"
-    port = "x25523D"
+    port = "xA05020"
     farm = "x25523D"
     mine = "xE0D021"
     wood = "x0C6712"
@@ -91,6 +99,8 @@ STATE_MATRUH = {
         building_fishing_wharf = 3
     }
     naval_exit_id = 3034
+    min_cold_effect = 0.00
+    max_cold_effect = 0.08
 }
 
 STATE_SINAI = {
@@ -110,6 +120,8 @@ STATE_SINAI = {
         building_lead_mine = 24
     }
     naval_exit_id = 3047
+    min_cold_effect = 0.00
+    max_cold_effect = 0.08
 }
 
 STATE_ERITREA = {
@@ -227,6 +239,8 @@ STATE_MARRAKECH = {
         building_fishing_wharf = 8
     }
     naval_exit_id = 3089
+    min_cold_effect = 0.00
+    max_cold_effect = 0.12
 }
 
 STATE_FEZ = {
@@ -245,6 +259,8 @@ STATE_FEZ = {
         building_fishing_wharf = 5
     }
     naval_exit_id = 3089
+    min_cold_effect = 0.00
+    max_cold_effect = 0.15
 }
 
 STATE_AL_RIF = {
@@ -264,6 +280,8 @@ STATE_AL_RIF = {
         building_coal_mine = 6
     }
     naval_exit_id = 3032
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 STATE_INNER_MOROCCO = {
@@ -285,6 +303,7 @@ STATE_INNER_MOROCCO = {
         building_fishing_wharf = 4
         building_gold_mine = 3
         building_coal_mine = 6
+        building_copper_mine = 4
     }
 
     resource = {
@@ -292,6 +311,8 @@ STATE_INNER_MOROCCO = {
         undiscovered_amount = 135
     }
     naval_exit_id = 3089
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 }
 
 STATE_ALGIERS = {
@@ -314,6 +335,8 @@ STATE_ALGIERS = {
         building_fishing_wharf = 8
     }
     naval_exit_id = 3032
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 STATE_CONSTANTINE = {
@@ -341,6 +364,8 @@ STATE_CONSTANTINE = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3032
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 STATE_ORAN = {
@@ -362,6 +387,8 @@ STATE_ORAN = {
         building_logging_camp = 3
     }
     naval_exit_id = 3032
+    min_cold_effect = 0.00
+    max_cold_effect = 0.16
 }
 
 STATE_TUNISIA = {
@@ -387,6 +414,8 @@ STATE_TUNISIA = {
         undiscovered_amount = 65
     }
     naval_exit_id = 3033
+    min_cold_effect = 0.00
+    max_cold_effect = 0.15
 }
 
 STATE_TRIPOLI = {
@@ -410,6 +439,8 @@ STATE_TRIPOLI = {
         undiscovered_amount = 30
     }
     naval_exit_id = 3033
+    min_cold_effect = 0.00
+    max_cold_effect = 0.09
 }
 
 STATE_LIBYA = {
@@ -435,6 +466,8 @@ STATE_LIBYA = {
         undiscovered_amount = 40
     }
     naval_exit_id = 3033
+    min_cold_effect = 0.00
+    max_cold_effect = 0.05
 }
 
 STATE_LIBYAN_DESERT = {
@@ -453,6 +486,8 @@ STATE_LIBYAN_DESERT = {
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.05
 }
 
 STATE_SAHARA = {
@@ -474,6 +509,8 @@ STATE_SAHARA = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.07
 }
 
 STATE_EAST_SAHARA = {
@@ -517,6 +554,8 @@ STATE_WEST_SAHARA = {
         undiscovered_amount = 200
     }
     naval_exit_id = 3089
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 }
 
 STATE_MAURITANIA = {
@@ -559,6 +598,8 @@ STATE_INNER_MAURITANIA = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_EASTERN_MALI = {

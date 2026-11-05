@@ -35,6 +35,17 @@ def _flagged(result):
     return {(f.keyword, f.kind) for f in result.flags if not f.exemption}
 
 
+def _install_dir(name: str) -> str | None:
+    """`<base_game_path>/game/common/<name>`, or None with no install (CI)."""
+    try:
+        import path_constants
+        base = path_constants.base_game_path
+    except Exception:  # an unconfigured machine: path_constants raises
+        return None
+    path = os.path.join(str(base or ""), "game", "common", name)
+    return path if os.path.isdir(path) else None
+
+
 class DetectionTests(unittest.TestCase):
     def test_unknown_effect_flagged(self):
         m = _Mod({"events/e.txt": "my.1 = {\n\tadd_authority = -200\n}\n"})
@@ -232,6 +243,126 @@ class ScanRootTests(unittest.TestCase):
             }
         )
         self.assertEqual(_flagged(m.audit()), set())
+
+
+class JournalEntry115SchemaTests(unittest.TestCase):
+    """1.15 replaced the completion blocks with `outcome = { }`: the old
+    fields left the root's extras (and the 1.15 catalog), so a leftover one
+    flags."""
+
+    def _audit(self, text):
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/journal_entries/j.txt": text})
+        return eva.audit(
+            mod.root, valid_keys=eva.load_catalog(here),
+            context_keys=eva.load_context_catalog(here),
+        )
+
+    def test_pre_115_completion_blocks_flag(self):
+        result = self._audit(
+            "je_x = {\n"
+            "\tcomplete = { always = yes }\n"
+            "\ton_complete = { add_treasury = 1 }\n"
+            "\tfail = { always = no }\n"
+            "\ton_fail = { add_treasury = 1 }\n"
+            "\tinvalid = { always = no }\n"
+            "\ton_invalid = { add_treasury = 1 }\n"
+            "\ton_timeout = { add_treasury = 1 }\n"
+            "\tcustom_completion_header = x\n"
+            "\tcustom_on_failure_header = x\n"
+            "\tevent_outcome_completed_effect_desc = { add_treasury = 1 }\n"
+            "}\n"
+        )
+        self.assertEqual(
+            {(f.keyword, f.kind) for f in result.flags},
+            {("complete", "unresolved-helper-call"),
+             ("on_complete", "unresolved-helper-call"),
+             ("fail", "unresolved-helper-call"),
+             ("on_fail", "unresolved-helper-call"),
+             ("invalid", "unresolved-helper-call"),
+             ("on_invalid", "unresolved-helper-call"),
+             ("on_timeout", "unresolved-helper-call"),
+             ("custom_completion_header", "unknown-name"),
+             ("custom_on_failure_header", "unknown-name"),
+             ("event_outcome_completed_effect_desc", "unresolved-helper-call")},
+        )
+
+    def test_115_entry_is_clean(self):
+        result = self._audit(
+            "je_x = {\n"
+            "\tgroup = je_group_x\n"
+            "\tdisable_evaluation = { always = no }\n"
+            "\tactivation_description = { always = yes }\n"
+            "\tscaling_modifiers_while_active = {\n"
+            "\t\tmodifier = m\n\t\tvalue = { value = 1 min = 0 }\n\t}\n"
+            "\tmap_color = { lerp = { min_color = \"grey\" max_color = \"red\" factor = 0.5 } }\n"
+            "\tmap_tooltip = { custom_tooltip_no_bullet = x }\n"
+            "\ttimeout = 720\n"
+            "\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\teffect_header = je_standard_on_completion_header\n"
+            "\t\tconclusion_desc = je_standard_completion_conclusion_desc\n"
+            "\t\tcolor = \"gold_positive\"\n"
+            "\t\ttrigger = { scope:journal_entry = { is_goal_complete = yes } }\n"
+            "\t\teffect = { add_treasury = 1 }\n"
+            "\t\tevent_outcome_effect_desc = { header = h effect = { add_treasury = 1 } }\n"
+            "\t}\n"
+            "\toutcome = {\n"
+            "\t\theader = JOURNAL_ENTRY_TIMEOUT\n"
+            "\t\teffect_header = JOURNAL_ENTRY_ON_TIMEOUT\n"
+            "\t\tconclusion_desc = x\n"
+            "\t\tflags = { timeout }\n"
+            "\t}\n"
+            "\toutcome = {\n"
+            "\t\tconclusion_desc = x\n"
+            "\t\tflags = { hidden invalid_outcome }\n"
+            "\t\ttrigger = { always = no }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(_flagged(result), set())
+
+    def test_pre_115_bar_preset_flags(self):
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"common/scripted_progress_bars/b.txt": (
+            "bar_x = {\n\tdouble_sided_gold = yes\n\tdefault_green = yes\n"
+            "\tprogress_texture = \"gfx/interface/progressbar/progressbar_bad.dds\"\n"
+            "\tmarker = yes\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual({(f.keyword, f.kind) for f in result.flags},
+                         {("double_sided_gold", "unresolved-helper-call")})
+
+    def test_115_one_time_event_fields_pass(self):
+        # 1.15's `fire_only_once_globally` (and `fire_only_once`): no vanilla
+        # event sets them, so they live in the events root's extras.
+        here = os.path.dirname(os.path.abspath(__file__))
+        mod = _Mod({"events/e.txt": (
+            "namespace = e\n"
+            "e.1 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once_globally = yes\n\timmediate = { add_treasury = 1 }\n}\n"
+            "e.2 = {\n\ttype = country_event\n\thidden = yes\n"
+            "\tfire_only_once = yes\n\tfire_only_once_forever = yes\n}\n"
+        )})
+        result = eva.audit(mod.root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertEqual({(f.keyword, f.kind) for f in result.flags},
+                         {("fire_only_once_forever", "unresolved-helper-call")})
+
+    @unittest.skipUnless(_install_dir("journal_entries"), "needs the game install")
+    def test_vanilla_115_entries_and_bars_are_clean(self):
+        # The audit's 1.15 reading against vanilla's own 1.15 files.
+        here = os.path.dirname(os.path.abspath(__file__))
+        root = tempfile.mkdtemp()
+        os.makedirs(os.path.join(root, "common"))
+        for d in ("journal_entries", "scripted_progress_bars"):
+            os.symlink(_install_dir(d), os.path.join(root, "common", d))
+        result = eva.audit(root, valid_keys=eva.load_catalog(here),
+                           context_keys=eva.load_context_catalog(here))
+        self.assertGreater(result.coverage["files_scanned"], 150)
+        self.assertEqual([(f.kind, f.keyword, os.path.basename(f.file), f.line)
+                          for f in result.flags], [])
 
 
 class UnresolvedHelperCallTests(unittest.TestCase):
@@ -457,13 +588,73 @@ class EffectInTriggerTests(unittest.TestCase):
         })
         self.assertEqual(_flagged(result), set())
 
-    def test_journal_entry_complete_is_trigger_context(self):
+    def test_journal_entry_outcome_trigger_and_effect_contexts(self):
+        # 1.15: an outcome's `trigger` holds triggers, its `effect` effects.
         result = _ctx_audit({"common/journal_entries/j.txt": (
-            "je_x = {\n\tcomplete = { set_variable = x }\n"
-            "\ton_complete = { set_variable = y }\n}\n"
+            "je_x = {\n\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\ttrigger = { set_variable = x }\n"
+            "\t\teffect = { has_variable = y }\n"
+            "\t}\n}\n"
         )})
         self.assertEqual(
-            [(f.keyword, f.line) for f in result.flags], [("set_variable", 2)]
+            sorted((f.keyword, f.kind, f.line) for f in result.flags),
+            [("has_variable", "trigger-in-effect", 5),
+             ("set_variable", "effect-in-trigger", 4)],
+        )
+
+    def test_journal_entry_effect_blocks_without_an_effect_name(self):
+        # effect_all_involved, immediate_all_involved, map_tooltip and
+        # event_outcome_effect_desc match no `on_` / `_effect` pattern, so
+        # they read as effects only through the root's effect_blocks.
+        result = _ctx_audit({"common/journal_entries/j.txt": (
+            "je_x = {\n"
+            "\timmediate_all_involved = { has_variable = a }\n"
+            "\tmap_tooltip = { has_variable = b }\n"
+            "\toutcome = {\n"
+            "\t\teffect_all_involved = { has_variable = c }\n"
+            "\t\tevent_outcome_effect_desc = { has_variable = d }\n"
+            "\t\tevent_outcome_effect_desc = { header = h effect = { has_variable = e } }\n"
+            "\t}\n"
+            "\tactivation_description = { set_variable = f }\n"
+            "\tdisable_evaluation = { set_variable = g }\n"
+            "\tmap_color = { if = { limit = { set_variable = h } } }\n"
+            "}\n"
+        )})
+        self.assertEqual(
+            sorted((f.keyword, f.kind, f.line) for f in result.flags),
+            [("has_variable", "trigger-in-effect", 2),
+             ("has_variable", "trigger-in-effect", 3),
+             ("has_variable", "trigger-in-effect", 5),
+             ("has_variable", "trigger-in-effect", 6),
+             ("has_variable", "trigger-in-effect", 7),
+             ("set_variable", "effect-in-trigger", 9),
+             ("set_variable", "effect-in-trigger", 10),
+             ("set_variable", "effect-in-trigger", 11)],
+        )
+
+    def test_map_color_is_neutral(self):
+        # A script value returning a color: neither reader.
+        result = _ctx_audit({"common/journal_entries/j.txt": (
+            "je_x = {\n\tmap_color = { value = \"golden\" has_variable = x }\n"
+            "\tmap_color_second = { lerp = { set_variable = y } }\n}\n"
+        )})
+        self.assertEqual(_flagged(result), set())
+
+    def test_progress_condition_limit_is_trigger_context(self):
+        # 1.15 bars: progress_condition works like an `if`, its `limit` a
+        # trigger, an `else` inside it taking over; the rest stays neutral.
+        result = _ctx_audit({"common/scripted_progress_bars/b.txt": (
+            "bar_x = {\n\tweekly_progress = {\n\t\tprogress_condition = {\n"
+            "\t\t\tlimit = { save_scope_as = x }\n"
+            "\t\t\tadd = { desc = D value = 1 }\n"
+            "\t\t\telse = {\n\t\t\t\tlimit = { has_variable = y }\n"
+            "\t\t\t\tadd = { desc = D value = 2 }\n\t\t\t}\n"
+            "\t\t}\n\t}\n}\n"
+        )})
+        self.assertEqual(
+            [(f.keyword, f.kind, f.line) for f in result.flags],
+            [("save_scope_as", "effect-in-trigger", 4)],
         )
 
     def test_multiline_string_keys_are_not_read(self):

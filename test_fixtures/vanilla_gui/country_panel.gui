@@ -478,6 +478,23 @@ types country_panel_types
 
 					#RULER PORTRAIT
 					character_portrait_large_torso = {
+						visible = "[Not(Character.IsHistorical)]"
+						parentanchor = bottom
+						datacontext = "[Country.AccessRuler]"
+						blockoverride "show_hat" {}
+						blockoverride "highlight" {}
+					}
+
+					character_portrait_large_torso_historical_info_link = {
+						visible = "[And( Character.IsHistorical, Not(StringIsEmpty(Character.GetHistoricalUrl)) )]"
+						parentanchor = bottom
+						datacontext = "[Country.AccessRuler]"
+						blockoverride "show_hat" {}
+						blockoverride "highlight" {}
+					}
+
+					character_portrait_large_torso_historical_no_info_link = {
+						visible = "[And( Character.IsHistorical, StringIsEmpty(Character.GetHistoricalUrl) )]"
 						parentanchor = bottom
 						datacontext = "[Country.AccessRuler]"
 						blockoverride "show_hat" {}
@@ -605,13 +622,16 @@ types country_panel_types
 						autoresize = yes
 						visible = "[Not(CountryPanel.GetCountry.IsColonizable)]"
 						raw_text = "#variable @ships! [Country.GetNumShips|0]#!"
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
 						using = fontsize_mega
 						minimumsize = { 60 -1 }
 						align = right|nobaseline
 						parentanchor = right
 						margin_left = 10
 						margin_right = 5
+
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 					}
 				}
 			}
@@ -884,7 +904,9 @@ types country_panel_types
 				country_stats_entry = {
 					alpha = "[TransparentIfZero_int32(Country.GetNumShips)]"
 					blockoverride "stats_tooltip" {
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 					}
 					blockoverride "information_icon" {
 						texture = "gfx/interface/icons/generic_icons/flotillas.dds"
@@ -1560,8 +1582,9 @@ types diplomatic
 
 		background = {
 			texture = "gfx/state_pictures/urban_european_overlord.dds"
+			fittype = centercrop
 			alpha = 0.4
-			using = fade_top_illus
+			using = illus_top_shadow_bottom_fade
 		}
 
 		widget = {
@@ -2688,13 +2711,25 @@ types country_panel_treaties_types
 				block "binding_period" {
 					### BINDING PERIOD
 					textbox = {
-						visible = "[NotZero(Treaty.GetBindingDaysLeft)]"
+						visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Not(Treaty.IsBindingPeriodPending))]"
 						parentanchor = vcenter
 						align = nobaseline
 						autoresize = yes
 						max_width = 122
 						using = elide_fontsize_min
 						text = "[Treaty.GetBindingPeriodRemainingFormatted]"
+					}
+
+					### BINDING PERIOD PENDING
+					textbox = {
+						visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Treaty.IsBindingPeriodPending)]"
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						max_width = 122
+						using = elide_fontsize_min
+						tooltip = "TREATY_BINDING_PERIOD_PENDING_TOOLTIP"
+						text = "TREATY_BINDING_PERIOD_PENDING_SHORT"
 					}
 
 					### BINDING PERIOD HAS ENDED
@@ -3077,13 +3112,25 @@ types country_panel_treaties_types
 				block "binding_period" {
 					### BINDING PERIOD
 					textbox = {
-						visible = "[NotZero(Treaty.GetBindingDaysLeft)]"
+						visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Not(Treaty.IsBindingPeriodPending))]"
 						parentanchor = vcenter
 						align = nobaseline
 						autoresize = yes
 						max_width = 122
 						using = elide_fontsize_min
 						text = "[Treaty.GetBindingPeriodRemainingFormatted]"
+					}
+
+					### BINDING PERIOD PENDING
+					textbox = {
+						visible = "[And(NotZero(Treaty.GetBindingDaysLeft), Treaty.IsBindingPeriodPending)]"
+						parentanchor = vcenter
+						align = nobaseline
+						autoresize = yes
+						max_width = 122
+						using = elide_fontsize_min
+						tooltip = "TREATY_BINDING_PERIOD_PENDING_TOOLTIP"
+						text = "TREATY_BINDING_PERIOD_PENDING_SHORT"
 					}
 
 					### BINDING PERIOD HAS ENDED
@@ -4136,6 +4183,41 @@ types war_panel
 			}
 		}
 	}
+
+	type return_state_to_subject_button = button {
+		size = { @panel_width 50 }
+		enabled = "[IsValid(DiplomaticPlayType.GetStartCommandStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition))]"
+		onclick = "[DiplomaticPlayType.ShowConfirmationStateWithDefinition(State.Self, Country.GetDefinition)]"
+		onmousehierarchyenter = "[AccessHighlightManager.HighlightState(State.Self)]"
+		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
+		using = default_button
+		tooltip = "[DiplomaticPlayType.GetStartTooltipStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition)]"
+
+		blockoverride "sound" {
+			using = confirm_button_sound
+		}
+
+		icon = {
+			size = { 40 40 }
+			parentanchor = vcenter
+			position = { 10 0 }
+			texture = "[DiplomaticPlayType.GetTexture]"
+		}
+
+		textbox = {
+			parentanchor = vcenter
+			position = { 55 0 }
+			elide = right
+			fontsize_min = 12
+			align = nobaseline
+			using = fontsize_large
+			text = "RETURN_STATE_TO_SUBJECT_IN_STATE_ITEM"
+
+			block "text_size" {
+				size = { 410 50 }
+			}
+		}
+	}
 }
 
 types country_info
@@ -4175,12 +4257,15 @@ types country_info
 				autoresize = yes
 				visible = "[Not(CountryPanel.GetCountry.IsColonizable)]"
 				raw_text = "#variable @ships![Country.GetNumShips|0]#!"
-				tooltip = PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP
 				using = fontsize_mega
 				minimumsize = { 60 -1 }
 				align = hcenter|nobaseline
 				margin_left = 10
 				margin_right = 10
+
+				tooltipwidget = {
+					RegularTooltip_CountryShips = {}
+				}
 			}
 		}
 	}

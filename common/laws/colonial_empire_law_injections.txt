@@ -106,6 +106,14 @@ INJECT:law_census_voting = {
 	}
 }
 
+# Labour Suffrage (1.15): a broad franchise of workers, with Wealth and Census
+# Voting's authority and vote share, so their line.
+INJECT:law_labour_suffrage = {
+	modifier = {
+		country_colonial_invest_effectiveness_add = 0.3
+	}
+}
+
 INJECT:law_anarchy = {
 	modifier = {
 		country_colonial_stability_drift_add = -0.2
@@ -136,6 +144,35 @@ INJECT:law_secret_police = {
 	}
 
 
+	institution_modifier = {
+		country_colonial_garrison_effectiveness_add = 0.1
+	}
+}
+
+# 1.15: Secret Police's two Russian variants and the Extraordinary Commission
+# carry its lines.
+INJECT:law_okhrana = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+	}
+	institution_modifier = {
+		country_colonial_garrison_effectiveness_add = 0.1
+	}
+}
+
+INJECT:law_third_section = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+	}
+	institution_modifier = {
+		country_colonial_garrison_effectiveness_add = 0.1
+	}
+}
+
+INJECT:law_extraordinary_commission = {
+	modifier = {
+		country_colonial_stability_drift_add = 0.2
+	}
 	institution_modifier = {
 		country_colonial_garrison_effectiveness_add = 0.1
 	}

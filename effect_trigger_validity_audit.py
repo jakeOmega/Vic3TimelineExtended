@@ -103,9 +103,11 @@ class ScanRoot:
     # the context; see `_child_context`.
     body_context: str | None = None
     # Schema blocks of this root only that hold triggers (a journal entry's
-    # `complete`, a treaty article's `conditions`), on top of the global names
-    # and patterns in `_child_context`.
+    # `disable_evaluation`, a treaty article's `conditions`), on top of the
+    # global names and patterns in `_child_context`.
     trigger_blocks: frozenset[str] = frozenset()
+    # The same for effects (a journal entry's `effect_all_involved`).
+    effect_blocks: frozenset[str] = frozenset()
 
 
 # Script contexts (#1142): the engine reads a block's keys either as triggers or
@@ -151,7 +153,9 @@ _ENTITY_GATES: frozenset[str] = frozenset({
 # directories too, and an unknown keyword there (a deleted scripted effect still
 # called from a button, a trigger vanilla removed) was previously invisible.
 SCAN_ROOTS: tuple[ScanRoot, ...] = (
-    ScanRoot("events"),
+    # 1.15 event fields (changes_features.md, "One Time Events") that no
+    # vanilla event sets, so the bootstrap can't harvest them.
+    ScanRoot("events", extra_valid=frozenset({"fire_only_once", "fire_only_once_globally"})),
     ScanRoot(os.path.join("common", "scripted_effects"), body_context=CTX_EFFECT),
     ScanRoot(os.path.join("common", "scripted_triggers"), body_context=CTX_TRIGGER),
     ScanRoot(os.path.join("common", "on_actions")),
@@ -160,27 +164,59 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         os.path.join("common", "scripted_buttons"),
         extra_valid=_ENTITY_GATES,
     ),
+    # The 1.15 schema (game/common/journal_entries/journal_entries.md, and
+    # what vanilla's 1.15 entries use beyond it). 1.15 replaced complete /
+    # on_complete, fail / on_fail, invalid / on_invalid, on_timeout, the
+    # custom_*_header fields and event_outcome_{completed,failed}_*_desc with
+    # `outcome = { }` blocks, and the catalog (re-bootstrapped from 1.15)
+    # dropped every one of them, so a leftover old block flags here.
     ScanRoot(
         os.path.join("common", "journal_entries"),
         extra_valid=_ENTITY_GATES | frozenset({
-            "group", "header", "progressbar", "widget", "gui", "container",
-            "scripted_button", "scripted_progress_bar",
-            "can_revolution_inherit", "can_deactivate",
+            "group", "context", "dlc", "icon", "progressbar", "widget", "gui",
+            "container", "scripted_button", "scripted_progress_bar",
+            "can_revolution_inherit", "can_deactivate", "transferable",
             "should_update_on_player_command",
+            "should_be_pinned_by_default_involved",
             "should_be_pinned_by_default_uninvolved_or_context",
-            "is_shown_when_inactive", "is_shown_in_lobby",
-            "complete", "fail", "invalid",
-            "on_complete", "on_fail", "on_invalid", "on_timeout",
-            "on_weekly_pulse", "current_value", "goal_add_value",
-            "progress_desc", "status_desc",
-            "custom_completion_header", "custom_on_completion_header",
-            "custom_failure_header", "custom_on_failure_header",
-            "event_outcome_activated_effect_desc",
-            "event_outcome_completed_effect_desc",
-            "event_outcome_failed_effect_desc",
+            "is_shown_when_inactive", "is_shown_in_lobby", "disable_evaluation",
+            "should_be_involved", "should_show_when_not_involved",
+            "activation_description", "immediate_all_involved",
+            "on_become_involved_after_activation", "on_no_longer_involved",
+            "on_weekly_pulse", "on_monthly_pulse", "on_yearly_pulse",
+            "current_value", "goal_add_value", "is_progressing", "weight",
+            "highlight", "timeout", "reason", "progress_desc", "status_desc",
+            "display_progressbar_as_months", "how_tutorial", "why_tutorial",
+            "event_outcome_activated_desc", "event_outcome_activated_effect_desc",
+            "modifiers_while_active", "scaling_modifiers_while_active",
+            "modifier", "value",
+            # Map mode: map_color / map_color_second are script values (a
+            # named or literal color, or a lerp), map_tooltip a display-only
+            # effect block.
+            "map_color", "map_color_second", "map_tooltip",
+            "lerp", "min_color", "max_color", "factor",
+            # outcome = { header effect_header conclusion_desc color flags
+            # trigger effect effect_all_involved event_outcome_desc
+            # event_outcome_effect_desc }
+            "outcome", "header", "effect_header", "conclusion_desc", "color",
+            "flags", "trigger", "effect", "effect_all_involved",
+            "event_outcome_desc", "event_outcome_effect_desc",
         }),
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
-        trigger_blocks=frozenset({"complete", "fail", "invalid", "is_progressing"}),
+        # An outcome's `trigger` is a trigger block wherever it is (the
+        # global names); `activation_description` (on every 1.15 vanilla
+        # entry, not in the readme) holds `always = yes` or a custom_tooltip.
+        trigger_blocks=frozenset({
+            "is_progressing", "disable_evaluation", "activation_description",
+        }),
+        # Effects, though no `on_` / `_effect` name says so: the per-country
+        # copies of `immediate` and an outcome's `effect`, the map mode's
+        # tooltip (built like an effect block, never run) and an outcome's
+        # effect description (`header` + `effect = { }`, or effects directly).
+        effect_blocks=frozenset({
+            "immediate_all_involved", "effect_all_involved", "map_tooltip",
+            "event_outcome_effect_desc",
+        }),
     ),
     ScanRoot(
         os.path.join("common", "diplomatic_actions"),
@@ -233,12 +269,21 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
         os.path.join("common", "character_interactions"),
         extra_valid=_ENTITY_GATES | frozenset({"show_confirmation_box"}),
     ),
+    # 1.15 schema (game/common/scripted_progress_bars/scripted_progress_bars.md):
+    # the three ready-made looks stay, the double_sided_* presets are gone
+    # (vanilla's own were restyled with the texture/color/marker/icon keys),
+    # and `progress_condition` works like an `if` inside a *_progress block
+    # (its `limit` a trigger, an `else` inside it taking over).
     ScanRoot(
         os.path.join("common", "scripted_progress_bars"),
         extra_valid=_ENTITY_GATES | frozenset({
-            "start_value", "min_value", "max_value", "monthly_progress",
-            "default_green", "default_bad", "double_sided_gold",
-            "second_desc",  # vanilla 00_great_game_progress_bars.txt
+            "name", "desc", "second_desc", "is_inverted",
+            "start_value", "min_value", "max_value",
+            "weekly_progress", "monthly_progress", "yearly_progress",
+            "progress_condition", "add", "value",
+            "default", "default_green", "default_bad",
+            "progress_texture", "background_texture", "glow_texture",
+            "glow_line_texture", "color", "marker", "left_icon", "right_icon",
         }),
     ),
     ScanRoot(
@@ -323,8 +368,17 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
     ),
 )
 
+# The per-root schema blocks, for `_root_for`'s fallback root (a directory the
+# audit doesn't scan whose schema shares names). Plus 1.15's AI regional
+# objectives, which keep the pre-1.15 journal entry names (`complete` and
+# `invalid` triggers; `on_complete` / `on_invalid` read as effects by prefix),
+# so the context harvest reads them as it did before 1.15 moved journal
+# entries to outcomes.
 _ALL_ROOT_TRIGGER_BLOCKS: frozenset[str] = frozenset().union(
     *(root.trigger_blocks for root in SCAN_ROOTS)
+) | frozenset({"complete", "invalid", "fail"})
+_ALL_ROOT_EFFECT_BLOCKS: frozenset[str] = frozenset().union(
+    *(root.effect_blocks for root in SCAN_ROOTS)
 )
 
 _CATALOG_REL = os.path.join("docs", "engine", "effect_trigger_valid_keys.txt")
@@ -502,7 +556,10 @@ _NEUTRAL_BLOCKS: frozenset[str] = frozenset({
     "modulo", "round_to", "factor", "base", "days", "weeks", "months", "years",
     "delay", "cooldown", "random_range", "fixed_range", "integer_range",
     "current_value", "goal_add_value", "start_value", "min_value", "max_value",
-    "monthly_progress",
+    "weekly_progress", "monthly_progress", "yearly_progress",
+    # A journal entry's map mode colors (1.15): script values that return a
+    # color, with `if` / `limit` reading triggers as in any script value.
+    "map_color", "map_color_second", "lerp",
 })
 _NEUTRAL_SUFFIXES = ("_weight", "_score", "_chance")
 
@@ -558,7 +615,10 @@ def _child_context(
         or (root is not None and name in root.trigger_blocks)
     ):
         return CTX_TRIGGER
-    if name in _EFFECT_BLOCKS or name.startswith("on_") or name.endswith("_effect"):
+    if (
+        name in _EFFECT_BLOCKS or name.startswith("on_") or name.endswith("_effect")
+        or (root is not None and name in root.effect_blocks)
+    ):
         return CTX_EFFECT
     return parent
 
@@ -809,12 +869,14 @@ def _root_for(rel_path: str) -> ScanRoot:
         prefix = root.rel.replace("\\", "/") + "/"
         if rel_path.startswith(prefix):
             return root
-    # The per-root trigger blocks too, for a directory that shares a schema
-    # (an objective's `complete`); on 1.14.5 they add three names to the
-    # trigger-context harvest and change neither catalog section.
+    # The per-root trigger and effect blocks too, for a directory that shares
+    # a schema (1.15's AI regional objectives' `complete` and `invalid`); on
+    # 1.14.5 they added three names to the trigger-context harvest and
+    # changed neither catalog section.
     return ScanRoot(
         os.path.dirname(rel_path), skip_blocks=_STATIC_MODIFIER_BLOCKS,
         trigger_blocks=_ALL_ROOT_TRIGGER_BLOCKS,
+        effect_blocks=_ALL_ROOT_EFFECT_BLOCKS,
     )
 
 

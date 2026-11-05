@@ -220,7 +220,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -290,7 +290,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -359,7 +359,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -428,7 +428,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -497,7 +497,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -566,7 +566,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -644,7 +644,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -716,7 +716,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_farmers_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 				add = workplace.modifier:building_group_bg_ranching_farmers_mortality_mult
 			}
@@ -806,7 +806,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_laborers_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 				add = workplace.modifier:building_group_bg_ranching_laborers_mortality_mult
 			}
@@ -838,6 +838,10 @@ te_demog_pop_death_mult = {
 			if = {
 				limit = { workplace = { OR = { is_building_group = bg_agriculture is_building_group = bg_staple_crops is_building_group = bg_subsistence_agriculture } } }
 				add = workplace.modifier:building_group_bg_agriculture_mortality_mult
+			}
+			if = {
+				limit = { workplace = { is_building_group = bg_construction } }
+				add = workplace.modifier:building_group_bg_construction_machinists_mortality_mult
 			}
 			if = {
 				limit = { workplace = { is_building_group = bg_fishing } }
@@ -892,7 +896,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -962,7 +966,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1032,7 +1036,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1101,7 +1105,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1175,7 +1179,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_slaves_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1247,7 +1251,7 @@ te_demog_pop_death_mult = {
 				add = workplace.modifier:building_group_bg_plantations_mortality_mult
 			}
 			if = {
-				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_subsistence_ranching } } }
+				limit = { workplace = { OR = { is_building_group = bg_ranching is_building_group = bg_cossack_host is_building_group = bg_subsistence_ranching } } }
 				add = workplace.modifier:building_group_bg_ranching_mortality_mult
 			}
 			if = {
@@ -1631,8 +1635,8 @@ te_demog_pr_start_lm = {
 		limit = {
 			OR = {
 				state_region = s:STATE_CROATIA
-				state_region = s:STATE_KAUNAS
 				state_region = s:STATE_LESSER_POLAND
+				state_region = s:STATE_LITHUANIA
 				state_region = s:STATE_MAZOVIA
 				state_region = s:STATE_SLOVAKIA
 				state_region = s:STATE_TRANSDANUBIA

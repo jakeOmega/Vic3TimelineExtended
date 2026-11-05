@@ -1274,7 +1274,6 @@ ICONS: dict[str, dict[str, dict]] = {
         # Vanilla draws each bureaucracy law as an object beside a quill in an inkwell.
         "law_automated_bureaucracy": {"subject": "a small brass robot arm holding a feather quill over a square glass inkwell", "seed": 1},
         "law_contracted_administration": {"subject": "a closed leather briefcase beside a feather quill standing in a square glass inkwell", "seed": 0},
-        "law_communal_administration": {"subject": "three raised open hands side by side beside a feather quill in a square glass inkwell", "seed": 0},
         "law_private_policing": {"subject": "a security guard's peaked cap lying beside a big ring of keys and a flashlight", "seed": 0},
         # gen_law_icons.py's flat bronze glyphs (2026-04-12), many near-identical
         # (spec, "Batch 4"). One object per law in the law style; siblings differ in

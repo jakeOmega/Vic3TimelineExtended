@@ -214,7 +214,7 @@ War.
 | Humanitarian Regulations | Nuclear Weapons | Allies and treaties. +6 diplomatic reputation, the most of any law, so other countries sign treaties with you and back your plays more readily; 10% more of your wounded survive; half the devastation. | Kill rate −0.05; no strategic nuclear strikes |
 | Limited War | Intercontinental Ballistic Missiles | Small wars for limited aims. You gain 25% less infamy, plays escalate 30% slower, battles move war support 20% less either way, the anti-war movement is weaker and devastation falls by three quarters. | War goals in plays you start cost twice the maneuvers, so each play takes fewer states; kill rate −0.05; no nuclear strikes at all |
 
-Patriotic, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
+Patriotic, Militarist, Fascist and Vanguardist groups and Jingoist leaders favor Total War,
 Traditionalists and Theocrats Traditional Rules of War, Reformers and the Pious
 War Crimes Forbidden, Liberals, Market Liberals and Humanitarians both
 Humanitarian Regulations and Limited War, and Pacifists and Anarchists Limited
@@ -304,7 +304,6 @@ shows last year's rise.
 | Neocameralism | Governance Principles | Marketing Research, with Laissez-Faire or Interventionism | The state run as a corporation: industrialists and wealth hold power. |
 | Collective Governance | Governance Principles | Political Agitation | No single head of state; see [Collective Governance](#collective-governance). |
 | Contracted Administration | Bureaucracy | Supply Chain Management, with Laissez-Faire or Interventionism | Private firms run the administration under contract; see [Who staffs the administration](#who-staffs-the-administration). |
-| Communal Administration | Bureaucracy | Council Republic, Anarchy or Collective Governance | Local assemblies and recallable delegates run the administration; see [Who staffs the administration](#who-staffs-the-administration). |
 | Automated Bureaucracy | Bureaucracy | AI Agents | Machines run the administration under your government: institutions cost less bureaucracy and change size faster. |
 | Algorithmic Governance | Distribution of Power | Artificial General Intelligence | Machines hold supreme authority and run the administration too. |
 | Liquid Democracy | Distribution of Power | Liquid Democracy | Everyone votes on every question or lends the vote to someone they trust, and can take it back at any time. A voting law with Universal Suffrage's franchise: ideological incoherence costs less legitimacy and enacted laws stir their opponents less, but laws pass more slowly. With Neural Lace you also gain the Continuous Vote, checked once a year: more enactment success and fewer radicals from movements, but the groups in government draw less support. Women's Suffrage, Elected Bureaucrats, the campaign finance laws and the Tradition of Free Elections work with it as with any voting law; First Past the Post and the voting-age amendments don't. |
@@ -317,19 +316,21 @@ shows last year's rise.
 
 ### Who staffs the administration
 
-Three of the mod's Bureaucracy laws decide who does the work of your
-Government Administrations: Contracted Administration, Communal Administration
-and Automated Bureaucracy. Each replaces Professional Bureaucrats there with its
-own staffing, and each moves political strength away from bureaucrats.
+Three Bureaucracy laws decide who does the work of your Government
+Administrations in ways this chapter covers: the mod's Contracted
+Administration and Automated Bureaucracy, and the base game's Communal
+Administration, which the mod opens to more governments. Each replaces
+Professional Bureaucrats there with its own staffing, and each moves political
+strength away from bureaucrats.
 Automated Bureaucracy is covered further in [Machine administration and machine
 rule](#machine-administration-and-machine-rule).
 
 | | Contracted Administration | Communal Administration | Automated Bureaucracy |
 |---|---|---|---|
-| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | In a Council Republic, under Anarchy or under Collective Governance; not with Technocracy or Elder Council | From AI Agents |
-| Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Recallable Delegates: 250 bureaucrats and 250 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
-| You gain | Institutions change size 25% faster; capitalists +15% political strength | Movements 5% less radical; Trade Unions and Rural Folk +10% political strength | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
-| You pay | Institutions cost 5% more bureaucracy | Tax capacity −10%; Legislative Override Capacity −2 | Nothing beyond the staffing |
+| Available | From Supply Chain Management, with Laissez-Faire or Interventionism; not in a Council Republic | From Socialism; in a Council Republic or with Factory Councils (the base game's rule), or under Anarchy or Collective Governance; not with Technocracy, Elder Council or Algorithmic Governance | From AI Agents |
+| Staffing | Service Contractors: 250 bureaucrats a level, buying 20 Services | Communal Representatives: 250 bureaucrats and 500 clerks a level | Automated Casework: 150 bureaucrats and 100 engineers a level, buying Digital Access and Software |
+| You gain | Institutions change size 25% faster; capitalists +15% political strength | Bureaucracy cost from population −25%; government wages −15% | Institutions cost 20% less bureaucracy and change size 50% faster; engineers +15% political strength; Legislative Override Capacity +1 |
+| You pay | Institutions cost 5% more bureaucracy | Legislative Override Capacity −2 | Nothing beyond the staffing |
 | Bureaucrats | −25% political strength | −25% political strength | −25% political strength |
 
 Contracted Administration suits a market economy with high wages. Each
@@ -341,14 +342,14 @@ shrinks or disappears, and a shortage cuts the building's output. Contracts also
 budget, so every institution costs more bureaucracy.
 
 Communal Administration is the bureaucracy for a council republic or an
-anarchist society. Delegates from local assemblies do half the work as clerks,
-who earn less than bureaucrats and qualify at lower literacy, so Government
-Administrations cost less and fill faster. The assemblies meet local needs
-first, which costs tax capacity, and delegates answer to the assembly that can
-recall them, which costs override capacity. If a Council Republic or a country
-under Collective Governance loses Elected Bureaucrats because its Distribution
-of Power stops being a voting law, it moves to Communal Administration rather
-than Appointed Bureaucrats. A country that can no longer hold Contracted
+anarchist society. Two thirds of its representatives work as clerks, who earn
+less than bureaucrats and qualify at lower literacy, so Government
+Administrations fill faster, though each level employs 750 people rather than
+500. Representatives answer to the assemblies that elected them, which costs
+override capacity. If a Council Republic or a country under Collective
+Governance loses Elected Bureaucrats because its Distribution of Power stops
+being a voting law, it moves to Communal Administration rather than Appointed
+Bureaucrats, once it has Socialism. A country that can no longer hold Contracted
 Administration moves to Appointed Bureaucrats (Automated Bureaucracy under
 Algorithmic Governance), and one that can no longer hold
 Communal Administration moves to Elected Bureaucrats where it can, otherwise to
@@ -923,8 +924,8 @@ The tutors' net lean sets the heir's ideology.
 
 | Tutors' net lean | Possible ideologies, likeliest first |
 |---|---|
-| Strong progressive (4 points or more) | Reformer, Liberal, Social Democrat, Humanitarian, Radical, Communist or Vanguardist; rarely Moderate |
-| Light progressive | Reformer, Liberal, Humanitarian or Social Democrat; often Moderate |
+| Strong progressive (4 points or more) | Reformer, Liberal, State Socialist, Humanitarian, Radical, Communist or Vanguardist; rarely Moderate |
+| Light progressive | Reformer, Liberal, Humanitarian or State Socialist; often Moderate |
 | None | Usually Moderate, sometimes Reformer, Traditionalist or Liberal |
 | Light conservative | Royalist, Traditionalist, Authoritarian or Theocrat; often Moderate |
 | Strong conservative (4 points or more) | Royalist, Traditionalist, Authoritarian, Theocrat, Ethno-Nationalist or Jingoist; rarely Moderate |
@@ -935,7 +936,7 @@ chance to rebel and take the opposite lean.
 
 Only ideologies your country can have are rolled. Reformer needs Egalitarianism
 and is no longer possible once you have Feminism; Radical also needs
-Egalitarianism, Liberal needs Democracy, Social Democrat and Communist need
+Egalitarianism, Liberal needs Democracy, State Socialist and Communist need
 Socialism, Vanguardist needs Political Agitation, Humanitarian needs Feminism
 and Ethno-Nationalist needs Pan-nationalism. France never gets a Royalist or
 Traditionalist heir, and countries with a strong republican tradition never get

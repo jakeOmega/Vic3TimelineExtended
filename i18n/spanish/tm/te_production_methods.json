@@ -3976,8 +3976,8 @@
   "es": "Defensa puntual de energía dirigida"
  },
  "pm_directed_energy_point_defense_desc": {
-  "en": "High-energy lasers that burn incoming warheads out of the sky, raising this [Concept('concept_state','$concept_state$')]'s chance of stopping a [concept_nuclear_strike] further than interceptor missiles can.",
-  "es": "Láseres de alta energía que abrasan en el aire las ojivas entrantes y elevan la probabilidad de este [Concept('concept_state','$concept_state$')|l] de detener un [concept_nuclear_strike|l] más que los misiles interceptores."
+  "en": "High-energy lasers that burn incoming warheads out of the sky, raising this [Concept('concept_state','$concept_state|q$')]'s chance of stopping a [concept_nuclear_strike] further than interceptor missiles can.",
+  "es": "Láseres de alta energía que abrasan en el aire las ojivas entrantes y elevan la probabilidad de este [Concept('concept_state','$concept_state|q$')|l] de detener un [concept_nuclear_strike|l] más que los misiles interceptores."
  },
  "pm_directional_drilling_rigs": {
   "en": "Directional Drilling Rigs",
@@ -5272,8 +5272,8 @@
   "es": "Batería de defensa antimisiles"
  },
  "pm_missile_defense_battery_desc": {
-  "en": "Radar-guided interceptor missiles that raise this [Concept('concept_state','$concept_state$')]'s chance of stopping an incoming [concept_nuclear_strike], on top of the defenses our technology gives every state.",
-  "es": "Misiles interceptores guiados por radar que elevan la probabilidad de este [Concept('concept_state','$concept_state$')|l] de detener un [concept_nuclear_strike|l] entrante, además de las defensas que nuestra tecnología da a todos los estados."
+  "en": "Radar-guided interceptor missiles that raise this [Concept('concept_state','$concept_state|q$')]'s chance of stopping an incoming [concept_nuclear_strike], on top of the defenses our technology gives every state.",
+  "es": "Misiles interceptores guiados por radar que elevan la probabilidad de este [Concept('concept_state','$concept_state|q$')|l] de detener un [concept_nuclear_strike|l] entrante, además de las defensas que nuestra tecnología da a todos los estados."
  },
  "pm_mitsubishi_nagasaki_shipyard": {
   "en": "Mitsubishi Nagasaki Shipyard",
@@ -6362,10 +6362,6 @@
  "pm_ramirez_vila_real_cannery": {
   "en": "Ramirez Vila Real Cannery",
   "es": "Conservera Ramirez Vila Real"
- },
- "pm_recallable_delegates": {
-  "en": "Recallable Delegates",
-  "es": "Delegados revocables"
  },
  "pm_regional_branding_building_furniture_manufactory": {
   "en": "Regional Marketing",

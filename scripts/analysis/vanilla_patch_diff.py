@@ -27,6 +27,9 @@ Subcommands:
 
 `--mod-uses` greps the mod (common/ events/ gui/ localization/english/) for
 every REMOVED name and prints the hits; comment-only hits are counted apart.
+On `parsed` it also lists the entity fields vanilla dropped from a type (no
+entity of the type sets them any more: 1.15's `complete`, `on_complete`, ...)
+that the mod's files of that type still set at the top level.
 That join is what `/validate/vanilla-surface-diff` is meant to do, without
 needing an old ref. Unit test: `test_vanilla_patch_diff.py`.
 """
@@ -181,11 +184,19 @@ def _load_json(path):
         return json.load(f)
 
 
-def diff_parsed(new_dir, old_ref=None, old_dir=None):
+def entity_fields(data):
+    """Top-level field names any entity of one parsed type sets."""
+    return {k for v in data.values() if isinstance(v, list)
+            for pair in ([v] if _is_pair(v) else v)
+            if _is_pair(pair) and isinstance(pair[1], dict) for k in pair[1]}
+
+
+def diff_parsed(new_dir, old_ref=None, old_dir=None, fields_out=None):
     """{snapshot file name: (removed, added, changed, diffs)} for changed snapshot files.
 
     `new_dir` is a `vanilla_parsed/`-shaped directory; the old side is either
-    another such directory (`old_dir`) or the same tree at a git ref.
+    another such directory (`old_dir`) or the same tree at a git ref. A
+    `fields_out` dict gets {snapshot file name: [fields no entity sets now]}.
     """
     out = {}
     files = sorted(glob.glob(os.path.join(new_dir, "common", "*.json"))
@@ -204,6 +215,9 @@ def diff_parsed(new_dir, old_ref=None, old_dir=None):
             continue
         new = _load_json(path)
         res = diff_entities(old, new)
+        gone = sorted(entity_fields(old) - entity_fields(new))
+        if fields_out is not None and gone:
+            fields_out[rel] = gone
         if res[0] or res[1] or res[2]:
             out[rel] = res
     return out
@@ -226,6 +240,23 @@ def mod_uses(names, repo=REPO_ROOT):
                 code.append(f"{path}:{lineno}")
         if code or comment:
             hits[name] = {"code": code, "comment": comment}
+    return hits
+
+
+def mod_field_uses(fields_by_file, new_dir, repo=REPO_ROOT):
+    """{(mod dir, field): [file:line, ...]} for removed fields that the mod's
+    files of the same type set at entity level (one tab in)."""
+    types = _load_json(os.path.join(new_dir, "manifest.json"))["entity_types"].values()
+    dirs = {t["file"]: t["dir"].split("/", 1)[1] for t in types}
+    hits = {}
+    for rel, fields in fields_by_file.items():
+        mod_dir = dirs.get(rel.replace(os.sep, "/"))
+        for field in fields if mod_dir else ():
+            r = subprocess.run(["git", "grep", "-n", "-E", "^\t" + re.escape(field) + r"\s*=",
+                                "--", mod_dir], capture_output=True, text=True, cwd=repo)
+            code = [":".join(line.split(":", 2)[:2]) for line in r.stdout.splitlines()]
+            if code:
+                hits[(mod_dir, field)] = code
     return hits
 
 
@@ -262,7 +293,9 @@ def _cmd_docs(args):
 
 def _cmd_parsed(args):
     new_dir = os.path.join(REPO_ROOT, args.new_dir)
-    results = diff_parsed(new_dir, old_ref=args.old_ref, old_dir=args.old_dir)
+    removed_fields = {}
+    results = diff_parsed(new_dir, old_ref=args.old_ref, old_dir=args.old_dir,
+                          fields_out=removed_fields)
     removed_names = []
     if args.out:
         os.makedirs(args.out, exist_ok=True)
@@ -278,6 +311,11 @@ def _cmd_parsed(args):
                 fh.write(f"@@@@@@ {k}\n" + "\n".join(diffs[k]) + "\n")
     if args.mod_uses:
         print_mod_uses(removed_names)
+        hits = mod_field_uses(removed_fields, new_dir)
+        print(f"\n== removed fields the mod still sets: {len(hits)}")
+        for (mod_dir, field), code in sorted(hits.items()):
+            more = f" (+{len(code) - 3} more)" if len(code) > 3 else ""
+            print(f"  {mod_dir}: {field}: {len(code)} hit(s)  {', '.join(code[:3])}{more}")
     return 0
 
 
@@ -290,7 +328,7 @@ def main(argv=None):
     src.add_argument("--old-dir", help="a directory shaped like vanilla_parsed/ instead of a git ref")
     p.add_argument("--new-dir", default="vanilla_parsed", help="new snapshot, relative to the repo root")
     p.add_argument("--out", help="write a <type>.diff per changed type into this directory")
-    p.add_argument("--mod-uses", action="store_true", help="grep the mod for removed entity names")
+    p.add_argument("--mod-uses", action="store_true", help="grep the mod for removed entity names and fields")
     p.set_defaults(func=_cmd_parsed)
     d = sub.add_parser("docs", help="diff two script_docs dumps")
     d.add_argument("old", help="old docs dir (holds effects.log, triggers.log, ...)")

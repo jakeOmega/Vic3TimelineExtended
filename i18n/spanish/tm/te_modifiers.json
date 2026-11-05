@@ -1004,8 +1004,8 @@
   "es": "Eficiencia de construcción de $ship_type_destroyer$"
  },
  "country_ship_type_destroyer_construction_efficiency_add_desc": {
-  "en": "The efficiency of [Concept('concept_ship_type', '$ship_type_destroyer$')] @ship_construction! [concept_ship_construction]",
-  "es": "La eficiencia de la @ship_construction! [concept_ship_construction|l] de [Concept('concept_ship_type', '$ship_type_destroyer$')]"
+  "en": "The efficiency of [Concept('concept_ship_type', '$ship_type_destroyer|q$')] @ship_construction! [concept_ship_construction]",
+  "es": "La eficiencia de la @ship_construction! [concept_ship_construction|l] de [Concept('concept_ship_type', '$ship_type_destroyer|q$')]"
  },
  "country_sol_expectation_adaptation_rate_mult": {
   "en": "[concept_sol_expectations] Adaptation Rate",
@@ -1830,14 +1830,6 @@
  "goods_output_fertilizer_mult_desc": {
   "en": "A bonus or penalty to the amount of @fertilizer! $fertilizer$ produced by buildings",
   "es": "Una bonificación o penalización a la cantidad de @fertilizer! $fertilizer$ producidos por los edificios"
- },
- "goods_output_fine_art_mult": {
-  "en": "Building @fine_art! $fine_art$ output",
-  "es": "Producción de $fine_art$ @fine_art! de los edificios"
- },
- "goods_output_fine_art_mult_desc": {
-  "en": "A bonus or penalty to the amount of @fine_art! $fine_art$ produced by buildings",
-  "es": "Bonificación o penalización a la cantidad de $fine_art$ @fine_art! que producen los edificios"
  },
  "goods_output_fish_mult": {
   "en": "Building @fish! $fish$ output",
@@ -5252,16 +5244,16 @@
   "es": "[concept_infrastructure] por el consumo de [GetGoods('aeroplanes').GetName] de los [Concept('concept_pop', 'colectivos')]"
  },
  "state_infrastructure_from_aeroplanes_consumption_add_desc": {
-  "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('aeroplanes').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there",
-  "es": "La cantidad de [concept_infrastructure|l] del [concept_state|l] que se añade por cada unidad de [GetGoods('aeroplanes').GetName] consumida por los [Concept('concept_pop', '$concept_pops$')|l] que viven allí"
+  "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('aeroplanes').GetName] consumed by the [Concept('concept_pop', '$concept_pops|q$')] that live there",
+  "es": "La cantidad de [concept_infrastructure|l] del [concept_state|l] que se añade por cada unidad de [GetGoods('aeroplanes').GetName] consumida por los [Concept('concept_pop', '$concept_pops|q$')|l] que viven allí"
  },
  "state_infrastructure_from_transportation_consumption_add": {
   "en": "[concept_infrastructure] from [concept_pop] [GetGoods('transportation').GetName] Consumption",
   "es": "[concept_infrastructure] por el consumo de [GetGoods('transportation').GetName] de los [Concept('concept_pop', 'colectivos')]"
  },
  "state_infrastructure_from_transportation_consumption_add_desc": {
-  "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there",
-  "es": "La cantidad de [concept_infrastructure|l] del [concept_state|l] que se añade por cada unidad de [GetGoods('transportation').GetName] consumida por los [Concept('concept_pop', '$concept_pops$')|l] que viven allí"
+  "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops|q$')] that live there",
+  "es": "La cantidad de [concept_infrastructure|l] del [concept_state|l] que se añade por cada unidad de [GetGoods('transportation').GetName] consumida por los [Concept('concept_pop', '$concept_pops|q$')|l] que viven allí"
  },
  "state_labor_participation_add": {
   "en": "Census: People at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
@@ -5376,12 +5368,12 @@
   "es": "Un cambio en la aceptación cultural local mínima que se puede aplicar en un [concept_state|l]."
  },
  "state_monthly_loyalists_add": {
-  "en": "Monthly [Concept('concept_loyalist','$concept_loyalists$')]",
-  "es": "[Concept('concept_loyalist','$concept_loyalists$')] mensuales"
+  "en": "Monthly [Concept('concept_loyalist','$concept_loyalists|q$')]",
+  "es": "[Concept('concept_loyalist','$concept_loyalists|q$')] mensuales"
  },
  "state_monthly_loyalists_add_desc": {
-  "en": "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists$')] each month, in incorporated [Concept('concept_state','$concept_states$')] only.",
-  "es": "Proporción de la población que se convierte en [Concept('concept_loyalist','$concept_loyalists$')|l] cada mes, solo en [Concept('concept_state','$concept_states$')|l] incorporados."
+  "en": "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists|q$')] each month, in incorporated [Concept('concept_state','$concept_states|q$')] only.",
+  "es": "Proporción de la población que se convierte en [Concept('concept_loyalist','$concept_loyalists|q$')|l] cada mes, solo en [Concept('concept_state','$concept_states|q$')|l] incorporados."
  },
  "state_natural_fertility_mult": {
   "en": "Natural Fertility[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
@@ -5396,8 +5388,8 @@
   "es": "Probabilidad de defensa ante un [concept_nuclear_strike|l]"
  },
  "state_nuclear_weapon_defense_chance_add_desc": {
-  "en": "The chance of successfully defending a [Concept('concept_state','$concept_state$')] against a [concept_nuclear_strike].",
-  "es": "La probabilidad de defender con éxito un [Concept('concept_state','$concept_state$')|l] frente a un [concept_nuclear_strike|l]."
+  "en": "The chance of successfully defending a [Concept('concept_state','$concept_state|q$')] against a [concept_nuclear_strike].",
+  "es": "La probabilidad de defender con éxito un [Concept('concept_state','$concept_state|q$')|l] frente a un [concept_nuclear_strike|l]."
  },
  "state_pollution_generation_mult": {
   "en": "Generated [concept_pollution_system]",
@@ -5484,8 +5476,8 @@
   "es": "[concept_war_support] mensual"
  },
  "state_war_support_monthly_add_desc": {
-  "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive$')] share of the national population. Displayed in event tooltips as 'From Events'.",
-  "es": "[concept_war_support] adicional que se obtiene cada mes, escalado según la proporción de la población nacional [Concept('concept_state','$concept_state_possessive$')]. Se muestra en las descripciones emergentes de los eventos como «Por eventos»."
+  "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive|q$')] share of the national population. Displayed in event tooltips as 'From Events'.",
+  "es": "[concept_war_support] adicional que se obtiene cada mes, escalado según la proporción de la población nacional [Concept('concept_state','$concept_state_possessive|q$')]. Se muestra en las descripciones emergentes de los eventos como «Por eventos»."
  },
  "state_wealth_concentration_land_add": {
   "en": "[concept_inheritance_concentration]: Land Tenure",

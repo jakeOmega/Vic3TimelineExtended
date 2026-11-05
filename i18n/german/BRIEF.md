@@ -50,14 +50,15 @@ A value that contains nothing to translate (only markup, or a bare `$reference$`
 EN  … have [concept_foreign_investment_rights] in [concept_power_bloc_member] with lower [concept_rank]
 DE  … haben [concept_foreign_investment_rights] bei [Concept('concept_power_bloc_member','Blockmitgliedern')] mit niedrigerem [concept_rank]
 
-EN  The efficiency of [Concept('concept_ship_group', '$ship_group_cruisers$')] @ship_construction! [concept_ship_construction]
-DE  Die Effizienz des @ship_construction! [Concept('concept_ship_construction', 'Schiffbaus')] für [Concept('concept_ship_group', '$ship_group_cruisers$')]
+EN  The efficiency of [Concept('concept_ship_group', '$ship_group_cruisers|q$')] @ship_construction! [concept_ship_construction]
+DE  Die Effizienz des @ship_construction! [Concept('concept_ship_construction', 'Schiffbaus')] für [Concept('concept_ship_group', '$ship_group_cruisers|q$')]
 
-EN  Allow enacting [Concept('concept_decree', '$concept_decrees$')] on [concept_subject] [Concept('concept_state', '$concept_states$')]
-DE  Erlaubt es, [Concept('concept_decree', '$concept_decrees$')] in [Concept('concept_state', '$concept_states$')] von [Concept('concept_subject', 'Klientelländern')] zu beschließen
+EN  Allow enacting [Concept('concept_decree', '$concept_decrees|q$')] on [concept_subject] [Concept('concept_state', '$concept_states|q$')]
+DE  Erlaubt es, [Concept('concept_decree', '$concept_decrees|q$')] in [Concept('concept_state', '$concept_states|q$')] von [Concept('concept_subject', 'Klientelländern')] zu beschließen
 ```
 
 - Keep **every** concept link: the same concepts, the same number of times. You may switch between `[concept_x]` and `[Concept('concept_x', '…')]` freely, and move links within the sentence.
+- A `$reference$` inside a quoted argument carries `|q` (`[Concept('concept_state', '$concept_states|q$')]`). Keep it, and add it to any you write there yourself: the game logs an error for each one without it.
 - For a plain `[concept_x]` link, the display text you write must be the concept's own German term, inflected; the glossary's REFERENCED KEYS section shows the nominative. Don't substitute a synonym.
 - Where the English already gives its own display text (`[Concept('concept_x', 'construction capacity')]`), translate that text, inflected. The English author chose it on purpose, even when it differs from the concept's name.
 - `|l` lowercases a link's rendered name (`[concept_foreign_investment_rights|l]`), `|U` capitalises it. Use them where German capitalisation needs it.

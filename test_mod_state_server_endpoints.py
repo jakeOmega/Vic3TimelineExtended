@@ -136,11 +136,36 @@ class LocKeysFamilyTests(unittest.TestCase):
         self.assertIn("Treaty Articles", result["known_types"])
 
     def test_journal_entries_family_size(self):
-        # JE family currently has 4 suffixes (name/desc/reason/goal).
+        # JE family: name/desc/reason/goal, and since 1.15 the concluded name
+        # and the four conclusion texts the converter names.
         family = mss.LOC_KEY_FAMILIES["Journal Entries"]
-        self.assertEqual(len(family), 4)
+        self.assertEqual(len(family), 9)
         roles = {r for r, _ in family}
-        self.assertSetEqual(roles, {"name", "desc", "reason", "goal"})
+        self.assertSetEqual(roles, {
+            "name", "desc", "reason", "goal", "concluded", "complete_conclusion",
+            "fail_conclusion", "timeout_conclusion", "invalid_conclusion",
+        })
+
+    def test_journal_entry_outcome_keys_come_from_the_body(self):
+        body = ("=", {"outcome": [
+            ("=", {"header": ("=", "je_standard_completion_header"),
+                   "effect_header": ("=", "je_standard_on_completion_header"),
+                   "conclusion_desc": ("=", "je_x_complete_conclusion_desc")}),
+            ("=", {"flags": ("=", ["hidden", "invalid_outcome"]),
+                   "conclusion_desc": ("=", "je_x_invalid_conclusion_desc")}),
+        ]})
+        loc = {"je_standard_completion_header": "Complete", "je_x_complete_conclusion_desc": "Done."}
+        keys = mss._loc_keys_for("Journal Entries", "je_x", loc, body)["keys"]
+        self.assertEqual(keys["outcome1_header"],
+                         {"key": "je_standard_completion_header", "value": "Complete", "found": True})
+        self.assertFalse(keys["outcome1_effect_header"]["found"])
+        self.assertTrue(keys["outcome1_conclusion_desc"]["found"])
+        self.assertEqual(keys["outcome2_conclusion_desc"]["key"], "je_x_invalid_conclusion_desc")
+        self.assertNotIn("outcome2_header", keys)
+        self.assertTrue(keys["complete_conclusion"]["found"])  # the suffix family
+        # Other types ignore a body.
+        self.assertNotIn("outcome1_header",
+                         mss._loc_keys_for("Decisions", "d", {}, body)["keys"])
 
     @unittest.skipUnless(_server_up(), "mod_state_server not running")
     def test_treaty_articles_loc_keys_via_http(self):

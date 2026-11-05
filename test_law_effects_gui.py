@@ -32,6 +32,10 @@ def _type(lines, name):
     return lines[start:end + 1]
 
 
+def _costly(line):
+    return "GetEffectDesc(" in line or "GetDeltaEffectDesc(" in line
+
+
 def _unmod(lines):
     """The lines with every MOD block taken out, stripped of indentation."""
     out, inside = [], False
@@ -58,31 +62,38 @@ class GeneratedFileTest(unittest.TestCase):
         mod = _read(gen.OUT).split("\n")
         for fixture, _, types in gen.SOURCES:
             vanilla = _read(gen.FIXTURES / fixture).split("\n")
-            for name, _, _ in types:
+            for name, *_ in types:
                 with self.subTest(type=name):
                     self.assertEqual(_unmod(_type(mod, name)), [line.strip() for line in _type(vanilla, name)])
 
     def test_every_effects_text_is_hidden_for_a_taxation_law(self):
-        """Each GetEffectDesc call sits in a container whose own `visible`
-        hides it for a taxation law."""
+        """Each GetEffectDesc and GetDeltaEffectDesc call sits in a container
+        whose own `visible` hides it for a taxation law, and every call
+        vanilla's types make is still there."""
         lines = _read(gen.OUT).split("\n")
         hidden_line = f'visible = "[Not({gen.IS_TAX})]"'
         stack, calls = [], 0
         for line in lines:
             if line.strip() == hidden_line and stack:
                 stack[-1] = True
-            if "GetEffectDesc(" in line:
+            if _costly(line):
                 calls += 1
                 self.assertIn(True, stack, line.strip())
             for _ in range(line.count("{") - line.count("}")):
                 stack.append(False)
             for _ in range(line.count("}") - line.count("{")):
                 stack.pop()
-        self.assertEqual(calls, 3 * sum(len(types) for _, _, types in gen.SOURCES))
+        vanilla = 0
+        for fixture, _, types in gen.SOURCES:
+            fixture_lines = _read(gen.FIXTURES / fixture).split("\n")
+            vanilla += sum(1 for name, *_ in types for line in _type(fixture_lines, name) if _costly(line))
+        self.assertEqual(calls, vanilla)
 
     def test_a_taxation_law_shows_the_header_and_the_line(self):
+        """Each effects text has its line for a taxation law, under the same
+        header vanilla's text has (one copy hidden for it, one shown), and
+        the comparison view's too where vanilla has one."""
         lines = _read(gen.OUT).split("\n")
-        tax_visible = f'visible = "[{gen.IS_TAX}]"'
 
         def widget(i):
             """The lines of the widget whose property is line i."""
@@ -91,16 +102,36 @@ class GeneratedFileTest(unittest.TestCase):
                          and len(lines[j]) - len(lines[j].lstrip("\t")) == indent - 1)
             return [line.strip() for line in lines[start:i + 1]]
 
-        expected = {}
+        def for_tax(i):
+            """The widget's own `visible` shows it for a taxation law only."""
+            return any(line.startswith('visible = "') and gen.IS_TAX in line and f"Not({gen.IS_TAX})" not in line
+                       for line in widget(i))
+
+        expected, headers = {}, {"DATA_LAW_EFFECTS_HEADER": 0, "DATA_LAW_DELTA_EFFECTS_HEADER": 0}
         for _, _, types in gen.SOURCES:
-            for _, _, link in types:
+            for _, _, link, delta_link in types:
                 expected[link] = expected.get(link, 0) + 1
-        for text, count in list(expected.items()) + [("DATA_LAW_EFFECTS_HEADER", 2 * sum(expected.values()))]:
+                headers["DATA_LAW_EFFECTS_HEADER"] += 2
+                if delta_link:
+                    expected[delta_link] = expected.get(delta_link, 0) + 1
+                    headers["DATA_LAW_DELTA_EFFECTS_HEADER"] += 2
+        self.assertTrue(headers["DATA_LAW_DELTA_EFFECTS_HEADER"], "vanilla's comparison view went: update the test")
+        for text, count in list(expected.items()) + list(headers.items()):
             with self.subTest(text=text):
                 sites = [i for i, line in enumerate(lines) if line.strip() == f'text = "{text}"']
                 self.assertEqual(len(sites), count)
-                shown_for_tax = [i for i in sites if tax_visible in widget(i)]
-                self.assertEqual(len(shown_for_tax), count if text != "DATA_LAW_EFFECTS_HEADER" else count // 2)
+                shown_for_tax = [i for i in sites if for_tax(i)]
+                self.assertEqual(len(shown_for_tax), count if text in expected else count // 2)
+
+    def test_a_taxation_law_keeps_the_view_toggle(self):
+        """The selected law's All effects / Comparative effects toggle shows
+        for a taxation law too: a copy shown only for one, its `visible`
+        building no text."""
+        lines = _read(gen.OUT).split("\n")
+        start, end = gen.type_span(lines, "selected_or_enacting_law_content")
+        body = [line.strip() for line in lines[start:end + 1]]
+        self.assertEqual(body.count('text = "DATA_LAW_DELTA_EFFECTS_BUTTON"'), 2)
+        self.assertIn(f'visible = "[{gen.IS_TAX}]"', body)
 
     def test_it_defines_the_constants_it_uses(self):
         gui = _read(gen.OUT)
@@ -118,13 +149,15 @@ class LocalizationTest(unittest.TestCase):
 
     def test_each_link_opens_its_text(self):
         loc = _loc()
-        for link, country in (("te_law_tax_effects", "GetPlayer.Self"),
-                              ("te_law_tax_effects_country", "Law.GetCountry.Self")):
+        for link, function, country in (("te_law_tax_effects", "GetEffectDesc", "GetPlayer.Self"),
+                                        ("te_law_tax_effects_country", "GetEffectDesc", "Law.GetCountry.Self"),
+                                        ("te_law_tax_delta_effects", "GetDeltaEffectDesc", "GetPlayer.Self")):
             with self.subTest(link=link):
+                label = "te_law_tax_delta_effects_label" if "delta" in link else "te_law_tax_effects_label"
                 self.assertIn(f"#tooltip:[Law.GetTooltipTag],{link}_tt ", loc[link])
-                self.assertIn("$te_law_tax_effects_label$", loc[link])
-                self.assertEqual(loc[f"{link}_tt"], f"[Law.GetLawType.GetEffectDesc({country})]")
-        self.assertTrue(loc["te_law_tax_effects_label"])
+                self.assertIn(f"${label}$", loc[link])
+                self.assertEqual(loc[f"{link}_tt"], f"[Law.GetLawType.{function}({country})]")
+                self.assertTrue(loc[label])
 
 
 class DriftTest(unittest.TestCase):

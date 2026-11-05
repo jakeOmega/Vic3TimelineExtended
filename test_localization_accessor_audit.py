@@ -242,6 +242,31 @@ class ValidationTests(unittest.TestCase):
         self.assertIn("GetTargetCountry", reason)
         self.assertIn("scope_object", reason)
 
+    def test_115_type_changing_accessors_keep_checking(self):
+        # Hand-placed before the 1.15 fold (runbook § 4): each returns an
+        # object, so the step after it is still checked. Folded as "value",
+        # the broken variant of each (its last step swapped for a bogus one)
+        # would pass unchecked. Chains from vanilla 1.15's loc and the mod's.
+        chains = [
+            "THIS.GetJournalEntry.MakeScope",
+            "STATE.GetWorldMarketHub.GetStateRegion.GetNavalExitStateRegion.GetName",
+            "JournalEntry.GetModifier.GetFormattedValueFor('country_prestige_add')",
+            "PowerBloc.GetModifier.GetValueWithBreakdownFor('country_prestige_add')",
+            "MilitaryFormation.GetNewShipsHQ.GetName",
+            "MilitaryFormation.GetTargetSeaNode.GetStateRegion.GetName",
+            "MilitaryFormation.GetTargetInterestTierTypeInRegion(StrategicRegion.Self).GetNameNoIcon",
+            "Law.GetLawType.GetEffectDesc(GetPlayer.Self)",
+        ]
+        for chain in chains:
+            with self.subTest(chain=chain):
+                self.assertIsNone(self._validate(f"[{chain}]", "permissive"))
+                broken = chain.rsplit(".", 1)[0] + ".GetNoSuchThing"
+                self.assertIn("GetNoSuchThing", self._validate(f"[{broken}]", "permissive") or "")
+        for text in ("[GetPlayer.GetInstitutionInvestmentBureaucracyCost|D]",
+                     "[Glossary('glossary_zaibatsu','zaibatsu')]"):
+            with self.subTest(text=text):
+                self.assertIsNone(self._validate(text, "permissive"))
+
     def test_unknown_first_step_silent(self):
         """Unknown first step is silent (treated as 'unknown' and accepted) —
         matches engine's silent-fallback behavior. The audit's value is in

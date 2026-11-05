@@ -70,10 +70,11 @@ _NEGATIONS = frozenset({"NOT", "NOR", "NAND"})
 
 # Core-ideology switches vanilla script makes from outside the movement files,
 # {movement: (ideology, ...)}; the movement bodies' own switches are read from
-# the data. Verified against 1.14.5.
+# the data. Verified against 1.15.0.
 EXTERNAL_SWITCHES = {
-    # events/communism.txt:211
-    "movement_communist": ("ideology_vanguardist_movement",),
+    # events/russia_events/ip5_communism_events.txt:390 and :619 (1.15 dropped
+    # communism.txt's switch of movement_communist to the vanguardist movement)
+    "movement_socialist": ("ideology_revolutionary_socialist_movement", "ideology_state_socialist_movement"),
     # events/japan_events/ep2_meiji_restoration.txt:91
     "movement_tokugawa_loyalist": ("ideology_tokugawa_loyalist_movement_2",),
     # common/scripted_effects/00_victoria_ep2_scripted_effects.txt:2696

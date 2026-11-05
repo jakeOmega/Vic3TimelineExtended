@@ -135,7 +135,7 @@ populist_party = {
 		}
 		leader ?= {
 			NOR = {
-				has_ideology = ideology:ideology_communist
+				has_ideology = ideology:ideology_communist_leader
 				has_ideology = ideology:ideology_vanguardist
 				has_ideology = ideology:ideology_anarchist
 			}
@@ -279,9 +279,9 @@ populist_party = {
 			limit = {
 				leader ?= {
 					OR = {
-						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_communist_leader
 						has_ideology = ideology:ideology_vanguardist
-						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_state_socialist
 					}
 				}
 			}

@@ -1,4 +1,7 @@
-﻿@non_layoutpolicy_max_width = 300 #for elements that can not use a layoutpolicy, need to be adapted for lowest resolution 1600x900.
+﻿# TE override of vanilla politics_panel_overview.gui (1.15.0): vanilla's file plus the ruler's aptitude
+# traits in three featured slots (### APTITUDE TRAITS) and the other traits without them.
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+@non_layoutpolicy_max_width = 300 #for elements that can not use a layoutpolicy, need to be adapted for lowest resolution 1600x900.
 
 types politics_panel_types
 {
@@ -390,6 +393,21 @@ types politics_panel_types
 			margin_right = 10
 
 			character_portrait_medium_torso = {
+				visible = "[Not(Character.IsHistorical)]"
+				using = tooltip_below
+				blockoverride "show_hat" {}
+				blockoverride "highlight" {}
+			}
+
+			character_portrait_medium_torso_historical_info_link = {
+				visible = "[And( Character.IsHistorical, Not(StringIsEmpty(Character.GetHistoricalUrl)) )]"
+				using = tooltip_below
+				blockoverride "show_hat" {}
+				blockoverride "highlight" {}
+			}
+
+			character_portrait_medium_torso_historical_no_info_link = {
+				visible = "[And( Character.IsHistorical, StringIsEmpty(Character.GetHistoricalUrl) )]"
 				using = tooltip_below
 				blockoverride "show_hat" {}
 				blockoverride "highlight" {}
@@ -525,23 +543,47 @@ types politics_panel_types
 					}
 				}
 
-				### HEIR
+				### HEIR & FAVORITE
 				hbox = {
 					layoutpolicy_horizontal = expanding
 					layoutpolicy_vertical = preferred
 					margin_bottom = 10
-					visible = "[Country.HasHeir]"
 
-					character_portrait_small = {
-						datacontext = "[AccessPlayer.AccessHeir]"
+					hbox = {
+						visible = "[Country.HasHeir]"
+
+						character_portrait_small = {
+							datacontext = "[AccessPlayer.AccessHeir]"
+						}
+						textbox = {
+							autoresize = yes
+							size = { 0 25 }
+							datacontext = "[Character.GetInterestGroup]"
+							text = "character_role_heir"
+							default_format = "#title"
+							align = left|nobaseline
+						}
 					}
-					textbox = {
+
+					hbox = {
+						visible = "[Country.HasFavorite]"
+						margin_left = 10
+
+						character_portrait_small = {
+							datacontext = "[AccessPlayer.GetHighestProminenceCharacterOfRole('character_role_favorite')]"
+						}
+						textbox = {
+							autoresize = yes
+							size = { 0 25 }
+							text = "character_role_favorite"
+							default_format = "#title"
+							align = left|nobaseline
+						}
+					}
+
+					widget = {
 						layoutpolicy_horizontal = expanding
-						size = { 0 25 }
-						datacontext = "[Character.GetInterestGroup]"
-						text = "character_role_heir"
-						default_format = "#title"
-						align = left|nobaseline
+						layoutpolicy_vertical = expanding
 					}
 				}
 			}
@@ -807,16 +849,26 @@ types politics_panel_types
 								character_with_background = {
 									visible = "[Country.HasRuler]"
 									datacontext = "[AccessPlayer.AccessRuler]"
+									datacontext = "[PoliticsPanel.GetPortraitViewer]"
 									layoutpolicy_horizontal = expanding
 									layoutpolicy_vertical = expanding
 									minimumsize = { -1 340 }
 
 									blockoverride "character_layout" {
-										position = { 0 0 }
+										position = { 0 8 }
 										size = { 70% 100% }
 									}
 									blockoverride "character_portrait_size" {
 										size = { 110% 110% }
+									}
+
+									blockoverride "portrait_mask" {
+										mask = "gfx/interface/backgrounds/white.dds"
+									}
+
+									heir_and_favorite_character_portraits = {
+										parentanchor = bottom
+										position = { 10 -10 }
 									}
 
 									# ruler stats
@@ -2118,6 +2170,79 @@ types politics_panel_types
 									using = default_fade_in_out
 
 									visible = "[GetVariableSystem.Exists('politics_overview_exile_pool')]"
+
+									### REGIONAL EXILE POOL TABS
+									hbox = {
+										visible = "[Not(IsDataModelEmpty(GetExilePool.GetAccessibleRegionalExilePools))]"
+										margin_top = 15
+										spacing = 5
+
+										widget = {
+											size = { 160 44 }
+
+											tab_button = {
+												size = { 100% 100% }
+												visible = "[Not(GetExilePool.IsGlobalExilePoolSelected)]"
+												onclick = "[GetExilePool.SelectGlobalExilePool]"
+
+												textbox = {
+													text = "EXILE_POOL_GLOBAL_TAB"
+													default_format = "#title"
+													using = tab_text_properties
+												}
+											}
+
+											icon = {
+												size = { 100% 100% }
+												using = selected_tabs
+												visible = "[GetExilePool.IsGlobalExilePoolSelected]"
+
+												textbox = {
+													text = "EXILE_POOL_GLOBAL_TAB"
+													default_format = "#variable"
+													using = tab_text_properties
+												}
+											}
+										}
+
+										hbox = {
+											spacing = 5
+
+											datamodel = "[GetExilePool.GetAccessibleRegionalExilePools]"
+
+											item = {
+												widget = {
+													size = { 160 44 }
+
+													tab_button = {
+														size = { 100% 100% }
+														visible = "[Not(GetExilePool.IsRegionalExilePoolSelected(RegionalExilePool.Self))]"
+														onclick = "[GetExilePool.SelectRegionalExilePool(RegionalExilePool.Self)]"
+														tooltip = "REGIONAL_EXILE_POOL_TOOLTIP"
+
+														textbox = {
+															raw_text = "[RegionalExilePool.GetName]"
+															default_format = "#title"
+															using = tab_text_properties
+														}
+													}
+
+													icon = {
+														size = { 100% 100% }
+														using = selected_tabs
+														visible = "[GetExilePool.IsRegionalExilePoolSelected(RegionalExilePool.Self)]"
+														tooltip = "REGIONAL_EXILE_POOL_TOOLTIP"
+
+														textbox = {
+															raw_text = "[RegionalExilePool.GetName]"
+															default_format = "#variable"
+															using = tab_text_properties
+														}
+													}
+												}
+											}
+										}
+									}
 
 									### IG FILTERS
 									hbox = {

@@ -24,7 +24,7 @@ assassinate_domestic = {
 		}
 		owner = {
 			OR = {
-				has_law = law_type:law_secret_police
+				has_law_or_variant = law_type:law_secret_police
 				has_law = law_type:law_ministry_of_intelligence_and_security
 			}
 		}

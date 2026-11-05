@@ -242,9 +242,12 @@ types te_law_effects_tooltips
 				text = "DATA_LAW_TOOLTIP_NOT_SUPPORTED"
 			}
 
-			custom_tooltip_newline = {}
+			custom_tooltip_newline = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
+			}
 
 			custom_tooltip_textbox = {
+				visible = "[Law.HasAnyAgitatorOrMovementStance]"
 				text = "DATA_LAW_MOVEMENT_AND_AGITATORS_TITLE"
 			}
 
@@ -1467,15 +1470,51 @@ types te_law_effects_change_law
 			text = "[Law.GetLawType.GetAdditionalEffectDesc]"
 		}
 
-		### effects header
+		### effects view toggle
 		### MOD: Tax law effects: a taxation law's effects text prices its revenue at every tax level each
-		### frame, so vanilla's header and text go in a container hidden for one
+		### frame, so vanilla's view toggle, headers and texts go in a container hidden for one
 		flowcontainer = {
 			direction = vertical
 			visible = "[Not(EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
 		### END MOD ###
+			hbox = {
+				visible = "[Or(Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+				spacing = 5
+				margin = { 15 0 }
+				margin_top = 10
+
+				law_effects_view_button = {
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Clear( 'law_effects_view' )]"
+					}
+
+					blockoverride "selected" {
+						visible = "[Not(GetVariableSystem.Exists( 'law_effects_view' ))]"
+					}
+
+					blockoverride "text" {
+						text = "DATA_LAW_ALL_EFFECTS_BUTTON"
+					}
+				}
+
+				law_effects_view_button = {
+					blockoverride "onclick" {
+						onclick = "[GetVariableSystem.Set( 'law_effects_view', 'delta' )]"
+					}
+
+					blockoverride "selected" {
+						visible = "[GetVariableSystem.HasValue( 'law_effects_view', 'delta' )]"
+					}
+
+					blockoverride "text" {
+						text = "DATA_LAW_DELTA_EFFECTS_BUTTON"
+					}
+				}
+			}
+
+			### effects header
 			textbox = {
-				visible = "[Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self)))]"
+				visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))))]"
 				default_format = "#title"
 				autoresize = yes
 				multiline = yes
@@ -1488,7 +1527,7 @@ types te_law_effects_change_law
 
 			### effects
 			textbox = {
-				visible = "[Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self)))]"
+				visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), Not(StringIsEmpty(Law.GetLawType.GetEffectDesc(GetPlayer.Self))))]"
 				autoresize = yes
 				multiline = yes
 				minimumsize = { @law_sides_width -1 }
@@ -1496,12 +1535,71 @@ types te_law_effects_change_law
 				margin = { 35 0 }
 				text = "[Law.GetLawType.GetEffectDesc(GetPlayer.Self)]"
 			}
-		### MOD: Tax law effects: a taxation law shows the header and one line, whose hover holds the
-		### text (te_law_tax_effects), built only while the player hovers it
+
+			### delta effects header
+			textbox = {
+				visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+				minimumsize = { @law_sides_width -1 }
+				maximumsize = { @law_sides_width -1 }
+				default_format = "#title"
+				autoresize = yes
+				multiline = yes
+				margin = { 25 0 }
+				margin_top = 10
+				text = "DATA_LAW_DELTA_EFFECTS_HEADER"
+			}
+
+			### delta effects
+			textbox = {
+				visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), Not(StringIsEmpty(Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self))))]"
+				minimumsize = { @law_sides_width -1 }
+				maximumsize = { @law_sides_width -1 }
+				autoresize = yes
+				multiline = yes
+				margin = { 35 0 }
+				text = "[Law.GetLawType.GetDeltaEffectDesc(GetPlayer.Self)]"
+			}
+		### MOD: Tax law effects: a taxation law shows the toggle and the headers, and a line for each text whose
+		### hover holds it (te_law_tax_effects, te_law_tax_delta_effects), built only while the player hovers it
+		}
+
+		hbox = {
+			visible = "[EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation')]"
+			spacing = 5
+			margin = { 15 0 }
+			margin_top = 10
+
+			law_effects_view_button = {
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Clear( 'law_effects_view' )]"
+				}
+
+				blockoverride "selected" {
+					visible = "[Not(GetVariableSystem.Exists( 'law_effects_view' ))]"
+				}
+
+				blockoverride "text" {
+					text = "DATA_LAW_ALL_EFFECTS_BUTTON"
+				}
+			}
+
+			law_effects_view_button = {
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Set( 'law_effects_view', 'delta' )]"
+				}
+
+				blockoverride "selected" {
+					visible = "[GetVariableSystem.HasValue( 'law_effects_view', 'delta' )]"
+				}
+
+				blockoverride "text" {
+					text = "DATA_LAW_DELTA_EFFECTS_BUTTON"
+				}
+			}
 		}
 
 		textbox = {
-			visible = "[EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation')]"
+			visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
 			default_format = "#title"
 			autoresize = yes
 			multiline = yes
@@ -1513,13 +1611,35 @@ types te_law_effects_change_law
 		}
 
 		textbox = {
-			visible = "[EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation')]"
+			visible = "[And(Not(GetVariableSystem.Exists( 'law_effects_view' )), EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
 			autoresize = yes
 			multiline = yes
 			minimumsize = { @law_sides_width -1 }
 			maximumsize = { @law_sides_width -1 }
 			margin = { 35 0 }
 			text = "te_law_tax_effects"
+		}
+
+		textbox = {
+			visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
+			minimumsize = { @law_sides_width -1 }
+			maximumsize = { @law_sides_width -1 }
+			default_format = "#title"
+			autoresize = yes
+			multiline = yes
+			margin = { 25 0 }
+			margin_top = 10
+			text = "DATA_LAW_DELTA_EFFECTS_HEADER"
+		}
+
+		textbox = {
+			visible = "[And(GetVariableSystem.HasValue( 'law_effects_view', 'delta' ), EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
+			minimumsize = { @law_sides_width -1 }
+			maximumsize = { @law_sides_width -1 }
+			autoresize = yes
+			multiline = yes
+			margin = { 35 0 }
+			text = "te_law_tax_delta_effects"
 		}
 		### END MOD ###
 

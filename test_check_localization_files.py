@@ -6,6 +6,7 @@ are checked because the repo's own loc tools misread a bare inner quote.
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 import tempfile
@@ -13,7 +14,15 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "scripts", "analysis"))
 
-from check_localization_files import check_file, iter_loc_files, main  # noqa: E402
+from check_localization_files import (  # noqa: E402
+    check_file,
+    check_tm_file,
+    escape_quoted_splices,
+    iter_loc_files,
+    iter_tm_files,
+    main,
+    unescaped_quoted_splices,
+)
 
 BOM = "﻿"
 GOOD = BOM + 'l_english:\n TE_ALPHA:0 "Alpha"\n TE_BETA:0 "Beta"\n'
@@ -207,6 +216,66 @@ class MainTests(unittest.TestCase):
             problems.extend(check_file(path))
         self.assertEqual(problems, [], "\n".join(problems))
 
+
+
+class QuoteEscapingTests(unittest.TestCase):
+    """Check 9: from 1.15 a `$key$` inside a loc function's quoted argument
+    needs the `q` flag; the game logs "missing required quote-escaping"."""
+
+    def test_unescaped_concept_display_splice_is_flagged(self):
+        text = BOM + "l_english:\n TE_ALPHA:0 \"[Concept('concept_pop','$concept_pops$')] grow\"\n"
+        problems = _check(text)
+        self.assertEqual(len(problems), 1)
+        self.assertIn(":2:", problems[0])
+        self.assertIn("`$concept_pops$`", problems[0])
+        self.assertIn("quote-escaping", problems[0])
+
+    def test_escaped_splices_pass(self):
+        text = (BOM + "l_english:\n TE_ALPHA:0 \"[Concept('concept_pop','$concept_pops|q$')]\"\n"
+                " TE_BETA:0 \"[ConcatIfNeitherEmpty('$VALUE|%0q$', '\\n')]\"\n")
+        self.assertEqual(_check(text), [])
+
+    def test_splices_outside_quoted_arguments_pass(self):
+        # Top level, and a prose apostrophe outside brackets that must not pair
+        # with an argument's quote.
+        text = BOM + "l_english:\n TE_ALPHA:0 \"It's $concept_pops$ and [GetPlayer.GetName]'s $X$\"\n"
+        self.assertEqual(_check(text), [])
+
+    def test_other_functions_and_flagged_splices_are_flagged(self):
+        problems = _check(BOM + "l_english:\n TE_ALPHA:0 \"#tooltip:[GetRawTextTooltipTag('$DESC$')] [ConcatIfNeitherEmpty('$VALUE|v$', '\\n')]\"\n")
+        self.assertEqual(len(problems), 1)
+        self.assertIn("`$DESC$`, `$VALUE|v$`", problems[0])
+
+    def test_escape_appends_q_to_existing_flags(self):
+        self.assertEqual(
+            escape_quoted_splices("[Concept('c','$a$')] $b$ [F('$x|v$', '$y|q$')]"),
+            ("[Concept('c','$a|q$')] $b$ [F('$x|vq$', '$y|q$')]", 2))
+        self.assertEqual(unescaped_quoted_splices("[A('[concept_x] $k$')] '$p$'"), ["$k$"])
+
+    def test_translation_memory_fields_are_checked(self):
+        records = {
+            "TE_ALPHA": {"en": "[Concept('concept_pop','$concept_pops|q$')]",
+                         "de": "[Concept('concept_pop','$concept_pops$')]"},
+            "TE_ALPHA_GEN": {"base": "TE_ALPHA", "en": "x", "de": "y"},
+        }
+        with tempfile.TemporaryDirectory() as d:
+            tm = os.path.join(d, "german", "tm")
+            os.makedirs(tm)
+            path = os.path.join(tm, "te_test.json")
+            with open(path, "w", encoding="utf-8") as fh:
+                json.dump(records, fh)
+            self.assertEqual(iter_tm_files([d]), [path])
+            problems = check_tm_file(path)
+            self.assertEqual(main([d]), 1)
+        self.assertEqual(len(problems), 1)
+        self.assertIn("TE_ALPHA.de", problems[0])
+
+    def test_repo_translation_memories_are_escaped(self):
+        repo_i18n = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
+        problems = []
+        for path in iter_tm_files([repo_i18n]):
+            problems.extend(check_tm_file(path))
+        self.assertEqual(problems, [], "\n".join(problems))
 
 
 class SplitValueTests(unittest.TestCase):

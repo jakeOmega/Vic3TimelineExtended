@@ -30,6 +30,13 @@ TRY_DIRECTIVES = frozenset({"TRY_INJECT", "TRY_REPLACE"})
 # the same treatment. That is this parser's convention, not engine-verified:
 # the digest describes entry-level keys only, and neither vanilla nor the mod
 # nests one.
+# Entity fields that are one entry each time they appear, not one field: a
+# 1.15 journal entry concludes through any of its `outcome = { }` blocks. The
+# engine appends an INJECT block's keys to the entity, so an injected outcome
+# is read as another outcome (the reading this parser takes; how the panel
+# shows one is a play-test item), never merged into vanilla's or replacing
+# them. Vanilla 1.15 uses the name only in common/journal_entries/.
+REPEATED_ENTRY_FIELDS = frozenset({"outcome"})
 
 
 class ParadoxFileParser:
@@ -455,9 +462,20 @@ class ParadoxFileParser:
 
         `entity` is true when the two are a whole entity and the INJECT block
         aimed at it, so their keys are the entity's fields. A script-value
-        field there is replaced (see _is_script_value_field). Every other
-        field merges: lists append, and numbers sum as a modifier block's
-        lines do."""
+        field there is replaced (see _is_script_value_field), and a
+        `REPEATED_ENTRY_FIELDS` field gains the injected entries beside its
+        own. Every other field merges: lists append, and numbers sum as a
+        modifier block's lines do."""
+        if (
+            isinstance(base_value, dict) and isinstance(injected_value, list)
+            and injected_value
+            and all(isinstance(item, dict) and len(item) == 1 for item in injected_value)
+        ):
+            # An injected block that repeats a key arrives un-normalized (one
+            # dict per entry, as parse_object returns it) when parse_file
+            # applies directives itself. Read it as the block it is; with no
+            # branch for it, the whole base was replaced by the injected keys.
+            injected_value = self._normalize_fully(injected_value)
         if isinstance(base_value, tuple) and isinstance(injected_value, tuple):
             base_operator = base_value[0]
             base_right = base_value[1]
@@ -481,6 +499,8 @@ class ParadoxFileParser:
                         merged[key] = injected_child
                 elif key not in merged:
                     merged[key] = injected_child
+                elif entity and key in REPEATED_ENTRY_FIELDS:
+                    merged[key] = self._entries(merged[key]) + self._entries(injected_child)
                 elif entity and self._is_script_value_field(merged[key], injected_child):
                     merged[key] = injected_child
                 else:
@@ -506,6 +526,10 @@ class ParadoxFileParser:
                     if directive not in TRY_DIRECTIVES:
                         merged.append({key: injected_child})
                     continue
+                if (entity and key in REPEATED_ENTRY_FIELDS
+                        and directive not in REPLACE_DIRECTIVES | INJECT_DIRECTIVES):
+                    merged.extend({key: e} for e in self._entries(injected_child))
+                    continue
 
                 existing_value = merged[matched_index][key]
                 if directive in REPLACE_DIRECTIVES:
@@ -528,6 +552,12 @@ class ParadoxFileParser:
             return str(summed)
 
         return injected_value
+
+    @staticmethod
+    def _entries(value):
+        """A field's entries as a list: one `(op, value)` per appearance. A
+        repeated field is already a list of them; a single one is not."""
+        return list(value) if isinstance(value, list) else [value]
 
     @staticmethod
     def _is_script_value_field(base_value, injected_value):
