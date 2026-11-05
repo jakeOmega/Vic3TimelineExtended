@@ -1440,8 +1440,8 @@
   "es": "Casa comercial Mitsui"
  },
  "building_mitsui_trading_house_desc": {
-  "en": "The Mitsui [concept_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.",
-  "es": "La casa comercial central del [concept_zaibatsu|l] Mitsui, que coordina una vasta red de banca, comercio y transporte marítimo por Asia Oriental y más allá."
+  "en": "The Mitsui [glossary_zaibatsu]'s central trading house, coordinating a vast network of banking, commerce, and shipping across East Asia and beyond.",
+  "es": "La casa comercial central del [glossary_zaibatsu|l] Mitsui, que coordina una vasta red de banca, comercio y transporte marítimo por Asia Oriental y más allá."
  },
  "building_mokta_el_hadid_beni_saf_mine": {
   "en": "Mokta el Hadid Beni Saf Mine",
