@@ -1,0 +1,60 @@
+{
+ "ai_ship_category_battle_line": [
+  "=",
+  {}
+ ],
+ "ai_ship_category_coastal_defense": [
+  "=",
+  {
+   "can_build": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "ironclad_tech"
+     ]
+    }
+   ]
+  }
+ ],
+ "ai_ship_category_screens": [
+  "=",
+  {}
+ ],
+ "ai_ship_category_torpedo_craft": [
+  "=",
+  {
+   "can_build": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "self_propelled_torpedoes"
+     ]
+    }
+   ]
+  }
+ ],
+ "ai_ship_category_submarines": [
+  "=",
+  {}
+ ],
+ "ai_ship_category_carriers": [
+  "=",
+  {
+   "can_build": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "dreadnought_tech"
+     ]
+    }
+   ]
+  }
+ ],
+ "ai_ship_category_transports": [
+  "=",
+  {}
+ ]
+}
