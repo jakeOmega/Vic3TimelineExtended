@@ -30,7 +30,7 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, REPO)
 
-VERSION = 1
+VERSION = 2
 OUT = os.path.join(REPO, "common", "scripted_effects", "te_region_area_generated.txt")
 STATE_REGIONS = os.path.join(REPO, "map_data", "state_regions")
 SEA_FILE = "99_seas.txt"
