@@ -2022,6 +2022,7 @@ law_minority_rights_ghettoization = {
 
 	unlocking_laws = {
 		law_subjecthood
+		law_official_nationality # 1.15: Subjecthood's Russian variant
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
@@ -2240,6 +2241,7 @@ law_minority_rights_discrimination = {
 
 	unlocking_laws = {
 		law_subjecthood
+		law_official_nationality # 1.15: Subjecthood's Russian variant
 		law_ethnostate
 		law_national_supremacy
 		law_racial_segregation
