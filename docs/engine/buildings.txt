@@ -28,6 +28,12 @@ Food Industries (bg_light_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_canning$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
 
 Textile Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -88,6 +94,18 @@ Furniture Manufacturies (bg_light_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_automation_building_furniture_manufactory$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (5 Coal)
+		Carbon Capture and Storage (5 Coal)
+		Advanced Carbon Capture (5 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Glassworks (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -126,6 +144,12 @@ Glassworks (bg_light_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_glassblowing$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
 
 Tooling Workshops (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -152,6 +176,7 @@ Tooling Workshops (bg_light_industry):
 		Robotic Assembly Lines
 			Monthly Pollution: 10
 		AI-Managed Tooling Workshops
+		$pm_ai_managed_building_tooling_workshop$
 	Facility Emission Standards:
 		No Facility Emission Standards
 		Ventilation Systems
@@ -161,6 +186,21 @@ Tooling Workshops (bg_light_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_automation_building_tooling_workshop$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Paper Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -193,6 +233,15 @@ Paper Mills (bg_light_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_automation_building_paper_mill$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Coal)
+		Carbon Capture and Storage (5 Coal)
+		Advanced Carbon Capture (5 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Chemical Plants (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
@@ -231,6 +280,24 @@ Chemical Plants (bg_heavy_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_fertilizer_production$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (20 Oil)
+		Carbon Capture and Storage (20 Oil)
+		Advanced Carbon Capture (20 Oil)
+		Partial Carbon Capture (120 Oil)
+		Carbon Capture and Storage (120 Oil)
+		Advanced Carbon Capture (120 Oil)
+		Partial Carbon Capture (160 Oil)
+		Carbon Capture and Storage (160 Oil)
+		Advanced Carbon Capture (160 Oil)
+		Partial Carbon Capture (180 Oil)
+		Carbon Capture and Storage (180 Oil)
+		Advanced Carbon Capture (180 Oil)
+		Partial Carbon Capture (220 Oil)
+		Carbon Capture and Storage (220 Oil)
+		Advanced Carbon Capture (220 Oil)
 
 Explosives Factory (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
@@ -258,6 +325,12 @@ Explosives Factory (bg_heavy_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($building_explosives_factory$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (30 Coal)
+		Carbon Capture and Storage (30 Coal)
+		Advanced Carbon Capture (30 Coal)
 
 Synthetic Dyes Industries (bg_heavy_industry):
 	Unlocking Technology: Aniline
@@ -299,6 +372,8 @@ Steel Mills (bg_heavy_industry):
 			Monthly Pollution: 20
 		Microgravity Alloying
 			Monthly Pollution: 20
+		Fusion Torch Reclamation
+			Monthly Pollution: 10
 	Automation:
 		Hand Assembly
 		Water-tube Boiler
@@ -315,6 +390,24 @@ Steel Mills (bg_heavy_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_steelmaking_process$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (30 Coal)
+		Carbon Capture and Storage (30 Coal)
+		Advanced Carbon Capture (30 Coal)
+	Carbon Capture ($pmg_automation_building_steel_mill$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Coal)
+		Carbon Capture and Storage (5 Coal)
+		Advanced Carbon Capture (5 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Motor Industries (bg_heavy_industry):
 	Unlocking Technology: Atmospheric Engine
@@ -329,7 +422,7 @@ Motor Industries (bg_heavy_industry):
 			Monthly Pollution: 10
 		Hydrogen Fuel Cell Engines
 		Graphene Electric Motors
-		Fusion Battery Motors
+		Microfusion Motors
 	Automation:
 		Hand Assembly
 		Water-tube Boiler
@@ -343,9 +436,34 @@ Motor Industries (bg_heavy_industry):
 		Robotic Assembly Lines
 			Monthly Pollution: 10
 		AI Managed Factory
+		$pm_ai_managed_building_motor_industry$
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($building_motor_industry$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (40 Oil)
+		Carbon Capture and Storage (40 Oil)
+		Advanced Carbon Capture (40 Oil)
+		Partial Carbon Capture (50 Oil)
+		Carbon Capture and Storage (50 Oil)
+		Advanced Carbon Capture (50 Oil)
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
+	Carbon Capture ($pmg_automation_building_motor_industry$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (5 Coal)
+		Carbon Capture and Storage (5 Coal)
+		Advanced Carbon Capture (5 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Shipyards (bg_ship_construction):
 	Unlocking Technology: Navigation
@@ -368,6 +486,18 @@ Shipyards (bg_ship_construction):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($building_shipyard$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (30 Oil)
+		Carbon Capture and Storage (30 Oil)
+		Advanced Carbon Capture (30 Oil)
+		Partial Carbon Capture (35 Oil)
+		Carbon Capture and Storage (35 Oil)
+		Advanced Carbon Capture (35 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Automotive Industries (bg_heavy_industry):
 	Unlocking Technology: Combustion Engine
@@ -380,7 +510,7 @@ Automotive Industries (bg_heavy_industry):
 			Monthly Pollution: 15
 		Electric Car Production
 			Monthly Pollution: 10
-		Fusion Battery Vehicles
+		Microfusion Vehicles
 	Tanks:
 		No Tank Production
 		Tank Production
@@ -405,6 +535,21 @@ Automotive Industries (bg_heavy_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_automobile_production$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_automation_building_automotive_industry$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
 
 Wired Telecommunications Industries (bg_heavy_industry):
 	Unlocking Technology: Telephone
@@ -447,6 +592,7 @@ Arms Industries (bg_military_industry):
 		Advanced Assembly
 			Monthly Pollution: 10
 		AI-Managed Arms Industry
+		AI-Managed $building_artillery_foundry$
 	Facility Emission Standards:
 		No Facility Emission Standards
 		Ventilation Systems
@@ -456,12 +602,32 @@ Arms Industries (bg_military_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_firearms_manufacturing$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_automation_building_arms_industry$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Artillery Foundry (bg_military_industry):
 	Unlocking Technology: Gunsmithing
 	Foundries:
 		Cannons
+		Bronze Cannons
 		Smoothbores
+		Bronze Smoothbores
 		Breech Loaders
 		Recoil Mechanisms
 		Rocket Artillery
@@ -478,9 +644,31 @@ Artillery Foundry (bg_military_industry):
 		Advanced Assembly
 			Monthly Pollution: 10
 		AI-Managed Arms Industry
+		AI-Managed $building_artillery_foundry$
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_foundries$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (20 Oil)
+		Carbon Capture and Storage (20 Oil)
+		Advanced Carbon Capture (20 Oil)
+	Carbon Capture ($pmg_automation_building_arms_industry$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Munition Plants (bg_military_industry):
 	Unlocking Technology: Percussion Cap
@@ -505,6 +693,7 @@ Munition Plants (bg_military_industry):
 		Advanced Assembly Lines
 			Monthly Pollution: 10
 		AI-Managed Munition Plants
+		$pm_ai_managed_building_munition_plant$
 	Facility Emission Standards:
 		No Facility Emission Standards
 		Ventilation Systems
@@ -514,6 +703,18 @@ Munition Plants (bg_military_industry):
 	Maintenance:
 		Maintenance
 		No Maintenance
+	Carbon Capture ($pmg_automation_building_munition_plant$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Rye Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
@@ -791,6 +992,31 @@ Coal Mines (bg_mining):
 			Monthly Pollution: -5
 		Tailings Treatment
 			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_coal_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_coal_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (3 Coal)
+		Carbon Capture and Storage (3 Coal)
+		Advanced Carbon Capture (3 Coal)
 
 Iron Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
@@ -845,6 +1071,31 @@ Iron Mines (bg_mining):
 			Monthly Pollution: -5
 		Tailings Treatment
 			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Lead Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
@@ -899,6 +1150,31 @@ Lead Mines (bg_mining):
 			Monthly Pollution: -5
 		Tailings Treatment
 			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Sulfur Mines (bg_mining):
 	Unlocking Technology: Shaft Mining
@@ -953,6 +1229,31 @@ Sulfur Mines (bg_mining):
 			Monthly Pollution: -5
 		Tailings Treatment
 			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Gold Mines (bg_mining):
 	Unlocking Technology: Prospecting
@@ -1007,11 +1308,115 @@ Gold Mines (bg_mining):
 			Monthly Pollution: -5
 		Tailings Treatment
 			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_gold_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_gold_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Gold Fields (bg_gold_fields):
 	Unlocking Technology: Prospecting
 	$pm_base$:
 		$pm_default$
+
+Copper Mine (bg_discoverable_mining):
+	Unlocking Technology: Rural Electrification
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Coffee Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
@@ -1029,9 +1434,9 @@ Coffee Plantations (bg_plantations):
 		Mechanical Dryers
 			Monthly Pollution: 5
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Partial Bulk Transport
@@ -1049,9 +1454,9 @@ Cotton Plantations (bg_plantations):
 		Mechanized Farm
 			Monthly Pollution: 10
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Partial Bulk Transport
@@ -1069,9 +1474,9 @@ Dye Plantations (bg_plantations):
 		Mechanized Farm
 			Monthly Pollution: 10
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Partial Bulk Transport
@@ -1106,9 +1511,9 @@ Tea Plantations (bg_plantations):
 			Monthly Pollution: 10
 		GMO Plantation
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Partial Bulk Transport
@@ -1168,6 +1573,18 @@ Sugar Plantations (bg_plantations):
 			Monthly Pollution: 10
 		Extensive Rail Transport
 			Monthly Pollution: 10
+	Carbon Capture ($pmg_refinement_building_sugar_plantation$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (1 Coal)
+		Carbon Capture and Storage (1 Coal)
+		Advanced Carbon Capture (1 Coal)
+		Partial Carbon Capture (2 Coal)
+		Carbon Capture and Storage (2 Coal)
+		Advanced Carbon Capture (2 Coal)
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
 
 Banana Plantations (bg_plantations):
 	Unlocking Technology: Enclosure
@@ -1179,9 +1596,9 @@ Banana Plantations (bg_plantations):
 			Monthly Pollution: 10
 		GMO Plantation
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Partial Bulk Transport
@@ -1216,6 +1633,11 @@ Barracks (bg_army):
 		Training Method Streamlining
 		NCO Incorporation
 		Mobile Warfare Tactics
+		Officer Academies
+		Expeditionary Logistics
+		Neural Grafting
+		Reserve Cadre
+		Political Commissars
 	Engineering and Logisitics [concept_power_bloc_principle_group]:
 		Engineering and Logisitics [concept_power_bloc_principle] 1
 		No Effect
@@ -1319,7 +1741,7 @@ Creative Industry (bg_arts):
 		Artistic Expression [concept_power_bloc_principle] 2
 		No Effect
 	Maintenance:
-		Maintenance
+		Light Maintenance
 		No Maintenance
 
 Power Plants (bg_power):
@@ -1340,6 +1762,9 @@ Power Plants (bg_power):
 		Power Centralized Control Systems
 		Power Integrated Smart Systems
 		AI Managed Power Plant
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
 	Emissions Control:
 		No Emissions Control
 		Basic Emissions Control
@@ -1347,8 +1772,27 @@ Power Plants (bg_power):
 		Advanced Emissions Control
 			Monthly Pollution: -20
 	Maintenance:
-		Maintenance
+		Light Maintenance
+		Standard Maintenance
+		Heavy Maintenance
 		No Maintenance
+	Carbon Capture ($building_power_plant$):
+		No Carbon Capture
+		Partial Carbon Capture (25 Oil)
+		Carbon Capture and Storage (25 Oil)
+		Advanced Carbon Capture (25 Oil)
+		Partial Carbon Capture (35 Oil)
+		Carbon Capture and Storage (35 Oil)
+		Advanced Carbon Capture (35 Oil)
+		Partial Carbon Capture (5 Coal)
+		Carbon Capture and Storage (5 Coal)
+		Advanced Carbon Capture (5 Coal)
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
+		Partial Carbon Capture (25 Coal)
+		Carbon Capture and Storage (25 Coal)
+		Advanced Carbon Capture (25 Coal)
 
 Government Administration (bg_bureaucracy):
 	Unlocking Technology: Bureaucracy
@@ -1363,12 +1807,15 @@ Government Administration (bg_bureaucracy):
 	Professionalism:
 		Hereditary Bureaucrats
 		Professional Bureaucrats
+		Military Bureaucrats
+		Communal Representatives
 		Automated Casework
 		Service Contractors
 		Recallable Delegates
 	Secularism:
 		Administrative Clergy
 		Secular Administration
+		Communal Administration
 
 University (bg_technology):
 	Unlocking Technology: Academia
@@ -1648,6 +2095,26 @@ Manila Cathedral Ruins (bg_monuments_hidden):
 		Prestige
 		No Effect
 
+$building_dummy$ (bg_monuments_hidden):
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$ (bg_monuments_hidden):
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$ (bg_monuments_hidden):
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$ (bg_monuments_hidden):
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
+$building_dummy$ (bg_monuments_hidden):
+	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
+		Dummy PM for graphics-only buildings. Should never be shown in UI.
+
 Logging Camps (bg_logging):
 	$pm_base$:
 		Simple Forestry
@@ -1681,9 +2148,9 @@ Rubber Plantations (bg_rubber):
 		Mechanized Farm
 			Monthly Pollution: 10
 	$pmg_exploitation_sugar$:
-		Standard Labor
 		$slave_exploitation_sugar$
 		$worker_exploitation_sugar$
+		Standard Labor
 	$pmg_train_automation$:
 		Road Carts
 		Rail Transportation
@@ -1756,6 +2223,15 @@ Oil Rigs (bg_oil_extraction):
 			Monthly Pollution: 10
 		Ultradeep Well
 			Monthly Pollution: 15
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+	Carbon Capture ($building_oil_rig$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Suez Canal (bg_canals):
 	Unlocking Technology: Colonization
@@ -1785,8 +2261,8 @@ Port (bg_private_infrastructure):
 			Monthly Pollution: 20
 		Magnetic Drive Ports
 			Monthly Pollution: 25
-	Water Personal Transport:
-		No Water Personal Transport
+	Passenger Ships:
+		No Passenger Ships
 		Sailing Ships
 		Steam Paddleboats
 		Diesel-Electric Ferries
@@ -1799,7 +2275,9 @@ Port (bg_private_infrastructure):
 		Advanced Emissions Control
 			Monthly Pollution: -20
 	Maintenance:
-		Maintenance
+		Light Maintenance
+		Standard Maintenance
+		Heavy Maintenance
 		No Maintenance
 
 Railway (bg_private_infrastructure):
@@ -1824,15 +2302,19 @@ Railway (bg_private_infrastructure):
 		Automated Loading and Unloading
 			Monthly Pollution: 15
 		Autonomous Trains
-	Passenger Trains:
+		Vactrain Freight
+	Rolling Stock:
 		Cargo Prioritization
 		Wooden Passenger Carriages
 		Steel Passenger Carriages
 		Double-Decker Passenger Carriages
 		Bullet Trains
 		Maglev Trains
+		Vactrains
 	Maintenance:
-		Maintenance
+		Light Maintenance
+		Standard Maintenance
+		Heavy Maintenance
 		No Maintenance
 
 Trade Center (bg_trade):
@@ -1849,7 +2331,7 @@ Trade Center (bg_trade):
 		Just-in-Time Logistics
 		Autonomous Logistics
 	Maintenance:
-		Maintenance
+		Light Maintenance
 		No Maintenance
 
 Manor Houses (bg_manor_houses):
@@ -1948,6 +2430,7 @@ Construction Sector (bg_construction):
 		Reinforced Concrete Buildings
 		Advanced Construction
 		Nanomaterial Buildings
+		Self-Replicating Construction
 	Construction Automation:
 		No Construction Automation
 		Prefabricated Building Components
@@ -2018,6 +2501,1878 @@ Regional Company Headquarter (bg_company_regional_headquarter):
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
 		$pm_worker_cooperative$
+
+Cossack Host (bg_cossack_host):
+	Cossack Host:
+		$pmg_base_building_cossack_host$
+	Cossack Recruitment:
+		$pmg_special_building_cossack_host$
+		No $pm_cossack_recruitment$
+
+Synthetic Clothes Industries (bg_heavy_industry):
+	Unlocking Technology: Art Silk
+	Synthetic Silk:
+		Rayon
+		Polyester Production
+		Nylon Production
+		Microfiber Blends
+			Monthly Pollution: 5
+		Elastomeric Blends
+			Monthly Pollution: 10
+		Performance Textiles
+			Monthly Pollution: 10
+		Advanced Material Fibers
+		Programmable Fibers
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Synthetic Fuel Works (bg_heavy_industry):
+	Unlocking Technology: Bergius Process
+	Synthetic Oil:
+		Synthetic Oil
+			Monthly Pollution: 50
+		Oil-Producing Bacteria
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Synthetic Rubber Works (bg_heavy_industry):
+	Unlocking Technology: Isoprene
+	Synthetic Rubber:
+		Polyisoprene Rubber
+			Monthly Pollution: 20
+		Styrene-Butadiene Rubber
+			Monthly Pollution: 20
+		Ziegler–Natta Catalyzation SBR
+			Monthly Pollution: 20
+		Neodymium Catalyzation SBR
+			Monthly Pollution: 20
+		Bioengineered Rubber
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Carbon Conversion Works (bg_heavy_industry):
+	Unlocking Technology: Carbon Capture and Storage
+	Carbon Processing:
+		Direct Air Capture
+		Synthetic Coal
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Phenolic Resin Panels Plant (bg_heavy_industry):
+	Unlocking Technology: Biotechnology
+	Synthetic Wood:
+		Synthetic Wood
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Artificial Sweeteners Plant (bg_heavy_industry):
+	Unlocking Technology: Green Revolution
+	Synthetic Sugar:
+		High-Fructose Syrup
+			Monthly Pollution: 5
+		Cellulosic Hydrolysis
+			Monthly Pollution: 10
+		Electroenzymatic Synthesis
+			Monthly Pollution: 10
+		Programmable Sweetness
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Beverage Concentrates Plant (bg_heavy_industry):
+	Unlocking Technology: Biotechnology
+	Synthetic Drinks:
+		Synthetic Drinks
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Pharmaceutical Industries (bg_biotechnology):
+	Unlocking Technology: Pharmaceuticals
+	Pharmaceuticals:
+		Alkaloid Extraction
+		Synthetic Drug Chemistry
+		Antibiotic Fermentation
+		Rational Drug Design
+		Biologics and mRNA
+		Precision Medicine
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_synthetic_opium$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+
+Cultured Meat Plant (bg_biotechnology):
+	Unlocking Technology: Lab-Grown Food
+	Synthetic Meat:
+		Synthetic Meat
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Cultured Produce Facility (bg_biotechnology):
+	Unlocking Technology: Lab-Grown Food
+	Synthetic Fruit:
+		Synthetic Fruit
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Integrated Biorefinery (bg_biotechnology):
+	Unlocking Technology: Genetic Engineering
+	Synthetic Biomass:
+		Synthetic Biomass
+	Automation:
+		Manual Batch Processing
+		Continuous Processing
+			Monthly Pollution: 2.5
+		Advanced Process Control
+			Monthly Pollution: 5
+		Distributed Control Systems
+			Monthly Pollution: 5
+		AI Managed Chemical Plant
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Wireless Telecommunications Industries (bg_heavy_industry):
+	Unlocking Technology: Radio
+	Radios:
+		Radio Production
+		VHF and UHF Transmission
+		Satellite Communications
+		Quantum Communications
+		Neural Lace Telepathy
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Consumer Appliance Industries (bg_high_tech):
+	Unlocking Technology: Personal Appliances
+	Consumer Appliances:
+		Consumer Appliances Production
+			Monthly Pollution: 10
+		Television Production
+			Monthly Pollution: 10
+		Personal Electronics
+			Monthly Pollution: 10
+		Smart Phones
+			Monthly Pollution: 10
+		Virtual Reality Headsets
+			Monthly Pollution: 10
+		Bioelectronic Implants
+		Microfusion Appliances
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Electronic Components and Semiconductor Industry (bg_high_tech):
+	Unlocking Technology: Transistor Technology
+	Electronic Components:
+		Transistors
+		Integrated Circuits
+		Modern Microprocessors
+		Multicore Processors
+		Neuromorphic Computing
+		Orbital Nanolithography
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Software Industry (bg_high_tech):
+	Unlocking Technology: Computer Networks
+	Software Industry:
+		Punchcards
+		Web 1.0
+		Cloud Computing
+		ML Assisted Code Generation
+		Self-Improving AI Systems
+	Automation Building Network:
+		Digital Creation Tools
+		Version Control and Distribution Platforms
+		Advanced Workflow Optimization
+		Fully Automated Content Creation
+		AI-Mediated Mind Sharing
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+
+Robotics Industry (bg_high_tech):
+	Unlocking Technology: Industrial Robotics
+	Base Building Robotics:
+		Robots
+		Smart Robots
+		Nanorobots
+	Automation:
+		Manual Assembly
+			Monthly Pollution: 2.5
+		Automated Assembly Lines
+			Monthly Pollution: 5
+		Cleanroom Fabs
+			Monthly Pollution: 5
+		AI Managed Fab
+			Monthly Pollution: 5
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Advanced Material Fabricator (bg_high_tech):
+	Unlocking Technology: Modern Material Science
+	Advanced Material Fabricator:
+		Basic AM Fabrication
+		Advanced AM Fabrication
+		Self-Replicating Assemblers
+		Advanced Self-Replicating Assemblers
+	Automation:
+		Lab Advanced Material Fabrication
+		Synthetic Bacteria Advanced Material Fabrication
+		Automated AM Fabrication
+	Location:
+		Basic Production
+		Orbital Fabrication
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Aerospace Industry (bg_high_tech):
+	Unlocking Technology: Military Aviation
+	Aeroplanes:
+		Aeroplane Production
+			Monthly Pollution: 10
+		Advanced Aeroplane Production
+			Monthly Pollution: 10
+		Modern Aeroplane Production
+			Monthly Pollution: 10
+	$building_aerospace_industry$:
+		Aircraft Only
+		Chemical Rockets
+		Reusable Rockets
+		Ablative Rockets
+		Fusion SSTO Craft
+	Automation:
+		Manual Production & Operations
+		Standardized Production
+		Packet-Switched Control Links
+		Robotic Assembly & Handling
+		AI-Optimized Operations
+	Maintenance:
+		Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_aeroplanes$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+
+Manganese Mine (bg_discoverable_mining):
+	Unlocking Technology: Modern Tools
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Chromium Mine (bg_discoverable_mining):
+	Unlocking Technology: Stainless Steel Mass Production
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Specialty Alloy Metal Mine (bg_discoverable_mining):
+	Unlocking Technology: Jet Engine Technology
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Bauxite Mine (bg_discoverable_mining):
+	Unlocking Technology: Aluminum Mass Production
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_iron_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Precious and Minor Base Metal Mine (bg_discoverable_mining):
+	Unlocking Technology: Advanced Automotive Production Techniques
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_lead_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Nickel and Cobalt Mine (bg_discoverable_mining):
+	Unlocking Technology: Modern Materials
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Lithium Mine (bg_discoverable_mining):
+	Unlocking Technology: Modern Chemical Processes
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Rare Earth Metals Mine (bg_discoverable_mining):
+	Unlocking Technology: Laser Technology
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Platinum Group Metals Mine (bg_discoverable_mining):
+	Unlocking Technology: Pollution Control
+	Mining Equipment:
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	Automation:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large-Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	Transportation:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+	Carbon Capture ($pmg_steam_automation_building_tech_metals_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Graphite Mine (bg_discoverable_mining):
+	Unlocking Technology: Nuclear Energy
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_coal_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_coal_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (3 Coal)
+		Carbon Capture and Storage (3 Coal)
+		Advanced Carbon Capture (3 Coal)
+
+Phosphate Mine (bg_discoverable_mining):
+	Unlocking Technology: Green Revolution
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Potash Mine (bg_discoverable_mining):
+	Unlocking Technology: Advanced Agricultural Statistics
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Industrial Mineral and Salt Mine (bg_discoverable_mining):
+	Unlocking Technology: Modern Skyscrapers
+	Mining Equipment:
+		Picks and Shovels
+		Atmospheric Engine Pump
+			Monthly Pollution: 5
+		Condensing Engine Pump
+			Monthly Pollution: 15
+		Diesel Pump
+			Monthly Pollution: 10
+		High-Pressure Hydraulic Pump
+			Monthly Pollution: 15
+		Continuous Miners
+			Monthly Pollution: 15
+		Smart Miners
+			Monthly Pollution: 10
+	Explosives:
+		Manual Drilling
+		Nitroglycerin
+			Monthly Pollution: 5
+		Dynamite
+			Monthly Pollution: 10
+		Ammonium Nitrate
+			Monthly Pollution: 10
+		Metamaterial Explosives
+			Monthly Pollution: 5
+	$pmg_steam_automation$:
+		Hand Cranked Crane
+		Steam Donkey
+			Monthly Pollution: 5
+		Dragline Excavators
+			Monthly Pollution: 5
+		Large Scale Earth Movers
+			Monthly Pollution: 5
+		Geophysical Survey Techniques
+			Monthly Pollution: 5
+		Ore Sorting and Separation Technology
+			Monthly Pollution: 5
+		Laser Excavation Technology
+			Monthly Pollution: 5
+	$pmg_train_automation$:
+		Road Carts
+		Partial Bulk Transport
+		$pm_rail_transport$
+			Monthly Pollution: 10
+		Extensive Rail Transport
+			Monthly Pollution: 10
+	Tailings and Wastewater Management:
+		No Tailings Management
+		Settling Ponds
+			Monthly Pollution: -5
+		Tailings Treatment
+			Monthly Pollution: -10
+	Maintenance:
+		Traditional Workings
+		Mechanized Workings
+		No Maintenance
+	Carbon Capture ($pmg_mining_equipment_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (5 Oil)
+		Carbon Capture and Storage (5 Oil)
+		Advanced Carbon Capture (5 Oil)
+		Partial Carbon Capture (10 Oil)
+		Carbon Capture and Storage (10 Oil)
+		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
+	Carbon Capture ($pmg_steam_automation_building_sulfur_mine$):
+		No Carbon Capture
+		Capture Not Applicable
+		Partial Carbon Capture (4 Coal)
+		Carbon Capture and Storage (4 Coal)
+		Advanced Carbon Capture (4 Coal)
+
+Deep-Sea Mine (bg_exotic):
+	Unlocking Technology: Abyssal Plain Mining
+	Deep-Sea Mine:
+		Deep-Sea Mining
+		Advanced Deep-Sea Mining
+		Automated Deep-Sea Mining
+		$pm_ocean_mine$
+		$pm_advanced_ocean_mine$
+		$pm_automated_ocean_mine$
+	Support Vessels:
+		Motor Ship Tenders
+		Magnetic Drive Tenders
+	Maintenance:
+		Intensive Maintenance
+		No Maintenance
+
+Military Base (bg_government):
+	A permanent military installation providing state-level [concept_infrastructure] and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders.
+	Unlocking Technology: Trench Works
+	Military Base:
+		Military Base Operations
+	Fortification Type:
+		Earthwork Fortifications
+		Concrete Bunkers
+		Hardened Positions
+	Base Purpose:
+		Garrison Duty
+		Territorial Defense
+		Logistics Hub
+	Missile Defense:
+		No Missile Defense
+		Missile Defense Battery
+		Directed Energy Point Defense
+
+Ground-to-Orbit Battery (bg_government):
+	Interceptor silos, and later lasers, aimed at the sky over our own territory. Each level fires on every enemy fleet in Earth orbit every month, by its production method, from states we control. Ground lasers also sweep small debris out of low orbit while we are at peace.
+	Unlocking Technology: Space Militarization
+	Weapons:
+		Kinetic Interceptors
+		Ground Lasers
+
+Space Command (bg_government):
+	The yards, crews and staff that build and run a nation's warships in space. Each level builds fleet strength each month, by its production method, and the fleets' upkeep multiplies its maintenance goods.
+	Unlocking Technology: Space Militarization
+	Yards:
+		Orbital Shipyards
+		Fusion Yards
+		Torch Yards
+		Antimatter Yards
+
+Hydro Plant (bg_clean_power):
+	Unlocking Technology: Public Works Programs
+	Hydro Power:
+		Hydro Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+Nuclear Plant (bg_clean_power):
+	Unlocking Technology: Nuclear Energy
+	Nuclear Power:
+		Nuclear Power
+		Generation IV Reactors
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+	Maintenance:
+		Intensive Maintenance
+		No Maintenance
+
+Renewable Energy Plant (bg_clean_power):
+	Unlocking Technology: Clean Energy Technologies
+	Renewable Power:
+		Renewable Power
+		Advanced Renewable Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+Fusion Plant (bg_clean_power):
+	Unlocking Technology: Fusion Power
+	Fusion Power:
+		Tokamak Fusion Power
+		Inertial Fusion Power
+		Compact Fusion Power
+		Aneutronic Fusion Power
+	Power Automation:
+		Power Manual Operation
+		Power Centralized Control Systems
+		Power Integrated Smart Systems
+		AI Managed Power Plant
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+		$pm_ai_managed_power_plant$
+	Maintenance:
+		Intensive Maintenance
+		No Maintenance
+
+Grid Transfer Station (bg_private_infrastructure):
+	Joins this state to its [concept_power_grid]: our other stations in the same [concept_market_area], and the stations they reach by undersea cable ($building_grid_hvdc_interconnector$) or through a $grid_interconnection_agreement$. Each month the grid moves $electricity$ from states where it is cheap to states where it is dear, until it sells at one price where it is sent and at that price over the #b Grid Transmission Efficiency#! where it is received. A station that sends $electricity$ is paid for it in @grid_power! $grid_power$ and one that receives pays in $grid_power$, each at the grid's price, so a station about covers what its goods cost. Some power is lost on the way. A grid takes out what it puts in. One per state. Our first station in a market area can go in any of our states there; every later one must border a state of ours that has one. Always subsidized.
+	Unlocking Technology: Electrical Capacitors
+	Grid Transfer:
+		Substation
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+HVDC Undersea Interconnector (bg_public_infrastructure):
+	Lays a high-voltage direct-current cable across the sea from this state's $building_grid_transfer_station$. It joins the station's [concept_power_grid] to that of any station with a cable of its own within reach, counted in [Concept('concept_sea_node', '$concept_sea_nodes$')] by its $building_grid_undersea_cable_range_add$: one of ours, or one of a country we have a $grid_interconnection_agreement$ with. Two cables join when either one's range reaches the other. Needs a $building_grid_transfer_station$ in the state, and joins nothing without one. One per state, on a coast.
+	Unlocking Technology: Clean Energy Technologies
+	Interconnector:
+		HVDC Cable
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+State Youth Centers (bg_government):
+	Philosophy:
+		Voluntary Daycare
+		Communal Child-Rearing
+		Youth Cadre Programs
+		Behavioral Conditioning
+		Eugenics Programs
+	Advanced Nurturing:
+		Natural Nurturing
+		Assisted Postnatal Care
+		Ectogenesis
+		Cloning Vats
+	Maintenance:
+		Light Maintenance
+		No Maintenance
+
+Public Housing (bg_government):
+	Dwellings the state builds and runs, so a city can grow without [concept_migration_crowding] turning migrants away. Each staffed level adds [concept_urban_engineering] to its [concept_state], more on each later method, and each point houses #v 1,000#! more people before crowding sets in, multiplied by the state's $state_migration_crowding_density_mult$. Technology sets how many levels a state can hold. A state below its crowding threshold gains nothing from it.
+	Unlocking Technology: Urban Planning
+	Housing:
+		Model Dwellings
+		Sanitary Tenements
+		Steel-Frame Apartments
+		High-Rise Apartments
+		Prefabricated Tower Blocks
+		Arcologies
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+Settlement Authority (bg_resettlement):
+	A [concept_internal_resettlement] office that recruits settlers across the country and brings them to this frontier. Its program decides who is recruited and how; its settlement plan decides what they build here. It can be founded only on an open frontier and closes when the region fills up; its build requirements show the numbers.
+	Resettlement Program:
+		Land Grants
+		Military Colonies
+		Penal Transportation
+		Organized Colonization
+		Special Settlements
+		Development Program
+		Rustication
+		Managed Retreat
+	Settlement Plan:
+		Homesteads
+		Work Settlements
+		Planned Towns
+	Transport:
+		Overland
+		Rail and Steamship
+		Motor Transport
+		Airlift
+
+Strategic Reserve Hub (bg_public_infrastructure):
+	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good on the Reserve tab of the Market panel. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.
+	Unlocking Technology: Logistics
+	Hub Reserve:
+		Reserve Control
+
+Strategic Reserve Silo (bg_public_infrastructure):
+	A distributed storage depot that adds +1000 capacity per level for each reserve good and raises each good's weekly flow limit by 100 per level. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.
+	Unlocking Technology: Logistics
+	Silo Storage:
+		Silo Storage
+
+Monument Name Placeholder (bg_grand_monuments):
+	Monument Name Placeholder:
+		Monument Name Placeholder
+
+Grand Monument (Under Construction) (bg_grand_monuments):
+	A Grand Monument being built. Each level adds to the monument it will be; it has no effects until it is dedicated, from its card in the state view or the Grand Monuments tab, once nothing more is being built here. The dedication finishes the monument at the levels built.
+	Construction:
+		Under Construction
+
+Grand Monument (bg_grand_monuments):
+	A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. It is built as a $building_grand_monument_site$ and finished when dedicated, at the [concept_grandeur] of the levels built. It lends prestige, and legitimacy and the favor of like-minded interest groups while what it honors still stands. When that falls, the next government must decide what to do with it. See the Grand Monuments tab of the Timeline Extended window.
+	Dedication:
+		Undedicated
+		To the Crown
+		To the Republic
+		To the Revolution
+		To the Leader
+		Grand Shrine
+		To the Nation
+		War Memorial
+		Grand Opera House
+		Botanical Gardens
+		Grand Observatory
+		Great Exhibition Hall
+		Grand Stadium
+		To History
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+National Park (bg_parks):
+	National Park:
+		National Park
+			Monthly Pollution: -500
+		National Forest
+			Monthly Pollution: -250
+		National Wildlife Refuge
+			Monthly Pollution: -500
+
+Tourism Industry (bg_arts):
+	A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal.
+	Unlocking Technology: Romanticism
+	Tourism:
+		Tourism
+		Mass Tourism
+		Jet Age Tourism
+		Modern Tourism
+		Space Tourism
+	Maintenance:
+		Maintenance
+		No Maintenance
+
+United Nations Headquarters (bg_bureaucracy):
+	International Diplomacy:
+		Host Nation
+
+Power Bloc Headquarters (bg_bureaucracy):
+	Unlocking Technology: Intergovernmental Organizations
+	[concept_power_bloc] Headquarters:
+		Seat of the Empire
+		Alliance Command
+		Global Trade Center
+		Seat of the Faith
+		Central Committee Headquarters
+		World Cultural Center
+		Palace of Nations
+
+Golden Gate Bridge (bg_monuments):
+	Unlocking Technology: Marketing Research
+	Golden Gate Bridge:
+		Golden Gate Bridge
+
+Empire State Building (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	Empire State Building:
+		Empire State Building
+
+Sydney Opera House (bg_monuments):
+	Unlocking Technology: Art Deco Architecture
+	Sydney Opera House:
+		Sydney Opera House
+
+CN Tower (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	CN Tower:
+		CN Tower
+
+Hoover Dam (bg_monuments):
+	Unlocking Technology: Public Works Programs
+	Hoover Dam:
+		Hoover Dam
+
+The Pentagon (bg_monuments):
+	Unlocking Technology: Combined Arms
+	The Pentagon:
+		The Pentagon
+
+Kennedy Space Center (bg_monuments):
+	Unlocking Technology: Space Exploration
+	Kennedy Space Center:
+		Kennedy Space Center
+
+Aswan High Dam (bg_monuments):
+	Unlocking Technology: Nuclear Energy
+	Aswan High Dam:
+		Aswan High Dam
+
+Tokyo Tower (bg_monuments):
+	Unlocking Technology: Television Broadcasting
+	Tokyo Tower:
+		Tokyo Tower
+
+Moscow State University (bg_monuments):
+	Unlocking Technology: Mainframe Computers
+	Moscow State University:
+		Moscow State University
+
+Berlin TV Tower (bg_monuments):
+	Unlocking Technology: Transistor Technology
+	Berlin TV Tower:
+		Berlin TV Tower
+
+Azadi Tower (bg_monuments):
+	Unlocking Technology: Decolonization
+	Azadi Tower:
+		Azadi Tower
+
+Kenyatta International Convention Centre (bg_monuments):
+	Unlocking Technology: Decolonization
+	Kenyatta ICC:
+		Kenyatta ICC
+
+Burj Khalifa (bg_monuments):
+	Unlocking Technology: Computer-Aided Design
+	Burj Khalifa:
+		Burj Khalifa
+
+World Trade Center (bg_monuments):
+	Unlocking Technology: Containerization
+	World Trade Center:
+		World Trade Center
+
+Lotus Temple (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Lotus Temple:
+		Lotus Temple
+
+Itaipu Dam (bg_monuments):
+	Unlocking Technology: Industrial Robotics
+	Itaipu Dam:
+		Itaipu Dam
+
+Petronas Towers (bg_monuments):
+	Unlocking Technology: Cellular Networks
+	Petronas Towers:
+		Petronas Towers
+
+Basilica of Our Lady of Peace (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Basilica of Our Lady of Peace:
+		Basilica of Our Lady of Peace
+
+Three Gorges Dam (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Three Gorges Dam:
+		Three Gorges Dam
+
+Channel Tunnel (bg_monuments):
+	Unlocking Technology: Globalization
+	Channel Tunnel:
+		Channel Tunnel
+
+Taipei 101 (bg_monuments):
+	Unlocking Technology: Digital Telecommunications
+	Taipei 101:
+		Taipei 101
+
+Lotte World Tower (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Lotte World Tower:
+		Lotte World Tower
+
+Gardens by the Bay (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Gardens by the Bay:
+		Gardens by the Bay
+
+Abraj Al-Bait Clock Tower (bg_monuments):
+	Unlocking Technology: Globalization
+	Abraj Al-Bait Clock Tower:
+		Abraj Al-Bait Clock Tower
+
+Shanghai Tower (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Shanghai Tower:
+		Shanghai Tower
+
+FAST Telescope (bg_monuments):
+	Unlocking Technology: Machine Learning
+	FAST Telescope:
+		FAST Telescope
+
+Statue of Unity (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Statue of Unity:
+		Statue of Unity
+
+Golden Bridge (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Golden Bridge:
+		Golden Bridge
+
+Large Hadron Collider (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Large Hadron Collider:
+		Large Hadron Collider
+
+International Space Station (bg_monuments):
+	Unlocking Technology: Satellite Communications
+	International Space Station:
+		International Space Station
+
+ITER Fusion Reactor (bg_monuments):
+	Unlocking Technology: Fusion Power
+	ITER Fusion Reactor:
+		ITER Fusion Reactor
+
+Svalbard Global Seed Vault (bg_monuments):
+	Unlocking Technology: Biotechnology
+	Svalbard Global Seed Vault:
+		Svalbard Global Seed Vault
+
+LIGO Observatory (bg_monuments):
+	Unlocking Technology: Fiber Optics
+	LIGO Observatory:
+		LIGO Observatory
+
+Continental Union Headquarters (bg_monuments):
+	Unlocking Technology: Globalization
+	Continental Union Headquarters:
+		Continental Union Headquarters
+
+Peace Palace (bg_monuments):
+	Unlocking Technology: Intergovernmental Organizations
+	Peace Palace:
+		Peace Palace
+
+Palais des Nations (bg_monuments):
+	Palais des Nations:
+		Palais des Nations
+
+Airport (bg_private_infrastructure):
+	Unlocking Technology: Commercial Aviation
+	$building_airport$:
+		Airport
+			Monthly Pollution: 100
+		Spaceport
+			Monthly Pollution: 50
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+Highway (bg_private_infrastructure):
+	Unlocking Technology: Paved Roads
+	Highway:
+		Civil Highway
+			Monthly Pollution: 40
+		Industrial Highway
+			Monthly Pollution: 40
+		Electric Civil Highway
+		Electric Industrial Highway
+		Autonomous Highway
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
+
+Network Infrastructure (bg_private_infrastructure):
+	Unlocking Technology: Computer Networks
+	Base Building Network:
+		Local Network
+		Low Bandwidth
+		Medium Bandwidth
+		High Bandwidth
+		Extreme Bandwidth
+		Semi-Infinite Bandwidth
+	Network Maintenance Automation:
+		Automated Routing Protocols
+		Predictive Maintenance Systems
+		Autonomous Networks
+	Maintenance:
+		Heavy Maintenance
+		No Maintenance
 
 Volkswagen Autostadt (bg_company_buildings):
 	Volkswagen Autostadt:
@@ -2252,9 +4607,9 @@ Mega-Factory Complex (bg_company_buildings):
 	Mega-Factory Complex:
 		Mega-Factory Complex
 
-National Exhibition Centre (bg_company_buildings):
-	National Exhibition Centre:
-		National Exhibition Centre
+National Exhibition Center (bg_company_buildings):
+	National Exhibition Center:
+		National Exhibition Center
 
 Global Shipping Terminal (bg_company_buildings):
 	Global Shipping Terminal:
@@ -2288,6 +4643,11 @@ Global Media Headquarters (bg_company_buildings):
 High-Efficiency Power Hub (bg_company_buildings):
 	High-Efficiency Power Hub:
 		High-Efficiency Power Hub
+	Carbon Capture ($pmg_generic_power_hub$):
+		No Carbon Capture
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
 
 Cross-Continental Pipeline Terminus (bg_company_buildings):
 	Cross-Continental Pipeline Terminus:
@@ -2332,6 +4692,11 @@ Carnegie Homestead Mill (bg_company_buildings):
 	The massive Homestead steelworks on the Monongahela River, forging the steel that built America's railways and skyscrapers.
 	Carnegie Homestead Mill:
 		Carnegie Homestead Mill
+	Carbon Capture ($pmg_carnegie_homestead_mill$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Ford Rouge Plant (bg_company_buildings):
 	The River Rouge Complex: the world's largest integrated factory, where raw materials enter one end and finished automobiles emerge from the other.
@@ -2347,6 +4712,11 @@ Schneider Le Creusot Works (bg_company_buildings):
 	The great Schneider-Creusot industrial complex, France's premier producer of steel, artillery, and armaments since the Napoleonic era.
 	Schneider Le Creusot Works:
 		Schneider Le Creusot Works
+	Carbon Capture ($pmg_schneider_le_creusot$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Putilov Works (bg_company_buildings):
 	The Putilov iron and steel works in Saint Petersburg, producing heavy machinery, railway equipment, and artillery for the Russian Empire.
@@ -2362,6 +4732,11 @@ Tata Jamshedpur Works (bg_company_buildings):
 	The Tata Iron and Steel Company works at Jamshedpur, India's first integrated steel plant and symbol of indigenous industrialization.
 	Tata Jamshedpur Works:
 		Tata Jamshedpur Works
+	Carbon Capture ($pmg_tata_jamshedpur_works$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Siemens Erlangen Campus (bg_company_buildings):
 	The Siemens research and manufacturing campus, pioneering telegraph systems, electrical generators, and communications technology.
@@ -2417,6 +4792,11 @@ Foundry Complex (bg_company_buildings):
 	A sprawling steel and iron smelting campus that feeds the insatiable demand for construction materials.
 	Foundry Complex:
 		Foundry Complex
+	Carbon Capture ($pmg_generic_foundry_complex$):
+		No Carbon Capture
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
 
 Machine Shop (bg_company_buildings):
 	A precision engineering workshop producing tools, machine parts, and specialized equipment for heavy industry.
@@ -2487,6 +4867,11 @@ Mineral Refinery (bg_company_buildings):
 	A refinery converting raw minerals into industrial chemicals and fertilizers.
 	Mineral Refinery Operations:
 		Mineral Refining
+	Carbon Capture ($pmg_generic_mineral_refinery$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Silk Exchange (bg_company_buildings):
 	A trading house for sorting, grading, and auctioning raw silk and dyed textiles.
@@ -2526,6 +4911,11 @@ Allatini Thessaloniki Flour Mill (bg_company_buildings):
 Altos Hornos Baracaldo Furnaces (bg_company_buildings):
 	Altos Hornos de Baracaldo Furnaces:
 		Altos Hornos de Baracaldo Furnaces
+	Carbon Capture ($pmg_altos_hornos_baracaldo_furnaces$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Anglo-Persian Abadan Refinery (bg_company_buildings):
 	Anglo-Persian Abadan Refinery:
@@ -2566,6 +4956,11 @@ Bacardí Santiago Distillery (bg_company_buildings):
 BASF Ludwigshafen Works (bg_company_buildings):
 	BASF Ludwigshafen Plant:
 		BASF Ludwigshafen Plant
+	Carbon Capture ($pmg_basf_ludwigshafen_plant$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Basileiades Piraeus Works (bg_company_buildings):
 	Basileiades Piraeus Works:
@@ -2578,6 +4973,11 @@ Bengal Coal Raniganj Mine (bg_company_buildings):
 Bolckow Vaughan Eston Ironworks (bg_company_buildings):
 	Bolckow Eston Ironworks:
 		Bolckow Eston Ironworks
+	Carbon Capture ($pmg_bolckow_eston_ironworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Bombay Burmah Rangoon Timber Depot (bg_company_buildings):
 	Bombay Burmah Rangoon Timber Depot:
@@ -2594,6 +4994,11 @@ Bunge & Born Buenos Aires Grain Silo (bg_company_buildings):
 Calcutta Electric Victoria House (bg_company_buildings):
 	Calcutta Electric Victoria House:
 		Calcutta Electric Victoria House
+	Carbon Capture ($pmg_calcutta_electric_victoria_house$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Caribbean Petroleum Maracaibo Depot (bg_company_buildings):
 	Caribbean Petroleum Maracaibo Depot:
@@ -2614,6 +5019,11 @@ CGV Haut-Brion Estate (bg_company_buildings):
 Chr. Hansen Copenhagen Laboratory (bg_company_buildings):
 	Chr. Hansen Copenhagen Laboratory:
 		Chr. Hansen Copenhagen Laboratory
+	Carbon Capture ($pmg_chr_hansen_copenhagen_laboratory$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Colt Hartford Armory (bg_company_buildings):
 	Colt Hartford Armory:
@@ -2650,10 +5060,20 @@ Douro Wine Lodge (bg_company_buildings):
 Duro La Felguera Steelworks (bg_company_buildings):
 	Duro La Felguera Steelworks:
 		Duro La Felguera Steelworks
+	Carbon Capture ($pmg_duro_la_felguera_steelworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 EEA Dock Sud Power Station (bg_company_buildings):
 	EEA Dock Sud Power Station:
 		EEA Dock Sud Power Station
+	Carbon Capture ($pmg_eea_dock_sud_power_station$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Egyptian Railway Cairo Central Station (bg_company_buildings):
 	Egyptian Rail Cairo Central:
@@ -2666,6 +5086,11 @@ El Águila Tampico Refinery (bg_company_buildings):
 Electricidad de Caracas Power House (bg_company_buildings):
 	Electricidad de Caracas Power House:
 		Electricidad de Caracas Power House
+	Carbon Capture ($pmg_electricidad_caracas_power_house$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Első Budapesti Steam Mill (bg_company_buildings):
 	Első Budapesti Steam Mill:
@@ -2716,10 +5141,20 @@ Franco-Belge Raismes Works (bg_company_buildings):
 Fundição Ipanema Sorocaba Foundry (bg_company_buildings):
 	Fundição Ipanema Sorocaba Foundry:
 		Fundição Ipanema Sorocaba Foundry
+	Carbon Capture ($pmg_fundicao_ipanema_sorocaba_foundry$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Fundidora Monterrey Blast Furnace (bg_company_buildings):
 	Fundidora Monterrey Blast Furnace:
 		Fundidora Monterrey Blast Furnace
+	Carbon Capture ($pmg_fundidora_monterrey_blast_furnace$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Galician Borysław Oil Field (bg_company_buildings):
 	Galician Borysław Oil Field:
@@ -2758,6 +5193,11 @@ GWR Swindon Works (bg_company_buildings):
 Hanseong Electric Gwanghwamun Station (bg_company_buildings):
 	Hanseong Jeongi Gwanghwamun Station:
 		Hanseong Jeongi Gwanghwamun Station
+	Carbon Capture ($pmg_hanseong_jeongi_gwanghwamun_station$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Hanyang Arsenal Iron Works (bg_company_buildings):
 	Hanyang Arsenal Iron Works:
@@ -2774,6 +5214,11 @@ Hispano-Suiza Barcelona Factory (bg_company_buildings):
 ILVA Bagnoli Steelworks (bg_company_buildings):
 	ILVA Bagnoli Steelworks:
 		ILVA Bagnoli Steelworks
+	Carbon Capture ($pmg_ilva_bagnoli_steelworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Imperial Arsenal Golden Horn (bg_company_buildings):
 	Imperial Arsenal Golden Horn:
@@ -2792,6 +5237,11 @@ Imperial Tobacco Wills Factory (bg_company_buildings):
 Ingolstadt Power Station (bg_company_buildings):
 	Ingolstadt Power Station:
 		Ingolstadt Power Station
+	Carbon Capture ($pmg_ingolstadt_power_station$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Iranian State Railway Veresk Station (bg_company_buildings):
 	Iranian State Railway Veresk Station:
@@ -2826,6 +5276,11 @@ John Brown Clydebank Shipyard (bg_company_buildings):
 Cockerill Seraing Works (bg_company_buildings):
 	Cockerill Seraing Works:
 		Cockerill Seraing Works
+	Carbon Capture ($pmg_cockerill_seraing_works$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 John Holt Lagos Trading House (bg_company_buildings):
 	John Holt Lagos Trading House:
@@ -2834,6 +5289,11 @@ John Holt Lagos Trading House (bg_company_buildings):
 Hughes Yuzovka Steelworks (bg_company_buildings):
 	Hughes Yuzovka Steelworks:
 		Hughes Yuzovka Steelworks
+	Carbon Capture ($pmg_hughes_yuzovka_steelworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Kablín Zárate Paper Mill (bg_company_buildings):
 	Kablín Zárate Paper Mill:
@@ -2878,6 +5338,11 @@ Lee Wilson Plantation Depot (bg_company_buildings):
 Lilpop Warsaw Metalworks (bg_company_buildings):
 	Lilpop Warsaw Metalworks:
 		Lilpop Warsaw Metalworks
+	Carbon Capture ($pmg_lilpop_warsaw_metalworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 LKAB Kiruna Iron Mine (bg_company_buildings):
 	LKAB Kiruna Mine:
@@ -2962,10 +5427,20 @@ Nokia Cable Works (bg_company_buildings):
 Norsk Hydro Rjukan Plant (bg_company_buildings):
 	Norsk Hydro Rjukan Plant:
 		Norsk Hydro Rjukan Plant
+	Carbon Capture ($pmg_norsk_hydro_rjukan_plant$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Alpine Donawitz Steelworks (bg_company_buildings):
 	Alpine Donawitz Steelworks:
 		Alpine Donawitz Steelworks
+	Carbon Capture ($pmg_alpine_donawitz_steelworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 OEVG Steyr Arms Works (bg_company_buildings):
 	OEWG Steyr Arms Works:
@@ -3146,6 +5621,11 @@ Turkish Petroleum Kirkuk Depot (bg_company_buildings):
 União Fabril Barreiro Plant (bg_company_buildings):
 	União Fabril Barreiro Plant:
 		União Fabril Barreiro Plant
+	Carbon Capture ($pmg_uniao_fabril_barreiro_plant$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 United Fruit Terminal (bg_company_buildings):
 	United Fruit Great White Fleet Terminal:
@@ -3182,10 +5662,20 @@ Cramp Philadelphia Shipyard (bg_company_buildings):
 Sandford Newcastle-Natal Ironworks (bg_company_buildings):
 	Sandford Newcastle Natal Ironworks:
 		Sandford Newcastle Natal Ironworks
+	Carbon Capture ($pmg_sandford_newcastle_natal_ironworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Witkowitzer Ostrava Ironworks (bg_company_buildings):
 	Witkowitzer Ostrava Ironworks:
 		Witkowitzer Ostrava Ironworks
+	Carbon Capture ($pmg_witkowitzer_ostrava_ironworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Ynchausti Manila Trading House (bg_company_buildings):
 	Ynchausti Manila Trading House:
@@ -3266,6 +5756,11 @@ Thyssen Steelworks (bg_company_buildings):
 	August Thyssen's vast Ruhr steelworks, a pillar of German heavy industry.
 	Thyssen Steelworks:
 		Thyssen Steelworks
+	Carbon Capture ($pmg_thyssen_steelworks$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Boeing Everett Factory (bg_company_buildings):
 	Boeing's Everett assembly hall, among the largest buildings on earth, where airframes take shape.
@@ -3278,17 +5773,17 @@ Renault Billancourt Plant (bg_company_buildings):
 		Renault Billancourt Plant
 
 Michelin Clermont-Ferrand Works (bg_company_buildings):
-	Michelin's Clermont-Ferrand tyre works, putting the automobile age on pneumatic rubber.
+	Michelin's Clermont-Ferrand tire works, putting the automobile age on pneumatic rubber.
 	Michelin Clermont-Ferrand Works:
 		Michelin Clermont-Ferrand Works
 
 Pirelli Bicocca Plant (bg_company_buildings):
-	Pirelli's Bicocca works in Milan, producing tyres and the insulated cables wiring the modern world.
+	Pirelli's Bicocca works in Milan, producing tires and the insulated cables wiring the modern world.
 	Pirelli Bicocca Plant:
 		Pirelli Bicocca Plant
 
 Jardine Princeps House (bg_company_buildings):
-	Jardine, Matheson & Co.'s Hong Kong head office, nerve centre of a sprawling China-coast trading empire.
+	Jardine, Matheson & Co.'s Hong Kong head office, nerve center of a sprawling China-coast trading empire.
 	Jardine Princeps House:
 		Jardine Princeps House
 
@@ -3296,16 +5791,31 @@ Sumitomo Besshi Mine (bg_company_buildings):
 	The Besshi copper mine and smelter, the industrial cradle of the Sumitomo zaibatsu.
 	Sumitomo Besshi Mine:
 		Sumitomo Besshi Mine
+	Carbon Capture ($pmg_sumitomo_besshi_mine$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Yasuda Atosanupuri Sulfur Mine (bg_company_buildings):
 	The sulfur mine on the slopes of Mount Atosanupuri in eastern Hokkaido, bought by Yasuda Zenjirō in 1887 and served by the Kushiro Railway he built that year to carry its sulfur to the refinery at Shibecha.
 	Yasuda Atosanupuri Sulfur Mine:
 		Yasuda Atosanupuri Sulfur Mine
+	Carbon Capture ($pmg_yasuda_atosanupuri_mine$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Tokyo Electric Asakusa Power Station (bg_company_buildings):
 	Tokyo Electric Light's coal-fired station at Asakusa, opened in 1895 with German AEG generators whose 50-hertz current still sets the frequency of eastern Japan.
 	Tokyo Electric Asakusa Power Station:
 		Tokyo Electric Asakusa Power Station
+	Carbon Capture ($pmg_tokyo_electric_asakusa_station$):
+		No Carbon Capture
+		Partial Carbon Capture (20 Coal)
+		Carbon Capture and Storage (20 Coal)
+		Advanced Carbon Capture (20 Coal)
 
 Guthrie Singapore Agency House (bg_company_buildings):
 	The Singapore head office of Guthrie & Co., founded in 1821 and the oldest of the Straits agency houses, which traded British cloth and machinery for the produce of the region and went on to manage plantation estates across Malaya.
@@ -3321,6 +5831,11 @@ BHP Broken Hill Mine (bg_company_buildings):
 	The silver, lead and zinc workings on the Line of Lode at Broken Hill, whose riches paid for BHP's move into steelmaking at Newcastle.
 	BHP Broken Hill Mine:
 		BHP Broken Hill Mine
+	Carbon Capture ($pmg_bhp_broken_hill_mine$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Ramirez Vila Real Cannery (bg_company_buildings):
 	The fish-salting house at Vila Real de Santo António that Sebastian Ramirez opened in 1853 and turned over to tins in 1865, the cradle of the oldest canning firm still in business.
@@ -3336,6 +5851,11 @@ Siam Electricity Wat Liab Power Station (bg_company_buildings):
 	Siam's first power station, at Wat Liab beside the Chao Phraya, where the Danish-run Siam Electricity Company made the current for Bangkok's lamps and trams.
 	Siam Electricity Wat Liab Power Station:
 		Siam Electricity Wat Liab Power Station
+	Carbon Capture ($pmg_siam_electric_wat_liab_station$):
+		No Carbon Capture
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 
 Ferranti Hollinwood Works (bg_company_buildings):
 	The Oldham works to which Sebastian de Ferranti moved his business in 1896, turning out transformers, meters and switchgear and, in time, radios.
@@ -3346,16 +5866,31 @@ Van Vlissingen Oostenburg Works (bg_company_buildings):
 	The steam-engine factory opened in 1827 in a former Dutch East India Company smokehouse on Amsterdam's Oostenburg island, building engines for ships and sugar mills, bridges and rolling stock.
 	Van Vlissingen Oostenburg Works:
 		Van Vlissingen Oostenburg Works
+	Carbon Capture ($pmg_van_vlissingen_oostenburg_works$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 MFO Oerlikon Works (bg_company_buildings):
 	The engineering works at Oerlikon outside Zürich whose machines carried three-phase current from Lauffen to Frankfurt in 1891, the first long-distance transmission of its kind.
 	MFO Oerlikon Works:
 		MFO Oerlikon Works
+	Carbon Capture ($pmg_mfo_oerlikon_works$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Markwald Bangkok Rice Mill (bg_company_buildings):
 	The steam rice mill and riverside godowns of A. Markwald & Co., one of the German trading houses that milled and shipped Siam's rice.
 	Markwald Bangkok Rice Mill:
 		Markwald Bangkok Rice Mill
+	Carbon Capture ($pmg_markwald_bangkok_rice_mill$):
+		No Carbon Capture
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 NHM Factorij Batavia (bg_company_buildings):
 	The Batavia head office of the Netherlands Trading Society, the Factorij, through which the coffee and sugar of Java's forced-cultivation system reached the Amsterdam auctions.
@@ -3372,477 +5907,55 @@ Noda Shoyu Goyōgura (bg_company_buildings):
 	Noda Shoyu Goyōgura:
 		Noda Shoyu Goyōgura
 
-Synthetic Clothes Industries (bg_heavy_industry):
-	Unlocking Technology: Art Silk
-	Synthetic Silk:
-		Rayon
-		Polyester Production
-		Nylon Production
-		Microfiber Blends
-			Monthly Pollution: 5
-		Elastomeric Blends
-			Monthly Pollution: 10
-		Performance Textiles
-			Monthly Pollution: 10
-		Advanced Material Fibers
-		Programmable Fibers
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Genentech DNA Way Campus (bg_company_buildings):
+	Genentech's laboratories at 1 DNA Way in South San Francisco. In 1978, two years after its founding, the company made human insulin in bacteria and turned recombinant DNA into an industry.
+	Genentech DNA Way Campus:
+		Genentech DNA Way Campus
 
-Synthetic Fuel Works (bg_heavy_industry):
-	Unlocking Technology: Bergius Process
-	Synthetic Oil:
-		Synthetic Oil
-			Monthly Pollution: 50
-		Oil-Producing Bacteria
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Monsanto Chesterfield Research Center (bg_company_buildings):
+	Monsanto's life-sciences laboratories at Chesterfield, outside St. Louis. Its plant biologists bred the herbicide-tolerant and insect-resistant crops that by the 2010s made up most of the soy, maize and cotton grown in the United States.
+	Monsanto Chesterfield Research Center:
+		Monsanto Chesterfield Research Center
 
-Synthetic Rubber Works (bg_heavy_industry):
-	Unlocking Technology: Isoprene
-	Synthetic Rubber:
-		Polyisoprene Rubber
-			Monthly Pollution: 20
-		Styrene-Butadiene Rubber
-			Monthly Pollution: 20
-		Ziegler–Natta Catalyzation SBR
-			Monthly Pollution: 20
-		Neodymium Catalyzation SBR
-			Monthly Pollution: 20
-		Bioengineered Rubber
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Novo Nordisk Kalundborg Plant (bg_company_buildings):
+	Novo Nordisk's insulin works at Kalundborg on Zealand, the largest in the world. It belongs to the Kalundborg Symbiosis, in which the town's power station, refinery and factories trade steam, water and by-products, so that one plant's waste is another's feedstock.
+	Novo Nordisk Kalundborg Plant:
+		Novo Nordisk Kalundborg Plant
 
-Pharmaceutical Industries (bg_biotechnology):
-	Unlocking Technology: Modern Pharmaceuticals
-	Pharmaceuticals:
-		Pharmaceuticals
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Ajinomoto Kawasaki Plant (bg_company_buildings):
+	Ajinomoto's works on the Kawasaki waterfront, opened in 1914 to make monosodium glutamate. Its fermentation tanks now turn out amino acids, sweeteners and seasonings by the shipload.
+	Ajinomoto Kawasaki Plant:
+		Ajinomoto Kawasaki Plant
 
-Carbon Conversion Works (bg_heavy_industry):
-	Unlocking Technology: Genetic Engineering
-	Synthetic Coal:
-		Synthetic Coal
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Biocon Park (bg_company_buildings):
+	Biocon's campus at Bommasandra, outside Bengaluru, where biosimilar insulins and antibodies are made for a fraction of the price of the branded drugs they copy.
+	Biocon Park:
+		Biocon Park
 
-Phenolic Resin Panels Plant (bg_heavy_industry):
-	Unlocking Technology: Biotechnology
-	Synthetic Wood:
-		Synthetic Wood
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+BGI National GeneBank (bg_company_buildings):
+	The China National GeneBank, which BGI runs for the state in Shenzhen: banks of sequencers, a bioinformatics data center, and frozen vaults of seeds, cells and DNA from across the living world.
+	BGI National GeneBank:
+		BGI National GeneBank
 
-Artificial Sweeteners Plant (bg_heavy_industry):
-	Unlocking Technology: Green Revolution
-	Synthetic Sugar:
-		High-Fructose Syrup
-			Monthly Pollution: 5
-		Cellulosic Hydrolysis
-			Monthly Pollution: 10
-		Electroenzymatic Synthesis
-			Monthly Pollution: 10
-		Programmable Sweetness
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+BioNTech Mainz Campus (bg_company_buildings):
+	BioNTech's headquarters and plant on An der Goldgrube in Mainz. The company writes messenger RNA to order: a vaccine against a new virus in weeks, or a cancer therapy matched to one patient's tumor.
+	BioNTech Mainz Campus:
+		BioNTech Mainz Campus
 
-Cultured Meat Plant (bg_biotechnology):
-	Unlocking Technology: Lab-Grown Food
-	Synthetic Meat:
-		Synthetic Meat
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+Rosen Association Headquarters (bg_company_buildings):
+	The Rosen Association's Seattle headquarters. Its vats grow android workers who can pass for human, and artificial animals for households that can no longer find real ones.
+	Rosen Association Headquarters:
+		Rosen Association Headquarters
 
-Cultured Produce Facility (bg_biotechnology):
-	Unlocking Technology: Lab-Grown Food
-	Synthetic Fruit:
-		Synthetic Fruit
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
+InGen Biological Preserve (bg_company_buildings):
+	InGen's island preserve, stocked with animals that were extinct until the company rebuilt their DNA. Visitors cross the world to see them from behind electrified fences, and the same laboratories breed hardier livestock for the mainland.
+	InGen Biological Preserve:
+		InGen Biological Preserve
 
-Beverage Concentrates Plant (bg_heavy_industry):
-	Unlocking Technology: Biotechnology
-	Synthetic Drinks:
-		Synthetic Drinks
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Integrated Biorefinery (bg_biotechnology):
-	Unlocking Technology: Genetic Engineering
-	Synthetic Biomass:
-		Synthetic Biomass
-	Automation:
-		Manual Batch Processing
-		Continuous Processing
-			Monthly Pollution: 2.5
-		Advanced Process Control
-			Monthly Pollution: 5
-		Distributed Control Systems
-			Monthly Pollution: 5
-		AI Managed Chemical Plant
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Wireless Telecommunications Industries (bg_heavy_industry):
-	Unlocking Technology: Radio
-	Radios:
-		Radio Production
-		VHF and UHF Transmission
-		Satellite Communications
-		Quantum Communications
-		Neural Lace Telepathy
-	Automation:
-		Manual Assembly
-			Monthly Pollution: 2.5
-		Automated Assembly Lines
-			Monthly Pollution: 5
-		Cleanroom Fabs
-			Monthly Pollution: 5
-		AI Managed Fab
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Consumer Appliance Industries (bg_high_tech):
-	Unlocking Technology: Personal Appliances
-	Consumer Appliances:
-		Consumer Appliances Production
-			Monthly Pollution: 10
-		Television Production
-			Monthly Pollution: 10
-		Personal Electronics
-			Monthly Pollution: 10
-		Smart Phones
-			Monthly Pollution: 10
-		Virtual Reality Headsets
-			Monthly Pollution: 10
-		Bioelectronic Implants
-		Fusion Battery Appliances
-	Automation:
-		Manual Assembly
-			Monthly Pollution: 2.5
-		Automated Assembly Lines
-			Monthly Pollution: 5
-		Cleanroom Fabs
-			Monthly Pollution: 5
-		AI Managed Fab
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Airport (bg_private_infrastructure):
-	Unlocking Technology: Commercial Aviation
-	$building_airport$:
-		Airport
-			Monthly Pollution: 100
-		Spaceport
-			Monthly Pollution: 50
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Highway (bg_private_infrastructure):
-	Unlocking Technology: Paved Roads
-	Highway:
-		Civil Highway
-			Monthly Pollution: 40
-		Industrial Highway
-			Monthly Pollution: 40
-		Electric Civil Highway
-		Electric Industrial Highway
-		Autonomous Highway
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Software Industry (bg_high_tech):
-	Unlocking Technology: Computer Networks
-	Software Industry:
-		Punchcards
-		Web 1.0
-		Cloud Computing
-		ML Assisted Code Generation
-		Self-Improving AI Systems
-	Automation Building Network:
-		Digital Creation Tools
-		Version Control and Distribution Platforms
-		Advanced Workflow Optimization
-		Fully Automated Content Creation
-		AI-Mediated Mind Sharing
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Network Infrastructure (bg_private_infrastructure):
-	Unlocking Technology: Computer Networks
-	Base Building Network:
-		Local Network
-		Low Bandwidth
-		Medium Bandwidth
-		High Bandwidth
-		Extreme Bandwidth
-		Semi-Infinite Bandwidth
-	Network Maintenance Automation:
-		Automated Routing Protocols
-		Predictive Maintenance Systems
-		Autonomous Networks
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Hydro Plant (bg_power):
-	Unlocking Technology: Public Works Programs
-	Hydro Power:
-		Hydro Power
-	Power Automation:
-		Power Manual Operation
-		Power Centralized Control Systems
-		Power Integrated Smart Systems
-		AI Managed Power Plant
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Nuclear Plant (bg_power):
-	Unlocking Technology: Nuclear Energy
-	Nuclear Power:
-		Nuclear Power
-	Power Automation:
-		Power Manual Operation
-		Power Centralized Control Systems
-		Power Integrated Smart Systems
-		AI Managed Power Plant
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Fusion Plant (bg_power):
-	Unlocking Technology: Fusion Power
-	Fusion Power:
-		Tokamak Fusion Power
-		Inertial Fusion Power
-		Muon-Catalyzed Fusion Power
-	Power Automation:
-		Power Manual Operation
-		Power Centralized Control Systems
-		Power Integrated Smart Systems
-		AI Managed Power Plant
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Renewable Energy Plant (bg_power):
-	Unlocking Technology: Clean Energy Technologies
-	Renewable Power:
-		Renewable Power
-		Advanced Renewable Power
-	Power Automation:
-		Power Manual Operation
-		Power Centralized Control Systems
-		Power Integrated Smart Systems
-		AI Managed Power Plant
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Electronic Components and Semiconductor Industry (bg_high_tech):
-	Unlocking Technology: Transistor Technology
-	Electronic Components:
-		Transistors
-		Integrated Circuits
-		Modern Microprocessors
-		Multicore Processors
-		Neuromorphic Computing
-		Orbital Nanolithography
-	Automation:
-		Manual Assembly
-			Monthly Pollution: 2.5
-		Automated Assembly Lines
-			Monthly Pollution: 5
-		Cleanroom Fabs
-			Monthly Pollution: 5
-		AI Managed Fab
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Robotics Industry (bg_high_tech):
-	Unlocking Technology: Industrial Robotics
-	Base Building Robotics:
-		Robots
-		Smart Robots
-		Nanorobots
-	Automation:
-		Manual Assembly
-			Monthly Pollution: 2.5
-		Automated Assembly Lines
-			Monthly Pollution: 5
-		Cleanroom Fabs
-			Monthly Pollution: 5
-		AI Managed Fab
-			Monthly Pollution: 5
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Advanced Material Fabricator (bg_high_tech):
-	Unlocking Technology: Modern Material Science
-	Advanced Material Fabricator:
-		Basic AM Fabrication
-		Advanced AM Fabrication
-		Self-Replicating Assemblers
-		Advanced Self-Replicating Assemblers
-	Automation:
-		Lab Advanced Material Fabrication
-		Synthetic Bacteria Advanced Material Fabrication
-		Automated AM Fabrication
-	Location:
-		Basic Production
-		Orbital Fabrication
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Aerospace Industry (bg_high_tech):
-	Unlocking Technology: Military Aviation
-	Aeroplanes:
-		Aeroplane Production
-			Monthly Pollution: 10
-		Advanced Aeroplane Production
-			Monthly Pollution: 10
-		Modern Aeroplane Production
-			Monthly Pollution: 10
-	$building_aerospace_industry$:
-		Aircraft Only
-		Chemical Rockets
-		Reusable Rockets
-		Ablative Rockets
-		Fusion SSTO Craft
-	Automation:
-		Manual Production & Operations
-		Standardized Production
-		Packet-Switched Control Links
-		Robotic Assembly & Handling
-		AI-Optimized Operations
-	Maintenance:
-		Maintenance
-		No Maintenance
+RejoovenEsense Compound (bg_company_buildings):
+	RejoovenEsense's walled campus, where its staff live and work under guard. Its clinics sell treatments that halt aging and wind the body back toward its prime to anyone who can pay, and its laboratories work on a pill that promises the same to everyone.
+	RejoovenEsense Compound:
+		RejoovenEsense Compound
 
 Space Elevator Construction Site (bg_government):
 	Unlocking Technology: Space Elevator
@@ -3857,23 +5970,21 @@ Space Elevator (bg_private_infrastructure):
 		Space Elevator
 
 Extraplanetary Base (bg_exotic):
-	Unlocking Technology: Asteroid Mining
+	Unlocking Technology: In-Situ Resource Utilization
 	Base Building Space Mine:
+		Regolith Processing
 		Asteroid Mine
 		Mining Colony
 		Resort Colony
+		Self-Replicating Miners
+	Launch to Orbit:
+		Chemical Launch
+		Tethered Launch
+	Transport in Space:
+		Chemical Tugs
+		Fusion Tugs
 	Maintenance:
-		Maintenance
-		No Maintenance
-
-Deep-Sea Mine (bg_exotic):
-	Unlocking Technology: Abyssal Plain Mining
-	Deep-Sea Mine:
-		Deep-Sea Mining
-		Advanced Deep-Sea Mining
-		Automated Deep-Sea Mining
-	Maintenance:
-		Maintenance
+		Intensive Maintenance
 		No Maintenance
 
 Space Program (bg_monuments):
@@ -3885,780 +5996,16 @@ Space Program (bg_monuments):
 		Solar Colonization
 		Deep Space Exploration
 		Interstellar Mission
-
-National Park (bg_parks):
-	National Park:
-		National Park
-			Monthly Pollution: -500
-		National Forest
-			Monthly Pollution: -250
-		National Wildlife Refuge
-			Monthly Pollution: -500
-
-Tourism Industry (bg_arts):
-	A collection of hotels, resorts, and services that cater to visitors, generating [concept_tourism_system] revenue from the state's natural and cultural appeal.
-	Unlocking Technology: Romanticism
-	Tourism:
-		Tourism
-		Mass Tourism
-		Jet Age Tourism
-		Modern Tourism
-		Space Tourism
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-State Youth Centers (bg_government):
-	Philosophy:
-		Voluntary Daycare
-		Communal Child-Rearing
-		Youth Cadre Programs
-		Behavioral Conditioning
-		Eugenics Programs
-	Advanced Nurturing:
-		Natural Nurturing
-		Assisted Postnatal Care
-		Ectogenesis
-		Cloning Vats
-	Maintenance:
-		Maintenance
-		No Maintenance
-
-Manganese Mine (bg_discoverable_mining):
-	Unlocking Technology: Modern Tools
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Chromium Mine (bg_discoverable_mining):
-	Unlocking Technology: Stainless Steel Mass Production
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Specialty Alloy Metal Mine (bg_discoverable_mining):
-	Unlocking Technology: Jet Engine Technology
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Copper Mine (bg_discoverable_mining):
-	Unlocking Technology: Rural Electrification
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Bauxite Mine (bg_discoverable_mining):
-	Unlocking Technology: Aluminum Mass Production
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Precious and Minor Base Metal Mine (bg_discoverable_mining):
-	Unlocking Technology: Advanced Automotive Production Techniques
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Nickel and Cobalt Mine (bg_discoverable_mining):
-	Unlocking Technology: Modern Materials
-	Mining Equipment:
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	Automation:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large-Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	Transportation:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Lithium Mine (bg_discoverable_mining):
-	Unlocking Technology: Modern Chemical Processes
-	Mining Equipment:
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	Automation:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large-Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	Transportation:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Rare Earth Metals Mine (bg_discoverable_mining):
-	Unlocking Technology: Laser Technology
-	Mining Equipment:
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	Automation:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large-Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	Transportation:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Platinum Group Metals Mine (bg_discoverable_mining):
-	Unlocking Technology: Pollution Control
-	Mining Equipment:
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	Automation:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large-Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	Transportation:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Graphite Mine (bg_discoverable_mining):
-	Unlocking Technology: Nuclear Energy
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Phosphate Mine (bg_discoverable_mining):
-	Unlocking Technology: Green Revolution
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Potash Mine (bg_discoverable_mining):
-	Unlocking Technology: Advanced Agricultural Statistics
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
-
-Industrial Mineral and Salt Mine (bg_discoverable_mining):
-	Unlocking Technology: Modern Skyscrapers
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
-			Monthly Pollution: 5
-		Condensing Engine Pump
-			Monthly Pollution: 15
-		Diesel Pump
-			Monthly Pollution: 10
-		High-Pressure Hydraulic Pump
-			Monthly Pollution: 15
-		Continuous Miners
-			Monthly Pollution: 15
-		Smart Miners
-			Monthly Pollution: 10
-	Explosives:
-		Manual Drilling
-		Nitroglycerin
-			Monthly Pollution: 5
-		Dynamite
-			Monthly Pollution: 10
-		Ammonium Nitrate
-			Monthly Pollution: 10
-		Metamaterial Explosives
-			Monthly Pollution: 5
-	$pmg_steam_automation$:
-		Hand Cranked Crane
-		Steam Donkey
-			Monthly Pollution: 5
-		Dragline Excavators
-			Monthly Pollution: 5
-		Large Scale Earth Movers
-			Monthly Pollution: 5
-		Geophysical Survey Techniques
-			Monthly Pollution: 5
-		Ore Sorting and Separation Technology
-			Monthly Pollution: 5
-		Laser Excavation Technology
-			Monthly Pollution: 5
-	$pmg_train_automation$:
-		Road Carts
-		Partial Bulk Transport
-		$pm_rail_transport$
-			Monthly Pollution: 10
-		Extensive Rail Transport
-			Monthly Pollution: 10
-	Tailings and Wastewater Management:
-		No Tailings Management
-		Settling Ponds
-			Monthly Pollution: -5
-		Tailings Treatment
-			Monthly Pollution: -10
+	Debris Removal:
+		No Debris Removal
+		Active Debris Removal
+		Laser Broom
+		Fusion Sweepers
+	Module Fabrication:
+		No Module Fabrication
+		Orbital Assembly
+		Orbital Foundries
+		Fusion Shipyards
 
 Solar Collector Construction Site (bg_government):
 	Unlocking Technology: Space-Based Solar Power
@@ -4750,76 +6097,205 @@ Consciousness Network (bg_government):
 		Open Network
 		Social Control Network
 
-Military Base (bg_government):
-	A permanent military installation providing state-level [concept_infrastructure] and [concept_fortification_system] defensive bonuses. Expanding the base and upgrading its [Concept('concept_production_method', 'production methods')] increases [concept_fortification_level], unlocking progressively stronger [Concept('concept_battle_condition', 'battle conditions')] for defenders.
-	Unlocking Technology: Trench Works
-	Military Base:
-		Military Base Operations
-	Fortification Type:
-		Earthwork Fortifications
-		Concrete Bunkers
-		Hardened Positions
-	Base Purpose:
-		Garrison Duty
-		Territorial Defense
-		Logistics Hub
-	Missile Defense:
-		No Missile Defense
-		Missile Defense Battery
-		Directed Energy Point Defense
+$sr_site_name_valles_marineris$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_valles_marineris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
 
-Grand Monument (bg_grand_monuments):
-	A monument a government raises to what it stands for: its crown, its republic, its revolution, its leader, its faith or the nation. Its level is its [concept_grandeur]. It lends prestige, and legitimacy and the favour of like-minded interest groups while what it honours still stands. When that falls, the next government must decide what to do with it. See the Monuments journal entry.
-	Dedication:
-		Undedicated
-		To the Crown
-		To the Republic
-		To the Revolution
-		To the Leader
-		Grand Shrine
-		To the Nation
-		War Memorial
-		Grand Opera House
-		Botanical Gardens
-		Grand Observatory
-		Great Exhibition Hall
-		Grand Stadium
-	Maintenance:
-		Maintenance
-		No Maintenance
+$sr_site_name_olympus_mons$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_olympus_mons$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
 
-Settlement Authority (bg_resettlement):
-	A [concept_internal_resettlement] office that recruits settlers across the country and brings them to this frontier. Its program decides who is recruited and how; its settlement plan decides what they build here. It can be founded only on an open frontier and closes when the region fills up; its build requirements show the numbers.
-	Resettlement Program:
-		Land Grants
-		Military Colonies
-		Penal Transportation
-		Organized Colonization
-		Special Settlements
-		Development Program
-		Rustication
-		Managed Retreat
-	Settlement Plan:
-		Homesteads
-		Work Settlements
-		Planned Towns
-	Transport:
-		Overland
-		Rail and Steamship
-		Motor Transport
-		Airlift
+$sr_site_name_hellas_planitia$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_hellas_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
 
-Strategic Reserve Hub (bg_public_infrastructure):
-	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and lets each good move up to 1000 units a week into or out of the reserve, set separately for each good in the Strategic Reserve [concept_journal_entry]. It cannot be demolished and always stands in the capital: if the capital moves, the hub is rebuilt there for free. A foreign power that takes its state destroys it.
-	Unlocking Technology: Logistics
-	Hub Reserve:
-		Reserve Control
+$sr_site_name_utopia_planitia$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_utopia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
 
-Strategic Reserve Silo (bg_public_infrastructure):
-	A distributed storage depot that adds +1000 capacity per level for each reserve good and raises each good's weekly flow limit by 100 per level. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.
-	Unlocking Technology: Logistics
-	Silo Storage:
-		Silo Storage
+$sr_site_name_arcadia_planitia$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_arcadia_planitia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_ceres$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_ceres$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_vesta$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_vesta$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_psyche$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_psyche$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_pallas$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_pallas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_hygiea$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_hygiea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_io$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_io$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_europa$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_europa$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_ganymede$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_ganymede$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_callisto$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_callisto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_himalia$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_himalia$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_amalthea$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_amalthea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_venus$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_venus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_mercury$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_mercury$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_titan$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_titan$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_enceladus$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_enceladus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_rhea$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_rhea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_mimas$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_mimas$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_iapetus$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_iapetus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_titania$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_titania$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_oberon$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_oberon$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_miranda$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_miranda$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_ariel$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_ariel$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_triton$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_triton$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_proteus$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_proteus$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_pluto$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_pluto$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_eris$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_eris$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_makemake$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_makemake$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_haumea$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_haumea$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_sedna$ Colony (bg_sr_colony_sites):
+	The colony on $sr_site_name_sedna$, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_shackleton$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_shackleton$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_peary$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_peary$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_tranquility$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_tranquility$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_marius_hills$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_marius_hills$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_daedalus$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_daedalus$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
+
+$sr_site_name_imbrium$ Colony (bg_sr_colony_sites):
+	The colony at $sr_site_name_imbrium$ on the Moon, named here so that the Cede Colony treaty article can move it from one country to another. It is never built.
+	Colony:
+		Colony Record
 
 Construction Site (te_construction_market_bg):
 	With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method.
@@ -4832,6 +6308,7 @@ Construction Site (te_construction_market_bg):
 		$pm_reinforced_concrete_buildings$
 		$pm_advanced_construction$
 		$pm_nanomaterial_buildings$
+		$pm_self_replicating_construction$
 	Construction Automation:
 		No Construction Automation
 		Prefabricated Building Components
@@ -4841,203 +6318,4 @@ Construction Site (te_construction_market_bg):
 	Construction [concept_power_bloc_principle_group]:
 		Construction Principle 2
 		No Effect
-
-United Nations Headquarters (bg_bureaucracy):
-	International Diplomacy:
-		Host Nation
-
-Power Bloc Headquarters (bg_bureaucracy):
-	Unlocking Technology: Intergovernmental Organizations
-	[concept_power_bloc] Headquarters:
-		Seat of the Empire
-		Alliance Command
-		Global Trade Center
-		Seat of the Faith
-		Central Committee Headquarters
-		World Cultural Center
-		Palace of Nations
-
-Golden Gate Bridge (bg_monuments):
-	Unlocking Technology: Marketing Research
-	Golden Gate Bridge:
-		Golden Gate Bridge
-
-Empire State Building (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	Empire State Building:
-		Empire State Building
-
-Sydney Opera House (bg_monuments):
-	Unlocking Technology: Art Deco Architecture
-	Sydney Opera House:
-		Sydney Opera House
-
-CN Tower (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	CN Tower:
-		CN Tower
-
-Hoover Dam (bg_monuments):
-	Unlocking Technology: Public Works Programs
-	Hoover Dam:
-		Hoover Dam
-
-The Pentagon (bg_monuments):
-	Unlocking Technology: Combined Arms
-	The Pentagon:
-		The Pentagon
-
-Kennedy Space Center (bg_monuments):
-	Unlocking Technology: Space Exploration
-	Kennedy Space Center:
-		Kennedy Space Center
-
-Aswan High Dam (bg_monuments):
-	Unlocking Technology: Nuclear Energy
-	Aswan High Dam:
-		Aswan High Dam
-
-Tokyo Tower (bg_monuments):
-	Unlocking Technology: Television Broadcasting
-	Tokyo Tower:
-		Tokyo Tower
-
-Moscow State University (bg_monuments):
-	Unlocking Technology: Mainframe Computers
-	Moscow State University:
-		Moscow State University
-
-Berlin TV Tower (bg_monuments):
-	Unlocking Technology: Transistor Technology
-	Berlin TV Tower:
-		Berlin TV Tower
-
-Azadi Tower (bg_monuments):
-	Unlocking Technology: Decolonization
-	Azadi Tower:
-		Azadi Tower
-
-Kenyatta International Convention Centre (bg_monuments):
-	Unlocking Technology: Decolonization
-	Kenyatta ICC:
-		Kenyatta ICC
-
-Burj Khalifa (bg_monuments):
-	Unlocking Technology: Computer-Aided Design
-	Burj Khalifa:
-		Burj Khalifa
-
-World Trade Center (bg_monuments):
-	Unlocking Technology: Containerization
-	World Trade Center:
-		World Trade Center
-
-Lotus Temple (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Lotus Temple:
-		Lotus Temple
-
-Itaipu Dam (bg_monuments):
-	Unlocking Technology: Industrial Robotics
-	Itaipu Dam:
-		Itaipu Dam
-
-Petronas Towers (bg_monuments):
-	Unlocking Technology: Cellular Networks
-	Petronas Towers:
-		Petronas Towers
-
-Basilica of Our Lady of Peace (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Basilica of Our Lady of Peace:
-		Basilica of Our Lady of Peace
-
-Three Gorges Dam (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Three Gorges Dam:
-		Three Gorges Dam
-
-Channel Tunnel (bg_monuments):
-	Unlocking Technology: Globalization
-	Channel Tunnel:
-		Channel Tunnel
-
-Taipei 101 (bg_monuments):
-	Unlocking Technology: Digital Telecommunications
-	Taipei 101:
-		Taipei 101
-
-Lotte World Tower (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Lotte World Tower:
-		Lotte World Tower
-
-Gardens by the Bay (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Gardens by the Bay:
-		Gardens by the Bay
-
-Abraj Al-Bait Clock Tower (bg_monuments):
-	Unlocking Technology: Globalization
-	Abraj Al-Bait Clock Tower:
-		Abraj Al-Bait Clock Tower
-
-Shanghai Tower (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Shanghai Tower:
-		Shanghai Tower
-
-FAST Telescope (bg_monuments):
-	Unlocking Technology: Machine Learning
-	FAST Telescope:
-		FAST Telescope
-
-Statue of Unity (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Statue of Unity:
-		Statue of Unity
-
-Golden Bridge (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Golden Bridge:
-		Golden Bridge
-
-Large Hadron Collider (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Large Hadron Collider:
-		Large Hadron Collider
-
-International Space Station (bg_monuments):
-	Unlocking Technology: Satellite Communications
-	International Space Station:
-		International Space Station
-
-ITER Fusion Reactor (bg_monuments):
-	Unlocking Technology: Fusion Power
-	ITER Fusion Reactor:
-		ITER Fusion Reactor
-
-Svalbard Global Seed Vault (bg_monuments):
-	Unlocking Technology: Biotechnology
-	Svalbard Global Seed Vault:
-		Svalbard Global Seed Vault
-
-LIGO Observatory (bg_monuments):
-	Unlocking Technology: Fiber Optics
-	LIGO Observatory:
-		LIGO Observatory
-
-Continental Union Headquarters (bg_monuments):
-	Unlocking Technology: Globalization
-	Continental Union Headquarters:
-		Continental Union Headquarters
-
-Peace Palace (bg_monuments):
-	Unlocking Technology: Intergovernmental Organizations
-	Peace Palace:
-		Peace Palace
-
-Palais des Nations (bg_monuments):
-	Palais des Nations:
-		Palais des Nations
 

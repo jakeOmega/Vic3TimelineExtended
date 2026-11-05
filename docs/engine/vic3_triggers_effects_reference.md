@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log + effects.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log + effects.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1854 trigger entries and 3158 effect entries.*
-*99 iterator families, 938 standalone triggers, 390 standalone effects.*
+*Auto-generated from 2044 trigger entries and 3666 effect entries.*
+*99 iterator families, 963 standalone triggers, 403 standalone effects.*
 
 ## Reading Guide
 
@@ -82,7 +82,7 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (341)
+### Triggers (350)
 
 - `additional_war_support_change` — Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
@@ -108,15 +108,16 @@
 - `can_create_diplomatic_pact` — Checks if a diplomatic pact is valid to create with another country
 - `can_decrease_autonomy` — Check if a subject country is able to become a less autonomous subject type
 - `can_establish_company` — Check if the country can establish a new company
-- `can_form_nation` — Check if the target country is able to potentially form a nation
+- `can_form_nation` — Check if the target country is able to potentially form a nation **Value Type**: common/country_formation
 - `can_have_as_subject` — Checks if a country can have another country as a particular type of subject Where X = country and Y = subject type
 - `can_have_subjects` — Check if the country is able to have subjects of it sown
 - `can_increase_autonomy` — Check if a subject country is able to become a more autonomous subject type
 - `can_leave_power_bloc` — Checks if the country in scope can leave its current Power Bloc (returns false if country is not in a Power Bloc)
 - `can_lobbies_target` — Checks if target country is a valid target for lobbies in the scoped country → country
 - `can_own_autonomy_be_decreased` — Check if scoped country can have it's autonomy decreased
-- `can_research` — True if a country can research an technology
+- `can_research` — True if a country can research an technology **Value Type**: common/technology/technologies
 - `can_send_diplomatic_action` — Checks if a diplomatic action is valid to send by scope country to target country
+- `can_start_play_against_overlord` — Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war goal targeting the subject, and none of the subje...
 - `can_take_on_scaled_debt` — Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
 - `can_toll_straits` — Check if the scoped country is allowed to charge tolls on the straits it controls
 - `can_transfer_subject` — Check if the target country can be transferred as a subject to the scoped country scope:country → country
@@ -140,12 +141,13 @@
 - `country_has_building_group_levels` — Checks the sum of building levels for a building group in a country  country_has_building_group_levels
 - `country_has_building_levels` — Checks the sum of building levels for a country
 - `country_has_building_type_levels` — Checks the sum of building levels for a building type in a country  country_has_building_type_levels
-- `country_has_building_type_monopoly` — Check if the scoped country has a monopoly of the specified building type → building_type
+- `country_has_building_type_monopoly` — Check if the scoped country has a monopoly of the specified building type **Value Type**: common/buildings → building_type
 - `country_has_country_monopoly` — Check if the scoped country has any country monopolies
 - `country_has_primary_culture` — Checks if a culture is one of the primary cultures in the country → culture
 - `country_has_state_religion` — Checks if a religion is the state religion in the country country_has_accepted_religion → religion
 - `country_innovation` — Checks the amount of weekly innovation a country produces
-- `country_or_subject_owns_entire_state_region` — Checks whether the scoped country or any of its subjects owns the entire specified state region
+- `country_or_subject_owns_entire_state_region` — Check whether the scoped country or any of its subjects owns the entire specified state region **Value Type**: map_data/state_regions
+- `country_or_subject_owns_entire_state_region_uncontested` — Check whether the scoped country or any of its subjects owns the entire region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
 - `country_rank` — Compares a Country's Power Ranking
 - `country_ship_type_fraction` — Checks that a country has a certain fraction of a specific ship type
 - `country_tier` — Compare tier of country tag
@@ -194,10 +196,11 @@
 - `has_any_subventions_on` — Check if the scoped country has any level of subventions on a goods scope:country → goods
 - `has_any_tariffs_on` — Check if the scoped country has any level of tariffs on a goods scope:country → goods
 - `has_attitude` — Checks if scoped country has a particular attitude towards another country Where X = country and Y = attitude type
-- `has_building` — True if a state/market/state region/country has a building type (scopes: country, market, state, state_region)
-- `has_civil_war_from_movement_type` — Checks if a country is having a civil war started by a particular movement type → political_movement_type
+- `has_building` — True if a state/market/state region/country has a building type **Value Type**: common/buildings (scopes: country, market, state, state_region)
+- `has_building_levels_in_state_region` — Checks how many levels of a building type the scoped country has in the state it owns in a state region Counts as 0 when the country owns no state in the region, or when is_incorporated does not match
+- `has_civil_war_from_movement_type` — Checks if a country is having a civil war started by a particular movement type **Value Type**: common/political_movements → political_movement_type
 - `has_claim` — Checks if country in scope has a claim on state/state region/country
-- `has_company` — Checks if a company of the specified type exists in scope country → company_type
+- `has_company` — Checks if a company of the specified type exists in scope country **Value Type**: common/company_types → company_type
 - `has_completed_subgoal` — Checks if the scoped country has completed a certain subgoal
 - `has_consumption_tax` — Checks if the country is taxing the target good. → goods
 - `has_convoys_being_sunk` — Check if the country has convoys being sunk through convoy raiding
@@ -209,40 +212,43 @@
 - `has_global_highest_gdp` — Checks if the scoped country has the highest GDP
 - `has_global_highest_innovation` — Checks if the scoped country has the highest weekly innovation
 - `has_government_clout` — Does the country's government have the necessary total Clout
-- `has_government_type` — Is the country's government type as specified
+- `has_government_type` — Is the country's government type as specified **Value Type**: common/government_types
 - `has_healthy_economy` — Check if the country has a healthy economy
-- `has_inactive_journal_entry` — Check if the country has at least one inactive journal entry of the specified type
+- `has_inactive_journal_entry` — Check if the country has at least one inactive journal entry of the specified type **Value Type**: common/journal_entries
 - `has_institution` — Checks if scope country has a particular type of institution
 - `has_insurrectionary_interest_groups` — Check if the country has Interest Groups that are insurrectionary
 - `has_interest_marker_in_region` — True if scope country has an interest marker in target region
-- `has_journal_entry` — Check if the country has at least one active journal entry of the specified type
-- `has_law` — Checks if a country has a certain law active → law_type
-- `has_law_commitment` — Checks if a country has a commitment to enact a certain law → law_type
+- `has_journal_entry` — Check if the country has at least one active journal entry of the specified type **Value Type**: common/journal_entries
+- `has_law` — Checks if a country has a certain law active **Value Type**: common/laws → law_type
+- `has_law_commitment` — Checks if a country has a commitment to enact a certain law **Value Type**: common/laws → law_type
 - `has_law_imposition_rights` — Checks if the scoped country has the necessary permits to demand another country enacts a certain law
-- `has_law_or_variant` — Checks if a country has a certain law or one its variant laws active → law_type
+- `has_law_or_variant` — Checks if a country has a certain law or one its variant laws active **Value Type**: common/laws → law_type
+- `has_military_reach` — Checks if the country in scope can realistically get an army to a target state or country.
 - `has_military_strait_access_through` — Check if the scoped country has military access through every strait owned by the target country → country
-- `has_modifier` — Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
-- `has_objective` — Checks if the scoped country has a certain objective type
+- `has_modifier` — Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front **Value Type**: common/static_mod... (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
+- `has_objective` — Checks if the scoped country has a certain objective type **Value Type**: common/objectives
 - `has_or_is_contesting_state_in_state_region` — Check if country has a state in the state region, or is at war with a country that holds one - i.e.
 - `has_overlapping_interests` — Checks if country in scope has an overlapping interest marker with any of target country's interests → country
 - `has_port_country` — Check if scoped country has at least one port
 - `has_possible_decisions` — Check if a country has any possible Decisions
-- `has_potential_to_form_country` — Check if the target country could ever be able to form a nation
+- `has_potential_to_form_country` — Check if the target country could ever be able to form a nation **Value Type**: common/country_formation
 - `has_power_struggle` — Checks if scope Power Bloc has a power struggle
 - `has_region_stance` — Checks if the scoped country's AI has the specified stance for a strategic region Usage: region_stance
+- `has_regional_exile_pool_access` — Checks whether the scoped country meets the has_access requirements of the given Regional Exile Pool
 - `has_regional_objective` — Checks if the scoped country's AI has an active regional objective in a strategic region Leave out type to match an objective of any type Usage:
 - `has_researchable_technology` — Check if the country has any researchable technology left.
 - `has_revolution` — Check if the country has revolutionary uprising
-- `has_ruling_interest_group` — Does the country's government include the named IG
+- `has_ruling_interest_group` — Does the country's government include the named IG **Value Type**: common/interest_groups
 - `has_ruling_interest_group_count` — Does the country's government consist of the specified number of IGs
 - `has_secret_goal` — Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
-- `has_social_hierarchy` — Checks if the scoped country has adopted a specific social hierarchy
-- `has_state_in_state_region` — Check if country has a state in the state region
+- `has_social_hierarchy` — Checks if the scoped country has adopted a specific social hierarchy **Value Type**: common/social_hierarchies
+- `has_state_in_state_region` — Check if country has a state in the state region **Value Type**: map_data/state_regions
+- `has_state_in_state_region_uncontested` — Check if country has a state in the state region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
 - `has_strait_toll_exemption_from` — Check if the scoped country is exempt from the strait tolls charged by the target country → country
 - `has_strategic_adjacency` — Checks if country in scope has a strategic adjacency (direct/coastal/military access/war goal adjacency) to target state/country
 - `has_strategic_land_adjacency` — Checks if country in scope has a strategic adjacency (direct land border, military access or war goal adjacency only) to target state/country
 - `has_strategic_region_interest_tier` — Checks the scoped country's interest tier rank in a specific strategic region scope:country
-- `has_strategy` — Checks if country in scope has a particular AI strategy
+- `has_strategy` — Checks if country in scope has a particular AI strategy **Value Type**: common/ai_strategies
 - `has_subject_relation_with` — Checks if country in scope is subject or overlord of event target → country
 - `has_sufficient_construction_capacity_for_investment` — Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
 - `has_sufficient_sailors` — Check if the Naval Administrations can deliver enough sailors for every ship the country already has
@@ -272,7 +278,7 @@
 - `is_considered_adjacent_due_to_wargoals` — Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play → country
 - `is_construction_paused` — Check if construction in a state is paused.
 - `is_country_alive` — Checks if the scoped country is alive, i.e.
-- `is_country_type` — Checks the countrys type
+- `is_country_type` — Checks the countrys type **Value Type**: common/country_types
 - `is_diplomatic_play_ally_of` — Checks if country in scope is in a diplomatic play together with event target → country
 - `is_diplomatic_play_committed_participant` — True if country is a committed participant of any diplomatic play
 - `is_diplomatic_play_enemy_of` — Checks if country in scope is in a diplomatic play against event target → country
@@ -289,14 +295,14 @@
 - `is_immune_to_revolutions` — Checks if the country has been set to be immune to revolutions via set_immune_to_revolutions Warning: This does not check if the country is naturally immune to revolutions due to for example being ...
 - `is_in_customs_union` — Check if the country is part of a customs union
 - `is_in_customs_union_with` — Check if the country is in a customs union with scoped country → country
-- `is_in_geographic_region` — Checks if a scoped object is in a specific geographic region (scopes: country, state, state_region, strategic_region)
+- `is_in_geographic_region` — Checks if a scoped object is in a specific geographic region **Value Type**: common/geographic_regions (scopes: country, state, state_region, strategic_region)
 - `is_in_power_bloc` — Checks if the country is in a Power Bloc
 - `is_in_same_power_bloc` — Checks if the scoped country is in the same power bloc as the target scoped country → country
 - `is_in_war_together` — Checks if country in scope is in war on the same side as event target → country
 - `is_independent_and_not_being_subjugated` — True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 - `is_indirect_subject_of` — Checks if country in scope is an indirect subject (subject-of-subject) of event target → country
 - `is_insurrectionary` — Check if country, movement or IG is insurrectionary (scopes: country, interest_group, political_movement)
-- `is_involved_in_journal_entry` — Check if the country is involved in a specific journal entry
+- `is_involved_in_journal_entry` — Check if the country is involved in a specific journal entry **Value Type**: common/journal_entries
 - `is_junior_in_customs_union` — True if country is a junior country in a customs custom
 - `is_land_adjacent_to_state` — Checks if country in scope shares a land border with a target state, ignoring sea crossings → state
 - `is_local_country` — Checks if the scoped country is local in specified strategic region
@@ -306,23 +312,26 @@
 - `is_mass_migration_origin` — Checks if the scoped country is the origin of mass migration
 - `is_mass_migration_origin_of_culture` — Checks if the scoped country origin of mass migration of specific culture → culture
 - `is_negotiating` — Check if the scoped country or interest group is currently negotiating. (scopes: country, interest_group)
-- `is_not_in_geographic_region` — Checks if a scoped object is NOT in a specific geographic region (scopes: country, state, state_region, strategic_region)
+- `is_not_in_geographic_region` — Checks if a scoped object is NOT in a specific geographic region **Value Type**: common/geographic_regions (scopes: country, state, state_region, strategic_region)
 - `is_owed_obligation_by` — Checks if the scoped country is owed a obligation by the target country → country
 - `is_player` — True if country scope is a player
 - `is_power_bloc_leader` — Checks if the country is a leader of a Power Bloc
-- `is_researching_technology` — Check if the country is actively researching a tech
+- `is_regional_objective_target_country` — Checks if the scoped country's AI has an active regional objective of the given type that targets the country Uses the objective type's country_target, or for objectives with only a state_target, w...
+- `is_regional_objective_target_state` — Checks if the scoped country's AI has an active regional objective of the given type that targets the state Usage:
+- `is_researching_technology` — Check if the country is actively researching a tech **Value Type**: common/technology/technologies
 - `is_researching_technology_category` — Check if the country is actively researching a tech category
 - `is_revolutionary` — Check if the country, movement or interest group is revolutionary (scopes: country, interest_group, political_movement)
 - `is_secessionist` — Check if the country, movement or interest group is secessionist (scopes: country, interest_group, political_movement)
 - `is_subject` — True if country is a subject
 - `is_subject_of` — Checks if country in scope is subject (or subject-of-subject) of event target → country
+- `is_subject_of_and_not_being_freed` — True if the country is a subject and no war goal to free it is pending in any wars → country
 - `is_subject_type` — Checks the country's subject type
 - `is_supporting_unification_candidate` — Check if scope country is supporting a unification candidate for a specific country formation
 - `is_taxing_goods` — Check if a country is taxing a good has_embargo
 - `is_unification_candidate` — Check if scope country is a unification candidate for country tag
 - `is_violating_sovereignty_of` — Check if the scoped country is violating the sovereignty of a target country → country
 - `isolated_states` — Compare number of Isolated States
-- `leading_producer_of` — Checks if country is producing the most of a certain good → goods
+- `leading_producer_of` — Checks if country is producing the most of a certain good **Value Type**: common/goods → goods
 - `leads_customs_union` — Check if any other country is part of this country's customs union
 - `liberty_desire` — Compare trigger for the Liberty Desire value in a scoped country.
 - `liberty_desire_weekly_progress` — Compare trigger for the weekly Liberty Desire progress value in a scoped country.
@@ -353,9 +362,9 @@
 - `overlord_can_decrease_subject_autonomy` — Check if an overlord can decrease a subject autonomy
 - `owes_obligation_to` — Checks if country in scope owes a obligation to event target → country
 - `owns_entire_or_is_contesting_state_region` — Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
-- `owns_entire_state_region` — Check if country owns entire region
-- `owns_entire_state_region_uncontested` — Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
-- `owns_treaty_port_in` — Does country own the treaty port in assigned state region
+- `owns_entire_state_region` — Check if country owns entire region **Value Type**: map_data/state_regions
+- `owns_entire_state_region_uncontested` — Check if country owns the entire region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
+- `owns_treaty_port_in` — Does country own the treaty port in assigned state region **Value Type**: map_data/state_regions
 - `play_participant_has_war_goal_of_type_against` — Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 - `play_side_has_war_goal_of_type_against` — Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
 - `political_strength_share` — Checks the political strength share of a pop type, religion or culture in a country or state. (scopes: country, state)
@@ -417,29 +426,30 @@
 - `total_population_share` — Compares the total population of a given country's share of the global population
 - `transfer_money_gross_income` — Does the country have this amount of gross income (income before expenses) from money transfer treaties
 - `transfer_money_net_income` — Does the country have this amount of net income (income after expenses) from money transfer treaties
-- `war_may_restore_country` — Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war → country_definition
+- `war_may_restore_country` — Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war **Value Typ... → country_definition
 - `war_participant_has_war_goal_of_type_against` — Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 - `war_side_has_war_goal_of_type_against` — Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
 - `war_support_from_war_goals` — Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
-- `was_formed_from` — Check if a formed country previously had a specific definition
+- `was_formed_from` — Check if a formed country previously had a specific definition **Value Type**: common/country_definitions
 - `wealth_share` — Checks the wealth political strength share of a pop type, religion or culture in a country or state. (scopes: country, state)
 - `weeks_until_bankruptcy` — Compares how many weeks the country can sustain its current deficit before its debt reaches its credit limit
 - `would_accept_diplomatic_action` — Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...
 
-### Effects (118)
+### Effects (125)
 
-- `activate_law` — Activates a law for a country → law_type
+- `activate_law` — Activates a law for a country **Value Type**: common/laws → law_type
 - `activate_production_method` — Activates the named production method for buildings of a certain type in country/state (scopes: country, state)
-- `add_banned_goods` — Adds a total ban of a good to a country → goods
+- `add_banned_goods` — Adds a total ban of a good to a country **Value Type**: common/goods → goods
 - `add_change_relations_progress` — Add progress towards changing relations between two countries
-- `add_company` — Adds company type to a country's companies → company_type
+- `add_company` — Adds company type to a country's companies **Value Type**: common/company_types → company_type
 - `add_country_monopoly` — Adds a monopoly to a country scope: → building_type
 - `add_culture_acceptance_modifier` — Apply a cultural acceptance modifier in the scoped country for the given culture.
+- `add_decree` — Adds the decree to the scoped state, or to every state of the scoped country, enacted by the state owner **Value Type**: common/decrees/ (scopes: country, state)
 - `add_electoral_confidence` — Adds x% electoral confidence to scope country
 - `add_enactment_modifier` — Adds an enactment-related timed modifier effect to object in scope
 - `add_enactment_phase` — Changes the current law enactment phase in scope country by an added amount.
 - `add_enactment_setback` — Changes the current law enactment setback count in scope country by an added amount.
-- `add_era_researched` — Add specified era as researched in a country scope
+- `add_era_researched` — Add specified era as researched in a country scope **Value Type**: common/technology/eras
 - `add_fervor_target_modifier` — Apply a fervor target modifier in the scoped country for the given culture.
 - `add_investment_pool` — Directly adds money to the investment pool
 - `add_involvement` — Adds involvement for the scoped country in the given strategic region
@@ -450,9 +460,9 @@
 - `add_primary_culture` — Adds a culture to the primary cultures of a country Where X is a culture scope → culture
 - `add_radicals` — Adds radicals to pops in the scoped country.
 - `add_supply_ships` — Adds number of supply ships to the scoped country
-- `add_taxed_goods` — Adds consumption taxes on a good to a country → goods
+- `add_taxed_goods` — Adds consumption taxes on a good to a country **Value Type**: common/goods → goods
 - `add_technology_progress` — Add technology progress Where X is a fixed point and Y is an technology
-- `add_technology_researched` — Research the specified technology in a country scope
+- `add_technology_researched` — Research the specified technology in a country scope **Value Type**: common/technology/technologies
 - `add_treasury` — Add/remove money from a country
 - `annex` — Annexes a country → country
 - `annex_as_civil_war` — Annexes a country with all the inheritance effects of a victorious side in a civil war → country
@@ -469,7 +479,7 @@
 - `clear_enactment_modifier` — Clears the current law enactment modifier of scope country.
 - `clear_ownership_transfer_fleet` — Clears the ownership transfer fleet in the scoped country, should be done after a series of set_ship_owner_multiple
 - `clear_scaled_debt` — Clears an amount of debt equal to the defined multiplier on target's max credit
-- `complete_objective_subgoal` — Completes an objective subgoal
+- `complete_objective_subgoal` — Completes an objective subgoal **Value Type**: common/objective_subgoals
 - `copy_laws` — Copies the constitution of the target country scope Warning: This stops any current enactment. → country
 - `create_bidirectional_truce` — Create a bidirectional truce between two countries
 - `create_character` — Creates a character, any option can be omitted.
@@ -483,37 +493,43 @@
 - `create_power_bloc` — Creates a power bloc with the scoped object as leader
 - `create_ship` — Creates a ship in a scoped country
 - `create_unidirectional_truce` — Create a unidirectional truce for one country towards another
-- `deactivate_law` — Deactivates a law for a country → law_type
+- `deactivate_law` — Deactivates a law for a country **Value Type**: common/laws → law_type
 - `deactivate_parties` — Deactivates parties in scoped country.
 - `decrease_autonomy` — Change a country's subject type to a less autonomus one
 - `disable_temporary_hostilities` — Disable temporary hostilities of a given type between two countries
 - `enable_temporary_hostilities` — Enable temporary hostilities between two countries for a duration
+- `enact_law` — Activates a law for a country as a successful enactment, with on_enact, movement loyalists and interest group approval **Value Type**: common/laws → law_type
 - `end_national_awakening` — Ends a cultural awakening: → culture
 - `end_truce` — Ends any truce betweeen two countries } → country
 - `increase_autonomy` — Change a country's subject type to a more autonomus one
 - `join_power_bloc` — Scoped country joins the power bloc of the target scoped country → country
 - `kill_population` — Kills a number of individuals in the population in the scoped country.
 - `kill_population_percent` — Kills a percentage of the population in the scoped country.
+- `leave_plays_supporting` — Makes the scoped country leave every diplomatic play and war where it supports the target country, unless the scoped country is a primary participant → country
+- `leave_power_bloc` — Scoped country leaves its power bloc The country must be a core member, subjects follow their overlord instead If the country is the leader, leadership passes to the next eligible member, or the bl...
 - `liberate_slaves` — Frees all slaves in the country/state (scopes: country, state)
 - `liberate_slaves_in_incorporated_states` — Frees all slaves in the country's incorporated states
 - `liberate_slaves_in_unincorporated_states` — Frees all slaves in the country's unincorporated states
 - `make_independent` — Makes a country independent.
 - `play_as` — Change which country scoped country's player will play as → country
+- `play_music_cue` — Plays the specified music track for the player, interrupting the current one
 - `recalculate_pop_ig_support` — Recalculates and updates a country's pop IG
 - `regime_change` — Executes a regime change by the scope country in the target country. → country
-- `remove_active_objective_subgoal` — Removes an active objective subgoal
-- `remove_banned_goods` — Removes a total ban of a good from a country → goods
-- `remove_company` — Removes company type from a country's companies → company_type
+- `remove_active_objective_subgoal` — Removes an active objective subgoal **Value Type**: common/objective_subgoals
+- `remove_banned_goods` — Removes a total ban of a good from a country **Value Type**: common/goods → goods
+- `remove_company` — Removes company type from a country's companies **Value Type**: common/company_types → company_type
+- `remove_decree` — Removes the decree from the scoped state, or from every state of the scoped country **Value Type**: common/decrees/ (scopes: country, state)
 - `remove_diplomatic_pact` — Removes a diplomatic pact between two countries, with scope country as initiator
-- `remove_enactment_modifier` — Removes an enactment-related timed modifier effect to object in scope
-- `remove_modifier` — Removes a timed modifier effect to object in scope (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
+- `remove_enactment_modifier` — Removes an enactment-related timed modifier effect to object in scope **Value Type**: common/static_modifiers
+- `remove_modifier` — Removes a timed modifier effect to object in scope **Value Type**: common/static_modifiers (scopes: country, building, character, institution, interest_group, journal_entry, political_movement, power_bloc, state)
 - `remove_monopoly` — removes a monopoly in a country scope for a specific building: → building_type
 - `remove_primary_culture` — Removes a culture from the primary cultures of a country Where X is a culture scope → culture
-- `remove_taxed_goods` — Removes consumption taxes on a good from a country → goods
+- `remove_taxed_goods` — Removes consumption taxes on a good from a country **Value Type**: common/goods → goods
 - `renege_treaty_ports_with` — Void all treaty-port treaties scoped country hosts for the target foreign power, returning the ports to the host → country
+- `replace_decree` — Replaces the from decree with the to decree in the scoped state, or in every state of the scoped country, keeping the original enactor (scopes: country, state)
 - `seize_investment_pool` — Seize investment pool for the treasury and transfer all private construction queue elements to the government
-- `set_capital` — Set capital state in a country scope Where X is a state region
-- `set_country_type` — Sets the type of country for a country, for history
+- `set_capital` — Set capital state in a country scope Where X is a state region **Value Type**: map_data/state_regions
+- `set_country_type` — Sets the type of country for a country, for history **Value Type**: common/country_types
 - `set_diplomats_expelled` — Expels diplomats from target country in scoped country → country
 - `set_electoral_confidence` — Set x% electoral confidence in scope country
 - `set_export_tariff_level` — Sets export tariff level for a good in scoped country
@@ -522,7 +538,7 @@
 - `set_immune_to_revolutions` — Makes a country immune to revolutions or removes such immunity.
 - `set_import_tariff_level` — Sets import tariff level for a good in scoped country
 - `set_institution_investment_level` — Sets the investment level for an institution
-- `set_market_capital` — Set market capital in a country scope Where X is a state region
+- `set_market_capital` — Set market capital in a country scope Where X is a state region **Value Type**: map_data/state_regions
 - `set_military_wage_level` — Sets the military wage level of scoped country
 - `set_mutual_secret_goal` — Set mutual secret AI goal for scope country and target country
 - `set_next_election_date` — Set next election date for country
@@ -531,12 +547,12 @@
 - `set_relations` — Set relations between two countries
 - `set_ruling_interest_groups` — Creates a government for the country in scope from a set of interest groups
 - `set_secret_goal` — Set a secret AI goal for scope country towards another country
-- `set_social_hierarchy` — Sets the social hierarchy the scoped country
-- `set_state_religion` — Changes the state religion of the country to the specified religion Where X is a religion scope → religion
-- `set_strategy` — Set AI strategy for scope country
+- `set_social_hierarchy` — Sets the social hierarchy the scoped country **Value Type**: common/social_hierarchies
+- `set_state_religion` — Changes the state religion of the country to the specified religion Where X is a religion scope **Value Type**: common/religions → religion
+- `set_strategy` — Set AI strategy for scope country **Value Type**: common/ai_strategies
 - `set_tax_level` — Sets the overall tax level of scoped country
 - `set_tension` — Set tension between two countries
-- `start_enactment` — Starts enacting the specified law type for the country in scope → law_type
+- `start_enactment` — Starts enacting the specified law type for the country in scope **Value Type**: common/laws → law_type
 - `start_national_awakening` — Starts a cultural awakening
 - `start_research_random_technology` — Scoped country starts research of any random technology they can
 - `take_on_scaled_debt` — Transfers an amount of debt equal to the defined multiplier on target's max credit 	who
@@ -554,13 +570,14 @@
 
 - `any/every/ordered/random_sea_node_adjacent_state` → state — Iterate through all states that share a sea node with a state
 
-### Triggers (80)
+### Triggers (85)
 
 - `arable_land` — Check arable land in state
 - `available_jobs` — Checks the state's number of available jobs in non-subsistence buildings
 - `blockade_level` — Compare to state's blockade level
 - `can_activate_production_method` — Checks if the building of a particular type in scoped state is able to active the specified production method
-- `can_construct_building` — Checks if 1 level of <building_type> can be constructed in a scoped state
+- `can_construct_building` — Checks if 1 level of <building_type> can be constructed in a scoped state **Value Type**: common/buildings
+- `cold_effect` — How much the scoped state is currently suffering from the cold, from 0 to 1
 - `controls_treaty_port_province` — Checks if the scoped state controls the treaty port province in the state region
 - `cultural_acceptance_delta` — Compare the current local delta (modification) to a culture's acceptance in the scoped state
 - `culture_percent_state` — Checks that a state's population has a certain percentage of a specific culture scope:example_state
@@ -571,12 +588,16 @@
 - `has_coastal_access` — Check if this state has a direct connection to a coastal state owned by the same country.
 - `has_converting_pops` — Check if a state has any pops currently in the process of converting.
 - `has_cultural_community` — Checks if a culture has a cultural community in the scoped state.
-- `has_decree` — Checks if scope state has a particular type of decree
+- `has_decree` — Checks if scope state has a particular type of decree **Value Type**: common/decrees/
 - `has_mobilizing_unit` — Checks if any Building in a scoped State maintains any Combat Units that are currently mobilizing
 - `has_port_state` — Check if scoped state has at least one port
 - `has_potential_resource` — Checks if the specificed building group is allowed in the scoped state. → building_type
-- `has_state_trait` — Checks if scoped state has a certain trait
+- `has_recently_removed_cossack_host` — Check if a Cossack Host was removed from the state recently enough to still count
+- `has_state_trait` — Checks if scoped state has a certain trait **Value Type**: common/state_traits
 - `ig_state_pol_strength_share` — True if IG in scope has scripted political strength in state
+- `in_north_hemisphere` — Checks if the scoped state's state region has its center point north of the equator
+- `in_south_hemisphere` — Checks if the scoped state's state region has its center point south of the equator
+- `in_tropics` — Checks if the scoped state's state region has its center point between the tropics of Cancer and Capricorn
 - `incorporation_progress` — Check incorporation progress in state
 - `infrastructure` — Compares the infrastructure value of a given state (scopes: state, state_region)
 - `infrastructure_delta` — Compares the infrastructure balance of a given state (scopes: state, state_region)
@@ -637,7 +658,7 @@
 - `world_market_access` — Checks the world market access of the scoped state Worldmarket_access > 0.8
 - `years_to_incorporate` — Checks how many years it would take for target country to incorporate scope state
 
-### Effects (34)
+### Effects (36)
 
 - `activate_building` — Activate a building in a state
 - `add_acceptance` — Adds an acceptance delta for a culture in a state
@@ -647,7 +668,7 @@
 - `add_loyalists_in_state` — Adds loyalists to pops in the scoped state.
 - `add_radicals_in_state` — Adds radicals to pops in the scoped state.
 - `add_religion_standard_of_living_modifier` — Apply a standard of living modifier in the scoped state for the given religion.
-- `add_resource_potential` — Add a building type as a resource potential to a state region (scopes: state, state_region)
+- `add_resource_potential` — Add a building type as a resource potential to a state region **Value Type**: common/buildings (scopes: state, state_region)
 - `cede_treaty_port` — Cedes a treaty port in scope state to target country → country
 - `change_resource_potential` — Change the potential max buildings of a resource in a state region. (scopes: state, state_region)
 - `convert_population` — Changes X% of the different religion population to the specified religion.
@@ -655,24 +676,26 @@
 - `create_mass_migration` — Initiates mass migration of a specific culture from a origin country to a scoped state
 - `create_pop` — Creates a pop in the scoped state
 - `deactivate_building` — Deactivate a building in a state
-- `force_resource_depletion` — Forces a resource depletion in state
-- `force_resource_discovery` — Forces a resource discovery in state
+- `establish_cossack_host` — Establishes a cossack host in the scoped state
+- `force_resource_depletion` — Forces a resource depletion in state **Value Type**: common/buildings
+- `force_resource_discovery` — Forces a resource discovery in state **Value Type**: common/buildings
 - `kill_population_in_state` — Kills a number of individuals in the population in the scoped state.
 - `kill_population_percent_in_state` — Kills a percentage of the population in the scoped state.
-- `remove_building` — Remove a building in the scope state
-- `remove_resource_potential` — Remove a building type from the resource potentials of a state region (scopes: state, state_region)
+- `remove_building` — Remove a building in the scope state **Value Type**: common/buildings
+- `remove_cossack_host` — Removes the cossack host from the scoped state
+- `remove_resource_potential` — Remove a building type from the resource potentials of a state region **Value Type**: common/buildings (scopes: state, state_region)
 - `reset_hub_names` — Resets the names of all hubs in a scoped state
 - `reset_state_name` — Resets the name of a scoped state
-- `set_available_for_autonomous_investment` — Sets a building type as available for autonomous investment in the current scoped State → building_type
+- `set_available_for_autonomous_investment` — Sets a building type as available for autonomous investment in the current scoped State **Value Type**: common/buildings → building_type
 - `set_devastation` — Set devastation to a state region or state (scopes: state, state_region)
 - `set_hub_name` — Sets the name of a hub in a scoped state to a localization string set_state_name
 - `set_hub_names` — Sets the names of all the hubs in a scoped state to localization strings based on the name of the state region, the type of hub and a specified suffix
 - `set_state_name` — Sets the name of a scoped state to a localization string
 - `set_state_owner` — Set State Owner → country
 - `set_state_type` — Sets a state to a certain type (incorporated, unincorporated, treaty_port)
-- `start_building_construction` — Start constructing a building in a scoped state as a government construction
-- `start_privately_funded_building_construction` — Start constructing a building in a scoped state as a private construction
-- `unset_available_for_autonomous_investment` — Sets a building type as unavailable for autonomous investment in the current scoped State → building_type
+- `start_building_construction` — Start constructing a building in a scoped state as a government construction **Value Type**: common/buildings
+- `start_privately_funded_building_construction` — Start constructing a building in a scoped state as a private construction **Value Type**: common/buildings
+- `unset_available_for_autonomous_investment` — Sets a building type as unavailable for autonomous investment in the current scoped State **Value Type**: common/buildings → building_type
 
 ---
 ## State Region
@@ -680,7 +703,7 @@
 ### Triggers (6)
 
 - `contains_capital_of` — Checks if scoped state region contains the capital of target tag
-- `has_harvest_condition` — Check if the scoped state region has a harvest condition of type
+- `has_harvest_condition` — Check if the scoped state region has a harvest condition of type **Value Type**: common/harvest_condition_types
 - `is_homeland` — Checks if scoped state region is a homeland of target culture
 - `is_state_region_land` — Check if the state region is on land
 - `pollution_amount` — Compare state region pollution
@@ -694,14 +717,14 @@
 - `add_pollution` — Increase/decrease pollution level in a scoped state region
 - `add_state_trait` — add state trait in a scoped state region
 - `create_state` — creates a state in a state region
-- `finish_harvest_condition` — Finish a harvest condition of type in the scoped state region
+- `finish_harvest_condition` — Finish a harvest condition of type in the scoped state region **Value Type**: common/harvest_condition_types
 - `remove_claim` — Removes scoped state region as a claim for target country → country
 - `remove_homeland` — Removes scoped state region as Homeland for target culture → culture
 - `remove_state_trait` — remove state trait in a scoped state region
 - `set_owner_of_provinces` — Gives a set of provinces in a state region to a specific country
 - `spawn_entity_effect` — Spawns a temporary entity at the center of the scoped state region for a number of seconds
 - `start_earthquake_effect` — Starts an earthquake camera shake centered on the scoped state region
-- `start_harvest_condition` — Start a harvest condition of type (or refresh it if already exists) in the scoped state region
+- `start_harvest_condition` — Start a harvest condition of type (or refresh it if already exists) in the scoped state region **Value Type**: common/harvest_condition_types
 - `start_harvest_condition_with_params` — Start a harvest condition of type in scoped state region where intensity and duration(in days) are optionally provided
 
 ---
@@ -713,17 +736,17 @@
 - `food_security` — Checks if a pop has a certain amount of food security
 - `has_ongoing_assimilation` — Checks if the scoped pop has ongoing cultural assimilation
 - `has_ongoing_conversion` — Checks if the scoped pop has ongoing religious conversion
-- `has_pop_culture` — Checks if pop has specific culture
-- `has_pop_religion` — Checks if pop has specific religion
-- `has_social_class` — Checks if the scoped pop belongs to a specific social class
+- `has_pop_culture` — Checks if pop has specific culture **Value Type**: common/cultures
+- `has_pop_religion` — Checks if pop has specific religion **Value Type**: common/religions
+- `has_social_class` — Checks if the scoped pop belongs to a specific social class **Value Type**: common/social_classes
 - `has_state_religion` — Check if the Pop has the state religion
 - `is_employed` — Check if the pop is employed
 - `is_in_mild_starvation` — Check if the pop is in mild starvation
 - `is_in_severe_starvation` — Check if the pop is in severe starvation
 - `is_in_starvation` — Check if the pop is in starvation (mild or severe)
-- `is_pop_type` — Checks if pop is of specified type
+- `is_pop_type` — Checks if pop is of specified type **Value Type**: common/pop_types
 - `pop_acceptance` — Compares the scoped pop's acceptance against an acceptence value
-- `pop_employment_building` — Checks if pop is working in a specific building type
+- `pop_employment_building` — Checks if pop is working in a specific building type **Value Type**: common/buildings
 - `pop_employment_building_group` — Checks if pop is working in a specific building type
 - `pop_has_primary_culture` — Checks if pop's culture is primary
 - `pop_loyalist_fraction` — Compares the number of Radicals in a pop to its total size
@@ -741,7 +764,7 @@
 - `add_pop_wealth` — Adds the wealth of the pop Where the distribution adding to wealth of the pop
 - `change_pop_culture` — Changes the culture of the scoped pop to a specified culture by a specified percentage
 - `change_pop_religion` — Changes the religion of the scoped pop to a specified religion by a specified percentage
-- `change_poptype` — Changes the type of the pop to the given type → pop_type
+- `change_poptype` — Changes the type of the pop to the given type **Value Type**: common/pop_types → pop_type
 - `move_partial_pop` — Moves the scoped pop to the specified state (they become unemployed)
 - `move_pop` — Moves the scoped pop in its entirety to the specified state (they become unemployed) NOTE: VERY IMPORTANT! This effect _may_ change the pop type of the moved pop. → state
 - `set_pop_literacy` — Sets the literacy of the pop Where the ratio is a script value computing the percentage of (workforce) pops that will be literate
@@ -751,7 +774,7 @@
 ---
 ## Building
 
-### Triggers (23)
+### Triggers (24)
 
 - `building_has_goods_shortage` — Check if building has a shortage of any of its inputs
 - `can_queue_building_levels` — Checks if the building's owner could queue the provided number of additional levels without hitting a level or resource potential cap
@@ -766,12 +789,13 @@
 - `has_failed_hires` — Checks if a building failed to hire someone last week
 - `is_buildable` — Check if a building is
 - `is_building_group` — True if scope is a building of given group
-- `is_building_type` — True if scope is a building of given type
+- `is_building_type` — True if scope is a building of given type **Value Type**: common/buildings
 - `is_government_funded` — Check if a building is is_government_funded
 - `is_subsidized` — Check if a building is being subsidized
 - `is_subsistence_building` — Check if a building is a subsistence building
 - `is_under_construction` — Checks if building is under construction
 - `levels_owned_by_country` — Compares how many levels a country or investors in that country own in a building  levels_owned_by_country
+- `num_building_assets_of_type` — Checks the number of building levels of a given type the scoped building own.
 - `occupancy` — Evaluates a building's current occupancy
 - `private_ownership_fraction` — Compares the fraction of this building's levels that are privately owned
 - `self_ownership_fraction` — Compares the fraction of this building's levels that are owned by the building itself
@@ -784,11 +808,12 @@
 ---
 ## Character
 
-### Iterators (1)
+### Iterators (2)
 
 - `any/every/ordered/random_character_role` → character_role — Iterate through all roles of the scoped character
+- `any/every/ordered/random_preferred_law` → law (scopes: character, interest_group, political_movement) — Iterate through all active and possible laws in the country of the scoped interest group, character or political movement, ordered by how much they...
 
-### Triggers (49)
+### Triggers (52)
 
 - `age` — Compares the character age
 - `amendment_stance` — Compares the stance of the scoped character, movement or interest group has on the specified amendment type, assuming the amendment type has a parent law 	amendment (scopes: character, interest_group, political_movement)
@@ -798,16 +823,17 @@
 - `commander_is_available` — Check if a commander is not busy
 - `commander_rank` — Compares the commanders rank
 - `could_support_political_movement` — Check if a character could potentially support a political movement
+- `current_career_length` — Checks if the character's current career length meets a duration threshold.
 - `experience_level` — Compares the character experience level
 - `has_commander_order` — Checks whether the scoped character is following the given order
 - `has_culture` — Checks characters culture
 - `has_ideology` — Check if scoped character or interest group has ideology (scopes: character, interest_group, political_movement)
 - `has_military_formation` — Checks if character has a Military Formation
-- `has_religion` — Checks characters religion
-- `has_role` — Checks if character has specific role
+- `has_religion` — Checks characters religion **Value Type**: common/religions
+- `has_role` — Checks if character has specific role **Value Type**: common/character_roles
 - `has_role_of_type` — Checks if character has a role of the specified archetype
-- `has_template` — Checks if character was made from the specified template
-- `has_trait` — Checks if character has specific trait
+- `has_template` — Checks if character was made from the specified template **Value Type**: common/character_templates
+- `has_trait` — Checks if character has specific trait **Value Type**: common/character_traits
 - `is_adult` — Check if character is an adult
 - `is_advancing_on_front` — Checks if a commander is advancing on a front → front
 - `is_attacker_in_battle` — Checks if a Commander or Ship is attacker in a battle (scopes: character, ship)
@@ -820,9 +846,11 @@
 - `is_immortal` — checks if the scoped character is immortal scope:abbath
 - `is_in_battle` — Checks if a Commander or Ship is engaged in battle (scopes: character, ship)
 - `is_in_exile_pool` — Checks whether the scoped character is in the exile pool
+- `is_in_regional_exile_pool` — Checks whether the scoped character is in a Regional Exile Pool is_in_regional_exile_pool
 - `is_in_void` — Check if character is in the void
 - `is_interest_group_leader` — Checks if character is the leader of their interest group is_interest_group_Leader = bool
-- `is_interest_group_type` — Checks if Interest Group is of a certain type Can also be used on characters directly (scopes: character, interest_group)
+- `is_interest_group_pool_full` — Checks if the character's interest group already has as many pool characters of the role as it would spawn, using the country rank pool multiplier for AI countries **Value Type**: common/character_...
+- `is_interest_group_type` — Checks if Interest Group is of a certain type Can also be used on characters directly **Value Type**: common/interest_groups (scopes: character, interest_group)
 - `is_monarch` — Checks if character is a monarch of a country with hereditary succession
 - `is_noble` — Check if character is a noble
 - `is_on_front` — Checks if a character or military formation has been assigned to a Front and has arrived there (scopes: character, military_formation)
@@ -833,7 +861,7 @@
 - `law_stance` — Compares the base stance of the scoped character, movement or interest group has about the specified law, ignoring the current active law in the same group (scopes: character, interest_group, political_movement)
 - `lifetime_piracy_income` — Compares the lifetime piracy income of a character
 - `loyalty` — Compares the character loyalty
-- `primary_role` — Checks if the character's primary role is the specified role
+- `primary_role` — Checks if the character's primary role is the specified role **Value Type**: common/character_roles
 - `prominence` — Compares the character prominence
 - `remaining_career_length` — Checks if the character's remaining career length meets a duration threshold.
 - `trait_value` — Compares the character's total trait value
@@ -843,21 +871,21 @@
 ### Effects (38)
 
 - `add_career_length` — Adds to a character's current career length in a role.
-- `add_character_role` — Adds a new role to a character, works with either archetype or database role
+- `add_character_role` — Adds a new role to a character, works with either archetype or database role **Value Type**: common/character_roles
 - `add_commander_rank` — Promotes/demotes a character a given amount of military ranks
 - `add_experience` — Adds an amount of experience to a commander
 - `add_random_trait` — Adds a random qualifying Trait of the specified category
-- `add_trait` — Add a trait to a Character
+- `add_trait` — Add a trait to a Character **Value Type**: common/character_traits
 - `change_character_culture` — Changes the culture of the scoped character → culture
-- `change_character_religion` — Changes the religion of the scoped character → religion
+- `change_character_religion` — Changes the religion of the scoped character **Value Type**: common/religions → religion
 - `disinherit_character` — Strips the scoped character of their heir status in whichever countries apply.
-- `exile_character` — Exile a character to the exile pool
+- `exile_character` — Exile a character to the exile pool exile_character
 - `free_character_from_void` — Frees a character from the void, if set to no character is deleted instead
 - `kill_character` — Kill a character kill_character
 - `place_character_in_void` — Banishes a character to the void, duration is how long character is kept before being deleted
 - `remove_as_interest_group_leader` — Removes a character from position as interest group leader
-- `remove_character_role` — Removes an existing role from a character, works with either archetype or database role
-- `remove_trait` — Remove a trait from a Character
+- `remove_character_role` — Removes an existing role from a character, works with either archetype or database role **Value Type**: common/character_roles
+- `remove_trait` — Remove a trait from a Character **Value Type**: common/character_traits
 - `replace_character_roles` — Replaces existing role(s) from a character with another, works with either archetype or database role replace_character_role
 - `retire_character` — Retire a character retire_character
 - `retire_character_if_should_be_culled` — Conditionally retire a character if it should be culled retire_character_if_should_be_culled
@@ -871,9 +899,9 @@
 - `set_commander_rank` — Promotes/demotes a character to a given military rank value
 - `set_first_name` — Changes the first name of a character to a loc key
 - `set_home_country` — Set a character's home country. → country
-- `set_home_country_definition` — Set a character's home country directly to a tag, you can use this to avoid making sure that the tag exists, this makes them an exile → country_definition
+- `set_home_country_definition` — Set a character's home country directly to a tag, you can use this to avoid making sure that the tag exists, this makes them an exile **Value Type**: common/country_definitions → country_definition
 - `set_home_state` — Changes the home state of the scoped character → state
-- `set_ideology` — Changes scoped character's ideology → ideology
+- `set_ideology` — Changes scoped character's ideology **Value Type**: common/ideologies → ideology
 - `set_interest_group` — Sets the interest group of the character → interest_group
 - `set_is_noble` — Sets the noble flag of the scoped character.
 - `set_last_name` — Changes the last name of a character to a loc key
@@ -891,7 +919,7 @@
 
 ### Triggers (15)
 
-- `has_active_building` — True if a state has an active building type (scopes: market, state)
+- `has_active_building` — True if a state has an active building type **Value Type**: common/buildings (scopes: market, state)
 - `has_port_market` — Check if scoped market has at least one port
 - `is_adjacent_to_market` — Checks if market in scope is adjacent to a target market → market
 - `market_consumption_share` — Compare fraction of scope market consumption coming from target country
@@ -971,10 +999,6 @@
 ---
 ## Interest Group
 
-### Iterators (1)
-
-- `any/every/ordered/random_preferred_law` → law — Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law
-
 ### Triggers (19)
 
 - `has_negotiated` — Checks whether the interest group has finished negotiation:
@@ -988,27 +1012,27 @@
 - `is_in_government` — True if IG scope is in the government
 - `is_marginal` — True if IG scope is marginal
 - `is_member_of_any_lobby` — Checks if interest group is member of any lobby
-- `is_member_of_lobby` — Checks if interest group is member of a certain lobby type → political_lobby_type
+- `is_member_of_lobby` — Checks if interest group is member of a certain lobby type **Value Type**: common/political_lobbies → political_lobby_type
 - `is_member_of_party` — Checks if Interest Group is a member of target party → party
 - `is_powerful` — True if IG scope is influential
 - `is_same_interest_group_type` — Checks if Interest Group is of the same IG type as target → interest_group
 - `is_strongest_ig_in_government` — Checks whether the scoped interest group has the most clout out of all interest groups in government
 - `most_powerful_strata` — Compares an interest groups most powerful strata
 - `prefers_law` — Checks if the scoped interest group prefers the specified law to the comparison law
-- `would_sponsor_amendment` — Check if scoped IG would sponsor an amendment of a given type → amendment_type
+- `would_sponsor_amendment` — Check if scoped IG would sponsor an amendment of a given type **Value Type**: common/amendments → amendment_type
 
 ### Effects (11)
 
 - `abandon_revolution` — Removes interest group from revolution
-- `add_ideology` — Adds an ideology to scoped interest group
+- `add_ideology` — Adds an ideology to scoped interest group **Value Type**: common/ideologies
 - `add_ruling_interest_group` — Adds interest group to government
 - `finish_negotiation` — Finishes the negotiation that has started for an interest group:
 - `improve_stance` — Improves the stance of an IG on the currently enacting law by the given number of steps:
 - `join_revolution` — Adds interest group to ongoing revolution
-- `remove_ideology` — Removes an ideology from scoped interest group
+- `remove_ideology` — Removes an ideology from scoped interest group **Value Type**: common/ideologies
 - `remove_ruling_interest_group` — Removes interest group in scope from government
 - `set_has_negotiated` — Sets whether an interest group has finished negotiating:
-- `set_ig_trait` — Adds a trait to the Interest Group, or replaces their current trait with the same approval level → interest_group_trait
+- `set_ig_trait` — Adds a trait to the Interest Group, or replaces their current trait with the same approval level **Value Type**: common/interest_group_traits → interest_group_trait
 - `set_interest_group_name` — Renames interest group to the specified loc key
 
 ---
@@ -1019,14 +1043,15 @@
 - `any/every/ordered/random_influenced_interest_group` → interest_group — Iterate through all interest groups influenced by a political movement
 - `any/every/ordered/random_supporting_character` → character — Iterate through all characters that support the scoped political movement
 
-### Triggers (15)
+### Triggers (16)
 
 - `days_since_movement_defeated` — Compares the number of days since a movement with this identity was last defeated in civil war.
 - `has_character_ideology` — Check if scoped political movement has character ideology
 - `has_core_ideology` — Check if scoped political movement has core ideology
 - `is_being_bolstered` — Check if scoped movement is being bolstered
 - `is_being_suppressed` — Check if scoped movement is being suppressed
-- `is_political_movement_type` — Check if a political movement is a particular type
+- `is_culture_seceding_elsewhere` — Its [concept_culture] has a growing or ongoing [concept_secession] in another [concept_country]
+- `is_political_movement_type` — Check if a political movement is a particular type **Value Type**: common/political_movements
 - `movement_can_cause_obstinance` — Check if the political movement can generate obstinance in states
 - `movement_is_causing_obstinance` — Check if the political movement is causing obstinance in any state
 - `movement_pressure` — Compares the pressure of the scoped movement on the target IG movement_pressure( ig:intelligentsia ) > 0.1
@@ -1039,8 +1064,8 @@
 
 ### Effects (6)
 
-- `add_character_ideology` — Adds a character ideology to the scoped political movement
-- `remove_character_ideology` — Removes a character ideology from the scoped political movement
+- `add_character_ideology` — Adds a character ideology to the scoped political movement **Value Type**: common/ideologies
+- `remove_character_ideology` — Removes a character ideology from the scoped political movement **Value Type**: common/ideologies
 - `set_bolstering` — Starts/stops bolstering the political movement in scope
 - `set_core_ideology` — Sets the core ideology of a political movement
 - `set_movement_defeated` — Sets or clears the defeat date for the movement in scope
@@ -1056,7 +1081,7 @@
 ### Triggers (3)
 
 - `appeasement` — Compares the appeasement of a political lobby.
-- `is_political_lobby_type` — Checks political lobby is of a certain lobby type
+- `is_political_lobby_type` — Checks political lobby is of a certain lobby type **Value Type**: common/political_lobbies
 - `lobby_clout` — Compare to total clout of scoped lobby's interest groups
 
 ### Effects (4)
@@ -1078,7 +1103,7 @@
 - `election_momentum` — Compare election momentum of the scoped party against a value
 - `has_party_member` — Checks if the target interest group is a member of scope party → interest_group
 - `is_party` — Checks if the target party is same as scoped party. → party
-- `is_party_type` — Checks if the scoped party's type is the specified one
+- `is_party_type` — Checks if the scoped party's type is the specified one **Value Type**: common/parties
 - `is_same_party_type` — Checks if Party is of the same party type as target → party
 
 ### Effects (5)
@@ -1101,10 +1126,10 @@
 - `culture_national_awakening_occurred` — Checks if the scoped culture has ever had a national awakening started
 - `culture_secession_progress` — Checks the culture's progress percentage towards secession in a country.
 - `culture_target_fervor` — Compares the target fervor for a given culture,
-- `has_cultural_obsession` — Checks if a culture has a certain goods as obsession
-- `has_culture_graphics` — Checks if a culture has a certain culture_graphics
+- `has_cultural_obsession` — Checks if a culture has a certain goods as obsession **Value Type**: common/goods
+- `has_culture_graphics` — Checks if a culture has a certain culture_graphics **Value Type**: common/culture_graphics
 - `has_discrimination_trait` — Checks if scoped culture or religion has the given discrimination trait (scopes: culture, religion)
-- `has_discrimination_trait_group` — Checks if scoped culture or religion has the given discrimination trait group (scopes: culture, religion)
+- `has_discrimination_trait_group` — Checks if scoped culture or religion has the given discrimination trait group **Value Type**: common/discrimination_trait_groups (scopes: culture, religion)
 - `has_homeland` — Checks if scoped culture has a homeland in target state or state region
 - `is_primary_culture_of` — Checks if culture is any of a country's primary cultures → country
 - `shares_heritage_trait_group_with_any_primary_culture` — Checks if culture shares any trait group marked as 'heritage' with any of a country's primary cultures → country
@@ -1121,13 +1146,13 @@
 ### Effects (10)
 
 - `add_cultural_community_in_state` — Adds a cultural community for the scoped culture in the target state. → state
-- `add_cultural_obsession` — Adds a new obsession to the culture in scope Where X is a goods
-- `add_cultural_taboo` — Adds a new taboo to the culture in scope Where X is a goods
+- `add_cultural_obsession` — Adds a new obsession to the culture in scope Where X is a goods **Value Type**: common/goods
+- `add_cultural_taboo` — Adds a new taboo to the culture in scope Where X is a goods **Value Type**: common/goods
 - `add_fervor` — Adds fervor to a scoped culture
-- `add_tradition_trait` — Adds a new tradition trait to the culture in scope Where X is a tradition trait
-- `remove_cultural_obsession` — Removes a new obsession to the culture in scope Where X is a goods
-- `remove_cultural_taboo` — Removes a taboo from the culture in scope Where X is a goods
-- `remove_tradition_trait` — Removes an existing tradition trait from the culture in scope Where X is a tradition trait
+- `add_tradition_trait` — Adds a new tradition trait to the culture in scope Where X is a tradition trait **Value Type**: common/discrimination_traits
+- `remove_cultural_obsession` — Removes a new obsession to the culture in scope Where X is a goods **Value Type**: common/goods
+- `remove_cultural_taboo` — Removes a taboo from the culture in scope Where X is a goods **Value Type**: common/goods
+- `remove_tradition_trait` — Removes an existing tradition trait from the culture in scope Where X is a tradition trait **Value Type**: common/discrimination_traits
 - `set_fervor` — Sets the fervor of a scoped culture
 - `set_name_format` — Sets the name format of a scoped culture
 
@@ -1136,11 +1161,11 @@
 
 ### Triggers (6)
 
-- `has_religious_taboo` — Checks if a religion has a certain goods as taboo
+- `has_religious_taboo` — Checks if a religion has a certain goods as taboo **Value Type**: common/goods
 - `is_state_religion` — Checks if the religion is the state religion in a country is_accepted_religion → country
 - `shares_heritage_trait_group_with_religion` — Checks if the religion shares any heritage trait group with another religion shares_heritage_trait_with_religion → religion
 - `shares_heritage_trait_group_with_state_religion` — Checks if the religion shares any heritage trait group with a country's state religion → country
-- `shares_heritage_trait_with_religion` — Checks if the religion shares any heritage trait with another religion → religion
+- `shares_heritage_trait_with_religion` — Checks if the religion shares any heritage trait with another religion **Value Type**: common/religions → religion
 - `shares_heritage_trait_with_state_religion` — Checks if the religion shares any heritage trait with a country's religion → country
 
 ---
@@ -1151,13 +1176,16 @@
 - `any/every/ordered/random_scope_front` → front — Iterate through all Fronts related to the scoped War
 - `any/every/ordered/random_war_participant` → country — Iterate through all participants in a war
 
-### Triggers (26)
+### Triggers (30)
 
+- `blockaded_gdp_share` — Compares the share of the target country's GDP that sits in blockaded states, from the scoped war
+- `connects_important_war_theaters` — Checks if pulling the target country into the scoped war would connect an important land theater of one side to an important land theater of the other, at least one of them not yet connected by lan...
+- `enemy_pressure` — Compares how actively the target country's enemies in the scoped war are pressuring it, from 0 to 1, through occupation, blockade or recent significant battles
 - `gdp_change_since_war_start` — Compares the fraction of GDP the target country has gained or lost since it entered the scoped war
+- `has_stalled_state_wargoal_against` — Checks if any enemy war goal in the scoped war would take whole states from the specified country without being contested or advanced on → country
 - `has_stalled_wargoal_against` — Checks if any enemy war goal in the scoped war targets the specified country without being contested or advanced on → country
 - `has_stalled_wargoal_held_by` — Checks if the specified country holds a war goal in the scoped war that is neither being contested nor advanced on → country
 - `has_war_goal` — Checks if war has a certain war goal type
-- `has_war_goal_at_risk_of_being_dropped` — Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long → country
 - `has_war_support` — Checks the war support of the target country in the scoped war
 - `has_war_support_change` — Checks the war support change of the target country in the scoped war
 - `is_at_war_with_rival` — Checks if the specified country is at war against a declared rival in the scoped war → country
@@ -1178,6 +1206,7 @@
 - `war_duration_months` — Number of months the scoped war has lasted scope:war
 - `war_goal_time_ramp` — How much of their full weight war-goal-driven war support factors currently carry, from zero early in the war to one once it is old
 - `war_has_active_peace_deal` — True if the war has a proposed peace deal
+- `war_is_in_stalemate` — True if both war leaders are at minimum war support and the war is counting down to a stalemate
 - `war_support_from_acceptance_of_dead` — Determines the war support change a country gets from their degree of cultural acceptance of manpower killed in the war, regardless of what side they were on
 
 ### Effects (3)
@@ -1200,7 +1229,7 @@
 - `escalation` — Checks whether escalation has passed a certain threshold
 - `has_play_goal` — Checks if diplomatic play has a certain war goal type
 - `initiator_is` — Checks who the initiator of a diplomatic play is → country
-- `is_diplomatic_play_type` — Checks diplomatic play is of a certain type
+- `is_diplomatic_play_type` — Checks diplomatic play is of a certain type **Value Type**: common/diplomatic_plays
 - `is_war` — True if the diplomatic play has escalated into war
 - `target_is` — Checks who the target of a diplomatic play is → country
 
@@ -1230,7 +1259,7 @@
 ### Triggers (4)
 
 - `income_transfer` — Compares the base income transfer of the diplomatic pact
-- `is_diplomatic_action_type` — Checks diplomatic pact is of a certain action type
+- `is_diplomatic_action_type` — Checks diplomatic pact is of a certain action type **Value Type**: common/diplomatic_actions
 - `is_diplomatic_pact_in_danger` — Checks if diplomatic pact is in danger of breaking
 - `is_forced_pact` — Check if a diplomatic pact has a forced duration due to reasons such as a sway or obligation
 
@@ -1239,22 +1268,23 @@
 
 ### Triggers (2)
 
-- `is_diplomatic_catalyst_type` — Checks diplomatic catalyst is of a certain catalyst type
+- `is_diplomatic_catalyst_type` — Checks diplomatic catalyst is of a certain catalyst type **Value Type**: common/diplomatic_catalysts
 - `lobby_formation_reason` — Check scope diplomatic catalyst or political lobby scope for lobby formation reason (scopes: diplomatic_catalyst, political_lobby)
 
 ---
 ## Military Formation
 
-### Triggers (14)
+### Triggers (15)
 
 - `formation_army_unit_type_fraction` — Checks that a formation has a certain percentage of a specific army unit type scope:example_formation
 - `formation_ship_type_fraction` — Checks that a formation has a certain fraction of a specific ship type
 - `has_high_attrition` — Checks if a Military Formation's attrition risk is higher than the base value for their type
 - `has_mobilization_option` — Checks that a formation has a specific mobilization option → mobilization_option
+- `has_naval_mission_in_region` — Checks if a Fleet is running a specific naval mission covering the specified strategic region
 - `has_naval_mission_with_invalid_area` — Checks if a Fleet has a naval mission with an invalid area
 - `has_ship_outside_max_port_distance` — Checks if a Fleet has any ship that is beyond its maximum distance to port
 - `is_army` — Checks if a military formation is Army
-- `is_doing_piracy_in_region` — Checks if a Fleet is doing piracy in the specified strategic region → strategic_region
+- `is_doing_piracy_in_region` — Checks if a Fleet is doing piracy in the specified strategic region **Value Type**: common/strategic_regions → strategic_region
 - `is_fleet` — Checks if a military formation is Fleet
 - `is_fully_mobilized` — Checks if the Military Formation is fully mobilized
 - `is_invalid_naval_mission_grace_period_active` — Checks if a Fleet is in the grace period from having an invalid naval mission
@@ -1293,7 +1323,7 @@
 ### Triggers (3)
 
 - `current_manpower` — Compares the current manpower of a battle side
-- `has_battle_condition` — True if the battle side currently has a condition with the given key
+- `has_battle_condition` — True if the battle side currently has a condition with the given key **Value Type**: common/battle_conditions
 - `starting_manpower` — Compares the starting manpower of a battle side
 
 ---
@@ -1318,7 +1348,7 @@
 - `current_cohesion_number` — Compare the current Cohesion as a numeric value
 - `current_cohesion_percentage` — Compare the current Cohesion as a percentage of the maximum of a Power Bloc in scope
 - `free_principle_slots` — Compare a power bloc's free principle slot count power_bloc
-- `has_identity` — Checks if the scoped power bloc has certain central identity → power_bloc_identity
+- `has_identity` — Checks if the scoped power bloc has certain central identity **Value Type**: common/power_bloc_identities → power_bloc_identity
 - `has_principle` — Checks if the scoped power bloc has certain principle → power_bloc_principle
 - `has_principle_group` — Checks if the scoped power bloc has a principle in the specified group → power_bloc_principle_group
 - `leverage_advantage` — Checks that the leverage advantage between power bloc and target country meets condition power_bloc
@@ -1352,12 +1382,15 @@
 - `total_used_principle_levels` — Compare a power bloc's total number of active principle levels power_bloc
 - `used_principle_slots` — Compare a power bloc's used principle slot count power_bloc
 
-### Effects (5)
+### Effects (8)
 
 - `add_cohesion_number` — Adds a specific amount of Cohesion to the Power Bloc in scope
 - `add_cohesion_percent` — Adds a percentage-based amount of Cohesion to the Power Bloc in scope
 - `add_leverage` — Adds the specified amount of leverage for the Power Bloc in scope on the country specified If the value is positive, also reduces the amount of Leverage of all other Blocs proportionally to match
+- `add_power_bloc_mandate` — Adds free mandates to the Power Bloc in scope, capped by MAX_MANDATES
 - `add_principle` — Adds principle to powerbloc power_bloc
+- `change_power_bloc_name` — Changes the name of the power bloc in scope to a localization key power_bloc
+- `destroy_power_bloc` — Dissolves the power bloc in scope and removes all of its members Should only be used by the power bloc leader, this is not enforced.
 - `remove_principle` — Removes principle from powerbloc power_bloc
 
 ---
@@ -1373,13 +1406,13 @@
 - `can_potentially_produce_prestige_goods` — Checks if scope company can potentially produce target prestige good type
 - `company_employed_levels` — Check the number of employed building levels of the scoped company
 - `company_global_productivity_comparison` — Check the average global productivity of buildings matching this company's buildings, scaled by owned levels for each type
-- `company_has_building_type_monopoly` — Check if the scoped company has a monopoly of the specified building type → building_type
+- `company_has_building_type_monopoly` — Check if the scoped company has a monopoly of the specified building type **Value Type**: common/buildings → building_type
 - `company_has_monopoly` — Check if the scoped company has any monopoly
 - `company_is_prosperous` — Check if a company is considered to be prosperous
 - `company_owned_levels` — Check the number of owned building levels of the scoped company
 - `company_productivity` — Check the productivity of the scoped company
 - `company_prosperity` — Check the prosperity of a company
-- `is_company_type` — Checks if scoped company is of the specified type → company_type
+- `is_company_type` — Checks if scoped company is of the specified type **Value Type**: common/company_types → company_type
 - `is_producing_prestige_goods` — Checks if scope company is producing prstige goods
 
 ### Effects (5)
@@ -1402,9 +1435,9 @@
 
 - `amendment_count` — Compares the number of amendments in scope law
 - `can_be_enacted` — Checks if a law could be enacted by its country, considering its current situation
-- `has_amendment` — Check if scoped law has an amendment of the given type → amendment_type
+- `has_amendment` — Check if scoped law has an amendment of the given type **Value Type**: common/amendments → amendment_type
 - `is_reasonable_law_for_petition` — Checks if a law is considered reasonable for a government petition to enact it
-- `law_approved_by` — Checks whether the scoped law is approved by an interest group
+- `law_approved_by` — Checks whether the scoped law is approved by an interest group **Value Type**: common/interest_groups
 - `law_is_available` — Checks if a law is available for its country, considering its current situation.
 
 ### Effects (1)
@@ -1416,7 +1449,7 @@
 
 ### Triggers (3)
 
-- `is_same_law_group_as` — Checks if scope law type is in the same group as the target law type scope → law_type
+- `is_same_law_group_as` — Checks if scope law type is in the same group as the target law type scope **Value Type**: common/laws → law_type
 - `law_progressiveness_difference` — Compares the progressiveness of the scoped law type to the target law type, higher value means greater difference "law_progressiveness_difference( scope:target_law )" > 50
 - `progressiveness` — Compare the progressiveness of the law type in scope law_type:law_isolationism.progressiveness > 50
 
@@ -1450,9 +1483,10 @@
 - `any/every/ordered/random_scope_article` → treaty_article — Iterate through articles of the scoped treaty
 - `any/every/ordered/random_scope_article_option` → treaty_article_options (scopes: treaty_options, treaty) — Iterate through article_options of the scoped treaty or treaty_options
 
-### Triggers (8)
+### Triggers (9)
 
 - `binds` — Checks if the scoped treaty or treaty_options binds the given country scope:some_treaty → country (scopes: treaty_options, treaty)
+- `has_planned_withdrawal` — Checks if a participant is planning on withdrawing from the scoped treaty
 - `is_enforced` — Checks if the scoped treaty is enforced on either party scope:some_treaty
 - `is_equal_exchange_for` — Checks if the scoped treaty is considered an equal exchange by target country, scope:some_treaty → country (scopes: treaty_options, treaty)
 - `is_exchanging_obligations` — Checks if the scoped treaty is exchanging any obligations, scope:some_treaty (scopes: treaty_options, treaty)
@@ -1493,7 +1527,7 @@
 
 ### Triggers (2)
 
-- `has_unit_type` — Checks if a Combat Unit is of the specified type → combat_unit_type
+- `has_unit_type` — Checks if a Combat Unit is of the specified type **Value Type**: common/combat_unit_types → combat_unit_type
 - `unit_formation_has_commander` — Checks if ther formation of the scoped combat unit has the provided character as one of its commanders → character
 
 ### Effects (1)
@@ -1509,8 +1543,8 @@
 
 ### Triggers (3)
 
-- `has_label` — Check if the scope object has the specified label
-- `has_terrain` — Check if the province has the specified terrain type
+- `has_label` — Check if the scope object has the specified label **Value Type**: common/labels
+- `has_terrain` — Check if the province has the specified terrain type **Value Type**: common/terrain
 - `is_province_land` — Check if the province is on land
 
 ---
@@ -1591,7 +1625,7 @@
 ### Triggers (5)
 
 - `is_auto_assigned` — Checks if the character role is auto assigned
-- `is_character_role` — Checks if the scoped character role is a specific role
+- `is_character_role` — Checks if the scoped character role is a specific role **Value Type**: common/character_roles
 - `is_character_role_type` — Checks if the scoped character role is of a specific archetype
 - `role_priority` — Compares the priority of the character role
 - `spawns_characters_to_pool` — Checks if the character role spawns characters to the pool
@@ -1664,7 +1698,7 @@
 - `assert_read` — Conditionally cause an assert during read time
 - `calc_true_if` — Returns true if the specified number of sub-triggers return true
 - `can_create_treaty` — Checks if a treaty between countries can be created
-- `can_start_tutorial_lesson` — Can the specified tutorial lesson be started?
+- `can_start_tutorial_lesson` — Can the specified tutorial lesson be started? **Value Type**: common/tutorial_lessons
 - `container_exists` — True if a named script container exists
 - `current_tooltip_depth` — Returns the number of tooltips currently open on screen
 - `custom_description` — Wraps triggers that get a custom description instead of the auto-generated one
@@ -1682,7 +1716,7 @@
 - `has_cosmetic_dlc` — Does the client have this cosmetic DLC
 - `has_cosmetic_dlc_feature` — Does the client have DLC that enables this particular cosmetic feature
 - `has_dlc_feature` — Does the host have DLC that enables this particular feature
-- `has_game_rule` — Is the given game rule setting enabled?
+- `has_game_rule` — Is the given game rule setting enabled? **Value Type**:
 - `has_game_started` — True if game has started
 - `has_gameplay_dlc` — Does the host have this gameplay DLC
 - `has_global_variable` — Checks whether the current scope has the specified variable set
@@ -1691,8 +1725,8 @@
 - `has_local_variable` — Checks whether the current scope has the specified variable set
 - `has_local_variable_list` — Checks whether the current scope has the specified variable list set
 - `has_local_variable_map` — Checks whether the current scope has the specified variable map
-- `has_map_interaction` — Checks if the map interaction type is active
-- `has_map_interaction_diplomatic_action` — Checks if our current map interaction is a specific diplomatic action
+- `has_map_interaction` — Checks if the map interaction type is active **Value Type**: common/map_interaction_types
+- `has_map_interaction_diplomatic_action` — Checks if our current map interaction is a specific diplomatic action **Value Type**: common/diplomatic_actions
 - `has_reached_end_date` — True if the end date (NDefines::NGame::END_DATE) has been reached
 - `has_unification_candidate` — Check if there is at least one unification candidate for country tag
 - `has_variable` — Checks whether the current scope has the specified variable set
@@ -1715,10 +1749,10 @@
 - `is_target_in_global_variable_list` — Checks if a target is in a variable list is_target_in_variable_list
 - `is_target_in_local_variable_list` — Checks if a target is in a variable list is_target_in_variable_list
 - `is_target_in_variable_list` — Checks if a target is in a variable list Where X is the name of the variable Where Y is an event target
-- `is_template_used` — Checks if character template has already been used
+- `is_template_used` — Checks if character template has already been used **Value Type**: common/character_templates
 - `is_theme_selected` — Does the player have the theme selected in settings
 - `is_tutorial_active` — Is the tutorial active?
-- `is_tutorial_lesson_active` — Is this the current tutorial lesson?
+- `is_tutorial_lesson_active` — Is this the current tutorial lesson? **Value Type**: common/tutorial_lessons
 - `is_tutorial_lesson_chain_completed` — Has the tutorial lesson chain with the specified key been finished?
 - `is_tutorial_lesson_completed` — has the tutorial lesson with the specified name been finished?
 - `is_tutorial_lesson_step_completed` — Has the tutorial lesson step been finished?
@@ -1747,9 +1781,9 @@
 - `weighted_calc_true_if` — Returns true if the sum of weights of fulfilled sub-triggers amount to the specified sum
 - `year` — Compares the current year of the game
 
-### Effects (76)
+### Effects (77)
 
-- `add_contextless_journal_entry` — Activates a contextless journal entry of the given type
+- `add_contextless_journal_entry` — Activates a contextless journal entry of the given type **Value Type**: common/journal_entries
 - `add_journal_entry` — Adds a journal entry to a scoped country's journal, with optional saved scope target
 - `add_to_global_variable_list` — Adds the event target to a variable list for the given duration add_to_variable_list
 - `add_to_global_variable_map` — Adds the event target to a variable map for the given duration add_to_variable_map
@@ -1794,8 +1828,8 @@
 - `hidden_effect` — Enclosed effects are not shown in tooltips
 - `if` — Executes enclosed effects if limit criteria are met
 - `post_audio_event` — Runs an audio even on a "persistent" audio object
-- `post_notification` — Posts notification
-- `post_proposal` — Posts proposal
+- `post_notification` — Posts notification **Value Type**: common/messages
+- `post_proposal` — Posts proposal **Value Type**: common/proposal_types
 - `random` — run an effect depending on a random chance, do nothing otherwise.
 - `remove_from_global_variable_map` — Removes the target from a variable map remove_from_variable_map
 - `remove_from_list` — Removes the current scope from a named list remove_from_list
@@ -1814,6 +1848,7 @@
 - `save_scope_value_as` — Saves a numerical or bool value as an arbitrarily-named target to be referenced later in the (unbroken) event chain
 - `save_temporary_scope_as` — Saves the current scope as an arbitrarily-named temporary target to be referenced later in the same effect
 - `save_temporary_scope_value_as` — Saves a numerical or bool value as an arbitrarily-named temporary target to be referenced later in the same effect
+- `send_interface_message` — Runs the contained effects in the current scope and shows the player a message
 - `set_global_variable` — Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An ...
 - `set_local_variable` — Sets a variable set_variable = { name = X value = Y days = Z } Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An ...
 - `set_variable` — Sets a variable Where X is the name of the variable used to then access it Where Y is any event target, bool, value, script value or flag (flag:W) An optional days where Z is the number of days or ...
@@ -1837,12 +1872,12 @@
 - `crew_percent` — Compare a ship's current crew
 - `hit_points` — Compare a ship's current hit points
 - `hit_points_percent` — Compare a ship's current hit points
-- `is_ai_ship_category` — Checks if scoped ship is in the specified AI ship category
+- `is_ai_ship_category` — Checks if scoped ship is in the specified AI ship category **Value Type**: common/ai_ship_categories
 - `is_damaged` — Checks if a ship is damaged
 - `is_flagship` — Checks if the scoped ship is assigned as the flagship
 - `is_in_port` — Checks if a ship is in port
 - `is_ship_obsolete_for` — Checks if the ship's type is obsolete for the target country. → country
-- `is_ship_type` — Checks if scoped ship is of the specified type → ship_type
+- `is_ship_type` — Checks if scoped ship is of the specified type **Value Type**: common/ship_types → ship_type
 - `is_ship_very_obsolete_for` — Checks if the ship's type is very obsolete for the target country. → country
 - `power_projection_value` — Compare a ship's power projection
 - `speed` — Compare a ship's speed

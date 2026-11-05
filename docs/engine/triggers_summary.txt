@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 none|active_lens|Checks if the specified lens is open
@@ -45,8 +45,10 @@ none|any_country_in_asia|Iterate through all countries in geographic region asia
 none|any_country_in_atlantic_coast|Iterate through all countries in geographic region atlantic_coast
 none|any_country_in_australasia|Iterate through all countries in geographic region australasia
 none|any_country_in_australia|Iterate through all countries in geographic region australia
+none|any_country_in_austria|Iterate through all countries in geographic region austria
 none|any_country_in_balkans|Iterate through all countries in geographic region balkans
 none|any_country_in_balkans_old|Iterate through all countries in geographic region balkans_old
+none|any_country_in_baltic_governorates|Iterate through all countries in geographic region baltic_governorates
 none|any_country_in_baltic_old|Iterate through all countries in geographic region baltic_old
 none|any_country_in_baltic_states_old|Iterate through all countries in geographic region baltic_states_old
 none|any_country_in_belarus_old|Iterate through all countries in geographic region belarus_old
@@ -58,6 +60,7 @@ none|any_country_in_brazil|Iterate through all countries in geographic region br
 none|any_country_in_burma|Iterate through all countries in geographic region burma
 none|any_country_in_canada|Iterate through all countries in geographic region canada
 none|any_country_in_canada_old|Iterate through all countries in geographic region canada_old
+none|any_country_in_canadian_confederation|Iterate through all countries in geographic region canadian_confederation
 none|any_country_in_caribbean_old|Iterate through all countries in geographic region caribbean_old
 none|any_country_in_castile|Iterate through all countries in geographic region castile
 none|any_country_in_caucasus_old|Iterate through all countries in geographic region caucasus_old
@@ -67,6 +70,7 @@ none|any_country_in_central_asia|Iterate through all countries in geographic reg
 none|any_country_in_central_asia_old|Iterate through all countries in geographic region central_asia_old
 none|any_country_in_central_europe|Iterate through all countries in geographic region central_europe
 none|any_country_in_central_india_old|Iterate through all countries in geographic region central_india_old
+none|any_country_in_central_russia|Iterate through all countries in geographic region central_russia
 none|any_country_in_china|Iterate through all countries in geographic region china
 none|any_country_in_chorasmia|Iterate through all countries in geographic region chorasmia
 none|any_country_in_colonial_la_plata|Iterate through all countries in geographic region colonial_la_plata
@@ -74,23 +78,28 @@ none|any_country_in_colonial_new_grenada|Iterate through all countries in geogra
 none|any_country_in_colonial_new_spain|Iterate through all countries in geographic region colonial_new_spain
 none|any_country_in_colonial_peru|Iterate through all countries in geographic region colonial_peru
 none|any_country_in_congo_old|Iterate through all countries in geographic region congo_old
+none|any_country_in_congress_poland|Iterate through all countries in geographic region congress_poland
 none|any_country_in_danubia_old|Iterate through all countries in geographic region danubia_old
 none|any_country_in_delhi_calcutta_line|Iterate through all countries in geographic region delhi_calcutta_line
+none|any_country_in_diocese_of_kamchatka|Iterate through all countries in geographic region diocese_of_kamchatka
 none|any_country_in_dixie_old|Iterate through all countries in geographic region dixie_old
 none|any_country_in_dnieper_old|Iterate through all countries in geographic region dnieper_old
 none|any_country_in_east_africa|Iterate through all countries in geographic region east_africa
 none|any_country_in_east_asia|Iterate through all countries in geographic region east_asia
 none|any_country_in_east_sibera_old|Iterate through all countries in geographic region east_sibera_old
+none|any_country_in_east_slavic_states|Iterate through all countries in geographic region east_slavic_states
 none|any_country_in_eastern_europe|Iterate through all countries in geographic region eastern_europe
 none|any_country_in_england_old|Iterate through all countries in geographic region england_old
 none|any_country_in_equatorial_africa|Iterate through all countries in geographic region equatorial_africa
 none|any_country_in_ethiopia_old|Iterate through all countries in geographic region ethiopia_old
 none|any_country_in_europe|Iterate through all countries in geographic region europe
 none|any_country_in_ezochi|Iterate through all countries in geographic region ezochi
+none|any_country_in_finland|Iterate through all countries in geographic region finland
 none|any_country_in_finland_old|Iterate through all countries in geographic region finland_old
 none|any_country_in_france|Iterate through all countries in geographic region france
 none|any_country_in_france_old|Iterate through all countries in geographic region france_old
 none|any_country_in_french_natural_borders|Iterate through all countries in geographic region french_natural_borders
+none|any_country_in_french_revolution_zone|Iterate through all countries in geographic region french_revolution_zone
 none|any_country_in_german_confederation|Iterate through all countries in geographic region german_confederation
 none|any_country_in_gran_colombia|Iterate through all countries in geographic region gran_colombia
 none|any_country_in_great_game_region|Iterate through all countries in geographic region great_game_region
@@ -151,6 +160,7 @@ none|any_country_in_north_sea_old|Iterate through all countries in geographic re
 none|any_country_in_northeast_asia|Iterate through all countries in geographic region northeast_asia
 none|any_country_in_northern_europe|Iterate through all countries in geographic region northern_europe
 none|any_country_in_northern_mexico|Iterate through all countries in geographic region northern_mexico
+none|any_country_in_northwestern_russia|Iterate through all countries in geographic region northwestern_russia
 none|any_country_in_occitania_old|Iterate through all countries in geographic region occitania_old
 none|any_country_in_oceania|Iterate through all countries in geographic region oceania
 none|any_country_in_old_world|Iterate through all countries in geographic region old_world
@@ -161,11 +171,31 @@ none|any_country_in_peru|Iterate through all countries in geographic region peru
 none|any_country_in_philippines|Iterate through all countries in geographic region philippines
 none|any_country_in_poland_old|Iterate through all countries in geographic region poland_old
 none|any_country_in_polar_seas|Iterate through all countries in geographic region polar_seas
+none|any_country_in_priamurye|Iterate through all countries in geographic region priamurye
 none|any_country_in_punjab_old|Iterate through all countries in geographic region punjab_old
+none|any_country_in_qing_empire|Iterate through all countries in geographic region qing_empire
+none|any_country_in_rcw_baltic|Iterate through all countries in geographic region rcw_baltic
+none|any_country_in_rcw_central|Iterate through all countries in geographic region rcw_central
+none|any_country_in_rcw_east_siberia|Iterate through all countries in geographic region rcw_east_siberia
+none|any_country_in_rcw_far_east|Iterate through all countries in geographic region rcw_far_east
+none|any_country_in_rcw_north|Iterate through all countries in geographic region rcw_north
+none|any_country_in_rcw_petrograd|Iterate through all countries in geographic region rcw_petrograd
+none|any_country_in_rcw_south|Iterate through all countries in geographic region rcw_south
+none|any_country_in_rcw_steppe|Iterate through all countries in geographic region rcw_steppe
+none|any_country_in_rcw_transcaucasia|Iterate through all countries in geographic region rcw_transcaucasia
+none|any_country_in_rcw_turkestan|Iterate through all countries in geographic region rcw_turkestan
+none|any_country_in_rcw_ukraine|Iterate through all countries in geographic region rcw_ukraine
+none|any_country_in_rcw_urals|Iterate through all countries in geographic region rcw_urals
+none|any_country_in_rcw_volga|Iterate through all countries in geographic region rcw_volga
+none|any_country_in_rcw_west|Iterate through all countries in geographic region rcw_west
+none|any_country_in_rcw_west_siberia|Iterate through all countries in geographic region rcw_west_siberia
 none|any_country_in_rhine_old|Iterate through all countries in geographic region rhine_old
 none|any_country_in_ring_of_fire|Iterate through all countries in geographic region ring_of_fire
 none|any_country_in_russia|Iterate through all countries in geographic region russia
 none|any_country_in_russia_old|Iterate through all countries in geographic region russia_old
+none|any_country_in_russia_western_borderlands|Iterate through all countries in geographic region russia_western_borderlands
+none|any_country_in_russian_eurasia|Iterate through all countries in geographic region russian_eurasia
+none|any_country_in_russian_siberia|Iterate through all countries in geographic region russian_siberia
 none|any_country_in_scandinavia|Iterate through all countries in geographic region scandinavia
 none|any_country_in_senegal_old|Iterate through all countries in geographic region senegal_old
 none|any_country_in_siberia|Iterate through all countries in geographic region siberia
@@ -179,8 +209,11 @@ none|any_country_in_southern_africa|Iterate through all countries in geographic 
 none|any_country_in_southern_africa_old|Iterate through all countries in geographic region southern_africa_old
 none|any_country_in_southern_cone|Iterate through all countries in geographic region southern_cone
 none|any_country_in_southern_europe|Iterate through all countries in geographic region southern_europe
+none|any_country_in_southern_russia|Iterate through all countries in geographic region southern_russia
 none|any_country_in_subsaharan_africa|Iterate through all countries in geographic region subsaharan_africa
 none|any_country_in_the_midwest_old|Iterate through all countries in geographic region the_midwest_old
+none|any_country_in_trans_siberian_line|Iterate through all countries in geographic region trans_siberian_line
+none|any_country_in_transcaucasia|Iterate through all countries in geographic region transcaucasia
 none|any_country_in_transoxiana|Iterate through all countries in geographic region transoxiana
 none|any_country_in_tropical_seas|Iterate through all countries in geographic region tropical_seas
 none|any_country_in_turkestan|Iterate through all countries in geographic region turkestan
@@ -227,7 +260,7 @@ law|any_possible_amendment_type|Iterate through amendment types that could be ad
 country|any_potential_party|Iterate through all potential political parties in a country
 none|any_power_bloc|Iterate through all power blocs
 power_bloc|any_power_bloc_member|Iterate through all members of the scoped power bloc including the leader
-interest_group|any_preferred_law|Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law
+character,interest_group,political_movement|any_preferred_law|Iterate through all active and possible laws in the country of the scoped interest group, character or political movement, ordered by how much they...
 country,country_definition|any_primary_culture|Primary cultures of the scoped country or country definition
 province|any_province|Iterate through all Provinces in the scoped State
 none|any_province_in_afghanistan|Iterate through all provinces in geographic region afghanistan
@@ -248,8 +281,10 @@ none|any_province_in_asia|Iterate through all provinces in geographic region asi
 none|any_province_in_atlantic_coast|Iterate through all provinces in geographic region atlantic_coast
 none|any_province_in_australasia|Iterate through all provinces in geographic region australasia
 none|any_province_in_australia|Iterate through all provinces in geographic region australia
+none|any_province_in_austria|Iterate through all provinces in geographic region austria
 none|any_province_in_balkans|Iterate through all provinces in geographic region balkans
 none|any_province_in_balkans_old|Iterate through all provinces in geographic region balkans_old
+none|any_province_in_baltic_governorates|Iterate through all provinces in geographic region baltic_governorates
 none|any_province_in_baltic_old|Iterate through all provinces in geographic region baltic_old
 none|any_province_in_baltic_states_old|Iterate through all provinces in geographic region baltic_states_old
 none|any_province_in_belarus_old|Iterate through all provinces in geographic region belarus_old
@@ -261,6 +296,7 @@ none|any_province_in_brazil|Iterate through all provinces in geographic region b
 none|any_province_in_burma|Iterate through all provinces in geographic region burma
 none|any_province_in_canada|Iterate through all provinces in geographic region canada
 none|any_province_in_canada_old|Iterate through all provinces in geographic region canada_old
+none|any_province_in_canadian_confederation|Iterate through all provinces in geographic region canadian_confederation
 none|any_province_in_caribbean_old|Iterate through all provinces in geographic region caribbean_old
 none|any_province_in_castile|Iterate through all provinces in geographic region castile
 none|any_province_in_caucasus_old|Iterate through all provinces in geographic region caucasus_old
@@ -270,6 +306,7 @@ none|any_province_in_central_asia|Iterate through all provinces in geographic re
 none|any_province_in_central_asia_old|Iterate through all provinces in geographic region central_asia_old
 none|any_province_in_central_europe|Iterate through all provinces in geographic region central_europe
 none|any_province_in_central_india_old|Iterate through all provinces in geographic region central_india_old
+none|any_province_in_central_russia|Iterate through all provinces in geographic region central_russia
 none|any_province_in_china|Iterate through all provinces in geographic region china
 none|any_province_in_chorasmia|Iterate through all provinces in geographic region chorasmia
 none|any_province_in_colonial_la_plata|Iterate through all provinces in geographic region colonial_la_plata
@@ -277,23 +314,28 @@ none|any_province_in_colonial_new_grenada|Iterate through all provinces in geogr
 none|any_province_in_colonial_new_spain|Iterate through all provinces in geographic region colonial_new_spain
 none|any_province_in_colonial_peru|Iterate through all provinces in geographic region colonial_peru
 none|any_province_in_congo_old|Iterate through all provinces in geographic region congo_old
+none|any_province_in_congress_poland|Iterate through all provinces in geographic region congress_poland
 none|any_province_in_danubia_old|Iterate through all provinces in geographic region danubia_old
 none|any_province_in_delhi_calcutta_line|Iterate through all provinces in geographic region delhi_calcutta_line
+none|any_province_in_diocese_of_kamchatka|Iterate through all provinces in geographic region diocese_of_kamchatka
 none|any_province_in_dixie_old|Iterate through all provinces in geographic region dixie_old
 none|any_province_in_dnieper_old|Iterate through all provinces in geographic region dnieper_old
 none|any_province_in_east_africa|Iterate through all provinces in geographic region east_africa
 none|any_province_in_east_asia|Iterate through all provinces in geographic region east_asia
 none|any_province_in_east_sibera_old|Iterate through all provinces in geographic region east_sibera_old
+none|any_province_in_east_slavic_states|Iterate through all provinces in geographic region east_slavic_states
 none|any_province_in_eastern_europe|Iterate through all provinces in geographic region eastern_europe
 none|any_province_in_england_old|Iterate through all provinces in geographic region england_old
 none|any_province_in_equatorial_africa|Iterate through all provinces in geographic region equatorial_africa
 none|any_province_in_ethiopia_old|Iterate through all provinces in geographic region ethiopia_old
 none|any_province_in_europe|Iterate through all provinces in geographic region europe
 none|any_province_in_ezochi|Iterate through all provinces in geographic region ezochi
+none|any_province_in_finland|Iterate through all provinces in geographic region finland
 none|any_province_in_finland_old|Iterate through all provinces in geographic region finland_old
 none|any_province_in_france|Iterate through all provinces in geographic region france
 none|any_province_in_france_old|Iterate through all provinces in geographic region france_old
 none|any_province_in_french_natural_borders|Iterate through all provinces in geographic region french_natural_borders
+none|any_province_in_french_revolution_zone|Iterate through all provinces in geographic region french_revolution_zone
 none|any_province_in_german_confederation|Iterate through all provinces in geographic region german_confederation
 none|any_province_in_gran_colombia|Iterate through all provinces in geographic region gran_colombia
 none|any_province_in_great_game_region|Iterate through all provinces in geographic region great_game_region
@@ -354,6 +396,7 @@ none|any_province_in_north_sea_old|Iterate through all provinces in geographic r
 none|any_province_in_northeast_asia|Iterate through all provinces in geographic region northeast_asia
 none|any_province_in_northern_europe|Iterate through all provinces in geographic region northern_europe
 none|any_province_in_northern_mexico|Iterate through all provinces in geographic region northern_mexico
+none|any_province_in_northwestern_russia|Iterate through all provinces in geographic region northwestern_russia
 none|any_province_in_occitania_old|Iterate through all provinces in geographic region occitania_old
 none|any_province_in_oceania|Iterate through all provinces in geographic region oceania
 none|any_province_in_old_world|Iterate through all provinces in geographic region old_world
@@ -364,11 +407,31 @@ none|any_province_in_peru|Iterate through all provinces in geographic region per
 none|any_province_in_philippines|Iterate through all provinces in geographic region philippines
 none|any_province_in_poland_old|Iterate through all provinces in geographic region poland_old
 none|any_province_in_polar_seas|Iterate through all provinces in geographic region polar_seas
+none|any_province_in_priamurye|Iterate through all provinces in geographic region priamurye
 none|any_province_in_punjab_old|Iterate through all provinces in geographic region punjab_old
+none|any_province_in_qing_empire|Iterate through all provinces in geographic region qing_empire
+none|any_province_in_rcw_baltic|Iterate through all provinces in geographic region rcw_baltic
+none|any_province_in_rcw_central|Iterate through all provinces in geographic region rcw_central
+none|any_province_in_rcw_east_siberia|Iterate through all provinces in geographic region rcw_east_siberia
+none|any_province_in_rcw_far_east|Iterate through all provinces in geographic region rcw_far_east
+none|any_province_in_rcw_north|Iterate through all provinces in geographic region rcw_north
+none|any_province_in_rcw_petrograd|Iterate through all provinces in geographic region rcw_petrograd
+none|any_province_in_rcw_south|Iterate through all provinces in geographic region rcw_south
+none|any_province_in_rcw_steppe|Iterate through all provinces in geographic region rcw_steppe
+none|any_province_in_rcw_transcaucasia|Iterate through all provinces in geographic region rcw_transcaucasia
+none|any_province_in_rcw_turkestan|Iterate through all provinces in geographic region rcw_turkestan
+none|any_province_in_rcw_ukraine|Iterate through all provinces in geographic region rcw_ukraine
+none|any_province_in_rcw_urals|Iterate through all provinces in geographic region rcw_urals
+none|any_province_in_rcw_volga|Iterate through all provinces in geographic region rcw_volga
+none|any_province_in_rcw_west|Iterate through all provinces in geographic region rcw_west
+none|any_province_in_rcw_west_siberia|Iterate through all provinces in geographic region rcw_west_siberia
 none|any_province_in_rhine_old|Iterate through all provinces in geographic region rhine_old
 none|any_province_in_ring_of_fire|Iterate through all provinces in geographic region ring_of_fire
 none|any_province_in_russia|Iterate through all provinces in geographic region russia
 none|any_province_in_russia_old|Iterate through all provinces in geographic region russia_old
+none|any_province_in_russia_western_borderlands|Iterate through all provinces in geographic region russia_western_borderlands
+none|any_province_in_russian_eurasia|Iterate through all provinces in geographic region russian_eurasia
+none|any_province_in_russian_siberia|Iterate through all provinces in geographic region russian_siberia
 none|any_province_in_scandinavia|Iterate through all provinces in geographic region scandinavia
 none|any_province_in_senegal_old|Iterate through all provinces in geographic region senegal_old
 none|any_province_in_siberia|Iterate through all provinces in geographic region siberia
@@ -382,8 +445,11 @@ none|any_province_in_southern_africa|Iterate through all provinces in geographic
 none|any_province_in_southern_africa_old|Iterate through all provinces in geographic region southern_africa_old
 none|any_province_in_southern_cone|Iterate through all provinces in geographic region southern_cone
 none|any_province_in_southern_europe|Iterate through all provinces in geographic region southern_europe
+none|any_province_in_southern_russia|Iterate through all provinces in geographic region southern_russia
 none|any_province_in_subsaharan_africa|Iterate through all provinces in geographic region subsaharan_africa
 none|any_province_in_the_midwest_old|Iterate through all provinces in geographic region the_midwest_old
+none|any_province_in_trans_siberian_line|Iterate through all provinces in geographic region trans_siberian_line
+none|any_province_in_transcaucasia|Iterate through all provinces in geographic region transcaucasia
 none|any_province_in_transoxiana|Iterate through all provinces in geographic region transoxiana
 none|any_province_in_tropical_seas|Iterate through all provinces in geographic region tropical_seas
 none|any_province_in_turkestan|Iterate through all provinces in geographic region turkestan
@@ -451,8 +517,10 @@ none|any_state_in_asia|Iterate through all states in geographic region asia
 none|any_state_in_atlantic_coast|Iterate through all states in geographic region atlantic_coast
 none|any_state_in_australasia|Iterate through all states in geographic region australasia
 none|any_state_in_australia|Iterate through all states in geographic region australia
+none|any_state_in_austria|Iterate through all states in geographic region austria
 none|any_state_in_balkans|Iterate through all states in geographic region balkans
 none|any_state_in_balkans_old|Iterate through all states in geographic region balkans_old
+none|any_state_in_baltic_governorates|Iterate through all states in geographic region baltic_governorates
 none|any_state_in_baltic_old|Iterate through all states in geographic region baltic_old
 none|any_state_in_baltic_states_old|Iterate through all states in geographic region baltic_states_old
 none|any_state_in_belarus_old|Iterate through all states in geographic region belarus_old
@@ -464,6 +532,7 @@ none|any_state_in_brazil|Iterate through all states in geographic region brazil
 none|any_state_in_burma|Iterate through all states in geographic region burma
 none|any_state_in_canada|Iterate through all states in geographic region canada
 none|any_state_in_canada_old|Iterate through all states in geographic region canada_old
+none|any_state_in_canadian_confederation|Iterate through all states in geographic region canadian_confederation
 none|any_state_in_caribbean_old|Iterate through all states in geographic region caribbean_old
 none|any_state_in_castile|Iterate through all states in geographic region castile
 none|any_state_in_caucasus_old|Iterate through all states in geographic region caucasus_old
@@ -473,6 +542,7 @@ none|any_state_in_central_asia|Iterate through all states in geographic region c
 none|any_state_in_central_asia_old|Iterate through all states in geographic region central_asia_old
 none|any_state_in_central_europe|Iterate through all states in geographic region central_europe
 none|any_state_in_central_india_old|Iterate through all states in geographic region central_india_old
+none|any_state_in_central_russia|Iterate through all states in geographic region central_russia
 none|any_state_in_china|Iterate through all states in geographic region china
 none|any_state_in_chorasmia|Iterate through all states in geographic region chorasmia
 none|any_state_in_colonial_la_plata|Iterate through all states in geographic region colonial_la_plata
@@ -480,23 +550,28 @@ none|any_state_in_colonial_new_grenada|Iterate through all states in geographic 
 none|any_state_in_colonial_new_spain|Iterate through all states in geographic region colonial_new_spain
 none|any_state_in_colonial_peru|Iterate through all states in geographic region colonial_peru
 none|any_state_in_congo_old|Iterate through all states in geographic region congo_old
+none|any_state_in_congress_poland|Iterate through all states in geographic region congress_poland
 none|any_state_in_danubia_old|Iterate through all states in geographic region danubia_old
 none|any_state_in_delhi_calcutta_line|Iterate through all states in geographic region delhi_calcutta_line
+none|any_state_in_diocese_of_kamchatka|Iterate through all states in geographic region diocese_of_kamchatka
 none|any_state_in_dixie_old|Iterate through all states in geographic region dixie_old
 none|any_state_in_dnieper_old|Iterate through all states in geographic region dnieper_old
 none|any_state_in_east_africa|Iterate through all states in geographic region east_africa
 none|any_state_in_east_asia|Iterate through all states in geographic region east_asia
 none|any_state_in_east_sibera_old|Iterate through all states in geographic region east_sibera_old
+none|any_state_in_east_slavic_states|Iterate through all states in geographic region east_slavic_states
 none|any_state_in_eastern_europe|Iterate through all states in geographic region eastern_europe
 none|any_state_in_england_old|Iterate through all states in geographic region england_old
 none|any_state_in_equatorial_africa|Iterate through all states in geographic region equatorial_africa
 none|any_state_in_ethiopia_old|Iterate through all states in geographic region ethiopia_old
 none|any_state_in_europe|Iterate through all states in geographic region europe
 none|any_state_in_ezochi|Iterate through all states in geographic region ezochi
+none|any_state_in_finland|Iterate through all states in geographic region finland
 none|any_state_in_finland_old|Iterate through all states in geographic region finland_old
 none|any_state_in_france|Iterate through all states in geographic region france
 none|any_state_in_france_old|Iterate through all states in geographic region france_old
 none|any_state_in_french_natural_borders|Iterate through all states in geographic region french_natural_borders
+none|any_state_in_french_revolution_zone|Iterate through all states in geographic region french_revolution_zone
 none|any_state_in_german_confederation|Iterate through all states in geographic region german_confederation
 none|any_state_in_gran_colombia|Iterate through all states in geographic region gran_colombia
 none|any_state_in_great_game_region|Iterate through all states in geographic region great_game_region
@@ -557,6 +632,7 @@ none|any_state_in_north_sea_old|Iterate through all states in geographic region 
 none|any_state_in_northeast_asia|Iterate through all states in geographic region northeast_asia
 none|any_state_in_northern_europe|Iterate through all states in geographic region northern_europe
 none|any_state_in_northern_mexico|Iterate through all states in geographic region northern_mexico
+none|any_state_in_northwestern_russia|Iterate through all states in geographic region northwestern_russia
 none|any_state_in_occitania_old|Iterate through all states in geographic region occitania_old
 none|any_state_in_oceania|Iterate through all states in geographic region oceania
 none|any_state_in_old_world|Iterate through all states in geographic region old_world
@@ -567,11 +643,31 @@ none|any_state_in_peru|Iterate through all states in geographic region peru
 none|any_state_in_philippines|Iterate through all states in geographic region philippines
 none|any_state_in_poland_old|Iterate through all states in geographic region poland_old
 none|any_state_in_polar_seas|Iterate through all states in geographic region polar_seas
+none|any_state_in_priamurye|Iterate through all states in geographic region priamurye
 none|any_state_in_punjab_old|Iterate through all states in geographic region punjab_old
+none|any_state_in_qing_empire|Iterate through all states in geographic region qing_empire
+none|any_state_in_rcw_baltic|Iterate through all states in geographic region rcw_baltic
+none|any_state_in_rcw_central|Iterate through all states in geographic region rcw_central
+none|any_state_in_rcw_east_siberia|Iterate through all states in geographic region rcw_east_siberia
+none|any_state_in_rcw_far_east|Iterate through all states in geographic region rcw_far_east
+none|any_state_in_rcw_north|Iterate through all states in geographic region rcw_north
+none|any_state_in_rcw_petrograd|Iterate through all states in geographic region rcw_petrograd
+none|any_state_in_rcw_south|Iterate through all states in geographic region rcw_south
+none|any_state_in_rcw_steppe|Iterate through all states in geographic region rcw_steppe
+none|any_state_in_rcw_transcaucasia|Iterate through all states in geographic region rcw_transcaucasia
+none|any_state_in_rcw_turkestan|Iterate through all states in geographic region rcw_turkestan
+none|any_state_in_rcw_ukraine|Iterate through all states in geographic region rcw_ukraine
+none|any_state_in_rcw_urals|Iterate through all states in geographic region rcw_urals
+none|any_state_in_rcw_volga|Iterate through all states in geographic region rcw_volga
+none|any_state_in_rcw_west|Iterate through all states in geographic region rcw_west
+none|any_state_in_rcw_west_siberia|Iterate through all states in geographic region rcw_west_siberia
 none|any_state_in_rhine_old|Iterate through all states in geographic region rhine_old
 none|any_state_in_ring_of_fire|Iterate through all states in geographic region ring_of_fire
 none|any_state_in_russia|Iterate through all states in geographic region russia
 none|any_state_in_russia_old|Iterate through all states in geographic region russia_old
+none|any_state_in_russia_western_borderlands|Iterate through all states in geographic region russia_western_borderlands
+none|any_state_in_russian_eurasia|Iterate through all states in geographic region russian_eurasia
+none|any_state_in_russian_siberia|Iterate through all states in geographic region russian_siberia
 none|any_state_in_scandinavia|Iterate through all states in geographic region scandinavia
 none|any_state_in_senegal_old|Iterate through all states in geographic region senegal_old
 none|any_state_in_siberia|Iterate through all states in geographic region siberia
@@ -585,8 +681,11 @@ none|any_state_in_southern_africa|Iterate through all states in geographic regio
 none|any_state_in_southern_africa_old|Iterate through all states in geographic region southern_africa_old
 none|any_state_in_southern_cone|Iterate through all states in geographic region southern_cone
 none|any_state_in_southern_europe|Iterate through all states in geographic region southern_europe
+none|any_state_in_southern_russia|Iterate through all states in geographic region southern_russia
 none|any_state_in_subsaharan_africa|Iterate through all states in geographic region subsaharan_africa
 none|any_state_in_the_midwest_old|Iterate through all states in geographic region the_midwest_old
+none|any_state_in_trans_siberian_line|Iterate through all states in geographic region trans_siberian_line
+none|any_state_in_transcaucasia|Iterate through all states in geographic region transcaucasia
 none|any_state_in_transoxiana|Iterate through all states in geographic region transoxiana
 none|any_state_in_tropical_seas|Iterate through all states in geographic region tropical_seas
 none|any_state_in_turkestan|Iterate through all states in geographic region turkestan
@@ -617,8 +716,10 @@ none|any_state_region_in_asia|Iterate through all state regions in geographic re
 none|any_state_region_in_atlantic_coast|Iterate through all state regions in geographic region atlantic_coast
 none|any_state_region_in_australasia|Iterate through all state regions in geographic region australasia
 none|any_state_region_in_australia|Iterate through all state regions in geographic region australia
+none|any_state_region_in_austria|Iterate through all state regions in geographic region austria
 none|any_state_region_in_balkans|Iterate through all state regions in geographic region balkans
 none|any_state_region_in_balkans_old|Iterate through all state regions in geographic region balkans_old
+none|any_state_region_in_baltic_governorates|Iterate through all state regions in geographic region baltic_governorates
 none|any_state_region_in_baltic_old|Iterate through all state regions in geographic region baltic_old
 none|any_state_region_in_baltic_states_old|Iterate through all state regions in geographic region baltic_states_old
 none|any_state_region_in_belarus_old|Iterate through all state regions in geographic region belarus_old
@@ -630,6 +731,7 @@ none|any_state_region_in_brazil|Iterate through all state regions in geographic 
 none|any_state_region_in_burma|Iterate through all state regions in geographic region burma
 none|any_state_region_in_canada|Iterate through all state regions in geographic region canada
 none|any_state_region_in_canada_old|Iterate through all state regions in geographic region canada_old
+none|any_state_region_in_canadian_confederation|Iterate through all state regions in geographic region canadian_confederation
 none|any_state_region_in_caribbean_old|Iterate through all state regions in geographic region caribbean_old
 none|any_state_region_in_castile|Iterate through all state regions in geographic region castile
 none|any_state_region_in_caucasus_old|Iterate through all state regions in geographic region caucasus_old
@@ -639,6 +741,7 @@ none|any_state_region_in_central_asia|Iterate through all state regions in geogr
 none|any_state_region_in_central_asia_old|Iterate through all state regions in geographic region central_asia_old
 none|any_state_region_in_central_europe|Iterate through all state regions in geographic region central_europe
 none|any_state_region_in_central_india_old|Iterate through all state regions in geographic region central_india_old
+none|any_state_region_in_central_russia|Iterate through all state regions in geographic region central_russia
 none|any_state_region_in_china|Iterate through all state regions in geographic region china
 none|any_state_region_in_chorasmia|Iterate through all state regions in geographic region chorasmia
 none|any_state_region_in_colonial_la_plata|Iterate through all state regions in geographic region colonial_la_plata
@@ -646,23 +749,28 @@ none|any_state_region_in_colonial_new_grenada|Iterate through all state regions 
 none|any_state_region_in_colonial_new_spain|Iterate through all state regions in geographic region colonial_new_spain
 none|any_state_region_in_colonial_peru|Iterate through all state regions in geographic region colonial_peru
 none|any_state_region_in_congo_old|Iterate through all state regions in geographic region congo_old
+none|any_state_region_in_congress_poland|Iterate through all state regions in geographic region congress_poland
 none|any_state_region_in_danubia_old|Iterate through all state regions in geographic region danubia_old
 none|any_state_region_in_delhi_calcutta_line|Iterate through all state regions in geographic region delhi_calcutta_line
+none|any_state_region_in_diocese_of_kamchatka|Iterate through all state regions in geographic region diocese_of_kamchatka
 none|any_state_region_in_dixie_old|Iterate through all state regions in geographic region dixie_old
 none|any_state_region_in_dnieper_old|Iterate through all state regions in geographic region dnieper_old
 none|any_state_region_in_east_africa|Iterate through all state regions in geographic region east_africa
 none|any_state_region_in_east_asia|Iterate through all state regions in geographic region east_asia
 none|any_state_region_in_east_sibera_old|Iterate through all state regions in geographic region east_sibera_old
+none|any_state_region_in_east_slavic_states|Iterate through all state regions in geographic region east_slavic_states
 none|any_state_region_in_eastern_europe|Iterate through all state regions in geographic region eastern_europe
 none|any_state_region_in_england_old|Iterate through all state regions in geographic region england_old
 none|any_state_region_in_equatorial_africa|Iterate through all state regions in geographic region equatorial_africa
 none|any_state_region_in_ethiopia_old|Iterate through all state regions in geographic region ethiopia_old
 none|any_state_region_in_europe|Iterate through all state regions in geographic region europe
 none|any_state_region_in_ezochi|Iterate through all state regions in geographic region ezochi
+none|any_state_region_in_finland|Iterate through all state regions in geographic region finland
 none|any_state_region_in_finland_old|Iterate through all state regions in geographic region finland_old
 none|any_state_region_in_france|Iterate through all state regions in geographic region france
 none|any_state_region_in_france_old|Iterate through all state regions in geographic region france_old
 none|any_state_region_in_french_natural_borders|Iterate through all state regions in geographic region french_natural_borders
+none|any_state_region_in_french_revolution_zone|Iterate through all state regions in geographic region french_revolution_zone
 none|any_state_region_in_german_confederation|Iterate through all state regions in geographic region german_confederation
 none|any_state_region_in_gran_colombia|Iterate through all state regions in geographic region gran_colombia
 none|any_state_region_in_great_game_region|Iterate through all state regions in geographic region great_game_region
@@ -723,6 +831,7 @@ none|any_state_region_in_north_sea_old|Iterate through all state regions in geog
 none|any_state_region_in_northeast_asia|Iterate through all state regions in geographic region northeast_asia
 none|any_state_region_in_northern_europe|Iterate through all state regions in geographic region northern_europe
 none|any_state_region_in_northern_mexico|Iterate through all state regions in geographic region northern_mexico
+none|any_state_region_in_northwestern_russia|Iterate through all state regions in geographic region northwestern_russia
 none|any_state_region_in_occitania_old|Iterate through all state regions in geographic region occitania_old
 none|any_state_region_in_oceania|Iterate through all state regions in geographic region oceania
 none|any_state_region_in_old_world|Iterate through all state regions in geographic region old_world
@@ -733,11 +842,31 @@ none|any_state_region_in_peru|Iterate through all state regions in geographic re
 none|any_state_region_in_philippines|Iterate through all state regions in geographic region philippines
 none|any_state_region_in_poland_old|Iterate through all state regions in geographic region poland_old
 none|any_state_region_in_polar_seas|Iterate through all state regions in geographic region polar_seas
+none|any_state_region_in_priamurye|Iterate through all state regions in geographic region priamurye
 none|any_state_region_in_punjab_old|Iterate through all state regions in geographic region punjab_old
+none|any_state_region_in_qing_empire|Iterate through all state regions in geographic region qing_empire
+none|any_state_region_in_rcw_baltic|Iterate through all state regions in geographic region rcw_baltic
+none|any_state_region_in_rcw_central|Iterate through all state regions in geographic region rcw_central
+none|any_state_region_in_rcw_east_siberia|Iterate through all state regions in geographic region rcw_east_siberia
+none|any_state_region_in_rcw_far_east|Iterate through all state regions in geographic region rcw_far_east
+none|any_state_region_in_rcw_north|Iterate through all state regions in geographic region rcw_north
+none|any_state_region_in_rcw_petrograd|Iterate through all state regions in geographic region rcw_petrograd
+none|any_state_region_in_rcw_south|Iterate through all state regions in geographic region rcw_south
+none|any_state_region_in_rcw_steppe|Iterate through all state regions in geographic region rcw_steppe
+none|any_state_region_in_rcw_transcaucasia|Iterate through all state regions in geographic region rcw_transcaucasia
+none|any_state_region_in_rcw_turkestan|Iterate through all state regions in geographic region rcw_turkestan
+none|any_state_region_in_rcw_ukraine|Iterate through all state regions in geographic region rcw_ukraine
+none|any_state_region_in_rcw_urals|Iterate through all state regions in geographic region rcw_urals
+none|any_state_region_in_rcw_volga|Iterate through all state regions in geographic region rcw_volga
+none|any_state_region_in_rcw_west|Iterate through all state regions in geographic region rcw_west
+none|any_state_region_in_rcw_west_siberia|Iterate through all state regions in geographic region rcw_west_siberia
 none|any_state_region_in_rhine_old|Iterate through all state regions in geographic region rhine_old
 none|any_state_region_in_ring_of_fire|Iterate through all state regions in geographic region ring_of_fire
 none|any_state_region_in_russia|Iterate through all state regions in geographic region russia
 none|any_state_region_in_russia_old|Iterate through all state regions in geographic region russia_old
+none|any_state_region_in_russia_western_borderlands|Iterate through all state regions in geographic region russia_western_borderlands
+none|any_state_region_in_russian_eurasia|Iterate through all state regions in geographic region russian_eurasia
+none|any_state_region_in_russian_siberia|Iterate through all state regions in geographic region russian_siberia
 none|any_state_region_in_scandinavia|Iterate through all state regions in geographic region scandinavia
 none|any_state_region_in_senegal_old|Iterate through all state regions in geographic region senegal_old
 none|any_state_region_in_siberia|Iterate through all state regions in geographic region siberia
@@ -751,8 +880,11 @@ none|any_state_region_in_southern_africa|Iterate through all state regions in ge
 none|any_state_region_in_southern_africa_old|Iterate through all state regions in geographic region southern_africa_old
 none|any_state_region_in_southern_cone|Iterate through all state regions in geographic region southern_cone
 none|any_state_region_in_southern_europe|Iterate through all state regions in geographic region southern_europe
+none|any_state_region_in_southern_russia|Iterate through all state regions in geographic region southern_russia
 none|any_state_region_in_subsaharan_africa|Iterate through all state regions in geographic region subsaharan_africa
 none|any_state_region_in_the_midwest_old|Iterate through all state regions in geographic region the_midwest_old
+none|any_state_region_in_trans_siberian_line|Iterate through all state regions in geographic region trans_siberian_line
+none|any_state_region_in_transcaucasia|Iterate through all state regions in geographic region transcaucasia
 none|any_state_region_in_transoxiana|Iterate through all state regions in geographic region transoxiana
 none|any_state_region_in_tropical_seas|Iterate through all state regions in geographic region tropical_seas
 none|any_state_region_in_turkestan|Iterate through all state regions in geographic region turkestan
@@ -784,8 +916,10 @@ none|any_strategic_region_in_asia|Iterate through all strategic regions in geogr
 none|any_strategic_region_in_atlantic_coast|Iterate through all strategic regions in geographic region atlantic_coast
 none|any_strategic_region_in_australasia|Iterate through all strategic regions in geographic region australasia
 none|any_strategic_region_in_australia|Iterate through all strategic regions in geographic region australia
+none|any_strategic_region_in_austria|Iterate through all strategic regions in geographic region austria
 none|any_strategic_region_in_balkans|Iterate through all strategic regions in geographic region balkans
 none|any_strategic_region_in_balkans_old|Iterate through all strategic regions in geographic region balkans_old
+none|any_strategic_region_in_baltic_governorates|Iterate through all strategic regions in geographic region baltic_governorates
 none|any_strategic_region_in_baltic_old|Iterate through all strategic regions in geographic region baltic_old
 none|any_strategic_region_in_baltic_states_old|Iterate through all strategic regions in geographic region baltic_states_old
 none|any_strategic_region_in_belarus_old|Iterate through all strategic regions in geographic region belarus_old
@@ -797,6 +931,7 @@ none|any_strategic_region_in_brazil|Iterate through all strategic regions in geo
 none|any_strategic_region_in_burma|Iterate through all strategic regions in geographic region burma
 none|any_strategic_region_in_canada|Iterate through all strategic regions in geographic region canada
 none|any_strategic_region_in_canada_old|Iterate through all strategic regions in geographic region canada_old
+none|any_strategic_region_in_canadian_confederation|Iterate through all strategic regions in geographic region canadian_confederation
 none|any_strategic_region_in_caribbean_old|Iterate through all strategic regions in geographic region caribbean_old
 none|any_strategic_region_in_castile|Iterate through all strategic regions in geographic region castile
 none|any_strategic_region_in_caucasus_old|Iterate through all strategic regions in geographic region caucasus_old
@@ -806,6 +941,7 @@ none|any_strategic_region_in_central_asia|Iterate through all strategic regions 
 none|any_strategic_region_in_central_asia_old|Iterate through all strategic regions in geographic region central_asia_old
 none|any_strategic_region_in_central_europe|Iterate through all strategic regions in geographic region central_europe
 none|any_strategic_region_in_central_india_old|Iterate through all strategic regions in geographic region central_india_old
+none|any_strategic_region_in_central_russia|Iterate through all strategic regions in geographic region central_russia
 none|any_strategic_region_in_china|Iterate through all strategic regions in geographic region china
 none|any_strategic_region_in_chorasmia|Iterate through all strategic regions in geographic region chorasmia
 none|any_strategic_region_in_colonial_la_plata|Iterate through all strategic regions in geographic region colonial_la_plata
@@ -813,23 +949,28 @@ none|any_strategic_region_in_colonial_new_grenada|Iterate through all strategic 
 none|any_strategic_region_in_colonial_new_spain|Iterate through all strategic regions in geographic region colonial_new_spain
 none|any_strategic_region_in_colonial_peru|Iterate through all strategic regions in geographic region colonial_peru
 none|any_strategic_region_in_congo_old|Iterate through all strategic regions in geographic region congo_old
+none|any_strategic_region_in_congress_poland|Iterate through all strategic regions in geographic region congress_poland
 none|any_strategic_region_in_danubia_old|Iterate through all strategic regions in geographic region danubia_old
 none|any_strategic_region_in_delhi_calcutta_line|Iterate through all strategic regions in geographic region delhi_calcutta_line
+none|any_strategic_region_in_diocese_of_kamchatka|Iterate through all strategic regions in geographic region diocese_of_kamchatka
 none|any_strategic_region_in_dixie_old|Iterate through all strategic regions in geographic region dixie_old
 none|any_strategic_region_in_dnieper_old|Iterate through all strategic regions in geographic region dnieper_old
 none|any_strategic_region_in_east_africa|Iterate through all strategic regions in geographic region east_africa
 none|any_strategic_region_in_east_asia|Iterate through all strategic regions in geographic region east_asia
 none|any_strategic_region_in_east_sibera_old|Iterate through all strategic regions in geographic region east_sibera_old
+none|any_strategic_region_in_east_slavic_states|Iterate through all strategic regions in geographic region east_slavic_states
 none|any_strategic_region_in_eastern_europe|Iterate through all strategic regions in geographic region eastern_europe
 none|any_strategic_region_in_england_old|Iterate through all strategic regions in geographic region england_old
 none|any_strategic_region_in_equatorial_africa|Iterate through all strategic regions in geographic region equatorial_africa
 none|any_strategic_region_in_ethiopia_old|Iterate through all strategic regions in geographic region ethiopia_old
 none|any_strategic_region_in_europe|Iterate through all strategic regions in geographic region europe
 none|any_strategic_region_in_ezochi|Iterate through all strategic regions in geographic region ezochi
+none|any_strategic_region_in_finland|Iterate through all strategic regions in geographic region finland
 none|any_strategic_region_in_finland_old|Iterate through all strategic regions in geographic region finland_old
 none|any_strategic_region_in_france|Iterate through all strategic regions in geographic region france
 none|any_strategic_region_in_france_old|Iterate through all strategic regions in geographic region france_old
 none|any_strategic_region_in_french_natural_borders|Iterate through all strategic regions in geographic region french_natural_borders
+none|any_strategic_region_in_french_revolution_zone|Iterate through all strategic regions in geographic region french_revolution_zone
 none|any_strategic_region_in_german_confederation|Iterate through all strategic regions in geographic region german_confederation
 none|any_strategic_region_in_gran_colombia|Iterate through all strategic regions in geographic region gran_colombia
 none|any_strategic_region_in_great_game_region|Iterate through all strategic regions in geographic region great_game_region
@@ -890,6 +1031,7 @@ none|any_strategic_region_in_north_sea_old|Iterate through all strategic regions
 none|any_strategic_region_in_northeast_asia|Iterate through all strategic regions in geographic region northeast_asia
 none|any_strategic_region_in_northern_europe|Iterate through all strategic regions in geographic region northern_europe
 none|any_strategic_region_in_northern_mexico|Iterate through all strategic regions in geographic region northern_mexico
+none|any_strategic_region_in_northwestern_russia|Iterate through all strategic regions in geographic region northwestern_russia
 none|any_strategic_region_in_occitania_old|Iterate through all strategic regions in geographic region occitania_old
 none|any_strategic_region_in_oceania|Iterate through all strategic regions in geographic region oceania
 none|any_strategic_region_in_old_world|Iterate through all strategic regions in geographic region old_world
@@ -900,11 +1042,31 @@ none|any_strategic_region_in_peru|Iterate through all strategic regions in geogr
 none|any_strategic_region_in_philippines|Iterate through all strategic regions in geographic region philippines
 none|any_strategic_region_in_poland_old|Iterate through all strategic regions in geographic region poland_old
 none|any_strategic_region_in_polar_seas|Iterate through all strategic regions in geographic region polar_seas
+none|any_strategic_region_in_priamurye|Iterate through all strategic regions in geographic region priamurye
 none|any_strategic_region_in_punjab_old|Iterate through all strategic regions in geographic region punjab_old
+none|any_strategic_region_in_qing_empire|Iterate through all strategic regions in geographic region qing_empire
+none|any_strategic_region_in_rcw_baltic|Iterate through all strategic regions in geographic region rcw_baltic
+none|any_strategic_region_in_rcw_central|Iterate through all strategic regions in geographic region rcw_central
+none|any_strategic_region_in_rcw_east_siberia|Iterate through all strategic regions in geographic region rcw_east_siberia
+none|any_strategic_region_in_rcw_far_east|Iterate through all strategic regions in geographic region rcw_far_east
+none|any_strategic_region_in_rcw_north|Iterate through all strategic regions in geographic region rcw_north
+none|any_strategic_region_in_rcw_petrograd|Iterate through all strategic regions in geographic region rcw_petrograd
+none|any_strategic_region_in_rcw_south|Iterate through all strategic regions in geographic region rcw_south
+none|any_strategic_region_in_rcw_steppe|Iterate through all strategic regions in geographic region rcw_steppe
+none|any_strategic_region_in_rcw_transcaucasia|Iterate through all strategic regions in geographic region rcw_transcaucasia
+none|any_strategic_region_in_rcw_turkestan|Iterate through all strategic regions in geographic region rcw_turkestan
+none|any_strategic_region_in_rcw_ukraine|Iterate through all strategic regions in geographic region rcw_ukraine
+none|any_strategic_region_in_rcw_urals|Iterate through all strategic regions in geographic region rcw_urals
+none|any_strategic_region_in_rcw_volga|Iterate through all strategic regions in geographic region rcw_volga
+none|any_strategic_region_in_rcw_west|Iterate through all strategic regions in geographic region rcw_west
+none|any_strategic_region_in_rcw_west_siberia|Iterate through all strategic regions in geographic region rcw_west_siberia
 none|any_strategic_region_in_rhine_old|Iterate through all strategic regions in geographic region rhine_old
 none|any_strategic_region_in_ring_of_fire|Iterate through all strategic regions in geographic region ring_of_fire
 none|any_strategic_region_in_russia|Iterate through all strategic regions in geographic region russia
 none|any_strategic_region_in_russia_old|Iterate through all strategic regions in geographic region russia_old
+none|any_strategic_region_in_russia_western_borderlands|Iterate through all strategic regions in geographic region russia_western_borderlands
+none|any_strategic_region_in_russian_eurasia|Iterate through all strategic regions in geographic region russian_eurasia
+none|any_strategic_region_in_russian_siberia|Iterate through all strategic regions in geographic region russian_siberia
 none|any_strategic_region_in_scandinavia|Iterate through all strategic regions in geographic region scandinavia
 none|any_strategic_region_in_senegal_old|Iterate through all strategic regions in geographic region senegal_old
 none|any_strategic_region_in_siberia|Iterate through all strategic regions in geographic region siberia
@@ -918,8 +1080,11 @@ none|any_strategic_region_in_southern_africa|Iterate through all strategic regio
 none|any_strategic_region_in_southern_africa_old|Iterate through all strategic regions in geographic region southern_africa_old
 none|any_strategic_region_in_southern_cone|Iterate through all strategic regions in geographic region southern_cone
 none|any_strategic_region_in_southern_europe|Iterate through all strategic regions in geographic region southern_europe
+none|any_strategic_region_in_southern_russia|Iterate through all strategic regions in geographic region southern_russia
 none|any_strategic_region_in_subsaharan_africa|Iterate through all strategic regions in geographic region subsaharan_africa
 none|any_strategic_region_in_the_midwest_old|Iterate through all strategic regions in geographic region the_midwest_old
+none|any_strategic_region_in_trans_siberian_line|Iterate through all strategic regions in geographic region trans_siberian_line
+none|any_strategic_region_in_transcaucasia|Iterate through all strategic regions in geographic region transcaucasia
 none|any_strategic_region_in_transoxiana|Iterate through all strategic regions in geographic region transoxiana
 none|any_strategic_region_in_tropical_seas|Iterate through all strategic regions in geographic region tropical_seas
 none|any_strategic_region_in_turkestan|Iterate through all strategic regions in geographic region turkestan
@@ -959,6 +1124,7 @@ country|average_sol_for_religion|Compares the average standard of living for the
 country|average_sol_for_slaves|Compare average standard of living for enslaved pops
 treaty_options,treaty|binds|Checks if the scoped treaty or treaty_options binds the given country scope:some_treaty
 state|blockade_level|Compare to state's blockade level
+war|blockaded_gdp_share|Compares the share of the target country's GDP that sits in blockaded states, from the scoped war
 building|building_has_goods_shortage|Check if building has a shortage of any of its inputs
 country|bureaucracy|Compares the available bureaucracy of the scoped country
 country|bureaucracy_usage|Compares the consumed bureaucracy of the scoped country
@@ -969,12 +1135,12 @@ character|can_agitate|Check if the scope character can agitate the target countr
 law|can_be_enacted|Checks if a law could be enacted by its country, considering its current situation
 country|can_break_diplomatic_pact|Checks if there is a diplomatic pact of the specified type with target country that can be broken by scope country
 country|can_close_straits|Check if the scoped country is allowed to close the straits it controls
-state|can_construct_building|Checks if 1 level of <building_type> can be constructed in a scoped state
+state|can_construct_building|Checks if 1 level of <building_type> can be constructed in a scoped state **Value Type**: common/buildings
 country|can_create_diplomatic_pact|Checks if a diplomatic pact is valid to create with another country
 none|can_create_treaty|Checks if a treaty between countries can be created
 country|can_decrease_autonomy|Check if a subject country is able to become a less autonomous subject type
 country|can_establish_company|Check if the country can establish a new company
-country|can_form_nation|Check if the target country is able to potentially form a nation
+country|can_form_nation|Check if the target country is able to potentially form a nation **Value Type**: common/country_formation
 country|can_have_as_subject|Checks if a country can have another country as a particular type of subject Where X = country and Y = subject type
 country|can_have_subjects|Check if the country is able to have subjects of it sown
 country|can_increase_autonomy|Check if a subject country is able to become a more autonomous subject type
@@ -984,9 +1150,10 @@ country|can_lobbies_target|Checks if target country is a valid target for lobbie
 country|can_own_autonomy_be_decreased|Check if scoped country can have it's autonomy decreased
 company|can_potentially_produce_prestige_goods|Checks if scope company can potentially produce target prestige good type
 building|can_queue_building_levels|Checks if the building's owner could queue the provided number of additional levels without hitting a level or resource potential cap
-country|can_research|True if a country can research an technology
+country|can_research|True if a country can research an technology **Value Type**: common/technology/technologies
 country|can_send_diplomatic_action|Checks if a diplomatic action is valid to send by scope country to target country
-none|can_start_tutorial_lesson|Can the specified tutorial lesson be started?
+country|can_start_play_against_overlord|Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war...
+none|can_start_tutorial_lesson|Can the specified tutorial lesson be started? **Value Type**: common/tutorial_lessons
 country|can_take_on_scaled_debt|Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
 country|can_toll_straits|Check if the scoped country is allowed to charge tolls on the straits it controls
 country|can_transfer_subject|Check if the target country can be transferred as a subject to the scoped country scope:country
@@ -998,17 +1165,19 @@ character|character_supports_political_movement|Checks whether the scoped charac
 country|charges_strait_toll|Check if the scoped country controls a strait with a toll rate of Low or higher
 country,market,province,state,state_region,strategic_region,theater|check_area|Compares areas of object to another object
 civil_war|civil_war_progress|Compare progress of civil war
+state|cold_effect|How much the scoped state is currently suffering from the cold, from 0 to 1
 character|commander_is_available|Check if a commander is not busy
 character|commander_rank|Compares the commanders rank
 company|company_employed_levels|Check the number of employed building levels of the scoped company
 company|company_global_productivity_comparison|Check the average global productivity of buildings matching this company's buildings, scaled by owned levels for each type
-company|company_has_building_type_monopoly|Check if the scoped company has a monopoly of the specified building type
+company|company_has_building_type_monopoly|Check if the scoped company has a monopoly of the specified building type **Value Type**: common/buildings
 company|company_has_monopoly|Check if the scoped company has any monopoly
 company|company_is_prosperous|Check if a company is considered to be prosperous
 company|company_owned_levels|Check the number of owned building levels of the scoped company
 company|company_productivity|Check the productivity of the scoped company
 company|company_prosperity|Check the prosperity of a company
 ai_regional_objective|conclusion_date|Compare to the date the scoped AI regional objective was concluded Only concluded objectives have a date, so check is_completed or is_failed first
+war|connects_important_war_theaters|Checks if pulling the target country into the scoped war would connect an important land theater of one side to an important land theater of the ot...
 country|construction_queue_duration|Compares the maximum of all the very roughly approximated weeks remaining to finish the constructions in any queue:
 country|construction_queue_government_duration|Compares the very roughly approximated weeks remaining to finish the constructions in the government queue:
 country|construction_queue_num_queued_government_levels|Compares the number of government constructed building levels in the construction queue
@@ -1031,13 +1200,14 @@ country|country_fervor_primary_culture|Compares with the hightest fervor of a co
 country|country_has_building_group_levels|Checks the sum of building levels for a building group in a country  country_has_building_group_levels
 country|country_has_building_levels|Checks the sum of building levels for a country
 country|country_has_building_type_levels|Checks the sum of building levels for a building type in a country  country_has_building_type_levels
-country|country_has_building_type_monopoly|Check if the scoped country has a monopoly of the specified building type
+country|country_has_building_type_monopoly|Check if the scoped country has a monopoly of the specified building type **Value Type**: common/buildings
 country|country_has_country_monopoly|Check if the scoped country has any country monopolies
 market_goods|country_has_local_shortage|Whether the scoped market goods are in shortage in the target country
 country|country_has_primary_culture|Checks if a culture is one of the primary cultures in the country
 country|country_has_state_religion|Checks if a religion is the state religion in the country country_has_accepted_religion
 country|country_innovation|Checks the amount of weekly innovation a country produces
-country|country_or_subject_owns_entire_state_region|Checks whether the scoped country or any of its subjects owns the entire specified state region
+country|country_or_subject_owns_entire_state_region|Check whether the scoped country or any of its subjects owns the entire specified state region **Value Type**: map_data/state_regions
+country|country_or_subject_owns_entire_state_region_uncontested|Check whether the scoped country or any of its subjects owns the entire region and no war goal in any of its wars is targeting a state in it **Valu...
 building|country_ownership_fraction|Compares the fraction of this building's levels that are owned by a country
 country|country_rank|Compares a Country's Power Ranking
 country|country_ship_type_fraction|Checks that a country has a certain fraction of a specific ship type
@@ -1056,6 +1226,7 @@ country|culture_percent_country|Checks that a country's population has a certain
 state|culture_percent_state|Checks that a state's population has a certain percentage of a specific culture scope:example_state
 culture|culture_secession_progress|Checks the culture's progress percentage towards secession in a country.
 culture|culture_target_fervor|Compares the target fervor for a given culture,
+character|current_career_length|Checks if the character's current career length meets a duration threshold.
 power_bloc|current_cohesion_number|Compare the current Cohesion as a numeric value
 power_bloc|current_cohesion_percentage|Compare the current Cohesion as a percentage of the maximum of a Power Bloc in scope
 country|current_law_enactment_score|Check what the scoped country's AI enactment score is for the currently enacting law
@@ -1085,6 +1256,7 @@ country|enactment_chance_without_enactment_modifier|Compares the current enactme
 country|enactment_phase|Compares the current law enactment phase in scope country.
 country|enactment_setback_count|Compares the current enactment setback count in scope country.
 country|enemy_occupation|Determines the (weighted) enemy occupation score of a country
+war|enemy_pressure|Compares how actively the target country's enemies in the scoped war are pressuring it, from 0 to 1, through occupation, blockade or recent signifi...
 country|enemy_side_occupation|Average weighted occupation of the countries on the enemy side of the scoped war, from the scoped country's perspective (0-1)
 diplomatic_play|escalation|Checks whether escalation has passed a certain threshold
 none|exists|Checks whether the specified scope target exists (check for not being the null object)
@@ -1119,10 +1291,10 @@ country|government_wage_level|Compares the government wage level of scoped count
 country|government_wage_level_value|Compares the government wage level value of scoped country
 harvest_condition|harvest_condition_intensity|With a harvest condition scope, compare the intensity of the harvest condition in a given country (since the state region can span multiple countries)
 none|has_account_item|Does the player have the item in the account
-market,state|has_active_building|True if a state has an active building type
+market,state|has_active_building|True if a state has an active building type **Value Type**: common/buildings
 country|has_active_peace_deal|True if the country is in a war where there is a proposed peace deal
 building|has_active_production_method|Checks if a scoped building has the specified production method active
-law|has_amendment|Check if scoped law has an amendment of the given type
+law|has_amendment|Check if scoped law has an amendment of the given type **Value Type**: common/amendments
 country|has_any_law_commitment|Checks if a country has a commitment to enact any law
 country|has_any_naval_only_hostilities|Check if the country has naval hostilities with any country it is not also at war with
 country,state,state_region|has_any_potential_strait_province|Check if a state, state region or country owns any potential strait province
@@ -1136,15 +1308,16 @@ container|has_any_tags|True if the script container in scope has any tags
 country|has_any_tariffs_on|Check if the scoped country has any level of tariffs on a goods scope:country
 state|has_assimilating_pops|Check if a state has any pops currently in the process of assimilating.
 country|has_attitude|Checks if scoped country has a particular attitude towards another country Where X = country and Y = attitude type
-battle_side|has_battle_condition|True if the battle side currently has a condition with the given key
-country,market,state,state_region|has_building|True if a state/market/state region/country has a building type
+battle_side|has_battle_condition|True if the battle side currently has a condition with the given key **Value Type**: common/battle_conditions
+country,market,state,state_region|has_building|True if a state/market/state region/country has a building type **Value Type**: common/buildings
+country|has_building_levels_in_state_region|Checks how many levels of a building type the scoped country has in the state it owns in a state region Counts as 0 when the country owns no state ...
 political_movement|has_character_ideology|Check if scoped political movement has character ideology
-country|has_civil_war_from_movement_type|Checks if a country is having a civil war started by a particular movement type
+country|has_civil_war_from_movement_type|Checks if a country is having a civil war started by a particular movement type **Value Type**: common/political_movements
 country|has_claim|Checks if country in scope has a claim on state/state region/country
 state|has_claim_by|Checks if a state is claimed by a country any_state
 state|has_coastal_access|Check if this state has a direct connection to a coastal state owned by the same country.
 character|has_commander_order|Checks whether the scoped character is following the given order
-country|has_company|Checks if a company of the specified type exists in scope country
+country|has_company|Checks if a company of the specified type exists in scope country **Value Type**: common/company_types
 country|has_completed_subgoal|Checks if the scoped country has completed a certain subgoal
 country|has_consumption_tax|Checks if the country is taxing the target good.
 state|has_converting_pops|Check if a state has any pops currently in the process of converting.
@@ -1153,23 +1326,23 @@ political_movement|has_core_ideology|Check if scoped political movement has core
 none|has_cosmetic_dlc|Does the client have this cosmetic DLC
 none|has_cosmetic_dlc_feature|Does the client have DLC that enables this particular cosmetic feature
 state|has_cultural_community|Checks if a culture has a cultural community in the scoped state.
-culture|has_cultural_obsession|Checks if a culture has a certain goods as obsession
+culture|has_cultural_obsession|Checks if a culture has a certain goods as obsession **Value Type**: common/goods
 character|has_culture|Checks characters culture
-culture|has_culture_graphics|Checks if a culture has a certain culture_graphics
-state|has_decree|Checks if scope state has a particular type of decree
+culture|has_culture_graphics|Checks if a culture has a certain culture_graphics **Value Type**: common/culture_graphics
+state|has_decree|Checks if scope state has a particular type of decree **Value Type**: common/decrees/
 building|has_deployed_units|Check if a building supports any units which have been deployed outside of home HQ
 country|has_diplomatic_pact|Checks if two countries have an active diplomatic pact of type Where X = country and Y = diplomatic action type, is_initiator is optional parameter...
 strategic_region|has_diplomatic_play|Check if strategic region has a diplomatic play or not
 country|has_diplomatic_relevance|Checks if target country is diplomatically relevant for scope country
 country|has_diplomats_expelled|Checks if country in scope has recently expelled diplomats of event target
 culture,religion|has_discrimination_trait|Checks if scoped culture or religion has the given discrimination trait
-culture,religion|has_discrimination_trait_group|Checks if scoped culture or religion has the given discrimination trait group
+culture,religion|has_discrimination_trait_group|Checks if scoped culture or religion has the given discrimination trait group **Value Type**: common/discrimination_trait_groups
 none|has_dlc_feature|Does the host have DLC that enables this particular feature
 building|has_employee_slots_filled|Checks whether the amount of employees of a certain poptype are above or below a given percentage of the total amount the building can currently hire.
 building|has_failed_hires|Checks if a building failed to hire someone last week
 country,state|has_famine|Check if state or country has famine
 country|has_free_government_reform|Check if the country has a free (of radicals) government reform
-none|has_game_rule|Is the given game rule setting enabled?
+none|has_game_rule|Is the given game rule setting enabled? **Value Type**:
 none|has_game_started|True if game has started
 none|has_gameplay_dlc|Does the host have this gameplay DLC
 country|has_global_highest_gdp|Checks if the scoped country has the highest GDP
@@ -1178,37 +1351,39 @@ none|has_global_variable|Checks whether the current scope has the specified vari
 none|has_global_variable_list|Checks whether the current scope has the specified variable list set
 none|has_global_variable_map|Checks whether the current scope has the specified variable map
 country|has_government_clout|Does the country's government have the necessary total Clout
-country|has_government_type|Is the country's government type as specified
-state_region|has_harvest_condition|Check if the scoped state region has a harvest condition of type
+country|has_government_type|Is the country's government type as specified **Value Type**: common/government_types
+state_region|has_harvest_condition|Check if the scoped state region has a harvest condition of type **Value Type**: common/harvest_condition_types
 country|has_healthy_economy|Check if the country has a healthy economy
 military_formation|has_high_attrition|Checks if a Military Formation's attrition risk is higher than the base value for their type
 culture|has_homeland|Checks if scoped culture has a homeland in target state or state region
-power_bloc|has_identity|Checks if the scoped power bloc has certain central identity
+power_bloc|has_identity|Checks if the scoped power bloc has certain central identity **Value Type**: common/power_bloc_identities
 character,interest_group,political_movement|has_ideology|Check if scoped character or interest group has ideology
-country|has_inactive_journal_entry|Check if the country has at least one inactive journal entry of the specified type
+country|has_inactive_journal_entry|Check if the country has at least one inactive journal entry of the specified type **Value Type**: common/journal_entries
 country|has_institution|Checks if scope country has a particular type of institution
 country|has_insurrectionary_interest_groups|Check if the country has Interest Groups that are insurrectionary
 country|has_interest_marker_in_region|True if scope country has an interest marker in target region
-country|has_journal_entry|Check if the country has at least one active journal entry of the specified type
-province|has_label|Check if the scope object has the specified label
-country|has_law|Checks if a country has a certain law active
-country|has_law_commitment|Checks if a country has a commitment to enact a certain law
+country|has_journal_entry|Check if the country has at least one active journal entry of the specified type **Value Type**: common/journal_entries
+province|has_label|Check if the scope object has the specified label **Value Type**: common/labels
+country|has_law|Checks if a country has a certain law active **Value Type**: common/laws
+country|has_law_commitment|Checks if a country has a commitment to enact a certain law **Value Type**: common/laws
 country|has_law_imposition_rights|Checks if the scoped country has the necessary permits to demand another country enacts a certain law
-country|has_law_or_variant|Checks if a country has a certain law or one its variant laws active
+country|has_law_or_variant|Checks if a country has a certain law or one its variant laws active **Value Type**: common/laws
 none|has_local_variable|Checks whether the current scope has the specified variable set
 none|has_local_variable_list|Checks whether the current scope has the specified variable list set
 none|has_local_variable_map|Checks whether the current scope has the specified variable map
-none|has_map_interaction|Checks if the map interaction type is active
-none|has_map_interaction_diplomatic_action|Checks if our current map interaction is a specific diplomatic action
+none|has_map_interaction|Checks if the map interaction type is active **Value Type**: common/map_interaction_types
+none|has_map_interaction_diplomatic_action|Checks if our current map interaction is a specific diplomatic action **Value Type**: common/diplomatic_actions
 character|has_military_formation|Checks if character has a Military Formation
+country|has_military_reach|Checks if the country in scope can realistically get an army to a target state or country.
 country|has_military_strait_access_through|Check if the scoped country has military access through every strait owned by the target country
 military_formation|has_mobilization_option|Checks that a formation has a specific mobilization option
 state|has_mobilizing_unit|Checks if any Building in a scoped State maintains any Combat Units that are currently mobilizing
 country,building,character,institution,interest_group,journal_entry,political_movement,power_bloc,state|has_modifier|Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, In...
 container|has_name|True if the script container in scope has a name
+military_formation|has_naval_mission_in_region|Checks if a Fleet is running a specific naval mission covering the specified strategic region
 military_formation|has_naval_mission_with_invalid_area|Checks if a Fleet has a naval mission with an invalid area
 interest_group|has_negotiated|Checks whether the interest group has finished negotiation:
-country|has_objective|Checks if the scoped country has a certain objective type
+country|has_objective|Checks if the scoped country has a certain objective type **Value Type**: common/objectives
 pop|has_ongoing_assimilation|Checks if the scoped pop has ongoing cultural assimilation
 pop|has_ongoing_conversion|Checks if the scoped pop has ongoing religious conversion
 country|has_or_is_contesting_state_in_state_region|Check if country has a state in the state region, or is at war with a country that holds one - i.e.
@@ -1217,44 +1392,49 @@ container|has_parent|True if the script container in scope has a parent
 amendment_type|has_parent_law|Check if the amendment type has a parent law
 interest_group|has_party|True if IG scope has a party
 party|has_party_member|Checks if the target interest group is a member of scope party
+treaty|has_planned_withdrawal|Checks if a participant is planning on withdrawing from the scoped treaty
 diplomatic_play|has_play_goal|Checks if diplomatic play has a certain war goal type
-pop|has_pop_culture|Checks if pop has specific culture
-pop|has_pop_religion|Checks if pop has specific religion
+pop|has_pop_culture|Checks if pop has specific culture **Value Type**: common/cultures
+pop|has_pop_religion|Checks if pop has specific religion **Value Type**: common/religions
 country|has_port_country|Check if scoped country has at least one port
 market|has_port_market|Check if scoped market has at least one port
 state|has_port_state|Check if scoped state has at least one port
 country|has_possible_decisions|Check if a country has any possible Decisions
 state|has_potential_resource|Checks if the specificed building group is allowed in the scoped state.
 market_goods,state_goods|has_potential_supply|Check if the market goods or state goods has a potential supply, either though local production or theoretical import
-country|has_potential_to_form_country|Check if the target country could ever be able to form a nation
+country|has_potential_to_form_country|Check if the target country could ever be able to form a nation **Value Type**: common/country_formation
 country|has_power_struggle|Checks if scope Power Bloc has a power struggle
 power_bloc|has_principle|Checks if the scoped power bloc has certain principle
 power_bloc|has_principle_group|Checks if the scoped power bloc has a principle in the specified group
 none|has_reached_end_date|True if the end date (NDefines::NGame::END_DATE) has been reached
+state|has_recently_removed_cossack_host|Check if a Cossack Host was removed from the state recently enough to still count
 country|has_region_stance|Checks if the scoped country's AI has the specified stance for a strategic region Usage: region_stance
+country|has_regional_exile_pool_access|Checks whether the scoped country meets the has_access requirements of the given Regional Exile Pool
 country|has_regional_objective|Checks if the scoped country's AI has an active regional objective in a strategic region Leave out type to match an objective of any type Usage:
-character|has_religion|Checks characters religion
-religion|has_religious_taboo|Checks if a religion has a certain goods as taboo
+character|has_religion|Checks characters religion **Value Type**: common/religions
+religion|has_religious_taboo|Checks if a religion has a certain goods as taboo **Value Type**: common/goods
 country|has_researchable_technology|Check if the country has any researchable technology left.
 country|has_revolution|Check if the country has revolutionary uprising
-character|has_role|Checks if character has specific role
+character|has_role|Checks if character has specific role **Value Type**: common/character_roles
 character|has_role_of_type|Checks if character has a role of the specified archetype
-country|has_ruling_interest_group|Does the country's government include the named IG
+country|has_ruling_interest_group|Does the country's government include the named IG **Value Type**: common/interest_groups
 country|has_ruling_interest_group_count|Does the country's government consist of the specified number of IGs
 country|has_secret_goal|Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
 military_formation|has_ship_outside_max_port_distance|Checks if a Fleet has any ship that is beyond its maximum distance to port
-pop|has_social_class|Checks if the scoped pop belongs to a specific social class
-country|has_social_hierarchy|Checks if the scoped country has adopted a specific social hierarchy
+pop|has_social_class|Checks if the scoped pop belongs to a specific social class **Value Type**: common/social_classes
+country|has_social_hierarchy|Checks if the scoped country has adopted a specific social hierarchy **Value Type**: common/social_hierarchies
+war|has_stalled_state_wargoal_against|Checks if any enemy war goal in the scoped war would take whole states from the specified country without being contested or advanced on
 war|has_stalled_wargoal_against|Checks if any enemy war goal in the scoped war targets the specified country without being contested or advanced on
 war|has_stalled_wargoal_held_by|Checks if the specified country holds a war goal in the scoped war that is neither being contested nor advanced on
-country|has_state_in_state_region|Check if country has a state in the state region
+country|has_state_in_state_region|Check if country has a state in the state region **Value Type**: map_data/state_regions
+country|has_state_in_state_region_uncontested|Check if country has a state in the state region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
 pop|has_state_religion|Check if the Pop has the state religion
-state|has_state_trait|Checks if scoped state has a certain trait
+state|has_state_trait|Checks if scoped state has a certain trait **Value Type**: common/state_traits
 country|has_strait_toll_exemption_from|Check if the scoped country is exempt from the strait tolls charged by the target country
 country|has_strategic_adjacency|Checks if country in scope has a strategic adjacency (direct/coastal/military access/war goal adjacency) to target state/country
 country|has_strategic_land_adjacency|Checks if country in scope has a strategic adjacency (direct land border, military access or war goal adjacency only) to target state/country
 country|has_strategic_region_interest_tier|Checks the scoped country's interest tier rank in a specific strategic region scope:country
-country|has_strategy|Checks if country in scope has a particular AI strategy
+country|has_strategy|Checks if country in scope has a particular AI strategy **Value Type**: common/ai_strategies
 country|has_subject_relation_with|Checks if country in scope is subject or overlord of event target
 country|has_sufficient_construction_capacity_for_investment|Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
 country|has_sufficient_sailors|Check if the Naval Administrations can deliver enough sailors for every ship the country already has
@@ -1262,20 +1442,19 @@ container|has_tag|True if the script container in scope has the given tag
 container|has_tags|True if the script container in scope has all of the given tags
 country|has_technology_progress|Does the country have the required progress for an technology Where X is an technology and Y is a fixed point
 country|has_technology_researched|True if a country has researched an technology
-character|has_template|Checks if character was made from the specified template
-province|has_terrain|Check if the province has the specified terrain type
-character|has_trait|Checks if character has specific trait
+character|has_template|Checks if character was made from the specified template **Value Type**: common/character_templates
+province|has_terrain|Check if the province has the specified terrain type **Value Type**: common/terrain
+character|has_trait|Checks if character has specific trait **Value Type**: common/character_traits
 country|has_treaty_port_in_market|Checks if the scoped country has a treaty port in target market c:POR
 country|has_truce_with|Check if a country has a truce with a different target country
 treaty_article,treaty_article_options|has_type|Checks if the scoped object has the type identified by the given string scope:some_object
 none|has_unification_candidate|Check if there is at least one unification candidate for country tag
-new_combat_unit|has_unit_type|Checks if a Combat Unit is of the specified type
+new_combat_unit|has_unit_type|Checks if a Combat Unit is of the specified type **Value Type**: common/combat_unit_types
 country|has_unreachable_ship_construction_fleet|Checks if a country is building a ship with a target fleet it will not be able to reach once built
 none|has_variable|Checks whether the current scope has the specified variable set
 none|has_variable_list|Checks whether the current scope has the specified variable list set
 none|has_variable_map|Checks whether the current scope has the specified variable map
 war|has_war_goal|Checks if war has a certain war goal type
-war|has_war_goal_at_risk_of_being_dropped|Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long
 war|has_war_support|Checks the war support of the target country in the scoped war
 war|has_war_support_change|Checks the war support change of the target country in the scoped war
 country|has_war_with|Checks if country in scope is at war with event target
@@ -1293,6 +1472,9 @@ state_goods|import_advantage|Compare to state goods import advantage
 state_goods|import_tariff_level|Checks if state goods has a particular import tariff level set
 country|in_default|Check if the country is currently in default
 country|in_election_campaign|Check if the country is in election campaign period
+state|in_north_hemisphere|Checks if the scoped state's state region has its center point north of the equator
+state|in_south_hemisphere|Checks if the scoped state's state region has its center point south of the equator
+state|in_tropics|Checks if the scoped state's state region has its center point between the tropics of Cancer and Capricorn
 diplomatic_pact|income_transfer|Compares the base income transfer of the diplomatic pact
 state|incorporation_progress|Check incorporation progress in state
 country|influence|Compares the available influence of the scoped country
@@ -1316,7 +1498,7 @@ country|is_adjacent_to_state|Checks if country in scope is adjacent to a target 
 character|is_adult|Check if character is an adult
 character|is_advancing_on_front|Checks if a commander is advancing on a front
 country|is_ai|True if country scope is controlled by an AI
-ship|is_ai_ship_category|Checks if scoped ship is in the specified AI ship category
+ship|is_ai_ship_category|Checks if scoped ship is in the specified AI ship category **Value Type**: common/ai_ship_categories
 military_formation|is_army|Checks if a military formation is Army
 country|is_at_war|Check if the country is at war
 war|is_at_war_with_rival|Checks if the specified country is at war against a declared rival in the scoped war
@@ -1329,28 +1511,29 @@ political_movement|is_being_suppressed|Check if scoped movement is being suppres
 state|is_blockaded_by|Checks if a state is blockaded by a country
 building|is_buildable|Check if a building is
 building|is_building_group|True if scope is a building of given group
-building|is_building_type|True if scope is a building of given type
+building|is_building_type|True if scope is a building of given type **Value Type**: common/buildings
 none|is_building_type_expanded|Checks if the CProductionMethodsPanelEntry for a particular CBuildingType is expanded
 character|is_busy|Check if character is busy
 state|is_capital|Check if state is the capital of the
 character|is_character_alive|Checks if the scoped character is alive
-character_role|is_character_role|Checks if the scoped character role is a specific role
+character_role|is_character_role|Checks if the scoped character role is a specific role **Value Type**: common/character_roles
 character_role|is_character_role_type|Checks if the scoped character role is of a specific archetype
 civil_war|is_civil_war_type|Check if the scoped civil war is of a specific type
 country,state|is_coastal|Check if a state borders a (non-impassable) sea region or if a country contains any such state.
-company|is_company_type|Checks if scoped company is of the specified type
+company|is_company_type|Checks if scoped company is of the specified type **Value Type**: common/company_types
 ai_regional_objective|is_completed|Checks if the scoped AI regional objective has been completed
 country|is_considered_adjacent_due_to_wargoals|Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the...
 country|is_construction_paused|Check if construction in a state is paused.
 market_goods|is_consumed_by_government_buildings|Check if the market goods is instrumental in running the bureaucratic machine
 market_goods|is_consumed_by_military_buildings|Check if the goods is instrumental in running the war machine
 country|is_country_alive|Checks if the scoped country is alive, i.e.
-country|is_country_type|Checks the countrys type
+country|is_country_type|Checks the countrys type **Value Type**: common/country_types
+political_movement|is_culture_seceding_elsewhere|Its [concept_culture] has a growing or ongoing [concept_secession] in another [concept_country]
 ship|is_damaged|Checks if a ship is damaged
 character,ship|is_defender_in_battle|Checks if a Commander or Ship is defender in a battle
 treaty_article,treaty_article_options|is_desired_by|Check if the scoped article or article_options has positive inherent acceptance with the target country scope:treaty_article
-diplomatic_pact|is_diplomatic_action_type|Checks diplomatic pact is of a certain action type
-diplomatic_catalyst|is_diplomatic_catalyst_type|Checks diplomatic catalyst is of a certain catalyst type
+diplomatic_pact|is_diplomatic_action_type|Checks diplomatic pact is of a certain action type **Value Type**: common/diplomatic_actions
+diplomatic_catalyst|is_diplomatic_catalyst_type|Checks diplomatic catalyst is of a certain catalyst type **Value Type**: common/diplomatic_catalysts
 diplomatic_pact|is_diplomatic_pact_in_danger|Checks if diplomatic pact is in danger of breaking
 country|is_diplomatic_play_ally_of|Checks if country in scope is in a diplomatic play together with event target
 country|is_diplomatic_play_committed_participant|True if country is a committed participant of any diplomatic play
@@ -1359,11 +1542,11 @@ country|is_diplomatic_play_initiator|True if country is the initiator of any dip
 country|is_diplomatic_play_involved_with|Checks if country in scope is involved in the same diplomatic play as event target
 country|is_diplomatic_play_participant_with|Checks if country in scope is a committed participant in the same diplomatic play as event target
 country|is_diplomatic_play_target|True if country is the target of any diplomatic play
-diplomatic_play|is_diplomatic_play_type|Checks diplomatic play is of a certain type
+diplomatic_play|is_diplomatic_play_type|Checks diplomatic play is of a certain type **Value Type**: common/diplomatic_plays
 country|is_diplomatic_play_undecided_participant|True if country is a undecided participant of any diplomatic play
 country|is_direct_subject_of|Checks if country in scope is a direct subject (not subject-of-subject) of event target
 treaty_article,treaty_article_options|is_directed|Is the treaty article [option] directed, i.e.
-military_formation|is_doing_piracy_in_region|Checks if a Fleet is doing piracy in the specified strategic region
+military_formation|is_doing_piracy_in_region|Checks if a Fleet is doing piracy in the specified strategic region **Value Type**: common/strategic_regions
 pop|is_employed|Check if the pop is employed
 country|is_enacting_law|Checks if the scoped country is enacting a specific law type.
 treaty|is_enforced|Checks if the scoped treaty is enforced on either party scope:some_treaty
@@ -1399,12 +1582,13 @@ character,ship|is_in_battle|Checks if a Commander or Ship is engaged in battle
 country|is_in_customs_union|Check if the country is part of a customs union
 country|is_in_customs_union_with|Check if the country is in a customs union with scoped country
 character|is_in_exile_pool|Checks whether the scoped character is in the exile pool
-country,state,state_region,strategic_region|is_in_geographic_region|Checks if a scoped object is in a specific geographic region
+country,state,state_region,strategic_region|is_in_geographic_region|Checks if a scoped object is in a specific geographic region **Value Type**: common/geographic_regions
 interest_group|is_in_government|True if IG scope is in the government
 none|is_in_list|Checks if a target in in a list
 pop|is_in_mild_starvation|Check if the pop is in mild starvation
 ship|is_in_port|Checks if a ship is in port
 country|is_in_power_bloc|Checks if the country is in a Power Bloc
+character|is_in_regional_exile_pool|Checks whether the scoped character is in a Regional Exile Pool is_in_regional_exile_pool
 state|is_in_revolt|Check if a state has any chance to split off into a revolutionary or seceding country
 state|is_in_same_market_area|Checks if scope state is in the same market area as target state
 country|is_in_same_power_bloc|Checks if the scoped country is in the same power bloc as the target scoped country
@@ -1417,10 +1601,11 @@ country|is_independent_and_not_being_subjugated|True if the country is not a sub
 country|is_indirect_subject_of|Checks if country in scope is an indirect subject (subject-of-subject) of event target
 country,interest_group,political_movement|is_insurrectionary|Check if country, movement or IG is insurrectionary
 character|is_interest_group_leader|Checks if character is the leader of their interest group is_interest_group_Leader = bool
-character,interest_group|is_interest_group_type|Checks if Interest Group is of a certain type Can also be used on characters directly
+character|is_interest_group_pool_full|Checks if the character's interest group already has as many pool characters of the role as it would spawn, using the country rank pool multiplier ...
+character,interest_group|is_interest_group_type|Checks if Interest Group is of a certain type Can also be used on characters directly **Value Type**: common/interest_groups
 military_formation|is_invalid_naval_mission_grace_period_active|Checks if a Fleet is in the grace period from having an invalid naval mission
 invasion|is_invasion_stalled|Checks if the invasion is stalled due to wrong commander orders
-country|is_involved_in_journal_entry|Check if the country is involved in a specific journal entry
+country|is_involved_in_journal_entry|Check if the country is involved in a specific journal entry **Value Type**: common/journal_entries
 state|is_isolated_from_market|Check if a state is isolated from its market
 country|is_junior_in_customs_union|True if country is a junior country in a customs custom
 none|is_key_in_global_variable_map|Checks if a target is a key in a variable list is_key_in_variable_list
@@ -1441,25 +1626,25 @@ country|is_mass_migration_origin_of_culture|Checks if the scoped country origin 
 state|is_mass_migration_target|Mass migration target is state.
 state|is_mass_migration_target_for_culture|Scoped state is a mass migration target for the specified culture.
 interest_group|is_member_of_any_lobby|Checks if interest group is member of any lobby
-interest_group|is_member_of_lobby|Checks if interest group is member of a certain lobby type
+interest_group|is_member_of_lobby|Checks if interest group is member of a certain lobby type **Value Type**: common/political_lobbies
 interest_group|is_member_of_party|Checks if Interest Group is a member of target party
 military_formation|is_mobilized|Checks if the military formation is mobilized
 character|is_monarch|Checks if character is a monarch of a country with hereditary succession
 invasion|is_naval_invasion|Checks if the scoped invasion is a naval invasion
 country,interest_group|is_negotiating|Check if the scoped country or interest group is currently negotiating.
 character|is_noble|Check if character is a noble
-country,state,state_region,strategic_region|is_not_in_geographic_region|Checks if a scoped object is NOT in a specific geographic region
+country,state,state_region,strategic_region|is_not_in_geographic_region|Checks if a scoped object is NOT in a specific geographic region **Value Type**: common/geographic_regions
 none|is_objective_completed|Is the objective completed for the country in scope?
 war|is_on_defending_side|Checks if the target country is on the target side of the scoped war, as the target itself or backing it
 character,military_formation|is_on_front|Checks if a character or military formation has been assigned to a Front and has arrived there
 country|is_owed_obligation_by|Checks if the scoped country is owed a obligation by the target country
 none|is_panel_open|Checks if a certain infopanel is open, specified as an event target (target) or as a string (panel_name).
 party|is_party|Checks if the target party is same as scoped party.
-party|is_party_type|Checks if the scoped party's type is the specified one
+party|is_party_type|Checks if the scoped party's type is the specified one **Value Type**: common/parties
 country|is_player|True if country scope is a player
-political_lobby|is_political_lobby_type|Checks political lobby is of a certain lobby type
-political_movement|is_political_movement_type|Check if a political movement is a particular type
-pop|is_pop_type|Checks if pop is of specified type
+political_lobby|is_political_lobby_type|Checks political lobby is of a certain lobby type **Value Type**: common/political_lobbies
+political_movement|is_political_movement_type|Check if a political movement is a particular type **Value Type**: common/political_movements
+pop|is_pop_type|Checks if pop is of specified type **Value Type**: common/pop_types
 none|is_popup_open|Checks if the specified popup panel is open
 state|is_potential_treaty_port|Checks if the scoped state has the potential to become a treaty port for target country
 country|is_power_bloc_leader|Checks if the country is a leader of a Power Bloc
@@ -1470,8 +1655,10 @@ state|is_production_method_active|Checks if the building of a particular type in
 journal_entry|is_progressing|Check if the journal entry is progressing
 province|is_province_land|Check if the province is on land
 law|is_reasonable_law_for_petition|Checks if a law is considered reasonable for a government petition to enact it
+country|is_regional_objective_target_country|Checks if the scoped country's AI has an active regional objective of the given type that targets the country Uses the objective type's country_tar...
+country|is_regional_objective_target_state|Checks if the scoped country's AI has an active regional objective of the given type that targets the state Usage:
 treaty_options,treaty|is_renegotiation|Checks if the scoped treaty is amending an existing treaty scope:some_treaty
-country|is_researching_technology|Check if the country is actively researching a tech
+country|is_researching_technology|Check if the country is actively researching a tech **Value Type**: common/technology/technologies
 country|is_researching_technology_category|Check if the country is actively researching a tech category
 country,interest_group,political_movement|is_revolutionary|Check if the country, movement or interest group is revolutionary
 none|is_rightclick_menu_open|Checks if the specified rightclick menu is open
@@ -1479,13 +1666,13 @@ character|is_ruler_of_any_country|Checks if character is a ruler/head of state o
 character|is_ruler_of_other_country|Checks if character is a ruler/head of state of a country they don't live in
 character|is_ruler_of_own_country|Checks if character is a ruler/head of state of the country they live in
 interest_group|is_same_interest_group_type|Checks if Interest Group is of the same IG type as target
-law_type|is_same_law_group_as|Checks if scope law type is in the same group as the target law type scope
+law_type|is_same_law_group_as|Checks if scope law type is in the same group as the target law type scope **Value Type**: common/laws
 party|is_same_party_type|Checks if Party is of the same party type as target
 state|is_sea_adjacent|Check if state borders a sea region (regular or impassable)
 country,interest_group,political_movement|is_secessionist|Check if the country, movement or interest group is secessionist
 none|is_set|Checks whether the specified scope target has been set (includes being the null object)
 ship|is_ship_obsolete_for|Checks if the ship's type is obsolete for the target country.
-ship|is_ship_type|Checks if scoped ship is of the specified type
+ship|is_ship_type|Checks if scoped ship is of the specified type **Value Type**: common/ship_types
 ship|is_ship_very_obsolete_for|Checks if the ship's type is very obsolete for the target country.
 state|is_slave_state|Check if a state employs or has the potential to employ slaves.
 state|is_split_state|Checks if the scoped state is a split state.
@@ -1495,6 +1682,7 @@ state|is_strategic_objective|Checks if the scoped State is a Strategic Objective
 interest_group|is_strongest_ig_in_government|Checks whether the scoped interest group has the most clout out of all interest groups in government
 country|is_subject|True if country is a subject
 country|is_subject_of|Checks if country in scope is subject (or subject-of-subject) of event target
+country|is_subject_of_and_not_being_freed|True if the country is a subject and no war goal to free it is pending in any wars
 country|is_subject_type|Checks the country's subject type
 building|is_subsidized|Check if a building is being subsidized
 building|is_subsistence_building|Check if a building is a subsistence building
@@ -1505,13 +1693,13 @@ none|is_target_in_variable_list|Checks if a target is in a variable list Where X
 state|is_target_of_wargoal|Checks if state is target of any war goal in wars involving a specific country has_war_goal
 war|is_target_of_wargoal_in_war|Checks if the specified country is the target of any war goal in the scoped war
 country|is_taxing_goods|Check if a country is taxing a good has_embargo
-none|is_template_used|Checks if character template has already been used
+none|is_template_used|Checks if character template has already been used **Value Type**: common/character_templates
 none|is_theme_selected|Does the player have the theme selected in settings
 goods,market_goods|is_tradeable|Check if a goods or market goods is tradeable
 treaty_article|is_treaty_article_in_danger|Checks if treaty article is in danger of breaking
 state|is_treaty_port|Checks if the scoped state is a treaty port
 none|is_tutorial_active|Is the tutorial active?
-none|is_tutorial_lesson_active|Is this the current tutorial lesson?
+none|is_tutorial_lesson_active|Is this the current tutorial lesson? **Value Type**: common/tutorial_lessons
 none|is_tutorial_lesson_chain_completed|Has the tutorial lesson chain with the specified key been finished?
 none|is_tutorial_lesson_completed|has the tutorial lesson with the specified name been finished?
 none|is_tutorial_lesson_step_completed|Has the tutorial lesson step been finished?
@@ -1530,12 +1718,12 @@ state|is_world_market_hub|Check if state is a world market hub
 country|isolated_states|Compare number of Isolated States
 journal_entry|journal_entry_age|Return the age of the journal entry (since activation) in days
 war|land_lost_since_war_start|Compares how much of what the target country's economy was worth on entering the scoped war has since been taken from it by war goal enforcement
-law|law_approved_by|Checks whether the scoped law is approved by an interest group
+law|law_approved_by|Checks whether the scoped law is approved by an interest group **Value Type**: common/interest_groups
 character,interest_group,political_movement|law_enactment_stance|Compares the stance of the scoped character, movement or interest group has about enactment of the specified law compared to the current active law...
 law|law_is_available|Checks if a law is available for its country, considering its current situation.
 law_type|law_progressiveness_difference|Compares the progressiveness of the scoped law type to the target law type, higher value means greater difference "law_progressiveness_difference( ...
 character,interest_group,political_movement|law_stance|Compares the base stance of the scoped character, movement or interest group has about the specified law, ignoring the current active law in the sa...
-country|leading_producer_of|Checks if country is producing the most of a certain good
+country|leading_producer_of|Checks if country is producing the most of a certain good **Value Type**: common/goods
 country|leads_customs_union|Check if any other country is part of this country's customs union
 building|levels_owned_by_country|Compares how many levels a country or investors in that country own in a building  levels_owned_by_country
 power_bloc|leverage_advantage|Checks that the leverage advantage between power bloc and target country meets condition power_bloc
@@ -1611,6 +1799,7 @@ country|net_total_income|Does the country have this amount of income after expen
 none|night_value|Night value
 none|nor|a negated OR trigger
 none|not|negates content of trigger
+building|num_building_assets_of_type|Checks the number of building levels of a given type the scoped building own.
 war|num_casualties|Checks the number of total casualties in the scoped war
 country|num_companies|How many companies the scoped country has
 treaty_article|num_contraventions|Check if the scoped article has the given number of contravention from the given country scope:treaty_article
@@ -1644,9 +1833,9 @@ military_formation|organization_target|Compares the target Organization of the M
 country|overlord_can_decrease_subject_autonomy|Check if an overlord can decrease a subject autonomy
 country|owes_obligation_to|Checks if country in scope owes a obligation to event target
 country|owns_entire_or_is_contesting_state_region|Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
-country|owns_entire_state_region|Check if country owns entire region
-country|owns_entire_state_region_uncontested|Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
-country|owns_treaty_port_in|Does country own the treaty port in assigned state region
+country|owns_entire_state_region|Check if country owns entire region **Value Type**: map_data/state_regions
+country|owns_entire_state_region_uncontested|Check if country owns the entire region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
+country|owns_treaty_port_in|Does country own the treaty port in assigned state region **Value Type**: map_data/state_regions
 country|play_participant_has_war_goal_of_type_against|Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 country|play_side_has_war_goal_of_type_against|Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
 political_movement|political_movement_identity_support|Compare pop with correct culture/religion identity support of political movement
@@ -1660,7 +1849,7 @@ country|politically_involved_ratio|Compares the percentage of politically involv
 state_region|pollution_amount|Compare state region pollution
 state|pollution_generation|Compare total pollution generation across all buildings in the state
 pop|pop_acceptance|Compares the scoped pop's acceptance against an acceptence value
-pop|pop_employment_building|Checks if pop is working in a specific building type
+pop|pop_employment_building|Checks if pop is working in a specific building type **Value Type**: common/buildings
 pop|pop_employment_building_group|Checks if pop is working in a specific building type
 pop|pop_has_primary_culture|Checks if pop's culture is primary
 pop|pop_loyalist_fraction|Compares the number of Radicals in a pop to its total size
@@ -1708,7 +1897,7 @@ interest_group|prefers_law|Checks if the scoped interest group prefers the speci
 country|prestige|Compare prestige
 country|primary_cultures_percent_country|Checks that a country's population has a certain percentage of the target country's primary cultures scope:example_country
 state|primary_cultures_percent_state|Checks that a state's population has a certain percentage of the target country's primary cultures scope:example_state
-character|primary_role|Checks if the character's primary role is the specified role
+character|primary_role|Checks if the character's primary role is the specified role **Value Type**: common/character_roles
 building|private_ownership_fraction|Compares the fraction of this building's levels that are privately owned
 country|produced_authority|Compares the produced authority of the scoped country
 country|produced_bureaucracy|Compares the produced bureaucracy of the scoped country
@@ -1744,7 +1933,7 @@ religion|shares_heritage_trait_group_with_religion|Checks if the religion shares
 religion|shares_heritage_trait_group_with_state_religion|Checks if the religion shares any heritage trait group with a country's state religion
 culture|shares_heritage_trait_with_any_primary_culture|Checks if culture shares any trait marked as 'heritage' with any of a country's primary cultures
 culture|shares_heritage_trait_with_culture|Checks if culture shares any trait marked as 'heritage' with another culture
-religion|shares_heritage_trait_with_religion|Checks if the religion shares any heritage trait with another religion
+religion|shares_heritage_trait_with_religion|Checks if the religion shares any heritage trait with another religion **Value Type**: common/religions
 religion|shares_heritage_trait_with_state_religion|Checks if the religion shares any heritage trait with a country's religion
 culture|shares_language_trait_group_with_any_primary_culture|Checks if culture shares any trait group marked as 'language' with any of a country's primary cultures
 culture|shares_language_trait_group_with_culture|Checks if culture shares any trait group marked as 'language' with another culture
@@ -1832,6 +2021,7 @@ none|variable_map_size|Checks the size of a variable map Where X is the name of 
 war|war_duration_months|Number of months the scoped war has lasted scope:war
 war|war_goal_time_ramp|How much of their full weight war-goal-driven war support factors currently carry, from zero early in the war to one once it is old
 war|war_has_active_peace_deal|True if the war has a proposed peace deal
+war|war_is_in_stalemate|True if both war leaders are at minimum war support and the war is counting down to a stalemate
 country|war_may_restore_country|Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal cre...
 country|war_participant_has_war_goal_of_type_against|Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 country|war_side_has_war_goal_of_type_against|Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
@@ -1839,7 +2029,7 @@ war|war_support_from_acceptance_of_dead|Determines the war support change a coun
 country|war_support_from_war_goals|Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
 treaty|was_coerced_with_naval_threat|Check if the scoped treaty was accepted through threatening naval hostilities
 character|was_exiled|Checks whether the scoped character was exiled
-country|was_formed_from|Check if a formed country previously had a specific definition
+country|was_formed_from|Check if a formed country previously had a specific definition **Value Type**: common/country_definitions
 pop|wealth|Checks if a pop has a certain amount of wealth
 country,state|wealth_share|Checks the wealth political strength share of a pop type, religion or culture in a country or state.
 building|weekly_profit|Checks whether the profits the building has made this week are above or below a given value
@@ -1851,7 +2041,7 @@ goods|world_market_delta|Checks if goods has the specified number of exports min
 goods|world_market_exports|Checks if goods has the specified number of exports in the world market Where X = fixed point
 goods|world_market_imports|Checks if goods has the specified number of imports in the world market Where X = fixed point
 country|would_accept_diplomatic_action|Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score,...
-interest_group|would_sponsor_amendment|Check if scoped IG would sponsor an amendment of a given type
+interest_group|would_sponsor_amendment|Check if scoped IG would sponsor an amendment of a given type **Value Type**: common/amendments
 none|year|Compares the current year of the game
 character|years_of_service|Compares the commander's years of service
 state|years_to_incorporate|Checks how many years it would take for target country to incorporate scope state

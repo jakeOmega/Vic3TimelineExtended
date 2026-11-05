@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -7,6 +7,9 @@ country|ai_gdp_comparison|value|Scope to comparative GDP between two countries (
 country|ai_ideological_opinion|value|Scope to AI ideological opinion of scope country on target country (example:
 country|ai_navy_comparison|value|Scope to comparative navy strength between two countries (example:
 |ai_regional_objective_type|ai_regional_objective_type|Scope to an AI regional objective type from its key (ai_regional_objective_type:ai_regional_objective_acquire_state) Global Link: yes
+treaty_options,treaty|ai_ship_purchase_rejected_share|value|Share of the target ship's AI ship category sent in the scoped treaty that the receiving country does not want at all, because its navy has no use ...
+treaty_options,treaty|ai_ship_purchase_value_multiplier|value|How much the receiving country of the target ship's ship transfer article in the scoped treaty values the ship, based on its need for that ship cat...
+treaty_options,treaty|ai_ship_sale_remaining_share|value|Share of its wanted ships in the target ship's AI ship category that the country giving away the ship in the scoped treaty would have left afterwar...
 state|ai_state_value|value|Scope to target country AI desire to own scope state (example:
 |ai_strategic_region_stance_type|ai_strategic_region_stance_type|Scope to an AI regional stance type from its key (ai_strategic_region_stance_type:stance_conquer_region) Global Link: yes
 country|ai_subject_value|value|Scope to AI desire of target country to have scope country as a subject (example:
@@ -56,6 +59,7 @@ country|carrying_capacity|value|Total naval carrying capacity of scope country, 
 political_movement|civil_war|civil_war|Scope to the civil war started by the scoped (revolutionary) political movement.
 country|civil_war_origin_country|country|Scope to the origin country of a civil war country
 country|colonial_growth_per_colony|value|Scope to the country's colonial growth per colony value (example:
+country,country_definition,culture,interest_group,party,power_bloc,religion,strategic_region|color|color|Scope to the color of the object
 province|combat_width|value|Scope to combat width multiplier of scope province
 character|command_limit_num_units|value|Get the baseline number of units from their military formation a commander would normally get, depending on their command limit
 military_formation|commander|character|Scope from a military formation to its commander character
@@ -97,6 +101,7 @@ front|front_length|value|Returns the number of provinces in Front
 |g|goods|Scope to the goods with specified key Global Link: yes
 country,market,state,strategic_region|gdp|value|Get the scoped country's yearly predicted GDP
 country|get_ruler_for|character|Scopes from country to a character that would be ruler, under the given transfer of power type get_ruler_for:parliamentary_elective
+|global_average_gdp_per_capita|value|Get the average yearly predicted GDP per capita of all playable countries, the same set as global_gdp - note that this differs from global_populati...
 |global_gdp|value|Get the global yearly predicted GDP
 |global_productivity|value|Scope to global productivity values (example: global_productivity:high_threshold)
 |global_var||Reference a previous set global variable via its name eg: global_var:important_thing Global Link: yes
@@ -109,6 +114,7 @@ building,building_type|group|building_group|Scope from an object to its group
 country|heir|character|Scope to the heir of a country
 character,pop|home_country|country|Scopes to the home country of an exile
 military_formation|home_hq|hq|Returns the home HQ of the scoped military formation
+character|home_state|state|Scope to the home state of the character!
 |i|ideology|Scope to ideology specified by key Global Link: yes
 |identity|power_bloc_identity|Scope to the power bloc identity from its name (identity:key) Global Link: yes
 power_bloc|identity|power_bloc_identity|Scope to the central identity for the scoped power bloc
@@ -179,9 +185,11 @@ strait|military_dependence_for|value|Scope to how much a target country would be
 country|military_expenses|value|Get the current military expenses (slaves, wages and goods) of the scoped country
 country|military_expenses_share|value|Get the current share of military expenses (slaves, wages and goods) relative to the total expenses of the scoped country
 strait|military_fallout_for|value|Scope to how many countries a target controller of this strait would hurt by blocking warships: like trade_fallout_for, but summing military_depend...
+new_combat_unit|military_formation|military_formation|Links from a combat unit scope to the military formation the combat unit belongs to
+country|military_reach|value|How realistically scope country can get an army into a target state or country, from 0 to 1.
 new_combat_unit|mobilization|value|Returns the unit's mobilization value between 0 and 1
 |mobilization_option|mobilization_option|Scope to a mobilization option from its name (mobilization_option:key) Global Link: yes
-country,battle_side,building,character,interest_group,market,power_bloc,state|modifier|value,boolean|Scope to the value of the modifier type of specified key belonging to the current object
+country,battle_side,building,character,interest_group,market,naval_battle,power_bloc,state|modifier|value,boolean|Scope to the value of the modifier type of specified key belonging to the current object
 party|momentum|value|Get the scoped party's raw momentum
 new_combat_unit|morale|value|Returns the unit's morale
 political_movement|most_desired_law|law_type|Scope to the law type that political movement most desires to be enacted (if any).
@@ -278,6 +286,7 @@ container|parent||Scope to the parent of a script container
 amendment|parent_law_type|law_type|Links from an amendment scope to the law type that is considered the amendment's parent
 market|participants|value|Get the total number of participating countries in the scoped market
 interest_group|party|party|Scope to the party that an IG is supporting
+country|piracy_grievance_against|value|Scope to how badly the piracy of a target country hurts this country, as a percentage - the goods it seized last week or its weekly average over th...
 country|pirated_trade_value_by|value|Scope to the average weekly base value of goods pilfered from this country by a target country (example: pirated_trade_value_by:root >= 50)
 |play_type|diplomatic_play_type|Scope to a diplomatic play type from its name (play_type:dp_default_treaty_article) Global Link: yes
 |player|country|Scope to the player (do not use this outside tutorial)
@@ -306,7 +315,7 @@ country|relations|value|Scope to relations between two countries (example: relat
 country|relations_change_rate|value|Scope to daily change in relations progress between two countries (example: relations_change_rate:root > 0)
 |relations_threshold|value|Scope to relations threshold level for comparison purposes (relations_threshold:warm)
 country|relative_carrying_capacity|value|Naval carrying capacity of scope country relative to its standing battalions.
-country,character,country_definition,political_movement,pop|religion|religion|Scope to country or country definition's primary religion or pop religion
+country,character,country_definition,culture,political_movement,pop|religion|religion|Scope to country or country definition's primary religion or pop religion
 treaty_options,treaty|remaining_binding_period|value|Get the current remaining binding period in days for the scoped treaty
 building_type|required_construction|value|Get the required amount of construction for scope building type
 |root||The head of the current top scope eg: reciever of an event, taker of a decision Global Link: yes
@@ -323,6 +332,7 @@ ship|ship_fleet|military_formation|Links from a ship scope to the ship fleet
 ship|ship_group|ship_group|Scope from a ship to its group
 |ship_group|ship_group|Scope to a ship group from its name (ship_group:ship_group_capital_ships) Global Link: yes
 |ship_type|ship_type|Scope to a ship type from its name (ship_type:ship_type_frigate) Global Link: yes
+country|shippable_army_strength_against|value|Army strength scope country can ship at once relative to the army strength of a target country.
 treaty_article|shipping_lane|shipping_lanes|Scope to the shipping lane for the military formation, or treaty article (goods transfer)
 building_type|slaves_role|pop_type|Scope from building type to it's slaves role pop type
 treaty_article,treaty_article_options|source_country|country|Scope to the source_country of any of: 1.
@@ -370,6 +380,7 @@ diplomatic_play|war|war|Scope from a diplomatic play to its war
 company|weekly_prosperity_change|value|Scope to the weekly prosperity change for scope company (example:
 pop|workplace|building|Scope to the workplace of a pop
 state|world_market_hub|state|Scope to the world market hub state associated with the scoped state
+country|worst_piracy_grievance|value|Scope to the largest piracy_grievance_against this country holds against any pirate (example:
 country|worst_strait_access_grievance|value|Scope to the largest strait_access_grievance_against this country holds against any strait controller (example:
 country|worst_strait_toll_grievance|value|Scope to the largest strait_toll_grievance_against this country holds against any strait controller (example:
 |yes|boolean|Boolean literal for true values Global Link: yes

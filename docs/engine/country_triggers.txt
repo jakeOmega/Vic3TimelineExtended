@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 additional_war_support_change: Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 aggressive_diplomatic_plays_permitted: True if country is independent or permitted to start their own Diplomatic Plays
@@ -77,15 +77,16 @@ can_close_straits: Check if the scoped country is allowed to close the straits i
 can_create_diplomatic_pact: Checks if a diplomatic pact is valid to create with another country
 can_decrease_autonomy: Check if a subject country is able to become a less autonomous subject type
 can_establish_company: Check if the country can establish a new company
-can_form_nation: Check if the target country is able to potentially form a nation
+can_form_nation: Check if the target country is able to potentially form a nation **Value Type**: common/country_formation
 can_have_as_subject: Checks if a country can have another country as a particular type of subject Where X = country and Y = subject type
 can_have_subjects: Check if the country is able to have subjects of it sown
 can_increase_autonomy: Check if a subject country is able to become a more autonomous subject type
 can_leave_power_bloc: Checks if the country in scope can leave its current Power Bloc (returns false if country is not in a Power Bloc)
 can_lobbies_target: Checks if target country is a valid target for lobbies in the scoped country
 can_own_autonomy_be_decreased: Check if scoped country can have it's autonomy decreased
-can_research: True if a country can research an technology
+can_research: True if a country can research an technology **Value Type**: common/technology/technologies
 can_send_diplomatic_action: Checks if a diplomatic action is valid to send by scope country to target country
+can_start_play_against_overlord: Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war goal targeting the subject, and none of the subje...
 can_take_on_scaled_debt: Checks if scoped country can take on a certain amount of scaled debt from another country Where X = country and Y = decimal value
 can_toll_straits: Check if the scoped country is allowed to charge tolls on the straits it controls
 can_transfer_subject: Check if the target country can be transferred as a subject to the scoped country scope:country
@@ -109,12 +110,13 @@ country_fervor_primary_culture: Compares with the hightest fervor of a country's
 country_has_building_group_levels: Checks the sum of building levels for a building group in a country  country_has_building_group_levels
 country_has_building_levels: Checks the sum of building levels for a country
 country_has_building_type_levels: Checks the sum of building levels for a building type in a country  country_has_building_type_levels
-country_has_building_type_monopoly: Check if the scoped country has a monopoly of the specified building type
+country_has_building_type_monopoly: Check if the scoped country has a monopoly of the specified building type **Value Type**: common/buildings
 country_has_country_monopoly: Check if the scoped country has any country monopolies
 country_has_primary_culture: Checks if a culture is one of the primary cultures in the country
 country_has_state_religion: Checks if a religion is the state religion in the country country_has_accepted_religion
 country_innovation: Checks the amount of weekly innovation a country produces
-country_or_subject_owns_entire_state_region: Checks whether the scoped country or any of its subjects owns the entire specified state region
+country_or_subject_owns_entire_state_region: Check whether the scoped country or any of its subjects owns the entire specified state region **Value Type**: map_data/state_regions
+country_or_subject_owns_entire_state_region_uncontested: Check whether the scoped country or any of its subjects owns the entire region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
 country_rank: Compares a Country's Power Ranking
 country_ship_type_fraction: Checks that a country has a certain fraction of a specific ship type
 country_tier: Compare tier of country tag
@@ -163,10 +165,11 @@ has_any_strait_province: Check if a state, state region or country owns any stra
 has_any_subventions_on: Check if the scoped country has any level of subventions on a goods scope:country
 has_any_tariffs_on: Check if the scoped country has any level of tariffs on a goods scope:country
 has_attitude: Checks if scoped country has a particular attitude towards another country Where X = country and Y = attitude type
-has_building: True if a state/market/state region/country has a building type
-has_civil_war_from_movement_type: Checks if a country is having a civil war started by a particular movement type
+has_building: True if a state/market/state region/country has a building type **Value Type**: common/buildings
+has_building_levels_in_state_region: Checks how many levels of a building type the scoped country has in the state it owns in a state region Counts as 0 when the country owns no state in the region, or when is_incorporated does not match
+has_civil_war_from_movement_type: Checks if a country is having a civil war started by a particular movement type **Value Type**: common/political_movements
 has_claim: Checks if country in scope has a claim on state/state region/country
-has_company: Checks if a company of the specified type exists in scope country
+has_company: Checks if a company of the specified type exists in scope country **Value Type**: common/company_types
 has_completed_subgoal: Checks if the scoped country has completed a certain subgoal
 has_consumption_tax: Checks if the country is taxing the target good.
 has_convoys_being_sunk: Check if the country has convoys being sunk through convoy raiding
@@ -178,40 +181,43 @@ has_free_government_reform: Check if the country has a free (of radicals) govern
 has_global_highest_gdp: Checks if the scoped country has the highest GDP
 has_global_highest_innovation: Checks if the scoped country has the highest weekly innovation
 has_government_clout: Does the country's government have the necessary total Clout
-has_government_type: Is the country's government type as specified
+has_government_type: Is the country's government type as specified **Value Type**: common/government_types
 has_healthy_economy: Check if the country has a healthy economy
-has_inactive_journal_entry: Check if the country has at least one inactive journal entry of the specified type
+has_inactive_journal_entry: Check if the country has at least one inactive journal entry of the specified type **Value Type**: common/journal_entries
 has_institution: Checks if scope country has a particular type of institution
 has_insurrectionary_interest_groups: Check if the country has Interest Groups that are insurrectionary
 has_interest_marker_in_region: True if scope country has an interest marker in target region
-has_journal_entry: Check if the country has at least one active journal entry of the specified type
-has_law: Checks if a country has a certain law active
-has_law_commitment: Checks if a country has a commitment to enact a certain law
+has_journal_entry: Check if the country has at least one active journal entry of the specified type **Value Type**: common/journal_entries
+has_law: Checks if a country has a certain law active **Value Type**: common/laws
+has_law_commitment: Checks if a country has a commitment to enact a certain law **Value Type**: common/laws
 has_law_imposition_rights: Checks if the scoped country has the necessary permits to demand another country enacts a certain law
-has_law_or_variant: Checks if a country has a certain law or one its variant laws active
+has_law_or_variant: Checks if a country has a certain law or one its variant laws active **Value Type**: common/laws
+has_military_reach: Checks if the country in scope can realistically get an army to a target state or country.
 has_military_strait_access_through: Check if the scoped country has military access through every strait owned by the target country
-has_modifier: Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front
-has_objective: Checks if the scoped country has a certain objective type
+has_modifier: Check if a supported scope has a certain timed modifier Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front **Value Type**: common/static_mod...
+has_objective: Checks if the scoped country has a certain objective type **Value Type**: common/objectives
 has_or_is_contesting_state_in_state_region: Check if country has a state in the state region, or is at war with a country that holds one - i.e.
 has_overlapping_interests: Checks if country in scope has an overlapping interest marker with any of target country's interests
 has_port_country: Check if scoped country has at least one port
 has_possible_decisions: Check if a country has any possible Decisions
-has_potential_to_form_country: Check if the target country could ever be able to form a nation
+has_potential_to_form_country: Check if the target country could ever be able to form a nation **Value Type**: common/country_formation
 has_power_struggle: Checks if scope Power Bloc has a power struggle
 has_region_stance: Checks if the scoped country's AI has the specified stance for a strategic region Usage: region_stance
+has_regional_exile_pool_access: Checks whether the scoped country meets the has_access requirements of the given Regional Exile Pool
 has_regional_objective: Checks if the scoped country's AI has an active regional objective in a strategic region Leave out type to match an objective of any type Usage:
 has_researchable_technology: Check if the country has any researchable technology left.
 has_revolution: Check if the country has revolutionary uprising
-has_ruling_interest_group: Does the country's government include the named IG
+has_ruling_interest_group: Does the country's government include the named IG **Value Type**: common/interest_groups
 has_ruling_interest_group_count: Does the country's government consist of the specified number of IGs
 has_secret_goal: Checks if scoped country has a particular secret goal towards another country Where X = country and Y = secret_goal type
-has_social_hierarchy: Checks if the scoped country has adopted a specific social hierarchy
-has_state_in_state_region: Check if country has a state in the state region
+has_social_hierarchy: Checks if the scoped country has adopted a specific social hierarchy **Value Type**: common/social_hierarchies
+has_state_in_state_region: Check if country has a state in the state region **Value Type**: map_data/state_regions
+has_state_in_state_region_uncontested: Check if country has a state in the state region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
 has_strait_toll_exemption_from: Check if the scoped country is exempt from the strait tolls charged by the target country
 has_strategic_adjacency: Checks if country in scope has a strategic adjacency (direct/coastal/military access/war goal adjacency) to target state/country
 has_strategic_land_adjacency: Checks if country in scope has a strategic adjacency (direct land border, military access or war goal adjacency only) to target state/country
 has_strategic_region_interest_tier: Checks the scoped country's interest tier rank in a specific strategic region scope:country
-has_strategy: Checks if country in scope has a particular AI strategy
+has_strategy: Checks if country in scope has a particular AI strategy **Value Type**: common/ai_strategies
 has_subject_relation_with: Checks if country in scope is subject or overlord of event target
 has_sufficient_construction_capacity_for_investment: Check if country has enough construction capacity to be spending all of its incoming investment pool funds.
 has_sufficient_sailors: Check if the Naval Administrations can deliver enough sailors for every ship the country already has
@@ -241,7 +247,7 @@ is_coastal: Check if a state borders a (non-impassable) sea region or if a count
 is_considered_adjacent_due_to_wargoals: Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play
 is_construction_paused: Check if construction in a state is paused.
 is_country_alive: Checks if the scoped country is alive, i.e.
-is_country_type: Checks the countrys type
+is_country_type: Checks the countrys type **Value Type**: common/country_types
 is_diplomatic_play_ally_of: Checks if country in scope is in a diplomatic play together with event target
 is_diplomatic_play_committed_participant: True if country is a committed participant of any diplomatic play
 is_diplomatic_play_enemy_of: Checks if country in scope is in a diplomatic play against event target
@@ -258,14 +264,14 @@ is_home_country_for: Checks if a country is the home country for target country
 is_immune_to_revolutions: Checks if the country has been set to be immune to revolutions via set_immune_to_revolutions Warning: This does not check if the country is naturally immune to revolutions due to for example being ...
 is_in_customs_union: Check if the country is part of a customs union
 is_in_customs_union_with: Check if the country is in a customs union with scoped country
-is_in_geographic_region: Checks if a scoped object is in a specific geographic region
+is_in_geographic_region: Checks if a scoped object is in a specific geographic region **Value Type**: common/geographic_regions
 is_in_power_bloc: Checks if the country is in a Power Bloc
 is_in_same_power_bloc: Checks if the scoped country is in the same power bloc as the target scoped country
 is_in_war_together: Checks if country in scope is in war on the same side as event target
 is_independent_and_not_being_subjugated: True if the country is not a subject and no war goal to make it a subject is pending against it in any of its wars
 is_indirect_subject_of: Checks if country in scope is an indirect subject (subject-of-subject) of event target
 is_insurrectionary: Check if country, movement or IG is insurrectionary
-is_involved_in_journal_entry: Check if the country is involved in a specific journal entry
+is_involved_in_journal_entry: Check if the country is involved in a specific journal entry **Value Type**: common/journal_entries
 is_junior_in_customs_union: True if country is a junior country in a customs custom
 is_land_adjacent_to_state: Checks if country in scope shares a land border with a target state, ignoring sea crossings
 is_local_country: Checks if the scoped country is local in specified strategic region
@@ -275,23 +281,26 @@ is_market_reachable_for_trade: Check if the scope country can reach the specifie
 is_mass_migration_origin: Checks if the scoped country is the origin of mass migration
 is_mass_migration_origin_of_culture: Checks if the scoped country origin of mass migration of specific culture
 is_negotiating: Check if the scoped country or interest group is currently negotiating.
-is_not_in_geographic_region: Checks if a scoped object is NOT in a specific geographic region
+is_not_in_geographic_region: Checks if a scoped object is NOT in a specific geographic region **Value Type**: common/geographic_regions
 is_owed_obligation_by: Checks if the scoped country is owed a obligation by the target country
 is_player: True if country scope is a player
 is_power_bloc_leader: Checks if the country is a leader of a Power Bloc
-is_researching_technology: Check if the country is actively researching a tech
+is_regional_objective_target_country: Checks if the scoped country's AI has an active regional objective of the given type that targets the country Uses the objective type's country_target, or for objectives with only a state_target, w...
+is_regional_objective_target_state: Checks if the scoped country's AI has an active regional objective of the given type that targets the state Usage:
+is_researching_technology: Check if the country is actively researching a tech **Value Type**: common/technology/technologies
 is_researching_technology_category: Check if the country is actively researching a tech category
 is_revolutionary: Check if the country, movement or interest group is revolutionary
 is_secessionist: Check if the country, movement or interest group is secessionist
 is_subject: True if country is a subject
 is_subject_of: Checks if country in scope is subject (or subject-of-subject) of event target
+is_subject_of_and_not_being_freed: True if the country is a subject and no war goal to free it is pending in any wars
 is_subject_type: Checks the country's subject type
 is_supporting_unification_candidate: Check if scope country is supporting a unification candidate for a specific country formation
 is_taxing_goods: Check if a country is taxing a good has_embargo
 is_unification_candidate: Check if scope country is a unification candidate for country tag
 is_violating_sovereignty_of: Check if the scoped country is violating the sovereignty of a target country
 isolated_states: Compare number of Isolated States
-leading_producer_of: Checks if country is producing the most of a certain good
+leading_producer_of: Checks if country is producing the most of a certain good **Value Type**: common/goods
 leads_customs_union: Check if any other country is part of this country's customs union
 liberty_desire: Compare trigger for the Liberty Desire value in a scoped country.
 liberty_desire_weekly_progress: Compare trigger for the weekly Liberty Desire progress value in a scoped country.
@@ -322,9 +331,9 @@ number_of_possible_decisions: The number of possible Descision a Country can tak
 overlord_can_decrease_subject_autonomy: Check if an overlord can decrease a subject autonomy
 owes_obligation_to: Checks if country in scope owes a obligation to event target
 owns_entire_or_is_contesting_state_region: Check if country owns the entire region, or is at war with a country that holds a state in it - i.e.
-owns_entire_state_region: Check if country owns entire region
-owns_entire_state_region_uncontested: Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
-owns_treaty_port_in: Does country own the treaty port in assigned state region
+owns_entire_state_region: Check if country owns entire region **Value Type**: map_data/state_regions
+owns_entire_state_region_uncontested: Check if country owns the entire region and no war goal in any of its wars is targeting a state in it **Value Type**: map_data/state_regions
+owns_treaty_port_in: Does country own the treaty port in assigned state region **Value Type**: map_data/state_regions
 play_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any diplomatic play
 play_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any diplomatic play holds a war goal of a specific type targeting a specificcountry
 political_strength_share: Checks the political strength share of a pop type, religion or culture in a country or state.
@@ -386,11 +395,11 @@ total_population_including_subjects_share: Compares the total population in the 
 total_population_share: Compares the total population of a given country's share of the global population
 transfer_money_gross_income: Does the country have this amount of gross income (income before expenses) from money transfer treaties
 transfer_money_net_income: Does the country have this amount of net income (income after expenses) from money transfer treaties
-war_may_restore_country: Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war
+war_may_restore_country: Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war **Value Typ...
 war_participant_has_war_goal_of_type_against: Checks if scope country holds a war goal of a specific type targeting a specific country in any war
 war_side_has_war_goal_of_type_against: Checks if any country on the same side as scope country in any war holds a war goal of a specific type targeting a specific country
 war_support_from_war_goals: Signed war support change per beat for the scoped country from war goals it holds (positive) or is targeted by (negative), by progress tier
-was_formed_from: Check if a formed country previously had a specific definition
+was_formed_from: Check if a formed country previously had a specific definition **Value Type**: common/country_definitions
 wealth_share: Checks the wealth political strength share of a pop type, religion or culture in a country or state.
 weeks_until_bankruptcy: Compares how many weeks the country can sustain its current deficit before its debt reaches its credit limit
 would_accept_diplomatic_action: Checks if a country would accept a diplomatic action proposed by another country if set, modify_acceptance will be added to their acceptance score, to allow for checking if they would accept with a...

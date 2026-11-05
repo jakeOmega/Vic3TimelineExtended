@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log (engine docs 1.14.5) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.15.0) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -9,92 +9,92 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 ### `building_group_bg_{bg}_employee_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members in engine docs: **69**
-- Vocab size: 157; missing entries: 88
+- Members in engine docs: **70**
+- Vocab size: 163; missing entries: 93
 
 ### `building_group_bg_{bg}_expected_sol_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 157; missing entries: 157
+- Vocab size: 163; missing entries: 163
 
 ### `building_group_bg_{bg}_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members in engine docs: **69**
-- Vocab size: 157; missing entries: 88
+- Members in engine docs: **70**
+- Vocab size: 163; missing entries: 93
 
 ### `building_group_bg_{bg}_tax_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members in engine docs: **69**
-- Vocab size: 157; missing entries: 88
+- Members in engine docs: **70**
+- Vocab size: 163; missing entries: 93
 
 ### `building_group_bg_{bg}_throughput_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members in engine docs: **70**
-- Vocab size: 157; missing entries: 87
+- Members in engine docs: **71**
+- Vocab size: 163; missing entries: 92
 
 ### `building_group_bg_{bg}_throughput_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 157; missing entries: 157
+- Vocab size: 163; missing entries: 163
 
 ### `building_group_bg_{bg}_urbanization_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 157; missing entries: 157
+- Vocab size: 163; missing entries: 163
 
 ### `building_group_bg_{bg}_wages_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
 - Members in engine docs: **0**
-- Vocab size: 157; missing entries: 157
+- Vocab size: 163; missing entries: 163
 
 ### `building_{building}_employees_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `building_{building}_employees_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `building_{building}_max_level_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `building_{building}_mortality_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
-- Members in engine docs: **150**
-- Vocab size: 1073; missing entries: 923
+- Members in engine docs: **166**
+- Vocab size: 1199; missing entries: 1033
 
 ### `building_{building}_throughput_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `building_{building}_unincorporated_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1073; missing entries: 1073
+- Vocab size: 1199; missing entries: 1199
 
 ### `country_institution_impact_{institution}_mult`
 
@@ -115,45 +115,45 @@ _Per-culture migration pull modifier; instantiated for every culture used in mod
 
 - Placeholder: `culture` (vocab: `culture`)
 - Members in engine docs: **0**
-- Vocab size: 317; missing entries: 317
+- Vocab size: 322; missing entries: 322
 
 ### `goods_input_{good}_add`
 
 _Extra flat input consumption of a specific good._
 
 - Placeholder: `good` (vocab: `good`)
-- Members in engine docs: **64**
-- Vocab size: 65; missing entries: 1
+- Members in engine docs: **66**
+- Vocab size: 67; missing entries: 1
   - Missing values: `tourism`
 
 ### `goods_input_{good}_mult`
 
 - Placeholder: `good` (vocab: `good`)
-- Members in engine docs: **54**
-- Vocab size: 65; missing entries: 11
-  - Missing values: `advanced_materials`, `consumer_appliances`, `digital_access`, `digital_assets`, `electronic_components`, `launch_capacity`, `magnetic_drive_ships`, `motor_ships`, `robotics`, `tech_metals`, `tourism`
+- Members in engine docs: **62**
+- Vocab size: 67; missing entries: 5
+  - Missing values: `consumer_appliances`, `magnetic_drive_ships`, `motor_ships`, `tech_metals`, `tourism`
 
 ### `goods_output_{good}_add`
 
 _Flat additive to the output of a specific good across the economy._
 
 - Placeholder: `good` (vocab: `good`)
-- Members in engine docs: **65**
-- Vocab size: 65; missing entries: 0
+- Members in engine docs: **67**
+- Vocab size: 67; missing entries: 0
 
 ### `goods_output_{good}_mult`
 
 _Multiplicative bonus to a specific good's output._
 
 - Placeholder: `good` (vocab: `good`)
-- Members in engine docs: **65**
-- Vocab size: 65; missing entries: 0
+- Members in engine docs: **67**
+- Vocab size: 67; missing entries: 0
 
 ### `goods_sales_tax_{good}_add`
 
 - Placeholder: `good` (vocab: `good`)
 - Members in engine docs: **0**
-- Vocab size: 65; missing entries: 65
+- Vocab size: 67; missing entries: 67
 
 ### `interest_group_ig_{ig}_approval_add`
 
@@ -195,8 +195,8 @@ _Multiplicative bonus to a specific good's output._
 _State-scoped cap on a specific building's level._
 
 - Placeholder: `building` (vocab: `building`)
-- Members in engine docs: **325**
-- Vocab size: 1073; missing entries: 748
+- Members in engine docs: **338**
+- Vocab size: 1199; missing entries: 861
 
 ### `state_pop_qualifications_{poptype}_mult`
 
@@ -230,7 +230,7 @@ _State-scoped cap on a specific building's level._
 - Members in engine docs: **3**
 - Vocab size: 88; missing entries: 85
 
-## Discovered (not yet in catalog) — 140 patterns
+## Discovered (not yet in catalog) — 142 patterns
 
 These patterns were auto-detected by matching engine modifiers against loaded vocabulary values. Review and promote desired ones into `common/_meta/modifier_patterns.yml`.
 
@@ -471,19 +471,19 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `building_group_{bg}_academics_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_academics_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_academics_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_allowed_collectivization_add`
@@ -495,19 +495,19 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `building_group_{bg}_aristocrats_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_aristocrats_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_aristocrats_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_bureaucrats_fertility_mult`
@@ -531,253 +531,253 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `building_group_{bg}_capitalists_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_capitalists_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_capitalists_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_clergymen_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_clergymen_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_clergymen_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_clerks_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_clerks_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_clerks_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_construction_efficiency_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **9**
-  - Examples: `bg_agriculture`, `bg_extraction`, `bg_government`, `bg_heavy_industry`, `bg_infrastructure`, `bg_light_industry`
+- Members: **10**
+  - Examples: `bg_agriculture`, `bg_clean_power`, `bg_extraction`, `bg_government`, `bg_heavy_industry`, `bg_infrastructure`
 
 ### `building_group_{bg}_engineers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_engineers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_engineers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **64**
+- Members: **65**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_farmers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_farmers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_farmers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_infrastructure_usage_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **42**
+- Members: **43**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coffee_plantations`, `bg_company_headquarter`
 
 ### `building_group_{bg}_laborers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_laborers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_laborers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_machinists_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **61**
+- Members: **62**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_machinists_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **61**
+- Members: **62**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_machinists_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **61**
+- Members: **62**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_officers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_officers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_officers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_peasants_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_peasants_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_peasants_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_self_investment_chance_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_shopkeepers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_shopkeepers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_shopkeepers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **57**
+- Members: **58**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_coal_mining`, `bg_coffee_plantations`
 
 ### `building_group_{bg}_slaves_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_slaves_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_slaves_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_soldiers_fertility_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_soldiers_mortality_mult`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_soldiers_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **66**
+- Members: **67**
   - Examples: `bg_agriculture`, `bg_army_logistics_center`, `bg_banana_plantations`, `bg_bureaucracy`, `bg_canals`, `bg_coal_mining`
 
 ### `building_group_{bg}_standard_of_living_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_group_{bg}_unincorporated_throughput_add`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `building_total_{building}_progress`
@@ -837,20 +837,20 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_enactment_speed_{law}_mult`
 
 - Placeholder: `law` (vocab: `law`)
-- Members: **6**
-  - Examples: `law_anarchy`, `law_autocracy`, `law_oligarchy`, `law_public_schools`, `law_single_party_state`, `law_technocracy`
+- Members: **7**
+  - Examples: `law_anarchy`, `law_autocracy`, `law_multicultural`, `law_oligarchy`, `law_public_schools`, `law_single_party_state`
 
 ### `country_enactment_success_chance_{law}_add`
 
 - Placeholder: `law` (vocab: `law`)
-- Members: **147**
+- Members: **157**
   - Examples: `law_affirmative_action`, `law_agrarianism`, `law_anarchy`, `law_anti_strike_laws`, `law_appointed_bureaucrats`, `law_autocracy`
 
 ### `country_fervor_target_{culture}_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **316**
-  - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
+- Members: **321**
+  - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_institution_cost_{institution}_mult`
 
@@ -885,55 +885,55 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_{bg}_require_subsidies_bool`
 
 - Placeholder: `bg` (vocab: `bg`)
-- Members: **69**
+- Members: **70**
   - Examples: `bg_agriculture`, `bg_army`, `bg_army_logistics_center`, `bg_arts`, `bg_banana_plantations`, `bg_bureaucracy`
 
 ### `country_{building}_require_subsidies_bool`
 
 - Placeholder: `building` (vocab: `building`)
-- Members: **118**
+- Members: **126**
   - Examples: `building_airport`, `building_angkor_wat`, `building_argebam`, `building_arms_industry`, `building_army_logistics_center`, `building_art_academy`
 
 ### `country_{culture}_cultural_acceptance_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **316**
-  - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
+- Members: **321**
+  - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_{good}_export_tariffs_rate_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{good}_import_tariffs_rate_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{good}_max_export_tariffs_level_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{good}_max_import_tariffs_level_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{good}_min_export_tariffs_level_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{good}_min_import_tariffs_level_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `country_{institution}_max_investment_add`
@@ -963,8 +963,14 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `goods_trade_advantage_{good}_mult`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **42**
+- Members: **43**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
+
+### `interest_group_{ideology}_leader_chance_mult`
+
+- Placeholder: `ideology` (vocab: `ideology`)
+- Members: **47**
+  - Examples: `ideology_abolitionist`, `ideology_anarchist`, `ideology_authoritarian`, `ideology_bonapartist`, `ideology_carlist`, `ideology_carlist_2`
 
 ### `power_bloc_invite_acceptance_{country_rank}_add`
 
@@ -987,8 +993,14 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_buy_orders_{good}_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
+
+### `state_demog_absorbed_{poptype}_mortality_mult`
+
+- Placeholder: `poptype` (vocab: `poptype`)
+- Members: **4**
+  - Examples: `farmers`, `laborers`, `machinists`, `peasants`
 
 ### `state_infrastructure_from_{good}_consumption_add`
 
@@ -1011,14 +1023,14 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_sell_orders_{good}_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **53**
+- Members: **54**
   - Examples: `aeroplanes`, `ammunition`, `artillery`, `automobiles`, `clippers`, `clothes`
 
 ### `state_{culture}_standard_of_living_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **316**
-  - Examples: `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`, `afro_caribbean`
+- Members: **321**
+  - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `state_{poptype}_dependent_wage_mult`
 
@@ -1071,6 +1083,6 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `unit_{combat_unit}_offense_mult`
 
 - Placeholder: `combat_unit` (vocab: `combat_unit`)
-- Members: **9**
-  - Examples: `combat_unit_type_cannon_artillery`, `combat_unit_type_heavy_tank`, `combat_unit_type_jet_powered_fighters`, `combat_unit_type_mobile_artillery`, `combat_unit_type_orbital_tactical_vehicles`, `combat_unit_type_orbital_weapons_platforms`
+- Members: **13**
+  - Examples: `combat_unit_type_cannon_artillery`, `combat_unit_type_cuirassiers`, `combat_unit_type_dragoons`, `combat_unit_type_heavy_tank`, `combat_unit_type_hussars`, `combat_unit_type_jet_powered_fighters`
 
