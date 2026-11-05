@@ -2072,8 +2072,8 @@
   "de": "Durch [concept_power_bloc], der [SCOPE.GetRootScope.GetPowerBloc.MakeScope.ScriptValue('power_bloc_population_share')|V]% der Weltbevölkerung umfasst ($identity_diplomatic$)"
  },
  "POWER_BLOC_MANDATE_PROGRESS_NUM_STATES": {
-  "en": "From the number of [Concept('concept_state','$concept_states$')] in the [concept_power_bloc] ($identity_diplomatic$)",
-  "de": "Aus der Anzahl der [Concept('concept_state','$concept_states$')] im [concept_power_bloc] ($identity_diplomatic$)"
+  "en": "From the number of [Concept('concept_state','$concept_states|q$')] in the [concept_power_bloc] ($identity_diplomatic$)",
+  "de": "Aus der Anzahl der [Concept('concept_state','$concept_states|q$')] im [concept_power_bloc] ($identity_diplomatic$)"
  },
  "PROTECT_FOREIGN_PROPERTY_RELATIONS_TT": {
   "en": "#G +20#! relations with all countries that own significant portions of our economy.",
@@ -3488,8 +3488,8 @@
   "de": "Beginnt nächsten Monat."
  },
  "TE_HOMELAND_UNLOCK_SOURCES": {
-  "en": "[Concept('concept_law', '$concept_laws$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) or [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] tier II or higher in the country's [concept_power_bloc]\\n[concept_technology]: [GetTechnology('mass_media').GetName]",
-  "de": "[Concept('concept_law', '$concept_laws$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) oder [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] Stufe II oder höher im [concept_power_bloc] des Landes\\n[concept_technology]: [GetTechnology('mass_media').GetName]"
+  "en": "[Concept('concept_law', '$concept_laws|q$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) or [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] tier II or higher in the country's [concept_power_bloc]\\n[concept_technology]: [GetTechnology('mass_media').GetName]",
+  "de": "[Concept('concept_law', '$concept_laws|q$')]: [GetLawType('law_ethnostate').GetName] ($lawgroup_citizenship$), [GetLawType('law_minority_rights_violent_hostility').GetName] ($lawgroup_minority_rights$) oder [GetLawType('law_linguistic_purity').GetName] ($lawgroup_language_policy$)\\n[concept_power_bloc_principle]: [GetPowerBlocPrincipleGroup('principle_group_cultural_unity').GetName] Stufe II oder höher im [concept_power_bloc] des Landes\\n[concept_technology]: [GetTechnology('mass_media').GetName]"
  },
  "TE_STATE_ANTIMATTER_TT": {
   "en": "#bold [concept_antimatter_facility] Points#!\\n\\nTotal Generated: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!\\nActive Structures: #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_consumed')|0]#!\\nReserved (incl. queued): #v [State.GetOwner.MakeScope.ScriptValue('antimatter_points_reserved')|0]#!\\nNet Available: #G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!\\n\\nEach [concept_antimatter_facility] level provides 5 sub-building slots for Antimatter Engines and Warhead Plants.",
@@ -3536,8 +3536,8 @@
   "de": "Seekabel"
  },
  "TE_STATE_GRID_ROW_CABLES_TT": {
-  "en": "#b Undersea Cables#!\\nThis state's $building_grid_hvdc_interconnector$ crosses up to #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')] (#b $building_grid_undersea_cable_range_add$#!). It joins this state's grid to any station with a cable of its own when either one's range reaches the other: one of ours in another [concept_market_area], or one of a country we have a $grid_interconnection_agreement$ with. The number is how many stations it joins this way.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]",
-  "de": "#b Seekabel#!\\nDie $building_grid_hvdc_interconnector$ dieses Staates überquert bis zu #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')] (#b $building_grid_undersea_cable_range_add$#!). Sie verbindet das Netz dieses Staates mit jeder Station, die ein eigenes Kabel hat, sobald die Reichweite eines der beiden Kabel das andere erreicht: mit einer von uns in einem anderen [concept_market_area] oder mit einer eines Landes, mit dem wir ein $grid_interconnection_agreement$ haben. Die Zahl gibt an, wie viele Stationen sie auf diese Weise verbindet.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]"
+  "en": "#b Undersea Cables#!\\nThis state's $building_grid_hvdc_interconnector$ crosses up to #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')] (#b $building_grid_undersea_cable_range_add$#!). It joins this state's grid to any station with a cable of its own when either one's range reaches the other: one of ours in another [concept_market_area], or one of a country we have a $grid_interconnection_agreement$ with. The number is how many stations it joins this way.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]",
+  "de": "#b Seekabel#!\\nDie $building_grid_hvdc_interconnector$ dieses Staates überquert bis zu #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')] (#b $building_grid_undersea_cable_range_add$#!). Sie verbindet das Netz dieses Staates mit jeder Station, die ein eigenes Kabel hat, sobald die Reichweite eines der beiden Kabel das andere erreicht: mit einer von uns in einem anderen [concept_market_area] oder mit einer eines Landes, mit dem wir ein $grid_interconnection_agreement$ haben. Die Zahl gibt an, wie viele Stationen sie auf diese Weise verbindet.\\n\\n[GetScriptedGui('te_grid_cable_links_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).End)]"
  },
  "TE_STATE_GRID_ROW_EFFICIENCY": {
   "en": "Efficiency",
@@ -3592,8 +3592,8 @@
   "de": "#b Netzgröße#!\\nDie Anzahl der Staaten, deren Stationen sich das [concept_power_grid] dieses Staates teilen."
  },
  "TE_STATE_GRID_TT": {
-  "en": "#bold [concept_power_grid]#!\\nThis state's $building_grid_transfer_station$ shares $electricity$ with #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! states' stations. Once a month the grid gives every state on it the same supply against its demand, now #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')]",
-  "de": "#bold [concept_power_grid]#!\\nDie $building_grid_transfer_station$ dieses Staates teilt $electricity$ mit den Stationen von #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Staaten. Einmal im Monat verschafft das Netz jedem Staat darin dieselbe Versorgung im Verhältnis zu seinem Bedarf, derzeit #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes$')]"
+  "en": "#bold [concept_power_grid]#!\\nThis state's $building_grid_transfer_station$ shares $electricity$ with #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! states' stations. Once a month the grid gives every state on it the same supply against its demand, now #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nMode: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]",
+  "de": "#bold [concept_power_grid]#!\\nDie $building_grid_transfer_station$ dieses Staates teilt $electricity$ mit den Stationen von #v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#! Staaten. Einmal im Monat verschafft das Netz jedem Staat darin dieselbe Versorgung im Verhältnis zu seinem Bedarf, derzeit #v [State.MakeScope.ScriptValue('te_grid_region_ratio_disp')|%0]#!.\\n\\nModus: #v $TE_STATE_GRID_MODE_NAME$#!\\n$building_grid_undersea_cable_range_add$: #v [State.MakeScope.ScriptValue('te_grid_cable_range_disp')|0]#! [Concept('concept_sea_node', '$concept_sea_nodes|q$')]"
  },
  "TE_STATE_HOMELAND_TT": {
   "en": "#bold [concept_homeland_dynamics]#!\\n\\nEach eligible culture has independent progress. Multiple homelands can form or decay in parallel, advancing monthly to #v 100%#!, without random rolls.\\n\\nCreation: a primary culture without a homeland here must reach #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_CREATION_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_form_threshold')|%0]#!#!#! of the state's population.\\nRemoval: a non-primary homeland culture must fall below #tooltippable #tooltip:[State.GetTooltipTag],TE_HOMELAND_REMOVAL_THRESHOLD_TT #v [State.MakeScope.ScriptValue('homeland_culture_disappear_threshold')|%0]#!#!#!.\\n\\nBase Rate: #v 10#! percentage points per year.\\nModified Rate: #v [State.MakeScope.ScriptValue('te_homeland_annual_progress')|2]#! points per year.\\nRemoval Rate: #v [State.MakeScope.ScriptValue('te_homeland_removal_annual_progress')|2]#! points per year (slower in the states of a party to the UN Convention on Cultural Diversity).\\nChange Speed: [State.GetModifier.GetValueWithBreakdownFor('state_homeland_change_speed_mult')]\\n\\nTurmoil of 25% / 50% multiplies progress by 1.25 / 1.5. Legitimacy below 25 halves progress; legitimacy of 75 or more multiplies it by 1.25.\\n\\nRequires the entire state region to have the same owner, and homeland changes to be enabled by any one of:\\n$TE_HOMELAND_UNLOCK_SOURCES$\\nLosing either condition pauses progress. A change of owner, primary-culture status, population eligibility or homeland status resets the affected culture's progress.",
@@ -16244,12 +16244,12 @@
   "de": "Erkenntnisse aus gemeinsamen Übungen"
  },
  "joint_military_exercises_limit_first_country_tt": {
-  "en": "[SCOPE.sCountry('first_country').GetName] holds $joint_military_exercises$ in fewer than #v 3#! other [Concept('concept_treaty', '$concept_treaties$')]. Each set raises its [Concept('concept_military_good', 'military goods')] costs by another #N 5%#!",
-  "de": "Weniger als #v 3#! andere [Concept('concept_treaty', '$concept_treaties$')] von [SCOPE.sCountry('first_country').GetAltName('GEN')] enthalten $joint_military_exercises$. Jeder Satz erhöht die Kosten für [Concept('concept_military_good', 'Militärwaren')] um weitere #N 5%#!"
+  "en": "[SCOPE.sCountry('first_country').GetName] holds $joint_military_exercises$ in fewer than #v 3#! other [Concept('concept_treaty', '$concept_treaties|q$')]. Each set raises its [Concept('concept_military_good', 'military goods')] costs by another #N 5%#!",
+  "de": "Weniger als #v 3#! andere [Concept('concept_treaty', '$concept_treaties|q$')] von [SCOPE.sCountry('first_country').GetAltName('GEN')] enthalten $joint_military_exercises$. Jeder Satz erhöht die Kosten für [Concept('concept_military_good', 'Militärwaren')] um weitere #N 5%#!"
  },
  "joint_military_exercises_limit_second_country_tt": {
-  "en": "[SCOPE.sCountry('second_country').GetName] holds $joint_military_exercises$ in fewer than #v 3#! other [Concept('concept_treaty', '$concept_treaties$')]. Each set raises its [Concept('concept_military_good', 'military goods')] costs by another #N 5%#!",
-  "de": "Weniger als #v 3#! andere [Concept('concept_treaty', '$concept_treaties$')] von [SCOPE.sCountry('second_country').GetAltName('GEN')] enthalten $joint_military_exercises$. Jeder Satz erhöht die Kosten für [Concept('concept_military_good', 'Militärwaren')] um weitere #N 5%#!"
+  "en": "[SCOPE.sCountry('second_country').GetName] holds $joint_military_exercises$ in fewer than #v 3#! other [Concept('concept_treaty', '$concept_treaties|q$')]. Each set raises its [Concept('concept_military_good', 'military goods')] costs by another #N 5%#!",
+  "de": "Weniger als #v 3#! andere [Concept('concept_treaty', '$concept_treaties|q$')] von [SCOPE.sCountry('second_country').GetAltName('GEN')] enthalten $joint_military_exercises$. Jeder Satz erhöht die Kosten für [Concept('concept_military_good', 'Militärwaren')] um weitere #N 5%#!"
  },
  "joint_military_exercises_ties_tt": {
   "en": "[SCOPE.sCountry('first_country').GetName] and [SCOPE.sCountry('second_country').GetName] have an [concept_alliance] or a [concept_defensive_pact], in force or in this treaty, one is the other's [concept_subject], or they belong to the same [concept_power_bloc] with the $identity_military_treaty_organization$ identity",
@@ -23368,40 +23368,40 @@
   "de": "Der Zustand und der Verlauf des Zyklus sowie Ihre Interventionen. Dies sind die eigenen Panels des Journaleintrags: Eine hier vorgenommene Änderung zeigt sich auch dort."
  },
  "te_bulk_tariff_effect_cd_export": {
-  "en": "[Concept('concept_trade','$concept_exports$')] can be set for all [Concept('concept_good','$concept_goods$')] again within a week, then not for 3 months",
-  "de": "[Concept('concept_trade','$concept_exports$')] können innerhalb einer Woche erneut für alle [Concept('concept_good','$concept_goods$')] festgelegt werden, danach 3 Monate lang nicht"
+  "en": "[Concept('concept_trade','$concept_exports|q$')] can be set for all [Concept('concept_good','$concept_goods|q$')] again within a week, then not for 3 months",
+  "de": "[Concept('concept_trade','$concept_exports|q$')] können innerhalb einer Woche erneut für alle [Concept('concept_good','$concept_goods|q$')] festgelegt werden, danach 3 Monate lang nicht"
  },
  "te_bulk_tariff_effect_cd_import": {
-  "en": "[Concept('concept_trade','$concept_imports$')] can be set for all [Concept('concept_good','$concept_goods$')] again within a week, then not for 3 months",
-  "de": "[Concept('concept_trade','$concept_imports$')] können innerhalb einer Woche erneut für alle [Concept('concept_good','$concept_goods$')] festgelegt werden, danach 3 Monate lang nicht"
+  "en": "[Concept('concept_trade','$concept_imports|q$')] can be set for all [Concept('concept_good','$concept_goods|q$')] again within a week, then not for 3 months",
+  "de": "[Concept('concept_trade','$concept_imports|q$')] können innerhalb einer Woche erneut für alle [Concept('concept_good','$concept_goods|q$')] festgelegt werden, danach 3 Monate lang nicht"
  },
  "te_bulk_tariff_effect_export_high_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $high_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $high_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_export_high_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $high_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $high_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_export_low_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $low_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $low_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_export_low_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $low_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $low_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_export_max_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $max_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $max_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_export_max_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $max_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $max_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_export_no_tariffs_or_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_export$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export$')] jeder handelbaren [concept_good] auf #v $no_tariffs_or_subventions$#!"
+  "en": "Sets the [Concept('concept_trade','$concept_export|q$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_export|q$')] jeder handelbaren [concept_good] auf #v $no_tariffs_or_subventions$#!"
  },
  "te_bulk_tariff_effect_grace_export": {
   "en": "Corrects this week's change: the 3-month wait is unchanged",
@@ -23412,48 +23412,48 @@
   "de": "Korrigiert die Änderung dieser Woche: Die Wartezeit von 3 Monaten bleibt unverändert"
  },
  "te_bulk_tariff_effect_import_high_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $high_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $high_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $high_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_import_high_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $high_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $high_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $high_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_import_low_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $low_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $low_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $low_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_import_low_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $low_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $low_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $low_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_import_max_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $max_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $max_subventions$#!, except where a [concept_treaty] bars [concept_subventions]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $max_subventions$#!, außer wo ein [concept_treaty] [concept_subventions] untersagt"
  },
  "te_bulk_tariff_effect_import_max_tariffs": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $max_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $max_tariffs$#!, except where a [concept_treaty] bars [concept_tariffs]",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $max_tariffs$#!, außer wo ein [concept_treaty] [concept_tariffs] untersagt"
  },
  "te_bulk_tariff_effect_import_no_tariffs_or_subventions": {
-  "en": "Sets the [Concept('concept_trade','$concept_import$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
-  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import$')] jeder handelbaren [concept_good] auf #v $no_tariffs_or_subventions$#!"
+  "en": "Sets the [Concept('concept_trade','$concept_import|q$')] level of every tradeable [concept_good] to #v $no_tariffs_or_subventions$#!",
+  "de": "Setzt die Stufe des [Concept('concept_trade','$concept_import|q$')] jeder handelbaren [concept_good] auf #v $no_tariffs_or_subventions$#!"
  },
  "te_bulk_tariff_label_export": {
   "en": "All Goods",
   "de": "Alle Waren"
  },
  "te_bulk_tariff_label_export_tt": {
-  "en": "Sets one [Concept('concept_trade','$concept_export$')] level on every tradeable [concept_good] at once. [Concept('concept_good','$concept_goods$')] a [concept_treaty] bars from that level keep their own. After a change there is a week to correct it, then [Concept('concept_trade','$concept_exports$')] cannot be set for all [Concept('concept_good','$concept_goods$')] again until 3 months have passed.",
-  "de": "Setzt auf einmal dieselbe Stufe des [Concept('concept_trade','$concept_export$')] für jede handelbare [concept_good]. [Concept('concept_good','$concept_goods$')], die ein [concept_treaty] von dieser Stufe ausschließt, behalten ihre eigene. Nach einer Änderung bleibt eine Woche zur Korrektur, danach lassen sich [Concept('concept_trade','$concept_exports$')] erst nach Ablauf von 3 Monaten wieder für alle [Concept('concept_good','$concept_goods$')] festlegen."
+  "en": "Sets one [Concept('concept_trade','$concept_export|q$')] level on every tradeable [concept_good] at once. [Concept('concept_good','$concept_goods|q$')] a [concept_treaty] bars from that level keep their own. After a change there is a week to correct it, then [Concept('concept_trade','$concept_exports|q$')] cannot be set for all [Concept('concept_good','$concept_goods|q$')] again until 3 months have passed.",
+  "de": "Setzt auf einmal dieselbe Stufe des [Concept('concept_trade','$concept_export|q$')] für jede handelbare [concept_good]. [Concept('concept_good','$concept_goods|q$')], die ein [concept_treaty] von dieser Stufe ausschließt, behalten ihre eigene. Nach einer Änderung bleibt eine Woche zur Korrektur, danach lassen sich [Concept('concept_trade','$concept_exports|q$')] erst nach Ablauf von 3 Monaten wieder für alle [Concept('concept_good','$concept_goods|q$')] festlegen."
  },
  "te_bulk_tariff_label_import": {
   "en": "All Goods",
   "de": "Alle Waren"
  },
  "te_bulk_tariff_label_import_tt": {
-  "en": "Sets one [Concept('concept_trade','$concept_import$')] level on every tradeable [concept_good] at once. [Concept('concept_good','$concept_goods$')] a [concept_treaty] bars from that level keep their own. After a change there is a week to correct it, then [Concept('concept_trade','$concept_imports$')] cannot be set for all [Concept('concept_good','$concept_goods$')] again until 3 months have passed.",
-  "de": "Setzt auf einmal dieselbe Stufe des [Concept('concept_trade','$concept_import$')] für jede handelbare [concept_good]. [Concept('concept_good','$concept_goods$')], die ein [concept_treaty] von dieser Stufe ausschließt, behalten ihre eigene. Nach einer Änderung bleibt eine Woche zur Korrektur, danach lassen sich [Concept('concept_trade','$concept_imports$')] erst nach Ablauf von 3 Monaten wieder für alle [Concept('concept_good','$concept_goods$')] festlegen."
+  "en": "Sets one [Concept('concept_trade','$concept_import|q$')] level on every tradeable [concept_good] at once. [Concept('concept_good','$concept_goods|q$')] a [concept_treaty] bars from that level keep their own. After a change there is a week to correct it, then [Concept('concept_trade','$concept_imports|q$')] cannot be set for all [Concept('concept_good','$concept_goods|q$')] again until 3 months have passed.",
+  "de": "Setzt auf einmal dieselbe Stufe des [Concept('concept_trade','$concept_import|q$')] für jede handelbare [concept_good]. [Concept('concept_good','$concept_goods|q$')], die ein [concept_treaty] von dieser Stufe ausschließt, behalten ihre eigene. Nach einer Änderung bleibt eine Woche zur Korrektur, danach lassen sich [Concept('concept_trade','$concept_imports|q$')] erst nach Ablauf von 3 Monaten wieder für alle [Concept('concept_good','$concept_goods|q$')] festlegen."
  },
  "te_bulk_tariff_req_customs": {
   "en": "[concept_tariffs] are not set by Tax Code bills",
@@ -23464,28 +23464,28 @@
   "de": "Wir sind [concept_market_owner]"
  },
  "te_bulk_tariff_req_policy_subvention_export": {
-  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_export$')] [concept_subventions]",
-  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_export$')]-[concept_subventions]"
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_export|q$')] [concept_subventions]",
+  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_export|q$')]-[concept_subventions]"
  },
  "te_bulk_tariff_req_policy_subvention_import": {
-  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import$')] [concept_subventions]",
-  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_import$')]-[concept_subventions]"
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import|q$')] [concept_subventions]",
+  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_import|q$')]-[concept_subventions]"
  },
  "te_bulk_tariff_req_policy_tariff_export": {
-  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_export$')] [concept_tariffs]",
-  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_export$')]-[concept_tariffs]"
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_export|q$')] [concept_tariffs]",
+  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_export|q$')]-[concept_tariffs]"
  },
  "te_bulk_tariff_req_policy_tariff_import": {
-  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import$')] [concept_tariffs]",
-  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_import$')]-[concept_tariffs]"
+  "en": "Our Trade Policy allows [Concept('concept_trade','$concept_import|q$')] [concept_tariffs]",
+  "de": "Unsere Handelspolitik erlaubt [Concept('concept_trade','$concept_import|q$')]-[concept_tariffs]"
  },
  "te_bulk_tariff_req_ready_export": {
-  "en": "[Concept('concept_trade','$concept_exports$')] were not set for all [Concept('concept_good','$concept_goods$')] in the last 3 months, or were set this week",
-  "de": "[Concept('concept_trade','$concept_exports$')] wurden in den letzten 3 Monaten nicht für alle [Concept('concept_good','$concept_goods$')] festgelegt, oder erst in dieser Woche"
+  "en": "[Concept('concept_trade','$concept_exports|q$')] were not set for all [Concept('concept_good','$concept_goods|q$')] in the last 3 months, or were set this week",
+  "de": "[Concept('concept_trade','$concept_exports|q$')] wurden in den letzten 3 Monaten nicht für alle [Concept('concept_good','$concept_goods|q$')] festgelegt, oder erst in dieser Woche"
  },
  "te_bulk_tariff_req_ready_import": {
-  "en": "[Concept('concept_trade','$concept_imports$')] were not set for all [Concept('concept_good','$concept_goods$')] in the last 3 months, or were set this week",
-  "de": "[Concept('concept_trade','$concept_imports$')] wurden in den letzten 3 Monaten nicht für alle [Concept('concept_good','$concept_goods$')] festgelegt, oder erst in dieser Woche"
+  "en": "[Concept('concept_trade','$concept_imports|q$')] were not set for all [Concept('concept_good','$concept_goods|q$')] in the last 3 months, or were set this week",
+  "de": "[Concept('concept_trade','$concept_imports|q$')] wurden in den letzten 3 Monaten nicht für alle [Concept('concept_good','$concept_goods|q$')] festgelegt, oder erst in dieser Woche"
  },
  "te_capital_controls_fatigue": {
   "en": "Trapped Capital",
@@ -24216,8 +24216,8 @@
   "de": "Wehrfähige Männer"
  },
  "te_demog_fam_rule": {
-  "en": "Men of fighting age, 20 to 39, against their share of the world's people in 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, give a state's multiplier on its [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: an older people, or one that has lost its young men, fewer, down to none; a young one more, with no ceiling. War dead come from the same men.",
-  "de": "Männer im wehrfähigen Alter, 20 bis 39, im Verhältnis zu ihrem Anteil an den Menschen der Welt im Jahr 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, ergeben den Multiplikator eines Staates auf seine [Concept('concept_conscript_battalion','$concept_conscript_battalions$')]: ein älteres Volk oder eines, das seine jungen Männer verloren hat, weniger, bis hin zu keinen; ein junges mehr, ohne Obergrenze. Die Kriegstoten stammen aus denselben Männern."
+  "en": "Men of fighting age, 20 to 39, against their share of the world's people in 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, give a state's multiplier on its [Concept('concept_conscript_battalion','$concept_conscript_battalions|q$')]: an older people, or one that has lost its young men, fewer, down to none; a young one more, with no ceiling. War dead come from the same men.",
+  "de": "Männer im wehrfähigen Alter, 20 bis 39, im Verhältnis zu ihrem Anteil an den Menschen der Welt im Jahr 1836, #v [GetPlayer.MakeScope.ScriptValue('te_demog_k_conscription_ref')|%1]#!, ergeben den Multiplikator eines Staates auf seine [Concept('concept_conscript_battalion','$concept_conscript_battalions|q$')]: ein älteres Volk oder eines, das seine jungen Männer verloren hat, weniger, bis hin zu keinen; ein junges mehr, ohne Obergrenze. Die Kriegstoten stammen aus denselben Männern."
  },
  "te_demog_family_limitation": {
   "en": "Family Limitation",
@@ -29040,12 +29040,12 @@
   "de": "Dieser Platz für ein [concept_power_bloc_principle] öffnet sich, wenn der [concept_power_bloc] #v 8#! Plätze hat. $te_pb_locked_slot_sources_tt$"
  },
  "te_pb_locked_slot_sources_tt": {
-  "en": "It has #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!: #v 2#! to start, and #v 1#! for each line ticked below. It is ranked [PowerBloc.GetRankFormatted] with #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_member_count')|0]#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')].\\n[GetScriptedGui('te_pb_principle_slot_sources_sgui').IsValidTooltip( GuiScope.SetRoot( PowerBloc.GetLeader.MakeScope ).End )]",
-  "de": "Er hat #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!: anfangs #v 2#!, dazu #v 1#! für jede unten abgehakte Zeile. Er hat den Rang [PowerBloc.GetRankFormatted]; [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')]: #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_member_count')|0]#!.\\n[GetScriptedGui('te_pb_principle_slot_sources_sgui').IsValidTooltip( GuiScope.SetRoot( PowerBloc.GetLeader.MakeScope ).End )]"
+  "en": "It has #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!: #v 2#! to start, and #v 1#! for each line ticked below. It is ranked [PowerBloc.GetRankFormatted] with #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_member_count')|0]#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')].\\n[GetScriptedGui('te_pb_principle_slot_sources_sgui').IsValidTooltip( GuiScope.SetRoot( PowerBloc.GetLeader.MakeScope ).End )]",
+  "de": "Er hat #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_principle_slot_cap')|0]#!: anfangs #v 2#!, dazu #v 1#! für jede unten abgehakte Zeile. Er hat den Rang [PowerBloc.GetRankFormatted]; [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')]: #v [PowerBloc.GetLeader.MakeScope.ScriptValue('te_pb_bloc_member_count')|0]#!.\\n[GetScriptedGui('te_pb_principle_slot_sources_sgui').IsValidTooltip( GuiScope.SetRoot( PowerBloc.GetLeader.MakeScope ).End )]"
  },
  "te_pb_remove_principle_tt": {
-  "en": "Remove [PowerBlocPrinciple.GetName] from the [concept_power_bloc]. The [Concept('concept_power_bloc_mandate', '$concept_power_bloc_mandates$')] spent on it are not refunded.",
-  "de": "[PowerBlocPrinciple.GetName] aus dem [concept_power_bloc] entfernen. Die dafür aufgewendeten [Concept('concept_power_bloc_mandate', '$concept_power_bloc_mandates$')] werden nicht erstattet."
+  "en": "Remove [PowerBlocPrinciple.GetName] from the [concept_power_bloc]. The [Concept('concept_power_bloc_mandate', '$concept_power_bloc_mandates|q$')] spent on it are not refunded.",
+  "de": "[PowerBlocPrinciple.GetName] aus dem [concept_power_bloc] entfernen. Die dafür aufgewendeten [Concept('concept_power_bloc_mandate', '$concept_power_bloc_mandates|q$')] werden nicht erstattet."
  },
  "te_pb_slot_3_unlock_tt": {
   "en": "The [concept_power_bloc] has at least #v 3#! [concept_power_bloc_principle] slots",
@@ -29068,12 +29068,12 @@
   "de": "Der [concept_power_bloc_leader] hat $intergovernmental_organizations$ erforscht"
  },
  "te_pb_slot_source_rank_3_tt": {
-  "en": "[concept_power_bloc_rank] #v ##3#! or better with at least #v 10#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')]",
-  "de": "[concept_power_bloc_rank] #v ##3#! oder besser und mindestens #v 10#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')]"
+  "en": "[concept_power_bloc_rank] #v ##3#! or better with at least #v 10#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')]",
+  "de": "[concept_power_bloc_rank] #v ##3#! oder besser und mindestens #v 10#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')]"
  },
  "te_pb_slot_source_rank_5_tt": {
-  "en": "[concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')]",
-  "de": "[concept_power_bloc_rank] #v ##5#! oder besser und mindestens #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short$')]"
+  "en": "[concept_power_bloc_rank] #v ##5#! or better with at least #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')]",
+  "de": "[concept_power_bloc_rank] #v ##5#! oder besser und mindestens #v 5#! [Concept('concept_power_bloc_member', '$concept_power_bloc_members_short|q$')]"
  },
  "te_pb_slot_source_universal_digital_identity_tt": {
   "en": "The [concept_power_bloc_leader] has researched $universal_digital_identity$",
@@ -29968,8 +29968,8 @@
   "de": "Unsere [concept_subjugation_strength] gegenüber [SCOPE.sCountry('target_country').GetAltName('DAT')] beträgt mindestens #V 1,0#! (derzeit #V [SCOPE.ScriptValue('te_subjugation_strength')|2]#!)\\n• Aus [concept_prestige]: [SCOPE.ScriptValue('te_subjugation_strength_prestige')|+2] (#V [SCOPE.ScriptValue('te_subjugation_prestige_own')|0]#! gegenüber #V [SCOPE.ScriptValue('te_subjugation_prestige_target')|0]#!, ein Verhältnis von #V [SCOPE.ScriptValue('te_subjugation_prestige_ratio')|2]#! geteilt durch #V 20#!)\\n• Aus unserer [concept_power_bloc_identity]: [SCOPE.ScriptValue('te_subjugation_strength_identity')|+2][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)0'), 'te_subjugation_strength_tt_identity_none', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)1'), 'te_subjugation_strength_tt_identity_sovereign', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)2'), 'te_subjugation_strength_tt_identity_religious', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)3'), 'te_subjugation_strength_tt_identity_ideological', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)4'), 'te_subjugation_strength_tt_identity_cultural', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)5'), 'te_subjugation_strength_tt_identity_trade', 'te_tt_blank')][SelectLocalization(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_identity_index'), '(CFixedPoint)6'), 'te_subjugation_strength_tt_identity_military', 'te_tt_blank')][SelectLocalization(Not(EqualTo_CFixedPoint(SCOPE.ScriptValue('te_subjugation_strength_other'), '(CFixedPoint)0')), 'te_subjugation_strength_tt_other', 'te_tt_blank')]"
  },
  "te_subjugation_strength_tt_identity_cultural": {
-  "en": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member shares one of our [Concept('concept_primary_cultures', '$concept_primary_cultures$')])",
-  "de": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#!, wenn das Mitglied eine unserer [Concept('concept_primary_cultures', '$concept_primary_cultures$')] teilt)"
+  "en": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member shares one of our [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')])",
+  "de": " ($identity_cultural$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#!, wenn das Mitglied eine unserer [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')] teilt)"
  },
  "te_subjugation_strength_tt_identity_ideological": {
   "en": " ($identity_ideological_union$: #V [GetPlayer.MakeScope.ScriptValue('te_subjugation_identity_bonus')|+2]#! if the member has our $lawgroup_governance_principles$ law)",

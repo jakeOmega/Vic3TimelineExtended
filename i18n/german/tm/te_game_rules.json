@@ -384,16 +384,16 @@
   "de": "Bis zu acht"
  },
  "setting_te_principle_slots_eight_desc": {
-  "en": "A [concept_power_bloc] can hold up to #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]. On top of the base game's slots from [concept_power_bloc_rank] and members, each of $intergovernmental_organizations$, $containerization$, $globalization$ and $universal_digital_identity$ the leader has researched adds a slot.",
-  "de": "Ein [concept_power_bloc] kann bis zu #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')] halten. Zusätzlich zu den Plätzen des Basisspiels durch [concept_power_bloc_rank] und Mitglieder fügt jede der Technologien $intergovernmental_organizations$, $containerization$, $globalization$ und $universal_digital_identity$, die der Anführer erforscht hat, einen Platz hinzu."
+  "en": "A [concept_power_bloc] can hold up to #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]. On top of the base game's slots from [concept_power_bloc_rank] and members, each of $intergovernmental_organizations$, $containerization$, $globalization$ and $universal_digital_identity$ the leader has researched adds a slot.",
+  "de": "Ein [concept_power_bloc] kann bis zu #v 8#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')] halten. Zusätzlich zu den Plätzen des Basisspiels durch [concept_power_bloc_rank] und Mitglieder fügt jede der Technologien $intergovernmental_organizations$, $containerization$, $globalization$ und $universal_digital_identity$, die der Anführer erforscht hat, einen Platz hinzu."
  },
  "setting_te_principle_slots_four": {
   "en": "Four (Base Game)",
   "de": "Vier (Basisspiel)"
  },
  "setting_te_principle_slots_four_desc": {
-  "en": "A [concept_power_bloc] holds up to #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')], opened by [concept_power_bloc_rank] and members as in the base game. Technologies add no slots.",
-  "de": "Ein [concept_power_bloc] hält bis zu #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')], die wie im Basisspiel durch [concept_power_bloc_rank] und Mitglieder freigeschaltet werden. Technologien fügen keine Plätze hinzu."
+  "en": "A [concept_power_bloc] holds up to #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')], opened by [concept_power_bloc_rank] and members as in the base game. Technologies add no slots.",
+  "de": "Ein [concept_power_bloc] hält bis zu #v 4#! [Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')], die wie im Basisspiel durch [concept_power_bloc_rank] und Mitglieder freigeschaltet werden. Technologien fügen keine Plätze hinzu."
  },
  "setting_united_nations_disabled": {
   "en": "United Nations Disabled",

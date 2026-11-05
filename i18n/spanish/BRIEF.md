@@ -53,11 +53,12 @@ ES  … tienen [concept_foreign_investment_rights|l] en [Concept('concept_power_
 EN  Every [concept_building] that is [concept_nationally_owned] can be put up for sale
 ES  Todo [concept_building|l] que sea de [concept_nationally_owned|l] se puede poner a la venta
 
-EN  Allow enacting [Concept('concept_decree', '$concept_decrees$')] on [concept_subject] [Concept('concept_state', '$concept_states$')]
-ES  Permite promulgar [Concept('concept_decree', '$concept_decrees$')|l] en [Concept('concept_state', '$concept_states$')|l] de [Concept('concept_subject', 'súbditos')]
+EN  Allow enacting [Concept('concept_decree', '$concept_decrees|q$')] on [concept_subject] [Concept('concept_state', '$concept_states|q$')]
+ES  Permite promulgar [Concept('concept_decree', '$concept_decrees|q$')|l] en [Concept('concept_state', '$concept_states|q$')|l] de [Concept('concept_subject', 'súbditos')]
 ```
 
 - Keep **every** concept link: the same concepts, the same number of times. You may switch between `[concept_x]` and `[Concept('concept_x', '…')]` freely, and move links within the sentence.
+- A `$reference$` inside a quoted argument carries `|q` (`[Concept('concept_state', '$concept_states|q$')]`). Keep it, and add it to any you write there yourself: the game logs an error for each one without it.
 - For a plain `[concept_x]` link, the display text you write must be the concept's own Spanish term, in the form the sentence needs; the glossary's REFERENCED KEYS section shows the singular. Don't substitute a synonym.
 - Where the English already gives its own display text (`[Concept('concept_x', 'construction capacity')]`), translate that text. The English author chose it on purpose, even when it differs from the concept's name.
 - Make articles and adjectives agree with the concept's gender and number: *la* [concept_legitimacy|l], *los* [Concept('concept_pop','colectivos')] (the official name for pops is «Colectivo»).
