@@ -417,6 +417,50 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertEqual(self._flags(mod, "unchosen_self_action"),
                          {("unchosen_self_action", "flav.1")})
 
+    def test_journal_entry_outcome_blocks_are_not_scope_switches(self):
+        # 1.15: a dispatch in an outcome's effect / effect_all_involved sits in
+        # the entry's own scope, guarded by the outcome's trigger.
+        je = ("je_x = {\n\toutcome = {\n"
+              "\t\ttrigger = { has_variable = x_done }\n"
+              "\t\teffect = { trigger_event = { id = flav.1 } }\n"
+              "\t\teffect_all_involved = { trigger_event = { id = flav.2 } }\n"
+              "\t}\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2"),
+                         "common/journal_entries/je_x.txt": je})
+        g = eca.build_graph(mod)
+        for eid in ("flav.1", "flav.2"):
+            [site] = g.sites_by_event[eid]
+            self.assertEqual(site.switches, [], eid)
+            self.assertEqual(site.path[0], "outcome")
+            self.assertIn("has_variable", site.conds)
+
+    def test_send_interface_message_keeps_the_options_choice(self):
+        pre = _event("flav.2", "\toption = {\n\t\tsend_interface_message = {\n"
+                     "\t\t\ttitle = flav.2.msg\n\t\t\ttrigger_event = { id = flav.1 }\n\t\t}\n\t}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre}, self.CAMPAIGN_LOC)
+        [site] = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual(site.switches, [])
+        self.assertEqual(self._flags(mod, "unchosen_self_action"), set())
+
+    def test_display_only_blocks_dispatch_nothing(self):
+        # map_tooltip and the effect descriptions are never run, so a
+        # trigger_event or a helper call inside one is no dispatch site.
+        eff = "fire_it = {\n\ttrigger_event = { id = flav.3 }\n}\n"
+        je = ("je_x = {\n"
+              "\tmap_tooltip = { trigger_event = { id = flav.1 } }\n"
+              "\tevent_outcome_activated_effect_desc = { header = h effect = { fire_it = yes } }\n"
+              "\toutcome = {\n"
+              "\t\tevent_outcome_effect_desc = { header = h effect = { trigger_event = { id = flav.2 } } }\n"
+              "\t\teffect = { trigger_event = { id = flav.2 } }\n"
+              "\t}\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + _event("flav.2") + _event("flav.3"),
+                         "common/scripted_effects/h.txt": eff,
+                         "common/journal_entries/je_x.txt": je})
+        g = eca.build_graph(mod)
+        self.assertEqual(g.sites_by_event.get("flav.1", []), [])
+        self.assertEqual([s.path for s in g.sites_by_event["flav.2"]], [["outcome", "effect"]])
+        self.assertNotIn("fire_it", {k for k, v in g.effect_calls.items() if v})
+
     def test_pre_attribution_names_the_picked_country_as_source(self):
         mod = self._imputing("The evidence points to [SCOPE.sCountry('rival').GetName].",
                              "\toption = { scope:rival = { trigger_event = { id = flav.1 } } }\n")
