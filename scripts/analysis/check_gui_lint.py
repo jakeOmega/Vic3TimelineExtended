@@ -60,6 +60,21 @@ LOC_LINE = re.compile(r'^\s*([\w.\-]+):\d*\s*"(.*)"\s*$')
 LOC_CALL = re.compile(r"\b(Localize|SelectLocalization|AddLocalizationIf|AddTextIf)\(")
 BARE_KEY = re.compile(r'\b(?:text|tooltip|raw_text|raw_tooltip)\s*=\s*"([A-Za-z][\w.\-]*)"')
 ALWAYS_KNOWN = {"types", "template", "blockoverride", "block", "state", "on_start", "on_finish"}
+# The global names the 1.15 data-types dump lists only as a "Global promote" (no
+# "Global function" form) that take arguments. As a function's argument the
+# engine looks for a function of that name, logs "Could not find data system
+# function", and drops the whole callback or binding, so end the chain with a
+# function: GetPlayerJournalEntry('x').AccessSelf (vanilla: construction_panel.gui's
+# GetBuildingType('building_shipyard').Self). Names with both forms, GetPlayer
+# and GetBuildingType among them, can be passed bare.
+PROMOTE_ONLY_CALLS = ("GetPlayerJournalEntry", "AccessPlayerJournalEntry", "GetStrategicObjectiveFormationInState",
+                      "GetScriptedGui", "GC")
+PROMOTE_ARG = re.compile(r"[(,]\s*(" + "|".join(PROMOTE_ONLY_CALLS) + r")\((?:[^()]|\([^()]*\))*\)\s*[),]")
+
+
+def promote_as_argument(text):
+    """The promote-only calls passed bare as a function's argument, as (line, name)."""
+    return [(text.count("\n", 0, m.start(1)) + 1, m.group(1)) for m in PROMOTE_ARG.finditer(text)]
 
 
 def strip_comments(text):
@@ -316,6 +331,9 @@ class Linter:
                         "const Get* promote it fails at load and crashed the panel, and through Access* promotes it "
                         "loads but silently keeps the parent's entry. Read that country's data through a Country datacontext instead, e.g. "
                         "datacontext = \"[MarketPanel.GetMarket.GetOwner]\"; GetPlayerJournalEntry is fine (gotcha #35)")
+        for _, name in promote_as_argument(expr):
+            self.report("ERROR", path, ln, f"{name}(...) is a promote only, so as an argument it fails at load and the "
+                        f"engine drops the callback: end it with a function, {name}(...).AccessSelf")
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")

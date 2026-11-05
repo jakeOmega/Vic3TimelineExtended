@@ -45,6 +45,8 @@ NEW_GUI = BOM + """types t {
 		widget = { datacontext = "[Market.AccessMarketCapital.AccessOwner.GetJournalEntry('je_x')]" }
 		widget = { datacontext = "[MarketPanel.GetMarket.GetOwner]" }
 		widget = { datacontext = "[GetPlayerJournalEntry('je_x')]" }
+		button = { onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x'))]" }
+		button = { onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]" }
 		widget = {
 			size = { 400 84 }
 			margin_right = 8
@@ -146,6 +148,9 @@ class LintTest(unittest.TestCase):
         # Both ways into another country's journal entry failed in game; a Country
         # datacontext and GetPlayerJournalEntry are fine.
         self.assertEqual(errs.count("another country's journal entry (.GetJournalEntry)"), 2)
+        # A promote-only call as an argument fails at load (the map test strip,
+        # 2026-11-05); ended with .AccessSelf, and as a datacontext, it is fine.
+        self.assertEqual(errs.count("GetPlayerJournalEntry(...) is a promote only"), 1)
 
     def test_margin_on_plain_widget(self):
         # The engine logs "Property 'margin_right' not handled" for a plain
@@ -303,6 +308,25 @@ class BoxInFlowcontainerTest(unittest.TestCase):
         bases = lint.gui_type_bases("\n".join(texts.values()))
         hits = [f"{os.path.relpath(p, repo)}:{ln}: {child} ({kind})"
                 for p, text in texts.items() for ln, child, kind in lint.box_in_flowcontainer(text, bases)]
+        self.assertEqual(hits, [])
+
+
+class PromoteAsArgumentTest(unittest.TestCase):
+    def test_bare_promote_arguments(self):
+        text = ("a = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x'))]\"\n"
+                "b = \"[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_x').AccessSelf)]\"\n"
+                "c = \"[GetPlayerJournalEntry('je_x')]\"\n"
+                "d = \"[Foo(GetPlayer, AccessPlayerJournalEntry('je_y'))]\"\n"
+                "e = \"[Foo(GetBuildingType('building_shipyard'))]\"\n")
+        self.assertEqual(lint.promote_as_argument(text), [(1, "GetPlayerJournalEntry"), (4, "AccessPlayerJournalEntry")])
+
+    def test_no_bare_promote_argument_in_the_repository(self):
+        # The engine drops a callback whose argument is a bare promote; CI doesn't
+        # run the lint, so this is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {name}" for p in paths
+                for ln, name in lint.promote_as_argument(lint.strip_comments(lint._read(p)))]
         self.assertEqual(hits, [])
 
 

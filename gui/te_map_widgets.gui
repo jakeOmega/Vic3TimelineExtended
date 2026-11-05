@@ -100,7 +100,7 @@ types te_map_widgets
 				text = "te_jmap_strip_one_click"
 				tooltip = "te_jmap_strip_one_click_tt"
 				onclick = "[GetScriptedGui('te_jmap_show_demographics_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-				onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_te_map_host'))]"
+				onclick = "[InformationPanelBar.OpenJournalEntryPanel(GetPlayerJournalEntry('je_te_map_host').AccessSelf)]"
 			}
 
 			# The activation-trigger route: set the variable only.
