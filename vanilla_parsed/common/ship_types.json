@@ -133,7 +133,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.5"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -146,11 +146,11 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "650"
+      "420"
      ],
      "goods_input_fabric_add": [
       "=",
-      "390"
+      "250"
      ]
     }
    ],
@@ -327,7 +327,7 @@
      ],
      "ship_screening_add": [
       "=",
-      "5"
+      "17"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -363,7 +363,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.5"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -376,11 +376,11 @@
     {
      "goods_input_iron_add": [
       "=",
-      "780"
+      "500"
      ],
      "goods_input_engines_add": [
       "=",
-      "260"
+      "165"
      ]
     }
    ],
@@ -611,7 +611,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.5"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -624,11 +624,11 @@
     {
      "goods_input_iron_add": [
       "=",
-      "2500"
+      "1540"
      ],
      "goods_input_engines_add": [
       "=",
-      "800"
+      "490"
      ]
     }
    ],
@@ -806,7 +806,7 @@
      ],
      "ship_screening_add": [
       "=",
-      "10"
+      "36"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -842,7 +842,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.5"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -868,11 +868,11 @@
     {
      "goods_input_iron_add": [
       "=",
-      "2500"
+      "1530"
      ],
      "goods_input_engines_add": [
       "=",
-      "800"
+      "490"
      ]
     }
    ],
@@ -953,7 +953,8 @@
        "utility_mod_fire_suppression",
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
-       "utility_mod_advanced_explosives"
+       "utility_mod_advanced_explosives",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -1094,7 +1095,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.66"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -1107,15 +1108,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "2000"
+      "1230"
      ],
      "goods_input_iron_add": [
       "=",
-      "900"
+      "550"
      ],
      "goods_input_engines_add": [
       "=",
-      "900"
+      "550"
      ]
     }
    ],
@@ -1199,7 +1200,8 @@
        "utility_mod_extended_sick_bay",
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
-       "utility_mod_advanced_explosives"
+       "utility_mod_advanced_explosives",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -1340,7 +1342,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.66"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -1353,15 +1355,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "3000"
+      "1830"
      ],
      "goods_input_iron_add": [
       "=",
-      "2000"
+      "1210"
      ],
      "goods_input_engines_add": [
       "=",
-      "2000"
+      "1210"
      ]
     }
    ],
@@ -1446,7 +1448,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ],
      "ship_mod_slot_utility_2": [
@@ -1460,7 +1463,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -1592,7 +1596,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.66"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -1605,15 +1609,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "4000"
+      "2450"
      ],
      "goods_input_iron_add": [
       "=",
-      "2600"
+      "1570"
      ],
      "goods_input_engines_add": [
       "=",
-      "2600"
+      "1570"
      ]
     }
    ],
@@ -1698,7 +1702,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ],
      "ship_mod_slot_utility_2": [
@@ -1712,7 +1717,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -1835,7 +1841,7 @@
      ],
      "ship_battle_against_ship_type_submarine_accuracy_mult": [
       "=",
-      "-0.66"
+      "-0.8"
      ],
      "ship_battle_against_ship_type_destroyer_accuracy_mult": [
       "=",
@@ -1848,15 +1854,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "5200"
+      "3150"
      ],
      "goods_input_iron_add": [
       "=",
-      "2600"
+      "1580"
      ],
      "goods_input_engines_add": [
       "=",
-      "2600"
+      "1580"
      ]
     }
    ],
@@ -1944,7 +1950,8 @@
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ],
      "ship_mod_slot_utility_2": [
@@ -1958,7 +1965,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ],
      "ship_mod_slot_utility_3": [
@@ -1972,7 +1980,8 @@
        "utility_mod_range_finder",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -2102,6 +2111,10 @@
      "ship_marine_capacity_add": [
       "=",
       "0.10"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -2110,11 +2123,11 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "358"
+      "230"
      ],
      "goods_input_fabric_add": [
       "=",
-      "215"
+      "140"
      ]
     }
    ],
@@ -2317,6 +2330,10 @@
      "ship_marine_capacity_add": [
       "=",
       "0.10"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -2325,15 +2342,15 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "390"
+      "250"
      ],
      "goods_input_iron_add": [
       "=",
-      "650"
+      "410"
      ],
      "goods_input_fabric_add": [
       "=",
-      "390"
+      "250"
      ]
     }
    ],
@@ -2510,11 +2527,11 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "345"
+      "230"
      ],
      "goods_input_fabric_add": [
       "=",
-      "170"
+      "110"
      ]
     }
    ],
@@ -2537,7 +2554,7 @@
    ],
    "profile_texture": [
     "=",
-    "\"gfx/interface/icons/ships/ship_types/silhouette_troop_ship.dds\""
+    "\"gfx/interface/icons/ships/ship_types/silhouette_early_troop_ship.dds\""
    ],
    "modifications": [
     "=",
@@ -2572,6 +2589,12 @@
        "ship_mod_early_troop_ship_range_light",
        "ship_mod_early_troop_ship_range_medium",
        "ship_mod_early_troop_ship_range_high"
+      ]
+     ],
+     "ship_mod_slot_utility_1": [
+      "=",
+      [
+       "utility_mod_landing_skiffs"
       ]
      ]
     }
@@ -2692,11 +2715,11 @@
     {
      "goods_input_hardwood_add": [
       "=",
-      "520"
+      "340"
      ],
      "goods_input_fabric_add": [
       "=",
-      "260"
+      "165"
      ]
     }
    ],
@@ -2764,6 +2787,13 @@
        "ship_mod_troop_ship_range_light",
        "ship_mod_troop_ship_range_medium",
        "ship_mod_troop_ship_range_high"
+      ]
+     ],
+     "ship_mod_slot_utility_1": [
+      "=",
+      [
+       "utility_mod_landing_skiffs",
+       "utility_mod_camouflage"
       ]
      ]
     }
@@ -2893,6 +2923,10 @@
      "ship_marine_capacity_add": [
       "=",
       "0.075"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -2901,11 +2935,11 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1300"
+      "810"
      ],
      "goods_input_engines_add": [
       "=",
-      "650"
+      "410"
      ]
     }
    ],
@@ -2990,7 +3024,8 @@
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -3111,6 +3146,10 @@
      "ship_marine_capacity_add": [
       "=",
       "0.15"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -3119,11 +3158,11 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1709"
+      "1060"
      ],
      "goods_input_engines_add": [
       "=",
-      "569"
+      "350"
      ]
     }
    ],
@@ -3207,7 +3246,8 @@
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -3319,6 +3359,10 @@
      "ship_marine_capacity_add": [
       "=",
       "0.15"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -3327,11 +3371,11 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1645"
+      "1020"
      ],
      "goods_input_engines_add": [
       "=",
-      "822"
+      "510"
      ]
     }
    ],
@@ -3415,7 +3459,8 @@
        "utility_mod_torpedo_nets",
        "utility_mod_fire_control_system",
        "utility_mod_advanced_explosives",
-       "utility_mod_camouflage"
+       "utility_mod_camouflage",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -3528,6 +3573,10 @@
      "ship_blockade_strength_add": [
       "=",
       "350"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -3536,15 +3585,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1300"
+      "800"
      ],
      "goods_input_iron_add": [
       "=",
-      "650"
+      "400"
      ],
      "goods_input_engines_add": [
       "=",
-      "650"
+      "400"
      ]
     }
    ],
@@ -3728,6 +3777,10 @@
      "ship_blockade_strength_add": [
       "=",
       "1000"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -3736,15 +3789,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "2500"
+      "1540"
      ],
      "goods_input_iron_add": [
       "=",
-      "900"
+      "560"
      ],
      "goods_input_engines_add": [
       "=",
-      "900"
+      "560"
      ]
     }
    ],
@@ -3983,6 +4036,10 @@
      "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": [
       "=",
       "2.0"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -3991,15 +4048,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "650"
+      "400"
      ],
      "goods_input_iron_add": [
       "=",
-      "325"
+      "200"
      ],
      "goods_input_engines_add": [
       "=",
-      "325"
+      "200"
      ]
     }
    ],
@@ -4152,7 +4209,7 @@
      ],
      "ship_critical_hit_chance_add": [
       "=",
-      "0.10"
+      "0.15"
      ],
      "ship_critical_hit_multiplier_add": [
       "=",
@@ -4213,6 +4270,10 @@
      "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": [
       "=",
       "2.0"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -4221,11 +4282,11 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1170"
+      "730"
      ],
      "goods_input_engines_add": [
       "=",
-      "390"
+      "240"
      ]
     }
    ],
@@ -4300,7 +4361,8 @@
       [
        "utility_mod_fire_suppression",
        "utility_mod_advanced_explosives",
-       "utility_mod_range_finder"
+       "utility_mod_range_finder",
+       "utility_mod_searchlights"
       ]
      ]
     }
@@ -4316,7 +4378,7 @@
    ],
    "ai_ship_category": [
     "=",
-    "ai_ship_category_torpedo_craft"
+    "ai_ship_category_submarines"
    ],
    "modification_construction_cost": [
     "=",
@@ -4379,7 +4441,7 @@
      ],
      "ship_screening_add": [
       "=",
-      "5"
+      "6"
      ],
      "ship_readiness_gain_add": [
       "=",
@@ -4392,6 +4454,10 @@
      "ship_visibility_add": [
       "=",
       "5"
+     ],
+     "ship_suffered_accuracy_mult": [
+      "=",
+      "-0.5"
      ],
      "ship_detection_add": [
       "=",
@@ -4428,6 +4494,10 @@
      "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": [
       "=",
       "2.0"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "0.5"
      ]
     }
    ],
@@ -4436,11 +4506,11 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1658"
+      "1020"
      ],
      "goods_input_engines_add": [
       "=",
-      "553"
+      "340"
      ]
     }
    ],
@@ -4647,6 +4717,10 @@
      "ship_battle_against_ship_type_super_dreadnought_hull_damage_mult": [
       "=",
       "2.0"
+     ],
+     "ship_battle_against_ship_type_submarine_accuracy_mult": [
+      "=",
+      "1.0"
      ]
     }
    ],
@@ -4655,15 +4729,15 @@
     {
      "goods_input_steel_add": [
       "=",
-      "1300"
+      "800"
      ],
      "goods_input_iron_add": [
       "=",
-      "650"
+      "400"
      ],
      "goods_input_engines_add": [
       "=",
-      "650"
+      "400"
      ]
     }
    ],

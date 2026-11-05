@@ -633,7 +633,9 @@
     "=",
     [
      "pm_cannons",
+     "pm_bronze_cannons",
      "pm_smoothbores",
+     "pm_bronze_smoothbores",
      "pm_breech_loaders",
      "pm_recoiled_barrels"
     ]
@@ -1400,6 +1402,73 @@
    ]
   }
  ],
+ "pmg_mining_equipment_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_base.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_picks_and_shovels_building_copper_mine",
+     "pm_atmospheric_engine_pump_building_copper_mine",
+     "pm_condensing_engine_pump_building_copper_mine",
+     "pm_diesel_pump_building_copper_mine"
+    ]
+   ]
+  }
+ ],
+ "pmg_explosives_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_base.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_no_explosives",
+     "pm_nitroglycerin_building_copper_mine",
+     "pm_dynamite_building_copper_mine"
+    ]
+   ]
+  }
+ ],
+ "pmg_steam_automation_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_automation.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_no_steam_automation",
+     "pm_steam_donkey_mine"
+    ]
+   ]
+  }
+ ],
+ "pmg_train_automation_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_automation.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_road_carts",
+     "pm_rail_transport_mine"
+    ]
+   ]
+  }
+ ],
  "pmg_base_building_coffee_plantation": [
   "=",
   {
@@ -1443,9 +1512,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_coffee",
-     "worker_exploitation_coffee"
+     "worker_exploitation_coffee",
+     "default_labour"
     ]
    ]
   }
@@ -1460,9 +1529,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_cotton",
-     "worker_exploitation_cotton"
+     "worker_exploitation_cotton",
+     "default_labour"
     ]
    ]
   }
@@ -1477,9 +1546,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_dye",
-     "worker_exploitation_dye"
+     "worker_exploitation_dye",
+     "default_labour"
     ]
    ]
   }
@@ -1494,9 +1563,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_banana",
-     "worker_exploitation_banana"
+     "worker_exploitation_banana",
+     "default_labour"
     ]
    ]
   }
@@ -1511,9 +1580,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_tea",
-     "worker_exploitation_tea"
+     "worker_exploitation_tea",
+     "default_labour"
     ]
    ]
   }
@@ -1528,9 +1597,9 @@
    "production_methods": [
     "=",
     [
-     "default_labour",
      "slave_exploitation_rubber",
-     "worker_exploitation_rubber"
+     "worker_exploitation_rubber",
+     "default_labour"
     ]
    ]
   }
@@ -2231,7 +2300,9 @@
     "=",
     [
      "pm_hereditary_bureaucrats",
-     "pm_professional_bureaucrats"
+     "pm_professional_bureaucrats",
+     "pm_military_bureaucrats",
+     "pm_communal_representatives"
     ]
    ]
   }
@@ -2251,7 +2322,8 @@
     "=",
     [
      "pm_religious_bureaucrats",
-     "pm_secular_bureaucrats"
+     "pm_secular_bureaucrats",
+     "pm_communal_administration"
     ]
    ]
   }
@@ -3688,6 +3760,37 @@
      "pm_company_headquarter_principle_divine_economics_2_bureaucrats",
      "pm_company_headquarter_government_run",
      "pm_company_headquarter_worker_cooperative"
+    ]
+   ]
+  }
+ ],
+ "pmg_base_building_cossack_host": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_refining.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_cossack_host"
+    ]
+   ]
+  }
+ ],
+ "pmg_special_building_cossack_host": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/mixed_icon_military.dds\""
+   ],
+   "production_methods": [
+    "=",
+    [
+     "pm_cossack_recruitment",
+     "pm_no_cossack_recruitment"
     ]
    ]
   }

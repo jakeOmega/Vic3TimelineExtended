@@ -595,9 +595,9 @@
      "c:CIR": [
       "?=",
       {
-       "has_journal_entry": [
+       "is_involved_in_journal_entry": [
         "=",
-        "je_caucasian_war_circassia"
+        "je_caucasian_war"
        ]
       }
      ],
@@ -630,9 +630,9 @@
      "c:CIR": [
       "?=",
       {
-       "has_journal_entry": [
+       "is_involved_in_journal_entry": [
         "=",
-        "je_caucasian_war_circassia"
+        "je_caucasian_war"
        ]
       }
      ],
@@ -985,6 +985,385 @@
         "add": [
          "=",
          "15"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "rus_upgrade_secret_police": [
+  "=",
+  {
+   "is_shown": [
+    "=",
+    {
+     "c:RUS": [
+      "?=",
+      "this"
+     ],
+     "has_law": [
+      "=",
+      "law_type:law_third_section"
+     ],
+     "country_has_monarchy_law": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_law": [
+      "=",
+      "law_type:law_third_section"
+     ],
+     "country_has_monarchy_law": [
+      "=",
+      "yes"
+     ],
+     "has_technology_researched": [
+      "=",
+      "central_archives"
+     ]
+    }
+   ],
+   "when_taken": [
+    "=",
+    {
+     "activate_law": [
+      "=",
+      "law_type:law_okhrana"
+     ],
+     "every_interest_group": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "law_stance": [
+           "=",
+           {
+            "law": [
+             "=",
+             "law_type:law_secret_police"
+            ],
+            "value": [
+             ">",
+             "neutral"
+            ]
+           }
+          ]
+         }
+        ],
+        "add_modifier": [
+         "=",
+         {
+          "name": [
+           "=",
+           "modifier_formed_okhrana_positive"
+          ],
+          "days": [
+           "=",
+           "normal_modifier_time"
+          ],
+          "is_decaying": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "law_stance": [
+           "=",
+           {
+            "law": [
+             "=",
+             "law_type:law_secret_police"
+            ],
+            "value": [
+             "<",
+             "neutral"
+            ]
+           }
+          ]
+         }
+        ],
+        "add_modifier": [
+         "=",
+         {
+          "name": [
+           "=",
+           "modifier_formed_okhrana_negative"
+          ],
+          "days": [
+           "=",
+           "normal_modifier_time"
+          ],
+          "is_decaying": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ],
+   "ai_chance": [
+    "=",
+    {
+     "value": [
+      "=",
+      "15"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "NOR": [
+           "=",
+           {
+            "has_law_or_variant": [
+             [
+              "=",
+              "law_type:law_autocracy"
+             ],
+             [
+              "=",
+              "law_type:law_oligarchy"
+             ],
+             [
+              "=",
+              "law_type:law_single_party_state"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-25"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_law_or_variant": [
+           "=",
+           "law_type:law_outlawed_dissent"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "30"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_law_or_variant": [
+           "=",
+           "law_type:law_censorship"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_law_or_variant": [
+           "=",
+           "law_type:law_right_of_assembly"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-10"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_law_or_variant": [
+           "=",
+           "law_type:law_protected_speech"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-20"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "any_interest_group": [
+           "=",
+           {
+            "is_revolutionary": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "25"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "ruler": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_authoritarian"
+              ],
+              "has_trait": [
+               [
+                "=",
+                "cruel"
+               ],
+               [
+                "=",
+                "imperious"
+               ]
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_pool_secret_police"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_tsar_great_reform"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "je_great_reforms_bureaucratic_complete"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_tp_tsar_unshakable_autocracy"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "je_tp_tsar_unshakable_autocracy_button_1_complete"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
         ]
        }
       ]
@@ -4561,6 +4940,15 @@
      "has_journal_entry": [
       "=",
       "je_divided_monarchists"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_variable": [
+        "=",
+        "fra_divided_monarchists_freeze"
+       ]
+      }
      ]
     }
    ],
@@ -4659,6 +5047,55 @@
         "add": [
          "=",
          "5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "divided_monarchists_ai_backs_bonapartist": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "divided_monarchists_ai_backs_orleanist": [
+             "=",
+             "yes"
+            ],
+            "divided_monarchists_ai_backs_legitimist": [
+             "=",
+             "yes"
+            ],
+            "divided_monarchists_ai_republican": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
         ]
        }
       ]
@@ -6230,9 +6667,9 @@
        ]
       }
      ],
-     "is_subject": [
+     "is_independent_and_not_being_subjugated": [
       "=",
-      "no"
+      "yes"
      ],
      "country_rank": [
       ">=",
@@ -6281,7 +6718,7 @@
         "NOT": [
          "=",
          {
-          "any_diplomatically_relevant_country": [
+          "any_country_in_europe": [
            "=",
            {
             "custom_tooltip": [
@@ -6344,7 +6781,7 @@
        ]
       }
      ],
-     "random_country": [
+     "random_country_in_europe": [
       "=",
       {
        "limit": [
@@ -6413,7 +6850,7 @@
         "limit": [
          "=",
          {
-          "any_diplomatically_relevant_country": [
+          "any_country_in_europe": [
            "=",
            {
             "has_variable": [
@@ -6870,54 +7307,18 @@
       }
      ],
      "custom_tooltip": [
-      "=",
-      "if_they_accept_tt"
-     ],
-     "show_as_tooltip": [
-      "=",
-      {
-       "add_modifier": [
-        "=",
-        {
-         "name": [
-          "=",
-          "lease_of_berar_costs"
-         ]
-        }
-       ],
-       "c:HYD": [
-        "?=",
-        {
-         "add_modifier": [
-          "=",
-          {
-           "name": [
-            "=",
-            "lease_of_berar_income"
-           ]
-          }
-         ],
-         "random_scope_state": [
-          "=",
-          {
-           "limit": [
-            "=",
-            {
-             "state_region": [
-              "=",
-              "s:STATE_CENTRAL_PROVINCES"
-             ]
-            }
-           ],
-           "set_state_owner": [
-            "=",
-            "root"
-           ]
-          }
-         ]
-        }
-       ]
-      }
+      [
+       "=",
+       "if_they_accept_tt"
+      ],
+      [
+       "=",
+       "lease_of_berar_decision_tt"
+      ],
+      [
+       "=",
+       "lease_of_berar_decision_payment_tt"
+      ]
      ],
      "set_variable": [
       "=",
@@ -8101,6 +8502,10 @@
          ]
         }
        ],
+       "is_busy": [
+        "=",
+        "no"
+       ],
        "loyalty": [
         "<",
         "define:NCharacters|LOYALTY_UNCERTAIN_THRESHOLD"
@@ -8189,6 +8594,10 @@
          "var:monthly_cached_commander_coup_strength": [
           ">=",
           "root.country_coup_resistance"
+         ],
+         "is_busy": [
+          "=",
+          "no"
          ],
          "loyalty": [
           "<",
@@ -10023,7 +10432,7 @@
                 "=",
                 "root"
                ],
-               "is_subject_of": [
+               "is_subject_of_and_not_being_freed": [
                 "=",
                 "root"
                ]
@@ -10049,7 +10458,7 @@
         "limit": [
          "=",
          {
-          "owns_entire_state_region": [
+          "owns_entire_state_region_uncontested": [
            [
             "=",
             "STATE_CALIFORNIA"
@@ -10094,7 +10503,7 @@
         "limit": [
          "=",
          {
-          "owns_entire_state_region": [
+          "owns_entire_state_region_uncontested": [
            [
             "=",
             "STATE_MONTANA"
@@ -11867,7 +12276,7 @@
            ">",
            "5000"
           ],
-          "any_diplomatically_relevant_country": [
+          "any_country": [
            "=",
            {
             "is_ai": [

@@ -470,6 +470,104 @@
    ]
   }
  ],
+ "dp_return_state_to_subject": [
+  "=",
+  {
+   "requires_interest_marker": [
+    "=",
+    "no"
+   ],
+   "war_goal": [
+    "=",
+    "return_state"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/war_goals/return_state.dds\""
+   ],
+   "selectable_in_lens": [
+    "=",
+    {
+     "is_ai": [
+      "=",
+      "no"
+     ],
+     "any_direct_subject": [
+      "=",
+      {
+       "number_of_claims": [
+        ">",
+        "0"
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOT": [
+      [
+       "=",
+       {
+        "is_country_type": [
+         "=",
+         "decentralized"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:target_country"
+        ]
+       }
+      ]
+     ],
+     "aggressive_diplomatic_plays_permitted": [
+      "=",
+      "yes"
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_country_type": [
+          "=",
+          "decentralized"
+         ]
+        }
+       ]
+      }
+     ],
+     "diplomatic_play_has_no_relations_blockers": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_acceptance_max": [
+    "=",
+    "90"
+   ],
+   "on_weekly_pulse": [
+    "=",
+    {}
+   ],
+   "on_war_begins": [
+    "=",
+    {}
+   ],
+   "on_war_end": [
+    "=",
+    {}
+   ]
+  }
+ ],
  "dp_liberate_subject": [
   "=",
   {
@@ -987,6 +1085,75 @@
    "on_war_end": [
     "=",
     {}
+   ],
+   "on_demand_accepted": [
+    "=",
+    {
+     "scope:target_country": [
+      "=",
+      {
+       "add_liberty_desire": [
+        "=",
+        "50"
+       ]
+      }
+     ],
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "\"ADD_LIBERTY_DESIRE_TO_ALL_SUBJECTS\""
+       ],
+       "every_direct_subject": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "NOT": [
+            "=",
+            {
+             "this": [
+              "=",
+              "scope:target_country"
+             ]
+            }
+           ]
+          }
+         ],
+         "add_liberty_desire": [
+          "=",
+          "decrease_autonomy_liberty_desire_to_add"
+         ]
+        }
+       ]
+      }
+     ],
+     "hidden_effect": [
+      "=",
+      {
+       "scope:target_country": [
+        "=",
+        {
+         "create_diplomatic_catalyst": [
+          "=",
+          {
+           "type": [
+            "=",
+            "catalyst_autonomy_change_imposed"
+           ],
+           "target": [
+            "=",
+            "root"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
    ]
   }
  ],
@@ -1347,81 +1514,110 @@
     "=",
     {
      "trigger_if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "c:BIC": [
-          "?=",
-          "this"
-         ],
-         "is_at_war": [
-          "=",
-          "no"
-         ],
-         "NOT": [
-          [
-           "=",
-           {
-            "has_variable": [
-             "=",
-             "doctrine_of_lapse_cooldown"
-            ]
-           }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "c:BIC": [
+           "?=",
+           "this"
           ],
-          [
+          "is_at_war": [
            "=",
-           {
-            "has_variable": [
-             "=",
-             "doctrine_of_lapse_ended"
-            ]
-           }
-          ]
-         ],
-         "scope:target_country": [
-          "=",
-          {
-           "is_subject_of": [
-            "=",
-            "ROOT"
-           ],
-           "has_variable": [
-            "=",
-            "princely_state"
-           ],
-           "NOT": [
+           "no"
+          ],
+          "NOT": [
+           [
             "=",
             {
-             "country_tier": [
+             "has_variable": [
               "=",
-              "empire"
+              "doctrine_of_lapse_cooldown"
              ]
             }
            ],
-           "is_player": [
+           [
             "=",
-            "no"
+            {
+             "has_variable": [
+              "=",
+              "doctrine_of_lapse_ended"
+             ]
+            }
            ]
-          }
-         ]
-        }
-       ],
-       "custom_tooltip": [
-        "=",
-        {
-         "text": [
-          "=",
-          "CAN_USE_DOCTRINE_OF_LAPSE_INSTEAD"
-         ],
-         "always": [
-          "=",
-          "no"
-         ]
-        }
-       ]
-      }
+          ],
+          "scope:target_country": [
+           "=",
+           {
+            "is_subject_of": [
+             "=",
+             "ROOT"
+            ],
+            "has_variable": [
+             "=",
+             "princely_state"
+            ],
+            "NOT": [
+             "=",
+             {
+              "country_tier": [
+               "=",
+               "empire"
+              ]
+             }
+            ],
+            "is_player": [
+             "=",
+             "no"
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "CAN_USE_DOCTRINE_OF_LAPSE_INSTEAD"
+          ],
+          "always": [
+           "=",
+           "no"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "c:RUS": [
+           "?=",
+           "this"
+          ],
+          "c:POL": [
+           "?=",
+           "scope:target_country"
+          ]
+         }
+        ],
+        "NOT": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_congress_poland"
+          ]
+         }
+        ]
+       }
+      ]
      ],
      "NOT": [
       "=",
@@ -1923,9 +2119,33 @@
        ]
       }
      ],
-     "aggressive_diplomatic_plays_permitted": [
-      "=",
-      "yes"
+     "OR": [
+      [
+       "=",
+       {
+        "aggressive_diplomatic_plays_permitted": [
+         "=",
+         "yes"
+        ],
+        "is_subject": [
+         "=",
+         "yes"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_interest_marker_in_region": [
+         "=",
+         "scope:secession_capital_region"
+        ],
+        "is_home_country_for": [
+         "=",
+         "scope:initiator"
+        ]
+       }
+      ]
      ],
      "scope:initiator": [
       "=",
@@ -1943,19 +2163,6 @@
           }
          ]
         }
-       ]
-      }
-     ],
-     "OR": [
-      "=",
-      {
-       "has_interest_marker_in_region": [
-        "=",
-        "scope:secession_capital_region"
-       ],
-       "is_home_country_for": [
-        "=",
-        "scope:initiator"
        ]
       }
      ]
@@ -2330,17 +2537,42 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "is_country_type": [
-        "=",
-        "decentralized"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_country_type": [
+         "=",
+         "decentralized"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:target_country"
+        ]
+       }
+      ]
      ],
      "aggressive_diplomatic_plays_permitted": [
       "=",
       "yes"
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_subject_of": [
+          "=",
+          "root"
+         ]
+        }
+       ]
+      }
      ],
      "diplomatic_play_has_no_relations_blockers": [
       "=",
@@ -2398,17 +2630,42 @@
     "=",
     {
      "NOT": [
-      "=",
-      {
-       "is_country_type": [
-        "=",
-        "decentralized"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_country_type": [
+         "=",
+         "decentralized"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "is_subject_of": [
+         "=",
+         "scope:target_country"
+        ]
+       }
+      ]
      ],
      "aggressive_diplomatic_plays_permitted": [
       "=",
       "yes"
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_subject_of": [
+          "=",
+          "root"
+         ]
+        }
+       ]
+      }
      ],
      "diplomatic_play_has_no_relations_blockers": [
       "=",
@@ -2512,7 +2769,7 @@
          }
         ]
        ],
-       "has_any_strait_province": [
+       "has_any_strait_province_in_hierarchy": [
         "=",
         "yes"
        ],
@@ -2850,7 +3107,7 @@
          }
         ]
        ],
-       "has_any_strait_province": [
+       "has_any_strait_province_in_hierarchy": [
         "=",
         "yes"
        ],
@@ -3836,6 +4093,165 @@
    ]
   }
  ],
+ "dp_unify_russia": [
+  "=",
+  {
+   "war_goal": [
+    "=",
+    "annex_country"
+   ],
+   "requires_interest_marker": [
+    "=",
+    "no"
+   ],
+   "mirror_war_goal": [
+    "=",
+    "yes"
+   ],
+   "add_infamy_for_starting_initiator_wargoals": [
+    "=",
+    "no"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/war_goals/unification.dds\""
+   ],
+   "selectable_in_lens": [
+    "=",
+    {
+     "has_variable": [
+      "=",
+      "rcw_russian_faction"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_variable": [
+      "=",
+      "rcw_russian_faction"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_country_type": [
+        "=",
+        "decentralized"
+       ]
+      }
+     ],
+     "is_subject": [
+      "=",
+      "no"
+     ],
+     "is_russia_unification_pair": [
+      "=",
+      {
+       "TARGET": [
+        "=",
+        "scope:target_country"
+       ]
+      }
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_country_type": [
+          "=",
+          "decentralized"
+         ]
+        }
+       ],
+       "aggressive_diplomatic_plays_permitted": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "additional_involvement_trigger": [
+    "=",
+    {
+     "has_variable": [
+      "=",
+      "rcw_russian_faction"
+     ]
+    }
+   ],
+   "ai_acceptance_max": [
+    "=",
+    "75"
+   ],
+   "on_weekly_pulse": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "escalation": [
+          "<",
+          "100"
+         ]
+        }
+       ],
+       "add_escalation": [
+        "=",
+        "7"
+       ]
+      }
+     ]
+    }
+   ],
+   "on_war_begins": [
+    "=",
+    {}
+   ],
+   "on_war_end": [
+    "=",
+    {
+     "every_scope_play_involved": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "rcw_russian_faction"
+         ],
+         "is_country_alive": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "set_variable": [
+        "=",
+        {
+         "name": [
+          "=",
+          "rcw_recent_war"
+         ],
+         "days": [
+          "=",
+          "90"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
  "dp_leadership_germany": [
   "=",
   {
@@ -4061,6 +4477,29 @@
      "aggressive_diplomatic_plays_permitted": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_subject_of": [
+        "=",
+        "scope:target_country"
+       ]
+      }
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_subject_of": [
+          "=",
+          "root"
+         ]
+        }
+       ]
+      }
      ]
     }
    ],
@@ -4578,6 +5017,56 @@
       }
      ]
     }
+   ]
+  }
+ ],
+ "dp_polish_uprising": [
+  "=",
+  {
+   "war_goal": [
+    "=",
+    "annex_country"
+   ],
+   "add_infamy_for_starting_initiator_wargoals": [
+    "=",
+    "no"
+   ],
+   "initiator_can_add_war_goals": [
+    "=",
+    "no"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/war_goals/annex_country.dds\""
+   ],
+   "selectable_in_lens": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {}
+   ],
+   "ai_acceptance_max": [
+    "=",
+    "75"
+   ],
+   "on_weekly_pulse": [
+    "=",
+    {}
+   ],
+   "on_war_begins": [
+    "=",
+    {}
+   ],
+   "on_war_end": [
+    "=",
+    {}
    ]
   }
  ]

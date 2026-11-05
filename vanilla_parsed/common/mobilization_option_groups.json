@@ -2,9 +2,9 @@
  "supplies": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_supplies.dds\""
    ],
    "weight": [
     "=",
@@ -15,9 +15,9 @@
  "supplements": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_supplements.dds\""
    ],
    "weight": [
     "=",
@@ -28,9 +28,9 @@
  "transport": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_transportation.dds\""
    ],
    "weight": [
     "=",
@@ -41,9 +41,9 @@
  "reconnaissance": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_reconaissance.dds\""
    ],
    "weight": [
     "=",
@@ -54,9 +54,9 @@
  "special_weapons": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_support_equipment.dds\""
    ],
    "weight": [
     "=",
@@ -67,9 +67,9 @@
  "medic_support": [
   "=",
   {
-   "icon": [
+   "background": [
     "=",
-    "\"gfx/interface/icons/generic_icons/generic_concept_icon.dds\""
+    "\"gfx/interface/illustrations/mobilization_options/mobilisation_medical_support.dds\""
    ],
    "weight": [
     "=",

@@ -1705,7 +1705,7 @@
      ],
      "unit_kill_rate_add": [
       "=",
-      "0.5"
+      "0.3"
      ],
      "unit_recovery_rate_add": [
       "=",
