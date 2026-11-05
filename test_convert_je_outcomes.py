@@ -368,6 +368,18 @@ class TreeTest(unittest.TestCase):
     def test_a_rerun_changes_nothing(self):
         self.assertEqual(conv.main(["--check"]), 0)
 
+    def test_every_entry_declares_activation_description(self):
+        """1.15 logs "missing an activation_description trigger" for an entry without one (29 mod entries on the
+        first 1.15 game); vanilla's default is `activation_description = { always = yes }`."""
+        for path in sorted((ROOT / "common" / "journal_entries").glob("*.txt")):
+            text = path.read_text(encoding="utf-8")
+            body = text[1:] if text.startswith(BOM) else text
+            for entry in conv.parse(conv.mask(body)):
+                if entry.key.startswith("INJECT:"):  # takes the field from its target; a REPLACE: needs its own
+                    continue
+                with self.subTest(file=path.name, entry=entry.key):
+                    self.assertIn("activation_description", {child.key for child in entry.children})
+
 
 if __name__ == "__main__":
     unittest.main()

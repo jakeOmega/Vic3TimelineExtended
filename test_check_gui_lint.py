@@ -1,4 +1,5 @@
 """scripts/analysis/check_gui_lint.py: what it flags, on a throwaway repository."""
+import glob
 import os
 import subprocess
 import sys
@@ -247,6 +248,63 @@ class DefinitionRuleTest(unittest.TestCase):
             linter = lint.Linter.__new__(lint.Linter)
             linter.repo = repo
             self.assertEqual(linter._top_level_keys("common/scripted_guis/**/*.txt"), {"real_sgui", "made"})
+
+
+BOX_GUI = """types boxes {
+	type te_flow_row = flowcontainer {
+		direction = vertical
+		vbox = {}
+	}
+	type te_toggle_row = hbox {
+		spacing = 5
+	}
+	type te_panel = vbox {
+		flowcontainer = {
+			direction = vertical
+			visible = "[Not(EqualTo_string(Law.GetGroup.GetKey, 'lawgroup_taxation'))]"
+			hbox = {
+				spacing = 5
+			}
+			te_toggle_row = {}
+			textbox = { text = "x" }
+			flowcontainer = {
+				direction = horizontal
+			}
+			blockoverride "row" {
+				hbox = {}
+			}
+		}
+		vbox = {
+			hbox = {}
+		}
+		te_flow_row = {
+			hbox = {}
+		}
+	}
+}
+"""
+
+
+class BoxInFlowcontainerTest(unittest.TestCase):
+    def test_box_children_of_a_flowcontainer(self):
+        # #1402's tax-law wrapper held vanilla 1.15's toggle hbox in a
+        # flowcontainer, and the game overflowed its stack building it.
+        text = lint.strip_comments(BOX_GUI)
+        hits = lint.box_in_flowcontainer(text, lint.gui_type_bases(text))
+        self.assertEqual(hits, [(4, "vbox", "vbox"), (13, "hbox", "hbox"), (16, "te_toggle_row", "hbox"),
+                                (29, "hbox", "hbox")])
+
+    def test_no_box_in_a_flowcontainer_in_the_repository(self):
+        # The lint judges only the files a branch changes, and CI doesn't run it,
+        # so this test is the gate over every .gui in the mod.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        paths = sorted(glob.glob(os.path.join(repo, "gui", "**", "*.gui"), recursive=True))
+        texts = {p: lint.strip_comments(lint._read(p)) for p in paths}
+        bases = lint.gui_type_bases("\n".join(texts.values()))
+        hits = [f"{os.path.relpath(p, repo)}:{ln}: {child} ({kind})"
+                for p, text in texts.items() for ln, child, kind in lint.box_in_flowcontainer(text, bases)]
+        self.assertEqual(hits, [])
+
 
 if __name__ == "__main__":
     unittest.main()

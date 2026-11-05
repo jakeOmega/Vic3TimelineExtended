@@ -22,7 +22,7 @@ A fixed item is struck through with the commit that fixed it.
 |---|---|---|
 | `TE_SELF_CHECK OK/BROKEN monument_created_on_dedication` | The first restore after a construction site's dedication made its finished building: OK when `create_building`'s `activate_production_methods` put the dedication on it; BROKEN when the engine's copy won and `gm_restore_pm` had to switch it. | Nothing to do for play: the restore is the fallback. If it is BROKEN, the switch is a second one in the building's first days; drop `activate_production_methods` from `gm_state_finish_site` and rely on the restore alone. |
 | `TE_SELF_CHECK OK/BROKEN monument_migrated` | Once a game, a month after an older save's dedicated monument was migrated (`monument_events.32`: records written, building reset to level 1), its grandeur is within 1% below and 5% above what it was. | BROKEN: the records missed its size (`gm_levels` from the old arithmetic) or a reader still reads the building's level; compare its state card with the save before loading. |
-| `TE_SELF_CHECK OK/BROKEN gm_world_base` | Once, on a new game's first pass (before 1836.3.1): world GDP is within a tenth of the 1836 constant the world-wealth rate is measured against (`gm_world_gdp_1836`, 402,500,000). | Set `gm_world_gdp_1836` to the figure the line prints. **Vanilla 1.15:** read this line on the first 1.15 new game and reset the constant to it whether it says OK or BROKEN; the figure was measured on 1.14.5. |
+| `TE_SELF_CHECK OK/BROKEN gm_world_base` | Once, on a new game's first pass (before 1836.3.1): world GDP is within a tenth of the 1836 constant the world-wealth rate is measured against (`gm_world_gdp_1836`, 404,100,000). | Set `gm_world_gdp_1836` to the figure the line prints. Reset it after a vanilla patch that moves the 1836 economy, whether the line says OK or BROKEN (1.15: 2026-11-05, below). |
 | `TE_SELF_CHECK OK/BROKEN monument_merge_kept` | The first time a game settles a monument whose state merged into another part of its region (issue #936): OK when its shadow was adopted (onto a building nothing recorded, beside the monument there, or raised into a new one); BROKEN when no part of its region took it. | Lost: note which state survived the merge and who owned it; the orphan looks for its last owner's part (`gm_sh_owner`). |
 | `TE_SELF_CHECK OK/BROKEN monument_merge_level1` | Once a game, a day or more after a merge's reset (`gm_state_reset_building_level`), with its dedication recorded: OK when the merged region's finished building stands at level 1 on the dedication its records name; the line prints the level the merge left it at. | Note that level and the method it stood on; if the merge kept the other part's method, `gm_restore_pm` from `gm_dedication` should have put it back, so a BROKEN here means the restore did not run. |
 
@@ -63,6 +63,8 @@ A fixed item is struck through with the commit that fixed it.
 
 **2026-10-25:** `gm_world_base` read BROKEN in a new game: world GDP 402,505,869 at the first pass (February 1836) against the constant's 334,000,000, which had summed a save's GDP records. The constant is now 402,500,000, the rate's own read. In 1836 a level now adds the 5 grandeur the rule says (it added about 4.15), and every count after that is a fifth higher than before, in running saves too.
 
+**2026-11-05:** the first 1.15 new game read OK: world GDP 404,148,929 at the first pass against 402,500,000. The constant is now 404,100,000, so every count after that is 0.4% higher, in running saves too.
+
 ## The 1/n curve (owner, 2026-10-19)
 
 | Check | Expect | If it fails |
@@ -90,6 +92,8 @@ absorbed part, and before or after the merge; and what colonizing a decentralize
 | **No loss in ordinary play.** A monument whose state changes hands whole (no other part held by the new owner). | Nothing changes: the state survives, and its shadow is refreshed in place. | |
 
 **2026-10-25: a civil war's winner.** `monument_merge_kept` read BROKEN when the Haitian Liberal Revolt won (1861): Sans Souci Palace's shadow was lost (5 levels recorded, no building in Haiti). The revolt's part of the state held a copy of the building, which the stray pass removed while the loser's part still existed. The two parts then merged and the loser's part went, and the shadow looked for its last owner's part (`gm_sh_owner`): the loser, dead. `gm_repair_after_civil_war` now repoints a dead loser's shadows' last owner to the winner too, so the winner's merged part raises the monument again (`gm_state_raise_orphan`: a new building, its records put back). Check: a revolt that takes part of a monument's state and wins (Haiti, or the Paris Commune); the monument stands again in the winner's state within a month, and `monument_merge_kept` reads OK.
+
+**2026-11-05: the first 1.15 game.** `monument_merge_kept` read BROKEN in February 1848 (6 levels, no building in the region), a week after the stray pass removed a revolt's copy of a building. The saves either side show no monument missing: every building, shadow and landmark of 1848.1.1 is still there in 1849.1.1, so the shadow lost was made and dropped within the month. The log line doesn't name the monument; issue #1409 has the evidence and the next steps.
 
 ## Dedicate (owner, 2026-10-18)
 

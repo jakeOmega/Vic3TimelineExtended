@@ -6,6 +6,12 @@ je_heir_education = {
 	icon = "gfx/interface/icons/event_icons/je_heir_education.dds"
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	is_shown_when_inactive = {
 		has_law = law_type:law_monarchy
 		has_game_rule = heir_education_enabled
