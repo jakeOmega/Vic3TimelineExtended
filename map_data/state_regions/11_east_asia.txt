@@ -17,6 +17,8 @@
         type = "building_oil_rig"
         undiscovered_amount = 10
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.37
 }
 
 STATE_TIANSHAN = {
@@ -30,6 +32,8 @@ STATE_TIANSHAN = {
     wood = "x8A8795"
     arable_land = 40
     arable_resources = { "building_wheat_farm" "building_livestock_ranch" "building_cotton_plantation" }
+    min_cold_effect = 0.20
+    max_cold_effect = 0.78
 }
 
 STATE_SICHUAN = {
@@ -48,6 +52,8 @@ STATE_SICHUAN = {
         building_sulfur_mine = 40
         building_logging_camp = 23
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 
     resource = {
         type = "building_specialty_alloy_metal_mine"
@@ -79,8 +85,11 @@ STATE_YUNNAN = {
     capped_resources = {
         building_coal_mine = 40
         building_iron_mine = 60
+        building_copper_mine = 6
         building_logging_camp = 17
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 
     resource = {
         type = "building_precious_minor_base_metal_mine"
@@ -103,6 +112,8 @@ STATE_GUIZHOU = {
         building_coal_mine = 32
         building_logging_camp = 26
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.06
 
     resource = {
         type = "building_phosphate_mine"
@@ -128,6 +139,8 @@ STATE_SHAOZHOU = {
         building_fishing_wharf = 10
     }
     naval_exit_id = 3056
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 }
 
 STATE_ALXA = {
@@ -148,6 +161,8 @@ STATE_ALXA = {
         type = "building_oil_rig"
         undiscovered_amount = 10
     }
+    min_cold_effect = 0.05
+    max_cold_effect = 0.40
 }
 
 STATE_HINGGAN = {
@@ -167,6 +182,8 @@ STATE_HINGGAN = {
         building_lead_mine = 24
         building_logging_camp = 6
     }
+    min_cold_effect = 0.05
+    max_cold_effect = 0.47
 
     resource = {
         type = "building_specialty_alloy_metal_mine"
@@ -193,6 +210,8 @@ STATE_GUANGXI = {
     capped_resources = {
         building_logging_camp = 9
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.04
 
     resource = {
         type = "building_manganese_mine"
@@ -220,6 +239,8 @@ STATE_BEIJING = {
         building_fishing_wharf = 3
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.02
+    max_cold_effect = 0.37
 }
 
 STATE_SHENGJING = {
@@ -246,6 +267,8 @@ STATE_SHENGJING = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.02
+    max_cold_effect = 0.36
 }
 
 STATE_OUTER_MANCHURIA = {
@@ -277,6 +300,8 @@ STATE_OUTER_MANCHURIA = {
         undiscovered_amount = 20
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.05
+    max_cold_effect = 0.56
 }
 
 STATE_SOUTHERN_MANCHURIA = {
@@ -296,6 +321,8 @@ STATE_SOUTHERN_MANCHURIA = {
         building_logging_camp = 25
         building_fishing_wharf = 8
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.45
 }
 
 STATE_NORTHERN_MANCHURIA = {
@@ -314,6 +341,8 @@ STATE_NORTHERN_MANCHURIA = {
         building_lead_mine = 5
         building_logging_camp = 34
     }
+    min_cold_effect = 0.05
+    max_cold_effect = 0.60
 
     resource = {
         type = "building_graphite_mine"
@@ -342,6 +371,8 @@ STATE_SHANXI = {
         type = "building_oil_rig"
         undiscovered_amount = 30
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.28
 }
 
 STATE_NINGXIA = {
@@ -358,12 +389,14 @@ STATE_NINGXIA = {
     capped_resources = {
         building_logging_camp = 8
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.24
 }
 
 STATE_GANSU = {
     id = 493
     subsistence_building = "building_subsistence_rice_farm"
-    provinces = { "x0BB1FD" "x0CD56E" "x0FA31C" "x1628E7" "x1A96D6" "x1CA516" "x1CBDEB" "x1E2B5B" "x1E766C" "x1FFCB8" "x200F1E" "x20B9B8" "x25425B" "x26CFB7" "x28A469" "x2A3BA7" "x2A8941" "x2FB9C1" "x31DB5B" "x35E5A6" "x3CC0FB" "x3CE40F" "x420171" "x429A2D" "x46C752" "x48D0ED" "x4E6196" "x51C8FE" "x5EBA61" "x5F68D6" "x619172" "x64D221" "x66C5EF" "x677428" "x6C0FF5" "x6DFA0C" "x7214AC" "x7F54BB" "x83F3D4" "x8469FE" "x85EDAB" "x8B7A5E" "x8C62C2" "x935523" "x98562F" "x989A23" "xA2B075" "xA2D436" "xA4641B" "xA6E1B1" "xA9C393" "xAD8661" "xB1C68F" "xB4ABCE" "xC6A067" "xCF5A60" "xD00924" "xD4F3DE" "xDB53A0" "xDED72F" "xE03060" "xE6B547" "xE78B94" "xED5B03" "xF91EB1" "xF97B78" "xFB886B" "xFD3127" }
+    provinces = { "x0BB1FD" "x0CD56E" "x0FA31C" "x1628E7" "x1A96D6" "x1CA516" "x1CBDEB" "x1E2B5B" "x1E766C" "x1FFCB8" "x200F1E" "x20B9B8" "x25425B" "x26CFB7" "x28A469" "x2A3BA7" "x2A8941" "x2FB9C1" "x31DB5B" "x35E5A6" "x3CC0FB" "x3CE40F" "x420171" "x429A2D" "x46C752" "x48D0ED" "x4E6196" "x51C8FE" "x5EBA61" "x5F68D6" "x619172" "x64D221" "x66C5EF" "x677428" "x6C0FF5" "x6DFA0C" "x7214AC" "x7F54BB" "x83F3D4" "x8469FE" "x85EDAB" "x8B7A5E" "x8C62C2" "x935523" "x98562F" "x989A23" "xA2B075" "xA2D436" "xA4641B" "xA6E1B1" "xA9C393" "xAD8661" "xB1C68F" "xB4ABCE" "xBD5671" "xC6A067" "xCF5A60" "xD00924" "xD4F3DE" "xDB53A0" "xDED72F" "xE03060" "xE6B547" "xE78B94" "xED5B03" "xF91EB1" "xF97B78" "xFB886B" "xFD3127" }
     city = "xA4641B"
     farm = "x1CBDEB"
     mine = "x2A8941"
@@ -373,6 +406,8 @@ STATE_GANSU = {
     capped_resources = {
         building_logging_camp = 5
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.31
 
     resource = {
         type = "building_nickel_cobalt_mine"
@@ -400,6 +435,8 @@ STATE_XIAN = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.16
 }
 
 STATE_QINGHAI = {
@@ -417,6 +454,8 @@ STATE_QINGHAI = {
         building_coal_mine = 48
         building_logging_camp = 6
     }
+    min_cold_effect = 0.25
+    max_cold_effect = 0.80
 
     resource = {
         type = "building_potash_mine"
@@ -448,6 +487,8 @@ STATE_CHONGQING = {
         type = "building_oil_rig"
         undiscovered_amount = 10
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 }
 
 STATE_GUANGDONG = {
@@ -467,6 +508,12 @@ STATE_GUANGDONG = {
         building_fishing_wharf = 14
     }
     naval_exit_id = 3056
+    blockade_locator = {
+        position = { 6683 0 2025 }
+        yaw = -31
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }
 
 STATE_FUJIAN = {
@@ -485,6 +532,8 @@ STATE_FUJIAN = {
         building_fishing_wharf = 10
     }
     naval_exit_id = 3056
+    min_cold_effect = 0.00
+    max_cold_effect = 0.05
 }
 
 STATE_ZHEJIANG = {
@@ -503,6 +552,8 @@ STATE_ZHEJIANG = {
         building_fishing_wharf = 11
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.07
 }
 
 STATE_JIANGSU = {
@@ -521,6 +572,8 @@ STATE_JIANGSU = {
         building_fishing_wharf = 8
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.00
+    max_cold_effect = 0.15
 }
 
 STATE_NANJING = {
@@ -537,6 +590,8 @@ STATE_NANJING = {
     capped_resources = {
         building_logging_camp = 5
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.12
 }
 
 STATE_HENAN = {
@@ -555,6 +610,8 @@ STATE_HENAN = {
         building_sulfur_mine = 36
         building_logging_camp = 11
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.15
 }
 
 STATE_ZHILI = {
@@ -578,6 +635,8 @@ STATE_ZHILI = {
         building_fishing_wharf = 4
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.02
+    max_cold_effect = 0.28
 }
 
 STATE_JIANGXI = {
@@ -595,6 +654,8 @@ STATE_JIANGXI = {
         building_coal_mine = 52
         building_logging_camp = 15
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.06
 
     resource = {
         type = "building_manganese_mine"
@@ -632,6 +693,8 @@ STATE_SOUTHERN_ANHUI = {
         building_coal_mine = 40
         building_logging_camp = 14
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 }
 
 STATE_NORTHERN_ANHUI = {
@@ -648,6 +711,8 @@ STATE_NORTHERN_ANHUI = {
         building_coal_mine = 48
         building_logging_camp = 6
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.14
 }
 
 STATE_WESTERN_HUBEI = {
@@ -664,6 +729,8 @@ STATE_WESTERN_HUBEI = {
     capped_resources = {
         building_logging_camp = 9
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.10
 }
 
 STATE_EASTERN_HUBEI = {
@@ -680,6 +747,8 @@ STATE_EASTERN_HUBEI = {
     capped_resources = {
         building_logging_camp = 8
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.09
 }
 
 STATE_HUNAN = {
@@ -697,6 +766,8 @@ STATE_HUNAN = {
         building_sulfur_mine = 44
         building_logging_camp = 18
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.07
 
     resource = {
         type = "building_manganese_mine"
@@ -709,7 +780,7 @@ STATE_FORMOSA = {
     subsistence_building = "building_subsistence_rice_farm"
     provinces = { "x44797F" "x6645CF" "x6DAB21" "x7070E0" "x9A5066" "xAEA2D8" "xE73B31" }
     city = "x6DAB21"
-    port = "x44797F"
+    port = "xE73B31"
     farm = "xAEA2D8"
     mine = "xE73B31"
     wood = "xE73B31"
@@ -725,6 +796,8 @@ STATE_FORMOSA = {
         undiscovered_amount = 6
     }
     naval_exit_id = 3056
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_SHANDONG = {
@@ -754,6 +827,8 @@ STATE_SHANDONG = {
         undiscovered_amount = 135
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.00
+    max_cold_effect = 0.19
 }
 
 STATE_SUZHOU = {
@@ -773,6 +848,8 @@ STATE_SUZHOU = {
         building_fishing_wharf = 5
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.11
 }
 
 STATE_ULIASTAI = {
@@ -789,8 +866,11 @@ STATE_ULIASTAI = {
     capped_resources = {
         building_coal_mine = 36
         building_iron_mine = 33
+        building_copper_mine = 6
         building_logging_camp = 5
     }
+    min_cold_effect = 0.05
+    max_cold_effect = 0.57
 }
 
 STATE_URGA = {
@@ -808,12 +888,10 @@ STATE_URGA = {
         building_coal_mine = 36
         building_iron_mine = 45
         building_logging_camp = 4
+        building_copper_mine = 370
     }
-
-    resource = {
-        type = "building_copper_mine"
-        undiscovered_amount = 370
-    }
+    min_cold_effect = 0.05
+    max_cold_effect = 0.55
 }
 
 STATE_CAMBODIA = {
@@ -891,6 +969,8 @@ STATE_TONKIN = {
         undiscovered_amount = 125
     }
     naval_exit_id = 3056
+    min_cold_effect = 0.00
+    max_cold_effect = 0.02
 }
 
 STATE_ANNAM = {
@@ -1039,6 +1119,8 @@ STATE_SAKHALIN = {
         undiscovered_amount = 10
     }
     naval_exit_id = 3118
+    min_cold_effect = 0.02
+    max_cold_effect = 0.55
 }
 
 STATE_HOKKAIDO = {
@@ -1057,7 +1139,8 @@ STATE_HOKKAIDO = {
     capped_resources = {
         building_coal_mine = 59
         building_iron_mine = 4
-        building_lead_mine = 7
+        building_lead_mine = 5
+        building_copper_mine = 4
         building_sulfur_mine = 22
         building_logging_camp = 9
         building_whaling_station = 8
@@ -1069,6 +1152,8 @@ STATE_HOKKAIDO = {
         undiscovered_amount = 4
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.00
+    max_cold_effect = 0.36
 }
 
 STATE_TOHOKU = {
@@ -1076,7 +1161,7 @@ STATE_TOHOKU = {
     subsistence_building = "building_subsistence_rice_farm"
     provinces = { "x15EED4" "x19C715" "x1BAF33" "x3190C0" "x322F47" "x3CA2FC" "x4C5533" "x637FEB" "x701040" "x81A720" "xA26E5F" "xAC762F" "xB011C0" "xB090C0" "xBC2AFE" "xBED026" "xE0D080" "xE22202" "xF01040" "xF29D08" }
     city = "xB090C0"
-    port = "xE0D080"
+    port = "xBC2AFE"
     farm = "x1BAF33"
     mine = "xF01040"
     wood = "x3190C0"
@@ -1087,7 +1172,8 @@ STATE_TOHOKU = {
         building_coal_mine = 6
         building_gold_mine = 2
         building_sulfur_mine = 51
-        building_lead_mine = 33
+        building_lead_mine = 20
+        building_copper_mine = 7
         building_logging_camp = 15
         building_whaling_station = 5
         building_fishing_wharf = 15
@@ -1098,6 +1184,8 @@ STATE_TOHOKU = {
         undiscovered_amount = 4
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.00
+    max_cold_effect = 0.25
 }
 
 STATE_KANTO = {
@@ -1115,13 +1203,20 @@ STATE_KANTO = {
     arable_resources = { "building_rice_farm" "building_livestock_ranch" "building_cotton_plantation" "building_silk_plantation" "building_tea_plantation" "building_tobacco_plantation" "building_dye_plantation" }
     capped_resources = {
         building_iron_mine = 3
-        building_lead_mine = 49
+        building_lead_mine = 4
+        building_copper_mine = 10
         building_sulfur_mine = 21
         building_logging_camp = 9
         building_whaling_station = 2
         building_fishing_wharf = 10
     }
     naval_exit_id = 3086
+    blockade_locator = {
+        position = { 7284 0 2352 }
+        yaw = 24
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 STATE_TOKAI = {
@@ -1147,6 +1242,8 @@ STATE_TOKAI = {
         undiscovered_amount = 1
     }
     naval_exit_id = 3086
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 STATE_HOKUSHINETSU = {
@@ -1179,6 +1276,8 @@ STATE_HOKUSHINETSU = {
         undiscovered_amount = 8
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.00
+    max_cold_effect = 0.20
 }
 
 STATE_KANSAI = {
@@ -1195,12 +1294,19 @@ STATE_KANSAI = {
     arable_resources = { "building_rice_farm" "building_livestock_ranch" "building_cotton_plantation" "building_opium_plantation" "building_silk_plantation" "building_tea_plantation" "building_vineyard" "building_tobacco_plantation" "building_dye_plantation" }
     capped_resources = {
         building_gold_mine = 1
-        building_lead_mine = 18
+        building_lead_mine = 13
+        building_copper_mine = 4
         building_logging_camp = 9
         building_fishing_wharf = 10
         building_whaling_station = 6
     }
     naval_exit_id = 3086
+    blockade_locator = {
+        position = { 7179 0 2334 }
+        yaw = 31
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.16
 }
 
 STATE_KYOTO = {
@@ -1222,6 +1328,8 @@ STATE_KYOTO = {
         building_fishing_wharf = 10
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.00
+    max_cold_effect = 0.17
 }
 
 
@@ -1242,12 +1350,15 @@ STATE_KYUSHU = {
         building_iron_mine = 6
         building_coal_mine = 52
         building_logging_camp = 7
-        building_lead_mine = 9
+        building_lead_mine = 6
+        building_copper_mine = 4
         building_sulfur_mine = 31
         building_fishing_wharf = 18
         building_gold_mine = 1
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.12
 }
 
 STATE_RYUKYU_ISLANDS = {
@@ -1256,7 +1367,7 @@ STATE_RYUKYU_ISLANDS = {
     provinces = { "xBB27F6" "xF0D080" "xF0F061" }
     traits = { "state_trait_naha_cane_fields" }
     city = "xF0F061"
-    port = "xF0D080"
+    port = "xF0F061"
     farm = "xF0F061"
     mine = "xF0F061"
     wood = "xF0F061"
@@ -1268,6 +1379,8 @@ STATE_RYUKYU_ISLANDS = {
         building_sulfur_mine = 6
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.05
 }
 
 STATE_CHUGOKU = {
@@ -1285,12 +1398,19 @@ STATE_CHUGOKU = {
     capped_resources = {
         building_iron_mine = 16
         building_coal_mine = 8
-        building_lead_mine = 11
+        building_lead_mine = 5
+        building_copper_mine = 7
         building_logging_camp = 20
         building_fishing_wharf = 12
         building_whaling_station = 3
     }
     naval_exit_id = 3086
+    blockade_locator = {
+        position = { 7113 0 2320 }
+        yaw = 0
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.16
 }
 
 STATE_SHIKOKU = {
@@ -1307,11 +1427,14 @@ STATE_SHIKOKU = {
     arable_resources = { "building_rice_farm" "building_livestock_ranch" "building_cotton_plantation" "building_silk_plantation" "building_dye_plantation" "building_tea_plantation" "building_tobacco_plantation" }
     capped_resources = {
         building_iron_mine = 4
-        building_lead_mine = 38
+        building_lead_mine = 4
+        building_copper_mine = 8
         building_logging_camp = 11
         building_fishing_wharf = 9
     }
     naval_exit_id = 3086
+    min_cold_effect = 0.00
+    max_cold_effect = 0.14
 }
 
 STATE_SEOUL = {
@@ -1341,6 +1464,8 @@ STATE_SEOUL = {
         undiscovered_amount = 35
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.00
+    max_cold_effect = 0.22
 }
 
 STATE_BUSAN = {
@@ -1359,11 +1484,14 @@ STATE_BUSAN = {
         building_iron_mine = 5
         building_coal_mine = 6
         building_lead_mine = 12
+        building_copper_mine = 6
         building_logging_camp = 7
         building_whaling_station = 7
         building_fishing_wharf = 11
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.18
 }
 
 STATE_YANGHO = {
@@ -1387,6 +1515,8 @@ STATE_YANGHO = {
         building_fishing_wharf = 8
     }
     naval_exit_id = 3058
+    min_cold_effect = 0.00
+    max_cold_effect = 0.18
 }
 
 STATE_SARIWON = {
@@ -1410,6 +1540,8 @@ STATE_SARIWON = {
         building_gold_mine = 2
     }
     naval_exit_id = 3059
+    min_cold_effect = 0.00
+    max_cold_effect = 0.30
 }
 
 STATE_PYONGYANG = {
@@ -1433,4 +1565,6 @@ STATE_PYONGYANG = {
         building_fishing_wharf = 8
     }
     naval_exit_id = 3138
+    min_cold_effect = 0.00
+    max_cold_effect = 0.26
 }

@@ -283,6 +283,13 @@ RING300_DIGESTS = {
     ("generated_effects", "te_demog_reset_country_bands"):
         "f4a032062b67769cb25ad877d56f9593c00a4b65c58d7f8874bb1fc890638b15",
 }
+# Vanilla 1.15 (the migration): the death multiplier's ranching gate takes the new bg_cossack_host, a child of
+# bg_ranching, and the construction gate vanilla's new building_group_bg_construction_machinists_mortality_mult; Late
+# Marriage's start names STATE_LITHUANIA, 1.15's name for STATE_KAUNAS. The recorded cases' numbers are unchanged.
+VANILLA_115_DIGESTS = {
+    ("generated_values", "te_demog_pop_death_mult"): "6b7b4a7cf211d3f81df710938255b5a73d44aa81b619c4e99af089535a99384a",
+    ("generated_values", "te_demog_pr_start_lm"): "1dccef6a27dce009f9e165cfa57cfac0cb4745a0b2907dd1ef688167876d0293",
+}
 
 
 def _ring300(name):
@@ -487,6 +494,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = CAUSES_ON_TOP_DIGESTS.get((key, name), want)
                 want = WOMEN_WORKERS_DIGESTS.get((key, name), want)
                 want = RING300_DIGESTS.get((key, name), want)
+                want = VANILLA_115_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

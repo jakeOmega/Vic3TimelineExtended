@@ -53,7 +53,7 @@ geographic_region_intermarium = {
 		STATE_TARTU
 		STATE_RIGA
 		STATE_COURLAND
-		STATE_KAUNAS
+		STATE_LITHUANIA
 		STATE_VILNIUS
 		# Belarus / Ukraine
 		STATE_BREST
@@ -183,7 +183,7 @@ geographic_region_dar_al_islam = {
 		# --- Central Asia ---
 		STATE_UZBEKIA
 		STATE_SAMARA
-		STATE_TARTARIA
+		STATE_SARATOV
 		STATE_KIRGHIZIA
 		STATE_TAJIKISTAN
 		STATE_TURKMENIA

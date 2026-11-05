@@ -445,7 +445,7 @@ STATE_ARMENIA,Yerevan,26,0,-3,1,1,40,40.5,28.7,WMO37788:10km,Dry continental bas
 STATE_AZERBAIJAN,Baku,27,2,4,1,1,40,39.7,30.3,UBBB:19km,Hot semi-arid Caspian coast
 STATE_GREATER_CAUCASUS,Tiflis,24,1,1,0,1,42,37.6,27.6,WMO37545:7km,Warm continental valley Transcaucasian fevers
 STATE_SAMARA,Samara,21,1,-10,0,1,53,36.4,26,UWWW:34km,Continental Volga steppe with cold winters
-STATE_TARTARIA,Saratov,22,1,-8,0,1,52,36.8,26.3,WMO34163:41km,Continental Volga steppe with cold winters
+STATE_SARATOV,Saratov,22,1,-8,0,1,52,36.8,26.3,WMO34163:41km,Continental Volga steppe with cold winters
 STATE_ASTRAKHAN,Astrakhan,26,1,-4,0,1,46,40.2,28.9,URWA:8km,Desert steppe watered by the Volga delta
 STATE_UZBEKIA,Samarkand,26,0,1,1,1,40,40.4,27.2,UTSS:3km,Hot dry irrigated oasis valley
 STATE_TAJIKISTAN,Dushanbe,27,0,2,0,2,39,41.7,28.2,UTDD:5km,Hot dry-summer valley with malarious lowlands
@@ -602,7 +602,6 @@ STATE_TUVA,Kyzyl,20,1,-31,1,0,52,36.4,25.5,WMO36096:8km,Dry steppe basin extreme
 STATE_TOBOLSK,Tyumen,19,1,-15,0,0,57,33.2,25.5,WMO28367:7km,Cold continental forest steppe
 STATE_UPPER_YENISEYSK,Yeniseysk,18,1,-21,0,0,58,32.4,25.5,UNII:1km,Cold continental Yenisei taiga
 STATE_OB,Salekhard,15,1,-23,0,0,67,29.4,22.9,USDD:7km,Subarctic forest tundra long winters
-STATE_CHUKOTKA,Markovo,14,0,-26,0,0,65,28.9,22,UHMO:2km,Subarctic tundra river valley
 STATE_KAMCHATKA,Petropavlovsk-Kamchatsky,14,1,-7,0,0,53,25.3,20.2,WMO32583:6km,Cool damp maritime volcanic coast
 STATE_OKHOTSK,Okhotsk,13,1,-21,0,0,59,25.7,19.6,WMO31088:4km,Cold subarctic sea coast
 STATE_YAKUTSK,Yakutsk,19,1,-38,0,0,62,34.3,25.4,WMO24856:68km,Extreme continental cold
@@ -612,7 +611,7 @@ STATE_TALINN,Tallinn,17,1,-4,0,0,59,30.5,24.4,EETN:6km,Cool Baltic coast cold wi
 STATE_TARTU,Tartu,17,1,-6,0,0,58,31.4,25.1,EETU:8km,Cool continental Baltic interior
 STATE_RIGA,Riga,18,1,-4,0,0,57,31.6,25,UMRR:2km,Cool Baltic coast cold winters
 STATE_COURLAND,Jelgava,18,1,-4,0,0,57,32.2,25.9,WMO26425:4km,Cool Baltic lowland cold winters
-STATE_KAUNAS,Kaunas,18,1,-4,0,0,55,32.8,25.6,WMO26629:3km,Cool humid continental Baltic interior
+STATE_LITHUANIA,Kaunas,18,1,-4,0,0,55,32.8,25.6,WMO26629:3km,Cool humid continental Baltic interior
 STATE_VILNIUS,Vilnius,18,1,-5,0,0,55,32.8,25.6,EYVI:6km,Cool humid continental cold winters
 STATE_KUOPIO,Kuopio,17,1,-10,0,0,63,29.8,23.7,EFKU:14km,Subarctic lake country long cold winters
 STATE_UUSIMAA,Helsingfors,18,1,-5,0,0,60,28.4,23.1,WMO02978:1km,Cool Baltic coast cold winters
@@ -627,7 +626,7 @@ STATE_MOSCOW,Moscow,19,1,-7,0,0,56,32.3,25.7,WMO27612:9km,"Humid continental, co
 STATE_BREST,Hrodna,18,1,-4,0,0,54,32.1,25.3,UMMG:17km,Humid continental cold winters
 STATE_VOLHYNIA,Lutsk,19,1,-4,0,0,51,34.1,26,UKLR:60km,Humid continental cold winters
 STATE_KIEV,Kyiv,20,1,-4,0,0,50,34.9,26.5,UKKK:8km,Humid continental forest-steppe cold winters
-STATE_ORYOL,Tula,19,1,-8,0,0,54,32.8,25.5,WMO27719:4km,Humid continental cold winters
+STATE_ORYOL,Oryol,19,1,-8,0,0,53,32.8,25.5,analog:STATE_TULA,Humid continental cold winters; Tula's record (1.15 split Tula off Oryol) at Oryol's latitude
 STATE_SMOLENSK,Smolensk,18,1,-7,0,0,55,31.3,24.6,WMO26781:4km,Humid continental cold winters
 STATE_MOGILEV,Magiliow,18,1,-6,0,0,54,32.5,25,UMOO:16km,Humid continental cold winters
 STATE_ARKHANGELSK,Arkhangelsk,16,1,-12,0,0,65,27.4,22,WMO22551:34km,Subarctic White Sea coast long winters
@@ -637,7 +636,7 @@ STATE_KHARKOV,Kharkiv,21,1,-5,0,0,50,36.2,26.5,UKHH:8km,Humid continental forest
 STATE_KURSK,Kursk,20,1,-7,0,0,52,34.3,25.6,WMO34009:4km,Humid continental black-earth cold winters
 STATE_TVER,Tver,18,1,-8,0,0,57,32.2,25.1,UUEM:9km,Humid continental cold winters
 STATE_CHERSON,Odesa,23,1,-1,0,1,46,36,27.2,UKOO:6km,Warm Black Sea steppe coast liman fevers
-STATE_GALICH,Vologda,17,1,-11,0,0,59,31.2,24.6,ULWW:11km,Cold continental northern forest
+STATE_VOLOGDA,Vologda,17,1,-11,0,0,59,31.2,24.6,ULWW:11km,Cold continental northern forest
 STATE_MINSK,Minsk,18,1,-5,0,0,54,33.2,25.6,UMMM:5km,Humid continental cold winters
 STATE_ROSTOV,Rostov-on-Don,23,1,-3,0,1,47,37.9,28.3,WMO34838:157km,Warm continental steppe Don delta ague
 STATE_PERM,Perm,19,1,-13,0,0,58,33.3,25.2,WMO28224:3km,Cold continental Ural foothills
@@ -674,3 +673,5 @@ STATE_STAVROPOL,Stavropol,22,1,-3,0,1,45,36.4,26.5,URMT:13km,Warm continental st
 STATE_CHUVASHIA,Cheboksary,19,1,-11,0,0,56,32.7,25.5,WMO27479:47km,Cold continental middle Volga
 STATE_CHERNIHIV,Chernihiv,20,1,-5,0,0,51,34.7,26.6,UKRR:5km,Humid continental cold winters
 STATE_NENETSIA,Mezen,15,1,-14,0,0,66,30,23.4,ULAE:3km,Subarctic White Sea coast long winters
+STATE_TULA,Tula,19,1,-8,0,0,54,32.8,25.5,WMO27719:4km,Humid continental cold winters
+STATE_KOSTROMA,Kostroma,18,1,-9,0,0,58,32,25.3,analog:STATE_YAROSLAVL,Cold continental upper Volga; Yaroslavl's record (1.15 made Kostroma from Yaroslavl, Nizhny Novgorod and Galich)

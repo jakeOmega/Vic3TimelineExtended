@@ -147,6 +147,7 @@ resettlement_pop_urban_worker = {
 		pop_employment_building_group = bg_ranching
 		pop_employment_building_group = bg_subsistence_agriculture
 		pop_employment_building_group = bg_subsistence_ranching
+		pop_employment_building_group = bg_cossack_host # 1.15: its laborers work the land
 	}
 }
 

@@ -727,12 +727,6 @@ te_pb_name_pact_STATE_CHUGOKU = {
 	}
 }
 
-te_pb_name_pact_STATE_CHUKOTKA = {
-	trigger = {
-		capital = { state_region = s:STATE_CHUKOTKA }
-	}
-}
-
 te_pb_name_pact_STATE_CHUVASHIA = {
 	trigger = {
 		capital = { state_region = s:STATE_CHUVASHIA }
@@ -1192,12 +1186,6 @@ te_pb_name_pact_STATE_FUJIAN = {
 te_pb_name_pact_STATE_GABON = {
 	trigger = {
 		capital = { state_region = s:STATE_GABON }
-	}
-}
-
-te_pb_name_pact_STATE_GALICH = {
-	trigger = {
-		capital = { state_region = s:STATE_GALICH }
 	}
 }
 
@@ -1693,12 +1681,6 @@ te_pb_name_pact_STATE_KATANGA = {
 	}
 }
 
-te_pb_name_pact_STATE_KAUNAS = {
-	trigger = {
-		capital = { state_region = s:STATE_KAUNAS }
-	}
-}
-
 te_pb_name_pact_STATE_KAZAN = {
 	trigger = {
 		capital = { state_region = s:STATE_KAZAN }
@@ -1792,6 +1774,12 @@ te_pb_name_pact_STATE_KORDOFAN = {
 te_pb_name_pact_STATE_KOSOVO = {
 	trigger = {
 		capital = { state_region = s:STATE_KOSOVO }
+	}
+}
+
+te_pb_name_pact_STATE_KOSTROMA = {
+	trigger = {
+		capital = { state_region = s:STATE_KOSTROMA }
 	}
 }
 
@@ -1930,6 +1918,12 @@ te_pb_name_pact_STATE_LIMA = {
 te_pb_name_pact_STATE_LINDI = {
 	trigger = {
 		capital = { state_region = s:STATE_LINDI }
+	}
+}
+
+te_pb_name_pact_STATE_LITHUANIA = {
+	trigger = {
+		capital = { state_region = s:STATE_LITHUANIA }
 	}
 }
 
@@ -2989,6 +2983,12 @@ te_pb_name_pact_STATE_SAO_PAULO = {
 	}
 }
 
+te_pb_name_pact_STATE_SARATOV = {
+	trigger = {
+		capital = { state_region = s:STATE_SARATOV }
+	}
+}
+
 te_pb_name_pact_STATE_SARDINIA = {
 	trigger = {
 		capital = { state_region = s:STATE_SARDINIA }
@@ -3349,12 +3349,6 @@ te_pb_name_pact_STATE_TARAPACA = {
 	}
 }
 
-te_pb_name_pact_STATE_TARTARIA = {
-	trigger = {
-		capital = { state_region = s:STATE_TARTARIA }
-	}
-}
-
 te_pb_name_pact_STATE_TARTU = {
 	trigger = {
 		capital = { state_region = s:STATE_TARTU }
@@ -3496,6 +3490,12 @@ te_pb_name_pact_STATE_TRIPOLI = {
 te_pb_name_pact_STATE_TUCUMAN = {
 	trigger = {
 		capital = { state_region = s:STATE_TUCUMAN }
+	}
+}
+
+te_pb_name_pact_STATE_TULA = {
+	trigger = {
+		capital = { state_region = s:STATE_TULA }
 	}
 }
 
@@ -3694,6 +3694,12 @@ te_pb_name_pact_STATE_VITEBSK = {
 te_pb_name_pact_STATE_VOLHYNIA = {
 	trigger = {
 		capital = { state_region = s:STATE_VOLHYNIA }
+	}
+}
+
+te_pb_name_pact_STATE_VOLOGDA = {
+	trigger = {
+		capital = { state_region = s:STATE_VOLOGDA }
 	}
 }
 
@@ -4735,12 +4741,6 @@ te_pb_name_league_STATE_CHUGOKU = {
 	}
 }
 
-te_pb_name_league_STATE_CHUKOTKA = {
-	trigger = {
-		capital = { state_region = s:STATE_CHUKOTKA }
-	}
-}
-
 te_pb_name_league_STATE_CHUVASHIA = {
 	trigger = {
 		capital = { state_region = s:STATE_CHUVASHIA }
@@ -5206,12 +5206,6 @@ te_pb_name_league_STATE_FUJIAN = {
 te_pb_name_league_STATE_GABON = {
 	trigger = {
 		capital = { state_region = s:STATE_GABON }
-	}
-}
-
-te_pb_name_league_STATE_GALICH = {
-	trigger = {
-		capital = { state_region = s:STATE_GALICH }
 	}
 }
 
@@ -5701,12 +5695,6 @@ te_pb_name_league_STATE_KATANGA = {
 	}
 }
 
-te_pb_name_league_STATE_KAUNAS = {
-	trigger = {
-		capital = { state_region = s:STATE_KAUNAS }
-	}
-}
-
 te_pb_name_league_STATE_KAZAN = {
 	trigger = {
 		capital = { state_region = s:STATE_KAZAN }
@@ -5800,6 +5788,12 @@ te_pb_name_league_STATE_KORDOFAN = {
 te_pb_name_league_STATE_KOSOVO = {
 	trigger = {
 		capital = { state_region = s:STATE_KOSOVO }
+	}
+}
+
+te_pb_name_league_STATE_KOSTROMA = {
+	trigger = {
+		capital = { state_region = s:STATE_KOSTROMA }
 	}
 }
 
@@ -5944,6 +5938,12 @@ te_pb_name_league_STATE_LIMA = {
 te_pb_name_league_STATE_LINDI = {
 	trigger = {
 		capital = { state_region = s:STATE_LINDI }
+	}
+}
+
+te_pb_name_league_STATE_LITHUANIA = {
+	trigger = {
+		capital = { state_region = s:STATE_LITHUANIA }
 	}
 }
 
@@ -7009,6 +7009,12 @@ te_pb_name_league_STATE_SAO_PAULO = {
 	}
 }
 
+te_pb_name_league_STATE_SARATOV = {
+	trigger = {
+		capital = { state_region = s:STATE_SARATOV }
+	}
+}
+
 te_pb_name_league_STATE_SARDINIA = {
 	trigger = {
 		capital = { state_region = s:STATE_SARDINIA }
@@ -7369,12 +7375,6 @@ te_pb_name_league_STATE_TARAPACA = {
 	}
 }
 
-te_pb_name_league_STATE_TARTARIA = {
-	trigger = {
-		capital = { state_region = s:STATE_TARTARIA }
-	}
-}
-
 te_pb_name_league_STATE_TARTU = {
 	trigger = {
 		capital = { state_region = s:STATE_TARTU }
@@ -7516,6 +7516,12 @@ te_pb_name_league_STATE_TRIPOLI = {
 te_pb_name_league_STATE_TUCUMAN = {
 	trigger = {
 		capital = { state_region = s:STATE_TUCUMAN }
+	}
+}
+
+te_pb_name_league_STATE_TULA = {
+	trigger = {
+		capital = { state_region = s:STATE_TULA }
 	}
 }
 
@@ -7726,6 +7732,12 @@ te_pb_name_league_STATE_VITEBSK = {
 te_pb_name_league_STATE_VOLHYNIA = {
 	trigger = {
 		capital = { state_region = s:STATE_VOLHYNIA }
+	}
+}
+
+te_pb_name_league_STATE_VOLOGDA = {
+	trigger = {
+		capital = { state_region = s:STATE_VOLOGDA }
 	}
 }
 

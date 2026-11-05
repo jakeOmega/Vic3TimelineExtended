@@ -51,7 +51,7 @@ class CoastalStatesTest(unittest.TestCase):
         coastal = {s for s, ids in exits.items() if ids}
         basins = gen.state_basins()   # raises on an unmapped sea or a double exit
         self.assertEqual(set(basins), coastal)
-        self.assertEqual(len(coastal), 372)
+        self.assertEqual(len(coastal), 371)   # 1.15 merged coastal Chukotka into Kamchatka
         for state, n in basins.items():
             self.assertIn(n, gen.BASINS, state)
 
