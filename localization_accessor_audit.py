@@ -671,6 +671,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         # fold never meets it.
         "GetLawType": "law",
         "GetEffectDesc": "value",  # LawType.GetEffectDesc(country): its effects text
+        "GetDeltaEffectDesc": "value",  # 1.15: the effects compared to the current law (politics_panel_change_law.gui:969)
         "Self": "law",
         "GetName": "value",
         "GetNameNoFormatting": "value",

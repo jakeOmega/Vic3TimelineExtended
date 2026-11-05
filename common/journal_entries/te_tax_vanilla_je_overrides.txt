@@ -348,8 +348,8 @@ REPLACE:je_portugal_regeneration = {
 	}
 
 	immediate = {
-		set_variable = { name = surplus_time_var value = 0 }
-		set_variable = { name = je_age_in_months_var value = 0 }
+		set_variable = { name = surplus_time_var value = 0 } # REVIEWED 2026-11-05: vanilla 1.15's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
+		set_variable = { name = je_age_in_months_var value = 0 } # REVIEWED 2026-11-05: vanilla 1.15's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
 		add_journal_entry = { type = je_portugal_regeneration_public_works }
 		add_journal_entry = { type = je_portugal_regeneration_agriculture }
 		add_journal_entry = { type = je_portugal_regeneration_institutions }
