@@ -41,6 +41,26 @@ class ReferenceTests(unittest.TestCase):
             [(4, "desc", "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs")],
         )
 
+    def test_journal_entry_outcome_keys_are_references(self):
+        # 1.15: an outcome's three keys; flags is a token list, not a key.
+        text = (
+            "je_x = {\n"
+            "\toutcome = {\n"
+            "\t\theader = je_standard_completion_header\n"
+            "\t\teffect_header = je_x_on_done_header\n"
+            "\t\tconclusion_desc = je_x_done_conclusion_desc\n"
+            "\t\tflags = { historical }\n"
+            "\t}\n"
+            "}\n"
+        )
+        self.assertEqual(_refs(text), [
+            (3, "header", "je_standard_completion_header"),
+            (4, "effect_header", "je_x_on_done_header"),
+            (5, "conclusion_desc", "je_x_done_conclusion_desc"),
+        ])
+        # 1.14's header fields are gone from 1.15, and from the catalog.
+        self.assertNotIn("custom_completion_header", LOC_REFERENCE_FIELDS)
+
     def test_unquoted_and_dotted_keys(self):
         self.assertEqual(
             _refs("e = { title = te_x.1.t flavor = te_x.1.f }\n"),

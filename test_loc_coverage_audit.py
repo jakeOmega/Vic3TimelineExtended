@@ -669,6 +669,127 @@ class DiplomaticActionTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Diplomatic Actions"], "common/diplomatic_actions")
 
 
+def _je_parse(text: str) -> dict:
+    """Parse journal entry text the way ModState stores it (normalized)."""
+    from paradox_file_parser import ParadoxFileParser
+    with tempfile.TemporaryDirectory() as td:
+        path = os.path.join(td, "j.txt")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        p = ParadoxFileParser()
+        p.parse_file(path, apply_directives=False)
+        return {k.split(":", 1)[-1]: v for k, v in p.data.items()}
+
+
+class JournalEntryOutcomeTests(unittest.TestCase):
+    """1.15: every outcome needs conclusion_desc, a non-hidden one header and
+    effect_header too, and each key named must resolve."""
+
+    JE = (
+        "je_x = {{{comment}\n"
+        "\toutcome = {{\n\t\theader = je_standard_completion_header\n"
+        "\t\teffect_header = je_standard_on_completion_header\n"
+        "\t\tconclusion_desc = je_x_complete_conclusion_desc\n"
+        "\t\ttrigger = {{ always = yes }}\n\t}}\n"
+        "\toutcome = {{\n\t\theader = je_standard_failure_header\n"
+        "\t\tconclusion_desc = je_x_fail_conclusion_desc\n\t}}\n"
+        "\toutcome = {{\n\t\tflags = {{ hidden invalid_outcome }}\n"
+        "\t\ttrigger = {{ always = no }}\n\t}}\n"
+        "}}\n"
+    )
+    LOC = {"je_x", "je_x_reason", "je_standard_completion_header",
+           "je_standard_on_completion_header", "je_standard_failure_header",
+           "je_x_complete_conclusion_desc"}
+
+    def _run(self, text, *, loc=None, base=None, opener="je_x"):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        _write(tmp.name, "common/journal_entries/x.txt", text.replace("je_x = {", opener + " = {", 1))
+        ms = FakeMS(
+            mod_data={"Journal Entries": _je_parse(text)},
+            base_data={"Journal Entries": base or {}},
+            loc_keys=self.LOC if loc is None else loc,
+        )
+        return audit(ms, mod_path=tmp.name)
+
+    def test_missing_fields_and_keys_flag(self):
+        result = self._run(self.JE.format(comment=""))
+        self.assertEqual(
+            [(f.category, f.entity, f.missing_keys, f.line) for f in result.flags],
+            [("Journal Entry Outcomes", "je_x",
+              ["outcome 2: no effect_header", "je_x_fail_conclusion_desc",
+               "outcome 3: no conclusion_desc"], 1)],
+        )
+        self.assertIn("### Journal Entry Outcomes (1)", render_report(result))
+
+    def test_complete_outcomes_pass(self):
+        text = self.JE.format(comment="").replace(
+            "\t\tconclusion_desc = je_x_fail_conclusion_desc\n",
+            "\t\teffect_header = je_standard_on_failure_header\n"
+            "\t\tconclusion_desc = je_x_fail_conclusion_desc\n",
+        ).replace("flags = { hidden invalid_outcome }",
+                  "flags = { hidden invalid_outcome }\n\t\tconclusion_desc = je_x_fail_conclusion_desc")
+        loc = self.LOC | {"je_x_fail_conclusion_desc", "je_standard_on_failure_header"}
+        self.assertEqual(self._run(text, loc=loc).flags, [])
+
+    def test_entry_with_no_outcome_passes(self):
+        self.assertEqual(self._run("je_x = {\n\tgroup = g\n}\n").flags, [])
+
+    def test_replace_of_a_vanilla_entry_is_checked_on_its_replace_line(self):
+        text = self.JE.format(comment=" # REVIEWED 2026-11-05: fixture")
+        result = self._run(text, base={"je_x": ("=", {"group": ("=", "g")})}, opener="REPLACE:je_x")
+        [flag] = result.flags
+        self.assertEqual((flag.category, flag.line), ("Journal Entry Outcomes", 1))
+        self.assertEqual(flag.exemption, {"date": "2026-11-05", "rationale": "fixture"})
+
+    def test_unchanged_vanilla_entry_is_not_checked(self):
+        data = _je_parse(self.JE.format(comment=""))
+        self.assertEqual(self._run(self.JE.format(comment=""), base=data).flags, [])
+
+    def test_every_vanilla_115_outcome_holds(self):
+        # The rule is read off the readme; vanilla's 927 outcomes obey it.
+        import vanilla_parsed
+        from loc_coverage_audit import _je_outcome_problems, je_outcomes
+        snap = vanilla_parsed.load()
+        entries = snap.data["Journal Entries"]
+        self.assertGreater(sum(len(je_outcomes(b)) for b in entries.values()), 900)
+        bad = {n: p for n, b in entries.items()
+               if (p := _je_outcome_problems(b, snap.localization.__contains__))}
+        self.assertEqual(bad, {})
+
+
+class GlossaryAndExilePoolTests(unittest.TestCase):
+    def test_glossary_entry_needs_name_and_desc(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        _write(tmp.name, "common/glossary/g.txt", "glossary_dirigisme = {\n}\n")
+        _write(tmp.name, "common/regional_exile_pools/p.txt", "te_pool = {\n}\n")
+        ms = FakeMS(
+            mod_data={"Glossary": {"glossary_dirigisme": {}},
+                      "Regional Exile Pools": {"te_pool": {}}},
+            base_data={"Glossary": {}, "Regional Exile Pools": {}},
+            loc_keys={"glossary_dirigisme"},
+        )
+        result = audit(ms, mod_path=tmp.name)
+        self.assertEqual(
+            sorted((f.category, f.entity, tuple(f.missing_keys)) for f in result.flags),
+            [("Glossary", "glossary_dirigisme", ("glossary_dirigisme_desc",)),
+             ("Regional Exile Pools", "te_pool", ("te_pool",))],
+        )
+
+    def test_rules_hold_for_vanilla(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _REQUIREMENTS
+        snap = vanilla_parsed.load()
+        for etype in ("Glossary", "Regional Exile Pools"):
+            entities = snap.data[etype]
+            self.assertTrue(entities, etype)
+            missing = {n: [k for k, req, _ in _REQUIREMENTS[etype](n, b)
+                           if req and k not in snap.localization]
+                       for n, b in entities.items()}
+            self.assertEqual({n: m for n, m in missing.items() if m}, {}, etype)
+
+
 class GameConceptTests(unittest.TestCase):
     def _run(self, loc_keys, *, base=None, reviewed=False):
         tmp = tempfile.TemporaryDirectory()

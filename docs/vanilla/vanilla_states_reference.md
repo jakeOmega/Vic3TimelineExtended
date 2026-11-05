@@ -194,11 +194,10 @@ Foreign powers can amplify obstinance via the *Support Separatism* diplomatic in
 
 ## 9. Devastation
 
-States occupied during war or damaged by events accumulate **devastation**. The shape:
+States fought over in war or damaged by events accumulate **devastation**. The shape (since 1.15; before it, occupation itself devastated a state a little every day):
 
-- **A constant per-day trickle in occupied states**.
-- **Battle-occupation bumps** per battle in the state, scaled by formation devastation modifiers.
-- **Per-day decay in unoccupied states** with two compounding multipliers:
+- **Battles are the only wartime source.** Each battle with troops on both sides adds a base amount plus more per thousand casualties, capped per battle, scaled up for a state with a small population, and then by the formations' devastation modifiers (`NWar` `DEVASTATION_*` defines).
+- **Per-day decay once no battle has been fought in the state for a grace period** (slower while any of the state is under hostile occupation), with two compounding multipliers:
   - The built-in `state_region_devastation` static modifier carries `state_devastation_decay_mult = 3.0`, scaled by the state's current devastation level — high-devastation states naturally decay faster than mildly-devastated ones (a self-correcting feedback that prevents states staying devastated indefinitely).
   - **`state_devastation_decay_mult` is a registered modifier** (added in 1.13 — see `common/modifier_type_definitions/00_modifier_types.txt`). External modifiers can speed or slow decay: e.g. the *Brutal Anti-Bandit Campaigns* event modifier sets it to −1 (stops decay outright). Mod content can grant decay-speedup as a reward, or decay-penalty as a flavor cost.
 

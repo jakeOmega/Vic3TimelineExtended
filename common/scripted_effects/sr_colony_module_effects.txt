@@ -556,13 +556,14 @@ sr_marker_self_check = {
 sr_mod_seen_self_check = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_mod_seen_checked } }
-		set_global_variable = { name = sr_mod_seen_checked value = yes }
+		# the modifier's name, as a flag for the line (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
+		set_global_variable = { name = sr_mod_seen_checked value = flag:$MODIFIER$ }
 		if = {
 			limit = { has_modifier = $MODIFIER$ }
-			debug_log = "TE_SELF_CHECK OK modifier_seen_same_effect $MODIFIER$ (has_modifier sees an add_modifier made earlier in the same effect) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK modifier_seen_same_effect [GetGlobalVariable('sr_mod_seen_checked').GetFlagName] (has_modifier sees an add_modifier made earlier in the same effect) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN modifier_seen_same_effect $MODIFIER$ (has_modifier does not yet see an add_modifier made earlier in the same effect: keep every refresh to once per effect; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN modifier_seen_same_effect [GetGlobalVariable('sr_mod_seen_checked').GetFlagName] (has_modifier does not yet see an add_modifier made earlier in the same effect: keep every refresh to once per effect; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 	}
 }

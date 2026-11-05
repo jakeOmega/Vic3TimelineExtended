@@ -1032,7 +1032,7 @@ class TabLayoutTest(unittest.TestCase):
         def shown(key, depth=0):
             v = loc[key]
             self.assertLess(depth, 6, key)
-            v = re.sub(r"\$(\w[\w.]*)\$", lambda m: shown(m.group(1), depth + 1), v)
+            v = re.sub(r"\$(\w[\w.]*)(?:\|q)?\$", lambda m: shown(m.group(1), depth + 1), v)   # 1.15: |q in a quoted argument
             v = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", v)
             v = re.sub(r"\[(concept_\w+)\]", lambda m: shown(m.group(1), depth + 1), v)
             v = re.sub(r"\[[^\[\]]*\]", "9999", v)
@@ -1116,7 +1116,7 @@ class TabLayoutTest(unittest.TestCase):
         # D: money, as the UN overview's Dues figure prints what is owed
         # (je_un_ov_dues_fig_4), which the UN lines' arrears hover repeats.
         for key, value in self._nation_loc().items():
-            for fmt in re.findall(r"\|([^\]]*)\]", value):
+            for fmt in re.findall(r"\|([^\]$']*)\]", value):   # a data function's format, not a splice's |q
                 with self.subTest(key=key, fmt=fmt):
                     self.assertIn(fmt, ("0", "1", "2", "+0", "+1", "+2", "%0", "+%0", "D"))
 

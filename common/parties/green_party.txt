@@ -142,12 +142,12 @@ green_party = {
 				desc = "from_progressive_values"
 			}
 		}
-		if = { # reformers and social democrats lean green
+		if = { # reformers and state socialists lean green
 			limit = {
 				leader ?= {
 					OR = {
 						has_ideology = ideology:ideology_reformer
-						has_ideology = ideology:ideology_social_democrat
+						has_ideology = ideology:ideology_state_socialist
 						has_ideology = ideology:ideology_radical
 					}
 				}
@@ -265,7 +265,7 @@ green_party = {
 			limit = {
 				leader ?= {
 					OR = {
-						has_ideology = ideology:ideology_communist
+						has_ideology = ideology:ideology_communist_leader
 						has_ideology = ideology:ideology_vanguardist
 					}
 				}

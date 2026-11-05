@@ -2508,6 +2508,32 @@ te_tax_base_dr_exp_consumer_appliances = {
 		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_consumer_appliances var:te_tax_pb_exp_consumer_appliances >= -3 } value = var:te_tax_pb_exp_consumer_appliances }
 	}
 }
+te_tax_base_dr_imp_copper = {
+	value = 1
+	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_imp_copper } value = var:te_tax_en_imp_copper }
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_imp_copper var:te_tax_pb_imp_copper >= -3 } value = var:te_tax_pb_imp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_imp_copper var:te_tax_pa_imp_copper >= -3 } value = var:te_tax_pa_imp_copper }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_imp_copper var:te_tax_pa_imp_copper >= -3 } value = var:te_tax_pa_imp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_imp_copper var:te_tax_pb_imp_copper >= -3 } value = var:te_tax_pb_imp_copper }
+	}
+}
+te_tax_base_dr_exp_copper = {
+	value = 1
+	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_exp_copper } value = var:te_tax_en_exp_copper }
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_copper var:te_tax_pb_exp_copper >= -3 } value = var:te_tax_pb_exp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_exp_copper var:te_tax_pa_exp_copper >= -3 } value = var:te_tax_pa_exp_copper }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_dr_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_exp_copper var:te_tax_pa_exp_copper >= -3 } value = var:te_tax_pa_exp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_dr_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_copper var:te_tax_pb_exp_copper >= -3 } value = var:te_tax_pb_exp_copper }
+	}
+}
 te_tax_base_dr_imp_digital_assets = {
 	value = 1
 	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_imp_digital_assets } value = var:te_tax_en_imp_digital_assets }
@@ -4068,6 +4094,32 @@ te_tax_base_bl_exp_consumer_appliances = {
 		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_consumer_appliances var:te_tax_pb_exp_consumer_appliances >= -3 } value = var:te_tax_pb_exp_consumer_appliances }
 	}
 }
+te_tax_base_bl_imp_copper = {
+	value = 1
+	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_imp_copper } value = var:te_tax_en_imp_copper }
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_imp_copper var:te_tax_pb_imp_copper >= -3 } value = var:te_tax_pb_imp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_imp_copper var:te_tax_pa_imp_copper >= -3 } value = var:te_tax_pa_imp_copper }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_imp_copper var:te_tax_pa_imp_copper >= -3 } value = var:te_tax_pa_imp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_imp_copper var:te_tax_pb_imp_copper >= -3 } value = var:te_tax_pb_imp_copper }
+	}
+}
+te_tax_base_bl_exp_copper = {
+	value = 1
+	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_exp_copper } value = var:te_tax_en_exp_copper }
+	if = {
+		limit = { te_tax_slot_b_first = yes }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_copper var:te_tax_pb_exp_copper >= -3 } value = var:te_tax_pb_exp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_exp_copper var:te_tax_pa_exp_copper >= -3 } value = var:te_tax_pa_exp_copper }
+	}
+	else = {
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = a DUE = te_tax_bl_due } has_variable = te_tax_pa_pver_customs has_variable = te_tax_pa_exp_copper var:te_tax_pa_exp_copper >= -3 } value = var:te_tax_pa_exp_copper }
+		if = { limit = { te_tax_slot_awaits_before = { SLOT = b DUE = te_tax_bl_due } has_variable = te_tax_pb_pver_customs has_variable = te_tax_pb_exp_copper var:te_tax_pb_exp_copper >= -3 } value = var:te_tax_pb_exp_copper }
+	}
+}
 te_tax_base_bl_imp_digital_assets = {
 	value = 1
 	if = { limit = { has_variable = te_tax_customs_held var:te_tax_customs_held = 1 has_variable = te_tax_en_imp_digital_assets } value = var:te_tax_en_imp_digital_assets }
@@ -5430,6 +5482,14 @@ te_tax_dr_eff_exp_consumer_appliances = {
 	value = te_tax_base_dr_exp_consumer_appliances
 	if = { limit = { has_variable = te_tax_dr_exp_consumer_appliances var:te_tax_dr_exp_consumer_appliances >= -3 } value = var:te_tax_dr_exp_consumer_appliances }
 }
+te_tax_dr_eff_imp_copper = {
+	value = te_tax_base_dr_imp_copper
+	if = { limit = { has_variable = te_tax_dr_imp_copper var:te_tax_dr_imp_copper >= -3 } value = var:te_tax_dr_imp_copper }
+}
+te_tax_dr_eff_exp_copper = {
+	value = te_tax_base_dr_exp_copper
+	if = { limit = { has_variable = te_tax_dr_exp_copper var:te_tax_dr_exp_copper >= -3 } value = var:te_tax_dr_exp_copper }
+}
 te_tax_dr_eff_imp_digital_assets = {
 	value = te_tax_base_dr_imp_digital_assets
 	if = { limit = { has_variable = te_tax_dr_imp_digital_assets var:te_tax_dr_imp_digital_assets >= -3 } value = var:te_tax_dr_imp_digital_assets }
@@ -5915,6 +5975,14 @@ te_tax_bl_dstep_exp_consumer_appliances = {
 	value = 0
 	if = { limit = { has_variable = te_tax_bl_exp_consumer_appliances var:te_tax_bl_exp_consumer_appliances >= -3 } value = var:te_tax_bl_exp_consumer_appliances subtract = te_tax_base_bl_exp_consumer_appliances }
 }
+te_tax_bl_dstep_imp_copper = {
+	value = 0
+	if = { limit = { has_variable = te_tax_bl_imp_copper var:te_tax_bl_imp_copper >= -3 } value = var:te_tax_bl_imp_copper subtract = te_tax_base_bl_imp_copper }
+}
+te_tax_bl_dstep_exp_copper = {
+	value = 0
+	if = { limit = { has_variable = te_tax_bl_exp_copper var:te_tax_bl_exp_copper >= -3 } value = var:te_tax_bl_exp_copper subtract = te_tax_base_bl_exp_copper }
+}
 te_tax_bl_dstep_imp_digital_assets = {
 	value = 0
 	if = { limit = { has_variable = te_tax_bl_imp_digital_assets var:te_tax_bl_imp_digital_assets >= -3 } value = var:te_tax_bl_imp_digital_assets subtract = te_tax_base_bl_imp_digital_assets }
@@ -6325,6 +6393,7 @@ te_tax_bl_dcu_imp_industrial = {
 	add = te_tax_bl_dstep_imp_clippers
 	add = te_tax_bl_dstep_imp_coal
 	add = te_tax_bl_dstep_imp_construction
+	add = te_tax_bl_dstep_imp_copper
 	add = te_tax_bl_dstep_imp_dye
 	add = te_tax_bl_dstep_imp_electronic_components
 	add = te_tax_bl_dstep_imp_engines
@@ -6405,6 +6474,8 @@ te_tax_bl_customs_changed = {
 	if = { limit = { NOT = { te_tax_bl_dstep_exp_construction = 0 } } add = 1 }
 	if = { limit = { NOT = { te_tax_bl_dstep_imp_consumer_appliances = 0 } } add = 1 }
 	if = { limit = { NOT = { te_tax_bl_dstep_exp_consumer_appliances = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_imp_copper = 0 } } add = 1 }
+	if = { limit = { NOT = { te_tax_bl_dstep_exp_copper = 0 } } add = 1 }
 	if = { limit = { NOT = { te_tax_bl_dstep_imp_digital_assets = 0 } } add = 1 }
 	if = { limit = { NOT = { te_tax_bl_dstep_exp_digital_assets = 0 } } add = 1 }
 	if = { limit = { NOT = { te_tax_bl_dstep_imp_dye = 0 } } add = 1 }

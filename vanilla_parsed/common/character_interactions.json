@@ -604,6 +604,56 @@
          "50"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_matches_divided_monarchists_ai_path": [
+           "=",
+           "yes"
+          ],
+          "interest_group.leader": [
+           "?=",
+           {
+            "NOT": [
+             "=",
+             {
+              "character_matches_divided_monarchists_ai_path": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
       ]
      ]
     }
@@ -686,6 +736,29 @@
      "exists": [
       "=",
       "owner.capital.land_hq"
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_template": [
+          "=",
+          "nemo_prince"
+         ]
+        }
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_template": [
+          "=",
+          "nemo_prince"
+         ]
+        }
+       ]
+      }
      ]
     }
    ],
@@ -816,208 +889,29 @@
          "100"
         ]
        }
-      ]
-     ]
-    }
-   ]
-  }
- ],
- "marry_ruler_or_heir": [
-  "=",
-  {
-   "icon": [
-    "=",
-    "\"gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_royalist.dds\""
-   ],
-   "clicksound": [
-    "=",
-    "\"event:/SFX/UI/Military/command_grant\""
-   ],
-   "potential": [
-    "=",
-    {
-     "owner": [
-      "?=",
-      "scope:actor"
-     ],
-     "OR": [
-      "=",
-      {
-       "is_ruler_of_own_country": [
-        "=",
-        "yes"
-       ],
-       "is_heir_of_own_country": [
-        "=",
-        "yes"
-       ]
-      }
-     ],
-     "scope:actor": [
-      "?=",
-      {
-       "country_has_monarchy_law": [
-        "=",
-        "yes"
-       ],
-       "NOT": [
-        "=",
-        {
-         "has_law": [
-          "=",
-          "law_type:law_bakufu"
-         ]
-        }
-       ],
-       "has_gov_regency": [
-        "=",
-        "no"
-       ],
-       "religion": [
-        "=",
-        {
-         "has_discrimination_trait": [
-          "=",
-          "heritage_christian"
-         ]
-        }
-       ]
-      }
-     ],
-     "is_adult": [
-      "=",
-      "yes"
-     ],
-     "NOT": [
-      [
-       "=",
-       {
-        "has_variable": [
-         "=",
-         "spouse_seeker"
-        ]
-       }
       ],
       [
        "=",
        {
-        "has_variable": [
+        "limit": [
          "=",
-         "is_married"
+         {
+          "character_matches_divided_monarchists_ai_path": [
+           "=",
+           "yes"
+          ],
+          "has_commander_traits": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
         ]
        }
       ]
-     ]
-    }
-   ],
-   "possible": [
-    "=",
-    {
-     "owner": [
-      "?=",
-      {
-       "any_diplomatically_relevant_country": [
-        "=",
-        {
-         "NOT": [
-          [
-           "=",
-           {
-            "THIS": [
-             "=",
-             "scope:actor"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "is_subject_type": [
-             "=",
-             "subject_type_personal_union"
-            ]
-           }
-          ]
-         ],
-         "country_has_monarchy_law": [
-          "=",
-          "yes"
-         ],
-         "religion": [
-          "=",
-          "scope:actor.religion"
-         ],
-         "ruler": [
-          "=",
-          {
-           "age": [
-            ">",
-            "36"
-           ],
-           "hidden_trigger": [
-            "=",
-            {
-             "NOT": [
-              "=",
-              {
-               "has_variable": [
-                "=",
-                "marriage_target"
-               ]
-              }
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "effect": [
-    "=",
-    {
-     "set_variable": [
-      "=",
-      "spouse_seeker"
-     ],
-     "owner": [
-      "?=",
-      {
-       "trigger_event": [
-        "=",
-        {
-         "id": [
-          "=",
-          "wedding.2"
-         ],
-         "popup": [
-          "=",
-          "yes"
-         ]
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "cooldown": [
-    "=",
-    {
-     "days": [
-      "=",
-      "normal_modifier_time"
-     ]
-    }
-   ],
-   "ai_chance": [
-    "=",
-    {
-     "value": [
-      "=",
-      "25"
      ]
     }
    ]
@@ -1536,6 +1430,10 @@
          "=",
          "law_type:law_outlawed_dissent"
         ]
+       ],
+       "divided_monarchists_ai_active": [
+        "=",
+        "yes"
        ]
       }
      ]
@@ -1769,9 +1667,9 @@
              "NOT": [
               "=",
               {
-               "has_variable": [
-                "=",
-                "house_tokugawa"
+               "var:dynasty_var": [
+                "?=",
+                "flag:house_tokugawa"
                ]
               }
              ]
@@ -1817,9 +1715,9 @@
              "NOT": [
               "=",
               {
-               "has_variable": [
-                "=",
-                "house_yamato"
+               "var:dynasty_var": [
+                "?=",
+                "flag:house_yamato"
                ]
               }
              ]
@@ -2059,6 +1957,24 @@
           "yes"
          ]
         }
+       ]
+      }
+     ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "rlit_pushkin_needed_for_golden_age": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "rlit_pushkin_force_duel_effect": [
+        "=",
+        "yes"
        ]
       }
      ],
@@ -2568,458 +2484,728 @@
       "0"
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "interest_group": [
-            "?=",
-            {
-             "ig_approval": [
-              "<",
-              "0"
-             ]
-            }
-           ],
-           "political_movement": [
-            "?=",
-            {
-             "is_being_suppressed": [
-              "=",
-              "yes"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        {
-         "value": [
-          "=",
-          "popularity"
-         ],
-         "multiply": [
-          "=",
-          "0.2"
-         ]
-        }
-       ],
-       "if": [
-        [
+      [
+       "=",
+       {
+        "limit": [
          "=",
          {
-          "limit": [
-           "=",
-           {
-            "has_role_of_type": [
-             "=",
-             "agitator"
-            ],
-            "OR": [
-             "=",
-             {
-              "has_trait": [
-               [
-                "=",
-                "ambitious"
-               ],
-               [
-                "=",
-                "wrathful"
-               ],
-               [
-                "=",
-                "ruthless"
-               ],
-               [
-                "=",
-                "bandit"
-               ],
-               [
-                "=",
-                "social_bandit"
-               ],
-               [
-                "=",
-                "special_character_luxemburg_in_exile"
-               ]
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_outlawed_dissent"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_secret_police"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
+          "OR": [
            "=",
            {
             "interest_group": [
              "?=",
              {
               "ig_approval": [
-               "<=",
-               "-5"
+               "<",
+               "0"
+              ]
+             }
+            ],
+            "political_movement": [
+             "?=",
+             {
+              "is_being_suppressed": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "popularity"
+          ],
+          "multiply": [
+           "=",
+           "0.2"
+          ]
+         }
+        ],
+        "if": [
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_role_of_type": [
+              "=",
+              "agitator"
+             ],
+             "OR": [
+              "=",
+              {
+               "has_trait": [
+                [
+                 "=",
+                 "ambitious"
+                ],
+                [
+                 "=",
+                 "wrathful"
+                ],
+                [
+                 "=",
+                 "ruthless"
+                ],
+                [
+                 "=",
+                 "bandit"
+                ],
+                [
+                 "=",
+                 "social_bandit"
+                ],
+                [
+                 "=",
+                 "special_character_luxemburg_in_exile"
+                ]
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_outlawed_dissent"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_secret_police"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "interest_group": [
+              "?=",
+              {
+               "ig_approval": [
+                "<=",
+                "-5"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_conservative_agenda"
+               ]
+              }
+             ],
+             "has_liberal_ideology": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_role_of_type": [
+                "=",
+                "agitator"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.25"
+           ]
+          }
+         ]
+        ],
+        "else_if": [
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_censorship"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_right_of_assembly"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.75"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_national_guard"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_no_home_affairs"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "interest_group": [
+              "?=",
+              {
+               "ig_approval": [
+                "<=",
+                "-10"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_progressive_agenda"
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_liberal_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_egalitarian_agenda"
+               ],
+               "NOT": [
+                "=",
+                {
+                 "has_law_or_variant": [
+                  "=",
+                  "law_type:law_council_republic"
+                 ]
+                }
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_liberal_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_socialist_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_egalitarian_agenda"
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_socialist_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_unshakable_autocracy"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_unshakable_autocracy_button_1_complete"
               ]
              }
             ]
            }
           ],
-          "multiply": [
+          "has_role_of_type": [
            "=",
-           "1.25"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
+           "agitator"
+          ],
+          "OR": [
            "=",
            {
-            "scope:actor": [
-             "?=",
-             {
-              "has_strategy": [
-               "=",
-               "ai_strategy_conservative_agenda"
-              ]
-             }
+            "has_socialist_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_progressive_ideology": [
+             "=",
+             "yes"
             ],
             "has_liberal_ideology": [
              "=",
              "yes"
             ]
            }
-          ],
-          "multiply": [
-           "=",
-           "0.5"
           ]
          }
         ],
-        [
+        "add": [
+         "=",
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
          "=",
          {
-          "limit": [
+          "save_temporary_scope_as": [
            "=",
+           "tp_exile_candidate_scope"
+          ],
+          "owner": [
+           "?=",
            {
-            "NOT": [
+            "has_journal_entry": [
+             "=",
+             "je_tp_fav_bootlicker"
+            ],
+            "OR": [
+             "=",
+             {
+              "var:tp_bootlicker_rival_1": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_2": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_3": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "25"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ],
+          "is_interest_group_leader": [
+           "=",
+           "yes"
+          ],
+          "interest_group": [
+           "?=",
+           {
+            "any_scope_character": [
              "=",
              {
               "has_role_of_type": [
                "=",
-               "agitator"
+               "politician"
+              ],
+              "is_interest_group_leader": [
+               "=",
+               "no"
+              ],
+              "character_matches_divided_monarchists_ai_path": [
+               "=",
+               "yes"
               ]
              }
             ]
            }
-          ],
-          "multiply": [
-           "=",
-           "0.25"
           ]
          }
+        ],
+        "add": [
+         "=",
+         "25"
         ]
-       ],
-       "else_if": [
-        [
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
          "=",
          {
-          "limit": [
-           "=",
+          "owner": [
+           "?=",
            {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_censorship"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.25"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_right_of_assembly"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "0.75"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_national_guard"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.25"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_law_or_variant": [
-               "=",
-               "law_type:law_no_home_affairs"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "0.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "interest_group": [
-             "?=",
-             {
-              "ig_approval": [
-               "<=",
-               "-10"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "1.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_strategy": [
-               "=",
-               "ai_strategy_progressive_agenda"
-              ]
-             }
-            ],
-            "OR": [
+            "divided_monarchists_ai_backs_monarchist": [
              "=",
-             {
-              "has_liberal_ideology": [
-               "=",
-               "yes"
-              ],
-              "has_progressive_ideology": [
-               "=",
-               "yes"
-              ]
-             }
+             "yes"
             ]
            }
           ],
-          "multiply": [
+          "has_role_of_type": [
            "=",
-           "0.5"
+           "agitator"
+          ],
+          "OR": [
+           "=",
+           {
+            "has_ideology": [
+             [
+              "=",
+              "ideology:ideology_republican_leader"
+             ],
+             [
+              "=",
+              "ideology:ideology_radical"
+             ],
+             [
+              "=",
+              "ideology:ideology_positivist"
+             ]
+            ]
+           }
           ]
          }
         ],
-        [
+        "add": [
          "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_strategy": [
-               "=",
-               "ai_strategy_egalitarian_agenda"
-              ],
-              "NOT": [
-               "=",
-               {
-                "has_law_or_variant": [
-                 "=",
-                 "law_type:law_council_republic"
-                ]
-               }
-              ]
-             }
-            ],
-            "OR": [
-             "=",
-             {
-              "has_liberal_ideology": [
-               "=",
-               "yes"
-              ],
-              "has_progressive_ideology": [
-               "=",
-               "yes"
-              ],
-              "has_socialist_ideology": [
-               "=",
-               "yes"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "0.5"
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:actor": [
-             "?=",
-             {
-              "has_strategy": [
-               "=",
-               "ai_strategy_egalitarian_agenda"
-              ]
-             }
-            ],
-            "OR": [
-             "=",
-             {
-              "has_progressive_ideology": [
-               "=",
-               "yes"
-              ],
-              "has_socialist_ideology": [
-               "=",
-               "yes"
-              ]
-             }
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           "0.5"
-          ]
-         }
+         "25"
         ]
-       ]
-      }
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "ai_wants_radicals": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          "character_is_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_alexander_pushkin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_matches_divided_monarchists_ai_path": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ]
      ]
     }
    ]
@@ -3058,34 +3244,18 @@
     "=",
     "yes"
    ],
+   "actor_capacity": [
+    "=",
+    {
+     "empty_agitator_slots": [
+      ">=",
+      "1"
+     ]
+    }
+   ],
    "possible": [
     "=",
     {
-     "scope:actor": [
-      [
-       "?=",
-       {
-        "empty_agitator_slots": [
-         ">=",
-         "1"
-        ]
-       }
-      ],
-      [
-       "?=",
-       {
-        "NOT": [
-         "=",
-         {
-          "has_law_or_variant": [
-           "=",
-           "law_type:law_closed_borders"
-          ]
-         }
-        ]
-       }
-      ]
-     ],
      "trigger_if": [
       [
        "=",
@@ -3166,6 +3336,20 @@
        "value": [
         ">=",
         "acceptance_status_3"
+       ]
+      }
+     ],
+     "scope:actor": [
+      "?=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_law_or_variant": [
+          "=",
+          "law_type:law_closed_borders"
+         ]
+        }
        ]
       }
      ],
@@ -3266,9 +3450,9 @@
            "limit": [
             "=",
             {
-             "has_variable": [
+             "has_template": [
               "=",
-              "nightingale_var"
+              "GBR_florence_nightingale"
              ]
             }
            ],
@@ -3617,6 +3801,114 @@
         "limit": [
          "=",
          {
+          "OR": [
+           "=",
+           {
+            "AND": [
+             [
+              "=",
+              {
+               "scope:actor": [
+                "?=",
+                {
+                 "divided_monarchists_ai_backs_orleanist": [
+                  "=",
+                  "yes"
+                 ]
+                }
+               ],
+               "has_ideology": [
+                "=",
+                "ideology:ideology_orleanist"
+               ]
+              }
+             ],
+             [
+              "=",
+              {
+               "scope:actor": [
+                "?=",
+                {
+                 "divided_monarchists_ai_backs_legitimist": [
+                  "=",
+                  "yes"
+                 ]
+                }
+               ],
+               "has_ideology": [
+                "=",
+                "ideology:ideology_legitimist"
+               ]
+              }
+             ],
+             [
+              "=",
+              {
+               "scope:actor": [
+                "?=",
+                {
+                 "divided_monarchists_ai_backs_bonapartist": [
+                  "=",
+                  "yes"
+                 ]
+                }
+               ],
+               "has_ideology": [
+                "=",
+                "ideology:ideology_bonapartist"
+               ]
+              }
+             ],
+             [
+              "=",
+              {
+               "scope:actor": [
+                "?=",
+                {
+                 "ai_wants_radicals": [
+                  "=",
+                  "yes"
+                 ]
+                }
+               ],
+               "OR": [
+                "=",
+                {
+                 "has_ideology": [
+                  [
+                   "=",
+                   "ideology:ideology_republican_leader"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_radical"
+                  ],
+                  [
+                   "=",
+                   "ideology:ideology_positivist"
+                  ]
+                 ]
+                }
+               ]
+              }
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "150"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "scope:actor": [
            "?=",
            {
@@ -3824,6 +4116,24 @@
        ]
       }
      ],
+     "else_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "rlit_pushkin_needed_for_golden_age": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "rlit_pushkin_force_duel_effect": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
      "else": [
       "=",
       {
@@ -3839,6 +4149,15 @@
              "general",
              "admiral"
             ]
+           ]
+          }
+         ],
+         "retired_commander_becomes_politician_roll_effect": [
+          "=",
+          {
+           "CHANCE_MULT": [
+            "=",
+            "define:NCharacters|RETIRED_COMMANDER_POLITICIAN_FORCED_CHANCE_MULT"
            ]
           }
          ],
@@ -4236,6 +4555,117 @@
          "-150"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "save_temporary_scope_as": [
+           "=",
+           "tp_retire_candidate_scope"
+          ],
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_fav_bootlicker"
+            ],
+            "is_at_war": [
+             "=",
+             "no"
+            ],
+            "OR": [
+             "=",
+             {
+              "var:tp_bootlicker_rival_1": [
+               "?=",
+               "scope:tp_retire_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_2": [
+               "?=",
+               "scope:tp_retire_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_3": [
+               "?=",
+               "scope:tp_retire_candidate_scope"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ],
+          "owner": [
+           "?=",
+           {
+            "is_at_war": [
+             "=",
+             "no"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_alexander_pushkin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_matches_divided_monarchists_ai_path": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
       ]
      ]
     }
@@ -4550,11 +4980,11 @@
            ],
            [
             "=",
-            "ideology:ideology_social_democrat"
+            "ideology:ideology_state_socialist"
            ],
            [
             "=",
-            "ideology:ideology_communist"
+            "ideology:ideology_communist_leader"
            ],
            [
             "=",
@@ -4625,7 +5055,30 @@
     {
      "value": [
       "=",
-      "1"
+      "0"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "scope:actor": [
+          "?=",
+          {
+           "divided_monarchists_ai_backs_bonapartist": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "100"
+       ]
+      }
      ]
     }
    ]
@@ -4762,11 +5215,11 @@
            ],
            [
             "=",
-            "ideology:ideology_social_democrat"
+            "ideology:ideology_state_socialist"
            ],
            [
             "=",
-            "ideology:ideology_communist"
+            "ideology:ideology_communist_leader"
            ],
            [
             "=",
@@ -4841,7 +5294,30 @@
     {
      "value": [
       "=",
-      "1"
+      "0"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "scope:actor": [
+          "?=",
+          {
+           "divided_monarchists_ai_backs_legitimist": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "100"
+       ]
+      }
      ]
     }
    ]
@@ -4978,11 +5454,11 @@
            ],
            [
             "=",
-            "ideology:ideology_social_democrat"
+            "ideology:ideology_state_socialist"
            ],
            [
             "=",
-            "ideology:ideology_communist"
+            "ideology:ideology_communist_leader"
            ],
            [
             "=",
@@ -5057,7 +5533,30 @@
     {
      "value": [
       "=",
-      "1"
+      "0"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "scope:actor": [
+          "?=",
+          {
+           "divided_monarchists_ai_backs_orleanist": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "100"
+       ]
+      }
      ]
     }
    ]
@@ -5133,29 +5632,6 @@
    "effect": [
     "=",
     {
-     "hidden_effect": [
-      "=",
-      {
-       "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "is_immortal": [
-            "=",
-            "yes"
-           ]
-          }
-         ],
-         "set_character_immortal": [
-          "=",
-          "no"
-         ]
-        }
-       ]
-      }
-     ],
      "owner": [
       "=",
       {
@@ -5470,9 +5946,9 @@
              "NOT": [
               "=",
               {
-               "has_variable": [
-                "=",
-                "house_tokugawa"
+               "var:dynasty_var": [
+                "?=",
+                "flag:house_tokugawa"
                ]
               }
              ]
@@ -5518,9 +5994,9 @@
              "NOT": [
               "=",
               {
-               "has_variable": [
-                "=",
-                "house_yamato"
+               "var:dynasty_var": [
+                "?=",
+                "flag:house_yamato"
                ]
               }
              ]
@@ -5556,6 +6032,24 @@
       }
      ],
      "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "rlit_pushkin_needed_for_golden_age": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "rlit_pushkin_force_duel_effect": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "else_if": [
       "=",
       {
        "limit": [
@@ -6471,6 +6965,37 @@
         "limit": [
          "=",
          {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ],
+          "OR": [
+           "=",
+           {
+            "is_interest_group_leader": [
+             "=",
+             "yes"
+            ],
+            "has_role_of_type": [
+             "=",
+             "agitator"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "40"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "has_role_of_type": [
            "=",
            "agitator"
@@ -6511,6 +7036,46 @@
         "multiply": [
          "=",
          "1.5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_grigoriy_rasputin"
+          ],
+          "has_role": [
+           "=",
+           "character_role_favorite"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_alexander_pushkin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
         ]
        }
       ]
@@ -7055,6 +7620,20 @@
      "has_dlc_feature": [
       "=",
       "ip2_content"
+     ],
+     "scope:actor": [
+      "?=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_regional_exile_pool_access": [
+          "=",
+          "siberian_exile_pool"
+         ]
+        }
+       ]
+      }
      ]
     }
    ],
@@ -7159,16 +7738,39 @@
        ]
       }
      ],
-     "trigger_event": [
+     "if": [
       "=",
       {
-       "id": [
+       "limit": [
         "=",
-        "jail.1"
+        {
+         "rlit_pushkin_needed_for_golden_age": [
+          "=",
+          "yes"
+         ]
+        }
        ],
-       "popup": [
+       "rlit_pushkin_force_duel_effect": [
         "=",
         "yes"
+       ]
+      }
+     ],
+     "else": [
+      "=",
+      {
+       "trigger_event": [
+        "=",
+        {
+         "id": [
+          "=",
+          "jail.1"
+         ],
+         "popup": [
+          "=",
+          "yes"
+         ]
+        }
        ]
       }
      ]
@@ -7469,6 +8071,69 @@
          "10"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "ai_wants_radicals": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          "character_is_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_alexander_pushkin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
       ]
      ]
     }
@@ -7620,24 +8285,6 @@
              }
             ],
             "has_progressive_ideology": [
-             "=",
-             "yes"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "owner.ruler": [
-             "?=",
-             {
-              "has_liberal_ideology": [
-               "=",
-               "yes"
-              ]
-             }
-            ],
-            "has_liberal_ideology": [
              "=",
              "yes"
             ]
@@ -8209,6 +8856,199 @@
          "100"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_pool_decrease_landowner_influence"
+            ],
+            "ruler": [
+             "?=",
+             {
+              "is_interest_group_type": [
+               "=",
+               "ig_landowners"
+              ]
+             }
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_landowners"
+          ],
+          "je_tsarpoints_landowner_ideology_close_enough": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_crown_of_perfection"
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "is_interest_group_type": [
+             [
+              "=",
+              "ig_intelligentsia"
+             ],
+             [
+              "=",
+              "ig_petty_bourgeoisie"
+             ],
+             [
+              "=",
+              "ig_industrialists"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "is_interest_group_type": [
+             "=",
+             "ig_intelligentsia"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "50"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_heir_of_alexander"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_heir_of_alexander_button_4_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_rural_folk"
+          ],
+          "is_interest_group_leader": [
+           "=",
+           "yes"
+          ],
+          "OR": [
+           "=",
+           {
+            "has_conservative_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_reactionary_ideology": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_divided_monarchists"
+            ]
+           }
+          ],
+          "character_matches_divided_monarchists_ai_path": [
+           "=",
+           "yes"
+          ],
+          "OR": [
+           "=",
+           {
+            "is_interest_group_leader": [
+             "=",
+             "yes"
+            ],
+            "has_role_of_type": [
+             "=",
+             "agitator"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
       ]
      ]
     }
@@ -8769,24 +9609,6 @@
                "owner.ruler": [
                 "?=",
                 {
-                 "has_liberal_ideology": [
-                  "=",
-                  "yes"
-                 ]
-                }
-               ],
-               "has_liberal_ideology": [
-                "=",
-                "yes"
-               ]
-              }
-             ],
-             [
-              "=",
-              {
-               "owner.ruler": [
-                "?=",
-                {
                  "has_socialist_ideology": [
                   "=",
                   "yes"
@@ -9017,6 +9839,139 @@
         "add": [
          "=",
          "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_pool_decrease_landowner_influence"
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_landowners"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_heir_of_alexander"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_heir_of_alexander_button_4_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_rural_folk"
+          ],
+          "is_interest_group_leader": [
+           "=",
+           "no"
+          ],
+          "has_role_of_type": [
+           "=",
+           "politician"
+          ],
+          "OR": [
+           "=",
+           {
+            "has_liberal_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_progressive_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_socialist_ideology": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "character_is_rival_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "ai_wants_radicals": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          "character_is_french_house": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "50"
         ]
        }
       ],
@@ -9566,24 +10521,6 @@
             "owner.ruler": [
              "?=",
              {
-              "has_liberal_ideology": [
-               "=",
-               "yes"
-              ]
-             }
-            ],
-            "has_liberal_ideology": [
-             "=",
-             "yes"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "owner.ruler": [
-             "?=",
-             {
               "has_socialist_ideology": [
                "=",
                "yes"
@@ -9954,6 +10891,2165 @@
         "add": [
          "=",
          "100"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "exile_to_siberia": [
+  "=",
+  {
+   "clicksound": [
+    "=",
+    "\"event:/SFX/DLC/1.3_ip1/UI/exile_character\""
+   ],
+   "should_ai_evaluate": [
+    "=",
+    {
+     "OR": [
+      "=",
+      {
+       "has_law_or_variant": [
+        [
+         "=",
+         "law_type:law_autocracy"
+        ],
+        [
+         "=",
+         "law_type:law_oligarchy"
+        ],
+        [
+         "=",
+         "law_type:law_single_party_state"
+        ],
+        [
+         "=",
+         "law_type:law_secret_police"
+        ],
+        [
+         "=",
+         "law_type:law_outlawed_dissent"
+        ],
+        [
+         "=",
+         "law_type:law_censorship"
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "regional_exile_pools"
+     ],
+     "is_in_exile_pool": [
+      "=",
+      "no"
+     ],
+     "is_in_void": [
+      "=",
+      "no"
+     ],
+     "is_ruler_of_own_country": [
+      "=",
+      "no"
+     ],
+     "is_heir_of_own_country": [
+      "=",
+      "no"
+     ],
+     "OR": [
+      "=",
+      {
+       "has_role_of_type": [
+        [
+         "=",
+         "executive"
+        ],
+        [
+         "=",
+         "magnate"
+        ],
+        [
+         "=",
+         "politician"
+        ],
+        [
+         "=",
+         "agitator"
+        ],
+        [
+         "=",
+         "favorite"
+        ]
+       ]
+      }
+     ],
+     "scope:actor": [
+      "?=",
+      {
+       "has_regional_exile_pool_access": [
+        "=",
+        "siberian_exile_pool"
+       ]
+      }
+     ]
+    }
+   ],
+   "show_requirements": [
+    "=",
+    "yes"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "NOR": [
+        "=",
+        {
+         "has_law_or_variant": [
+          [
+           "=",
+           "law_type:law_protected_speech"
+          ],
+          [
+           "=",
+           "law_type:law_guaranteed_liberties"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "is_busy": [
+      "=",
+      "no"
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_role_of_type": [
+          "=",
+          "agitator"
+         ]
+        }
+       ],
+       "political_movement": [
+        "?=",
+        {
+         "is_insurrectionary": [
+          "=",
+          "no"
+         ]
+        }
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "interest_group": [
+        "?=",
+        {
+         "is_in_government": [
+          "=",
+          "no"
+         ],
+         "is_insurrectionary": [
+          "=",
+          "no"
+         ],
+         "ig_counts_as_marginal": [
+          "=",
+          "no"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "effect": [
+    "=",
+    {
+     "this": [
+      "=",
+      {
+       "save_scope_as": [
+        "=",
+        "siberian_exile_scope"
+       ]
+      }
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "rlit_pushkin_needed_for_golden_age": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "rlit_pushkin_force_duel_effect": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "else": [
+      "=",
+      {
+       "scope:actor": [
+        "?=",
+        {
+         "trigger_event": [
+          "=",
+          {
+           "id": [
+            "=",
+            "siberia.1"
+           ],
+           "popup": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "cooldown": [
+    "=",
+    {
+     "days": [
+      "=",
+      "siberian_exile_cooldown_time"
+     ]
+    }
+   ],
+   "show_confirmation_box": [
+    "=",
+    "yes"
+   ],
+   "ai_chance": [
+    "=",
+    {
+     "value": [
+      "=",
+      "0"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "interest_group": [
+             "?=",
+             {
+              "ig_approval": [
+               "<",
+               "0"
+              ]
+             }
+            ],
+            "political_movement": [
+             "?=",
+             {
+              "is_being_suppressed": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "popularity"
+          ],
+          "multiply": [
+           "=",
+           "0.25"
+          ]
+         }
+        ],
+        "if": [
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_role_of_type": [
+              "=",
+              "agitator"
+             ],
+             "OR": [
+              "=",
+              {
+               "has_trait": [
+                [
+                 "=",
+                 "ambitious"
+                ],
+                [
+                 "=",
+                 "wrathful"
+                ],
+                [
+                 "=",
+                 "ruthless"
+                ],
+                [
+                 "=",
+                 "bandit"
+                ],
+                [
+                 "=",
+                 "social_bandit"
+                ],
+                [
+                 "=",
+                 "special_character_luxemburg_in_exile"
+                ]
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_outlawed_dissent"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_secret_police"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "interest_group": [
+              "?=",
+              {
+               "ig_approval": [
+                "<=",
+                "-5"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_conservative_agenda"
+               ]
+              }
+             ],
+             "has_liberal_ideology": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "NOT": [
+              "=",
+              {
+               "has_role_of_type": [
+                "=",
+                "agitator"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.25"
+           ]
+          }
+         ]
+        ],
+        "else_if": [
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_censorship"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_right_of_assembly"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.75"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_national_guard"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.25"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_law_or_variant": [
+                "=",
+                "law_type:law_no_home_affairs"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "interest_group": [
+              "?=",
+              {
+               "ig_approval": [
+                "<=",
+                "-10"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "1.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_progressive_agenda"
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_liberal_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_egalitarian_agenda"
+               ],
+               "NOT": [
+                "=",
+                {
+                 "has_law_or_variant": [
+                  "=",
+                  "law_type:law_council_republic"
+                 ]
+                }
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_liberal_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_socialist_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:actor": [
+              "?=",
+              {
+               "has_strategy": [
+                "=",
+                "ai_strategy_egalitarian_agenda"
+               ]
+              }
+             ],
+             "OR": [
+              "=",
+              {
+               "has_progressive_ideology": [
+                "=",
+                "yes"
+               ],
+               "has_socialist_ideology": [
+                "=",
+                "yes"
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_unshakable_autocracy"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_unshakable_autocracy_button_1_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "has_role_of_type": [
+           "=",
+           "agitator"
+          ],
+          "OR": [
+           "=",
+           {
+            "has_socialist_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_progressive_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_liberal_ideology": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "20"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "save_temporary_scope_as": [
+           "=",
+           "tp_exile_candidate_scope"
+          ],
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_fav_bootlicker"
+            ],
+            "OR": [
+             "=",
+             {
+              "var:tp_bootlicker_rival_1": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_2": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ],
+              "var:tp_bootlicker_rival_3": [
+               "?=",
+               "scope:tp_exile_candidate_scope"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "30"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_pool_decrease_landowner_influence"
+            ],
+            "ruler": [
+             "?=",
+             {
+              "is_interest_group_type": [
+               "=",
+               "ig_landowners"
+              ]
+             }
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_landowners"
+          ],
+          "is_interest_group_leader": [
+           "=",
+           "yes"
+          ],
+          "je_tsarpoints_landowner_ideology_close_enough": [
+           "=",
+           "no"
+          ],
+          "interest_group": [
+           "?=",
+           {
+            "any_scope_character": [
+             "=",
+             {
+              "has_role_of_type": [
+               "=",
+               "politician"
+              ],
+              "is_interest_group_leader": [
+               "=",
+               "no"
+              ],
+              "je_tsarpoints_landowner_ideology_close_enough": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "40"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_heir_of_alexander"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_heir_of_alexander_button_4_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_rural_folk"
+          ],
+          "is_interest_group_leader": [
+           "=",
+           "yes"
+          ],
+          "OR": [
+           "=",
+           {
+            "has_liberal_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_progressive_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_socialist_ideology": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "40"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_grigoriy_rasputin"
+          ],
+          "has_role": [
+           "=",
+           "character_role_favorite"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_alexander_pushkin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "appoint_favorite": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/character_role_icons/favorite.dds\""
+   ],
+   "clicksound": [
+    "=",
+    "\"event:/SFX/UI/Military/command_grant\""
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "owner": [
+      "?=",
+      "scope:actor"
+     ],
+     "is_ruler_of_own_country": [
+      "=",
+      "no"
+     ],
+     "is_heir_of_own_country": [
+      "=",
+      "no"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_role": [
+        "=",
+        "character_role_favorite"
+       ]
+      }
+     ]
+    }
+   ],
+   "show_requirements": [
+    "=",
+    "yes"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "can_have_favorites": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "has_variable": [
+            "=",
+            "rasputin1_active_var"
+           ]
+          }
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "rasputin1_active_tt"
+         ],
+         "NOT": [
+          "=",
+          {
+           "owner": [
+            "?=",
+            {
+             "has_variable": [
+              "=",
+              "rasputin1_active_var"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "effect": [
+    "=",
+    {
+     "owner": [
+      [
+       "?=",
+       {
+        "random_scope_character": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_role": [
+             "=",
+             "character_role_favorite"
+            ]
+           }
+          ],
+          "revoke_favorite_effect": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "?=",
+       {
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tsarpoints_master"
+            ]
+           }
+          ],
+          "trigger_event": [
+           "=",
+           {
+            "id": [
+             "=",
+             "tsarpoints_events.6"
+            ],
+            "popup": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "any_interest_group": [
+             "=",
+             {
+              "favorite_appointment_ig_penalty": [
+               ">=",
+               "1"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         "appoint_favorite_controversy_tt"
+        ],
+        "owner": [
+         "?=",
+         {
+          "every_interest_group": [
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "favorite_appointment_ig_penalty": [
+                ">=",
+                "1"
+               ]
+              }
+             ],
+             "add_modifier": [
+              "=",
+              {
+               "name": [
+                "=",
+                "modifier_controversial_favorite"
+               ],
+               "days": [
+                "=",
+                "normal_modifier_time"
+               ],
+               "is_decaying": [
+                "=",
+                "yes"
+               ],
+               "multiplier": [
+                "=",
+                "favorite_appointment_ig_penalty"
+               ]
+              }
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "favorite_appointment_ig_penalty": [
+                ">=",
+                "1"
+               ],
+               "favorite_appointment_ig_radicals": [
+                ">=",
+                "0.01"
+               ]
+              }
+             ],
+             "save_temporary_scope_as": [
+              "=",
+              "controversial_favorite_ig"
+             ],
+             "owner": [
+              "=",
+              {
+               "add_radicals": [
+                "=",
+                {
+                 "value": [
+                  "=",
+                  "scope:controversial_favorite_ig.favorite_appointment_ig_radicals"
+                 ],
+                 "interest_group": [
+                  "=",
+                  "scope:controversial_favorite_ig"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_modifier": [
+           "=",
+           "revoked_favorite"
+          ]
+         }
+        ],
+        "remove_modifier": [
+         "=",
+         "revoked_favorite"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_grigoriy_rasputin"
+          ],
+          "owner": [
+           "?=",
+           {
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_fav_rasputin_complete_var"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "owner": [
+         "?=",
+         {
+          "random_scope_character": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_template": [
+               "=",
+               "RUS_alexei_ii"
+              ],
+              "NOT": [
+               "=",
+               {
+                "has_modifier": [
+                 "=",
+                 "modifier_faith_healing"
+                ]
+               }
+              ]
+             }
+            ],
+            "add_modifier": [
+             "=",
+             {
+              "name": [
+               "=",
+               "modifier_faith_healing"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ],
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "appoint_favorite_effect_tt"
+       ],
+       "add_character_role": [
+        "=",
+        "favorite"
+       ]
+      }
+     ]
+    }
+   ],
+   "cooldown": [
+    "=",
+    {
+     "days": [
+      "=",
+      "normal_modifier_time"
+     ]
+    }
+   ],
+   "ai_chance": [
+    "=",
+    {
+     "value": [
+      "=",
+      "0"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "NOT": [
+            "=",
+            {
+             "any_scope_character": [
+              "=",
+              {
+               "has_role": [
+                "=",
+                "character_role_favorite"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ],
+         "interest_group": [
+          "?=",
+          {
+           "is_insurrectionary": [
+            "=",
+            "no"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "5"
+       ],
+       "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_journal_entry": [
+               "=",
+               "je_tsarpoints_master"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "10"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "interest_group": [
+             "?=",
+             {
+              "OR": [
+               "=",
+               {
+                "is_powerful": [
+                 "=",
+                 "yes"
+                ],
+                "is_in_government": [
+                 "=",
+                 "yes"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "25"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "is_interest_group_leader": [
+               "=",
+               "yes"
+              ],
+              "has_role": [
+               [
+                "=",
+                "character_role_general"
+               ],
+               [
+                "=",
+                "character_role_admiral"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "10"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_template": [
+             "=",
+             "RUS_grigoriy_rasputin"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "60"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "OR": [
+               "=",
+               {
+                "has_strategy": [
+                 [
+                  "=",
+                  "ai_strategy_reactionary_agenda"
+                 ],
+                 [
+                  "=",
+                  "ai_strategy_conservative_agenda"
+                 ]
+                ]
+               }
+              ]
+             }
+            ],
+            "OR": [
+             "=",
+             {
+              "is_interest_group_type": [
+               [
+                "=",
+                "ig_landowners"
+               ],
+               [
+                "=",
+                "ig_devout"
+               ],
+               [
+                "=",
+                "ig_armed_forces"
+               ]
+              ],
+              "has_ideology": [
+               [
+                "=",
+                "ideology:ideology_traditionalist"
+               ],
+               [
+                "=",
+                "ideology:ideology_royalist"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "20"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "OR": [
+               "=",
+               {
+                "has_strategy": [
+                 [
+                  "=",
+                  "ai_strategy_progressive_agenda"
+                 ],
+                 [
+                  "=",
+                  "ai_strategy_great_reforms"
+                 ]
+                ]
+               }
+              ]
+             }
+            ],
+            "OR": [
+             "=",
+             {
+              "is_interest_group_type": [
+               [
+                "=",
+                "ig_intelligentsia"
+               ],
+               [
+                "=",
+                "ig_industrialists"
+               ],
+               [
+                "=",
+                "ig_petty_bourgeoisie"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "20"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_ideology": [
+             "=",
+             "ideology:ideology_modernizer_leader"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "20"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_template": [
+             "=",
+             "rus_witte_character_template"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "80"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_journal_entry": [
+               "=",
+               "je_tp_pool_decrease_landowner_influence"
+              ]
+             }
+            ],
+            "is_interest_group_type": [
+             "=",
+             "ig_landowners"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "-100"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "has_journal_entry": [
+               "=",
+               "je_tp_tsar_crown_of_perfection"
+              ],
+              "NOT": [
+               "=",
+               {
+                "has_variable": [
+                 "=",
+                 "je_tp_tsar_crown_of_perfection_button_1_complete"
+                ]
+               }
+              ]
+             }
+            ],
+            "is_interest_group_type": [
+             "=",
+             "ig_intelligentsia"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "50"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "owner": [
+             "?=",
+             {
+              "OR": [
+               "=",
+               {
+                "c:RUS": [
+                 "?=",
+                 "this"
+                ],
+                "has_journal_entry": [
+                 "=",
+                 "je_tsarpoints_master"
+                ]
+               }
+              ]
+             }
+            ],
+            "OR": [
+             "=",
+             {
+              "is_interest_group_type": [
+               "=",
+               "ig_armed_forces"
+              ],
+              "has_role": [
+               [
+                "=",
+                "character_role_general"
+               ],
+               [
+                "=",
+                "character_role_admiral"
+               ]
+              ],
+              "has_ideology": [
+               "=",
+               "ideology:ideology_jingoist_leader"
+              ]
+             }
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "0.25"
+          ]
+         }
+        ]
+       ],
+       "subtract": [
+        "=",
+        {
+         "value": [
+          "=",
+          "favorite_appointment_controversy"
+         ],
+         "multiply": [
+          "=",
+          "5"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "revoke_favorite": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/character_role_icons/favorite.dds\""
+   ],
+   "clicksound": [
+    "=",
+    "\"event:/SFX/UI/Military/commander_retire\""
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip5_content"
+     ],
+     "owner": [
+      "?=",
+      "scope:actor"
+     ],
+     "has_role": [
+      "=",
+      "character_role_favorite"
+     ]
+    }
+   ],
+   "show_requirements": [
+    "=",
+    "yes"
+   ],
+   "possible": [
+    "=",
+    {
+     "current_career_length": [
+      "=",
+      {
+       "role": [
+        "=",
+        "character_role_favorite"
+       ],
+       "months": [
+        "=",
+        "12"
+       ]
+      }
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "has_variable": [
+            "=",
+            "rasputin1_active_var"
+           ]
+          }
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "rasputin1_active_tt"
+         ],
+         "NOT": [
+          "=",
+          {
+           "owner": [
+            "?=",
+            {
+             "has_variable": [
+              "=",
+              "rasputin1_active_var"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "effect": [
+    "=",
+    {
+     "revoke_favorite_effect": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_chance": [
+    "=",
+    {
+     "value": [
+      "=",
+      "0"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "interest_group": [
+           "?=",
+           {
+            "is_insurrectionary": [
+             "=",
+             "yes"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "80"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_strategy": [
+               [
+                "=",
+                "ai_strategy_reactionary_agenda"
+               ],
+               [
+                "=",
+                "ai_strategy_conservative_agenda"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "has_socialist_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_progressive_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_liberal_ideology": [
+             "=",
+             "yes"
+            ],
+            "is_interest_group_type": [
+             "=",
+             "ig_trade_unions"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_strategy": [
+               [
+                "=",
+                "ai_strategy_progressive_agenda"
+               ],
+               [
+                "=",
+                "ai_strategy_egalitarian_agenda"
+               ],
+               [
+                "=",
+                "ai_strategy_great_reforms"
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "has_reactionary_ideology": [
+             "=",
+             "yes"
+            ],
+            "has_ideology": [
+             [
+              "=",
+              "ideology:ideology_traditionalist"
+             ],
+             [
+              "=",
+              "ideology:ideology_royalist"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "15"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "interest_group": [
+           "?=",
+           {
+            "ig_approval": [
+             "<=",
+             "-10"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_pool_decrease_landowner_influence"
+            ]
+           }
+          ],
+          "is_interest_group_type": [
+           "=",
+           "ig_landowners"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_crown_of_perfection"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_crown_of_perfection_button_1_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "NOT": [
+           "=",
+           {
+            "is_interest_group_type": [
+             "=",
+             "ig_intelligentsia"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "100"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_template": [
+           "=",
+           "RUS_grigoriy_rasputin"
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "0.01"
         ]
        }
       ]

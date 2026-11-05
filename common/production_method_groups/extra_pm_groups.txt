@@ -414,6 +414,28 @@ INJECT:pmg_steam_automation_building_gold_mine = {
 		pm_laser_excavation_technology_gold_mine
 	}
 }
+INJECT:pmg_mining_equipment_building_copper_mine = {
+	production_methods = {
+		pm_high_pressure_hydraulic_pump_building_copper_mine
+		pm_continuous_miners_building_copper_mine
+		pm_smart_miners_building_copper_mine
+	}
+}
+INJECT:pmg_explosives_building_copper_mine = {
+	production_methods = {
+		pm_ammonium_nitrate_building_copper_mine
+		pm_metamaterial_explosives_building_copper_mine
+	}
+}
+INJECT:pmg_steam_automation_building_copper_mine = {
+	production_methods = {
+		pm_dragline_excavators_copper_mine
+		pm_large_scale_earth_movers_copper_mine
+		pm_geophysical_survey_techniques_copper_mine
+		pm_ore_sorting_and_separation_technology_copper_mine
+		pm_laser_excavation_technology_copper_mine
+	}
+}
 REPLACE_OR_CREATE:pmg_mining_equipment_building_tech_metals_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	production_methods = {
@@ -599,7 +621,6 @@ INJECT:pmg_government_administration_bureaucrat_professionalism = {
 	production_methods = {
 		pm_automated_casework
 		pm_service_contractors
-		pm_recallable_delegates
 	}
 }
 INJECT:pmg_base_building_university = {
@@ -1185,6 +1206,16 @@ REPLACE_OR_CREATE:pmg_train_automation_building_sulfur_mine = {
 }
 
 REPLACE_OR_CREATE:pmg_train_automation_building_gold_mine = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
+	production_methods = {
+		pm_road_carts
+		pm_partial_bulk_transport
+		pm_rail_transport_mine
+		pm_rail_transport_mine_infrastructure_4
+	}
+}
+
+REPLACE_OR_CREATE:pmg_train_automation_building_copper_mine = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_automation.dds"
 	production_methods = {
 		pm_road_carts

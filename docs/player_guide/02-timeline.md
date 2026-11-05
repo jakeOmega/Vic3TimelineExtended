@@ -236,7 +236,7 @@ movements](07-social-movements.md).
 ## New goods
 
 The new industries trade in thirteen goods the base game doesn't have, and the mod
-renames twelve base-game goods to fit a longer timeline.
+renames eleven base-game goods to fit a longer timeline.
 
 ### Goods the mod adds
 
@@ -269,7 +269,8 @@ the same goods underneath, so base-game buildings still make and use them.
 |---|---|
 | Coal | Energy and Carbon Minerals |
 | Iron | Structural Metals |
-| Lead | Conductive and Base Metals |
+| Lead | Base Metals |
+| Copper | Conductive Metals |
 | Sulfur | Chemical and Industrial Minerals |
 | Fertilizer | Chemicals |
 | Glass | Glass and Plastics |
@@ -291,7 +292,7 @@ most base-game buildings with production methods for the new eras.
 
 ### New mines and extraction
 
-Fourteen new mines work deposits of specific minerals. Ten of them produce one
+Thirteen new mines work deposits of specific minerals. Nine of them produce one
 of the renamed resource goods, adding supply to existing chains; the other four
 produce the new Tech-Critical Metals. Resource deposits are covered in [New
 mineral deposits](03-economy.md#new-mineral-deposits).
@@ -299,7 +300,7 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 | Mine | Produces |
 |---|---|
 | Manganese, Chromium, Bauxite, Specialty Alloy Metal | Structural Metals |
-| Copper, Precious and Minor Base Metal | Conductive and Base Metals |
+| Precious and Minor Base Metal | Base Metals |
 | Nickel and Cobalt, Lithium, Rare Earth Metals, Platinum Group Metals | Tech-Critical Metals |
 | Graphite | Energy and Carbon Minerals |
 | Phosphate, Potash, Industrial Mineral and Salt | Chemical and Industrial Minerals |

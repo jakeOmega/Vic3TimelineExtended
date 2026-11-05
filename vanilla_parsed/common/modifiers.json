@@ -112,7 +112,7 @@
    ],
    "state_literacy_growth_add": [
     "=",
-    "0.0005"
+    "0.002"
    ],
    "building_economy_of_scale_level_cap_add": [
     "=",
@@ -562,7 +562,7 @@
    ]
   }
  ],
- "war_support_battle_effects": [
+ "war_support_battle_effects_army": [
   "=",
   {
    "unit_offense_mult": [
@@ -580,6 +580,19 @@
    "unit_morale_damage_mult": [
     "=",
     "-0.5"
+   ]
+  }
+ ],
+ "war_support_battle_effects_navy": [
+  "=",
+  {
+   "ship_hull_damage_mult": [
+    "=",
+    "-0.2"
+   ],
+   "ship_crew_damage_mult": [
+    "=",
+    "-0.2"
    ]
   }
  ],
@@ -1928,7 +1941,7 @@
    ],
    "state_infrastructure_mult": [
     "=",
-    "-1.0"
+    "-0.75"
    ],
    "state_mortality_mult": [
     "=",
@@ -2406,6 +2419,19 @@
    "character_loyalty_add": [
     "=",
     "10"
+   ]
+  }
+ ],
+ "revoked_favorite": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "character_loyalty_add": [
+    "=",
+    "-50"
    ]
   }
  ],
@@ -5801,6 +5827,32 @@
    "interest_group_approval_add": [
     "=",
     "2"
+   ]
+  }
+ ],
+ "modifier_republican_intelligentsia": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "modifier_republican_movement_growing": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.2"
    ]
   }
  ],
@@ -10791,11 +10843,15 @@
    ],
    "building_rye_farm_throughput_add": [
     "=",
-    "-0.3"
+    "-0.4"
    ],
    "building_wheat_farm_throughput_add": [
     "=",
-    "-0.15"
+    "-0.2"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.10"
    ],
    "state_harvest_condition_disease_outbreak_impact_mult": [
     "=",
@@ -10808,19 +10864,23 @@
   {
    "icon": [
     "=",
-    "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
    ],
    "building_rye_farm_throughput_add": [
     "=",
-    "-0.15"
+    "0.2"
    ],
    "building_wheat_farm_throughput_add": [
     "=",
-    "-0.10"
+    "0.1"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "-0.05"
    ],
    "state_harvest_condition_disease_outbreak_impact_mult": [
     "=",
-    "0.25"
+    "-0.25"
    ],
    "state_import_advantage_mult": [
     "=",
@@ -11456,7 +11516,7 @@
    ],
    "state_mortality_turmoil_mult": [
     "=",
-    "0.10"
+    "0.05"
    ],
    "state_conscription_rate_mult": [
     "=",
@@ -14950,6 +15010,2154 @@
    ]
   }
  ],
+ "modifier_tsarpoints": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
+   ],
+   "country_authority_add": [
+    "=",
+    "2"
+   ],
+   "country_prestige_add": [
+    "=",
+    "2"
+   ]
+  }
+ ],
+ "modifier_tsarpoints_legitimacy_boost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "20"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_tsarpoints_liberty_desire_boost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_influence_add": [
+    "=",
+    "50"
+   ],
+   "country_liberty_desire_of_subjects_add": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "modifier_tsarpoints_ig_boost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pol_str_mult": [
+    "=",
+    "0.4"
+   ]
+  }
+ ],
+ "modifier_uniate_dioceses_converted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "5"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "modifier_crypto_catholic_communities": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "state_radicals_from_political_movements_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_restoration_of_second_rome": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "state_pop_pol_str_mult": [
+    "=",
+    "0.50"
+   ],
+   "state_conversion_mult": [
+    "=",
+    "0.1"
+   ],
+   "state_migration_pull_mult": [
+    "=",
+    "0.25"
+   ],
+   "state_radicals_from_political_movements_mult": [
+    "=",
+    "0.1"
+   ],
+   "state_loyalists_from_political_movements_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_true_heir_of_rome": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "character_popularity_add": [
+    "=",
+    "40"
+   ]
+  }
+ ],
+ "modifier_orthodox_messianism": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ]
+  }
+ ],
+ "modifier_the_restorer": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "character_popularity_add": [
+    "=",
+    "40"
+   ]
+  }
+ ],
+ "modifier_model_governorate": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "state_migration_pull_mult": [
+    "=",
+    "0.2"
+   ],
+   "state_pop_pol_str_mult": [
+    "=",
+    "0.1"
+   ],
+   "state_assimilation_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_completed_parochial_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_completed_law_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_completed_industry_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_favorite_rebuffed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "-10"
+   ]
+  }
+ ],
+ "modifier_favorite_boosted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "10"
+   ],
+   "character_popularity_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "modifier_controversial_favorite": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-1"
+   ]
+  }
+ ],
+ "modifier_completed_bootlicker_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_completed_privatization_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_investment_flurry": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "state_capitalists_investment_pool_efficiency_mult": [
+    "=",
+    "0.15"
+   ],
+   "state_radicals_from_political_movements_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "modifier_completed_war_objective": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_regional_russification_payments": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "country_expenses_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_regional_russification_efforts": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "state_decree_cost_mult": [
+    "=",
+    "-0.20"
+   ]
+  }
+ ],
+ "modifier_je_russification_secured_ext": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_influence_mult": [
+    "=",
+    "0.2"
+   ],
+   "country_leverage_generation_mult": [
+    "=",
+    "0.2"
+   ]
+  }
+ ],
+ "modifier_je_russification_secured_int": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_bureaucracy_mult": [
+    "=",
+    "0.1"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_je_russification_ig_str": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "interest_group_pol_str_mult": [
+    "=",
+    "0.1"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_je_russification_loyal_prominence_gain": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "20"
+   ],
+   "character_loyalty_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "modifier_je_russification_loyal_prominence_loss": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "-20"
+   ],
+   "character_loyalty_add": [
+    "=",
+    "-10"
+   ]
+  }
+ ],
+ "modifier_je_russification_approval_loss": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_je_russification_decline_approval_loss": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "modifier_russify_state_success": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_pop_attraction_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "modifier_western_territory_incorporated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "state_migration_pull_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_candidate_reject_approval_loss": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_local_administration_autonomy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "state_assimilation_mult": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_doubling_origin": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_prestige_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "modifier_early_doubler": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "modifier_surveilled_artists": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "country_authority_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "modifier_ig_surveilled_artists_approval": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "modifier_artel_of_artists": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "state_pop_pol_str_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_peredvizhniki_political_movement": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "political_movement_radicalism_add": [
+    "=",
+    "0.1"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.2"
+   ]
+  }
+ ],
+ "modifier_peredvizhniki_art": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
+   ],
+   "goods_output_fine_art_mult": [
+    "=",
+    "0.35"
+   ]
+  }
+ ],
+ "modifier_ig_approves_peredvizhniki_rejection": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "modifier_russia_participation_cost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "country_expenses_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_russia_participation_prestige": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_prestige_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "modifier_russia_agricultural_showcase": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds"
+   ],
+   "building_group_bg_agriculture_throughput_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "modifier_russia_armaments_showcase": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+   ],
+   "country_company_throughput_bonus_add": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_russia_expo_research_speed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "country_society_tech_research_speed_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "modifier_chartering_the_stanitsas_expense": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "country_expenses_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_chartering_the_stanitsas_host_approval": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_ig_landowners_approval_add": [
+    "=",
+    "3"
+   ],
+   "interest_group_ig_armed_forces_approval_add": [
+    "=",
+    "3"
+   ],
+   "interest_group_ig_rural_folk_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_chartering_the_stanitsas_settlement": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
+   ],
+   "state_migration_pull_mult": [
+    "=",
+    "0.25"
+   ],
+   "state_turmoil_effects_mult": [
+    "=",
+    "-0.15"
+   ],
+   "state_conscription_rate_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_chartering_the_stanitsas_open_frontier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "state_turmoil_effects_mult": [
+    "=",
+    "0.15"
+   ],
+   "state_migration_pull_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "modifier_chartering_the_stanitsas_native_approval": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_ig_rural_folk_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "modifier_faith_healing": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_health_add": [
+    "=",
+    "0.3"
+   ]
+  }
+ ],
+ "modifier_rasputin_not_dismissed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "modifier_survived_assassination": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "character_health_add": [
+    "=",
+    "-0.2"
+   ]
+  }
+ ],
+ "modifier_rasputin_legit_instability": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-5"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "modifier_tsar_saved_rasputin": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "character_popularity_add": [
+    "=",
+    "-15"
+   ]
+  }
+ ],
+ "modifier_rasputin_ig_instability": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_miracle_worker": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "modifier_holy_blessing": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "character_health_add": [
+    "=",
+    "0.4"
+   ]
+  }
+ ],
+ "modifier_felix_ig_upset": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_formed_okhrana_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "modifier_formed_okhrana_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-3"
+   ]
+  }
+ ],
+ "modifier_crisis_of_social_democracy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.01"
+   ]
+  }
+ ],
+ "modifier_heroic_era_revolution": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds"
+   ],
+   "country_reform_or_revolution_revolution_bonus_add": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_heroic_era_reform": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_reform_or_revolution_reform_bonus_add": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_studying_the_commune": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_das_kapital": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_funding_capital": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "country_expenses_add": [
+    "=",
+    "500"
+   ]
+  }
+ ],
+ "modifier_sponsoring_baltic_conversions": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
+   ],
+   "country_authority_cost_add": [
+    "=",
+    "200"
+   ]
+  }
+ ],
+ "modifier_sponsoring_baltic_conversions_ig": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_factory_councils_amendment_repealed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "political_movement_radicalism_add": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "modifier_state_and_revolution_economic_confrontation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "state_trade_advantage_mult": [
+    "=",
+    "-0.01"
+   ],
+   "country_other_country_socialist_economy_hostility_impact_mult": [
+    "=",
+    "0.01"
+   ],
+   "country_loan_interest_rate_mult": [
+    "=",
+    "0.005"
+   ]
+  }
+ ],
+ "modifier_state_and_revolution_political_confrontation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "country_law_enactment_speed_mult": [
+    "=",
+    "0.005"
+   ],
+   "country_other_country_socialist_government_hostility_impact_mult": [
+    "=",
+    "0.01"
+   ],
+   "country_infamy_generation_mult": [
+    "=",
+    "-0.005"
+   ]
+  }
+ ],
+ "modifier_state_and_revolution_conciliation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "country_other_country_socialist_government_hostility_impact_mult": [
+    "=",
+    "-0.5"
+   ],
+   "country_other_country_socialist_economy_hostility_impact_mult": [
+    "=",
+    "-0.5"
+   ]
+  }
+ ],
+ "modifier_state_and_revolution_home_of_the_revolution": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "state_loyalists_from_political_movements_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_influence_mult": [
+    "=",
+    "0.5"
+   ],
+   "country_diplomatic_play_maneuvers_add": [
+    "=",
+    "50"
+   ]
+  }
+ ],
+ "modifier_state_and_revolution_employed_bourgeois_specialists": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "modifier_ukaz_spreading_counter_revolution": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "country_influence_cost_add": [
+    "=",
+    "100"
+   ]
+  }
+ ],
+ "modifier_general_secretary": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "modifier_commissar_for_nationalities": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "10"
+   ],
+   "character_popularity_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "modifier_marxism_and_the_national_question": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "country_enactment_success_chance_law_multicultural_add": [
+    "=",
+    "0.10"
+   ]
+  }
+ ],
+ "modifier_recall_overridden": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "country_bureaucrats_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "modifier_recall_overridden_military": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "country_bureaucrats_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_officers_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "modifier_spontaneous_enactment": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds"
+   ],
+   "country_law_enactment_success_add": [
+    "=",
+    "2"
+   ]
+  }
+ ],
+ "modifier_bureaucratic_veto": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "interest_group_ig_trade_unions_approval_add": [
+    "=",
+    "-3"
+   ],
+   "country_bureaucrats_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "modifier_defended_the_specialists": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "interest_group_ig_trade_unions_approval_add": [
+    "=",
+    "-3"
+   ],
+   "country_bureaucrats_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "modifier_wrecking_accusations": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "building_group_bg_heavy_industry_throughput_add": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "russian_mandates_refund": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "country_power_bloc_formation_mandates_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "russian_government_popular_opposition": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "1"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "1"
+   ],
+   "political_movement_radicalism_add": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "provisional_government_popular_opposition": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.5"
+   ]
+  }
+ ],
+ "supreme_ruthenian_council": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "10"
+   ],
+   "country_ukrainian_cultural_acceptance_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "ruthenian_representatives": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "5"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.2"
+   ],
+   "interest_group_ig_devout_pol_str_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "brotherhood_of_saints_cyril_and_methodius": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "ukrainophile_intelligentsia": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "5"
+   ],
+   "interest_group_ig_intelligentsia_pop_attraction_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "hromada": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "5"
+   ],
+   "state_peasants_education_access_add": [
+    "=",
+    "0.25"
+   ],
+   "state_literacy_growth_add": [
+    "=",
+    "0.0005"
+   ],
+   "building_art_academy_throughput_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "government_funded_prosvita": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "5"
+   ],
+   "state_education_access_add": [
+    "=",
+    "0.15"
+   ],
+   "state_literacy_growth_add": [
+    "=",
+    "0.0005"
+   ],
+   "state_ukrainian_standard_of_living_add": [
+    "=",
+    "2"
+   ]
+  }
+ ],
+ "self_funded_prosvita": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "2"
+   ],
+   "state_education_access_add": [
+    "=",
+    "0.05"
+   ],
+   "state_literacy_growth_add": [
+    "=",
+    "0.0005"
+   ],
+   "state_ukrainian_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "encouraged_chlopomania": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "interest_group_ig_intelligentsia_approval_add": [
+    "=",
+    "2"
+   ],
+   "country_fervor_target_ukrainian_add": [
+    "=",
+    "10"
+   ],
+   "country_fervor_target_polish_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "discouraged_chlopomania": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "interest_group_ig_intelligentsia_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "cultural_renaissance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.20"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "0.5"
+   ]
+  }
+ ],
+ "peasants_truth": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "letters_from_gallows": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "latin_alphabet_permitted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "latin_alphabet_banned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "state_education_access_add": [
+    "=",
+    "-0.05"
+   ],
+   "building_art_academy_throughput_add": [
+    "=",
+    "-0.2"
+   ]
+  }
+ ],
+ "local_linguistics_research": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds"
+   ],
+   "country_society_tech_research_speed_mult": [
+    "=",
+    "0.025"
+   ]
+  }
+ ],
+ "restricted_linguistics_research": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds"
+   ],
+   "country_society_tech_research_speed_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "hope_for_belarus": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "homan": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds"
+   ],
+   "country_fervor_target_byelorussian_add": [
+    "=",
+    "10"
+   ],
+   "state_pop_support_movement_communist_mult": [
+    "=",
+    "0.1"
+   ],
+   "state_pop_support_movement_cultural_minority_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "cultural_foundation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "15"
+   ],
+   "country_society_tech_research_speed_mult": [
+    "=",
+    "0.1"
+   ],
+   "country_law_enactment_speed_mult": [
+    "=",
+    "0.3"
+   ],
+   "country_law_enactment_success_add": [
+    "=",
+    "0.15"
+   ],
+   "state_decree_cost_mult": [
+    "=",
+    "-0.2"
+   ]
+  }
+ ],
+ "culture_suppressed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-15"
+   ],
+   "country_society_tech_research_speed_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "appeased_poland_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "interest_group_ig_landowners_approval_add": [
+    "=",
+    "-2"
+   ]
+  }
+ ],
+ "congress_poland_restrictions": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "country_disallow_army_creation_bool": [
+    "=",
+    "yes"
+   ],
+   "country_disallow_military_ship_construction_bool": [
+    "=",
+    "yes"
+   ],
+   "state_disallow_barracks_construction_bool": [
+    "=",
+    "yes"
+   ],
+   "country_liberty_desire_add": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "congress_poland_laws": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds"
+   ],
+   "country_law_enactment_success_add": [
+    "=",
+    "-1"
+   ],
+   "country_overlord_law_enactment_success_add": [
+    "=",
+    "1"
+   ],
+   "country_liberty_desire_add": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "congress_poland_red_conscription": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
+   ],
+   "state_conscription_rate_mult": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "modifier_russian_revolution_new_government": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "50"
+   ],
+   "country_opposition_ig_approval_add": [
+    "=",
+    "-3"
+   ]
+  }
+ ],
+ "rus_prov_gov_success_mod": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "rcw_reward_enactment": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_law_enactment_speed_mult": [
+    "=",
+    "0.33"
+   ],
+   "country_law_enactment_success_add": [
+    "=",
+    "0.15"
+   ],
+   "country_influence_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "rcw_reward_construction": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "building_construction_sector_throughput_add": [
+    "=",
+    "0.33"
+   ],
+   "state_construction_mult": [
+    "=",
+    "0.33"
+   ]
+  }
+ ],
+ "rcw_reward_warfare": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "building_training_rate_mult": [
+    "=",
+    "0.25"
+   ],
+   "unit_morale_loss_mult": [
+    "=",
+    "-0.25"
+   ],
+   "unit_morale_damage_mult": [
+    "=",
+    "0.1"
+   ],
+   "country_infamy_generation_mult": [
+    "=",
+    "-0.25"
+   ]
+  }
+ ],
+ "rcw_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "country_radicals_from_conquest_mult": [
+    "=",
+    "-0.5"
+   ],
+   "unit_devastation_mult": [
+    "=",
+    "0.5"
+   ],
+   "state_devastation_decay_mult": [
+    "=",
+    "-0.5"
+   ]
+  }
+ ],
+ "rcw_independence_secured": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "rcw_terror": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "state_turmoil_effects_mult": [
+    "=",
+    "-0.5"
+   ],
+   "state_radicals_from_political_movements_mult": [
+    "=",
+    "-0.5"
+   ]
+  }
+ ],
+ "russian_gold_reserves_lost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "country_minting_mult": [
+    "=",
+    "-0.3"
+   ]
+  }
+ ],
+ "fate_of_the_tsar": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "10"
+   ],
+   "state_radicals_from_political_movements_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "support_russian_socialist_faction": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.1"
+   ],
+   "political_movement_character_attraction_mult": [
+    "=",
+    "0.1"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "bolshevik_labor_activism": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "menshevik_labor_support": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "social_faction_labor_failure": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "-0.1"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "-0.1"
+   ]
+  }
+ ],
+ "most_popular_leftist_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "15"
+   ],
+   "character_coup_strength_mult": [
+    "=",
+    "0.2"
+   ]
+  }
+ ],
+ "popular_leftist_movement_support": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "suppress_russian_socialist_faction": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "-0.1"
+   ],
+   "political_movement_character_attraction_mult": [
+    "=",
+    "-0.1"
+   ],
+   "political_movement_activism_growth_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "discredited_leftist_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "character_prominence_add": [
+    "=",
+    "-15"
+   ],
+   "character_coup_strength_mult": [
+    "=",
+    "-0.2"
+   ]
+  }
+ ],
+ "popular_leftist_movement_setback": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
+   ],
+   "political_movement_pop_attraction_mult": [
+    "=",
+    "-0.15"
+   ]
+  }
+ ],
+ "bolshevik_government_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_authority_mult": [
+    "=",
+    "0.1"
+   ]
+  }
+ ],
+ "menshevik_government_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "sr_government_modifier": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "2"
+   ]
+  }
+ ],
  "negotiation_completed_quest": [
   "=",
   {
@@ -15153,6 +17361,3350 @@
    "country_amenability_add": [
     "=",
     "-3"
+   ]
+  }
+ ],
+ "third_section_literary_oversight": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.13"
+   ]
+  }
+ ],
+ "pushkin_circle_marginalised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-13"
+   ]
+  }
+ ],
+ "pushkin_circle_patronised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "13"
+   ]
+  }
+ ],
+ "bulgarin_propaganda_surge": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "literary_tension_unresolved": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "pushkin_canonized_by_state": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "13"
+   ]
+  }
+ ],
+ "lermontov_elegy_circulates": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "intelligentsia_grief_radicalised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.025"
+   ]
+  }
+ ],
+ "pushkin_grief_underground": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "caucasus_literary_glorification": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "nationalist_cultural_swell": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "hero_of_our_time_published": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "13"
+   ]
+  }
+ ],
+ "lermontov_martyr_legacy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "13"
+   ]
+  }
+ ],
+ "intelligentsia_doubly_grieved": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "imperial_literary_prize_established": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "independent_writers_marginalised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ]
+  }
+ ],
+ "literary_market_emerging": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "suppressed_gazette_backlash": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "dead_souls_banned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-13"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "underground_literature_flourishes": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "dead_souls_permitted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "13"
+   ]
+  }
+ ],
+ "educated_class_social_awareness": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "gogol_selected_passages_commissioned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "belinsky_letter_provoked": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "belinsky_arrested": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "petrashevsky_circle_radicalised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "belinsky_legacy_grows": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "gogol_belinsky_great_debate": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "slavophile_westernizer_dialogue": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "dostoevsky_siberia_transformed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "petrashevsky_pardoned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "petrashevsky_executed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-20"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "herzen_bell_rings_louder": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "reformist_literary_pressure": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "kolokol_intercepted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "samizdat_proto_underground": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "herzen_amnesty_offered": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "10"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "slavophile_literary_ascendancy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "slavophile_tolerated_not_embraced": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "westernizer_literary_ascendancy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "nihilism_officially_banned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "youth_nihilism_spreads": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.25"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "what_is_to_be_done_suppressed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "marxist_movement_weakened_russia": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.15"
+   ]
+  }
+ ],
+ "what_is_to_be_done_circulates": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "chernyshevsky_exiled": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ]
+  }
+ ],
+ "chernyshevsky_martyr_radical": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.25"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "dostoevsky_citizen_sponsored": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "pan_slavic_literary_voice": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "crime_punishment_published": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "crime_punishment_suppressed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-20"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-10"
+   ]
+  }
+ ],
+ "dostoevsky_liberal_voice": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "tolstoy_war_glory_commissioned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "war_and_peace_international_sensation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_influence_add": [
+    "=",
+    "50"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "20"
+   ]
+  }
+ ],
+ "tolstoy_foreign_restricted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_influence_add": [
+    "=",
+    "-50"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "satire_tolerated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "bureaucratic_self_awareness": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_bureaucracy_add": [
+    "=",
+    "100"
+   ]
+  }
+ ],
+ "shchedrin_prosecuted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "underground_satire_flourishes": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "shchedrin_reform_commissioner": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_bureaucracy_add": [
+    "=",
+    "150"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "civil_service_reform_literary": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_bureaucracy_add": [
+    "=",
+    "100"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "leskov_official_champion": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "russian_folk_orthodoxy_valued": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "leskov_translated_abroad": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_influence_add": [
+    "=",
+    "50"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "leskov_left_to_write": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "church_state_literary_alliance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "tolstoy_excommunicated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "russia_international_image_damaged": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-20"
+   ],
+   "country_influence_add": [
+    "=",
+    "-100"
+   ]
+  }
+ ],
+ "state_protects_tolstoy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_influence_add": [
+    "=",
+    "50"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "church_state_tension": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-5"
+   ],
+   "country_authority_add": [
+    "=",
+    "-25"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "tolstoy_exiled_international_scandal": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-25"
+   ],
+   "country_influence_add": [
+    "=",
+    "-200"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-20"
+   ]
+  }
+ ],
+ "international_literary_condemnation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-20"
+   ],
+   "country_influence_add": [
+    "=",
+    "-100"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "chekhov_patriotic_commission": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "cherry_orchard_written_in_defiance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "chekhov_travels_europe": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "european_theatrical_influence": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "solovyov_theocratic_vision": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "solovyov_suppressed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "silver_age_philosophical_ferment": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "gorky_arrested_1905": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "proletarian_radicalisation_gorky": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.25"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "gorky_official_recognition": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "gorky_lower_depths_published": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "social_reform_literary_pressure": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "blok_spiritual_voice": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "blok_apocalyptic_published": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "blok_openly_revolutionary": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "imperial_arts_academy_founded": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "silver_age_salon_culture": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "20"
+   ]
+  }
+ ],
+ "stray_dog_cabaret_thrives": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "cabaret_quietly_blessed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "cabaret_under_surveillance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.1"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "war_literature_mobilised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "silver_age_poets_drafted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "literature_suppressed_legacy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.25"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "katkov_moscow_gazette_patronised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "katkov_herzen_mirror_silenced": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "katkov_independent_nationalist": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "katkov_wildcard_nationalist": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_authority_add": [
+    "=",
+    "-25"
+   ]
+  }
+ ],
+ "aksakov_narod_philosophy_official": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "peasant_commune_ideologically_sacred": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "dostoevsky_reads_aksakov_siberia": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "epocha_journal_funded": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "epocha_journal_subsidy_cost": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds\""
+   ],
+   "country_expenses_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "pochvennichestvo_movement": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "strakhov_dostoevsky_conservative_axis": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "strakhov_independent_critic": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "strakhov_bitter_turns_on_tolstoy": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "meshchersky_citizen_patronised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "diary_of_a_writer_mass_platform": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "meshchersky_scandal_brewing": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "citizen_journal_tolerated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "citizen_journal_disowned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-5"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "pobedonostsev_full_authority": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "100"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "press_freedom_abolished": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.25"
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "pobedonostsev_reverses_tolerance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ]
+  }
+ ],
+ "pobedonostsev_synod_only": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "pobedonostsev_retired": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "without_the_freezer_literary_spring": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "pobedonostsev_anti_nihilism_memo": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "nihilism_memo_filed": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "10"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "nihilism_left_to_the_critics": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.025"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "suvorin_new_times_patronised": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "suvorin_antisemitism_official_platform": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "chekhov_breaks_with_suvorin": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "suvorin_press_moderated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "chekhov_compromised_by_suvorin": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "suvorin_snubbed_press_independent": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "russian_messenger_reactionary": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "major_journal_closes_to_literature": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "-20"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "-10"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "russian_messenger_moderate": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "russian_messenger_state_owned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "total_press_control": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "100"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.35"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "golden_age_of_russian_literature": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "century_of_russian_literature": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "golden_age_closed_official": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "golden_age_closed_radical": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "golden_age_closed_spiritual": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "golden_age_closed_universal": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "crossroads_closed_official": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_authority_add": [
+    "=",
+    "50"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_loyalists_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "crossroads_closed_radical": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "crossroads_closed_spiritual": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "crossroads_closed_universal": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_influence_add": [
+    "=",
+    "50"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "oberiu_arrested_condemned": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ],
+   "country_authority_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "kharms_writes_for_the_drawer": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.15"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "oberiu_exiled_returns": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "5"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "5"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "oberiu_final_performance": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_radicals_from_legitimacy_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "kharms_witnessed_before_silence": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ],
+   "country_rlit_intellectual_freedom_add": [
+    "=",
+    "0.05"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ]
+  }
+ ],
+ "oberiu_psychiatric_suppression": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "country_rlit_censorship_severity_add": [
+    "=",
+    "0.15"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ],
+   "country_influence_add": [
+    "=",
+    "-50"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "-0.05"
+   ]
+  }
+ ],
+ "golden_age_literary_triumph": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "silver_age_literary_triumph": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_influence_add": [
+    "=",
+    "100"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "15"
+   ]
+  }
+ ],
+ "immortal_russian_literature": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "50"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "country_influence_add": [
+    "=",
+    "200"
+   ],
+   "country_rlit_cultural_prestige_add": [
+    "=",
+    "20"
+   ]
+  }
+ ],
+ "pushkin_national_fervor": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_russian_add": [
+    "=",
+    "20"
+   ],
+   "country_prestige_add": [
+    "=",
+    "20"
+   ]
+  }
+ ],
+ "rlit_writer_state_laureate": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "character_popularity_add": [
+    "=",
+    "25"
+   ],
+   "character_loyalty_add": [
+    "=",
+    "10"
+   ]
+  }
+ ],
+ "rlit_writer_dissident_fame": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds\""
+   ],
+   "character_popularity_add": [
+    "=",
+    "50"
+   ],
+   "character_loyalty_add": [
+    "=",
+    "-10"
+   ]
+  }
+ ],
+ "rlit_writer_persecuted": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds\""
+   ],
+   "character_health_add": [
+    "=",
+    "-0.5"
+   ],
+   "character_popularity_add": [
+    "=",
+    "20"
+   ]
+  }
+ ],
+ "rlit_academy_celebrated": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "building_art_academy_throughput_add": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "rlit_university_purged": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "building_university_throughput_add": [
+    "=",
+    "-0.25"
+   ]
+  }
+ ],
+ "rlit_presses_running_hot": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "building_paper_mill_throughput_add": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "rlit_presses_seized": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "building_paper_mill_throughput_add": [
+    "=",
+    "-0.25"
+   ]
+  }
+ ],
+ "rlit_prestige_tier_1": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "10"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.025"
+   ]
+  }
+ ],
+ "rlit_prestige_tier_2": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.05"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "rlit_prestige_tier_3": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "45"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.1"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.1"
+   ],
+   "country_tech_spread_mult": [
+    "=",
+    "0.05"
+   ]
+  }
+ ],
+ "rlit_prestige_tier_4": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds\""
+   ],
+   "country_prestige_add": [
+    "=",
+    "75"
+   ],
+   "country_weekly_innovation_mult": [
+    "=",
+    "0.15"
+   ],
+   "interest_group_ig_intelligentsia_pol_str_mult": [
+    "=",
+    "0.15"
+   ],
+   "country_tech_spread_mult": [
+    "=",
+    "0.1"
+   ],
+   "country_influence_add": [
+    "=",
+    "5"
    ]
   }
  ],
@@ -17193,6 +22745,10 @@
    "building_group_bg_plantations_throughput_add": [
     "=",
     "-0.6"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.1"
    ]
   }
  ],
@@ -17227,6 +22783,10 @@
    "building_group_bg_plantations_throughput_add": [
     "=",
     "-0.3"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.05"
    ]
   }
  ],
@@ -18109,11 +23669,28 @@
    ],
    "unit_defense_mult": [
     "=",
-    "0.20"
+    "0.10"
    ],
    "unit_offense_mult": [
     "=",
-    "0.20"
+    "0.10"
+   ],
+   "battle_total_combat_width_mult": [
+    "=",
+    "-0.8"
+   ]
+  }
+ ],
+ "modifier_texas_war_of_independence_mexico": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "battle_total_combat_width_mult": [
+    "=",
+    "-0.8"
    ]
   }
  ],
@@ -24081,27 +29658,105 @@
    ]
   }
  ],
- "north_caucasian_standard_of_living_modifier_positive": [
+ "dagestani_standard_of_living_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "state_north_caucasian_standard_of_living_add": [
+   "state_dagestani_standard_of_living_add": [
     "=",
     "1"
    ]
   }
  ],
- "north_caucasian_standard_of_living_modifier_negative": [
+ "dagestani_standard_of_living_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "state_north_caucasian_standard_of_living_add": [
+   "state_dagestani_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_standard_of_living_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "state_ossetian_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_standard_of_living_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "state_ossetian_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_standard_of_living_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "state_abkhazian_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_standard_of_living_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "state_abkhazian_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_standard_of_living_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "state_caucasian_turk_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_standard_of_living_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "state_caucasian_turk_standard_of_living_add": [
     "=",
     "1"
    ]
@@ -24601,27 +30256,53 @@
    ]
   }
  ],
- "siberian_standard_of_living_modifier_positive": [
+ "evenki_standard_of_living_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "state_siberian_standard_of_living_add": [
+   "state_evenki_standard_of_living_add": [
     "=",
     "1"
    ]
   }
  ],
- "siberian_standard_of_living_modifier_negative": [
+ "evenki_standard_of_living_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "state_siberian_standard_of_living_add": [
+   "state_evenki_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_standard_of_living_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "state_chukchi_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_standard_of_living_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "state_chukchi_standard_of_living_add": [
     "=",
     "1"
    ]
@@ -30477,6 +36158,32 @@
    ]
   }
  ],
+ "crimean_tatar_standard_of_living_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "state_crimean_tatar_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "crimean_tatar_standard_of_living_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "state_crimean_tatar_standard_of_living_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
  "ig_join_pol_str_negative": [
   "=",
   {
@@ -35016,6 +40723,10 @@
    "building_group_bg_plantations_throughput_add": [
     "=",
     "-0.3"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.05"
    ]
   }
  ],
@@ -35033,6 +40744,10 @@
    "building_group_bg_plantations_throughput_add": [
     "=",
     "-0.2"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.03"
    ]
   }
  ],
@@ -35050,6 +40765,10 @@
    "building_group_bg_plantations_throughput_add": [
     "=",
     "-0.1"
+   ],
+   "state_peasants_consumption_multiplier_add": [
+    "=",
+    "0.02"
    ]
   }
  ],
@@ -37917,7 +43636,19 @@
     "=",
     "-3"
    ],
-   "state_north_caucasian_standard_of_living_add": [
+   "state_dagestani_standard_of_living_add": [
+    "=",
+    "-2"
+   ],
+   "state_ossetian_standard_of_living_add": [
+    "=",
+    "-2"
+   ],
+   "state_abkhazian_standard_of_living_add": [
+    "=",
+    "-2"
+   ],
+   "state_caucasian_turk_standard_of_living_add": [
     "=",
     "-2"
    ]
@@ -38323,7 +44054,19 @@
     "=",
     "-5"
    ],
-   "state_north_caucasian_standard_of_living_add": [
+   "state_dagestani_standard_of_living_add": [
+    "=",
+    "-5"
+   ],
+   "state_ossetian_standard_of_living_add": [
+    "=",
+    "-5"
+   ],
+   "state_abkhazian_standard_of_living_add": [
+    "=",
+    "-5"
+   ],
+   "state_caucasian_turk_standard_of_living_add": [
     "=",
     "-5"
    ]
@@ -40663,27 +46406,105 @@
    ]
   }
  ],
- "north_caucasian_cultural_acceptance_modifier_positive": [
+ "dagestani_cultural_acceptance_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "country_north_caucasian_cultural_acceptance_add": [
+   "country_dagestani_cultural_acceptance_add": [
     "=",
     "1"
    ]
   }
  ],
- "north_caucasian_cultural_acceptance_modifier_negative": [
+ "dagestani_cultural_acceptance_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "country_north_caucasian_cultural_acceptance_add": [
+   "country_dagestani_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_cultural_acceptance_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_ossetian_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_cultural_acceptance_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_ossetian_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_cultural_acceptance_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_abkhazian_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_cultural_acceptance_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_abkhazian_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_cultural_acceptance_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_caucasian_turk_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_cultural_acceptance_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_caucasian_turk_cultural_acceptance_add": [
     "=",
     "1"
    ]
@@ -41183,27 +47004,53 @@
    ]
   }
  ],
- "siberian_cultural_acceptance_modifier_positive": [
+ "evenki_cultural_acceptance_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "country_siberian_cultural_acceptance_add": [
+   "country_evenki_cultural_acceptance_add": [
     "=",
     "1"
    ]
   }
  ],
- "siberian_cultural_acceptance_modifier_negative": [
+ "evenki_cultural_acceptance_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "country_siberian_cultural_acceptance_add": [
+   "country_evenki_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_cultural_acceptance_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_chukchi_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_cultural_acceptance_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_chukchi_cultural_acceptance_add": [
     "=",
     "1"
    ]
@@ -47059,6 +52906,32 @@
    ]
   }
  ],
+ "crimean_tatar_cultural_acceptance_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_crimean_tatar_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "crimean_tatar_cultural_acceptance_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_crimean_tatar_cultural_acceptance_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
  "scottish_fervor_target_modifier_positive": [
   "=",
   {
@@ -48905,27 +54778,105 @@
    ]
   }
  ],
- "north_caucasian_fervor_target_modifier_positive": [
+ "dagestani_fervor_target_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "country_fervor_target_north_caucasian_add": [
+   "country_fervor_target_dagestani_add": [
     "=",
     "1"
    ]
   }
  ],
- "north_caucasian_fervor_target_modifier_negative": [
+ "dagestani_fervor_target_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "country_fervor_target_north_caucasian_add": [
+   "country_fervor_target_dagestani_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_fervor_target_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_ossetian_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "ossetian_fervor_target_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_fervor_target_ossetian_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_fervor_target_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_abkhazian_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "abkhazian_fervor_target_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_fervor_target_abkhazian_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_fervor_target_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_caucasian_turk_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "caucasian_turk_fervor_target_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_fervor_target_caucasian_turk_add": [
     "=",
     "1"
    ]
@@ -49425,27 +55376,53 @@
    ]
   }
  ],
- "siberian_fervor_target_modifier_positive": [
+ "evenki_fervor_target_modifier_positive": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
    ],
-   "country_fervor_target_siberian_add": [
+   "country_fervor_target_evenki_add": [
     "=",
     "1"
    ]
   }
  ],
- "siberian_fervor_target_modifier_negative": [
+ "evenki_fervor_target_modifier_negative": [
   "=",
   {
    "icon": [
     "=",
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
-   "country_fervor_target_siberian_add": [
+   "country_fervor_target_evenki_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_fervor_target_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_chukchi_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "chukchi_fervor_target_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_fervor_target_chukchi_add": [
     "=",
     "1"
    ]
@@ -55296,6 +61273,32 @@
     "\"gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds\""
    ],
    "country_fervor_target_ryukyuan_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "crimean_tatar_fervor_target_modifier_positive": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_fervor_target_modifier_icons/modifier_flag_positive.dds\""
+   ],
+   "country_fervor_target_crimean_tatar_add": [
+    "=",
+    "1"
+   ]
+  }
+ ],
+ "crimean_tatar_fervor_target_modifier_negative": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/timed_fervor_target_modifier_icons/modifier_flag_negative.dds\""
+   ],
+   "country_fervor_target_crimean_tatar_add": [
     "=",
     "1"
    ]
@@ -66617,9 +72620,13 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
    ],
-   "interest_group_pol_str_mult": [
+   "interest_group_pop_attraction_mult": [
     "=",
     "0.15"
+   ],
+   "interest_group_ideology_state_socialist_leader_chance_mult": [
+    "=",
+    "0.5"
    ]
   }
  ],
@@ -67960,7 +73967,7 @@
    ]
   }
  ],
- "scandalous": [
+ "modifier_scandalous": [
   "=",
   {
    "icon": [
@@ -72556,16 +78563,24 @@
    ]
   }
  ],
- "institutions_of_socialism_modifier": [
+ "modifier_social_revolution": [
   "=",
   {
    "icon": [
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds"
    ],
-   "country_bureaucracy_mult": [
+   "state_dependent_political_participation_add": [
     "=",
-    "0.2"
+    "0.10"
+   ],
+   "state_working_adult_ratio_add": [
+    "=",
+    "0.05"
+   ],
+   "country_weekly_innovation_max_add": [
+    "=",
+    "25"
    ]
   }
  ],
@@ -72697,6 +78712,10 @@
    "political_movement_activism_growth_mult": [
     "=",
     "5"
+   ],
+   "country_revolution_clock_time_add": [
+    "=",
+    "0.125"
    ]
   }
  ],
@@ -74595,7 +80614,91 @@
    ],
    "state_loyalists_from_political_movements_mult": [
     "=",
-    "1"
+    "0.10"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "five_year_plan_failure_mod": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-3"
+   ],
+   "country_prestige_mult": [
+    "=",
+    "-0.02"
+   ]
+  }
+ ],
+ "modifier_falsified_plan_figures": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "country_bureaucracy_mult": [
+    "=",
+    "-0.25"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-10"
+   ]
+  }
+ ],
+ "modifier_fyp_censorship_campaign": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "country_authority_cost_add": [
+    "=",
+    "100"
+   ],
+   "country_legitimacy_base_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "modifier_fyp_forced_labor": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds"
+   ],
+   "building_construction_sector_throughput_add": [
+    "=",
+    "0.25"
+   ],
+   "building_group_bg_construction_laborers_mortality_mult": [
+    "=",
+    "0.1"
+   ],
+   "building_group_bg_construction_machinists_mortality_mult": [
+    "=",
+    "0.1"
+   ],
+   "tax_land_add": [
+    "=",
+    "0.1"
+   ],
+   "tax_per_capita_add": [
+    "=",
+    "0.1"
    ]
   }
  ],
@@ -78607,9 +84710,9 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds"
    ],
-   "ship_accuracy_add": [
+   "ship_accuracy_mult": [
     "=",
-    "10"
+    "0.1"
    ]
   }
  ],
@@ -78830,6 +84933,84 @@
    "interest_group_approval_add": [
     "=",
     "-3"
+   ]
+  }
+ ],
+ "the_first_blast_of_the_trumpet": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "against_the_monstruous_regiment": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-5"
+   ]
+  }
+ ],
+ "pensioned_beardless_hero": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "state_loyalists_from_political_movements_mult": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "promoting_the_cause_of_women": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "promoted_a_challenge_to_old_norms": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-8"
+   ]
+  }
+ ],
+ "uncomfortable_presentation": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds"
+   ],
+   "character_command_limit_mult": [
+    "=",
+    "-0.2"
    ]
   }
  ],
@@ -80883,7 +87064,7 @@
     "=",
     "gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds"
    ],
-   "state_birth_rate_mult": [
+   "state_lower_strata_birth_rate_mult": [
     "=",
     "-0.02"
    ],
@@ -87647,6 +93828,84 @@
    "state_shopkeepers_investment_pool_efficiency_mult": [
     "=",
     "0.2"
+   ]
+  }
+ ],
+ "nemo_shipping_losses": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-3"
+   ]
+  }
+ ],
+ "nemo_promised_protection": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "3"
+   ]
+  }
+ ],
+ "nemo_broken_promise_IG": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds"
+   ],
+   "interest_group_approval_add": [
+    "=",
+    "-6"
+   ]
+  }
+ ],
+ "nemo_broken_promise_country": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds"
+   ],
+   "country_prestige_add": [
+    "=",
+    "-15"
+   ]
+  }
+ ],
+ "nemo_scourge_ended": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_prestige_add": [
+    "=",
+    "25"
+   ]
+  }
+ ],
+ "nemo_nautilus_captured": [
+  "=",
+  {
+   "icon": [
+    "=",
+    "gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds"
+   ],
+   "country_prestige_add": [
+    "=",
+    "15"
    ]
   }
  ],

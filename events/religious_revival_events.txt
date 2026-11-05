@@ -55,9 +55,7 @@ religious_revival_events.1 = {
 		NOT = { has_modifier = rre_religious_right_modifier }
 		NOT = { has_law = law_type:law_state_atheism }
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -209,9 +207,7 @@ religious_revival_events.2 = {
 		NOT = { has_modifier = rre_televangelism_modifier }
 		NOT = { has_law = law_type:law_state_atheism }
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -353,9 +349,7 @@ religious_revival_events.3 = {
 		NOT = { has_modifier = rre_liberation_theology_modifier }
 		# state_atheism intentionally allowed — see triggered_desc *_atheism (underground faith)
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -497,9 +491,7 @@ religious_revival_events.4 = {
 		NOT = { has_modifier = rre_religious_nationalism_modifier }
 		NOT = { has_law = law_type:law_state_atheism }
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -641,9 +633,7 @@ religious_revival_events.5 = {
 		NOT = { has_modifier = rre_digital_faith_modifier }
 		NOT = { has_law = law_type:law_state_atheism }
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -770,9 +760,7 @@ religious_revival_events.6 = {
 		NOT = { has_modifier = rre_culture_war_modifier }
 		NOT = { has_law = law_type:law_state_atheism }
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy
@@ -921,9 +909,7 @@ religious_revival_events.7 = {
 		NOT = { has_modifier = rre_faith_services_modifier }
 		# state_atheism intentionally allowed — see triggered_desc *_atheism (civil-society charities)
 		NOR = {
-			has_law = law_type:law_state_religion
-			has_law = law_type:law_millet_system
-			has_law = law_type:law_people_of_the_book
+			has_law_or_variant = law_type:law_state_religion
 		}
 		NOR = {
 			has_law = law_type:law_autocracy

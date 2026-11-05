@@ -1585,7 +1585,7 @@ pm_bhp_mount_whaleback_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			building_group_bg_mining_throughput_add = 0.5
-			goods_output_lead_mult = 0.05
+			goods_output_copper_mult = 0.05
 		}
 	}
 	building_modifiers = {
@@ -7352,7 +7352,7 @@ pm_kirgizian_copper_smelter = {
 	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
 	state_modifiers = {
 		workforce_scaled = {
-			building_iron_mine_throughput_add = 0.1
+			building_copper_mine_throughput_add = 0.1
 		}
 	}
 	building_modifiers = {
@@ -7360,7 +7360,7 @@ pm_kirgizian_copper_smelter = {
 			# Input goods
 			goods_input_tools_add = 15                           # Price:   40, Total cost:   600.0 (100.00%)
 			# Output goods
-			goods_output_iron_add = 30                           # Price:   40, Total cost:  1200.0 (80.00%)
+			goods_output_copper_add = 30                         # Price:   40, Total cost:  1200.0 (80.00%)
 			goods_output_coal_add = 10                           # Price:   30, Total cost:   300.0 (20.00%)
 			# Total input cost: 600.0
 			# Total output cost: 1500.0
@@ -11110,7 +11110,7 @@ pm_sumitomo_besshi_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00 # AUTO-GENERATED: industrial emissions
-			building_lead_mine_throughput_add = 0.15
+			building_copper_mine_throughput_add = 0.15
 			building_steel_mill_throughput_add = 0.05
 		}
 	}
@@ -11120,7 +11120,7 @@ pm_sumitomo_besshi_mine = {
 			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
 			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
 			# Output goods
-			goods_output_lead_add = 25                           # Price:   40, Total cost:  1000.0 (57.14%)
+			goods_output_copper_add = 25                         # Price:   40, Total cost:  1000.0 (57.14%)
 			goods_output_steel_add = 15                          # Price:   50, Total cost:   750.0 (42.86%)
 			# Total input cost: 700.0
 			# Total output cost: 1750.0

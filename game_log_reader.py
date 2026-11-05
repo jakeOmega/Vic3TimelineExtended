@@ -97,6 +97,7 @@ SOURCE_CATEGORY_PREFIX: dict[str, str] = {
     # but is never set. Without this it fell through to the file rule below
     # and read as a scope error.
     "jomini_effect.cpp:1139": "used_but_never_set",
+    "jomini_effect.cpp:1144": "used_but_never_set",  # the same line on vanilla 1.15
     "virtualfilesystem.cpp:569": "missing_file",
     "guitexturehandler.h:155": "missing_texture_for_entity",
     "gfx_dds_loader.cpp:442": "dds_dimensions",
@@ -1155,7 +1156,7 @@ _NEVER_SET_EVENT_TARGET_RE = re.compile(r"^Event target '([A-Za-z0-9_]+)' is use
 GUI_INJECTED_SCOPE_REF = VanillaBugRef(
     title="GUI-injected scope flagged never-set (a mod .gui or loc string sets it with AddScope)",
     file_basenames=[],
-    source_anchors=["jomini_effect.cpp:1139"],
+    source_anchors=["jomini_effect.cpp:1139", "jomini_effect.cpp:1144"],  # 1.14.5, 1.15
     signatures=[],
     anchor="docs/audits/mod_known_noise.md#jomini_effectcpp1139--gui-injected-scopes-flagged-never-set",
     kind="mod_low_priority",

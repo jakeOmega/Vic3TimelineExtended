@@ -229,6 +229,7 @@ imperial_federation_act_civilizing_mission = {
 			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_labour_suffrage
 		}
 		authority > 300
 		prestige >= 100
@@ -288,6 +289,7 @@ mandate_system_decision = {
 			has_law = law_type:law_liquid_democracy
 			has_law = law_type:law_census_voting
 			has_law = law_type:law_wealth_voting
+			has_law = law_type:law_labour_suffrage
 		}
 		# Cannot have outlawed dissent — selling negotiated transition needs press
 		NOT = { has_law = law_type:law_outlawed_dissent }

@@ -2499,6 +2499,9 @@ gm_state_merge_check_was = {
 # (global_gdp_script_value): 402,505,869 at a new game's first pass, February
 # 1836 (TE_SELF_CHECK gm_world_base, 2026-10-25). The first figure, 334,000,000,
 # summed every country's latest GDP from a save of 1836.1.20 and read a sixth low.
+# Vanilla 1.15 reworked the economy, so a 1.15 new game may start from another
+# figure: on the first one, read the TE_SELF_CHECK gm_world_base line and set this
+# to the world GDP it prints (vanilla 1.15 migration; no figure is guessed here).
 gm_world_gdp_1836 = {
 	value = 402500000
 }

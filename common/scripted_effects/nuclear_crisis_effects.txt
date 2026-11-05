@@ -2841,28 +2841,30 @@ nd_crisis_trade_check_schedule = {
 }
 
 # nuclear_crisis.27's immediate, in the traded crisis's issuer: one code's
-# line. The demanded half is the other side's concession to us; the matching
-# half is ours to it, the one run with the parties swapped.
+# line, which prints the code from nd_tc_code (no argument inside a debug_log
+# string: te_debug_log_arg_effects.txt). The demanded half is the other side's
+# concession to us; the matching half is ours to it, the one run with the
+# parties swapped.
 nd_crisis_trade_check_log = {
 	if = {
 		limit = { var:nd_tc_code = $CODE$ }
 		if = {
 			limit = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_other } }
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the demanded half; [THIS.GetCountry.GetNameNoFormatting] still has a dispute $CODE$ grievance against [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] a day after their trade, so the target's own concession failed (read as nd_concession_$CODE$)"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the demanded half; [THIS.GetCountry.GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] a day after their trade, so the target's own concession failed (read as nd_concession_[THIS.Var('nd_tc_code').GetValue|0])"
 		}
 		else_if = {
 			limit = {
 				scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } }
 				var:nd_tc_swap ?= 0
 			}
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the matching half, and the swap did not take; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute $CODE$ grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, since save_scope_as did not replace a saved scope and the target's concession ran twice"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the matching half, and the swap did not take; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, since save_scope_as did not replace a saved scope and the target's concession ran twice"
 		}
 		else_if = {
 			limit = { scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } } }
-			debug_log = "TE_SELF_CHECK BROKEN nd_trade_$CODE$: the matching half, though the swap took; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute $CODE$ grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, so the issuer's own concession failed (read as nd_concession_$CODE$)"
+			debug_log = "TE_SELF_CHECK BROKEN nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: the matching half, though the swap took; [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] still has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against [THIS.GetCountry.GetNameNoFormatting] a day after their trade, so the issuer's own concession failed (read as nd_concession_[THIS.Var('nd_tc_code').GetValue|0])"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK OK nd_trade_$CODE$: neither [THIS.GetCountry.GetNameNoFormatting] nor [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] has a dispute $CODE$ grievance against the other a day after their trade (swap=[THIS.GetVariable('nd_tc_swap').GetValue|0])"
+			debug_log = "TE_SELF_CHECK OK nd_trade_[THIS.Var('nd_tc_code').GetValue|0]: neither [THIS.GetCountry.GetNameNoFormatting] nor [SCOPE.sCountry('nd_tc_other').GetNameNoFormatting] has a dispute [THIS.Var('nd_tc_code').GetValue|0] grievance against the other a day after their trade (swap=[THIS.GetVariable('nd_tc_swap').GetValue|0])"
 		}
 	}
 }

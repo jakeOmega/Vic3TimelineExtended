@@ -1305,11 +1305,16 @@ gm_seed_trophy = {
 				gm_tr_sig_backfill = yes
 				gm_tr_update_picture = yes
 			}
-			debug_log = "TE_MONUMENTS: trophy $LANDMARK$ placed: from $ORIGIN_TAG$'s part of $ORIGIN$, standing in $SITE_TAG$'s part of $SITE$, $LEVELS$ levels"
+			# its records, not its arguments (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
+			scope:gm_tr_new = {
+				debug_log = "TE_MONUMENTS: trophy [THIS.Var('gm_tr_landmark').GetFlagName] placed: from [THIS.Var('gm_tr_origin').GetState.GetOwner.GetTagName]'s part of [THIS.Var('gm_tr_origin').GetState.GetNameNoFormatting], standing in [THIS.Var('gm_tr_site').GetState.GetOwner.GetTagName]'s part of [THIS.Var('gm_tr_site').GetState.GetNameNoFormatting], [THIS.Var('gm_tr_levels').GetValue|0] levels"
+			}
 		}
 	}
 	else = {
-		debug_log = "TE_MONUMENTS: trophy $LANDMARK$ not placed: $ORIGIN$ not held by $ORIGIN_TAG$, $SITE$ not held by $SITE_TAG$, one country holds both, or it is already abroad"
+		te_log_args_set = { A = $LANDMARK$ B = $ORIGIN$ C = $ORIGIN_TAG$ D = $SITE$ E = $SITE_TAG$ }
+		debug_log = "TE_MONUMENTS: trophy [GetGlobalVariable('te_log_arg_1').GetFlagName] not placed: [GetGlobalVariable('te_log_arg_2').GetFlagName] not held by [GetGlobalVariable('te_log_arg_3').GetFlagName], [GetGlobalVariable('te_log_arg_4').GetFlagName] not held by [GetGlobalVariable('te_log_arg_5').GetFlagName], one country holds both, or it is already abroad"
+		te_log_args_clear = yes
 	}
 }
 

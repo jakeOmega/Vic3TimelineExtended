@@ -190,10 +190,11 @@ no two of them within two years of each other.
 Cybersecurity, the era 9 technology that opens the entry, unlocks Strong
 Privacy Rights; if Automated Surveillance opened it, research Cybersecurity
 first. The law also needs Guaranteed Liberties, which needs Right of Assembly or
-Protected Speech, and the Paternalistic, Patriotic and Traditionalist ideologies
-strongly oppose it, so the twenty years are mostly a political fight. The
-entry's status line names the step you are missing. Running out the clock under
-Moderate Data Privacy costs half the time-out penalty and no radicals.
+Protected Speech, and the Paternalistic, Patriotic, Militarist and
+Traditionalist ideologies strongly oppose it, so the twenty years are mostly a
+political fight. The entry's status line names the step you are missing.
+Running out the clock under Moderate Data Privacy costs half the time-out
+penalty and no radicals.
 The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage. The first three are leaks, and no two of them
 come within two years of each other. With Covert Warfare on, the last follows

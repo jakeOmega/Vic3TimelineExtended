@@ -30,11 +30,11 @@ _None._
 
 ## Reviewed Exemptions
 
-_None._
+- `common/scripted_effects/te_demog_wealth_effects.txt` — `te_demog_inequality_refresh`: `te_demog_census_inequality` with `multiplier = var:te_dg_ineq`, `te_dg_ineq` removed — **2026-10-19**: outside Full only, after the modifier came off at the top of this effect; nothing applies it there
 
 ## Coverage
 
-- total flags: 0
+- total flags: 1
 - unreviewed: 0
-- exempted: 0
+- exempted: 1
 

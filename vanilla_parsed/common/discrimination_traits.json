@@ -2716,6 +2716,19 @@
    ]
   }
  ],
+ "language_luoravetlan": [
+  "=",
+  {
+   "type": [
+    "=",
+    "language"
+   ],
+   "trait_group": [
+    "=",
+    "language_group_luoravetlan"
+   ]
+  }
+ ],
  "language_lusophone": [
   "=",
   {
@@ -3207,6 +3220,19 @@
    "trait_group": [
     "=",
     "language_group_turkic"
+   ]
+  }
+ ],
+ "language_ossetic": [
+  "=",
+  {
+   "type": [
+    "=",
+    "language"
+   ],
+   "trait_group": [
+    "=",
+    "language_group_iranic"
    ]
   }
  ],
@@ -4059,6 +4085,15 @@
   }
  ],
  "tradition_lusitanian": [
+  "=",
+  {
+   "type": [
+    "=",
+    "tradition"
+   ]
+  }
+ ],
+ "tradition_cossacks": [
   "=",
   {
    "type": [

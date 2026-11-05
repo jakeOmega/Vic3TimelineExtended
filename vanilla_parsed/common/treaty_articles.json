@@ -33,6 +33,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_alliance",
      "can_be_renegotiated",
      "is_military_access",
@@ -546,24 +547,73 @@
        "limit": [
         "=",
         {
-         "scope:article_options.second_country": [
+         "NOT": [
           "=",
           {
-           "any_scope_treaty": [
+           "exists": [
+            "=",
+            "scope:is_renegotiation"
+           ]
+          }
+         ]
+        }
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "scope:article_options.second_country": [
             "=",
             {
-             "binds": [
+             "any_scope_treaty": [
+              "=",
+              {
+               "binds": [
+                "=",
+                "scope:article_options.first_country"
+               ],
+               "any_scope_article": [
+                "=",
+                {
+                 "has_type": [
+                  "=",
+                  "defensive_pact"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ],
+         "scope:article_options.first_country": [
+          "=",
+          {
+           "add_lobby_appeasement_from_diplomacy_bidirectional": [
+            "=",
+            {
+             "FIRST": [
               "=",
               "scope:article_options.first_country"
              ],
-             "any_scope_article": [
+             "SECOND": [
               "=",
-              {
-               "has_type": [
-                "=",
-                "defensive_pact"
-               ]
-              }
+              "scope:article_options.second_country"
+             ],
+             "PRO_AMOUNT": [
+              "=",
+              "1"
+             ],
+             "ANTI_AMOUNT": [
+              "=",
+              "-1"
+             ],
+             "FACTOR": [
+              "=",
+              "appeasement_alliance_formed"
              ]
             }
            ]
@@ -571,66 +621,36 @@
          ]
         }
        ],
-       "scope:article_options.first_country": [
+       "else": [
         "=",
         {
-         "add_lobby_appeasement_from_diplomacy_bidirectional": [
+         "scope:article_options.first_country": [
           "=",
           {
-           "FIRST": [
+           "add_lobby_appeasement_from_diplomacy_bidirectional": [
             "=",
-            "scope:article_options.first_country"
-           ],
-           "SECOND": [
-            "=",
-            "scope:article_options.second_country"
-           ],
-           "PRO_AMOUNT": [
-            "=",
-            "1"
-           ],
-           "ANTI_AMOUNT": [
-            "=",
-            "-1"
-           ],
-           "FACTOR": [
-            "=",
-            "appeasement_alliance_formed"
-           ]
-          }
-         ]
-        }
-       ]
-      }
-     ],
-     "else": [
-      "=",
-      {
-       "scope:article_options.first_country": [
-        "=",
-        {
-         "add_lobby_appeasement_from_diplomacy_bidirectional": [
-          "=",
-          {
-           "FIRST": [
-            "=",
-            "scope:article_options.first_country"
-           ],
-           "SECOND": [
-            "=",
-            "scope:article_options.second_country"
-           ],
-           "PRO_AMOUNT": [
-            "=",
-            "4"
-           ],
-           "ANTI_AMOUNT": [
-            "=",
-            "-4"
-           ],
-           "FACTOR": [
-            "=",
-            "appeasement_alliance_formed"
+            {
+             "FIRST": [
+              "=",
+              "scope:article_options.first_country"
+             ],
+             "SECOND": [
+              "=",
+              "scope:article_options.second_country"
+             ],
+             "PRO_AMOUNT": [
+              "=",
+              "4"
+             ],
+             "ANTI_AMOUNT": [
+              "=",
+              "-4"
+             ],
+             "FACTOR": [
+              "=",
+              "appeasement_alliance_formed"
+             ]
+            }
            ]
           }
          ]
@@ -810,26 +830,50 @@
         }
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "num_alliances": [
-            "<",
-            "1"
-           ],
-           "country_rank": [
-            ">=",
-            "rank_value:major_power"
-           ]
-          }
-         ],
-         "multiply": [
-          "=",
-          "2"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "has_variable": [
+             "=",
+             "ai_russia_client_bloc_pending"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.15"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "num_alliances": [
+             "<",
+             "1"
+            ],
+            "country_rank": [
+             ">=",
+             "rank_value:major_power"
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "2"
+          ]
+         }
+        ]
        ],
        "else_if": [
         "=",
@@ -859,6 +903,37 @@
         "1"
        ],
        "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "ai_russia_article_partner_is_pending_client": [
+             "=",
+             "yes"
+            ],
+            "scope:other_country": [
+             "=",
+             {
+              "is_subject": [
+               "=",
+               "no"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "3"
+          ]
+         }
+        ],
         [
          "=",
          {
@@ -1771,7 +1846,11 @@
             ],
             "divide": [
              "=",
-             "3650"
+             "365"
+            ],
+            "multiply": [
+             "=",
+             "5"
             ],
             "subtract": [
              "=",
@@ -1905,6 +1984,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_defensive_pact",
      "can_be_renegotiated",
      "friendly"
@@ -2180,31 +2260,50 @@
    "on_entry_into_force": [
     "=",
     {
-     "scope:article_options.first_country": [
+     "if": [
       "=",
       {
-       "add_lobby_appeasement_from_diplomacy_bidirectional": [
+       "limit": [
         "=",
         {
-         "FIRST": [
+         "NOT": [
           "=",
-          "scope:article_options.first_country"
-         ],
-         "SECOND": [
+          {
+           "exists": [
+            "=",
+            "scope:is_renegotiation"
+           ]
+          }
+         ]
+        }
+       ],
+       "scope:article_options.first_country": [
+        "=",
+        {
+         "add_lobby_appeasement_from_diplomacy_bidirectional": [
           "=",
-          "scope:article_options.second_country"
-         ],
-         "PRO_AMOUNT": [
-          "=",
-          "3"
-         ],
-         "ANTI_AMOUNT": [
-          "=",
-          "-3"
-         ],
-         "FACTOR": [
-          "=",
-          "appeasement_defensive_pact_formed"
+          {
+           "FIRST": [
+            "=",
+            "scope:article_options.first_country"
+           ],
+           "SECOND": [
+            "=",
+            "scope:article_options.second_country"
+           ],
+           "PRO_AMOUNT": [
+            "=",
+            "3"
+           ],
+           "ANTI_AMOUNT": [
+            "=",
+            "-3"
+           ],
+           "FACTOR": [
+            "=",
+            "appeasement_defensive_pact_formed"
+           ]
+          }
          ]
         }
        ]
@@ -2357,26 +2456,50 @@
         }
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "num_defensive_pacts": [
-            "<",
-            "1"
-           ],
-           "country_rank": [
-            ">=",
-            "rank_value:minor_power"
-           ]
-          }
-         ],
-         "multiply": [
-          "=",
-          "2"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "has_variable": [
+             "=",
+             "ai_russia_client_bloc_pending"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.15"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "num_defensive_pacts": [
+             "<",
+             "1"
+            ],
+            "country_rank": [
+             ">=",
+             "rank_value:minor_power"
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "2"
+          ]
+         }
+        ]
        ],
        "else_if": [
         "=",
@@ -2406,6 +2529,37 @@
         "1"
        ],
        "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "ai_russia_article_partner_is_pending_client": [
+             "=",
+             "yes"
+            ],
+            "scope:other_country": [
+             "=",
+             {
+              "is_subject": [
+               "=",
+               "no"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "5"
+          ]
+         }
+        ],
         [
          "=",
          {
@@ -3331,7 +3485,11 @@
             ],
             "divide": [
              "=",
-             "3650"
+             "365"
+            ],
+            "multiply": [
+             "=",
+             "5"
             ],
             "subtract": [
              "=",
@@ -3465,6 +3623,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_guarantee_independence",
      "can_be_renegotiated",
      "giftable",
@@ -3952,6 +4111,28 @@
           "limit": [
            "=",
            {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "has_variable": [
+             "=",
+             "ai_russia_client_bloc_pending"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.15"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
             "any_scope_regional_objective": [
              "=",
              {
@@ -3984,31 +4165,64 @@
         "1"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "scope:source_country": [
-            "?=",
-            "this"
-           ],
-           "ai_is_regional_objective_protect_target": [
-            "=",
-            {
-             "TARGET": [
-              "=",
-              "scope:target_country"
-             ]
-            }
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          "3"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "ai_russia_article_partner_is_pending_client": [
+             "=",
+             "yes"
+            ],
+            "scope:other_country": [
+             "=",
+             {
+              "is_subject": [
+               "=",
+               "no"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "5"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:source_country": [
+             "?=",
+             "this"
+            ],
+            "ai_is_regional_objective_protect_target": [
+             "=",
+             {
+              "TARGET": [
+               "=",
+               "scope:target_country"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "3"
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -4372,67 +4586,6 @@
            }
           ]
          }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "scope:is_treaty_active"
-              ]
-             }
-            ],
-            "exists": [
-             "=",
-             "scope:treaty"
-            ],
-            "scope:treaty.binding_period": [
-             ">=",
-             "1825"
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           {
-            "desc": [
-             "=",
-             "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
-            ],
-            "value": [
-             "=",
-             "1"
-            ],
-            "add": [
-             "=",
-             {
-              "value": [
-               "=",
-               "scope:treaty.binding_period"
-              ],
-              "min": [
-               "=",
-               "365"
-              ],
-              "divide": [
-               "=",
-               "3650"
-              ]
-             }
-            ],
-            "max": [
-             "=",
-             "2"
-            ]
-           }
-          ]
-         }
         ]
        ],
        "else": [
@@ -4545,6 +4698,28 @@
         }
        ]
       }
+     ],
+     "contextual_accept_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0"
+       ],
+       "add": [
+        "=",
+        {
+         "desc": [
+          "=",
+          "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+         ],
+         "value": [
+          "=",
+          "treaty_binding_period_commitment_acceptance"
+         ]
+        }
+       ]
+      }
      ]
     }
    ]
@@ -4584,6 +4759,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_support_independence",
      "can_be_renegotiated",
      "giftable",
@@ -4738,6 +4914,41 @@
       "trigger": [
        "=",
        {
+        "OR": [
+         "=",
+         {
+          "scope:source_country": [
+           [
+            "=",
+            {
+             "aggressive_diplomatic_plays_permitted": [
+              "=",
+              "yes"
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "overlord": [
+              "=",
+              "scope:target_country.overlord"
+             ]
+            }
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "trigger": [
+       "=",
+       {
         "custom_tooltip": [
          "=",
          {
@@ -4778,6 +4989,179 @@
             "scope:source_country.country_rank": [
              ">=",
              "scope:target_country.country_rank"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "trigger": [
+       "=",
+       {
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "\"DIPLOMATIC_PACT_REQUIREMENT_NOT_HUMILIATED_BY_OVERLORD\""
+          ],
+          "trigger_if": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:target_country": [
+               "=",
+               {
+                "is_subject": [
+                 "=",
+                 "yes"
+                ]
+               }
+              ]
+             }
+            ],
+            "scope:target_country.overlord": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "has_diplomatic_pact": [
+                 "=",
+                 {
+                  "who": [
+                   "=",
+                   "scope:source_country"
+                  ],
+                  "type": [
+                   "=",
+                   "humiliation"
+                  ],
+                  "is_initiator": [
+                   "=",
+                   "yes"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "scope:target_country.top_overlord": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "has_diplomatic_pact": [
+                 "=",
+                 {
+                  "who": [
+                   "=",
+                   "scope:source_country"
+                  ],
+                  "type": [
+                   "=",
+                   "humiliation"
+                  ],
+                  "is_initiator": [
+                   "=",
+                   "yes"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "trigger": [
+       "=",
+       {
+        "trigger_if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:target_country": [
+             "=",
+             {
+              "is_subject": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ],
+          "scope:source_country": [
+           "=",
+           {
+            "NOT": [
+             "=",
+             {
+              "has_truce_with": [
+               "=",
+               "scope:target_country.overlord"
+              ]
+             }
+            ]
+           }
+          ],
+          "trigger_if": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:target_country": [
+               "=",
+               {
+                "NOT": [
+                 "=",
+                 {
+                  "overlord": [
+                   "=",
+                   "top_overlord"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "scope:source_country": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "has_truce_with": [
+                 "=",
+                 "scope:target_country.top_overlord"
+                ]
+               }
+              ]
+             }
             ]
            }
           ]
@@ -5099,25 +5483,89 @@
         }
        ],
        "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "has_variable": [
+             "=",
+             "ai_russia_client_bloc_pending"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.15"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "is_subject": [
+             "=",
+             "yes"
+            ],
+            "has_attitude": [
+             "=",
+             {
+              "who": [
+               "=",
+               "overlord"
+              ],
+              "attitude": [
+               "=",
+               "rebellious"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "1.0"
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "if": [
         "=",
         {
          "limit": [
           "=",
           {
-           "is_subject": [
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "ai_russia_article_partner_is_pending_client": [
             "=",
             "yes"
            ],
-           "has_attitude": [
+           "scope:other_country": [
             "=",
             {
-             "who": [
+             "is_subject": [
               "=",
-              "overlord"
-             ],
-             "attitude": [
-              "=",
-              "rebellious"
+              "yes"
              ]
             }
            ]
@@ -5125,7 +5573,7 @@
          ],
          "add": [
           "=",
-          "1.0"
+          "5"
          ]
         }
        ]
@@ -5146,181 +5594,110 @@
         "0"
        ],
        "if": [
-        [
-         "=",
-         {
-          "limit": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "scope:source_country": [
+            "?=",
+            "this"
+           ]
+          }
+         ],
+         "scope:source_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "target"
+           ]
+          }
+         ],
+         "scope:target_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "actor"
+           ]
+          }
+         ],
+         "add": [
+          [
            "=",
            {
-            "scope:source_country": [
-             "?=",
-             "this"
-            ]
-           }
-          ],
-          "scope:source_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
+            "desc": [
              "=",
-             "target"
+             "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
+            ],
+            "value": [
+             "=",
+             "-20"
             ]
            }
           ],
-          "scope:target_country": [
+          [
            "=",
            {
-            "save_temporary_scope_as": [
+            "desc": [
              "=",
-             "actor"
+             "\"DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH\""
+            ],
+            "value": [
+             "=",
+             "\"scope:source_country.ai_army_comparison(scope:target_country)\""
+            ],
+            "multiply": [
+             "=",
+             "-3"
+            ],
+            "min": [
+             "=",
+             "-50"
+            ],
+            "max": [
+             "=",
+             "50"
             ]
            }
           ],
-          "add": [
-           [
-            "=",
-            {
-             "desc": [
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE\""
+            ],
+            "if": [
+             [
               "=",
-              "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
+              {
+               "limit": [
+                "=",
+                {
+                 "has_attitude": [
+                  "=",
+                  {
+                   "who": [
+                    "=",
+                    "scope:target_country"
+                   ],
+                   "attitude": [
+                    "=",
+                    "protective"
+                   ]
+                  }
+                 ]
+                }
+               ],
+               "value": [
+                "=",
+                "25"
+               ]
+              }
              ],
-             "value": [
-              "=",
-              "-20"
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH\""
-             ],
-             "value": [
-              "=",
-              "\"scope:source_country.ai_army_comparison(scope:target_country)\""
-             ],
-             "multiply": [
-              "=",
-              "-3"
-             ],
-             "min": [
-              "=",
-              "-50"
-             ],
-             "max": [
-              "=",
-              "50"
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE\""
-             ],
-             "if": [
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "has_attitude": [
-                   "=",
-                   {
-                    "who": [
-                     "=",
-                     "scope:target_country"
-                    ],
-                    "attitude": [
-                     "=",
-                     "protective"
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "value": [
-                 "=",
-                 "25"
-                ]
-               }
-              ],
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "OR": [
-                   "=",
-                   {
-                    "has_attitude": [
-                     [
-                      "=",
-                      {
-                       "who": [
-                        "=",
-                        "scope:target_country"
-                       ],
-                       "attitude": [
-                        "=",
-                        "antagonistic"
-                       ]
-                      }
-                     ],
-                     [
-                      "=",
-                      {
-                       "who": [
-                        "=",
-                        "scope:target_country"
-                       ],
-                       "attitude": [
-                        "=",
-                        "belligerent"
-                       ]
-                      }
-                     ],
-                     [
-                      "=",
-                      {
-                       "who": [
-                        "=",
-                        "scope:target_country"
-                       ],
-                       "attitude": [
-                        "=",
-                        "rebellious"
-                       ]
-                      }
-                     ]
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "value": [
-                 "=",
-                 "-1000"
-                ]
-               }
-              ]
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE_TOWARDS_ACTOR_OVERLORD\""
-             ],
-             "if": [
+             [
               "=",
               {
                "limit": [
@@ -5335,7 +5712,7 @@
                      {
                       "who": [
                        "=",
-                       "scope:target_country.overlord"
+                       "scope:target_country"
                       ],
                       "attitude": [
                        "=",
@@ -5348,7 +5725,20 @@
                      {
                       "who": [
                        "=",
-                       "scope:target_country.overlord"
+                       "scope:target_country"
+                      ],
+                      "attitude": [
+                       "=",
+                       "belligerent"
+                      ]
+                     }
+                    ],
+                    [
+                     "=",
+                     {
+                      "who": [
+                       "=",
+                       "scope:target_country"
                       ],
                       "attitude": [
                        "=",
@@ -5363,224 +5753,219 @@
                ],
                "value": [
                 "=",
-                "50"
-               ]
-              }
-             ],
-             "else_if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "OR": [
-                  "=",
-                  {
-                   "has_attitude": [
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country.overlord"
-                      ],
-                      "attitude": [
-                       "=",
-                       "belligerent"
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country.overlord"
-                      ],
-                      "attitude": [
-                       "=",
-                       "domineering"
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country.overlord"
-                      ],
-                      "attitude": [
-                       "=",
-                       "defiant"
-                      ]
-                     }
-                    ]
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "value": [
-                "=",
-                "30"
-               ]
-              }
-             ],
-             "else": [
-              "=",
-              {
-               "value": [
-                "=",
-                "-500"
+                "-1000"
                ]
               }
              ]
-            }
-           ]
-          ],
-          "if": [
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scope:target_country": [
-                "=",
-                {
-                 "is_subject": [
-                  "=",
-                  "yes"
-                 ],
-                 "overlord": [
-                  "=",
-                  "scope:source_country.overlord"
-                 ]
-                }
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_FELLOW_SUBJECT\""
-               ],
-               "value": [
-                "=",
-                "50"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "NOT": [
-                "=",
-                {
-                 "is_country_type": [
-                  "=",
-                  "unrecognized"
-                 ]
-                }
-               ],
-               "scope:target_country": [
-                "=",
-                {
-                 "is_country_type": [
-                  "=",
-                  "unrecognized"
-                 ]
-                }
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_UNRECOGNIZED\""
-               ],
-               "value": [
-                "=",
-                "-25"
-               ]
-              }
-             ]
-            }
-           ]
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "scope:is_treaty_active"
-              ]
-             }
-            ],
-            "exists": [
-             "=",
-             "scope:treaty"
-            ],
-            "scope:treaty.binding_period": [
-             ">=",
-             "1825"
             ]
            }
           ],
-          "multiply": [
+          [
            "=",
            {
             "desc": [
              "=",
-             "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+             "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE_TOWARDS_ACTOR_OVERLORD\""
             ],
-            "value": [
+            "if": [
              "=",
-             "1"
+             {
+              "limit": [
+               "=",
+               {
+                "OR": [
+                 "=",
+                 {
+                  "has_attitude": [
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country.overlord"
+                     ],
+                     "attitude": [
+                      "=",
+                      "antagonistic"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country.overlord"
+                     ],
+                     "attitude": [
+                      "=",
+                      "rebellious"
+                     ]
+                    }
+                   ]
+                  ]
+                 }
+                ]
+               }
+              ],
+              "value": [
+               "=",
+               "50"
+              ]
+             }
             ],
-            "add": [
+            "else_if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "OR": [
+                 "=",
+                 {
+                  "has_attitude": [
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country.overlord"
+                     ],
+                     "attitude": [
+                      "=",
+                      "belligerent"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country.overlord"
+                     ],
+                     "attitude": [
+                      "=",
+                      "domineering"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country.overlord"
+                     ],
+                     "attitude": [
+                      "=",
+                      "defiant"
+                     ]
+                    }
+                   ]
+                  ]
+                 }
+                ]
+               }
+              ],
+              "value": [
+               "=",
+               "30"
+              ]
+             }
+            ],
+            "else": [
              "=",
              {
               "value": [
                "=",
-               "scope:treaty.binding_period"
-              ],
-              "min": [
-               "=",
-               "365"
-              ],
-              "divide": [
-               "=",
-               "3650"
+               "-500"
               ]
              }
-            ],
-            "max": [
-             "=",
-             "2"
             ]
            }
           ]
-         }
-        ]
+         ],
+         "if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:target_country": [
+               "=",
+               {
+                "is_subject": [
+                 "=",
+                 "yes"
+                ],
+                "overlord": [
+                 "=",
+                 "scope:source_country.overlord"
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_FELLOW_SUBJECT\""
+              ],
+              "value": [
+               "=",
+               "50"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "is_country_type": [
+                 "=",
+                 "unrecognized"
+                ]
+               }
+              ],
+              "scope:target_country": [
+               "=",
+               {
+                "is_country_type": [
+                 "=",
+                 "unrecognized"
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_UNRECOGNIZED\""
+              ],
+              "value": [
+               "=",
+               "-25"
+              ]
+             }
+            ]
+           }
+          ]
+         ]
+        }
        ],
        "else": [
         "=",
@@ -5960,6 +6345,28 @@
         }
        ]
       }
+     ],
+     "contextual_accept_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0"
+       ],
+       "add": [
+        "=",
+        {
+         "desc": [
+          "=",
+          "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+         ],
+         "value": [
+          "=",
+          "treaty_binding_period_commitment_acceptance"
+         ]
+        }
+       ]
+      }
      ]
     }
    ]
@@ -5983,7 +6390,9 @@
    "flags": [
     "=",
     [
-     "giftable"
+     "show_in_lens",
+     "giftable",
+     "is_one_time"
     ]
    ],
    "maintenance_paid_by": [
@@ -7263,408 +7672,345 @@
         "0"
        ],
        "if": [
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:source_country": [
-             "?=",
-             "this"
-            ]
-           }
-          ],
-          "scope:source_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "target"
-            ]
-           }
-          ],
-          "scope:target_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "actor"
-            ]
-           }
-          ],
-          "if": [
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "exists": [
-                "=",
-                "scope:article.input_quantity"
-               ]
-              }
-             ],
-             "subtract": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY\""
-               ],
-               "value": [
-                "=",
-                "scope:article.input_quantity"
-               ],
-               "divide": [
-                "=",
-                "25"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "in_default": [
-                "=",
-                "yes"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_DEBT_TARGET\""
-               ],
-               "value": [
-                "=",
-                "-1000"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "exists": [
-                "=",
-                "scope:article.input_quantity"
-               ]
-              }
-             ],
-             "if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "net_fixed_income": [
-                  "<",
-                  "0"
-                 ]
-                }
-               ],
-               "multiply": [
-                "=",
-                {
-                 "desc": [
-                  "=",
-                  "\"DIPLOMATIC_ACCEPTANCE_BUDGET_DEFICIT\""
-                 ],
-                 "value": [
-                  "=",
-                  "1"
-                 ],
-                 "add": [
-                  "=",
-                  {
-                   "value": [
-                    "=",
-                    "net_fixed_income"
-                   ],
-                   "divide": [
-                    "=",
-                    "scope:article.input_quantity"
-                   ],
-                   "multiply": [
-                    "=",
-                    "-1"
-                   ],
-                   "max": [
-                    "=",
-                    "0.2"
-                   ]
-                  }
-                 ]
-                }
-               ]
-              }
-             ],
-             "else_if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "net_fixed_income": [
-                  ">",
-                  "0"
-                 ]
-                }
-               ],
-               "multiply": [
-                "=",
-                {
-                 "desc": [
-                  "=",
-                  "\"DIPLOMATIC_ACCEPTANCE_BUDGET_SURPLUS\""
-                 ],
-                 "value": [
-                  "=",
-                  "1"
-                 ],
-                 "subtract": [
-                  "=",
-                  {
-                   "value": [
-                    "=",
-                    "net_fixed_income"
-                   ],
-                   "divide": [
-                    "=",
-                    "scope:article.input_quantity"
-                   ],
-                   "max": [
-                    "=",
-                    "0.2"
-                   ]
-                  }
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "income_transfer_relative_expenses": [
-                ">=",
-                "0.2"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_MONEY_TRANSFER_CAP\""
-               ],
-               "value": [
-                "=",
-                "-200"
-               ]
-              }
-             ]
-            }
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "scope:source_country": [
+            "?=",
+            "this"
            ]
-          ],
-          "multiply": [
-           "=",
-           {
-            "desc": [
-             "=",
-             "\"DIPLOMATIC_ACCEPTANCE_GDP\""
-            ],
-            "value": [
-             "=",
-             "1"
-            ],
-            "add": [
-             "=",
-             {
-              "value": [
-               "=",
-               "\"scope:source_country.ai_gdp_comparison(root)\""
-              ],
-              "max": [
-               "=",
-               "25"
-              ],
-              "min": [
-               "=",
-               "-50"
-              ],
-              "multiply": [
-               "=",
-               "0.01"
-              ]
-             }
-            ]
-           }
-          ],
-          "else_if": [
-           [
+          }
+         ],
+         "scope:source_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
             "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scaled_debt": [
-                ">=",
-                "0.05"
-               ]
-              }
-             ],
-             "multiply": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_DEBT_TARGET\""
-               ],
-               "value": [
-                "=",
-                "1"
-               ],
-               "add": [
-                "=",
-                {
-                 "value": [
-                  "=",
-                  "scaled_debt"
-                 ],
-                 "max": [
-                  "=",
-                  "0.2"
-                 ]
-                }
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scaled_gold_reserves": [
-                ">=",
-                "0.05"
-               ]
-              }
-             ],
-             "multiply": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES\""
-               ],
-               "value": [
-                "=",
-                "1"
-               ],
-               "subtract": [
-                "=",
-                {
-                 "value": [
-                  "=",
-                  "scaled_gold_reserves"
-                 ],
-                 "max": [
-                  "=",
-                  "0.2"
-                 ]
-                }
-               ]
-              }
-             ]
-            }
+            "target"
            ]
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
+          }
+         ],
+         "scope:target_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "actor"
+           ]
+          }
+         ],
+         "if": [
+          [
            "=",
            {
-            "NOT": [
+            "limit": [
              "=",
              {
               "exists": [
                "=",
-               "scope:is_treaty_active"
+               "scope:article.input_quantity"
               ]
              }
             ],
-            "exists": [
+            "subtract": [
              "=",
-             "scope:treaty"
-            ],
-            "scope:treaty.binding_period": [
-             ">=",
-             "1825"
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_INPUT_QUANTITY\""
+              ],
+              "value": [
+               "=",
+               "scope:article.input_quantity"
+              ],
+              "divide": [
+               "=",
+               "25"
+              ]
+             }
             ]
            }
           ],
-          "multiply": [
+          [
            "=",
            {
-            "desc": [
+            "limit": [
              "=",
-             "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
-            ],
-            "value": [
-             "=",
-             "1"
+             {
+              "in_default": [
+               "=",
+               "yes"
+              ]
+             }
             ],
             "add": [
              "=",
              {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_DEBT_TARGET\""
+              ],
               "value": [
                "=",
-               "scope:treaty.binding_period"
-              ],
-              "min": [
+               "-1000"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "exists": [
                "=",
-               "365"
-              ],
-              "divide": [
-               "=",
-               "3650"
+               "scope:article.input_quantity"
               ]
              }
             ],
-            "max": [
+            "if": [
              "=",
-             "2"
+             {
+              "limit": [
+               "=",
+               {
+                "net_fixed_income": [
+                 "<",
+                 "0"
+                ]
+               }
+              ],
+              "multiply": [
+               "=",
+               {
+                "desc": [
+                 "=",
+                 "\"DIPLOMATIC_ACCEPTANCE_BUDGET_DEFICIT\""
+                ],
+                "value": [
+                 "=",
+                 "1"
+                ],
+                "add": [
+                 "=",
+                 {
+                  "value": [
+                   "=",
+                   "net_fixed_income"
+                  ],
+                  "divide": [
+                   "=",
+                   "scope:article.input_quantity"
+                  ],
+                  "multiply": [
+                   "=",
+                   "-1"
+                  ],
+                  "max": [
+                   "=",
+                   "0.2"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "else_if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "net_fixed_income": [
+                 ">",
+                 "0"
+                ]
+               }
+              ],
+              "multiply": [
+               "=",
+               {
+                "desc": [
+                 "=",
+                 "\"DIPLOMATIC_ACCEPTANCE_BUDGET_SURPLUS\""
+                ],
+                "value": [
+                 "=",
+                 "1"
+                ],
+                "subtract": [
+                 "=",
+                 {
+                  "value": [
+                   "=",
+                   "net_fixed_income"
+                  ],
+                  "divide": [
+                   "=",
+                   "scope:article.input_quantity"
+                  ],
+                  "max": [
+                   "=",
+                   "0.2"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "income_transfer_relative_expenses": [
+               ">=",
+               "0.2"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_MONEY_TRANSFER_CAP\""
+              ],
+              "value": [
+               "=",
+               "-200"
+              ]
+             }
             ]
            }
           ]
-         }
-        ]
+         ],
+         "multiply": [
+          "=",
+          {
+           "desc": [
+            "=",
+            "\"DIPLOMATIC_ACCEPTANCE_GDP\""
+           ],
+           "value": [
+            "=",
+            "1"
+           ],
+           "add": [
+            "=",
+            {
+             "value": [
+              "=",
+              "\"scope:source_country.ai_gdp_comparison(root)\""
+             ],
+             "max": [
+              "=",
+              "25"
+             ],
+             "min": [
+              "=",
+              "-50"
+             ],
+             "multiply": [
+              "=",
+              "0.01"
+             ]
+            }
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scaled_debt": [
+               ">=",
+               "0.05"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_DEBT_TARGET\""
+              ],
+              "value": [
+               "=",
+               "1"
+              ],
+              "add": [
+               "=",
+               {
+                "value": [
+                 "=",
+                 "scaled_debt"
+                ],
+                "max": [
+                 "=",
+                 "0.2"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scaled_gold_reserves": [
+               ">=",
+               "0.05"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_GOLD_RESERVES\""
+              ],
+              "value": [
+               "=",
+               "1"
+              ],
+              "subtract": [
+               "=",
+               {
+                "value": [
+                 "=",
+                 "scaled_gold_reserves"
+                ],
+                "max": [
+                 "=",
+                 "0.2"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ]
+         ]
+        }
        ],
        "else": [
         "=",
@@ -7937,6 +8283,141 @@
                "max": [
                 "=",
                 "0.2"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "contextual_accept_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "NOT": [
+            "=",
+            {
+             "exists": [
+              "=",
+              "scope:is_treaty_active"
+             ]
+            }
+           ],
+           "scope:treaty.binding_period": [
+            ">",
+            "1825"
+           ],
+           "exists": [
+            "=",
+            "scope:article.input_quantity"
+           ]
+          }
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "scope:source_country": [
+              "?=",
+              "this"
+             ]
+            }
+           ],
+           "subtract": [
+            "=",
+            {
+             "desc": [
+              "=",
+              "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+             ],
+             "value": [
+              "=",
+              "scope:article.input_quantity"
+             ],
+             "divide": [
+              "=",
+              "25"
+             ],
+             "multiply": [
+              "=",
+              {
+               "value": [
+                "=",
+                "scope:treaty.binding_period"
+               ],
+               "subtract": [
+                "=",
+                "1825"
+               ],
+               "divide": [
+                "=",
+                "3650"
+               ],
+               "max": [
+                "=",
+                "1"
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ],
+         "else": [
+          "=",
+          {
+           "add": [
+            "=",
+            {
+             "desc": [
+              "=",
+              "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+             ],
+             "value": [
+              "=",
+              "scope:article.input_quantity"
+             ],
+             "divide": [
+              "=",
+              "100"
+             ],
+             "max": [
+              "=",
+              "75"
+             ],
+             "multiply": [
+              "=",
+              {
+               "value": [
+                "=",
+                "scope:treaty.binding_period"
+               ],
+               "subtract": [
+                "=",
+                "1825"
+               ],
+               "divide": [
+                "=",
+                "3650"
+               ],
+               "max": [
+                "=",
+                "1"
                ]
               }
              ]
@@ -8231,7 +8712,8 @@
      "causes_state_transfer",
      "giftable",
      "exclude_from_make_this_work",
-     "ai_consider_threaten_naval_hostilities"
+     "ai_consider_threaten_naval_hostilities",
+     "is_one_time"
     ]
    ],
    "usage_limit": [
@@ -8890,6 +9372,46 @@
             "limit": [
              "=",
              {
+              "ai_ceding_state_would_isolate_states": [
+               "=",
+               {
+                "STATE": [
+                 "=",
+                 "scope:article.input_state"
+                ],
+                "CEDER": [
+                 "=",
+                 "scope:source_country"
+                ],
+                "RECEIVER": [
+                 "=",
+                 "scope:target_country"
+                ]
+               }
+              ]
+             }
+            ],
+            "subtract": [
+             "=",
+             {
+              "value": [
+               "=",
+               "1000"
+              ],
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_WOULD_ISOLATE_STATES\""
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
               "exists": [
                "=",
                "scope:target_country.var:recently_traded_states_counter"
@@ -8984,44 +9506,32 @@
                "=",
                {
                 "ai_is_regional_objective_state": [
-                 "=",
-                 {
-                  "TYPE": [
-                   "=",
-                   "aro:ai_regional_objective_acquire_states"
-                  ],
-                  "STATE": [
-                   "=",
-                   "scope:article.input_state"
-                  ]
-                 }
-                ],
-                "AND": [
-                 "=",
-                 {
-                  "ai_is_regional_objective_state": [
-                   "=",
-                   {
-                    "TYPE": [
-                     "=",
-                     "aro:ai_regional_objective_recover_claims"
-                    ],
-                    "STATE": [
-                     "=",
-                     "scope:article.input_state"
-                    ]
-                   }
-                  ],
-                  "scope:article.input_state": [
-                   "=",
-                   {
-                    "has_claim_by": [
-                     "=",
-                     "root"
-                    ]
-                   }
-                  ]
-                 }
+                 [
+                  "=",
+                  {
+                   "TYPE": [
+                    "=",
+                    "aro:ai_regional_objective_acquire_states"
+                   ],
+                   "STATE": [
+                    "=",
+                    "scope:article.input_state"
+                   ]
+                  }
+                 ],
+                 [
+                  "=",
+                  {
+                   "TYPE": [
+                    "=",
+                    "aro:ai_regional_objective_recover_claims"
+                   ],
+                   "STATE": [
+                    "=",
+                    "scope:article.input_state"
+                   ]
+                  }
+                 ]
                 ]
                }
               ]
@@ -9126,6 +9636,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_investment_rights",
      "can_be_enforced",
      "can_be_renegotiated",
@@ -9479,6 +9990,88 @@
           "0.05"
          ]
         }
+       ],
+       "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "has_variable": [
+             "=",
+             "ai_russia_client_bloc_pending"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.15"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_heir_of_alexander"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_heir_of_alexander_button_2_complete"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.5"
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "ai_russia_article_partner_is_pending_client": [
+            "=",
+            "yes"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "5"
+         ]
+        }
        ]
       }
      ],
@@ -9731,6 +10324,51 @@
               "add": [
                "=",
                "25"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "c:CHI": [
+               "?=",
+               "this"
+              ],
+              "scope:target_country": [
+               "?=",
+               {
+                "has_journal_entry": [
+                 "=",
+                 "je_tp_tsar_heir_of_alexander"
+                ],
+                "NOT": [
+                 "=",
+                 {
+                  "has_variable": [
+                   "=",
+                   "je_tp_tsar_heir_of_alexander_button_2_complete"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
+              ],
+              "value": [
+               "=",
+               "50"
               ]
              }
             ]
@@ -10496,7 +11134,7 @@
               ]
              }
             ],
-            "can_reach_target_country": [
+            "can_reach_target_country_to_coerce": [
              "=",
              {
               "TARGET_COUNTRY": [
@@ -10661,7 +11299,9 @@
    "flags": [
     "=",
     [
-     "ai_consider_threaten_naval_hostilities"
+     "show_in_lens",
+     "ai_consider_threaten_naval_hostilities",
+     "is_one_time"
     ]
    ],
    "maintenance_paid_by": [
@@ -12002,6 +12642,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "can_be_renegotiated",
      "friendly",
      "ai_consider_threaten_naval_hostilities"
@@ -12271,6 +12912,68 @@
        "value": [
         "=",
         "0.01"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "has_variable": [
+            "=",
+            "ai_russia_client_bloc_pending"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "0.15"
+         ]
+        }
+       ]
+      }
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "ai_russia_article_partner_is_pending_client": [
+            "=",
+            "yes"
+           ],
+           "scope:other_country": [
+            "=",
+            {
+             "is_subject": [
+              "=",
+              "no"
+             ]
+            }
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "5"
+         ]
+        }
        ]
       }
      ],
@@ -13554,6 +14257,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "can_be_renegotiated",
      "friendly"
     ]
@@ -13587,6 +14291,19 @@
    "possible": [
     "=",
     {}
+   ],
+   "show_in_lens": [
+    "=",
+    {
+     "is_country_type": [
+      "=",
+      "unrecognized"
+     ],
+     "has_journal_entry": [
+      "=",
+      "je_earn_recognition"
+     ]
+    }
    ],
    "can_ratify": [
     "=",
@@ -14443,6 +15160,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "can_be_renegotiated",
      "giftable",
      "friendly"
@@ -14789,6 +15507,59 @@
           "0.05"
          ]
         }
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "has_variable": [
+            "=",
+            "ai_russia_client_bloc_pending"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "0.15"
+         ]
+        }
+       ]
+      }
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "ai_russia_article_partner_is_pending_client": [
+            "=",
+            "yes"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "5"
+         ]
+        }
        ]
       }
      ],
@@ -14806,731 +15577,380 @@
         "0"
        ],
        "if": [
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:source_country": [
-             "?=",
-             "this"
-            ]
-           }
-          ],
-          "scope:source_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "target"
-            ]
-           }
-          ],
-          "scope:target_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "actor"
-            ]
-           }
-          ],
-          "add": [
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
-             ],
-             "value": [
-              "=",
-              "-10"
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH\""
-             ],
-             "value": [
-              "=",
-              "\"scope:source_country.ai_army_comparison(scope:target_country)\""
-             ],
-             "multiply": [
-              "=",
-              "-2"
-             ],
-             "min": [
-              "=",
-              "-30"
-             ],
-             "max": [
-              "=",
-              "30"
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE\""
-             ],
-             "if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "OR": [
-                  "=",
-                  {
-                   "has_attitude": [
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country"
-                      ],
-                      "attitude": [
-                       "=",
-                       "antagonistic"
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country"
-                      ],
-                      "attitude": [
-                       "=",
-                       "domineering"
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country"
-                      ],
-                      "attitude": [
-                       "=",
-                       "belligerent"
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "who": [
-                       "=",
-                       "scope:target_country"
-                      ],
-                      "attitude": [
-                       "=",
-                       "rebellious"
-                      ]
-                     }
-                    ]
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "value": [
-                "=",
-                "-1000"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"GREAT_GAME_BONUS\""
-             ],
-             "if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "OR": [
-                  "=",
-                  {
-                   "scope:target_country": [
-                    [
-                     "=",
-                     {
-                      "has_journal_entry": [
-                       "=",
-                       "je_unify_afghanistan"
-                      ],
-                      "OR": [
-                       "=",
-                       {
-                        "AND": [
-                         [
-                          "=",
-                          {
-                           "has_variable": [
-                            "=",
-                            "AFG_appealed_to_GBR"
-                           ],
-                           "c:GBR": [
-                            "?=",
-                            "scope:source_country"
-                           ]
-                          }
-                         ],
-                         [
-                          "=",
-                          {
-                           "has_variable": [
-                            "=",
-                            "AFG_appealed_to_RUS"
-                           ],
-                           "c:RUS": [
-                            "?=",
-                            "scope:source_country"
-                           ]
-                          }
-                         ]
-                        ]
-                       }
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "has_journal_entry": [
-                       "=",
-                       "je_eastern_frontier"
-                      ],
-                      "OR": [
-                       "=",
-                       {
-                        "AND": [
-                         [
-                          "=",
-                          {
-                           "has_variable": [
-                            "=",
-                            "PER_appealed_to_GBR"
-                           ],
-                           "c:GBR": [
-                            "?=",
-                            "scope:source_country"
-                           ]
-                          }
-                         ],
-                         [
-                          "=",
-                          {
-                           "has_variable": [
-                            "=",
-                            "PER_appealed_to_RUS"
-                           ],
-                           "c:RUS": [
-                            "?=",
-                            "scope:source_country"
-                           ]
-                          }
-                         ]
-                        ]
-                       }
-                      ]
-                     }
-                    ],
-                    [
-                     "=",
-                     {
-                      "c:CIR": [
-                       "?=",
-                       "this"
-                      ],
-                      "has_global_variable": [
-                       "=",
-                       "circassia_recognizer"
-                      ],
-                      "global_var:circassia_recognizer": [
-                       "?=",
-                       "scope:source_country"
-                      ]
-                     }
-                    ]
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "value": [
-                "=",
-                "25"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"AT_WAR_WITH_FRIENDLY_COUNTRY\""
-             ],
-             "if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "scope:target_country": [
-                  "=",
-                  {
-                   "is_at_war": [
-                    "=",
-                    "yes"
-                   ],
-                   "any_enemy_in_war": [
-                    "=",
-                    {
-                     "scope:source_country.relations:this": [
-                      ">=",
-                      "relations_threshold:cordial"
-                     ]
-                    }
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "add": [
-                "=",
-                "-100"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"AT_WAR_WITH_UNFRIENDLY_COUNTRY\""
-             ],
-             "if": [
-              "=",
-              {
-               "limit": [
-                "=",
-                {
-                 "scope:target_country": [
-                  "=",
-                  {
-                   "is_at_war": [
-                    "=",
-                    "yes"
-                   ],
-                   "any_enemy_in_war": [
-                    "=",
-                    {
-                     "scope:source_country.relations:this": [
-                      "<=",
-                      "relations_threshold:poor"
-                     ]
-                    }
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "add": [
-                "=",
-                "25"
-               ]
-              }
-             ]
-            }
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "scope:source_country": [
+            "?=",
+            "this"
            ]
+          }
+         ],
+         "scope:source_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "target"
+           ]
+          }
+         ],
+         "scope:target_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "actor"
+           ]
+          }
+         ],
+         "add": [
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
+            ],
+            "value": [
+             "=",
+             "-10"
+            ]
+           }
           ],
-          "if": [
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "has_strategic_adjacency": [
-                "=",
-                "scope:target_country"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_NEIGHBORS\""
-               ],
-               "value": [
-                "=",
-                "5"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "has_strategy": [
-                "=",
-                "ai_strategy_armed_isolationism"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_ISOLATIONIST\""
-               ],
-               "add": [
-                "=",
-                "-25"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "has_strategy": [
-                "=",
-                "ai_strategy_maintain_power_balance"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_MAINTAIN_POWER_BALANCE\""
-               ],
-               "add": [
-                "=",
-                "10"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "\"num_alliances_and_defensive_pacts_with_rivals(scope:target_country)\"": [
-                ">",
-                "0"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_RIVALS\""
-               ],
-               "value": [
-                "=",
-                "\"num_alliances_and_defensive_pacts_with_rivals(scope:target_country)\""
-               ],
-               "multiply": [
-                "=",
-                "-15"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\"": [
-                ">",
-                "0"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_ALLIES\""
-               ],
-               "value": [
-                "=",
-                "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\""
-               ],
-               "multiply": [
-                "=",
-                "10"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "\"num_shared_rivals(scope:target_country)\"": [
-                ">",
-                "0"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_SHARED_RIVALS\""
-               ],
-               "value": [
-                "=",
-                "\"num_shared_rivals(scope:target_country)\""
-               ],
-               "multiply": [
-                "=",
-                "10"
-               ],
-               "max": [
-                "=",
-                "30"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "NOT": [
-                "=",
-                {
-                 "any_scope_treaty": [
-                  "=",
-                  {
-                   "binds": [
-                    "=",
-                    "scope:source_country"
-                   ],
-                   "any_scope_article": [
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_ARMY_STRENGTH\""
+            ],
+            "value": [
+             "=",
+             "\"scope:source_country.ai_army_comparison(scope:target_country)\""
+            ],
+            "multiply": [
+             "=",
+             "-2"
+            ],
+            "min": [
+             "=",
+             "-30"
+            ],
+            "max": [
+             "=",
+             "30"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_ATTITUDE\""
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "OR": [
+                 "=",
+                 {
+                  "has_attitude": [
+                   [
                     "=",
                     {
-                     "has_type": [
+                     "who": [
                       "=",
-                      "military_assistance"
-                     ]
-                    }
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "any_scope_treaty": [
-                "=",
-                {
-                 "count": [
-                  ">",
-                  "0"
-                 ],
-                 "any_scope_article": [
-                  "=",
-                  {
-                   "has_type": [
-                    "=",
-                    "military_assistance"
-                   ]
-                  }
-                 ]
-                }
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_NUM_MILITARY_ASSISTANCE_PACTS\""
-               ],
-               "value": [
-                "=",
-                {
-                 "every_scope_treaty": [
-                  "=",
-                  {
-                   "limit": [
-                    "=",
-                    {
-                     "any_scope_article": [
-                      "=",
-                      {
-                       "has_type": [
-                        "=",
-                        "military_assistance"
-                       ]
-                      }
-                     ]
-                    }
-                   ],
-                   "add": [
-                    "=",
-                    "1"
-                   ]
-                  }
-                 ]
-                }
-               ],
-               "multiply": [
-                "=",
-                "-10"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scope:target_country": [
-                "=",
-                {
-                 "any_scope_treaty": [
-                  "=",
-                  {
-                   "count": [
-                    ">",
-                    "0"
-                   ],
-                   "any_scope_article": [
-                    "=",
-                    {
-                     "has_type": [
-                      "=",
-                      "military_assistance"
-                     ]
-                    }
-                   ]
-                  }
-                 ]
-                }
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_NUM_MILITARY_ASSISTANCE_PACTS_TARGET\""
-               ],
-               "value": [
-                "=",
-                {
-                 "scope:target_country": [
-                  "=",
-                  {
-                   "every_scope_treaty": [
-                    "=",
-                    {
-                     "limit": [
-                      "=",
-                      {
-                       "any_scope_article": [
-                        "=",
-                        {
-                         "has_type": [
-                          "=",
-                          "military_assistance"
-                         ]
-                        }
-                       ]
-                      }
+                      "scope:target_country"
                      ],
-                     "add": [
+                     "attitude": [
                       "=",
-                      "1"
+                      "antagonistic"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country"
+                     ],
+                     "attitude": [
+                      "=",
+                      "domineering"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country"
+                     ],
+                     "attitude": [
+                      "=",
+                      "belligerent"
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "who": [
+                      "=",
+                      "scope:target_country"
+                     ],
+                     "attitude": [
+                      "=",
+                      "rebellious"
                      ]
                     }
                    ]
-                  }
-                 ]
-                }
-               ],
-               "multiply": [
-                "=",
-                "-10"
-               ]
-              }
-             ]
-            }
-           ]
+                  ]
+                 }
+                ]
+               }
+              ],
+              "value": [
+               "=",
+               "-1000"
+              ]
+             }
+            ]
+           }
           ],
-          "else_if": [
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"GREAT_GAME_BONUS\""
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "OR": [
+                 "=",
+                 {
+                  "scope:target_country": [
+                   [
+                    "=",
+                    {
+                     "has_journal_entry": [
+                      "=",
+                      "je_unify_afghanistan"
+                     ],
+                     "OR": [
+                      "=",
+                      {
+                       "AND": [
+                        [
+                         "=",
+                         {
+                          "has_variable": [
+                           "=",
+                           "AFG_appealed_to_GBR"
+                          ],
+                          "c:GBR": [
+                           "?=",
+                           "scope:source_country"
+                          ]
+                         }
+                        ],
+                        [
+                         "=",
+                         {
+                          "has_variable": [
+                           "=",
+                           "AFG_appealed_to_RUS"
+                          ],
+                          "c:RUS": [
+                           "?=",
+                           "scope:source_country"
+                          ]
+                         }
+                        ]
+                       ]
+                      }
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "has_journal_entry": [
+                      "=",
+                      "je_eastern_frontier"
+                     ],
+                     "OR": [
+                      "=",
+                      {
+                       "AND": [
+                        [
+                         "=",
+                         {
+                          "has_variable": [
+                           "=",
+                           "PER_appealed_to_GBR"
+                          ],
+                          "c:GBR": [
+                           "?=",
+                           "scope:source_country"
+                          ]
+                         }
+                        ],
+                        [
+                         "=",
+                         {
+                          "has_variable": [
+                           "=",
+                           "PER_appealed_to_RUS"
+                          ],
+                          "c:RUS": [
+                           "?=",
+                           "scope:source_country"
+                          ]
+                         }
+                        ]
+                       ]
+                      }
+                     ]
+                    }
+                   ],
+                   [
+                    "=",
+                    {
+                     "c:CIR": [
+                      "?=",
+                      "this"
+                     ],
+                     "has_global_variable": [
+                      "=",
+                      "circassia_recognizer"
+                     ],
+                     "global_var:circassia_recognizer": [
+                      "?=",
+                      "scope:source_country"
+                     ]
+                    }
+                   ]
+                  ]
+                 }
+                ]
+               }
+              ],
+              "value": [
+               "=",
+               "25"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"AT_WAR_WITH_FRIENDLY_COUNTRY\""
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "scope:target_country": [
+                 "=",
+                 {
+                  "is_at_war": [
+                   "=",
+                   "yes"
+                  ],
+                  "any_enemy_in_war": [
+                   "=",
+                   {
+                    "scope:source_country.relations:this": [
+                     ">=",
+                     "relations_threshold:cordial"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               }
+              ],
+              "add": [
+               "=",
+               "-100"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"AT_WAR_WITH_UNFRIENDLY_COUNTRY\""
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "scope:target_country": [
+                 "=",
+                 {
+                  "is_at_war": [
+                   "=",
+                   "yes"
+                  ],
+                  "any_enemy_in_war": [
+                   "=",
+                   {
+                    "scope:source_country.relations:this": [
+                     "<=",
+                     "relations_threshold:poor"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               }
+              ],
+              "add": [
+               "=",
+               "25"
+              ]
+             }
+            ]
+           }
+          ]
+         ],
+         "if": [
+          [
            "=",
            {
             "limit": [
              "=",
              {
-              "has_strategy": [
+              "has_strategic_adjacency": [
                "=",
-               "ai_strategy_economic_imperialism"
+               "scope:target_country"
               ]
              }
             ],
@@ -15539,7 +15959,61 @@
              {
               "desc": [
                "=",
-               "\"DIPLOMATIC_ACCEPTANCE_ECONOMIC_IMPERIALISM\""
+               "\"DIPLOMATIC_ACCEPTANCE_NEIGHBORS\""
+              ],
+              "value": [
+               "=",
+               "5"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_strategy": [
+               "=",
+               "ai_strategy_armed_isolationism"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_ISOLATIONIST\""
+              ],
+              "add": [
+               "=",
+               "-25"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_strategy": [
+               "=",
+               "ai_strategy_maintain_power_balance"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_MAINTAIN_POWER_BALANCE\""
               ],
               "add": [
                "=",
@@ -15548,70 +16022,304 @@
              }
             ]
            }
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
+          ],
+          [
            "=",
            {
-            "NOT": [
+            "limit": [
              "=",
              {
-              "exists": [
-               "=",
-               "scope:is_treaty_active"
+              "\"num_alliances_and_defensive_pacts_with_rivals(scope:target_country)\"": [
+               ">",
+               "0"
               ]
              }
-            ],
-            "exists": [
-             "=",
-             "scope:treaty"
-            ],
-            "scope:treaty.binding_period": [
-             ">=",
-             "1825"
-            ]
-           }
-          ],
-          "multiply": [
-           "=",
-           {
-            "desc": [
-             "=",
-             "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
-            ],
-            "value": [
-             "=",
-             "1"
             ],
             "add": [
              "=",
              {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_RIVALS\""
+              ],
               "value": [
                "=",
-               "scope:treaty.binding_period"
+               "\"num_alliances_and_defensive_pacts_with_rivals(scope:target_country)\""
               ],
-              "min": [
+              "multiply": [
                "=",
-               "365"
-              ],
-              "divide": [
-               "=",
-               "3650"
+               "-15"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\"": [
+               ">",
+               "0"
               ]
              }
             ],
-            "max": [
+            "add": [
              "=",
-             "2"
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_ALLIES\""
+              ],
+              "value": [
+               "=",
+               "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\""
+              ],
+              "multiply": [
+               "=",
+               "10"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "\"num_shared_rivals(scope:target_country)\"": [
+               ">",
+               "0"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_SHARED_RIVALS\""
+              ],
+              "value": [
+               "=",
+               "\"num_shared_rivals(scope:target_country)\""
+              ],
+              "multiply": [
+               "=",
+               "10"
+              ],
+              "max": [
+               "=",
+               "30"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "any_scope_treaty": [
+                 "=",
+                 {
+                  "binds": [
+                   "=",
+                   "scope:source_country"
+                  ],
+                  "any_scope_article": [
+                   "=",
+                   {
+                    "has_type": [
+                     "=",
+                     "military_assistance"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               }
+              ],
+              "any_scope_treaty": [
+               "=",
+               {
+                "count": [
+                 ">",
+                 "0"
+                ],
+                "any_scope_article": [
+                 "=",
+                 {
+                  "has_type": [
+                   "=",
+                   "military_assistance"
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_NUM_MILITARY_ASSISTANCE_PACTS\""
+              ],
+              "value": [
+               "=",
+               {
+                "every_scope_treaty": [
+                 "=",
+                 {
+                  "limit": [
+                   "=",
+                   {
+                    "any_scope_article": [
+                     "=",
+                     {
+                      "has_type": [
+                       "=",
+                       "military_assistance"
+                      ]
+                     }
+                    ]
+                   }
+                  ],
+                  "add": [
+                   "=",
+                   "1"
+                  ]
+                 }
+                ]
+               }
+              ],
+              "multiply": [
+               "=",
+               "-10"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:target_country": [
+               "=",
+               {
+                "any_scope_treaty": [
+                 "=",
+                 {
+                  "count": [
+                   ">",
+                   "0"
+                  ],
+                  "any_scope_article": [
+                   "=",
+                   {
+                    "has_type": [
+                     "=",
+                     "military_assistance"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_NUM_MILITARY_ASSISTANCE_PACTS_TARGET\""
+              ],
+              "value": [
+               "=",
+               {
+                "scope:target_country": [
+                 "=",
+                 {
+                  "every_scope_treaty": [
+                   "=",
+                   {
+                    "limit": [
+                     "=",
+                     {
+                      "any_scope_article": [
+                       "=",
+                       {
+                        "has_type": [
+                         "=",
+                         "military_assistance"
+                        ]
+                       }
+                      ]
+                     }
+                    ],
+                    "add": [
+                     "=",
+                     "1"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               }
+              ],
+              "multiply": [
+               "=",
+               "-10"
+              ]
+             }
             ]
            }
           ]
-         }
-        ]
+         ],
+         "else_if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_strategy": [
+              "=",
+              "ai_strategy_economic_imperialism"
+             ]
+            }
+           ],
+           "add": [
+            "=",
+            {
+             "desc": [
+              "=",
+              "\"DIPLOMATIC_ACCEPTANCE_ECONOMIC_IMPERIALISM\""
+             ],
+             "add": [
+              "=",
+              "10"
+             ]
+            }
+           ]
+          }
+         ]
+        }
        ],
        "else": [
         "=",
@@ -16002,6 +16710,19 @@
        "value": [
         "=",
         "0"
+       ],
+       "add": [
+        "=",
+        {
+         "desc": [
+          "=",
+          "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+         ],
+         "value": [
+          "=",
+          "treaty_binding_period_commitment_acceptance"
+         ]
+        }
        ],
        "if": [
         "=",
@@ -19675,6 +20396,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_military_access",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -20055,37 +20777,6 @@
             "limit": [
              "=",
              {
-              "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\"": [
-               ">",
-               "0"
-              ]
-             }
-            ],
-            "add": [
-             "=",
-             {
-              "desc": [
-               "=",
-               "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_ALLIES\""
-              ],
-              "value": [
-               "=",
-               "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\""
-              ],
-              "multiply": [
-               "=",
-               "10"
-              ]
-             }
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "limit": [
-             "=",
-             {
               "\"num_shared_rivals(scope:target_country)\"": [
                ">",
                "0"
@@ -20121,65 +20812,92 @@
             "limit": [
              "=",
              {
-              "exists": [
-               [
-                "=",
-                "power_bloc"
-               ],
-               [
-                "=",
-                "scope:target_country.power_bloc"
-               ]
+              "\"num_alliances_and_defensive_pacts_with_allies(scope:target_country)\"": [
+               ">",
+               "0"
               ]
              }
             ],
-            "if": [
+            "add": [
              "=",
              {
-              "limit": [
+              "desc": [
                "=",
-               {
-                "power_bloc": [
-                 "=",
-                 "scope:target_country.power_bloc"
-                ]
-               }
+               "\"DIPLOMATIC_ACCEPTANCE_ALLIED_TO_ALLIES\""
               ],
-              "add": [
+              "value": [
                "=",
-               {
-                "desc": [
-                 "=",
-                 "\"DIPLOMATIC_ACCEPTANCE_SAME_POWER_BLOC\""
-                ],
-                "value": [
-                 "=",
-                 "25"
-                ]
-               }
-              ]
-             }
-            ],
-            "else": [
-             "=",
-             {
-              "add": [
-               "=",
-               {
-                "desc": [
-                 "=",
-                 "\"DIPLOMATIC_ACCEPTANCE_DIFFERENT_POWER_BLOC\""
-                ],
-                "value": [
-                 "=",
-                 "-25"
-                ]
-               }
+               "10"
               ]
              }
             ]
            }
           ]
+         ],
+         "else_if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "exists": [
+              [
+               "=",
+               "power_bloc"
+              ],
+              [
+               "=",
+               "scope:target_country.power_bloc"
+              ]
+             ]
+            }
+           ],
+           "if": [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "power_bloc": [
+                "=",
+                "scope:target_country.power_bloc"
+               ]
+              }
+             ],
+             "add": [
+              "=",
+              {
+               "desc": [
+                "=",
+                "\"DIPLOMATIC_ACCEPTANCE_SAME_POWER_BLOC\""
+               ],
+               "value": [
+                "=",
+                "10"
+               ]
+              }
+             ]
+            }
+           ],
+           "else": [
+            "=",
+            {
+             "add": [
+              "=",
+              {
+               "desc": [
+                "=",
+                "\"DIPLOMATIC_ACCEPTANCE_DIFFERENT_POWER_BLOC\""
+               ],
+               "value": [
+                "=",
+                "-10"
+               ]
+              }
+             ]
+            }
+           ]
+          }
          ]
         }
        ],
@@ -21551,6 +22269,15 @@
    "possible": [
     "=",
     {
+     "NOT": [
+      "=",
+      {
+       "has_law": [
+        "=",
+        "law_type:law_canton_system"
+       ]
+      }
+     ],
      "scope:other_country": [
       "=",
       {
@@ -21968,6 +22695,55 @@
         }
        ],
        "else_if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:target_country": [
+             "?=",
+             "this"
+            ],
+            "scope:source_country.market": [
+             "?=",
+             {
+              "market_trade": [
+               "=",
+               {
+                "target": [
+                 "=",
+                 "root.market"
+                ],
+                "goods": [
+                 "=",
+                 "scope:article.input_goods"
+                ],
+                "value": [
+                 ">",
+                 "0"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_TRADE_PARTNER_FOR_GOODS\""
+            ],
+            "value": [
+             "=",
+             "-300"
+            ]
+           }
+          ]
+         }
+        ],
         [
          "=",
          {
@@ -23627,11 +24403,11 @@
              "scope:treaty_options.binding_period": [
               [
                ">=",
-               "5"
+               "1825"
               ],
               [
                "<",
-               "10"
+               "3650"
               ]
              ]
             }
@@ -23665,11 +24441,11 @@
               "scope:treaty_options.binding_period": [
                [
                 ">=",
-                "10"
+                "3650"
                ],
                [
                 "<",
-                "20"
+                "7300"
                ]
               ]
              }
@@ -23701,7 +24477,7 @@
              {
               "scope:treaty_options.binding_period": [
                ">=",
-               "20"
+               "7300"
               ]
              }
             ],
@@ -23795,11 +24571,11 @@
               "scope:treaty_options.binding_period": [
                [
                 ">=",
-                "5"
+                "1825"
                ],
                [
                 "<",
-                "10"
+                "3650"
                ]
               ]
              }
@@ -23834,11 +24610,11 @@
               "scope:treaty_options.binding_period": [
                [
                 ">=",
-                "10"
+                "3650"
                ],
                [
                 "<",
-                "20"
+                "7300"
                ]
               ]
              }
@@ -23870,7 +24646,7 @@
              {
               "scope:treaty_options.binding_period": [
                ">=",
-               "20"
+               "7300"
               ]
              }
             ],
@@ -24117,432 +24893,303 @@
         }
        ],
        "if": [
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:source_country": [
-             "?=",
-             "this"
-            ],
-            "any_interest_group": [
-             "=",
-             {
-              "is_in_government": [
-               "=",
-               "yes"
-              ],
-              "law_stance": [
-               "=",
-               {
-                "law": [
-                 "=",
-                 "scope:article.input_law"
-                ],
-                "value": [
-                 ">=",
-                 "neutral"
-                ]
-               }
-              ]
-             }
-            ]
-           }
-          ],
-          "scope:source_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "target"
-            ]
-           }
-          ],
-          "scope:target_country": [
-           "=",
-           {
-            "save_temporary_scope_as": [
-             "=",
-             "actor"
-            ]
-           }
-          ],
-          "add": [
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
-             ],
-             "value": [
-              "=",
-              "-100"
-             ],
-             "if": [
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "NOT": [
-                   "=",
-                   {
-                    "exists": [
-                     "=",
-                     "scope:is_treaty_active"
-                    ]
-                   }
-                  ],
-                  "any_scope_treaty": [
-                   "=",
-                   {
-                    "any_scope_article": [
-                     "=",
-                     {
-                      "has_type": [
-                       "=",
-                       "law_commitment"
-                      ],
-                      "source_country": [
-                       "=",
-                       "scope:source_country"
-                      ]
-                     }
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "add": [
-                 "=",
-                 {
-                  "value": [
-                   "=",
-                   "-300"
-                  ]
-                 }
-                ]
-               }
-              ],
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "scope:article.input_law": [
-                   "=",
-                   {
-                    "is_same_law_group_as": [
-                     "=",
-                     "law_type:law_monarchy"
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "add": [
-                 "=",
-                 "-100"
-                ]
-               }
-              ],
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "scope:article.input_law": [
-                   "=",
-                   {
-                    "is_same_law_group_as": [
-                     "=",
-                     "law_type:law_autocracy"
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "add": [
-                 "=",
-                 "-50"
-                ]
-               }
-              ],
-              [
-               "=",
-               {
-                "limit": [
-                 "=",
-                 {
-                  "scope:article.input_law": [
-                   "=",
-                   {
-                    "OR": [
-                     "=",
-                     {
-                      "this": [
-                       [
-                        "=",
-                        "law_type:law_traditionalism"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_peasant_levies"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_extraction_economy"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_no_schools"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_no_health_system"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_no_home_affairs"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_serfdom"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_no_police"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_debt_slavery"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_consumption_based_taxation"
-                       ],
-                       [
-                        "=",
-                        "law_type:law_no_social_security"
-                       ]
-                      ]
-                     }
-                    ]
-                   }
-                  ]
-                 }
-                ],
-                "value": [
-                 "=",
-                 "-1000"
-                ]
-               }
-              ]
-             ]
-            }
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "scope:source_country": [
+            "?=",
+            "this"
            ],
-           [
+           "any_interest_group": [
             "=",
             {
-             "desc": [
+             "is_in_government": [
               "=",
-              "\"DIPLOMATIC_ACCEPTANCE_LIKES_LAW\""
+              "yes"
              ],
-             "if": [
+             "law_stance": [
               "=",
               {
-               "limit": [
+               "law": [
                 "=",
-                {
-                 "has_law": [
-                  "=",
-                  "scope:article.input_law"
-                 ]
-                }
+                "scope:article.input_law"
                ],
-               "add": [
-                "=",
-                "5"
+               "value": [
+                ">=",
+                "neutral"
                ]
               }
              ]
             }
            ]
-          ],
-          "if": [
-           [
+          }
+         ],
+         "scope:source_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
             "=",
-            {
-             "limit": [
+            "target"
+           ]
+          }
+         ],
+         "scope:target_country": [
+          "=",
+          {
+           "save_temporary_scope_as": [
+            "=",
+            "actor"
+           ]
+          }
+         ],
+         "add": [
+          [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_BASE_ADDITIONAL\""
+            ],
+            "value": [
+             "=",
+             "-100"
+            ],
+            "if": [
+             [
               "=",
               {
-               "has_law_or_variant": [
+               "limit": [
                 "=",
-                "law_type:law_isolationism"
+                {
+                 "NOT": [
+                  "=",
+                  {
+                   "exists": [
+                    "=",
+                    "scope:is_treaty_active"
+                   ]
+                  }
+                 ],
+                 "any_scope_treaty": [
+                  "=",
+                  {
+                   "any_scope_article": [
+                    "=",
+                    {
+                     "has_type": [
+                      "=",
+                      "law_commitment"
+                     ],
+                     "source_country": [
+                      "=",
+                      "scope:source_country"
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                }
+               ],
+               "add": [
+                "=",
+                {
+                 "value": [
+                  "=",
+                  "-300"
+                 ]
+                }
                ]
               }
              ],
-             "add": [
+             [
               "=",
               {
-               "desc": [
+               "limit": [
                 "=",
-                "\"law_isolationism\""
+                {
+                 "scope:article.input_law": [
+                  "=",
+                  {
+                   "is_same_law_group_as": [
+                    "=",
+                    "law_type:law_monarchy"
+                   ]
+                  }
+                 ]
+                }
                ],
                "add": [
                 "=",
                 "-100"
                ]
               }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "country_rank": [
-                ">=",
-                "scope:target_country.country_rank"
-               ]
-              }
              ],
-             "add": [
+             [
               "=",
               {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_RANK\""
-               ],
-               "value": [
-                "=",
-                "-300"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scope:article.input_law": [
-                "=",
-                "law_type:law_slavery_banned"
-               ],
-               "OR": [
+               "limit": [
                 "=",
                 {
-                 "has_strategy": [
-                  [
-                   "=",
-                   "ai_strategy_egalitarian_agenda"
-                  ],
-                  [
-                   "=",
-                   "ai_strategy_progressive_agenda"
-                  ]
-                 ]
-                }
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"DIPLOMATIC_ACCEPTANCE_ANTI_SLAVERY\""
-               ],
-               "value": [
-                "=",
-                "25"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "scope:article.input_law": [
-                "=",
-                "law_type:law_council_republic"
-               ],
-               "has_law": [
-                "=",
-                "law_type:law_council_republic"
-               ]
-              }
-             ],
-             "add": [
-              "=",
-              {
-               "desc": [
-                "=",
-                "\"communist_solidarity\""
-               ],
-               "value": [
-                "=",
-                "25"
-               ]
-              }
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "limit": [
-              "=",
-              {
-               "c:JAP": [
-                "?=",
-                "scope:source_country"
-               ],
-               "scope:source_country": [
-                "?=",
-                {
-                 "has_journal_entry": [
+                 "scope:article.input_law": [
                   "=",
-                  "je_meiji_imperial_marriage"
+                  {
+                   "is_same_law_group_as": [
+                    "=",
+                    "law_type:law_autocracy"
+                   ]
+                  }
                  ]
                 }
+               ],
+               "add": [
+                "=",
+                "-50"
                ]
               }
              ],
-             "add": [
+             [
               "=",
               {
-               "desc": [
+               "limit": [
                 "=",
-                "\"je_meiji_imperial_marriage\""
+                {
+                 "scope:article.input_law": [
+                  "=",
+                  {
+                   "OR": [
+                    "=",
+                    {
+                     "this": [
+                      [
+                       "=",
+                       "law_type:law_traditionalism"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_peasant_levies"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_extraction_economy"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_no_schools"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_no_health_system"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_no_home_affairs"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_serfdom"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_no_police"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_debt_slavery"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_consumption_based_taxation"
+                      ],
+                      [
+                       "=",
+                       "law_type:law_no_social_security"
+                      ]
+                     ]
+                    }
+                   ]
+                  }
+                 ]
+                }
                ],
                "value": [
                 "=",
-                "-500"
+                "-1000"
                ]
               }
              ]
-            }
-           ]
+            ]
+           }
           ],
-          "else": [
+          [
            "=",
            {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_LIKES_LAW\""
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "has_law": [
+                 "=",
+                 "scope:article.input_law"
+                ]
+               }
+              ],
+              "add": [
+               "=",
+               "5"
+              ]
+             }
+            ]
+           }
+          ]
+         ],
+         "if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_isolationism"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"law_isolationism\""
+              ],
+              "add": [
+               "=",
+               "-100"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "country_rank": [
+               ">=",
+               "scope:target_country.country_rank"
+              ]
+             }
+            ],
             "add": [
              "=",
              {
@@ -24550,93 +25197,159 @@
                "=",
                "\"DIPLOMATIC_ACCEPTANCE_RANK\""
               ],
-              "add": [
+              "value": [
                "=",
-               "scope:target_country.country_rank"
-              ],
-              "subtract": [
-               "=",
-               "country_rank"
-              ],
-              "multiply": [
-               "=",
-               "10"
-              ],
-              "min": [
-               "=",
-               "0"
-              ],
-              "max": [
-               "=",
-               "50"
+               "-300"
               ]
              }
-            ]
-           }
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "NOT": [
-             "=",
-             {
-              "exists": [
-               "=",
-               "scope:is_treaty_active"
-              ]
-             }
-            ],
-            "exists": [
-             "=",
-             "scope:treaty"
-            ],
-            "scope:treaty.binding_period": [
-             ">=",
-             "1825"
             ]
            }
           ],
-          "multiply": [
+          [
            "=",
            {
-            "desc": [
+            "limit": [
              "=",
-             "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
-            ],
-            "value": [
-             "=",
-             "1"
+             {
+              "scope:article.input_law": [
+               "=",
+               "law_type:law_slavery_banned"
+              ],
+              "OR": [
+               "=",
+               {
+                "has_strategy": [
+                 [
+                  "=",
+                  "ai_strategy_egalitarian_agenda"
+                 ],
+                 [
+                  "=",
+                  "ai_strategy_progressive_agenda"
+                 ]
+                ]
+               }
+              ]
+             }
             ],
             "add": [
              "=",
              {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_ANTI_SLAVERY\""
+              ],
               "value": [
                "=",
-               "scope:treaty.binding_period"
-              ],
-              "min": [
+               "25"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:article.input_law": [
                "=",
-               "365"
+               "law_type:law_council_republic"
               ],
-              "divide": [
+              "has_law": [
                "=",
-               "3650"
+               "law_type:law_council_republic"
               ]
              }
             ],
-            "max": [
+            "add": [
              "=",
-             "2"
+             {
+              "desc": [
+               "=",
+               "\"communist_solidarity\""
+              ],
+              "value": [
+               "=",
+               "25"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "c:JAP": [
+               "?=",
+               "scope:source_country"
+              ],
+              "scope:source_country": [
+               "?=",
+               {
+                "has_journal_entry": [
+                 "=",
+                 "je_meiji_imperial_marriage"
+                ]
+               }
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"je_meiji_imperial_marriage\""
+              ],
+              "value": [
+               "=",
+               "-500"
+              ]
+             }
             ]
            }
           ]
-         }
-        ]
+         ],
+         "else": [
+          "=",
+          {
+           "add": [
+            "=",
+            {
+             "desc": [
+              "=",
+              "\"DIPLOMATIC_ACCEPTANCE_RANK\""
+             ],
+             "add": [
+              "=",
+              "scope:target_country.country_rank"
+             ],
+             "subtract": [
+              "=",
+              "country_rank"
+             ],
+             "multiply": [
+              "=",
+              "10"
+             ],
+             "min": [
+              "=",
+              "0"
+             ],
+             "max": [
+              "=",
+              "50"
+             ]
+            }
+           ]
+          }
+         ]
+        }
        ],
        "else_if": [
         "=",
@@ -25114,6 +25827,28 @@
             "-300"
            ]
           }
+         ]
+        }
+       ]
+      }
+     ],
+     "contextual_accept_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0"
+       ],
+       "add": [
+        "=",
+        {
+         "desc": [
+          "=",
+          "\"DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD\""
+         ],
+         "value": [
+          "=",
+          "treaty_binding_period_commitment_acceptance"
          ]
         }
        ]
@@ -26101,6 +26836,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_transit_rights",
      "can_be_enforced",
      "can_be_renegotiated",
@@ -26673,6 +27409,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_trade_privilege",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -26863,28 +27600,47 @@
    "on_entry_into_force": [
     "=",
     {
-     "add_lobby_appeasement_from_diplomacy_bidirectional": [
+     "if": [
       "=",
       {
-       "FIRST": [
+       "limit": [
         "=",
-        "scope:article_options.source_country"
+        {
+         "NOT": [
+          "=",
+          {
+           "exists": [
+            "=",
+            "scope:is_renegotiation"
+           ]
+          }
+         ]
+        }
        ],
-       "SECOND": [
+       "add_lobby_appeasement_from_diplomacy_bidirectional": [
         "=",
-        "scope:article_options.target_country"
-       ],
-       "PRO_AMOUNT": [
-        "=",
-        "1"
-       ],
-       "ANTI_AMOUNT": [
-        "=",
-        "-1"
-       ],
-       "FACTOR": [
-        "=",
-        "appeasement_trade_agreement_formed"
+        {
+         "FIRST": [
+          "=",
+          "scope:article_options.source_country"
+         ],
+         "SECOND": [
+          "=",
+          "scope:article_options.target_country"
+         ],
+         "PRO_AMOUNT": [
+          "=",
+          "1"
+         ],
+         "ANTI_AMOUNT": [
+          "=",
+          "-1"
+         ],
+         "FACTOR": [
+          "=",
+          "appeasement_trade_agreement_formed"
+         ]
+        }
        ]
       }
      ]
@@ -26958,6 +27714,68 @@
        "value": [
         "=",
         "0.1"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "has_variable": [
+            "=",
+            "ai_russia_client_bloc_pending"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "0.15"
+         ]
+        }
+       ]
+      }
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "c:RUS": [
+            "?=",
+            "this"
+           ],
+           "ai_russia_article_partner_is_pending_client": [
+            "=",
+            "yes"
+           ],
+           "scope:other_country": [
+            "=",
+            {
+             "is_subject": [
+              "=",
+              "yes"
+             ]
+            }
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "5"
+         ]
+        }
        ]
       }
      ],
@@ -29550,7 +30368,10 @@
    ],
    "flags": [
     "=",
-    {}
+    [
+     "show_in_lens",
+     "is_one_time"
+    ]
    ],
    "maintenance_paid_by": [
     "=",
@@ -29597,6 +30418,15 @@
         "modifier_not_recognized_by_spain"
        ]
       }
+     ]
+    }
+   ],
+   "show_in_lens": [
+    "=",
+    {
+     "has_modifier": [
+      "=",
+      "modifier_not_recognized_by_spain"
      ]
     }
    ],
@@ -30340,7 +31170,8 @@
     "=",
     [
      "giftable",
-     "target_subjects_as_input"
+     "target_subjects_as_input",
+     "is_one_time"
     ]
    ],
    "usage_limit": [
@@ -31012,9 +31843,9 @@
    "flags": [
     "=",
     [
-     "can_be_enforced",
      "giftable",
-     "is_ship_transfer"
+     "is_ship_transfer",
+     "is_one_time"
     ]
    ],
    "usage_limit": [
@@ -31041,6 +31872,19 @@
      "has_dlc_feature": [
       "=",
       "ep2_content"
+     ],
+     "has_port_country": [
+      "=",
+      "yes"
+     ],
+     "scope:other_country": [
+      "=",
+      {
+       "has_port_country": [
+        "=",
+        "yes"
+       ]
+      }
      ]
     }
    ],
@@ -31119,50 +31963,55 @@
          }
         ]
        }
-      ],
-      [
-       "=",
-       {
-        "text": [
-         "=",
-         "SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE"
-        ],
-        "scope:treaty": [
-         "?=",
-         {
-          "any_scope_article_option": [
-           "=",
-           {
-            "NOT": [
-             [
-              "=",
-              {
-               "has_type": [
-                "=",
-                "alliance"
-               ]
-              }
-             ],
-             [
-              "=",
-              {
-               "has_type": [
-                "=",
-                "defensive_pact"
-               ]
-              }
-             ]
-            ],
-            "target_country": [
-             "=",
-             "scope:source_country"
-            ]
-           }
-          ]
-         }
-        ]
-       }
       ]
+     ]
+    }
+   ],
+   "can_propose": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "SHIP_TRANSFER_REQUIRES_RECIPROCAL_ARTICLE"
+       ],
+       "scope:treaty": [
+        "?=",
+        {
+         "any_scope_article_option": [
+          "=",
+          {
+           "NOT": [
+            [
+             "=",
+             {
+              "has_type": [
+               "=",
+               "alliance"
+              ]
+             }
+            ],
+            [
+             "=",
+             {
+              "has_type": [
+               "=",
+               "defensive_pact"
+              ]
+             }
+            ]
+           ],
+           "target_country": [
+            "=",
+            "scope:source_country"
+           ]
+          }
+         ]
+        }
+       ]
+      }
      ]
     }
    ],
@@ -31390,7 +32239,7 @@
      ],
      "combined_acceptance_cap_max": [
       "=",
-      "50"
+      "100"
      ],
      "proposal_weight": [
       "=",
@@ -31666,6 +32515,104 @@
            }
           ]
          }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:source_country": [
+             "?=",
+             "this"
+            ],
+            "NOT": [
+             "=",
+             {
+              "exists": [
+               "=",
+               "scope:is_treaty_active"
+              ]
+             }
+            ],
+            "scope:article.input_ship": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "is_ship_very_obsolete_for": [
+                 "=",
+                 "scope:source_country"
+                ]
+               }
+              ]
+             }
+            ],
+            "OR": [
+             "=",
+             {
+              "AND": [
+               [
+                "=",
+                {
+                 "scope:article.input_ship": [
+                  "=",
+                  {
+                   "is_ship_obsolete_for": [
+                    "=",
+                    "scope:source_country"
+                   ]
+                  }
+                 ],
+                 "\"scope:treaty.ai_ship_sale_remaining_share(scope:article.input_ship)\"": [
+                  "<=",
+                  "define:NAI|SHIP_SALE_MIN_REMAINING_SHARE_OBSOLETE"
+                 ]
+                }
+               ],
+               [
+                "=",
+                {
+                 "scope:article.input_ship": [
+                  "=",
+                  {
+                   "NOT": [
+                    "=",
+                    {
+                     "is_ship_obsolete_for": [
+                      "=",
+                      "scope:source_country"
+                     ]
+                    }
+                   ]
+                  }
+                 ],
+                 "\"scope:treaty.ai_ship_sale_remaining_share(scope:article.input_ship)\"": [
+                  "<=",
+                  "define:NAI|SHIP_SALE_MIN_REMAINING_SHARE"
+                 ]
+                }
+               ]
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_SHIP_CATEGORY_UNDERSTRENGTH\""
+            ],
+            "value": [
+             "=",
+             "-300"
+            ]
+           }
+          ]
+         }
         ]
        ],
        "else": [
@@ -31712,208 +32659,89 @@
           }
          ],
          "if": [
-          "=",
-          {
-           "limit": [
-            "=",
-            {
-             "scope:article.input_ship": [
-              "=",
-              {
-               "is_ship_obsolete_for": [
-                "=",
-                "scope:target_country"
-               ]
-              }
-             ]
-            }
-           ],
-           "add": [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"DIPLOMATIC_ACCEPTANCE_SHIP_OBSOLETE\""
-             ],
-             "value": [
-              "=",
-              "-500"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "wargoal": [
-    "=",
-    {
-     "execution_priority": [
-      "=",
-      "21"
-     ],
-     "contestion_type": [
-      "=",
-      "control_target_country_capital"
-     ],
-     "maneuvers": [
-      "=",
-      {
-       "value": [
-        "=",
-        "0"
-       ],
-       "add": [
-        "=",
-        {
-         "desc": [
-          "=",
-          "\"MANEUVERS_BASE_VALUE\""
-         ],
-         "value": [
-          "=",
-          "2.5"
-         ]
-        }
-       ]
-      }
-     ],
-     "infamy": [
-      "=",
-      {
-       "value": [
-        "=",
-        "0"
-       ],
-       "if": [
-        [
-         "=",
-         {
-          "limit": [
+          [
            "=",
            {
-            "exists": [
+            "limit": [
              "=",
-             "scope:ship"
-            ]
-           }
-          ],
-          "add": [
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"INFAMY_SHIP_TRANSFER_TARGET_SHARE\""
-             ],
-             "value": [
-              "=",
-              "scope:ship.power_projection"
-             ],
-             "divide": [
-              "=",
-              {
-               "value": [
-                "=",
-                "scope:target_country.naval_power_projection"
-               ],
-               "min": [
-                "=",
-                "1"
-               ]
-              }
-             ],
-             "multiply": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MULT"
-             ],
-             "min": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MIN"
-             ],
-             "max": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MAX"
-             ]
-            }
-           ],
-           [
-            "=",
-            {
-             "desc": [
-              "=",
-              "\"INFAMY_SHIP_TRANSFER_SELF_SHARE\""
-             ],
-             "value": [
-              "=",
-              "scope:ship.power_projection"
-             ],
-             "divide": [
-              "=",
-              {
-               "value": [
-                "=",
-                "naval_power_projection"
-               ],
-               "min": [
-                "=",
-                "1"
-               ]
-              }
-             ],
-             "multiply": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MULT"
-             ],
-             "min": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MIN"
-             ],
-             "max": [
-              "=",
-              "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_SHARE_MAX"
-             ]
-            }
-           ]
-          ]
-         }
-        ],
-        [
-         "=",
-         {
-          "limit": [
-           "=",
-           {
-            "scope:ship": [
-             "?=",
              {
-              "is_flagship": [
+              "NOT": [
                "=",
-               "yes"
+               {
+                "exists": [
+                 "=",
+                 "scope:is_treaty_active"
+                ]
+               }
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_SHIP_CATEGORY_SHORTFALL\""
+              ],
+              "value": [
+               "=",
+               "\"scope:treaty.ai_ship_purchase_value_multiplier(scope:article.input_ship)\""
+              ]
+             }
+            ],
+            "subtract": [
+             "=",
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_SHIP_CATEGORY_UNWANTED\""
+              ],
+              "value": [
+               "=",
+               "\"scope:treaty.ai_ship_purchase_rejected_share(scope:article.input_ship)\""
+              ],
+              "multiply": [
+               "=",
+               "500"
               ]
              }
             ]
            }
           ],
-          "multiply": [
+          [
            "=",
            {
-            "desc": [
+            "limit": [
              "=",
-             "\"INFAMY_SHIP_TRANSFER_FLAGSHIP\""
+             {
+              "scope:article.input_ship": [
+               "=",
+               {
+                "is_ship_obsolete_for": [
+                 "=",
+                 "scope:target_country"
+                ]
+               }
+              ]
+             }
             ],
-            "value": [
+            "add": [
              "=",
-             "define:NDiplomacy|WAR_GOAL_INFAMY_SHIP_TRANSFER_FLAGSHIP_MULT"
+             {
+              "desc": [
+               "=",
+               "\"DIPLOMATIC_ACCEPTANCE_SHIP_OBSOLETE\""
+              ],
+              "value": [
+               "=",
+               "-500"
+              ]
+             }
             ]
            }
           ]
-         }
-        ]
+         ]
+        }
        ]
       }
      ]
@@ -31955,6 +32783,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_toll_exemption",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -31980,7 +32809,7 @@
    "visible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ]
@@ -31989,7 +32818,7 @@
    "possible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ],
@@ -32148,44 +32977,65 @@
         "0"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            ">=",
-            "rank_value:unrecognized_major_power"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          {
-           "value": [
-            "=",
-            "country_rank"
-           ],
-           "multiply": [
-            "=",
-            "0.025"
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        {
-         "value": [
-          "=",
-          "worst_strait_toll_grievance"
-         ],
-         "multiply": [
-          "=",
-          "0.005"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             ">=",
+             "rank_value:unrecognized_major_power"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "country_rank"
+            ],
+            "multiply": [
+             "=",
+             "0.025"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "NOT": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_free_trade"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_strait_toll_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -32629,6 +33479,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_no_tolls",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -32653,7 +33504,7 @@
    "visible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ]
@@ -32662,7 +33513,7 @@
    "possible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ],
@@ -32821,44 +33672,60 @@
         "0"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            ">=",
-            "rank_value:unrecognized_major_power"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          {
-           "value": [
-            "=",
-            "country_rank"
-           ],
-           "multiply": [
-            "=",
-            "0.025"
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        {
-         "value": [
-          "=",
-          "worst_strait_toll_grievance"
-         ],
-         "multiply": [
-          "=",
-          "0.005"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             ">=",
+             "rank_value:unrecognized_major_power"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "country_rank"
+            ],
+            "multiply": [
+             "=",
+             "0.025"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_law_or_variant": [
+             "=",
+             "law_type:law_free_trade"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_strait_toll_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -33251,6 +34118,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_strait_access",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -33276,7 +34144,7 @@
    "visible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ]
@@ -33285,7 +34153,7 @@
    "possible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ],
@@ -33446,44 +34314,65 @@
         "0"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            ">=",
-            "rank_value:unrecognized_major_power"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          {
-           "value": [
-            "=",
-            "country_rank"
-           ],
-           "multiply": [
-            "=",
-            "0.025"
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        {
-         "value": [
-          "=",
-          "worst_strait_access_grievance"
-         ],
-         "multiply": [
-          "=",
-          "0.005"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             ">=",
+             "rank_value:unrecognized_major_power"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "country_rank"
+            ],
+            "multiply": [
+             "=",
+             "0.025"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "NOT": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_free_trade"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_strait_access_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -33501,6 +34390,66 @@
         "=",
         "1"
        ],
+       "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "root": [
+             "=",
+             "scope:target_country"
+            ],
+            "scope:source_country": [
+             "=",
+             {
+              "any_scope_state": [
+               "=",
+               {
+                "state_region": [
+                 "=",
+                 "s:STATE_EASTERN_THRACE"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "3"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "root": [
+             "=",
+             "scope:target_country"
+            ],
+            "has_law_or_variant": [
+             "=",
+             "law_type:law_free_trade"
+            ]
+           }
+          ],
+          "value": [
+           "=",
+           "0"
+          ]
+         }
+        ]
+       ],
        "add": [
         "=",
         {
@@ -33511,28 +34460,6 @@
          "multiply": [
           "=",
           "0.04"
-         ]
-        }
-       ],
-       "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "root": [
-            "=",
-            "scope:target_country"
-           ],
-           "has_law_or_variant": [
-            "=",
-            "law_type:law_free_trade"
-           ]
-          }
-         ],
-         "value": [
-          "=",
-          "0"
          ]
         }
        ]
@@ -34181,6 +35108,7 @@
    "flags": [
     "=",
     [
+     "show_in_lens",
      "is_no_strait_closure",
      "can_be_enforced",
      "ai_consider_threaten_naval_hostilities",
@@ -34205,7 +35133,7 @@
    "visible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ]
@@ -34214,7 +35142,7 @@
    "possible": [
     "=",
     {
-     "has_any_strait_province": [
+     "has_any_strait_province_in_hierarchy": [
       "=",
       "yes"
      ],
@@ -34375,44 +35303,60 @@
         "0"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            ">=",
-            "rank_value:unrecognized_major_power"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          {
-           "value": [
-            "=",
-            "country_rank"
-           ],
-           "multiply": [
-            "=",
-            "0.025"
-           ]
-          }
-         ]
-        }
-       ],
-       "add": [
-        "=",
-        {
-         "value": [
-          "=",
-          "worst_strait_access_grievance"
-         ],
-         "multiply": [
-          "=",
-          "0.005"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             ">=",
+             "rank_value:unrecognized_major_power"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "country_rank"
+            ],
+            "multiply": [
+             "=",
+             "0.025"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_law_or_variant": [
+             "=",
+             "law_type:law_free_trade"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_strait_access_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -35286,22 +36230,56 @@
         "0.05"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            "<",
-            "rank_value:great_power"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          "0.05"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             "<",
+             "rank_value:great_power"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.05"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "NOT": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_free_trade"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_piracy_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -35311,6 +36289,50 @@
        "request",
        "offer"
       ]
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "add": [
+        "=",
+        {
+         "value": [
+          "=",
+          "\"piracy_grievance_against(scope:source_country)\""
+         ],
+         "multiply": [
+          "=",
+          "0.04"
+         ]
+        }
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "root": [
+            "=",
+            "scope:target_country"
+           ],
+           "has_law_or_variant": [
+            "=",
+            "law_type:law_free_trade"
+           ]
+          }
+         ],
+         "value": [
+          "=",
+          "0"
+         ]
+        }
+       ]
+      }
      ],
      "inherent_accept_score": [
       "=",
@@ -35452,7 +36474,7 @@
              "scope:target_country": [
               "=",
               {
-               "\"pirated_trade_value_by(scope:source_country)\"": [
+               "\"piracy_grievance_against(scope:source_country)\"": [
                 ">",
                 "0"
                ]
@@ -35465,20 +36487,25 @@
             {
              "desc": [
               "=",
-              "\"country_piracy_income_add\""
+              "\"DIPLOMATIC_ACCEPTANCE_PIRACY_GRIEVANCE\""
              ],
-             "scope:target_country": [
+             "value": [
               "=",
               {
-               "add": [
+               "scope:target_country": [
                 "=",
-                "\"pirated_trade_value_by(scope:source_country)\""
+                {
+                 "add": [
+                  "=",
+                  "\"piracy_grievance_against(scope:source_country)\""
+                 ]
+                }
                ]
               }
              ],
-             "divide": [
+             "multiply": [
               "=",
-              "100"
+              "0.3"
              ],
              "max": [
               "=",
@@ -35497,7 +36524,7 @@
       {
        "value": [
         "=",
-        "1"
+        "0"
        ],
        "if": [
         "=",
@@ -35508,50 +36535,34 @@
            "NOT": [
             "=",
             {
-             "is_country_type": [
+             "has_law_or_variant": [
               "=",
-              "unrecognized"
+              "law_type:law_free_trade"
              ]
             }
            ],
-           "navy_size": [
-            ">=",
-            "scope:source_country.navy_size"
+           "\"piracy_grievance_against(scope:source_country)\"": [
+            ">",
+            "0"
            ]
           }
          ],
+         "value": [
+          "=",
+          "1"
+         ],
          "add": [
-          [
-           "=",
-           {
-            "value": [
-             "=",
-             "navy_size"
-            ],
-            "divide": [
-             "=",
-             "1000"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "root": [
-             "=",
-             {
-              "add": [
-               "=",
-               "\"pirated_trade_value_by(scope:source_country)\""
-              ]
-             }
-            ],
-            "divide": [
-             "=",
-             "10000"
-            ]
-           }
-          ]
+          "=",
+          {
+           "value": [
+            "=",
+            "\"piracy_grievance_against(scope:source_country)\""
+           ],
+           "multiply": [
+            "=",
+            "0.15"
+           ]
+          }
          ]
         }
        ]
@@ -35869,26 +36880,55 @@
         "0.025"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "country_rank": [
-            "=",
-            "rank_value:great_power"
-           ],
-           "navy_size": [
-            ">=",
-            "25"
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          "0.075"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             "=",
+             "rank_value:great_power"
+            ],
+            "navy_size": [
+             ">=",
+             "25"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "0.075"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_law_or_variant": [
+             "=",
+             "law_type:law_free_trade"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "value": [
+             "=",
+             "worst_piracy_grievance"
+            ],
+            "multiply": [
+             "=",
+             "0.005"
+            ]
+           }
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -35897,6 +36937,55 @@
       [
        "request"
       ]
+     ],
+     "proposal_weight": [
+      "=",
+      {
+       "value": [
+        "=",
+        "1"
+       ],
+       "add": [
+        "=",
+        {
+         "value": [
+          "=",
+          "\"piracy_grievance_against(scope:source_country)\""
+         ],
+         "multiply": [
+          "=",
+          "0.04"
+         ]
+        }
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "root": [
+            "=",
+            "scope:target_country"
+           ],
+           "NOT": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_free_trade"
+             ]
+            }
+           ]
+          }
+         ],
+         "value": [
+          "=",
+          "0"
+         ]
+        }
+       ]
+      }
      ],
      "inherent_accept_score": [
       "=",
@@ -36038,7 +37127,7 @@
              "scope:target_country": [
               "=",
               {
-               "\"pirated_trade_value_by(scope:source_country)\"": [
+               "\"piracy_grievance_against(scope:source_country)\"": [
                 ">",
                 "0"
                ]
@@ -36051,20 +37140,25 @@
             {
              "desc": [
               "=",
-              "\"country_piracy_income_add\""
+              "\"DIPLOMATIC_ACCEPTANCE_PIRACY_GRIEVANCE\""
              ],
-             "scope:target_country": [
+             "value": [
               "=",
               {
-               "add": [
+               "scope:target_country": [
                 "=",
-                "\"pirated_trade_value_by(scope:source_country)\""
+                {
+                 "add": [
+                  "=",
+                  "\"piracy_grievance_against(scope:source_country)\""
+                 ]
+                }
                ]
               }
              ],
-             "divide": [
+             "multiply": [
               "=",
-              "100"
+              "0.3"
              ],
              "max": [
               "=",
@@ -36083,7 +37177,7 @@
       {
        "value": [
         "=",
-        "1"
+        "0"
        ],
        "if": [
         "=",
@@ -36091,53 +37185,32 @@
          "limit": [
           "=",
           {
-           "NOT": [
+           "has_law_or_variant": [
             "=",
-            {
-             "is_country_type": [
-              "=",
-              "unrecognized"
-             ]
-            }
+            "law_type:law_free_trade"
            ],
-           "navy_size": [
-            ">=",
-            "scope:source_country.navy_size"
+           "\"piracy_grievance_against(scope:source_country)\"": [
+            ">",
+            "0"
            ]
           }
          ],
+         "value": [
+          "=",
+          "1"
+         ],
          "add": [
-          [
-           "=",
-           {
-            "value": [
-             "=",
-             "navy_size"
-            ],
-            "divide": [
-             "=",
-             "1000"
-            ]
-           }
-          ],
-          [
-           "=",
-           {
-            "root": [
-             "=",
-             {
-              "add": [
-               "=",
-               "\"pirated_trade_value_by(scope:source_country)\""
-              ]
-             }
-            ],
-            "divide": [
-             "=",
-             "10000"
-            ]
-           }
-          ]
+          "=",
+          {
+           "value": [
+            "=",
+            "\"piracy_grievance_against(scope:source_country)\""
+           ],
+           "multiply": [
+            "=",
+            "0.15"
+           ]
+          }
          ]
         }
        ]

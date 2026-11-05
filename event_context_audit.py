@@ -326,6 +326,24 @@ _CONTROL_KEYS = {
     "abandon_effect", "on_weekly_pulse_effect", "manual_break_effect", "on_activate",
     "on_deactivate", "on_ratify", "on_accepted", "on_declined", "on_trigger",
     "on_escalation", "on_war_begins", "on_pay", "on_expire",
+    # 1.15 journal entries: an outcome and its blocks, the per-country copies
+    # of immediate and effect, and the involvement hooks run in the entry's
+    # own scope (journal_entries.md). send_interface_message runs its effects
+    # in the current scope and shows a toast, so a dispatch inside it keeps
+    # its option's choice. The old on_complete / on_fail / on_timeout /
+    # on_invalid stay above: 1.15's AI regional objectives still use them.
+    "outcome", "effect_all_involved", "immediate_all_involved",
+    "event_outcome_desc", "event_outcome_effect_desc",
+    "event_outcome_activated_desc", "event_outcome_activated_effect_desc",
+    "map_tooltip", "send_interface_message",
+    "on_become_involved_after_activation", "on_no_longer_involved",
+}
+# Blocks that only describe effects and never run them: a 1.15 journal entry's
+# map tooltip (`map_tooltip`, "a fake effect block") and an outcome's or the
+# activation's effect description. A `trigger_event` inside one fires nothing,
+# so it is not a dispatch site.
+_DISPLAY_ONLY_KEYS = {
+    "map_tooltip", "event_outcome_effect_desc", "event_outcome_activated_effect_desc",
 }
 # Keys whose child `trigger` / `limit` blocks guard the calls that follow.
 _COND_KEYS = {"limit", "trigger", "possible", "is_shown", "potential", "is_valid",
@@ -494,6 +512,11 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
             continue
 
         nxt = toks[i + 1][0] if i + 1 < n else None
+        if nxt in ("=", "?=") and any(fr.key in _DISPLAY_ONLY_KEYS for fr in stack):
+            # A described effect never runs: no dispatch site, no call site.
+            pending_key = t
+            i += 2
+            continue
         if nxt in ("=", "?="):
             if t == "trigger_event":
                 j = i + 2

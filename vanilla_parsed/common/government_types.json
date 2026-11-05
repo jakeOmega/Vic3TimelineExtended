@@ -1207,6 +1207,144 @@
    ]
   }
  ],
+ "gov_congress_poland_crown_land": [
+  "=",
+  {
+   "transfer_of_power": [
+    "=",
+    "dictatorial"
+   ],
+   "male_ruler": [
+    "=",
+    "\"RULER_TITLE_NAMIESTNIK\""
+   ],
+   "female_ruler": [
+    "=",
+    "\"RULER_TITLE_NAMIESTNIK\""
+   ],
+   "possible": [
+    "=",
+    {
+     "is_subject_type": [
+      "=",
+      "subject_type_crown_land"
+     ],
+     "c:POL": [
+      "?=",
+      "this"
+     ],
+     "c:RUS": [
+      "?=",
+      {
+       "country_has_monarchy_law": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "is_subject_of": [
+      "=",
+      "c:RUS"
+     ],
+     "has_gov_regency": [
+      "=",
+      "no"
+     ],
+     "is_domain_alliance_gov": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "on_government_type_change": [
+    "=",
+    {
+     "change_to_dictatorial": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_post_government_type_change": [
+    "=",
+    {
+     "post_change_to_dictatorial": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "gov_congress_poland_personal_union": [
+  "=",
+  {
+   "transfer_of_power": [
+    "=",
+    "dictatorial"
+   ],
+   "male_ruler": [
+    "=",
+    "\"RULER_TITLE_NAMIESTNIK\""
+   ],
+   "female_ruler": [
+    "=",
+    "\"RULER_TITLE_NAMIESTNIK\""
+   ],
+   "possible": [
+    "=",
+    {
+     "is_subject_type": [
+      "=",
+      "subject_type_personal_union"
+     ],
+     "c:POL": [
+      "?=",
+      "this"
+     ],
+     "c:RUS": [
+      "?=",
+      {
+       "country_has_monarchy_law": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "is_subject_of": [
+      "=",
+      "c:RUS"
+     ],
+     "has_gov_regency": [
+      "=",
+      "no"
+     ],
+     "is_domain_alliance_gov": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "on_government_type_change": [
+    "=",
+    {
+     "change_to_dictatorial": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_post_government_type_change": [
+    "=",
+    {
+     "post_change_to_dictatorial": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
  "gov_domain_alliance": [
   "=",
   {
@@ -4816,13 +4954,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -5850,13 +5999,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -9438,7 +9598,115 @@
            "ROOT"
           ]
          }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:CRI"
+          ],
+          "c:CRI": [
+           "=",
+           "ROOT"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:BKH"
+          ],
+          "c:BKH": [
+           "=",
+           "ROOT"
+          ]
+         }
         ]
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_subject_type": [
+        "=",
+        "subject_type_crown_land"
+       ]
+      }
+     ],
+     "has_gov_regency": [
+      "=",
+      "no"
+     ],
+     "is_domain_alliance_gov": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "on_government_type_change": [
+    "=",
+    {
+     "change_to_hereditary": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_post_government_type_change": [
+    "=",
+    {
+     "post_change_to_hereditary": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "gov_shamkhalate": [
+  "=",
+  {
+   "transfer_of_power": [
+    "=",
+    "hereditary"
+   ],
+   "male_ruler": [
+    "=",
+    "\"RULER_TITLE_SHAMKHAL\""
+   ],
+   "female_ruler": [
+    "=",
+    "\"\""
+   ],
+   "male_heir": [
+    "=",
+    "\"RULER_TITLE_PRINCE\""
+   ],
+   "female_heir": [
+    "=",
+    "\"RULER_TITLE_PRINCESS\""
+   ],
+   "possible": [
+    "=",
+    {
+     "has_law": [
+      "=",
+      "law_type:law_monarchy"
+     ],
+     "AND": [
+      "=",
+      {
+       "exists": [
+        "=",
+        "c:TKI"
+       ],
+       "c:TKI": [
+        "=",
+        "ROOT"
        ]
       }
      ],
@@ -13577,6 +13845,15 @@
          "je_spain_provisional_government"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
       ]
      ],
      "has_gov_regency": [
@@ -14516,13 +14793,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -17169,7 +17457,111 @@
            "ROOT"
           ]
          }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:CRI"
+          ],
+          "c:CRI": [
+           "=",
+           "ROOT"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:BKH"
+          ],
+          "c:BKH": [
+           "=",
+           "ROOT"
+          ]
+         }
         ]
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_subject_type": [
+        "=",
+        "subject_type_crown_land"
+       ]
+      }
+     ],
+     "has_gov_regency": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_government_type_change": [
+    "=",
+    {
+     "change_to_hereditary": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_post_government_type_change": [
+    "=",
+    {
+     "post_change_to_hereditary": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "gov_regency_shamkhalate": [
+  "=",
+  {
+   "transfer_of_power": [
+    "=",
+    "hereditary"
+   ],
+   "male_ruler": [
+    "=",
+    "\"RULER_TITLE_REGENT\""
+   ],
+   "female_ruler": [
+    "=",
+    "\"RULER_TITLE_REGENT\""
+   ],
+   "male_heir": [
+    "=",
+    "\"RULER_TITLE_SHAMKHAL\""
+   ],
+   "female_heir": [
+    "=",
+    "\"\""
+   ],
+   "possible": [
+    "=",
+    {
+     "country_has_monarchy_law": [
+      "=",
+      "yes"
+     ],
+     "AND": [
+      "=",
+      {
+       "exists": [
+        "=",
+        "c:TKI"
+       ],
+       "c:TKI": [
+        "=",
+        "ROOT"
        ]
       }
      ],
@@ -18802,6 +19194,53 @@
       "yes"
      ]
     }
+   ]
+  }
+ ],
+ "gov_provisional_government_russia": [
+  "=",
+  {
+   "transfer_of_power": [
+    "=",
+    "presidential_elective"
+   ],
+   "new_leader_on_reform_government": [
+    "=",
+    "yes"
+   ],
+   "male_ruler": [
+    "=",
+    "\"RULER_TITLE_MINISTER_PRESIDENT\""
+   ],
+   "female_ruler": [
+    "=",
+    "\"RULER_TITLE_MINISTER_PRESIDENT\""
+   ],
+   "possible": [
+    "=",
+    {
+     "c:RUS": [
+      "?=",
+      "this"
+     ],
+     "has_journal_entry": [
+      "=",
+      "je_russia_provisional_government"
+     ]
+    }
+   ],
+   "on_government_type_change": [
+    "=",
+    {
+     "change_to_presidential_elective": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "on_post_government_type_change": [
+    "=",
+    {}
    ]
   }
  ],
@@ -20636,6 +21075,15 @@
          "je_spain_provisional_government"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
       ]
      ],
      "has_gov_regency": [
@@ -21660,13 +22108,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -27305,6 +27764,15 @@
          "je_spain_provisional_government"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
       ]
      ],
      "has_gov_regency": [
@@ -28329,13 +28797,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -33898,6 +34377,15 @@
          "je_spain_provisional_government"
         ]
        }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
       ]
      ],
      "has_gov_regency": [
@@ -34882,13 +35370,24 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "is_subject_type": [
-        "=",
-        "subject_type_crown_land"
-       ]
-      }
+      [
+       "=",
+       {
+        "is_subject_type": [
+         "=",
+         "subject_type_crown_land"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "has_gov_regency": [
       "=",
@@ -40028,6 +40527,15 @@
         "pbc_member"
        ]
       }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -40488,26 +40996,41 @@
       [
        "=",
        "law_type:law_autocracy"
-      ],
-      [
-       "=",
-       "law_type:law_peasant_levies"
       ]
      ],
      "OR": [
-      "=",
-      {
-       "is_in_geographic_region": [
-        [
+      [
+       "=",
+       {
+        "has_law_or_variant": [
          "=",
-         "geographic_region_china"
+         "law_type:law_peasant_levies"
         ],
-        [
+        "has_variable": [
          "=",
-         "geographic_region_manchuria_old"
+         "russian_warlord_country"
         ]
-       ]
-      }
+       }
+      ],
+      [
+       "=",
+       {
+        "is_in_geographic_region": [
+         [
+          "=",
+          "geographic_region_china"
+         ],
+         [
+          "=",
+          "geographic_region_manchuria_old"
+         ]
+        ],
+        "has_variable": [
+         "=",
+         "russian_warlord_country"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -40588,6 +41111,15 @@
      "coa_fascist_trigger": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -40664,29 +41196,40 @@
       }
      ],
      "NOT": [
-      "=",
-      {
-       "any_primary_culture": [
-        "=",
-        {
-         "OR": [
-          "=",
-          {
-           "has_discrimination_trait": [
-            [
-             "=",
-             "language_hispanophone"
-            ],
-            [
-             "=",
-             "language_lusophone"
+      [
+       "=",
+       {
+        "any_primary_culture": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_discrimination_trait": [
+             [
+              "=",
+              "language_hispanophone"
+             ],
+             [
+              "=",
+              "language_lusophone"
+             ]
             ]
-           ]
-          }
-         ]
-        }
-       ]
-      }
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "NAND": [
       "=",
@@ -40787,6 +41330,15 @@
         "pbc_member"
        ]
       }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -40872,6 +41424,15 @@
         "pbc_member"
        ]
       }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -40922,13 +41483,24 @@
       "no"
      ],
      "NOT": [
-      "=",
-      {
-       "coa_fascist_trigger": [
-        "=",
-        "yes"
-       ]
-      }
+      [
+       "=",
+       {
+        "coa_fascist_trigger": [
+         "=",
+         "yes"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "NAND": [
       "=",
@@ -41071,6 +41643,15 @@
         ]
        }
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -41149,6 +41730,15 @@
         ]
        }
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -41730,6 +42320,15 @@
        "=",
        "law_type:law_technocracy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -42198,6 +42797,15 @@
        "=",
        "law_type:law_autocracy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -42246,6 +42854,15 @@
      "country_has_voting_franchise": [
       "=",
       "no"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -42300,6 +42917,15 @@
        "=",
        "law_type:law_single_party_state"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -42354,13 +42980,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "has_law_or_variant": [
-        "=",
-        "law_type:law_single_party_state"
-       ]
-      }
+      [
+       "=",
+       {
+        "has_law_or_variant": [
+         "=",
+         "law_type:law_single_party_state"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -42506,6 +43143,10 @@
    "transfer_of_power": [
     "=",
     "dictatorial"
+   ],
+   "uses_regnal_numbers": [
+    "=",
+    "yes"
    ],
    "male_ruler": [
     "=",
@@ -42806,6 +43447,15 @@
        "=",
        "law_type:law_technocracy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -42835,6 +43485,10 @@
    "transfer_of_power": [
     "=",
     "dictatorial"
+   ],
+   "uses_regnal_numbers": [
+    "=",
+    "yes"
    ],
    "male_ruler": [
     "=",
@@ -43095,6 +43749,15 @@
         ]
        ]
       }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43300,6 +43963,15 @@
        "=",
        "law_type:law_oligarchy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43348,6 +44020,15 @@
      "country_has_voting_franchise": [
       "=",
       "no"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43396,6 +44077,15 @@
      "country_has_voting_franchise": [
       "=",
       "yes"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43446,13 +44136,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "has_law_or_variant": [
-        "=",
-        "law_type:law_single_party_state"
-       ]
-      }
+      [
+       "=",
+       {
+        "has_law_or_variant": [
+         "=",
+         "law_type:law_single_party_state"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -43503,6 +44204,15 @@
        "=",
        "law_type:law_autocracy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43637,6 +44347,15 @@
         ]
        }
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43702,6 +44421,15 @@
         ]
        ]
       }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43756,13 +44484,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "has_law_or_variant": [
-        "=",
-        "law_type:law_single_party_state"
-       ]
-      }
+      [
+       "=",
+       {
+        "has_law_or_variant": [
+         "=",
+         "law_type:law_single_party_state"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ],
      "OR": [
       "=",
@@ -43835,6 +44574,15 @@
          "=",
          "law_type:law_oligarchy"
         ]
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
        ]
       }
      ]
@@ -43941,6 +44689,15 @@
        "=",
        "law_type:law_technocracy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -43991,6 +44748,15 @@
        "=",
        "law_type:law_single_party_state"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -44045,13 +44811,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "has_law_or_variant": [
-        "=",
-        "law_type:law_single_party_state"
-       ]
-      }
+      [
+       "=",
+       {
+        "has_law_or_variant": [
+         "=",
+         "law_type:law_single_party_state"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -44106,6 +44883,15 @@
        "=",
        "law_type:law_anarchy"
       ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],
@@ -44598,13 +45384,24 @@
       "yes"
      ],
      "NOT": [
-      "=",
-      {
-       "has_law_or_variant": [
-        "=",
-        "law_type:law_single_party_state"
-       ]
-      }
+      [
+       "=",
+       {
+        "has_law_or_variant": [
+         "=",
+         "law_type:law_single_party_state"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_journal_entry": [
+         "=",
+         "je_russia_provisional_government"
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -44719,6 +45516,15 @@
      "has_law_or_variant": [
       "=",
       "law_type:law_technocracy"
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_russia_provisional_government"
+       ]
+      }
      ]
     }
    ],

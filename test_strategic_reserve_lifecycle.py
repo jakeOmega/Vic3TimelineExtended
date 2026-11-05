@@ -59,6 +59,8 @@ class EntryLifecycleTests(unittest.TestCase):
     def test_entry_has_no_invalid(self):
         self.assertFalse(_has_block(JE, "invalid"))
         self.assertFalse(_has_block(JE, "on_invalid"))
+        # 1.15: an outcome is how an entry ends; this one never does
+        self.assertFalse(_has_block(JE, "outcome"))
 
     def test_rebels_of_a_revolution_start_no_entry(self):
         self.assertRegex(_block(JE, "is_shown_when_inactive", top_level=False), r"is_revolutionary\s*=\s*no")

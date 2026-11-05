@@ -1,8 +1,4 @@
 {
- "ADDITIONAL_NUKE_CREATED": {
-  "en": "Additional Nuclear Weapon Created and Stockpiled",
-  "es": "Arma nuclear adicional creada y almacenada"
- },
  "AI_ALREADY_MULTICULTURAL": {
   "en": "from already having multicultural laws",
   "es": "por tener ya leyes multiculturales"
@@ -442,10 +438,6 @@
  "DESELECT_NAME_DESC": {
   "en": "Deselect this name for your custom religion.",
   "es": "Deselecciona este nombre para tu religión personalizada."
- },
- "FIRST_NUKE_CREATED": {
-  "en": "First Nuclear Weapon Created and Stockpiled. Future weapons will be created more quickly.",
-  "es": "Primera arma nuclear creada y almacenada. Las armas futuras se crearán más rápido."
  },
  "GDPPERCAPITA": {
   "en": "$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!",
@@ -3568,8 +3560,8 @@
   "es": "Fuerza de sometimiento"
  },
  "concept_subjugation_strength_desc": {
-  "en": "How far a [concept_power_bloc_leader] stands above a [concept_power_bloc_member]. The $force_become_subject$ action, which makes the member your [concept_subject], needs a Subjugation Strength of at least #v 1.0#! against it.\\n\\nIts base is your [concept_prestige] divided by the member's, then divided by #v 20#!, so without a bonus you need twenty times its prestige. Your bloc's [concept_power_bloc_identity] can add a bonus:\\n• $identity_sovereign_empire$: #v +0.50#! against any member\\n• $identity_religious$: #v +0.40#! if the member shares your [concept_state_religion]\\n• $identity_ideological_union$: #v +0.40#! if it has your $lawgroup_governance_principles$ law\\n• $identity_cultural$: #v +0.40#! if it shares one of your [Concept('concept_primary_cultures', '$concept_primary_cultures$')]\\n• $identity_trade_league$: #v +0.40#! if its [concept_economic_dependence] on you is at least #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0.40#! if your [concept_army] is at least five times the size of its army\\n\\n$identity_diplomatic$ gets no bonus. The $force_become_subject$ tooltip shows your current Subjugation Strength against a member, part by part.",
-  "es": "Cuánto se sitúa un [concept_power_bloc_leader|l] por encima de un [concept_power_bloc_member|l]. La acción $force_become_subject$, que convierte al miembro en tu [concept_subject|l], necesita una Fuerza de sometimiento de al menos #v 1,0#! contra él.\\n\\nSu base es tu [concept_prestige|l] dividido entre el del miembro, y luego dividido entre #v 20#!, de modo que sin bonificación necesitas veinte veces su prestigio. El [concept_power_bloc_identity|l] de tu bloque puede añadir una bonificación:\\n• $identity_sovereign_empire$: #v +0,50#! contra cualquier miembro\\n• $identity_religious$: #v +0,40#! si el miembro comparte tu [concept_state_religion|l]\\n• $identity_ideological_union$: #v +0,40#! si tiene la misma ley de $lawgroup_governance_principles$ que tú\\n• $identity_cultural$: #v +0,40#! si comparte una de tus [Concept('concept_primary_cultures', '$concept_primary_cultures$')]\\n• $identity_trade_league$: #v +0,40#! si su [concept_economic_dependence|l] respecto de ti es de al menos #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0,40#! si tu [concept_army|l] es al menos cinco veces mayor que su ejército\\n\\n$identity_diplomatic$ no recibe bonificación. El tooltip de $force_become_subject$ muestra tu Fuerza de sometimiento actual contra un miembro, parte por parte."
+  "en": "How far a [concept_power_bloc_leader] stands above a [concept_power_bloc_member]. The $force_become_subject$ action, which makes the member your [concept_subject], needs a Subjugation Strength of at least #v 1.0#! against it.\\n\\nIts base is your [concept_prestige] divided by the member's, then divided by #v 20#!, so without a bonus you need twenty times its prestige. Your bloc's [concept_power_bloc_identity] can add a bonus:\\n• $identity_sovereign_empire$: #v +0.50#! against any member\\n• $identity_religious$: #v +0.40#! if the member shares your [concept_state_religion]\\n• $identity_ideological_union$: #v +0.40#! if it has your $lawgroup_governance_principles$ law\\n• $identity_cultural$: #v +0.40#! if it shares one of your [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')]\\n• $identity_trade_league$: #v +0.40#! if its [concept_economic_dependence] on you is at least #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0.40#! if your [concept_army] is at least five times the size of its army\\n\\n$identity_diplomatic$ gets no bonus. The $force_become_subject$ tooltip shows your current Subjugation Strength against a member, part by part.",
+  "es": "Cuánto se sitúa un [concept_power_bloc_leader|l] por encima de un [concept_power_bloc_member|l]. La acción $force_become_subject$, que convierte al miembro en tu [concept_subject|l], necesita una Fuerza de sometimiento de al menos #v 1,0#! contra él.\\n\\nSu base es tu [concept_prestige|l] dividido entre el del miembro, y luego dividido entre #v 20#!, de modo que sin bonificación necesitas veinte veces su prestigio. El [concept_power_bloc_identity|l] de tu bloque puede añadir una bonificación:\\n• $identity_sovereign_empire$: #v +0,50#! contra cualquier miembro\\n• $identity_religious$: #v +0,40#! si el miembro comparte tu [concept_state_religion|l]\\n• $identity_ideological_union$: #v +0,40#! si tiene la misma ley de $lawgroup_governance_principles$ que tú\\n• $identity_cultural$: #v +0,40#! si comparte una de tus [Concept('concept_primary_cultures', '$concept_primary_cultures|q$')]\\n• $identity_trade_league$: #v +0,40#! si su [concept_economic_dependence|l] respecto de ti es de al menos #b $ECONOMIC_DEPENDENCE_LABEL_3$#!\\n• $identity_military_treaty_organization$: #v +0,40#! si tu [concept_army|l] es al menos cinco veces mayor que su ejército\\n\\n$identity_diplomatic$ no recibe bonificación. El tooltip de $force_become_subject$ muestra tu Fuerza de sometimiento actual contra un miembro, parte por parte."
  },
  "concept_target_defenses": {
   "en": "Target's Defenses",
@@ -4116,12 +4108,12 @@
   "es": "Nadie puede presentar esta moneda para canjearla por metal, así que el banco central puede pagar la deuda pública con dinero que él mismo crea. Eso desbloquea la herramienta #bold Operaciones de mercado abierto#! del [concept_banking_cycle|l], cuando además el tipo de interés oficial se ha quedado sin margen para bajar. Una moneda convertible en metal no puede hacerlo: las reservas saldrían por la puerta detrás del dinero nuevo."
  },
  "country_can_impose_same_lawgroup_ministry_of_science_in_power_bloc_bool_desc": {
-  "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_ministry_of_science').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')]",
-  "es": "Puede #b imponer#! a otros [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')|l] la misma [concept_law|l] que tiene en el grupo [GetLawGroup('lawgroup_ministry_of_science').GetName]"
+  "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_ministry_of_science').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]",
+  "es": "Puede #b imponer#! a otros [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')|l] la misma [concept_law|l] que tiene en el grupo [GetLawGroup('lawgroup_ministry_of_science').GetName]"
  },
  "country_can_impose_same_lawgroup_minority_rights_in_power_bloc_bool_desc": {
-  "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_minority_rights').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')]",
-  "es": "Puede #b imponer#! a otros [Concept('concept_power_bloc_member','$concept_power_bloc_members_short$')|l] la misma [concept_law|l] que tiene en el grupo [GetLawGroup('lawgroup_minority_rights').GetName]"
+  "en": "Allowed to #b Impose#! the same [concept_law] as their own in the [GetLawGroup('lawgroup_minority_rights').GetName] group on other [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')]",
+  "es": "Puede #b imponer#! a otros [Concept('concept_power_bloc_member','$concept_power_bloc_members_short|q$')|l] la misma [concept_law|l] que tiene en el grupo [GetLawGroup('lawgroup_minority_rights').GetName]"
  },
  "country_can_join_united_nations_bool_desc": {
   "en": "Lets a [concept_great_power] found the [concept_united_nations_system] while none exists, or convene a founding conference after one has been dissolved. Also lets a [concept_power_bloc] leader bring this country into the United Nations by treaty. Joining a United Nations that already exists needs no technology.",
@@ -4136,8 +4128,8 @@
   "es": "Habilita la intervención bancaria de recapitalización interna."
  },
  "country_can_use_biotech_companies_bool_desc": {
-  "en": "Allows the formation of biotech [Concept('concept_company', '$concept_companies$')].",
-  "es": "Permite la formación de [Concept('concept_company', '$concept_companies$')|l] biotecnológicas."
+  "en": "Allows the formation of biotech [Concept('concept_company', '$concept_companies|q$')].",
+  "es": "Permite la formación de [Concept('concept_company', '$concept_companies|q$')|l] biotecnológicas."
  },
  "country_can_use_countercyclical_buffer_bool_desc": {
   "en": "A [concept_banking_cycle] tool that forces financial institutions to retain earnings during boom years. Sharply reduces [concept_bubble_pressure] and slows financial momentum, but reduces [concept_investment_pool] contributions.",
@@ -5124,8 +5116,8 @@
   "es": "Obliga a un país a disolver una de sus compañías como concesión de un tratado."
  },
  "disband_company_effects_desc": {
-  "en": "• Establishes an agreement between two [Concept('concept_country', '$concept_countries$')] where one dissolves a specified company.",
-  "es": "• Establece un acuerdo entre dos [Concept('concept_country', '$concept_countries$')|l] en el que uno disuelve una compañía determinada."
+  "en": "• Establishes an agreement between two [Concept('concept_country', '$concept_countries|q$')] where one dissolves a specified company.",
+  "es": "• Establece un acuerdo entre dos [Concept('concept_country', '$concept_countries|q$')|l] en el que uno disuelve una compañía determinada."
  },
  "discredit_pacifists_modifier": {
   "en": "Pacifists Discredited",
@@ -6836,8 +6828,8 @@
   "es": "Los ejercicios militares conjuntos se realizan entre dos países para mejorar su cooperación y preparación militar."
  },
  "joint_military_exercises_effects_desc": {
-  "en": "• Increases army experience gain by 25% for both countries.\\n• Increases the benefit [Concept('concept_admiral', '$concept_admirals$')] gain from their rank by 25% for both countries.\\n• Slightly increases [Concept('concept_military_good', 'military goods')] costs.\\n• Improves relations over time.",
-  "es": "• Aumenta un 25% la experiencia que gana el ejército de ambos países.\\n• Aumenta un 25% el beneficio que obtienen los [Concept('concept_admiral', '$concept_admirals$')|l] por su rango en ambos países.\\n• Aumenta ligeramente los costes de los [Concept('concept_military_good', 'bienes militares')].\\n• Mejora las relaciones con el tiempo."
+  "en": "• Increases army experience gain by 25% for both countries.\\n• Increases the benefit [Concept('concept_admiral', '$concept_admirals|q$')] gain from their rank by 25% for both countries.\\n• Slightly increases [Concept('concept_military_good', 'military goods')] costs.\\n• Improves relations over time.",
+  "es": "• Aumenta un 25% la experiencia que gana el ejército de ambos países.\\n• Aumenta un 25% el beneficio que obtienen los [Concept('concept_admiral', '$concept_admirals|q$')|l] por su rango en ambos países.\\n• Aumenta ligeramente los costes de los [Concept('concept_military_good', 'bienes militares')].\\n• Mejora las relaciones con el tiempo."
  },
  "langpol_assimilation_boost": {
   "en": "Cultural Integration Push",
@@ -8564,8 +8556,8 @@
   "es": "El movimiento masivo de personas bajo un acuerdo de traslado de población ha tensado la capacidad administrativa y alterado a la población."
  },
  "population_transfer_effects_desc": {
-  "en": "• Moves every pop of the target country's primary cultures from the source country to the target country, however well accepted it is there.\\n• Cultures that are primary to both countries are excluded.\\n• Both countries suffer a decaying disruption for 5 years, scaled by the share of their population that moved: lower [concept_bureaucracy] and [concept_legitimacy], and more [Concept('concept_radical','$concept_radicals$')] from conquest.\\n• A one-time effect executed upon treaty ratification.",
-  "es": "• Traslada a todos los colectivos de las culturas principales del país objetivo desde el país de origen al país objetivo, por muy aceptados que estén allí.\\n• Quedan excluidas las culturas que son principales en ambos países.\\n• Ambos países sufren una perturbación decreciente durante 5 años, escalada según la proporción de su población trasladada: menor [concept_bureaucracy|l] y [concept_legitimacy|l], y más [Concept('concept_radical','$concept_radicals$')|l] por conquista.\\n• Un efecto único que se ejecuta al ratificar el tratado."
+  "en": "• Moves every pop of the target country's primary cultures from the source country to the target country, however well accepted it is there.\\n• Cultures that are primary to both countries are excluded.\\n• Both countries suffer a decaying disruption for 5 years, scaled by the share of their population that moved: lower [concept_bureaucracy] and [concept_legitimacy], and more [Concept('concept_radical','$concept_radicals|q$')] from conquest.\\n• A one-time effect executed upon treaty ratification.",
+  "es": "• Traslada a todos los colectivos de las culturas principales del país objetivo desde el país de origen al país objetivo, por muy aceptados que estén allí.\\n• Quedan excluidas las culturas que son principales en ambos países.\\n• Ambos países sufren una perturbación decreciente durante 5 años, escalada según la proporción de su población trasladada: menor [concept_bureaucracy|l] y [concept_legitimacy|l], y más [Concept('concept_radical','$concept_radicals|q$')|l] por conquista.\\n• Un efecto único que se ejecuta al ratificar el tratado."
  },
  "population_transfer_neglect_modifier_desc": {
   "en": "Transferred populations have been left to fend for themselves, breeding resentment.",
@@ -9632,8 +9624,8 @@
   "es": "Obliga a un país a ceder una de sus empresas a otro como concesión en un tratado."
  },
  "seize_company_effects_desc": {
-  "en": "• Establishes an agreement between two [Concept('concept_country', '$concept_countries$')] where one surrenders a specified company to the other.",
-  "es": "• Establece un acuerdo entre dos [Concept('concept_country', '$concept_countries$')|l] por el cual uno cede una empresa concreta al otro."
+  "en": "• Establishes an agreement between two [Concept('concept_country', '$concept_countries|q$')] where one surrenders a specified company to the other.",
+  "es": "• Establece un acuerdo entre dos [Concept('concept_country', '$concept_countries|q$')|l] por el cual uno cede una empresa concreta al otro."
  },
  "selective_nationalization_modifier": {
   "en": "Selective Nationalization",

@@ -439,13 +439,21 @@
         "=",
         "25"
        ],
+       "goods_input_glass_add": [
+        "=",
+        "3"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "2"
+       ],
        "goods_output_liquor_add": [
         "=",
         "60"
        ],
        "goods_output_groceries_add": [
         "=",
-        "-30"
+        "-25"
        ]
       }
      ],
@@ -491,7 +499,11 @@
        ],
        "goods_input_glass_add": [
         "=",
-        "10"
+        "6"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "4"
        ],
        "goods_output_liquor_add": [
         "=",
@@ -558,9 +570,17 @@
      "workforce_scaled": [
       "=",
       {
+       "goods_input_electricity_add": [
+        "=",
+        "5"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
+       ],
        "goods_input_tools_add": [
         "=",
-        "10"
+        "2"
        ]
       }
      ],
@@ -762,7 +782,11 @@
        ],
        "goods_input_tools_add": [
         "=",
-        "10"
+        "8"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "2"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -997,7 +1021,11 @@
       {
        "goods_input_tools_add": [
         "=",
-        "5"
+        "3"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "2"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -1492,7 +1520,11 @@
       {
        "goods_input_tools_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_oil_add": [
         "=",
@@ -2313,7 +2345,11 @@
       {
        "goods_input_oil_add": [
         "=",
-        "10"
+        "9"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -3799,7 +3835,11 @@
        ],
        "goods_input_electricity_add": [
         "=",
-        "30"
+        "20"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "10"
        ],
        "goods_output_engines_add": [
         "=",
@@ -4063,7 +4103,11 @@
       {
        "goods_input_tools_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_oil_add": [
         "=",
@@ -4131,7 +4175,11 @@
       {
        "goods_input_tools_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_oil_add": [
         "=",
@@ -4994,15 +5042,15 @@
       {
        "goods_input_iron_add": [
         "=",
-        "20"
+        "10"
        ],
        "goods_input_rubber_add": [
         "=",
         "20"
        ],
-       "goods_input_lead_add": [
+       "goods_input_copper_add": [
         "=",
-        "20"
+        "30"
        ],
        "goods_input_tools_add": [
         "=",
@@ -5348,6 +5396,10 @@
     "=",
     "\"gfx/interface/icons/production_method_icons/artillery_production.dds\""
    ],
+   "is_hidden_when_unavailable": [
+    "=",
+    "yes"
+   ],
    "unlocking_technologies": [
     "=",
     [
@@ -5367,6 +5419,64 @@
        "goods_input_hardwood_add": [
         "=",
         "10"
+       ],
+       "goods_output_artillery_add": [
+        "=",
+        "25"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "3500"
+       ],
+       "building_employment_machinists_add": [
+        "=",
+        "1000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_bronze_cannons": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/artillery_production.dds\""
+   ],
+   "is_hidden_when_unavailable": [
+    "=",
+    "yes"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "artillery"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_copper_add": [
+        "=",
+        "10"
+       ],
+       "goods_input_hardwood_add": [
+        "=",
+        "15"
        ],
        "goods_output_artillery_add": [
         "=",
@@ -5421,6 +5531,64 @@
        "goods_input_hardwood_add": [
         "=",
         "15"
+       ],
+       "goods_output_artillery_add": [
+        "=",
+        "45"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "3250"
+       ],
+       "building_employment_machinists_add": [
+        "=",
+        "1000"
+       ],
+       "building_employment_engineers_add": [
+        "=",
+        "250"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_bronze_smoothbores": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/smoothbores.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shell_gun"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_copper_add": [
+        "=",
+        "20"
+       ],
+       "goods_input_hardwood_add": [
+        "=",
+        "20"
        ],
        "goods_output_artillery_add": [
         "=",
@@ -5610,9 +5778,13 @@
      "workforce_scaled": [
       "=",
       {
+       "goods_input_tools_add": [
+        "=",
+        "4"
+       ],
        "goods_input_coal_add": [
         "=",
-        "15"
+        "10"
        ]
       }
      ],
@@ -5662,9 +5834,17 @@
      "workforce_scaled": [
       "=",
       {
+       "goods_input_tools_add": [
+        "=",
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
+       ],
        "goods_input_oil_add": [
         "=",
-        "10"
+        "5"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -5722,7 +5902,11 @@
        ],
        "goods_input_lead_add": [
         "=",
-        "20"
+        "15"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "5"
        ],
        "goods_output_ammunition_add": [
         "=",
@@ -5794,7 +5978,11 @@
        ],
        "goods_input_lead_add": [
         "=",
-        "30"
+        "20"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "10"
        ],
        "goods_output_ammunition_add": [
         "=",
@@ -5860,9 +6048,13 @@
      "workforce_scaled": [
       "=",
       {
+       "goods_input_tools_add": [
+        "=",
+        "4"
+       ],
        "goods_input_coal_add": [
         "=",
-        "15"
+        "10"
        ]
       }
      ],
@@ -5912,9 +6104,17 @@
      "workforce_scaled": [
       "=",
       {
+       "goods_input_tools_add": [
+        "=",
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
+       ],
        "goods_input_oil_add": [
         "=",
-        "10"
+        "5"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -9782,6 +9982,391 @@
        "country_minting_add": [
         "=",
         "500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_picks_and_shovels_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/picks_and_shovels.dds\""
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_tools_add": [
+        "=",
+        "5"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "20"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "4500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_atmospheric_engine_pump_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/pumps.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "atmospheric_engine"
+    ]
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "state_pollution_generation_add": [
+        "=",
+        "5"
+       ]
+      }
+     ]
+    }
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_tools_add": [
+        "=",
+        "10"
+       ],
+       "goods_input_coal_add": [
+        "=",
+        "10"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "40"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "3750"
+       ],
+       "building_employment_machinists_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_engineers_add": [
+        "=",
+        "250"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_condensing_engine_pump_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/condensing_engine_pump.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "watertube_boiler"
+    ]
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "state_pollution_generation_add": [
+        "=",
+        "15"
+       ]
+      }
+     ]
+    }
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_tools_add": [
+        "=",
+        "15"
+       ],
+       "goods_input_coal_add": [
+        "=",
+        "15"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "60"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "3000"
+       ],
+       "building_employment_machinists_add": [
+        "=",
+        "1000"
+       ],
+       "building_employment_engineers_add": [
+        "=",
+        "500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_diesel_pump_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/diesel_pump.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "compression_ignition"
+    ]
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "state_pollution_generation_add": [
+        "=",
+        "10"
+       ]
+      }
+     ]
+    }
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_tools_add": [
+        "=",
+        "15"
+       ],
+       "goods_input_oil_add": [
+        "=",
+        "5"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "70"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_shopkeepers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "2250"
+       ],
+       "building_employment_machinists_add": [
+        "=",
+        "1500"
+       ],
+       "building_employment_engineers_add": [
+        "=",
+        "750"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_nitroglycerin_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/nitroglycerin.dds\""
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "state_pollution_generation_add": [
+        "=",
+        "5"
+       ]
+      }
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "nitroglycerin"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_explosives_add": [
+        "=",
+        "5"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "12"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_engineers_add": [
+        "=",
+        "250"
+       ]
+      }
+     ],
+     "unscaled": [
+      "=",
+      {
+       "building_laborers_mortality_mult": [
+        "=",
+        "0.3"
+       ],
+       "building_machinists_mortality_mult": [
+        "=",
+        "0.2"
+       ],
+       "building_engineers_mortality_mult": [
+        "=",
+        "0.1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_dynamite_building_copper_mine": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/dynamite.dds\""
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "state_pollution_generation_add": [
+        "=",
+        "10"
+       ]
+      }
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "dynamite"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_input_explosives_add": [
+        "=",
+        "10"
+       ],
+       "goods_output_copper_add": [
+        "=",
+        "20"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_engineers_add": [
+        "=",
+        "250"
        ]
       }
      ]
@@ -13913,7 +14498,11 @@
        ],
        "goods_input_steel_add": [
         "=",
-        "2"
+        "1"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_electricity_add": [
         "=",
@@ -14678,9 +15267,9 @@
         "=",
         "5"
        ],
-       "goods_input_wood_add": [
+       "goods_input_copper_add": [
         "=",
-        "5"
+        "2"
        ],
        "goods_output_electricity_add": [
         "=",
@@ -14748,7 +15337,11 @@
        ],
        "goods_input_coal_add": [
         "=",
-        "20"
+        "15"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "4"
        ],
        "goods_output_electricity_add": [
         "=",
@@ -14816,7 +15409,11 @@
        ],
        "goods_input_oil_add": [
         "=",
-        "25"
+        "20"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "5"
        ],
        "goods_output_electricity_add": [
         "=",
@@ -15136,6 +15733,39 @@
    ]
   }
  ],
+ "pm_military_bureaucrats": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/military_bureaucrats.dds\""
+   ],
+   "unlocking_laws": [
+    "=",
+    [
+     "law_military_bureaucrats"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_officers_add": [
+        "=",
+        "250"
+       ],
+       "building_employment_bureaucrats_add": [
+        "=",
+        "250"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
  "pm_professional_bureaucrats": [
   "=",
   {
@@ -15147,7 +15777,9 @@
     "=",
     [
      "law_hereditary_bureaucrats",
-     "law_crownland_diets"
+     "law_military_bureaucrats",
+     "law_crownland_diets",
+     "law_communal_administration"
     ]
    ],
    "building_modifiers": [
@@ -15157,6 +15789,39 @@
       "=",
       {
        "building_employment_bureaucrats_add": [
+        "=",
+        "500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_communal_representatives": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/communal_representatives.dds\""
+   ],
+   "unlocking_laws": [
+    "=",
+    [
+     "law_communal_administration"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_bureaucrats_add": [
+        "=",
+        "250"
+       ],
+       "building_employment_clerks_add": [
         "=",
         "500"
        ]
@@ -15176,7 +15841,8 @@
    "disallowing_laws": [
     "=",
     [
-     "law_state_religion"
+     "law_state_religion",
+     "law_communal_administration"
     ]
    ],
    "building_modifiers": [
@@ -15222,6 +15888,35 @@
        "building_employment_bureaucrats_add": [
         "=",
         "250"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_communal_administration": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/communal_administration.dds\""
+   ],
+   "unlocking_laws": [
+    "=",
+    [
+     "law_communal_administration"
+    ]
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_clerks_add": [
+        "=",
+        "1000"
        ]
       }
      ]
@@ -17960,7 +18655,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ]
       }
      ],
@@ -18016,7 +18715,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_transportation_add": [
         "=",
@@ -18062,7 +18765,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "7"
+        "6"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_transportation_add": [
         "=",
@@ -18272,7 +18979,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ]
       }
      ],
@@ -18328,7 +19039,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "5"
+        "4"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_transportation_add": [
         "=",
@@ -18374,7 +19089,11 @@
       {
        "goods_input_electricity_add": [
         "=",
-        "7"
+        "6"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "1"
        ],
        "goods_input_transportation_add": [
         "=",
@@ -21491,11 +22210,15 @@
        ],
        "goods_input_tools_add": [
         "=",
-        "40"
+        "30"
        ],
        "goods_input_electricity_add": [
         "=",
         "40"
+       ],
+       "goods_input_copper_add": [
+        "=",
+        "10"
        ]
       }
      ],
@@ -22464,6 +23187,137 @@
       }
      ]
     }
+   ]
+  }
+ ],
+ "pm_cossack_host": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/subsistence_farming.dds\""
+   ],
+   "building_modifiers": [
+    "=",
+    {
+     "workforce_scaled": [
+      "=",
+      {
+       "goods_output_grain_add": [
+        "=",
+        "5"
+       ],
+       "goods_output_meat_add": [
+        "=",
+        "4"
+       ],
+       "goods_output_fabric_add": [
+        "=",
+        "3"
+       ],
+       "goods_output_wood_add": [
+        "=",
+        "0.5"
+       ],
+       "goods_output_services_add": [
+        "=",
+        "0.25"
+       ],
+       "goods_output_clothes_add": [
+        "=",
+        "0.25"
+       ],
+       "goods_output_furniture_add": [
+        "=",
+        "0.25"
+       ],
+       "goods_output_liquor_add": [
+        "=",
+        "0.25"
+       ]
+      }
+     ],
+     "level_scaled": [
+      "=",
+      {
+       "building_employment_farmers_add": [
+        "=",
+        "500"
+       ],
+       "building_employment_laborers_add": [
+        "=",
+        "4500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_cossack_recruitment": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/cavalry.dds\""
+   ],
+   "unlocking_laws": [
+    "=",
+    [
+     "law_internal_colonization"
+    ]
+   ],
+   "state_modifiers": [
+    "=",
+    {
+     "unscaled": [
+      "=",
+      {
+       "state_migration_pull_add": [
+        "=",
+        "10"
+       ],
+       "state_migration_pull_mult": [
+        "=",
+        "0.1"
+       ]
+      }
+     ],
+     "workforce_scaled": [
+      "=",
+      {
+       "state_colony_growth_creation_factor": [
+        "=",
+        "0.003"
+       ],
+       "state_turmoil_effects_mult": [
+        "=",
+        "-0.003"
+       ],
+       "state_radicalism_increases_violent_hostility_mult": [
+        "=",
+        "0.003"
+       ],
+       "state_radicalism_increases_cultural_erasure_mult": [
+        "=",
+        "0.003"
+       ],
+       "state_radicalism_increases_open_prejudice_mult": [
+        "=",
+        "0.003"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pm_no_cossack_recruitment": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/production_method_icons/no_specialists.dds\""
    ]
   }
  ]

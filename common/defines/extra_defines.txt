@@ -33,6 +33,8 @@ NAI = {
 }
 
 NPolitics = {
+	# Vanilla 1.15 halved its own value, 5 to 2.5 (the changelog's cheaper ideological incoherence). The mod's 2 still
+	# sits below vanilla's, so it is kept: players pay what they paid on 1.14.5.
 	INCOHERENCE_FACTOR = 2								# The amount to multiply the approval value with to get an incoherence score for legitimacy
 	MAX_INSTITUTION_INVESTMENT = 9
 
@@ -48,11 +50,14 @@ NPolitics = {
 	RADICALISM_AGITATING_THRESHOLD = 0.1
 }
 
-NWar = {
-	DEVASTATION_INCREASE_RATE = -0.01 # Per day, scales with level of occupation
-	DEVASTATION_DECAY_RATE = -0.03 # Per day, when there are no occupations
-	DEVASTATION_FROM_BATTLES = 3 # For each battle
-}
+# NWar: no overrides since vanilla 1.15. The mod's three devastation defines (1.14.5) made battles, not occupation,
+# the source of devastation and let it recover faster than vanilla's: DEVASTATION_INCREASE_RATE -0.01 (vanilla 0.1;
+# occupation slowly undid devastation), DEVASTATION_DECAY_RATE -0.03 (vanilla -0.025), DEVASTATION_FROM_BATTLES 3
+# (vanilla 0.1). Vanilla 1.15 does the same natively: occupation no longer devastates (DEVASTATION_INCREASE_RATE is
+# gone, and the engine warned "define macro is missing" on the mod's line), devastation decays at -0.04 a day once 180
+# days pass without a battle (half that while occupied), and each battle adds 1.0 plus 0.5 per thousand casualties,
+# capped at 15 and scaled up for small states. The mod's -0.03 would now slow recovery below vanilla's, and its 3
+# would triple the base of a model that already scales with casualties, so all three take vanilla's values.
 
 NPops = {
 	NUM_WEALTH_LEVELS = 200

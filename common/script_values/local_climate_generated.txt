@@ -454,7 +454,7 @@ te_climate_has_record = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 1 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 1 }
@@ -611,7 +611,6 @@ te_climate_has_record = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 1 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 1 }
@@ -621,7 +620,7 @@ te_climate_has_record = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 1 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 1 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 1 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 1 }
@@ -646,7 +645,7 @@ te_climate_has_record = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 1 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 1 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 1 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 1 }
@@ -683,6 +682,8 @@ te_climate_has_record = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 1 }
 }
 
 # State scope: the warmest month's dew point: 0 dry (<10 °C), 1 moderate (10-16), 2 humid (16-20), 3 oppressive (>20); the tile's Humidity word only.
@@ -1134,7 +1135,7 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 2 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 1 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 0 }
@@ -1291,7 +1292,6 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 1 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 1 }
@@ -1301,7 +1301,7 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 1 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 1 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 1 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 1 }
@@ -1326,7 +1326,7 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 1 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 1 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 1 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 1 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 1 }
@@ -1363,6 +1363,8 @@ te_climate_summer_humidity = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 1 }
 }
 
 # State scope: the coldest month's mean temperature, °C.
@@ -1814,7 +1816,7 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 4 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = -10 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = -8 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = -8 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = -4 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 2 }
@@ -1971,7 +1973,6 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = -15 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = -21 }
 	else_if = { limit = { state_region = s:STATE_OB } value = -23 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = -26 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = -7 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = -21 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = -38 }
@@ -1981,7 +1982,7 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = -6 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = -4 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = -4 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = -4 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = -4 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = -5 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = -10 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = -5 }
@@ -2006,7 +2007,7 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = -7 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = -8 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = -1 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = -11 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = -11 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = -5 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = -3 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = -13 }
@@ -2043,6 +2044,8 @@ te_climate_winter_mean = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = -11 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = -5 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = -14 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = -8 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = -9 }
 }
 
 # State scope: water for settlement: 0 ample, 1 limited, 2 scarce.
@@ -2494,7 +2497,7 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 0 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 0 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 0 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 0 }
@@ -2651,7 +2654,6 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 0 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 0 }
@@ -2661,7 +2663,7 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 0 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 0 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 0 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 0 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 0 }
@@ -2686,7 +2688,7 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 0 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 0 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 0 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 0 }
@@ -2723,6 +2725,8 @@ te_climate_aridity = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 0 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 0 }
 }
 
 # State scope: malaria as of 1836: 0 none, 1 seasonal or local, 2 endemic.
@@ -3174,7 +3178,7 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 1 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 1 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 1 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 1 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 1 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 2 }
@@ -3331,7 +3335,6 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 0 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 0 }
@@ -3341,7 +3344,7 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 0 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 0 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 0 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 0 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 0 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 0 }
@@ -3366,7 +3369,7 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 1 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 0 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 0 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 1 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 0 }
@@ -3403,6 +3406,8 @@ te_climate_malaria = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 0 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 0 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 0 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 0 }
 }
 
 # State scope: signed degrees of the reference place.
@@ -3854,7 +3859,7 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 40 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 42 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 53 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 52 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 52 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 46 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 40 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 39 }
@@ -4011,7 +4016,6 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 57 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 58 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 67 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 65 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 53 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 59 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 62 }
@@ -4021,7 +4025,7 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 58 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 57 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 57 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 55 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 55 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 55 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 63 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 60 }
@@ -4036,7 +4040,7 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_BREST } value = 54 }
 	else_if = { limit = { state_region = s:STATE_VOLHYNIA } value = 51 }
 	else_if = { limit = { state_region = s:STATE_KIEV } value = 50 }
-	else_if = { limit = { state_region = s:STATE_ORYOL } value = 54 }
+	else_if = { limit = { state_region = s:STATE_ORYOL } value = 53 }
 	else_if = { limit = { state_region = s:STATE_SMOLENSK } value = 55 }
 	else_if = { limit = { state_region = s:STATE_MOGILEV } value = 54 }
 	else_if = { limit = { state_region = s:STATE_ARKHANGELSK } value = 65 }
@@ -4046,7 +4050,7 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 52 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 57 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 46 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 59 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 59 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 54 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 47 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 58 }
@@ -4083,6 +4087,8 @@ te_climate_latitude = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 56 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 51 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 66 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 54 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 58 }
 }
 
 # State scope: the hottest day of a typical year, °C (the mean of each year's highest).
@@ -4534,7 +4540,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 39.7 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 37.6 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 36.4 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 36.8 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 36.8 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 40.2 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 40.4 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 41.7 }
@@ -4691,7 +4697,6 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 33.2 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 32.4 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 29.4 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 28.9 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 25.3 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 25.7 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 34.3 }
@@ -4701,7 +4706,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 31.4 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 31.6 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 32.2 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 32.8 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 32.8 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 32.8 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 29.8 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 28.4 }
@@ -4726,7 +4731,7 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 34.3 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 32.2 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 36 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 31.2 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 31.2 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 33.2 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 37.9 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 33.3 }
@@ -4763,6 +4768,8 @@ te_climate_hot_day = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 32.7 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 34.7 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 30 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 32.8 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 32 }
 }
 
 # State scope: heat stress on a typical year's worst day, °C: 0.7 x wet-bulb + 0.3 x air temperature.
@@ -5214,7 +5221,7 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_AZERBAIJAN } value = 30.3 }
 	else_if = { limit = { state_region = s:STATE_GREATER_CAUCASUS } value = 27.6 }
 	else_if = { limit = { state_region = s:STATE_SAMARA } value = 26 }
-	else_if = { limit = { state_region = s:STATE_TARTARIA } value = 26.3 }
+	else_if = { limit = { state_region = s:STATE_SARATOV } value = 26.3 }
 	else_if = { limit = { state_region = s:STATE_ASTRAKHAN } value = 28.9 }
 	else_if = { limit = { state_region = s:STATE_UZBEKIA } value = 27.2 }
 	else_if = { limit = { state_region = s:STATE_TAJIKISTAN } value = 28.2 }
@@ -5371,7 +5378,6 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_TOBOLSK } value = 25.5 }
 	else_if = { limit = { state_region = s:STATE_UPPER_YENISEYSK } value = 25.5 }
 	else_if = { limit = { state_region = s:STATE_OB } value = 22.9 }
-	else_if = { limit = { state_region = s:STATE_CHUKOTKA } value = 22 }
 	else_if = { limit = { state_region = s:STATE_KAMCHATKA } value = 20.2 }
 	else_if = { limit = { state_region = s:STATE_OKHOTSK } value = 19.6 }
 	else_if = { limit = { state_region = s:STATE_YAKUTSK } value = 25.4 }
@@ -5381,7 +5387,7 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_TARTU } value = 25.1 }
 	else_if = { limit = { state_region = s:STATE_RIGA } value = 25 }
 	else_if = { limit = { state_region = s:STATE_COURLAND } value = 25.9 }
-	else_if = { limit = { state_region = s:STATE_KAUNAS } value = 25.6 }
+	else_if = { limit = { state_region = s:STATE_LITHUANIA } value = 25.6 }
 	else_if = { limit = { state_region = s:STATE_VILNIUS } value = 25.6 }
 	else_if = { limit = { state_region = s:STATE_KUOPIO } value = 23.7 }
 	else_if = { limit = { state_region = s:STATE_UUSIMAA } value = 23.1 }
@@ -5406,7 +5412,7 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_KURSK } value = 25.6 }
 	else_if = { limit = { state_region = s:STATE_TVER } value = 25.1 }
 	else_if = { limit = { state_region = s:STATE_CHERSON } value = 27.2 }
-	else_if = { limit = { state_region = s:STATE_GALICH } value = 24.6 }
+	else_if = { limit = { state_region = s:STATE_VOLOGDA } value = 24.6 }
 	else_if = { limit = { state_region = s:STATE_MINSK } value = 25.6 }
 	else_if = { limit = { state_region = s:STATE_ROSTOV } value = 28.3 }
 	else_if = { limit = { state_region = s:STATE_PERM } value = 25.2 }
@@ -5443,4 +5449,6 @@ te_climate_heat_index = {
 	else_if = { limit = { state_region = s:STATE_CHUVASHIA } value = 25.5 }
 	else_if = { limit = { state_region = s:STATE_CHERNIHIV } value = 26.6 }
 	else_if = { limit = { state_region = s:STATE_NENETSIA } value = 23.4 }
+	else_if = { limit = { state_region = s:STATE_TULA } value = 25.5 }
+	else_if = { limit = { state_region = s:STATE_KOSTROMA } value = 25.3 }
 }

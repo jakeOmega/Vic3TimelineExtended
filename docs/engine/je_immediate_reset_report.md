@@ -31,6 +31,7 @@ can_revolution_inherit: yes; can_deactivate: unset (= no)
 
 - `set_variable` `te_mon_stance_band_applied` = `0` at `common/journal_entries/je_banking.txt` — **2026-09-26**: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
 - `remove_variable` `banking_bank_holiday_reopening` at `common/journal_entries/je_banking.txt` — only a positive existence test of `banking_bank_holiday_reopening` encloses it, so it destroys what is there — **2026-10-05**: cleared on purpose; the holiday this marker belongs to did not survive the revolution, so no reopening bounce is owed
+- `remove_variable` `banking_contagion_pending` at `common/journal_entries/je_banking.txt` — only a positive existence test of `banking_contagion_pending` encloses it, so it destroys what is there — **2026-10-17**: cleared on purpose; the contagion event this mark stands for did not survive the revolution, so the winner may be reached again
 
 ### `je_heir_education` (`common/journal_entries/je_heir_education.txt`)
 
@@ -51,64 +52,74 @@ can_revolution_inherit: no; can_deactivate: yes
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_mars_landing` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_moon_base` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 40 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +10 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_moon_landing` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_orbital` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_probe` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_solar_colonization` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
+- `change_variable` `sr_launch_banked_fleets` at `common/scripted_effects/sr_launch_window_effects.txt` via `sr_launch_bank_staged_fleets` (common/journal_entries/je_space_race.txt) — **2026-10-29**: banks the whole fleets staged now, and the reset below always follows, so a re-run moves only what was staged since and never counts a fleet twice. Flagged once the outer guard became NOT completed OR resumed (lunar colonization 2b)
+- 80 writes of `sr_colony_valles_marineris_research_mult`, `sr_colony_valles_marineris_mining_mult`, `sr_colony_olympus_mons_atmospheric_mult`, `sr_colony_olympus_mons_geothermal_mult`, `sr_colony_hellas_settlement_mult`, `sr_colony_hellas_astrobiology_mult`, +74 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-10-25**: records the multiplier just applied, recomputed from the world's global record; nothing built up is lost
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_suborbital` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
 - 2 writes of `sr_cost_participation`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: a cache of live state (global ranking), re-derived on every call; nothing a revolution's winner could lose
+- `set_variable` `sr_cost_funding_cap` = `sr_max_funding_level` at `common/scripted_effects/space_race_effects.txt` via `sr_recalculate_cost` (common/journal_entries/je_space_race.txt) — **2026-10-29**: a cache of live state (the funding cap), re-derived on every call; nothing a revolution's winner could lose
 - 2 writes of `sr_cost_solar_running`, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-29**: a cache of live state (the production method), re-derived on every call; nothing a revolution's winner could lose
-- 56 writes of `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 35 writes of `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_strategic_reserve` (`common/journal_entries/je_strategic_reserve.txt`)
 
@@ -126,7 +137,7 @@ can_revolution_inherit: yes; can_deactivate: no
 
 can_revolution_inherit: unset (= yes); can_deactivate: unset (= no); a mod `REPLACE:` of a vanilla entry
 
-- 2 writes of `surplus_time_var`, `je_age_in_months_var`, first at `common/journal_entries/te_tax_vanilla_je_overrides.txt` — **2026-10-02**: vanilla 1.14.5's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
+- 2 writes of `surplus_time_var`, `je_age_in_months_var`, first at `common/journal_entries/te_tax_vanilla_je_overrides.txt` — **2026-11-05**: vanilla 1.15's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
 
 ## Not Failing
 
@@ -143,7 +154,7 @@ where the bar wraps and say why with a REVIEWED comment
 activation"). Not failing yet.
 
 - `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
-- `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:147` — the entry's `current_value` reads it; goal not pinned
+- `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:141` — the entry's `current_value` reads it; goal not pinned
 - `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
 - `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:23` — the entry's `current_value` reads it; goal not pinned
 
@@ -154,12 +165,11 @@ with the same parameters, every time it fires: a recomputation the
 next pulse would make anyway, not a reset. One line per entry and
 outermost refresh effect.
 
-- `je_colonial_empire` (inherited): `colonial_empire_refresh_display` — 22 variables: `colonial_empire_tier`, `colonial_empire_next_boundary`, `colonial_empire_bar_bucket`, `colonial_empire_d_overreach`, `colonial_empire_d_gp`, `colonial_empire_d_acceptance`, +16 more
+- `je_colonial_empire` (inherited): `colonial_empire_refresh_display` — 41 variables: `colonial_empire_tier`, `colonial_empire_next_boundary`, `colonial_empire_bar_bucket`, `colonial_empire_d_overreach`, `colonial_empire_d_gp`, `colonial_empire_d_acceptance`, +35 more
 - `je_colonial_empire` (inherited): `colonial_programmes_refresh_cost_base` — 1 variables: `colonial_dev_colonial_gdp`
 - `je_nuclear_program` (not inherited): `nuclear_program_refresh_state_effect` — 1 variables: `nuclear_program_last_status`
 - `je_space_race_interstellar_probe` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_interstellar_probe_last_status`, `sr_interstellar_probe_setbacks`
 - `je_space_race_mars_landing` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_mars_landing_last_status`, `sr_mars_landing_setbacks`
-- `je_space_race_moon_base` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_moon_base_last_status`, `sr_moon_base_setbacks`
 - `je_space_race_moon_landing` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`
 - `je_space_race_orbital` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_orbital_last_status`, `sr_orbital_setbacks`
 - `je_space_race_probe` (inherited): `sr_set_milestone_status_base` — 2 variables: `sr_probe_last_status`, `sr_probe_setbacks`
@@ -189,21 +199,30 @@ removed while this variable was kept.
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_sol` = `0` at `common/journal_entries/je_cultural_hegemony.txt:85` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:82`)
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_monuments` = `0` at `common/journal_entries/je_cultural_hegemony.txt:86` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:82`)
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_megaprojects` = `0` at `common/journal_entries/je_cultural_hegemony.txt:87` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:82`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_doctrine_months` = `nd_doctrine_tenure_months` at `common/scripted_effects/nuclear_deterrence_effects.txt:61` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_doctrine` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:50`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_target` = `1` at `common/scripted_effects/nuclear_deterrence_effects.txt:71` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_months` = `0` at `common/scripted_effects/nuclear_deterrence_effects.txt:72` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_transition` = `0` at `common/scripted_effects/nuclear_deterrence_effects.txt:73` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_authority_months` = `nd_authority_tenure_months` at `common/scripted_effects/nuclear_deterrence_effects.txt:82` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_authority` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:80`)
-- `je_nuclear_program` (not inherited): `set_variable` `nd_estimate_year` = `year` at `common/scripted_effects/nuclear_deterrence_effects.txt:125` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:170) — runs only while `nd_public_estimate` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:123`)
-- `je_space_race_solar_colonization` (inherited): `change_variable` `sr_launch_banked_fleets` at `common/scripted_effects/sr_launch_window_effects.txt:129` via `sr_launch_bank_staged_fleets` (common/journal_entries/je_space_race.txt:1347) — runs only while `sr_all_colonies_complete` is missing (`common/scripted_effects/sr_launch_window_effects.txt:120`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_doctrine_months` = `nd_doctrine_tenure_months` at `common/scripted_effects/nuclear_deterrence_effects.txt:61` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_doctrine` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:50`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_target` = `1` at `common/scripted_effects/nuclear_deterrence_effects.txt:71` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_months` = `0` at `common/scripted_effects/nuclear_deterrence_effects.txt:72` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_readiness_transition` = `0` at `common/scripted_effects/nuclear_deterrence_effects.txt:73` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_readiness` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:69`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_authority_months` = `nd_authority_tenure_months` at `common/scripted_effects/nuclear_deterrence_effects.txt:82` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_authority` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:80`)
+- `je_nuclear_program` (not inherited): `set_variable` `nd_estimate_year` = `year` at `common/scripted_effects/nuclear_deterrence_effects.txt:125` via `nd_init_posture` (common/journal_entries/je_nuclear_program.txt:164) — runs only while `nd_public_estimate` is missing (`common/scripted_effects/nuclear_deterrence_effects.txt:123`)
+- `je_space_race_interstellar_probe` (inherited): `set_variable` `sr_fuzz_interstellar_probe` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:995) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_interstellar_probe` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_mars_landing` (inherited): `set_variable` `sr_fuzz_mars_landing` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:831) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_mars_landing` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_moon_base` (inherited): `set_variable` `sr_fuzz_moon_base` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:715) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_moon_base` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_moon_landing` (inherited): `set_variable` `sr_fuzz_moon_landing` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:397) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_moon_landing` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_orbital` (inherited): `set_variable` `sr_fuzz_orbital` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:240) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_orbital` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_probe` (inherited): `set_variable` `sr_fuzz_probe` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:555) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_probe` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_solar_colonization` (inherited): `set_variable` `sr_fuzz_solar_colonization` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:1334) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_solar_colonization` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `je_space_race_suborbital` (inherited): `set_variable` `sr_fuzz_suborbital` = `-1` at `common/scripted_effects/space_race_effects.txt:1152` via `sr_power_fuzz_first` (common/journal_entries/je_space_race.txt:89) -> `sr_roll_rival_fuzz` (common/scripted_effects/space_race_effects.txt:1325) — runs only while `sr_fuzz_until_suborbital` is missing (`common/scripted_effects/space_race_effects.txt:1324`) (+8 more writes)
+- `te_probe_115` (not inherited): `set_variable` `te_probe_115_step` = `0` at `common/journal_entries/te_probe_115_probes.txt:50` — runs only while `te_probe_115_claimed` is missing (`common/journal_entries/te_probe_115_probes.txt:47`)
+- `te_probe_115` (not inherited): `set_variable` `te_probe_115_c7_scale` = `0` at `common/journal_entries/te_probe_115_probes.txt:51` — runs only while `te_probe_115_claimed` is missing (`common/journal_entries/te_probe_115_probes.txt:47`)
 
 ## Coverage
 
 - counts are writes per entry, so a helper several entries call counts
   once for each; distinct (line, variable) pairs are in brackets
 - unreviewed: 0 (0)
-- exempted: 614 (202)
+- exempted: 541 (261)
 - progress-bar inputs: 27 (27)
-- pulse refreshes: 371 (371)
-- guarded by another variable: 21 (21)
+- pulse refreshes: 379 (379)
+- guarded by another variable: 94 (94)
 

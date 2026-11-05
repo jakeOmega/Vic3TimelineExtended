@@ -1,15 +1,16 @@
 {
   "_comment": "Maps STATE_X -> list of state_trait_* keys to add to that state's traits = { ... } block. Consumed by resources.py during map_data/state_regions regeneration. Only NEW-mode traits go here; INJECT-mode traits (atacama_desert, bone_valley) extend vanilla traits already attached to vanilla states. See common/state_traits/te_mining_traits.txt and GH #110. An entry written \"-state_trait_x\" removes vanilla's trait from that state instead (test_state_trait_config.py).",
 
-  "STATE_ANTOFAGASTA": ["state_trait_atacama_copper_belt"],
+  "_comment_copper_belts": "1.15 gives Katanga and Zambia vanilla's African Copper Belt (+20% copper mine throughput) and Antofagasta the Domeyko Fault (+10%): the same orebodies as the mod's Copperbelt (+20% copper, +10% nickel and cobalt) and Atacama Copper Belt (+20%). The vanilla trait goes, so each state shows one copper belt and keeps the figures it had on 1.14.5.",
+  "STATE_ANTOFAGASTA": ["-state_trait_domeyko_fault", "state_trait_atacama_copper_belt"],
   "STATE_ONTARIO": ["state_trait_sudbury_basin"],
   "STATE_SASKATCHEWAN": ["state_trait_saskatchewan_potash"],
   "STATE_NEVADA": ["state_trait_great_basin_borates"],
   "STATE_JAMAICA": ["state_trait_jamaican_bauxite"],
 
   "STATE_TRANSVAAL": ["state_trait_bushveld_complex"],
-  "STATE_KATANGA": ["state_trait_copperbelt"],
-  "STATE_ZAMBIA": ["state_trait_copperbelt"],
+  "STATE_KATANGA": ["-state_trait_african_copper_belt", "state_trait_copperbelt"],
+  "STATE_ZAMBIA": ["-state_trait_african_copper_belt", "state_trait_copperbelt"],
   "STATE_INNER_MOROCCO": ["state_trait_moroccan_phosphate"],
   "STATE_NORTH_MADAGASCAR": ["state_trait_madagascar_graphite"],
 

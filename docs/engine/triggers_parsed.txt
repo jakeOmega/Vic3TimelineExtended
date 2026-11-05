@@ -1,4 +1,4 @@
-# Auto-generated from triggers.log (engine docs 1.14.5). Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from triggers.log (engine docs 1.15.0). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 # Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a fixed description: the engine dump prints unrelated script there, reshuffled on every dump.
 
 ## active_lens
@@ -261,6 +261,12 @@ Targets: country
 
 Iterate through all countries in geographic region australia
 
+## any_country_in_austria
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region austria
+
 ## any_country_in_balkans
 Scopes: none
 Targets: country
@@ -272,6 +278,12 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region balkans_old
+
+## any_country_in_baltic_governorates
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region baltic_governorates
 
 ## any_country_in_baltic_old
 Scopes: none
@@ -339,6 +351,12 @@ Targets: country
 
 Iterate through all countries in geographic region canada_old
 
+## any_country_in_canadian_confederation
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region canadian_confederation
+
 ## any_country_in_caribbean_old
 Scopes: none
 Targets: country
@@ -393,6 +411,12 @@ Targets: country
 
 Iterate through all countries in geographic region central_india_old
 
+## any_country_in_central_russia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region central_russia
+
 ## any_country_in_china
 Scopes: none
 Targets: country
@@ -435,6 +459,12 @@ Targets: country
 
 Iterate through all countries in geographic region congo_old
 
+## any_country_in_congress_poland
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region congress_poland
+
 ## any_country_in_danubia_old
 Scopes: none
 Targets: country
@@ -446,6 +476,12 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region delhi_calcutta_line
+
+## any_country_in_diocese_of_kamchatka
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region diocese_of_kamchatka
 
 ## any_country_in_dixie_old
 Scopes: none
@@ -476,6 +512,12 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region east_sibera_old
+
+## any_country_in_east_slavic_states
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region east_slavic_states
 
 ## any_country_in_eastern_europe
 Scopes: none
@@ -513,6 +555,12 @@ Targets: country
 
 Iterate through all countries in geographic region ezochi
 
+## any_country_in_finland
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region finland
+
 ## any_country_in_finland_old
 Scopes: none
 Targets: country
@@ -536,6 +584,12 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region french_natural_borders
+
+## any_country_in_french_revolution_zone
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region french_revolution_zone
 
 ## any_country_in_german_confederation
 Scopes: none
@@ -897,6 +951,12 @@ Targets: country
 
 Iterate through all countries in geographic region northern_mexico
 
+## any_country_in_northwestern_russia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region northwestern_russia
+
 ## any_country_in_occitania_old
 Scopes: none
 Targets: country
@@ -957,11 +1017,113 @@ Targets: country
 
 Iterate through all countries in geographic region polar_seas
 
+## any_country_in_priamurye
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region priamurye
+
 ## any_country_in_punjab_old
 Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region punjab_old
+
+## any_country_in_qing_empire
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region qing_empire
+
+## any_country_in_rcw_baltic
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_baltic
+
+## any_country_in_rcw_central
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_central
+
+## any_country_in_rcw_east_siberia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_east_siberia
+
+## any_country_in_rcw_far_east
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_far_east
+
+## any_country_in_rcw_north
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_north
+
+## any_country_in_rcw_petrograd
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_petrograd
+
+## any_country_in_rcw_south
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_south
+
+## any_country_in_rcw_steppe
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_steppe
+
+## any_country_in_rcw_transcaucasia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_transcaucasia
+
+## any_country_in_rcw_turkestan
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_turkestan
+
+## any_country_in_rcw_ukraine
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_ukraine
+
+## any_country_in_rcw_urals
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_urals
+
+## any_country_in_rcw_volga
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_volga
+
+## any_country_in_rcw_west
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_west
+
+## any_country_in_rcw_west_siberia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region rcw_west_siberia
 
 ## any_country_in_rhine_old
 Scopes: none
@@ -986,6 +1148,24 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region russia_old
+
+## any_country_in_russia_western_borderlands
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region russia_western_borderlands
+
+## any_country_in_russian_eurasia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region russian_eurasia
+
+## any_country_in_russian_siberia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region russian_siberia
 
 ## any_country_in_scandinavia
 Scopes: none
@@ -1065,6 +1245,12 @@ Targets: country
 
 Iterate through all countries in geographic region southern_europe
 
+## any_country_in_southern_russia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region southern_russia
+
 ## any_country_in_subsaharan_africa
 Scopes: none
 Targets: country
@@ -1076,6 +1262,18 @@ Scopes: none
 Targets: country
 
 Iterate through all countries in geographic region the_midwest_old
+
+## any_country_in_trans_siberian_line
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region trans_siberian_line
+
+## any_country_in_transcaucasia
+Scopes: none
+Targets: country
+
+Iterate through all countries in geographic region transcaucasia
 
 ## any_country_in_transoxiana
 Scopes: none
@@ -1360,10 +1558,10 @@ Targets: country
 Iterate through all members of the scoped power bloc including the leader
 
 ## any_preferred_law
-Scopes: interest_group
+Scopes: character, interest_group, political_movement
 Targets: law
 
-Iterate through all active and possible laws in an interest group's country, ordered by how much they prefer that law
+Iterate through all active and possible laws in the country of the scoped interest group, character or political movement, ordered by how much they prefer that law
 
 ## any_primary_culture
 Scopes: country, country_definition
@@ -1485,6 +1683,12 @@ Targets: province
 
 Iterate through all provinces in geographic region australia
 
+## any_province_in_austria
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region austria
+
 ## any_province_in_balkans
 Scopes: none
 Targets: province
@@ -1496,6 +1700,12 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region balkans_old
+
+## any_province_in_baltic_governorates
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region baltic_governorates
 
 ## any_province_in_baltic_old
 Scopes: none
@@ -1563,6 +1773,12 @@ Targets: province
 
 Iterate through all provinces in geographic region canada_old
 
+## any_province_in_canadian_confederation
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region canadian_confederation
+
 ## any_province_in_caribbean_old
 Scopes: none
 Targets: province
@@ -1617,6 +1833,12 @@ Targets: province
 
 Iterate through all provinces in geographic region central_india_old
 
+## any_province_in_central_russia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region central_russia
+
 ## any_province_in_china
 Scopes: none
 Targets: province
@@ -1659,6 +1881,12 @@ Targets: province
 
 Iterate through all provinces in geographic region congo_old
 
+## any_province_in_congress_poland
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region congress_poland
+
 ## any_province_in_danubia_old
 Scopes: none
 Targets: province
@@ -1670,6 +1898,12 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region delhi_calcutta_line
+
+## any_province_in_diocese_of_kamchatka
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region diocese_of_kamchatka
 
 ## any_province_in_dixie_old
 Scopes: none
@@ -1700,6 +1934,12 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region east_sibera_old
+
+## any_province_in_east_slavic_states
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region east_slavic_states
 
 ## any_province_in_eastern_europe
 Scopes: none
@@ -1737,6 +1977,12 @@ Targets: province
 
 Iterate through all provinces in geographic region ezochi
 
+## any_province_in_finland
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region finland
+
 ## any_province_in_finland_old
 Scopes: none
 Targets: province
@@ -1760,6 +2006,12 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region french_natural_borders
+
+## any_province_in_french_revolution_zone
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region french_revolution_zone
 
 ## any_province_in_german_confederation
 Scopes: none
@@ -2121,6 +2373,12 @@ Targets: province
 
 Iterate through all provinces in geographic region northern_mexico
 
+## any_province_in_northwestern_russia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region northwestern_russia
+
 ## any_province_in_occitania_old
 Scopes: none
 Targets: province
@@ -2181,11 +2439,113 @@ Targets: province
 
 Iterate through all provinces in geographic region polar_seas
 
+## any_province_in_priamurye
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region priamurye
+
 ## any_province_in_punjab_old
 Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region punjab_old
+
+## any_province_in_qing_empire
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region qing_empire
+
+## any_province_in_rcw_baltic
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_baltic
+
+## any_province_in_rcw_central
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_central
+
+## any_province_in_rcw_east_siberia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_east_siberia
+
+## any_province_in_rcw_far_east
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_far_east
+
+## any_province_in_rcw_north
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_north
+
+## any_province_in_rcw_petrograd
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_petrograd
+
+## any_province_in_rcw_south
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_south
+
+## any_province_in_rcw_steppe
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_steppe
+
+## any_province_in_rcw_transcaucasia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_transcaucasia
+
+## any_province_in_rcw_turkestan
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_turkestan
+
+## any_province_in_rcw_ukraine
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_ukraine
+
+## any_province_in_rcw_urals
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_urals
+
+## any_province_in_rcw_volga
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_volga
+
+## any_province_in_rcw_west
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_west
+
+## any_province_in_rcw_west_siberia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region rcw_west_siberia
 
 ## any_province_in_rhine_old
 Scopes: none
@@ -2210,6 +2570,24 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region russia_old
+
+## any_province_in_russia_western_borderlands
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region russia_western_borderlands
+
+## any_province_in_russian_eurasia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region russian_eurasia
+
+## any_province_in_russian_siberia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region russian_siberia
 
 ## any_province_in_scandinavia
 Scopes: none
@@ -2289,6 +2667,12 @@ Targets: province
 
 Iterate through all provinces in geographic region southern_europe
 
+## any_province_in_southern_russia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region southern_russia
+
 ## any_province_in_subsaharan_africa
 Scopes: none
 Targets: province
@@ -2300,6 +2684,18 @@ Scopes: none
 Targets: province
 
 Iterate through all provinces in geographic region the_midwest_old
+
+## any_province_in_trans_siberian_line
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region trans_siberian_line
+
+## any_province_in_transcaucasia
+Scopes: none
+Targets: province
+
+Iterate through all provinces in geographic region transcaucasia
 
 ## any_province_in_transoxiana
 Scopes: none
@@ -2705,6 +3101,12 @@ Targets: state
 
 Iterate through all states in geographic region australia
 
+## any_state_in_austria
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region austria
+
 ## any_state_in_balkans
 Scopes: none
 Targets: state
@@ -2716,6 +3118,12 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region balkans_old
+
+## any_state_in_baltic_governorates
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region baltic_governorates
 
 ## any_state_in_baltic_old
 Scopes: none
@@ -2783,6 +3191,12 @@ Targets: state
 
 Iterate through all states in geographic region canada_old
 
+## any_state_in_canadian_confederation
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region canadian_confederation
+
 ## any_state_in_caribbean_old
 Scopes: none
 Targets: state
@@ -2837,6 +3251,12 @@ Targets: state
 
 Iterate through all states in geographic region central_india_old
 
+## any_state_in_central_russia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region central_russia
+
 ## any_state_in_china
 Scopes: none
 Targets: state
@@ -2879,6 +3299,12 @@ Targets: state
 
 Iterate through all states in geographic region congo_old
 
+## any_state_in_congress_poland
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region congress_poland
+
 ## any_state_in_danubia_old
 Scopes: none
 Targets: state
@@ -2890,6 +3316,12 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region delhi_calcutta_line
+
+## any_state_in_diocese_of_kamchatka
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region diocese_of_kamchatka
 
 ## any_state_in_dixie_old
 Scopes: none
@@ -2920,6 +3352,12 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region east_sibera_old
+
+## any_state_in_east_slavic_states
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region east_slavic_states
 
 ## any_state_in_eastern_europe
 Scopes: none
@@ -2957,6 +3395,12 @@ Targets: state
 
 Iterate through all states in geographic region ezochi
 
+## any_state_in_finland
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region finland
+
 ## any_state_in_finland_old
 Scopes: none
 Targets: state
@@ -2980,6 +3424,12 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region french_natural_borders
+
+## any_state_in_french_revolution_zone
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region french_revolution_zone
 
 ## any_state_in_german_confederation
 Scopes: none
@@ -3341,6 +3791,12 @@ Targets: state
 
 Iterate through all states in geographic region northern_mexico
 
+## any_state_in_northwestern_russia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region northwestern_russia
+
 ## any_state_in_occitania_old
 Scopes: none
 Targets: state
@@ -3401,11 +3857,113 @@ Targets: state
 
 Iterate through all states in geographic region polar_seas
 
+## any_state_in_priamurye
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region priamurye
+
 ## any_state_in_punjab_old
 Scopes: none
 Targets: state
 
 Iterate through all states in geographic region punjab_old
+
+## any_state_in_qing_empire
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region qing_empire
+
+## any_state_in_rcw_baltic
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_baltic
+
+## any_state_in_rcw_central
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_central
+
+## any_state_in_rcw_east_siberia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_east_siberia
+
+## any_state_in_rcw_far_east
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_far_east
+
+## any_state_in_rcw_north
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_north
+
+## any_state_in_rcw_petrograd
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_petrograd
+
+## any_state_in_rcw_south
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_south
+
+## any_state_in_rcw_steppe
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_steppe
+
+## any_state_in_rcw_transcaucasia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_transcaucasia
+
+## any_state_in_rcw_turkestan
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_turkestan
+
+## any_state_in_rcw_ukraine
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_ukraine
+
+## any_state_in_rcw_urals
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_urals
+
+## any_state_in_rcw_volga
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_volga
+
+## any_state_in_rcw_west
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_west
+
+## any_state_in_rcw_west_siberia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region rcw_west_siberia
 
 ## any_state_in_rhine_old
 Scopes: none
@@ -3430,6 +3988,24 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region russia_old
+
+## any_state_in_russia_western_borderlands
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region russia_western_borderlands
+
+## any_state_in_russian_eurasia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region russian_eurasia
+
+## any_state_in_russian_siberia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region russian_siberia
 
 ## any_state_in_scandinavia
 Scopes: none
@@ -3509,6 +4085,12 @@ Targets: state
 
 Iterate through all states in geographic region southern_europe
 
+## any_state_in_southern_russia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region southern_russia
+
 ## any_state_in_subsaharan_africa
 Scopes: none
 Targets: state
@@ -3520,6 +4102,18 @@ Scopes: none
 Targets: state
 
 Iterate through all states in geographic region the_midwest_old
+
+## any_state_in_trans_siberian_line
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region trans_siberian_line
+
+## any_state_in_transcaucasia
+Scopes: none
+Targets: state
+
+Iterate through all states in geographic region transcaucasia
 
 ## any_state_in_transoxiana
 Scopes: none
@@ -3701,6 +4295,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region australia
 
+## any_state_region_in_austria
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region austria
+
 ## any_state_region_in_balkans
 Scopes: none
 Targets: state_region
@@ -3712,6 +4312,12 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region balkans_old
+
+## any_state_region_in_baltic_governorates
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region baltic_governorates
 
 ## any_state_region_in_baltic_old
 Scopes: none
@@ -3779,6 +4385,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region canada_old
 
+## any_state_region_in_canadian_confederation
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region canadian_confederation
+
 ## any_state_region_in_caribbean_old
 Scopes: none
 Targets: state_region
@@ -3833,6 +4445,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region central_india_old
 
+## any_state_region_in_central_russia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region central_russia
+
 ## any_state_region_in_china
 Scopes: none
 Targets: state_region
@@ -3875,6 +4493,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region congo_old
 
+## any_state_region_in_congress_poland
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region congress_poland
+
 ## any_state_region_in_danubia_old
 Scopes: none
 Targets: state_region
@@ -3886,6 +4510,12 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region delhi_calcutta_line
+
+## any_state_region_in_diocese_of_kamchatka
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region diocese_of_kamchatka
 
 ## any_state_region_in_dixie_old
 Scopes: none
@@ -3916,6 +4546,12 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region east_sibera_old
+
+## any_state_region_in_east_slavic_states
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region east_slavic_states
 
 ## any_state_region_in_eastern_europe
 Scopes: none
@@ -3953,6 +4589,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region ezochi
 
+## any_state_region_in_finland
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region finland
+
 ## any_state_region_in_finland_old
 Scopes: none
 Targets: state_region
@@ -3976,6 +4618,12 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region french_natural_borders
+
+## any_state_region_in_french_revolution_zone
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region french_revolution_zone
 
 ## any_state_region_in_german_confederation
 Scopes: none
@@ -4337,6 +4985,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region northern_mexico
 
+## any_state_region_in_northwestern_russia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region northwestern_russia
+
 ## any_state_region_in_occitania_old
 Scopes: none
 Targets: state_region
@@ -4397,11 +5051,113 @@ Targets: state_region
 
 Iterate through all state regions in geographic region polar_seas
 
+## any_state_region_in_priamurye
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region priamurye
+
 ## any_state_region_in_punjab_old
 Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region punjab_old
+
+## any_state_region_in_qing_empire
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region qing_empire
+
+## any_state_region_in_rcw_baltic
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_baltic
+
+## any_state_region_in_rcw_central
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_central
+
+## any_state_region_in_rcw_east_siberia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_east_siberia
+
+## any_state_region_in_rcw_far_east
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_far_east
+
+## any_state_region_in_rcw_north
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_north
+
+## any_state_region_in_rcw_petrograd
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_petrograd
+
+## any_state_region_in_rcw_south
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_south
+
+## any_state_region_in_rcw_steppe
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_steppe
+
+## any_state_region_in_rcw_transcaucasia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_transcaucasia
+
+## any_state_region_in_rcw_turkestan
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_turkestan
+
+## any_state_region_in_rcw_ukraine
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_ukraine
+
+## any_state_region_in_rcw_urals
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_urals
+
+## any_state_region_in_rcw_volga
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_volga
+
+## any_state_region_in_rcw_west
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_west
+
+## any_state_region_in_rcw_west_siberia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region rcw_west_siberia
 
 ## any_state_region_in_rhine_old
 Scopes: none
@@ -4426,6 +5182,24 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region russia_old
+
+## any_state_region_in_russia_western_borderlands
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region russia_western_borderlands
+
+## any_state_region_in_russian_eurasia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region russian_eurasia
+
+## any_state_region_in_russian_siberia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region russian_siberia
 
 ## any_state_region_in_scandinavia
 Scopes: none
@@ -4505,6 +5279,12 @@ Targets: state_region
 
 Iterate through all state regions in geographic region southern_europe
 
+## any_state_region_in_southern_russia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region southern_russia
+
 ## any_state_region_in_subsaharan_africa
 Scopes: none
 Targets: state_region
@@ -4516,6 +5296,18 @@ Scopes: none
 Targets: state_region
 
 Iterate through all state regions in geographic region the_midwest_old
+
+## any_state_region_in_trans_siberian_line
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region trans_siberian_line
+
+## any_state_region_in_transcaucasia
+Scopes: none
+Targets: state_region
+
+Iterate through all state regions in geographic region transcaucasia
 
 ## any_state_region_in_transoxiana
 Scopes: none
@@ -4703,6 +5495,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region australia
 
+## any_strategic_region_in_austria
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region austria
+
 ## any_strategic_region_in_balkans
 Scopes: none
 Targets: strategic_region
@@ -4714,6 +5512,12 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region balkans_old
+
+## any_strategic_region_in_baltic_governorates
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region baltic_governorates
 
 ## any_strategic_region_in_baltic_old
 Scopes: none
@@ -4781,6 +5585,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region canada_old
 
+## any_strategic_region_in_canadian_confederation
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region canadian_confederation
+
 ## any_strategic_region_in_caribbean_old
 Scopes: none
 Targets: strategic_region
@@ -4835,6 +5645,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region central_india_old
 
+## any_strategic_region_in_central_russia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region central_russia
+
 ## any_strategic_region_in_china
 Scopes: none
 Targets: strategic_region
@@ -4877,6 +5693,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region congo_old
 
+## any_strategic_region_in_congress_poland
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region congress_poland
+
 ## any_strategic_region_in_danubia_old
 Scopes: none
 Targets: strategic_region
@@ -4888,6 +5710,12 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region delhi_calcutta_line
+
+## any_strategic_region_in_diocese_of_kamchatka
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region diocese_of_kamchatka
 
 ## any_strategic_region_in_dixie_old
 Scopes: none
@@ -4918,6 +5746,12 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region east_sibera_old
+
+## any_strategic_region_in_east_slavic_states
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region east_slavic_states
 
 ## any_strategic_region_in_eastern_europe
 Scopes: none
@@ -4955,6 +5789,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region ezochi
 
+## any_strategic_region_in_finland
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region finland
+
 ## any_strategic_region_in_finland_old
 Scopes: none
 Targets: strategic_region
@@ -4978,6 +5818,12 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region french_natural_borders
+
+## any_strategic_region_in_french_revolution_zone
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region french_revolution_zone
 
 ## any_strategic_region_in_german_confederation
 Scopes: none
@@ -5339,6 +6185,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region northern_mexico
 
+## any_strategic_region_in_northwestern_russia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region northwestern_russia
+
 ## any_strategic_region_in_occitania_old
 Scopes: none
 Targets: strategic_region
@@ -5399,11 +6251,113 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region polar_seas
 
+## any_strategic_region_in_priamurye
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region priamurye
+
 ## any_strategic_region_in_punjab_old
 Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region punjab_old
+
+## any_strategic_region_in_qing_empire
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region qing_empire
+
+## any_strategic_region_in_rcw_baltic
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_baltic
+
+## any_strategic_region_in_rcw_central
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_central
+
+## any_strategic_region_in_rcw_east_siberia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_east_siberia
+
+## any_strategic_region_in_rcw_far_east
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_far_east
+
+## any_strategic_region_in_rcw_north
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_north
+
+## any_strategic_region_in_rcw_petrograd
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_petrograd
+
+## any_strategic_region_in_rcw_south
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_south
+
+## any_strategic_region_in_rcw_steppe
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_steppe
+
+## any_strategic_region_in_rcw_transcaucasia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_transcaucasia
+
+## any_strategic_region_in_rcw_turkestan
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_turkestan
+
+## any_strategic_region_in_rcw_ukraine
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_ukraine
+
+## any_strategic_region_in_rcw_urals
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_urals
+
+## any_strategic_region_in_rcw_volga
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_volga
+
+## any_strategic_region_in_rcw_west
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_west
+
+## any_strategic_region_in_rcw_west_siberia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region rcw_west_siberia
 
 ## any_strategic_region_in_rhine_old
 Scopes: none
@@ -5428,6 +6382,24 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region russia_old
+
+## any_strategic_region_in_russia_western_borderlands
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region russia_western_borderlands
+
+## any_strategic_region_in_russian_eurasia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region russian_eurasia
+
+## any_strategic_region_in_russian_siberia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region russian_siberia
 
 ## any_strategic_region_in_scandinavia
 Scopes: none
@@ -5507,6 +6479,12 @@ Targets: strategic_region
 
 Iterate through all strategic regions in geographic region southern_europe
 
+## any_strategic_region_in_southern_russia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region southern_russia
+
 ## any_strategic_region_in_subsaharan_africa
 Scopes: none
 Targets: strategic_region
@@ -5518,6 +6496,18 @@ Scopes: none
 Targets: strategic_region
 
 Iterate through all strategic regions in geographic region the_midwest_old
+
+## any_strategic_region_in_trans_siberian_line
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region trans_siberian_line
+
+## any_strategic_region_in_transcaucasia
+Scopes: none
+Targets: strategic_region
+
+Iterate through all strategic regions in geographic region transcaucasia
 
 ## any_strategic_region_in_transoxiana
 Scopes: none
@@ -5745,6 +6735,11 @@ Scopes: state
 
 Compare to state's blockade level
 
+## blockaded_gdp_share
+Scopes: war
+
+Compares the share of the target country's GDP that sits in blockaded states, from the scoped war
+
 ## building_has_goods_shortage
 Scopes: building
 
@@ -5801,6 +6796,7 @@ Check if the scoped country is allowed to close the straits it controls
 Scopes: state
 
 Checks if 1 level of <building_type> can be constructed in a scoped state
+**Value Type**: common/buildings
 
 ## can_create_diplomatic_pact
 Scopes: country
@@ -5876,6 +6872,7 @@ Check if the country can establish a new company
 Scopes: country
 
 Check if the target country is able to potentially form a nation
+**Value Type**: common/country_formation
 
 ## can_have_as_subject
 Scopes: country
@@ -5929,16 +6926,23 @@ Checks if the building's owner could queue the provided number of additional lev
 Scopes: country
 
 True if a country can research an technology
+**Value Type**: common/technology/technologies
 
 ## can_send_diplomatic_action
 Scopes: country
 
 Checks if a diplomatic action is valid to send by scope country to target country
 
+## can_start_play_against_overlord
+Scopes: country
+
+Checks if a subject can start a diplomatic play against its direct overlord, even while the overlord is at war: no war the overlord is in has a war goal targeting the subject, and none of the subject's states are occupied
+
 ## can_start_tutorial_lesson
 Scopes: none
 
 Can the specified tutorial lesson be started?
+**Value Type**: common/tutorial_lessons
 
 ## can_take_on_scaled_debt
 Scopes: country
@@ -6004,6 +7008,11 @@ Scopes: civil_war
 
 Compare progress of civil war
 
+## cold_effect
+Scopes: state
+
+How much the scoped state is currently suffering from the cold, from 0 to 1
+
 ## commander_is_available
 Scopes: character
 
@@ -6029,6 +7038,7 @@ Scopes: company
 Targets: building_type
 
 Check if the scoped company has a monopoly of the specified building type
+**Value Type**: common/buildings
 
 ## company_has_monopoly
 Scopes: company
@@ -6061,6 +7071,11 @@ Scopes: ai_regional_objective
 
 Compare to the date the scoped AI regional objective was concluded
 Only concluded objectives have a date, so check is_completed or is_failed first
+
+## connects_important_war_theaters
+Scopes: war
+
+Checks if pulling the target country into the scoped war would connect an important land theater of one side to an important land theater of the other, at least one of them not yet connected by land to the other side. A theater is important when it holds at least NDiplomacy|VIOLATE_SOVEREIGNTY_IMPORTANT_THEATER_UNIT_SHARE of the mobilizing and mobilized units in the war
 
 ## construction_queue_duration
 Scopes: country
@@ -6198,6 +7213,7 @@ Scopes: country
 Targets: building_type
 
 Check if the scoped country has a monopoly of the specified building type
+**Value Type**: common/buildings
 
 ## country_has_country_monopoly
 Scopes: country
@@ -6222,6 +7238,7 @@ Targets: religion
 
 Checks if a religion is the state religion in the country
 country_has_accepted_religion = <religion>
+**Value Type**: common/religions
 
 ## country_innovation
 Scopes: country
@@ -6231,7 +7248,14 @@ Checks the amount of weekly innovation a country produces
 ## country_or_subject_owns_entire_state_region
 Scopes: country
 
-Checks whether the scoped country or any of its subjects owns the entire specified state region
+Check whether the scoped country or any of its subjects owns the entire specified state region
+**Value Type**: map_data/state_regions
+
+## country_or_subject_owns_entire_state_region_uncontested
+Scopes: country
+
+Check whether the scoped country or any of its subjects owns the entire region and no war goal in any of its wars is targeting a state in it
+**Value Type**: map_data/state_regions
 
 ## country_ownership_fraction
 Scopes: building
@@ -6343,6 +7367,11 @@ Checks the culture's progress percentage towards secession in a country. 0 if no
 Scopes: culture
 
 Compares the target fervor for a given culture, culture_target_fervor > 0.2
+
+## current_career_length
+Scopes: character
+
+Checks if the character's current career length meets a duration threshold. Role can be a specific database role, a role type, or omitted to use the role with the longest tenure.
 
 ## current_cohesion_number
 Scopes: power_bloc
@@ -6504,6 +7533,11 @@ Compares the current enactment setback count in scope country.
 Scopes: country
 
 Determines the (weighted) enemy occupation score of a country
+
+## enemy_pressure
+Scopes: war
+
+Compares how actively the target country's enemies in the scoped war are pressuring it, from 0 to 1, through occupation, blockade or recent significant battles
 
 ## enemy_side_occupation
 Scopes: country
@@ -6705,6 +7739,7 @@ Does the player have the item in the account
 Scopes: market, state
 
 True if a state has an active building type
+**Value Type**: common/buildings
 
 ## has_active_peace_deal
 Scopes: country
@@ -6721,6 +7756,7 @@ Scopes: law
 Targets: amendment_type
 
 Check if scoped law has an amendment of the given type
+**Value Type**: common/amendments
 
 ## has_any_law_commitment
 Scopes: country
@@ -6775,6 +7811,7 @@ Check if the scoped country has any level of subventions on a goods
 scope:country = {
 	has_any_subventions_on = g:grain
 }
+**Value Type**: common/goods
 
 ## has_any_tags
 Scopes: container
@@ -6789,6 +7826,7 @@ Check if the scoped country has any level of tariffs on a goods
 scope:country = {
 	has_any_tariffs_on = g:grain
 }
+**Value Type**: common/goods
 
 ## has_assimilating_pops
 Scopes: state
@@ -6805,11 +7843,24 @@ Where X = country and Y = attitude type
 Scopes: battle_side
 
 True if the battle side currently has a condition with the given key
+**Value Type**: common/battle_conditions
 
 ## has_building
 Scopes: country, market, state, state_region
 
 True if a state/market/state region/country has a building type
+**Value Type**: common/buildings
+
+## has_building_levels_in_state_region
+Scopes: country
+
+Checks how many levels of a building type the scoped country has in the state it owns in a state region
+Counts as 0 when the country owns no state in the region, or when is_incorporated does not match
+	region = STATE_MICHIGAN
+	building = building_iron_mine
+	levels >= 8
+	is_incorporated = yes (optional)
+}
 
 ## has_character_ideology
 Scopes: political_movement
@@ -6821,6 +7872,7 @@ Scopes: country
 Targets: political_movement_type
 
 Checks if a country is having a civil war started by a particular movement type
+**Value Type**: common/political_movements
 
 ## has_claim
 Scopes: country
@@ -6847,12 +7899,14 @@ Scopes: character
 
 Checks whether the scoped character is following the given order
 has_order = order type key/order type scope
+**Value Type**: common/commander_orders
 
 ## has_company
 Scopes: country
 Targets: company_type
 
 Checks if a company of the specified type exists in scope country
+**Value Type**: common/company_types
 
 ## has_completed_subgoal
 Scopes: country
@@ -6865,6 +7919,7 @@ Targets: goods
 
 Checks if the country is taxing the target good.
 c:FRA = { has_consumption_tax = g:grain }
+**Value Type**: common/goods
 
 ## has_converting_pops
 Scopes: state
@@ -6900,6 +7955,7 @@ Checks if a culture has a cultural community in the scoped state.
 Scopes: culture
 
 Checks if a culture has a certain goods as obsession
+**Value Type**: common/goods
 
 ## has_culture
 Scopes: character
@@ -6910,11 +7966,13 @@ Checks characters culture
 Scopes: culture
 
 Checks if a culture has a certain culture_graphics
+**Value Type**: common/culture_graphics
 
 ## has_decree
 Scopes: state
 
 Checks if scope state has a particular type of decree
+**Value Type**: common/decrees/
 
 ## has_deployed_units
 Scopes: building
@@ -6949,11 +8007,13 @@ Scopes: culture, religion
 
 Checks if scoped culture or religion has the given discrimination trait
 has_trait = trait
+**Value Type**: common/discrimination_traits
 
 ## has_discrimination_trait_group
 Scopes: culture, religion
 
 Checks if scoped culture or religion has the given discrimination trait group
+**Value Type**: common/discrimination_trait_groups
 
 ## has_dlc_feature
 Scopes: none
@@ -6985,6 +8045,7 @@ Check if the country has a free (of radicals) government reform
 Scopes: none
 
 Is the given game rule setting enabled?
+**Value Type**:
 
 ## has_game_started
 Scopes: none
@@ -7033,11 +8094,13 @@ Does the country's government have the necessary total Clout
 Scopes: country
 
 Is the country's government type as specified
+**Value Type**: common/government_types
 
 ## has_harvest_condition
 Scopes: state_region
 
 Check if the scoped state region has a harvest condition of type
+**Value Type**: common/harvest_condition_types
 
 ## has_healthy_economy
 Scopes: country
@@ -7059,6 +8122,7 @@ Scopes: power_bloc
 Targets: power_bloc_identity
 
 Checks if the scoped power bloc has certain central identity
+**Value Type**: common/power_bloc_identities
 
 ## has_ideology
 Scopes: character, interest_group, political_movement
@@ -7069,6 +8133,7 @@ Check if scoped character or interest group has ideology
 Scopes: country
 
 Check if the country has at least one inactive journal entry of the specified type
+**Value Type**: common/journal_entries
 
 ## has_institution
 Scopes: country
@@ -7089,23 +8154,27 @@ True if scope country has an interest marker in target region
 Scopes: country
 
 Check if the country has at least one active journal entry of the specified type
+**Value Type**: common/journal_entries
 
 ## has_label
 Scopes: province
 
 Check if the scope object has the specified label
+**Value Type**: common/labels
 
 ## has_law
 Scopes: country
 Targets: law_type
 
 Checks if a country has a certain law active
+**Value Type**: common/laws
 
 ## has_law_commitment
 Scopes: country
 Targets: law_type
 
 Checks if a country has a commitment to enact a certain law
+**Value Type**: common/laws
 
 ## has_law_imposition_rights
 Scopes: country
@@ -7117,6 +8186,7 @@ Scopes: country
 Targets: law_type
 
 Checks if a country has a certain law or one its variant laws active
+**Value Type**: common/laws
 
 ## has_local_variable
 Scopes: none
@@ -7140,16 +8210,23 @@ has_variable_map = name
 Scopes: none
 
 Checks if the map interaction type is active
+**Value Type**: common/map_interaction_types
 
 ## has_map_interaction_diplomatic_action
 Scopes: none
 
 Checks if our current map interaction is a specific diplomatic action
+**Value Type**: common/diplomatic_actions
 
 ## has_military_formation
 Scopes: character
 
 Checks if character has a Military Formation
+
+## has_military_reach
+Scopes: country
+
+Checks if the country in scope can realistically get an army to a target state or country. Always true with a land route; otherwise military_reach must be at least min_reach, and when min_shippable_strength is set, shippable_army_strength_against the target (or the target state's owner) must be at least that
 
 ## has_military_strait_access_through
 Scopes: country
@@ -7163,6 +8240,7 @@ Targets: mobilization_option
 
 Checks that a formation has a specific mobilization option
   has_mobilization_option = mobilization_option:key
+**Value Type**: common/mobilization_options
 
 ## has_mobilizing_unit
 Scopes: state
@@ -7174,11 +8252,17 @@ Scopes: country, building, character, institution, interest_group, journal_entry
 
 Check if a supported scope has a certain timed modifier
 Supported scopes: Country, Character, State, Building, InterestGroup, PoliticalMovement, Institution, Front
+**Value Type**: common/static_modifiers
 
 ## has_name
 Scopes: container
 
 True if the script container in scope has a name
+
+## has_naval_mission_in_region
+Scopes: military_formation
+
+Checks if a Fleet is running a specific naval mission covering the specified strategic region
 
 ## has_naval_mission_with_invalid_area
 Scopes: military_formation
@@ -7194,6 +8278,7 @@ Checks whether the interest group has finished negotiation: has_negotiated = yes
 Scopes: country
 
 Checks if the scoped country has a certain objective type
+**Value Type**: common/objectives
 
 ## has_ongoing_assimilation
 Scopes: pop
@@ -7209,6 +8294,7 @@ Checks if the scoped pop has ongoing religious conversion
 Scopes: country
 
 Check if country has a state in the state region, or is at war with a country that holds one - i.e. the region has not been settled away from it
+**Value Type**: map_data/state_regions
 
 ## has_overlapping_interests
 Scopes: country
@@ -7237,6 +8323,11 @@ Targets: interest_group
 
 Checks if the target interest group is a member of scope party
 
+## has_planned_withdrawal
+Scopes: treaty
+
+Checks if a participant is planning on withdrawing from the scoped treaty
+
 ## has_play_goal
 Scopes: diplomatic_play
 
@@ -7246,11 +8337,13 @@ Checks if diplomatic play has a certain war goal type
 Scopes: pop
 
 Checks if pop has specific culture
+**Value Type**: common/cultures
 
 ## has_pop_religion
 Scopes: pop
 
 Checks if pop has specific religion
+**Value Type**: common/religions
 
 ## has_port_country
 Scopes: country
@@ -7277,6 +8370,7 @@ Scopes: state
 Targets: building_type
 
 Checks if the specificed building group is allowed in the scoped state. Used to check if a state can potentially produce a resource
+**Value Type**: common/buildings
 
 ## has_potential_supply
 Scopes: market_goods, state_goods
@@ -7287,6 +8381,7 @@ Check if the market goods or state goods has a potential supply, either though l
 Scopes: country
 
 Check if the target country could ever be able to form a nation
+**Value Type**: common/country_formation
 
 ## has_power_struggle
 Scopes: country
@@ -7310,6 +8405,11 @@ Scopes: none
 
 True if the end date (NDefines::NGame::END_DATE) has been reached
 
+## has_recently_removed_cossack_host
+Scopes: state
+
+Check if a Cossack Host was removed from the state recently enough to still count
+
 ## has_region_stance
 Scopes: country
 
@@ -7319,6 +8419,11 @@ region_stance = {
 	region = sr:some_region
 	stance = <conquer_region>
 }
+
+## has_regional_exile_pool_access
+Scopes: country
+
+Checks whether the scoped country meets the has_access requirements of the given Regional Exile Pool
 
 ## has_regional_objective
 Scopes: country
@@ -7334,11 +8439,13 @@ Usage:
 Scopes: character
 
 Checks characters religion
+**Value Type**: common/religions
 
 ## has_religious_taboo
 Scopes: religion
 
 Checks if a religion has a certain goods as taboo
+**Value Type**: common/goods
 
 ## has_researchable_technology
 Scopes: country
@@ -7354,6 +8461,7 @@ Check if the country has revolutionary uprising
 Scopes: character
 
 Checks if character has specific role
+**Value Type**: common/character_roles
 
 ## has_role_of_type
 Scopes: character
@@ -7364,6 +8472,7 @@ Checks if character has a role of the specified archetype
 Scopes: country
 
 Does the country's government include the named IG
+**Value Type**: common/interest_groups
 
 ## has_ruling_interest_group_count
 Scopes: country
@@ -7385,11 +8494,19 @@ Checks if a Fleet has any ship that is beyond its maximum distance to port
 Scopes: pop
 
 Checks if the scoped pop belongs to a specific social class
+**Value Type**: common/social_classes
 
 ## has_social_hierarchy
 Scopes: country
 
 Checks if the scoped country has adopted a specific social hierarchy
+**Value Type**: common/social_hierarchies
+
+## has_stalled_state_wargoal_against
+Scopes: war
+Targets: country
+
+Checks if any enemy war goal in the scoped war would take whole states from the specified country without being contested or advanced on
 
 ## has_stalled_wargoal_against
 Scopes: war
@@ -7407,6 +8524,13 @@ Checks if the specified country holds a war goal in the scoped war that is neith
 Scopes: country
 
 Check if country has a state in the state region
+**Value Type**: map_data/state_regions
+
+## has_state_in_state_region_uncontested
+Scopes: country
+
+Check if country has a state in the state region and no war goal in any of its wars is targeting a state in it
+**Value Type**: map_data/state_regions
 
 ## has_state_religion
 Scopes: pop
@@ -7417,6 +8541,7 @@ Check if the Pop has the state religion
 Scopes: state
 
 Checks if scoped state has a certain trait
+**Value Type**: common/state_traits
 
 ## has_strait_toll_exemption_from
 Scopes: country
@@ -7449,6 +8574,7 @@ scope:country = {
 Scopes: country
 
 Checks if country in scope has a particular AI strategy
+**Value Type**: common/ai_strategies
 
 ## has_subject_relation_with
 Scopes: country
@@ -7491,16 +8617,19 @@ True if a country has researched an technology
 Scopes: character
 
 Checks if character was made from the specified template
+**Value Type**: common/character_templates
 
 ## has_terrain
 Scopes: province
 
 Check if the province has the specified terrain type
+**Value Type**: common/terrain
 
 ## has_trait
 Scopes: character
 
 Checks if character has specific trait
+**Value Type**: common/character_traits
 
 ## has_treaty_port_in_market
 Scopes: country
@@ -7534,6 +8663,7 @@ Scopes: new_combat_unit
 Targets: combat_unit_type
 
 Checks if a Combat Unit is of the specified type
+**Value Type**: common/combat_unit_types
 
 ## has_unreachable_ship_construction_fleet
 Scopes: country
@@ -7559,12 +8689,6 @@ Checks whether the current scope has the specified variable map
 Scopes: war
 
 Checks if war has a certain war goal type
-
-## has_war_goal_at_risk_of_being_dropped
-Scopes: war
-Targets: country
-
-Checks if the target country holds a war goal in the scoped war that is at risk of being dropped for having been uncontested for too long
 
 ## has_war_support
 Scopes: war
@@ -7660,6 +8784,21 @@ Check if the country is currently in default
 Scopes: country
 
 Check if the country is in election campaign period
+
+## in_north_hemisphere
+Scopes: state
+
+Checks if the scoped state's state region has its center point north of the equator
+
+## in_south_hemisphere
+Scopes: state
+
+Checks if the scoped state's state region has its center point south of the equator
+
+## in_tropics
+Scopes: state
+
+Checks if the scoped state's state region has its center point between the tropics of Cancer and Capricorn
 
 ## income_transfer
 Scopes: diplomatic_pact
@@ -7785,6 +8924,7 @@ True if country scope is controlled by an AI
 Scopes: ship
 
 Checks if scoped ship is in the specified AI ship category
+**Value Type**: common/ai_ship_categories
 
 ## is_army
 Scopes: military_formation
@@ -7848,11 +8988,13 @@ Scopes: building
 
 True if scope is a building of given group
 building_group = building
+**Value Type**: common/building_groups
 
 ## is_building_type
 Scopes: building
 
 True if scope is a building of given type
+**Value Type**: common/buildings
 
 ## is_building_type_expanded
 Scopes: none
@@ -7878,6 +9020,7 @@ Checks if the scoped character is alive
 Scopes: character_role
 
 Checks if the scoped character role is a specific role
+**Value Type**: common/character_roles
 
 ## is_character_role_type
 Scopes: character_role
@@ -7899,6 +9042,7 @@ Scopes: company
 Targets: company_type
 
 Checks if scoped company is of the specified type
+**Value Type**: common/company_types
 
 ## is_completed
 Scopes: ai_regional_objective
@@ -7935,6 +9079,12 @@ Checks if the scoped country is alive, i.e. if it has at least one state on the 
 Scopes: country
 
 Checks the countrys type
+**Value Type**: common/country_types
+
+## is_culture_seceding_elsewhere
+Scopes: political_movement
+
+Its [concept_culture] has a growing or ongoing [concept_secession] in another [concept_country]
 
 ## is_damaged
 Scopes: ship
@@ -7959,11 +9109,13 @@ scope:treaty_article = {
 Scopes: diplomatic_pact
 
 Checks diplomatic pact is of a certain action type
+**Value Type**: common/diplomatic_actions
 
 ## is_diplomatic_catalyst_type
 Scopes: diplomatic_catalyst
 
 Checks diplomatic catalyst is of a certain catalyst type
+**Value Type**: common/diplomatic_catalysts
 
 ## is_diplomatic_pact_in_danger
 Scopes: diplomatic_pact
@@ -8014,6 +9166,7 @@ True if country is the target of any diplomatic play
 Scopes: diplomatic_play
 
 Checks diplomatic play is of a certain type
+**Value Type**: common/diplomatic_plays
 
 ## is_diplomatic_play_undecided_participant
 Scopes: country
@@ -8037,6 +9190,7 @@ Scopes: military_formation
 Targets: strategic_region
 
 Checks if a Fleet is doing piracy in the specified strategic region
+**Value Type**: common/strategic_regions
 
 ## is_employed
 Scopes: pop
@@ -8048,6 +9202,7 @@ Scopes: country
 Targets: law_type
 
 Checks if the scoped country is enacting a specific law type.
+**Value Type**: common/laws
 
 ## is_enforced
 Scopes: treaty
@@ -8257,6 +9412,7 @@ Checks whether the scoped character is in the exile pool
 Scopes: country, state, state_region, strategic_region
 
 Checks if a scoped object is in a specific geographic region
+**Value Type**: common/geographic_regions
 
 ## is_in_government
 Scopes: interest_group
@@ -8282,6 +9438,15 @@ Checks if a ship is in port
 Scopes: country
 
 Checks if the country is in a Power Bloc
+
+## is_in_regional_exile_pool
+Scopes: character
+
+Checks whether the scoped character is in a Regional Exile Pool
+is_in_regional_exile_pool = {
+	exile_pool = regional_exile_pool_key (check a specific Regional Exile Pool instead of any)
+	value = bool (optional, default yes)
+}
 
 ## is_in_revolt
 Scopes: state
@@ -8348,11 +9513,18 @@ Scopes: character
 Checks if character is the leader of their interest group
 is_interest_group_Leader = bool
 
+## is_interest_group_pool_full
+Scopes: character
+
+Checks if the character's interest group already has as many pool characters of the role as it would spawn, using the country rank pool multiplier for AI countries
+**Value Type**: common/character_roles
+
 ## is_interest_group_type
 Scopes: character, interest_group
 
 Checks if Interest Group is of a certain type
 Can also be used on characters directly
+**Value Type**: common/interest_groups
 
 ## is_invalid_naval_mission_grace_period_active
 Scopes: military_formation
@@ -8368,6 +9540,7 @@ Checks if the invasion is stalled due to wrong commander orders
 Scopes: country
 
 Check if the country is involved in a specific journal entry
+**Value Type**: common/journal_entries
 
 ## is_isolated_from_market
 Scopes: state
@@ -8488,6 +9661,7 @@ Scopes: interest_group
 Targets: political_lobby_type
 
 Checks if interest group is member of a certain lobby type
+**Value Type**: common/political_lobbies
 
 ## is_member_of_party
 Scopes: interest_group
@@ -8524,6 +9698,7 @@ Check if character is a noble
 Scopes: country, state, state_region, strategic_region
 
 Checks if a scoped object is NOT in a specific geographic region
+**Value Type**: common/geographic_regions
 
 ## is_objective_completed
 Scopes: none
@@ -8562,6 +9737,7 @@ Checks if the target party is same as scoped party. Will only work on exact same
 Scopes: party
 
 Checks if the scoped party's type is the specified one
+**Value Type**: common/parties
 
 ## is_player
 Scopes: country
@@ -8572,16 +9748,19 @@ True if country scope is a player
 Scopes: political_lobby
 
 Checks political lobby is of a certain lobby type
+**Value Type**: common/political_lobbies
 
 ## is_political_movement_type
 Scopes: political_movement
 
 Check if a political movement is a particular type
+**Value Type**: common/political_movements
 
 ## is_pop_type
 Scopes: pop
 
 Checks if pop is of specified type
+**Value Type**: common/pop_types
 
 ## is_popup_open
 Scopes: none
@@ -8635,6 +9814,25 @@ Scopes: law
 
 Checks if a law is considered reasonable for a government petition to enact it
 
+## is_regional_objective_target_country
+Scopes: country
+
+Checks if the scoped country's AI has an active regional objective of the given type that targets the country
+Uses the objective type's country_target, or for objectives with only a state_target, whether the country owns a targeted state
+Usage:
+	type = aro:ai_regional_objective_befriend_countries
+	target = scope:target_country
+}
+
+## is_regional_objective_target_state
+Scopes: country
+
+Checks if the scoped country's AI has an active regional objective of the given type that targets the state
+Usage:
+	type = aro:ai_regional_objective_acquire_states
+	target = scope:target_state
+}
+
 ## is_renegotiation
 Scopes: treaty_options, treaty
 
@@ -8649,6 +9847,7 @@ scope:some_treaty = {
 Scopes: country
 
 Check if the country is actively researching a tech
+**Value Type**: common/technology/technologies
 
 ## is_researching_technology_category
 Scopes: country
@@ -8692,6 +9891,7 @@ Scopes: law_type
 Targets: law_type
 
 Checks if scope law type is in the same group as the target law type scope
+**Value Type**: common/laws
 
 ## is_same_party_type
 Scopes: party
@@ -8726,6 +9926,7 @@ Scopes: ship
 Targets: ship_type
 
 Checks if scoped ship is of the specified type
+**Value Type**: common/ship_types
 
 ## is_ship_very_obsolete_for
 Scopes: ship
@@ -8777,6 +9978,12 @@ Scopes: country
 Targets: country
 
 Checks if country in scope is subject (or subject-of-subject) of event target
+
+## is_subject_of_and_not_being_freed
+Scopes: country
+Targets: country
+
+True if the country is a subject and no war goal to free it is pending in any wars
 
 ## is_subject_type
 Scopes: country
@@ -8844,6 +10051,7 @@ has_embargo = <goods key/scope>
 Scopes: none
 
 Checks if character template has already been used
+**Value Type**: common/character_templates
 
 ## is_theme_selected
 Scopes: none
@@ -8874,6 +10082,7 @@ Is the tutorial active?
 Scopes: none
 
 Is this the current tutorial lesson?
+**Value Type**: common/tutorial_lessons
 
 ## is_tutorial_lesson_chain_completed
 Scopes: none
@@ -8983,6 +10192,7 @@ Compares how much of what the target country's economy was worth on entering the
 Scopes: law
 
 Checks whether the scoped law is approved by an interest group
+**Value Type**: common/interest_groups
 
 ## law_enactment_stance
 Scopes: character, interest_group, political_movement
@@ -9010,6 +10220,7 @@ Scopes: country
 Targets: goods
 
 Checks if country is producing the most of a certain good
+**Value Type**: common/goods
 
 ## leads_customs_union
 Scopes: country
@@ -9348,6 +10559,7 @@ Compares an interest groups most powerful strata
 Scopes: state
 
 Checks if the most prominent revolting interest group in the scoped state has the given interest group type. Evaluates false if the scoped state is not in revolt.
+**Value Type**: common/interest_groups
 
 ## movement_can_cause_obstinance
 Scopes: political_movement
@@ -9421,6 +10633,12 @@ a negated OR trigger
 Scopes: none
 
 negates content of trigger
+
+## num_building_assets_of_type
+Scopes: building
+
+Checks the number of building levels of a given type the scoped building own.
+ num_building_assets_of_type = { type = building_arms_industry value >= 3 }
 
 ## num_casualties
 Scopes: war
@@ -9597,21 +10815,25 @@ Checks if country in scope owes a obligation to event target
 Scopes: country
 
 Check if country owns the entire region, or is at war with a country that holds a state in it - i.e. the region has not been settled away from it
+**Value Type**: map_data/state_regions
 
 ## owns_entire_state_region
 Scopes: country
 
 Check if country owns entire region
+**Value Type**: map_data/state_regions
 
 ## owns_entire_state_region_uncontested
 Scopes: country
 
 Check if country owns the entire region and no war goal in any of its wars is targeting a state in it
+**Value Type**: map_data/state_regions
 
 ## owns_treaty_port_in
 Scopes: country
 
 Does country own the treaty port in assigned state region
+**Value Type**: map_data/state_regions
 
 ## play_participant_has_war_goal_of_type_against
 Scopes: country
@@ -9685,12 +10907,14 @@ Compares the scoped pop's acceptance against an acceptence value
 Scopes: pop
 
 Checks if pop is working in a specific building type
+**Value Type**: common/buildings
 
 ## pop_employment_building_group
 Scopes: pop
 
 Checks if pop is working in a specific building type
 pop_employment_building = building
+**Value Type**: common/building_groups
 
 ## pop_has_primary_culture
 Scopes: pop
@@ -9718,8 +10942,8 @@ Scopes: country
 Checks whether the scoped country has <percent> of its population belonging to the specified pop type
 scope:example_country = {
 	pop_type_percent_country = {
-		pop_type = <pop_type>
-		percent <compare operator (<,>,= and so on)> <percent>
+		target = <pop_type>
+		value <compare operator (<,>,= and so on)> <percent>
 	}
 }
 
@@ -9978,6 +11202,7 @@ scope:example_state = {
 Scopes: character
 
 Checks if the character's primary role is the specified role
+**Value Type**: common/character_roles
 
 ## private_ownership_fraction
 Scopes: building
@@ -10162,6 +11387,7 @@ Targets: religion
 
 Checks if the religion shares any heritage trait group with another religion
 shares_heritage_trait_with_religion = <religion>
+**Value Type**: common/religions
 
 ## shares_heritage_trait_group_with_state_religion
 Scopes: religion
@@ -10186,6 +11412,7 @@ Scopes: religion
 Targets: religion
 
 Checks if the religion shares any heritage trait with another religion
+**Value Type**: common/religions
 
 ## shares_heritage_trait_with_state_religion
 Scopes: religion
@@ -10670,11 +11897,17 @@ Scopes: war
 
 True if the war has a proposed peace deal
 
+## war_is_in_stalemate
+Scopes: war
+
+True if both war leaders are at minimum war support and the war is counting down to a stalemate
+
 ## war_may_restore_country
 Scopes: country
 Targets: country_definition
 
 Checks if a war the scoped country is committed to has a war goal that would put the specified country back on the map, such as the mirror goal created when a country is annexed mid-war
+**Value Type**: common/country_definitions
 
 ## war_participant_has_war_goal_of_type_against
 Scopes: country
@@ -10711,6 +11944,7 @@ Checks whether the scoped character was exiled
 Scopes: country
 
 Check if a formed country previously had a specific definition
+**Value Type**: common/country_definitions
 
 ## wealth
 Scopes: pop
@@ -10780,6 +12014,7 @@ Scopes: interest_group
 Targets: amendment_type
 
 Check if scoped IG would sponsor an amendment of a given type
+**Value Type**: common/amendments
 
 ## year
 Scopes: none

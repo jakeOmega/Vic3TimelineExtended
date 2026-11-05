@@ -50,14 +50,17 @@ ROMAN = {1: "I", 2: "II", 3: "III", 4: "IV", 5: "V"}
 PRINCIPLE_ID_RE = re.compile(r"^principle_(.+?)_([1-5])(?:_mod)?$")
 UNLOCK_BOOL_RE = re.compile(r"^country_[a-z0-9_]+_pb_principles_bool$")
 
+# A `$key$` inside a loc function's quoted argument carries the `q` flag
+# (`$key|q$`): from 1.15 the game logs "missing required quote-escaping" without
+# it (scripts/analysis/check_localization_files.py, check 9).
 PRINCIPLE_CONCEPT = (
-    "[Concept('concept_power_bloc_principle', '$concept_power_bloc_principles$')]"
+    "[Concept('concept_power_bloc_principle', '$concept_power_bloc_principles|q$')]"
 )
-POWER_BLOC_CONCEPT = "[Concept('concept_power_bloc', '$concept_power_blocs$')]"
+POWER_BLOC_CONCEPT = "[Concept('concept_power_bloc', '$concept_power_blocs|q$')]"
 GROUP_SINGULAR = "[concept_power_bloc_principle_group]"
 GROUP_PLURAL = (
     "[Concept('concept_power_bloc_principle_group', "
-    "'$concept_power_bloc_principle_groups$')]"
+    "'$concept_power_bloc_principle_groups|q$')]"
 )
 
 

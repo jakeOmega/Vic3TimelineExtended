@@ -28,33 +28,40 @@ _None._
 
 ## Reviewed exemptions
 
+- `events/archaeology_events.txt` — `arch_events.1` option `arch_events.1.c` (no_effect_option) — **2026-10-14**: sealing the site is the point; it stays open in the journal entry's Known Antiquities
 - `events/banking_cycle_events.txt` — `banking_cycle_events.68` option `banking_cycle_events.68.b` (no_effect_option) — **2026-09-26**: the decline; the tooltip says no appeal is made
+- `events/banking_debt_events.txt` — `banking_debt_events.1` option `banking_debt_events.1.e` (no_effect_option) — **2026-10-07**: the decline; the tooltip says nothing is written off and the talks wait a year
+- `events/decolonization_events.txt` — `decolonization_events.74` option `decolonization_events.74.e` (no_effect_option) — **2026-10-24**: staying out of the war is the choice
+- `events/decolonization_events.txt` — `decolonization_events.79` option `decolonization_events.79.b` (no_effect_option) — **2026-10-24**: staying out of the war is the choice
 - `events/irredentism_events.txt` — `irredentism.1` option `irredentism.1.bide` (no_effect_option) — **2026-09-26**: the decline: biding our time is the choice
 - `events/minor_events.txt` — `minor_events_timelineextended.2` option `minor_events_timelineextended.2.a` (no_effect_option) — **2026-09-26**: the decline: the law proceeds with no intervention
 - `events/monument_events.txt` — `monument_events.17` option `monument_events.17.d` (no_effect_option) — **2026-09-27**: the decision waits on the monument's journal entry row; the tooltip says the standing penalty continues
+- `events/monument_trophy_events.txt` — `monument_trophy_events.1` option `monument_trophy_events.1.b` (no_effect_option) — **2026-10-12**: declining is the point; the tooltip says the state card's button stays
 - `events/movement_events_te.txt` — `movement_events_te.17` option `movement_events_te.17.b` (no_effect_option) — **2026-09-26**: the decline; the tooltip says nothing is said
 - `events/nuclear_custody_events.txt` — `nuclear_custody.6` option `nuclear_custody.6.e` (no_effect_option) — **2026-09-26**: the decline: we stay out of their civil war
 - `events/nuclear_custody_events.txt` — `nuclear_custody.10` option `nuclear_custody.10.b` (no_effect_option) — **2026-09-26**: the decline: we leave the matter to others
-- `events/nuclear_incident_events.txt` — `nuclear_incident.5` option `nuclear_incident.5.a` (no_effect_option) — **2026-09-26**: the only option for a victim that is unarmed or not free to answer
-- `events/nuclear_incident_events.txt` — `nuclear_incident.11` option `nuclear_incident.11.b` (no_effect_option) — **2026-09-26**: holding posture is the choice; the tooltip says readiness stays where it is
-- `events/nuclear_incident_events.txt` — `nuclear_incident.12` option `nuclear_incident.12.b` (no_effect_option) — **2026-09-26**: the decline; the tooltip says nothing changes
-- `events/nuclear_incident_events.txt` — `nuclear_incident.40` option `nuclear_incident.40.b` (no_effect_option) — **2026-09-26**: the no-cost choice beside paying to fix the procedure
 - `events/nuclear_loose_events.txt` — `nuclear_loose.4` option `nuclear_loose.4.g` (no_effect_option) — **2026-09-26**: the decline: say nothing yet
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.1` option `nuclear_weapon_events.1.a` (no_effect_option) — **2026-09-26**: absorbing the blow without retaliating is the choice
+- `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.1` option `nuclear_weapon_events.1.cut_off` (no_effect_option) — **2026-10-28**: the answer was recorded when the command was cut off; this only says so
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.9` option `nuclear_weapon_events.9.a` (no_effect_option) — **2026-09-26**: shown only when the world-first variant is not, so never a choice between the two
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.11` option `nuclear_weapon_events.11.a` (no_effect_option) — **2026-09-26**: absorbing the blow without retaliating is the choice
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.21` option `nuclear_weapon_events.21.c` (no_effect_option) — **2026-09-26**: silence is the choice, beside the two reforms
 - `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.24` option `nuclear_weapon_events.24.a` (no_effect_option) — **2026-09-26**: standing the crews down is the choice
+- `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.25` option `nuclear_weapon_events.25.c` (no_effect_option) — **2026-10-07**: the offer lapsed; there is nothing left to answer
+- `events/nuclear_weapon_events.txt` — `nuclear_weapon_events.31` option `nuclear_weapon_events.31.b` (no_effect_option) — **2026-10-28**: not giving the order is the choice
 - `events/resettlement_events.txt` — `resettlement.20` option `resettlement.20.a` (no_effect_option) — **2026-09-26**: continuing the coercive program
+- `events/space_race_events.txt` — `space_race_events.93` option `space_race_events.93.c` (no_effect_option) — **2026-10-26**: keeping the colony is the choice; the tooltip says so
 - `events/te_formable_formation_events.txt` — `formation_te.10` option `formation_te.10.c` (no_effect_option) — **2026-09-26**: the decline: no annexation
 - `events/te_inflation_events.txt` — `te_inflation.1` option `te_inflation.1.c` (no_effect_option) — **2026-09-26**: doing nothing is the choice; the tooltip says the question returns in two years
+- `events/te_judiciary_events.txt` — `te_judiciary_events.5` option `te_judiciary_events.5.b` (no_effect_option) — **2026-10-25**: the packed court stays for the rest of its ten years
 - `events/te_map_modes_events.txt` — `te_map_modes.1` option `te_map_modes.1.f_dismiss` (no_effect_option) — **2026-09-26**: closes the survey menu
 - `events/un_events.txt` — `un_events.10` option `un_events.10.b` (no_effect_option) — **2026-09-26**: waiting is the choice; the tooltip says so
 - `events/un_events.txt` — `un_events.35` option `un_events.35.b` (no_effect_option) — **2026-09-26**: the refusal; the tooltip says so
+- `events/un_vote_events.txt` — `un_vote.1` option `un_vote.1.later` (no_effect_option) — **2026-11-03**: deferring is the point; the vote is cast later in the chamber
 
 ## Coverage
 
 - empty blocks: 0 (0 unreviewed)
-- no-effect options: 23 (0 unreviewed)
+- no-effect options: 30 (0 unreviewed)
 - stale tags: 0
 

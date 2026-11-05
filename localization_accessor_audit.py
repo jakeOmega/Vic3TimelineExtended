@@ -334,6 +334,10 @@ _GLOBAL_FUNCTIONS: dict[str, str] = {
     # Pure-helper functions returning value
     "GetDefine": "value",
     "Concept": "value",
+    # 1.15: a glossary link (Glossary('glossary_x', 'text')) and a concept
+    # looked up by a key held in a parameter.
+    "Glossary": "value",
+    "ConceptByKey": "value",
     "ObjectsEqual": "value",
     "AddTextIf": "value",
     "AddLocalizationIf": "value",
@@ -398,7 +402,15 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetRank": "value",
         "GetRankName": "value",
         "GetLawBeingEnacted": "value",
-        "GetModifier": "value",
+        # A modifier, whose accessors the `modifier` type lists. Seeded (and
+        # bootstrapped on every other type) as "value", which stopped the
+        # check at it: every step after it was accepted unchecked.
+        "GetModifier": "modifier",
+        # 1.15 (vanilla: `THIS.GetJournalEntry.MakeScope.Var(...)`).
+        "GetJournalEntry": "journal_entry",
+        # A number (CFixedPoint in the 1.15 data types), which vanilla reads
+        # only in its GUI, so the loc fold never meets it.
+        "GetInstitutionInvestmentBureaucracyCost": "value",
         "GetActiveLawFromGroup": "law",
         "GetPrimaryCulturesDesc": "value",
         "GetGovernmentLegitimacy": "value",
@@ -573,6 +585,11 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         # the follow-up issue for the rest of that class.
         "GetStateInfamyPerspective": "country",
         "GetStateValuePerspective": "country",
+        # 1.15: the world market hub serving the state, a state itself
+        # (vanilla: `STATE.GetWorldMarketHub.GetNameWithCountryFlag`,
+        # `.GetWorldMarketHub.GetStateRegion.GetNavalExitStateRegion...`).
+        "GetWorldMarketHub": "state",
+        "GetModifier": "modifier",
         "GetRegion": "strategic_region",
         "GetStateRegion": "state_region",
         "GetPopulation": "value",
@@ -593,6 +610,9 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetNameNoFormatting": "value",
         "GetStrategicRegion": "strategic_region",
         "GetCityHubName": "value",
+        # 1.15: the sea region a state region's naval exit opens on, read for
+        # its cold (vanilla: `.GetNavalExitStateRegion.GetColdEffect`).
+        "GetNavalExitStateRegion": "state_region",
     },
     "interest_group": {
         "Self": "interest_group",
@@ -607,6 +627,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetTooltipTag": "value",
         "GetPopulation": "value",
         "GetApprovalValue": "value",
+        "GetModifier": "modifier",
         "MakeScope": "scope_object",
     },
     "culture": {
@@ -635,7 +656,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetIdentity": "value",
         "GetParticipantWithHighestInfamy": "country",
         "GetParticipantWithLowestInfamy": "country",
-        "GetModifier": "value",
+        "GetModifier": "modifier",
         "GetCustom": "value",
         "GetTooltipTag": "value",
         # Every other type's MakeScope is scope_object; power_bloc's was folded
@@ -644,6 +665,13 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "MakeScope": "scope_object",
     },
     "law": {
+        # The audit models a law type as `law`, as the global GetLawType('x')
+        # does. Law.GetLawType is the promote to it (LawType in the 1.15 data
+        # types); vanilla reads it 65 times, mostly in its GUI, so the loc
+        # fold never meets it.
+        "GetLawType": "law",
+        "GetEffectDesc": "value",  # LawType.GetEffectDesc(country): its effects text
+        "GetDeltaEffectDesc": "value",  # 1.15: the effects compared to the current law (politics_panel_change_law.gui:969)
         "Self": "law",
         "GetName": "value",
         "GetNameNoFormatting": "value",
@@ -692,6 +720,10 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "CalcCurrentGoalValue": "value",
         "GetCountry": "country",
         "GetTarget": "country",
+        # 1.15 (vanilla: `JournalEntry.MakeScope.Var(...)`,
+        # `JournalEntry.GetModifier.GetFormattedValueFor(...)`).
+        "MakeScope": "scope_object",
+        "GetModifier": "modifier",
     },
     "pop": {
         "Self": "pop",
@@ -716,6 +748,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetBuildingType": "value",
         "GetTooltipTag": "value",
         "GetNoOfEmployed": "value",
+        "GetModifier": "modifier",
     },
     "political_movement": {
         "Self": "political_movement",
@@ -768,6 +801,15 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetTooltipTag": "value",
         "GetNumCombatUnits": "value",
         "GetSelectedUnitTypeForGroup": "value",
+        # 1.15, from vanilla's chains: the HQ new ships join
+        # (`.GetNewShipsHQ.GetName`), the sea node a fleet sails to
+        # (`.GetTargetSeaNode.GetStateRegion`, a Province per the data types),
+        # and the interest tier a project-power order would reach
+        # (`.GetTargetInterestTierTypeInRegion(...).GetNameNoIcon`).
+        "GetNewShipsHQ": "hq",
+        "GetTargetSeaNode": "province",
+        "GetTargetInterestTierTypeInRegion": "interest_tier_type",
+        "GetTargetInterestTierTypeWithoutFleetInRegion": "interest_tier_type",
     },
     "party": {
         "Self": "party",
@@ -776,6 +818,7 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetLeader": "character",
         "GetCountry": "country",
         "GetMembersSummary": "value",
+        "MakeScope": "scope_object",  # 1.15 vanilla: `.sParty('x').MakeScope.ScriptValue(...)`
     },
     "company": {
         "Self": "company",
@@ -806,6 +849,36 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetCountry": "country",
         "GetGoods": "market_goods",
         "GetOwner": "country",
+    },
+    # A modifier (Country/State/Building/InterestGroup/PowerBloc/JournalEntry
+    # .GetModifier): every accessor vanilla 1.15's and the mod's loc read off
+    # one, all text or numbers.
+    "modifier": {
+        "GetDesc": "value",
+        "GetDescFor": "value",
+        "GetFormattedValueFor": "value",
+        "GetFullEntryDescFor": "value",
+        "GetInvertedValueFor": "value",
+        "GetNonFormattedValueWithBreakdownAndNoDecimalsFor": "value",
+        "GetTooltipFor": "value",
+        "GetValueFor": "value",
+        "GetValueWithBreakdownFor": "value",
+        "IsEmpty": "value",
+    },
+    # 1.15's type-changing military formation accessors land on these.
+    "hq": {
+        "Self": "hq",
+        "GetName": "value",
+    },
+    "province": {
+        "Self": "province",
+        "GetStateRegion": "state_region",
+    },
+    "interest_tier_type": {
+        "Self": "interest_tier_type",
+        "GetName": "value",
+        "GetNameNoIcon": "value",
+        "GetSmallTextIcon": "value",
     },
     "meta_player": {
         "GetPlayedOrObservedCountry": "country",

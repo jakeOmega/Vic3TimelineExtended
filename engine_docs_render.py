@@ -650,10 +650,21 @@ def render_all(
 
     triggers = engine_docs.get("triggers", []) or []
     effects = engine_docs.get("effects", []) or []
-    modifiers = engine_docs.get("modifiers", []) or []
+    # The server unions the mod's own modifier types and custom localization
+    # into engine_docs with origin="mod" before rendering. These files are the
+    # engine's reference, so they list only what the script_docs dump carries.
+    # Including the union churned them on every /reload, and a vanilla bump
+    # that committed them (39cf48af9) failed the tests asserting a script-only
+    # mod type is absent from the engine list.
+    modifiers = [
+        e for e in (engine_docs.get("modifiers", []) or []) if e.get("origin") != "mod"
+    ]
     event_targets = engine_docs.get("event-targets", []) or []
     on_actions = engine_docs.get("on-actions", []) or []
-    custom_loc = engine_docs.get("custom-localization", []) or []
+    custom_loc = [
+        e for e in (engine_docs.get("custom-localization", []) or [])
+        if e.get("origin") != "mod"
+    ]
 
     src = source_paths or {}
     triggers_version = _source_version(src.get("triggers"))

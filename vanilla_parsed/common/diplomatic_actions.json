@@ -1440,6 +1440,41 @@
         "limit": [
          "=",
          {
+          "has_journal_entry": [
+           "=",
+           "je_red_summer"
+          ],
+          "has_variable": [
+           "=",
+           "tp_counter_revolution_ukaz_var"
+          ],
+          "scope:target_country": [
+           "?=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_tsarpoints_master"
+            ]
+           }
+          ]
+         }
+        ],
+        "remove_variable": [
+         "=",
+         "tp_counter_revolution_ukaz_var"
+        ],
+        "custom_tooltip": [
+         "=",
+         "bolster_counter_revolution_stop_tt"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
           "scope:target_country": [
            "=",
            {
@@ -1940,6 +1975,23 @@
    "possible": [
     "=",
     {
+     "scope:target_country.relations:root": [
+      "<",
+      "relations_threshold:amicable"
+     ],
+     "is_revolutionary": [
+      "=",
+      "no"
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "is_revolutionary": [
+        "=",
+        "no"
+       ]
+      }
+     ],
      "trigger_if": [
       "=",
       {
@@ -1973,23 +2025,6 @@
           }
          ]
         }
-       ]
-      }
-     ],
-     "scope:target_country.relations:root": [
-      "<",
-      "relations_threshold:amicable"
-     ],
-     "is_revolutionary": [
-      "=",
-      "no"
-     ],
-     "scope:target_country": [
-      "=",
-      {
-       "is_revolutionary": [
-        "=",
-        "no"
        ]
       }
      ]
@@ -3500,6 +3535,46 @@
                "10"
               ]
              }
+            ],
+            "if": [
+             "=",
+             {
+              "limit": [
+               "=",
+               {
+                "ai_ceding_state_would_isolate_states": [
+                 "=",
+                 {
+                  "STATE": [
+                   "=",
+                   "scope:second_state"
+                  ],
+                  "CEDER": [
+                   "=",
+                   "scope:target_country"
+                  ],
+                  "RECEIVER": [
+                   "=",
+                   "scope:actor"
+                  ]
+                 }
+                ]
+               }
+              ],
+              "subtract": [
+               "=",
+               {
+                "value": [
+                 "=",
+                 "1000"
+                ],
+                "desc": [
+                 "=",
+                 "\"DIPLOMATIC_ACCEPTANCE_WOULD_ISOLATE_STATES\""
+                ]
+               }
+              ]
+             }
             ]
            }
           ],
@@ -3972,6 +4047,10 @@
      "is_two_sided_pact": [
       "=",
       "no"
+     ],
+     "show_in_outliner": [
+      "=",
+      "yes"
      ],
      "forced_duration": [
       "=",
@@ -4803,6 +4882,10 @@
       "=",
       "no"
      ],
+     "show_in_outliner": [
+      "=",
+      "yes"
+     ],
      "max_target_involvement": [
       "=",
       "1000"
@@ -5354,22 +5437,42 @@
           "infamy_threshold:pariah"
          ],
          "scope:target_country": [
-          "=",
-          {
-           "has_diplomatic_pact": [
-            "=",
-            {
-             "who": [
-              "=",
-              "root"
-             ],
-             "type": [
-              "=",
-              "embargo"
-             ]
-            }
-           ]
-          }
+          [
+           "=",
+           {
+            "has_diplomatic_pact": [
+             "=",
+             {
+              "who": [
+               "=",
+               "root"
+              ],
+              "type": [
+               "=",
+               "embargo"
+              ]
+             }
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "has_radical_leftist_economy": [
+               "=",
+               "yes"
+              ],
+              "has_radical_leftist_government": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
          ]
         }
        ]
@@ -8902,6 +9005,10 @@
       "=",
       "no"
      ],
+     "show_in_outliner": [
+      "=",
+      "yes"
+     ],
      "max_target_involvement": [
       "=",
       "1000"
@@ -9418,31 +9525,60 @@
         "10"
        ],
        "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "has_journal_entry": [
-            "=",
-            "je_hawaiian_interest"
-           ],
-           "c:HAW": [
-            "?=",
-            {
-             "this": [
-              "=",
-              "scope:target_country"
-             ]
-            }
-           ]
-          }
-         ],
-         "add": [
-          "=",
-          "100"
-         ]
-        }
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_hawaiian_interest"
+            ],
+            "c:HAW": [
+             "?=",
+             {
+              "this": [
+               "=",
+               "scope:target_country"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "100"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "c:RUS": [
+             "?=",
+             "this"
+            ],
+            "scope:target_country": [
+             "=",
+             {
+              "ai_russia_client_outside_bloc": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "100"
+          ]
+         }
+        ]
        ]
       }
      ],
@@ -9955,6 +10091,24 @@
         ]
        }
       ]
+     ],
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "DIPLOMATIC_PACT_REQUIREMENT_CAN_BE_SUBJUGATED"
+       ],
+       "scope:target_country": [
+        "=",
+        {
+         "modifier:country_cannot_be_subjugated_bool": [
+          "?=",
+          "no"
+         ]
+        }
+       ]
+      }
      ],
      "power_bloc": [
       "=",
@@ -11644,6 +11798,24 @@
          "\"potential_diplomatic_play_power_ratio(root)\"": [
           "<=",
           "0.5"
+         ]
+        }
+       ],
+       "NAND": [
+        "=",
+        {
+         "ai_russia_is_holding_poland": [
+          "=",
+          "yes"
+         ],
+         "scope:target_country": [
+          "=",
+          {
+           "liberty_desire": [
+            ">=",
+            "25"
+           ]
+          }
          ]
         }
        ]
@@ -13537,51 +13709,23 @@
        "OR": [
         "=",
         {
-         "has_attitude": [
-          "=",
-          {
-           "who": [
-            "=",
-            "scope:target_country"
-           ],
-           "attitude": [
-            "=",
-            "domineering"
-           ]
-          }
-         ],
-         "AND": [
-          "=",
-          {
-           "NOT": [
-            "=",
-            {
-             "has_strategy": [
-              "=",
-              "ai_strategy_anti_imperialism"
-             ]
-            }
-           ],
-           "scope:target_country": [
-            "=",
-            {
-             "liberty_desire": [
-              "<",
-              "10"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ],
-       "NOR": [
-        "=",
-        {
          "AND": [
           [
            "=",
            {
+            "has_journal_entry": [
+             "=",
+             "je_tp_tsar_crown_of_perfection"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "je_tp_tsar_crown_of_perfection_button_4_complete"
+              ]
+             }
+            ],
             "scope:target_country": [
              "=",
              {
@@ -13589,33 +13733,30 @@
                "=",
                {
                 "is_subject_type": [
-                 [
-                  "=",
-                  "subject_type_dominion"
-                 ],
-                 [
-                  "=",
-                  "subject_type_personal_union"
-                 ],
-                 [
-                  "=",
-                  "subject_type_chartered_company"
-                 ]
+                 "=",
+                 "subject_type_crown_land"
+                ],
+                "capital": [
+                 "?=",
+                 {
+                  "OR": [
+                   "=",
+                   {
+                    "is_in_geographic_region": [
+                     [
+                      "=",
+                      "geographic_region_caucasus_old"
+                     ],
+                     [
+                      "=",
+                      "geographic_region_central_asia"
+                     ]
+                    ]
+                   }
+                  ]
+                 }
                 ]
                }
-              ]
-             }
-            ],
-            "prestige": [
-             "<",
-             {
-              "add": [
-               "=",
-               "scope:target_country.prestige"
-              ],
-              "multiply": [
-               "=",
-               "4"
               ]
              }
             ]
@@ -13624,41 +13765,144 @@
           [
            "=",
            {
-            "scope:target_country": [
+            "OR": [
              "=",
              {
-              "OR": [
+              "has_attitude": [
                "=",
                {
-                "is_subject_type": [
-                 [
-                  "=",
-                  "subject_type_protectorate"
-                 ],
-                 [
-                  "=",
-                  "subject_type_tributary"
-                 ]
+                "who": [
+                 "=",
+                 "scope:target_country"
+                ],
+                "attitude": [
+                 "=",
+                 "domineering"
+                ]
+               }
+              ],
+              "AND": [
+               "=",
+               {
+                "NOT": [
+                 "=",
+                 {
+                  "has_strategy": [
+                   "=",
+                   "ai_strategy_anti_imperialism"
+                  ]
+                 }
+                ],
+                "scope:target_country": [
+                 "=",
+                 {
+                  "liberty_desire": [
+                   "<",
+                   "10"
+                  ]
+                 }
                 ]
                }
               ]
              }
             ],
-            "prestige": [
-             "<",
+            "NOR": [
+             "=",
              {
-              "add": [
-               "=",
-               "scope:target_country.prestige"
-              ],
-              "multiply": [
-               "=",
-               "3"
+              "AND": [
+               [
+                "=",
+                {
+                 "scope:target_country": [
+                  "=",
+                  {
+                   "OR": [
+                    "=",
+                    {
+                     "is_subject_type": [
+                      [
+                       "=",
+                       "subject_type_dominion"
+                      ],
+                      [
+                       "=",
+                       "subject_type_personal_union"
+                      ],
+                      [
+                       "=",
+                       "subject_type_chartered_company"
+                      ]
+                     ]
+                    }
+                   ]
+                  }
+                 ],
+                 "prestige": [
+                  "<",
+                  {
+                   "add": [
+                    "=",
+                    "scope:target_country.prestige"
+                   ],
+                   "multiply": [
+                    "=",
+                    "4"
+                   ]
+                  }
+                 ]
+                }
+               ],
+               [
+                "=",
+                {
+                 "scope:target_country": [
+                  "=",
+                  {
+                   "OR": [
+                    "=",
+                    {
+                     "is_subject_type": [
+                      [
+                       "=",
+                       "subject_type_protectorate"
+                      ],
+                      [
+                       "=",
+                       "subject_type_tributary"
+                      ]
+                     ]
+                    }
+                   ]
+                  }
+                 ],
+                 "prestige": [
+                  "<",
+                  {
+                   "add": [
+                    "=",
+                    "scope:target_country.prestige"
+                   ],
+                   "multiply": [
+                    "=",
+                    "3"
+                   ]
+                  }
+                 ]
+                }
+               ]
               ]
              }
             ]
            }
           ]
+         ],
+         "ai_russia_wants_caucasus_subject_annexed": [
+          "=",
+          "yes"
+         ],
+         "ai_russia_wants_bukey_orda_annexed": [
+          "=",
+          "yes"
          ]
         }
        ],
@@ -13987,6 +14231,10 @@
           }
          ]
         }
+       ],
+       "ai_russia_is_holding_poland": [
+        "=",
+        "no"
        ]
       }
      ]
@@ -14668,6 +14916,33 @@
            }
           ]
          }
+        ],
+        [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"DIPLOMATIC_ACCEPTANCE_RUSSIA_NO_APPEASEMENT_POLAND\""
+          ],
+          "if": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "ai_russia_refuses_polish_autonomy": [
+               "=",
+               "yes"
+              ]
+             }
+            ],
+            "add": [
+             "=",
+             "-300"
+            ]
+           }
+          ]
+         }
         ]
        ],
        "if": [
@@ -14758,6 +15033,34 @@
            "has_journal_entry": [
             "=",
             "je_hungarian_revolution"
+           ],
+           "OR": [
+            "=",
+            {
+             "has_variable": [
+              [
+               "=",
+               "hungarian_revolution_twelve_points_var"
+              ],
+              [
+               "=",
+               "hungarian_revolution_annex_transylvania_button_var"
+              ]
+             ],
+             "AND": [
+              "=",
+              {
+               "is_involved_in_journal_entry": [
+                "=",
+                "je_springtime_of_the_peoples"
+               ],
+               "has_variable": [
+                "=",
+                "had_springtime_revolution"
+               ]
+              }
+             ]
+            }
            ],
            "scope:target_country": [
             "=",
@@ -15025,58 +15328,72 @@
      "will_propose": [
       "=",
       {
-       "government_legitimacy": [
-        ">",
-        "90"
-       ],
-       "\"ai_ideological_opinion(scope:target_country)\"": [
-        ">=",
-        "25"
-       ],
-       "has_attitude": [
-        "=",
-        {
-         "who": [
-          "=",
-          "scope:target_country"
-         ],
-         "attitude": [
-          "=",
-          "protective"
-         ]
-        }
-       ],
        "OR": [
         "=",
         {
-         "scope:target_country": [
+         "ai_russia_wants_to_placate_poland": [
+          "=",
+          "yes"
+         ],
+         "AND": [
           "=",
           {
-           "liberty_desire": [
+           "government_legitimacy": [
+            ">",
+            "90"
+           ],
+           "\"ai_ideological_opinion(scope:target_country)\"": [
             ">=",
             "25"
-           ]
-          }
-         ],
-         "NOT": [
-          "=",
-          {
-           "any_subject_or_below": [
+           ],
+           "has_attitude": [
             "=",
             {
-             "root": [
+             "who": [
+              "=",
+              "scope:target_country"
+             ],
+             "attitude": [
+              "=",
+              "protective"
+             ]
+            }
+           ],
+           "OR": [
+            "=",
+            {
+             "scope:target_country": [
               "=",
               {
-               "has_diplomatic_pact": [
+               "liberty_desire": [
+                ">=",
+                "25"
+               ]
+              }
+             ],
+             "NOT": [
+              "=",
+              {
+               "any_subject_or_below": [
                 "=",
                 {
-                 "type": [
+                 "root": [
                   "=",
-                  "da_support_regime"
-                 ],
-                 "who": [
-                  "=",
-                  "prev"
+                  {
+                   "has_diplomatic_pact": [
+                    "=",
+                    {
+                     "type": [
+                      "=",
+                      "da_support_regime"
+                     ],
+                     "who": [
+                      "=",
+                      "prev"
+                     ]
+                    }
+                   ]
+                  }
                  ]
                 }
                ]
@@ -15093,6 +15410,10 @@
      "will_break": [
       "=",
       {
+       "ai_russia_wants_to_placate_poland": [
+        "=",
+        "no"
+       ],
        "OR": [
         "=",
         {
@@ -15779,6 +16100,15 @@
        "liberty_desire_weekly_progress": [
         ">",
         "-0.2"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "ai_poland_red"
+         ]
+        }
        ]
       }
      ],
@@ -16141,19 +16471,6 @@
         ">",
         "-0.25"
        ],
-       "has_attitude": [
-        "=",
-        {
-         "who": [
-          "=",
-          "scope:target_country"
-         ],
-         "attitude": [
-          "=",
-          "protective"
-         ]
-        }
-       ],
        "NOT": [
         "=",
         {
@@ -16166,34 +16483,61 @@
        "OR": [
         "=",
         {
-         "scope:target_country": [
+         "ai_russia_wants_to_placate_poland": [
           "=",
-          {
-           "liberty_desire": [
-            ">=",
-            "25"
-           ]
-          }
+          "yes"
          ],
-         "NOT": [
+         "AND": [
           "=",
           {
-           "any_subject_or_below": [
+           "has_attitude": [
             "=",
             {
-             "root": [
+             "who": [
+              "=",
+              "scope:target_country"
+             ],
+             "attitude": [
+              "=",
+              "protective"
+             ]
+            }
+           ],
+           "OR": [
+            "=",
+            {
+             "scope:target_country": [
               "=",
               {
-               "has_diplomatic_pact": [
+               "liberty_desire": [
+                ">=",
+                "25"
+               ]
+              }
+             ],
+             "NOT": [
+              "=",
+              {
+               "any_subject_or_below": [
                 "=",
                 {
-                 "type": [
+                 "root": [
                   "=",
-                  "da_knowledge_sharing"
-                 ],
-                 "who": [
-                  "=",
-                  "prev"
+                  {
+                   "has_diplomatic_pact": [
+                    "=",
+                    {
+                     "type": [
+                      "=",
+                      "da_knowledge_sharing"
+                     ],
+                     "who": [
+                      "=",
+                      "prev"
+                     ]
+                    }
+                   ]
+                  }
                  ]
                 }
                ]
@@ -16213,16 +16557,25 @@
        "OR": [
         "=",
         {
-         "has_attitude": [
+         "AND": [
           "=",
           {
-           "who": [
+           "ai_russia_wants_to_placate_poland": [
             "=",
-            "scope:target_country"
+            "no"
            ],
-           "attitude": [
+           "has_attitude": [
             "=",
-            "domineering"
+            {
+             "who": [
+              "=",
+              "scope:target_country"
+             ],
+             "attitude": [
+              "=",
+              "domineering"
+             ]
+            }
            ]
           }
          ],
@@ -16868,6 +17221,15 @@
        "techs_researched": [
         "<",
         "scope:target_country.techs_researched"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "ai_poland_red"
+         ]
+        }
        ]
       }
      ],
@@ -17238,59 +17600,91 @@
        "value": [
         "=",
         "10"
+       ],
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "je_tsarpoints_ai_wants_to_evangelize": [
+            "=",
+            "yes"
+           ]
+          }
+         ],
+         "add": [
+          "=",
+          "50"
+         ]
+        }
        ]
       }
      ],
      "will_propose": [
       "=",
       {
-       "has_attitude": [
-        "=",
-        {
-         "who": [
-          "=",
-          "scope:target_country"
-         ],
-         "attitude": [
-          "=",
-          "protective"
-         ]
-        }
-       ],
        "OR": [
         "=",
         {
-         "ig:ig_devout": [
-          "?=",
-          {
-           "is_in_government": [
-            "=",
-            "yes"
-           ]
-          }
+         "je_tsarpoints_ai_wants_to_evangelize": [
+          "=",
+          "yes"
          ],
-         "any_interest_group": [
+         "AND": [
           "=",
           {
-           "is_in_government": [
-            "=",
-            "yes"
-           ],
-           "leader": [
+           "has_attitude": [
             "=",
             {
-             "OR": [
+             "who": [
+              "=",
+              "scope:target_country"
+             ],
+             "attitude": [
+              "=",
+              "protective"
+             ]
+            }
+           ],
+           "OR": [
+            "=",
+            {
+             "ig:ig_devout": [
+              "?=",
+              {
+               "is_in_government": [
+                "=",
+                "yes"
+               ]
+              }
+             ],
+             "any_interest_group": [
               "=",
               {
-               "has_ideology": [
-                [
-                 "=",
-                 "ideology:ideology_traditionalist"
-                ],
-                [
-                 "=",
-                 "ideology:ideology_theocrat"
-                ]
+               "is_in_government": [
+                "=",
+                "yes"
+               ],
+               "leader": [
+                "=",
+                {
+                 "OR": [
+                  "=",
+                  {
+                   "has_ideology": [
+                    [
+                     "=",
+                     "ideology:ideology_traditionalist"
+                    ],
+                    [
+                     "=",
+                     "ideology:ideology_theocrat"
+                    ]
+                   ]
+                  }
+                 ]
+                }
                ]
               }
              ]
@@ -17305,6 +17699,10 @@
      "will_break": [
       "=",
       {
+       "je_tsarpoints_ai_wants_to_evangelize": [
+        "=",
+        "no"
+       ],
        "OR": [
         "=",
         {
@@ -18367,116 +18765,163 @@
       }
      ],
      "if": [
-      "=",
-      {
-       "limit": [
-        "=",
-        {
-         "exists": [
-          "=",
-          "scope:first_state"
-         ]
-        }
-       ],
-       "if": [
-        "=",
-        {
-         "limit": [
-          "=",
-          {
-           "scope:first_state": [
-            "=",
-            {
-             "NOT": [
-              "=",
-              {
-               "owner": [
-                "=",
-                "root"
-               ]
-              }
-             ]
-            }
-           ]
-          }
-         ],
-         "scope:first_state.owner": [
-          "=",
-          {
-           "save_temporary_scope_as": [
-            "=",
-            "subject_taken_from"
-           ]
-          }
-         ],
-         "scope:subject_taken_from": [
-          "=",
-          {
-           "add_liberty_desire": [
-            "=",
-            {
-             "value": [
-              "=",
-              "\"scope:first_state.ai_state_value(scope:subject_taken_from)\""
-             ],
-             "divide": [
-              "=",
-              "5"
-             ],
-             "max": [
-              "=",
-              "100"
-             ],
-             "min": [
-              "=",
-              "20"
-             ]
-            }
-           ]
-          }
-         ]
-        }
-       ],
-       "scope:target_country": [
-        "=",
-        {
-         "add_liberty_desire": [
-          "=",
-          {
-           "value": [
-            "=",
-            "0"
-           ],
-           "subtract": [
-            "=",
-            "\"scope:first_state.ai_state_value(scope:target_country)\""
-           ],
-           "divide": [
-            "=",
-            "5"
-           ],
-           "max": [
-            "=",
-            "-5"
-           ],
-           "min": [
-            "=",
-            "-50"
-           ]
-          }
-         ]
-        }
-       ],
-       "scope:first_state": [
-        "=",
-        {
-         "set_state_owner": [
-          "=",
-          "scope:target_country"
-         ]
-        }
-       ]
-      }
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "exists": [
+           "=",
+           "scope:first_state"
+          ]
+         }
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:first_state": [
+             "=",
+             {
+              "NOT": [
+               "=",
+               {
+                "owner": [
+                 "=",
+                 "root"
+                ]
+               }
+              ]
+             }
+            ]
+           }
+          ],
+          "scope:first_state.owner": [
+           "=",
+           {
+            "save_temporary_scope_as": [
+             "=",
+             "subject_taken_from"
+            ]
+           }
+          ],
+          "scope:subject_taken_from": [
+           "=",
+           {
+            "add_liberty_desire": [
+             "=",
+             {
+              "value": [
+               "=",
+               "\"scope:first_state.ai_state_value(scope:subject_taken_from)\""
+              ],
+              "divide": [
+               "=",
+               "5"
+              ],
+              "max": [
+               "=",
+               "100"
+              ],
+              "min": [
+               "=",
+               "20"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "scope:target_country": [
+         "=",
+         {
+          "add_liberty_desire": [
+           "=",
+           {
+            "value": [
+             "=",
+             "0"
+            ],
+            "subtract": [
+             "=",
+             "\"scope:first_state.ai_state_value(scope:target_country)\""
+            ],
+            "divide": [
+             "=",
+             "5"
+            ],
+            "max": [
+             "=",
+             "-5"
+            ],
+            "min": [
+             "=",
+             "-50"
+            ]
+           }
+          ]
+         }
+        ],
+        "scope:first_state": [
+         "=",
+         {
+          "set_state_owner": [
+           "=",
+           "scope:target_country"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "c:RUS": [
+           "?=",
+           "scope:first_state.owner"
+          ],
+          "c:POL": [
+           "?=",
+           "scope:target_country"
+          ],
+          "scope:first_state.owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_congress_poland"
+            ]
+           }
+          ]
+         }
+        ],
+        "scope:first_state.owner": [
+         "=",
+         {
+          "add_modifier": [
+           "=",
+           {
+            "name": [
+             "=",
+             "appeased_poland_modifier"
+            ],
+            "days": [
+             "=",
+             "normal_modifier_time"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
      ]
     }
    ],
@@ -20428,6 +20873,672 @@
    ]
   }
  ],
+ "seek_royal_marriage": [
+  "=",
+  {
+   "groups": [
+    "=",
+    [
+     "general"
+    ]
+   ],
+   "requires_approval": [
+    "=",
+    "yes"
+   ],
+   "show_confirmation_box": [
+    "=",
+    "yes"
+   ],
+   "show_effect_in_tooltip": [
+    "=",
+    "yes"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/diplomatic_action_icons/seek_royal_marriage.dds\""
+   ],
+   "selectable": [
+    "=",
+    {
+     "NOT": [
+      [
+       "=",
+       {
+        "is_country_type": [
+         "=",
+         "decentralized"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_law": [
+         "=",
+         "law_type:law_bakufu"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "has_gov_regency": [
+         "=",
+         "yes"
+        ]
+       }
+      ]
+     ],
+     "is_revolutionary": [
+      "=",
+      "no"
+     ],
+     "country_has_monarchy_law": [
+      "=",
+      "yes"
+     ],
+     "religion": [
+      "=",
+      {
+       "has_discrimination_trait": [
+        "=",
+        "heritage_christian"
+       ]
+      }
+     ],
+     "any_scope_character": [
+      "=",
+      {
+       "OR": [
+        "=",
+        {
+         "is_ruler_of_own_country": [
+          "=",
+          "yes"
+         ],
+         "is_heir_of_own_country": [
+          "=",
+          "yes"
+         ]
+        }
+       ],
+       "is_adult": [
+        "=",
+        "yes"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "is_married"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        [
+         "=",
+         {
+          "is_country_type": [
+           "=",
+           "decentralized"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "has_gov_regency": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       ],
+       "is_revolutionary": [
+        "=",
+        "no"
+       ],
+       "country_has_monarchy_law": [
+        "=",
+        "yes"
+       ],
+       "religion": [
+        "=",
+        {
+         "has_discrimination_trait": [
+          "=",
+          "heritage_christian"
+         ]
+        }
+       ],
+       "NAND": [
+        "=",
+        {
+         "c:POL": [
+          "?=",
+          "this"
+         ],
+         "has_journal_entry": [
+          "=",
+          "je_congress_poland"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_war_with": [
+        "=",
+        "scope:target_country"
+       ]
+      }
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_subject_type": [
+          "=",
+          "subject_type_personal_union"
+         ]
+        }
+       ],
+       "country_has_monarchy_law": [
+        "=",
+        "yes"
+       ],
+       "hidden_trigger": [
+        "=",
+        {
+         "NOT": [
+          "=",
+          {
+           "has_gov_regency": [
+            "=",
+            "yes"
+           ]
+          }
+         ]
+        }
+       ],
+       "OR": [
+        "=",
+        {
+         "ruler": [
+          "=",
+          {
+           "is_adult": [
+            "=",
+            "yes"
+           ],
+           "custom_tooltip": [
+            "=",
+            {
+             "text": [
+              "=",
+              "ruler_already_married_tt"
+             ],
+             "NOT": [
+              "=",
+              {
+               "has_variable": [
+                "=",
+                "is_married"
+               ]
+              }
+             ],
+             "hidden_trigger": [
+              "=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "has_variable": [
+                  "=",
+                  "marriage_target"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ],
+         "heir": [
+          "?=",
+          {
+           "is_adult": [
+            "=",
+            "yes"
+           ],
+           "custom_tooltip": [
+            "=",
+            {
+             "text": [
+              "=",
+              "heir_already_married_tt"
+             ],
+             "NOT": [
+              "=",
+              {
+               "has_variable": [
+                "=",
+                "is_married"
+               ]
+              }
+             ],
+             "hidden_trigger": [
+              "=",
+              {
+               "NOT": [
+                "=",
+                {
+                 "has_variable": [
+                  "=",
+                  "marriage_target"
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "has_diplomatic_relevance": [
+      "=",
+      "scope:target_country"
+     ]
+    }
+   ],
+   "accept_effect": [
+    "=",
+    {
+     "root": [
+      [
+       "=",
+       {
+        "ordered_scope_character": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "OR": [
+             "=",
+             {
+              "is_ruler_of_own_country": [
+               "=",
+               "yes"
+              ],
+              "is_heir_of_own_country": [
+               "=",
+               "yes"
+              ]
+             }
+            ],
+            "is_adult": [
+             "=",
+             "yes"
+            ],
+            "NOT": [
+             "=",
+             {
+              "has_variable": [
+               "=",
+               "is_married"
+              ]
+             }
+            ]
+           }
+          ],
+          "position": [
+           "=",
+           "0"
+          ],
+          "order_by": [
+           "=",
+           "prominence"
+          ],
+          "save_scope_as": [
+           "=",
+           "royal_marriage_character"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "trigger_event": [
+         "=",
+         {
+          "id": [
+           "=",
+           "wedding.1"
+          ],
+          "popup": [
+           "=",
+           "yes"
+          ]
+         }
+        ]
+       }
+      ]
+     ],
+     "scope:target_country": [
+      "?=",
+      {
+       "ruler": [
+        "=",
+        {
+         "set_variable": [
+          "=",
+          "marriage_target"
+         ],
+         "save_scope_as": [
+          "=",
+          "foreign_ruler"
+         ]
+        }
+       ],
+       "save_scope_as": [
+        "=",
+        "marriage_country"
+       ],
+       "change_relations": [
+        "=",
+        {
+         "country": [
+          "=",
+          "root"
+         ],
+         "value": [
+          "=",
+          "20"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai": [
+    "=",
+    {
+     "evaluation_chance": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0.25"
+       ]
+      }
+     ],
+     "accept_score": [
+      "=",
+      {
+       "add": [
+        [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"DIPLOMATIC_ACCEPTANCE_BASE\""
+          ],
+          "value": [
+           "=",
+           "-10"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "desc": [
+           "=",
+           "\"DIPLOMATIC_ACCEPTANCE_RELATIONS\""
+          ],
+          "if": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "scope:actor.relations:root": [
+               ">=",
+               "relations_threshold:friendly"
+              ]
+             }
+            ],
+            "value": [
+             "=",
+             "40"
+            ]
+           }
+          ],
+          "else_if": [
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "scope:actor.relations:root": [
+                ">=",
+                "relations_threshold:amicable"
+               ]
+              }
+             ],
+             "value": [
+              "=",
+              "20"
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "scope:actor.relations:root": [
+                "<=",
+                "relations_threshold:hostile"
+               ]
+              }
+             ],
+             "value": [
+              "=",
+              "-80"
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "scope:actor.relations:root": [
+                "<=",
+                "relations_threshold:cold"
+               ]
+              }
+             ],
+             "value": [
+              "=",
+              "-40"
+             ]
+            }
+           ],
+           [
+            "=",
+            {
+             "limit": [
+              "=",
+              {
+               "scope:actor.relations:root": [
+                "<=",
+                "relations_threshold:poor"
+               ]
+              }
+             ],
+             "value": [
+              "=",
+              "-20"
+             ]
+            }
+           ]
+          ]
+         }
+        ]
+       ],
+       "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "scope:actor.religion": [
+             "!=",
+             "ROOT.religion"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_DIFFERENT_RELIGION\""
+            ],
+            "value": [
+             "=",
+             "-20"
+            ]
+           }
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "ROOT.prestige": [
+             ">",
+             "0"
+            ],
+            "scope:actor.prestige": [
+             ">",
+             "0"
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           {
+            "desc": [
+             "=",
+             "\"DIPLOMATIC_ACCEPTANCE_PRESTIGE_DIFFERENCE\""
+            ],
+            "add": [
+             "=",
+             {
+              "value": [
+               "=",
+               "scope:actor.prestige"
+              ],
+              "subtract": [
+               "=",
+               "ROOT.prestige"
+              ]
+             }
+            ],
+            "divide": [
+             "=",
+             "10"
+            ],
+            "min": [
+             "=",
+             "-50"
+            ],
+            "max": [
+             "=",
+             "50"
+            ]
+           }
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "propose_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "15"
+       ],
+       "add": [
+        "=",
+        {
+         "value": [
+          "=",
+          "scope:target_country.country_rank"
+         ],
+         "multiply": [
+          "=",
+          "3"
+         ]
+        }
+       ]
+      }
+     ],
+     "will_propose": [
+      "=",
+      {
+       "scope:target_country.relations:root": [
+        ">=",
+        "relations_threshold:cordial"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
  "invoke_doctrine_of_lapse": [
   "=",
   {
@@ -20670,6 +21781,163 @@
        "annex": [
         "=",
         "scope:target_country"
+       ]
+      }
+     ],
+     "hidden_effect": [
+      "=",
+      {
+       "if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "is_player": [
+            "=",
+            "yes"
+           ],
+           "NOR": [
+            "=",
+            {
+             "has_global_variable": [
+              "=",
+              "nemo_chain_started_global_var"
+             ],
+             "has_game_rule": [
+              "=",
+              "no_fantastical_content"
+             ]
+            }
+           ],
+           "OR": [
+            "=",
+            {
+             "real_month": [
+              [
+               "=",
+               "10"
+              ],
+              [
+               "=",
+               "11"
+              ]
+             ]
+            }
+           ]
+          }
+         ],
+         "random_list": [
+          "=",
+          {
+           "10": [
+            "=",
+            {
+             "set_global_variable": [
+              "=",
+              "nemo_chain_started_global_var"
+             ],
+             "set_variable": [
+              [
+               "=",
+               {
+                "name": [
+                 "=",
+                 "nemo_raid_count_var"
+                ],
+                "value": [
+                 "=",
+                 "0"
+                ]
+               }
+              ],
+              [
+               "=",
+               "nemo_pending_raid_var"
+              ]
+             ],
+             "random_list": [
+              "=",
+              {
+               "1": [
+                [
+                 "=",
+                 {
+                  "set_variable": [
+                   "=",
+                   {
+                    "name": [
+                     "=",
+                     "nemo_raid_limit_var"
+                    ],
+                    "value": [
+                     "=",
+                     "2"
+                    ]
+                   }
+                  ]
+                 }
+                ],
+                [
+                 "=",
+                 {
+                  "set_variable": [
+                   "=",
+                   {
+                    "name": [
+                     "=",
+                     "nemo_raid_limit_var"
+                    ],
+                    "value": [
+                     "=",
+                     "3"
+                    ]
+                   }
+                  ]
+                 }
+                ]
+               ]
+              }
+             ],
+             "create_character": [
+              "=",
+              {
+               "template": [
+                "=",
+                "nemo_prince"
+               ],
+               "on_created": [
+                "=",
+                {
+                 "set_character_immortal": [
+                  "=",
+                  "yes"
+                 ],
+                 "place_character_in_void": [
+                  "=",
+                  "700"
+                 ]
+                }
+               ],
+               "save_scope_as": [
+                "=",
+                "nemo_scope"
+               ]
+              }
+             ],
+             "post_notification": [
+              "=",
+              "nemo_appears_notification"
+             ]
+            }
+           ],
+           "90": [
+            "=",
+            {}
+           ]
+          }
+         ]
+        }
        ]
       }
      ]
@@ -25754,6 +27022,10 @@
            ]
           }
          ],
+         "is_busy": [
+          "=",
+          "no"
+         ],
          "loyalty": [
           "<",
           "define:NCharacters|LOYALTY_UNCERTAIN_THRESHOLD"
@@ -25964,6 +27236,10 @@
               }
              ]
             }
+           ],
+           "is_busy": [
+            "=",
+            "no"
            ],
            "loyalty": [
             "<",
@@ -26213,6 +27489,10 @@
      "is_two_sided_pact": [
       "=",
       "no"
+     ],
+     "show_in_outliner": [
+      "=",
+      "yes"
      ],
      "max_target_involvement": [
       "=",
@@ -27119,6 +28399,167 @@
             }
            ]
           }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "da_tsarpoints_install_subject_ruler": [
+  "=",
+  {
+   "groups": [
+    "=",
+    [
+     "overlord"
+    ]
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/diplomatic_action_icons/da_tsarpoints_install_subject_ruler.dds\""
+   ],
+   "requires_approval": [
+    "=",
+    "no"
+   ],
+   "should_notify_third_parties": [
+    "=",
+    "yes"
+   ],
+   "show_effect_in_tooltip": [
+    "=",
+    "yes"
+   ],
+   "can_use_obligations": [
+    "=",
+    "no"
+   ],
+   "selectable": [
+    "=",
+    {
+     "c:RUS": [
+      "?=",
+      "this"
+     ],
+     "has_journal_entry": [
+      "=",
+      "je_tsarpoints_master"
+     ],
+     "has_variable": [
+      "=",
+      "tsarpoints_install_ruler_var"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "tsarpoints_install_ruler_requires_ukaz_tt"
+       ],
+       "has_variable": [
+        "=",
+        "tsarpoints_install_ruler_var"
+       ]
+      }
+     ],
+     "scope:target_country": [
+      "=",
+      {
+       "is_subject_of": [
+        "=",
+        "root"
+       ],
+       "NOT": [
+        "=",
+        {
+         "is_diplomatic_play_enemy_of": [
+          "=",
+          "root"
+         ]
+        }
+       ],
+       "NAND": [
+        "=",
+        {
+         "c:POL": [
+          "?=",
+          "this"
+         ],
+         "has_journal_entry": [
+          "=",
+          "je_congress_poland"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "accept_effect": [
+    "=",
+    {
+     "scope:target_country": [
+      "?=",
+      {
+       "save_scope_as": [
+        "=",
+        "relevant_country_scope"
+       ]
+      }
+     ],
+     "trigger_event": [
+      "=",
+      {
+       "id": [
+        "=",
+        "tsarpoints_events.13"
+       ],
+       "popup": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai": [
+    "=",
+    {
+     "evaluation_chance": [
+      "=",
+      {
+       "value": [
+        "=",
+        "0.25"
+       ]
+      }
+     ],
+     "propose_score": [
+      "=",
+      {
+       "value": [
+        "=",
+        "10"
+       ]
+      }
+     ],
+     "will_propose": [
+      "=",
+      {
+       "scope:target_country": [
+        "=",
+        {
+         "liberty_desire": [
+          ">=",
+          "25"
          ]
         }
        ]

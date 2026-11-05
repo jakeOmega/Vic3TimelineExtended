@@ -3248,6 +3248,32 @@
    ]
   }
  ],
+ "country_overlord_law_enactment_success_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "country_law_enactment_stall_mult": [
   "=",
   {
@@ -4819,7 +4845,7 @@
    ],
    "color": [
     "=",
-    "neutral"
+    "good"
    ],
    "percent": [
     "=",
@@ -6197,7 +6223,7 @@
   {
    "decimals": [
     "=",
-    "2"
+    "3"
    ],
    "color": [
     "=",
@@ -6548,6 +6574,84 @@
    ]
   }
  ],
+ "state_lower_strata_birth_rate_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_middle_strata_birth_rate_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_upper_strata_birth_rate_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "state_blockade_resistance_add": [
   "=",
   {
@@ -6657,7 +6761,7 @@
   {
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10380,6 +10484,110 @@
    ]
   }
  ],
+ "unit_combat_unit_type_hussars_offense_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "unit_combat_unit_type_dragoons_offense_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "unit_combat_unit_type_cuirassiers_offense_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "unit_combat_unit_type_lancers_offense_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "military_formation_army_movement_speed_add": [
   "=",
   {
@@ -10877,7 +11085,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10894,7 +11102,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10911,7 +11119,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10928,7 +11136,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10945,7 +11153,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10962,7 +11170,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10979,7 +11187,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -10996,7 +11204,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -11013,7 +11221,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -11030,7 +11238,7 @@
    ],
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -11209,7 +11417,104 @@
    ]
   }
  ],
+ "country_rlit_cultural_prestige_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "hidden": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "country_rlit_intellectual_freedom_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "hidden": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "country_rlit_censorship_severity_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "hidden": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
  "building_group_bg_construction_laborers_mortality_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "building_group_bg_construction_machinists_mortality_mult": [
   "=",
   {
    "decimals": [
@@ -15395,6 +15700,28 @@
    ]
   }
  ],
+ "goods_output_copper_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "goods_output_hardwood_add": [
   "=",
   {
@@ -16649,6 +16976,28 @@
    ]
   }
  ],
+ "goods_input_copper_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "goods_output_hardwood_mult": [
   "=",
   {
@@ -16988,6 +17337,32 @@
   }
  ],
  "building_gold_mine_throughput_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "building_copper_mine_throughput_add": [
   "=",
   {
    "decimals": [
@@ -17690,6 +18065,32 @@
   }
  ],
  "goods_output_ironclads_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "goods_output_fine_art_mult": [
   "=",
   {
    "decimals": [
@@ -20110,6 +20511,28 @@
    ]
   }
  ],
+ "state_disallow_barracks_construction_bool": [
+  "=",
+  {
+   "color": [
+    "=",
+    "bad"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "state_allow_assimilation_in_homeland_bool": [
   "=",
   {
@@ -20511,6 +20934,50 @@
    "color": [
     "=",
     "neutral"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_disallow_army_creation_bool": [
+  "=",
+  {
+   "color": [
+    "=",
+    "bad"
+   ],
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_disallow_military_ship_construction_bool": [
+  "=",
+  {
+   "color": [
+    "=",
+    "bad"
    ],
    "boolean": [
     "=",
@@ -21758,6 +22225,1416 @@
   }
  ],
  "battle_naval_condition_tropical_storm_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_moderate_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_traditionalist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_traditionalist_minoritarian_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_nihilist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_republican_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_radical_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_reformer_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_feminist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_abolitionist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_slaver_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_pacifist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_jingoist_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_royalist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_state_socialist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_communist_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_vanguardist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_fascist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_anarchist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_ethno_nationalist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_theocrat_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_market_liberal_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_luddite_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_authoritarian_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_protectionist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_humanitarian_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_jacksonian_democrat_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_positivist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_land_reformer_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_integralist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_liberal_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_corporatist_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_humanitarian_royalist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_despotic_utopian_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_utilitarian_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_sovereignist_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_utopian_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_modernizer_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_carlist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_carlist_2_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_miguelist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_miguelist_2_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_ilustrado_leader_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_mitogaku_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_shojoi_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_orleanist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_legitimist_leader_chance_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "interest_group_ideology_bonapartist_leader_chance_mult": [
   "=",
   {
    "script_only": [
@@ -23473,6 +25350,28 @@
    ]
   }
  ],
+ "country_power_bloc_formation_mandates_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "country_general_rank_impact_mult": [
   "=",
   {
@@ -23746,7 +25645,7 @@
   {
    "decimals": [
     "=",
-    "0"
+    "1"
    ],
    "color": [
     "=",
@@ -24105,7 +26004,7 @@
    ]
   }
  ],
- "country_institution_impact_institution_health_system_mult": [
+ "country_institution_cost_institution_home_affairs_mult": [
   "=",
   {
    "decimals": [
@@ -24114,7 +26013,7 @@
    ],
    "color": [
     "=",
-    "good"
+    "bad"
    ],
    "percent": [
     "=",
@@ -24131,7 +26030,7 @@
    ]
   }
  ],
- "country_institution_cost_institution_home_affairs_mult": [
+ "country_institution_impact_institution_health_system_mult": [
   "=",
   {
    "decimals": [
@@ -24140,7 +26039,7 @@
    ],
    "color": [
     "=",
-    "bad"
+    "good"
    ],
    "percent": [
     "=",
@@ -24697,6 +26596,23 @@
   }
  ],
  "country_allow_assimilation_full_acceptance_bool": [
+  "=",
+  {
+   "boolean": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_can_found_cossack_host_bool": [
   "=",
   {
    "boolean": [
@@ -25802,6 +27718,91 @@
    ]
   }
  ],
+ "country_birth_rate_violent_hostility_mult": [
+  "=",
+  {
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "country_birth_rate_cultural_erasure_mult": [
+  "=",
+  {
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "country_birth_rate_open_prejudice_mult": [
+  "=",
+  {
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "country_birth_rate_second_rate_citizen_mult": [
+  "=",
+  {
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "country_birth_rate_full_acceptance_mult": [
+  "=",
+  {
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
  "country_enactment_success_chance_law_autocracy_add": [
   "=",
   {
@@ -26045,6 +28046,58 @@
    "color": [
     "=",
     "bad"
+   ]
+  }
+ ],
+ "country_enactment_success_chance_law_multicultural_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_enactment_speed_law_multicultural_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
    ]
   }
  ],
@@ -31291,7 +33344,73 @@
    ]
   }
  ],
- "country_north_caucasian_cultural_acceptance_add": [
+ "country_dagestani_cultural_acceptance_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_ossetian_cultural_acceptance_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_abkhazian_cultural_acceptance_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_caucasian_turk_cultural_acceptance_add": [
   "=",
   {
    "decimals": [
@@ -31753,7 +33872,29 @@
    ]
   }
  ],
- "country_siberian_cultural_acceptance_add": [
+ "country_evenki_cultural_acceptance_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_chukchi_cultural_acceptance_add": [
   "=",
   {
    "decimals": [
@@ -36703,6 +38844,28 @@
    ]
   }
  ],
+ "country_crimean_tatar_cultural_acceptance_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "country_fervor_target_scottish_add": [
   "=",
   {
@@ -38265,7 +40428,73 @@
    ]
   }
  ],
- "country_fervor_target_north_caucasian_add": [
+ "country_fervor_target_dagestani_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_fervor_target_ossetian_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_fervor_target_abkhazian_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_fervor_target_caucasian_turk_add": [
   "=",
   {
    "decimals": [
@@ -38727,7 +40956,29 @@
    ]
   }
  ],
- "country_fervor_target_siberian_add": [
+ "country_fervor_target_evenki_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_fervor_target_chukchi_add": [
   "=",
   {
    "decimals": [
@@ -43677,6 +45928,28 @@
    ]
   }
  ],
+ "country_fervor_target_crimean_tatar_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
  "country_yankee_and_dixie_cultures_obsessed_with_guns": [
   "=",
   {
@@ -44071,6 +46344,360 @@
    "percent": [
     "=",
     "yes"
+   ],
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_reform_or_revolution_revolution_bonus_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_reform_or_revolution_reform_bonus_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_orthodox_lower_strata_conversion_rate_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "3"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_other_country_socialist_government_hostility_impact_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_other_country_socialist_economy_hostility_impact_add": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_other_country_socialist_government_hostility_impact_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_other_country_socialist_economy_hostility_impact_mult": [
+  "=",
+  {
+   "script_only": [
+    "=",
+    "yes"
+   ],
+   "decimals": [
+    "=",
+    "2"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_none_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_observant_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_engaged_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_influential_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_pervasive_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "country_interest_tier_hegemonic_trade_advantage_mult": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "0"
+   ],
+   "percent": [
+    "=",
+    "yes"
+   ],
+   "color": [
+    "=",
+    "good"
    ],
    "game_data": [
     "=",
@@ -46019,7 +48646,73 @@
    ]
   }
  ],
- "state_north_caucasian_standard_of_living_add": [
+ "state_dagestani_standard_of_living_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_ossetian_standard_of_living_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_abkhazian_standard_of_living_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_caucasian_turk_standard_of_living_add": [
   "=",
   {
    "decimals": [
@@ -46481,7 +49174,29 @@
    ]
   }
  ],
- "state_siberian_standard_of_living_add": [
+ "state_evenki_standard_of_living_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_chukchi_standard_of_living_add": [
   "=",
   {
    "decimals": [
@@ -54967,6 +57682,28 @@
    "color": [
     "=",
     "neutral"
+   ],
+   "game_data": [
+    "=",
+    {
+     "ai_value": [
+      "=",
+      "0"
+     ]
+    }
+   ]
+  }
+ ],
+ "state_crimean_tatar_standard_of_living_add": [
+  "=",
+  {
+   "decimals": [
+    "=",
+    "1"
+   ],
+   "color": [
+    "=",
+    "good"
    ],
    "game_data": [
     "=",

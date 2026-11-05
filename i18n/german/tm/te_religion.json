@@ -952,7 +952,7 @@
   "de": "Inbrunst: Monatlicher Zuwachs"
  },
  "state_war_support_monthly_add_religion_desc": {
-  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
-  "de": "[concept_war_support]-Zuwachs pro Monat, multipliziert mit dem [concept_clout] der [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Jeder [Concept('concept_state','$concept_state$')] trägt seinen Anteil nach Bevölkerung bei. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
+  "en": "[concept_war_support] added monthly, multiplied by the [concept_clout] of the [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Each [Concept('concept_state','$concept_state|q$')] adds its share by population. Displayed in event tooltips as 'From Events'.",
+  "de": "[concept_war_support]-Zuwachs pro Monat, multipliziert mit dem [concept_clout] der [GetInterestGroupVariant('ig_devout',GetPlayer).GetNameWithCountryVariant]. Jeder [Concept('concept_state','$concept_state|q$')] trägt seinen Anteil nach Bevölkerung bei. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
  }
 }

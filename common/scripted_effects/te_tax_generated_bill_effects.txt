@@ -96,6 +96,8 @@ te_tax_gen_draft_init = {
 		set_variable = { name = te_tax_dr_exp_construction value = -99 }
 		set_variable = { name = te_tax_dr_imp_consumer_appliances value = -99 }
 		set_variable = { name = te_tax_dr_exp_consumer_appliances value = -99 }
+		set_variable = { name = te_tax_dr_imp_copper value = -99 }
+		set_variable = { name = te_tax_dr_exp_copper value = -99 }
 		set_variable = { name = te_tax_dr_imp_digital_assets value = -99 }
 		set_variable = { name = te_tax_dr_exp_digital_assets value = -99 }
 		set_variable = { name = te_tax_dr_imp_dye value = -99 }
@@ -297,6 +299,8 @@ te_tax_gen_draft_from_bill = {
 		set_variable = { name = te_tax_dr_exp_construction value = var:te_tax_bl_exp_construction }
 		set_variable = { name = te_tax_dr_imp_consumer_appliances value = var:te_tax_bl_imp_consumer_appliances }
 		set_variable = { name = te_tax_dr_exp_consumer_appliances value = var:te_tax_bl_exp_consumer_appliances }
+		set_variable = { name = te_tax_dr_imp_copper value = var:te_tax_bl_imp_copper }
+		set_variable = { name = te_tax_dr_exp_copper value = var:te_tax_bl_exp_copper }
 		set_variable = { name = te_tax_dr_imp_digital_assets value = var:te_tax_bl_imp_digital_assets }
 		set_variable = { name = te_tax_dr_exp_digital_assets value = var:te_tax_bl_exp_digital_assets }
 		set_variable = { name = te_tax_dr_imp_dye value = var:te_tax_bl_imp_dye }
@@ -422,6 +426,8 @@ te_tax_gen_draft_from_bill = {
 		set_variable = { name = te_tax_dr_exp_construction value = -99 }
 		set_variable = { name = te_tax_dr_imp_consumer_appliances value = -99 }
 		set_variable = { name = te_tax_dr_exp_consumer_appliances value = -99 }
+		set_variable = { name = te_tax_dr_imp_copper value = -99 }
+		set_variable = { name = te_tax_dr_exp_copper value = -99 }
 		set_variable = { name = te_tax_dr_imp_digital_assets value = -99 }
 		set_variable = { name = te_tax_dr_exp_digital_assets value = -99 }
 		set_variable = { name = te_tax_dr_imp_dye value = -99 }
@@ -614,6 +620,8 @@ te_tax_gen_draft_clear = {
 		remove_variable = te_tax_dr_exp_construction
 		remove_variable = te_tax_dr_imp_consumer_appliances
 		remove_variable = te_tax_dr_exp_consumer_appliances
+		remove_variable = te_tax_dr_imp_copper
+		remove_variable = te_tax_dr_exp_copper
 		remove_variable = te_tax_dr_imp_digital_assets
 		remove_variable = te_tax_dr_exp_digital_assets
 		remove_variable = te_tax_dr_imp_dye
@@ -823,6 +831,8 @@ te_tax_gen_bill_from_draft = {
 		set_variable = { name = te_tax_bl_exp_construction value = var:te_tax_dr_exp_construction }
 		set_variable = { name = te_tax_bl_imp_consumer_appliances value = var:te_tax_dr_imp_consumer_appliances }
 		set_variable = { name = te_tax_bl_exp_consumer_appliances value = var:te_tax_dr_exp_consumer_appliances }
+		set_variable = { name = te_tax_bl_imp_copper value = var:te_tax_dr_imp_copper }
+		set_variable = { name = te_tax_bl_exp_copper value = var:te_tax_dr_exp_copper }
 		set_variable = { name = te_tax_bl_imp_digital_assets value = var:te_tax_dr_imp_digital_assets }
 		set_variable = { name = te_tax_bl_exp_digital_assets value = var:te_tax_dr_exp_digital_assets }
 		set_variable = { name = te_tax_bl_imp_dye value = var:te_tax_dr_imp_dye }
@@ -1096,6 +1106,8 @@ te_tax_gen_bill_clear = {
 		remove_variable = te_tax_bl_exp_construction
 		remove_variable = te_tax_bl_imp_consumer_appliances
 		remove_variable = te_tax_bl_exp_consumer_appliances
+		remove_variable = te_tax_bl_imp_copper
+		remove_variable = te_tax_bl_exp_copper
 		remove_variable = te_tax_bl_imp_digital_assets
 		remove_variable = te_tax_bl_exp_digital_assets
 		remove_variable = te_tax_bl_imp_dye
@@ -1226,6 +1238,8 @@ te_tax_gen_customs_drop_draft = {
 	set_variable = { name = te_tax_dr_exp_construction value = -99 }
 	set_variable = { name = te_tax_dr_imp_consumer_appliances value = -99 }
 	set_variable = { name = te_tax_dr_exp_consumer_appliances value = -99 }
+	set_variable = { name = te_tax_dr_imp_copper value = -99 }
+	set_variable = { name = te_tax_dr_exp_copper value = -99 }
 	set_variable = { name = te_tax_dr_imp_digital_assets value = -99 }
 	set_variable = { name = te_tax_dr_exp_digital_assets value = -99 }
 	set_variable = { name = te_tax_dr_imp_dye value = -99 }
@@ -1351,6 +1365,8 @@ te_tax_gen_customs_drop_bill = {
 	set_variable = { name = te_tax_bl_exp_construction value = -99 }
 	set_variable = { name = te_tax_bl_imp_consumer_appliances value = -99 }
 	set_variable = { name = te_tax_bl_exp_consumer_appliances value = -99 }
+	set_variable = { name = te_tax_bl_imp_copper value = -99 }
+	set_variable = { name = te_tax_bl_exp_copper value = -99 }
 	set_variable = { name = te_tax_bl_imp_digital_assets value = -99 }
 	set_variable = { name = te_tax_bl_exp_digital_assets value = -99 }
 	set_variable = { name = te_tax_bl_imp_dye value = -99 }
@@ -1588,6 +1604,8 @@ te_tax_gen_supersede_a = {
 				if = { limit = { var:te_tax_bl_exp_construction >= -3 var:te_tax_pa_exp_construction >= -3 } set_variable = { name = te_tax_pa_exp_construction value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_consumer_appliances >= -3 var:te_tax_pa_imp_consumer_appliances >= -3 } set_variable = { name = te_tax_pa_imp_consumer_appliances value = -99 } }
 				if = { limit = { var:te_tax_bl_exp_consumer_appliances >= -3 var:te_tax_pa_exp_consumer_appliances >= -3 } set_variable = { name = te_tax_pa_exp_consumer_appliances value = -99 } }
+				if = { limit = { var:te_tax_bl_imp_copper >= -3 var:te_tax_pa_imp_copper >= -3 } set_variable = { name = te_tax_pa_imp_copper value = -99 } }
+				if = { limit = { var:te_tax_bl_exp_copper >= -3 var:te_tax_pa_exp_copper >= -3 } set_variable = { name = te_tax_pa_exp_copper value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_digital_assets >= -3 var:te_tax_pa_imp_digital_assets >= -3 } set_variable = { name = te_tax_pa_imp_digital_assets value = -99 } }
 				if = { limit = { var:te_tax_bl_exp_digital_assets >= -3 var:te_tax_pa_exp_digital_assets >= -3 } set_variable = { name = te_tax_pa_exp_digital_assets value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_dye >= -3 var:te_tax_pa_imp_dye >= -3 } set_variable = { name = te_tax_pa_imp_dye value = -99 } }
@@ -1839,6 +1857,8 @@ te_tax_gen_supersede_b = {
 				if = { limit = { var:te_tax_bl_exp_construction >= -3 var:te_tax_pb_exp_construction >= -3 } set_variable = { name = te_tax_pb_exp_construction value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_consumer_appliances >= -3 var:te_tax_pb_imp_consumer_appliances >= -3 } set_variable = { name = te_tax_pb_imp_consumer_appliances value = -99 } }
 				if = { limit = { var:te_tax_bl_exp_consumer_appliances >= -3 var:te_tax_pb_exp_consumer_appliances >= -3 } set_variable = { name = te_tax_pb_exp_consumer_appliances value = -99 } }
+				if = { limit = { var:te_tax_bl_imp_copper >= -3 var:te_tax_pb_imp_copper >= -3 } set_variable = { name = te_tax_pb_imp_copper value = -99 } }
+				if = { limit = { var:te_tax_bl_exp_copper >= -3 var:te_tax_pb_exp_copper >= -3 } set_variable = { name = te_tax_pb_exp_copper value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_digital_assets >= -3 var:te_tax_pb_imp_digital_assets >= -3 } set_variable = { name = te_tax_pb_imp_digital_assets value = -99 } }
 				if = { limit = { var:te_tax_bl_exp_digital_assets >= -3 var:te_tax_pb_exp_digital_assets >= -3 } set_variable = { name = te_tax_pb_exp_digital_assets value = -99 } }
 				if = { limit = { var:te_tax_bl_imp_dye >= -3 var:te_tax_pb_imp_dye >= -3 } set_variable = { name = te_tax_pb_imp_dye value = -99 } }

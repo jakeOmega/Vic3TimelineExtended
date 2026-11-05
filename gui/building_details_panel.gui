@@ -2420,7 +2420,13 @@ types building_panels
 			texture = "[CombatUnitType.GetTextureForCulture(Culture.Self)]"
 
 			tooltipwidget = {
-				FancyTooltip_CombatUnitTypeWithCulture = {}
+				FancyTooltip_CombatUnitTypeWithCulture = {
+					blockoverride "tooltip_content_before" {
+						custom_tooltip_textbox = {
+							text = "BUILDING_COMBAT_UNIT_TYPE_COUNT"
+						}
+					}
+				}
 			}
 
 			modify_texture = {
@@ -2432,7 +2438,9 @@ types building_panels
 				size = { 100% 100% }
 			}
 
-			offense_defense_info_small = {}
+			block "combat_stats" {
+				offense_defense_info_small = {}
+			}
 
 			block "icon_size" {
 				size = { 75 75 }
@@ -2441,6 +2449,7 @@ types building_panels
 			textbox = {
 				parentanchor = left|bottom
 				autoresize = yes
+				align = nobaseline
 				raw_text = "#v [Building.GetNumUnitsOfCombatUnitType(CombatUnitType.Self)]#!"
 				using = fontsize_small
 
@@ -2448,6 +2457,8 @@ types building_panels
 					margin = { 10 5 }
 				}
 				background = {
+					alpha = 0.8
+					margin = { 2 2 }
 					using = blurry_dark_background
 				}
 			}
@@ -2680,6 +2691,9 @@ types building_panels
 							blockoverride "controller_size" {
 								size = { 130 35 }
 							}
+							blockoverride "expand_button_widgetid" {
+								widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+							}
 						}
 
 						### BUILD PROGRESS
@@ -2739,6 +2753,10 @@ types building_panels
 						}
 					}
 				}
+			}
+
+			widget = {
+				size = { 300 80 }
 
 				block "extra_items_in_production_methods_list" {}
 			}
@@ -3589,7 +3607,7 @@ types building_panels
 		### EXPAND
 		block "expand_button" {
 			expand_building_button = {
-				widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+				block "expand_button_widgetid" {}
 				position = { 0 0 }
 				parentanchor = right|vcenter
 			}
@@ -3599,7 +3617,7 @@ types building_panels
 	type building_level_controls_with_military = building_level_controls {
 		blockoverride "expand_button" {
 			expand_building_button_with_military  = {
-				widgetid = "[Concatenate('building_details_expand', Building.GetIDString)]"
+				block "expand_button_widgetid" {}
 				position = { 0 0 }
 				parentanchor = right|vcenter
 			}
@@ -4029,9 +4047,10 @@ types building_panels
 		}
 
 		default_progressbar_horizontal = {
-			tooltip = "TOOLTIP_BUILDING_EMPLOYMENT"
 			size = { 100% 100% }
 			parentanchor = vcenter
+			tooltip = "TOOLTIP_BUILDING_EMPLOYMENT"
+			using = tooltip_se
 
 			blockoverride "values" {
 				value = "[FixedPointToFloat(Building.GetEmploymentPercentage)]"
@@ -4042,6 +4061,7 @@ types building_panels
 
 		flowcontainer = {
 			parentanchor = vcenter
+
 			textbox = {
 				text = "[Building.GetNoOfEmployed|1*v]"
 				margin_left = 10
@@ -4054,6 +4074,13 @@ types building_panels
 			}
 
 			textbox = {
+				visible = "[LessThan_int64(Building.GetNoOfEmployed, Building.GetEmployeeCap)]"
+				raw_text = "/ #maximum [Building.GetEmployeeCap|1*]#!"
+				margin_left = 7
+				align = hcenter|nobaseline
+				autoresize = yes
+				parentanchor = vcenter
+				widgetanchor = vcenter
 				alpha = 0
 				name = employment_max
 
@@ -4064,29 +4091,27 @@ types building_panels
 					duration = 0.15
 					using = Animation_Curve_Default
 				}
+
 				state = {
 					name = hide_employment_max
 					alpha = 0
 					duration = 0
 					using = Animation_Curve_Default
 				}
+			}
 
-				visible = "[LessThan_int64(Building.GetNoOfEmployed, Building.GetEmployeeCap)]"
-				raw_text = "/ #maximum [Building.GetEmployeeCap|1*]#!"
-				margin_left = 7
-				align = hcenter|nobaseline
-				autoresize = yes
-				parentanchor = vcenter
-				widgetanchor = vcenter
+			widget = {
+				size = { 10 10 }
 			}
 		}
 
 		employment_indicator_icon = {
+			parentanchor = right|vcenter
+			position = { -2 0 }
+
 			blockoverride "indicator_icon_size" {
 				size = { 25 25 }
 			}
-			parentanchor = right|vcenter
-			position = { -2 0 }
 		}
 	}
 

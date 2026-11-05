@@ -19,7 +19,12 @@ fields point at; for messages (`common/messages`) the keys are
 message name; for diplomatic actions the `_action_notification_*`
 keys (the `_third_party_*` pair when `should_notify_third_parties =
 yes`, the `_break_*` pairs with a `pact`) or, for
-`requires_approval = yes`, the `_proposal_*` keys.
+`requires_approval = yes`, the `_proposal_*` keys; for a glossary
+entry `glossary_x` and `glossary_x_desc`. A **Journal Entry
+Outcomes** flag is a 1.15 outcome with no `conclusion_desc` (or, not
+`hidden`, no `header` / `effect_header`), listed as `outcome N: no
+<field>`, or naming a key no loc defines; it covers the mod's
+`REPLACE:`s of vanilla entries too.
 
 Suppress an intentional missing key with a same-line comment on the
 entity's opening line:

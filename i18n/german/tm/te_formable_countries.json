@@ -438,8 +438,8 @@
   "de": "Ein $dp_leadership_african_union$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_african_union_tooltip_desc$"
  },
  "dp_leadership_african_union_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der afrikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the African [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der afrikanischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_china": {
   "en": "Contest Leadership of China",
@@ -450,8 +450,8 @@
   "de": "Ein [concept_diplomatic_play] „$dp_leadership_china$“ starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_china_tooltip_desc$"
  },
  "dp_leadership_china_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Chinese [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der chinesischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Chinese [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der chinesischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_dar_al_islam": {
   "en": "Caliphal Leadership",
@@ -462,8 +462,8 @@
   "de": "Ein $dp_leadership_dar_al_islam$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_dar_al_islam_tooltip_desc$"
  },
  "dp_leadership_dar_al_islam_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Islamic [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der islamischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Islamic [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der islamischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_east_african_federation": {
   "en": "East African Leadership",
@@ -474,8 +474,8 @@
   "de": "Ein $dp_leadership_east_african_federation$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_east_african_federation_tooltip_desc$"
  },
  "dp_leadership_east_african_federation_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the East African [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der ostafrikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the East African [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der ostafrikanischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_european_union": {
   "en": "European Leadership",
@@ -486,8 +486,8 @@
   "de": "Ein $dp_leadership_european_union$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_european_union_tooltip_desc$"
  },
  "dp_leadership_european_union_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der europäischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the European [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der europäischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_india": {
   "en": "Indian Leadership",
@@ -498,8 +498,8 @@
   "de": "Ein $dp_leadership_india$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_india_tooltip_desc$"
  },
  "dp_leadership_india_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indian [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_indonesia": {
   "en": "Indonesian Leadership",
@@ -510,8 +510,8 @@
   "de": "Ein $dp_leadership_indonesia$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_indonesia_tooltip_desc$"
  },
  "dp_leadership_indonesia_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indonesian [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indonesischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Indonesian [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der indonesischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_intermarium": {
   "en": "Intermarium Leadership",
@@ -522,8 +522,8 @@
   "de": "Ein $dp_leadership_intermarium$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_intermarium_tooltip_desc$"
  },
  "dp_leadership_intermarium_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Intermarium [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] des Intermarium-[Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Intermarium [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] des Intermarium-[Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_united_earth": {
   "en": "Terran Leadership",
@@ -534,8 +534,8 @@
   "de": "Ein $dp_leadership_united_earth$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_earth_tooltip_desc$"
  },
  "dp_leadership_united_earth_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Terran [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der terranischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the Terran [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der terranischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_leadership_united_north_america": {
   "en": "North American Leadership",
@@ -546,8 +546,8 @@
   "de": "Ein $dp_leadership_united_north_america$-[concept_diplomatic_play] starten\\n$TOOLTIP_DELIMITER$\\n$dp_leadership_united_north_america_tooltip_desc$"
  },
  "dp_leadership_united_north_america_tooltip_desc": {
-  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the North American [Concept('concept_unification', '$concept_major_unification$')].",
-  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der nordamerikanischen [Concept('concept_unification', '$concept_major_unification$')] zu verdrängen."
+  "en": "Sets the initiating [concept_war_goal] to kick out the targeted [concept_country] as a [concept_unification_candidate] of the North American [Concept('concept_unification', '$concept_major_unification|q$')].",
+  "de": "Setzt das auslösende [concept_war_goal] darauf, das angegriffene [concept_country] als [concept_unification_candidate] der nordamerikanischen [Concept('concept_unification', '$concept_major_unification|q$')] zu verdrängen."
  },
  "dp_unify_african_union": {
   "en": "Unify the African Union",

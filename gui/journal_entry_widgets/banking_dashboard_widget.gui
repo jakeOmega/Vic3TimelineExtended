@@ -715,8 +715,10 @@ types banking_dashboard_widget_types
 	### (banking_cycle_update_progress_bars). The player's own panel draws the
 	### entry's bars themselves (te_banking_overview_panel). The markup is
 	### te_je_scripted_bars' (gui/te_system_tab_widgets.gui), one bar each in the
-	### entry's order and variant: the cycle value (default_green), momentum and
-	### the policy stance (double_sided_gold), bubble pressure (default_bad).
+	### entry's order and look: the cycle value (default_green), momentum and
+	### the policy stance (blue on gold with the sliding marker, the bar's own
+	### textures, in vanilla 1.15's scripted_progressbar_dynamic markup), bubble
+	### pressure (default_bad).
 	### Each value is a banking_disp_bar_* script value, 0 to 1 along the bar
 	### (banking_overview_display_values.txt). No tooltip: the entry's bar
 	### carried only the engine's periodic-progress breakdown, which a bar set
@@ -780,16 +782,14 @@ types banking_dashboard_widget_types
 							texture_density = 2
 							skip_initial_animation = yes
 
-							block "values" {}
-							block "direction" {
-								direction = horizontal
-							}
-							block "progress_changed_animation" {
-								using = progressbar_changed_animation
-							}
-							block "animate_negative_change" {
-								animate_negative_changes = yes
-							}
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
+							min = 0
+							max = 1
+
+							direction = horizontal
+							using = progressbar_changed_animation
+							animate_negative_changes = yes
+
 							marker = {
 								icon = {
 									size = { 65 33 }
@@ -847,16 +847,14 @@ types banking_dashboard_widget_types
 							texture_density = 2
 							skip_initial_animation = yes
 
-							block "values" {}
-							block "direction" {
-								direction = horizontal
-							}
-							block "progress_changed_animation" {
-								using = progressbar_changed_animation
-							}
-							block "animate_negative_change" {
-								animate_negative_changes = yes
-							}
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
+							min = 0
+							max = 1
+
+							direction = horizontal
+							using = progressbar_changed_animation
+							animate_negative_changes = yes
+
 							marker = {
 								icon = {
 									size = { 65 33 }

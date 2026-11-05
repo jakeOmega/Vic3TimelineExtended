@@ -23,6 +23,14 @@
 # ship's set; their names come from that set (or, where it was the base
 # game's 19th-century troopship or light cruiser, from a modern mod set) and
 # their goods are its goods scaled by the ratio of the two hulls' costs.
+#
+# Goods (vanilla 1.15): the base game moved its ships' construction goods from
+# the hull into the modules (hulls about -39%, modules about 20x, so at medium
+# the two weigh about the same) and raised each class's medium total about 20%
+# (the aircraft carrier 42%, at the mod's price for aeroplanes).
+# Each mod ship followed its analogue: its medium total is the same multiple of
+# the analogue's as before, split between hull and each slot's light / medium /
+# high module as the analogue splits it, each block keeping its own mix of goods.
 # =============================================================================
 
 
@@ -39,7 +47,7 @@ ship_mod_asw_destroyer_armor_light = {
 		ship_hit_points_max_add = 375
 	}
 	construction_goods = {
-		goods_input_steel_add = 10
+		goods_input_steel_add = 160
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -52,7 +60,7 @@ ship_mod_asw_destroyer_armor_medium = {
 		ship_hit_points_max_add = 1000
 	}
 	construction_goods = {
-		goods_input_steel_add = 20
+		goods_input_steel_add = 325
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -66,7 +74,7 @@ ship_mod_asw_destroyer_armor_high = {
 		ship_visibility_add = -5
 	}
 	construction_goods = {
-		goods_input_steel_add = 32
+		goods_input_steel_add = 515
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -82,8 +90,8 @@ ship_mod_asw_destroyer_guns_light = {
 		ship_vulnerability_add = 5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 16
-		goods_input_radios_add = 4
+		goods_input_ammunition_add = 340
+		goods_input_radios_add = 86
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -98,8 +106,8 @@ ship_mod_asw_destroyer_guns_medium = {
 		ship_vulnerability_add = 12
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 24
-		goods_input_radios_add = 8
+		goods_input_ammunition_add = 490
+		goods_input_radios_add = 165
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -118,8 +126,8 @@ ship_mod_asw_destroyer_guns_high = {
 		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.15
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 30
-		goods_input_radios_add = 14
+		goods_input_ammunition_add = 580
+		goods_input_radios_add = 270
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -130,8 +138,8 @@ ship_mod_asw_destroyer_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 8 }
 	construction_goods = {
-		goods_input_engines_add = 24
-		goods_input_oil_add = 10
+		goods_input_engines_add = 385
+		goods_input_oil_add = 160
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -141,8 +149,8 @@ ship_mod_asw_destroyer_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 36
-		goods_input_oil_add = 16
+		goods_input_engines_add = 580
+		goods_input_oil_add = 260
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -155,8 +163,8 @@ ship_mod_asw_destroyer_propulsion_high = {
 		ship_visibility_add = -3
 	}
 	construction_goods = {
-		goods_input_engines_add = 50
-		goods_input_oil_add = 24
+		goods_input_engines_add = 805
+		goods_input_oil_add = 385
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -170,7 +178,7 @@ ship_mod_asw_destroyer_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 20
 	}
-	construction_goods = { goods_input_groceries_add = 16 }
+	construction_goods = { goods_input_groceries_add = 260 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_asw_destroyer_range_medium = {
@@ -184,7 +192,7 @@ ship_mod_asw_destroyer_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 33
 	}
-	construction_goods = { goods_input_groceries_add = 34 }
+	construction_goods = { goods_input_groceries_add = 540 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_asw_destroyer_range_high = {
@@ -198,7 +206,7 @@ ship_mod_asw_destroyer_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 56
 	}
-	construction_goods = { goods_input_groceries_add = 52 }
+	construction_goods = { goods_input_groceries_add = 840 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -215,7 +223,7 @@ ship_mod_nuclear_submarine_armor_light = {
 		ship_armor_add = 13
 		ship_hit_points_max_add = 400
 	}
-	construction_goods = { goods_input_steel_add = 12 }
+	construction_goods = { goods_input_steel_add = 225 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_submarine_armor_medium = {
@@ -226,7 +234,7 @@ ship_mod_nuclear_submarine_armor_medium = {
 		ship_armor_add = 37
 		ship_hit_points_max_add = 1100
 	}
-	construction_goods = { goods_input_steel_add = 25 }
+	construction_goods = { goods_input_steel_add = 465 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_submarine_armor_high = {
@@ -238,7 +246,7 @@ ship_mod_nuclear_submarine_armor_high = {
 		ship_hit_points_max_add = 2025
 		ship_visibility_add = -1
 	}
-	construction_goods = { goods_input_steel_add = 40 }
+	construction_goods = { goods_input_steel_add = 680 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -253,8 +261,8 @@ ship_mod_nuclear_submarine_guns_light = {
 		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 20
-		goods_input_electronic_components_add = 5
+		goods_input_ammunition_add = 260
+		goods_input_electronic_components_add = 65
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -269,8 +277,8 @@ ship_mod_nuclear_submarine_guns_medium = {
 		ship_vulnerability_add = 1
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 30
-		goods_input_electronic_components_add = 10
+		goods_input_ammunition_add = 445
+		goods_input_electronic_components_add = 150
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -285,8 +293,8 @@ ship_mod_nuclear_submarine_guns_high = {
 		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 38
-		goods_input_electronic_components_add = 18
+		goods_input_ammunition_add = 660
+		goods_input_electronic_components_add = 315
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -297,8 +305,8 @@ ship_mod_nuclear_submarine_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 5.5 }
 	construction_goods = {
-		goods_input_engines_add = 30
-		goods_input_oil_add = 12
+		goods_input_engines_add = 365
+		goods_input_oil_add = 145
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -308,8 +316,8 @@ ship_mod_nuclear_submarine_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 6.5 }
 	construction_goods = {
-		goods_input_engines_add = 45
-		goods_input_oil_add = 20
+		goods_input_engines_add = 550
+		goods_input_oil_add = 245
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -322,8 +330,8 @@ ship_mod_nuclear_submarine_propulsion_high = {
 		ship_visibility_add = -1
 	}
 	construction_goods = {
-		goods_input_engines_add = 62
-		goods_input_oil_add = 30
+		goods_input_engines_add = 820
+		goods_input_oil_add = 400
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -333,7 +341,7 @@ ship_mod_nuclear_submarine_range_light = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
 	modifier = { ship_supply_capacity_add = 35 }
-	construction_goods = { goods_input_groceries_add = 15 }
+	construction_goods = { goods_input_groceries_add = 330 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_submarine_range_medium = {
@@ -344,7 +352,7 @@ ship_mod_nuclear_submarine_range_medium = {
 		ship_supply_capacity_add = 85
 		ship_supply_efficiency_add = 0.1
 	}
-	construction_goods = { goods_input_groceries_add = 30 }
+	construction_goods = { goods_input_groceries_add = 655 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_submarine_range_high = {
@@ -356,7 +364,7 @@ ship_mod_nuclear_submarine_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 30
 	}
-	construction_goods = { goods_input_groceries_add = 50 }
+	construction_goods = { goods_input_groceries_add = 1010 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -373,7 +381,7 @@ ship_mod_guided_missile_ship_armor_light = {
 		ship_armor_add = 34
 		ship_hit_points_max_add = 450
 	}
-	construction_goods = { goods_input_steel_add = 12 }
+	construction_goods = { goods_input_steel_add = 200 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_guided_missile_ship_armor_medium = {
@@ -384,7 +392,7 @@ ship_mod_guided_missile_ship_armor_medium = {
 		ship_armor_add = 80
 		ship_hit_points_max_add = 1200
 	}
-	construction_goods = { goods_input_steel_add = 25 }
+	construction_goods = { goods_input_steel_add = 405 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_guided_missile_ship_armor_high = {
@@ -395,7 +403,7 @@ ship_mod_guided_missile_ship_armor_high = {
 		ship_armor_add = 160
 		ship_hit_points_max_add = 2225
 	}
-	construction_goods = { goods_input_steel_add = 40 }
+	construction_goods = { goods_input_steel_add = 650 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -410,8 +418,8 @@ ship_mod_guided_missile_ship_guns_light = {
 		ship_vulnerability_add = 5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 20
-		goods_input_electronic_components_add = 5
+		goods_input_ammunition_add = 430
+		goods_input_electronic_components_add = 105
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -426,8 +434,8 @@ ship_mod_guided_missile_ship_guns_medium = {
 		ship_vulnerability_add = 12
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 30
-		goods_input_electronic_components_add = 10
+		goods_input_ammunition_add = 610
+		goods_input_electronic_components_add = 205
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -443,8 +451,8 @@ ship_mod_guided_missile_ship_guns_high = {
 		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 38
-		goods_input_electronic_components_add = 18
+		goods_input_ammunition_add = 725
+		goods_input_electronic_components_add = 345
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -455,8 +463,8 @@ ship_mod_guided_missile_ship_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 8 }
 	construction_goods = {
-		goods_input_engines_add = 30
-		goods_input_oil_add = 12
+		goods_input_engines_add = 490
+		goods_input_oil_add = 195
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -466,8 +474,8 @@ ship_mod_guided_missile_ship_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 45
-		goods_input_oil_add = 20
+		goods_input_engines_add = 730
+		goods_input_oil_add = 325
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -477,8 +485,8 @@ ship_mod_guided_missile_ship_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = { ship_movement_speed_add = 12 }
 	construction_goods = {
-		goods_input_engines_add = 62
-		goods_input_oil_add = 30
+		goods_input_engines_add = 1010
+		goods_input_oil_add = 485
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -492,7 +500,7 @@ ship_mod_guided_missile_ship_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 25
 	}
-	construction_goods = { goods_input_groceries_add = 20 }
+	construction_goods = { goods_input_groceries_add = 325 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_guided_missile_ship_range_medium = {
@@ -506,7 +514,7 @@ ship_mod_guided_missile_ship_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 41
 	}
-	construction_goods = { goods_input_groceries_add = 42 }
+	construction_goods = { goods_input_groceries_add = 675 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_guided_missile_ship_range_high = {
@@ -520,7 +528,7 @@ ship_mod_guided_missile_ship_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 70
 	}
-	construction_goods = { goods_input_groceries_add = 65 }
+	construction_goods = { goods_input_groceries_add = 1050 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -538,8 +546,8 @@ ship_mod_nuclear_supercarrier_armor_light = {
 		ship_hit_points_max_add = 500
 	}
 	construction_goods = {
-		goods_input_steel_add = 12
-		goods_input_electronic_components_add = 8
+		goods_input_steel_add = 125
+		goods_input_electronic_components_add = 82
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -552,8 +560,8 @@ ship_mod_nuclear_supercarrier_armor_medium = {
 		ship_hit_points_max_add = 1600
 	}
 	construction_goods = {
-		goods_input_steel_add = 30
-		goods_input_electronic_components_add = 15
+		goods_input_steel_add = 275
+		goods_input_electronic_components_add = 135
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -566,8 +574,8 @@ ship_mod_nuclear_supercarrier_armor_high = {
 		ship_hit_points_max_add = 3225
 	}
 	construction_goods = {
-		goods_input_steel_add = 55
-		goods_input_electronic_components_add = 25
+		goods_input_steel_add = 485
+		goods_input_electronic_components_add = 220
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -583,8 +591,8 @@ ship_mod_nuclear_supercarrier_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 25
-		goods_input_electronic_components_add = 8
+		goods_input_aeroplanes_add = 525
+		goods_input_electronic_components_add = 170
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -599,9 +607,9 @@ ship_mod_nuclear_supercarrier_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 50
-		goods_input_electronic_components_add = 15
-		goods_input_ammunition_add = 12
+		goods_input_aeroplanes_add = 1120
+		goods_input_electronic_components_add = 335
+		goods_input_ammunition_add = 270
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -617,9 +625,9 @@ ship_mod_nuclear_supercarrier_guns_high = {
 		ship_battle_against_ship_type_arsenal_ship_hull_damage_mult = 0.1
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 88
-		goods_input_electronic_components_add = 30
-		goods_input_ammunition_add = 25
+		goods_input_aeroplanes_add = 1510
+		goods_input_electronic_components_add = 515
+		goods_input_ammunition_add = 430
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -630,8 +638,8 @@ ship_mod_nuclear_supercarrier_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 38
-		goods_input_oil_add = 15
+		goods_input_engines_add = 810
+		goods_input_oil_add = 320
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -641,8 +649,8 @@ ship_mod_nuclear_supercarrier_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 12.5 }
 	construction_goods = {
-		goods_input_engines_add = 55
-		goods_input_oil_add = 25
+		goods_input_engines_add = 1020
+		goods_input_oil_add = 460
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -655,8 +663,8 @@ ship_mod_nuclear_supercarrier_propulsion_high = {
 		ship_blockade_strength_add = 75
 	}
 	construction_goods = {
-		goods_input_engines_add = 75
-		goods_input_oil_add = 38
+		goods_input_engines_add = 1310
+		goods_input_oil_add = 665
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -666,7 +674,7 @@ ship_mod_nuclear_supercarrier_range_light = {
 	icon = "gfx/interface/icons/military_icons/navy_icons/ship_designer_icons/ship_designer_range_low.dds"
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_range_short"
 	modifier = { ship_supply_capacity_add = 90 }
-	construction_goods = { goods_input_groceries_add = 30 }
+	construction_goods = { goods_input_groceries_add = 530 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_supercarrier_range_medium = {
@@ -678,7 +686,7 @@ ship_mod_nuclear_supercarrier_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 46
 	}
-	construction_goods = { goods_input_groceries_add = 55 }
+	construction_goods = { goods_input_groceries_add = 1070 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_nuclear_supercarrier_range_high = {
@@ -690,7 +698,7 @@ ship_mod_nuclear_supercarrier_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 92
 	}
-	construction_goods = { goods_input_groceries_add = 95 }
+	construction_goods = { goods_input_groceries_add = 1640 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -708,8 +716,8 @@ ship_mod_arsenal_ship_armor_light = {
 		ship_hit_points_max_add = 1050
 	}
 	construction_goods = {
-		goods_input_steel_add = 54
-		goods_input_electronic_components_add = 12
+		goods_input_steel_add = 1500
+		goods_input_electronic_components_add = 330
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -722,8 +730,8 @@ ship_mod_arsenal_ship_armor_medium = {
 		ship_hit_points_max_add = 2550
 	}
 	construction_goods = {
-		goods_input_steel_add = 96
-		goods_input_electronic_components_add = 21
+		goods_input_steel_add = 2080
+		goods_input_electronic_components_add = 455
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -736,8 +744,8 @@ ship_mod_arsenal_ship_armor_high = {
 		ship_hit_points_max_add = 5300
 	}
 	construction_goods = {
-		goods_input_steel_add = 150
-		goods_input_electronic_components_add = 36
+		goods_input_steel_add = 2580
+		goods_input_electronic_components_add = 620
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -753,8 +761,8 @@ ship_mod_arsenal_ship_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 36
-		goods_input_electronic_components_add = 15
+		goods_input_ammunition_add = 2230
+		goods_input_electronic_components_add = 930
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -769,8 +777,8 @@ ship_mod_arsenal_ship_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 66
-		goods_input_electronic_components_add = 27
+		goods_input_ammunition_add = 3050
+		goods_input_electronic_components_add = 1250
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -786,8 +794,8 @@ ship_mod_arsenal_ship_guns_high = {
 		ship_blockade_strength_add = 200
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 108
-		goods_input_electronic_components_add = 48
+		goods_input_ammunition_add = 3990
+		goods_input_electronic_components_add = 1770
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -798,8 +806,8 @@ ship_mod_arsenal_ship_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 45
-		goods_input_oil_add = 18
+		goods_input_engines_add = 2060
+		goods_input_oil_add = 825
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -809,8 +817,8 @@ ship_mod_arsenal_ship_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 12.5 }
 	construction_goods = {
-		goods_input_engines_add = 66
-		goods_input_oil_add = 30
+		goods_input_engines_add = 2450
+		goods_input_oil_add = 1110
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -820,8 +828,8 @@ ship_mod_arsenal_ship_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = { ship_movement_speed_add = 15 }
 	construction_goods = {
-		goods_input_engines_add = 90
-		goods_input_oil_add = 45
+		goods_input_engines_add = 3360
+		goods_input_oil_add = 1680
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -835,7 +843,7 @@ ship_mod_arsenal_ship_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 110
 	}
-	construction_goods = { goods_input_groceries_add = 36 }
+	construction_goods = { goods_input_groceries_add = 2670 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_arsenal_ship_range_medium = {
@@ -849,7 +857,7 @@ ship_mod_arsenal_ship_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 142
 	}
-	construction_goods = { goods_input_groceries_add = 66 }
+	construction_goods = { goods_input_groceries_add = 4250 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_arsenal_ship_range_high = {
@@ -863,7 +871,7 @@ ship_mod_arsenal_ship_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 306
 	}
-	construction_goods = { goods_input_groceries_add = 114 }
+	construction_goods = { goods_input_groceries_add = 6140 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -880,7 +888,7 @@ ship_mod_expeditionary_sea_base_armor_light = {
 		ship_armor_add = 36
 		ship_hit_points_max_add = 550
 	}
-	construction_goods = { goods_input_steel_add = 15 }
+	construction_goods = { goods_input_steel_add = 265 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_expeditionary_sea_base_armor_medium = {
@@ -891,7 +899,7 @@ ship_mod_expeditionary_sea_base_armor_medium = {
 		ship_armor_add = 90
 		ship_hit_points_max_add = 1375
 	}
-	construction_goods = { goods_input_steel_add = 30 }
+	construction_goods = { goods_input_steel_add = 455 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_expeditionary_sea_base_armor_high = {
@@ -902,7 +910,7 @@ ship_mod_expeditionary_sea_base_armor_high = {
 		ship_armor_add = 180
 		ship_hit_points_max_add = 2750
 	}
-	construction_goods = { goods_input_steel_add = 48 }
+	construction_goods = { goods_input_steel_add = 965 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -917,8 +925,8 @@ ship_mod_expeditionary_sea_base_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 15
-		goods_input_electronic_components_add = 3
+		goods_input_ammunition_add = 290
+		goods_input_electronic_components_add = 58
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -933,8 +941,8 @@ ship_mod_expeditionary_sea_base_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 27
-		goods_input_electronic_components_add = 9
+		goods_input_ammunition_add = 625
+		goods_input_electronic_components_add = 210
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -949,8 +957,8 @@ ship_mod_expeditionary_sea_base_guns_high = {
 		ship_vulnerability_add = 50
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 39
-		goods_input_electronic_components_add = 15
+		goods_input_ammunition_add = 985
+		goods_input_electronic_components_add = 380
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -961,8 +969,8 @@ ship_mod_expeditionary_sea_base_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 8.5 }
 	construction_goods = {
-		goods_input_engines_add = 42
-		goods_input_oil_add = 18
+		goods_input_engines_add = 580
+		goods_input_oil_add = 250
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -972,8 +980,8 @@ ship_mod_expeditionary_sea_base_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 11 }
 	construction_goods = {
-		goods_input_engines_add = 60
-		goods_input_oil_add = 27
+		goods_input_engines_add = 990
+		goods_input_oil_add = 445
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -983,8 +991,8 @@ ship_mod_expeditionary_sea_base_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = { ship_movement_speed_add = 13 }
 	construction_goods = {
-		goods_input_engines_add = 81
-		goods_input_oil_add = 39
+		goods_input_engines_add = 1290
+		goods_input_oil_add = 620
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -997,7 +1005,7 @@ ship_mod_expeditionary_sea_base_range_light = {
 		ship_carrying_capacity_add = 0.1
 		ship_supply_capacity_add = 165
 	}
-	construction_goods = { goods_input_groceries_add = 30 }
+	construction_goods = { goods_input_groceries_add = 1100 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_expeditionary_sea_base_range_medium = {
@@ -1010,7 +1018,7 @@ ship_mod_expeditionary_sea_base_range_medium = {
 		ship_marine_capacity_add = 0.1
 		ship_supply_efficiency_add = 0.1
 	}
-	construction_goods = { goods_input_groceries_add = 54 }
+	construction_goods = { goods_input_groceries_add = 1610 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_expeditionary_sea_base_range_high = {
@@ -1023,7 +1031,7 @@ ship_mod_expeditionary_sea_base_range_high = {
 		ship_marine_capacity_add = 0.25
 		ship_supply_efficiency_add = 0.25
 	}
-	construction_goods = { goods_input_groceries_add = 90 }
+	construction_goods = { goods_input_groceries_add = 2730 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -1041,8 +1049,8 @@ ship_mod_hypersonic_missile_platform_armor_light = {
 		ship_hit_points_max_add = 1525
 	}
 	construction_goods = {
-		goods_input_steel_add = 72
-		goods_input_electronic_components_add = 24
+		goods_input_steel_add = 2030
+		goods_input_electronic_components_add = 675
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1055,8 +1063,8 @@ ship_mod_hypersonic_missile_platform_armor_medium = {
 		ship_hit_points_max_add = 3700
 	}
 	construction_goods = {
-		goods_input_steel_add = 128
-		goods_input_electronic_components_add = 40
+		goods_input_steel_add = 2870
+		goods_input_electronic_components_add = 895
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1070,8 +1078,8 @@ ship_mod_hypersonic_missile_platform_armor_high = {
 		ship_visibility_add = -10
 	}
 	construction_goods = {
-		goods_input_steel_add = 200
-		goods_input_electronic_components_add = 64
+		goods_input_steel_add = 3620
+		goods_input_electronic_components_add = 1160
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1087,8 +1095,8 @@ ship_mod_hypersonic_missile_platform_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 56
-		goods_input_electronic_components_add = 28
+		goods_input_ammunition_add = 3160
+		goods_input_electronic_components_add = 1580
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1103,8 +1111,8 @@ ship_mod_hypersonic_missile_platform_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 104
-		goods_input_electronic_components_add = 48
+		goods_input_ammunition_add = 4440
+		goods_input_electronic_components_add = 2050
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1120,8 +1128,8 @@ ship_mod_hypersonic_missile_platform_guns_high = {
 		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.1
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 168
-		goods_input_electronic_components_add = 80
+		goods_input_ammunition_add = 5940
+		goods_input_electronic_components_add = 2830
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1132,8 +1140,8 @@ ship_mod_hypersonic_missile_platform_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 64
-		goods_input_oil_add = 28
+		goods_input_engines_add = 3100
+		goods_input_oil_add = 1360
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1143,8 +1151,8 @@ ship_mod_hypersonic_missile_platform_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 12.5 }
 	construction_goods = {
-		goods_input_engines_add = 96
-		goods_input_oil_add = 44
+		goods_input_engines_add = 3740
+		goods_input_oil_add = 1720
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1157,8 +1165,8 @@ ship_mod_hypersonic_missile_platform_propulsion_high = {
 		ship_visibility_add = -5
 	}
 	construction_goods = {
-		goods_input_engines_add = 128
-		goods_input_oil_add = 64
+		goods_input_engines_add = 5140
+		goods_input_oil_add = 2570
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1172,7 +1180,7 @@ ship_mod_hypersonic_missile_platform_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 125
 	}
-	construction_goods = { goods_input_groceries_add = 56 }
+	construction_goods = { goods_input_groceries_add = 4090 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_hypersonic_missile_platform_range_medium = {
@@ -1186,7 +1194,7 @@ ship_mod_hypersonic_missile_platform_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 142
 	}
-	construction_goods = { goods_input_groceries_add = 104 }
+	construction_goods = { goods_input_groceries_add = 6510 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_hypersonic_missile_platform_range_high = {
@@ -1200,7 +1208,7 @@ ship_mod_hypersonic_missile_platform_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 306
 	}
-	construction_goods = { goods_input_groceries_add = 176 }
+	construction_goods = { goods_input_groceries_add = 9410 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -1218,8 +1226,8 @@ ship_mod_pulsed_laser_escort_armor_light = {
 		ship_hit_points_max_add = 500
 	}
 	construction_goods = {
-		goods_input_steel_add = 21
-		goods_input_electronic_components_add = 14
+		goods_input_steel_add = 275
+		goods_input_electronic_components_add = 185
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1232,8 +1240,8 @@ ship_mod_pulsed_laser_escort_armor_medium = {
 		ship_hit_points_max_add = 1375
 	}
 	construction_goods = {
-		goods_input_steel_add = 42
-		goods_input_electronic_components_add = 28
+		goods_input_steel_add = 495
+		goods_input_electronic_components_add = 330
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1246,8 +1254,8 @@ ship_mod_pulsed_laser_escort_armor_high = {
 		ship_hit_points_max_add = 2700
 	}
 	construction_goods = {
-		goods_input_steel_add = 77
-		goods_input_electronic_components_add = 46
+		goods_input_steel_add = 740
+		goods_input_electronic_components_add = 445
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1263,8 +1271,8 @@ ship_mod_pulsed_laser_escort_guns_light = {
 		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 14
-		goods_input_electronic_components_add = 28
+		goods_input_ammunition_add = 240
+		goods_input_electronic_components_add = 480
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1279,8 +1287,8 @@ ship_mod_pulsed_laser_escort_guns_medium = {
 		ship_vulnerability_add = 1.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 24
-		goods_input_electronic_components_add = 49
+		goods_input_ammunition_add = 420
+		goods_input_electronic_components_add = 855
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1296,8 +1304,8 @@ ship_mod_pulsed_laser_escort_guns_high = {
 		ship_accuracy_mult = 0.3
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 42
-		goods_input_electronic_components_add = 77
+		goods_input_ammunition_add = 610
+		goods_input_electronic_components_add = 1120
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1308,8 +1316,8 @@ ship_mod_pulsed_laser_escort_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 49
-		goods_input_oil_add = 21
+		goods_input_engines_add = 1070
+		goods_input_oil_add = 455
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1319,8 +1327,8 @@ ship_mod_pulsed_laser_escort_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 12.5 }
 	construction_goods = {
-		goods_input_engines_add = 77
-		goods_input_oil_add = 35
+		goods_input_engines_add = 1290
+		goods_input_oil_add = 585
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1330,8 +1338,8 @@ ship_mod_pulsed_laser_escort_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = { ship_movement_speed_add = 15 }
 	construction_goods = {
-		goods_input_engines_add = 105
-		goods_input_oil_add = 52
+		goods_input_engines_add = 1700
+		goods_input_oil_add = 840
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1345,7 +1353,7 @@ ship_mod_pulsed_laser_escort_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 55
 	}
-	construction_goods = { goods_input_groceries_add = 42 }
+	construction_goods = { goods_input_groceries_add = 725 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_pulsed_laser_escort_range_medium = {
@@ -1359,7 +1367,7 @@ ship_mod_pulsed_laser_escort_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 65
 	}
-	construction_goods = { goods_input_groceries_add = 77 }
+	construction_goods = { goods_input_groceries_add = 1350 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_pulsed_laser_escort_range_high = {
@@ -1373,7 +1381,7 @@ ship_mod_pulsed_laser_escort_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 154
 	}
-	construction_goods = { goods_input_groceries_add = 133 }
+	construction_goods = { goods_input_groceries_add = 2280 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -1391,8 +1399,8 @@ ship_mod_swarm_coordination_vessel_armor_light = {
 		ship_hit_points_max_add = 550
 	}
 	construction_goods = {
-		goods_input_steel_add = 21
-		goods_input_electronic_components_add = 18
+		goods_input_steel_add = 270
+		goods_input_electronic_components_add = 235
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1405,8 +1413,8 @@ ship_mod_swarm_coordination_vessel_armor_medium = {
 		ship_hit_points_max_add = 1475
 	}
 	construction_goods = {
-		goods_input_steel_add = 42
-		goods_input_electronic_components_add = 32
+		goods_input_steel_add = 520
+		goods_input_electronic_components_add = 395
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1419,8 +1427,8 @@ ship_mod_swarm_coordination_vessel_armor_high = {
 		ship_hit_points_max_add = 2850
 	}
 	construction_goods = {
-		goods_input_steel_add = 77
-		goods_input_electronic_components_add = 52
+		goods_input_steel_add = 785
+		goods_input_electronic_components_add = 530
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1436,8 +1444,8 @@ ship_mod_swarm_coordination_vessel_guns_light = {
 		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 21
-		goods_input_electronic_components_add = 32
+		goods_input_ammunition_add = 330
+		goods_input_electronic_components_add = 505
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1452,8 +1460,8 @@ ship_mod_swarm_coordination_vessel_guns_medium = {
 		ship_vulnerability_add = 1.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 38
-		goods_input_electronic_components_add = 56
+		goods_input_ammunition_add = 600
+		goods_input_electronic_components_add = 885
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1469,8 +1477,8 @@ ship_mod_swarm_coordination_vessel_guns_high = {
 		ship_screening_add = 100
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 63
-		goods_input_electronic_components_add = 91
+		goods_input_ammunition_add = 815
+		goods_input_electronic_components_add = 1180
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1481,8 +1489,8 @@ ship_mod_swarm_coordination_vessel_propulsion_light = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_light"
 	modifier = { ship_movement_speed_add = 10 }
 	construction_goods = {
-		goods_input_engines_add = 49
-		goods_input_oil_add = 21
+		goods_input_engines_add = 1210
+		goods_input_oil_add = 515
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1492,8 +1500,8 @@ ship_mod_swarm_coordination_vessel_propulsion_medium = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_medium"
 	modifier = { ship_movement_speed_add = 12.5 }
 	construction_goods = {
-		goods_input_engines_add = 77
-		goods_input_oil_add = 35
+		goods_input_engines_add = 1460
+		goods_input_oil_add = 665
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1503,8 +1511,8 @@ ship_mod_swarm_coordination_vessel_propulsion_high = {
 	clicksound = "event:/SFX/UI/ShipDesigner/shipdesigner_modification_propulsion_heavy"
 	modifier = { ship_movement_speed_add = 15 }
 	construction_goods = {
-		goods_input_engines_add = 105
-		goods_input_oil_add = 52
+		goods_input_engines_add = 1920
+		goods_input_oil_add = 950
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1518,7 +1526,7 @@ ship_mod_swarm_coordination_vessel_range_light = {
 		ship_marine_capacity_add = 0.05
 		ship_supply_capacity_add = 50
 	}
-	construction_goods = { goods_input_groceries_add = 42 }
+	construction_goods = { goods_input_groceries_add = 820 }
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
 ship_mod_swarm_coordination_vessel_range_medium = {
@@ -1532,7 +1540,7 @@ ship_mod_swarm_coordination_vessel_range_medium = {
 		ship_supply_efficiency_add = 0.1
 		ship_power_projection_add = 50
 	}
-	construction_goods = { goods_input_groceries_add = 77 }
+	construction_goods = { goods_input_groceries_add = 1520 }
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
 ship_mod_swarm_coordination_vessel_range_high = {
@@ -1546,7 +1554,7 @@ ship_mod_swarm_coordination_vessel_range_high = {
 		ship_supply_efficiency_add = 0.25
 		ship_power_projection_add = 119
 	}
-	construction_goods = { goods_input_groceries_add = 133 }
+	construction_goods = { goods_input_groceries_add = 2570 }
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
 
@@ -1565,7 +1573,7 @@ ship_mod_stealth_attack_submarine_armor_light = {
 		ship_hit_points_max_add = 525
 	}
 	construction_goods = {
-		goods_input_steel_add = 16
+		goods_input_steel_add = 300
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1578,7 +1586,7 @@ ship_mod_stealth_attack_submarine_armor_medium = {
 		ship_hit_points_max_add = 1425
 	}
 	construction_goods = {
-		goods_input_steel_add = 33
+		goods_input_steel_add = 615
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1592,7 +1600,7 @@ ship_mod_stealth_attack_submarine_armor_high = {
 		ship_visibility_add = -1
 	}
 	construction_goods = {
-		goods_input_steel_add = 53
+		goods_input_steel_add = 905
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1607,8 +1615,8 @@ ship_mod_stealth_attack_submarine_guns_light = {
 		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 26
-		goods_input_electronic_components_add = 7
+		goods_input_ammunition_add = 335
+		goods_input_electronic_components_add = 90
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1623,8 +1631,8 @@ ship_mod_stealth_attack_submarine_guns_medium = {
 		ship_vulnerability_add = 1
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 40
-		goods_input_electronic_components_add = 13
+		goods_input_ammunition_add = 595
+		goods_input_electronic_components_add = 195
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1639,8 +1647,8 @@ ship_mod_stealth_attack_submarine_guns_high = {
 		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 50
-		goods_input_electronic_components_add = 24
+		goods_input_ammunition_add = 870
+		goods_input_electronic_components_add = 420
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1652,8 +1660,8 @@ ship_mod_stealth_attack_submarine_propulsion_light = {
 		ship_movement_speed_add = 5.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 40
-		goods_input_oil_add = 16
+		goods_input_engines_add = 485
+		goods_input_oil_add = 195
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1665,8 +1673,8 @@ ship_mod_stealth_attack_submarine_propulsion_medium = {
 		ship_movement_speed_add = 6.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 60
-		goods_input_oil_add = 26
+		goods_input_engines_add = 735
+		goods_input_oil_add = 320
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1679,8 +1687,8 @@ ship_mod_stealth_attack_submarine_propulsion_high = {
 		ship_visibility_add = -1
 	}
 	construction_goods = {
-		goods_input_engines_add = 82
-		goods_input_oil_add = 40
+		goods_input_engines_add = 1080
+		goods_input_oil_add = 530
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1692,7 +1700,7 @@ ship_mod_stealth_attack_submarine_range_light = {
 		ship_supply_capacity_add = 40
 	}
 	construction_goods = {
-		goods_input_groceries_add = 20
+		goods_input_groceries_add = 435
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1705,7 +1713,7 @@ ship_mod_stealth_attack_submarine_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 40
+		goods_input_groceries_add = 870
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1719,7 +1727,7 @@ ship_mod_stealth_attack_submarine_range_high = {
 		ship_power_projection_add = 42
 	}
 	construction_goods = {
-		goods_input_groceries_add = 66
+		goods_input_groceries_add = 1340
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1739,7 +1747,7 @@ ship_mod_autonomous_swarm_submarine_armor_light = {
 		ship_hit_points_max_add = 650
 	}
 	construction_goods = {
-		goods_input_steel_add = 22
+		goods_input_steel_add = 415
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1752,7 +1760,7 @@ ship_mod_autonomous_swarm_submarine_armor_medium = {
 		ship_hit_points_max_add = 1750
 	}
 	construction_goods = {
-		goods_input_steel_add = 46
+		goods_input_steel_add = 845
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1766,7 +1774,7 @@ ship_mod_autonomous_swarm_submarine_armor_high = {
 		ship_visibility_add = -1
 	}
 	construction_goods = {
-		goods_input_steel_add = 73
+		goods_input_steel_add = 1240
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1781,8 +1789,8 @@ ship_mod_autonomous_swarm_submarine_guns_light = {
 		ship_vulnerability_add = 0.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 36
-		goods_input_electronic_components_add = 9
+		goods_input_ammunition_add = 470
+		goods_input_electronic_components_add = 120
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1797,8 +1805,8 @@ ship_mod_autonomous_swarm_submarine_guns_medium = {
 		ship_vulnerability_add = 1
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 55
-		goods_input_electronic_components_add = 18
+		goods_input_ammunition_add = 815
+		goods_input_electronic_components_add = 265
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1813,8 +1821,8 @@ ship_mod_autonomous_swarm_submarine_guns_high = {
 		ship_vulnerability_add = 2.5
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 69
-		goods_input_electronic_components_add = 33
+		goods_input_ammunition_add = 1200
+		goods_input_electronic_components_add = 575
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1826,8 +1834,8 @@ ship_mod_autonomous_swarm_submarine_propulsion_light = {
 		ship_movement_speed_add = 5.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 55
-		goods_input_oil_add = 22
+		goods_input_engines_add = 665
+		goods_input_oil_add = 265
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1839,8 +1847,8 @@ ship_mod_autonomous_swarm_submarine_propulsion_medium = {
 		ship_movement_speed_add = 6.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 82
-		goods_input_oil_add = 36
+		goods_input_engines_add = 1010
+		goods_input_oil_add = 445
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1853,8 +1861,8 @@ ship_mod_autonomous_swarm_submarine_propulsion_high = {
 		ship_visibility_add = -1
 	}
 	construction_goods = {
-		goods_input_engines_add = 113
-		goods_input_oil_add = 55
+		goods_input_engines_add = 1500
+		goods_input_oil_add = 730
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1866,7 +1874,7 @@ ship_mod_autonomous_swarm_submarine_range_light = {
 		ship_supply_capacity_add = 40
 	}
 	construction_goods = {
-		goods_input_groceries_add = 27
+		goods_input_groceries_add = 600
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1879,7 +1887,7 @@ ship_mod_autonomous_swarm_submarine_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 55
+		goods_input_groceries_add = 1200
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1893,7 +1901,7 @@ ship_mod_autonomous_swarm_submarine_range_high = {
 		ship_power_projection_add = 60
 	}
 	construction_goods = {
-		goods_input_groceries_add = 91
+		goods_input_groceries_add = 1840
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1913,7 +1921,7 @@ ship_mod_fleet_carrier_armor_light = {
 		ship_hit_points_max_add = 375
 	}
 	construction_goods = {
-		goods_input_steel_add = 8
+		goods_input_steel_add = 175
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1926,7 +1934,7 @@ ship_mod_fleet_carrier_armor_medium = {
 		ship_hit_points_max_add = 1200
 	}
 	construction_goods = {
-		goods_input_steel_add = 16
+		goods_input_steel_add = 345
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1939,7 +1947,7 @@ ship_mod_fleet_carrier_armor_high = {
 		ship_hit_points_max_add = 2425
 	}
 	construction_goods = {
-		goods_input_steel_add = 27
+		goods_input_steel_add = 585
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1954,7 +1962,7 @@ ship_mod_fleet_carrier_guns_light = {
 		ship_vulnerability_add = 6
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 20
+		goods_input_aeroplanes_add = 425
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -1969,8 +1977,8 @@ ship_mod_fleet_carrier_guns_medium = {
 		ship_vulnerability_add = 14
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 40
-		goods_input_ammunition_add = 13
+		goods_input_aeroplanes_add = 870
+		goods_input_ammunition_add = 285
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -1985,8 +1993,8 @@ ship_mod_fleet_carrier_guns_high = {
 		ship_vulnerability_add = 56
 	}
 	construction_goods = {
-		goods_input_aeroplanes_add = 54
-		goods_input_ammunition_add = 27
+		goods_input_aeroplanes_add = 1150
+		goods_input_ammunition_add = 575
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -1998,8 +2006,8 @@ ship_mod_fleet_carrier_propulsion_light = {
 		ship_movement_speed_add = 10
 	}
 	construction_goods = {
-		goods_input_engines_add = 24
-		goods_input_oil_add = 13
+		goods_input_engines_add = 525
+		goods_input_oil_add = 285
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2011,8 +2019,8 @@ ship_mod_fleet_carrier_propulsion_medium = {
 		ship_movement_speed_add = 12.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 34
-		goods_input_oil_add = 13
+		goods_input_engines_add = 735
+		goods_input_oil_add = 280
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2024,8 +2032,8 @@ ship_mod_fleet_carrier_propulsion_high = {
 		ship_movement_speed_add = 15
 	}
 	construction_goods = {
-		goods_input_engines_add = 43
-		goods_input_oil_add = 20
+		goods_input_engines_add = 930
+		goods_input_oil_add = 435
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2037,7 +2045,7 @@ ship_mod_fleet_carrier_range_light = {
 		ship_supply_capacity_add = 65
 	}
 	construction_goods = {
-		goods_input_groceries_add = 18
+		goods_input_groceries_add = 370
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2051,7 +2059,7 @@ ship_mod_fleet_carrier_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 35
+		goods_input_groceries_add = 750
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2065,7 +2073,7 @@ ship_mod_fleet_carrier_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 54
+		goods_input_groceries_add = 1150
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2085,8 +2093,8 @@ ship_mod_stealth_battlecruiser_armor_light = {
 		ship_hit_points_max_add = 1125
 	}
 	construction_goods = {
-		goods_input_steel_add = 56
-		goods_input_electronic_components_add = 13
+		goods_input_steel_add = 1550
+		goods_input_electronic_components_add = 360
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2099,8 +2107,8 @@ ship_mod_stealth_battlecruiser_armor_medium = {
 		ship_hit_points_max_add = 2725
 	}
 	construction_goods = {
-		goods_input_steel_add = 100
-		goods_input_electronic_components_add = 22
+		goods_input_steel_add = 2170
+		goods_input_electronic_components_add = 475
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2113,8 +2121,8 @@ ship_mod_stealth_battlecruiser_armor_high = {
 		ship_hit_points_max_add = 5700
 	}
 	construction_goods = {
-		goods_input_steel_add = 157
-		goods_input_electronic_components_add = 38
+		goods_input_steel_add = 2690
+		goods_input_electronic_components_add = 650
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2129,8 +2137,8 @@ ship_mod_stealth_battlecruiser_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 38
-		goods_input_electronic_components_add = 16
+		goods_input_ammunition_add = 2320
+		goods_input_electronic_components_add = 975
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2145,8 +2153,8 @@ ship_mod_stealth_battlecruiser_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 69
-		goods_input_electronic_components_add = 28
+		goods_input_ammunition_add = 3200
+		goods_input_electronic_components_add = 1300
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2162,8 +2170,8 @@ ship_mod_stealth_battlecruiser_guns_high = {
 		ship_blockade_strength_add = 200
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 113
-		goods_input_electronic_components_add = 50
+		goods_input_ammunition_add = 4180
+		goods_input_electronic_components_add = 1850
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2175,8 +2183,8 @@ ship_mod_stealth_battlecruiser_propulsion_light = {
 		ship_movement_speed_add = 10
 	}
 	construction_goods = {
-		goods_input_engines_add = 47
-		goods_input_oil_add = 19
+		goods_input_engines_add = 2150
+		goods_input_oil_add = 870
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2188,8 +2196,8 @@ ship_mod_stealth_battlecruiser_propulsion_medium = {
 		ship_movement_speed_add = 12.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 69
-		goods_input_oil_add = 31
+		goods_input_engines_add = 2560
+		goods_input_oil_add = 1150
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2201,8 +2209,8 @@ ship_mod_stealth_battlecruiser_propulsion_high = {
 		ship_movement_speed_add = 15
 	}
 	construction_goods = {
-		goods_input_engines_add = 94
-		goods_input_oil_add = 47
+		goods_input_engines_add = 3510
+		goods_input_oil_add = 1750
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2216,7 +2224,7 @@ ship_mod_stealth_battlecruiser_range_light = {
 		ship_supply_capacity_add = 105
 	}
 	construction_goods = {
-		goods_input_groceries_add = 38
+		goods_input_groceries_add = 2790
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2232,7 +2240,7 @@ ship_mod_stealth_battlecruiser_range_medium = {
 		ship_power_projection_add = 122
 	}
 	construction_goods = {
-		goods_input_groceries_add = 69
+		goods_input_groceries_add = 4440
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2248,7 +2256,7 @@ ship_mod_stealth_battlecruiser_range_high = {
 		ship_power_projection_add = 263
 	}
 	construction_goods = {
-		goods_input_groceries_add = 119
+		goods_input_groceries_add = 6420
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2268,8 +2276,8 @@ ship_mod_antimatter_battleship_armor_light = {
 		ship_hit_points_max_add = 2325
 	}
 	construction_goods = {
-		goods_input_steel_add = 116
-		goods_input_electronic_components_add = 39
+		goods_input_steel_add = 3250
+		goods_input_electronic_components_add = 1090
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2282,8 +2290,8 @@ ship_mod_antimatter_battleship_armor_medium = {
 		ship_hit_points_max_add = 5625
 	}
 	construction_goods = {
-		goods_input_steel_add = 206
-		goods_input_electronic_components_add = 64
+		goods_input_steel_add = 4620
+		goods_input_electronic_components_add = 1430
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2297,8 +2305,8 @@ ship_mod_antimatter_battleship_armor_high = {
 		ship_visibility_add = -10
 	}
 	construction_goods = {
-		goods_input_steel_add = 322
-		goods_input_electronic_components_add = 103
+		goods_input_steel_add = 5820
+		goods_input_electronic_components_add = 1860
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2313,8 +2321,8 @@ ship_mod_antimatter_battleship_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 90
-		goods_input_electronic_components_add = 45
+		goods_input_ammunition_add = 5090
+		goods_input_electronic_components_add = 2540
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2329,8 +2337,8 @@ ship_mod_antimatter_battleship_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 167
-		goods_input_electronic_components_add = 77
+		goods_input_ammunition_add = 7150
+		goods_input_electronic_components_add = 3300
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2346,8 +2354,8 @@ ship_mod_antimatter_battleship_guns_high = {
 		ship_battle_against_ship_type_super_dreadnought_hull_damage_mult = 0.1
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 270
-		goods_input_electronic_components_add = 129
+		goods_input_ammunition_add = 9530
+		goods_input_electronic_components_add = 4550
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2359,8 +2367,8 @@ ship_mod_antimatter_battleship_propulsion_light = {
 		ship_movement_speed_add = 10
 	}
 	construction_goods = {
-		goods_input_engines_add = 103
-		goods_input_oil_add = 45
+		goods_input_engines_add = 4990
+		goods_input_oil_add = 2180
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2372,8 +2380,8 @@ ship_mod_antimatter_battleship_propulsion_medium = {
 		ship_movement_speed_add = 12.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 154
-		goods_input_oil_add = 71
+		goods_input_engines_add = 6010
+		goods_input_oil_add = 2770
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2386,8 +2394,8 @@ ship_mod_antimatter_battleship_propulsion_high = {
 		ship_visibility_add = -5
 	}
 	construction_goods = {
-		goods_input_engines_add = 206
-		goods_input_oil_add = 103
+		goods_input_engines_add = 8270
+		goods_input_oil_add = 4140
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2401,7 +2409,7 @@ ship_mod_antimatter_battleship_range_light = {
 		ship_supply_capacity_add = 175
 	}
 	construction_goods = {
-		goods_input_groceries_add = 90
+		goods_input_groceries_add = 6580
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2417,7 +2425,7 @@ ship_mod_antimatter_battleship_range_medium = {
 		ship_power_projection_add = 170
 	}
 	construction_goods = {
-		goods_input_groceries_add = 167
+		goods_input_groceries_add = 10470
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2433,7 +2441,7 @@ ship_mod_antimatter_battleship_range_high = {
 		ship_power_projection_add = 365
 	}
 	construction_goods = {
-		goods_input_groceries_add = 283
+		goods_input_groceries_add = 15130
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2453,7 +2461,7 @@ ship_mod_networked_air_defense_cruiser_armor_light = {
 		ship_hit_points_max_add = 400
 	}
 	construction_goods = {
-		goods_input_steel_add = 22
+		goods_input_steel_add = 445
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2466,7 +2474,7 @@ ship_mod_networked_air_defense_cruiser_armor_medium = {
 		ship_hit_points_max_add = 1075
 	}
 	construction_goods = {
-		goods_input_steel_add = 38
+		goods_input_steel_add = 795
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2479,7 +2487,7 @@ ship_mod_networked_air_defense_cruiser_armor_high = {
 		ship_hit_points_max_add = 2100
 	}
 	construction_goods = {
-		goods_input_steel_add = 54
+		goods_input_steel_add = 1130
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2493,8 +2501,8 @@ ship_mod_networked_air_defense_cruiser_guns_light = {
 		ship_critical_hit_chance_add = 0.1
 	}
 	construction_goods = {
-		goods_input_artillery_add = 22
-		goods_input_ammunition_add = 8
+		goods_input_artillery_add = 445
+		goods_input_ammunition_add = 160
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2509,8 +2517,8 @@ ship_mod_networked_air_defense_cruiser_guns_medium = {
 		ship_vulnerability_add = 1
 	}
 	construction_goods = {
-		goods_input_artillery_add = 38
-		goods_input_ammunition_add = 13
+		goods_input_artillery_add = 800
+		goods_input_ammunition_add = 275
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2525,8 +2533,8 @@ ship_mod_networked_air_defense_cruiser_guns_high = {
 		ship_vulnerability_add = 1
 	}
 	construction_goods = {
-		goods_input_artillery_add = 54
-		goods_input_ammunition_add = 13
+		goods_input_artillery_add = 1140
+		goods_input_ammunition_add = 275
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2538,8 +2546,8 @@ ship_mod_networked_air_defense_cruiser_propulsion_light = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_engines_add = 40
-		goods_input_oil_add = 16
+		goods_input_engines_add = 845
+		goods_input_oil_add = 340
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2551,8 +2559,8 @@ ship_mod_networked_air_defense_cruiser_propulsion_medium = {
 		ship_movement_speed_add = 14
 	}
 	construction_goods = {
-		goods_input_engines_add = 54
-		goods_input_oil_add = 16
+		goods_input_engines_add = 1100
+		goods_input_oil_add = 325
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2564,8 +2572,8 @@ ship_mod_networked_air_defense_cruiser_propulsion_high = {
 		ship_movement_speed_add = 17
 	}
 	construction_goods = {
-		goods_input_engines_add = 67
-		goods_input_oil_add = 27
+		goods_input_engines_add = 1390
+		goods_input_oil_add = 560
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2579,7 +2587,7 @@ ship_mod_networked_air_defense_cruiser_range_light = {
 		ship_supply_capacity_add = 50
 	}
 	construction_goods = {
-		goods_input_groceries_add = 27
+		goods_input_groceries_add = 565
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2595,7 +2603,7 @@ ship_mod_networked_air_defense_cruiser_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 51
+		goods_input_groceries_add = 1050
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2611,7 +2619,7 @@ ship_mod_networked_air_defense_cruiser_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 86
+		goods_input_groceries_add = 1780
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_power_projection_doctrine }
 }
@@ -2631,7 +2639,7 @@ ship_mod_orbital_support_amphibious_mothership_armor_light = {
 		ship_hit_points_max_add = 900
 	}
 	construction_goods = {
-		goods_input_steel_add = 27
+		goods_input_steel_add = 470
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2644,7 +2652,7 @@ ship_mod_orbital_support_amphibious_mothership_armor_medium = {
 		ship_hit_points_max_add = 2275
 	}
 	construction_goods = {
-		goods_input_steel_add = 53
+		goods_input_steel_add = 810
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2657,7 +2665,7 @@ ship_mod_orbital_support_amphibious_mothership_armor_high = {
 		ship_hit_points_max_add = 4550
 	}
 	construction_goods = {
-		goods_input_steel_add = 85
+		goods_input_steel_add = 1720
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2672,8 +2680,8 @@ ship_mod_orbital_support_amphibious_mothership_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 27
-		goods_input_electronic_components_add = 5
+		goods_input_ammunition_add = 525
+		goods_input_electronic_components_add = 97
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2688,8 +2696,8 @@ ship_mod_orbital_support_amphibious_mothership_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 48
-		goods_input_electronic_components_add = 16
+		goods_input_ammunition_add = 1110
+		goods_input_electronic_components_add = 370
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2704,8 +2712,8 @@ ship_mod_orbital_support_amphibious_mothership_guns_high = {
 		ship_vulnerability_add = 50
 	}
 	construction_goods = {
-		goods_input_ammunition_add = 69
-		goods_input_electronic_components_add = 27
+		goods_input_ammunition_add = 1740
+		goods_input_electronic_components_add = 680
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2717,8 +2725,8 @@ ship_mod_orbital_support_amphibious_mothership_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 75
-		goods_input_oil_add = 32
+		goods_input_engines_add = 1030
+		goods_input_oil_add = 440
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2730,8 +2738,8 @@ ship_mod_orbital_support_amphibious_mothership_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_engines_add = 107
-		goods_input_oil_add = 48
+		goods_input_engines_add = 1760
+		goods_input_oil_add = 790
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2743,8 +2751,8 @@ ship_mod_orbital_support_amphibious_mothership_propulsion_high = {
 		ship_movement_speed_add = 13
 	}
 	construction_goods = {
-		goods_input_engines_add = 144
-		goods_input_oil_add = 69
+		goods_input_engines_add = 2300
+		goods_input_oil_add = 1100
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2757,7 +2765,7 @@ ship_mod_orbital_support_amphibious_mothership_range_light = {
 		ship_supply_capacity_add = 310
 	}
 	construction_goods = {
-		goods_input_groceries_add = 53
+		goods_input_groceries_add = 1950
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier }
 }
@@ -2772,7 +2780,7 @@ ship_mod_orbital_support_amphibious_mothership_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 96
+		goods_input_groceries_add = 2860
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier }
 }
@@ -2787,7 +2795,7 @@ ship_mod_orbital_support_amphibious_mothership_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 160
+		goods_input_groceries_add = 4850
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier }
 }
@@ -2807,7 +2815,7 @@ ship_mod_amphibious_assault_ship_armor_light = {
 		ship_hit_points_max_add = 400
 	}
 	construction_goods = {
-		goods_input_steel_add = 19
+		goods_input_steel_add = 160
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2820,7 +2828,7 @@ ship_mod_amphibious_assault_ship_armor_medium = {
 		ship_hit_points_max_add = 975
 	}
 	construction_goods = {
-		goods_input_steel_add = 34
+		goods_input_steel_add = 270
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2833,7 +2841,7 @@ ship_mod_amphibious_assault_ship_armor_high = {
 		ship_hit_points_max_add = 1950
 	}
 	construction_goods = {
-		goods_input_steel_add = 68
+		goods_input_steel_add = 580
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2848,7 +2856,7 @@ ship_mod_amphibious_assault_ship_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_artillery_add = 20
+		goods_input_artillery_add = 165
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2863,7 +2871,7 @@ ship_mod_amphibious_assault_ship_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_artillery_add = 54
+		goods_input_artillery_add = 410
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2878,7 +2886,7 @@ ship_mod_amphibious_assault_ship_guns_high = {
 		ship_vulnerability_add = 50
 	}
 	construction_goods = {
-		goods_input_artillery_add = 82
+		goods_input_artillery_add = 680
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2890,8 +2898,8 @@ ship_mod_amphibious_assault_ship_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 45
-		goods_input_oil_add = 15
+		goods_input_engines_add = 365
+		goods_input_oil_add = 120
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2903,8 +2911,8 @@ ship_mod_amphibious_assault_ship_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_engines_add = 75
-		goods_input_oil_add = 26
+		goods_input_engines_add = 625
+		goods_input_oil_add = 215
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2916,8 +2924,8 @@ ship_mod_amphibious_assault_ship_propulsion_high = {
 		ship_movement_speed_add = 13
 	}
 	construction_goods = {
-		goods_input_engines_add = 102
-		goods_input_oil_add = 41
+		goods_input_engines_add = 805
+		goods_input_oil_add = 325
 	}
 	ai_weight = { value = 100 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2930,7 +2938,7 @@ ship_mod_amphibious_assault_ship_range_light = {
 		ship_supply_capacity_add = 80
 	}
 	construction_goods = {
-		goods_input_groceries_add = 79
+		goods_input_groceries_add = 660
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -2945,7 +2953,7 @@ ship_mod_amphibious_assault_ship_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 113
+		goods_input_groceries_add = 965
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -2960,7 +2968,7 @@ ship_mod_amphibious_assault_ship_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 204
+		goods_input_groceries_add = 1630
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -2980,7 +2988,7 @@ ship_mod_marine_assault_ship_armor_light = {
 		ship_hit_points_max_add = 475
 	}
 	construction_goods = {
-		goods_input_steel_add = 24
+		goods_input_steel_add = 200
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -2993,7 +3001,7 @@ ship_mod_marine_assault_ship_armor_medium = {
 		ship_hit_points_max_add = 1175
 	}
 	construction_goods = {
-		goods_input_steel_add = 43
+		goods_input_steel_add = 350
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3006,7 +3014,7 @@ ship_mod_marine_assault_ship_armor_high = {
 		ship_hit_points_max_add = 2350
 	}
 	construction_goods = {
-		goods_input_steel_add = 87
+		goods_input_steel_add = 740
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3021,7 +3029,7 @@ ship_mod_marine_assault_ship_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_artillery_add = 26
+		goods_input_artillery_add = 210
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3036,7 +3044,7 @@ ship_mod_marine_assault_ship_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_artillery_add = 70
+		goods_input_artillery_add = 520
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3051,7 +3059,7 @@ ship_mod_marine_assault_ship_guns_high = {
 		ship_vulnerability_add = 50
 	}
 	construction_goods = {
-		goods_input_artillery_add = 104
+		goods_input_artillery_add = 870
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3063,8 +3071,8 @@ ship_mod_marine_assault_ship_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 57
-		goods_input_oil_add = 20
+		goods_input_engines_add = 460
+		goods_input_oil_add = 160
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3076,8 +3084,8 @@ ship_mod_marine_assault_ship_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_engines_add = 96
-		goods_input_oil_add = 33
+		goods_input_engines_add = 800
+		goods_input_oil_add = 275
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3089,8 +3097,8 @@ ship_mod_marine_assault_ship_propulsion_high = {
 		ship_movement_speed_add = 13
 	}
 	construction_goods = {
-		goods_input_engines_add = 130
-		goods_input_oil_add = 52
+		goods_input_engines_add = 1030
+		goods_input_oil_add = 410
 	}
 	ai_weight = { value = 100 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3103,7 +3111,7 @@ ship_mod_marine_assault_ship_range_light = {
 		ship_supply_capacity_add = 105
 	}
 	construction_goods = {
-		goods_input_groceries_add = 101
+		goods_input_groceries_add = 840
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -3118,7 +3126,7 @@ ship_mod_marine_assault_ship_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 145
+		goods_input_groceries_add = 1230
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -3133,7 +3141,7 @@ ship_mod_marine_assault_ship_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 261
+		goods_input_groceries_add = 2090
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -3153,7 +3161,7 @@ ship_mod_expeditionary_fast_transport_armor_light = {
 		ship_hit_points_max_add = 300
 	}
 	construction_goods = {
-		goods_input_steel_add = 17
+		goods_input_steel_add = 140
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3166,7 +3174,7 @@ ship_mod_expeditionary_fast_transport_armor_medium = {
 		ship_hit_points_max_add = 775
 	}
 	construction_goods = {
-		goods_input_steel_add = 30
+		goods_input_steel_add = 240
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3179,7 +3187,7 @@ ship_mod_expeditionary_fast_transport_armor_high = {
 		ship_hit_points_max_add = 1550
 	}
 	construction_goods = {
-		goods_input_steel_add = 60
+		goods_input_steel_add = 515
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3194,7 +3202,7 @@ ship_mod_expeditionary_fast_transport_guns_light = {
 		ship_vulnerability_add = 10
 	}
 	construction_goods = {
-		goods_input_artillery_add = 18
+		goods_input_artillery_add = 145
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3209,7 +3217,7 @@ ship_mod_expeditionary_fast_transport_guns_medium = {
 		ship_vulnerability_add = 25
 	}
 	construction_goods = {
-		goods_input_artillery_add = 48
+		goods_input_artillery_add = 360
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3224,7 +3232,7 @@ ship_mod_expeditionary_fast_transport_guns_high = {
 		ship_vulnerability_add = 50
 	}
 	construction_goods = {
-		goods_input_artillery_add = 72
+		goods_input_artillery_add = 605
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3236,8 +3244,8 @@ ship_mod_expeditionary_fast_transport_propulsion_light = {
 		ship_movement_speed_add = 8.5
 	}
 	construction_goods = {
-		goods_input_engines_add = 40
-		goods_input_oil_add = 14
+		goods_input_engines_add = 320
+		goods_input_oil_add = 110
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3249,8 +3257,8 @@ ship_mod_expeditionary_fast_transport_propulsion_medium = {
 		ship_movement_speed_add = 11
 	}
 	construction_goods = {
-		goods_input_engines_add = 66
-		goods_input_oil_add = 23
+		goods_input_engines_add = 555
+		goods_input_oil_add = 195
 	}
 	ai_weight = { value = 10 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3262,8 +3270,8 @@ ship_mod_expeditionary_fast_transport_propulsion_high = {
 		ship_movement_speed_add = 13
 	}
 	construction_goods = {
-		goods_input_engines_add = 91
-		goods_input_oil_add = 36
+		goods_input_engines_add = 715
+		goods_input_oil_add = 285
 	}
 	ai_weight = { value = 100 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine }
 }
@@ -3276,7 +3284,7 @@ ship_mod_expeditionary_fast_transport_range_light = {
 		ship_supply_capacity_add = 45
 	}
 	construction_goods = {
-		goods_input_groceries_add = 70
+		goods_input_groceries_add = 585
 	}
 	ai_weight = { value = 1 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -3291,7 +3299,7 @@ ship_mod_expeditionary_fast_transport_range_medium = {
 		ship_supply_efficiency_add = 0.1
 	}
 	construction_goods = {
-		goods_input_groceries_add = 101
+		goods_input_groceries_add = 855
 	}
 	ai_weight = { value = 2 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }
@@ -3306,7 +3314,7 @@ ship_mod_expeditionary_fast_transport_range_high = {
 		ship_supply_efficiency_add = 0.25
 	}
 	construction_goods = {
-		goods_input_groceries_add = 181
+		goods_input_groceries_add = 1450
 	}
 	ai_weight = { value = 3 multiply = ship_mod_market_multiplier multiply = ship_mod_merchant_navy_doctrine multiply = ship_mod_power_projection_doctrine }
 }

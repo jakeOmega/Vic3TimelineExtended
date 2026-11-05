@@ -177,6 +177,8 @@
 						has_ideology = ideology:ideology_corporatist_movement
 						has_ideology = ideology:ideology_particularist
 						has_ideology = ideology:ideology_patriotic
+						# vanilla 1.15: the Armed Forces' base ideology (Patriotic went to the Petty Bourgeoisie)
+						has_ideology = ideology:ideology_militarist
 						has_ideology = ideology:ideology_conservative_praetorian
 					}
 				}

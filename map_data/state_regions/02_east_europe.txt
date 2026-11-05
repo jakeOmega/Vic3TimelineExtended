@@ -12,6 +12,8 @@
         building_coal_mine = 24
         building_logging_camp = 8
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.56
 }
 
 STATE_LOWER_SILESIA = {
@@ -31,6 +33,13 @@ STATE_LOWER_SILESIA = {
         building_lead_mine = 4
         building_sulfur_mine = 9
         building_logging_camp = 10
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.52
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 10
     }
 }
 
@@ -52,6 +61,8 @@ STATE_UPPER_SILESIA = {
         building_sulfur_mine = 31
         building_logging_camp = 4
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.50
 
     resource = {
         type = "building_copper_mine"
@@ -75,6 +86,8 @@ STATE_GREATER_POLAND = {
         building_lead_mine = 24
         building_logging_camp = 9
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.58
 }
 
 STATE_LESSER_POLAND = {
@@ -93,6 +106,8 @@ STATE_LESSER_POLAND = {
         building_sulfur_mine = 32
         building_logging_camp = 13
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.59
 }
 
 STATE_WEST_PRUSSIA = {
@@ -113,6 +128,12 @@ STATE_WEST_PRUSSIA = {
         building_fishing_wharf = 10
     }
     naval_exit_id = 3074
+    blockade_locator = {
+        position = { 4520 0 2891 }
+        yaw = -124
+    }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.64
 }
 
 STATE_EAST_PRUSSIA = {
@@ -131,6 +152,8 @@ STATE_EAST_PRUSSIA = {
         building_fishing_wharf = 10
     }
     naval_exit_id = 3074
+    min_cold_effect = 0.02
+    max_cold_effect = 0.65
 }
 
 STATE_POSEN = {
@@ -147,6 +170,8 @@ STATE_POSEN = {
         building_iron_mine = 24
         building_logging_camp = 9
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.61
 }
 
 STATE_WEST_GALICIA = {
@@ -169,6 +194,8 @@ STATE_WEST_GALICIA = {
         type = "building_oil_rig"
         undiscovered_amount = 60
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.49
 }
 
 STATE_EAST_GALICIA = {
@@ -189,6 +216,8 @@ STATE_EAST_GALICIA = {
         type = "building_oil_rig"
         undiscovered_amount = 100
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.48
 }
 
 STATE_CENTRAL_HUNGARY = {
@@ -207,10 +236,17 @@ STATE_CENTRAL_HUNGARY = {
         building_iron_mine = 30
         building_logging_camp = 6
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.44
 
     resource = {
         type = "building_bauxite_mine"
         undiscovered_amount = 30
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
 }
 
@@ -228,6 +264,8 @@ STATE_BEKES = {
     capped_resources = {
         building_logging_camp = 11
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.44
 }
 
 STATE_TRANSDANUBIA = {
@@ -245,6 +283,8 @@ STATE_TRANSDANUBIA = {
         building_coal_mine = 84
         building_logging_camp = 7
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.44
 }
 
 STATE_DELVIDEK = {
@@ -265,6 +305,8 @@ STATE_DELVIDEK = {
         type = "building_oil_rig"
         undiscovered_amount = 20
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.41
 }
 
 STATE_BANAT = {
@@ -281,6 +323,8 @@ STATE_BANAT = {
     capped_resources = {
         building_logging_camp = 9
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.41
 }
 
 STATE_SLOVAKIA = {
@@ -299,6 +343,13 @@ STATE_SLOVAKIA = {
         building_iron_mine = 63
         building_logging_camp = 8
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.53
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
 }
 
 STATE_RUTHENIA = {
@@ -316,6 +367,8 @@ STATE_RUTHENIA = {
         building_lead_mine = 33
         building_logging_camp = 15
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.52
 }
 
 STATE_SOUTHERN_TRANSYLVANIA = {
@@ -332,6 +385,13 @@ STATE_SOUTHERN_TRANSYLVANIA = {
         building_iron_mine = 45
         building_lead_mine = 45
         building_logging_camp = 17
+    }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.42
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
 }
 
@@ -350,6 +410,8 @@ STATE_NORTHERN_TRANSYLVANIA = {
         building_iron_mine = 63
         building_logging_camp = 13
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.49
 }
 
 STATE_MOLDAVIA = {
@@ -370,6 +432,8 @@ STATE_MOLDAVIA = {
         type = "building_oil_rig"
         undiscovered_amount = 50
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.49
 }
 
 STATE_BUKOVINA = {
@@ -387,6 +451,8 @@ STATE_BUKOVINA = {
         building_coal_mine = 3
         building_logging_camp = 7
     }
+    min_cold_effect = 0.02
+    max_cold_effect = 0.51
 }
 
 STATE_WALLACHIA = {
@@ -410,6 +476,8 @@ STATE_WALLACHIA = {
         type = "building_oil_rig"
         undiscovered_amount = 80
     }
+    min_cold_effect = 0.00
+    max_cold_effect = 0.39
 }
 
 STATE_BESSARABIA = {
@@ -428,4 +496,6 @@ STATE_BESSARABIA = {
         building_fishing_wharf = 9
     }
     naval_exit_id = 3036
+    min_cold_effect = 0.00
+    max_cold_effect = 0.43
 }

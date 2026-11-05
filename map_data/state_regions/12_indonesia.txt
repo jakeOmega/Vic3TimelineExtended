@@ -26,6 +26,10 @@
         undiscovered_amount = 115
     }
     naval_exit_id = 3072
+    blockade_locator = {
+        position = { 6467 0 1537 }
+        yaw = -121
+    }
 }
 
 STATE_NORTH_BORNEO = {
@@ -160,7 +164,7 @@ STATE_EAST_JAVA = {
     impassable = { "x5C2250" "x5C2239" }
     traits = { "state_trait_natural_harbors" "state_trait_volcanic_soil" }
     city = "x1D38B7"
-    port = "x1D38B7"
+    port = "x2060EF"
     farm = "xD91A27"
     mine = "xEF70EC"
     wood = "xC226AF"
@@ -291,6 +295,10 @@ STATE_ACEH = {
         undiscovered_amount = 25
     }
     naval_exit_id = 3051
+    blockade_locator = {
+        position = { 6270 0 1639 }
+        yaw = 72
+    }
 }
 
 STATE_WESTERN_NEW_GUINEA = {
@@ -324,7 +332,16 @@ STATE_WESTERN_NEW_GUINEA = {
         type = "building_nickel_cobalt_mine"
         undiscovered_amount = 45
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
     naval_exit_id = 3125
+    blockade_locator = {
+        position = { 7090 0 1481 }
+        yaw = 154
+    }
 }
 
 STATE_MOLUCCAS = {
@@ -430,7 +447,16 @@ STATE_SUNDA_ISLANDS = {
         type = "building_rubber_plantation"
         undiscovered_amount = 8
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 6
+    }
     naval_exit_id = 3052
+    blockade_locator = {
+        position = { 6726 0 1314 }
+        yaw = -3
+    }
 }
 
 STATE_MINDANAO = {
@@ -458,6 +484,11 @@ STATE_MINDANAO = {
     resource = {
         type = "building_nickel_cobalt_mine"
         undiscovered_amount = 65
+    }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
     }
     naval_exit_id = 3125
 }
@@ -488,6 +519,11 @@ STATE_LUZON = {
         type = "building_chromium_mine"
         undiscovered_amount = 45
     }
+
+    resource = {
+        type = "building_copper_mine"
+        discovered_amount = 4
+    }
     naval_exit_id = 3056
 }
 
@@ -513,6 +549,10 @@ STATE_VISAYAS = {
         undiscovered_amount = 4
     }
     naval_exit_id = 3157
+    blockade_locator = {
+        position = { 6941 0 1745 }
+        yaw = -1
+    }
 }
 
 STATE_WEST_MICRONESIA = {
@@ -522,7 +562,7 @@ STATE_WEST_MICRONESIA = {
     traits = { "state_trait_severe_malaria" }
     center_province = "x71414D"
     city = "x71414D"
-    port = "xA7F7E3"
+    port = "x414170"
     farm = "x71414D"
     mine = "x414170"
     wood = "x71414D"
@@ -668,6 +708,8 @@ STATE_KANAK = {
         undiscovered_amount = 135
     }
     naval_exit_id = 3129
+    min_cold_effect = 0.00
+    max_cold_effect = 0.01
 }
 
 STATE_BOUGAINVILLE = {
@@ -698,7 +740,7 @@ STATE_TAHITI = {
     impassable = { "xA000B0" "x9A79DC" }
     traits = { "state_trait_severe_malaria" }
     city = "x54BB3D"
-    port = "xA000B0"
+    port = "xF1DBF3"
     farm = "xA000B0"
     mine = "x98C69C"
     wood = "x0181B0"
@@ -710,6 +752,8 @@ STATE_TAHITI = {
         building_fishing_wharf = 5
     }
     naval_exit_id = 3150
+    min_cold_effect = 0.00
+    max_cold_effect = 0.03
 }
 
 STATE_TONGA = {

@@ -5,6 +5,10 @@
    "context": [
     "=",
     "none"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/top_illu_journal_entries.dds\""
    ]
   }
  ],
@@ -16,6 +20,14 @@
     "none"
    ],
    "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_international_situations.dds\""
+   ],
+   "themed": [
     "=",
     "yes"
    ]
@@ -31,6 +43,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_iberia.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -44,6 +64,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_british_india.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -53,6 +81,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_spa_economic_regeneration.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -64,6 +100,14 @@
     "country"
    ],
    "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_tanzimat.dds\""
+   ],
+   "themed": [
     "=",
     "yes"
    ]
@@ -79,6 +123,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_meiji_restoration.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -90,6 +142,14 @@
     "country"
    ],
    "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_german_unification.dds\""
+   ],
+   "themed": [
     "=",
     "yes"
    ]
@@ -105,6 +165,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_british_india.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -114,6 +182,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_american_civil_war.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -125,6 +201,14 @@
     "country"
    ],
    "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_manifest_destiny.dds\""
+   ],
+   "themed": [
     "=",
     "yes"
    ]
@@ -140,6 +224,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_poland.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -153,6 +245,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_qing.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -162,6 +262,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_brazil.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -171,6 +279,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_brazil_pedro.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -180,6 +296,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_russia_great_reformer.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -193,6 +317,14 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_russia_expansion.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -202,6 +334,14 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_france_divided_monarchies.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -213,6 +353,52 @@
     "country"
    ],
    "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_france_expansion.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "je_group_tsarpoints": [
+  "=",
+  {
+   "context": [
+    "=",
+    "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_tsarpoints.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "je_group_great_game": [
+  "=",
+  {
+   "context": [
+    "=",
+    "country"
+   ],
+   "updates_strategic_region_stances": [
+    "=",
+    "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_great_game.dds\""
+   ],
+   "themed": [
     "=",
     "yes"
    ]
@@ -228,6 +414,31 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_historical_content.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "je_group_socialism": [
+  "=",
+  {
+   "context": [
+    "=",
+    "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_socialism.dds\""
+   ],
+   "themed": [
+    "=",
+    "yes"
    ]
   }
  ],
@@ -241,6 +452,10 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_crises.dds\""
    ]
   }
  ],
@@ -250,6 +465,10 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_internal_affairs.dds\""
    ]
   }
  ],
@@ -263,6 +482,10 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_foreign_affairs.dds\""
    ]
   }
  ],
@@ -276,6 +499,10 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_expeditions.dds\""
    ]
   }
  ],
@@ -285,6 +512,10 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_technology.dds\""
    ]
   }
  ],
@@ -298,6 +529,10 @@
    "updates_strategic_region_stances": [
     "=",
     "yes"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_objectives.dds\""
    ]
   }
  ],
@@ -307,6 +542,23 @@
    "context": [
     "=",
     "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/je_group_illu_tutorial.dds\""
+   ]
+  }
+ ],
+ "je_group_test": [
+  "=",
+  {
+   "context": [
+    "=",
+    "country"
+   ],
+   "illustration": [
+    "=",
+    "\"gfx/interface/illustrations/journal/top_illu_journal_entries.dds\""
    ]
   }
  ]

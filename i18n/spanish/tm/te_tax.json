@@ -12,12 +12,12 @@
   "es": "Los impuestos en vigor, cada uno fijado dentro del rango de la ley de tributación."
  },
  "je_tax_code_reason_full": {
-  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups$')] commit to it, and takes effect on its [concept_tax_commencement].",
-  "es": "Todos los impuestos se fijan por ley. Un tipo del [concept_tax_code|l] se mantiene hasta que un [concept_tax_bill|l] lo cambia o llega su expiración. Una reforma empieza como borrador, se presenta como proyecto de ley, se aprueba cuando suficientes [Concept('concept_interest_group','$concept_interest_groups$')|l] se comprometen con él, y entra en vigor en su [concept_tax_commencement|l]."
+  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
+  "es": "Todos los impuestos se fijan por ley. Un tipo del [concept_tax_code|l] se mantiene hasta que un [concept_tax_bill|l] lo cambia o llega su expiración. Una reforma empieza como borrador, se presenta como proyecto de ley, se aprueba cuando suficientes [Concept('concept_interest_group','$concept_interest_groups|q$')|l] se comprometen con él, y entra en vigor en su [concept_tax_commencement|l]."
  },
  "je_tax_code_reason_light": {
-  "en": "Your taxation law sets the range of every tax it levies. Within that range you set each rate in the [concept_tax_code] yourself, and a change applies at once. Your tax level follows the heaviest tax, and [Concept('concept_interest_group','$concept_interest_groups$')] react to each change.",
-  "es": "Tu ley de tributación fija el rango de cada impuesto que grava. Dentro de ese rango fijas tú mismo cada tipo del [concept_tax_code|l], y el cambio se aplica al instante. Tu nivel de impuestos sigue al impuesto más gravoso, y los [Concept('concept_interest_group','$concept_interest_groups$')|l] reaccionan a cada cambio."
+  "en": "Your taxation law sets the range of every tax it levies. Within that range you set each rate in the [concept_tax_code] yourself, and a change applies at once. Your tax level follows the heaviest tax, and [Concept('concept_interest_group','$concept_interest_groups|q$')] react to each change.",
+  "es": "Tu ley de tributación fija el rango de cada impuesto que grava. Dentro de ese rango fijas tú mismo cada tipo del [concept_tax_code|l], y el cambio se aplica al instante. Tu nivel de impuestos sigue al impuesto más gravoso, y los [Concept('concept_interest_group','$concept_interest_groups|q$')|l] reaccionan a cada cambio."
  },
  "je_tax_code_status_inactive": {
   "en": "The tax code takes over once this country's taxation law has been carried over into it: at the start of the game, or when the country is founded.",
@@ -1144,8 +1144,8 @@
   "es": "Promesas"
  },
  "te_tax_ov_obligations_tt": {
-  "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.",
-  "es": "Promesas que el gobierno hizo a los [Concept('concept_interest_group','$concept_interest_groups$')|l] para aprobar sus proyectos de ley fiscales. Una pendiente vincula solo si se aprueba su proyecto; una vinculante se comprueba el día 1 de cada mes hasta que se cumple o se rompe."
+  "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups|q$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.",
+  "es": "Promesas que el gobierno hizo a los [Concept('concept_interest_group','$concept_interest_groups|q$')|l] para aprobar sus proyectos de ley fiscales. Una pendiente vincula solo si se aprueba su proyecto; una vinculante se comprueba el día 1 de cada mes hasta que se cumple o se rompe."
  },
  "te_tax_ov_obligations_value": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#! binding, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#! pending",

@@ -102,9 +102,9 @@ you qualify.
 | Spoils System (*Rotation in Office*) | One group holds at least half of your government's political strength | 2.5% | That group |
 | Corporate Security Powers (*Company Men*) | A labor movement has 5% support, or unrest as for Order in the Courts; from Corporate Charters on | 5% | Industrialists |
 | Civilian Oversight (*Complaints Against the Force*) | A civil rights movement has 5% support, or unrest as for Order in the Courts; from the Civil Rights Movement technology on | 5% | Intelligentsia |
-| Estate Duties (*What the Dead Owe*) | At war, or a reformist or social democratic group in government; from Political Agitation on, on a law with private estates and no Birthright Endowment | 2.5%, and 25% more at war | Intelligentsia, or Trade Unions |
+| Estate Duties (*What the Dead Owe*) | At war, or a reformist or state socialist group in government; from Political Agitation on, on a law with private estates and no Birthright Endowment | 2.5%, and 25% more at war | Intelligentsia, or Trade Unions |
 | Perpetual Dynastic Trusts (*Dynasty Trusts*) | Freedom of Testation, with the Industrialists powerful or in government; from Globalization on | 2.5% | Industrialists |
-| Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or social democratic group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
+| Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or state socialist group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
 | Undivided Farm Succession (*The Farm Is Not to Be Cut*) | Forced Heirship or Customary Inheritance, with the Rural Folk powerful or in government | 2.5% | Rural Folk |
 | Suspension of Habeas Corpus (*The Writ Suspended*) | Statutory Courts or Constitutional Review, at war, with the Armed Forces powerful or in government | 25% | Armed Forces |
 | Judicial Elections (*Let the People Choose Their Judges*) | Statutory Courts or Constitutional Review under an elected government, with a group led by a Jacksonian Democrat or populist powerful or in government | 5% | That group |
@@ -255,7 +255,7 @@ Escort and Swarm Coordination Vessel.
 | Ballistic Missile Bay | Precision Guided Munitions | +35% hull damage, +60% blockade strength | Large Carronades, Patrol Boats | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
 | Drone Complement | Swarm Technology | +40% accuracy, +40% screening, +200 detection | Range Finder | The battle-line ships, the cruiser escorts, Guided Missile Ship, Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, the two later submarines |
 | Aegis Air Defense | Network Centric Warfare | +20% readiness, +200 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
-| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +50% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
+| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +100% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
 | Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | | ASW Destroyer, the three new submarines |
 | Helicopter Pad | Rapid Deployment Forces | +40% naval invasion efficiency, +25% marine and carrying capacity | Landing Skiffs | The five transports |
 | Underway Replenishment | Containerization | +40% supply capacity, +25% supply efficiency, +30% distance from port | | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |

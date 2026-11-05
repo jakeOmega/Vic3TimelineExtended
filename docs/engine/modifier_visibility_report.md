@@ -26,12 +26,13 @@ _None._
 - `common/static_modifiers/extra_modifiers.txt` — `country_mass_migration_attraction_mult = 0.0025` (displays as +0%) — **2026-05-06**: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
 - `common/static_modifiers/extra_modifiers.txt` — `country_diplomatic_reputation_add = 0.1` (displays as +0) — **2026-05-06**: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
 - `common/static_modifiers/extra_modifiers.txt` — `country_sol_expectations_lower_offset_add = -0.02` (displays as +0) — **2026-09-20**: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders -0.1
+- `common/static_modifiers/te_orbital_debris_modifiers.txt` — `building_space_mine_throughput_add = -0.002` (displays as +0%) — **2026-10-16**: a unit modifier applied with multiplier = the index, so it shows −10% at 50; only the per-point line rounds to 0
 
 ## Coverage
 
-- total flags: 4
+- total flags: 5
 - unreviewed: 0
-- exempted: 4
+- exempted: 5
 
 ## Scope notes
 

@@ -274,9 +274,11 @@ class TestTradeSelfCheck(unittest.TestCase):
         self.assertIn("var:nd_tc_code = $CODE$", block(helper, "limit"))
         self.assertIn("nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_other }", helper)
         self.assertIn("scope:nd_tc_other = { nd_dispute_$WHAT$_by = { TARGET = scope:nd_tc_self } }", helper)
-        self.assertIn('"TE_SELF_CHECK OK nd_trade_$CODE$', helper)
+        # the code read from nd_tc_code, which is still set (no $CODE$ inside a debug_log string)
+        code = "[THIS.Var('nd_tc_code').GetValue|0]"
+        self.assertIn(f'"TE_SELF_CHECK OK nd_trade_{code}', helper)
         # the demanded half; the matching half with and without the swap
-        self.assertEqual(helper.count('"TE_SELF_CHECK BROKEN nd_trade_$CODE$'), 3)
+        self.assertEqual(helper.count(f'"TE_SELF_CHECK BROKEN nd_trade_{code}'), 3)
 
 
 def top_blocks(body):

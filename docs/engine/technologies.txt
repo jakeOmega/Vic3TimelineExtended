@@ -2,17 +2,17 @@
 	Sericulture - The ancient and closely guarded technique of cultivating silkworms for the production of silk.
 	Enclosure - The merger of subsistence plots into enclosed, privately owned fields permits for more organized agriculture and the use of arable land for growing cash crops rather than food.
 		Unlocks Buildings: Banana Plantations, Coffee Plantations, Cotton Plantations, Dye Plantations, Livestock Ranches, Maize Farms, Millet Farms, Opium Plantations, Rice Farms, Rye Farms, Silk Plantations, Sugar Plantations, Tea Plantations, Tobacco Plantations, Vineyards, Wheat Farms
-		Unlocks Decrees: Encourage Agricultural Industry
+		Unlocks Decrees: Develop Provincial Agriculture, Encourage Agricultural Industry
 	Manufacturies - The guilds controlled the methods and hiring practices a business could use, limiting entry into the labor force and demanding that only highly skilled and certified (by the guild, naturally) craftsmen perform certain tasks. Increasingly, industrialists left the cities and founded new sites of innovation, free from the exacting standards and high wages of the guild masters.
 		Unlocks Buildings: Food Industries, Furniture Manufacturies, Glassworks, Paper Mills, Textile Mills, Tooling Workshops
 		Unlocks Laws: Interventionism
-		Unlocks Decrees: Encourage Manufacturing Industry
+		Unlocks Decrees: Develop Provincial Manufacturing, Encourage Manufacturing Industry
 	Shaft Mining - By mining straight down to the desired depth before branching it off, and then using a lift system to raise materials up and down it is possible to make a much more efficient mine.
 		Unlocking Technologies:
 			Enclosure
 			Manufacturies
-		Unlocks Buildings: Coal Mines, Iron Mines, Lead Mines, Sulfur Mines
-		Unlocks Decrees: Encourage Resource Industry
+		Unlocks Buildings: Coal Mines, Copper Mines, Iron Mines, Lead Mines, Sulfur Mines
+		Unlocks Decrees: Develop Provincial Extraction, Encourage Resource Industry
 	Cotton Gin - The cotton gin is a machine which quickly separates the cotton from its seeds, enabling a much faster processing time than doing it by hand.
 		Unlocking Technologies:
 			Manufacturies
@@ -48,7 +48,7 @@
 		Unlocking Technologies:
 			Standing Army
 		Unlocks Laws: National Militia
-		Unlocks Decrees: Enlistment Efforts
+		Unlocks Decrees: Enlistment Efforts, Issue Conscription Reform
 	Gunsmithing - Gunsmithing allows the creation of explosive powered weaponry, making the relevance of physical strength much less important.
 		Unlocking Technologies:
 			Standing Army
@@ -57,7 +57,7 @@
 		Unlocking Technologies:
 			Gunsmithing
 		Unlocks Combat Unit Types: Cannon Artillery
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Military Drill - As the saying goes,
 		Unlocking Technologies:
 			Standing Army
@@ -89,9 +89,10 @@
 	Urban Planning - By planning out cities before they are built, rather than letting them develop naturally, it is possible to create a much more efficient living area.
 		Unlocking Technologies:
 			Urbanization
+		Unlocks Buildings: Public Housing
 		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Rationalism - Rationalism is the philosophical doctrine that knowledge is acquired by reason without resort to experience.
-		Unlocks Laws: Freedom of Conscience, Religious Schools
+		Unlocks Laws: Freedom of Conscience, Religious Schools, Statutory Courts
 	Bureaucracy - Bureaucracy is the machine of government, the cogs and wheels that decide the efficiency of the state.
 		Unlocking Technologies:
 			Urbanization
@@ -111,8 +112,7 @@
 			Academia
 		Unlocks Buildings: Creative Industry, Tourism Industry
 		Unlocks Laws: Agrarianism, Industry Banned, Legal Limbo
-		Unlocks Decrees: Greener Grass Campaign
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks Decrees: Greener Grass Campaign, Subsidize Resettlement
 	International Trade - The ability to trade not just within your country, or even within your continent, but across the entire world has revolutionized the global economy.
 		Unlocking Technologies:
 			Bureaucracy
@@ -134,7 +134,7 @@
 		Unlocking Technologies:
 			International Relations
 		Unlocks Buildings: Suez Canal
-		Unlocks Laws: Colonial Exploitation, Colonial Resettlement, Extraction Economy, Frontier Colonization
+		Unlocks Laws: Colonial Exploitation, Colonial Resettlement, Extraction Economy, Frontier Colonization, Internal Colonization
 	International Relations - Formalizing diplomacy provides a firm framework for both improved cordiality and hostility with other nations.
 		Unlocking Technologies:
 			Bureaucracy
@@ -143,7 +143,7 @@
 		Unlocking Technologies:
 			Bureaucracy
 			Urban Planning
-		Unlocks Laws: Censorship, Dedicated Police Force, National Guard, Shinsengumi
+		Unlocks Laws: Censorship, Dedicated Police Force, National Guard, Shinsengumi, Third Section
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Stock Exchange - An organized market where stocks and bonds can be bought and sold, the stock exchange is a central element of the modern market economy.
 		Unlocking Technologies:
@@ -154,6 +154,7 @@
 		Unlocking Technologies:
 			Academia
 		Unlocks Laws: Charity Hospitals
+		Unlocks Decrees: Medical Outreach
 	Mass Communication - Mass Communication is the easy spread of information utilizing technologies such as the newspaper.
 		Unlocking Technologies:
 			Democracy
@@ -162,7 +163,6 @@
 			Academia
 		Unlocks Laws: Public Schools, State Atheism, Total Separation
 		Unlocks Parties: liberal_party
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 2: 38 technologies
 	Crystal Glass - By adding lead to glass it is possible to create glass with the appearance of crystal, which is sought after due to its value.
 		Unlocking Technologies:
@@ -191,7 +191,7 @@
 			Shaft Mining
 		Unlocks Buildings: Motor Industries
 		Unlocks Ship Modifications: $ship_mod_full_sail_rig_single_expansion_engine$
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
 	Railways - The first steam locomotive railways were built to transport passengers, only later being used for industrial purposes. The efficient and rapid method of travel quickly rendered canal systems obsolete, sometimes just years after the canals had been completed at great expense.
 		Unlocking Technologies:
 			Mechanical Tools
@@ -207,7 +207,7 @@
 		Unlocking Technologies:
 			Intensive Agriculture
 			Prospecting
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
 	Bessemer Process - The Bessemer process is a technique for the mass production of steel from pig iron.
 		Unlocking Technologies:
 			Steelworking
@@ -244,7 +244,7 @@
 		Unlocking Technologies:
 			Artillery
 		Unlocks Ship Modifications: $ship_mod_32_pdr_sbml_8_in_shell_guns$
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Percussion Cap - The percussion cap is a single use device which allows firearms to operate reliably in all types of weather.
 		Unlocking Technologies:
 			Gunsmithing
@@ -277,15 +277,17 @@
 	Egalitarianism - Egalitarianism is the doctrine of the equality of mankind and the desirability of political, economic and social equality.
 		Unlocking Technologies:
 			Democracy
-		Unlocks Laws: Equal Inheritance, Proportional Taxation, Universal Suffrage
+		Unlocks Laws: Forced Heirship, Proportional Taxation, Universal Suffrage
 		Unlocks Parties: radical_party
 	Pharmaceuticals - The discovery of Pharmaceuticals allows for medicine to jump ahead as they can be prescribed for all types of ailments.
 		Unlocking Technologies:
 			Medical Degrees
+		Unlocks Buildings: Pharmaceutical Industries
 		Unlocks Laws: Private Health Insurance, Public Health Insurance
 	Modern Sewerage - Modern Sewerage is the creation of specific tunnels and pipes to remove refuse from a city, leading to a better standard of living.
 		Unlocking Technologies:
 			Urban Planning
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Quinine - Isolation of quinine allows it to be used as a most effective medicine against the harsh effects of malaria.
 		Unlocking Technologies:
 			Colonization
@@ -296,7 +298,7 @@
 	Central Archives - A modern state requires good record-keeping, and good record-keeping requires thorough paperwork. If you wish to learn more, please fill form ML-4.11866 in triplicate and expect a reponse in 2-5 working days.
 		Unlocking Technologies:
 			Centralization
-		Unlocks Laws: Secret Police, Technocracy
+		Unlocks Laws: Okhrana, Secret Police, Technocracy
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Central Banking - Harnessing and centralizing the banks brings an immense amount of power into the hands of the government.
 		Unlocking Technologies:
@@ -322,13 +324,12 @@
 			Mass Communication
 			International Relations
 		Unlocks Laws: Ancestral Citizenship, Civic Monolingualism
-		Unlocks Decrees: Promote National Values
+		Unlocks Decrees: Promote National Values, Promote Official Nationality
 	Labor Movement - Just as the world becomes more industrialized, so too do the workers become more organized, campaigning for better wages and better working conditions.
 		Unlocking Technologies:
 			Mass Communication
 			Egalitarianism
 		Unlocks Laws: Regulatory Bodies, Restricted Child Labor, Wage Subsidies
-		Unlocks Parties: social_democrat_party
 	Postal Savings - A valuable method for people to save money even if they do not have access to a bank, postal savings promote both the storage and flow of money among even the poorest of citizens.
 		Unlocking Technologies:
 			Stock Exchange
@@ -345,7 +346,7 @@
 	Dynamite - By applying a stabilizing agent to nitroglycerin it is possible to make a much safer and more reliable explosive.
 		Unlocking Technologies:
 			Nitroglycerin
-		Unlocks PMs: 8 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
 	Rubber Mastication - Natural rubber is a strange, viscous thing that needs heavy working in order to create a suitable material for industrial use.
 		Unlocking Technologies:
 			Fractional Distillation
@@ -404,7 +405,7 @@
 	Enlistment Offices - Offices built to attract recruits help immensely with bolstering the nation's military manpower.
 		Unlocking Technologies:
 			Logistics
-		Unlocks Laws: Mass Conscription
+		Unlocks Laws: Mass Conscription, Revolutionary Guard
 	Electric Telegraph - Through the use of simple electric pulses, messages can be rapidly transmitted through codes across vast distances. Officers in a stuffy office can send commands to armies on the far side of the world instantaneously. What hath God wrought?
 		Unlocking Technologies:
 			Logistics
@@ -459,11 +460,11 @@
 		Unlocking Technologies:
 			Hydraulic Cranes
 			Screw Frigate
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
 	Human Rights - Embracing the idea of universal, inalienable rights for all people invites new concepts into the nation's social and political venues.
 		Unlocking Technologies:
 			Egalitarianism
-		Unlocks Laws: Basic Protections, Compulsory Primary School, Multilingual Federalism, Old Age Pension, Protected Speech, Protection, Universal Citizenship, Workers' Protections
+		Unlocks Laws: Basic Protections, Compulsory Primary School, Constitutional Review, Multilingual Federalism, Old Age Pension, Protected Speech, Protection, Universal Citizenship, Workers' Protections
 	Feminism - Feminism is an ideology concerned with advancing social, economic, and political equality for women. Feminists believe that women should have the same legal rights as men to own property, work, and participate in politics.
 		Unlocking Technologies:
 			Human Rights
@@ -472,28 +473,28 @@
 		Unlocking Technologies:
 			Modern Sewerage
 		Unlocks Buildings: Atocha Railway Station, Statue of Liberty, The Eiffel Tower, Victoria Terminus
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Civilizing Mission - It falls on our great nation's shoulders to shine the light of modernity into every uncivilized corner of the world, to educate and instill in the less developed peoples the divine values of our glorious culture.
 		Unlocking Technologies:
 			Quinine
 			Nationalism
 		Unlocks Buildings: Panama Canal
 		Unlocks Decrees: Establish Missions
-	Anarchism - A political ideology promoting self-governance and opposition to authority. Anarchism seeks to do away with the state and other institutions which rule over people against their will, replacing them with voluntary associations.
+	Anarchism - A political movement promoting self-governance and opposition to authority. Anarchism seeks to do away with the state and other institutions which rule over people against their will, replacing them with voluntary associations.
 		Unlocking Technologies:
 			Egalitarianism
 		Unlocks Laws: Anarchy, Communal Child-Rearing
 		Unlocks Parties: anarchist_party
-	Socialism - A political ideology that encourages common social ownership of the means of production and self management by workers rather than an upper class.
+	Socialism - A political movement that views class struggle as the driving force of history, and desires the victory of the unpropertied industrial working class in this struggle. Socialists believe the victory of the working class will bring about social ownership of the means of production, and the end of the class system as a whole.
 		Unlocking Technologies:
 			Labor Movement
 			Dialectics
-		Unlocks Laws: Collectivized Agriculture, Council Republic, Factory Councils, Graduated Taxation
-		Unlocks Parties: communist_party
+		Unlocks Laws: Collectivized Agriculture, Communal Administration, Council Republic, Factory Councils, Graduated Taxation, Labor Suffrage
+		Unlocks Parties: communist_party, socialist_party
 	Corporatism - An approach towards social relations based on collaboration between different corporate groups in society, with the ultimate goal of superseding conflict between classes.
 		Unlocking Technologies:
 			Labor Movement
-			Nationalism
+			Pan-nationalism
 		Unlocks Laws: Corporate State, Corporatized Unions, Social Monarchy
 	Pan-nationalism - The notions of nationalism are in general the idea of people who speak the same language are the same people. But what of those who almost speak the same language as us? People see them as our cousins, but there is a new school of thought that they are really our long lost brothers and we should be united into a great whole. Together we will be stronger and able to protect our people.
 		Unlocking Technologies:
@@ -577,6 +578,7 @@
 	Electrical Capacitors - Electrical Capacitors allow for the increased usage of electricity without the necessity of having a directly connected generator.
 		Unlocking Technologies:
 			Electrical Generation
+		Unlocks Buildings: Grid Transfer Station
 		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Radio - By using invisible 'waves' it is possible to pass information over a great distance wirelessly.
 		Unlocking Technologies:
@@ -647,7 +649,7 @@
 	Concrete Dockyards - Sturdy and cheap, concrete allows for the construction of far larger piers that are able to support far heavier freight loads.
 		Unlocking Technologies:
 			Floating Harbor
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Military Aviation - By combining conventional aviation with military technology, it is possible to create aircraft that can fulfill a variety of military roles.
 		Unlocking Technologies:
 			Handcranked Machine Gun
@@ -657,7 +659,7 @@
 	Elevators - Through a complex system of weights and pulleys, it possible to raise people and objects to desired heights at will.
 		Unlocking Technologies:
 			Steel-Frame Buildings
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Zeppelins - A sort of rigid lighter-than-air aircraft, the zeppelin can carry freight and passenger loads high above the clouds, surpassing obstacles on land and sea.
 		Unlocking Technologies:
 			Steel-Frame Buildings
@@ -676,7 +678,7 @@
 			Anarchism
 			Socialism
 			Corporatism
-		Unlocks Laws: Collective Governance, Outlawed Dissent, Single-Party State
+		Unlocks Laws: Collective Governance, Extraordinary Commission, Outlawed Dissent, Single-Party State
 	International Exchange Standards - Establishing an international system of accounting and exchange makes trade between nations simpler and cheaper to maintain.
 		Unlocking Technologies:
 			Mutual Funds
@@ -716,7 +718,7 @@
 	Compression Ignition - A compression ignition engine ignites the fuel by compressing air and has the highest thermal efficiency of any engine.
 		Unlocking Technologies:
 			Combustion Engine
-		Unlocks PMs: 14 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 15 (listed under their buildings in buildings.txt)
 	Destroyer - Lighter vessels, equipped with torpedoes and smaller guns, are just as important in modern navies as capital ships.
 		Unlocking Technologies:
 			$ship_type_modern_ironclad$
@@ -730,6 +732,7 @@
 	Chemical Warfare - Certain chemical combinations produce adverse or even fatal effects when humans are exposed to them. Weaponizing this brings a whole new horrific aspect to warfare.
 		Unlocking Technologies:
 			Automatic Machine Guns
+		Unlocks Laws: Total War
 		Unlocks Mobilization Options: Chemical Weapons
 	Stormtroopers - Having troops trained and equipped specifically for infiltration allows greater success when assaulting more embedded positions.
 		Unlocking Technologies:
@@ -770,11 +773,12 @@
 	Antibiotics - Antibiotics are an advanced medicine used for fighting infections, allowing a greater survival rate in hospitals.
 		Unlocking Technologies:
 			Malaria Prevention
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Mass Propaganda - By printing and distributing a large amount of information in a short amount of time, it is possible to get your version of truth spread much more quickly and effectively than ever before.
 		Unlocking Technologies:
 			Political Agitation
 			Film
-		Unlocks Laws: Dirigiste Policy, Linguistic Purity, Ministry of Culture Established, Pro-Natalist Subsidies
+		Unlocks Laws: Dirigiste Policy, Linguistic Purity, Ministry of Culture Established, Pro-Natalist Policy
 		Unlocks Parties: fascist_party
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Modern Financial Instruments - Moneymaking methods continue to grow and proliferate. Some methods may involve money flowing in a pyramid upwards, but all of them involve more and more money flowing all the time.
@@ -788,7 +792,7 @@
 	Behaviorism - Establishing the law of effect, it becomes possible to create a predictive model of behavior that can be applied to the public at large.
 		Unlocking Technologies:
 			Psychoanalysis
-		Unlocks Laws: Restorative Justice
+		Unlocks Laws: Restorative Justice, State Eugenics Program
 	Analytical Philosophy - A rigorous, argumentative approach to philosophy, the formal logic and near-mathematical attitude of analytic philosophy provides a solid framework to approach social movements with.
 		Unlocking Technologies:
 			Psychoanalysis
@@ -825,7 +829,6 @@
 	Bombing Aircraft - These aircraft have changed the face of warfare. Now we can drop bombs on enemy targets and [concept_infrastructure] from a great distance, which is a very effective way to make a point.
 		Unlocking Technologies:
 			Military Aviation
-		Unlocks Laws: Total War
 		Unlocks Combat Unit Types: Propeller Aircraft
 		Unlocks Ship Types: Fleet Carrier
 	Nuclear Weapons - The atomic bomb has changed the world forever. These incredibly powerful weapons have fundamentally altered the nature of warfare and ushered in a new era of global politics.
@@ -851,16 +854,17 @@
 		Unlocks Buildings: The Pentagon
 		Unlocks Combat Unit Types: Armored Infantry, Combined Arms Marines
 		Unlocks Ship Types: Amphibious Assault Ship
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Modern Materials - New materials like fiberglass, nylon, and Teflon are stronger, lighter, and more versatile than what we had before. They've changed the way we build and manufacture things.
 		Unlocking Technologies:
 			Arc Welding
 		Unlocks Buildings: Nickel and Cobalt Mine
-		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
 	Modern Tools - Tools like forklifts have made our workplaces more efficient and safer. They've improved productivity and reduced the number of accidents, which is good for everyone.
 		Unlocking Technologies:
 			Modern Materials
 		Unlocks Buildings: Manganese Mine
-		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
 	Modern Skyscrapers - Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.
 		Unlocking Technologies:
 			Modern Materials
@@ -879,6 +883,7 @@
 		Unlocking Technologies:
 			Military Aviation
 		Unlocks Mobilization Options: Radar Equipment
+		Unlocks Ship Modifications: Surface Search Radar
 	Television - Television has revolutionized entertainment and communication. It has become a powerful medium for spreading information and shaping public opinion, one flickering screen at a time.
 		Unlocking Technologies:
 			Personal Appliances
@@ -905,14 +910,13 @@
 			Film
 		Unlocks Laws: Donation Limits, Ministry of Propaganda Established, Ministry of Religion Established, State-Led Language Reform
 		Unlocks Decrees: Natalism Initiative, Political Patronage
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Animation - By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse.
 		Unlocking Technologies:
 			Mass Media
 	Rural Electrification - Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. It's a key step in modernizing a nation.
 		Unlocking Technologies:
 			Paved Roads
-		Unlocks Buildings: Copper Mine
 	Fluorescent Lamps - These new lamps are much more efficient than the old arc lamps. They've made electrical lighting more widespread, and our cities a lot brighter.
 		Unlocking Technologies:
 			Radio
@@ -921,7 +925,7 @@
 			Nitrogen Fixation
 			Isoprene
 		Unlocks Buildings: Lithium Mine
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
 	Aluminum Mass Production - We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.
 		Unlocking Technologies:
 			Arc Welding
@@ -940,6 +944,7 @@
 		Unlocking Technologies:
 			Sonar
 		Unlocks Laws: Littoral Defense
+		Unlocks Ship Modifications: Damage Control Teams
 	Sonar - By using sound to detect objects underwater, sonar has become an essential tool for naval defense. It helps us to find submarines and other underwater threats.
 		Unlocking Technologies:
 			Modern Battlefleet Tactics
@@ -958,6 +963,7 @@
 		Unlocks Buildings: Hoover Dam, Hydro Plant
 		Unlocks Laws: Pro-Labor Ministry of Labor Established
 		Unlocks Decrees: Subsidize Immigration
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Art Deco Architecture - A style defined by bold geometric shapes and lavish details. It's often used to show off wealth and [concept_prestige], making our cities look a bit more glamorous.
 		Unlocking Technologies:
 			Marketing Research
@@ -985,7 +991,7 @@
 		Unlocking Technologies:
 			Modern Tools
 		Unlocks Buildings: Berlin TV Tower, Electronic Components and Semiconductor Industry
-		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
 	Nuclear Energy - By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.
 		Unlocking Technologies:
 			Nuclear Weapons
@@ -1011,7 +1017,7 @@
 		Unlocking Technologies:
 			Mass Media
 			Intergovernmental Organizations
-		Unlocks Laws: Affirmative Action, Ministry of Refugee Affairs Established
+		Unlocks Laws: Affirmative Action, Judicial Supremacy, Ministry of Refugee Affairs Established
 	Laser Technology - The laser has found its way into all sorts of applications, from telecommunications to medicine to manufacturing. It's a precise and powerful tool with a seemingly endless number of uses.
 		Unlocking Technologies:
 			Modern Chemical Processes
@@ -1043,6 +1049,7 @@
 		Unlocks Laws: Private Military Contractors
 		Unlocks Combat Unit Types: Guided Artillery Projectiles, Main Battle Tanks
 		Unlocks Ship Types: Guided Missile Ship
+		Unlocks Ship Modifications: Precision Warheads
 		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Plastic Mass Production - The mass production of plastic has given us a wide range of new, lightweight, and durable products. It has also given us a massive environmental problem to deal with.
 		Unlocking Technologies:
@@ -1052,7 +1059,7 @@
 		Unlocking Technologies:
 			Transistor Technology
 		Unlocks Buildings: Moscow State University
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Integrated Circuits - By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1060,7 +1067,7 @@
 	Prefabricated Construction - Standardized prefab building components - concrete panels, steel-frame modules, modular bathroom pods - slash construction time for housing, hospitals, and military bases. Postwar reconstruction speed defines the era.
 		Unlocking Technologies:
 			Modern Skyscrapers
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Photocopiers - The ability to quickly and easily make copies of documents has streamlined office work and improved productivity. It's a simple but essential tool in the modern workplace.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1089,11 +1096,13 @@
 			Animation
 			Rural Electrification
 		Unlocks Buildings: Tokyo Tower
+		Unlocks Laws: Ministry of Thought Control Established
 		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Antibiotic Mass Production - Now that we can produce antibiotics in large quantities, bacterial infections are no longer a death sentence. This has done wonders for public health and makes surgery a bit less of a gamble.
 		Unlocking Technologies:
 			Antibiotics
 			Modern Management Techniques
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Contraceptive Pill - This little pill has had a huge impact on society. By giving women more control over their fertility, it has played a key role in family planning and women's liberation.
 		Unlocking Technologies:
 			Modern Vaccines
@@ -1131,6 +1140,7 @@
 			Satellite Communications
 			Guided Missiles
 		Unlocks Laws: Auxiliary Fleet
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Advanced Assembly Lines - Further refining the assembly line with modular components and just-in-time production makes our factories even more efficient. We can now produce a wider variety of goods at lower costs, which is good for the economy, I suppose.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1138,8 +1148,7 @@
 	Modern Pharmaceuticals - With new drugs and vaccines, we've made huge strides in public health. People are living longer, healthier lives, all thanks to the miracles of modern medicine.
 		Unlocking Technologies:
 			Antibiotic Mass Production
-		Unlocks Buildings: Pharmaceutical Industries
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Containerization - The simple act of putting goods in standardized containers has revolutionized global trade. Now we can move things around the world much more efficiently and cheaply.
 		Unlocking Technologies:
 			Commercial Aviation
@@ -1158,6 +1167,7 @@
 			Mainframe Computers
 			Cellular Networks
 		Unlocks Buildings: Network Infrastructure, Software Industry
+		Unlocks Laws: Private Policing
 		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Personal Computers - The personal computer has brought the power of digital technology to the masses. It has changed the way we work, learn, and communicate, opening up a world of new possibilities.
 		Unlocking Technologies:
@@ -1168,7 +1178,7 @@
 			Computer Networks
 			Advanced Assembly Lines
 		Unlocks Buildings: Itaipu Dam, Robotics Industry
-		Unlocks PMs: 14 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 15 (listed under their buildings in buildings.txt)
 	Supersonic Aircraft - Aircraft that can travel faster than the speed of sound. They've made air travel faster and have enhanced our military aviation capabilities.
 		Unlocking Technologies:
 			Inertial Navigation Systems
@@ -1182,6 +1192,7 @@
 	Environmental Movement - A movement dedicated to protecting our planet. It raises awareness about ecological issues and pushes for more sustainable ways of living.
 		Unlocking Technologies:
 			Pollution Control
+		Unlocks Laws: Fossil Expansion Moratorium
 		Unlocks Parties: green_party
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Sexual Revolution - A social movement that has challenged traditional ideas about sexuality and relationships. It has led to greater acceptance of premarital sex, contraception, and different family structures.
@@ -1197,7 +1208,7 @@
 	Gene Splicing - By cutting and pasting DNA, we can now manipulate the very building blocks of life. This has opened up new possibilities for medicine and agriculture, as well as a host of ethical dilemmas.
 		Unlocking Technologies:
 			Green Revolution
-		Unlocks Laws: Ban on Genetic Modification
+		Unlocks Laws: Ban on Genetic Modification, Corporate Genetic Licensing, Open-Source Genetics
 	Computer-Aided Design - CAD has revolutionized engineering and manufacturing. Now we can create more complex and accurate designs, all with the help of a computer.
 		Unlocking Technologies:
 			Mainframe Computers
@@ -1209,7 +1220,7 @@
 			Barcodes and Scanners
 		Unlocks Buildings: Petronas Towers
 		Unlocks Mobilization Options: Home Communications
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Barcodes and Scanners - Those little black and white lines have changed the face of retail and logistics. Now we can track products and sales with a simple scan, making everything much more efficient.
 		Unlocking Technologies:
 			Laser Technology
@@ -1219,7 +1230,7 @@
 		Unlocking Technologies:
 			Guided Missiles
 		Unlocks Ship Types: Marine Assault Ship
-		Unlocks Ship Modifications: Ballistic Missile Bay
+		Unlocks Ship Modifications: Ballistic Missile Bay, Close-In Weapon System
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Infrared Night Vision - This technology allows us to see in the dark. It has changed the way we conduct military and security operations, turning night into day.
 		Unlocking Technologies:
@@ -1244,7 +1255,6 @@
 			Gene Splicing
 			Computer Networks
 		Unlocks Buildings: Beverage Concentrates Plant, Phenolic Resin Panels Plant, Svalbard Global Seed Vault
-		Unlocks Laws: Corporate Genetic Licensing
 		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
 	Early Nanotechnology - We're just beginning to manipulate materials at the atomic level. This early work in nanotechnology could lead to some incredible breakthroughs in the future.
 		Unlocking Technologies:
@@ -1267,8 +1277,8 @@
 	Clean Energy Technologies - With solar panels and wind turbines, we can generate electricity without burning fossil fuels. This should help reduce our impact on the environment, assuming we can build enough of them.
 		Unlocking Technologies:
 			Personal Computers
-		Unlocks Buildings: Gardens by the Bay, Renewable Energy Plant, Three Gorges Dam
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks Buildings: Gardens by the Bay, HVDC Undersea Interconnector, Renewable Energy Plant, Three Gorges Dam
+		Unlocks PMs: 121 (listed under their buildings in buildings.txt)
 	Supply Chain Management - By using technology and data to optimize our supply chains, we can make them more efficient and less costly. It's all about getting the right things to the right place at the right time.
 		Unlocking Technologies:
 			Computer Networks
@@ -1308,7 +1318,7 @@
 	Automated Surveillance - With ground sensors and aerial drones, we can keep an eye on things without having to send people out. This makes our military operations more effective, if a bit intrusive.
 		Unlocking Technologies:
 			Military-Grade Cybersecurity
-		Unlocks Laws: Intrusive Surveillance System, Ministry of Thought Control Established
+		Unlocks Laws: Intrusive Surveillance System
 	Advanced Body Armor - With new materials like lightweight composites and even exoskeletons, our soldiers are better protected and more mobile. This should improve their chances of surviving the unpleasantness of combat.
 		Unlocking Technologies:
 			Advanced Materials Armor
@@ -1367,13 +1377,19 @@
 		Unlocking Technologies:
 			Knowledge Economy
 			Terrorism and Antiterrorism
-		Unlocks Laws: Decentralized Cryptocurrency
+		Unlocks Laws: Decentralized Cryptocurrency, Strong Privacy Rights
 	Advanced Workflow Optimization - Using the latest technology and data analysis, we can make our business processes more streamlined and automated. This cuts down on waste and should, in theory, make everyone more productive.
 		Unlocking Technologies:
 			Knowledge Economy
 			Globalization
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-10: 17 technologies
+10: 20 technologies
+	Carbon Capture and Storage - Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.
+		Unlocking Technologies:
+			Clean Energy Technologies
+		Unlocks Buildings: Carbon Conversion Works
+		Unlocks Laws: Managed Fossil Phaseout
+		Unlocks PMs: 120 (listed under their buildings in buildings.txt)
 	Machine Learning - We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.
 		Unlocking Technologies:
 			Cloud Computing
@@ -1385,7 +1401,7 @@
 	Generative AI - We now have AI that can create original content, from images to music to text. It's a powerful new tool for creativity, and it's getting better all the time.
 		Unlocking Technologies:
 			Machine Learning
-		Unlocks Laws: Automated Bureaucracy
+		Unlocks Laws: Algorithmic Jurisprudence
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Additive Manufacturing - Also known as 3D printing, this process builds objects layer-by-layer. Now we can create complex and customized items on demand, transforming everything from healthcare to making trinkets for the home.
 		Unlocking Technologies:
@@ -1396,6 +1412,7 @@
 		Unlocking Technologies:
 			Industrial Robotics
 		Unlocks Buildings: Golden Bridge, Shanghai Tower, Statue of Unity
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Electric Vehicles - Battery-electric powertrains overtake internal combustion for passenger transport. Charging infrastructure, regenerative braking, and rare-earth supply chains reshape automotive manufacturing.
 		Unlocking Technologies:
 			Clean Energy Technologies
@@ -1404,14 +1421,23 @@
 		Unlocking Technologies:
 			Wireless Internet (Wi-Fi)
 			Cloud Computing
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	mRNA Therapeutics - Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.
 		Unlocking Technologies:
 			Modern Pharmaceuticals
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Reusable Rocketry - By making our rockets reusable, we can dramatically reduce the cost of space travel. This could open up a new era of exploration and commercial activity in space.
 		Unlocking Technologies:
 			Satellite Communications
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+	Cislunar Infrastructure - Relay satellites, orbital stations and landers that fly again and again turn the space between the Earth and the Moon into a working neighborhood. With them, settling other worlds becomes a question of cost rather than of daring.
+		Unlocking Technologies:
+			Reusable Rocketry
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+	In-Situ Resource Utilization - Every kilogram lifted from Earth is dear. By drawing oxygen, metals and glass from the dust and rock where our crews land, we can build and supply bases beyond Earth from materials already there.
+		Unlocking Technologies:
+			Reusable Rocketry
+		Unlocks Buildings: Extraplanetary Base
 	Hypersonic Weapons - Weapons that can travel at more than five times the speed of sound. They're incredibly fast and precise, and a real headache for our existing defense systems.
 		Unlocking Technologies:
 			Precision Guided Munitions
@@ -1428,7 +1454,7 @@
 		Unlocking Technologies:
 			Network Centric Warfare
 			Electronic Warfare
-		Unlocks Combat Unit Types: Networked Marines, Robotic Soldiers
+		Unlocks Combat Unit Types: Networked Marines
 	Cyber Warfare - As our world becomes more digital, so does warfare. We're now developing the tools to attack and defend in cyberspace, a new and invisible battlefield.
 		Unlocking Technologies:
 			Network Centric Warfare
@@ -1438,6 +1464,7 @@
 		Unlocking Technologies:
 			Network Centric Warfare
 		Unlocks Mobilization Options: Electronic Warfare Team
+		Unlocks Ship Modifications: Electronic Countermeasures
 	Decline of Organized Religion - It seems that fewer people are finding solace in organized religion these days. This trend towards secularism is changing our social norms, values, and even how we see ourselves.
 		Unlocking Technologies:
 			Globalization
@@ -1461,7 +1488,7 @@
 			Social Media
 			Digital Entertainment
 		Unlocks Laws: Rehabilitation-Focused Criminal Justice
-11: 20 technologies
+11: 26 technologies
 	Modern Material Science - From graphene to metamaterials, we're creating new substances with unique properties. These advanced materials are set to revolutionize everything from electronics to aerospace.
 		Unlocking Technologies:
 			Early Nanotechnology
@@ -1469,7 +1496,7 @@
 			Additive Manufacturing
 		Unlocks Buildings: Advanced Material Fabricator
 		Unlocks Ship Modifications: Composite Armor Plating
-		Unlocks PMs: 18 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 140 (listed under their buildings in buildings.txt)
 	Abyssal Plain Mining - By mining the deep ocean floor, we can access valuable minerals and resources that are otherwise out of reach. This could be a game-changer for industries like electronics and renewable energy.
 		Unlocking Technologies:
 			Additive Manufacturing
@@ -1484,7 +1511,7 @@
 		Unlocking Technologies:
 			Clean Energy Technologies
 			Internet of Things
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Autonomous Vehicles - Vehicles that can drive themselves are no longer a fantasy. They could revolutionize transportation, make our roads safer, and perhaps even put an end to traffic jams.
 		Unlocking Technologies:
 			Machine Learning
@@ -1493,25 +1520,41 @@
 	Genetic Engineering - By manipulating the genes of organisms, we can develop new medical treatments and improve our crops. It's a powerful technology, but one that we must wield with care.
 		Unlocking Technologies:
 			Biotechnology
-		Unlocks Buildings: Carbon Conversion Works, Integrated Biorefinery
-		Unlocks Laws: State Eugenics Program
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+		Unlocks Buildings: Integrated Biorefinery
+		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
 	Synthetic Biology - By designing and building new biological parts and systems, we can create solutions to some of the world's most pressing problems. It's a field with enormous potential, and some significant risks.
 		Unlocking Technologies:
 			Genetic Engineering
 			Modern Material Science
-		Unlocks Laws: Open-Source Genetics
 		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
+	AI Agents - Software that doesn't just answer questions but gets things done: it plans the steps, uses the tools, checks its own work and comes back when the job is finished. Whole departments now supervise agents instead of doing the work themselves, and some are finding there is little left to supervise.
+		Unlocking Technologies:
+			Generative AI
+		Unlocks Laws: Automated Bureaucracy, International Oversight, National Licensing, Open Weights, Private Labs, State Monopoly
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Self-Driving Laboratories - Robotic labs run by AI design an experiment, carry it out, read the results and choose the next one, around the clock. A search that once took a team of graduate students a decade can finish over a long weekend, provided someone remembers to restock the reagents.
+		Unlocking Technologies:
+			AI Agents
+			Additive Manufacturing
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Humanoid Robotics - Robots built in our own shape can work in a world built for people: they climb stairs, open doors, stock shelves and fold laundry. Shops, warehouses and homes fill with tireless helpers, and the question of what the clerk and the porter will do next is no longer theoretical.
+		Unlocking Technologies:
+			AI Agents
+			Autonomous Vehicles
+		Unlocks Laws: Automation Dividend, Human Labor Quotas, Robot Tax
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Directed Energy Weapons - We can now use high-energy lasers and microwaves as weapons. They offer a new level of precision for targeting and neutralizing threats.
 		Unlocking Technologies:
 			Directed Energy Defenses
 		Unlocks Ship Types: Pulsed Laser Escort
 		Unlocks Ship Modifications: DEW Point Defense
-		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Space Militarization - As space becomes more important strategically, we're seeing a push to develop and deploy military capabilities there. This raises concerns about the weaponization of space and the need for new rules of engagement.
 		Unlocking Technologies:
 			Reusable Rocketry
+		Unlocks Buildings: Ground-to-Orbit Battery, Space Command
 		Unlocks Combat Unit Types: Orbital Bombardment, Orbital Tactical Vehicles
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Swarm Technology - By coordinating large groups of autonomous systems, we can create powerful new tools for reconnaissance, defense, and attack. The whole is truly greater than the sum of its parts.
 		Unlocking Technologies:
 			Rapid Deployment Forces
@@ -1525,33 +1568,42 @@
 			Network Centric Warfare
 			Military-Grade Cybersecurity
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-	Bioenhanced Soldiers - Through biotechnology and genetic engineering, we can make our soldiers stronger and smarter. This does, however, open up a rather unsettling debate about the limits of human augmentation.
-		Unlocking Technologies:
-			Swarm Technology
-		Unlocks Laws: Mandatory Augmentation
-		Unlocks Combat Unit Types: Bioenhanced Marines
 	Augmented Reality Warfare - By overlaying digital information onto a soldier's view of the world, we can give them better situational awareness and targeting. It's a whole new way to experience the battlefield.
 		Unlocking Technologies:
 			Network Centric Warfare
 		Unlocks Combat Unit Types: Holographic Ambush Combat Vehicle
 	Asteroid Mining - Why limit ourselves to the resources on Earth? By mining asteroids, we could find valuable metals and minerals, fuel our space missions, and maybe even get rich in the process.
 		Unlocking Technologies:
-			Reusable Rocketry
+			In-Situ Resource Utilization
 			Directed Energy Weapons
-		Unlocks Buildings: Extraplanetary Base
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Nuclear Thermal Propulsion - A reactor heats hydrogen to twice the exhaust velocity of the best chemical rockets, so the same burn needs far less propellant. A colony fleet that leaves outside its launch window pays a much smaller premium for it.
+		Unlocking Technologies:
+			Cislunar Infrastructure
 	Fusion Power - If we can harness the power of nuclear fusion, we could have a nearly limitless source of clean energy. It's the holy grail of energy production, but it's not quite here yet.
 		Unlocking Technologies:
 			Directed Energy Defenses
 		Unlocks Buildings: Fusion Plant, ITER Fusion Reactor
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Autonomous Weapons - Machines that find, select and engage their targets without waiting for a human to approve each shot. They react faster than any soldier and never tire, and the debate over who answers for their mistakes has not slowed their spread.
+		Unlocking Technologies:
+			Swarm Technology
+			Joint All-Domain Command and Control (JADC2)
+		Unlocks Combat Unit Types: Robotic Soldiers
+	Advanced Fission - Molten-salt and thorium reactors run hotter, waste less of their fuel and cannot melt down the way the old light-water designs could. Our existing nuclear plants can be rebuilt around them for far more power from every level, if we can find the specialized alloys to keep the salt from eating through the pipes.
+		Unlocking Technologies:
+			Nuclear Energy
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Brain-Computer Interfaces - We can now connect human brains directly to computers. This opens up amazing new possibilities for medicine, communication, and even enhancing our own abilities.
 		Unlocking Technologies:
 			Cybersecurity
 		Unlocks Laws: Human Purity, Medical Augmentation Only, Unrestricted Augmentation
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Personalized Medicine - By tailoring medical treatments to individual patients, we can make them more effective. It's a new approach to healthcare that takes into account our unique genetic and lifestyle factors.
 		Unlocking Technologies:
 			Telemedicine
 			mRNA Therapeutics
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Lab-Grown Food - We can now grow food in a lab, from cultured meat to other synthetic products. It could be a more sustainable and ethical way to feed the world, if people are willing to eat it.
 		Unlocking Technologies:
 			Globalization
@@ -1560,32 +1612,27 @@
 		Unlocking Technologies:
 			Cybersecurity
 			Social Media
-		Unlocks Laws: Digital Currency, Strong Privacy Rights
+		Unlocks Laws: Digital Currency
 	Human Augmentation - From gene editing to neuroprosthetics, we're pushing the boundaries of what it means to be human. This raises all sorts of ethical questions about who gets to be augmented and what we're becoming.
 		Unlocking Technologies:
 			Brain-Computer Interfaces
 		Unlocks Laws: Regulated Augmentation Market
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
-12: 18 technologies
+	AI Tutors - Every child gets a tutor of their own: endlessly patient, awake at midnight before the exam, and able to explain fractions a fourth way when the first three failed. Adults use them too, to learn a new trade in months rather than years. Whoever writes what the tutors teach now has the ear of a whole generation, and not everyone who wants that job is a teacher.
+		Unlocking Technologies:
+			Digital Education
+12: 16 technologies
 	Artificial General Intelligence - We're creating machines that can think and reason like humans. While this could transform industries from healthcare to finance, it does raise some rather tricky questions about our new creations.
 		Unlocking Technologies:
-			Generative AI
-			Programmable Matter
-			Autonomous Vehicles
+			Self-Driving Laboratories
+			Humanoid Robotics
 		Unlocks Laws: Algorithmic Governance
-		Unlocks PMs: 17 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 21 (listed under their buildings in buildings.txt)
 	Advanced Nanofabrication - We can now create incredibly small and precise structures. This level of control at the nanoscale is set to revolutionize everything from electronics to medicine.
 		Unlocking Technologies:
 			Synthetic Biology
 			Additive Manufacturing
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
-	Molecular Assemblers - Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.
-		Unlocking Technologies:
-			Advanced Nanofabrication
-		Unlocks Buildings: Nanofabrication Center Construction Site
-		Unlocks Combat Unit Types: Utility Fog Phalanx
-		Unlocks Mobilization Options: Molecular Scanners
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
 	Quantum Materials - Engineered substances with unique quantum properties. These materials could lead to breakthroughs in energy, computing, and telecommunications, changing the world as we know it.
 		Unlocking Technologies:
 			Quantum Computing
@@ -1595,26 +1642,17 @@
 			Smart Grids
 			Additive Manufacturing
 		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
-	Programmable Matter - Imagine materials that can change their shape, color, or texture on command. Programmable matter could be the next great leap in materials science, with endless possibilities.
+	Vactrains - Pump the air out of a sealed tube and a maglev capsule inside meets almost nothing to slow it down. Superconducting magnets carry it at an airliner's speed for a fraction of the energy, and freight pods share the tubes around the clock. Cities five hundred miles apart are now less than an hour apart.
 		Unlocking Technologies:
-			Molecular Assemblers
+			Autonomous Vehicles
 			Quantum Materials
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
-	Muon-Catalyzed Fusion Reactors - These smaller, more efficient fusion reactors could be a game-changer. They promise to provide clean, cheap energy, if we can ever get them to work properly.
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
+	Compact Fusion Reactors - These smaller, more efficient fusion reactors could be a game-changer. They promise to provide clean, cheap energy, if we can ever get them to work properly.
 		Unlocking Technologies:
 			Fusion Power
 			Directed Energy Weapons
 		Unlocks Combat Unit Types: DEW Tank
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
-	Fusion Batteries - Imagine a battery that never needs to be recharged. These compact fusion reactors could power our devices and vehicles for years, revolutionizing energy as we know it.
-		Unlocking Technologies:
-			Muon-Catalyzed Fusion Reactors
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
-	Space Elevator - A hypothetical structure that would allow us to travel between Earth and space with ease. It would make space travel much cheaper and could accelerate our exploration of the cosmos.
-		Unlocking Technologies:
-			Asteroid Mining
-			Muon-Catalyzed Fusion Reactors
-		Unlocks Buildings: Space Elevator Construction Site
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Orbital Weapon Platforms - By placing weapons in space, we can have a global strike capability and a constant eye on our enemies. It's the ultimate high ground in modern warfare.
 		Unlocking Technologies:
 			Space Militarization
@@ -1626,37 +1664,37 @@
 		Unlocking Technologies:
 			Quantum Communications
 		Unlocks Buildings: Solar Collector Construction Site, Solar Power Receiver
-	Antimatter Production - We can now create antimatter on a large scale, a fuel source with an incredible energy density. This unlocks unprecedented power for our spacecraft and military hardware, revolutionizing how we operate.
+	Bioenhanced Soldiers - Through biotechnology and genetic engineering, we can make our soldiers stronger and smarter. This does, however, open up a rather unsettling debate about the limits of human augmentation.
 		Unlocking Technologies:
-			Fusion Power
-			Quantum Communications
-		Unlocks Buildings: Antimatter Engine, Antimatter Facility Construction Site, Antimatter Warhead Plant
-		Unlocks Combat Unit Types: Orbital Precision Antimatter Strikes
-		Unlocks Ship Types: Antimatter Battleship
-	Biological Immortality - The idea of living forever is no longer just a dream. Through advancements in medicine and genetic engineering, we might just be able to cheat death itself.
-		Unlocking Technologies:
-			Human Augmentation
-			Personalized Medicine
+			Swarm Technology
+		Unlocks Laws: Mandatory Augmentation
+		Unlocks Combat Unit Types: Bioenhanced Marines
+		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Space Colonization - As our own planet becomes more crowded, we may need to look to the stars for new places to live. Space colonization could be the next great chapter in human history.
 		Unlocking Technologies:
 			Human Augmentation
 			Lab-Grown Food
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
-	Telepathic Communities - What if we could communicate directly from mind to mind? Telepathic communities, connected by brain-computer interfaces, could foster a new level of empathy and understanding.
-		Unlocking Technologies:
-			Neural Lace
-			Mental Health Awareness
-		Unlocks Buildings: Consciousness Network Construction Site
-		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
-	Mind Backups - The ability to store our memories and consciousness in digital form. It's a path to a kind of immortality, allowing us to live on long after our physical bodies have failed.
-		Unlocking Technologies:
-			Biological Immortality
-			Neural Lace
-		Unlocks Buildings: Mind Upload Nexus Construction Site
-	Post-Scarcity Economy - What if we lived in a world where there was enough for everyone? A post-scarcity economy, made possible by advanced technology, could eliminate material want and redefine the very meaning of work.
-		Unlocking Technologies:
-			Universal Basic Income
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Neural Lace - A brain-computer interface that allows for a seamless connection between our minds and digital devices. It could enhance our cognitive abilities and give us direct control over technology.
 		Unlocking Technologies:
 			Human Augmentation
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+	Rejuvenation Therapies - Senolytic drugs clear out worn-out cells, partial reprogramming winds others back, and failing organs are regrown rather than replaced. Those who can afford the treatments now age at half the old pace. It isn't immortality, but it buys a great deal of time.
+		Unlocking Technologies:
+			Personalized Medicine
+	Post-Work Society - Machines now do most of the work that once paid the bills, and a basic income covers the rest. For the first time, most people choose how to spend their days: making art, studying, caring for others or arguing about politics. Not everyone knows what to do with the freedom.
+		Unlocking Technologies:
+			Universal Basic Income
+	Morphological Freedom - Gene therapy and grown tissue can now change how a body looks as readily as a tailor alters a coat: skin and hair in any color, sex characteristics remade, fur and tails grown from a person's own cells. None of it makes anyone stronger or cleverer. It changes how people present themselves to the world, and that makes it a question for the law.
+		Unlocking Technologies:
+			Human Augmentation
+			LGBTQ+ Rights Movement
+		Unlocks Laws: Licensed Modification, Morphological Freedom, Prescribed Form
+	Liquid Democracy - With a secure digital identity for every citizen, a vote can be counted on any question at any time. Each voter decides an issue directly or lends the vote to someone they trust, and can take it back whenever they like. Trust still pools around a few popular delegates, but none of them keeps it a day longer than people allow.
+		Unlocking Technologies:
+			Universal Digital Identity
+		Unlocks Laws: Liquid Democracy
+	Geoengineering - We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.
+		Unlocking Technologies:
+			Environmental Movement
+			Globalization

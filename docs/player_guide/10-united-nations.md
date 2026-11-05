@@ -489,7 +489,7 @@ situation and offers it to the countries it concerns. Roughly from gravest down:
 |---|---|---|
 | A nuclear strike | The struck country first | An Appeal to the Assembly |
 | The end of a year-long war between great powers | A proposer | Declaration of Universal Human Rights, or International Criminal Court |
-| A war of aggression on a member, six months or more, with heavy devastation | The attacked member first | An Appeal to the Assembly |
+| A war of aggression on a member, six months or more, with heavy devastation or a quarter of the member occupied | The attacked member first | An Appeal to the Assembly |
 | A warming threshold (0.5, 1, 2 and 3 °C) | A proposer | Climate Change Resolution |
 | A country's first nuclear bomb | A proposer | Nuclear Non-Proliferation Treaty |
 | A severe covert operation exposed | The target first | An Appeal to the Assembly |

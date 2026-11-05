@@ -13,7 +13,7 @@ INJECT:centrifugal_machine_sugar = {
 INJECT:pm_assembly_lines_building_arms_industry = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 1.74
+			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -45,7 +45,7 @@ INJECT:pm_assembly_lines_building_motor_industry = {
 INJECT:pm_assembly_lines_building_munition_plant = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 1.74
+			state_greenhouse_gas_emissions_add = 0.87
 		}
 	}
 }
@@ -53,13 +53,21 @@ INJECT:pm_assembly_lines_building_munition_plant = {
 INJECT:pm_assembly_lines_building_tooling_workshop = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 1.74
+			state_greenhouse_gas_emissions_add = 1.57
 		}
 	}
 }
 
 # 10 coal burned from this method's own output; its recipe lists no coal input.
 INJECT:pm_atmospheric_engine_pump_building_coal_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 2.00
+		}
+	}
+}
+
+INJECT:pm_atmospheric_engine_pump_building_copper_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 2.00
@@ -164,6 +172,14 @@ INJECT:pm_condensing_engine_pump_building_coal_mine = {
 	}
 }
 
+INJECT:pm_condensing_engine_pump_building_copper_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 3.00
+		}
+	}
+}
+
 INJECT:pm_condensing_engine_pump_building_gold_mine = {
 	state_modifiers = {
 		workforce_scaled = {
@@ -205,6 +221,14 @@ INJECT:pm_diesel_engines = {
 }
 
 INJECT:pm_diesel_pump_building_coal_mine = {
+	state_modifiers = {
+		workforce_scaled = {
+			state_greenhouse_gas_emissions_add = 0.87
+		}
+	}
+}
+
+INJECT:pm_diesel_pump_building_copper_mine = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_greenhouse_gas_emissions_add = 0.87
@@ -311,7 +335,7 @@ INJECT:pm_recoiled_barrels = {
 INJECT:pm_rotary_valve_engine_building_arms_industry = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 3.00
+			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }
@@ -335,7 +359,7 @@ INJECT:pm_rotary_valve_engine_building_motor_industry = {
 INJECT:pm_rotary_valve_engine_building_munition_plant = {
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 3.00
+			state_greenhouse_gas_emissions_add = 2.00
 		}
 	}
 }

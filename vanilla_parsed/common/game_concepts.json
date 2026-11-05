@@ -115,6 +115,24 @@
    ]
   }
  ],
+ "concept_cold": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/cold_value.dds\""
+   ]
+  }
+ ],
+ "concept_cold_intensity": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/generic_icons/cold_value.dds\""
+   ]
+  }
+ ],
  "concept_famine": [
   "=",
   {}
@@ -241,10 +259,6 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/notification_icons/buildings.dds\""
-   ],
-   "is_loading_tip": [
-    "=",
-    "yes"
    ]
   }
  ],
@@ -556,10 +570,6 @@
  "concept_tariffs": [
   "=",
   {
-   "is_loading_tip": [
-    "=",
-    "yes"
-   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/trade_icons/max_tariffs.dds\""
@@ -569,10 +579,6 @@
  "concept_subventions": [
   "=",
   {
-   "is_loading_tip": [
-    "=",
-    "yes"
-   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/trade_icons/max_subvention.dds\""
@@ -650,10 +656,6 @@
    "texture": [
     "=",
     "\"gfx/interface/main_hud/trade_overview_btn.dds\""
-   ],
-   "is_loading_tip": [
-    "=",
-    "yes"
    ]
   }
  ],
@@ -671,10 +673,6 @@
    "texture": [
     "=",
     "\"gfx/interface/main_hud/trade_overview_btn.dds\""
-   ],
-   "is_loading_tip": [
-    "=",
-    "yes"
    ]
   }
  ],
@@ -1344,6 +1342,10 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/faction_icons/faction_japan_imperial_house.dds\""
+   ],
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
    ]
   }
  ],
@@ -1777,6 +1779,15 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/character_role_icons/magnate.dds\""
+   ]
+  }
+ ],
+ "concept_favorite": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/character_role_icons/favorite.dds\""
    ]
   }
  ],
@@ -2214,10 +2225,6 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/generic_icons/goods_shortage.dds\""
-   ],
-   "is_loading_tip": [
-    "=",
-    "yes"
    ]
   }
  ],
@@ -2233,10 +2240,6 @@
  "concept_world_market": [
   "=",
   {
-   "is_loading_tip": [
-    "=",
-    "yes"
-   ],
    "texture": [
     "=",
     "\"gfx/interface/icons/generic_icons/world_market.dds\""
@@ -2885,10 +2888,6 @@
    "texture": [
     "=",
     "\"gfx/interface/icons/state_status_icons/pollution.dds\""
-   ],
-   "is_loading_tip": [
-    "=",
-    "yes"
    ]
   }
  ],
@@ -3018,6 +3017,10 @@
   {}
  ],
  "concept_war_support": [
+  "=",
+  {}
+ ],
+ "concept_war_pressure": [
   "=",
   {}
  ],
@@ -3805,6 +3808,10 @@
   "=",
   {}
  ],
+ "concept_siberian_exile": [
+  "=",
+  {}
+ ],
  "concept_message_settings_feed": [
   "=",
   {}
@@ -3853,7 +3860,12 @@
  ],
  "concept_brz_national_hero": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_capitulation_desire": [
   "=",
@@ -4088,27 +4100,57 @@
  ],
  "concept_presidency_stability": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_presidency": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_court_intrigue": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_empire_stability": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_ottoman_integrity": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_balkan_culture": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_georegion": [
   "=",
@@ -4125,7 +4167,12 @@
  ],
  "concept_austrian_constitutional_pressure": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_monopoly": [
   "=",
@@ -4146,23 +4193,30 @@
  ],
  "concept_privy_purse": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_dynastic_loyalty": [
   "=",
-  {}
- ],
- "concept_house_of_obrenovic": [
-  "=",
-  {}
- ],
- "concept_house_of_karadjordjevic": [
-  "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_lands_of_anarchy_control": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_company_hq": [
   "=",
@@ -4194,7 +4248,12 @@
  ],
  "concept_pronunciamento": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_negotiation": [
   "=",
@@ -4225,28 +4284,39 @@
  ],
  "concept_bavarocratic_ire": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_guerilla_war": [
   "=",
-  {}
- ],
- "concept_bio_tomas_de_zumalacarregui": [
-  "=",
   {
-   "texture": [
+   "shown_in_encyclopedia": [
     "=",
-    "\"gfx/interface/icons/generic_icons/historical_character_icon.dds\""
+    "no"
    ]
   }
  ],
  "concept_disqualified_culture": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_integrated_culture": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_strait": [
   "=",
@@ -4288,32 +4358,102 @@
    ]
   }
  ],
- "concept_zaibatsu": [
-  "=",
-  {}
- ],
- "concept_gongen": [
-  "=",
-  {}
- ],
- "concept_boddhisattva": [
-  "=",
-  {}
- ],
  "concept_government_premium": [
   "=",
   {}
  ],
+ "concept_tsarpoints": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/tsarpoint_icons/tsarpoints.dds\""
+   ],
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_ukaz": [
+  "=",
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_notable": [
+  "=",
+  {
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/character_role_icons/notable.dds\""
+   ]
+  }
+ ],
  "concept_raiding_frequency": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_russian_aid": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ],
  "concept_raiding": [
   "=",
-  {}
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_state_and_revolution_consolidation": [
+  "=",
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_state_and_revolution_confrontation": [
+  "=",
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_hromada": [
+  "=",
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "concept_prosvita": [
+  "=",
+  {
+   "shown_in_encyclopedia": [
+    "=",
+    "no"
+   ]
+  }
  ]
 }

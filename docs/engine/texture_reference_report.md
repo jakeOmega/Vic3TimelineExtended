@@ -81,15 +81,16 @@ is checked, and the types and fields left out, are in
 - `interest_group_traits`: `icon`
 - `interest_groups`: `texture`
 - `interest_tier_types`: `icon`, `small_icon`
+- `journal_entry_groups`: `illustration`
 - `laws`: `icon`
 - `liberty_desire_levels`: `background_texture`
 - `messages`: `texture`
 - `military_formation_flags`: `icon`
-- `mobilization_option_groups`: `icon`
+- `mobilization_option_groups`: `background`
 - `mobilization_options`: `texture`
 - `naval_battle_conditions`: `icon`
 - `naval_mission_types`: `icon`, `map_texture`
-- `objectives`: `icon`, `enabled_background`
+- `objectives`: `icon`, `enabled_background`, `illustration`
 - `parties`: `icon`
 - `political_lobbies`: `texture`
 - `political_movement_categories`: `icon`

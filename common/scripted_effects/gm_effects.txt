@@ -725,11 +725,17 @@ gm_country_refresh = {
 	# predate this entry, and any save where it lapsed, pick it back up. Not for
 	# a decentralized country (has_events = no), which can hold a landmark (Great
 	# Zimbabwe, under the Rozvi) but takes no journal entry: the add logs an error.
+	# Nor while the entry is shown but not yet active: has_journal_entry reads
+	# active entries only, the engine activates that one at its next check of
+	# `possible`, and adding over it logged "already has a journal entry of
+	# type je_grand_monuments" (journal_entry_manager.cpp: 116 lines, 55 countries,
+	# as the first 1.15 game began; the same line on 1.14.5).
 	if = {
 		limit = {
 			gm_system_enabled = yes
 			NOT = { is_country_type = decentralized }
 			NOT = { has_journal_entry = je_grand_monuments }
+			NOT = { has_inactive_journal_entry = je_grand_monuments }
 			OR = {
 				any_scope_state = { has_building = building_grand_monument }
 				any_scope_state = { has_building = building_grand_monument_site }

@@ -31,7 +31,7 @@ Couldn't find any animation state for harvest condition type
 
 Mod adds `bull_market` / `bear_market` / `market_downturn` / `financial_panic` as harvest condition types in `common/harvest_condition_types/extra_harvest_condition_types.txt` for banking-cycle visualization. Vanilla `harvest_condition_sound_entity` has no matching states. Functional impact: silent — engine just doesn't play a sound. Fix recipe in `docs/audits/open_issues.md#l7-mod-harvest-condition-sound-entity-states-missing`.
 
-### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:293 - Could not find template 'vertical_scrollbar'`
+### `pdx_gui_factory.cpp:628` — `gui/tooltip.gui:328 - Could not find template 'vertical_scrollbar'`
 - source: `pdx_gui_factory.cpp:628`
 - tracked: `docs/audits/open_issues.md#l8-mod-tooltipgui-vertical-scrollbar-template-warning`
 
@@ -56,6 +56,7 @@ Block-compressed (BC1/BC3) DDS textures need multiple-of-4 width and height; the
 
 ### `jomini_effect.cpp:1135` — variables set for localization tooltip read flagged unused
 - source: `jomini_effect.cpp:1135`
+- source: `jomini_effect.cpp:1140`
 - tracked: `docs/audits/open_issues.md#l10-mod-loc-only-variables-flagged-unused`
 
 ```
@@ -96,6 +97,7 @@ Duplicated event ID 'formation.17' found
 
 ### `jomini_effect.cpp:1139` — GUI-injected scopes flagged never-set
 - source: `jomini_effect.cpp:1139`
+- source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l14-gui-injected-event-targets-flagged-never-set`
 
 ```
@@ -106,6 +108,7 @@ A `.gui` (or a loc string) that sets a scope with `AddScope('<name>', …)` for 
 
 ### `power_bloc_principle.cpp:139` — vanilla principles orphaned by REPLACE:principle_group
 - source: `power_bloc_principle.cpp:139`
+- source: `power_bloc_principle.cpp:138`
 - tracked: `docs/audits/open_issues.md#l15-vanilla-principles-orphaned-by-replaceprinciple_group-overrides`
 
 ```
@@ -116,6 +119,7 @@ Principle principle_sacred_civics_
 
 ### `country_law_manager.cpp:464` — deliberate historical law seeds lacking unlock tech (1.13.9 validation)
 - source: `country_law_manager.cpp:464`
+- source: `country_law_manager.cpp:462`
 - tracked: `docs/audits/open_issues.md#l16-historical-law-seeding-vs-unlocking_technologies-retention-warnings-1139`
 
 ```
@@ -151,6 +155,7 @@ The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fi
 
 ### `jomini_effect.cpp:1139` — old-save migration cleanup reads variables nothing sets
 - source: `jomini_effect.cpp:1139`
+- source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`
 
 ```
@@ -370,7 +375,9 @@ Event un_vote.5 is orphaned
 
 ### `event.cpp:358` — Grand Monuments v2 load-time notices
 - source: `event.cpp:358`
+- source: `event.cpp:410`
 - source: `jomini_effect.cpp:1139`
+- source: `jomini_effect.cpp:1144`
 - tracked: `docs/audits/open_issues.md#l26-grand-monuments-v2-load-time-notices`
 
 ```

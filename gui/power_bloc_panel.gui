@@ -1,4 +1,8 @@
-﻿# COPY-PASTED FOR NOW
+﻿# TE override of vanilla power_bloc_panel.gui (1.15.0): vanilla's file plus principle slots 5-8, their
+# locked-slot tooltips and the remove button (#787, #836), and principle_group widened to 550 for the
+# mod's five-level groups (tiers IV and V).
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+# COPY-PASTED FOR NOW
 @panel_width_minus_20 = 520
 @panel_width_minus_10 = 530			# used to be 450
 @panel_width = 540  				# used to be 460
@@ -1023,7 +1027,7 @@ types power_bloc_panel_types
 						}
 
 						blockoverride "portrait_texture" {
-							portrait_texture = "[Character.GetAnimatedPortrait('characters_portrait_environment', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+							portrait_texture = "[Character.GetAnimatedPortrait('powerblock_member_environment', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 						}
 
 						blockoverride "portrait_icons" {}
@@ -1088,7 +1092,7 @@ types power_bloc_panel_types
 						}
 
 						blockoverride "portrait_texture" {
-							portrait_texture = "[Character.GetAnimatedPortrait('characters_portrait_environment', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+							portrait_texture = "[Character.GetAnimatedPortrait('powerblock_member_environment', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 						}
 
 						blockoverride "portrait_mask" {
@@ -1172,7 +1176,7 @@ types power_bloc_panel_types
 						}
 
 						blockoverride "portrait_texture" {
-							portrait_texture = "[Character.GetAnimatedPortrait('characters_portrait_environment', 'camera_event_left', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+							portrait_texture = "[Character.GetAnimatedPortrait('powerblock_member_environment', 'camera_event_left', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 						}
 
 						blockoverride "portrait_icons" {}
@@ -1237,7 +1241,7 @@ types power_bloc_panel_types
 						}
 
 						blockoverride "portrait_texture" {
-							portrait_texture = "[Character.GetAnimatedPortrait('characters_portrait_environment', 'camera_event_left', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+							portrait_texture = "[Character.GetAnimatedPortrait('powerblock_member_environment', 'camera_event_left', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 						}
 
 						blockoverride "portrait_icons" {}
@@ -1317,7 +1321,7 @@ types power_bloc_panel_types
 						}
 
 						blockoverride "portrait_texture" {
-							portrait_texture = "[Character.GetAnimatedPortrait('pop_environment', 'camera_body', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+							portrait_texture = "[Character.GetAnimatedPortrait('powerblock_leader_environment', 'camera_body', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 						}
 
 						blockoverride "portrait_icons" {}
@@ -1859,7 +1863,7 @@ types power_bloc_panel_types
 		background = {
 			visible = "[Country.IsLocalPlayer]"
 			using = fade_left_simple
-			
+
 			using = fancy_pattern
 			color = "[Country.GetMapColor]"
 			using = frame_small_mask
@@ -2051,7 +2055,10 @@ types power_bloc_panel_types
 					### TOTAL NUMBER OF SHIPS
 					power_bloc_header_grid_item = {
 						using = tooltip_se
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 
 						blockoverride "text" {
 							raw_text = "#v [Country.GetNumShips|0]#!"
@@ -2076,7 +2083,7 @@ types power_bloc_panel_types
 					### OVERLORD ACTIONS
 					diplo_actions_button = {
 						visible = "[Country.IsSubjectOf(GetPlayer.Self)]"
-						size = { 50 50 }
+						size = { 38 38 }
 
 						blockoverride "onclick" {
 							onclick = "[RightClickMenuManager.ToggleOverlordActions(Country.AccessSelf, PdxGuiWidget.AccessSelf)]"
@@ -2607,7 +2614,10 @@ types power_bloc_panel_types
 					### TOTAL NUMBER OF SHIPS
 					power_bloc_header_grid_item = {
 						using = tooltip_se
-						tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+
+						tooltipwidget = {
+							RegularTooltip_CountryShips = {}
+						}
 
 						blockoverride "text" {
 							raw_text = "#v [Country.GetNumShips|0]#!"
@@ -2658,46 +2668,46 @@ types power_bloc_panel_types
 					}
 
 					### BLOC LEADER ACTIONS
-						diplo_actions_button = {
+					diplo_actions_button = {
 						visible = "[Not(IsDataModelEmpty(Country.GetAllPowerBlocLeaderDiploActions))]"
-							size = { 35 35 }
+						size = { 35 35 }
 
-							blockoverride "onclick" {
+						blockoverride "onclick" {
 							onclick = "[RightClickMenuManager.ToggleBlocLeaderActions(Country.AccessSelf, PdxGuiWidget.AccessSelf)]"
-							}
-
-							blockoverride "tooltip" {
-							tooltip = "BLOC_LEADER_ACTIONS_BUTTON_TOOLTIP"
-							}
-
-							blockoverride "icon_texture" {
-							texture = "gfx/interface/buttons/button_icons/bloc_interaction.dds"
-							}
-
-							blockoverride "available_number_text" {
-							text = "[GetDataModelSize(Country.GetAvailablePowerBlocLeaderDiploActions)|+]"
-							}
 						}
 
-						### BLOC MEMBER ACTIONS
-						diplo_actions_button = {
+						blockoverride "tooltip" {
+							tooltip = "BLOC_LEADER_ACTIONS_BUTTON_TOOLTIP"
+						}
+
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/buttons/button_icons/bloc_interaction.dds"
+						}
+
+						blockoverride "available_number_text" {
+							text = "[GetDataModelSize(Country.GetAvailablePowerBlocLeaderDiploActions)|+]"
+						}
+					}
+
+					### BLOC MEMBER ACTIONS
+					diplo_actions_button = {
 						visible = "[And(Not(IsDataModelEmpty(Country.GetAllPowerBlocMemberDiploActions)), IsDataModelEmpty(Country.GetAllPowerBlocLeaderDiploActions))]"
-							size = { 35 35 }
+						size = { 35 35 }
 
-							blockoverride "onclick" {
-								onclick = "[RightClickMenuManager.ToggleBlocActions(Country.AccessSelf, PdxGuiWidget.AccessSelf)]"
-							}
+						blockoverride "onclick" {
+							onclick = "[RightClickMenuManager.ToggleBlocActions(Country.AccessSelf, PdxGuiWidget.AccessSelf)]"
+						}
 
-							blockoverride "tooltip" {
-								tooltip = "BLOC_ACTIONS_BUTTON_TOOLTIP"
-							}
+						blockoverride "tooltip" {
+							tooltip = "BLOC_ACTIONS_BUTTON_TOOLTIP"
+						}
 
-							blockoverride "icon_texture" {
-								texture = "gfx/interface/buttons/button_icons/bloc_interaction.dds"
-							}
+						blockoverride "icon_texture" {
+							texture = "gfx/interface/buttons/button_icons/bloc_interaction.dds"
+						}
 
-							blockoverride "available_number_text" {
-								text = "[GetDataModelSize(Country.GetAvailablePowerBlocMemberDiploActions)|+]"
+						blockoverride "available_number_text" {
+							text = "[GetDataModelSize(Country.GetAvailablePowerBlocMemberDiploActions)|+]"
 						}
 					}
 				}

@@ -1136,7 +1136,7 @@ remove_all_ideologies = {
 	remove_ideology = ideology_proletarian
 	remove_ideology = ideology_egalitarian
 	remove_ideology = ideology_populist
-	remove_ideology = ideology_socialist
+	remove_ideology = ideology_communist
 	remove_ideology = ideology_reactionary
 	remove_ideology = ideology_plutocratic
 	remove_ideology = ideology_patriarchal
@@ -1170,6 +1170,20 @@ remove_all_ideologies = {
 	remove_ideology = ideology_orleanist
 	remove_ideology = ideology_legitimist
 	remove_ideology = ideology_bonapartist
+	# Interest-group ideologies vanilla 1.15 added
+	remove_ideology = ideology_autocratic
+	remove_ideology = ideology_defensist
+	remove_ideology = ideology_disciplinarian
+	remove_ideology = ideology_internationalist
+	remove_ideology = ideology_managerial
+	remove_ideology = ideology_materialist
+	remove_ideology = ideology_militant
+	remove_ideology = ideology_militarist
+	remove_ideology = ideology_russian_patriarchal
+	remove_ideology = ideology_spiritual
+	remove_ideology = ideology_tsarist
+	remove_ideology = ideology_universalist
+	remove_ideology = ideology_universalist_modern
 }
 
 fix_incompatible_laws = {
@@ -1181,6 +1195,7 @@ fix_incompatible_laws = {
 				has_law = law_type:law_census_voting
 				has_law = law_type:law_universal_suffrage
 				has_law = law_type:law_liquid_democracy
+				has_law = law_type:law_labour_suffrage
 			}
 			has_law = law_type:law_no_campaign_finance_laws
 		}

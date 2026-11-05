@@ -16,16 +16,16 @@
   "de": "Die geltenden Steuern, jeweils innerhalb der Spanne des Steuergesetzes festgesetzt."
  },
  "je_tax_code_reason": {
-  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups$')] commit to it, and takes effect on its [concept_tax_commencement].",
-  "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] bleibt bestehen, bis eine [concept_tax_bill] ihn ändert oder er ausläuft. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald ihr genug [Concept('concept_interest_group','$concept_interest_groups$')] zusagen, und gilt ab dem Zeitpunkt ihres [Concept('concept_tax_commencement','Inkrafttretens')]."
+  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
+  "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] bleibt bestehen, bis eine [concept_tax_bill] ihn ändert oder er ausläuft. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald ihr genug [Concept('concept_interest_group','$concept_interest_groups|q$')] zusagen, und gilt ab dem Zeitpunkt ihres [Concept('concept_tax_commencement','Inkrafttretens')]."
  },
  "je_tax_code_reason_full": {
-  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups$')] commit to it, and takes effect on its [concept_tax_commencement].",
-  "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] gilt, bis eine [concept_tax_bill] ihn ändert oder seine Geltungsdauer endet. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald sich genügend [Concept('concept_interest_group','$concept_interest_groups$')] dafür verpflichten, und wird mit ihrem [concept_tax_commencement] wirksam."
+  "en": "Every tax is set by law. A rate in the [concept_tax_code] stays until a [concept_tax_bill] changes it or its expiry comes. A reform starts as a draft, is introduced as a bill, passes once enough [Concept('concept_interest_group','$concept_interest_groups|q$')] commit to it, and takes effect on its [concept_tax_commencement].",
+  "de": "Jede Steuer wird per Gesetz festgelegt. Ein Satz in der [concept_tax_code] gilt, bis eine [concept_tax_bill] ihn ändert oder seine Geltungsdauer endet. Eine Reform beginnt als Entwurf, wird als Vorlage eingebracht, wird verabschiedet, sobald sich genügend [Concept('concept_interest_group','$concept_interest_groups|q$')] dafür verpflichten, und wird mit ihrem [concept_tax_commencement] wirksam."
  },
  "je_tax_code_reason_light": {
-  "en": "Your taxation law sets the range of every tax it levies. Within that range you set each rate in the [concept_tax_code] yourself, and a change applies at once. Your tax level follows the heaviest tax, and [Concept('concept_interest_group','$concept_interest_groups$')] react to each change.",
-  "de": "Ihr Steuergesetz bestimmt die Spanne jeder Steuer, die es erhebt. Innerhalb dieser Spanne legen Sie jeden Satz in der [concept_tax_code] selbst fest, und eine Änderung gilt sofort. Ihre Besteuerungsstufe richtet sich nach der schwersten Steuer, und [Concept('concept_interest_group','$concept_interest_groups$')] reagieren auf jede Änderung."
+  "en": "Your taxation law sets the range of every tax it levies. Within that range you set each rate in the [concept_tax_code] yourself, and a change applies at once. Your tax level follows the heaviest tax, and [Concept('concept_interest_group','$concept_interest_groups|q$')] react to each change.",
+  "de": "Ihr Steuergesetz bestimmt die Spanne jeder Steuer, die es erhebt. Innerhalb dieser Spanne legen Sie jeden Satz in der [concept_tax_code] selbst fest, und eine Änderung gilt sofort. Ihre Besteuerungsstufe richtet sich nach der schwersten Steuer, und [Concept('concept_interest_group','$concept_interest_groups|q$')] reagieren auf jede Änderung."
  },
  "je_tax_code_status_inactive": {
   "en": "The tax code takes over once this country's taxation law has been carried over into it: at the start of the game, or when the country is founded.",
@@ -1152,8 +1152,8 @@
   "de": "Versprechen"
  },
  "te_tax_ov_obligations_tt": {
-  "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.",
-  "de": "Versprechen, die die Regierung [Concept('concept_interest_group','$concept_interest_groups$')] für die Verabschiedung ihrer Steuervorlagen gegeben hat. Ein ausstehendes wird nur verbindlich, wenn seine Vorlage verabschiedet wird; ein verbindliches wird am 1. jedes Monats geprüft, bis es gehalten oder gebrochen wird."
+  "en": "Promises the government made to [Concept('concept_interest_group','$concept_interest_groups|q$')] to pass its tax bills. A pending one binds only if its bill passes; a binding one is checked on the 1st of every month until it is kept or broken.",
+  "de": "Versprechen, die die Regierung [Concept('concept_interest_group','$concept_interest_groups|q$')] für die Verabschiedung ihrer Steuervorlagen gegeben hat. Ein ausstehendes wird nur verbindlich, wenn seine Vorlage verabschiedet wird; ein verbindliches wird am 1. jedes Monats geprüft, bis es gehalten oder gebrochen wird."
  },
  "te_tax_ov_obligations_value": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_binding')|0]#! binding, #v [GetPlayer.MakeScope.ScriptValue('te_tax_view_obl_pending')|0]#! pending",

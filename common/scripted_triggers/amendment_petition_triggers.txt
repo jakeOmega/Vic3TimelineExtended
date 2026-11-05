@@ -45,6 +45,7 @@ te_ap_enacting_in_language_policy = {
 te_ap_enacting_in_citizenship = {
 	OR = {
 		is_enacting_law = law_type:law_subjecthood
+		is_enacting_law = law_type:law_official_nationality
 		is_enacting_law = law_type:law_ethnostate
 		is_enacting_law = law_type:law_national_supremacy
 		is_enacting_law = law_type:law_racial_segregation
@@ -119,6 +120,7 @@ te_ap_enacting_in_bureaucracy = {
 		is_enacting_law = law_type:law_elected_bureaucrats
 		is_enacting_law = law_type:law_contracted_administration
 		is_enacting_law = law_type:law_communal_administration
+		is_enacting_law = law_type:law_military_bureaucrats
 		is_enacting_law = law_type:law_automated_bureaucracy
 	}
 }
@@ -165,6 +167,7 @@ te_ap_enacting_in_distribution_of_power = {
 		is_enacting_law = law_type:law_single_party_state
 		is_enacting_law = law_type:law_algorithmic_governance
 		is_enacting_law = law_type:law_liquid_democracy
+		is_enacting_law = law_type:law_labour_suffrage
 	}
 }
 

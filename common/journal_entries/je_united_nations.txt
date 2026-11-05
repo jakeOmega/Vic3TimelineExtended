@@ -136,10 +136,6 @@
 		un_state_restore_all = yes
 	}
 
-	complete = {
-		always = no
-	}
-
 	progressbar = no
 	progress_desc = un_authority_progress_desc
 

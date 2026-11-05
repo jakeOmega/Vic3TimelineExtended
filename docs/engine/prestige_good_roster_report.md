@@ -32,9 +32,9 @@ _None._
 
 ## Coverage
 
-- mod-touched companies checked: 314
-- vanilla-only companies not judged: 0
-- prestige goods checked: 212
+- mod-touched companies checked: 317
+- vanilla-only companies not judged: 10
+- prestige goods checked: 214
 - prestige goods with an unknown base good (vanilla named goods, not in the snapshot), not judged: 55
 - total flags: 0
 - unreviewed: 0

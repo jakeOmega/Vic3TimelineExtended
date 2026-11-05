@@ -2,6 +2,8 @@
 
 Vanilla 1.15 was due on 2026-10-22 and slipped to **2026-11-05**. This doc reads what is known about it against the mod: what to check the day the patch ships, what has to change before the mod loads and works, which new features are worth building, where 1.15 overlaps the mod without needing a change, and what the new mechanics and hooks let each of the mod's systems do better (§ 7). The general bump procedure is still `docs/guides/vanilla_patch_runbook.md`; this doc covers only what is specific to 1.15. After the migration, turn it into the migration record, as `vanilla_1_14_5_migration.md` was.
 
+**Migrated on 2026-11-05.** The release-day branch carried out §§ 3 and 5. What it did, the answers to § 2's checks, and where this plan was wrong are in `vanilla_1_15_migration.md`; what needs a game is on `docs/testing/vanilla-1-15-playtest.md`. This doc stays as the plan, and §§ 4 and 7 as the list of features not yet built.
+
 **Status on 2026-11-05, release day.** None of § 5's before-Nov-5 items has landed on `main`. Still open:
 - the engine-doc render guard and the `|q` conversion;
 - the two owner decisions and the art;

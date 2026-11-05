@@ -199,7 +199,8 @@ ch_has_regressive_laws = {
 # Scope: country
 # True when the interest group with the most clout in government holds a
 # communist ideology (an interest group counts its leader's ideology among its
-# own). The laws alone can't tell a communist one-party planned economy from a
+# own): the Trade Unions' Communist (1.15, under Factory Councils), a Communist
+# leader (ideology_communist_leader since 1.15) or a Vanguardist one. The laws alone can't tell a communist one-party planned economy from a
 # nationalist, technocratic or military one, so the Communist model's one-party
 # branch asks who runs the party.
 ch_government_led_by_communists = {
@@ -208,6 +209,7 @@ ch_government_led_by_communists = {
 		is_strongest_ig_in_government = yes
 		OR = {
 			has_ideology = ideology:ideology_communist
+			has_ideology = ideology:ideology_communist_leader
 			has_ideology = ideology:ideology_vanguardist
 		}
 	}
@@ -232,8 +234,9 @@ ch_government_led_by_fascists = {
 
 # Scope: country
 # True when that interest group holds any left-wing ideology: the communist
-# pair, vanilla's Socialist (the Trade Unions gain it as the game goes on), the
-# Trade Unions' baseline Proletarian, or a Social Democrat leader. A Command
+# ones above (1.15's Communist took over from the Trade Unions' Socialist), the
+# Trade Unions' baseline Proletarian, or a State Socialist leader (the Social
+# Democrat until 1.15). A Command
 # Economy run by the left counts as Socialist, and Cultural Citizenship in a
 # one-party state run by the left is not Fascist.
 ch_government_led_by_the_left = {
@@ -242,10 +245,10 @@ ch_government_led_by_the_left = {
 		is_strongest_ig_in_government = yes
 		OR = {
 			has_ideology = ideology:ideology_communist
+			has_ideology = ideology:ideology_communist_leader
 			has_ideology = ideology:ideology_vanguardist
-			has_ideology = ideology:ideology_socialist
 			has_ideology = ideology:ideology_proletarian
-			has_ideology = ideology:ideology_social_democrat
+			has_ideology = ideology:ideology_state_socialist
 		}
 	}
 }

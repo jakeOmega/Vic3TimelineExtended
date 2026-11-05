@@ -2907,7 +2907,7 @@ company_vale = {
 		OR = {
 			leading_producer_of = g:iron
 			leading_producer_of = g:tech_metals
-			leading_producer_of = g:lead
+			leading_producer_of = g:copper
 		}
 	}
 	prosperity_modifier = {
@@ -3659,7 +3659,7 @@ company_bhp_group = {
 		OR = {
 			"goods_production_rank(g:iron)" <= 5
 			"goods_production_rank(g:coal)" <= 5
-			"goods_production_rank(g:lead)" <= 5
+			"goods_production_rank(g:copper)" <= 5
 			"goods_production_rank(g:sulfur)" <= 5
 			"goods_production_rank(g:tech_metals)" <= 5
 		}
@@ -3680,7 +3680,7 @@ company_bhp_group = {
 		OR = {
 			leading_producer_of = g:iron
 			leading_producer_of = g:coal
-			leading_producer_of = g:lead
+			leading_producer_of = g:copper
 			leading_producer_of = g:sulfur
 			leading_producer_of = g:tech_metals
 		}

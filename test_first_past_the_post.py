@@ -349,7 +349,7 @@ class LawListsTest(unittest.TestCase):
     def test_allowed_laws_restated(self):
         amendment = _read("common/amendments/te_first_past_the_post.txt")
         allowed = set(re.findall(r"law_\w+", "\n".join(_block(amendment, "allowed_laws"))))
-        self.assertEqual(len(allowed), 5)
+        self.assertEqual(len(allowed), 6)
         triggers = _read("common/scripted_triggers/te_fptp_triggers.txt")
         self.assertEqual(self._laws(triggers, "te_fptp_allowed_voting_law", "law_type:"), allowed)
         self.assertEqual(self._laws(triggers, "te_fptp_enacting_allowed_voting_law", "law_type:"), allowed)

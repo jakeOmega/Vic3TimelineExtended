@@ -339,6 +339,35 @@
    ]
   }
  ],
+ "bg_cossack_host": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_ranching"
+   ],
+   "min_productivity_to_hire": [
+    "=",
+    "2.0"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "reserves_arable_land": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0"
+   ]
+  }
+ ],
  "bg_plantations": [
   "=",
   {
