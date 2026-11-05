@@ -304,7 +304,7 @@ def assert_column_closes_with_its_sections(test, wide_type, n, sections, text=No
 
 
 def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), outside=(),
-                               added_gates=(), composers=None, text=None, columns=None):
+                               added_gates=(), composers=None, text=None, columns=None, split=None):
     """Check a wide composer against the narrow layout it widens, and return
     its columns (a list of section-name lists, read down each column).
 
@@ -337,8 +337,15 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
       spacing, a size limit, a name and its visible; a flowcontainer runs
       vertically; and one under the same gates as a narrow composer or wrapper
       spaces its sections as that one does.
-    - A name in `extra`, `outside` or `added_gates` that no longer applies
-      fails, so a stale one can't hide a change.
+    - `split` maps a wide-only section to the narrow section it draws part
+      of (the Space Race's solar colonization tabs, which the narrow layout
+      draws inside the milestones and full screen takes a column of their
+      own: owner, 2026-11-05). It counts in its column, unlike `extra`, but
+      not in the narrow comparison, and it sits under every gate its narrow
+      section does, and may carry more. That the wide layout leaves the part
+      out of the narrow section is the caller's to check.
+    - A name in `extra`, `outside`, `added_gates` or `split` that no longer
+      applies fails, so a stale one can't hide a change.
     - `columns`, for a layout the owner balanced by hand (Banking, Grand
       Monuments, Demographics: 2026-11-03): its columns, a list of
       section-name lists read down each. The wide composer must lay them out
@@ -373,12 +380,24 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
     stale = set(extra) - wide.skipped
     test.assertFalse(stale, f"{wide_type}: extra names {sorted(stale)}, which it doesn't place")
 
-    wide_names = [s for s, _, _ in wide.sections]
+    split = dict(split or {})
+    placed = {s: gates for s, gates, _ in wide.sections}
+    narrow_gates = {s: gates for s, gates, _ in narrow.sections}
+    for section, part_of in split.items():
+        test.assertIn(section, placed, f"{wide_type}: split names {section}, which it doesn't place")
+        test.assertNotIn(section, narrow_gates, f"{wide_type}: split names {section}, which the narrow layout places")
+        test.assertIn(part_of, narrow_gates, f"{wide_type}: {section} is split out of {part_of}, "
+                                             f"which the narrow layout doesn't place")
+        missing = sorted(set(narrow_gates[part_of]) - set(placed[section]))
+        test.assertFalse(missing, f"{wide_type}: {section} shows in the narrow layout, inside {part_of}, only while "
+                                  f"{missing}, but in the wide one without it")
+    sections = [entry for entry in wide.sections if entry[0] not in split]
+    wide_names = [s for s, _, _ in sections]
     narrow_names = [s for s, _, _ in narrow.sections]
     if columns is None:
         test.assertEqual(wide_names, narrow_names,
                          f"{wide_type}: the narrow layout's sections, read down each column and then across")
-        pairs = list(zip(narrow.sections, wide.sections))
+        pairs = list(zip(narrow.sections, sections))
     else:
         test.assertEqual([c for c in wide.columns if c is not None], [list(c) for c in columns],
                          f"{wide_type}: the columns the owner set")
@@ -390,7 +409,7 @@ def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None,
             if section in wide_names and section in narrow_names:
                 test.assertEqual(wide_names.index(section), narrow_names.index(section),
                                  f"{wide_type}: {section} draws outside the columns at another place than the narrow one")
-        by_name = {s: (s, gates, in_column) for s, gates, in_column in wide.sections}
+        by_name = {s: (s, gates, in_column) for s, gates, in_column in sections}
         pairs = [(entry, by_name[entry[0]]) for entry in narrow.sections]
     out = [s for s, _, in_column in wide.sections if not in_column]
     test.assertFalse(sorted(set(out) - set(outside)),

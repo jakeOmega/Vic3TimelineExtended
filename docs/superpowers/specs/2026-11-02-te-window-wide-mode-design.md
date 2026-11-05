@@ -203,7 +203,9 @@ height (tooltips count, collapsed sections don't show), so the play-test
 settles them. The owner rebalanced Grand Monuments, Banking, Demographics and
 Nuclear Weapons on 2026-11-03; their composers and
 `docs/testing/te-window-wide-playtest.md` § "The owner's column balance" hold
-the current columns.
+the current columns. On 2026-11-05 the owner gave the Space Race three: the
+milestones, Solar System Colonization's four tabs, then Space Powers and Orbit
+(the same file, § "The Space Race in three columns").
 
 | Tab | Column 1 | Column 2 | Column 3 |
 |---|---|---|---|

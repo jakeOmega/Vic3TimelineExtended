@@ -20,7 +20,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 import gen_solar_sites as gss  # noqa: E402
 import gui_tree  # noqa: E402
-from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, gui_keys, guard_spans,  # noqa: E402
+from gui_test_helpers import (READ, _children, assert_wide_matches_narrow, block_defaults, gui_keys, guard_spans,  # noqa: E402
                               in_spans, load_loc, loc_closure, mod_types, panel_loc_keys, panel_view,
                               type_closure, unguarded)
 from scripts.generators import gen_te_systems_window as window_gen  # noqa: E402
@@ -1553,7 +1553,15 @@ class PrivateTest(unittest.TestCase):
     def test_the_entrys_sections_and_link_are_the_players(self):
         body = self.types["te_sr_window_milestones"].body
         spans = self.view.skip["te_sr_window_milestones"]
-        self.assertEqual(spans, guard_spans(body))
+        # the guards, and the live sections full screen moves to a column of
+        # their own (the frame's emptied block), which sit inside a guard
+        guards = guard_spans(body)
+        moved = [(a, b) for a, b, x in block_defaults(body)
+                 if x in {f"sr_window_{m}_live" for m in window_gen.SR_OWN_COLUMN}]
+        self.assertEqual(len(moved), len(window_gen.SR_OWN_COLUMN))
+        self.assertEqual(sorted(spans), sorted(guards + moved))
+        for a, _ in moved:
+            self.assertTrue(in_spans(a, guards), "a moved block outside the player's own part")
         frames = [m.start() for m in re.finditer(r"\bte_system_tab_frame = \{", body)] + [len(body)]
         self.assertEqual(len(frames) - 1, len(ALL))
         for m, start, end in zip(ALL, frames, frames[1:]):
@@ -1866,17 +1874,81 @@ class ScriptTooltipTest(unittest.TestCase):
 
 class WideLayoutTest(unittest.TestCase):
     """te_sr_wide_sections, the window's full-screen Space Race (spec
-    2026-11-02-te-window-wide-mode § 7): the milestones under way, then Space
-    Powers and Orbit, each column under the gate its narrow run carries, in
-    two columns (te_ui_columns_two): How the Space Race Works, once the
-    third, is the Help page."""
+    2026-11-02-te-window-wide-mode § 7), in three columns
+    (te_ui_columns_three), each under the gate its narrow run carries: the
+    milestones under way; solar colonization's four tabs (Mission Control,
+    Fleets, Colonies, Solar System) in a column of their own (owner,
+    2026-11-05), split out of its frame, which keeps its overview and Open
+    Journal Entry in the first; then Space Powers and Orbit. How the Space
+    Race Works is the Help page."""
+
+    LIVE = {f"te_sr_window_{m}_live": m for m in window_gen.SR_OWN_COLUMN}
+
+    def setUp(self):
+        self.wide = _strip_comments(_type_body(_read(GUI), "te_sr_wide_sections"))
+        self.generated = _strip_comments(_read(window_gen.GUI_OUT))
 
     def test_the_columns(self):
-        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"))
+        columns = assert_wide_matches_narrow(self, "te_sr_wide_sections", layout=("te_sr_tab_body", "te_sr_tab_layout"),
+                                             split={name: "te_sr_window_milestones" for name in self.LIVE})
         self.assertEqual(columns, [
             ["te_sr_window_milestones"],
+            ["te_sr_window_solar_colonization_live"],
             ["te_sr_sec_powers", "te_sr_sec_orbit"]])
-        self.assertIn("type te_sr_wide_sections = te_ui_columns_two", _read(GUI))
+        self.assertIn("type te_sr_wide_sections = te_ui_columns_three", _read(GUI))
+
+    def test_the_tabs_leave_the_first_column(self):
+        """The first column's milestones empty each split-out frame block, and
+        only those: the frame keeps its header, overview and Open Journal
+        Entry. The side panel's te_sr_tab_body leaves the blocks alone."""
+        milestones = _instances(self.wide, "te_sr_window_milestones")
+        self.assertEqual(len(milestones), 1)
+        self.assertEqual(re.findall(r'blockoverride "(\w+)" \{\s*\}', milestones[0]),
+                         [f"sr_window_{m}_live" for m in self.LIVE.values()])
+        self.assertEqual(re.sub(r'blockoverride "\w+" \{\s*\}', "", milestones[0][:-1]).strip(), "")
+        frames = _type_body(self.generated, "te_sr_window_milestones")
+        for m in self.LIVE.values():
+            with self.subTest(milestone=m):
+                opener = f'block "sr_window_{m}_live" {{'
+                self.assertEqual(frames.count(opener), 1)
+                start = frames.index(opener) + len(opener) - 1
+                block = frames[start:_close(frames, start) + 1]
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", block), [f"te_sr_{m}_status"])
+                self.assertNotIn("OpenJournalEntryPanel", block)
+        narrow = _type_body(_read(GUI), "te_sr_tab_body")
+        self.assertIn("te_sr_window_milestones = {}", narrow)
+        self.assertNotIn('blockoverride "sr_window_', narrow)
+
+    def test_the_tabs_column_is_the_frames_live_part(self):
+        """te_sr_window_<m>_live draws what the frame's block held, under the
+        frame's gates: the entry shown for the Country on its root, then the
+        player's own, with the entry's datacontext on the guard's child."""
+        for name, m in self.LIVE.items():
+            with self.subTest(type=name):
+                body = _type_body(self.generated, name)
+                gate = (f"GetScriptedGui('te_window_space_race_{m}_sgui')"
+                        ".IsShown( GuiScope.SetRoot( Country.MakeScope ).End )")
+                # its one visible, on the root: the inner levels gate by template
+                self.assertEqual(re.findall(r'^\s*visible = "(.*)"$', body, re.M), [f"[{gate}]"])
+                self.assertIn("minimumsize = { 520 -1 }", body)
+                self.assertRegex(body, re.compile(
+                    r"flowcontainer = \{\s*using = te_own_country_only\s*parentanchor = hcenter\s*direction = vertical"
+                    r"\s*ignoreinvisible = yes\s*flowcontainer = \{\s*"
+                    rf"datacontext = \"\[GetPlayerJournalEntry\('je_space_race_{m}'\)\]\"", re.S))
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", body), [f"te_sr_{m}_status"])
+                self.assertRegex(body, rf'te_sr_{m}_status = \{{\s*blockoverride "sr_debris" \{{\}}\s*\}}')
+
+    def test_the_tabs_column_closes_up_without_them(self):
+        """Column 2 shows only while its type would draw: the entry shown for
+        the Country, and the Country the player's own (te_own_country_only), so
+        another milestone, or another country's in National Info, leaves two
+        columns, not an empty 520 between them."""
+        (name, _), = self.LIVE.items()
+        own = re.search(r'^\s*visible = "\[(.*)\]"$', _type_body(self.generated, name), re.M).group(1)
+        shown = re.findall(r'blockoverride "column_2_visible" \{\s*visible = "(.*)"\s*\}', self.wide)
+        self.assertEqual(shown, [f"[And( {own}, Country.IsLocalPlayer )]"])
+        self.assertNotIn("column_1_visible", self.wide)
+        self.assertNotIn("column_3_visible", self.wide)
 
     def test_the_window_mounts_it_full_screen(self):
         tab = next(t for t in window_gen.TABS if t.key == "space_race")
