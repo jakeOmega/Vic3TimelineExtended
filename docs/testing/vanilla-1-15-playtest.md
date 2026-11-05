@@ -19,7 +19,7 @@ migration record that doc becomes), and an engine fact in `docs/guides/scripting
   512 KB, and a probe that fired once is gone after a few launches: copy the lines out right after the run
   (log-triage skill, 2026-09-27). Which line fired is the answer; none prints a figure.
 - **At load**, check `debug.log` for `Unexpected token` or an unknown-field line on `disable_evaluation`,
-  `fire_only_once_globally`, `scaling_modifiers_while_active` or `outcome` in the three `te_probe_115` files. Two of
+  `fire_only_once_globally`, `scaling_modifiers_while_active`, `outcome` or the bar's `min_value` in the `te_probe_115` files. Two of
   those fields are in vanilla's readme and digest but no vanilla 1.15 script uses them; a load error there is itself
   an answer (the field doesn't exist) and explains a BROKEN below.
 - **Re-arm** in a save that has run them by renaming the global `te_probe_115_claimed` (`_v2`) and giving events
@@ -28,8 +28,10 @@ migration record that doc becomes), and an engine fact in `docs/guides/scripting
   the probe country while it runs (the `TE_PROBE_115 start` line names it, via `debug_log_scopes`). Its two modifiers
   are the nuclear deterrent's display-only terms, whose types nothing reads.
 - **Delete once answered**: `common/journal_entries/te_probe_115_probes.txt`, `common/scripted_effects/te_probe_115_effects.txt`,
-  `events/te_probe_115_events.txt`, `test_te_probe_115.py`, the two loc keys `te_probe_115` and `te_probe_115_reason`
-  (organize_loc files them in `te_miscellaneous_l_english.yml`), and the Self-checks section below.
+  `common/scripted_effects/te_probe_115_c5_effects.txt`, `common/scripted_progress_bars/te_probe_115_bars.txt`,
+  `events/te_probe_115_events.txt`, `test_te_probe_115.py`, the four loc keys `te_probe_115`, `te_probe_115_reason`,
+  `te_probe_115_c5_bar_name` and `te_probe_115_c5_bar_text` (organize_loc files them in `te_miscellaneous_l_english.yml`),
+  and the Self-checks section below.
 
 ## Self-checks (the te_probe_115 probes)
 
@@ -42,6 +44,8 @@ Each row's first answer is the expected one.
 |---|---|---|---|
 | C3: two outcomes true on the same update | `TE_PROBE_115 c3_precedence FIRST` / `SECOND` | FIRST: the first declared outcome concludes the entry (it has the failure look, so the look doesn't decide). SECOND: the last declared one does, or the completion look wins. | FIRST: declare each converted entry's outcomes in 1.14's order of precedence. SECOND, or to be safe either way: give outcomes that can be true together mutually exclusive triggers (the Space Race, the four social-movement entries with complete, fail and timeout). |
 | C3: does the other one run too? | `TE_PROBE_115 c3_both ONE` / `BOTH` | ONE: only one outcome's effect runs. BOTH: every outcome true on the update runs its effect. | BOTH: mutually exclusive triggers on every entry whose outcomes can be true together. |
+| C5: the root of a bar's script-value `min_value` | `TE_PROBE_115 c5_root OWNER` / `ENTRY` / `NONE` / `UNCLAMPED` / `OTHER` (step 3) | The probe's bar (`te_probe_115_c5_bar`) has a minimum of 40 when its root holds the probe country's variable, 20 when `journal_entry_age` answers, 5 when neither; step 2 adds 1 to a start of 0. OWNER: the minimum runs with the owning country as root and reads its variables. ENTRY: with the entry as root. NONE: it ran, in neither. UNCLAMPED: it never clamped (`add_progress` doesn't clamp, or the minimum isn't read). A load-time scope error on `has_variable` or `journal_entry_age` in `te_probe_115_bars.txt` names the scope the engine expects. | ENTRY: read the owner through `owner` in bar values. NONE: mirror the input into a global variable first. UNCLAMPED: clamp in script with `set_bar_progress`. |
+| C5: clamped at activation? | `TE_PROBE_115 c5_at_activation 0` / `40` / `20` / `5` / `other` (step 2, before the add) | 0: the start value isn't clamped to the minimum when the entry activates. 40: it is, with the owner as root; 20: with the entry as root (step 3 then reads one more). 5: it is, but the root isn't told here: the clamp may run before the entry's `immediate` sets the owner's variable, so an owner root reads 5 too. Read `c5_root`. | — |
 | C7: does a scaling modifier apply? | `TE_PROBE_115 c7_control OK` / `UNSCALED` / `ABSENT` / `OTHER` | OK: a constant value of 4 scales `nd_authority_terms_2` (launch credit reads 1). UNSCALED: the value is ignored. ABSENT: nothing reaches the country's `modifier:` read. | UNSCALED or ABSENT: § 4.2 of the prep doc is off; keep the dynamic-modifier pulse (`add_modifier` with `multiplier`). |
 | C7: a value from a country-only read | `TE_PROBE_115 c7_positive seen after N days` / `NOT seen within 14 days` | seen: the value's root is the owning country (`is_ai` held) and the modifier follows it; N is how soon a `modifier:` read sees a change, `seen in the same effect` meaning at once. Expect N up to 4 (`JOURNAL_ENTRY_UPDATE_ACTIVE`). NOT seen with `c7_control OK`: the root is not the country. | Read the owner through `owner` (an event target from a journal entry) or `scope:journal_entry.owner`, or keep the pulse pattern. A large N: a reader must not expect the new value the same week. |
 | C7: a negative value | `TE_PROBE_115 c7_negative seen after N days` / `NOT seen within 14 days` | seen: value -1 reads +6, so negatives work. NOT seen: clamped at 0, or not re-evaluated. | A second static modifier with the unit values negated, for the negative side. |
@@ -63,8 +67,8 @@ Each row's first answer is the expected one.
 
 ## Not probed (needs a player or a save)
 
-- **C5**, the scope of a scripted progress bar's script-value `min_value` / `max_value`: the probes own no progress bar
-  file. A later commit on this branch adds one if the controller keeps it (see its row once added).
+- **C5**, the rest: how a `progress_condition` factor of 0, and one read from a named script value, show in the
+  panel's Advance and Retreat lists (open an entry that uses one, once one does).
 - **C7**: whether a scaling modifier at value 0 shows a row of zeros in the journal entry panel and the country's
   modifier tooltip, or is hidden (open a mod entry that uses one, once § 4.2 builds one); whether a revolution's winner
   gets it back with the inherited entry (the civil-war harness, `docs/audits/civil_war_inheritance_audit.md`; the probe

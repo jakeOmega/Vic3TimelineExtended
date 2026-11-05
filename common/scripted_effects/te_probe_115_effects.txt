@@ -3,6 +3,7 @@
 # ============================================================================
 # What it answers: the open engine questions of docs/audits/vanilla_1_15_prep.md § 2 that script can read with no
 # player watching, each as literal `TE_PROBE_115 <name> ...` lines in debug.log (which branch fired is the answer):
+#   C5   the root of a scripted progress bar's script-value min_value (te_probe_115_c5_effects.txt)
 #   C7   scaling_modifiers_while_active: a value from a country-only read, a negative value, 0, how soon a
 #        modifier: read sees a change, whether has_modifier sees the modifier on the entry
 #   C19  a quoted $ARG$ inside a debug_log string (te_probe_115_quoted_arg_effect)
@@ -43,7 +44,8 @@ te_probe_115_weekly_effect = {
 		}
 		else_if = {
 			limit = { var:te_probe_115_step = 3 }
-			debug_log = "TE_PROBE_115 step 3 (C7 negative value)"
+			debug_log = "TE_PROBE_115 step 3 (C5 root, C7 negative value)"
+			te_probe_115_c5_root_read_effect = yes
 			te_probe_115_c7_start_effect = { PHASE = 2 SCALE = -1 }
 		}
 		else_if = {
@@ -78,7 +80,7 @@ te_probe_115_weekly_effect = {
 
 # ---- Step 2: C21's pulse scope, C19, C7's first reads and its positive value ------------------------------------
 te_probe_115_step_2_effect = {
-	debug_log = "TE_PROBE_115 step 2 (C21 pulse scope, C19, C7 first reads, C7 positive value)"
+	debug_log = "TE_PROBE_115 step 2 (C21 pulse scope, C19, C5 first read, C7 first reads, C7 positive value)"
 	if = {
 		limit = { exists = scope:journal_entry }
 		debug_log = "TE_PROBE_115 c21_pulse_scope OK (scope:journal_entry is set in an entry's on_weekly_pulse and the scripted effects it calls)"
@@ -87,6 +89,7 @@ te_probe_115_step_2_effect = {
 		debug_log = "TE_PROBE_115 c21_pulse_scope BROKEN (scope:journal_entry is not set in an entry's on_weekly_pulse: reach the entry with je:<key>)"
 	}
 	te_probe_115_quoted_arg_effect = { N = 7 WORD = probe }
+	te_probe_115_c5_first_read_effect = yes
 	te_probe_115_c7_first_reads_effect = yes
 	te_probe_115_c7_start_effect = { PHASE = 1 SCALE = 1 }
 }

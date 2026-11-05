@@ -2,7 +2,7 @@
 # te_probe_115: the vanilla 1.15 migration's engine probes, the hidden entry (2026-11-05)
 # ============================================================================
 # What it answers: the open engine questions of docs/audits/vanilla_1_15_prep.md § 2 that script can read with no
-# player watching (C3, C7, C19, C20 and three of C21), each as literal `TE_PROBE_115 <name> ...` lines in debug.log;
+# player watching (C3, C5, C7, C19, C20 and three of C21), each as literal `TE_PROBE_115 <name> ...` lines in debug.log;
 # which branch fired is the answer. The steps are in common/scripted_effects/te_probe_115_effects.txt, the hidden
 # events in events/te_probe_115_events.txt, and what each line means in docs/testing/vanilla-1-15-playtest.md.
 #
@@ -12,7 +12,7 @@
 # logs that (itself an answer, c21_activation_pass) and ends at once through the hidden invalid outcome. Once the
 # claim is set, disable_evaluation removes every other country's inactive record.
 #
-# Invisible to players: no player country can hold it (is_ai), it is not pinned, it has no buttons or bar, and its
+# Invisible to players: no player country can hold it (is_ai), it is not pinned, it has no buttons, and its
 # events are hidden. Its two modifiers are the nuclear deterrent's display-only terms, whose types the engine and
 # the script never read, so the AI country it runs on is unchanged. It takes about ten weeks, then both C3 outcomes
 # come true together; te_probe_115.20 reports and removes every variable the probe set. If it stalls, it times out
@@ -81,6 +81,9 @@ te_probe_115 = {
 			}
 		}
 	}
+
+	# C5: a bar whose script-value minimum says which root it ran in (common/scripted_progress_bars/te_probe_115_bars.txt).
+	scripted_progress_bar = te_probe_115_c5_bar
 
 	on_weekly_pulse = {
 		effect = {

@@ -18,7 +18,9 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 ENTRY = "common/journal_entries/te_probe_115_probes.txt"
 EFFECTS = "common/scripted_effects/te_probe_115_effects.txt"
 EVENTS = "events/te_probe_115_events.txt"
-FILES = (ENTRY, EFFECTS, EVENTS)
+C5_EFFECTS = "common/scripted_effects/te_probe_115_c5_effects.txt"
+C5_BARS = "common/scripted_progress_bars/te_probe_115_bars.txt"
+FILES = (ENTRY, EFFECTS, EVENTS, C5_EFFECTS, C5_BARS)
 DOC = "docs/testing/vanilla-1-15-playtest.md"
 DELETE_LINE = "Delete once answered (see docs/testing/vanilla-1-15-playtest.md)."
 BOM = b"\xef\xbb\xbf"
@@ -123,7 +125,7 @@ class TestProbeFiles(unittest.TestCase):
 
     def test_every_event_and_effect_called_is_defined(self):
         events = set(parse(EVENTS))
-        effects = set(parse(EFFECTS))
+        effects = set(parse(EFFECTS)) | set(parse(C5_EFFECTS))
         text = "\n".join(code(rel) for rel in FILES)
         fired = set(re.findall(r"\bid\s*=\s*(te_probe_115\.\d+)", text))
         self.assertEqual(fired, events - {"namespace"}, "an event fired and not defined, or defined and never fired")
@@ -150,6 +152,17 @@ class TestProbeFiles(unittest.TestCase):
                       "map_color", "modifiers_while_active"):
             self.assertNotIn(field, entry)
         self.assertIn("timeout", entry)
+
+    def test_the_entry_carries_c5s_bar(self):
+        entry = body(parse(ENTRY)["te_probe_115"])
+        self.assertEqual(body(entry["scripted_progress_bar"]), "te_probe_115_c5_bar")
+        bar = code(C5_BARS)
+        self.assertIn("te_probe_115_c5_bar", parse(C5_BARS))
+        # the three minimums the reads tell apart
+        minimum = block(bar, "te_probe_115_c5_bar")
+        for value in ("value = 5", "value = 40", "value = 20", "has_variable = te_probe_115_owner",
+                      "journal_entry_age >= 0"):
+            self.assertIn(value, minimum)
 
 
 class TestC7Modifiers(unittest.TestCase):
