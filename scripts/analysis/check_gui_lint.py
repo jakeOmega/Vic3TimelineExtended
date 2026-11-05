@@ -103,12 +103,21 @@ MARGIN_PROPS = {"margin", "margin_left", "margin_right", "margin_top", "margin_b
 GUI_TOKEN = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*(?:([A-Za-z_]\w*)\s*)?(\{)?|(\{)|(\})")
 
 
+def collapse_strings(text):
+    """`text` with every quoted string emptied to `""`, for the scans that
+    must not read inside strings. A string's newlines stay, so a line of the
+    result is the same line of `text`. An offset into the result is not an
+    offset into `text` (each emptied string moves every later one), so a match
+    in it counts newlines in the result, never in `text`."""
+    return re.sub(r'"[^"]*"', lambda m: '""' + "\n" * m.group().count("\n"), text)
+
+
 def margin_on_plain_widget(text):
     """(line, opener, property, source line) for each margin property whose
     innermost block is a plain `widget = {` or `icon = {` (or a type declared
     `= widget {`). Takes comment-stripped text. A margin inside a block or
     blockoverride body is not judged: its widget is not known here."""
-    nostr = re.sub(r'"[^"]*"', '""', text)
+    nostr = collapse_strings(text)
     lines = text.split("\n")
     stack, hits = [], []
     for m in GUI_TOKEN.finditer(nostr):
@@ -288,15 +297,21 @@ class Linter:
         if depth:
             self.report("ERROR", path, lineno(len(text)), f"{depth} unclosed brace(s) at the end of the file")
 
-        nostr = re.sub(r'"[^"]*"', '""', text)
+        # Offsets into `nostr` are not offsets into `text` (a widget at :520
+        # was reported at :356), so its matches count lines in `nostr`.
+        nostr = collapse_strings(text)
+
+        def nostr_lineno(i):
+            return nostr.count("\n", 0, i) + 1
+
         for m in IDENT_BRACE.finditer(nostr):
             if m.group(1) not in self.known_brace:
-                self.report("WARN", path, lineno(m.start()),
+                self.report("WARN", path, nostr_lineno(m.start()),
                             f"unproven widget or type '{m.group(1)}': no .gui on {self.base} uses it "
                             "and no type here defines it")
         for m in IDENT_PROP.finditer(nostr):
             if m.group(1) not in self.known_prop and m.group(1) not in self.known_brace:
-                self.report("WARN", path, lineno(m.start()), f"unproven property '{m.group(1)}'")
+                self.report("WARN", path, nostr_lineno(m.start()), f"unproven property '{m.group(1)}'")
         base_margins = {(o, p, s) for _, o, p, s in margin_on_plain_widget(strip_comments(
             self.git("show", f"{self.base}:{path}")))}
         for ln, opener, prop, src in margin_on_plain_widget(text):

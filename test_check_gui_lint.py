@@ -56,6 +56,24 @@ NEW_GUI = BOM + """types t {
 	}
 """
 
+# Long strings above an unproven widget and property: their offsets in the
+# string-collapsed text sit lines earlier than in the file (a widget at :520
+# was reported at :356).
+LINES_GUI = BOM + """types lines {
+	type te_lines_row = flowcontainer {
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, one" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, two" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, three" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, four" }
+		textbox = { text = "a long string of loc that the collapsed text drops entirely, five" }
+		textbox = { tooltip = "a string that runs
+over two lines" }
+		lines_fancywidget = {}
+		lines_typo_prop = left
+	}
+}
+"""
+
 INHERITED_GUI = BOM + """types inherited {
 	type inherited_row = flowcontainer {
 		widget = {
@@ -92,6 +110,8 @@ class LintTest(unittest.TestCase):
             f.write(NEW_GUI)
         with open(os.path.join(repo, "gui", "inherited.gui"), "w", encoding="utf-8") as f:
             f.write(INHERITED_GUI.replace("margin_top = 5", "margin_top = 5\n\t\t\tsize = { 10 10 }"))
+        with open(os.path.join(repo, "gui", "lines.gui"), "w", encoding="utf-8") as f:
+            f.write(LINES_GUI)
         with open(os.path.join(repo, "gui", "clean.gui"), "w", encoding="utf-8") as f:
             f.write(BASE_GUI.replace("types base", "types clean").replace("proven_row", "clean_row"))
         linter = lint.Linter(repo, "HEAD")
@@ -108,7 +128,8 @@ class LintTest(unittest.TestCase):
         return [m for s, p, _, m in self.findings if p == path and (sev is None or s == sev)]
 
     def test_untracked_files_are_linted(self):
-        self.assertEqual(sorted(self.changed), ["gui/clean.gui", "gui/inherited.gui", "gui/new.gui"])
+        self.assertEqual(sorted(self.changed),
+                         ["gui/clean.gui", "gui/inherited.gui", "gui/lines.gui", "gui/new.gui"])
 
     def test_clean_file_has_no_findings(self):
         self.assertEqual(self.msgs("gui/clean.gui"), [])
@@ -160,6 +181,12 @@ class LintTest(unittest.TestCase):
         self.assertIn("gfx/interface/nope.dds", warns)
         self.assertNotIn("vanilla_icon", warns)
         self.assertIn("te_new_details should end _open", warns)
+
+    def test_unproven_warnings_name_their_own_line(self):
+        lines = {m: ln for s, p, ln, m in self.findings if p == "gui/lines.gui" and s == "WARN"}
+        widget = next(ln for m, ln in lines.items() if "'lines_fancywidget'" in m)
+        prop = next(ln for m, ln in lines.items() if "'lines_typo_prop'" in m)
+        self.assertEqual((widget, prop), (10, 11))
 
     def test_loc_args(self):
         self.assertEqual(lint.loc_args("Localize('te_tt_break')"), ["te_tt_break"])
