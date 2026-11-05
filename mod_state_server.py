@@ -3873,8 +3873,17 @@ def _rendered_engine_docs_version(engine_dir: str) -> Optional[str]:
     return m.group(1) if m else None
 
 
+def _vanilla_reference_versions() -> tuple[Optional[str], Optional[str]]:
+    """(vanilla_parsed snapshot's game_version, installed game's version), each
+    None when unknown: the vanilla the mod is checked against."""
+    manifest = vanilla_parsed.read_manifest(vanilla_parsed.DEFAULT_DIR) or {}
+    return (_version_from_text(manifest.get("game_version")),
+            _version_from_text(_read_live_game_version()))
+
+
 def _engine_docs_render_blockers(
-    chosen_dir: str, source_label: str, failed_logs: list, engine_dir: str
+    chosen_dir: str, source_label: str, failed_logs: list, engine_dir: str,
+    reference_versions: Optional[tuple] = None,
 ) -> list[dict]:
     """Return a one-entry reload-warning list when the parsed engine docs must
     not be rendered over docs/engine/, else [].
@@ -3883,12 +3892,25 @@ def _engine_docs_render_blockers(
     whatever parsed. With a log missing (no game install, or a fresh machine's
     digest snapshot not cloned yet), that is mod-only content. With a snapshot
     older than the one the files came from (the digest resolver skips open-beta
-    versions, #332), it is a silent downgrade. Either way the audits that read
-    those files change their verdicts. Rendering from the same or a newer
-    version still goes ahead: the mod's own modifier types are unioned in.
+    versions, #332), it is a silent downgrade. With one newer than both the
+    vanilla_parsed snapshot and the installed game (the digest publishes a
+    patch before the game updates), the audits would judge the mod by names the
+    game doesn't have yet. Either way the audits that read those files change
+    their verdicts. Rendering from a version in between still goes ahead: the
+    mod's own modifier types are unioned in.
+
+    `reference_versions` is (snapshot game_version, live game version), read
+    by `_vanilla_reference_versions` when not given; with neither known the
+    newer-source check is skipped.
     """
     source_version = _version_from_text(chosen_dir)
     rendered_version = _rendered_engine_docs_version(engine_dir)
+    snapshot_version, game_version = (
+        reference_versions if reference_versions is not None
+        else _vanilla_reference_versions()
+    )
+    known = [v for v in (snapshot_version, game_version) if v]
+    newest_vanilla = max(known, key=vanilla_parsed.version_key) if known else None
     if failed_logs:
         reason = (
             f"engine docs incomplete in {chosen_dir} ({source_label}): "
@@ -3896,12 +3918,22 @@ def _engine_docs_render_blockers(
         )
     elif (
         source_version and rendered_version
-        and tuple(map(int, source_version.split(".")))
-        < tuple(map(int, rendered_version.split(".")))
+        and vanilla_parsed.version_key(source_version)
+        < vanilla_parsed.version_key(rendered_version)
     ):
         reason = (
             f"engine docs in {chosen_dir} ({source_label}) are {source_version}, "
             f"older than {rendered_version}, the version docs/engine/ was rendered from"
+        )
+    elif (
+        source_version and newest_vanilla
+        and vanilla_parsed.version_key(source_version)
+        > vanilla_parsed.version_key(newest_vanilla)
+    ):
+        reason = (
+            f"engine docs in {chosen_dir} ({source_label}) are {source_version}, "
+            f"newer than vanilla {newest_vanilla} (vanilla_parsed snapshot "
+            f"{snapshot_version or 'absent'}, installed game {game_version or 'absent'})"
         )
     else:
         return []
@@ -3911,12 +3943,17 @@ def _engine_docs_render_blockers(
             f"{reason}, so the docs/engine/ reference files were left as they "
             "were, not re-rendered. Endpoints serve whatever did parse. Set "
             "`vanilla_snapshot_docs_path` to a complete script_docs dump of the "
-            "current vanilla version, then reload."
+            "current vanilla version, then reload"
+            + (" (or, once the game has updated, rebuild the snapshot with "
+               "`python3 vanilla_parsed.py build`)." if "newer than vanilla" in reason
+               else ".")
         ),
         "source_label": source_label,
         "source_dir": chosen_dir,
         "source_version": source_version,
         "rendered_version": rendered_version,
+        "snapshot_version": snapshot_version,
+        "game_version": game_version,
     }
     if failed_logs:
         warning["missing"] = list(failed_logs)
