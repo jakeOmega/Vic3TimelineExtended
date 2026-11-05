@@ -3,7 +3,8 @@
 #   1. mobilization option groups listed in one column for selected armies (datamodel_wrap = 1 on
 #      GetMobilizationOptionGroups): with the mod's options a group holds up to ten (special_weapons),
 #      50 px each, too wide for vanilla's three a row
-#   2. the formation settings section (borrow / lending) shown for armies only (two MilitaryFormation.IsArmy gates)
+#   2. the formation settings section (borrow / lending) shown for armies only (two MilitaryFormation.IsArmy gates);
+#      1.15's section still holds only the borrow / lending settings (checked 2026-11-05)
 #   3. the Raise Conscripts and Mobilize icons are not disabled by IsValid(...) (two `enabled` lines removed)
 #   4. the name-units-after-state buttons read STATE_NAME: vanilla's STATE key doesn't exist (#635)
 @panel_width_minus_30 = 510

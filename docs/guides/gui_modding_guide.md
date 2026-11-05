@@ -588,7 +588,7 @@ type my_window = default_popup {
 
 ### Common Vanilla Blocks
 
-The `default_popup` type (from `gui/block_windows.gui:97`) exposes these blocks:
+The `default_popup` type (from `gui/block_windows.gui:99` in 1.15) exposes these blocks:
 
 | Block | Purpose |
 |---|---|
@@ -1057,7 +1057,7 @@ Every file in the folder loads, so each mod ships its own. The widget name must 
 
 ### Step 2: Create the Window
 
-This is Demography's shipping shape (`demography_cmf_panel.gui`, Workshop `3759720467`), trimmed and renamed. It instances vanilla's `default_block_window` type (`block_windows.gui:317`), so the window gets the native header, back and close buttons and scroll area, and sits where vanilla's side panels sit:
+This is Demography's shipping shape (`demography_cmf_panel.gui`, Workshop `3759720467`), trimmed and renamed. It instances vanilla's `default_block_window` type (`block_windows.gui:319` in 1.15), so the window gets the native header, back and close buttons and scroll area, and sits where vanilla's side panels sit:
 
 ```
 widget = {
@@ -1585,7 +1585,7 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 16. **`IsValidTooltip` and `ExecuteTooltip` compose with `Concatenate`.** `tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( <gui scope> ), ScriptedGui.ExecuteTooltip( <gui scope> ) )]"` gives one tooltip carrying both *why the control is greyed out* (the `is_valid` custom_tooltip clauses, with ticks and crosses) and *what pressing it would do* (the effect, rendered without running). In-repo: `gui/journal_entry_widgets/banking_dashboard_widget.gui:69` and every vote / propose control in `un_chamber_widget.gui`. Loc values can reference the inherited `ScriptedGui` datacontext the same way (`st_res_policy_*_tooltip` in `te_miscellaneous_l_english.yml`), so the composed tooltip can live in either place. Note that `ExecuteTooltip` does **not** consult `is_shown`: it renders the effect regardless, so a "nothing to show here" case has to be an `if` inside the effect, not a gate beside it. **`Concatenate` inserts nothing between the two**, so the last condition line and the effect's first bullet run together on one line ("This is not the mandate already in force• Orders your central bank to …"). Put a break between them: `Concatenate( ScriptedGui.IsValidTooltip( … ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( … ) ) )`, where `te_tt_break` is a mod loc key whose whole value is `"\n\n"`. `Localize('<key>')` with a literal key is the engine's own idiom for this — `data_binding/gui_macros.txt` builds `MakeLineIf` out of `Localize( 'NEWLINE' )`. All 48 composed tooltips under `gui/journal_entry_widgets/` use this form. **Only context-free text goes through `Localize()`.** The key renders outside the widget's journal entry, so a `[JournalEntry.…]` in its value comes out blank and logs `Wrong context supplied, wanted context of type 'JournalEntry' … got context 'Container'` on every render. `nd_w_survivability_tt` lost its effective-survivability figure that way (#762, fixed 2026-10-06). A tooltip that needs the journal entry is a plain key, `tooltip = "nd_w_survivability_row_tt"`, and it can pull other keys in with `$key$`; their data functions evaluate in the plain key's context. `test_gui_localize_context.py` fails on a `Localize()`'d key that reads `JournalEntry`.
 
-17. **Two `visible` properties on one widget is a bug, not a conjunction.** When a type instance needs to combine its own condition with one coming from a `blockoverride`, write a single `visible = "[And( A, B )]"` (vanilla: `gui/journal_entry.gui:670`). Multiple `onclick` lines on one button, by contrast, *are* ordinary vanilla and all run (`gui/panel_military.gui:715`, `gui/market_panel.gui:553`) — which is how an arm/confirm pair executes a scripted GUI and clears its `GetVariableSystem` flag in one click.
+17. **Two `visible` properties on one widget is a bug, not a conjunction.** When a type instance needs to combine its own condition with one coming from a `blockoverride`, write a single `visible = "[And( A, B )]"` (vanilla: `gui/journal_entry.gui:670`). Multiple `onclick` lines on one button, by contrast, *are* ordinary vanilla and all run (`gui/panel_military.gui:966` in 1.15, `gui/market_panel.gui:553`) — which is how an arm/confirm pair executes a scripted GUI and clears its `GetVariableSystem` flag in one click.
 
 18. **Script-built tooltip text prints a scope's own lines before its nested blocks' lines.** Confirmed in-game: in an `ExecuteTooltip` block, every `custom_tooltip` at the current scope renders first, then everything produced inside nested country-scope iterations (`every_in_list` over a country list, `every_country`, …). A "header, list, header, list" structure therefore renders as both headers on top and one undivided list below. Never put a header above a script-built country list: make each entry say which group it belongs to (`#G In favour#! — X` / `#R Opposed#! — X`), and where the structure really matters, use real GUI rows — one widget and one `ExecuteTooltip` call each — instead of one script-built block.
 
