@@ -11627,7 +11627,7 @@ REPLACE:pm_coal-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 4.00 # AUTO-GENERATED: industrial emissions
+			state_greenhouse_gas_emissions_add = 3.00 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 50
 		}
 	}
@@ -11666,7 +11666,7 @@ REPLACE:pm_oil-fired_plant = {
 
 	state_modifiers = {
 		workforce_scaled = {
-			state_greenhouse_gas_emissions_add = 4.35 # AUTO-GENERATED: industrial emissions
+			state_greenhouse_gas_emissions_add = 3.48 # AUTO-GENERATED: industrial emissions
 			state_pollution_generation_add = 40
 		}
 	}

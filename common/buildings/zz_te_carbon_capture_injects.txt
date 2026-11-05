@@ -27,6 +27,13 @@ INJECT:building_coal_mine = {
 	}
 }
 
+INJECT:building_copper_mine = {
+	production_method_groups = {
+		pmg_carbon_capture_mining_equipment_building_copper_mine
+		pmg_carbon_capture_steam_automation_building_copper_mine
+	}
+}
+
 INJECT:building_explosives_factory = {
 	production_method_groups = {
 		pmg_carbon_capture_explosives_building_chemical_plant
