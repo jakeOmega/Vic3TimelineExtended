@@ -20,6 +20,12 @@ je_te_map_host = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# A view, not a system: a revolution's winner or a country the player switches to starts without it.
 	transferable = no
 	can_revolution_inherit = no
@@ -301,6 +307,12 @@ je_te_map_hidden_world = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 	group = je_group_internal_affairs
 	context = none
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	transferable = no
 	can_revolution_inherit = no
