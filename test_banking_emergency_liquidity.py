@@ -34,7 +34,7 @@ def _top_level_block(body, header):
 
 
 def _loc(path, key):
-    return re.search(r"(?m)^ %s:0 \"(.*)\"$" % re.escape(key), _text(path)).group(1)
+    return re.search(r"(?m)^ %s:0 \"(.*)\"(?:\s*#[^\"]*)?$" % re.escape(key), _text(path)).group(1)
 
 
 class EmergencyLiquidityTests(unittest.TestCase):

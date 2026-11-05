@@ -147,3 +147,22 @@ st_res_hub_stays_within_nation = {
 		scope:st_res_capture_holder = { var:te_cw_origin ?= scope:st_res_capture_new_owner }
 	}
 }
+
+# The policy panel's op names the policy (0-4) or the preset (10-13) already
+# in force for $GOOD$. Read by st_res_policy_<good>_sgui's is_shown, so the
+# panel draws that control in the selected look rather than greyed (SR-10).
+# Country scope, with scope:op set. `?=` reads an absent variable (an older
+# save) as nothing in force.
+st_res_policy_op_in_force = {
+	OR = {
+		AND = { scope:op = 0 var:st_res_$GOOD$_policy ?= 0 }
+		AND = { scope:op = 1 var:st_res_$GOOD$_policy ?= 1 }
+		AND = { scope:op = 2 var:st_res_$GOOD$_policy ?= 2 }
+		AND = { scope:op = 3 var:st_res_$GOOD$_policy ?= 3 }
+		AND = { scope:op = 4 var:st_res_$GOOD$_policy ?= 4 }
+		AND = { scope:op = 10 var:st_res_$GOOD$_preset ?= 1 }
+		AND = { scope:op = 11 var:st_res_$GOOD$_preset ?= 2 }
+		AND = { scope:op = 12 var:st_res_$GOOD$_preset ?= 3 }
+		AND = { scope:op = 13 var:st_res_$GOOD$_preset ?= 4 }
+	}
+}

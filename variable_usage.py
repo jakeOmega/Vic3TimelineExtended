@@ -61,6 +61,7 @@ from bisect import bisect_right
 from dataclasses import dataclass, field
 
 from prev_scope_audit import _is_scope_change, load_links
+from paradox_file_parser import directive_prefixes
 from script_helper_index import blank_comments, line_of, line_starts
 
 SCRIPT_DIRS = ("common", "events")
@@ -111,8 +112,8 @@ _DATA_FN_RE = re.compile(
 _LOC_KEY_RE = re.compile(r"^\s*([A-Za-z0-9_.\-]+):\d*\s")
 _IDENT_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 _PARAM_RE = re.compile(r"\$[A-Za-z0-9_]+\$")
-_MERGE_PREFIX_RE = re.compile(
-    r"^(?:INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT|INJECT_OR_CREATE|CREATE):")
+# The six merge directives (paradox_file_parser.directive_prefixes).
+_MERGE_PREFIX_RE = re.compile(r"^(?:" + "|".join(map(re.escape, directive_prefixes)) + ")")
 # A file with none of these has no site; skip tokenizing it.
 _SCRIPT_HINT_RE = re.compile(r"variable|in_list|in_global_list|in_local_list|var:|'\)")
 

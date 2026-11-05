@@ -29,7 +29,7 @@ te_asat_un_on_strike = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
-			has_game_rule = space_race_enabled
+			sr_space_race_on = yes
 		}
 		set_variable = { name = un_dkt_asat_struck value = 1 days = 730 }
 		set_global_variable = { name = un_dkt_asat_pending value = THIS days = 730 }

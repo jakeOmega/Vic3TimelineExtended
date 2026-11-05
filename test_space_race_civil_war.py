@@ -19,6 +19,10 @@ MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
 ENTRIES = MILESTONES + ("solar_colonization",)
 CHOICE_EVENTS = {"80": "orbital", "5": "moon_landing", "81": "probe",
                  "82": "moon_base", "83": "mars_landing"}
+# Retired with the Moon Base (2026-10-29, lunar colonization design § 7): the
+# entry is never possible, and .82 keeps one option that does nothing, for an
+# old save's queued copy. Its recorded answers stand (the migration reads them).
+RETIRED = ("moon_base",)
 
 
 def _path(*parts):
@@ -165,10 +169,19 @@ class ImmediateTests(unittest.TestCase):
         for entry in ENTRIES[1:]:
             with self.subTest(entry=entry):
                 possible = _block(_block(JE, f"je_space_race_{entry}"), "possible")
+                if entry in RETIRED:
+                    # never possible, so it admits no one the gate could miss
+                    self.assertEqual(possible.split(), ["always", "=", "no"])
+                    continue
                 self.assertRegex(possible, r"(?<!NOT = \{ )has_variable = sr_completed_\w+")
         self.assertIn("has_variable = sr_completed_suborbital",
                       _block(_block(JE, "je_space_race_orbital"), "possible"))
         self.assertNotRegex(EFFECTS + JE, r"remove_variable\s*=\s*sr_completed_")
+        # Nor the old-save migration (owner, 2026-10-29: a race that ended before
+        # the Moon existed keeps every completion; a finished programme resumes
+        # for the Moon by choice, sr_colonization_resumed).
+        self.assertNotRegex(_read("common", "scripted_effects", "sr_site_effects.txt"),
+                            r"remove_variable\s*=\s*sr_completed_")
 
     def test_rebels_start_no_programme(self):
         entry = _block(JE, "je_space_race_suborbital")
@@ -201,7 +214,10 @@ class CostModifierTests(unittest.TestCase):
     def test_the_check_matches_what_is_applied(self):
         applied = _definition(EFFECTS, "sr_apply_milestone_cost_modifiers_base")
         pairs = re.findall(r"name = (\w+)\s+multiplier = (\S+)", applied)
-        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_level"),
+        # The pace at the effective level, the throughput at the level itself
+        # (lunar colonization design § 5.1).
+        self.assertEqual(sorted(pairs), sorted([("sr_funding_progress", "sr_funding_$MILESTONE$_effective"),
+                                                ("sr_funding_throughput", "sr_funding_$MILESTONE$_level"),
                                                 ("sr_space_program_cost", "sr_$MILESTONE$_cost")]))
         check = _definition(TRIGGERS, "sr_cost_modifiers_missing_base")
         self.assertIn("sr_milestone_billed_$MILESTONE$ = yes", check)
@@ -210,7 +226,7 @@ class CostModifierTests(unittest.TestCase):
         # without the other, for instance when a funding click lands while
         # the entry cannot be found.
         self.assertTrue(entry.strip().startswith("OR = {"), entry)
-        self.assertEqual(entry.count("AND = {"), 2)
+        self.assertEqual(entry.count("AND = {"), len(pairs))
         for modifier, multiplier in pairs:
             with self.subTest(modifier=modifier):
                 # Missing only where the multiplier is not zero, so a zero
@@ -257,6 +273,11 @@ class RewardTests(unittest.TestCase):
     def test_choice_modifiers_are_rebuilt_from_the_choice(self):
         for ev, entry in CHOICE_EVENTS.items():
             event = _block(EVENTS, f"space_race_events.{ev}")
+            if entry in RETIRED:
+                # one option, setting and adding nothing
+                self.assertEqual(len(re.findall(r"\boption\s*=\s*\{", event)), 1, ev)
+                self.assertNotRegex(event, r"set_variable|add_modifier|je:", ev)
+                continue
             pairs = re.findall(
                 r"set_variable\s*=\s*\{\s*name\s*=\s*(\w+)\s+value\s*=\s*yes\s*\}\s*"
                 r"je:je_space_race_" + entry + r"\s*=\s*\{\s*add_modifier\s*=\s*(\w+)\s*\}", event)
@@ -281,9 +302,13 @@ class RewardTests(unittest.TestCase):
         text = _read("events", "space_race_colony_events.txt")
         self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
         granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
-        self.assertEqual(len(granted), 68)
-        synced = re.findall(r"sr_sync_colony_modifier_base = \{ MODIFIER = (\w+)\s*\}",
-                            _block(EFFECTS, "sr_sync_solar_colonization_entry"))
+        self.assertEqual(len(granted), 80)  # two for each of the 40 worlds
+        # The backstop names every specialization at its multiplier, its level times
+        # the colony's staffing (colony modules design § 7), from the site table.
+        self.assertIn("sr_sites_sync_entry_specs = yes", _block(EFFECTS, "sr_sync_solar_colonization_entry"))
+        sites = _read("common", "scripted_effects", "sr_sites_generated.txt")
+        synced = re.findall(r"sr_sync_colony_spec_base = \{ MODIFIER = (\w+) MULT = sr_site_mult_[ab]_\w+ \}",
+                            _block(sites, "sr_sites_sync_entry_specs"))
         self.assertEqual(sorted(synced), sorted(set(granted)))
         defined = set(re.findall(r"^(sr_colony_\w+) = \{", MODIFIERS, re.M))
         self.assertEqual(set(granted), defined)

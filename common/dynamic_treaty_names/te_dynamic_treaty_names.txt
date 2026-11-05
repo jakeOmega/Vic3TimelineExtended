@@ -171,6 +171,28 @@ treaty_name_country_adj_country_adj_cultural_accord = {
 	}
 }
 
+treaty_name_grid_interconnection_treaty = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = grid_interconnection_agreement
+		}
+	}
+	weight = {
+		value = 120
+	}
+}
+
+treaty_name_country_adj_country_adj_power_pool = {
+	trigger = {
+		any_scope_article_option = {
+			has_type = grid_interconnection_agreement
+		}
+	}
+	weight = {
+		value = 100
+	}
+}
+
 treaty_name_religious_mission_concordat = {
 	trigger = {
 		any_scope_article_option = {

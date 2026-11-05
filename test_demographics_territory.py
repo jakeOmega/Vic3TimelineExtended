@@ -163,7 +163,7 @@ class TestProvinceLine(unittest.TestCase):
         line = re.search(r'debug_log = "(TE_INFO demog_province_change[^"]*)"', text).group(1)
         for read in ("[THIS.Var('te_dg_provinces').GetValue|0]", "[THIS.ScriptValue('te_demog_state_provinces')|0]",
                      "[THIS.Var('te_dg_pop_last').GetValue|0]",
-                     "[THIS.ScriptValue('te_debug_demog_province_people')|0]", "[THIS.GetState.GetOwner.GetTag]"):
+                     "[THIS.ScriptValue('te_debug_demog_province_people')|0]", "[THIS.GetState.GetOwner.GetTagName]"):
             self.assertIn(read, line)
         self.assertNotIn("local_var", line, "locals don't reach a debug_log line")
         self.assertNotIn("debug_log_scopes", _block(text, LINE), "no scope dump: the line names the state")

@@ -604,3 +604,46 @@ te_mon_board_seigniorage_from_subject = {
 # The wrong-stance lever: months at an extreme band before liberty desire moves.
 te_mon_board_wrong_months_threshold = { value = 6 }
 te_mon_board_wrong_months_cap = { value = 24 }
+
+# The Backstops rows' received figures (GUI audit BNK-13): what the guarantee
+# and the receivership take off this country's premium now, 0 while a
+# guarantor is living down a broken guarantee. Display only.
+te_mon_bs_lolr_received_display = {
+	value = 0
+	if = {
+		limit = { te_mon_lolr_is_effective = yes }
+		value = te_mon_lolr_relief
+	}
+}
+
+te_mon_bs_receivership_received_display = {
+	value = 0
+	if = {
+		limit = { te_mon_is_under_receivership = yes }
+		value = te_mon_lolr_relief
+	}
+}
+
+# ...and the power bloc's share: the cooperation and backstop a member gets,
+# and what its members cost a leader (te_monetary_discover_union). Display
+# only.
+te_mon_bs_union_received_display = {
+	value = te_mon_union_recipient_value
+}
+
+te_mon_bs_union_pts_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_bs_union_pts }
+		value = var:te_mon_bs_union_pts
+	}
+}
+
+# A member's share of what its leader pays (the Monetary Union member rows).
+te_mon_bs_union_cost_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_bs_cost_union }
+		value = var:te_mon_bs_cost_union
+	}
+}

@@ -89,6 +89,81 @@ nd_readiness_mod_3 = {
 	country_diplomatic_play_maneuvers_add = 5
 }
 
+# ---- Display only: never added (NUC-6, 2026-10-27) -------------------------
+# What each readiness level and each launch authority does through script, as
+# display lines (nuclear_deterrence_display_types.txt). The posture's hovers
+# print them with GetStaticModifier(...).GetDesc. Nothing adds or removes them,
+# so they are no managed family. Readiness 0 is named _terms_, never _mod_
+# (nd_readiness_mod_on uses 0 for "none"). Figures: Routine is the baseline of
+# the incident rate (x0.5 / x1 / x4 / x10), strain moves -6 / -6 / +1.5 / +5
+# a month, readiness adds (level - 1) x 8 to a crisis's danger, and a threat
+# made from Recessed or High Alert presses the target 10 less or more.
+nd_readiness_terms_0 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_custody_cost_mult = -0.5
+	country_nd_incident_rate_mult = -0.5
+	country_nd_crew_strain_monthly_add = -6
+	country_nd_crisis_danger_add = -8
+	country_nd_threat_pressure_add = -10
+	country_nd_launch_blocked_bool = yes
+}
+
+nd_readiness_terms_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_crew_strain_monthly_add = -6
+}
+
+nd_readiness_terms_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_incident_rate_mult = 3
+	country_nd_crew_strain_monthly_add = 1.5
+	country_nd_crisis_danger_add = 8
+}
+
+nd_readiness_terms_3 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_incident_rate_mult = 9
+	country_nd_crew_strain_monthly_add = 5
+	country_nd_crisis_danger_add = 16
+	country_nd_threat_pressure_add = 10
+}
+
+nd_authority_terms_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_order_required_bool = yes
+}
+
+nd_authority_terms_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = 0.25
+	country_nd_decapitation_immune_bool = yes
+	country_nd_unapproved_launch_bool = yes
+	country_nd_custody_loss_add = 0.03
+}
+
+nd_authority_terms_3 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = 0.6
+	country_nd_decapitation_immune_bool = yes
+	country_nd_unapproved_launch_bool = yes
+	country_nd_halt_chance_add = -0.1
+	country_nd_custody_loss_add = 0.03
+}
+
+nd_authority_terms_4 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_decapitation_immune_bool = yes
+	country_nd_automatic_answer_bool = yes
+}
+
+# What each safeguards level takes off a fast authority's launch credit
+# (nd_launch_credit, rework spec §4.2). Display only: the safeguards hover
+# prints it under Delegation or Launch on Warning.
+nd_safeguards_slow_launch = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nd_launch_credit_add = -0.05
+}
+
 # ---- Upkeep ---------------------------------------------------------------
 # Applied once with multiplier = root.var:nd_upkeep_weekly_cached; the monthly
 # pulse and every panel change rewrite the cached figure, and the engine
@@ -229,6 +304,13 @@ nd_incident_scandal = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_legitimacy_base_add = -5
 	country_authority_mult = -0.05
+}
+
+# A host said nothing when its guest's weapons contaminated one of its states
+# (nuclear_incident.31.c): smaller than the guest's own scandal.
+nd_host_accident_silence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -3
 }
 
 # A concealed incident came out: worse than admitting it.

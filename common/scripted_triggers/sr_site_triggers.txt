@@ -1,0 +1,92 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colony record's shared triggers, and the
+# Space Race rule's gates
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-holders-and-cession-design.md.
+
+# The Space Race rule has four settings (design § 10): off, races only (the
+# setting keeps its old name, space_race_enabled, so saves from before keep
+# today's colonies), simple colonies and full colonies. Each setting has one
+# flag, named after it. Read the rule through these gates, never through
+# has_game_rule = space_race_enabled, which is races only alone:
+# test_solar_sites.py fails on a bare one anywhere else. Any scope.
+sr_space_race_on = {
+	OR = {
+		has_game_rule = space_race_enabled
+		has_game_rule = space_race_colonies_simple
+		has_game_rule = space_race_colonies_full
+	}
+}
+
+# Colonies change hands by treaty and war (simple and full).
+sr_colonies_contested_enabled = {
+	OR = {
+		has_game_rule = space_race_colonies_simple
+		has_game_rule = space_race_colonies_full
+	}
+}
+
+# Fleets (full only; later slices).
+sr_colonies_full_enabled = {
+	has_game_rule = space_race_colonies_full
+}
+
+# Country scope. A country a dead holder's colonies can pass to (design § 6).
+sr_site_can_hold = {
+	is_country_alive = yes
+	NOT = { is_country_type = decentralized }
+}
+
+# ---- Colony fleets (slices 2-3 design) -------------------------------------------
+# Country scope. A fleet slot is free (six: sr_colony_fleet_effects.txt).
+sr_cf_has_free_slot = {
+	OR = {
+		NOT = { has_variable = sr_cf_1_site }
+		NOT = { has_variable = sr_cf_2_site }
+		NOT = { has_variable = sr_cf_3_site }
+		NOT = { has_variable = sr_cf_4_site }
+		NOT = { has_variable = sr_cf_5_site }
+		NOT = { has_variable = sr_cf_6_site }
+	}
+}
+
+# The inner worlds (stages 1 and 2) are not all claimed, so Solar Colonization
+# still reaches a world without Deep Space Exploration (the entry's `possible`,
+# the two mission decisions). Races only: the stage is at most 2, as before.
+# Simple and full, where the stages are no locks: an inner world is unclaimed
+# (design § 9). Any scope.
+sr_colonization_inner_open = {
+	OR = {
+		AND = {
+			NOT = { sr_colonies_contested_enabled = yes }
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage <= 2
+			}
+		}
+		AND = {
+			sr_colonies_contested_enabled = yes
+			sr_sites_inner_unclaimed = yes
+		}
+	}
+}
+
+# The same rule without the Moon: Begin Deep Space Exploration's test (lunar
+# colonization 2b, review M4). A free lunar world needs no Deep Space, so under
+# simple and full it mustn't keep the decision hidden once stages 1 and 2 are
+# full. Any scope.
+sr_colonization_inner_beyond_moon_open = {
+	OR = {
+		AND = {
+			NOT = { sr_colonies_contested_enabled = yes }
+			OR = {
+				NOT = { has_global_variable = sr_colonization_stage }
+				global_var:sr_colonization_stage <= 2
+			}
+		}
+		AND = {
+			sr_colonies_contested_enabled = yes
+			sr_sites_inner_beyond_moon_unclaimed = yes
+		}
+	}
+}

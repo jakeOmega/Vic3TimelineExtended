@@ -2,7 +2,7 @@
 against every site that lists operation types by hand.
 
 Adding an operation type touches about fourteen hand-kept places — see
-docs/systems/mod_systems.md § Covert Warfare System, "Adding an operation
+docs/systems/mod_systems/covert_warfare.md § Covert Warfare System, "Adding an operation
 type". OPS is the single list. Each test checks one site against it in both
 directions (no type missing, no stale extra), so a half-added type fails here,
 naming the site, instead of in a play test. The widget's stand-down buttons
@@ -52,6 +52,9 @@ OPS = (
     ("cultivate_assets", 12, "ideological", "mild", None),
     ("secure_material", 13, "military", "mild", None),
     ("counterintel_support", 14, "ideological", "mild", "covert_counterintel_support"),
+    ("incite_autonomy", 15, "ideological", "moderate", None),
+    ("sabotage_colony", 16, "military", "severe", None),
+    ("survey_defences", 17, "military", "moderate", None),
 )
 
 # Operations that work FOR their target, not against it: Counterintelligence
@@ -69,13 +72,16 @@ FRIENDLY = {"counterintel_support"}
 # lens_toolbar_icons byte copy, then deletes the entry, which re-arms the
 # icon and lens tests for that type. Until then the engine logs a VFSOpen
 # error for the missing lens icon once a session.
-PLACEHOLDER_ICON = {"counterintel_support": "cultivate_assets"}
+PLACEHOLDER_ICON = {}
 
 # Types with no target marker that still act in the monthly pulse, on
 # something that is not a modifier: secure material finds warheads in the
-# loose pool (nuclear_loose_effects.txt). Every other marker-less type
-# (cultivate assets) acts on nothing but its network.
-ACTS_WITHOUT_MODIFIER = {"secure_material"}
+# loose pool (nuclear_loose_effects.txt); inciting colonial autonomy and
+# colony sabotage move the target's colonies' autonomy and people (the space
+# race's sr_cov_* hooks); surveying colony defences gives the operator's fleets
+# an edge and its panel the target's figures (sr_cov_survey_defences). Every
+# other marker-less type (cultivate assets) acts on nothing but its network.
+ACTS_WITHOUT_MODIFIER = {"secure_material", "incite_autonomy", "sabotage_colony", "survey_defences"}
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")
 NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
@@ -419,7 +425,8 @@ class DocCountTests(unittest.TestCase):
     STALE = re.compile(r"\bnine\b|\b9 (?:covert|diplomatic)\b", re.IGNORECASE)
 
     def test_no_covert_line_still_says_nine(self):
-        for rel in ("docs/systems/mod_systems.md", "docs/systems/journal_entry_systems.md",
+        systems = sorted(p.relative_to(ROOT).as_posix() for p in (ROOT / "docs/systems/mod_systems").glob("*.md"))
+        for rel in (*systems, "docs/systems/journal_entry_systems.md",
                     "common/diplomatic_actions/un_lobbying.txt", "README.md"):
             lines = (ROOT / rel).read_text(encoding="utf-8-sig").splitlines()
             for n, line in enumerate(lines, 1):
@@ -428,7 +435,7 @@ class DocCountTests(unittest.TestCase):
                         self.assertNotRegex(line, self.STALE)
 
     def test_covert_doc_claims_match_the_actions(self):
-        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        doc = (ROOT / "docs/systems/mod_systems/covert_warfare.md").read_text(encoding="utf-8")
         # The per-type list now has an executable form.
         self.assertNotIn("there is no single shared list", doc)
         self.assertIn("test_covert_op_registry.py", doc)

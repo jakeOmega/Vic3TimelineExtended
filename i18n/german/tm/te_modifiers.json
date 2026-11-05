@@ -31,6 +31,14 @@
   "en": "Available capacity for antimatter-powered sub-buildings. Each Antimatter Containment Facility level provides 5 slots. Each Antimatter Engine or Warhead Plant level consumes 1 slot.",
   "de": "Verfügbare Kapazität für mit Antimaterie betriebene Unterbauten. Jede Stufe der Antimaterie-Eindämmungsanlage bietet 5 Plätze. Jede Stufe eines Antimaterie-Triebwerks oder einer Sprengkopf-Fabrik verbraucht 1 Platz."
  },
+ "country_authority_if_unelected_add": {
+  "en": "[concept_authority], without an Elected Government",
+  "de": "[concept_authority] ohne Gewählte Regierung"
+ },
+ "country_authority_if_unelected_add_desc": {
+  "en": "Under any other Distribution of Power law: the crown's law has the last word.",
+  "de": "Unter jedem anderen Gesetz zur Machtverteilung: Das Gesetz der Krone hat das letzte Wort."
+ },
  "country_bank_forecast_error_add": {
   "en": "Central Bank Forecasting Error",
   "de": "Prognosefehler der Zentralbank"
@@ -126,6 +134,14 @@
  "country_commissar_battalions_add_desc": {
   "en": "Battalions whose barracks train under $pm_political_commissars$. An understaffed barracks counts for less. Each month their share of your regular battalions scales $te_political_commissars_indoctrination$, which draws pops to the interest groups in government.",
   "de": "Bataillone, deren Kasernen unter $pm_political_commissars$ ausbilden. Eine unterbesetzte Kaserne zählt weniger. Jeden Monat skaliert ihr Anteil an Ihren regulären Bataillonen $te_political_commissars_indoctrination$, was Pops zu den Interessengruppen in der Regierung hinzieht."
+ },
+ "country_constitutional_law_enactment_success_add": {
+  "en": "Enactment Success of Constitutional Laws",
+  "de": "Verabschiedungserfolg bei Verfassungsgesetzen"
+ },
+ "country_constitutional_law_enactment_success_add_desc": {
+  "en": "For laws on Distribution of Power, Governance Principles, Church and State, Citizenship, Free Speech, Internal Security, State Power and the Judiciary: the courts hear challenges to them. Not while the courts can't challenge the government (Autocracy, Single-Party State, Algorithmic Governance).",
+  "de": "Für Gesetze zu Machtverteilung, Regierungsprinzipien, Kirche und Staat, Staatsbürgerschaft, Meinungsfreiheit, Innerer Sicherheit, Staatsmacht und Justiz: Die Gerichte verhandeln Anfechtungen dagegen. Nicht, solange die Gerichte die Regierung nicht anfechten können (Autokratie, Einparteienstaat, Algorithmische Regierungsführung)."
  },
  "country_covert_defense_economic_add": {
   "en": "Economic Covert Defense",
@@ -327,6 +343,22 @@
   "en": "A flat percentage point increase to the likelihood of enacting this specific law",
   "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
  },
+ "country_enactment_success_chance_law_slavery_banned_add": {
+  "en": "[concept_enactment_success] chance for [GetLawType('law_slavery_banned').GetName]",
+  "de": "[concept_enactment_success]-Chance für [GetLawType('law_slavery_banned').GetName]"
+ },
+ "country_enactment_success_chance_law_slavery_banned_add_desc": {
+  "en": "A flat percentage point increase to the likelihood of enacting this specific law",
+  "de": "Eine feste prozentuale Erhöhung der Wahrscheinlichkeit, dieses bestimmte Gesetz zu erlassen"
+ },
+ "country_family_limitation_literacy_mult": {
+  "en": "Family Limitation Among the Literate[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Familienbegrenzung unter Lesekundigen[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_family_limitation_literacy_mult_desc": {
+  "en": "How readily a people who nearly all read take up family limitation, stopping at the family size they want by methods older than any modern one. A state church slows it; a secular state speeds it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie bereitwillig ein Volk, in dem fast alle lesen können, die Familienbegrenzung annimmt und bei der gewünschten Familiengröße haltmacht, mit Methoden, die älter sind als jede moderne. Eine Staatskirche bremst sie; ein säkularer Staat beschleunigt sie. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "country_finance_momentum_monthly_add": {
   "en": "Monthly [concept_banking_momentum]",
   "de": "Monatliche [concept_banking_momentum]"
@@ -394,6 +426,14 @@
  "country_greenhouse_gas_emissions_mult_desc": {
   "en": "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions].",
   "de": "Verändert die Rate, mit der dieses Land zu den globalen [concept_greenhouse_gas_emissions] beiträgt."
+ },
+ "country_grid_transmission_efficiency_add": {
+  "en": "Grid Transmission Efficiency",
+  "de": "Netzübertragungseffizienz"
+ },
+ "country_grid_transmission_efficiency_add_desc": {
+  "en": "The share of the $grid_power$ a $building_grid_transfer_station$ receives that it turns back into $electricity$. The rest is lost in transmission.",
+  "de": "Der Anteil des $grid_power$, den eine $building_grid_transfer_station$ erhält und wieder in $electricity$ umwandelt. Der Rest geht bei der Übertragung verloren."
  },
  "country_household_greenhouse_gas_emissions_mult": {
   "en": "Household Greenhouse Gas Emissions",
@@ -811,9 +851,33 @@
   "en": "Raises or lowers the lowest import tariff level that can be set for $iron$. Tax code customs probe only.",
   "de": "Erhöht oder senkt die niedrigste Importzollstufe, die für $iron$ festgelegt werden kann. Nur für den Zolltest der Steuerordnung."
  },
+ "country_judicial_independence_ceiling_add": {
+  "en": "[Concept('concept_judicial_independence','Judicial Independence')] Ceiling",
+  "de": "Obergrenze der [Concept('concept_judicial_independence','Richterlichen Unabhängigkeit')]"
+ },
+ "country_judicial_independence_ceiling_add_desc": {
+  "en": "The highest [concept_judicial_independence] the courts can earn. The score rises by 4 a year toward it and falls by 10 a year above it.",
+  "de": "Die höchste [concept_judicial_independence], die die Gerichte erreichen können. Der Wert steigt um 4 pro Jahr auf sie zu und sinkt um 10 pro Jahr, wenn er darüber liegt."
+ },
+ "country_judicial_independence_ceiling_mult": {
+  "en": "[Concept('concept_judicial_independence','Judicial Independence')] Ceiling",
+  "de": "Obergrenze der [Concept('concept_judicial_independence','Richterlichen Unabhängigkeit')]"
+ },
+ "country_judicial_independence_ceiling_mult_desc": {
+  "en": "The executive can ignore its courts, so they earn less trust.",
+  "de": "Die Exekutive kann ihre Gerichte übergehen, daher genießen diese weniger Vertrauen."
+ },
  "country_legislative_override_capacity_add_desc": {
   "en": "How easily this regime can bypass the normal legislative process. At 2 or more, the regime can decisively push laws through despite [Concept('concept_interest_group','Interest Group')] opposition; at 4 or more, it can force them through outright. Each point also trims the [concept_authority] cost — modestly below +5 (about -3% at +2, -9% at +4) and steeply beyond it (about -20% at +5, -50% at +8, -75% at +16). Forcing a law temporarily depletes capacity, recovering over about five years, so capacity above a threshold acts as a buffer that lets the regime act again sooner and at higher tiers. Authoritarian governance, suppressive policies, centralized state structures, surveillance technology, state institutions (policing, thought control, propaganda), and certain power bloc principles raise capacity; democratic suffrage, decentralization, feudal arrangements, and protected liberties lower it.",
   "de": "Wie leicht dieses Regime den normalen Gesetzgebungsprozess umgehen kann. Bei 2 oder mehr kann das Regime Gesetze trotz des Widerstands von [Concept('concept_interest_group','Interessengruppen')] entschlossen durchsetzen; bei 4 oder mehr kann es sie regelrecht erzwingen. Jeder Punkt senkt zudem die [concept_authority]-Kosten — moderat unterhalb von +5 (etwa -3% bei +2, -9% bei +4) und deutlich darüber hinaus (etwa -20% bei +5, -50% bei +8, -75% bei +16). Das Erzwingen eines Gesetzes erschöpft die Kapazität vorübergehend; sie erholt sich über etwa fünf Jahre, sodass Kapazität oberhalb einer Schwelle als Puffer wirkt, der es dem Regime erlaubt, früher und auf höheren Stufen erneut zu handeln. Autoritäre Regierungsführung, unterdrückerische Politik, zentralisierte Staatsstrukturen, Überwachungstechnologie, staatliche Institutionen (Polizei, Gedankenkontrolle, Propaganda) und bestimmte Machtblockprinzipien erhöhen die Kapazität; demokratisches Wahlrecht, Dezentralisierung, feudale Verhältnisse und geschützte Freiheiten senken sie."
+ },
+ "country_legitimacy_from_votes_if_elected_add": {
+  "en": "[concept_legitimacy] from Votes, with an Elected Government",
+  "de": "[concept_legitimacy] aus Stimmen bei Gewählter Regierung"
+ },
+ "country_legitimacy_from_votes_if_elected_add_desc": {
+  "en": "Under Landed, Wealth or Census Voting, Universal Suffrage or Anarchy: the legislature's law has the last word, and the government elected to make it gains standing.",
+  "de": "Unter Grundbesitzerwahlen, Klassenwahl oder Zensuswahlrecht, Allgemeinem Wahlrecht oder Anarchie: Das Gesetz der Legislative hat das letzte Wort, und die Regierung, die gewählt wurde, um es zu machen, gewinnt an Ansehen."
  },
  "country_leverage_threshold_change_add": {
   "en": "[concept_power_bloc_leverage] Threshold Change",
@@ -822,6 +886,14 @@
  "country_leverage_threshold_change_add_desc": {
   "en": "A change in the [concept_power_bloc_leverage] threshold for a [concept_power_bloc_leader] to invite a country to their [concept_power_bloc].",
   "de": "Eine Änderung der [concept_power_bloc_leverage]-Schwelle, ab der ein [concept_power_bloc_leader] ein Land in seinen [concept_power_bloc] einladen kann."
+ },
+ "country_longevity_care_price_fall_mult": {
+  "en": "Longevity Care Price Fall[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Preisverfall der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "country_longevity_care_price_fall_mult_desc": {
+  "en": "How much faster the market price of longevity care falls each year, bringing it within reach of poorer people sooner. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Um wie viel schneller der Marktpreis der Langlebigkeitsmedizin jedes Jahr fällt, sodass sie früher für ärmere Menschen erschwinglich wird. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "country_nuclear_program_progress_mult": {
   "en": "[concept_nuclear_program] Progress",
@@ -855,6 +927,30 @@
   "en": "Additional maximum import tariff rate for $oil$. The collected rate scales with the selected tariff level.",
   "de": "Zusätzliche maximale Importzollhöhe für $oil$. Die erhobene Höhe skaliert mit der gewählten Zollstufe."
  },
+ "country_orbital_debris_removal_add": {
+  "en": "[concept_orbital_debris] Removal per Month",
+  "de": "[concept_orbital_debris]-Beseitigung pro Monat"
+ },
+ "country_orbital_debris_removal_add_desc": {
+  "en": "Points of [concept_orbital_debris] this country clears from orbit each month, taken from the high orbits first. Every country that uses orbit benefits.",
+  "de": "Punkte von [concept_orbital_debris], die dieses Land jeden Monat aus der Umlaufbahn räumt, zuerst aus den hohen Umlaufbahnen. Jedes Land, das den Orbit nutzt, profitiert davon."
+ },
+ "country_orbital_debris_removal_mult": {
+  "en": "[concept_orbital_debris] Removal",
+  "de": "[concept_orbital_debris]-Beseitigung"
+ },
+ "country_orbital_debris_removal_mult_desc": {
+  "en": "Scales this country's orbital debris removal, up to +100%. It removes nothing on its own: it needs a Space Program running a debris removal method.",
+  "de": "Skaliert die Weltraumschrott-Beseitigung dieses Landes, bis zu +100%. Allein beseitigt er nichts: Er braucht ein Raumfahrtprogramm, das eine Schrottbeseitigungsmethode betreibt."
+ },
+ "country_override_with_algorithmic_governance_add": {
+  "en": "[Concept('concept_legislative_override_capacity','Legislative Override Capacity')] under Algorithmic Governance",
+  "de": "[Concept('concept_legislative_override_capacity','Legislative Durchsetzungskapazität')] unter Algorithmischer Regierungsführung"
+ },
+ "country_override_with_algorithmic_governance_add_desc": {
+  "en": "With Algorithmic Governance, the system that writes the law also judges it.",
+  "de": "Bei Algorithmischer Regierungsführung beurteilt das System, das das Gesetz schreibt, es auch."
+ },
  "country_participant_diplomatic_play_escalation_weekly_add": {
   "en": "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] You Joined",
   "de": "Wöchentliche Eskalation in [Concept('concept_diplomatic_play', 'Diplomatiespielen')], denen Sie beigetreten sind"
@@ -876,8 +972,8 @@
   "de": "Anpassungsgeschwindigkeit des Leitzinses"
  },
  "country_policy_rate_drift_speed_mult_desc": {
-  "en": "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month — a point a quarter — so changing course takes seasons rather than weeks.",
-  "de": "Wie schnell sich der Leitzins dem Ziel annähert, auf das Ihre Zentralbank hinsteuert. Im Ausgangswert deckt dies etwa ein Drittel Punkt pro Monat ab — ein Punkt pro Quartal —, sodass ein Kurswechsel eher Jahreszeiten als Wochen dauert."
+  "en": "How quickly the policy rate closes on the target your central bank is steering for. At the baseline it covers about a third of a point a month, so a small change of course takes seasons rather than weeks. While inflation is far from its target too, it covers up to a sixth of the distance a month, so a bank chasing a runaway inflation closes most of the way in about a year.",
+  "de": "Wie schnell sich der Leitzins dem Ziel annähert, auf das Ihre Zentralbank hinsteuert. Im Ausgangswert deckt dies etwa ein Drittel Punkt pro Monat ab, sodass ein kleiner Kurswechsel eher Jahreszeiten als Wochen dauert. Ist auch die Inflation weit von ihrem Ziel entfernt, deckt dies bis zu ein Sechstel der Strecke pro Monat ab, sodass eine Bank, die einer davonlaufenden Inflation hinterherjagt, in etwa einem Jahr den größten Teil des Weges zurücklegt."
  },
  "country_policy_rate_floor_add": {
   "en": "Lowest Policy Rate",
@@ -886,6 +982,14 @@
  "country_policy_rate_floor_add_desc": {
   "en": "The lowest rate your central bank is able to set. Normally nothing below zero: charge savers to keep money in a bank and they will keep it in cash instead. A currency with no cash to keep can be pushed past that point.",
   "de": "Der niedrigste Zinssatz, den Ihre Zentralbank festlegen kann. Normalerweise nichts unter null: Wer Sparern Gebühren fürs Geldhalten berechnet, treibt sie ins Bargeld. Eine Währung ohne Bargeld zum Horten lässt sich über diesen Punkt hinaus drücken."
+ },
+ "country_rights_law_enactment_success_add": {
+  "en": "Enactment Success of Rights Laws",
+  "de": "Verabschiedungserfolg bei Rechtegesetzen"
+ },
+ "country_rights_law_enactment_success_add_desc": {
+  "en": "For laws on Rights of Women, Slavery, Minority Rights, LGBTQ+ Rights and Privacy Rights. Not while the courts can't challenge the government.",
+  "de": "Für Gesetze zu den Rechten der Frauen, Sklaverei, Minderheitenrechten, LGBTQ+-Rechten und Datenschutzrechten. Nicht, solange die Gerichte die Regierung nicht anfechten können."
  },
  "country_risk_premium_add": {
   "en": "Risk Premium",
@@ -1038,6 +1142,14 @@
  "country_space_race_risk_mult_desc": {
   "en": "Multiplicative adjustment to [concept_space_race] failure risk. The Safe approach on active milestones reduces failure risk at the cost of slower progress.",
   "de": "Multiplikative Anpassung des Fehlschlagsrisikos beim [concept_space_race]. Der sichere Ansatz bei aktiven Meilensteinen verringert das Fehlschlagsrisiko auf Kosten eines langsameren Fortschritts."
+ },
+ "country_sr_module_fabrication_add": {
+  "en": "Colony Module Fabrication per Month",
+  "de": "Koloniemodulfertigung pro Monat"
+ },
+ "country_sr_module_fabrication_add_desc": {
+  "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
+  "de": "Punkte pro Monat für unsere Koloniemodule in der Warteschlange, bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“. Jedes Modul kostet 100."
  },
  "country_st_res_aeroplanes_capacity_add": {
   "en": "$aeroplanes$ Reserve Capacity",
@@ -1271,6 +1383,46 @@
   "en": "Standing upward pressure on prices coming from wages — how far above expectations inflation settles while these labour and welfare laws stand. Workers who can bargain, and workers with an income floor beneath them, cost employers more, and employers pass that on. It is tracked apart from every other source of inflation because the same laws pay it back when prices are under control: while inflation is in the #b stable band#!, every #v 0.1%#! of wage pressure also nudges down what your #b lower strata expect#! of life — the pay rise was real, so the disappointment is smaller — and adds to your #b financial momentum#!, because money that holds its value gets spent. Outside that band the dividend stops, and it is never paid to a #b command economy#! or a #b dollarised#! country, neither of which earned the stability it would be paid for. Once headline inflation reaches #v 8%#! these laws count a #b second time#!, as workers who expect prices to keep rising start bargaining for the rise in advance. Laws that suppress wages carry a negative figure instead, and are paid no dividend.",
   "de": "Dauerhafter Aufwärtsdruck auf die Preise, der von Löhnen ausgeht — wie weit die Inflation über den Erwartungen einpendelt, solange diese Arbeits- und Sozialgesetze bestehen. Arbeiter, die verhandeln können, und Arbeiter mit einer Einkommensuntergrenze unter sich, kosten Arbeitgeber mehr, und Arbeitgeber geben dies weiter. Dies wird getrennt von jeder anderen Inflationsquelle erfasst, weil dieselben Gesetze es zurückzahlen, sobald die Preise unter Kontrolle sind: Solange die Inflation in der #b stabilen Spanne#! liegt, senkt jedes #v 0,1%#! an Lohndruck auch das, was Ihre #b Unterschicht vom Leben erwartet#! — die Lohnerhöhung war real, also fällt die Enttäuschung geringer aus — und erhöht Ihre #b Finanzdynamik#!, weil Geld, das seinen Wert behält, ausgegeben wird. Außerhalb dieser Spanne entfällt die Dividende, und sie wird niemals an eine #b Kommandowirtschaft#! oder ein #b dollarisiertes#! Land gezahlt, da keines der beiden sich die Stabilität verdient hat, für die sie gezahlt würde. Sobald die Gesamtinflation #v 8%#! erreicht, zählen diese Gesetze #b ein zweites Mal#!, da Arbeiter, die mit weiter steigenden Preisen rechnen, bereits im Voraus höhere Löhne fordern. Gesetze, die Löhne unterdrücken, tragen stattdessen einen negativen Wert und erhalten keine Dividende."
  },
+ "country_wealth_concentration_economy_add": {
+  "en": "[concept_inheritance_concentration]: Economic Laws",
+  "de": "[concept_inheritance_concentration]: Wirtschaftsgesetze"
+ },
+ "country_wealth_concentration_economy_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: how freely capital compounds and combines. The economic laws together move it at most 15 either way.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates: wie frei sich Kapital vermehrt und zusammenschließt. Die Wirtschaftsgesetze zusammen verschieben ihn um höchstens 15 in jede Richtung."
+ },
+ "country_wealth_concentration_inheritance_add": {
+  "en": "[concept_inheritance_concentration]: Inheritance Law",
+  "de": "[concept_inheritance_concentration]: Erbrecht"
+ },
+ "country_wealth_concentration_inheritance_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: who inherits an estate decides whether a fortune passes on whole or is broken up. The Inheritance law and its amendments together move it at most 50 either way.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates: Wer einen Nachlass erbt, entscheidet darüber, ob ein Vermögen ungeteilt weitergegeben oder zerschlagen wird. Das Erbrecht und seine Nachträge verschieben ihn zusammen um höchstens 50 in jede Richtung."
+ },
+ "country_wealth_concentration_public_goods_add": {
+  "en": "[concept_inheritance_concentration]: Public Goods",
+  "de": "[concept_inheritance_concentration]: Öffentliche Güter"
+ },
+ "country_wealth_concentration_public_goods_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: whether health care, schooling and ideas are provided to all or sold to those who can pay. Private provision and strict intellectual property raise it; public provision lowers it.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates: ob Gesundheitsversorgung, Schulbildung und Ideen allen zur Verfügung gestellt oder an zahlungskräftige Menschen verkauft werden. Private Bereitstellung und strenges geistiges Eigentum erhöhen ihn; öffentliche Bereitstellung senkt ihn."
+ },
+ "country_wealth_concentration_slavery_add": {
+  "en": "[concept_inheritance_concentration]: Slavery",
+  "de": "[concept_inheritance_concentration]: Sklaverei"
+ },
+ "country_wealth_concentration_slavery_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: property in people is the largest single asset a planter class holds. Only the law in force counts, not how many people are enslaved.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates: Eigentum an Menschen ist der größte Einzelwert, den eine Pflanzerklasse besitzt. Es zählt nur das geltende Gesetz, nicht, wie viele Menschen versklavt sind."
+ },
+ "country_wealth_concentration_tax_add": {
+  "en": "[concept_inheritance_concentration]: Taxes on Wealth",
+  "de": "[concept_inheritance_concentration]: Vermögensbesteuerung"
+ },
+ "country_wealth_concentration_tax_add_desc": {
+  "en": "Moves every state's [concept_inheritance_concentration] target: taxing great incomes breaks fortunes up. With the legislated tax code's dividend tax, at most −10.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates: Die Besteuerung hoher Einkommen zerschlägt Vermögen. Mit der Dividendensteuer der Gesetzlichen Steuerordnung höchstens −10."
+ },
  "country_weekly_investment_pool_add": {
   "en": "Weekly [concept_investment_pool] Change",
   "de": "Wöchentliche Änderung des [concept_investment_pool]s"
@@ -1292,6 +1444,14 @@
   "de": "@advanced_materials! $advanced_materials$-Einsatz"
  },
  "goods_input_advanced_materials_add_desc": {
+  "en": "The amount of @advanced_materials! $advanced_materials$ consumed by buildings",
+  "de": "Wie viel @advanced_materials! $advanced_materials$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_advanced_materials_mult": {
+  "en": "@advanced_materials! $advanced_materials$ Input",
+  "de": "@advanced_materials! $advanced_materials$-Einsatz"
+ },
+ "goods_input_advanced_materials_mult_desc": {
   "en": "The amount of @advanced_materials! $advanced_materials$ consumed by buildings",
   "de": "Wie viel @advanced_materials! $advanced_materials$ von Gebäuden verbraucht wird"
  },
@@ -1351,6 +1511,14 @@
   "en": "The amount of @digital_access! $digital_access$ consumed by buildings",
   "de": "Wie viel @digital_access! $digital_access$ von Gebäuden verbraucht wird"
  },
+ "goods_input_digital_access_mult": {
+  "en": "@digital_access! $digital_access$ Input",
+  "de": "@digital_access! $digital_access$-Einsatz"
+ },
+ "goods_input_digital_access_mult_desc": {
+  "en": "The amount of @digital_access! $digital_access$ consumed by buildings",
+  "de": "Wie viel @digital_access! $digital_access$ von Gebäuden verbraucht wird"
+ },
  "goods_input_digital_assets_add": {
   "en": "@digital_assets! $digital_assets$ Input",
   "de": "@digital_assets! $digital_assets$-Einsatz"
@@ -1372,6 +1540,14 @@
   "de": "@electronic_components! $electronic_components$-Einsatz"
  },
  "goods_input_electronic_components_add_desc": {
+  "en": "The amount of @electronic_components! $electronic_components$ consumed by buildings",
+  "de": "Wie viel @electronic_components! $electronic_components$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_electronic_components_mult": {
+  "en": "@electronic_components! $electronic_components$ Input",
+  "de": "@electronic_components! $electronic_components$-Einsatz"
+ },
+ "goods_input_electronic_components_mult_desc": {
   "en": "The amount of @electronic_components! $electronic_components$ consumed by buildings",
   "de": "Wie viel @electronic_components! $electronic_components$ von Gebäuden verbraucht wird"
  },
@@ -1407,11 +1583,35 @@
   "en": "The amount of @grain! $grain$ consumed by buildings",
   "de": "Wie viel @grain! $grain$ von Gebäuden verbraucht wird"
  },
+ "goods_input_grid_power_add": {
+  "en": "@grid_power! $grid_power$ Input",
+  "de": "@grid_power! $grid_power$-Einsatz"
+ },
+ "goods_input_grid_power_add_desc": {
+  "en": "The amount of @grid_power! $grid_power$ consumed by buildings",
+  "de": "Wie viel @grid_power! $grid_power$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_grid_power_mult": {
+  "en": "@grid_power! $grid_power$ Input",
+  "de": "@grid_power! $grid_power$-Einsatz"
+ },
+ "goods_input_grid_power_mult_desc": {
+  "en": "The amount of @grid_power! $grid_power$ consumed by buildings",
+  "de": "Wie viel @grid_power! $grid_power$ von Gebäuden verbraucht wird"
+ },
  "goods_input_launch_capacity_add": {
   "en": "@launch_capacity! $launch_capacity$ Input",
   "de": "@launch_capacity! $launch_capacity$-Einsatz"
  },
  "goods_input_launch_capacity_add_desc": {
+  "en": "The amount of @launch_capacity! $launch_capacity$ consumed by buildings",
+  "de": "Wie viel @launch_capacity! $launch_capacity$ von Gebäuden verbraucht wird"
+ },
+ "goods_input_launch_capacity_mult": {
+  "en": "@launch_capacity! $launch_capacity$ Input",
+  "de": "@launch_capacity! $launch_capacity$-Einsatz"
+ },
+ "goods_input_launch_capacity_mult_desc": {
   "en": "The amount of @launch_capacity! $launch_capacity$ consumed by buildings",
   "de": "Wie viel @launch_capacity! $launch_capacity$ von Gebäuden verbraucht wird"
  },
@@ -1678,6 +1878,22 @@
  "goods_output_grain_mult_desc": {
   "en": "A bonus or penalty to the amount of @grain! $grain$ produced by buildings",
   "de": "Ein Bonus oder Malus darauf, wie viel @grain! $grain$ von Gebäuden produziert wird"
+ },
+ "goods_output_grid_power_add": {
+  "en": "@grid_power! $grid_power$ Output",
+  "de": "@grid_power! $grid_power$-Ausstoß"
+ },
+ "goods_output_grid_power_add_desc": {
+  "en": "The amount of @grid_power! $grid_power$ produced by buildings",
+  "de": "Wie viel @grid_power! $grid_power$ von Gebäuden produziert wird"
+ },
+ "goods_output_grid_power_mult": {
+  "en": "Building @grid_power! $grid_power$ output",
+  "de": "Gebäude-Ausstoß: @grid_power! $grid_power$"
+ },
+ "goods_output_grid_power_mult_desc": {
+  "en": "A bonus or penalty to the amount of @grid_power! $grid_power$ produced by buildings",
+  "de": "Ein Bonus oder Malus darauf, wie viel @grid_power! $grid_power$ von Gebäuden produziert wird"
  },
  "goods_output_groceries_mult": {
   "en": "Building @groceries! $groceries$ output",
@@ -1995,6 +2211,14 @@
   "en": "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('tanks').GetName].",
   "de": "Ein Anstieg oder Rückgang des gesamten [Concept('concept_trade_advantage', 'Handelsvorteils')] für [GetGoods('tanks').GetName]."
  },
+ "state_ageing_rate_add": {
+  "en": "Ageing in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Alterung in der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_ageing_rate_add_desc": {
+  "en": "How much more slowly the bodies of people in longevity care age: at -10% a body ages nine-tenths of a year each year, at -100% it stops ageing. Who is in care depends on the health laws, the augmentation laws and wealth. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Um wie viel langsamer die Körper von Menschen in Langlebigkeitsmedizin altern: bei -10% altert ein Körper jedes Jahr um neun Zehntel eines Jahres, bei -100% hört er auf zu altern. Wer in Behandlung ist, hängt von den Gesundheitsgesetzen, den Augmentierungsgesetzen und dem Vermögen ab. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_arable_land_mult": {
   "en": "Arable Land",
   "de": "Ackerland"
@@ -2010,6 +2234,30 @@
  "state_atmospheric_carbon_capture_add_desc": {
   "en": "Carbon taken out of the atmosphere at this location by removal-only methods, such as Direct Air Capture at Carbon Conversion Works. It is the Carbon Captured figure on the Climate tab of the Market panel, and is subtracted from the market total after policy reductions.",
   "de": "Kohlenstoff, der an diesem Standort durch reine Entnahmemethoden der Atmosphäre entzogen wird, etwa durch Direktabscheidung aus der Luft in Kohlenstoffumwandlungswerken. Das ist der Wert „Abgeschiedener Kohlenstoff“ auf dem Reiter „Klima“ der Markttafel und wird nach den Senkungen durch die Politik von der Marktsumme abgezogen."
+ },
+ "state_backup_external_mortality_mult": {
+  "en": "Deaths from Violence and Accidents in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch Gewalt und Unfälle in der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_external_mortality_mult_desc": {
+  "en": "Deaths from violence and accidents among people in longevity care, whose minds are backed up and restored to a new body. The census takes it times the state's share of people in care. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch Gewalt und Unfälle unter Menschen in Langlebigkeitsmedizin, deren Geist gesichert und in einem neuen Körper wiederhergestellt wird. Die Volkszählung rechnet damit mal dem Anteil der Menschen des Staates, die in Behandlung sind. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_work_mortality_mult": {
+  "en": "Deaths at Work in Longevity Care[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle bei der Arbeit in der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_backup_work_mortality_mult_desc": {
+  "en": "Deaths at work among people in longevity care, whose minds are backed up and restored to a new body. The census takes it times the state's share of people in care. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle bei der Arbeit unter Menschen in Langlebigkeitsmedizin, deren Geist gesichert und in einem neuen Körper wiederhergestellt wird. Die Volkszählung rechnet damit mal dem Anteil der Menschen des Staates, die in Behandlung sind. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_birth_limit_relief_add": {
+  "en": "Rural Exemption from the Birth Limit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Ländliche Ausnahme von der Geburtenbeschränkung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_birth_limit_relief_add_desc": {
+  "en": "How much of the Birth Limit farm families are spared, by the state's share of $peasants$ and $farmers$. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viel der Geburtenbeschränkung Bauernfamilien erspart bleibt, nach dem Anteil von $peasants$ und $farmers$ im Staat. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_building_afghan_nassaji_kabul_mills_max_level_add": {
   "en": "[GetBuildingType('building_afghan_nassaji_kabul_mills').GetName] Max Level",
@@ -3090,6 +3338,22 @@
  "state_building_great_indian_railway_jamalpur_works_max_level_add_desc": {
   "en": "Increases the maximum number of levels that [GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] can expand to in this state",
   "de": "Erhöht die maximale Anzahl an Stufen, auf die [GetBuildingType('building_great_indian_railway_jamalpur_works').GetName] in diesem Staat ausgebaut werden kann"
+ },
+ "state_building_grid_hvdc_interconnector_max_level_add": {
+  "en": "[GetBuildingType('building_grid_hvdc_interconnector').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_grid_hvdc_interconnector').GetName]"
+ },
+ "state_building_grid_hvdc_interconnector_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_grid_hvdc_interconnector').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Anzahl an Stufen, auf die [GetBuildingType('building_grid_hvdc_interconnector').GetName] in diesem Staat ausgebaut werden kann"
+ },
+ "state_building_grid_transfer_station_max_level_add": {
+  "en": "[GetBuildingType('building_grid_transfer_station').GetName] Max Level",
+  "de": "Maximalstufe: [GetBuildingType('building_grid_transfer_station').GetName]"
+ },
+ "state_building_grid_transfer_station_max_level_add_desc": {
+  "en": "Increases the maximum number of levels that [GetBuildingType('building_grid_transfer_station').GetName] can expand to in this state",
+  "de": "Erhöht die maximale Stufenzahl, die [GetBuildingType('building_grid_transfer_station').GetName] in diesem Staat erreichen kann."
  },
  "state_building_guinness_st_james_gate_brewery_max_level_add": {
   "en": "[GetBuildingType('building_guinness_st_james_gate_brewery').GetName] Max Level",
@@ -4643,29 +4907,37 @@
   "en": "Increases the maximum number of levels that [GetBuildingType('building_zastava_kragujevac_arsenal').GetName] can expand to in this state",
   "de": "Erhöht die maximale Anzahl an Stufen, auf die [GetBuildingType('building_zastava_kragujevac_arsenal').GetName] in diesem Staat ausgebaut werden kann"
  },
+ "state_child_labor_participation_add": {
+  "en": "Census: Children at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Volkszählung: Kinder bei der Arbeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_child_labor_participation_add_desc": {
+  "en": "The share of children aged 10 to 14 who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Kinder im Alter von 10 bis 14 Jahren, die arbeiten. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_chronic_mortality_mult": {
-  "en": "Deaths from Chronic Disease",
-  "de": "Todesfälle durch chronische Krankheiten"
+  "en": "Deaths from Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch chronische Krankheiten[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_chronic_mortality_mult_desc": {
-  "en": "Deaths from the diseases of age, which poverty in old age makes more common. Used by the census on the Demographics tab.",
-  "de": "Todesfälle durch Alterskrankheiten, die Armut im Alter noch häufiger macht. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "Deaths from the diseases of age, which poverty in old age makes more common. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch Alterskrankheiten, die Armut im Alter noch häufiger macht. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_chronic_treatment_add": {
-  "en": "Treatment of Chronic Disease",
-  "de": "Behandlung chronischer Krankheiten"
+  "en": "Treatment of Chronic Disease[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Behandlung chronischer Krankheiten[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_chronic_treatment_add_desc": {
-  "en": "The share of deaths from the diseases of age that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
-  "de": "Der Anteil der Todesfälle durch Alterskrankheiten, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "The share of deaths from the diseases of age that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Todesfälle durch Alterskrankheiten, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_contraception_add": {
-  "en": "Contraception",
-  "de": "Verhütung"
+  "en": "Contraception[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Verhütung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_contraception_add_desc": {
-  "en": "The methods families have to space or limit births, beyond the traditional ones everyone has. How much of it people use depends on how many can read. Used by the census on the Demographics tab.",
-  "de": "Die Mittel, mit denen Familien Geburten zeitlich abstimmen oder begrenzen können, über die überlieferten hinaus, die jeder kennt. Wie viel davon genutzt wird, hängt davon ab, wie viele Menschen lesen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "The methods families have to space or limit births, beyond the traditional ones everyone has. How much of it people use depends on how many can read. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Mittel, mit denen Familien Geburten zeitlich abstimmen oder begrenzen können, über die überlieferten hinaus, die jeder kennt. Wie viel davon genutzt wird, hängt davon ab, wie viele Menschen lesen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_custom_religion_animist_standard_of_living_add": {
   "en": "[concept_sol] Modifier for $custom_religion_animist$",
@@ -4723,21 +4995,125 @@
   "en": "A bonus or penalty to the [concept_sol] of pops following this custom religion",
   "de": "Ein Bonus oder Malus auf den [concept_sol] von Bevölkerungsgruppen, die dieser eigen Religion angehören"
  },
+ "state_death_cause_chr_mult": {
+  "en": "Counted in Causes of Death under Chronic Illness[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "In den Todesursachen unter „Chronische Krankheit“ gezählt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_chr_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Chronic Illness in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Todesfälle, die die daneben stehende Sterblichkeitszeile hinzufügt, zählen im Abschnitt „Todesursachen“ auf dem Reiter „Demografie“ unter „Chronische Krankheit“. Die Zeile daneben ändert die Todesfälle; die Volkszählung liest nur diese hier.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_ext_mult": {
+  "en": "Counted in Causes of Death under Accidents and Violence[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "In den Todesursachen unter „Unfälle, Gewalt“ gezählt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_ext_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Accidents and Violence in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Todesfälle, die die daneben stehende Sterblichkeitszeile hinzufügt, zählen im Abschnitt „Todesursachen“ auf dem Reiter „Demografie“ unter „Unfälle, Gewalt“. Die Zeile daneben ändert die Todesfälle; die Volkszählung liest nur diese hier.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_inf_mult": {
+  "en": "Counted in Causes of Death under Infection and Hunger[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "In den Todesursachen unter „Infektion, Hunger“ gezählt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_inf_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Infection and Hunger in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Todesfälle, die die daneben stehende Sterblichkeitszeile hinzufügt, zählen im Abschnitt „Todesursachen“ auf dem Reiter „Demografie“ unter „Infektion, Hunger“. Die Zeile daneben ändert die Todesfälle; die Volkszählung liest nur diese hier.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_war_mult": {
+  "en": "Counted in Causes of Death under War and Devastation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "In den Todesursachen unter „Krieg, Verwüstung“ gezählt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_war_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under War and Devastation in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Todesfälle, die die daneben stehende Sterblichkeitszeile hinzufügt, zählen im Abschnitt „Todesursachen“ auf dem Reiter „Demografie“ unter „Krieg, Verwüstung“. Die Zeile daneben ändert die Todesfälle; die Volkszählung liest nur diese hier.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_work_mult": {
+  "en": "Counted in Causes of Death under Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "In den Todesursachen unter „Arbeit“ gezählt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_death_cause_work_mult_desc": {
+  "en": "The deaths the mortality line beside it adds count under Work in the Causes of Death section on the Demographics tab. The line beside it is what changes deaths; the census only reads this one.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Die Todesfälle, die die daneben stehende Sterblichkeitszeile hinzufügt, zählen im Abschnitt „Todesursachen“ auf dem Reiter „Demografie“ unter „Arbeit“. Die Zeile daneben ändert die Todesfälle; die Volkszählung liest nur diese hier.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_demog_absorbed_birth_rate_mult_desc": {
+  "en": "$state_birth_rate_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_birth_rate_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_absorbed_farmers_mortality_mult_desc": {
+  "en": "$state_farmers_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_farmers_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_absorbed_laborers_mortality_mult_desc": {
+  "en": "$state_laborers_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_laborers_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_absorbed_machinists_mortality_mult_desc": {
+  "en": "$state_machinists_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_machinists_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_absorbed_mortality_mult_desc": {
+  "en": "$state_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_absorbed_peasants_mortality_mult_desc": {
+  "en": "$state_peasants_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it carries this effect in its own rates instead.",
+  "de": "$state_peasants_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, bildet sie diesen Effekt stattdessen in ihren eigenen Raten ab."
+ },
+ "state_demog_ontop_birth_rate_mult_desc": {
+  "en": "$state_birth_rate_mult_desc$. Where the demographic census sets a state's births and deaths, it applies this effect at its own rate.",
+  "de": "$state_birth_rate_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, wendet sie diesen Effekt mit ihrer eigenen Rate an."
+ },
+ "state_demog_ontop_mortality_mult_desc": {
+  "en": "$state_mortality_mult_desc$. Where the demographic census sets a state's births and deaths, it applies this effect at its own rate.",
+  "de": "$state_mortality_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, wendet sie diesen Effekt mit ihrer eigenen Rate an."
+ },
+ "state_demog_ontop_mortality_wealth_mult_desc": {
+  "en": "$state_mortality_wealth_mult_desc$. Where the demographic census sets a state's births and deaths, it applies this effect at its own rate.",
+  "de": "$state_mortality_wealth_mult_desc$. Wo die demografische Volkszählung die Geburten und Todesfälle eines Staates festlegt, wendet sie diesen Effekt mit ihrer eigenen Rate an."
+ },
+ "state_demog_replaced_ratio_add_desc": {
+  "en": "$state_working_adult_ratio_add_desc$. Where the demographic census sets a state's workforce, it carries this effect its own way instead: through its ages (who is old, when they retire, how many children there are) or through who works.",
+  "de": "$state_working_adult_ratio_add_desc$. Wo die demografische Volkszählung die Arbeitskräfte eines Staates festlegt, bildet sie diesen Effekt stattdessen auf eigene Weise ab: über ihre Altersgruppen (wer alt ist, wann sie in Rente gehen, wie viele Kinder es gibt) oder darüber, wer arbeitet."
+ },
+ "state_desired_fertility_mult": {
+  "en": "Desired Family Size[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Gewünschte Familiengröße[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_desired_fertility_mult_desc": {
+  "en": "How many children families want, before the means to plan a family decide how many they have. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viele Kinder sich Familien wünschen, bevor die Mittel zur Familienplanung darüber entscheiden, wie viele sie haben. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_external_mortality_mult": {
-  "en": "Deaths from Violence and Accidents",
-  "de": "Todesfälle durch Gewalt und Unfälle"
+  "en": "Deaths from Violence and Accidents[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch Gewalt und Unfälle[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_external_mortality_mult_desc": {
-  "en": "Deaths from violence, traffic and everyday accidents, mostly of young men. Used by the census on the Demographics tab.",
-  "de": "Todesfälle durch Gewalt, Verkehrs- und Alltagsunfälle, meist junger Männer. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "Deaths from violence, traffic and everyday accidents, mostly of young men. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle durch Gewalt, Verkehrs- und Alltagsunfälle, meist junger Männer. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_safety_add": {
+  "en": "Safer Streets and Homes[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Sicherere Straßen und Häuser[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_external_safety_add_desc": {
+  "en": "The share of deaths from violence, traffic and everyday accidents that safer roads, buildings, cars and quicker help prevent: all of it at 100%, though never more than 95%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Todesfälle durch Gewalt, Verkehr und Alltagsunfälle, den sicherere Straßen, Gebäude, Autos und schnellere Hilfe verhindern: bei 100% alle, jedoch nie mehr als 95%. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_family_migration_add": {
+  "en": "Families Among Migrants[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Familien unter Migranten[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_family_migration_add_desc": {
+  "en": "How far cheaper, faster travel lets migrants bring their families, so more of the people moving to or from a state go as whole families rather than as young workers alone. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie weit billigere, schnellere Reisen es Migranten ermöglichen, ihre Familien mitzubringen, sodass mehr der Menschen, die in einen Staat oder aus ihm ziehen, als ganze Familien statt nur als junge Arbeitskräfte reisen. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_fertility_means_add": {
-  "en": "Fertility Control",
-  "de": "Geburtenkontrolle"
+  "en": "Fertility Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Geburtenkontrolle[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_fertility_means_add_desc": {
-  "en": "How much more of the gap between the children families want and the children they would have without trying they can close, whatever they can read: programs, clinics and custom. Used by the census on the Demographics tab.",
-  "de": "Wie viel mehr von der Lücke zwischen den Kindern, die Familien sich wünschen, und den Kindern, die sie ohne eigenes Zutun bekämen, geschlossen werden kann, unabhängig von der Lesefähigkeit: durch Programme, Kliniken und Brauchtum. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "How much more of the gap between the children families want and the children they would have without trying they can close, whatever they can read: programs, clinics and custom. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viel mehr von der Lücke zwischen den Kindern, die Familien sich wünschen, und den Kindern, die sie ohne eigenes Zutun bekämen, geschlossen werden kann, unabhängig von der Lesefähigkeit: durch Programme, Kliniken und Brauchtum. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_fortification_level_add_desc": {
   "en": "The [concept_fortification_level] of this state, determined by the [concept_fortification_system]. Higher values unlock stronger defensive [concept_fortification_system] [Concept('concept_battle_condition', 'battle conditions')].",
@@ -4824,12 +5200,12 @@
   "de": "Eine Erhöhung oder Verringerung der Auswirkung von [GetHarvestConditionType('torrential_rains').GetName]."
  },
  "state_health_care_access_add": {
-  "en": "Health Care Access",
-  "de": "Zugang zur Gesundheitsversorgung"
+  "en": "Health Care Access[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Zugang zur Gesundheitsversorgung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_health_care_access_add_desc": {
-  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, and a health law adds more with each level of its institution. Used by the census on the Demographics tab.",
-  "de": "Wie viele Menschen einen Arzt, eine Krankenschwester oder ein Krankenhaus erreichen können. Medizin rettet nur so weit Leben, wie sie ankommt. Märkte und Wohltätigkeit schaffen überall etwas Zugang, und ein Gesundheitsgesetz fügt mit jeder Stufe seiner Institution mehr hinzu. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "How many people can reach a doctor, a nurse or a hospital. Medicine saves lives only as far as it reaches. Markets and charity give some access everywhere, and a health law adds more with each level of its institution. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viele Menschen einen Arzt, eine Krankenschwester oder ein Krankenhaus erreichen können. Medizin rettet nur so weit Leben, wie sie ankommt. Märkte und Wohltätigkeit schaffen überall etwas Zugang, und ein Gesundheitsgesetz fügt mit jeder Stufe seiner Institution mehr hinzu. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_homeland_change_speed_mult": {
   "en": "[concept_homeland] Change Speed",
@@ -4864,12 +5240,12 @@
   "de": "Der Bevölkerungsanteil, unter dem das [concept_homeland] einer nicht-primären Kultur entfernt wird. Höhere Werte erleichtern den Verlust von Heimatgebieten. Wird pro Staat durch [Concept('concept_decree', 'Erlasse')] und Gebäude verändert."
  },
  "state_infection_treatment_add": {
-  "en": "Treatment of Infection",
-  "de": "Behandlung von Infektionen"
+  "en": "Treatment of Infection[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Behandlung von Infektionen[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_infection_treatment_add_desc": {
-  "en": "The share of deaths from infection and hunger that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
-  "de": "Der Anteil der Todesfälle durch Infektionen und Hunger, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "The share of deaths from infection and hunger that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Todesfälle durch Infektionen und Hunger, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_infrastructure_from_aeroplanes_consumption_add": {
   "en": "[concept_infrastructure] from [concept_pop] [GetGoods('aeroplanes').GetName] Consumption",
@@ -4887,21 +5263,109 @@
   "en": "The amount of [concept_state] [concept_infrastructure] added for each unit of [GetGoods('transportation').GetName] consumed by the [Concept('concept_pop', '$concept_pops$')] that live there",
   "de": "Die Menge an [concept_state]-[concept_infrastructure], die für jede von den dort lebenden [Concept('concept_pop', '$concept_pops$')] verbrauchte Einheit [GetGoods('transportation').GetName] hinzugefügt wird"
  },
+ "state_labor_participation_add": {
+  "en": "Census: People at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Volkszählung: Menschen bei der Arbeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_labor_participation_add_desc": {
+  "en": "The share of working-age women and men who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Frauen und Männer im Erwerbsalter, die arbeiten. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_late_marriage_farms_add": {
+  "en": "Late Marriage on the Farms[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Späte Heirat auf den Höfen[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_late_marriage_farms_add_desc": {
+  "en": "How much more common late marriage becomes, times the state's share of $peasants$ and $farmers$: where one heir takes the farm whole, the brothers and sisters who don't inherit wait to marry, or never do. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viel häufiger späte Heirat wird, multipliziert mit dem Anteil von $peasants$ und $farmers$ im Staat: Wo ein Erbe den Hof ungeteilt übernimmt, warten die Geschwister, die nicht erben, mit dem Heiraten oder heiraten nie. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_cover_add": {
+  "en": "Longevity Care Through the Health System[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Langlebigkeitsmedizin durch das Gesundheitssystem[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_cover_add_desc": {
+  "en": "The share of the people the health system reaches who are within reach of longevity care through it, at most 100%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der vom Gesundheitssystem erreichten Menschen, die darüber Zugang zur Langlebigkeitsmedizin haben, höchstens 100%. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_floor_add": {
+  "en": "Minimum Longevity Care Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Mindestreichweite der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_floor_add_desc": {
+  "en": "At least this share of the people are within reach of longevity care through the health system, however few it reaches. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Mindestens dieser Anteil der Menschen hat über das Gesundheitssystem Zugang zur Langlebigkeitsmedizin, wie wenige es auch erreicht. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_market_reach_add": {
+  "en": "Longevity Care Market Reach[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Marktreichweite der Langlebigkeitsmedizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_longevity_care_market_reach_add_desc": {
+  "en": "How many levels of wealth further down the market brings longevity care: people that much poorer can buy it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Um wie viele Vermögensstufen weiter nach unten der Markt Langlebigkeitsmedizin bringt: entsprechend ärmere Menschen können sie kaufen. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_malaria_control_add": {
+  "en": "Malaria Control[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Malariabekämpfung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_malaria_control_add_desc": {
+  "en": "How far malaria's toll on the people who live with it has been brought under control. In a state with malaria, deaths from infection rise by a share that this takes away: all of it at 100%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie weit der Tribut der Malaria unter den Menschen, die mit ihr leben, unter Kontrolle gebracht wurde. In einem Staat mit Malaria steigen die Todesfälle durch Infektion um einen Anteil, den dies wegnimmt: bei 100% den gesamten. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_male_labor_participation_add": {
+  "en": "Census: Men at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Volkszählung: Männer bei der Arbeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_male_labor_participation_add_desc": {
+  "en": "The share of working-age men who work. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Männer im Erwerbsalter, die arbeiten. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_maternal_mortality_mult": {
+  "en": "Maternal Deaths[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle von Müttern[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_maternal_mortality_mult_desc": {
+  "en": "Deaths of women in pregnancy and childbirth, unsafe abortions among them. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle von Frauen in Schwangerschaft und Geburt, darunter unsichere Abtreibungen. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_maternal_treatment_add": {
-  "en": "Treatment in Childbirth",
-  "de": "Behandlung bei der Geburt"
+  "en": "Treatment in Childbirth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Behandlung bei der Geburt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_maternal_treatment_add_desc": {
-  "en": "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab.",
-  "de": "Der Anteil der Todesfälle von Müttern bei der Geburt, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "The share of mothers' deaths in childbirth that medicine can prevent where people can reach it. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Todesfälle von Müttern bei der Geburt, den die Medizin verhindern kann, wo die Menschen sie erreichen können. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_means_literacy_add": {
+  "en": "Family Planning Knowledge[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Wissen zur Familienplanung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_means_literacy_add_desc": {
+  "en": "Knowledge of how to plan a family, spread beyond those who can read: people use the means to plan a family as if [concept_literacy] were this much higher. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wissen darüber, wie man eine Familie plant, verbreitet über die Lesekundigen hinaus: Die Menschen nutzen die Mittel zur Familienplanung, als wäre die [concept_literacy] um so viel höher. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_medical_diffusion_add": {
+  "en": "Spread of Medicine[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Verbreitung der Medizin[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_medical_diffusion_add_desc": {
+  "en": "How fast new medicine reaches each state: the share of the gap between its [concept_health_care_access] and treatments and where they are heading that closes at each yearly count. 10% everywhere; communications, medical training and the World Health Organization add more. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie schnell neue Medizin jeden Staat erreicht: der Anteil der Lücke zwischen seinem [concept_health_care_access] samt Behandlungen und dem Stand, auf den sie zusteuern, der sich bei jeder jährlichen Zählung schließt. Überall 10%; Kommunikation, medizinische Ausbildung und die Weltgesundheitsorganisation erhöhen ihn. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_metro_share_add": {
+  "en": "Metropolitan Share Target[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Zielwert des Metropolenanteils[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_metro_share_add_desc": {
+  "en": "Points on the target of the share of a state's urban people who live in its largest city: green belts and new towns spread them over more places. Used by the census on a state's Demographics subtab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Punkte auf den Zielwert des Anteils der städtischen Bevölkerung eines Staates, die in dessen größter Stadt lebt: Grüngürtel und Planstädte verteilen sie auf mehr Orte. Wird von der Volkszählung auf dem Unterreiter „Demografie“ eines Staates verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_migration_crowding_density_mult": {
   "en": "[concept_migration_crowding] Tolerance",
   "de": "[concept_migration_crowding]-Toleranz"
  },
  "state_migration_crowding_density_mult_desc": {
-  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. Improved by urban planning, [concept_infrastructure], and modern transportation.",
-  "de": "Multipliziert die Bevölkerung, die ein Staat aufnehmen kann, bevor [concept_migration_crowding] [concept_migration_pull] verringert: sowohl den Anteil, den sein [concept_arable_land] zulässt, als auch den Anteil, den seine [concept_urban_engineering] hinzufügt. Wird durch Stadtplanung, [concept_infrastructure] und moderne Transportmittel verbessert."
+  "en": "Multiplies the population a state can hold before [concept_migration_crowding] reduces [concept_migration_pull]: both the share its [concept_arable_land] allows and the share its [concept_urban_engineering] adds. It multiplies the densities that open and close an [concept_internal_resettlement] frontier in the same way. Improved by urban planning, [concept_infrastructure], and modern transportation.",
+  "de": "Multipliziert die Bevölkerung, die ein Staat aufnehmen kann, bevor [concept_migration_crowding] [concept_migration_pull] verringert: sowohl den Anteil, den sein [concept_arable_land] zulässt, als auch den Anteil, den seine [concept_urban_engineering] hinzufügt. Multipliziert auf dieselbe Weise die Dichten, die eine Grenzregion der [Concept('concept_internal_resettlement','Internen Umsiedlung')] öffnen und schließen. Wird durch Stadtplanung, [concept_infrastructure] und moderne Transportmittel verbessert."
  },
  "state_min_cultural_acceptance_delta_add": {
   "en": "Minimum Local Acceptance",
@@ -4918,6 +5382,14 @@
  "state_monthly_loyalists_add_desc": {
   "en": "Share of the population that becomes [Concept('concept_loyalist','$concept_loyalists$')] each month, in incorporated [Concept('concept_state','$concept_states$')] only.",
   "de": "Anteil der Bevölkerung, der jeden Monat zu [Concept('concept_loyalist','$concept_loyalists$')] wird, nur in inkorporierten [Concept('concept_state','$concept_states$')]."
+ },
+ "state_natural_fertility_mult": {
+  "en": "Natural Fertility[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Natürliche Fruchtbarkeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_natural_fertility_mult_desc": {
+  "en": "How many children women have before any family planning, through their standing inside marriage. Women's legal standing and their work move it: where women work the fields, own property, hold jobs or vote, they have more say over how many children they have. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viele Kinder Frauen vor jeder Familienplanung bekommen, bedingt durch ihre Stellung innerhalb der Ehe. Die rechtliche Stellung der Frauen und ihre Arbeit verändern sie: Wo Frauen auf den Feldern arbeiten, Eigentum besitzen, Stellen innehaben oder wählen, haben sie mehr Mitspracherecht darüber, wie viele Kinder sie bekommen. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_nuclear_weapon_defense_chance_add": {
   "en": "[concept_nuclear_strike] Defense Chance",
@@ -4959,6 +5431,14 @@
   "en": "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$.",
   "de": "Eine Erhöhung oder Verringerung des Anteils der [Concept('concept_pop', 'Bevölkerungsgruppen')], die sich von $movement_transhumanist_name$ angezogen fühlen."
  },
+ "state_rejuvenation_add": {
+  "en": "Rejuvenation[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Verjüngung[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_rejuvenation_add_desc": {
+  "en": "Each year the bodies of people in longevity care who are biologically older than 35 close this share of the gap to 35. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Jedes Jahr schließen die Körper von Menschen in Langlebigkeitsmedizin, die biologisch älter als 35 sind, diesen Anteil der Lücke zu 35. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_reserve_battalions_add": {
   "en": "Reserve Battalions",
   "de": "Reservebataillone"
@@ -4983,6 +5463,22 @@
   "en": "How many people this state's Settlement Authority recruits for it each month, when enough eligible people can be found. Those who die in transit never arrive.",
   "de": "Wie viele Menschen die Siedlungsbehörde dieses Staates jeden Monat für ihn anwirbt, sofern genügend geeignete Personen gefunden werden können. Wer unterwegs stirbt, kommt nie an."
  },
+ "state_sex_ratio_at_birth_add": {
+  "en": "Boys per 100 Girls at Birth[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Jungen pro 100 Mädchen bei der Geburt[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_sex_ratio_at_birth_add_desc": {
+  "en": "How far a preference for sons raises the boys born per 100 girls above the natural 105. It counts only once prenatal sexing exists, with $microprocessor$. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie weit eine Vorliebe für Söhne die Zahl der geborenen Jungen pro 100 Mädchen über die natürlichen 105 hebt. Sie zählt erst, sobald es pränatale Geschlechtsbestimmung gibt, mit dem $microprocessor$. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_urban_fertility_relief_add": {
+  "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Familienwohnungsbau in Städten[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_urban_fertility_relief_add_desc": {
+  "en": "How much of city life's pull toward smaller families is offset, as homes with room for children are built. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie viel des Zugs des Stadtlebens zu kleineren Familien ausgeglichen wird, wenn Wohnungen mit Platz für Kinder gebaut werden. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_war_support_monthly_add": {
   "en": "Monthly [concept_war_support]",
   "de": "Monatliche [concept_war_support]"
@@ -4991,13 +5487,37 @@
   "en": "Additional [concept_war_support] gained each month, scaled by the [Concept('concept_state','$concept_state_possessive$')] share of the national population. Displayed in event tooltips as 'From Events'.",
   "de": "Zusätzliche [concept_war_support], die jeden Monat gewonnen wird, skaliert nach dem Anteil [Concept('concept_state','$concept_state_possessive$')] an der nationalen Bevölkerung. Wird in Ereignis-Tooltips als „Durch Ereignisse“ angezeigt."
  },
+ "state_wealth_concentration_land_add": {
+  "en": "[concept_inheritance_concentration]: Land Tenure",
+  "de": "[concept_inheritance_concentration]: Landbesitzverhältnisse"
+ },
+ "state_wealth_concentration_land_add_desc": {
+  "en": "Moves each state's [concept_inheritance_concentration] target, times its share of $peasants$ and $farmers$: great estates gather the land into few hands, smallholdings spread it.",
+  "de": "Verschiebt den Zielwert der [concept_inheritance_concentration] jedes Staates, multipliziert mit dessen Anteil an $peasants$ und $farmers$: Großgrundbesitz bündelt das Land in wenigen Händen, Kleinbesitz verteilt es."
+ },
+ "state_work_capacity_mult": {
+  "en": "Census: Fitness for Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Volkszählung: Arbeitsfähigkeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_capacity_mult_desc": {
+  "en": "How fit people are to work at each age, most of all past 60. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Wie arbeitsfähig Menschen in jedem Alter sind, vor allem jenseits der 60. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
  "state_work_mortality_mult": {
-  "en": "Deaths at Work",
-  "de": "Todesfälle bei der Arbeit"
+  "en": "Deaths at Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle bei der Arbeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  },
  "state_work_mortality_mult_desc": {
-  "en": "Deaths in mines, mills and workshops, shared between women and men by their part of the workforce. Used by the census on the Demographics tab.",
-  "de": "Todesfälle in Minen, Mühlen und Werkstätten, nach ihrem jeweiligen Anteil an den Beschäftigten auf Frauen und Männer verteilt. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet."
+  "en": "Deaths in mines, mills and workshops, shared between women and men by their part of the workforce. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Todesfälle in Minen, Mühlen und Werkstätten, nach ihrem jeweiligen Anteil an den Beschäftigten auf Frauen und Männer verteilt. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_safety_add": {
+  "en": "Safer Work[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",
+  "de": "Sicherere Arbeit[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
+ },
+ "state_work_safety_add_desc": {
+  "en": "The share of deaths at work that safer machines and safer kinds of work prevent, whatever the labor laws: all of it at 100%, though never more than 95%. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]",
+  "de": "Der Anteil der Todesfälle bei der Arbeit, den sicherere Maschinen und sicherere Arbeitsformen verhindern, unabhängig von den Arbeitsgesetzen: bei 100% alle, jedoch nie mehr als 95%. Wird von der Volkszählung auf dem Reiter „Demografie“ verwendet.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  },
  "state_yearly_cultural_acceptance_add": {
   "en": "Annual Cultural Acceptance",

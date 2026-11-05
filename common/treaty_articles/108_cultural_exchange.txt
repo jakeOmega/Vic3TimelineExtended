@@ -11,6 +11,8 @@ cultural_exchange_program = {
 
 	relations_progress_per_day = 0.5
 	relations_improvement_max = 30
+	max_target_involvement = 1000
+	target_involvement_applies_to = mutual
 
 	flags = {
 		can_be_renegotiated

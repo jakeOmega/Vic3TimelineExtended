@@ -763,8 +763,8 @@ un_credentials_chamber_preview = {
 # role, so the enforcer may table sanctions again (an enforcer holds one
 # regime at a time, un_propose_sanctions_available). Called by a carried
 # petition and when a regime is orphaned. The enforcer's own Lift Sanctions
-# button (un_buttons.txt) does the same inline, because gen_un_button_descs.py
-# reads the effects it lists from the button's own block.
+# ends its regime through un_sanctions_lift_ours below, which also sweeps up
+# the orphans.
 # Scope: the sanctioned country
 un_sanctions_lift_regime = {
 	remove_modifier = un_sanctions_target_modifier
@@ -783,6 +783,82 @@ un_sanctions_lift_regime = {
 		remove_variable = un_sanctions_months
 	}
 	un_teeth_lift_embargoes = yes
+}
+
+# The enforcer walks away (un_lift_sanctions_button, and the panel's Lift
+# Sanctions beside Programmes and Conventions, un_action_sguis.txt): the
+# regime we enforce ends, and any regime nobody enforces any more with it.
+# Two can run at once, under different enforcers, and each sanctioned
+# country names its enforcer (un_sanctions_enforced_by, set by un_vote.2). An
+# enforcer holds at most one regime (un_propose_sanctions_available). A
+# regime nobody enforces any more is orphaned, and any enforcer's lift ends it
+# too, as every lift used to: its enforcer left the UN (un_membership_end_effect
+# drops the enforcer modifier), died, or won or lost a revolution (the winner
+# inherits no modifiers), or the regime is from a save made before the target
+# recorded its enforcer, so it names nobody. An orphan that names its
+# enforcer also lapses by itself at the next monthly update
+# (un_sanctions_regime_monthly_update), and the Assembly can lift any regime
+# on its target's petition (un_lift_sanctions_on_carried). Another live
+# enforcer's regime is spared. It saves scope:un_sanctions_lifted_target, the
+# country the UN's record names: ours, else the orphan when there is only
+# one; with several orphans and none of ours it is left unset, and the log
+# prints the plain line. The caller books the record once, after this.
+# Scope: the enforcer (ROOT)
+un_sanctions_lift_ours = {
+	if = {
+		limit = {
+			any_country = {
+				has_modifier = un_sanctions_target_modifier
+				var:un_sanctions_enforced_by ?= ROOT
+			}
+		}
+		random_country = {
+			limit = {
+				has_modifier = un_sanctions_target_modifier
+				var:un_sanctions_enforced_by ?= ROOT
+			}
+			save_scope_as = un_sanctions_lifted_target
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				any_country = {
+					count >= 2
+					has_modifier = un_sanctions_target_modifier
+					NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				has_modifier = un_sanctions_target_modifier
+				NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+			}
+			save_scope_as = un_sanctions_lifted_target
+		}
+	}
+	every_country = {
+		limit = {
+			has_modifier = un_sanctions_target_modifier
+			OR = {
+				var:un_sanctions_enforced_by ?= ROOT
+				NOT = { var:un_sanctions_enforced_by ?= { has_modifier = un_sanctions_enforcer_modifier } }
+			}
+		}
+		remove_modifier = un_sanctions_target_modifier
+		if = {
+			limit = { has_variable = un_sanctions_enforced_by }
+			remove_variable = un_sanctions_enforced_by
+		}
+		if = {
+			limit = { has_variable = un_sanctions_months }
+			remove_variable = un_sanctions_months
+		}
+		# The embargoes the Assembly imposed go with the regime
+		# (redesign phase 5, un_teeth_effects.txt).
+		un_teeth_lift_embargoes = yes
+	}
 }
 
 # The petition carried. A veto that held blocks it outright: there is no

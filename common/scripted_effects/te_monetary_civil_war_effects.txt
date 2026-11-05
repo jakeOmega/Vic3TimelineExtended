@@ -60,7 +60,8 @@
 #       is PHYSICALLY on which object, plus every value the monthly update
 #       recomputes from scratch (premiums, rate paid, market yield, neutral
 #       rate, stance gap and band, cost-push, flows, the per-pulse
-#       copies of world and anchor figures, the discovery's points). The
+#       copies of world and anchor figures, the discovery's points, and the
+#       Backstops rows' display figures, te_mon_bs_*). The
 #       trackers are the winner's own and describe the winner's own modifiers,
 #       so leaving them alone is what lets the next pulse swap every modifier
 #       from the copied state correctly; copying the loser's tracker without the

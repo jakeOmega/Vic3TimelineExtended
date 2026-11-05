@@ -166,7 +166,8 @@ class VetoBasisTest(unittest.TestCase):
 
 
 class DecideLaterTest(unittest.TestCase):
-    """§2: the human vote event can be put off, and comes back at months 9 and 11."""
+    """§2: the human vote event can be put off; it is the default, and the event
+    fires once per resolution (owner, 2026-11-03)."""
 
     @classmethod
     def setUpClass(cls):
@@ -180,20 +181,43 @@ class DecideLaterTest(unittest.TestCase):
         later = self.later[0]
         self.assertNotIn("un_vote_cast_", later)
         self.assertRegex(later, r"ai_chance\s*=\s*\{\s*base\s*=\s*0\s*\}")
-        self.assertIn("name = un_res_deferred", later)
+        self.assertNotIn("un_res_deferred", later)
 
-    def test_the_default_option_is_still_the_vote_in_favour(self):
+    def test_the_default_option_is_to_decide_later(self):
         defaults = [o for o in self.options if "default_option = yes" in o]
         self.assertEqual(len(defaults), 1)
-        self.assertIn("un_vote_cast_yes = yes", defaults[0])
+        self.assertIn("un_vote.1.later", defaults[0])
+        self.assertNotIn("un_vote_cast_", defaults[0])
 
-    def test_the_monthly_update_asks_again_at_nine_and_eleven(self):
+    def test_the_event_is_sent_once_in_the_ninth_month(self):
+        # Owner, 2026-11-03: the ninth month (it was thirty days in), once.
+        sends = []
+        for top in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(top)):
+                for name in sorted(files):
+                    path = os.path.join(dirpath, name)
+                    if name.endswith(".txt") and re.search(r"id\s*=\s*un_vote\.1[\s}]", _read(path)):
+                        sends.append(path)
+        self.assertEqual(sends, [VOTE_EFFECTS])
+        self.assertNotRegex(_block(_read(VOTE_EFFECTS), "un_resolution_open"), r"un_vote\.1[\s}]")
         monthly = _block(_read(VOTE_EFFECTS), "un_resolutions_monthly_update")
+        self.assertEqual(len(re.findall(r"id\s*=\s*un_vote\.1[\s}]", monthly)), 1)
         self.assertRegex(
             monthly,
-            r"var:un_res_months\s*=\s*9\s+var:un_res_months\s*=\s*11[\s\S]*?"
-            r"variable\s*=\s*un_res_deferred[\s\S]*?trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.1\s*\}",
+            r"limit = \{ var:un_res_months = 9 \}\s*every_country = \{\s*limit = \{\s*is_ai = no\s*"
+            r"je:je_united_nations \?= \{ has_modifier = un_member_modifier \}\s*\}\s*"
+            r"trigger_event = \{ id = un_vote\.1 \}",
         )
+        self.assertNotIn("un_res_deferred", monthly)
+
+    def test_the_proposer_is_turned_away_by_its_own_ballot(self):
+        # The send names no proposer: its ballot is on un_res_yes from the
+        # start, and the event's trigger refuses a member that has voted.
+        opener = _block(_read(VOTE_EFFECTS), "un_resolution_open")
+        self.assertIn("add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }", opener)
+        event = _event("un_vote.1")
+        trigger = _braced(event, re.search(r"^\ttrigger\s*=\s*\{", event, re.M).end() - 1)
+        self.assertIn("NOT = { un_resolution_has_vote = { LIST = un_res_yes } }", trigger)
 
 
 
@@ -618,7 +642,7 @@ class ReviewFixesTest(unittest.TestCase):
         self.assertEqual(found, [])
 
     def test_the_pledge_count_names_no_side(self):
-        self.assertNotIn("in favour", self.loc["je_un_chamber_tally_committed"])
+        self.assertNotIn("in favor", self.loc["je_un_chamber_tally_committed"])
 
     def test_standing_help_no_longer_ties_pledges_to_the_sponsor(self):
         for key in ("je_un_standing_help_limits", "je_un_standing_help_losses", "je_un_standing_help_sources"):

@@ -1,12 +1,14 @@
 ﻿### Legislated Tax Code — layout (plan Task 7). The one place that sets the
 ### order of the tax code's sections, for both hosts: je_tax_code attaches the
-### named roots at the foot of this file, and the Budget panel's Tax Code tab
-### (gui/budget_panel.gui, tab te_tax_code) instances the overview and the two
-### composers. The sections are types in te_tax_overview_widget.gui (the
+### named roots at the foot of this file, and the Tax Code tab, in the Budget
+### panel (tab te_tax_code) and the Timeline Extended window, mounts
+### te_tax_tab_body, which instances the overview and the two composers. The
+### sections are types in te_tax_overview_widget.gui (the
 ### overview, the enacted code, the history), te_tax_workbench_widget.gui
 ### (the workbench and the draft summary), te_tax_review_widget.gui (the
 ### review), te_tax_politics_widget.gui (passage and passed bills) and here
-### (How Tax Legislation Works), in the shape of banking_layout_widget.gui.
+### (the Help page for both codes, which the "?" in the tab's header and at
+### the top of the entry opens), in the shape of banking_layout_widget.gui.
 ###
 ### The journal entry, top to bottom (gui/journal_entry.gui draws container_1,
 ### the status desc, container_2, the button grid, container_3):
@@ -15,87 +17,140 @@
 ###   status desc  empty while the entry runs (the overview says it all); one
 ###                line for the inactive entry, which draws nothing else
 ###   container_2  widget_je_tax_code_status     the live sections, open
-###   container_3  widget_je_tax_code_reference  the history and How Tax
-###                Legislation Works, collapsed
+###   container_3  widget_je_tax_code_reference  the history
 ###
 ### Collapse flags say their default: *_closed sections are open until closed,
 ### *_open ones collapsed until opened (test_tax_code_layout.py).
 
 types te_tax_layout_widget_types
 {
-	### The live sections, open by default: the code in force; the draft (or
-	### Draft a Reform) and its summary; the review of the draft (collapsed
-	### until opened); the bill under debate; the passed bills waiting to take
-	### effect; the promises made to pass them (plan Task 12). Each hides
-	### itself when its record is closed. The summary sits
-	### in the "draft_summary" block so the Budget tab, which draws it in its
-	### fixed_bottom, can leave this copy out.
+	### The live sections, open by default, the ones to watch first and the
+	### editor last (GUI audit TAX-14; the owner, 2026-10-27): the bill under
+	### debate; the passed bills waiting to take effect; the promises made to
+	### pass them (plan Task 12); the code in force; the draft (or Draft a
+	### Reform) and its summary; the review of the draft (collapsed until
+	### opened). Each monitoring section hides itself when its record is
+	### closed, so a quiet code still opens on the Enacted Code. The summary
+	### sits in the "draft_summary" block so the Budget tab, which draws it in
+	### its fixed_bottom, can leave this copy out. The light code's section
+	### comes first: it and the legislated code's never draw together, and
+	### placed first it shares the wide layout's first column with the
+	### overview (te_tax_wide_sections). The composers read the shown country,
+	### Country, which every mount supplies (the player's in the journal entry
+	### and the tabs, another country's in National Info), and are gated on the
+	### tab's own gate rooted on it (te_budget_tax_tab_sgui: the rule and an
+	### active entry), not on the entry, which another country's mount lacks.
 	type te_tax_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
+		# The light code's rates (te_tax_light_widget.gui; it gates itself).
+		te_tax_light_section = {}
 		# The legislated code's sections, hidden under the light setting.
 		flowcontainer = {
-			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 			direction = vertical
 			parentanchor = hcenter
 			ignoreinvisible = yes
 			spacing = 4
 
+			te_tax_politics_section = {}
+			te_tax_pending_section = {}
+			te_tax_obligations_section = {}
 			te_tax_enacted_table = {}
 			te_tax_workbench_section = {}
 			block "draft_summary" {
 				te_tax_draft_summary = {}
 			}
 			te_tax_review_section = {}
-			te_tax_politics_section = {}
-			te_tax_pending_section = {}
-			te_tax_obligations_section = {}
 		}
-		# The light code's rates (te_tax_light_widget.gui; it gates itself).
-		te_tax_light_section = {}
 	}
 
-	### "How Tax Legislation Works": every explanation, collapsed by default,
-	### one heading per topic (style guide rule 1). The live sections say what
-	### is in force; this says how it got there and how it changes. The passage
-	### rule's numbers (share, legitimacy, debate days, thresholds, due-month
-	### range, reschedule delay) are read from its own script values
-	### (te_tax_support_values.txt), so those follow the rule. The Customs
-	### topic and the customs half of the monthly line show only under the
-	### customs option (te_tax_show_customs_option_sgui). Three facts are
-	### written out in both the loc and the script and CAN drift: the sunset
-	### offsets 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes,
-	### two steps" (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and
-	### regional relief's "at most three" states (the schema's cap, which Task
-	### 11's state selection enforces; the Enacted Code's relief hover says it
-	### too). Change the loc with them.
-	type te_tax_how_section = flowcontainer {
+	### The Help page, one for both codes: How the Light Tax Code Works while the
+	### Light code is in force (te_tax_show_light_sgui), How Tax Legislation Works
+	### otherwise, each one heading per topic; the popup's title follows the same
+	### gate. The live sections say what is in force; this says how it got there
+	### and how it changes. The passage rule's numbers (share, legitimacy, debate
+	### days, thresholds, due-month range, reschedule delay) are read from its own
+	### script values (te_tax_support_values.txt), so those follow the rule. The
+	### Customs topic and the customs half of the monthly line show only under the
+	### customs option (te_tax_show_customs_option_sgui). Three facts are written
+	### out in both the loc and the script and CAN drift: the sunset offsets
+	### 6/12/24/36/60 (te_tax_dr_sunset_*), a minor bill's "two taxes, two steps"
+	### (te_tax_bill_set_minor, te_tax_gen_bill_small_steps) and regional relief's
+	### "at most three" states (the schema's cap, which Task 11's state selection
+	### enforces; the Enacted Code's relief hover says it too). Change the loc
+	### with them.
+	### It reads GetPlayer only, as the section did, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_tax_code_help_popup.
+	type te_tax_code_help_body = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
-		spacing = 2
+		spacing = 4
 
-		te_tax_section_header = {
-			blockoverride "left_text" {
-				text = "te_tax_how_header"
+		### Under the Light code: How the Light Tax Code Works.
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_tax_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_rates"
+				}
 			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_tax_how_open')]"
+			te_tax_note = {
+				text = "te_tax_lt_how_rates"
 			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_tax_how_open'))]"
+			te_tax_note = {
+				text = "te_tax_lt_how_law"
 			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_level"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_level"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_groups"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_groups"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_relief"
+			}
+
+			te_tax_subheader = {
+				blockoverride "subheader_text" {
+					text = "te_tax_lt_how_sub_native"
+				}
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_native"
+			}
+			te_tax_note = {
+				text = "te_tax_lt_how_ai"
 			}
 		}
 
-		te_tax_panel = {
-			visible = "[GetVariableSystem.Exists('te_tax_how_open')]"
+		### Otherwise: How Tax Legislation Works.
+		flowcontainer = {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
 
 			te_tax_subheader = {
 				blockoverride "subheader_margin" {}
@@ -192,34 +247,169 @@ types te_tax_layout_widget_types
 		}
 	}
 
-	### The record, then how it all works: the history, collapsed (a list of
-	### past items), and How Tax Legislation Works, collapsed, last.
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_tax_code_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_tax_code')]"
+		}
+		blockoverride "popup_title" {
+			text = "[SelectLocalization( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_lt_how_header', 'te_tax_how_header' )]"
+		}
+		blockoverride "popup_list" {
+			te_tax_code_help_body = {}
+		}
+	}
+
+	### The record: the history, collapsed (a list of past items), which the
+	### light code keeps none of. The composer itself hides under the light
+	### code, so it leaves no empty composer and no gap above Open Journal
+	### Entry (review of the help-button-everywhere PR).
 	type te_tax_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[JournalEntry.IsActive]"
+		visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
-		# The legislated code's history and explanation, hidden under the light
-		# setting, which keeps no history.
-		flowcontainer = {
-			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-			direction = vertical
-			parentanchor = hcenter
-			ignoreinvisible = yes
-			spacing = 4
+		te_tax_history_section = {}
+	}
 
-			te_tax_history_section = {}
-			te_tax_how_section = {}
+	### The Tax Code tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Budget
+	### panel's Tax Code tab and the Timeline Extended window's. The overview
+	### and the two composers inside te_tax_tab_layout, which a wide mount
+	### overrides, then the frame's Open Journal Entry in the tab's row font.
+	### The types read the frame's Country, the player's, so the entry's
+	### datacontext serves only Open Journal Entry. Each frame draws the
+	### draft and bill summaries in its fixed_bottom, so the live sections
+	### leave their own copy out ("draft_summary").
+	type te_tax_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_tax_code"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
+				}
+			}
 		}
-		te_tax_light_how_section = {}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_tax_code')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_tax_tab_layout" {
+				te_tax_overview_panel = {}
+				te_tax_status_sections = {
+					blockoverride "draft_summary" {}
+				}
+				te_tax_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_font" {
+			using = te_tax_fontsize_row
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_tax_open_journal_tt"
+		}
+	}
+
+	### The Timeline Extended window's full-screen Tax Code tab (spec
+	### 2026-11-02-te-window-wide-mode § 7): the tab's layout read down one
+	### row of three columns of 520 (te_ui_columns_three). Under the full
+	### code: the overview and the bills and promises to watch, then the code
+	### in force, the workbench and the review, then the history. Under the
+	### light code: the overview and the light section alone, the second and
+	### third columns closing up (column_2_visible, column_3_visible: Not(
+	### light ), the gate every section in them carries). Each section keeps its narrow gates, the wrappers repeating the
+	### composers' and the full code's Not( light ), with their spacing; a run
+	### of the full code's sections alone takes both in one And, so under the
+	### light code its wrapper hides and leaves no gap. The
+	### draft summary is in the window's footer, so it is left out here as the
+	### tab body leaves it out. The window's wide mount puts it in
+	### te_tax_tab_layout (gen_te_systems_window.py);
+	### test_tax_code_layout.WideTest checks it against the narrow layout.
+	### National Info draws it for another country (spec
+	### 2026-11-02-charts-help-national-info § 6.4): every section reads
+	### Country, and what is the player's own (the draft, the workbench and the
+	### review, the offers and promises, the interest groups' bargaining, every
+	### control) sits under te_own_country_only, test_tax_code_layout.PrivateTest.
+	type te_tax_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_tax_overview_panel = {}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_light_section = {}
+				flowcontainer = {
+					visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+					direction = vertical
+					parentanchor = hcenter
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_tax_politics_section = {}
+					te_tax_pending_section = {}
+					te_tax_obligations_section = {}
+				}
+			}
+		}
+
+		blockoverride "column_2_visible" {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_enacted_table = {}
+				te_tax_workbench_section = {}
+				te_tax_review_section = {}
+			}
+		}
+
+		blockoverride "column_3_visible" {
+			visible = "[Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				visible = "[And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_tax_history_section = {}
+			}
+		}
 	}
 }
 
 ### ==========================================================================
-### JOURNAL ENTRY ROOTS (je_tax_code.txt). Bare wrappers that repeat the
-### composers' IsActive gate: je_tax_code has is_shown_when_inactive, so the
+### JOURNAL ENTRY ROOTS (je_tax_code.txt). Bare wrappers gated on the
+### entry being active, as the composers are on the tab's gate (the same
+### test, on Country): je_tax_code has is_shown_when_inactive, so the
 ### panel can open for a country whose entry has not activated yet and so has
 ### none of the code's variables, and an inactive entry's containers must
 ### collapse (gotcha #14). Each root is exactly a section's width (520): a
@@ -235,7 +425,16 @@ flowcontainer = {
 	minimumsize = { 520 -1 }
 	spacing = 6
 
-	te_tax_overview_panel = {}
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_tax_code')]"
+		}
+	}
+
+	te_je_country = {
+		te_tax_overview_panel = {}
+	}
 
 	# The tab carries the same panels, and later the workbench, so the entry
 	# links to it. OpenPanelTab with a mod tab name is the top bar's Banking
@@ -244,6 +443,7 @@ flowcontainer = {
 	# which opens Budget and leaves the player to click the tab.
 	button = {
 		using = default_button
+		using = te_tax_fontsize_row
 		parentanchor = hcenter
 		size = { 480 32 }
 		text = "te_tax_open_budget"
@@ -260,16 +460,22 @@ flowcontainer = {
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_tax_status_sections = {}
+	te_je_country = {
+		te_tax_status_sections = {}
+	}
 }
 
+### The record's root hides under the light code too, as its composer does,
+### so container_3 collapses instead of leaving the journal's 10 at the foot.
 flowcontainer = {
 	name = "widget_je_tax_code_reference"
-	visible = "[JournalEntry.IsActive]"
+	visible = "[And( JournalEntry.IsActive, Not( GetScriptedGui('te_tax_show_light_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
 	minimumsize = { 520 -1 }
 
-	te_tax_reference_sections = {}
+	te_je_country = {
+		te_tax_reference_sections = {}
+	}
 }

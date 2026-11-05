@@ -1,0 +1,39 @@
+﻿# ============================================================================
+# ALL-GOODS TARIFFS — display values for the Market panel's "All Goods" rows
+# ============================================================================
+# How long the row's own wait has left (te_bulk_tariff_effects.txt): the
+# 3-month cooldown counted from the day it began, which the row's apply
+# records (te_bulk_tariff_cd_day_<dir>; game_date as a value is the date in
+# days, te_tax_support_values.txt). Three months are 89 to 92 days, so the
+# figure is "about": 91 days, and never below 1 while the cooldown variable
+# stands. 0 when there is no wait, or for a wait set before the day was
+# recorded. Country scope; read only by the rows' tooltips.
+# ============================================================================
+
+te_bulk_tariff_cd_days_left_import = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_bulk_tariff_cd_import
+			has_variable = te_bulk_tariff_cd_day_import
+		}
+		value = 91
+		add = var:te_bulk_tariff_cd_day_import
+		subtract = game_date
+		min = 1
+	}
+}
+
+te_bulk_tariff_cd_days_left_export = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_bulk_tariff_cd_export
+			has_variable = te_bulk_tariff_cd_day_export
+		}
+		value = 91
+		add = var:te_bulk_tariff_cd_day_export
+		subtract = game_date
+		min = 1
+	}
+}

@@ -267,12 +267,14 @@ class ButtonTests(unittest.TestCase):
         for t in TOPICS:
             with self.subTest(key=t.key):
                 body = _flat(_block(buttons, f"un_propose_{t.key}_button"))
+                # The AI's alone (is_ai, the 2026-10-27 audit's UN-9): a human
+                # tables from the chamber's Propose row.
                 if t.reform == 2:
                     # Out of view until Reform I carries, like its chamber row.
-                    self.assertIn(f"visible = {{ un_charter_reform_ii_in_view = yes "
+                    self.assertIn(f"visible = {{ is_ai = yes un_charter_reform_ii_in_view = yes "
                                   f"un_propose_{t.key}_available = yes }}", body)
                 else:
-                    self.assertIn(f"visible = {{ un_propose_{t.key}_available = yes }}", body)
+                    self.assertIn(f"visible = {{ is_ai = yes un_propose_{t.key}_available = yes }}", body)
                 self.assertIn(f"possible = {{ un_propose_{t.key}_possible = yes }}", body)
                 self.assertIn(f"value = un_{t.key}_ai_chance", body)
                 self.assertIn(f"effect = {{ un_propose_{t.key}_effect = yes }}", body)
@@ -414,9 +416,11 @@ class DevelopmentFundFloorTests(unittest.TestCase):
         lines = _flat(_block(_read(ECONOMY_EFFECTS), "un_dev_fund_recipient_lines"))
         self.assertIn("limit = { un_dev_fund_receiving = yes } order_by = un_dev_fund_grant_order", lines)
         loc = _loc()
+        # The budget's sentence about the Fund (je_un_chamber_budget_dev_fund*)
+        # went with the budget table (the 2026-10-27 audit, UN-13): the
+        # section itself states the line and who it pays.
         for key in ("je_un_dev_fund_header", "je_un_dev_fund_recipient", "je_un_dev_fund_recipient_us",
                     "je_un_dev_fund_line_floored_tt", "je_un_dev_fund_line_share_tt",
-                    "je_un_chamber_budget_dev_fund_floored", "je_un_chamber_budget_dev_fund_voluntary_floored",
                     "je_un_chamber_preview_development_fund_floored",
                     "je_un_chamber_preview_development_fund_voluntary_floored"):
             self.assertIn(key, loc)
@@ -477,7 +481,7 @@ class LocTests(unittest.TestCase):
         loc = _loc()
         for key in ("un_charter_needs_reform_1_tt", "un_charter_needs_reform_2_tt",
                     "je_un_chamber_propose_needs_reform_1", "je_un_chamber_propose_needs_reform_2",
-                    "je_un_chamber_sub_propose_justice", "je_un_chamber_sub_propose_institutions",
+                    "je_un_chamber_sub_propose_ready", "je_un_chamber_sub_propose_shelved",
                     "je_un_chamber_outcome_passed_vetoed_blocked"):
             with self.subTest(key=key):
                 self.assertIn(key, loc)

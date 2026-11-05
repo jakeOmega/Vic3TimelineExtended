@@ -6,9 +6,14 @@ overview on top, the live sections open, the history and How Banking Works
 at the foot, and every collapse flag named for its default.
 """
 import json
+import operator
 import os
 import re
 import unittest
+
+import gui_tree
+from gui_test_helpers import _block_at, _strip_comments, assert_column_closes_with_its_sections, assert_wide_matches_narrow
+from gui_test_helpers import _read as _read_gui
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
@@ -23,18 +28,36 @@ CUSTOM_LOC = os.path.join(REPO, "common", "customizable_localization", "banking_
 DISP = os.path.join(REPO, "common", "script_values", "banking_overview_display_values.txt")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "banking_gui_icons.md")
 BANKING_GUI = [DASH, HIST, LAYOUT, BUDGET]
+# The entry's gate on the shown country: te_budget_banking_tab_sgui tests has_journal_entry.
+ENTRY_GATE = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+# The cycle under way: every country holds the entry, dormant until then, and the record draws nothing before it.
+CYCLE = "GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( {root}.MakeScope ).End )"
 
 STATUS = ["te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions"]
-REFERENCE = ["te_banking_history_panel", "te_banking_sec_how"]
+REFERENCE = ["te_banking_history_panel"]
 # Available Interventions' categories, by the economic system that shows them.
 CATEGORIES = {
     "banking_dash_system_market": ["prudential", "credit", "external", "crisis"],
     "banking_dash_system_command": ["plan", "allocation", "admin", "pool"],
     "banking_dash_system_coop": ["surplus", "investment", "council", "membership"],
 }
-MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_stance", "banking_dash_how_borrowing"]
+# The rules the Monetary Policy row tooltips used to teach are here since the
+# GUI audit (BNK-1, 2026-10-27): the mandates, gold, the exchange rate, the
+# international arrangements and prices.
+MONETARY_HOW = ["banking_dash_how_rate", "banking_dash_how_rate_none", "banking_dash_how_stance",
+                "banking_dash_how_mandates", "banking_dash_how_mandates_change", "banking_dash_how_mandates_floor",
+                "banking_dash_how_gold", "banking_dash_how_gold_flow", "banking_dash_how_peg",
+                "banking_dash_how_fx", "banking_dash_how_fx_effects", "banking_dash_how_fx_fixed",
+                "banking_dash_how_anchor", "banking_dash_how_treaty_peg", "banking_dash_how_backstops",
+                "banking_dash_how_union", "banking_dash_how_union_terms", "banking_dash_how_borrowing",
+                "banking_dash_how_prices", "banking_dash_how_expected", "banking_dash_how_printing"]
 GENERAL_HOW = ["banking_dash_how_cycle", "banking_dash_how_cycle_moves", "banking_dash_how_crashes",
                "banking_dash_how_budget"]
+# The Help page's topics, in order: the subheadings over the notes above.
+GENERAL_SUBS = ["banking_dash_how_sub_cycle", "banking_dash_how_sub_crashes", "banking_dash_how_sub_budget"]
+MONETARY_SUBS = ["banking_dash_how_sub_rate", "banking_dash_how_sub_mandates", "banking_dash_how_sub_gold",
+                 "banking_dash_how_sub_fx", "banking_dash_how_sub_arrangements", "banking_dash_how_sub_borrowing",
+                 "banking_dash_how_sub_prices"]
 
 
 def _read(path):
@@ -72,16 +95,17 @@ def _sgui(name):
 def _loc():
     keys = {}
     for line in _read(LOC).splitlines():
-        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+        m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
         if m:
             keys[m.group(1)] = m.group(2)
     return keys
 
 
 def _tab_block():
-    text = _read(BUDGET)
-    start = text.index('name = "te_budget_banking_tab"')
-    return text[start:text.index("### END MOD ###", start)]
+    """The Banking tab's body (te_banking_tab_body), which the Budget panel's
+    tab and the Timeline Extended window's both mount
+    (test_te_system_tab_bodies.py checks the mounts)."""
+    return _type_body(_read(LAYOUT), "te_banking_tab_body")
 
 
 class OrderTest(unittest.TestCase):
@@ -89,20 +113,39 @@ class OrderTest(unittest.TestCase):
         body = _type_body(_read(LAYOUT), "te_banking_status_sections")
         self.assertEqual(re.findall(r"^\t\t(te_banking_\w+) = \{", body, re.M), STATUS)
 
-    def test_reference_order_history_then_how(self):
+    def test_reference_order_the_history(self):
         body = _type_body(_read(LAYOUT), "te_banking_reference_sections")
         self.assertEqual(re.findall(r"^\t\t(te_banking_\w+) = \{", body, re.M), REFERENCE)
         # one open history shell for both hosts (play-test round 2): no swap left
         self.assertNotIn("block ", body)
 
     def test_composers_and_roots_are_gated_on_an_active_entry(self):
+        # The composers read the shown country (another country's panel has no
+        # entry, charts-help-national-info spec § 6.3), so they ask whether it
+        # holds the entry; the journal entry's own roots still ask the entry.
         layout = _read(LAYOUT)
-        for composer in ("te_banking_status_sections", "te_banking_reference_sections"):
-            self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(layout, composer), composer)
-        self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(_read(DASH), "te_banking_overview_panel"))
+        self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(layout, "te_banking_status_sections"))
+        self.assertIn(f'visible = "{ENTRY_GATE}"', _type_body(_read(DASH), "te_banking_overview_panel"))
+        self.assertEqual(_type_body(layout, "te_banking_wide_sections").count(f'visible = "{ENTRY_GATE}"'), 2)
         roots = re.findall(r'name = "(widget_je_banking_\w+)"\s*visible = "\[JournalEntry\.IsActive\]"', layout)
-        self.assertEqual(roots, ["widget_je_banking_overview", "widget_je_banking_status",
-                                 "widget_je_banking_reference"])
+        self.assertEqual(roots, ["widget_je_banking_overview", "widget_je_banking_status"])
+
+    def test_the_record_waits_for_the_cycle_in_every_host(self):
+        """The record (the history charts) draws nothing while the cycle is
+        dormant, which every country's entry is until its financial cycle
+        starts. Its composer, its journal root and its full-screen column carry
+        the cycle's gate too, so none is left empty: the composer would put a
+        gap above Open Journal Entry, the root one at the entry's foot, and the
+        column an empty 520 band (review of the help-button-everywhere PR)."""
+        layout = _read(LAYOUT)
+        country = CYCLE.format(root="Country")
+        self.assertIn(f'visible = "[{country}]"', _type_body(_read(HIST), "te_banking_history_panel"))
+        self.assertIn(f'visible = "[And( {ENTRY_GATE[1:-1]}, {country} )]"',
+                      _type_body(layout, "te_banking_reference_sections"))
+        self.assertIn(f'name = "widget_je_banking_reference"\n\tvisible = '
+                      f'"[And( JournalEntry.IsActive, {CYCLE.format(root="JournalEntry.GetCountry")} )]"', layout)
+        wide = _type_body(layout, "te_banking_wide_sections")
+        self.assertRegex(wide, r'blockoverride "column_3_visible" \{\s*visible = "\[' + re.escape(country) + r'\]"\s*\}')
 
     def test_the_journal_entry_attaches_overview_status_reference(self):
         widgets = re.findall(r'widget = \{\s*gui = "([^"]+)"\s*name = "(\w+)"\s*container = "(\w+)"',
@@ -122,11 +165,12 @@ class OrderTest(unittest.TestCase):
         Open Journal Entry link below everything."""
         tab = _tab_block()
         order = [m.group(1) for m in re.finditer(
-            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections"
-            r"|te_system_tab_open_journal)\b", tab)]
+            r"\b(te_banking_overview_panel|te_banking_status_sections|te_banking_reference_sections)\b", tab)]
         self.assertEqual(order, ["te_banking_overview_panel", "te_banking_status_sections",
-                                 "te_banking_reference_sections", "te_system_tab_open_journal"])
+                                 "te_banking_reference_sections"])
         self.assertIn("te_banking_reference_sections = {}", tab)
+        # the frame's link, below the content (te_system_tab_frame)
+        self.assertNotIn('blockoverride "tab_open_journal" ', tab)
 
     def test_history_is_open_in_both_hosts(self):
         """The owner's rule since play-test round 2: history charts start open,
@@ -145,6 +189,41 @@ class OrderTest(unittest.TestCase):
             self.assertNotIn(old, text, old)
 
 
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Banking tab (spec
+    2026-11-02-te-window-wide-mode § 7): the tab's sections in three columns
+    of 520, under the gates the narrow tab gives them."""
+
+    def test_the_wide_layout_takes_the_owners_three_columns(self):
+        """The owner's columns (2026-11-03): Available Interventions under Active Policies, the dial alone in the
+        middle, the record last."""
+        assert_wide_matches_narrow(self, "te_banking_wide_sections",
+                                   layout=("te_banking_tab_body", "te_banking_tab_layout"),
+                                   added_gates=("te_banking_sec_monetary",),
+                                   columns=[["te_banking_overview_panel", "te_banking_sec_active",
+                                             "te_banking_sec_interventions"],
+                                            ["te_banking_sec_monetary"],
+                                            REFERENCE])
+
+    def test_the_monetary_column_closes_up_while_its_section_hides(self):
+        """Monetary Policy alone in column 2 hides under the simplified rule outside a market economy, while the tab
+        still shows: the column takes its gate (column_2_visible), so no empty 520 band sits between the others."""
+        assert_column_closes_with_its_sections(self, "te_banking_wide_sections", 2, ["te_banking_sec_monetary"])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "banking").wide, "te_banking_wide_sections")
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read_gui(LAYOUT)), "te_banking_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertEqual(header.count("default_header = {"), 2)
+        self.assertEqual(header.count("using = default_list_position"), 2)
+
+
 class FlagTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -153,7 +232,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = {f for f in re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text)
                  if f.startswith(("banking_", "te_banking_", "te_hist_"))}
-        self.assertGreaterEqual(len(flags), 16)
+        self.assertGreaterEqual(len(flags), 15)
         for f in flags:
             self.assertRegex(f, r"_(open|closed)$", f"section flag {f} does not say its default")
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
@@ -169,12 +248,21 @@ class FlagTest(unittest.TestCase):
     def test_no_old_flag_survives(self):
         self.assertNotIn("banking_dash_collapsed_", self.text)
 
-    def test_the_live_sections_start_open_and_how_it_works_collapsed(self):
+    def test_the_live_sections_start_open(self):
         dash = _read(DASH)
         for sec, flag in (("te_banking_sec_active", "banking_dash_active_closed"),
                           ("te_banking_sec_monetary", "banking_dash_monetary_closed")):
             self.assertIn(f"Toggle('{flag}')", _type_body(dash, sec), sec)
-        self.assertIn("Toggle('banking_dash_how_open')", _type_body(_read(LAYOUT), "te_banking_sec_how"))
+
+    def test_how_banking_works_is_the_help_page(self):
+        """How Banking Works is the Help page (te_banking_help_popup, on
+        te_popup = help_banking), which only the "?" opens: the link that stood
+        for it at the foot of the panel is gone, and the collapse flag with it
+        (test_te_help_pages.py)."""
+        layout = _strip_comments(_read(LAYOUT))
+        self.assertNotIn("te_banking_sec_how", layout)
+        self.assertIn("type te_banking_help_body = flowcontainer {", layout)
+        self.assertNotIn("banking_dash_how_open", self.text)
 
 
 class GateTest(unittest.TestCase):
@@ -198,8 +286,11 @@ class GateTest(unittest.TestCase):
         self.assertIn("GetScriptedGui('banking_dash_omo_fallback_shown').IsShown", body)
 
     def test_how_it_works_explains_the_monetary_layer_only_while_it_is_on(self):
-        body = _type_body(_read(LAYOUT), "te_banking_sec_how")
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)", body)
+        """The Help page's monetary topics, under the player's gate: a page
+        reads GetPlayer, never the entry (test_te_help_pages.py)."""
+        body = _type_body(_read(LAYOUT), "te_banking_help_body")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[GetScriptedGui\('banking_mon_system_shown'\)"
+                      r"\.IsShown\( GuiScope\.SetRoot\( GetPlayer\.MakeScope \)\.End \)\]\"", body)
         self.assertTrue(m, "no monetary block gated on banking_mon_system_shown")
         gated = _block_from(body, m.start())
         for key in MONETARY_HOW:
@@ -207,16 +298,23 @@ class GateTest(unittest.TestCase):
         for key in GENERAL_HOW:
             self.assertIn(f'text = "{key}"', body, key)
             self.assertNotIn(f'text = "{key}"', gated, key)
+        # the topics' subheadings, in order, each on its side of the gate
+        subs = re.compile(r'text = "(banking_dash_how_sub_\w+)"')
+        self.assertEqual(subs.findall(body.replace(gated, "")), GENERAL_SUBS)
+        self.assertEqual(subs.findall(gated), MONETARY_SUBS)
 
 
 class TidyTest(unittest.TestCase):
-    def test_labels_with_a_tooltip_look_hoverable(self):
+    def test_labels_with_a_tooltip_are_plain(self):
+        # Style guide rule 3 (owner, 2026-10-30): as in vanilla, a hover's
+        # label is not underlined.
         dash = _read(DASH)
         for typ, block in (("banking_dash_condition_row", "condition_label"),
                            ("banking_dash_mon_label", "mon_label_text"),
                            ("banking_dash_policy_row", "row_label")):
-            self.assertRegex(_type_body(dash, typ),
-                             rf'default_format = "#tooltippable"\s*block "{block}"', typ)
+            body = _type_body(dash, typ)
+            self.assertIn(f'block "{block}"', body, typ)
+            self.assertNotIn("#tooltippable", body, typ)
 
     def test_one_heading_style(self):
         dash = _read(DASH)
@@ -230,9 +328,10 @@ class TidyTest(unittest.TestCase):
     def test_no_block_opens_on_a_gap(self):
         """The first heading of the Monetary Policy block and of How Banking
         Works drops its top margin (style guide rule 8)."""
-        for path, key in ((DASH, "banking_dash_mon_sub_rates"), (LAYOUT, "banking_dash_how_sub_cycle")):
+        for path, typ, key in ((DASH, "type te_banking_sec_", "banking_dash_mon_sub_rates"),
+                               (LAYOUT, "type te_banking_help_body", "banking_dash_how_sub_cycle")):
             text = _read(path)
-            first = text.index("banking_dash_subheader = {", text.index("type te_banking_sec_"))
+            first = text.index("banking_dash_subheader = {", text.index(typ))
             self.assertRegex(_block_from(text, first),
                              rf'blockoverride "subheader_margin" \{{\}}\s*blockoverride "subheader_text" '
                              rf'\{{\s*text = "{key}"', path)
@@ -434,6 +533,37 @@ class OverviewTest(unittest.TestCase):
         self.assertEqual([len(w) for w in rows], [1, 2, 2, 2])
 
 
+
+class MandateGridTest(unittest.TestCase):
+    """The mandates' two-by-two grid: both rows are centred, so each keeps the
+    width of two buttons whichever show (gui_modding_guide.md gotcha #43)."""
+
+    def test_the_mandate_rows_keep_their_width(self):
+        # One wrapper takes the rows' gate (the mandate by choice) and, inside
+        # it, one the own-country guard, so the two rows are its grandchildren.
+        tree = gui_tree.parse(_read(DASH))
+        (gate,) = [n for n in tree.walk() if n.kind == "flowcontainer" and n.prop("visible")
+                   and "banking_mon_mandate_by_choice" in n.prop("visible").value]
+        (guard,) = gui_tree.widgets(gate)
+        self.assertIn(("using", "te_own_country_only"), [(p.key, p.value) for p in guard.props])
+        rows = gui_tree.widgets(guard)
+        self.assertEqual(len(rows), 2)
+        for row, ops in zip(rows, (["14", "4"], ["5", "6"]), strict=True):
+            with self.subTest(ops=ops):
+                self.assertEqual(row.prop("parentanchor").value, "hcenter")
+                buttons = gui_tree.widgets(row)
+                self.assertEqual([re.search(r"\(CFixedPoint\)(\d+)", b.prop("onclick").value).group(1)
+                                  for b in buttons], ops)
+                widths = {gui_tree.size(b)[0] for b in buttons}
+                self.assertEqual(widths, {226})
+                full = 2 * 226 + int(row.prop("spacing").value)
+                gated = [b for b in buttons if b.prop("visible")]
+                if gated:
+                    # Peg Defence, on a gold standard only: 226 without it.
+                    self.assertEqual(gui_tree.size(row, "minimumsize"), (full, -1))
+                self.assertEqual(full, 456)
+        self.assertTrue([b for b in gui_tree.widgets(rows[1]) if b.prop("visible")], "Peg Defence is gated")
+
 class BandCodeTest(unittest.TestCase):
     """Each icon's display code repeats its band word's tests, in order, so the
     icon and the word beneath it cannot disagree."""
@@ -456,6 +586,59 @@ class BandCodeTest(unittest.TestCase):
                 self.assertEqual(branches[-1][0], "", "the word's last branch is its fallback")
                 got = [int(v) for _, v in chain] + [int(last)]
                 self.assertEqual(got, [codes[k] for _, k in branches])
+
+
+class HistoryBandTest(unittest.TestCase):
+    """The cycle charts' bars name the month's band, as the overview names
+    today's (GUI audit BNK-4, 2026-10-27): each row's AddLocalizationIf chain
+    picks exactly one word for any reading, the word the overview would."""
+    OPS = {"GreaterThanOrEqualTo": operator.ge, "GreaterThan": operator.gt,
+           "LessThan": operator.lt, "LessThanOrEqualTo": operator.le,
+           ">=": operator.ge, ">": operator.gt, "<": operator.lt, "<=": operator.le}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.loc, cls.custom = _loc(), _read(CUSTOM_LOC)
+
+    def chosen(self, key, x):
+        out = []
+        for m in re.finditer(r"\[AddLocalizationIf\( (.*?), '(\w+)' \)\]", self.loc[key]):
+            conds = re.findall(r"(\w+)_CFixedPoint\( ScriptContainer\.GetVariableValue\('\w+'\), "
+                               r"'\(CFixedPoint\)(-?[\d.]+)' \)", m.group(1))
+            self.assertTrue(conds, m.group(0))
+            if all(self.OPS[op](x, float(v)) for op, v in conds):
+                out.append(m.group(2))
+        return out
+
+    def custom_word(self, name, x):
+        loc = _block_from(self.custom, re.search(rf"(?m)^{name} = \{{", self.custom).end() - 1)
+        for trigger, key in re.findall(r"text = \{\s*(?:trigger = \{(.*?)\}\s*)?localization_key = (\w+)\s*\}",
+                                       loc, re.S)[1:]:
+            m = re.fullmatch(r"\s*var:\w+ (>=|>|<=|<) (-?[\d.]+)\s*", trigger)
+            if not trigger or self.OPS[m.group(1)](x, float(m.group(2))):
+                return key
+
+    def test_each_reading_names_one_band(self):
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "market_triggers.txt"))
+        phases = {}
+        for name, body in re.findall(r"(?m)^banking_cycle_is_(\w+) = \{(.*)\}$", triggers):
+            conds = re.findall(r"var:finance_cycle_value (>=|<) (\d+)", body)
+            if conds and name in ("panic", "downturn", "stagnation", "stable", "expansion", "boom", "frenzy"):
+                phases[name] = conds
+        self.assertEqual(len(phases), 7)
+        for i in range(-20, 221):
+            x = i / 2
+            with self.subTest(value=x):
+                want = [k for k, conds in phases.items() if all(self.OPS[o](x, float(v)) for o, v in conds)]
+                self.assertEqual(self.chosen("te_hist_tt_bank_value_row", x),
+                                 ["banking_dash_phase_%s_value" % k for k in want])
+                self.assertEqual(self.chosen("te_hist_tt_bank_bubble_row", x),
+                                 [self.custom_word("banking_dash_bubble_band", x)])
+        for i in range(-40, 41):
+            x = i / 4
+            with self.subTest(momentum=x):
+                self.assertEqual(self.chosen("te_hist_tt_bank_momentum_row", x),
+                                 [self.custom_word("banking_dash_momentum_band", x)])
 
 
 class IconsDocTest(unittest.TestCase):
@@ -579,7 +762,7 @@ def _concept_loc():
         if not name.endswith(".yml"):
             continue
         for line in _read(os.path.join(loc_dir, name)).splitlines():
-            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+            m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
             if m:
                 keys[m.group(1)] = m.group(2)
     return keys
@@ -666,7 +849,9 @@ class ShortPanelTest(unittest.TestCase):
         self.assertLessEqual(mon_label + 4 + mon_value + 4 + button, 460)  # the Delegation row
         body = _type_body(dash, "te_banking_sec_monetary")
         target = _block_from(body, body.index("flowcontainer = {", body.index('blockoverride "pair_right" {')))
-        parts = [int(w) for w in re.findall(r"size = \{ (\d+) \d+ \}", target)]
+        # The row's own cells: each stepper button sits in a slot of its size,
+        # guarded inside it (another country's panel, te_own_country_only).
+        parts = [gui_tree.size(c)[0] for c in gui_tree.widgets(gui_tree.parse("flowcontainer = " + target).children[0])]
         self.assertLessEqual(sum(parts) + 2 * (len(parts) - 1), right_label + 4 + right_value, parts)
 
     def test_status_text_is_empty_while_active(self):
@@ -719,7 +904,7 @@ def _all_loc():
     for name in sorted(os.listdir(loc_dir)):
         if name.endswith(".yml"):
             for line in _read(os.path.join(loc_dir, name)).splitlines():
-                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*$', line)
+                m = re.match(r'\s+([\w.\-]+):\d*\s*"(.*)"\s*(?:#[^"]*)?$', line)
                 if m:
                     keys[m.group(1)] = m.group(2)
     return keys
@@ -987,6 +1172,406 @@ class BudgetPointsTest(unittest.TestCase):
                     grants[owner] = m.group(1)
         self.assertGreaterEqual(len(grants), 9)
         self.assertEqual(listed, grants)
+
+
+def _child_blocks(inside):
+    """The direct child blocks of a block's inside, each from its name to its
+    closing brace, in order (comments included where they sit)."""
+    out, depth, start = [], 0, 0
+    for m in re.finditer(r"(?<![\w.])\w+ = \{|[{}]", inside):
+        if m.group().endswith("{"):
+            if depth == 0:
+                start = m.start()
+            depth += 1
+        else:
+            depth -= 1
+            if depth == 0:
+                out.append(inside[start:m.end()])
+    return out
+
+
+# What another country's Banking tab leaves out (spec 2026-11-02-charts-help-
+# national-info § 6.4, Hidden): every control; r* and the estimation error,
+# which no country is shown; and, by this PR's call, Available Interventions
+# and the notes that tell the player how to start the cycle.
+_SCRIPT_CLICK = re.compile(r"\b(?:onclick|ondefault|onctrl|onshift|onrightclick)\s*=\s*\"\[[^\"]*\.Execute\(")
+_CONTROL_TYPES = re.compile(r"\b(?:banking_dash_action_button|banking_dash_mon_button|"
+                            r"button_icon_minus_action|button_icon_plus_action)\s*=\s*\{")
+_HIDDEN_VARS = re.compile(r"(?:\bvar:|\bVar\(\s*')(?:te_neutral_rate|te_neutral_error|te_mon_stance_gap)\b")
+_SV_DIR = os.path.join(REPO, "common", "script_values")
+
+
+class PrivateTest(unittest.TestCase):
+    """National Info's Hidden items for Banking. Each sits under
+    te_own_country_only, which draws only for the local player, so another
+    country's tab shows the readings and none of these. GuardTest
+    (test_te_system_tab_bodies.py) checks every control tab-wide; this pins
+    the sections, and the parts that aren't controls."""
+
+    def setUp(self):
+        self.dash = _strip_comments(_read(DASH))
+
+    def _unguarded(self, body, pattern):
+        from gui_test_helpers import guard_spans, in_spans
+        spans = guard_spans(body)
+        found = list(pattern.finditer(body))
+        # An instance's position is its opening brace, so a guard it carries
+        # itself counts.
+        return found, [body[m.start():m.start() + 90] for m in found if not in_spans(m.end() - 1, spans)]
+
+    def test_each_control_is_the_players(self):
+        """A click that runs a scripted GUI, and each control type's instance:
+        the Monetary Policy tools, and Enable and Disable on every policy row
+        (Active Policies keeps its rows, their slot empty). Available
+        Interventions is all policy rows, under its own guard besides."""
+        cases = [("te_banking_sec_monetary", _SCRIPT_CLICK, 15), ("te_banking_sec_monetary", _CONTROL_TYPES, 15),
+                 ("banking_dash_policy_row", _CONTROL_TYPES, 2)]
+        for name, pattern, least in cases:
+            with self.subTest(type=name, pattern=pattern.pattern[:30]):
+                found, loose = self._unguarded(_type_body(self.dash, name), pattern)
+                self.assertGreaterEqual(len(found), least, "is the section still built this way?")
+                self.assertEqual(loose, [], "a control another country would see")
+
+    def test_available_interventions_is_the_players(self):
+        """The whole section, guarded on its root; an instance that set its own
+        visible would lose the guard (gotcha #17)."""
+        from gui_test_helpers import GUARD, own_props
+        body = _type_body(self.dash, "te_banking_sec_interventions")
+        self.assertRegex(own_props(body), rf"\busing\s*=\s*{GUARD}\b")
+        layout = _strip_comments(_read(LAYOUT))
+        instances = [m.start() for m in re.finditer(r"\bte_banking_sec_interventions\s*=\s*\{", layout)]
+        self.assertEqual(len(instances), 2, "the narrow composer and the wide column")
+        for at in instances:
+            self.assertNotIn("visible", _block_from(layout, at))
+
+    def test_the_start_notes_are_the_players(self):
+        """The notes under Monetary Policy and Available Interventions say
+        what starts the cycle, with the player's checklist on hover."""
+        for name, key in (("te_banking_sec_monetary", "banking_dash_dormant_monetary_note"),
+                          ("te_banking_sec_interventions", "banking_dash_dormant_tools_note")):
+            with self.subTest(note=key):
+                body = _type_body(self.dash, name)
+                found, loose = self._unguarded(body, re.compile(rf"text\s*=\s*\"{key}\""))
+                self.assertEqual(len(found), 1)
+                self.assertEqual(loose, [])
+
+    def test_nothing_draws_r_star_or_the_error(self):
+        """The neutral rate, its estimation error and the gap between them
+        (monetary_policy_design.md § 8): no Banking GUI, no loc key it names
+        (splices followed) and no script value reads one, whoever's tab it is.
+        Testing that a variable exists reads nothing."""
+        loc = _loc()
+        sv_text = "\n".join(_strip_comments(_read(os.path.join(_SV_DIR, f))) for f in sorted(os.listdir(_SV_DIR))
+                            if f.endswith(".txt"))
+        values = {m.group(1): m.start() for m in re.finditer(r"(?m)^(\w+)\s*=\s*\{", sv_text)}
+        gui = "".join(_strip_comments(_read(p)) for p in (DASH, LAYOUT, HIST))
+        self.assertIsNone(_HIDDEN_VARS.search(gui))
+        words, keys, svs = re.findall(r"\w+", gui), set(), set()
+        while words:
+            w = words.pop()
+            if w in loc and w not in keys:
+                keys.add(w)
+                self.assertIsNone(_HIDDEN_VARS.search(loc[w]), w)
+                words += re.findall(r"\w+", loc[w])
+            elif w in values and w not in svs:
+                svs.add(w)
+                block = _block_from(sv_text, values[w])
+                self.assertIsNone(_HIDDEN_VARS.search(block), w)
+                words += re.findall(r"\w+", block)
+        self.assertGreater(len(keys), 300)
+        self.assertGreater(len(svs), 50)
+
+    # The other half (spec § 6.4, Shown): another country's tab still draws the
+    # cycle's phase, momentum and bubble, the four bars, Monetary Policy's
+    # readings, the interventions in force and the history, and the readout for
+    # a country without the entry (which National Info draws beside the wide
+    # sections). Over-guarding passes every test above.
+    SHOWN = ("te_banking_overview_panel", "te_banking_bars", "te_banking_phase_icons", "te_banking_momentum_icons",
+             "te_banking_bubble_icons", "te_banking_sec_active", "banking_dash_policy_row", "te_banking_sec_monetary",
+             "banking_dash_mon_value", "te_banking_history_panel", "te_banking_history_charts", "te_hist_bank_value",
+             "te_hist_bank_momentum", "te_hist_bank_bubble", "te_hist_mon_policy", "te_hist_mon_inflation",
+             "te_hist_mon_fx")
+    SHOWN_KEYS = ("banking_cycle_value_bar_name", "banking_cycle_momentum_bar_name", "banking_policy_stance_bar_name",
+                  "banking_bubble_pressure_bar_name", "banking_dash_phase_boom_value", "banking_dash_mon_rate_label",
+                  "banking_dash_mon_inflation_label", "banking_dash_mon_fx_label", "banking_dash_active_header",
+                  "banking_dash_name_active_cb_bank_holiday", "te_hist_chart_bank_value_title",
+                  "te_hist_chart_mon_policy_title", "banking_dash_not_started_other_tt",
+                  # the overview's stance and price-band cells, whose keys nothing else names
+                  "banking_dash_mon_stance_tt", "banking_dash_mon_stance_label", "banking_dash_mon_stance_value",
+                  "banking_dash_mon_stance_word_tt", "banking_dash_ov_rate_line", "banking_dash_mon_band_value",
+                  "banking_dash_mon_band_word_tt", "banking_dash_ov_inflation_line")
+
+    def test_what_another_country_still_sees(self):
+        """The Shown types are drawn (panel_view, the walk BindingTest makes),
+        none guarded on its root; the four bars and every Active Policies row
+        outside any guard; the readings' keys in what the panel renders
+        (panel_loc_keys). Mutation-checked: a guard on te_banking_bars or
+        te_banking_sec_active fails this and nothing else."""
+        from gui_test_helpers import guard_spans, in_spans, load_loc, mod_types, panel_loc_keys, panel_view
+        types = mod_types()
+        view = panel_view({"te_banking_wide_sections"}, types)
+        for name in self.SHOWN:
+            with self.subTest(type=name):
+                self.assertIn(name, view.open)
+                self.assertNotIn((0, len(types[name].body)), view.skip[name], "guarded on its root")
+        # every bar and every Active Policies row, not just their types
+        bars = types["te_banking_bars"].body
+        self.assertEqual(len(re.findall(r"ScriptValue\('banking_disp_bar_\w+'\)", bars)), 4)
+        self.assertEqual(view.skip["te_banking_bars"], [])
+        active = types["te_banking_sec_active"].body
+        rows = [m.end() - 1 for m in re.finditer(r"\bbanking_dash_policy_row\s*=\s*\{", active)]
+        self.assertGreater(len(rows), 30)
+        self.assertEqual([r for r in rows if in_spans(r, view.skip["te_banking_sec_active"])], [])
+        row = types["banking_dash_policy_row"].body
+        for part in ('block "row_label"', 'block "row_cost"'):
+            self.assertFalse(in_spans(row.index(part), guard_spans(row)), part)
+        loc = load_loc()
+        keys = panel_loc_keys({"te_banking_wide_sections"}, types, loc)
+        for key in self.SHOWN_KEYS:
+            with self.subTest(key=key):
+                self.assertIn(key, keys)
+        readout = panel_view({"te_banking_mon_readout"}, types)
+        self.assertNotIn((0, len(types["te_banking_mon_readout"].body)), readout.skip["te_banking_mon_readout"])
+        self.assertIn("banking_dash_ro_entry_name", panel_loc_keys({"te_banking_mon_readout"}, types, loc))
+        # each overview cell, by its tooltip
+        overview = types["te_banking_overview_panel"].body
+        for tooltip, _, _ in CELLS:
+            with self.subTest(cell=tooltip):
+                at = overview.index(f'tooltip = "{tooltip}"')
+                self.assertFalse(in_spans(at, view.skip["te_banking_overview_panel"]), "the cell is guarded")
+
+    def test_nothing_shown_is_hidden_inline(self):
+        """The guard is the one way to keep a part from another country, so the
+        Shown half above sees it. A visible that asks Country.IsLocalPlayer
+        itself may only gate a wrapper whose every child is under the guard
+        (the gap-free wrappers: the dormant note, the mandate grid,
+        Recapitalize, the union buttons), or one of a pair that swaps by viewer,
+        a sibling for another country beside it (a chart's open button: the
+        player's viewer, or National Info's). Not( Country.IsLocalPlayer )
+        shows a part to another country, and SelectLocalization's first
+        argument picks text; both are fine."""
+        from gui_test_helpers import GUARD, enclosing_block, mod_types, panel_view
+        types = mod_types()
+        view = panel_view({"te_banking_wide_sections"}, types)
+        allowed = pairs = 0
+        other = re.compile(r'^\w+ = \{\s*visible = "\[Not\( Country\.IsLocalPlayer \)\]"')
+        for name in sorted(view.open):
+            body = types[name].body
+            for m in re.finditer(r"Country\.IsLocalPlayer", body):
+                if any(a <= m.start() <= b for a, b in view.skip[name]):
+                    continue
+                before = body[max(0, m.start() - 40):m.start()]
+                if re.search(r"(?:SelectLocalization|AddLocalizationIf)\(\s*$", before) or re.search(r"Not\(\s*$", before):
+                    continue
+                line = body[body.rindex("\n", 0, m.start()) + 1:body.index("\n", m.start())]
+                with self.subTest(type=name, line=line.strip()[:90]):
+                    self.assertRegex(line, r"^\s*visible\s*=", "Country.IsLocalPlayer outside a visible: use the guard")
+                    a, b = enclosing_block(body, m.start())
+                    if line.strip() == 'visible = "[Country.IsLocalPlayer]"':
+                        pa, pb = enclosing_block(body, a)
+                        if any(other.match(c) for c in _child_blocks(body[pa + 1:pb])):
+                            pairs += 1
+                            continue
+                    children = _child_blocks(body[a + 1:b])
+                    self.assertTrue(children, "a gate with nothing under it")
+                    for child in children:
+                        self.assertRegex(child, rf"^\w+ = \{{\s*(?:#[^\n]*\s*)*using = {GUARD}\b",
+                                         "a part another country should see, hidden inline: guard only the player's parts")
+                    allowed += 1
+        self.assertEqual(allowed, 4, "the four gap-free wrappers")
+        self.assertGreaterEqual(pairs, 8, "the history charts' open buttons")
+
+
+class BlocLeaderRowTest(unittest.TestCase):
+    """The union's "received from the leader" row, the one row whose country
+    shadows the panel's (spec 2026-11-02-charts-help-national-info § 6.3). Its
+    visible and its value read the shown member; only the flag and the name
+    read the bloc's leader. On the row, the leader's datacontext would be the
+    Country they read, and the leader receives nothing, so a member's row would
+    vanish; te_rebind_country.py sees nothing either way (every read is Country)."""
+
+    LEADER = 'datacontext = "[Country.GetPowerBloc.GetLeader]"'
+
+    def test_the_leader_is_the_flag_and_name_only(self):
+        from gui_test_helpers import own_props
+        dash = _strip_comments(_read(DASH))
+        rows = [_block_from(dash, m.start()) for m in re.finditer(r"\bbanking_dash_partner_row\s*=\s*\{", dash)]
+        rows = [r[1:-1] for r in rows if "te_mon_bs_union_received_display" in own_props(r[1:-1])]
+        self.assertEqual(len(rows), 1, "the row whose visible reads te_mon_bs_union_received_display")
+        row = rows[0]
+        self.assertNotRegex(own_props(row), r"\bdatacontext\s*=", "a datacontext on the row shadows its visible")
+        self.assertRegex(own_props(row), r"visible = \"\[And\( Country\.IsInPowerBloc, ")
+        for name in ("flag", "name"):
+            with self.subTest(block=name):
+                block = _block_from(row, re.search(rf'blockoverride "{name}"\s*\{{', row).start())
+                self.assertIn(self.LEADER, block)
+        value = _block_from(row, re.search(r'blockoverride "value"\s*\{', row).start())
+        self.assertNotIn("datacontext", value)
+        self.assertIn("banking_dash_mon_bs_union_from", value)
+
+
+PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")
+BAR_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "banking_cycle_effects.txt")
+# The entry's bar variant -> the progress bar te_je_scripted_bars draws it with.
+BAR_VARIANTS = {"default_green": "green_progressbar_horizontal", "default_bad": "bad_progressbar_horizontal",
+                "double_sided_gold": "default_progressbar_horizontal"}
+
+
+def _num(x):
+    return float(x)
+
+
+class BarsTest(unittest.TestCase):
+    """te_banking_bars, another country's four bars (National Info), draws what
+    the entry's scripted bars draw for the player: bar i is the entry's i-th
+    scripted_progress_bar (je_banking.txt), in its variant, with its desc and
+    second_desc, at its own banking_disp_bar_* value, which runs from the
+    bar's min_value to its max_value over 0 to 1, starts where the bar does,
+    and reads the variable banking_cycle_update_progress_bars sets the bar from."""
+
+    @classmethod
+    def setUpClass(cls):
+        text = _strip_comments(_read(PROGRESS_BARS))
+        cls.defs = {}
+        for m in re.finditer(r"(?m)^(\w+) = \{", text):
+            body = _block_from(text, m.end() - 1)
+            get = lambda key: (re.search(rf"\b{key}\s*=\s*\"?([\w.\-]+)\"?", body) or [None, None])[1]
+            cls.defs[m.group(1)] = {
+                "variant": [v for v in BAR_VARIANTS if re.search(rf"\b{v}\s*=\s*yes", body)],
+                "start": _num(get("start_value")), "min": _num(get("min_value")), "max": _num(get("max_value")),
+                "desc": get("desc"), "second": get("second_desc")}
+        cls.order = re.findall(r"scripted_progress_bar = (\w+)", _strip_comments(_read(JE)))
+        effects = _strip_comments(_read(BAR_EFFECTS))
+        update = _block_from(effects, effects.index("banking_cycle_update_progress_bars = {"))
+        cls.sets = {}
+        for m in re.finditer(r"set_bar_progress = \{ name = (\w+) value = ([^}]*?) \}", update):
+            cls.sets.setdefault(m.group(1), set()).update(re.findall(r"var:(\w+)", m.group(2)))
+        cls.containers = [c for c in _child_blocks(_type_body(_strip_comments(_read(DASH)), "te_banking_bars"))]
+        cls.values = _strip_comments(_read(DISP))
+
+    def test_the_entrys_bars_in_its_order(self):
+        self.assertEqual(len(self.order), 4)
+        self.assertEqual(len(self.containers), len(self.order))
+        self.assertEqual(set(self.sets), set(self.order), "banking_cycle_update_progress_bars sets every bar")
+
+    def test_each_bar(self):
+        used = []
+        for i, (bar, box) in enumerate(zip(self.order, self.containers)):
+            d = self.defs[bar]
+            with self.subTest(bar=bar, position=i):
+                self.assertEqual(len(d["variant"]), 1)
+                drawn = [v for v in BAR_VARIANTS.values() if re.search(rf"\b{v}\s*=\s*\{{", box)]
+                self.assertEqual(drawn, [BAR_VARIANTS[d["variant"][0]]], "the bar's variant")
+                if d["variant"] == ["double_sided_gold"]:
+                    self.assertIn("progressbar_gold.dds", box)
+                    self.assertIn("progressbar_marker.dds", box)
+                self.assertEqual(re.findall(r'text = "([\w.\-]+)"', box), [d["desc"]] + ([d["second"]] if d["second"] else []))
+                values = re.findall(r"ScriptValue\('(banking_disp_bar_\w+)'\)", box)
+                self.assertEqual(len(values), 1)
+                used.append(values[0])
+                self._check_value(values[0], d, self.sets[bar])
+        self.assertEqual(len(set(used)), 4, "each bar its own value")
+
+    def _check_value(self, name, d, variables):
+        at = re.search(rf"(?m)^{name} = \{{", self.values)
+        self.assertTrue(at, f"no script value {name}")
+        body = _block_from(self.values, at.end() - 1)
+        span = d["max"] - d["min"]
+        lines = [ln.strip() for ln in body.strip("{} \n").split("\n") if ln.strip()]
+        self.assertEqual(lines[0], f"value = {(d['start'] - d['min']) / span:g}", f"{name}: the bar's start")
+        self.assertEqual(lines[-2:], ["min = 0", "max = 1"], f"{name}: clamped to the bar")
+        branch = _block_from(body, body.index("if = {"))
+        var = re.search(r"limit = \{ has_variable = (\w+) \}", branch).group(1)
+        self.assertIn(var, variables, f"{name} reads {var}, not what the entry's bar is set from")
+        ops = re.findall(r"^\s*(value|add|divide|multiply|subtract) = (\S+)$", branch, re.M)
+        want = [("value", f"var:{var}")] + ([("add", f"{-d['min']:g}")] if d["min"] else []) + \
+               ([("divide", f"{span:g}")] if span != 1 else [])
+        self.assertEqual(ops, want, f"{name}: (var - min) / (max - min)")
+
+
+class ScriptedTooltipTest(unittest.TestCase):
+    """Text a scripted GUI prints through ExecuteTooltip, IsValidTooltip or
+    IsShownTooltip is invisible to BindingTest and te_rebind_country.py. What
+    another country's panel prints that way (the history markers' lines,
+    te_hist_tt_markers) speaks of no one and reads neither the player nor the
+    entry; the keys that still read GetPlayer print only under the guard."""
+
+    PRINT = re.compile(r"(?:GetScriptedGui\(\s*'(\w+)'\s*\)|ScriptedGui)\.(?:ExecuteTooltip|IsValidTooltip|IsShownTooltip)\b")
+    KEY = re.compile(r"\b(?:custom_tooltip|text|desc|tooltip)\s*=\s*\"?([\w.\-]+)\"?")
+    PLAYER_KEYS = ("banking_mon_recapitalise_tt", "banking_mon_tt_can_monetise", "banking_mon_tt_mandate_unlocked",
+                   "banking_mon_tt_mandate_locked")
+
+    @classmethod
+    def setUpClass(cls):
+        from gui_test_helpers import load_loc, mod_types
+        cls.types, cls.loc = mod_types(), load_loc()
+        cls.defs = {}
+        for sub in ("scripted_guis", "scripted_effects", "scripted_triggers"):
+            folder = os.path.join(REPO, "common", sub)
+            for f in sorted(os.listdir(folder)):
+                text = _strip_comments(_read(os.path.join(folder, f)))
+                for m in re.finditer(r"(?m)^(\w+) = \{", text):
+                    cls.defs[m.group(1)] = _block_from(text, m.end() - 1)
+
+    def _printed(self, sguis):
+        """The loc keys the scripted GUIs' bodies name, through every scripted
+        effect and trigger they call, with what those keys splice and render."""
+        from gui_test_helpers import loc_closure
+        seen, todo, keys = set(), list(sguis), set()
+        while todo:
+            name = todo.pop()
+            if name in seen or name not in self.defs:
+                continue
+            seen.add(name)
+            body = self.defs[name]
+            keys |= {k for k in self.KEY.findall(body) if k in self.loc}
+            todo += [w for w in set(re.findall(r"\b\w+\b", body)) if w in self.defs and w not in seen]
+        return loc_closure(keys, self.loc)
+
+    def _public_sguis(self, names):
+        """The scripted GUIs another country's panel prints a tooltip of: in the
+        parts it draws (none so far), and in the keys it renders."""
+        from gui_test_helpers import _OWN_BRANCH, _drawn, panel_loc_keys
+        out, inline = set(), []
+        for where, td, spans in _drawn(names, self.types):
+            from gui_test_helpers import unguarded
+            inline += [(where, m.group(0)) for m in self.PRINT.finditer(unguarded(td.body, spans))]
+        for key in panel_loc_keys(names, self.types, self.loc):
+            out |= {m.group(1) for m in self.PRINT.finditer(_OWN_BRANCH.sub(r"\1''", self.loc[key])) if m.group(1)}
+        return out, inline
+
+    def test_what_another_country_prints_is_neutral(self):
+        from gui_test_helpers import PERSONAL
+        for names in ({"te_banking_wide_sections"}, {"te_banking_mon_readout"}):
+            sguis, inline = self._public_sguis(names)
+            self.assertEqual(inline, [], "a scripted GUI's tooltip printed in another country's markup: "
+                                         "check what it prints, then extend this test")
+            if names == {"te_banking_wide_sections"}:
+                self.assertEqual(sguis, {"te_history_marker_tooltip"})
+            keys = self._printed(sguis)
+            for key in sorted(keys):
+                text = self.loc[key]
+                with self.subTest(key=key):
+                    self.assertNotRegex(text, r"GetPlayer|AccessPlayer|JournalEntry\.")
+                    self.assertIsNone(PERSONAL.search(re.sub(r"\[[^\]]*\]|\$[\w.\-]+\$|#\w+|\\n", " ", text)))
+            if sguis:
+                self.assertGreater(len(keys), 30)
+
+    def test_the_player_keys_print_under_the_guard(self):
+        gui = "".join(_read(p) for p in BANKING_GUI)
+        everything = self._printed(set(re.findall(r"GetScriptedGui\(\s*'(\w+)'", gui)))
+        public = set()
+        for names in ({"te_banking_wide_sections"}, {"te_banking_mon_readout"}):
+            public |= self._printed(self._public_sguis(names)[0])
+        for key in self.PLAYER_KEYS:
+            with self.subTest(key=key):
+                self.assertIn(key, everything, "a Banking scripted GUI prints it")
+                self.assertIn("GetPlayer", self.loc[key])
+                self.assertNotIn(key, public)
+        reads_player = sorted(k for k in everything if re.search(r"GetPlayer|JournalEntry\.", self.loc[k]))
+        self.assertEqual([k for k in reads_player if k not in self.PLAYER_KEYS and k != "je_banking_cycle"], [],
+                         "a new key reading the player in a scripted GUI's text: guard where it prints, or bind it")
+
 
 if __name__ == "__main__":
     unittest.main()

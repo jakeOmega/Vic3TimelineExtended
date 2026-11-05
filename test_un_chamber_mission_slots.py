@@ -18,6 +18,12 @@ appearance in the block (gui_modding_guide.md gotcha #27): a country serving
 in two missions was listed three times under the first and not at all under
 the second. Nothing in the engine checks that op 3 means slot 3 in every
 switch, or that a row passes one op everywhere; this test does.
+
+A mission row's contributors are flags (the 2026-10-27 GUI audit, UN-15):
+every player holds the capitals of slot S's contributors in
+``un_msn_cap_<S>_<K>``, rebuilt whole by ``un_mission_mirror_flags``. The
+mirror is only as good as its callers, so the test also holds every writer
+of a mission's slot or contributor list to calling it.
 """
 
 import os
@@ -38,6 +44,12 @@ HISTORY_ROWS = 30
 _OP_BRANCH = re.compile(r"limit\s*=\s*\{\s*exists\s*=\s*scope:op\s+scope:op\s*=\s*(\d+)\s*\}")
 _WIDGET_OP = re.compile(r"MakeScopeValue\(\s*'\(CFixedPoint\)(\d+)'\s*\)")
 _TOP_LEVEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{", re.M)
+# A write to a mission's contributor list or display slot.
+_MISSION_WRITE = re.compile(
+    r"(add_to_variable_list|remove_list_variable)\s*=\s*\{\s*name\s*=\s*un_msn_contributors\b"
+    r"|clear_variable_list\s*=\s*un_msn_contributors\b"
+    r"|set_variable\s*=\s*\{\s*name\s*=\s*un_msn_slot\b"
+    r"|remove_variable\s*=\s*un_msn_slot\b")
 
 
 def _read(path):
@@ -102,6 +114,10 @@ class MissionSlotTableTest(unittest.TestCase):
             body = _block(sguis, sgui)
             cls.switches[(sgui, "is_valid")] = _branches(_sub_block(body, "is_valid"))
             cls.switches[(sgui, "effect")] = _branches(_sub_block(body, "effect"))
+        # Whether a row can ever take our contingent (the 2026-10-27 audit,
+        # UN-15): never executed, so it has no effect switch.
+        cls.switches[("un_chamber_mission_joinable_sgui", "is_valid")] = _branches(
+            _sub_block(_block(sguis, "un_chamber_mission_joinable_sgui"), "is_valid"))
         cls.rows = _widget_rows(_read(WIDGET), "un_chamber_mission_row")
         cls.assign = _block(_read(MISSION_EFFECTS), "un_mission_assign_slot")
 
@@ -110,9 +126,10 @@ class MissionSlotTableTest(unittest.TestCase):
 
     def test_each_row_passes_one_slot_everywhere(self):
         for ops in self.rows:
-            # row visible and text; Join visible, enabled, onclick and the
-            # tooltip's two calls; Withdraw visible, onclick and tooltip
-            self.assertEqual(len(ops), 10, ops)
+            # row visible and text; Join visible (joinable, not serving),
+            # enabled, onclick and the tooltip's two calls; Withdraw visible,
+            # onclick and tooltip
+            self.assertEqual(len(ops), 11, ops)
             self.assertEqual(len(set(ops)), 1, f"a mission row mixes slots {ops}")
 
     def test_every_switch_maps_op_to_the_same_slot(self):
@@ -123,6 +140,7 @@ class MissionSlotTableTest(unittest.TestCase):
             ("un_chamber_mission_join_sgui", "effect"): "un_mission_slot_volunteer",
             ("un_chamber_mission_withdraw_sgui", "is_valid"): "un_mission_slot_served",
             ("un_chamber_mission_withdraw_sgui", "effect"): "un_mission_slot_withdraw",
+            ("un_chamber_mission_joinable_sgui", "is_valid"): "un_mission_slot_joinable",
         }
         for key, call in expected.items():
             branches = self.switches[key]
@@ -131,6 +149,17 @@ class MissionSlotTableTest(unittest.TestCase):
                 for op, branch in branches.items():
                     found = re.findall(r"\b(\w+)\s*=\s*\{\s*SLOT\s*=\s*(\d+)\s*\}", branch)
                     self.assertEqual(found, [(call, str(op))], f"op {op}")
+
+    def test_each_row_reads_its_own_slots_figures(self):
+        widget = _read(WIDGET)
+        rows = [_braced(widget, m.end() - 1) for m in re.finditer(
+            r"^\t+un_chamber_mission_row\s*=\s*\{", widget, re.M)]
+        for row in rows:
+            op = _WIDGET_OP.findall(row)[0]
+            with self.subTest(slot=op):
+                self.assertEqual(set(re.findall(r"un_disp_msn_slot_(\d+)_", row)), {op})
+                self.assertEqual(set(re.findall(r"je_un_chamber_mission_slot_(\d+)_", row)), {op})
+                self.assertEqual(set(re.findall(r"un_msn_cap_(\d+)_", row)), {op})
 
     def test_slots_are_assigned_lowest_first_and_all_of_them(self):
         pairs = re.findall(
@@ -192,14 +221,76 @@ class VotingDetailsRowTableTest(unittest.TestCase):
         self.assertIn("un_chamber_history_has_entry", set(_TOP_LEVEL.findall(_read(RESOLUTION_TRIGGERS))))
 
 
+class ArchiveRowTableTest(unittest.TestCase):
+    """The archive's brief rows (the 2026-10-27 audit, UN-16): one per
+    position, each passing its position to the row's IsValid, text and the
+    card on its hover."""
+
+    @classmethod
+    def setUpClass(cls):
+        sguis = _read(SGUIS)
+        brief = _block(sguis, "un_chamber_history_brief_row_sgui")
+        cls.valid = _branches(_sub_block(brief, "is_valid"))
+        cls.effect = _branches(_sub_block(brief, "effect"))
+        cls.card = _branches(_sub_block(_block(sguis, "un_chamber_history_card_row_sgui"), "effect"))
+        cls.rows = []
+        widget = _read(WIDGET)
+        for m in re.finditer(r"un_chamber_text\s*=\s*\{", widget):
+            block = _braced(widget, m.end() - 1)
+            if "un_chamber_history_brief_row_sgui').ExecuteTooltip" in block:
+                cls.rows.append([int(op) for op in _WIDGET_OP.findall(block)])
+
+    def test_the_widget_has_one_row_per_position(self):
+        self.assertEqual(sorted(ops[0] for ops in self.rows), list(range(HISTORY_ROWS)))
+        for ops in self.rows:
+            self.assertEqual(len(ops), 3, ops)
+            self.assertEqual(len(set(ops)), 1, ops)
+
+    def test_each_op_reads_its_own_position(self):
+        for name, branches in (("brief", self.effect), ("card", self.card)):
+            self.assertEqual(sorted(branches), list(range(HISTORY_ROWS)), name)
+            for op in range(HISTORY_ROWS):
+                with self.subTest(switch=name, op=op):
+                    self.assertEqual(
+                        re.findall(rf"un_chamber_history_{name}_row\s*=\s*\{{\s*POSITION\s*=\s*(\d+)\s+COUNT\s*=\s*(\d+)\s*\}}",
+                                   branches[op]),
+                        [(str(op), str(op + 1))],
+                    )
+        for op in range(HISTORY_ROWS):
+            with self.subTest(op=op):
+                self.assertEqual(
+                    re.findall(r"un_chamber_history_has_entry\s*=\s*\{\s*COUNT\s*=\s*(\d+)\s*\}", self.valid[op]),
+                    [str(op + 1)],
+                )
+
+    def test_the_names_exist(self):
+        display = set(_TOP_LEVEL.findall(_read(DISPLAY)))
+        for name in ("un_chamber_history_brief_row", "un_chamber_history_card_row", "un_chamber_history_entry"):
+            self.assertIn(name, display)
+
+
 class MissionContributorLinesTest(unittest.TestCase):
     """A mission's contributors print from the mission's scope (gotcha #27)."""
 
     @classmethod
     def setUpClass(cls):
         display = _read(DISPLAY)
-        cls.entry = _block(display, "un_chamber_mission_entry")
+        cls.display = display
+        cls.entry = _block(display, "un_chamber_mission_contributor_lines")
         cls.at = _block(display, "un_chamber_mission_contributor_at")
+
+    def test_lists_name_contributors_and_rows_show_flags(self):
+        # The lists (missions with no row, ended missions) print the names;
+        # a row's contributors are its flags, so its text prints none.
+        entry = _block(self.display, "un_chamber_mission_entry")
+        self.assertIn("un_chamber_mission_head = yes", entry)
+        self.assertIn("un_chamber_mission_contributor_lines = yes", entry)
+        slot = _block(self.display, "un_chamber_mission_slot_entry")
+        self.assertIn("un_chamber_mission_head = yes", slot)
+        self.assertNotIn("un_chamber_mission_contributor_lines", slot)
+        self.assertNotIn("un_chamber_mission_entry", slot)
+        # The Standing UN Force has no flag, so the row's text names it.
+        self.assertIn("je_un_chamber_mission_force_serves", slot)
 
     def test_no_line_is_printed_inside_a_contributor_scope(self):
         self.assertNotRegex(self.entry, r"\bevery_in_list\b")
@@ -216,6 +307,79 @@ class MissionContributorLinesTest(unittest.TestCase):
         more = re.search(r"count\s*>=\s*(\d+)\s+exists\s*=\s*this\s*\}\s*\}\s*custom_tooltip_no_bullet\s*=\s*je_un_chamber_mission_contributors_more", self.entry)
         self.assertIsNotNone(more)
         self.assertEqual(int(more.group(1)), len(calls) + 1)
+
+
+class MissionContributorFlagsTest(unittest.TestCase):
+    """The rows' contributor flags read a mirror every writer keeps whole."""
+
+    POSITIONS = 8
+    # The effect a writer leaves the rebuild to, when it runs only inside it.
+    COVERED_BY = {"un_mission_prune_contributors": "un_missions_monthly_update"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _read(MISSION_EFFECTS)
+        cls.widget = _read(WIDGET)
+        cls.mirror = _block(cls.effects, "un_mission_mirror_flags")
+        cls.slot = _block(cls.effects, "un_mission_mirror_slot_flags")
+
+    def test_the_mirror_covers_every_slot_and_position(self):
+        self.assertEqual(re.findall(r"un_mission_mirror_slot_flags\s*=\s*\{\s*SLOT\s*=\s*(\d+)\s*\}", self.mirror),
+                         [str(k) for k in range(MISSION_SLOTS)])
+        self.assertEqual(re.findall(r"set_variable\s*=\s*\{\s*name\s*=\s*un_msn_cap_count_(\d+)\s+value\s*=\s*0\s*\}", self.mirror),
+                         [str(k) for k in range(MISSION_SLOTS)])
+        calls = re.findall(
+            r"un_mission_mirror_flag\s*=\s*\{\s*SLOT\s*=\s*\$SLOT\$\s+POSITION\s*=\s*(\d+)\s+COUNT\s*=\s*(\d+)\s*\}",
+            self.slot)
+        self.assertEqual(calls, [(str(k), str(k + 1)) for k in range(self.POSITIONS)])
+
+    def test_each_row_shows_its_slots_flags_in_order(self):
+        rows = [_braced(self.widget, m.end() - 1) for m in re.finditer(
+            r"^\t+un_chamber_mission_row\s*=\s*\{", self.widget, re.M)]
+        self.assertEqual(len(rows), MISSION_SLOTS)
+        for row in rows:
+            op = _WIDGET_OP.findall(row)[0]
+            flags = re.findall(
+                r"ScriptValue\('un_disp_msn_slot_(\d+)_flags'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*"
+                r"tiny_flag = \{\s*parentanchor = center\s*"
+                r"datacontext = \"\[JournalEntry\.GetCountry\.MakeScope\.Var\('un_msn_cap_(\d+)_(\d+)'\)\.GetState\.GetCountry\]\"",
+                row)
+            with self.subTest(slot=op):
+                # Flag K shows while the count is above K, and reads position K.
+                self.assertEqual(flags, [(op, str(k), op, str(k)) for k in range(self.POSITIONS)])
+
+    def test_every_writer_rebuilds_the_mirror(self):
+        writers = []
+        for m in _TOP_LEVEL.finditer(self.effects):
+            body = _braced(self.effects, m.end() - 1)
+            if _MISSION_WRITE.search(body):
+                writers.append((m.group(1), body))
+        self.assertGreaterEqual(len(writers), 6, [w for w, _ in writers])
+        for name, body in writers:
+            with self.subTest(writer=name):
+                if name in self.COVERED_BY:
+                    cover = _block(self.effects, self.COVERED_BY[name])
+                    self.assertIn("un_mission_mirror_flags = yes", cover)
+                    # The cover runs the writer through un_mission_monthly,
+                    # before its rebuild.
+                    monthly = _block(self.effects, "un_mission_monthly")
+                    self.assertIn(f"{name} = yes", monthly)
+                    self.assertLess(cover.index("un_mission_monthly = yes"), cover.index("un_mission_mirror_flags = yes"))
+                else:
+                    self.assertIn("un_mission_mirror_flags = yes", body)
+
+    def test_nothing_else_writes_a_mission_list_or_slot(self):
+        # un_mission_effects.txt is the missions' only writer, so the check
+        # above sees every write.
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(os.path.join(REPO, root)):
+                for f in files:
+                    path = os.path.join(dirpath, f)
+                    if not f.endswith(".txt") or os.path.samefile(path, MISSION_EFFECTS):
+                        continue
+                    hit = _MISSION_WRITE.search(_read(path))
+                    with self.subTest(file=os.path.relpath(path, REPO)):
+                        self.assertIsNone(hit, hit and hit.group(0))
 
 
 if __name__ == "__main__":

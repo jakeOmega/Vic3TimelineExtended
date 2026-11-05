@@ -13,7 +13,23 @@ INDENT_SIZE = 4
 # mod script; an operator missing here makes parse_object reject the key.
 conditional_tokens = ["=", "<", ">", "<=", ">=", "!=", "?=", "=="]
 _CONDITIONAL_TOKENS = frozenset(conditional_tokens)
-directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
+# The engine's six merge directives, a key prefix such as `INJECT:law_x`. Source:
+# Modding-Digests 1.12.0/inject_types.md (the engine docs dumps don't list
+# them). INJECT and REPLACE error when the entry doesn't exist yet; the TRY_
+# forms skip it silently, the _OR_CREATE forms create it. Vanilla and this mod
+# use only INJECT, REPLACE and REPLACE_OR_CREATE; another mod may use the rest.
+directive_prefixes = (
+    "INJECT:", "REPLACE:", "TRY_INJECT:", "TRY_REPLACE:",
+    "REPLACE_OR_CREATE:", "INJECT_OR_CREATE:",
+)
+INJECT_DIRECTIVES = frozenset({"INJECT", "TRY_INJECT", "INJECT_OR_CREATE"})
+REPLACE_DIRECTIVES = frozenset({"REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE"})
+# Directives that do nothing when the entry they name doesn't exist.
+TRY_DIRECTIVES = frozenset({"TRY_INJECT", "TRY_REPLACE"})
+# A directive key inside a block (`INJECT:x = { REPLACE:field = ... }`) gets
+# the same treatment. That is this parser's convention, not engine-verified:
+# the digest describes entry-level keys only, and neither vanilla nor the mod
+# nests one.
 
 
 class ParadoxFileParser:
@@ -311,7 +327,7 @@ class ParadoxFileParser:
             for raw_key, value in item.items():
                 if raw_key in merged:
                     directive, _ = self._split_directive(raw_key)
-                    if directive == "INJECT":
+                    if directive in INJECT_DIRECTIVES:
                         merged[raw_key] = self._inject_entity(merged[raw_key], value)
                         if raw_key not in injected:
                             injected.append(raw_key)
@@ -347,11 +363,16 @@ class ParadoxFileParser:
         written = {}
         for raw_key, raw_value in new_data.items():
             directive, key = self._split_directive(raw_key)
-            if directive == "INJECT" and key in self.data:
+            if directive in INJECT_DIRECTIVES and key in self.data:
                 self.data[key] = self._inject_entity(self.data[key], raw_value)
+            elif directive in TRY_DIRECTIVES and key not in self.data:
+                # TRY_INJECT:/TRY_REPLACE: of an entry nobody defined: the
+                # engine skips it without an error, so nothing is created.
+                continue
             else:
-                # Plain keys, REPLACE:/REPLACE_OR_CREATE:, and an INJECT: with
-                # nothing to inject into all store the new value as is.
+                # Plain keys, the REPLACE family, and an INJECT:/
+                # INJECT_OR_CREATE: with nothing to inject into all store the
+                # new value as is.
                 self.data[key] = raw_value
             written[key] = None
         for key in written:
@@ -415,9 +436,11 @@ class ParadoxFileParser:
         merged = dict(base[1])  # _normalize_fully built it fresh
         for raw_key, injected_child in injected[1].items():
             directive, key = self._split_directive(raw_key)
-            if directive in ("REPLACE", "REPLACE_OR_CREATE") or key not in merged:
+            if key not in merged and directive in TRY_DIRECTIVES:
+                continue
+            if directive in REPLACE_DIRECTIVES or key not in merged:
                 merged[key] = injected_child
-            elif directive == "INJECT":
+            elif directive in INJECT_DIRECTIVES:
                 merged[key] = self._inject_value(merged[key], injected_child)
             else:
                 # A bare list here is a repeated key's entries (see parse_object).
@@ -447,9 +470,11 @@ class ParadoxFileParser:
             merged = copy.deepcopy(base_value)
             for raw_key, injected_child in injected_value.items():
                 directive, key = self._split_directive(raw_key)
-                if directive in ("REPLACE", "REPLACE_OR_CREATE"):
+                if key not in merged and directive in TRY_DIRECTIVES:
+                    continue
+                if directive in REPLACE_DIRECTIVES:
                     merged[key] = injected_child
-                elif directive == "INJECT":
+                elif directive in INJECT_DIRECTIVES:
                     if key in merged:
                         merged[key] = self._inject_value(merged[key], injected_child)
                     else:
@@ -478,13 +503,14 @@ class ParadoxFileParser:
                         matched_index = index
                         break
                 if matched_index is None:
-                    merged.append({key: injected_child})
+                    if directive not in TRY_DIRECTIVES:
+                        merged.append({key: injected_child})
                     continue
 
                 existing_value = merged[matched_index][key]
-                if directive in ("REPLACE", "REPLACE_OR_CREATE"):
+                if directive in REPLACE_DIRECTIVES:
                     merged[matched_index][key] = injected_child
-                elif directive == "INJECT":
+                elif directive in INJECT_DIRECTIVES:
                     merged[matched_index][key] = self._inject_value(
                         existing_value, injected_child
                     )

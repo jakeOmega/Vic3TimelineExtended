@@ -1,0 +1,350 @@
+﻿# ============================================================================
+# DECOLONIZATION — A COUNTRY'S STANCE ON COLONIALISM, AND THE COLONIAL POWERS
+#
+# The owner's request (2026-11-03): the Colonial Empire tab outlives the entry,
+# with the country's stance on colonialism and buttons to change it (a
+# cooldown, and influence for either side), and a list of the largest colonial
+# powers and where each stands. The Colonial Question (decolonization_events.14)
+# used to be the only way to a stance, every three years; a player now meets it
+# once, and changes the stance from the tab after that. The AI keeps the event.
+#
+# THE STANCE. Two variables, gp_anti_colonial_stance and gp_pro_colonial_stance
+# (neither is neutral; tests in decolonization_stance_triggers.txt). While a
+# stance counts (a great power's) the country holds its policy modifier, with
+# no duration, which costs decol_stance_influence_cost influence. A stance held
+# below great-power rank lies dormant: no modifier, no cost, and no weight on
+# any bar, which reads great powers only. Every change starts the cooldown,
+# decol_stance_months_left, counted down monthly.
+#
+#   decol_stance_core_<side>   the change itself: the variables, the cooldown,
+#                              the modifiers. A Decolonization Resolution's vote
+#                              (un_vote_effects.txt) calls core_anti.
+#   decol_stance_take_<side>   the core and the reactions at home, as The
+#                              Colonial Question's options always had: what a
+#                              player's button and the event's options call.
+#   decol_stance_refresh       the modifiers from the variables and the rank,
+#                              monthly and after a revolution: a winner inherits
+#                              the variables and no modifier.
+#   decol_stance_monthly       the cooldown's month, the AI's drop of a stance
+#                              it can no longer pay for or of a condemnation
+#                              while it runs an empire, then the refresh.
+#
+# The cores write each modifier explicitly rather than through the refresh,
+# whose limits read the variables: a tooltip evaluates a limit before the
+# effect runs, so the refresh's add would never show on a button's hover.
+#
+# THE COLONIAL POWERS. decol_world_refresh_display: a script container per
+# colonial power, the largest first, on each player that has researched
+# Decolonization, monthly and after a change of stance. Players only: no AI
+# reads a panel.
+# ============================================================================
+
+# Country scope. Starts the wait before the next change of stance.
+decol_stance_start_cooldown = {
+	set_variable = {
+		name = decol_stance_months_left
+		value = decol_stance_cooldown_months
+	}
+}
+
+# Country scope. Condemn colonialism (or keep condemning it).
+decol_stance_core_anti = {
+	set_variable = gp_anti_colonial_stance
+	if = {
+		limit = { has_variable = gp_pro_colonial_stance }
+		remove_variable = gp_pro_colonial_stance
+	}
+	decol_stance_start_cooldown = yes
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		remove_modifier = gp_pro_colonial_policy_modifier
+	}
+	if = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { has_modifier = gp_anti_colonial_policy_modifier }
+		}
+		add_modifier = { name = gp_anti_colonial_policy_modifier }
+	}
+}
+
+# Country scope. Back the colonial powers (or keep backing them).
+decol_stance_core_pro = {
+	set_variable = gp_pro_colonial_stance
+	if = {
+		limit = { has_variable = gp_anti_colonial_stance }
+		remove_variable = gp_anti_colonial_stance
+	}
+	decol_stance_start_cooldown = yes
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		remove_modifier = gp_anti_colonial_policy_modifier
+	}
+	if = {
+		limit = {
+			country_rank >= rank_value:great_power
+			NOT = { has_modifier = gp_pro_colonial_policy_modifier }
+		}
+		add_modifier = { name = gp_pro_colonial_policy_modifier }
+	}
+}
+
+# Country scope. Stand aside: no stance, no cost.
+decol_stance_core_neutral = {
+	if = {
+		limit = { has_variable = gp_anti_colonial_stance }
+		remove_variable = gp_anti_colonial_stance
+	}
+	if = {
+		limit = { has_variable = gp_pro_colonial_stance }
+		remove_variable = gp_pro_colonial_stance
+	}
+	decol_stance_start_cooldown = yes
+	if = {
+		limit = { has_modifier = gp_anti_colonial_policy_modifier }
+		remove_modifier = gp_anti_colonial_policy_modifier
+	}
+	if = {
+		limit = { has_modifier = gp_pro_colonial_policy_modifier }
+		remove_modifier = gp_pro_colonial_policy_modifier
+	}
+}
+
+# Country scope. The three choices with their reactions at home, The Colonial
+# Question's own: the progressive groups approve of condemning colonialism and
+# the propertied ones of backing it, and each side dismays the other. Each says
+# what the variables do, which no tooltip shows.
+decol_stance_take_anti = {
+	custom_tooltip = decol_stance_take_anti_tt
+	decol_stance_core_anti = yes
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+}
+
+decol_stance_take_pro = {
+	custom_tooltip = decol_stance_take_pro_tt
+	decol_stance_core_pro = yes
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	add_radicals = { value = small_radicals pop_type = academics }
+}
+
+decol_stance_take_neutral = {
+	custom_tooltip = decol_stance_take_neutral_tt
+	decol_stance_core_neutral = yes
+	# Cautious approach - no strong reactions either way
+	add_loyalists = { value = very_small_radicals }
+}
+
+# Country scope. Each stance's modifier while, and only while, it counts. The
+# monthly pass's and a revolution's repair (decol_repair_after_civil_war): a
+# great power that falls below the rank stops paying, and one that rises to it
+# starts. An old save's three-year decaying copy counts as held until it runs
+# out, and the next month puts the lasting one in its place.
+decol_stance_refresh = {
+	if = {
+		limit = {
+			decol_stance_anti_counts = yes
+			NOT = { has_modifier = gp_anti_colonial_policy_modifier }
+		}
+		add_modifier = { name = gp_anti_colonial_policy_modifier }
+	}
+	else_if = {
+		limit = {
+			NOT = { decol_stance_anti_counts = yes }
+			has_modifier = gp_anti_colonial_policy_modifier
+		}
+		remove_modifier = gp_anti_colonial_policy_modifier
+	}
+	if = {
+		limit = {
+			decol_stance_pro_counts = yes
+			NOT = { has_modifier = gp_pro_colonial_policy_modifier }
+		}
+		add_modifier = { name = gp_pro_colonial_policy_modifier }
+	}
+	else_if = {
+		limit = {
+			NOT = { decol_stance_pro_counts = yes }
+			has_modifier = gp_pro_colonial_policy_modifier
+		}
+		remove_modifier = gp_pro_colonial_policy_modifier
+	}
+}
+
+# Country scope, monthly (decolonization_events_on_action, for every country
+# that holds a stance, its modifier or its cooldown).
+decol_stance_monthly = {
+	if = {
+		limit = { has_variable = decol_stance_months_left }
+		change_variable = { name = decol_stance_months_left add = -1 }
+		if = {
+			limit = { var:decol_stance_months_left <= 0 }
+			remove_variable = decol_stance_months_left
+		}
+	}
+	# The AI's lower edge: a stance it pays for while in influence deficit goes,
+	# and the start line (decol_stance_ai_can_hold) keeps it from coming back
+	# until the cost and a spare are in hand.
+	if = {
+		limit = {
+			is_ai = yes
+			decol_stance_paid = yes
+			influence < 0
+		}
+		decol_stance_core_neutral = yes
+	}
+	# An AI empire does not condemn the colonialism it practices (issue #1370,
+	# owner 2026-11-03): one that holds the stance, from before it had its
+	# empire, from an older save or from a Decolonization Resolution's vote,
+	# drops it once the stance can change, and The Colonial Question never
+	# gives it back (decolonization_events.14). A dormant stance goes too.
+	else_if = {
+		limit = {
+			is_ai = yes
+			has_variable = gp_anti_colonial_stance
+			NOT = { has_variable = decol_stance_months_left }
+			decol_holds_colonial_empire = yes
+		}
+		decol_stance_core_neutral = yes
+	}
+	else = {
+		decol_stance_refresh = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# SELF-CHECK ai_condemn_factor_order (issue #1370). The Colonial Question's
+# (decolonization_events.14) Condemn weight is 0 for an empire only if
+# ai_chance applies its modifiers in order: the adds (at least 11 for an
+# empire) and then the factor = 0 placed last. No vanilla script shows that
+# order matters, so each line is logged once a game:
+#   TE_SELF_CHECK BROKEN  an AI empire took Condemn (option a): the factor did
+#                         not hold the weight at 0.
+#   TE_SELF_CHECK OK      an AI empire took Neutral or Support (options b and
+#                         c) while it had the influence for Condemn, so Condemn
+#                         was open to it. One OK alone is weak evidence, since
+#                         a wrong order still leaves Support a share: the
+#                         verdict is no BROKEN line over the whole run.
+# Fallback: docs/testing/colonial-holdings-playtest.md § The AI's stance on
+# colonialism, Self-checks. Country scope; each option calls its check first,
+# before the take changes the stance. Hidden, so no tooltip shows it.
+# ---------------------------------------------------------------------------
+decol_selfcheck_empire_condemned = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				decol_holds_colonial_empire = yes
+				NOT = { has_global_variable = te_decol_cfo_broken_logged }
+			}
+			set_global_variable = te_decol_cfo_broken_logged
+			debug_log = "TE_SELF_CHECK BROKEN ai_condemn_factor_order country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (an AI that runs a colonial empire took Condemn in The Colonial Question: ai_chance did not keep factor = 0 after the adds; take the fallback in docs/testing/colonial-holdings-playtest.md, Condemn's weight as one script value)"
+		}
+	}
+}
+
+decol_selfcheck_empire_declined = {
+	hidden_effect = {
+		if = {
+			limit = {
+				is_ai = yes
+				decol_holds_colonial_empire = yes
+				decol_stance_affordable = yes
+				decol_stance_ai_can_hold = yes
+				NOT = { has_global_variable = te_decol_cfo_ok_logged }
+			}
+			set_global_variable = te_decol_cfo_ok_logged
+			debug_log = "TE_SELF_CHECK OK ai_condemn_factor_order country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (an AI that runs a colonial empire, with the influence to condemn, took Neutral or Support in The Colonial Question; one OK is weak evidence: the verdict is no BROKEN line for the rest of the run)"
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# THE COLONIAL POWERS (te_ce_sec_powers)
+#
+# A script container per colonial power (a holder of a colony or a colonial
+# subject, je_colonial_empire's `possible`), the eight largest (the `max`
+# below) by the people of their colonies and colonial subjects
+# (ce_power_colonial_population), largest first: its capital (the panel
+# reaches the country through it, gui_modding_guide gotcha #11), that
+# population, where it stands (ce_power_status), its stability while its
+# entry runs (ce_power_stability) and what our stance does to that stability a
+# month (ce_power_viewer_weight). colonial_empire_refresh_gp_rows' shape: last
+# month's containers destroyed first, from a temporary copy.
+#
+# Country scope: a player. From decolonization_events_on_action monthly for a
+# player that has researched Decolonization, and from the stance buttons
+# (colonial_empire_stance_sgui), so a change shows at once. Hidden: the buttons'
+# ExecuteTooltip renders their effect every frame.
+# ---------------------------------------------------------------------------
+decol_world_refresh_display = {
+	hidden_effect = {
+		decol_world_clear_rows = yes
+		set_variable = decol_world_rows_built
+		if = {
+			limit = { is_player = yes }
+			save_scope_as = ce_pw_viewer
+			ordered_country = {
+				limit = {
+					exists = capital
+					OR = {
+						any_scope_state = { is_overseas_colonial_state = yes }
+						country_has_qualifying_colonial_subject = yes
+					}
+				}
+				order_by = ce_power_colonial_population
+				max = 8
+				check_range_bounds = no
+				decol_world_power_row = yes
+			}
+		}
+	}
+}
+
+# Country scope. The rows and their containers go.
+decol_world_clear_rows = {
+	hidden_effect = {
+		if = {
+			limit = { has_variable_list = decol_world_rows }
+			every_in_list = {
+				variable = decol_world_rows
+				add_to_temporary_list = ce_pw_old_rows
+			}
+			clear_variable_list = decol_world_rows
+			every_in_list = {
+				list = ce_pw_old_rows
+				destroy_container = yes
+			}
+		}
+	}
+}
+
+# Country scope: a colonial power; scope:ce_pw_viewer the player. Its row.
+decol_world_power_row = {
+	save_scope_as = ce_pw_power
+	capital = { save_scope_as = ce_pw_capital }
+	clear_saved_scope = ce_pw_new
+	create_container = {
+		tags = { ce_pw_row }
+		parent = scope:ce_pw_viewer
+		save_scope_as = ce_pw_new
+	}
+	if = {
+		limit = { exists = scope:ce_pw_new }
+		scope:ce_pw_new = {
+			set_variable = { name = ce_pw_capital value = scope:ce_pw_capital }
+			set_variable = { name = ce_pw_population value = scope:ce_pw_power.ce_power_colonial_population }
+			set_variable = { name = ce_pw_status value = scope:ce_pw_power.ce_power_status }
+			set_variable = { name = ce_pw_stability value = scope:ce_pw_power.ce_power_stability }
+			set_variable = { name = ce_pw_weight value = scope:ce_pw_power.ce_power_viewer_weight }
+		}
+		scope:ce_pw_viewer = {
+			add_to_variable_list = { name = decol_world_rows target = scope:ce_pw_new }
+		}
+	}
+}

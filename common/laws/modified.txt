@@ -20,9 +20,14 @@ INJECT:law_women_own_property = {
 	}
 }
 
+# Vanilla gives Women's Suffrage its voting laws as unlocking_laws; an INJECTed
+# list adds to them, so Liquid Democracy, a voting law, keeps it.
 INJECT:law_womens_suffrage = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
+	}
+	unlocking_laws = {
+		law_liquid_democracy
 	}
 }
 
@@ -36,6 +41,7 @@ INJECT:law_elected_bureaucrats = {
 		law_wealth_voting
 		law_census_voting
 		law_universal_suffrage
+		law_liquid_democracy
 		law_anarchy
 	}
 }

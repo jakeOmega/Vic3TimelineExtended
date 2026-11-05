@@ -415,6 +415,23 @@ te_mon_mandate_lock_condition = {
 	}
 }
 
+# The same line in the Mandate row's tooltip (banking_dash_mon_mandate_tt),
+# which reads the shown country: another country's panel (National Info) has
+# no player behind it. The buttons' line above renders in their script
+# tooltips, where only the player is in context, so the two are split.
+te_mon_mandate_lock_condition_ni = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_mandate_is_locked = yes }
+		localization_key = banking_mon_tt_mandate_locked_ni
+	}
+	text = {
+		localization_key = banking_mon_tt_mandate_free
+	}
+}
+
 # Why this country has no policy dial (§4, §5.2, §5.3). One sentence per cause,
 # because "you cannot set a rate" without a reason is the kind of dead end the
 # dashboard exists to avoid. The order matches te_monetary_set_regime's: a
@@ -985,6 +1002,42 @@ te_mon_union_state = {
 	}
 }
 
+
+# A bloc member's place in its leader's Monetary Union rows (GUI audit
+# BNK-13), evaluated on the member: the leader's view of te_mon_union_state.
+# "Would refuse" is te_monetary_discover_union's own test for its refusers
+# count, so the rows and the count agree.
+te_mon_union_member_status = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_bloc_union_tier_2_plus = no }
+		localization_key = banking_dash_mon_union_member_coop
+	}
+	text = {
+		trigger = { te_mon_is_union_adopter = yes }
+		localization_key = banking_dash_mon_union_member_adopted
+	}
+	text = {
+		trigger = { te_mon_is_union_member = yes }
+		localization_key = banking_dash_mon_union_member_dormant
+	}
+	text = {
+		trigger = {
+			te_mon_union_is_holdout = yes
+			te_mon_union_adopt_score <= 0
+		}
+		localization_key = banking_dash_mon_union_member_refuser
+	}
+	text = {
+		trigger = { te_mon_union_is_holdout = yes }
+		localization_key = banking_dash_mon_union_member_holdout
+	}
+	text = {
+		localization_key = banking_dash_mon_union_member_outside
+	}
+}
 
 # ----------------------------------------------------------------------------
 # §0.12 — the bank's virtual rate, under its own purchases

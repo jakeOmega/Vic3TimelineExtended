@@ -167,3 +167,99 @@ gm_mon_preserve_sgui = {
 		always = no
 	}
 }
+
+# ---- Clear Away (owner, 2026-10-31) -------------------------------------------------
+# Once six monuments stand in one of our states, the most construction allows,
+# the least grand of them may be cleared away to make room for a grander one:
+# the button on its row (the state card, the journal entry's Our Monuments, and
+# Also Standing Here). Its grandeur and what it gave go with it. Contested
+# monuments keep their own three choices. Only orders the work
+# (gm_state_order_clear, gm_mon_order_clear); monument_events.33 does it.
+# Visibility comes from gm_state_disp_clearable / gm_mon_disp_clearable and the
+# owner in the GUI, never from a saved scope reaching is_shown (gui gotcha #22);
+# is_valid fails closed.
+gm_clear_sgui = {
+	scope = country
+	saved_scopes = { gm_state }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_state
+		scope:gm_state = {
+			owner = root
+			custom_tooltip = {
+				text = gm_clear_req_full_tt
+				gm_state_monument_count >= 6
+			}
+			custom_tooltip = {
+				text = gm_clear_req_least_tt
+				gm_state_primary_is_least = yes
+			}
+			custom_tooltip = {
+				text = gm_clear_req_quiet_tt
+				gm_state_clear_quiet = yes
+				NOT = { has_variable = gm_clear_by }
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_state = {
+			custom_tooltip = {
+				text = gm_clear_tt
+				gm_state_order_clear = yes
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+gm_mon_clear_sgui = {
+	scope = country
+	saved_scopes = { gm_mon }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		exists = scope:gm_mon
+		scope:gm_mon = {
+			var:gm_tr_origin ?= { owner = root }
+			custom_tooltip = {
+				text = gm_clear_req_full_tt
+				var:gm_tr_origin ?= { gm_state_monument_count >= 6 }
+			}
+			custom_tooltip = {
+				text = gm_clear_req_least_tt
+				gm_mon_is_least = yes
+			}
+			custom_tooltip = {
+				text = gm_clear_req_quiet_tt
+				var:gm_tr_origin ?= {
+					gm_state_clear_quiet = yes
+					NOT = { has_variable = gm_clear_by }
+				}
+			}
+		}
+	}
+
+	effect = {
+		scope:gm_mon = {
+			custom_tooltip = {
+				text = gm_mon_clear_tt
+				gm_mon_order_clear = yes
+			}
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}

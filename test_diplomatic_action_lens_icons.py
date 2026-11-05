@@ -18,7 +18,7 @@ LENS = "gfx/interface/icons/lens_toolbar_icons"
 
 # Actions still on another action's art until an icon pass draws their own
 # (test_covert_op_registry.PLACEHOLDER_ICON).
-PENDING = {"covert_counterintel_support_action"}
+PENDING = set()
 
 
 def tracked(path: str) -> bool:

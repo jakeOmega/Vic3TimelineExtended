@@ -85,7 +85,9 @@ def _load_loc():
 def _bar_tooltip_keys():
     keys = set()
     pattern = os.path.join(REPO, "gui", "journal_entry_widgets", "*.gui")
-    for path in glob.glob(pattern):
+    # the charts themselves: each a generated wrapper (gen_te_history_charts.py)
+    generated = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
+    for path in glob.glob(pattern) + [generated]:
         with open(path, encoding="utf-8-sig") as fh:
             keys.update(_BAR_TOOLTIP.findall(fh.read()))
     return keys

@@ -804,6 +804,46 @@ class LinearParserTests(unittest.TestCase):
             "b": ("=", {"w": ("=", "3")}),
         })
 
+    def test_try_and_or_create_directives(self):
+        """The 1.12 digest's other three directives (#1170): TRY_REPLACE and
+        TRY_INJECT act like REPLACE and INJECT on an entry that exists and
+        create nothing when it doesn't; INJECT_OR_CREATE injects or creates.
+        Before, `TRY_REPLACE:b` stayed a key of its own, spelled with the
+        prefix, and `b` kept its old body."""
+        files = (
+            "a = { x = 1 }\nb = { y = 1 }",
+            "TRY_INJECT:a = { z = 2 }\nTRY_REPLACE:b = { w = 3 }\n"
+            "TRY_INJECT:c = { q = 1 }\nTRY_REPLACE:d = { q = 1 }\n"
+            "INJECT_OR_CREATE:a = { v = 4 }\nINJECT_OR_CREATE:e = { q = 2 }",
+        )
+        expected = {
+            "a": ("=", {"x": ("=", "1"), "z": ("=", "2"), "v": ("=", "4")}),
+            "b": ("=", {"w": ("=", "3")}),
+            "e": ("=", {"q": ("=", "2")}),
+        }
+        self.assertEqual(self._parse(*files), expected)
+        # ModState's flow: the mod file keeps its prefixes, then merge_data.
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = []
+            for i, text in enumerate(files):
+                paths.append(os.path.join(tmp, f"{i}.txt"))
+                with open(paths[-1], "w", encoding="utf-8") as f:
+                    f.write(text)
+            base = ParadoxFileParser()
+            base.parse_file(paths[0])
+            mod = ParadoxFileParser()
+            mod.parse_file(paths[1], apply_directives=False)
+            self.assertIn("TRY_REPLACE:b", mod.data)
+            base.merge_data(mod.data)
+        self.assertEqual(base.data, expected)
+
+    def test_try_directives_inside_an_inject_block(self):
+        data = self._parse(
+            "a = { m = { x = 1 } }",
+            "INJECT:a = { m = { TRY_REPLACE:x = 5 TRY_INJECT:y = 2 } }",
+        )
+        self.assertEqual(data, {"a": ("=", {"m": ("=", {"x": ("=", "5")})})})
+
     def test_normalization_reaches_a_fixpoint(self):
         # A list holding a repeated-key block folds in two passes; the old
         # one-pass-per-later-file normalization left its shape depending on

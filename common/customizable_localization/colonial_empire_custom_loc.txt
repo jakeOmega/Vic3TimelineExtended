@@ -160,3 +160,30 @@ colonial_empire_phase_modifier = {
 		localization_key = je_colonial_empire_phase_crumbling
 	}
 }
+
+# Why a subject counts as a colonial subject (is_qualifying_colonial_subject,
+# colonial_empire_triggers.txt): its kind, and for a protectorate the two
+# further tests. The Colonial Holdings subject list's hover, read as
+# [State.GetCountry.GetCustom('colonial_subject_reason_custom')] through the
+# subject's stored capital. Country scope: the subject.
+colonial_subject_reason_custom = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { is_subject_type = subject_type_colony }
+		localization_key = je_colonial_empire_subject_reason_colony
+	}
+	text = {
+		trigger = { is_subject_type = subject_type_chartered_company }
+		localization_key = je_colonial_empire_subject_reason_company
+	}
+	text = {
+		trigger = { is_subject_type = subject_type_protectorate }
+		localization_key = je_colonial_empire_subject_reason_protectorate
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = je_colonial_empire_subject_reason_other
+	}
+}

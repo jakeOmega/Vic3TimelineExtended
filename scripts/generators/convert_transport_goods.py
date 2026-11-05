@@ -5,7 +5,7 @@ merchant marine (market-wide, base 50) movement between markets. This script
 moves every mod production method's freight input from merchant marine to
 transportation, and the listed producers' output with it, scaling each
 quantity by 50/30 so the method's spend at base prices stays the same.
-Design: docs/superpowers/specs/2026-10-21-transport-goods-design.md.
+Design: docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md.
 
 Run it from the repo root; it rewrites the files in FILES in place:
 
@@ -53,6 +53,7 @@ CONSTRUCTION_PMS = frozenset({
     "pm_reinforced_concrete_buildings",
     "pm_advanced_construction",
     "pm_nanomaterial_buildings",
+    "pm_self_replicating_construction",
     "pm_prefabricated_building_components",
     "pm_tower_cranes",
     "pm_computer_aided_design",
@@ -63,6 +64,7 @@ CONSTRUCTION_PMS = frozenset({
     "pm_te_direct_construction_reinforced_concrete",
     "pm_te_direct_construction_advanced",
     "pm_te_direct_construction_nanomaterial",
+    "pm_te_direct_construction_self_replicating",
 })
 
 RAILWAY_BASE_PMS = frozenset({

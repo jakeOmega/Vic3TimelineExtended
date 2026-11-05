@@ -28,8 +28,9 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
               "interstellar_probe", "solar_colonization")
 # The cost factors sr_<m>_cost multiplied by before they became named values.
+# Solar colonization's is no longer a constant (CostTest below).
 FACTORS = {"suborbital": "1", "orbital": "1.5", "moon_landing": "2", "probe": "2", "moon_base": "5",
-           "mars_landing": "6", "interstellar_probe": "12", "solar_colonization": "8"}
+           "mars_landing": "6", "interstellar_probe": "12"}
 
 
 def _read(path, comments=False):
@@ -84,12 +85,36 @@ class NoDriftTest(unittest.TestCase):
                                  ["value", "=", "sr_progress", "min", "=", "0.5"])
                 risk = _block(values, f"sr_risk_shown_{m}")
                 self.assertNotIn("sr_safe_", risk)
-                self.assertIn("NOT = { sr_has_failure_cooldown = yes }", risk)
+                self.assertIn(f"value = sr_risk_pct_{m}", risk)
+                self.assertNotIn("cooldown", risk)
 
     def test_standard_has_its_own_status_codes(self):
         body = _block(_read(EFFECTS), "sr_set_milestone_status_base")
-        self.assertIn("set_variable = { name = sr_$MILESTONE$_last_status value = 5 }", body)
-        self.assertIn("set_variable = { name = sr_$MILESTONE$_last_status value = 0 }", body)
+        for code in (0, 1, 2):
+            self.assertIn(f"set_variable = {{ name = sr_$MILESTONE$_last_status value = {code} }}", body)
+        # The shielded codes 3 to 5 went with the post-setback cooldown (2026-10-31).
+        for code in (3, 4, 5):
+            self.assertNotIn(f"last_status value = {code} }}", body)
+
+
+class NoCooldownTest(unittest.TestCase):
+    """The post-setback cooldown skipped the roll for six months on every
+    milestone, so switching them all to Ambitious after a failure was free
+    progress. It went on 2026-10-31 (owner): nothing sets or reads it but the
+    monthly old-save strip."""
+
+    def test_nothing_sets_or_reads_the_cooldown(self):
+        strip = os.path.join(REPO, "common", "on_actions", "space_race_on_actions.txt")
+        for sub in ("common", "events"):
+            for path in glob.glob(os.path.join(REPO, sub, "**", "*.txt"), recursive=True):
+                text = _read(path)
+                with self.subTest(path=os.path.relpath(path, REPO)):
+                    self.assertNotIn("sr_has_failure_cooldown", text)
+                    if os.path.samefile(path, strip):
+                        self.assertIn("remove_variable = sr_failure_cooldown", text)
+                        self.assertNotIn("name = sr_failure_cooldown", text)
+                    else:
+                        self.assertNotIn("sr_failure_cooldown", text)
 
 
 class StandardControlTest(unittest.TestCase):
@@ -132,6 +157,23 @@ class CostTest(unittest.TestCase):
             with self.subTest(milestone=m):
                 self.assertEqual(_block(values, f"sr_cost_factor_{m}").split(), ["value", "=", factor])
                 self.assertIn(f"multiply = sr_cost_factor_{m}", _block(values, f"sr_{m}_cost"))
+
+    def test_colonization_costs_the_moon_base_s_factor_until_the_mars_landing(self):
+        """Lunar colonization design § 4: 5 until the country's own Mars Landing, then 8,
+        read through owner so it holds in the journal entry's scope (the cost modifier's
+        multiplier) as in the country's."""
+        values = _read(VALUES)
+        body = _block(values, "sr_cost_factor_solar_colonization").split()
+        self.assertEqual(body, ["value", "=", "5", "owner", "=", "{", "if", "=", "{", "limit", "=", "{",
+                                "has_variable", "=", "sr_completed_mars_landing", "}", "add", "=", "3", "}", "}"])
+        self.assertEqual(_block(values, "sr_cost_factor_moon_base").split(), ["value", "=", "5"])
+        self.assertIn("multiply = sr_cost_factor_solar_colonization", _block(values, "sr_solar_colonization_cost"))
+        # The Mars Landing's completion re-posts the cost with the new factor.
+        effects = _read(EFFECTS)
+        complete = _block(effects, "sr_complete_milestone_effect_base")
+        self.assertLess(complete.index("set_variable = { name = sr_completed_$MILESTONE$ value = yes }"),
+                        complete.index("sr_complete_milestone_effect = yes"))
+        self.assertIn("sr_recalculate_cost = yes", _block(effects, "sr_complete_milestone_effect"))
 
     def test_one_cost_level_is_the_modifier_s_innovation(self):
         modifier = _block(_read(MODIFIERS), "sr_space_program_cost")

@@ -181,7 +181,7 @@ environmentalism_events.3 = {
 		}
 		# Environmentalist IG leader gains ideology
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -240,12 +240,12 @@ environmentalism_events.4 = {
 		}
 		# Convert both Intelligentsia and Trade Union leaders to environmentalists
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
 		ig:ig_trade_unions ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -592,7 +592,7 @@ environmentalism_events.8 = {
 			}
 		}
 		ig:ig_intelligentsia ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -1146,7 +1146,7 @@ environmentalism_events.15 = {
 		# Side with environmentalists - even the industrialists must concede at 3 C
 		# Comes with severe economic and political fallout
 		ig:ig_industrialists ?= {
-			leader = {
+			leader ?= {
 				set_ideology = ideology:ideology_environmentalists
 			}
 		}
@@ -1640,5 +1640,47 @@ environmentalism_events.23 = {
 		}
 		add_loyalists = { value = small_radicals strata = upper }
 		add_radicals = { value = small_radicals pop_type = academics }
+	}
+}
+
+# Event 24: Termination Shock (Geoengineering, era 13 spec § 7.5). Every country,
+# once, when the last country running Stratospheric Aerosol Injection stops
+# and at least gw_aerosol_shock_min_mask of masked warming is coming back
+# (gw_aerosol_update_mask_effect). A forced crisis with one option: the
+# returning warming is the world's, so no government's choice changes it here;
+# a country able to restart the injections does so from the policy row. The
+# modifier stands for the speed of the change, on top of the warming itself.
+environmentalism_events.24 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/heatwave.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = environmentalism_events.24.t
+	desc = environmentalism_events.24.d
+	flavor = environmentalism_events.24.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by gw_aerosol_update_mask_effect when aerosol injection ends
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = environmentalism_events.24.a
+		default_option = yes
+		add_modifier = {
+			name = gw_termination_shock_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+			multiplier = gw_aerosol_mask
+		}
 	}
 }

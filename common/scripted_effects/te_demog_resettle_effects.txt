@@ -2,7 +2,7 @@
 # DEMOGRAPHICS — Internal Resettlement's known moves, and the US frontier's 1836 seed (2026-10-19)
 # ============================================================================
 # The master spec (docs/superpowers/specs/2026-10-08-demographics-design.md) §2.5 "Known kills" and §2.6;
-# docs/systems/mod_systems.md § Demographics, "Internal Resettlement in the census". The twin is
+# docs/systems/mod_systems/demographics.md § Demographics, "Internal Resettlement in the census". The twin is
 # scripts/analysis/demographics_resettle.py; the generated half is te_demog_resettle_generated_effects.txt
 # (scripts/generators/gen_demographics_resettle.py, from demographics_params.RESETTLE_PROFILES and FRONTIER_1836).
 #

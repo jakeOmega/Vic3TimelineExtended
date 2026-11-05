@@ -21,6 +21,9 @@
 #   un_res_why_* (resolution)     the reason tallies, from un_resolution_record_vote
 #                                 and un_resolution_record_veto
 #   un_res_case (resolution)      un_resolution_open: the target's case when tabled
+#                                 (on a motion to expel, the case for expulsion)
+#   un_veto_record (country)      un_veto_record_add (a veto cast outside
+#                                 Moribund), and the monthly decay
 #   un_res_last_call (resolution) un_vote.6, or the monthly pulse from month 12:
 #                                 every AI member still without a vote casts now
 #   un_res_ai_cast (resolution)   legacy: written before the late ballots; inert
@@ -39,6 +42,9 @@
 #               programme referred under the Non-Proliferation Treaty, #448)
 #   asat        te_asat_strike_effect (te_orbital_debris_effects.txt): a
 #               destructive anti-satellite strike (Global Commons § 6.3)
+#   space       sr_site_destroy and sr_cb_charge_free (sr_fleet_combat_effects.txt):
+#               a colony destroyed, a free colony assaulted (solar colonization
+#               fleets design §§ 9.3-9.4)
 # ============================================================================
 
 # ---- The dossier -------------------------------------------------------------------
@@ -46,7 +52,7 @@
 # Add $POINTS$ to this country's $RECORD$, capped at un_dossier_record_cap. A
 # no-op while no UN exists: the dossier is the Assembly's file on a country,
 # and there is no Assembly to keep one.
-# Parameters: $RECORD$ = aggression | defiance | violation | covert | nuclear | asat
+# Parameters: $RECORD$ = aggression | defiance | violation | covert | nuclear | asat | space
 #             $POINTS$ = a number or a script value (evaluated in this scope)
 # Scope: the country the record is against
 un_dossier_record = {
@@ -107,6 +113,7 @@ un_dossier_monthly_update = {
 		un_dossier_decay_record = { RECORD = covert }
 		un_dossier_decay_record = { RECORD = nuclear }
 		un_dossier_decay_record = { RECORD = asat }
+		un_dossier_decay_record = { RECORD = space }
 	}
 	every_country = {
 		limit = {
@@ -154,7 +161,49 @@ un_dossier_monthly_update = {
 			un_dossier_record = { RECORD = aggression POINTS = un_dos_points_aggression }
 		}
 	}
+	un_veto_record_monthly_update = yes
 	un_recess_monthly_update = yes
+}
+
+# ---- The veto record (owner, 2026-10-24) ----------------------------------------------
+# A permanent member's vetoes, the heart of the case for expelling it from its
+# seat (un_expulsion_case, un_dossier_values.txt). Kept apart from the dossier:
+# it fades more slowly (5% a year, not half in five years) and is no part of
+# the case for the punitive topics.
+
+# Add one veto to this country's record. Called with the veto's institutional
+# costs (un_vote_cast_veto), so a veto at Moribund, which costs nothing, is
+# not recorded.
+# Scope: the vetoing country
+un_veto_record_add = {
+	if = {
+		limit = { NOT = { has_variable = un_veto_record } }
+		set_variable = { name = un_veto_record value = 0 }
+	}
+	change_variable = { name = un_veto_record add = un_veto_record_points }
+}
+
+# Every record fades. Saves from before the record started a member that
+# carries a recent veto's isolation with one veto's worth: that member vetoed
+# within five years, and the record would otherwise read zero until it vetoes
+# again. Remove the seed after 2026-12-31.
+# Scope: none (inside un_dossier_monthly_update)
+un_veto_record_monthly_update = {
+	every_country = {
+		limit = { has_variable = un_veto_record }
+		change_variable = { name = un_veto_record multiply = un_veto_record_decay_factor }
+		if = {
+			limit = { var:un_veto_record < un_veto_record_floor }
+			remove_variable = un_veto_record
+		}
+	}
+	every_country = {
+		limit = {
+			has_modifier = un_veto_isolation_modifier
+			NOT = { has_variable = un_veto_record }
+		}
+		set_variable = { name = un_veto_record value = un_veto_record_points }
+	}
 }
 
 # ---- The recess ----------------------------------------------------------------------
@@ -384,6 +433,7 @@ un_deleg_reassign_rows = {
 	un_deleg_assign_row = { N = 21 COUNT = 22 }
 	un_deleg_assign_row = { N = 22 COUNT = 23 }
 	un_deleg_assign_row = { N = 23 COUNT = 24 }
+	un_deleg_mirror_flags = yes
 	set_variable = { name = un_res_deleg_firm_for value = 0 }
 	set_variable = { name = un_res_deleg_firm_against value = 0 }
 	set_variable = { name = un_res_deleg_rowable value = 0 }
@@ -415,6 +465,69 @@ un_deleg_clear_row = {
 	if = {
 		limit = { has_variable = un_deleg_row_$N$ }
 		remove_variable = un_deleg_row_$N$
+	}
+}
+
+# The rows' flags (the 2026-10-27 audit, UN-14). The GUI reaches a country
+# only through a stored state (gui_modding_guide.md gotcha #15), so every
+# player holds each row member's capital in un_deleg_cap_<N>, as it holds the
+# permanent members' in un_p5_seat_<N> (un_overview_display_effects.txt), and
+# un_deleg_cap_count says how many rows from the top have one, so the GUI
+# never reads a row's capital that was not set (gotcha #23). A row that empties
+# between sorts (its member voted) hides with its flag; the next sort rewrites
+# them all. Hidden: called from the vote events' immediate blocks.
+# Scope: resolution container
+un_deleg_mirror_flags = {
+	hidden_effect = {
+		every_country = {
+			limit = { is_player = yes }
+			set_variable = { name = un_deleg_cap_count value = 0 }
+		}
+		un_deleg_mirror_flag = { N = 0 COUNT = 1 }
+		un_deleg_mirror_flag = { N = 1 COUNT = 2 }
+		un_deleg_mirror_flag = { N = 2 COUNT = 3 }
+		un_deleg_mirror_flag = { N = 3 COUNT = 4 }
+		un_deleg_mirror_flag = { N = 4 COUNT = 5 }
+		un_deleg_mirror_flag = { N = 5 COUNT = 6 }
+		un_deleg_mirror_flag = { N = 6 COUNT = 7 }
+		un_deleg_mirror_flag = { N = 7 COUNT = 8 }
+		un_deleg_mirror_flag = { N = 8 COUNT = 9 }
+		un_deleg_mirror_flag = { N = 9 COUNT = 10 }
+		un_deleg_mirror_flag = { N = 10 COUNT = 11 }
+		un_deleg_mirror_flag = { N = 11 COUNT = 12 }
+		un_deleg_mirror_flag = { N = 12 COUNT = 13 }
+		un_deleg_mirror_flag = { N = 13 COUNT = 14 }
+		un_deleg_mirror_flag = { N = 14 COUNT = 15 }
+		un_deleg_mirror_flag = { N = 15 COUNT = 16 }
+		un_deleg_mirror_flag = { N = 16 COUNT = 17 }
+		un_deleg_mirror_flag = { N = 17 COUNT = 18 }
+		un_deleg_mirror_flag = { N = 18 COUNT = 19 }
+		un_deleg_mirror_flag = { N = 19 COUNT = 20 }
+		un_deleg_mirror_flag = { N = 20 COUNT = 21 }
+		un_deleg_mirror_flag = { N = 21 COUNT = 22 }
+		un_deleg_mirror_flag = { N = 22 COUNT = 23 }
+		un_deleg_mirror_flag = { N = 23 COUNT = 24 }
+	}
+}
+
+# Row $N$'s member's capital, to every player, if the row is filled; the
+# count then covers it ($COUNT$ = $N$ + 1). The capital is saved and used in
+# one block, so no row reads the one before's (gotcha #25).
+# Parameters: $N$, $COUNT$
+# Scope: resolution container
+un_deleg_mirror_flag = {
+	if = {
+		limit = { has_variable = un_deleg_row_$N$ }
+		var:un_deleg_row_$N$ ?= {
+			capital ?= {
+				save_temporary_scope_as = un_deleg_flag_cap
+				every_country = {
+					limit = { is_player = yes }
+					set_variable = { name = un_deleg_cap_$N$ value = scope:un_deleg_flag_cap }
+					set_variable = { name = un_deleg_cap_count value = $COUNT$ }
+				}
+			}
+		}
 	}
 }
 

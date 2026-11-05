@@ -103,6 +103,7 @@ _TOP = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
 _ARTICLE_19_ONLY = {
     "un_dues_vote_suspended",   # the definition
     "un_chamber_dues_lines",    # the dues display
+    "un_disp_dues_code",        # the overview's dues cell, in the same order
     "un_ai_dues_will",          # an AI weight: settle once the vote is gone
 }
 
@@ -358,14 +359,22 @@ class DisplayTests(unittest.TestCase):
                 self.assertNotRegex(text, re.compile(r"^" + gone + r"\s*=", re.M))
 
     def test_journal_lines(self):
+        # The Assembly's statistics are the overview's line under the pies
+        # since the 2026-10-27 audit (UN-20), read from the monthly snapshot
+        # of the same counts.
         je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
         with open(LOC_JE, encoding="utf-8-sig") as f:
             loc = f.read()
-        for key in ("je_un_statistics", "je_un_statistics_suspended_one",
-                    "je_un_statistics_suspended_many"):
-            with self.subTest(key=key):
-                self.assertIn("desc = " + key + "\n", je)
-                self.assertRegex(loc, r"\n " + key + r":0 \".*un_eligible_country_count")
+        self.assertNotIn("je_un_statistics", je)
+        line = re.search(r"\n je_un_ov_stats:0 \"(.*)\"", loc).group(1)
+        for value in ("un_disp_stat_members", "un_disp_stat_eligible"):
+            self.assertIn(value, line)
+        self.assertIn("un_disp_stat_suspended", re.search(r"\n je_un_ov_stats_tt:0 \"(.*)\"", loc).group(1))
+        snapshot = _block(_read(_path("common", "scripted_effects", "un_authority_effects.txt")),
+                          "un_authority_monthly_update")
+        for name, value in (("un_stat_members", "un_member_count"), ("un_stat_eligible", "un_eligible_country_count"),
+                            ("un_stat_suspended", "un_suspended_member_count")):
+            self.assertIn(f"name = {name} value = {value}", snapshot)
         self.assertNotIn("je_un_statistics_subject_seats", loc + je)
 
     def test_concept_defined(self):

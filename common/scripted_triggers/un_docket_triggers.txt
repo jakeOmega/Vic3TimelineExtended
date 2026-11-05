@@ -619,6 +619,10 @@ un_docket_agenda_ready = {
 			un_docket_topic_open_nuclear_ban = yes
 			any_country = { un_docket_may_propose_nuclear_ban = yes }
 		}
+		AND = {
+			un_docket_topic_open_colony_protection = yes
+			any_country = { un_docket_may_propose_colony_protection = yes }
+		}
 	}
 }
 
@@ -705,7 +709,7 @@ un_docket_antarctic_candidate = {
 # (te_asat_last_strike_month, which the strike records). No moratorium under
 # the disabled space race rule.
 un_docket_topic_open_asat = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	custom_tooltip = {
 		text = un_asat_strike_seen_tt
 		has_global_variable = te_asat_last_strike_month
@@ -727,4 +731,33 @@ un_docket_topic_open_asat = {
 un_docket_may_propose_asat = {
 	un_docket_can_be_offered = yes
 	un_propose_asat_qualifies = yes
+}
+
+# The Convention on the Settlement of Outer Space (solar colonization fleets
+# design § 13): under the Space Race rule's Full Colonies, once some country
+# holds a colony in space. The docket raises it after a seizure or
+# destruction (item 17) and as Assembly business.
+un_docket_topic_open_colony_protection = {
+	sr_colonies_full_enabled = yes
+	custom_tooltip = {
+		text = un_colony_protection_colony_held_tt
+		any_country = { sr_has_space_colony = yes }
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_colony_protection_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = colony_protection } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
+}
+
+un_docket_may_propose_colony_protection = {
+	un_docket_can_be_offered = yes
+	un_propose_colony_protection_qualifies = yes
 }

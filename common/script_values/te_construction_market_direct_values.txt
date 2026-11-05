@@ -1,6 +1,6 @@
 ﻿# Construction-market subsystem — values for direct construction, the model
 # games run with free_market_construction_rule disabled
-# (te_free_market_construction_off). See docs/systems/mod_systems.md,
+# (te_free_market_construction_off). See docs/systems/mod_systems/construction.md,
 # "Free Market Construction off".
 #
 # The rule's production methods do the construction itself (the Construction

@@ -98,7 +98,37 @@ defaults (September 2026, ~350 icons):
 - Some objects read as something else at icon size: a laser turret as a
   camera (make it fire at a target), a landing craft as a ferry, a flight
   simulator pod as a lunar lander, a parachute as a hot-air balloon, a
-  helmet seen from the front as a face.
+  helmet seen from the front as a face, a blue spark over a brass pipe
+  fitting as a gas flame (draw a zigzag lightning bolt), a knobbly green
+  germ as a cabbage (give a virus spaced stalks with red tips).
+- A lattice pylon or tower is all thin lines and vanishes at a goods text
+  icon's 25 px: give it thick girders and something solid in front.
+- A clear glass dome cuts out to its frame alone, a birdcage (four seeds of a
+  colony habitat, batch 6): tint the glass ("blue-tinted panes") or keep it
+  small on something solid.
+- "Tug" draws a sea tugboat with a fishing net, even in space: name the craft
+  ("a squat cylindrical rocket spacecraft").
+- In a silhouette, a drafting compass inside a circle or gear reads as an A in
+  a circle, vanilla's Anarchist party mark.
+- A balance beam with things hung from its ends is a hairline with specks at
+  44 px: set the two things side by side instead.
+- A tall thin object upright on a wide base is a sliver in a square frame (a
+  missile on a ringed pad, batch 7): lay it on something that fills the width.
+- "Clasped hands" in relief drew a bun or praying hands; "two hands clasped in
+  a handshake seen from the side" drew the handshake.
+- A radiation trefoil on a round face (a reactor drum seen end-on) comes out
+  as fan blades, and the object reads as a fan.
+- A black object vanishes on the panels' dark ground at 44 px (a quill):
+  colour it.
+- Raws can carry a stock-art watermark ("ALLPANELCO", batch 7) as well as a
+  signature: zoom every pick's raw.
+- An armoured soldier in olive green with an orange visor draws Halo's Master
+  Chief (batch 8, both subjects): change the palette (sand-tan, a dark visor).
+- At 24 px a scene the size of a building is a ring or specks (an amphitheater
+  under a dome, twin turrets on a crater rim): draw the emblem object (theatre
+  masks) or one object on a small base.
+- A drawn `damage` crack is dark, and vanishes on a dark surface (a deep-blue
+  dome): derive the damaged state from a lighter candidate.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -164,6 +194,8 @@ _GUI_SYSTEMS = {
     "nuclear": "nuclear_icons",
     "colonial": "colonial_empire_icons",
     "space": "space_race_icons",
+    # The Demographics tab and state subtab (docs/systems/demographics_gui_icons.md).
+    "demog": "demographics_icons",
 }
 _GUI_FILES = {
     "banking": "gui/journal_entry_widgets/banking_dashboard_widget.gui",
@@ -175,6 +207,7 @@ _GUI_FILES = {
     "nuclear": "gui/journal_entry_widgets/nuclear_overview_widget.gui",
     "colonial": "gui/journal_entry_widgets/colonial_empire_widget.gui",
     "space": "gui/journal_entry_widgets/space_race_widget.gui",
+    "demog": "gui/te_demographics_widgets.gui",
 }
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
@@ -494,6 +527,62 @@ CATEGORIES = {
     **{sys_: dict(folder=folder, size=150, mode="cutout", fill=0.92, grade_strength=0.5,
                   grade_folder="alert_icons", neighbours="alert_icons", gui=(_GUI_FILES[sys_],), style=UN_STYLE)
        for sys_, folder in _GUI_SYSTEMS.items()},
+    # The Demographics History charts' pips (9-10 px, in a lane above a census
+    # year's bars): at that size only a flat one-colour shape reads, so a
+    # silhouette is embossed in one colour, as the mobilization options are,
+    # with a dark rim (`outline`, 8 px here, under 1 px in game) that `fill`
+    # leaves room for. Written at 120 px, the size of the generic_icons they
+    # replace. Amber by default; an entry sets its own colours. The emboss's
+    # lighting has a median of about 0.6, so colours are set above the target.
+    "demog_pip": dict(
+        folder="demographics_icons", size=120, mode="emboss", fill=0.84, outline=8,
+        color=(372, 268, 74), color_bottom=(338, 206, 50),
+        neighbours="generic_icons", gui=("gui/te_demographics_widgets.gui",), style=SILHOUETTE),
+    # Production methods (PM.GetTexture, `texture =`): vanilla's are embossed
+    # tan-bronze silhouettes, 205 at 104 px and 86 at 208. Measured on all of
+    # them: the shape spans 0.865 of the side (median), its top quarter
+    # (173,159,134) and its bottom quarter (116,87,63), which `color` and
+    # `color_bottom` are fitted to. Vanilla shares PM art widely, so only a
+    # method whose borrowed icon says something wrong gets one here; the older
+    # mod PM icons are gen_pm_icons.py's drawn glyphs.
+    "production_method": dict(
+        folder="production_method_icons", size=208, mode="emboss", fill=0.865,
+        entity_dir="common/production_methods", field="texture",
+        color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
+    # Carbon capture's ladder: production methods in look, but hosted in effect, since
+    # pm_carbon_capture.py writes the 456 methods and names these files, and `wire` must
+    # never edit its output. "now" is the shield glyph each replaced.
+    "carbon_capture": dict(
+        folder="production_method_icons", size=208, mode="emboss", fill=0.865, gui=(),
+        color=(259, 238, 201), color_bottom=(211, 158, 115), style=SILHOUETTE),
+    # Political parties (100 px, `icon = { default = "/gfx/..." }`): vanilla's 12 are
+    # embossed silver-tan silhouettes on transparency, uncompressed with mips. Measured:
+    # the shape spans 0.87 of the side (median), its top quarter (164,154,134) and its
+    # bottom quarter (99,82,61), the production methods' palette a shade darker, so
+    # `color` and `color_bottom` are theirs scaled by the ratio. GUI-hosted in effect:
+    # `wire` reads only a `field = "..."` line, and a party's icon is a block, so the
+    # three `default =` lines are edited by hand.
+    "party": dict(
+        folder="political_parties", size=100, mode="emboss", fill=0.87, gui=(),
+        color=(246, 231, 201), color_bottom=(180, 149, 111), style=SILHOUETTE),
+    # The Tax Code panels' overview cells (GUI audit TAX-1; docs/systems/tax_code_schema.md, "Panels"):
+    # Banking's cells, so the system panels' cut-out style. Defined here rather than in _GUI_SYSTEMS
+    # because two of its icons are in the light code's widget, and it needs no part or state category.
+    "tax": dict(
+        folder="tax_icons", size=150, mode="cutout", fill=0.92, grade_strength=0.5,
+        grade_folder="alert_icons", neighbours="alert_icons",
+        gui=("gui/journal_entry_widgets/te_tax_overview_widget.gui",
+             "gui/journal_entry_widgets/te_tax_light_widget.gui"),
+        style=UN_STYLE),
+    # The state panel's status items (state_panel_status_item_small): vanilla's 28 are
+    # painted objects on a dark disc under a bronze ring, 128 px. The disc is measured
+    # on their bare pixels (centre, then edge), lifted a little at the centre as the
+    # decrees' is. The game concept that names the item uses the same file.
+    "state_status": dict(
+        folder="state_status_icons", size=128, mode="medallion", fill=0.8,
+        disc=((34, 27, 26), (24, 19, 19)), grade="spread",
+        gui=("gui/states_panel.gui",),
+        style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
 }
 
 
@@ -652,6 +741,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "hypersonic_weapons": {"subject": "a sleek black arrowhead-shaped hypersonic glide vehicle trailing a streak of glowing plasma", "seed": 0},
         "jadc2": {"subject": "a glowing holographic globe surrounded by small models of a ship, a jet, a tank and a satellite linked by lines of light", "seed": 1},
         "reusable_rocketry": {"subject": "a tall slim grey cylindrical rocket booster with a flat top, standing upright on four thin splayed landing legs, a small flame and smoke at its base", "seed": 0},
+        # Lunar colonization (2026-10-29), on byte copies of Reusable Rocketry and Asteroid Mining until now.
+        "cislunar_infrastructure": {"subject": "a grey cylindrical orbital station module with two wide dark blue solar panel wings and a squat gold-foil-wrapped lander on four splayed legs docked to its end", "seed": 1},
+        "in_situ_resource_utilization": {"subject": "a squat boxy grey regolith processing machine on caterpillar treads, its front scoop heaped with grey moon dust, a small glowing orange furnace window on its side", "seed": 0},
         "additive_manufacturing": {"subject": "a desktop 3D printer printing an orange plastic gear layer by layer", "seed": 1},
         "advanced_structural_engineering": {"subject": "a short thick steel I-beam welded to a black woven carbon-fibre plate, a bright orange glowing weld seam along the joint with a few sparks", "seed": 3},
         "electric_vehicles": {"subject": "a sleek dark blue electric car plugged into a green charging post by a thick cable", "seed": 1},
@@ -669,6 +761,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "bioenhanced_soldiers": {"subject": "a glowing green serum injector beside an olive-green military helmet", "seed": 1},
         "directed_energy_weapons": {"subject": "a futuristic rifle-shaped energy weapon with glowing blue coils", "seed": 2},
         "fusion_power": {"subject": "a doughnut-shaped tokamak fusion reactor with a glowing pink plasma ring inside", "seed": 0},
+        # Lunar colonization, on a byte copy of Fusion Power until now. Round 1's engine lying on its side,
+        # nose forward, read as a missile; standing it upright put the trefoil on its face like fan blades.
+        "nuclear_thermal_propulsion": {"subject": "a squat rocket engine standing upright: a round steel reactor drum with a yellow-and-black radiation trefoil on its side, copper pipes running down to a wide copper bell nozzle below it, a short blue flame from the nozzle", "seed": 3},
         "quantum_communications": {"subject": "two glowing deep violet crystal orbs linked by a bright twisting beam of cyan light", "seed": 1},
         "space_militarization": {"subject": "a dark grey armed military satellite with folded solar wings and a small missile rack", "seed": 1},
         "swarm_technology": {"subject": "a tight cluster of small black quadcopter drones flying in formation", "seed": 0},
@@ -684,9 +779,16 @@ ICONS: dict[str, dict[str, dict]] = {
         "lab-grown_food": {"subject": "a round petri dish holding a pink cultured meat steak", "seed": 0},
         "personalized_medicine": {"subject": "a single capsule pill with a DNA helix pattern on its shell", "seed": 1},
         "universal_digital_identity": {"subject": "a plain pale blue identity card with a glowing blue fingerprint and a gold chip", "seed": 1},
-        # era 12
+        "advanced_fission": {"subject": "a squat steel reactor vessel with glowing orange molten salt visible through a round porthole", "seed": 1},
+        "ai_agents": {"subject": "a small glowing blue robot hand moving a cursor across a stack of paper forms and ticking boxes", "seed": 3},
+        "self_driving_laboratories": {"subject": "a white robotic arm pipetting into a rack of glowing test tubes on a lab bench", "seed": 1},
+        "humanoid_robotics": {"subject": "a friendly white humanoid robot carrying a cardboard box in both arms", "seed": 1},
+        "autonomous_weapons": {"subject": "a dark grey four-legged robot with a sensor turret and a red targeting light", "seed": 1},
+        "ai_tutors": {"subject": "a small friendly white robot with a glowing blue screen for a face, pointing at a child's blank chalk slate", "seed": 3},
+        # eras 12 and 13 (era 13 split from era 12, 2026-10-31)
         "antimatter_production": {"subject": "a glowing magnetic containment bottle with a bright violet sphere suspended inside", "seed": 1},
         "compact_fusion_reactors": {"subject": "a compact barrel-sized cylindrical fusion reactor core glowing blue-white at its centre", "seed": 1},
+        "aneutronic_fusion": {"subject": "a glowing violet plasma ring inside a slim metal torus, with copper current leads drawing a bright spark straight off it", "seed": 3},
         "fusion_batteries": {"subject": "a chunky cylindrical battery cell with a glowing sun-like core behind a glass window", "seed": 3},
         "orbital_weapon_platforms": {"subject": "a large armed space station with a long cannon barrel and solar panel wings", "seed": 1},
         "space_based_solar_power": {"subject": "a vast orbiting solar panel array sending a thin red energy beam downward", "seed": 0},
@@ -696,12 +798,21 @@ ICONS: dict[str, dict[str, dict]] = {
         "molecular_assemblers": {"subject": "a cluster of coloured atom spheres being snapped together by tiny robotic arms", "seed": 0},
         "orbital_manufacturing": {"subject": "a space station module with a robotic arm assembling a glowing crystal", "seed": 1},
         "programmable_matter": {"subject": "a shimmering silver liquid-metal blob reshaping itself into a cube and a sphere", "seed": 1},
+        "von_neumann_machines": {"subject": "a small boxy silver robot factory on a grey asteroid assembling a smaller copy of itself with its own robotic arms", "seed": 3},
         "quantum_materials": {"subject": "a glowing iridescent crystal block levitating above a superconducting disc", "seed": 1},
         "biological_immortality": {"subject": "a glass hourglass with a green sprouting sprig growing inside it", "seed": 1},
         "mind_backups": {"subject": "a glowing crystal data cube with the faint shape of a brain inside", "seed": 1},
         "neural_lace": {"subject": "a delicate glowing silver mesh net shaped like a human brain", "seed": 1},
         "post-scarcity_economy": {"subject": "an overflowing cornucopia horn spilling fruit, bread and gleaming gadgets", "seed": 1},
         "space_colonization": {"subject": "a domed habitat colony on a red rocky planet surface", "seed": 0},
+        "rejuvenation_therapies": {"subject": "a wilted brown leaf turning fresh green from its stem, held in a pair of silver tweezers", "seed": 3},
+        "self_directed_evolution": {"subject": "a glass bell jar holding a small pale salamander-like figure with feathery pink gills and large dark eyes, a thin double helix of light curling up beside it", "seed": 1},
+        "post_work_society": {"subject": "an artist's wooden easel and palette standing beside a switched-off grey factory robot arm", "seed": 0},
+        "morphological_freedom": {"subject": "a glass petri dish holding a small curled tuft of russet fox fur, beside a pair of steel tweezers", "seed": 1},
+        "liquid_democracy": {"subject": "a big glowing blue fingerprint with thin glowing lines branching from it to a ring of small round dots", "seed": 1},
+        "geoengineering": {"subject": "a jet plane flying in front of a big round sun, a thick white trail of mist behind it veiling half of the sun", "seed": 1},
+        "terraforming": {"subject": "a rust-red planet half turned blue-green, a thin white haze of cloud and a small blue sea on its lit side, a round orbital mirror beside it catching the sun", "seed": 1},
+        "vactrains": {"subject": "a sleek white bullet-nosed capsule train speeding through a long transparent glass tube raised on slim pylons", "seed": 1},
         "telepathic_communities": {"subject": "two glowing translucent human heads facing each other, linked by a ribbon of light", "seed": 1},
     },
     "treaty_article": {
@@ -736,6 +847,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "cultural_exchange_program": {"subject": "two hands passing a small painted vase between them", "seed": 1},
         "enforce_emissions_reduction": {"subject": "a factory chimney with a big green cork stopper in its top", "seed": 0},
         "nuclear_guarantee": {"subject": "a large open steel umbrella with a yellow-and-black radiation trefoil painted on its canopy", "seed": 0},
+        # Nuclear crisis rework 4a, on a byte copy of Nuclear Guarantee until now.
+        # Round 1's upright missile on a ringed pad was a sliver at 100 px: lay it on a trailer, filling the width.
+        "nuclear_basing": {"subject": "a short fat olive-green missile with a small yellow-and-black radiation trefoil on its side, lying on a low steel launch trailer parked behind a low wall of green sandbags", "seed": 1},
         "population_transfer": {"subject": "a heap of worn suitcases and cloth bundles tied with rope", "seed": 1},
         # The monetary articles, on law icons until now.
         # Owner picks (2026-10-07): the $ on a coin is unreadable at icon size.
@@ -749,6 +863,15 @@ ICONS: dict[str, dict[str, dict]] = {
         "return_cultural_property": {"subject": "a small white marble bust packed in an open wooden crate full of straw, a green ribbon tied in a bow around the crate", "seed": 3},
         "archaeological_concession": {"subject": "an iron spade stuck upright in a small mound of brown earth beside a terracotta amphora split cleanly into two halves", "seed": 3},
         "excavation_permit": {"subject": "a rolled parchment scroll sealed with a big red wax seal, a small iron trowel and a soft brush lying across it", "seed": 0},
+        # Power grids (#1109), on Transit Rights' crates until now.
+        # Not household plugs (round 1), nor a spark over a brass fitting, which read as a gas flame (round 2).
+        "grid_interconnection_agreement": {"subject": "two thick armoured high-voltage cables, one with a red sheath and one with a blue sheath, joined end to end by a big bolted steel coupling, a jagged bright blue zigzag lightning bolt above the join", "seed": 2},
+        # Solar colonization (#1172), on vanilla's Transfer State until now.
+        "te_cede_colony": {"subject": "an open bronze hand holding out a small round grey moon rock with a gold-framed glass dome habitat standing on it", "seed": 1},
+        # Global Commons (#1107-#1160): the five basins' leases are one template (test_seabed_leases.py),
+        # so each has its own file of one picture; on vanilla's goods transfer crates until now.
+        **{f"te_seabed_lease_{basin}": {"subject": "a heavy brass key lying on a small heap of round black manganese nodules on a patch of sandy seabed", "seed": 1}
+           for basin in ("pacific", "atlantic", "indian", "arctic", "southern")},
     },
     "diplomatic_action": {
         # Mod-added diplomatic actions on a borrowed icon. Three have a better
@@ -773,6 +896,18 @@ ICONS: dict[str, dict[str, dict]] = {
         "covert_space_espionage_action": {"subject": "a grey rocket standing on its launch pad with a small brass spy camera on a tripod aimed at it", "seed": 1},
         "covert_cultivate_assets_action": {"subject": "two hands in shadow exchanging a sealed brown envelope", "seed": 3},
         "covert_secure_material_action": {"subject": "a black-gloved hand gripping the handle of a lead-lined steel case marked with a radiation trefoil", "seed": 2},
+        # Later operations, each on an older one's art until now (counterintelligence support on
+        # cultivate assets', the three solar-colony ones on byte copies). A round shield read as a
+        # plate or a porthole before (batch 3): give it a boss and a rim.
+        "covert_counterintel_support_action": {"subject": "a black-gloved hand holding up a round steel shield with a thick raised rim and a domed central boss, guarding", "seed": 1},
+        "covert_incite_autonomy_action": {"subject": "a black-gloved hand planting a small plain bright green cloth flag on a round grey moon rock that has a small gold-framed glass dome on it", "seed": 2},
+        # Round 1's glass dome cut out as a birdcage on all four seeds: the air runs out of a tank instead.
+        "covert_sabotage_colony_action": {"subject": "a black-gloved hand turning a big red valve wheel on top of a tall dented silver oxygen tank standing on a round grey moon rock", "seed": 2},
+        "covert_survey_defences_action": {"subject": "a small brass spy camera on a tripod aimed at a squat grey domed fortress with two gun turrets, standing on a round grey moon rock", "seed": 1},
+        # Not a covert operation: no glove. FLUX will not break things, so the strike is a burst.
+        "te_asat_strike_action": {"subject": "a slim grey interceptor missile on a bright orange flame trail striking a small gold-foil satellite with blue solar panel wings, a burst of orange fire and flying metal shards where they meet", "seed": 3},
+        # Global Commons, on vanilla's Raise Payments until now.
+        "te_seabed_administer_claims": {"subject": "a large bronze hand scooping up a heap of round black deep-sea mineral nodules from a small square of sandy seabed", "seed": 1},
         # Other actions that had no icon.
         "decolonize_diplo_action": {"subject": "an open brass birdcage with a small bird flying out of its door", "seed": 1},
         "annex_subject_peaceful": {"subject": "two small stone houses joined under a single shared roof", "seed": 1},
@@ -892,6 +1027,8 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_solar_receiver": {"subject": "a vast circular field of dark mesh antenna panels in rows on a desert plain around a central control building, a pale beam of light descending from the sky onto its centre", "seed": 0},
         "building_antimatter_facility": {"subject": "a futuristic research complex around a huge ring-shaped particle accelerator, with a round steel and glass containment dome at its centre holding a small glowing violet sphere", "seed": 0},
         "building_antimatter_engine": {"subject": "a colossal futuristic rocket engine on a concrete test stand, its polished steel nozzle glowing violet, with fuel tanks, pipes and a gantry beside it", "seed": 0},
+        # On vanilla's urban_center.dds until rendered (2026-10-31).
+        "building_public_housing": {"subject": "a city block of plain six-storey brick apartment buildings around a shared courtyard with trees and washing lines, a newer tower block of pale concrete rising behind them", "seed": 3},
         "te_construction_market_site": {"subject": "a construction site with cranes, scaffolding and stacked building materials", "seed": KEEP},  # a construction camp fits
         # Industry variants: vanilla's industrial layout, the plant behind and
         # its product large in the foreground. They were on goods icons.
@@ -974,6 +1111,18 @@ ICONS: dict[str, dict[str, dict]] = {
         "building_tourism_industry": {"subject": "a seaside resort: a tall white hotel with balconies above a sandy beach lined with rows of colourful parasols, palm trees and a promenade with cafes, a turquoise sea with small sailing boats", "seed": 2},  # fallback: restyle tourism.dds
         "building_network_infrastructure": {"subject": "a telecommunications hub: a tall red-and-white steel radio mast and several big white satellite dishes beside a low grey exchange building, telephone poles and cable trenches running away across green countryside toward a distant city", "seed": 0},  # fallback: restyle network.dds
         "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: a sleek dark grey factory hall with a glowing orange furnace seen through its open doors, stacks of black carbon-fibre sheets and dark composite panels in its yard, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle advanced_materials.dds
+        # Power grids (#1107), on the power plant's icon until now. A substation, not a plant:
+        # FLUX puts chimneys on anything called a plant.
+        "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
+        # The station's method until 2026-10-25, now a building of its own, on that method's icon until painted.
+        "building_grid_hvdc_interconnector": {"subject": "a coastal HVDC converter station: a large plain grey hall beside a row of tall white valve towers on a rocky shore, a thick black power cable running from it down the beach into blue sea, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Solar colonization slice 6 (#1179), on the Military Base's and the Battlestation's icons
+        # until now. Both stand on the ground, so the building style, not ORBIT.
+        "building_orbital_defense_battery": {"subject": "a ground-to-orbit missile battery: a fenced concrete compound with a row of open round interceptor silos, a tall radar dish and a low bunker, one slim grey missile rising from a silo on a plume of white smoke, loosely hand-painted with visible brush strokes", "seed": 1},
+        "building_space_command": {"subject": "a military space command base: a long low concrete headquarters with two white radar domes and a big dish antenna, beside a tall rocket assembly hangar and a launch tower holding a grey rocket, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
+        # sites were before batch 2.
+        "building_grand_monument_site": {"subject": "a grand monument under construction: a half-built stone column wrapped in wooden scaffolding with a timber crane beside it, blocks of cut stone stacked on an unfinished paved plaza, loosely hand-painted with visible brush strokes", "seed": 2},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -1049,6 +1198,9 @@ ICONS: dict[str, dict[str, dict]] = {
         "decree_subsidize_immigration": {"subject": "a battered brown leather suitcase standing on a stack of gold coins", "seed": 0},
         "decree_greenest_grass_campaign": {"subject": "a covered wagon drawn by two horses on a patch of vivid green grass, a big mint-green arrow pointing up behind it", "seed": 1},
         "decree_resettlement_recruitment_drive": {"subject": "a small new timber house with a big mint-green arrow pointing into its open door", "seed": 0},
+        # Demographics (#894), on Emergency Relief's icon until now.
+        # Round 1's bags read as luggage: nothing said medicine.
+        "decree_medical_outreach": {"subject": "a black leather doctor's bag with a silver stethoscope draped over it and a big red map pin stuck upright into its top", "seed": 2},
     },
     # The four mod-added laws still on another law's icon.
     "law": {
@@ -1061,13 +1213,19 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_unrestricted_extraction": {"subject": "a tall steel coal mine headframe with its big winding wheel, an oil pumpjack beside it, on a heap of black coal", "seed": 3},
         "law_fossil_expansion_moratorium": {"subject": "a half-built brick power station with bare steel girders on top and a red-and-white striped barrier pole across its gate", "seed": 1},
         "law_managed_fossil_phaseout": {"subject": "a tall brick smokestack with its top sections taken down and stacked in a neat pile beside it, a white wind turbine standing behind it", "seed": 3},
-        # Judiciary (docs/superpowers/specs/2026-10-17-judiciary-design.md)
-        "law_executive_tribunals": {"subject": "a royal crown resting on top of a closed leather-bound law book", "seed": None},
-        "law_religious_courts": {"subject": "a thick holy book lying open on a carved wooden lectern, a string of prayer beads draped across its pages", "seed": None},
-        "law_statutory_courts": {"subject": "a stack of three thick bound law codes with a judge's curled white wig resting on top", "seed": None},
-        "law_constitutional_review": {"subject": "a long parchment charter unrolled and pinned flat by two brass weights, a large red wax seal at its foot", "seed": None},
-        "law_judicial_supremacy": {"subject": "a pair of large brass balance scales on a marble pedestal, one pan holding a small rolled scroll and sitting lower than the other", "seed": None},
-        "law_algorithmic_jurisprudence": {"subject": "a pair of brass balance scales whose central pillar is a computer chip with glowing circuit traces running out along the beam", "seed": None},
+        # Automation Policy (era 13 spec § 7.1): placeholders borrow other law icons until these are rendered.
+        "law_unrestricted_automation": {"subject": "a bright orange industrial robot arm welding a car door on a factory line, sparks flying", "seed": 3},
+        "law_robot_tax": {"subject": "a small white humanoid robot dropping a gold coin into a slot in a black iron strongbox", "seed": 2},
+        "law_human_labor_quotas": {"subject": "a worker's yellow hard hat resting on a wrench, a switched-off robot arm folded down behind it", "seed": 0},
+        "law_automation_dividend": {"subject": "a white robot hand pouring gold coins from a tipped steel cog into a row of open cupped human hands", "seed": 2},
+        # Judiciary (docs/superpowers/archive/specs/2026-10-17-judiciary-design.md). Closed
+        # books with plain covers: an open book or an unrolled charter gets written on.
+        "law_executive_tribunals": {"subject": "a royal crown resting on top of a thick closed leather-bound book with a plain unmarked cover", "seed": 2},
+        "law_religious_courts": {"subject": "a thick closed book with a plain unmarked leather cover and brass corners resting on a carved wooden lectern, a long string of prayer beads draped over it", "seed": 3},
+        "law_statutory_courts": {"subject": "a stack of three thick bound books with plain unmarked spines, a judge's curled grey wig resting on top", "seed": 2},
+        "law_constitutional_review": {"subject": "a big brass magnifying glass lying across a thick closed book with a plain unmarked cover and a large red wax seal on it", "seed": 0},
+        "law_judicial_supremacy": {"subject": "a pair of large brass balance scales on a marble pedestal, one pan holding a small rolled scroll and sitting lower than the other", "seed": 2},
+        "law_algorithmic_jurisprudence": {"subject": "a pair of brass balance scales whose central pillar is a computer chip with glowing circuit traces running out along the beam", "seed": 1},
         # The ministries all shared national_bank.dds's picture (spec, mod placeholders audit).
         "law_ministry_of_foreign_affairs": {"subject": "a rolled parchment treaty scroll tied with a ribbon and a wax seal, a feather quill lying across it", "seed": 1},
         "law_ministry_of_war": {"subject": "two crossed cavalry sabres behind an empty steel army helmet", "seed": 1},
@@ -1144,6 +1302,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "law_restorative_justice": {"subject": "a cracked clay pot held together by thick metal staples across its cracks and a tight band of twine", "seed": 0},
         # Distribution of Power (a vanilla group)
         "law_algorithmic_governance": {"subject": "a large square computer microchip with gold pins resting on a tasselled royal velvet cushion", "seed": 2},
+        "law_liquid_democracy": {"subject": "a wooden ballot box with a stream of small glowing paper ballots flowing in and out of its slot like water", "seed": 1},
         # Electoral Finance
         "law_donation_limits": {"subject": "a fat leather money bag cinched tight around its middle by a thick buckled leather belt", "seed": 0},
         "law_no_campaign_finance_laws": {"from": "law/law_publicly_funded_elections", "base": {"scale": 0.78},
@@ -1185,6 +1344,16 @@ ICONS: dict[str, dict[str, dict]] = {
             "marks": [{"draw": "prohibition", "at": (0.5, 0.5), "scale": 1.0}]},
         "law_regulated_augmentation_market": {"subject": "a sleek robotic cybernetic hand standing upright on a small velvet-topped display pedestal", "seed": 0},
         "law_unrestricted_augmentation": {"subject": "a bulky cybernetic arm bristling with drills, blades and dangling wires, crudely bolted together", "seed": 2},
+        # Bodily Autonomy (era 13 spec § 7.1): placeholders borrow Human Purity's, Basic
+        # Protections' and Anti-Discrimination Laws' icons until these are painted.
+        "law_natural_form": {"subject": "a plain unpainted wooden artist's mannequin standing upright on its round wooden stand", "seed": 1},
+        "law_licensed_modification": {"subject": "a small brass hand mirror lying on a folded paper certificate with a red wax seal", "seed": 1},
+        "law_morphological_freedom": {"subject": "a soft fox tail and a pair of pointed fox ears lying on a folded silk scarf", "seed": 0},
+        # Clade Citizenship (era 13 spec § 7.3) borrows Unrestricted Augmentation's icon.
+        "law_clade_citizenship": {"subject": "a citizen's passport lying open, its photograph showing a smiling face with feathery gills at the neck", "seed": 0},
+        # Prescribed Form (owner, 2026-11-04) borrows Mandatory Augmentation's
+        # icon until it is painted (seed None: not yet picked).
+        "law_prescribed_form": {"subject": "a row of identical plain grey artist's mannequins standing shoulder to shoulder on one long wooden stand", "seed": None},
         # Inheritance Laws
         "law_equal_inheritance": {"subject": "a long crusty loaf of bread cut into identical even slices on a wooden board", "seed": 2},
         # 2026-10-08 redesign (#822). Testation: a pen lying across the scroll
@@ -1262,6 +1431,14 @@ ICONS: dict[str, dict[str, dict]] = {
         # Distribution of Power (a vanilla group)
         "law_post-scarcity": {"subject": "a large overflowing cornucopia horn spilling out fruit, bread and small machine gears", "seed": 1},
         "law_universal_basic_income": {"subject": "a sturdy knotted rope safety net slung taut between two thick wooden posts", "seed": 1},
+        # Frontier AI Control (era 13 spec § 7.1): placeholders borrow other laws'
+        # icons until these are painted. Unreviewed subjects.
+        "law_no_frontier_ai_policy": {"subject": "a plain closed cardboard box with a coiled unplugged power cable lying on its lid", "seed": 2},
+        "law_private_ai_labs": {"subject": "a glowing blue computer chip resting on a short stack of gold coins", "seed": 1},
+        "law_national_ai_licensing": {"subject": "a glowing blue computer chip with a paper license tag tied to it by a string and stamped with a plain red wax seal", "seed": 1},
+        "law_state_ai_monopoly": {"subject": "a glowing blue computer chip locked inside a small heavy steel safe with its door ajar", "seed": 2},
+        "law_international_ai_oversight": {"subject": "a glowing blue computer chip under a large brass magnifying glass held on a stand, a small globe beside it", "seed": 3},
+        "law_open_weights": {"subject": "a glowing blue computer chip in an open wooden box, its lid thrown back and rays of light spilling out", "seed": 2},
     },
     # Mod-added institutions, all on one of vanilla's seven icons.
     "institution": {
@@ -1427,6 +1604,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "je_grand_monuments": {"subject": "a tall grey stone obelisk with a golden pyramid tip on a stepped stone base", "seed": 0},
         "je_heir_education": {"subject": "a small gold crown resting on a stack of three closed leather-bound books with blank covers", "seed": 1},
         "je_human_augmentation": {"subject": "a polished steel prosthetic hand with an open palm, brass pistons and gears showing at the wrist", "seed": 3},
+        "je_morphological_freedom": {"subject": "a tall oval standing mirror on a wooden frame, a pair of pointed fox ears on a headband hanging from one corner", "seed": 3, "solid": True},
         "je_mental_health_crisis": {"subject": "a featureless grey plaster mannequin head in profile with a tangled knot of black wire rising from the top of it", "seed": 0},
         "je_post_scarcity": {"subject": "a golden cornucopia horn spilling ripe fruit, golden wheat and small brass gears", "seed": 1},
         "je_strategic_reserve": {"subject": "a neat stack of olive-green wooden ammunition crates and rust-red steel oil barrels with a brown burlap grain sack on top", "seed": 1},
@@ -1597,6 +1775,12 @@ ICONS: dict[str, dict[str, dict]] = {
                  "now": f"{_GI}/company_icons/historical_company_icons/german_biontech.dds"},
         "scifi_rosen_association": {"subject": "a lifelike artificial owl made of brass and glass, its eyes glowing amber", "seed": 1,
                  "now": f"{_GI}/company_icons/historical_company_icons/scifi_rosen_association.dds"},
+        # Fictional too (#1267), on labeled placeholder cards until batch 8. InGen s2: the amber fills the
+        # disc, the only seed whose mosquito still shows at 48 px (the others were an orange blob).
+        "scifi_ingen": {"subject": "a polished chunk of golden amber with a mosquito preserved inside it", "seed": 2,
+                 "now": f"{_GI}/company_icons/historical_company_icons/scifi_ingen.dds"},
+        "scifi_rejoovenesense": {"subject": "a glass hourglass lying on its side, a fresh green sprout growing out of the sand inside it", "seed": 1,
+                 "now": f"{_GI}/company_icons/historical_company_icons/scifi_rejoovenesense.dds"},
     },
     # Mod goods drawn by older generators: flat vector art and badges, not
     # vanilla's painted objects. Keys are the file names (written in place).
@@ -1631,6 +1815,12 @@ ICONS: dict[str, dict[str, dict]] = {
         # Reroll: "a dried poppy seed pod" drew a brown burr.
         "opium": {"subject": "a white porcelain apothecary mortar and pestle with a few round white pills and a smooth green poppy seed head beside it", "seed": 3,
                   "now": f"{_GI}/goods_icons/opium.dds"},
+        # Grid Power (#1107), on Electricity's icon until now; common/goods, its text icon and the
+        # station's method group point here by hand. A pylon, not Electricity's coil. Rounds before:
+        # a lattice pylon (too thin at 25 px, twice), an insulator stack (a copper spool), a
+        # transformer (a box). s3 is the lattice-pylon version of this one.
+        "grid_power": {"subject": "a chunky grey steel transmission pylon with thick legs and fat blue glass insulators on its arms, a big bright blue zigzag lightning bolt in front of it", "seed": 1,
+                       "now": f"{_GI}/goods_icons/electricity.dds"},
     },
     # Batch 5: the two renamed prestige goods of the goods above, each a finer
     # version of its good's idea (bulk carboy -> small reagent vials).
@@ -1687,6 +1877,15 @@ ICONS: dict[str, dict[str, dict]] = {
                         "now": f"{_GI}/goods_icons/electricity.dds"},
         "agency_incb": {"subject": "a bright red poppy flower with a green poppy seed pod on a stem beside it", "seed": 1,
                         "now": f"{_GI}/institution_icons/health_service.dds"},
+        # Global Commons and solar colonization agencies, byte copies of UNEP's and UNOOSA's until now.
+        # The penguin has no real holes: `solid` keeps its pale belly from being cut out.
+        "agency_ats": {"subject": "a standing emperor penguin with a black back, a pale cream belly and a bright yellow-orange patch on its neck", "seed": 2, "solid": True,
+                       "now": f"{_GI}/un_icons/agency_unep.dds"},
+        # The anti-satellite moratorium. A satellite side-on is a speck: an angled boxy one.
+        "agency_unoda": {"subject": "a chunky boxy gold-foil satellite seen at an angle from above, two short wide blue solar panels and a small dish antenna", "seed": 1,
+                         "now": f"{_GI}/un_icons/agency_unoosa.dds"},
+        "agency_copuos": {"subject": "a round grey moon rock with a gold-framed dome of blue-tinted glass panes standing on it", "seed": 2,
+                          "now": f"{_GI}/un_icons/agency_unoosa.dds"},
         # Resolution topics that are no agency's (40 px in the session strip).
         # War, condemned: the mandate's crossed swords under vanilla's red cross.
         # A lone sword was too thin at 40 px, and a gauntlet read as a mug.
@@ -1732,7 +1931,14 @@ ICONS: dict[str, dict[str, dict]] = {
                ("physical_protection", "cppnm", f"{_GI}/goods_icons/explosives.dds"),
                ("cultural_diversity", "ccd", f"{_GI}/goods_icons/fine_art.dds"),
                ("nuclear_ban", "tpnw", f"{_GI}/goods_icons/electricity.dds"),
-               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"))},
+               ("narcotics", "incb", f"{_GI}/institution_icons/health_service.dds"),
+               ("antarctic", "ats", f"{_GI}/un_icons/topic_climate.dds"),
+               ("asat", "unoda", f"{_GI}/un_icons/topic_space.dds"),
+               ("colony_protection", "copuos", f"{_GI}/un_icons/topic_space.dds"))},
+        # The petition to lift sanctions, a copy of Sanctions' crate until now. FLUX will not
+        # break the chain: the padlock hangs open and the chain lies loose.
+        "topic_lift_sanctions": {"subject": "a plain unmarked wooden crate with a heavy iron chain lying loose on the ground beside it and an open iron padlock hanging from the chain", "seed": 2,
+                                 "now": f"{_GI}/un_icons/topic_sanctions.dds"},
         # Phase 7 topics that are no agency's, until now byte copies of older topics.
         # Round 1 drew a clock and a box under the map, no scales: name the two pans.
         "topic_court_referral": {"subject": "a pair of polished brass balance scales with two hanging pans, a small rolled tan map tied with red cord lying in the left pan", "seed": 1,
@@ -1919,6 +2125,15 @@ ICONS: dict[str, dict[str, dict]] = {
         "policy_green_building_codes": {"subject": "a small red brick building front with a large bright green leaf "
                                                    "emblem on its wall", "seed": 3,
                                         "now": f"{_GI}/production_method_icons/cat_building_green_p1.dds"},
+        "policy_carbon_removal": {"subject": "a squat grey cylindrical air intake tower with wide fan vents, a thick blue ribbon of "
+                                             "air flowing down from it into a pipe that enters a mound of brown earth",
+                                  "seed": 3, "now": f"{_GI}/invention_icons/carbon_capture_and_storage.dds"},
+        "policy_fossil_fuel_tariffs": {"subject": "a red-and-white striped barrier arm lowered across a small black coal "
+                                                  "wagon heaped with coal", "seed": 0,
+                                       "now": f"{_GI}/trade_icons/max_tariffs.dds"},
+        "policy_aerosol_injection": {"subject": "a small white jet aircraft high over a blue globe, a pale grey haze "
+                                                "spreading behind it under a dimmed yellow sun", "seed": 3,
+                                     "now": f"{_GI}/un_icons/topic_climate.dds"},
     },
     # Grand Monuments (grand_monuments_gui_icons.md): 36 px, faded while a count is zero.
     "gm_part": {
@@ -1972,6 +2187,10 @@ ICONS: dict[str, dict[str, dict]] = {
         "radar": {"subject": "a grey radar dish on a sturdy mount, tilted up", "seed": 2},
         "cabinet": {"subject": "a grey steel mainframe computer cabinet with rows of dials and a big red lamp on top",
                     "seed": 2},
+        # Credibility (NUC-21): the guarantee article's icon until now.
+        # "Clasped hands" in relief drew a bun or praying hands; "a handshake seen from the side" drew one.
+        "handshake_seal": {"subject": "a thick round polished brass medal with a raised rim, its face embossed with a "
+                                      "large relief of two hands clasped in a handshake seen from the side", "seed": 3},
     },
     # Colonial Empire (colonial_empire_gui_icons.md): 36 px; the programmes faded while idle.
     "colonial_part": {
@@ -2004,6 +2223,9 @@ ICONS: dict[str, dict[str, dict]] = {
     "space_part": {
         "rocket": {"subject": "a squat silver rocket with red fins and a pointed nose cone, standing upright",
                    "seed": 1},
+        # A colony's own flag on its page's Autonomy tile (batch 8). Teal, not the gold of the
+        # overview's first-to-finish pennant, which marks the home country's claim.
+        "pennant": {"subject": "a small bold teal-green pennant flag on a thick short staff", "seed": 1},
     },
     "space": {
         "first": {"subject": "a gold pennant flag on a staff planted on the rim of a grey moon crater", "seed": 3,
@@ -2040,6 +2262,679 @@ ICONS: dict[str, dict[str, dict]] = {
         "colony_dwarf": {"subject": "a small round tan-and-rust-brown dwarf planet with a pale heart-shaped patch and "
                                     "one tiny grey moon beside it",
                          "seed": 1, "now": f"{_GI}/state_status_icons/colonizable.dds"},
+        # Lunar colonization (2026-10-29): a copy of Mercury's until now. Mid-grey with dark seas and evenly
+        # lit, so it neither loses its body in the cut-out nor repeats Mercury's half-lit grey-brown.
+        # Audit SPC-6 / SPC-16 stand-ins: Space Command's building icon on the Defense cell and on Locations'
+        # inbound warships (16 px), the Space Program's on the Modules cell. A light grey warship reroll
+        # (batch 7) read as a shuttle; the dark one keeps the armed silhouette.
+        "warship": {"subject": "a sleek dark grey armed warship spacecraft seen from the side, a long angular hull with "
+                               "two thick gun turrets on top and three round blue engine nozzles at the back",
+                    "seed": 1, "now": f"{_BI}/building_space_command.dds"},
+        "module": {"subject": "a squat silver-grey cylindrical spacecraft habitat module wrapped in gold foil bands, a "
+                              "round docking ring at one end and two short dark blue solar panels",
+                   "seed": 1, "now": f"{_BI}/building_space_program.dds"},
+        "colony_moon": {"subject": "a round mid-grey Moon, evenly lit, with large dark grey seas across its face and a "
+                                   "few bright rayed craters",
+                        "seed": 1, "now": f"{_GI}/space_race_icons/colony_mercury.dds"},
+        # A colony's page (space_race_gui_icons.md, batch 8): the tiles at 34 px, the module rows at 24 px.
+        # The habitat is also the dome the Autonomy, Status, Integrity and Defense status tiles derive from
+        # (space_state). Blue-tinted panes: a clear dome cuts out to its frame alone.
+        "module_hab": {"subject": "a squat round colony habitat dome of blue-tinted glass panes in a thick grey metal "
+                                  "frame, on a wide grey metal ring base with a row of small warm yellow lit round "
+                                  "windows",
+                       "seed": 0, "now": f"{_BI}/urban_center.dds"},
+        "module_port": {"subject": "a squat gold-foil lunar lander on four splayed legs standing on a round grey "
+                                   "concrete landing pad ringed with a thick orange stripe",
+                        "seed": 3, "now": f"{_BI}/building_port.dds"},
+        # Not a glass dome: the habitat is one, and this sits beside it in the module list.
+        "module_lab": {"subject": "a squat silver metal observatory dome with its slot open and a thick brass "
+                                  "telescope tube pointing up out of it, on a round grey metal base",
+                       "seed": 1, "now": f"{_BI}/building_university.dds"},
+        # The doc's amphitheater under a dome was a ring of steps at 24 px (round 1, raws kept as
+        # module_culture_r1); the theatre masks say culture at any size.
+        "module_culture": {"subject": "a pair of gold theatre masks, one smiling and one frowning, leaning on a "
+                                      "small round dome of amber-tinted glass panes",
+                           "seed": 1, "now": f"{_BI}/building_arts_academy.dds"},
+        # One figure: a drill of several is specks at 24 px. Olive-green armour with an orange visor (round 1,
+        # raws module_train_r1; two marines over a hurdle, module_train_v2) drew Halo's Master Chief: sand-tan.
+        "module_train": {"subject": "one marine in a bulky sand-tan pressure suit with dark grey armour plates and a "
+                                    "round grey helmet with a dark tinted visor, leaping high in mid-air, a rifle held "
+                                    "across his chest",
+                         "seed": 2, "now": f"{_BI}/building_barracks.dds"},
+        # The trefoil on a sign, not the door's round face: on a round face it draws as fan blades.
+        "module_bunker": {"subject": "a heavy rectangular steel blast door with thick bolts set into a low grey "
+                                     "concrete bunker, a yellow sign with a black radiation trefoil beside the door",
+                          "seed": 2, "now": f"{_BI}/building_nuclear_plant.dds"},
+        # The Defenses tile and the Defenses module row. Twin turrets on a crater rim (round 1, raws
+        # module_def_r1) left the guns a speck on a big rock disc: one turret, the rock small. s0 stamped
+        # faint letters on its turret's front; s3 drew one barrel and is clean.
+        "module_def": {"subject": "one squat grey armoured gun turret with two long thick barrels angled up to the "
+                                  "sky, set on a small chunk of grey moon rock",
+                       "seed": 3, "now": f"{_BI}/building_naval_fortification.dds"},
+        # A gold visor: a helmet seen from the front reads as a face.
+        "page_crews": {"subject": "a colonist in a bulky orange pressure suit and round white-rimmed helmet with a gold "
+                                  "visor, seen from the side, holding a big steel wrench",
+                       "seed": 3, "now": f"{_GI}/character_trait_icons/engineer.dds"},
+    },
+    # Power grids (#1109): the HVDC Undersea Interconnector's cable (the station's method until 2026-10-25),
+    # on vanilla's electric engines until now.
+    # A cable bent under the waves with a bolt over it read as a life ring or a hook.
+    "production_method": {
+        "pm_grid_hvdc_interconnector": {"subject": "the cut end of a fat round undersea power cable showing three round cores inside it, lying above three thick wavy lines of sea water", "seed": 1},
+        # Orbital debris removal (Global Commons), on cat_* glyphs until now. Thick beams:
+        # the emboss turns a thin one into a hairline.
+        "pm_debris_active_removal": {"subject": "a small boxy spacecraft reaching out a thick jointed robotic arm to grip a tumbling dead satellite with one broad solar panel", "seed": 3},
+        "pm_debris_laser_broom": {"subject": "an observatory dome on the ground firing one thick straight laser beam up at a small jagged rock fragment", "seed": 1},
+        # "Space tug" drew a sea tugboat with a fishing net on all four seeds.
+        "pm_debris_fusion_sweepers": {"subject": "a squat cylindrical rocket spacecraft with a big round engine bell and stubby fins, towing a wide round net bulging with jagged rocks behind it on a thick cable", "seed": 3},
+        # Era 13 phase 3 (#1289-#1291), on other methods' cat_* glyphs until now. The Construction
+        # Site's twin shares the sector's icon, as its name does.
+        "pm_fusion_torch_reclamation": {"subject": "a thick round nozzle pointing straight down and blasting one broad straight jet of plasma onto a heap of chunky twisted scrap metal beams", "seed": 0},
+        "pm_base_building_aneutronic_fusion_power": {"subject": "a fat ring-shaped donut reactor lying flat on a low square base, a thick zigzag lightning bolt springing straight up out of its hole", "seed": 0},
+        "pm_vactrains": {"subject": "a sleek bullet-nosed passenger capsule with a row of round windows, inside a long thick straight tube raised on two stout pylons, seen from the side", "seed": 0},
+        "pm_vactrain_freight": {"subject": "a sleek bullet-nosed capsule carrying a row of stacked shipping containers, inside a long thick straight tube raised on two stout pylons, seen from the side", "seed": 0},
+        "pm_self_replicating_miners": {"subject": "a squat boxy robot with a thick drill arm standing on a lumpy asteroid, a half-built smaller copy of itself beside it", "seed": 2},
+        "pm_self_replicating_construction": {"subject": "a big squat robot with a thick jointed arm lowering a heavy steel girder onto a half-built smaller copy of itself", "seed": 2},
+        "pm_te_direct_construction_self_replicating": {"use": f"{_GI}/production_method_icons/pm_self_replicating_construction.dds"},
+        # The cat_* glyphs replaced era by era (owner, 2026-11-01): eras 1-5, flagships and
+        # the hidden maintenance methods aside. Vanilla colours its ladders: automation and
+        # rail green, passenger methods purple (passenger_trains), the rest bronze. The
+        # colours below are vanilla's top and bottom quarters, measured on six green and
+        # three purple methods and scaled by the bronze fit's ratios. A "no X" step is the X
+        # inside a prohibition ring, as vanilla's no_passenger_trains is. FLUX draws the ring
+        # without its bar, so a "no" step's pick is a seed past the rendered ones: vanilla's ring
+        # and bar drawn around the object of one of them (~/flux_runs/tools/no_ring.py, off-repo
+        # like a retouch; the committed DDS is the record).
+        "pm_no_water_personal_transport": {"subject": "a small passenger steamboat inside a thick round ring with one thick diagonal bar across it", "seed": 4,
+                                           "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_sailing_ships": {"subject": "a three-masted passenger sailing ship with full square sails, seen from the side", "seed": 2,
+                             "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_steam_paddleboats": {"subject": "a side-wheel paddle steamer with a tall smokestack and a big round paddle box, seen from the side", "seed": 0,
+                                 "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_partial_bulk_transport": {"subject": "a mule pulling a small heaped ore cart along a short stretch of narrow rails, seen from the side", "seed": 0,
+                                      "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_manual_batch_processing": {"subject": "a big round open wooden vat on legs with a long wooden paddle standing in it", "seed": 1,
+                                       "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_continuous_processing": {"subject": "three tall round chemical columns of different heights joined by thick pipes", "seed": 1,
+                                     "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_power_manual_operation": {"subject": "a big spoked valve handwheel on a thick pipe beside a large lever switch", "seed": 1,
+                                      "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_power_centralized_control_systems": {"subject": "a sloped control desk with a row of big round dial gauges and short levers", "seed": 3,
+                                                 "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_pharma_alkaloid_extraction": {"subject": "a round poppy seed head on a curved stem beside a squat glass flask", "seed": 1},
+        "pm_pharma_synthetic_chemistry": {"subject": "a round-bottomed glass flask clamped on a stand over a small burner, a squat pill bottle beside it", "seed": 0},
+        "pm_grand_monument_site": {"subject": "a tall obelisk wrapped in wooden scaffolding with a tall wooden crane beside it", "seed": 1},
+        # The State Youth Centers' philosophies (Family Policy), open from era 3 with the laws that allow the building.
+        "pm_voluntary_daycare": {"subject": "a wooden rocking horse beside a stack of three toy building blocks", "seed": 0},
+        "pm_communal_child_rearing": {"subject": "a long low communal dormitory house with a row of small children's cots lined up in front of it", "seed": 1},
+        "pm_youth_cadre_programs": {"subject": "a snare drum with two crossed drumsticks on top, a small triangular pennant flag on a tall pole beside it", "seed": 1},
+        "pm_behavioral_conditioning": {"subject": "a big brass hand bell on a stand above a small round feeding bowl", "seed": 0},
+        "pm_eugenics_programs": {"subject": "a large pair of brass measuring calipers standing open beside a tall glass specimen jar", "seed": 0},
+        # Era 6 (icon batch 10). The Grand Monument's dedications and the power bloc headquarters'
+        # identities are painted; wonders keep their glyph, as the flagships do (owner's ruling on
+        # flagships, 2026-11-01). A twin on another building's group is a "use" entry.
+        "pm_manual_assembly": {"subject": "a sturdy wooden workbench with a bench vice clamped to it and a hammer lying on top", "seed": 3,
+                               "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_manual_production": {"subject": "a small propeller airplane standing on wooden trestles with a tall stepladder beside it", "seed": 0,
+                                 "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        # Vanilla's own "no automation" (its Automation Disabled, No Steam Automation and No
+        # Equipment share it): a crane crossed out read as no cranes, and Tower Cranes is a later step.
+        "pm_no_construction_automation": {"use": f"{_GI}/production_method_icons/no_automation.dds"},
+        "pm_prefabricated_building_components": {"subject": "a crane hook lowering a flat concrete wall panel with two square window holes onto a low building", "seed": 2,
+                                                 "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_process_control": {"subject": "a tall chemical column with a big round dial gauge and a wheel valve on its side", "seed": 1,
+                                        "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_automated_assembly_lines": {"subject": "a conveyor belt carrying a row of identical boxy radios under a big stamping press arm", "seed": 2,
+                                        "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_standardized_aerospace_production": {"subject": "a row of three identical small propeller airplanes parked nose to tail, seen from the side", "seed": 1,
+                                                 "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_double-decker_passenger_carriages": {"subject": "a double-decker railway passenger carriage with two rows of windows, seen from the side", "seed": 3,
+                                                 "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_flexible_packaging": {"subject": "a sealed soft food pouch with a crimped top beside a fat roll of wrapping film", "seed": 3,
+                                  "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_trade_center_trade_quantity_advanced_1": {"subject": "a globe on a stand with a stack of crates and an open ledger book in front of it", "seed": 2,
+                                                      "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_military_research": {"subject": "a steel army helmet beside a tall laboratory flask and a microscope", "seed": 0,
+                                 "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_modern_design_porcelain": {"subject": "a tall slender streamlined vase beside a round squat streamlined teapot", "seed": 2,
+                                       "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_media_corporations": {"subject": "a tall office tower with a broadcast antenna mast on its roof", "seed": 1,
+                                  "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_state_directed_media": {"subject": "a big loudspeaker horn on a pole above a tied stack of newspapers", "seed": 1,
+                                    "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_decentralized_religious_structures": {"subject": "three small simple chapels of different sizes side by side, each with a small bell tower", "seed": 3,
+                                                  "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_polyisoprene_rubber": {"subject": "a thick coil of rubber hose beside a squat chemical flask", "seed": 3},
+        "pm_styrene_butadiene_rubber": {"subject": "a stack of three thick rubber tires beside a tall chemical flask", "seed": 1},
+        "pm_ammonium_nitrate_explosives": {"subject": "a tied sack of fertilizer granules beside a big spiky starburst explosion shape", "seed": 1},
+        "pm_catalytic_cracking": {"subject": "a tall refinery cracking tower joined by thick pipes to a round reactor sphere on legs", "seed": 2},
+        "pm_centralized_traffic_control": {"subject": "a railway signal post with three big round lamps beside a short stretch of track", "seed": 1},
+        "pm_electrified_rotary_drilling_rigs": {"subject": "a tall lattice oil derrick with a boxy electric motor and a thick cable at its foot", "seed": 2},
+        "pm_food_additives": {"subject": "a small glass dropper bottle dripping into an open food tin", "seed": 2},
+        "pm_kraft_pulping": {"subject": "a tall round pressure digester vessel on legs beside a stack of brown paper sheets", "seed": 1},
+        "pm_modern_automobile_production": {"subject": "a rounded 1950s sedan car standing on a raised assembly platform", "seed": 1},
+        "pm_modern_cartridges": {"subject": "a row of five brass rifle cartridges standing upright in a metal clip", "seed": 0},
+        "pm_modular_shipbuilding": {"subject": "a crane lowering a big boxy ship hull section onto a half-built ship hull", "seed": 3},
+        "pm_national_labs": {"subject": "a low laboratory building with a large round dome and a big ring-shaped particle accelerator beside it", "seed": 1},
+        "pm_nylon": {"subject": "a pair of stockings draped over a large spool of thread", "seed": 2},
+        "pm_polyester": {"subject": "a tall bolt of rolled fabric with a chemical flask in front of it", "seed": 2},
+        "pm_rocket_artillery": {"subject": "a military truck carrying a slanted launcher rack of rockets, seen from the side", "seed": 3},
+        "pm_semiautomatic_rifles": {"subject": "a long World War Two infantry rifle with a full-length wooden stock and a small box magazine under it, seen from the side", "seed": 3},
+        "pm_sound_film": {"subject": "an old film camera on a tripod with a big microphone hanging from a boom above it", "seed": 1},
+        "pm_television": {"subject": "a boxy 1950s television set on short legs with a rabbit-ear antenna", "seed": 1},
+        "pm_twisted_pair_copper_cables": {"subject": "a big cable reel wound with thick twisted wire", "seed": 1},
+        "pm_vhf_and_uhf_transmission": {"subject": "a tall lattice transmission tower with a round dish and several antennas", "seed": 1},
+        # The Grand Monument dedications (one group; the player picks one) and the site.
+        "pm_monument_undedicated": {"subject": "a tall monument entirely hidden under a draped cloth tied with ropes", "seed": 1},
+        "pm_monument_civic": {"subject": "a tall triumphal arch with a flag flying from its top", "seed": 1},
+        "pm_monument_crown": {"subject": "a royal crown resting on a cushion atop a stepped pedestal", "seed": 1},
+        "pm_monument_leader": {"subject": "a statue of a standing leader with one arm raised, on a tall pedestal", "seed": 1},
+        "pm_monument_republic": {"subject": "a laurel wreath hanging on the front of a small classical temple with columns", "seed": 0},
+        "pm_monument_revolution": {"subject": "a raised fist holding a waving banner, on a tall pedestal", "seed": 2},
+        "pm_monument_historic": {"subject": "an ancient ruined stone arch beside two broken columns", "seed": 1},
+        "pm_monument_religious": {"subject": "a great domed temple with a colonnade and one tall tower", "seed": 1},
+        "pm_monument_war_memorial": {"subject": "a tall plain stone cenotaph with a wreath at its foot", "seed": 1},
+        "pm_monument_naturalist": {"subject": "a domed glass palm house with a tall palm tree inside it", "seed": 3},
+        "pm_monument_scientific": {"subject": "an observatory dome open with a big telescope pointing out of it", "seed": 1},
+        "pm_monument_artistic": {"subject": "a grand opera house front with columns and a domed roof", "seed": 3},
+        "pm_monument_industrial": {"subject": "a long glass exhibition hall with a tall arched glass roof", "seed": 0},
+        "pm_monument_athletic": {"subject": "an oval stadium with tiered stands and flags around its rim", "seed": 3},
+        # The power bloc headquarters, one method per identity (vanilla's blue: institutions).
+        "pm_hq_military_treaty": {"subject": "a round shield with two crossed swords behind it", "seed": 1,
+                                  "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_ideological_union": {"subject": "a tall stepped tower building with a big star on top of its spire", "seed": 1,
+                                    "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_trade_league": {"subject": "a balance scale standing on a stack of crates", "seed": 2,
+                               "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_diplomatic_framework": {"subject": "a domed classical palace with a row of flagpoles in front of it", "seed": 1,
+                                       "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_sovereign_empire": {"subject": "a tall throne with a crown resting on its seat", "seed": 1,
+                                   "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_religious_convocation": {"subject": "a tall domed temple with an eternal flame burning in a bowl in front of it", "seed": 1,
+                                        "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_cultural_coalition": {"subject": "two theatre masks above an open book", "seed": 1,
+                                     "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_advanced_process_control_explosives_factory": {"use": f"{_GI}/production_method_icons/pm_advanced_process_control.dds"},
+        # Era 7 (icon batch 11), with the National Park designations (era 7 by design, owner 2026-11-01)
+        # and the Modern orchards (Green Revolution). Colours follow the glyph each replaces.
+        # The "no" steps' picks (seed 4 or 5) are another render inside vanilla's ring and bar, as
+        # in batch 9 (~/flux_runs/tools/ring_from.py): mostly the ladder's first step, thickened
+        # when thin. Most subjects are FLUX's own ringed attempts, which seeds 0-3 still match.
+        "pm_aeroplane_production_2": {"subject": "a swept-wing jet fighter plane, seen from the side", "seed": 2},
+        "pm_no_rockets": {"subject": "a four-engine jet airliner, seen from the side", "seed": 0, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_chemical_rockets": {"subject": "a tall slim multistage rocket with fins standing upright on a launch pad", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_no_facility_emission_standards": {"subject": "one big ventilation fan rotor with five broad solid curved blades around a round hub", "seed": 4, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_ventilation_systems": {"subject": "a big round ventilation fan in a square duct housing with a short pipe rising from it", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_green_assembly": {"subject": "a small factory building with one large leaf rising above its roof", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_no_emissions_control": {"subject": "a squat oval exhaust filter canister on a short bent pipe inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_basic_emissions_control": {"subject": "a squat oval exhaust filter canister on a short bent exhaust pipe", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_emissions_control": {"subject": "a squat oval exhaust filter canister on a short bent pipe with a large leaf above it", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_no_tailings_management": {"subject": "a square concrete settling tank with a pipe pouring into it inside a thick round ring with one thick diagonal bar across it", "seed": 5, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_settling_ponds": {"subject": "a big square concrete settling tank seen from the side, a pipe pouring a thick stream into it", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_tailings_treatment": {"subject": "a round water treatment tank with a walkway bridge across its top and a thick pipe feeding it", "seed": 2, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_no_synthesis_scrubbing": {"subject": "a tall cylindrical fume scrubber tower inside a thick round ring with one thick diagonal bar across it", "seed": 5, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_basic_fume_scrubbers": {"subject": "a tall cylindrical fume scrubber tower with a thick pipe entering its base and a short stack on top", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_closed_loop_synthesis": {"subject": "a round chemical vessel inside a closed loop of thick pipe with a valve wheel on it", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_polymerization_processes": {"subject": "a squat round reactor vessel on legs pouring out a heap of small plastic pellets", "seed": 1},
+        "pm_continuous_miners_building_coal_mine": {"subject": "a low tracked mining machine with a big spiked rotating drum cutter at its front, seen from the side", "seed": 1},
+        "pm_electronic_brokerage": {"subject": "a boxy computer terminal with a curled strip of blank ticker tape spilling from its side", "seed": 2, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_reinforced_concrete_buildings": {"subject": "a tall concrete apartment block with a grid of square windows and steel rods sticking up from its unfinished top", "seed": 1},
+        "pm_advanced_construction": {"subject": "a tall modern skyscraper with a grid facade and a construction crane on its roof", "seed": 1},
+        "pm_tower_cranes": {"subject": "a tall tower crane with a long horizontal jib and a counterweight, a load hanging from its hook", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_satellite_communications": {"subject": "a big satellite dish antenna on a stand pointed up at a small satellite with solar panels", "seed": 2},
+        "pm_transistors": {"subject": "three small round-topped transistors standing in a row, each on three wire legs", "seed": 1},
+        "pm_integrated_circuits": {"subject": "a rectangular microchip with two rows of short metal legs, seen from above", "seed": 3},
+        "pm_motor_trawlers": {"subject": "a diesel fishing trawler with a tall mast and a net boom at its stern, seen from the side", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_purse_seine_nets": {"subject": "a small fishing boat beside a big round purse net bulging with fish", "seed": 2},
+        "pm_diesel_electric_ferries": {"subject": "a car ferry with an open bow ramp and a low funnel, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_motor_whaling_ships": {"subject": "a motor whaling catcher ship with a harpoon gun on its raised bow, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_no_glassworks_fume_ventilation": {"subject": "a big funnel-shaped extraction hood with a duct pipe inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_glassworks_fume_extraction": {"subject": "a big funnel-shaped extraction hood with a duct pipe rising from it, above a round glass furnace", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_glassworks_closed_loop_recycling": {"subject": "an open bin heaped with glass bottles and jars", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_injection_molding": {"subject": "a boxy injection molding machine with a funnel hopper on top, a plastic bucket beside it", "seed": 1},
+        "pm_teletype_communications": {"subject": "a teletype printer machine on a small stand with a long sheet of blank paper curling out of it", "seed": 1},
+        "pm_debarkers_and_chippers": {"subject": "a big drum chipper machine blowing out a heap of wood chips beside a stripped log", "seed": 1},
+        "pm_skidders_and_forwarders": {"subject": "a big four-wheeled forestry tractor with a crane arm, carrying a stack of logs, seen from the side", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_hydraulic_equipment": {"subject": "a farm tractor with a hydraulic front loader arm raised high, seen from the side", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_modern_farming": {"subject": "a fat sheaf of wheat with heavy ears beside a tall tied sack of fertilizer", "seed": 0},
+        "pm_no_precision_environmental_management": {"subject": "one large leaf inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_improved_crop_rotation": {"subject": "three different crop plants in a row: a wheat stalk, a bushy bean plant and a turnip", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_precision_agriculture": {"subject": "a farm tractor with a small round satellite antenna on its cab roof, seen from the side", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_smart_fuzes": {"subject": "an artillery shell with a pointed electronic fuze nose and a small circuit board beside it", "seed": 2},
+        "pm_offshore_rigs": {"subject": "an offshore oil platform on four tall legs standing in the sea, a derrick on top", "seed": 1},
+        "pm_directional_drilling_rigs": {"subject": "an oil derrick on the ground, its drill pipe running down under the ground line and curving sideways into a long horizontal run", "seed": 0},
+        "pm_no_effluent_filtration": {"subject": "a big round filter drum on a stand inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_waste_fiber_recovery": {"subject": "a big square bale of waste paper bound with straps", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_effluent_filtration": {"subject": "a big round rotating filter drum on a stand with a pipe below it", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_public_housing_tower_blocks": {"subject": "a tall plain prefabricated concrete apartment tower block with rows of identical small windows", "seed": 2, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_bullet_trains": {"subject": "a streamlined bullet train with a long pointed nose, seen from the side", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_diesel_shipbuilding": {"subject": "a big ship diesel engine block with a row of cylinders beside a large ship propeller", "seed": 2},
+        "pm_earth_orbit": {"subject": "a small satellite with two flat solar panel wings above the curved edge of the earth", "seed": 1},
+        "pm_moon_mission": {"subject": "a lunar landing module with four splayed legs standing on a cratered surface", "seed": 2},
+        "pm_pharma_antibiotic_fermentation": {"subject": "a tall steel fermentation tank on legs beside a round petri dish", "seed": 0},
+        "pm_ziegler_natta_catalyzation": {"subject": "a squat catalyst reactor vessel with small round pellets heaped at its base and a thick rubber tire leaning on it", "seed": 2},
+        "pm_elastomeric_blends": {"subject": "a pair of tight stretchy athletic leggings laid flat, seen from the front", "seed": 2},
+        "pm_microfiber_blends": {"subject": "a folded fluffy microfiber cloth beside a spool of fine thread", "seed": 3},
+        "pm_electrochemical_machining": {"subject": "a machine head with a thick electrode lowered into a small square tank, a zigzag spark under it", "seed": 3},
+        "pm_tourism": {"subject": "a leather travel suitcase with two straps and a handle, a straw sun hat on top", "seed": 1},
+        "pm_mass_tourism": {"subject": "a long tour coach bus with a big beach umbrella planted beside it", "seed": 1},
+        "pm_jet_age_tourism": {"subject": "a jet airliner flying low over a tall palm tree", "seed": 2},
+        "pm_department_stores": {"subject": "a grand multi-storey department store building with big shop windows and awnings", "seed": 1},
+        "pm_high_pressure_sodium_streetlights": {"subject": "a tall curved modern streetlight pole with a long flat lamp head", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_multimodal_transit": {"subject": "a city bus and a tram side by side at a covered stop", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_broadcast_television": {"subject": "a big studio television camera on a wheeled pedestal", "seed": 1},
+        "pm_national_park": {"subject": "two tall pine trees in front of a snow-capped mountain peak", "seed": 3},
+        "pm_national_forest": {"subject": "a dense cluster of tall pine trees of different heights", "seed": 1},
+        "pm_national_wildlife_refuge": {"subject": "a deer with large antlers standing beside a tall clump of reeds", "seed": 2},
+        "pm_modern_fig_orchards": {"subject": "a fig tree heavy with round figs, a thin irrigation pipe at its foot", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_modern_apple_orchards": {"subject": "an apple tree trained flat along a wire trellis, heavy with apples", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_modern_citrus_orchards": {"subject": "a round citrus tree heavy with oranges, a water sprinkler beside it", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_modern_potatoes": {"subject": "a bushy potato plant pulled up with a cluster of big potatoes on its roots", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        # Twins: the same method on another building's group.
+        "pm_continuous_miners_building_iron_mine": {"use": f"{_GI}/production_method_icons/pm_continuous_miners_building_coal_mine.dds"},
+        "pm_continuous_miners_building_lead_mine": {"use": f"{_GI}/production_method_icons/pm_continuous_miners_building_coal_mine.dds"},
+        "pm_continuous_miners_building_gold_mine": {"use": f"{_GI}/production_method_icons/pm_continuous_miners_building_coal_mine.dds"},
+        "pm_continuous_miners_building_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_continuous_miners_building_coal_mine.dds"},
+        "pm_continuous_miners_building_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_continuous_miners_building_coal_mine.dds"},
+        "pm_hydraulic_equipment_building_rice_farm": {"use": f"{_GI}/production_method_icons/pm_hydraulic_equipment.dds"},
+        "pm_modern_farming_rice_farm": {"use": f"{_GI}/production_method_icons/pm_modern_farming.dds"},
+        "pm_te_direct_construction_advanced": {"use": f"{_GI}/production_method_icons/pm_advanced_construction.dds"},
+        "pm_te_direct_construction_reinforced_concrete": {"use": f"{_GI}/production_method_icons/pm_reinforced_concrete_buildings.dds"},
+        # Era 8 (icon batch 12). An assembly line shows its own building's product.
+        "pm_academic_computing": {"subject": "a big mainframe computer cabinet with two tape reels beside a stack of books", "seed": 1},
+        "pm_advanced_assembly_lines_building_arms_industry": {"subject": "a conveyor belt carrying a row of identical rifles under an overhead gantry arm", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_assembly_lines_building_furniture_manufactory": {"subject": "a conveyor belt carrying a row of identical wooden chairs under an overhead gantry arm", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_assembly_lines_building_motor_industry": {"subject": "a conveyor belt carrying a row of identical car bodies under an overhead gantry arm", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_assembly_lines_building_munition_plant": {"subject": "a conveyor belt carrying a row of identical artillery shells standing upright under an overhead gantry arm", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_assembly_lines_building_tooling_workshop": {"subject": "a conveyor belt carrying a row of identical power drills under an overhead gantry arm", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_composite_armor": {"subject": "a battle tank with thick angular armor plates on its turret, seen from the side", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_natural_nurturing": {"subject": "a seated mother cradling a swaddled baby in her arms", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_assisted_postnatal_care": {"subject": "a baby incubator crib with a clear rounded hood on a wheeled stand", "seed": 0, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_automated_chemical_reactors": {"subject": "a squat chemical reactor vessel with a boxy computer control cabinet wired to it", "seed": 1},
+        "pm_automated_loading_and_unloading": {"subject": "a jointed robot arm loading a crate into an open railway boxcar", "seed": 3},
+        "pm_automated_mechanical_harvesters": {"subject": "a big combine harvester with a wide cutting header and a grain auger, seen from the side", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_blow_molding": {"subject": "a split two-part steel mold opened to show a plastic bottle inside it", "seed": 2},
+        "pm_calendered_and_coated_paper": {"subject": "a stack of big steel rollers pressing a glossy sheet of paper", "seed": 3},
+        "pm_cleanroom_fabs": {"subject": "a big round silicon wafer covered in a grid of small square chips, held at its rim by a pair of tweezers", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_computer_aided_design": {"subject": "a computer monitor showing a wireframe building on a desk with a keyboard", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_container_ports": {"subject": "a tall gantry crane on rails lifting a shipping container off a container ship", "seed": 3},
+        "pm_containerized_cargo": {"subject": "a railway flatcar carrying two stacked shipping containers, seen from the side", "seed": 3},
+        "pm_digital_trading": {"subject": "a computer monitor showing a rising zigzag line graph beside a small stack of coins", "seed": 3, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_fiber_optics": {"subject": "a bundle of thin glowing optical fibers fanning out from the end of a thick cable", "seed": 2},
+        "pm_geophysical_survey_techniques_coal_mine": {"subject": "a survey truck with a big vibrator plate lowered to the ground, curved sound waves spreading under the ground", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_trade_center_trade_quantity_advanced_2": {"subject": "a huge container ship stacked high with shipping containers, seen from the side", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_industrial_robotics": {"subject": "a big jointed industrial robot arm on a round base gripping a metal part", "seed": 1},
+        "pm_local_network": {"subject": "two boxy desktop computers joined by a thick cable", "seed": 1},
+        "pm_low_bandwidth": {"subject": "a wooden telephone pole carrying two thin wires", "seed": 3},
+        "pm_medium_bandwidth": {"subject": "a tall steel pole carrying a thick bundle of cables", "seed": 2},
+        "pm_aeroplane_production_3": {"subject": "a supersonic jet fighter with sharply swept delta wings, seen from above", "seed": 2},
+        "pm_modern_cruise_ships": {"subject": "a huge white cruise ship with many decks and a funnel, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_modern_microprocessors": {"subject": "a square microprocessor chip with a grid of pins on its underside, seen at an angle", "seed": 2},
+        "pm_neodymium_catalyzation": {"subject": "a cluster of shiny metal crystals beside a thick rubber tire", "seed": 1},
+        "pm_ore_sorting_and_separation_technology_coal_mine": {"subject": "a conveyor belt carrying rocks under a scanner arch, splitting into two heaps at its end", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_networked_control_systems": {"subject": "a boxy computer cabinet linked by thick cables to a half-built aircraft fuselage on a stand", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_personal_electronics": {"subject": "a boxy 1980s personal computer with a monitor and a keyboard", "seed": 3},
+        "pm_power_integrated_smart_systems": {"subject": "a sleek computer control desk with two flat screens, an electricity pylon beside it", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_precision_guided_shells": {"subject": "an artillery shell with small fins at its nose flying along a curved arc toward a round target", "seed": 1},
+        "pm_synthetic_opium": {"subject": "a ball-and-stick molecule model beside a pill capsule", "seed": 1},
+        "pm_robotic_assembly_handling": {"subject": "two jointed robot arms working on an aircraft fuselage on a stand", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_assembly_lines": {"subject": "a jointed robot arm welding a car body on a conveyor line, sparks flying", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_assembly_lines_building_furniture_manufactory": {"subject": "a jointed robot arm lifting a wooden chair off a conveyor line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_assembly_lines_building_motor_industry": {"subject": "a jointed robot arm fitting an engine block on a conveyor line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_assembly_lines_building_tooling_workshop": {"subject": "a jointed robot arm placing a power drill onto a conveyor line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_ship_assembly": {"subject": "a jointed robot arm welding a big ship hull section, sparks flying", "seed": 3},
+        "pm_shopping_malls": {"subject": "a long low shopping mall building with a tall glass atrium entrance", "seed": 1},
+        "pm_video_games": {"subject": "a video game controller with a cross pad and round buttons on a coiled cable", "seed": 1},
+        # Twins: the same method on another building's group.
+        "pm_automated_mechanical_harvesters_building_rice_farm": {"use": f"{_GI}/production_method_icons/pm_automated_mechanical_harvesters.dds"},
+        "pm_geophysical_survey_techniques_gold_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
+        "pm_ore_sorting_and_separation_technology_gold_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        "pm_geophysical_survey_techniques_iron_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
+        "pm_ore_sorting_and_separation_technology_iron_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        "pm_geophysical_survey_techniques_lead_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
+        "pm_ore_sorting_and_separation_technology_lead_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        "pm_geophysical_survey_techniques_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
+        "pm_ore_sorting_and_separation_technology_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        "pm_geophysical_survey_techniques_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_geophysical_survey_techniques_coal_mine.dds"},
+        "pm_ore_sorting_and_separation_technology_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_ore_sorting_and_separation_technology_coal_mine.dds"},
+        # Era 9 (icon batch 13). Carbon capture's ladder is its own category (carbon_capture), set by its generator.
+        "pm_active_protection_systems": {"subject": "a battle tank with a small radar dish and two boxy launcher pods on its turret, seen from the side", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_automated_routing_protocols": {"subject": "a network router box with four antennas and a row of cables plugged into its back", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_predictive_maintenance_systems": {"subject": "a computer monitor showing a jagged line graph with a big wrench leaning against it", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_automated_trading": {"subject": "a tall computer server rack with rows of small lights beside a small stack of coins", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_biotech_dyes": {"subject": "a folded dyed cloth beside a small DNA double helix", "seed": 3},
+        "pm_high_fructose_syrup": {"subject": "a tall jug of thick syrup beside an ear of corn", "seed": 1},
+        "pm_cellulosic_hydrolysis": {"subject": "a bundle of cut plant stalks beside a squat round tank and a heap of sugar cubes", "seed": 1},
+        "pm_punchcards": {"subject": "a stack of punched cards with rows of small square holes beside a boxy card reader machine", "seed": 3},
+        "pm_web_one": {"subject": "a boxy old computer monitor showing a simple globe, a mouse on a cord beside it", "seed": 1},
+        "pm_cloud_computing": {"subject": "a big puffy cloud floating above a tall server rack", "seed": 1},
+        "pm_digital_creation_tools": {"subject": "a flat drawing tablet with a stylus pen lying across it", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_version_control_and_distribution_platforms": {"subject": "a branching diagram of round nodes joined by thick lines, splitting into two branches that merge again", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_advanced_workflow_optimization": {"subject": "three interlocking gear wheels beside a computer monitor", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_customized_clothing": {"subject": "a tailor's dress form mannequin with a measuring tape draped around its neck", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_influencers_and_content_creators": {"subject": "a smartphone on a small tripod with a round ring light behind it", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_digital_streaming": {"subject": "a flat-screen television showing a big play button triangle", "seed": 3},
+        "pm_distributed_control_systems": {"subject": "three small computer control boxes linked by cables to a tall chemical column", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_e-commerce": {"subject": "a laptop computer with a small shopping cart on its screen beside a cardboard parcel", "seed": 2},
+        "pm_ectogenesis": {"subject": "a tall glass artificial womb tank filled with fluid, a curled baby inside, tubes running from its lid", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_flow_chemistry_production": {"subject": "a coiled glass tube reactor on a stand with fluid flowing through it", "seed": 3},
+        "pm_fracking": {"subject": "a drilling rig on the ground, its pipe running down to a horizontal underground rock layer with cracks spreading from it", "seed": 0},
+        "GMO_plantation_building_banana_plantation": {"subject": "a banana plant with a heavy bunch of bananas beside a small DNA double helix", "seed": 1},
+        "GMO_plantation_building_coffee_plantation": {"subject": "a coffee branch heavy with round coffee cherries beside a small DNA double helix", "seed": 3},
+        "GMO_plantation_building_sugar_plantation": {"subject": "tall sugar cane stalks beside a small DNA double helix", "seed": 2},
+        "GMO_plantation_building_tea_plantation": {"subject": "a tea bush with pointed leaves beside a small DNA double helix", "seed": 2},
+        "GMO_plantation_building_tobacco_plantation": {"subject": "a tall tobacco plant with broad leaves beside a small DNA double helix", "seed": 1},
+        "GMO_plantation_building_vineyard": {"subject": "a heavy bunch of grapes on a vine beside a small DNA double helix", "seed": 3},
+        "pm_global_ports": {"subject": "a row of three tall gantry cranes along a quay beside a huge container ship", "seed": 1},
+        "pm_intelligent_manufacturing_systems": {"subject": "a car body on a conveyor line watched by a camera on a gantry, a computer screen beside it", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_internet_communications": {"subject": "a computer monitor showing a closed envelope, a small globe beside it", "seed": 1},
+        "pm_trade_center_trade_quantity_advanced_3": {"subject": "a forklift truck lifting a pallet of cardboard boxes in front of a big round wall clock", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_led_streetlights": {"subject": "a slim straight streetlight pole with a thin square glowing lamp panel at its top", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_maglev_trains": {"subject": "a sleek maglev train hovering above a wide concrete guideway, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_mars_mission": {"subject": "a small spacecraft with solar panels flying toward a big cratered planet", "seed": 2},
+        "pm_no_missile_defense": {"subject": "a boxy missile canister launcher inside a thick round ring with one thick diagonal bar across it", "seed": 4, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_missile_defense_battery": {"subject": "a truck-mounted launcher with four boxy missile canisters raised up, a radar dish beside it", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_multicore_processors": {"subject": "a square processor chip whose face is divided into four equal raised squares", "seed": 2},
+        "pm_networked_munitions": {"subject": "three artillery shells standing in a row linked by curved radio waves", "seed": 1},
+        "pm_networked_small_arms": {"subject": "an assault rifle with a scope and a small antenna mounted on it, seen from the side", "seed": 3},
+        "pm_performance_textiles": {"subject": "a hooded running jacket with a zipper beside a roll of fabric", "seed": 3},
+        "pm_remote_work": {"subject": "a laptop computer on a kitchen table beside a coffee mug", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_robotic_food_processing": {"subject": "a jointed robot arm placing a loaf of bread into a box on a conveyor", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_smart_phones": {"subject": "a smartphone with a big blank glass touchscreen, standing upright", "seed": 2},
+        "pm_virtual_reality_headsets": {"subject": "a virtual reality headset with a wide visor and a head strap", "seed": 2},
+        # Twins: the same method on another building's group.
+        "pm_distributed_control_systems_explosives_factory": {"use": f"{_GI}/production_method_icons/pm_distributed_control_systems.dds"},
+        # Era 10 (icon batch 14).
+        "pm_3d_printed_buildings": {"subject": "a big 3D printer gantry frame printing the curved wall of a small house layer by layer", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_3d_printed_porcelain": {"subject": "a small 3D printer nozzle printing a tall vase layer by layer on a platform", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_public_housing_arcologies": {"subject": "a huge stepped pyramid-shaped megastructure building covered in terraces and trees", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_pharma_biologics": {"subject": "a syringe beside a small vial and a twisted ribbon strand", "seed": 0},
+        "pm_sr_site_marker": {"subject": "a flag on a tall pole planted on a cratered surface beside a small domed habitat", "seed": 2},
+        "pm_directed_energy_point_defense": {"subject": "a laser turret on a squat base firing one thick straight beam up into the sky", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_electric_cars": {"subject": "a sleek electric car plugged into a charging post by a thick cable, seen from the side", "seed": 1},
+        "pm_electric_civil_highway": {"subject": "an electric car on a wide highway beside a roadside charging post", "seed": 1},
+        "pm_electric_industrial_highway": {"subject": "an electric truck with a pantograph on its cab roof driving under overhead power lines", "seed": 1},
+        "pm_high_bandwidth": {"subject": "a tall cell tower with many flat antenna panels and a thick cable running down it", "seed": 2},
+        "pm_hydrogen_fuel_cell_engines": {"subject": "a boxy fuel cell engine block beside a tall rounded hydrogen tank", "seed": 0},
+        "pm_machine_learning_assisted_code_generation": {"subject": "a computer monitor with a small robot head peeking over its top edge", "seed": 1},
+        "pm_modern_tourism": {"subject": "a tall modern hotel tower beside a swimming pool and a sun lounger", "seed": 0},
+        "pm_sr_fabrication_orbital_assembly": {"subject": "a space station truss with a long robot arm assembling a big spacecraft module", "seed": 3},
+        "pm_reusable_rockets": {"subject": "a rocket booster landing upright on four splayed legs with a short flame under it", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_robots": {"subject": "two jointed industrial robot arms on square bases facing each other", "seed": 1},
+        "pm_smart_robots": {"subject": "a sleek humanoid robot with a smooth round head and jointed hands", "seed": 0},
+        "pm_secular_society": {"subject": "a classical public library building with columns and a big open book above its door", "seed": 0, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_smart_miners_building_coal_mine": {"subject": "a tracked mining machine with a drum cutter, a small antenna and a camera on its roof, seen from the side", "seed": 1},
+        "pm_solar_colonization": {"subject": "a spacecraft with big square solar sails flying past a ringed planet", "seed": 1},
+        # Twins: the same method on another building's group.
+        "pm_smart_miners_building_gold_mine": {"use": f"{_GI}/production_method_icons/pm_smart_miners_building_coal_mine.dds"},
+        "pm_smart_miners_building_iron_mine": {"use": f"{_GI}/production_method_icons/pm_smart_miners_building_coal_mine.dds"},
+        "pm_smart_miners_building_lead_mine": {"use": f"{_GI}/production_method_icons/pm_smart_miners_building_coal_mine.dds"},
+        "pm_smart_miners_building_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_smart_miners_building_coal_mine.dds"},
+        "pm_smart_miners_building_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_smart_miners_building_coal_mine.dds"},
+        # Era 11 (icon batch 15), with the Designed orchards (Synthetic Biology) and Automated Casework (AI Agents).
+        "pm_ai_assisted_research": {"subject": "a laboratory flask beside a small robot head with glowing eyes", "seed": 0},
+        "pm_ai_managed_power_plant": {"subject": "a sleek robot head with glowing eyes in front of an electricity pylon", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ablative_rockets": {"subject": "a rocket lifting off on one thick laser beam fired straight up from a ground dish", "seed": 0, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_advanced_material_fibers": {"subject": "a spool of thick black carbon fiber thread beside a woven hexagonal fabric swatch", "seed": 3},
+        "pm_advanced_metamaterials_shipbuilding": {"subject": "a sleek angular stealth warship hull with faceted sides, seen from the side", "seed": 2},
+        "pm_base_building_renewable_power": {"subject": "a tall wind turbine beside two tilted solar panels", "seed": 0},
+        "pm_base_building_advanced_renewable_power": {"subject": "a huge floating offshore wind turbine beside a tall solar tower ringed by mirrors", "seed": 2},
+        "pm_automated_casework": {"subject": "a sleek robot arm holding a rubber stamp over a sheet of paper", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_automated_harvesters_and_planters": {"subject": "a driverless combine harvester with no cab windows and a small antenna, a drone flying above it", "seed": 0, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_autonomous_highway": {"subject": "a driverless car with a round sensor dome on its roof on a wide highway", "seed": 3},
+        "pm_trade_center_trade_quantity_advanced_4": {"subject": "a delivery drone carrying a parcel above a driverless truck", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_autonomous_networks": {"subject": "a network router box with a small robot head on top", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_autonomous_trains": {"subject": "a sleek driverless train with a smooth windowless nose and a sensor dome, seen from the side", "seed": 3},
+        "pm_bioelectronic_implants": {"subject": "a small oval implant chip with thin wires lying in an open palm", "seed": 3},
+        "pm_bioengineered_rubber": {"subject": "a rubber tree with a tap dripping latex into a cup beside a small DNA double helix", "seed": 3},
+        "pm_bioplastics": {"subject": "a plastic bottle beside a sprouting leaf", "seed": 2},
+        "pm_cloning_vats": {"subject": "a row of three tall glass vats, each holding an identical curled figure", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_designed_apple_orchards": {"subject": "a perfectly round apple tree heavy with apples beside a small DNA double helix", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_designed_citrus_orchards": {"subject": "a round citrus tree heavy with oranges beside a small DNA double helix", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_designed_fig_orchards": {"subject": "a fig tree heavy with round figs beside a small DNA double helix", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_designed_potatoes": {"subject": "a potato plant with huge potatoes on its roots beside a small DNA double helix", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_designed_crops": {"subject": "a sheaf of wheat with huge heavy ears beside a small DNA double helix", "seed": 1},
+        "pm_drone_delivery_systems": {"subject": "a quadcopter drone carrying a parcel below it", "seed": 1},
+        "pm_electroenzymatic_synthesis": {"subject": "a glass beaker with two electrodes dipped in it beside a heap of sugar cubes", "seed": 1},
+        "pm_electromagnetic_projectors": {"subject": "a long railgun barrel on a turret with rings of copper coils along it", "seed": 1},
+        "pm_extreme_bandwidth": {"subject": "a big cluster of thick optical cables bundled together, light bursting from their ends", "seed": 1},
+        "pm_fully_automated_content_creation": {"subject": "a sleek robot head beside a big film reel", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_sr_space_command_fusion_yards": {"subject": "a big spacecraft with a glowing round fusion engine at its back, held in an orbital dock frame", "seed": 0},
+        "pm_sr_space_command_orbital_shipyards": {"subject": "a big square orbital dock frame of girders around a half-built spacecraft hull", "seed": 1},
+        "pm_base_building_advanced_fission_power": {"subject": "a squat domed reactor building beside a small modular reactor cylinder", "seed": 1},
+        "pm_graphene_electric_motors": {"subject": "an electric motor with a hexagonal honeycomb pattern on its housing", "seed": 2},
+        "pm_orbital_battery_lasers": {"subject": "a big domed laser installation with a huge lens firing a thick beam up at a small satellite", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_orbital_battery_kinetic": {"subject": "a tall interceptor missile launching straight up out of a silo", "seed": 0, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_base_building_tokamak_fusion_power": {"subject": "a big upright donut-shaped tokamak ring wrapped in thick magnet coils, on a stand", "seed": 1},
+        "pm_base_building_inertial_fusion_power": {"subject": "a small round target sphere hit by many laser beams converging from all sides", "seed": 3},
+        "pm_integrated_optical_chip_networks": {"subject": "a microchip with thin beams of light running from it to two smaller chips", "seed": 3},
+        "pm_intelligent_drilling_rigs": {"subject": "an oil derrick with a satellite antenna and a computer cabin at its foot", "seed": 1},
+        "pm_lab_am_fabrication": {"subject": "a laboratory press squeezing a small glowing material sample between two plates", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_synthetic_bacteria_am_fabrication": {"subject": "a glass vat of bacteria growing a sheet of woven fiber", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_laser_excavation_technology_coal_mine": {"subject": "a tracked machine firing a thick laser beam into a rock face", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_magnetic_drive_cruise_ships": {"subject": "a sleek futuristic cruise ship with a smooth rounded hull and no funnel, seen from the side", "seed": 0, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_magnetic_drive_ports": {"subject": "a quay with a tall gantry crane beside a sleek futuristic cargo ship with no funnel", "seed": 1},
+        "pm_motor_ship_tenders_building_ocean_mine": {"subject": "a diesel support ship with a big crane on its deck and a funnel, seen from the side", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_magnetic_drive_tenders_building_ocean_mine": {"subject": "a sleek futuristic support ship with no funnel and a crane on its deck, seen from the side", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_magnetic_drive_trawlers": {"subject": "a sleek futuristic fishing trawler with no funnel and a net boom at its stern", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_magnetic_drive_whaling_ships": {"subject": "a sleek futuristic whaling ship with no funnel and a harpoon gun on its bow", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_metamaterial_explosives": {"subject": "a bundle of explosive charges with faceted crystal casings and a detonator", "seed": 3},
+        "pm_metamaterial_explosives_building_coal_mine": {"subject": "a faceted crystal explosive charge wedged into a cracked rock face", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_molecular_foundry": {"subject": "a ball-and-stick molecule held in the claw of a small robot arm", "seed": 3},
+        "pm_neuromorphic_computing": {"subject": "a brain-shaped microchip with rows of short metal legs", "seed": 3},
+        "pm_neurostimulation": {"subject": "a headband with electrode pads and wires beside a small glowing brain", "seed": 2},
+        "pm_synthetic_oil_2": {"subject": "a glass vat of rod-shaped bacteria with a drop of oil dripping from its tap", "seed": 3},
+        "pm_pharma_precision_medicine": {"subject": "a pill capsule beside a small DNA double helix and a fingerprint", "seed": 3},
+        "pm_quantum_communications": {"subject": "two satellite dishes facing each other, linked by a pair of twisted light beams", "seed": 1},
+        "pm_regolith_processing": {"subject": "a squat boxy rover scooping grey dust from a cratered surface into a hopper", "seed": 0},
+        "pm_robotic_service_providers": {"subject": "a humanoid robot waiter carrying a tray with a cup", "seed": 0},
+        "pm_self_growing_paper": {"subject": "a stack of paper sheets sprouting small leaves from its edge", "seed": 3},
+        "pm_self-healing_packaging": {"subject": "a sealed food pouch with a tear closing itself, small sparkles along the seam", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_smart_led_streetlights": {"subject": "a slim streetlight pole with a thin flat lamp panel, a small camera and an antenna on top", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_swarm_coordinated_tanks": {"subject": "three small robotic tanks in a row with antennas, linked by curved radio waves", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_swarm_release_munitions": {"subject": "a missile opening at its front to release a cloud of tiny drones", "seed": 2},
+        # Twins: the same method on another building's group.
+        "pm_ai_managed_power_plant_aneutronic": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
+        "pm_ai_managed_power_plant_hydro": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
+        "pm_ai_managed_power_plant_reactor": {"use": f"{_GI}/production_method_icons/pm_ai_managed_power_plant.dds"},
+        "pm_automated_harvesters_and_planters_building_rice_farm": {"use": f"{_GI}/production_method_icons/pm_automated_harvesters_and_planters.dds"},
+        "pm_designed_crops_rice_farm": {"use": f"{_GI}/production_method_icons/pm_designed_crops.dds"},
+        "pm_laser_excavation_technology_gold_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
+        "pm_metamaterial_explosives_building_gold_mine": {"use": f"{_GI}/production_method_icons/pm_metamaterial_explosives_building_coal_mine.dds"},
+        "pm_laser_excavation_technology_iron_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
+        "pm_metamaterial_explosives_building_iron_mine": {"use": f"{_GI}/production_method_icons/pm_metamaterial_explosives_building_coal_mine.dds"},
+        "pm_laser_excavation_technology_lead_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
+        "pm_metamaterial_explosives_building_lead_mine": {"use": f"{_GI}/production_method_icons/pm_metamaterial_explosives_building_coal_mine.dds"},
+        "pm_laser_excavation_technology_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
+        "pm_metamaterial_explosives_building_sulfur_mine": {"use": f"{_GI}/production_method_icons/pm_metamaterial_explosives_building_coal_mine.dds"},
+        "pm_laser_excavation_technology_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_laser_excavation_technology_coal_mine.dds"},
+        "pm_metamaterial_explosives_building_tech_metals_mine": {"use": f"{_GI}/production_method_icons/pm_metamaterial_explosives_building_coal_mine.dds"},
+        # Era 12 (icon batch 16). The megastructures (Orbital Battlestation, Solar Collector) keep
+        # their glyphs, as the wonders do: each is its building's only method, plus a speed ladder.
+        "pm_ai_governance": {"subject": "three small robot heads linked by thick lines in a triangle", "seed": 1},
+        "pm_ai_managed_chemical_plant": {"subject": "a sleek robot head with glowing eyes beside a tall chemical column", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_explosives_factory": {"subject": "a sleek robot head with glowing eyes beside a bundle of dynamite sticks", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_fab": {"subject": "a sleek robot head with glowing eyes beside a round silicon wafer", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_motor_industry": {"subject": "a sleek robot head with glowing eyes beside an engine block", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_arms_industry": {"subject": "a sleek robot head with glowing eyes beside a rifle", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_artillery_foundry": {"subject": "a sleek robot head with glowing eyes beside an artillery cannon", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_furniture_manufactory": {"subject": "a sleek robot head with glowing eyes beside a wooden chair", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_munition_plant": {"subject": "a sleek robot head with glowing eyes beside an artillery shell", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_textile_factory": {"subject": "a sleek robot head with glowing eyes beside a tall bolt of rolled fabric", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_managed_building_tooling_workshop": {"subject": "a sleek robot head with glowing eyes beside a big wrench and a power drill", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ai_optimized_operations": {"subject": "a sleek robot head with glowing eyes beside a jet airplane", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_basic_am_fabrication": {"subject": "a hydraulic press stamping a small glowing hexagonal tile", "seed": 1},
+        "pm_advanced_am_fabrication": {"subject": "a laser beam cutting a glowing hexagonal tile on a workbench", "seed": 1},
+        "pm_automated_am_fabrication": {"subject": "a jointed robot arm stacking glowing hexagonal tiles", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_orbital_fabrication": {"subject": "a small space station module with a robot arm holding a glowing hexagonal tile", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_ocean_mine": {"subject": "a seabed mining vehicle crawling on the sea floor, a pipe rising from it to a ship on the surface", "seed": 1},
+        "pm_advanced_ocean_mine": {"subject": "a big seabed mining crawler with a spinning cutter head on the sea floor", "seed": 2},
+        "pm_automated_ocean_mine": {"subject": "a seabed crawler with a jointed robot arm and a camera on the sea floor", "seed": 3},
+        "pm_airport": {"subject": "an airport control tower beside a jet airliner", "seed": 2},
+        "pm_spaceport": {"subject": "a sleek spaceplane on a runway beside a tall launch tower", "seed": 0},
+        "pm_artificial_personalities": {"subject": "a smiling humanoid robot face", "seed": 1, "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_automated_labs": {"subject": "a jointed robot arm pipetting into a row of test tubes", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_chemical_tugs_building_space_mine": {"subject": "a small boxy spacecraft with a rocket engine nozzle at its back pulling a round cargo container on a cable, small stars around", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_fusion_tugs_building_space_mine": {"subject": "a small boxy spacecraft with a big glowing round fusion engine at its back pulling a round cargo container on a cable, small stars around", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_base_building_compact_modular_fusion_power": {"subject": "a small glowing fusion reactor sphere inside a squat cube housing", "seed": 1},
+        "pm_deep_space_exploration": {"subject": "a long probe spacecraft with a big dish antenna flying past a gas giant planet", "seed": 2},
+        "pm_fusion_ssto_craft": {"subject": "a sleek single-stage spaceplane climbing steeply on a glowing engine", "seed": 2, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_sr_fabrication_lunar_foundries": {"subject": "a glowing smelting furnace on a cratered surface pouring molten metal, a crescent earth above", "seed": 1},
+        "pm_sr_fabrication_fusion_shipyards": {"subject": "a long spacecraft hull with a fusion engine bell, held by robot arms on a station truss", "seed": 3},
+        "pm_sr_space_command_torch_yards": {"subject": "a long thin spacecraft with one huge glowing engine flame trailing behind it, held in a square frame of girders, small stars around", "seed": 1},
+        "pm_microgravity_alloying": {"subject": "a floating sphere of molten metal inside a small space station module", "seed": 2},
+        "pm_nanomaterial_buildings": {"subject": "a sleek tall skyscraper with a hexagonal honeycomb facade", "seed": 2},
+        "pm_neural_lace_communications": {"subject": "a human head in profile with a fine glowing mesh over the brain", "seed": 1},
+        "pm_orbital_nanolithography": {"subject": "a microchip floating beside a small satellite with solar panels", "seed": 0},
+        "pm_quantum_dot_pigments": {"subject": "a row of small glowing dots of different shades beside an open paint pot", "seed": 1},
+        "pm_self_improving_AI_systems": {"subject": "a sleek robot head with a jointed robot arm tightening a bolt on its own head", "seed": 3},
+        "pm_self_optimizing_production": {"subject": "a car body on a conveyor line under one big glowing robot eye", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_semiinfinite_bandwidth": {"subject": "a glowing infinity loop made of thick optical cable", "seed": 3},
+        "pm_solar_receiver": {"subject": "a big round receiving antenna dish on the ground, a beam coming down to it from a satellite", "seed": 2},
+        "pm_space_tourism": {"subject": "a ring-shaped space hotel station with rows of round windows", "seed": 0},
+        "pm_superconducting_networks": {"subject": "a thick frosted cable floating above a magnet", "seed": 3},
+        # Twins: the same method on another building's group, or its uncapped copy.
+        "pm_ai_managed_building_motor_industry_turbine": {"use": f"{_GI}/production_method_icons/pm_ai_managed_building_motor_industry.dds"},
+        "pm_ai_managed_building_munition_plant_shells": {"use": f"{_GI}/production_method_icons/pm_ai_managed_building_munition_plant.dds"},
+        "pm_ai_managed_building_tooling_workshop_handling": {"use": f"{_GI}/production_method_icons/pm_ai_managed_building_tooling_workshop.dds"},
+        "pm_ocean_mine_uncapped": {"use": f"{_GI}/production_method_icons/pm_ocean_mine.dds"},
+        "pm_advanced_ocean_mine_uncapped": {"use": f"{_GI}/production_method_icons/pm_advanced_ocean_mine.dds"},
+        "pm_automated_ocean_mine_uncapped": {"use": f"{_GI}/production_method_icons/pm_automated_ocean_mine.dds"},
+        "pm_te_direct_construction_nanomaterial": {"use": f"{_GI}/production_method_icons/pm_nanomaterial_buildings.dds"},
+        # Era 13 (icon batch 17). The megastructures keep their glyphs, as the wonders do; the
+        # phase 3 methods were painted in batch 9. Programmable matter: the product dissolving into cubes.
+        "pm_ai_mediated_mind_sharing": {"subject": "two human heads in profile linked by a glowing beam between their foreheads, a small robot head above them", "seed": 2, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_neural_lace_telepathy": {"subject": "two human heads in profile linked by glowing waves between their foreheads", "seed": 2},
+        "pm_self_replicating_assemblers": {"subject": "a tiny spider-like nanobot assembling a second one from a heap of tiny parts", "seed": 1},
+        "pm_advanced_self_replicating_assemblers": {"subject": "a swarm of tiny spider-like nanobots assembling a big cube", "seed": 3},
+        "pm_antimatter_engine": {"subject": "a spacecraft engine with a ring-shaped magnetic nozzle and a glowing core", "seed": 0},
+        "pm_antimatter_warhead_plant": {"subject": "a sleek missile warhead held in a ring-shaped magnetic containment cradle", "seed": 1},
+        "pm_sr_space_command_antimatter_yards": {"subject": "a spacecraft with a glowing ring-shaped engine, in an orbital dock frame", "seed": 1},
+        "pm_chemical_launch_building_space_mine": {"subject": "a chemical rocket carrying a cargo pod lifting off from a cratered surface", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_tethered_launch_building_space_mine": {"subject": "a cargo pod climbing a long straight cable rising from the ground into space", "seed": 2},
+        "pm_interstellar_mission": {"subject": "a long slender starship with a huge glowing engine flying toward a bright star", "seed": 2},
+        "pm_fusion_battery_appliances": {"subject": "a small glowing fusion battery cell plugged into a kitchen blender", "seed": 3},
+        "pm_fusion_battery_motors": {"subject": "an electric motor with a small glowing fusion battery cell fixed on top", "seed": 2},
+        "pm_fusion_battery_vehicles": {"subject": "a sleek car with a small glowing fusion battery cell above its hood", "seed": 3},
+        "pm_nanobot_assemblers": {"subject": "a swarm of tiny nanobots assembling a big wrench", "seed": 3},
+        "pm_nanorobots": {"subject": "a cloud of tiny glowing nanorobots forming the shape of a hand", "seed": 0},
+        "pm_consciousness_network_open": {"subject": "a ring of human heads in profile linked by glowing lines, an open hand at the centre", "seed": 3, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_consciousness_network_social_control": {"subject": "one big open eye above a ring of human heads linked by glowing lines", "seed": 1, "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_programmable_fibers": {"subject": "a spool of thread whose loose end dissolves into a cloud of small cubes", "seed": 3},
+        "pm_programmable_food_synthesis": {"subject": "a dinner plate with a meal half dissolved into a cloud of small cubes", "seed": 1},
+        "pm_programmable_matter_clothing": {"subject": "a shirt half dissolved into a cloud of small cubes", "seed": 1},
+        "pm_programmable_matter_furniture": {"subject": "a wooden chair half dissolved into a cloud of small cubes", "seed": 3},
+        "pm_programmable_matter_small_arms": {"subject": "a rifle half dissolved into a cloud of small cubes", "seed": 1},
+        "pm_programmable_munitions": {"subject": "an artillery shell half dissolved into a cloud of small cubes", "seed": 1},
+        "pm_programmable_matter_artillery": {"subject": "an artillery cannon half dissolved into a cloud of small cubes", "seed": 1},
+        "pm_programmable_paper": {"subject": "a sheet of paper half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_programmable_plastics": {"subject": "a plastic bottle half dissolved into a cloud of small cubes", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "pm_programmable_sweetness": {"subject": "a lollipop half dissolved into a cloud of small cubes", "seed": 1},
+    },
+    "carbon_capture": {
+        "carbon_capture_none": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p0.dds", "subject": "a factory chimney with a capture hood on top inside a thick round ring with one thick diagonal bar across it", "seed": 4},
+        "carbon_capture_partial": {"now": f"{_GI}/production_method_icons/cat_shield_green_p1.dds", "subject": "a short factory chimney with a small capture hood on top and one thin pipe leading down from it", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "carbon_capture_storage": {"now": f"{_GI}/production_method_icons/cat_shield_green_p2.dds", "subject": "a factory chimney with a big capture hood on top and a thick pipe running down under the ground line to a round storage tank", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+        "carbon_capture_advanced": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p3.dds", "subject": "a tall capture tower with a row of big round fans on its side and a thick pipe running down under the ground line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+    },
+    # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
+    # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.
+    # The keys follow the pie's textures (pie_<cause>.dds).
+    "demog": {
+        # s0 lost its pale face in the cut-out.
+        "ov_leading_cause": {"subject": "a rounded grey granite headstone with a perfectly plain smooth face, a small bunch of red flowers at its foot on a patch of green grass", "seed": 2,
+                             "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # A fat green germ covered in knobs read as a cabbage or a ball of beads.
+        "cause_infection": {"subject": "a round dark green virus: a smooth ball with short thick stalks ending in round red knobs sticking out evenly all over it", "seed": 1,
+                            "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # A brown medicine bottle with pills read as medicine in general.
+        "cause_chronic": {"subject": "a plump dark red anatomical human heart with thick stubby red and blue vessels on top", "seed": 2,
+                          "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # s0 and s3 lettered a corner of the sign. A crutch crossed with a bandage read as a gallows.
+        "cause_external": {"subject": "a yellow triangular warning sign with a red border and a thick black exclamation mark in its middle", "seed": 2,
+                           "now": f"{_GI}/generic_icons/red_cross.dds"},
+        "cause_work": {"subject": "an empty battered yellow miner's hard hat with a small brass lamp on its front", "seed": 2,
+                       "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # Not the Fertility cell's cradle. A stork carrying a bundle (s0) was thin at 44 px.
+        "cause_maternal": {"subject": "a pair of small pink knitted baby booties tied with ribbon", "seed": 0,
+                           "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # Nuclear strikes and crushed uprisings. s3 signed its base.
+        "cause_killed": {"subject": "a small grey and orange mushroom cloud rising from a burst of flame", "seed": 1,
+                         "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # The war dead, not war: two crossed sabres were thin at 44 px.
+        "cause_war": {"subject": "an empty dented steel army helmet resting on the butt of a rifle stuck upright in a mound of earth", "seed": 1,
+                      "now": f"{_GI}/generic_icons/red_cross.dds"},
+        # The other seven overview cells, on vanilla icons until now; subjects from the doc's Final art.
+        # Round 1's balance beam was a hairline with specks on it at 44 px: the two objects alone.
+        "ov_natural_change": {"subject": "a small wooden baby cradle with a blue blanket standing side by side with a small rounded grey headstone, both the same height", "seed": 0,
+                              "now": f"{_GI}/generic_icons/population.dds"},
+        "ov_migration": {"subject": "a small traveller in a brown coat and hat walking to the right, a cloth bundle tied to a stick over his shoulder", "seed": 1,
+                         "now": f"{_GI}/state_status_icons/mass_migration_target.dds"},
+        # Gold sand and a dark frame: a clear pale glass bulb is lost in the cut-out.
+        "ov_life_expectancy": {"subject": "a chunky hourglass with a dark wooden frame and amber-tinted glass, golden sand running down, a small bright green heart inside its upper bulb", "seed": 0,
+                               "now": f"{_GI}/diplomatic_treaties_articles_icons/healthcare_aid.dds"},
+        "ov_fertility": {"subject": "a wooden baby cradle on curved rockers with a soft pink blanket folded over its side", "seed": 2,
+                         "now": f"{_GI}/decree/decree_natalism_initiative.dds"},
+        "ov_median_age": {"subject": "a dark wooden walking cane with a curved handle crossed with a red and yellow child's rattle", "seed": 3,
+                          "now": f"{_GI}/generic_icons/clock.dds"},
+        "ov_working_age": {"subject": "a steel claw hammer with a wooden handle leaning against a brown leather briefcase", "seed": 3,
+                           "now": f"{_GI}/institution_icons/institution_ministry_of_labor.dds"},
+        "ov_gini": {"subject": "three stacks of plain gold coins each stamped with a small star, one stack tall and two short", "seed": 0,
+                    "now": f"{_GI}/generic_icons/money.dds"},
+    },
+    "demog_pip": {
+        # s0 came out broken.
+        "pip_war": {"subject": "two crossed swords with broad straight blades and thick crossguards", "seed": 3,
+                    "color": (342, 108, 92), "color_bottom": (300, 70, 58),
+                    "now": f"{_GI}/generic_icons/battalions.dds"},
+        # The doc's blue disc with a white dot, drawn outright: nothing for FLUX to add.
+        "pip_event": {"drawn": True, "marks": [{"draw": "disc", "colour": "blue", "scale": 0.9, "at": (0.5, 0.5)},
+                                               {"draw": "disc", "colour": "white", "scale": 0.34, "at": (0.5, 0.5)}],
+                      "now": f"{_GI}/generic_icons/information.dds"},
+        "pip_famine": {"subject": "an empty round bowl seen from the side with a spoon resting across its rim", "seed": 2,
+                       "now": f"{_GI}/generic_icons/goods_shortage.dds"},
+    },
+    # The mod's three parties, on vanilla parties' icons until now (`now`). Thick shapes:
+    # the emboss turns thin parts into hairlines at 100 px.
+    "party": {
+        # The European Greens' sunflower; a leaf would echo the Agrarians' clover.
+        "green_party": {"subject": "a sunflower head with a ring of thick rounded petals around a big round centre, on a short thick stem with one broad leaf", "seed": 3,
+                        "now": f"{_GI}/political_parties/agrarians.dds"},
+        "populist_party": {"subject": "a big megaphone bullhorn with a thick handle, its wide bell pointing up to the right", "seed": 3,
+                           "now": f"{_GI}/political_parties/radical.dds"},
+        # Round 1's compass in a gear read as an A in a circle, vanilla's Anarchist mark, at 32 px.
+        "technocratic_party": {"subject": "a thick toothed gear wheel with a big round light bulb set in its centre", "seed": 0,
+                               "now": f"{_GI}/political_parties/liberal.dds"},
+    },
+    # The Tax Code overview's cells and the light code's two: vanilla icons until now. The Tax Code cell keeps
+    # the journal entry's own icon (a law book under a wax seal). Paper is drawn as objects, not documents:
+    # a sheet cuts out to holes and gets written on.
+    "tax": {
+        # A black quill all but vanished on the panel's dark ground at 44 px.
+        "ov_draft": {"subject": "a large rust-red feather quill pen standing in a round brass inkwell", "seed": 3,
+                     "now": f"{_GI}/timed_modifier_icons/modifier_documents_positive.dds"},
+        "ov_bill": {"subject": "a dark polished wooden gavel lying on its round wooden sound block", "seed": 0,
+                    "now": f"{_GI}/generic_icons/negotiate.dds"},
+        "ov_passed": {"subject": "a rolled scroll of tan-brown parchment tied with a red ribbon and sealed with a red "
+                                 "wax seal, beside a small brass hourglass", "seed": 0,
+                      "now": f"{_GI}/generic_icons/clock.dds"},
+        "ov_promises": {"subject": "two hands clasped in a firm handshake, one in a dark blue coat sleeve and one in a "
+                                   "brown tweed coat sleeve", "seed": 1,
+                        "now": f"{_GI}/generic_icons/approval_icon.dds"},
+        "ov_law": {"subject": "a sturdy dark wooden strongbox bound with iron bands, a coin slot in its lid, a few "
+                              "plain gold coins stamped with a small star in front of it", "seed": 1,
+                   "now": f"{_GI}/law_icons/proportional_taxation.dds"},
+        "ov_level": {"subject": "a round brass dial gauge with a thick red needle, its dark face divided into green, "
+                                "yellow and red zones, standing on a short stack of plain gold coins stamped with a "
+                                "small star", "seed": 2,
+                     "now": f"{_GI}/banking_icons/budget.dds"},
+    },
+    # Local Climate (docs/systems/mod_systems/local_climate.md): the state panel's climate
+    # item and concept_local_climate, on vanilla's tropical climate trait until now.
+    "state_status": {
+        "local_climate": {"subject": "a fat glass thermometer with a big round red bulb, a small bright yellow sun beside "
+                                     "its top and a small pale blue snowflake beside its bottom",
+                          "seed": 3, "solid": True, "now": f"{_GI}/state_trait_icons/tropical_climate.dds"},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
@@ -2390,6 +3285,151 @@ ICONS: dict[str, dict[str, dict]] = {
                                                  "now": f"{_BI}/building_grand_monument.dds"},
         "landmark_pompeii__forum": {"subject": "the excavated ruins of a Roman town dug out of grey volcanic ash: a long open forum paved with pale stone slabs, lined on both sides by rows of broken columns, a ruined temple on a high red brick podium at its far end, roofless houses with red and ochre plastered walls along straight stone-paved streets all around, a steep bank of grey ash at the edge of the dig, the broad cone of the volcano Vesuvius beyond with a thin plume of smoke, vineyards and umbrella pines", "seed": 2,
                                    "now": f"{_BI}/building_grand_monument.dds"},
+        # The historical opportunities' landmarks (signatures spec §6.4), as completed.
+        "landmark_walhalla__hall_of_fame": {"subject": "the Walhalla near Regensburg: a white marble Doric temple like the Parthenon, its pediments filled with sculpture, standing high on a wooded hillside above the river Danube on a vast stepped terrace of grey stone with broad flights of stairs climbing to it, a green plain below", "seed": 0,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_bunker_hill_monument__obelisk": {"subject": "a tall plain grey granite obelisk with a small pyramid tip, alone on a grassy hilltop square ringed by an iron fence, the red brick and white clapboard houses of a New England town around it, a harbour with sailing ships beyond", "seed": 2,
+                                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_obelisk_of_the_second_of_may__obelisk": {"subject": "a slender grey granite obelisk on a tall square stone pedestal carved with a sarcophagus, four allegorical stone statues seated around its base, inside a small round garden ringed by iron railings on a wide tree-lined boulevard of Madrid, a long neoclassical museum building beyond", "seed": 3,
+                                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_muhammad_ali_mosque__faith": {"subject": "the Mosque of Muhammad Ali in Cairo: a great Ottoman mosque with a large central dome surrounded by cascading half domes and smaller domes, exactly two very tall slender pencil-shaped minarets standing side by side at its front corners, its walls faced in pale alabaster, crowning the walled stone citadel on a hill above the domes and minarets of the city, dusty lanes with camels and donkeys, desert hills beyond", "seed": 2,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_nelsons_column__column": {"subject": "Nelson's Column in London: a very tall grey granite Corinthian column topped by a small statue of an admiral, four great bronze lions lying around its square base, in the middle of a wide paved square with two fountains, a long columned gallery building with a small dome along one side", "seed": 1,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_washington_monument__obelisk": {"subject": "the Washington Monument: a colossal plain white marble obelisk with a pointed pyramid tip, alone on a grassy rise in the middle of a long open lawn, a white domed capitol building at the far end", "seed": 2,
+                                                 "now": f"{_BI}/building_grand_monument.dds"},
+        # To History, standing in 1836 (tourism heritage spec 2026-10-23, PR #1139): as they stood then.
+        "landmark_pyramids_of_giza__pyramid": {"subject": "the Pyramids of Giza: three great pyramids of weathered tan limestone blocks on a desert plateau, the largest stripped of its casing to rough stepped courses, the second still capped with smooth white casing near its peak, the head and shoulders of the Great Sphinx rising from drifted sand in front, the green Nile valley with palm groves and mud-brick villages below", "seed": 2,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_petra__rock_cut": {"subject": "the Treasury at Petra: a tall two-storey temple facade of columns, a broken pediment and a round central pavilion carved straight into a sheer rose-red sandstone cliff, at the end of a narrow winding gorge, rock-cut tomb fronts in the cliffs around, a few Bedouin with camels", "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_moscow_kremlin__tower": {"subject": "the Moscow Kremlin: long red brick walls with swallowtail battlements and tall pointed red brick towers with green tent roofs and small golden eagles on their spires, above a river embankment, inside the walls white cathedrals with clusters of gilded onion domes and a tall white bell tower with a golden dome", "seed": 2,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_fasil_ghebbi__hall": {"subject": "the royal castle of Gondar in Ethiopia: a massive castle of rough brown stone with round corner towers capped by domes, battlemented walls and a tall square keep, inside a walled enclosure of other ruined stone palaces among tall trees, green highland hills", "seed": 2,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_valley_of_the_temples__pantheon": {"subject": "the Temple of Concordia at Agrigento: a well-preserved Doric temple of golden-brown limestone with its full ring of columns and both pediments, on a long ridge among almond and olive trees, other ruined temples with a few columns standing along the ridge, the sea beyond", "seed": 2,
+                                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_borobudur__gate": {"subject": "Borobudur in Java: a huge stepped stone monument of square terraces lined with carved relief galleries and small niches holding seated Buddhas, topped by three round terraces ringed with many small bell-shaped latticed stone stupas around one great central stupa, jungle cleared from its slopes, green volcanoes beyond", "seed": 5,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_old_city_of_sanaa__hall": {"subject": "the old city of Sana'a in Yemen: a dense cluster of tall many-storeyed tower houses of brown stone and mud brick, their facades decorated with white gypsum friezes around arched windows, a slender minaret among them, inside a city wall, bare mountains behind", "seed": 0,
+                                            "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_shibam__tower": {"subject": "Shibam in Yemen, the mud-brick city of tower houses: hundreds of very tall, very narrow tower houses of brown sun-dried mud brick, each eight storeys high and much taller than it is wide, packed shoulder to shoulder into one tall block with straight sheer sides, their top storeys whitewashed, small windows in rows up every face, a low mud wall at their foot, alone on a wide flat valley floor of fields and date palms between steep barren cliffs", "seed": 0,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_amphitheatre_of_el_djem__forum": {"subject": "the Roman amphitheatre of El Djem in Tunisia: a huge oval amphitheatre of honey-coloured stone with three tiers of arches, a wide gap broken through one side, standing among the small flat-roofed white houses of a village, olive groves on a flat plain", "seed": 2,
+                                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_abu_simbel__rock_cut": {"subject": "the great temple of Abu Simbel: four colossal seated pharaoh statues carved out of a sandstone cliff face beside a doorway, sand drifted high against the cliff and up over their legs and laps, on the bank of the Nile in Nubia, desert hills", "seed": 3,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_temple_of_seti_abydos__colonnade": {"subject": "the temple of Seti I at Abydos: a long low limestone temple, its front a portico of thick square pillars carved with reliefs, behind it a roofed hall of massive papyrus columns, half buried in drifted sand, mud-brick village houses around it, palm trees at the desert edge", "seed": 0,
+                                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_pyramids_of_meroe__pyramid": {"subject": "the pyramids of Meroe in Sudan: dozens of small narrow pyramids of dark sandstone blocks with very steep sides, each with a small temple gateway at its foot, crowded in rows along low ridges of red sand, several with their tops broken off, a dry savanna with acacia trees", "seed": 1,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_windsor_castle__tower": {"subject": "Windsor Castle: a great grey stone royal castle with battlemented walls and towers, a tall round keep on a high grassy mound at its centre, a long Gothic chapel, on a hill above the river Thames and a small town, green parkland", "seed": 2,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_pont_du_gard__arch": {"subject": "the Pont du Gard: a Roman aqueduct bridge of three tiers of golden stone arches, large arches below and a long row of small arches on top, spanning a green river gorge between wooded hills", "seed": 2,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_palais_des_papes__hall": {"subject": "the Palace of the Popes in Avignon: a massive Gothic fortress palace of pale stone with tall square towers, high walls with deep pointed arches and battlements, on a rock above the river Rhone beside a cathedral, a broken medieval bridge reaching halfway into the river", "seed": 2,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_mont_saint_michel__tower": {"subject": "Mont-Saint-Michel: a small rocky tidal island rising from wide wet sands at low tide, a Gothic abbey church with a short square tower on its summit above the tall walls of a monastery, a little walled village of grey stone houses climbing its slopes", "seed": 1,
+                                             "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_chateau_de_chambord__hall": {"subject": "the Chateau de Chambord: a huge French Renaissance chateau of white stone with four great round corner towers, its roof a forest of turrets, ornate chimneys, lanterns and small domes, a moat in front, in a vast forest park", "seed": 2,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_jeronimos_monastery__hall": {"subject": "the Jeronimos Monastery in Lisbon: an ornate white limestone Manueline monastery church with a richly carved portal and a short bell tower, a two-storey cloister of carved arches beside it, on the riverside plain of the Tagus, a small fortified tower standing in the river nearby", "seed": 0,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_alhambra__hall": {"subject": "the Alhambra in Granada: a red-walled Moorish palace fortress with square towers of red earth on a wooded hill, inside a long courtyard with a narrow rectangular pool lined with myrtle hedges reflecting a slender arched portico of delicate carved plasterwork, the snowy Sierra Nevada beyond", "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_mezquita_of_cordoba__hall": {"subject": "the inside of the Great Mosque of Cordoba seen from above with its roof taken away: a vast hall filled with a forest of slender columns in long straight rows, every column carrying two tiers of horseshoe arches striped in red brick and white stone, the striped arches repeating into the distance, a richly gilded prayer niche in the far wall", "seed": 1,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_shore_temple__pillar": {"subject": "the Shore Temple at Mahabalipuram: two pyramid-shaped granite temple towers of tiered carved storeys, worn smooth by salt wind, standing on the beach at the edge of the sea with waves breaking near them, small carved stone bulls along the enclosure wall, great carved boulders on the land behind", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_charminar__gate": {"subject": "the Charminar in Hyderabad: a square monument of pale stone with four identical tall slender minarets, one rising from each of its four corners, each minaret ringed by balconies and topped by a small dome, each of its four faces pierced by one great pointed arch, a small mosque with arched windows on its upper floor between the minarets, at the crossing of four bazaar streets crowded with stalls, people and bullock carts", "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_gwalior_fort__gate": {"subject": "Gwalior Fort: a long hilltop fortress on steep sandstone cliffs above a town, massive walls, and a palace with round towers topped by small domed kiosks, its walls decorated with bands of blue, green and yellow glazed tiles, ancient temples on the plateau behind", "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_meteora__memorial_church": {"subject": "the monasteries of Meteora in Greece: small stone monasteries with red-tiled roofs perched on the flat tops of giant sheer grey rock pillars rising from a green plain, a rope net hoist hanging down one cliff", "seed": 1,
+                                             "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_citadel_of_aleppo__gate": {"subject": "the Citadel of Aleppo: a massive medieval fortress on a huge oval mound with a steep stone-faced slope, ringed by a dry moat, entered by a tall fortified gate tower reached over a long arched stone bridge, the domes and minarets of an old stone city around it", "seed": 2,
+                                            "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_naqsh_e_jahan_square__hall": {"subject": "Naqsh-e Jahan Square in Isfahan: a vast rectangular square lined with two-storey arcades, at one end the great blue-tiled dome and tall turquoise entrance arch of a mosque with minarets, on one side a flat-roofed palace with a wooden columned terrace, a smaller cream and blue tiled dome of a second mosque opposite", "seed": 1,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_buddhas_of_bamiyan__statue": {"subject": "the colossal Buddha of Bamiyan: a giant standing Buddha statue in folded robes carved in a tall arched niche in a sheer tan sandstone cliff, its face worn away, a second smaller standing Buddha in another niche along the cliff, many small cave openings in the cliff, a green valley of poplar trees and fields below, snowy mountains", "seed": 2, "style": STATUE_STYLE,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_musalla_of_herat__tower": {"subject": "the Musalla of Herat: a great complex of tiled madrasas and a mosque with a tall entrance arch, many tall slender minarets covered in blue and turquoise glazed tilework, the ribbed blue dome of a mausoleum, on a dusty plain outside a walled city, mountains beyond", "seed": 1,
+                                            "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_grand_palace_bangkok__hall": {"subject": "the Grand Palace in Bangkok: a walled compound of Thai royal halls and temples with steep layered roofs of orange and green glazed tiles, gilded pointed spires and ornate gables, white crenellated walls, beside a broad river with boats", "seed": 0,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_changdeokgung__hall": {"subject": "Changdeokgung Palace in Seoul: a Korean palace of wooden halls with curved grey tiled roofs, red pillars and colourful painted eaves on stone terraces, a two-storey throne hall facing a stone-paved courtyard, a lotus pond with a pavilion in a wooded garden at the foot of a mountain", "seed": 2,
+                                        "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_bulguksa__pagoda": {"subject": "Bulguksa temple in Korea: a few weathered wooden temple halls with curved tiled roofs on a high stone terrace reached by double stone stairways, two stone pagodas in the courtyard, one plain three-storeyed, one ornate, on a forested mountainside", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_kinkaku_ji__pagoda": {"subject": "Kinkaku-ji in Kyoto: a three-storey pavilion with its upper two storeys covered in weathered gold leaf, under a curved shingled roof topped by a bronze phoenix, at the edge of a still pond with small pine-covered islands and rocks, a garden of maples and pines", "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_todai_ji__hall": {"subject": "Todai-ji in Nara: a colossal wooden temple hall with a huge two-tiered hipped roof of grey tiles with golden horn ornaments on its ridge, in a wide gravel courtyard behind a massive wooden gate, deer grazing in a park of trees", "seed": 0,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_itsukushima_shrine__gate": {"subject": "the great gate of Itsukushima: a giant vermilion wooden shrine gate standing in the sea, its two curved crossbeams topped in black, before a vermilion shrine of long open corridors and halls on piers over the water, a green forested mountain on the island behind", "seed": 0,
+                                             "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_potala_palace__hall": {"subject": "the Potala Palace in Lhasa: a huge fortress palace climbing a rocky hill, tiers of white walls with a dark red central palace block on top, rows of trapezoid windows, gilded roofs on the summit, long zigzag stairways up its face, a valley and bare mountains", "seed": 0,
+                                        "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_swayambhunath__pagoda": {"subject": "Swayambhunath above Kathmandu: a large white dome stupa topped by a gilded square tower painted on each side with a pair of watchful eyes and a gilded tiered spire, small shrines and pagoda-roofed temples around it, strings of prayer flags, on a forested hilltop above the valley", "seed": 0,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_leshan_giant_buddha__statue": {"subject": "the Leshan Giant Buddha: a colossal seated Buddha carved into a red sandstone cliff face where three rivers meet, its hands on its knees, ferns and shrubs growing on its shoulders and its head of curls, tiny figures on a stairway cut down the cliff beside it, a temple with curved roofs on the clifftop", "seed": 1, "style": STATUE_STYLE,
+                                                "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_temple_of_confucius__hall": {"subject": "the Temple of Confucius at Qufu: a great hall with a double-eaved roof of yellow glazed tiles on carved stone pillars wound with dragons, on a white marble terrace, in a vast walled courtyard of ancient cypress trees, a series of gates and pavilions along a straight axis", "seed": 1,
+                                              "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_yungang_grottoes__rock_cut": {"subject": "the Yungang Grottoes: a long sandstone cliff face carved with many cave temples, in the largest an open niche holding a colossal seated Buddha carved from the rock, wooden temple fronts with tiled roofs built against the cliff over some caves, a dry valley of yellow earth", "seed": 1,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_humble_administrators_garden__pagoda": {"subject": "the Humble Administrator's Garden in Suzhou: a classical Chinese garden of winding lotus ponds, zigzag stone bridges, pavilions with upturned tiled roof corners, white walls with round moon gates, rockeries of twisted limestone and willows, a tall pagoda beyond the garden walls", "seed": 1,
+                                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_longmen_grottoes__rock_cut": {"subject": "the Longmen Grottoes: limestone cliffs along a river honeycombed with thousands of small caves and niches of carved Buddhas, a great open terrace niche high on the cliff holding a colossal seated Buddha with standing attendant statues on each side, stairways up the cliff", "seed": 1,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_registan__gate": {"subject": "the Registan in Samarkand: a great square framed on three sides by three madrasas, each with a huge arched portal covered in faded blue and turquoise tiles, tall minarets, some of them leaning, and ribbed blue domes, market stalls on the sandy square", "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_itchan_kala__gate": {"subject": "the old walled town of Khiva in Central Asia: tall slender minarets banded with blue and turquoise tiles rising above flat-roofed mud-brick houses, madrasas with tiled arched portals and small turquoise domes, inside thick brown mud-brick walls with rounded bastions and a great gate, green irrigated fields and poplar trees outside the walls", "seed": 0,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_mausoleum_of_sultan_sanjar__mausoleum": {"subject": "the Mausoleum of Sultan Sanjar at Merv: a massive cube of brown baked brick topped by a high dome with most of its blue tiles gone, an arcaded gallery round its upper drum, standing alone among the eroded mud-brick walls and mounds of a ruined city on a flat plain", "seed": 2,
+                                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_kazan_kremlin__tower": {"subject": "the Kazan Kremlin: white stone fortress walls with round towers on a hill above a river, inside a white cathedral with onion domes and a tall leaning red brick tower of seven tiers with a green spire", "seed": 0,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_saint_sophia_kiev__memorial_church": {"subject": "Saint Sophia's Cathedral in Kiev: a large white Baroque cathedral with many green and gilded pear-shaped domes, the largest gilded in the centre, beside a tall white and blue tiered Baroque bell tower with a gilded dome, inside a monastery wall in a city of trees", "seed": 0,
+                                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_diocletians_palace__colonnade": {"subject": "Diocletian's Palace in Split: the massive walls of a Roman palace on the Adriatic waterfront, crowded inside and around with the stone houses and red roofs of an old town, a colonnaded Roman courtyard of granite columns and arches, a tall Romanesque bell tower rising beside an octagonal domed mausoleum", "seed": 2,
+                                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_marksburg__tower": {"subject": "the Marksburg: a medieval castle of whitewashed walls and grey slate roofs with a tall square keep, perched on a steep wooded hilltop above the river Rhine, vineyards on the slopes, a small village and boats on the river below", "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_aachen_cathedral__hall": {"subject": "Aachen Cathedral: an octagonal Carolingian chapel with a tall domed roof, joined to a soaring Gothic choir of tall stained glass windows, small chapels around it and a short tower, among the tiled roofs of an old German town", "seed": 0,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_basilica_of_saint_francis__hall": {"subject": "the Basilica of Saint Francis in Assisi: a pale pink and white stone church with a rose window and a square Romanesque bell tower, built on massive arched buttresses over a long arcaded friary, on the slope of a hill town above the green Umbrian plain", "seed": 1,
+                                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_walls_of_tallinn__gate": {"subject": "the old town walls of Tallinn: tall round medieval stone towers with steep red conical roofs strung along a long grey limestone town wall, a narrow gate between two towers, red-roofed merchant houses and the tall Gothic spires of churches inside, the Baltic Sea beyond", "seed": 0,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        # To History sites, buried until the game (tourism heritage phase 3): as they stand once dug.
+        "landmark_ephesus__colonnade": {"subject": "the excavated Roman city of Ephesus: the two-storey marble facade of a great library with paired columns and statues in niches, at the foot of a marble-paved street lined with broken columns, a huge theatre cut into the hillside, low green hills", "seed": 2,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_tikal__pyramid": {"subject": "Tikal in the Guatemalan jungle: a steep narrow Maya temple pyramid of grey limestone with nine stepped terraces and a steep central stairway, topped by a small temple with a tall carved roof comb, rising above the dense green jungle canopy, a second temple pyramid facing it across a grassy plaza", "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_chichen_itza__pyramid": {"subject": "the great pyramid of Chichen Itza: a square Maya stepped pyramid of nine terraces with a broad stairway up the middle of each of its four sides, carved serpent heads at the foot of the stairs, a square temple on top, on a wide flat grassy plaza, a colonnade of square pillars and a ball court nearby, low scrub forest", "seed": 0,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_teotihuacan__pyramid": {"subject": "Teotihuacan: the Pyramid of the Sun, a broad squat pyramid much wider than it is tall, five sloping stepped tiers of rough grey stone rising to a wide flat empty summit, a single broad stairway up its front, beside a long straight avenue lined with low stone platforms leading to a smaller pyramid in the distance, on a dry high plain of grass and cactus ringed by mountains", "seed": 1,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_monte_alban__pyramid": {"subject": "the ruins of Monte Alban: a great long plaza on a levelled mountaintop, lined with stepped stone platforms and terraced temple bases with wide stairways and a ball court, the broad green valley of Oaxaca far below on every side", "seed": 1,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_leptis_magna__forum": {"subject": "the excavated Roman city of Leptis Magna on the Libyan coast: a four-way triumphal arch with carved reliefs, colonnaded streets, a large forum and basilica of grey and pink granite columns, a theatre facing the Mediterranean, sand dunes half covering the outer ruins", "seed": 2,
+                                        "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_cyrene__pantheon": {"subject": "the ruins of Cyrene in Libya: a Doric Greek temple with a few re-erected columns on a terrace beside a sacred spring, a theatre and ruined stone buildings on a green hillside above a plateau, tombs carved into the cliffs, the coastal plain and the sea far below", "seed": 1,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_merida_theatre__forum": {"subject": "the excavated Roman theatre of Merida: a semicircle of stone seating tiers facing a stage with a tall two-storey backdrop of marble columns with statues between them, an oval amphitheatre beside it, olive trees and a Spanish town", "seed": 0,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_chogha_zanbil__pyramid": {"subject": "the ziggurat of Chogha Zanbil: a massive square stepped temple tower of brown baked mud brick, its lower stages still standing and its top worn away, inside a square enclosure wall, on a flat plain of tawny dry grass by a river", "seed": 1,
+                                           "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_hattusa__gate": {"subject": "the Lion Gate of Hattusa: a gateway in a massive Hittite city wall of huge rough-cut stone blocks, its arched doorway flanked by two large lions carved out of the gateposts, the wall running over the rocky hills of a bare Anatolian plateau, the excavated foundations of temples below", "seed": 1,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_mount_nemrut__statue": {"subject": "the summit of Mount Nemrut: a huge cone-shaped mound of loose stone chips on a mountaintop, before it on a stone terrace a row of colossal seated stone figures without heads, and in front of them a row of giant carved stone heads in tall conical caps standing on the ground, bare mountain ranges beyond", "seed": 0, "style": STATUE_STYLE,
+                                         "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_mogao_caves__rock_cut": {"subject": "the Mogao Caves near Dunhuang: a long cliff face of crumbling sandstone honeycombed with hundreds of cave doorways on several levels, linked by wooden walkways and stairs, a tall nine-storey wooden temple facade with red pillars and tiered roofs built against the cliff, poplar trees along a stream, sand dunes beyond", "seed": 0,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_khajuraho__pillar": {"subject": "the temples of Khajuraho: tall sandstone Hindu temples on high platforms, each a cluster of rising curved spires like a mountain range, their walls covered in bands of carved figures, on a green lawn among trees by a lake", "seed": 2,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "landmark_hampi__pillar": {"subject": "the ruins of Hampi: a stone chariot carved as a small shrine with stone wheels in a courtyard before a temple hall of carved granite pillars, a tall tiered temple gateway tower beyond, among a landscape of giant round granite boulders, banana groves and a river", "seed": 1,
+                                  "now": f"{_BI}/building_grand_monument.dds"},
         # The trophies' own pictures (2026-10-16): what was carried off, close, in a museum room
         # (TROPHY_STYLE); keys trophy_<landmark>, codes TROPHY_PICTURES in the registry test.
         "trophy_arc_de_triomphe": {"subject": "great sculpted stone relief groups of soldiers rallied by a winged figure with outspread wings, cut from a triumphal arch and set up along the walls of a museum room with a skylight", "style": TROPHY_STYLE, "seed": 0,
@@ -2568,6 +3608,148 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "now": f"{_BI}/building_grand_monument.dds"},
         "trophy_pompeii": {"subject": "a huge ancient Roman floor mosaic of a battle made of tiny stone tiles in ochre, brown, black and white, horsemen with long spears charging a king who turns back in his chariot among rearing horses, the mosaic set upright in a heavy frame against the wall, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_walhalla": {"subject": "rows of white marble portrait busts of famous men and women on tall pedestals, and a carved marble pediment group of standing figures, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_bunker_hill_monument": {"subject": "a white marble statue of a general in a long coat on a pedestal, beside glass cases of old flintlock muskets, powder horns, a tricorne hat and a small model of a tall granite obelisk, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_obelisk_of_the_second_of_may": {"subject": "a carved stone funeral urn on a tall pedestal, flanked by four allegorical stone statues of seated women, and laurel wreaths of gilded bronze, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_muhammad_ali_mosque": {"subject": "an ornate gilded wooden pulpit with a tall pointed canopy at the top of its staircase, rings of hanging glass mosque lamps and carved pale alabaster wall panels, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_nelsons_column": {"subject": "a stone statue of an admiral with one empty sleeve pinned across his coat, standing beside a coiled rope, and a large bronze relief panel of a dying admiral on a ship's deck among sailors, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_washington_monument": {"subject": "the small polished aluminium pyramid that capped a great obelisk, on a velvet plinth, beside carved marble and granite memorial blocks with relief carvings of eagles and shields, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_pyramids_of_giza": {"subject": "a dark basalt stone sarcophagus carved like a palace facade with panelled niches, smooth white limestone casing blocks, and grey stone statues of a pharaoh standing between two goddesses, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_petra": {"subject": "a carved rose-red sandstone column capital and frieze blocks from a temple facade cut in a cliff, a carved stone eagle, and thin painted Nabataean bowls patterned with leaves, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                        "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_moscow_kremlin": {"subject": "the treasures of the tsars: a gold filigree crown trimmed with dark sable fur and topped with a cross, an ivory throne, jewelled gold icons and gilded silver plate, and a great gilded cross taken from a bell tower, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_fasil_ghebbi": {"subject": "Ethiopian royal treasures: a gold filigree crown with hanging pendants, parchment books painted with bright saints, silver and brass processional crosses and painted wooden church panels, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_valley_of_the_temples": {"subject": "a colossal carved stone giant, a bearded male figure standing with his arms bent up behind his head as if holding up a roof, rebuilt from blocks, beside black and red painted Greek vases, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                        "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_borobudur": {"subject": "rows of carved grey stone Buddha heads with tightly curled hair, seated stone Buddha statues and carved relief panels of court scenes and ships, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_old_city_of_sanaa": {"subject": "half-moon windows of carved white gypsum tracery set with coloured glass, curved silver daggers in ornate sheaths, and small ancient alabaster heads with inlaid eyes, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_shibam": {"subject": "tall carved wooden house doors with heavy wooden locks, carved wooden window shutters, silver jewellery and painted clay water jars, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                         "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_amphitheatre_of_el_djem": {"subject": "ancient Roman floor mosaics of lions and leopards hunting antelope and of men fighting wild beasts in an arena, set upright in frames against the walls, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                          "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_abu_simbel": {"subject": "a colossal carved sandstone head of a pharaoh in a striped headdress and tall crown, broken from a seated statue, and painted carved statues of a queen and gods, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                             "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_temple_of_seti_abydos": {"subject": "finely carved painted limestone relief slabs from a temple wall, a pharaoh in a tall crown offering incense to a seated falcon-headed god, the figures in bright red, blue and yellow, and a carved stone statue of a kneeling king holding an altar, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                        "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_pyramids_of_meroe": {"subject": "the gold treasure of a Nubian queen: gold armlets with coloured enamel inlays, gold shield-shaped rings, signet rings and necklaces of gold and glass beads, in glass cases on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_windsor_castle": {"subject": "suits of engraved plate armour on stands, a great silver-gilt banqueting service on a long table, gilt-framed royal portraits and carved oak panelling, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_pont_du_gard": {"subject": "a whole arch of golden limestone blocks taken from a Roman aqueduct bridge and re-erected in a museum hall with a skylight, with Roman lead water pipes and bronze taps in glass cases", "style": TROPHY_STYLE, "seed": 2,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_palais_des_papes": {"subject": "fragments of medieval frescoes cut from palace walls, painted with prophets on a deep blue ground and with hunting and fishing scenes in green forests, framed on the walls, beside a carved papal throne and gold chalices, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_mont_saint_michel": {"subject": "a gilded statue of the archangel Michael slaying a dragon, gold and enamel reliquaries, and medieval books open on stands with brightly painted pages, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_chateau_de_chambord": {"subject": "Renaissance tapestries of royal stag hunts, a gilded royal bed under a canopy, carved oak chests and suits of armour, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_jeronimos_monastery": {"subject": "a gold monstrance of delicate Gothic tracery with tiny enamelled kneeling figures, and white marble royal tombs resting on the backs of carved stone elephants, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_alhambra": {"subject": "a tall golden lustre-glazed Moorish vase with winged handles, panels of delicately carved white plasterwork arches, and panels of coloured geometric tiles, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_mezquita_of_cordoba": {"subject": "carved ivory caskets with domed lids covered in vines and figures, carved marble column capitals, and a red and white striped horseshoe arch re-erected on two columns, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_shore_temple": {"subject": "South Indian bronze statues of a four-armed god dancing in a ring of fire and of seated goddesses, and a carved granite reclining bull, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_charminar": {"subject": "Deccan royal treasures: black metal vessels inlaid with silver flowers, jewelled daggers, a large faceted diamond on a velvet cushion and painted miniatures of sultans, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_gwalior_fort": {"subject": "panels of glazed tiles in blue, green and yellow with ducks, elephants and banana trees, and carved sandstone temple sculptures of gods and dancers, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_meteora": {"subject": "painted Byzantine icons of saints on gold grounds, a carved gilded wooden altar screen, hanging silver lamps and silver censers, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                          "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_citadel_of_aleppo": {"subject": "iron-studded carved wooden gate doors, brass basins inlaid with silver, enamelled glass mosque lamps and a carved stone lintel with two lions, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_naqsh_e_jahan_square": {"subject": "panels of blue and turquoise Persian tilework with flowers and arabesques, great silk carpets of medallions and flowers hung on the walls, and enamelled vessels, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_buddhas_of_bamiyan": {"subject": "fragments of wall paintings of seated Buddhas in blue and ochre halos cut from cave walls, and grey stone and stucco Buddha heads with wavy hair, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_musalla_of_herat": {"subject": "a tall broken drum of a minaret standing upright, covered in tile mosaic of deep blue, turquoise and white stars and flowers, beside large framed panels of the same tile mosaic and a marble tomb chest carved with leaves and flowers, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_grand_palace_bangkok": {"subject": "a small green jade Buddha seated high on a tall tiered gilded altar, with gilded umbrellas, mother-of-pearl inlaid doors and gilded lacquer cabinets, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                       "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_changdeokgung": {"subject": "a royal folding screen painted with a red sun, a white moon and five blue mountain peaks above waves and pine trees, set behind a red lacquered throne, with pale green celadon vases, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_bulguksa": {"subject": "weathered stone lion statues taken from the corners of a pagoda's stairs, and seated gilt-bronze Buddha statues, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_kinkaku_ji": {"subject": "a gilded bronze phoenix taken from a temple roof, on a stand, a gilded wooden seated Buddha statue, black and gold lacquer boxes and tea bowls, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                             "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_todai_ji": {"subject": "the treasures of an imperial temple storehouse: a five-stringed lute inlaid with mother-of-pearl, lacquered boxes, pale blue glass bowls and painted folding screens of ladies under trees, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_itsukushima_shrine": {"subject": "suits of ancient Japanese armour of laced red and gold plates on stands, carved painted wooden dance masks, a vermilion lacquered lantern and gilded lacquer boxes, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_potala_palace": {"subject": "gilded bronze statues of Buddhas and many-armed deities, bright painted silk scroll paintings hung on the walls and a gold reliquary stupa set with turquoise, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_swayambhunath": {"subject": "a huge gilded copper thunderbolt sceptre on a drum-shaped base, gilded copper statues of Buddhas and goddesses set with stones, and prayer wheels, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_leshan_giant_buddha": {"subject": "red sandstone Buddha statues and heads cut from cliff niches, gilded bronze temple bells and bronze incense burners, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_temple_of_confucius": {"subject": "a wooden frame of hanging bronze bells and a frame of L-shaped stone chimes for ritual music, bronze ritual vessels and embroidered silk robes on stands, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                      "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_yungang_grottoes": {"subject": "carved sandstone Buddha heads with calm smiling faces, and relief panels of musicians and flying figures cut from cave walls, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_humble_administrators_garden": {"subject": "a tall twisted grey limestone garden rock on a carved stand, dark rosewood scholar's furniture, a painted silk scroll of a garden, porcelain vases and potted dwarf trees, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_longmen_grottoes": {"subject": "large carved limestone relief panels of an emperor and an empress in procession with their courtiers, cut from a cave wall, and carved stone Buddha heads, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_registan": {"subject": "glazed tile panels from a madrasa portal showing a striped tiger chasing a deer under a rising sun with a human face, and panels of blue and turquoise tile mosaic, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                           "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_itchan_kala": {"subject": "the silver-covered throne of a Central Asian khan, tall slender carved wooden columns on bulb-shaped bases, and carved wooden doors, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_mausoleum_of_sultan_sanjar": {"subject": "glazed tile fragments, carved stucco panels, bronze ewers and incense burners shaped like lions and birds, and a carved marble cenotaph, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                                             "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_kazan_kremlin": {"subject": "the gold crown of a Tatar khan, a domed cap of gold filigree set with turquoises and rubies, with curved Tatar swords and silver-mounted saddles, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_saint_sophia_kiev": {"subject": "Byzantine gold mosaics of a standing Virgin with raised arms on a glittering gold ground, fresco fragments of saints, and a carved stone sarcophagus of a prince, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                    "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_diocletians_palace": {"subject": "a black granite Egyptian sphinx, carved Roman column capitals and relief friezes, and a carved stone sarcophagus, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                     "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_marksburg": {"subject": "suits of medieval armour, crossbows, swords and halberds on racks, and a carved oak chest, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_aachen_cathedral": {"subject": "a gold reliquary bust of a crowned bearded emperor, a jewelled gold processional cross, and a plain white marble throne on steps, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_basilica_of_saint_francis": {"subject": "fresco fragments of a saint in a brown robe preaching to birds, gilded panel paintings and gold reliquaries, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                            "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_walls_of_tallinn": {"subject": "a long medieval painted panel of skeletons dancing with a pope, an emperor and a king, and carved gilded altarpieces, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 2,
+                                   "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_ephesus": {"subject": "a carved marble column drum with life-size figures from a great temple, a bronze statue of an athlete, and long marble relief friezes of battles, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                          "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_tikal": {"subject": "carved dark wooden lintel beams covered in reliefs of a Maya lord on a throne beneath a great serpent, jade masks and painted Maya vases, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                        "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_chichen_itza": {"subject": "a reclining stone figure holding a dish on its belly, gold discs embossed with warriors, and jade beads and ornaments dredged from a sacred well, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_teotihuacan": {"subject": "greenstone masks with inlaid shell eyes, a carved stone feathered serpent head, and painted wall fragments of red and green figures, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_monte_alban": {"subject": "the treasure of a Mixtec tomb: gold pendants and necklaces of tiny gold bells, carved jaguar bones, rock crystal goblets and turquoise mosaic, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_leptis_magna": {"subject": "tall granite and marble columns, carved capitals and pieces of entablature from a Roman city, re-erected as a ruined colonnade inside a museum hall with a skylight, with marble statues of emperors", "style": TROPHY_STYLE, "seed": 0,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_cyrene": {"subject": "a white marble statue of the god Apollo with a lyre and a python coiled round a tree stump, and marble heads and statues of goddesses, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                         "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_merida_theatre": {"subject": "white marble statues of Roman goddesses and robed emperors from a theatre's stage wall, carved column capitals and Roman floor mosaics, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                 "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_chogha_zanbil": {"subject": "glazed bricks incised with wedge-shaped signs, a glazed clay bull statue, glazed clay wall knobs and small bronze figurines, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                                "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_hattusa": {"subject": "a carved stone sphinx with a broad human face, a lion's body and a rounded cap, taken from a city gate, beside bronze standards topped with stags and bulls and painted clay jugs with long beak spouts, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                          "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_mount_nemrut": {"subject": "a colossal carved stone head of a bearded god in a tall conical cap set on the floor, beside a colossal carved stone eagle's head and a colossal carved lion's head, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 0,
+                               "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_mogao_caves": {"subject": "rolled and open paper scrolls of an ancient library, a printed scroll with a picture of a Buddha preaching, and silk banner paintings of Buddhas and bodhisattvas, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                              "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_khajuraho": {"subject": "carved sandstone figures of graceful celestial dancers and of a woman looking into a mirror, and carved sandstone temple wall panels, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                            "now": f"{_BI}/building_grand_monument.dds"},
+        "trophy_hampi": {"subject": "carved granite pillars with rearing horses and lion-like beasts, a carved stone wheel from a temple chariot, and bronze statues of a god and his two consorts, on display in a museum room with pale walls and a skylight", "style": TROPHY_STYLE, "seed": 1,
+                        "now": f"{_BI}/building_grand_monument.dds"},
     },
 }
 
@@ -2697,6 +3879,10 @@ ICONS.update({
                                  marks=[{"draw": "arrow", "dir": "up", "colour": "green"}]),
         "phase_boom": _bank(f"{_TM}/modifier_coins_positive.dds", tint="gold",
                             marks=[{"draw": "arrow", "dir": "up", "colour": "blue"}]),
+        # Not Started (2026-10-17): the bank front alone, centred, no mark; the overview dims it,
+        # as it dimmed Stable's until now.
+        "phase_not_started": {"from": "banking_part/bank", "base": {"scale": 0.88, "at": (0.5, 0.5)},
+                              "now": f"{_GI}/banking_icons/phase_stable.dds"},
         "phase_frenzy": _bank(f"{_TM}/modifier_fire_positive.dds", tint="gold",
                               marks=[{"draw": "arrow", "dir": "up", "colour": "red", "double": True, "scale": 0.58},
                                      {"part": "banking_part/coin", "at": (0.2, 0.86), "scale": 0.22},
@@ -2858,6 +4044,12 @@ ICONS.update({
         "authority_delegation": _key("cap", f"{_GI}/generic_icons/most_senior_front_commander.dds"),
         "authority_on_warning": _key("radar", f"{_GI}/lens_toolbar_icons/nd_nuclear_warning_action.dds"),
         "authority_automatic": _key("cabinet", f"{_GI}/generic_icons/observer_mode_icon.dds"),
+        # Credibility: the warhead under a brass seal stamped with a handshake.
+        # The warhead lifted and shrunk a little so its trefoil shows above the seal; a plain handshake
+        # in place of the seal was a skin-coloured blob at 44 px.
+        "credibility": {"from": "nuclear_part/warhead", "base": {"scale": 0.86, "at": (0.44, 0.42)},
+                        "marks": [{"part": "nuclear_part/handshake_seal", "at": (0.7, 0.7), "scale": 0.62}],
+                        "now": f"{_DT}/nuclear_guarantee.dds"},
     },
     "colonial_state": {
         # One globe; the tie between home and overseas coasts is the band.
@@ -2910,6 +4102,24 @@ ICONS.update({
                                        "marks": [{"icon": f"{_GI}/generic_icons/green_checkmark.dds",
                                                   "at": (0.74, 0.74), "scale": 0.46}],
                                        "now": f"{_GI}/event_icons/je_space_race_interstellar_results.dds"},
+        # A colony's page (batch 8): four tiles on the habitat's dome, what is around it saying which.
+        "page_autonomy": {"from": "space/module_hab", "base": {"scale": 0.84, "at": (0.44, 0.56)},
+                          "marks": [{"part": "space_part/pennant", "at": (0.72, 0.3), "scale": 0.52}],
+                          "now": f"{_GI}/diplomatic_action_icons/liberty_desire.dds"},
+        "page_aut_status": {"from": "space/module_hab", "base": {"scale": 0.86, "at": (0.44, 0.44)},
+                            "marks": [{"part": "nuclear_part/treaty_seal", "at": (0.72, 0.72), "scale": 0.52}],
+                            "now": f"{_GI}/ai_strategy_icons/subject_maintain_autonomy.dds"},
+        # A crack, not a split: split halves read as a colony already destroyed. The crack is lost on
+        # the deep-blue habitat (s1), so the habitat is s0, with lighter panes and a lit band.
+        "page_integrity": {"from": "space/module_hab", "damage": "crack",
+                           "now": f"{_GI}/state_status_icons/has_devastation.dds"},
+        "page_def_status": {"from": "space/module_hab", "base": {"scale": 0.84, "at": (0.4, 0.56)},
+                            "marks": [{"part": "nuclear_part/radar", "at": (0.74, 0.34), "scale": 0.5}],
+                            "now": f"{_GI}/state_status_icons/colony.dds"},
+        # Modules Crewed: the Modules cell's module with vanilla's population mark as its crew badge.
+        "page_crewed": {"from": "space/module", "base": {"scale": 0.88, "at": (0.44, 0.44)},
+                        "marks": [{"icon": f"{_GI}/generic_icons/population.dds", "at": (0.74, 0.74), "scale": 0.46}],
+                        "now": f"{_GI}/generic_icons/employment_not_full.dds"},
     },
     "st_res_state": {
         # One crate; the lane's state is the mark in its word's colour.

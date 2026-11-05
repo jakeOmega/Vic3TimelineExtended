@@ -336,6 +336,9 @@ un_regime_refresh_country = {
 		# no regime modifier: its terms are the strike's doubled costs
 		# (te_asat_moratorium_party) and the cleaners' Delivery entries
 		# (te_asat_moratorium_delivery_monthly).
+		# The Convention on the Settlement of Outer Space (COPUOS, solar
+		# colonization fleets § 13) has no regime modifier either: its terms
+		# are the fleets' doubled prices of force (sr_colony_convention_party).
 		# The prohibition of nuclear weapons (TPNW, redesign phase 7) has no
 		# regime modifier: its terms are the ceiling the nuclear entry keeps
 		# (nd_taboo_refresh_ban_ceiling, nuclear_taboo_effects.txt) and the
@@ -405,6 +408,7 @@ un_regime_reapply_conventions = {
 	un_regime_reapply_country = { MODIFIER = un_nuclear_ban_modifier }
 	un_regime_reapply_country = { MODIFIER = un_antarctic_treaty_modifier }
 	un_regime_reapply_country = { MODIFIER = un_asat_moratorium_modifier }
+	un_regime_reapply_country = { MODIFIER = un_colony_protection_modifier }
 }
 
 # Parameters: $MODIFIER$ = a convention member modifier on the journal entry

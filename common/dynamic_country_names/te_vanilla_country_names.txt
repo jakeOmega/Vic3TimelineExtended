@@ -1,0 +1,145 @@
+﻿# Government-flavored dynamic names for vanilla countries the mod renames.
+#
+# REPLACE:USA drops vanilla's whole USA block (00_dynamic_country_names.txt)
+# and puts this one in its place; vanilla's Archduchy / Syndicates / Synods /
+# North American Technate / United Senators / United State entries do not
+# survive alongside it.
+#
+# Government partition. Each Governance Principles law gets one name, so the
+# priority-0 entries never overlap and file order does not matter:
+#   presidential / parliamentary republic  United States of America
+#   ... with Technocracy (Distribution of Power)  American Technate
+#   council republic                       Workers' Commonwealth of America
+#   any monarchy                           Imperial Union of America
+#   theocracy                              New Canaan
+#   corporate state ("Corporatist")        National Estates of America
+#   Neocameralism ("Corpocracy")           Associated Trusts of America
+# Technocracy only splits the presidential / parliamentary case, as in
+# vanilla (its Technate needed a republic). Any other law (Collective
+# Governance) matches nothing and falls back to the bare USA loc key,
+# "America" (as it did under vanilla's block).
+#
+# Territory entries (priority 1) beat every government name. They keep
+# vanilla's triggers except that the second also requires the District, so a
+# lone state without it reads as its government name.
+#
+# Neocameralism is a mod law, so there is no coa_def_* trigger for it; the
+# inline form is the one vanilla's technocracy entry uses.
+#
+# All entries use USA_ADJ ("American").
+
+REPLACE:USA = {
+	dynamic_country_name = { # The District of Columbia alone
+		name = dyn_c_federal_district_of_columbia
+		adjective = USA_ADJ
+		priority = 1
+		trigger = {
+			exists = c:USA
+			c:USA ?= {
+				any_scope_state = {
+					state_region = { has_variable = district_of_columbia }
+					count > 0
+				}
+				any_scope_state = {
+					state_region = { NOT = { has_variable = district_of_columbia } }
+					count < 1
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # The District of Columbia and exactly one state
+		name = dyn_c_state_and_district_of_america
+		adjective = USA_ADJ
+		priority = 1
+		trigger = {
+			exists = c:USA
+			c:USA ?= {
+				any_scope_state = {
+					state_region = { has_variable = district_of_columbia }
+					count > 0
+				}
+				any_scope_state = {
+					state_region = { NOT = { has_variable = district_of_columbia } }
+					count = 1
+				}
+			}
+		}
+	}
+	dynamic_country_name = { # Presidential / parliamentary republic
+		name = dyn_c_united_states
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			scope:actor ?= {
+				OR = {
+					has_law_or_variant = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_parliamentary_republic
+				}
+				NOT = { has_law_or_variant = law_type:law_technocracy }
+			}
+		}
+	}
+	dynamic_country_name = { # Technocracy
+		name = dyn_c_american_technate
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			scope:actor ?= {
+				OR = {
+					has_law_or_variant = law_type:law_presidential_republic
+					has_law_or_variant = law_type:law_parliamentary_republic
+				}
+				has_law_or_variant = law_type:law_technocracy
+			}
+		}
+	}
+	dynamic_country_name = { # Monarchy
+		name = dyn_c_imperial_union_of_america
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_monarchy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Council republic
+		name = dyn_c_workers_commonwealth_of_america
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_communist_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Corpocracy (Neocameralism)
+		name = dyn_c_associated_trusts_of_america
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			scope:actor ?= {
+				has_law_or_variant = law_type:law_neocameralism
+			}
+		}
+	}
+	dynamic_country_name = { # Theocracy
+		name = dyn_c_new_canaan
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_theocracy_flag_trigger = yes
+		}
+	}
+	dynamic_country_name = { # Corporatist (corporate state)
+		name = dyn_c_national_estates_of_america
+		adjective = USA_ADJ
+		is_main_tag_only = yes
+		priority = 0
+		trigger = {
+			coa_def_corporate_state_flag_trigger = yes
+		}
+	}
+}

@@ -1,0 +1,471 @@
+﻿# Flags of the mod's releasable city-states (common/country_creation/te_city_states.txt).
+# No flag_definitions entry: the engine falls back to the coat of arms named after
+# the tag. Every texture is a vanilla pattern or colored emblem; no new art.
+
+NYC = { # New York: blue, white and orange, after the city flag
+	pattern = "pattern_solid.tga"
+	color1 = "white"
+	color2 = "medium_blue"
+	color3 = "orange"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.334 1.0 } position = { 0.167 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.334 1.0 } position = { 0.833 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_eagle_usa_simple.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.42 0.42 } position = { 0.5 0.5 } }
+	}
+}
+
+SFO = { # San Francisco: a rising bird in black and gold on white, gold border
+	pattern = "pattern_solid.tga"
+	color1 = "white"
+	color2 = "yellow"
+	color3 = "black"
+
+	colored_emblem = {
+		texture = "ce_eagle.dds"
+		color1 = color3
+		color2 = color2
+		instance = { scale = { 0.62 0.62 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.06 } position = { 0.5 0.03 } }
+		instance = { scale = { 1.0 0.06 } position = { 0.5 0.97 } }
+		instance = { scale = { 0.04 1.0 } position = { 0.02 0.5 } }
+		instance = { scale = { 0.04 1.0 } position = { 0.98 0.5 } }
+	}
+}
+
+SGP = { # Singapore: red over white, crescent and five stars
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.5 } position = { 0.5 0.75 } }
+	}
+	colored_emblem = {
+		texture = "ce_crescent.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.34 0.34 } position = { 0.19 0.25 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.075 0.075 } position = { 0.31 0.175 } }
+		instance = { scale = { 0.075 0.075 } position = { 0.262 0.227 } }
+		instance = { scale = { 0.075 0.075 } position = { 0.281 0.311 } }
+		instance = { scale = { 0.075 0.075 } position = { 0.339 0.311 } }
+		instance = { scale = { 0.075 0.075 } position = { 0.358 0.227 } }
+	}
+}
+
+HKG = { # Hong Kong: a white flower, for the bauhinia, on red
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_pattern_flower.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.75 0.75 } position = { 0.5 0.5 } }
+	}
+}
+
+SHG = { # Shanghai: a white junk on blue, after the Special Municipality's emblem
+	pattern = "pattern_solid.tga"
+	color1 = "azure"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_ship_manchester.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.7 0.7 } position = { 0.5 0.47 } }
+	}
+	colored_emblem = {
+		texture = "ce_waves.dds"
+		color1 = color1
+		color2 = color2
+		instance = { scale = { 1.0 0.3 } position = { 0.5 0.86 } }
+	}
+}
+
+CST = { # Constantinople: the city's ancient crescent and star, in gold on purple
+	pattern = "pattern_solid.tga"
+	color1 = "purple"
+	color2 = "yellow"
+
+	colored_emblem = {
+		texture = "ce_crescent.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.66 0.66 } position = { 0.36 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_08.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.36 0.36 } position = { 0.62 0.5 } }
+	}
+}
+
+MCU = { # Macau: a white lotus over water under five gold stars, on green
+	pattern = "pattern_solid.tga"
+	color1 = "green"
+	color2 = "white"
+	color3 = "yellow"
+
+	colored_emblem = {
+		texture = "ce_lotus_base.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.6 0.6 } position = { 0.5 0.56 } }
+	}
+	colored_emblem = {
+		texture = "ce_waves.dds"
+		color1 = color1
+		color2 = color2
+		instance = { scale = { 0.5 0.2 } position = { 0.5 0.8 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.13 0.13 } position = { 0.5 0.2 } }
+		instance = { scale = { 0.07 0.07 } position = { 0.39 0.24 } }
+		instance = { scale = { 0.07 0.07 } position = { 0.61 0.24 } }
+		instance = { scale = { 0.07 0.07 } position = { 0.32 0.33 } }
+		instance = { scale = { 0.07 0.07 } position = { 0.68 0.33 } }
+	}
+}
+
+KUW = { # Kuwait: green, white and red with a black hoist
+	pattern = "pattern_solid.tga"
+	color1 = "white"
+	color2 = "green"
+	color3 = "red"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.334 } position = { 0.5 0.167 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 1.0 0.334 } position = { 0.5 0.833 } }
+	}
+	colored_emblem = {
+		texture = "ce_rhombus.dds"
+		color1 = "black"
+		color2 = "black"
+		instance = { scale = { 0.6 1.0 } position = { 0 0.5 } }
+	}
+}
+
+FIU = { # Fiume: crimson, yellow and blue, the Free State's tricolor
+	pattern = "pattern_solid.tga"
+	color1 = "yellow"
+	color2 = "red_dark"
+	color3 = "blue"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.334 } position = { 0.5 0.167 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 1.0 0.334 } position = { 0.5 0.833 } }
+	}
+}
+
+BOM = { # Bombay: a lion over the harbor, on saffron
+	pattern = "pattern_solid.tga"
+	color1 = "saffron"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_lion_passant_guardant.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.75 0.75 } position = { 0.5 0.42 } }
+	}
+	colored_emblem = {
+		texture = "ce_waves.dds"
+		color1 = color1
+		color2 = color2
+		instance = { scale = { 1.0 0.3 } position = { 0.5 0.86 } }
+	}
+}
+
+GOA = { # Goa: Portuguese green and red with the armillary sphere
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "green"
+	color3 = "yellow"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.4 1.0 } position = { 0.2 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_armillary_sphere.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.62 0.62 } position = { 0.4 0.5 } }
+	}
+}
+
+PDY = { # Pondicherry: the French tricolor with a gold elephant
+	pattern = "pattern_solid.tga"
+	color1 = "white"
+	color2 = "blue"
+	color3 = "red"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.334 1.0 } position = { 0.167 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.334 1.0 } position = { 0.833 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_elephant_asia.dds"
+		color1 = "yellow"
+		color2 = "brown_light"
+		instance = { scale = { 0.5 0.5 } position = { 0.5 0.5 } }
+	}
+}
+
+ADN = { # Aden: a dhow on a white disc, after the colony's badge, on blue
+	pattern = "pattern_solid.tga"
+	color1 = "blue"
+	color2 = "white"
+	color3 = "brown"
+
+	colored_emblem = {
+		texture = "ce_circle.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.05 1.05 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_ship_manchester.dds"
+		color1 = color3
+		color2 = color1
+		instance = { scale = { 0.62 0.62 } position = { 0.5 0.5 } }
+	}
+}
+
+DXB = { # Dubai: red with a white hoist
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.25 1.0 } position = { 0.125 0.5 } }
+	}
+}
+
+TAN = { # Tangier: a white kasbah on red
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_castle.dds"
+		color1 = color2
+		color2 = color1
+		instance = { scale = { 0.6 0.6 } position = { 0.5 0.5 } }
+	}
+}
+
+LAG = { # Lagos: an elephant before a palm, after the colony's badge, on green
+	pattern = "pattern_solid.tga"
+	color1 = "green"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_circle.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.1 1.1 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_palm_tree.dds"
+		color1 = "brown_light"
+		color2 = "green_light"
+		instance = { scale = { 0.52 0.52 } position = { 0.57 0.43 } }
+	}
+	colored_emblem = {
+		texture = "ce_elephant_african.dds"
+		color1 = "grey"
+		color2 = "brown_light"
+		instance = { scale = { 0.36 0.36 } position = { 0.46 0.6 } }
+	}
+}
+
+DKR = { # Dakar: the Lebou Republic's crescent and star, white on green
+	pattern = "pattern_solid.tga"
+	color1 = "green"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_crescent.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.6 0.6 } position = { 0.4 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.28 0.28 } position = { 0.62 0.5 } }
+	}
+}
+
+DJI = { # Djibouti: light blue over green, white hoist triangle, red star
+	pattern = "pattern_solid.tga"
+	color1 = "blue_light"
+	color2 = "green_light"
+	color3 = "white"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.5 } position = { 0.5 0.75 } }
+	}
+	colored_emblem = {
+		texture = "ce_rhombus.dds"
+		color1 = color3
+		color2 = color3
+		instance = { position = { 0 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = "red"
+		color2 = "red"
+		instance = { scale = { 0.22 0.22 } position = { 0.16 0.5 } }
+	}
+}
+
+OCL = { # Calabar: the Ekpe society's leopard, gold on black
+	pattern = "pattern_solid.tga"
+	color1 = "black"
+	color2 = "yellow"
+	color3 = "red"
+
+	colored_emblem = {
+		texture = "ce_leopard_passant_guardant.dds"
+		color1 = color2
+		color2 = color3
+		instance = { scale = { 0.85 0.85 } position = { 0.5 0.5 } }
+	}
+}
+
+GYE = { # Guayaquil: the Free Province's light blue and white stripes, three stars
+	pattern = "pattern_solid.tga"
+	color1 = "blue_light"
+	color2 = "white"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.2 } position = { 0.5 0.3 } }
+		instance = { scale = { 1.0 0.2 } position = { 0.5 0.7 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_05.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.14 0.14 } position = { 0.33 0.5 } }
+		instance = { scale = { 0.14 0.14 } position = { 0.5 0.5 } }
+		instance = { scale = { 0.14 0.14 } position = { 0.67 0.5 } }
+	}
+}
+
+CTG = { # Cartagena: the Free State's red, yellow and green with an eight-point star
+	pattern = "pattern_solid.tga"
+	color1 = "red"
+	color2 = "yellow"
+	color3 = "green"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 0.75 0.75 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.5 0.5 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_star_08.dds"
+		color1 = "white"
+		color2 = "white"
+		instance = { scale = { 0.3 0.3 } position = { 0.5 0.5 } }
+	}
+}
+
+BUE = { # Buenos Aires: light blue and white with a ship, from the city's arms
+	pattern = "pattern_solid.tga"
+	color1 = "blue_light"
+	color2 = "white"
+	color3 = "medium_blue"
+
+	colored_emblem = {
+		texture = "ce_solid.dds"
+		color1 = color2
+		color2 = color2
+		instance = { scale = { 1.0 0.334 } position = { 0.5 0.5 } }
+	}
+	colored_emblem = {
+		texture = "ce_ship_manchester.dds"
+		color1 = color3
+		color2 = color3
+		instance = { scale = { 0.46 0.46 } position = { 0.5 0.5 } }
+	}
+}

@@ -464,7 +464,7 @@ def step(state: State, sc: Scenario, md: D.ModData, p: Params) -> YearRecord:
             staff = max(0.0, k_emp * (b.employment + (tier.employment if tier else 0.0)))
             buildings = min(ss.levels, n_states) if n_states > 0 else 0.0
             crew = (tier.crew if tier else 0.0) * max(0.0, buildings)
-            maint = lad.maintenance * p.maintenance_mult
+            maint = D.maintenance_at(lad, b.pm) * p.maintenance_mult
             va = k_va * (b.va + (tier.va if tier else 0.0)) - maint * maint_good_prev
         if s in NO_EOS or n_states <= 0:
             eos = 0.0

@@ -1790,6 +1790,7 @@ te_tax_gen_sync_goods = {
 	if = { limit = { has_consumption_tax = g:explosives } remove_taxed_goods = g:explosives }
 	if = { limit = { has_consumption_tax = g:fertilizer } remove_taxed_goods = g:fertilizer }
 	if = { limit = { has_consumption_tax = g:gold } remove_taxed_goods = g:gold }
+	if = { limit = { has_consumption_tax = g:grid_power } remove_taxed_goods = g:grid_power }
 	if = { limit = { has_consumption_tax = g:hardwood } remove_taxed_goods = g:hardwood }
 	if = { limit = { has_consumption_tax = g:iron } remove_taxed_goods = g:iron }
 	if = { limit = { has_consumption_tax = g:ironclads } remove_taxed_goods = g:ironclads }
@@ -1861,6 +1862,7 @@ te_tax_gen_count_goods_drift = {
 	if = { limit = { has_consumption_tax = g:explosives } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:fertilizer } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:gold } change_variable = { name = te_tax_drift_goods add = 1 } }
+	if = { limit = { has_consumption_tax = g:grid_power } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:hardwood } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:iron } change_variable = { name = te_tax_drift_goods add = 1 } }
 	if = { limit = { has_consumption_tax = g:ironclads } change_variable = { name = te_tax_drift_goods add = 1 } }

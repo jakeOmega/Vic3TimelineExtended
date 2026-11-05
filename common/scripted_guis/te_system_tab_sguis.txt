@@ -2,7 +2,9 @@
 # SYSTEM TABS IN VANILLA PANELS — gates
 # ============================================================================
 # A system's journal-entry panels are also shown as a tab in a vanilla panel
-# (docs/systems/system_panels_feasibility.md). Each tab has two handlers here,
+# (docs/systems/system_panels_feasibility.md), and the Timeline Extended window
+# mirrors that tab under the same two gates (gen_te_systems_window.py), so a
+# gate's name records the tab's first host. Each tab has two handlers here,
 # and both read nothing but the root, so they are safe as `visible` / `enabled`
 # gates (gotcha #22 in docs/guides/gui_modding_guide.md):
 #
@@ -172,6 +174,30 @@ te_military_nuclear_tab_unlock_sgui = {
 	effect = { }
 }
 
+# National Info's open gate for another country's Nuclear tab (the generator's
+# Tab.ni_open): the tab's gate, once the world's first warhead has made the
+# nuclear taboo (nd_taboo_birth). Before it only a country with a programme
+# holds the entry, so the tab's state would tell whether another country runs
+# one. In play neither nd_believed_armed nor nd_in_crisis comes before the
+# taboo; they keep an armed country's tab open in a save from before the taboo,
+# for the month until nd_taboo_seed_existing_world births it. The player's own
+# tab opens on te_military_nuclear_tab_sgui as before.
+te_ni_nuclear_tab_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
+		has_journal_entry = je_nuclear_program
+		OR = {
+			has_global_variable = nd_taboo
+			nd_believed_armed = yes
+			nd_in_crisis = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ---------------------------------------------------------------------------
 # Covert Warfare: Military panel (gui/panel_military.gui, the fifth slot),
 # je_covert_warfare. The entry is active once a country holds one operation
@@ -317,25 +343,32 @@ te_pops_demog_tab_unlock_sgui = {
 
 # ---------------------------------------------------------------------------
 # Space Race: the nine je_space_race_* entries (je_space_race.txt). The tab
-# opens while any of them runs; each entry's block has its own gate below,
-# because GetPlayerJournalEntry takes one literal key. The checklist is when
-# the first milestone starts (sr_entry_unlocked).
+# opens with the first milestone and stays open from then on (sr_in_space_race:
+# the country has run a milestone, or holds an entry), so the Space Powers
+# standings and Orbit, which read no entry, show between milestones too
+# (owner, 2026-10-25). Each entry's block has its own gate below, because
+# GetPlayerJournalEntry takes one literal key, and a note stands in for them
+# while none runs (te_window_space_race_idle_sgui). The checklist is when the
+# first milestone starts (sr_entry_unlocked).
 # ---------------------------------------------------------------------------
 te_window_space_race_tab_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
-		OR = {
-			has_journal_entry = je_space_race_suborbital
-			has_journal_entry = je_space_race_orbital
-			has_journal_entry = je_space_race_moon_landing
-			has_journal_entry = je_space_race_probe
-			has_journal_entry = je_space_race_moon_base
-			has_journal_entry = je_space_race_mars_landing
-			has_journal_entry = je_space_race_interstellar_probe
-			has_journal_entry = je_space_race_interstellar_results
-			has_journal_entry = je_space_race_solar_colonization
-		}
+		sr_space_race_on = yes
+		sr_in_space_race = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# The tab is open and no entry runs: its note, in the entries' place.
+te_window_space_race_idle_sgui = {
+	scope = country
+	is_shown = {
+		sr_space_race_on = yes
+		sr_in_space_race = yes
+		NOT = { sr_holds_space_race_entry = yes }
 	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
@@ -344,7 +377,7 @@ te_window_space_race_tab_sgui = {
 
 te_window_space_race_tab_unlock_sgui = {
 	scope = country
-	is_shown = { has_game_rule = space_race_enabled }
+	is_shown = { sr_space_race_on = yes }
 	ai_is_valid = { always = no }
 	is_valid = { sr_entry_unlocked = yes }
 	effect = { }
@@ -353,7 +386,7 @@ te_window_space_race_tab_unlock_sgui = {
 te_window_space_race_suborbital_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_suborbital
 	}
 	ai_is_valid = { always = no }
@@ -364,7 +397,7 @@ te_window_space_race_suborbital_sgui = {
 te_window_space_race_orbital_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_orbital
 	}
 	ai_is_valid = { always = no }
@@ -375,7 +408,7 @@ te_window_space_race_orbital_sgui = {
 te_window_space_race_moon_landing_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_moon_landing
 	}
 	ai_is_valid = { always = no }
@@ -386,7 +419,7 @@ te_window_space_race_moon_landing_sgui = {
 te_window_space_race_probe_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_probe
 	}
 	ai_is_valid = { always = no }
@@ -397,7 +430,7 @@ te_window_space_race_probe_sgui = {
 te_window_space_race_moon_base_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_moon_base
 	}
 	ai_is_valid = { always = no }
@@ -408,7 +441,7 @@ te_window_space_race_moon_base_sgui = {
 te_window_space_race_mars_landing_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_mars_landing
 	}
 	ai_is_valid = { always = no }
@@ -419,7 +452,7 @@ te_window_space_race_mars_landing_sgui = {
 te_window_space_race_interstellar_probe_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_interstellar_probe
 	}
 	ai_is_valid = { always = no }
@@ -430,7 +463,7 @@ te_window_space_race_interstellar_probe_sgui = {
 te_window_space_race_interstellar_results_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_interstellar_results
 	}
 	ai_is_valid = { always = no }
@@ -441,7 +474,7 @@ te_window_space_race_interstellar_results_sgui = {
 te_window_space_race_solar_colonization_sgui = {
 	scope = country
 	is_shown = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		has_journal_entry = je_space_race_solar_colonization
 	}
 	ai_is_valid = { always = no }
@@ -450,7 +483,16 @@ te_window_space_race_solar_colonization_sgui = {
 }
 
 # ---------------------------------------------------------------------------
-# Colonial Empire: je_colonial_empire.
+# Colonial Empire: je_colonial_empire. The second exception to "greyed until
+# the entry runs" (owner, 2026-11-03), after Banking's readout: a country's
+# stance on colonialism and the list of the colonial powers outlive the entry
+# (decolonization_stance_effects.txt), so the tab opens once the country has
+# researched Decolonization. Without the entry it shows those two sections
+# alone (te_window_colonial_empire_readout_sgui); the entry adds its own
+# panels while it runs (te_window_colonial_empire_tab_sgui). The two are never
+# true together. The greyed tab's checklist is the research
+# (ce_tab_unlocked); what opens the entry is ce_entry_unlocked, which the
+# readout's note shows on hover (te_window_colonial_empire_entry_unlock_sgui).
 # ---------------------------------------------------------------------------
 te_window_colonial_empire_tab_sgui = {
 	scope = country
@@ -463,7 +505,27 @@ te_window_colonial_empire_tab_sgui = {
 	effect = { }
 }
 
+te_window_colonial_empire_readout_sgui = {
+	scope = country
+	is_shown = {
+		has_game_rule = decolonization_enabled
+		NOT = { has_journal_entry = je_colonial_empire }
+		ce_tab_unlocked = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 te_window_colonial_empire_tab_unlock_sgui = {
+	scope = country
+	is_shown = { has_game_rule = decolonization_enabled }
+	ai_is_valid = { always = no }
+	is_valid = { ce_tab_unlocked = yes }
+	effect = { }
+}
+
+te_window_colonial_empire_entry_unlock_sgui = {
 	scope = country
 	is_shown = { has_game_rule = decolonization_enabled }
 	ai_is_valid = { always = no }

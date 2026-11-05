@@ -7,6 +7,9 @@ import os
 import re
 import unittest
 
+import gui_test_helpers as gh
+from gui_test_helpers import _children, _strip_comments, assert_wide_matches_narrow
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 GUI = os.path.join(REPO, "gui", "journal_entry_widgets", "global_warming_widget.gui")
 JE = os.path.join(REPO, "common", "journal_entries", "je_global_warming.txt")
@@ -20,17 +23,18 @@ LOC_DIR = os.path.join(REPO, "localization", "english")
 STATUS = ["te_gw_sec_policies", "te_gw_sec_emitters", "te_gw_sec_transition"]
 # National, the player's own (#660): the Market tab shows it on our market only.
 OWN_MARKET_ONLY = {"te_gw_sec_transition"}
-REFERENCE = ["te_gw_sec_history", "te_gw_sec_how"]
+REFERENCE = ["te_gw_sec_history"]
 ROOTS = {"widget_je_gw_overview": ("custom_widget_container_1", "te_gw_overview_panel"),
          "widget_je_gw_status": ("custom_widget_container_2", "te_gw_status_sections"),
          "widget_je_gw_reference": ("custom_widget_container_3", "te_gw_reference_sections")}
-FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed", "gw_how_open",
-         "rt_transition_closed", "rt_how_open"}
+FLAGS = {"gw_policies_closed", "gw_emitters_closed", "gw_world_closed", "gw_hist_closed",
+         "rt_transition_closed"}
 OLD_FLAGS = ["gw_hist_open", "gw_world_open", "gw_emissions_closed"]
 MARKET_WIDE = ["fossil_fuel_tariffs"]
 NATIONAL = ["carbon_tax", "renewable_investment", "emission_standards", "climate_adaptation", "reforestation", "public_transit", "fossil_fuel_divestment",
             "green_building_codes"]
 NATIONAL.insert(5, "carbon_removal")
+NATIONAL.append("aerosol_injection")   # Geoengineering (era 13 spec § 7.5)
 # Textures in the widget that are not icons: frames, fills and blanks.
 NOT_ICONS = {"gfx/interface/backgrounds/round_frame_dec.dds",
                     "gfx/interface/backgrounds/white.dds",   # the threshold line, a tinted flat fill
@@ -100,8 +104,16 @@ class OrderTest(unittest.TestCase):
             m = re.search(rf'(?m)^flowcontainer = \{{\s*name = "{name}"', gui)
             self.assertTrue(m, name)
             body = _block_from(gui, gui.index("{", m.start()) + 1)
-            self.assertIn('visible = "[JournalEntry.IsActive]"', body, name)
-            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), [composer], name)
+            # the record's root is climate only, as its composer, so with the rule off container_3 collapses
+            gate = ("[And( JournalEntry.IsActive, GetScriptedGui('gw_rule_enabled_sgui').IsShown( "
+                    "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+                    if name == "widget_je_gw_reference" else "[JournalEntry.IsActive]")
+            self.assertEqual(re.findall(r'^\tvisible = "(.*)"$', body, re.M), [gate], name)
+            # the composer in te_je_country, the entry's Country (test_te_system_tab_bodies.py), under
+            # the "?" at the top of the entry (test_te_help_pages.py)
+            expected = ["te_help_row", "te_je_country"] if name == "widget_je_gw_overview" else ["te_je_country"]
+            self.assertEqual(re.findall(r"^\t(\w+) = \{", body, re.M), expected, name)
+            self.assertEqual(re.findall(r"^\tte_je_country = \{\n\t\t(\w+) = \{", body, re.M), [composer], name)
 
     def test_the_bars_on_top_marker_is_attached(self):
         """Round 2: the overview draws the temperature bar, so the entry carries
@@ -114,6 +126,48 @@ class OrderTest(unittest.TestCase):
         for old in ("widget_je_gw_conditions", "widget_je_gw_policies", "widget_je_gw_history"):
             self.assertNotIn(old, _read(JE))
             self.assertNotIn(old, _read(GUI))
+
+
+class WideTest(unittest.TestCase):
+    """The Timeline Extended window's full-screen Global Warming tab (spec
+    2026-11-02-te-window-wide-mode § 7): three columns of 520 under the gates
+    the narrow tab gives each section. It replaces the whole te_gw_tab_layout,
+    so it shows the player's own market, the body's default view, as the
+    window wants."""
+
+    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
+        # With the Global Warming rule off columns 1 and 3 close up on the rule,
+        # which the overview carries on its root, the policies on their header
+        # and panel and the record on its composer: one more gate on the first
+        # two, the record's own.
+        columns = assert_wide_matches_narrow(self, "te_gw_wide_sections",
+                                             layout=("te_gw_tab_body", "te_gw_tab_layout"),
+                                             added_gates=("te_gw_overview_panel", "te_gw_sec_policies"))
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
+        wide = _strip_comments(_read(GUI))
+        wide = wide[wide.index("type te_gw_wide_sections"):]
+        for n in (1, 3):
+            self.assertRegex(wide, rf'blockoverride "column_{n}_visible" \{{\s*visible = "\[{re.escape(rule)}\]"\s*\}}')
+        self.assertNotIn("column_2_visible", wide.split("\n}\n")[0])
+        # what the column's gate stands for: the overview's own root, and the
+        # policies' header and panel, each on the rule
+        text = _strip_comments(_read(GUI))
+        overview = [v for kind, k, v in _children(gh._type_body(text, "te_gw_overview_panel")) if k == "visible"]
+        self.assertEqual(len(overview), 1)
+        self.assertIn(rule, overview[0])
+        # (the policies read Country, which the gw_market_country block sets to the entry's country here)
+        policies = [(k, inner) for kind, k, inner in _children(gh._type_body(text, "te_gw_sec_policies")) if kind == "widget"]
+        self.assertEqual([k for k, _ in policies], ["gw_section_header", "gw_panel"])
+        for k, inner in policies:
+            own = [v for kind, kk, v in _children(inner) if kind == "property" and kk == "visible"]
+            self.assertIn(rule.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope"), own[0], k)
+        self.assertEqual(columns, [["te_gw_overview_panel", "te_gw_sec_policies"],
+                                   ["te_gw_sec_emitters", "te_gw_sec_transition"],
+                                   REFERENCE])
+
+    def test_the_registry_names_it(self):
+        from scripts.generators import gen_te_systems_window as gen
+        self.assertEqual(next(t for t in gen.TABS if t.key == "global_warming").wide, "te_gw_wide_sections")
 
 
 class FlagTest(unittest.TestCase):
@@ -187,7 +241,7 @@ class GatedLinesTest(unittest.TestCase):
 
 
 class PolicyRowTest(unittest.TestCase):
-    def test_ten_rows_tariffs_first_each_wired_to_its_own_handlers(self):
+    def test_eleven_rows_tariffs_first_each_wired_to_its_own_handlers(self):
         body = _type_body(_read(GUI), "te_gw_sec_policies")
         rows = re.findall(r"gw_policy_row = \{\s*datacontext = \"\[GetScriptedGui\('gw_active_(\w+)_sgui'\)\]\"", body)
         self.assertEqual(rows, MARKET_WIDE + NATIONAL)
@@ -235,16 +289,52 @@ class PolicyRowTest(unittest.TestCase):
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_global_warming_works(self):
+        """On the Help page (te_global_warming_help_body): the climate's
+        topics under the Global Warming rule, then the Fossil Transition's.
+        Only the "?" opens it: the two links that stood for it (How Global
+        Warming Works at the panel's foot, the Fossil Transition's nested one)
+        are gone, the two flags with them (test_te_help_pages.py)."""
         gui = _read(GUI)
-        how = _type_body(gui, "te_gw_sec_how")
-        notes = re.findall(r'gw_note = \{\s*text = "(\w+)"', how)
+        how = _type_body(gui, "te_global_warming_help_body")
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        climate = how[how.index(f'visible = "[{rule}]"'):how.index('text = "rt_how_header"')]
+        notes = re.findall(r'gw_note = \{\s*text = "(\w+)"', climate)
         self.assertGreaterEqual(len(notes), 6)
         self.assertTrue(all(n.startswith("gw_how_") for n in notes), notes)
-        self.assertIn("GetVariableSystem.Toggle('gw_how_open')", how)
+        transition = how[how.index('text = "rt_how_header"'):]
+        self.assertEqual(re.findall(r'gw_note = \{\s*text = "(\w+)"', transition),
+                         ["rt_how_laws", "rt_how_programmes", "rt_how_emissions"])
+        for section in ("te_gw_sec_how", "te_gw_transition_how_link"):
+            self.assertNotIn(section, _strip_comments(gui))
+        for flag in ("gw_how_open", "rt_how_open"):
+            self.assertNotIn(flag, gui)
         for sec in ("te_gw_overview_panel", "te_gw_sec_policies", "te_gw_sec_history"):
             body = _type_body(gui, sec)
             self.assertNotIn("gw_note", body, sec)
             self.assertNotIn('"gw_how_', body, sec)
+
+    def test_the_transition_sits_outside_the_rule(self):
+        """The Fossil Transition's topics are the body's own children, after the
+        rule's box, never inside it: with the rule off the page still explains
+        the transition (the entry's and the Climate tab's "?" open it then). Its
+        header hides with the rule off, when the popup's title names the
+        transition instead (Tax Code's pattern), so the name isn't printed twice."""
+        gui = _strip_comments(_read(GUI))
+        rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
+        items = [(kind, name, inner) for kind, name, inner in _children(_type_body(gui, "te_global_warming_help_body"))
+                 if kind != "property"]
+        kind, name, box = items[0]
+        self.assertEqual(name, "flowcontainer")
+        self.assertIn(f'visible = "[{rule}]"', box)
+        self.assertNotIn("rt_how_", box)
+        rest = [(name, re.findall(r'text = "(\w+)"', inner)) for _, name, inner in items[1:]]
+        self.assertEqual(rest, [("default_header", ["rt_how_header"]),
+                                ("gw_subheader", ["rt_how_laws_head"]), ("gw_note", ["rt_how_laws"]),
+                                ("gw_subheader", ["rt_how_programmes_head"]), ("gw_note", ["rt_how_programmes"]),
+                                ("gw_subheader", ["rt_how_emissions_head"]), ("gw_note", ["rt_how_emissions"])])
+        self.assertIn(f'visible = "[{rule}]"', items[1][2])
+        popup = _type_body(gui, "te_global_warming_help_popup")
+        self.assertIn(f"text = \"[SelectLocalization( {rule}, 'gw_how_header', 'rt_how_header' )]\"", popup)
 
     def test_retired_explanation_is_gone(self):
         self.assertNotIn("gw_policies_none_yet", _read(GUI))
@@ -283,7 +373,7 @@ class TierLadderTest(unittest.TestCase):
     def test_every_tier_has_an_icon(self):
         body = _type_body(_read(GUI), "te_gw_overview_panel")
         codes = {int(n) for n in re.findall(
-            r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*blockoverride \"icon_texture\"", body)}
+            r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d+)' \)\]\"\s*texture = \"", body)}
         self.assertEqual(codes, set(range(7)))
 
 
@@ -322,6 +412,30 @@ class RoundTwoTest(unittest.TestCase):
         self.assertIn("trigger = { always = yes }", blocks[1])
         self.assertEqual(_loc_value("je_global_warming_status_none"), "")
         self.assertNotIn("je_global_warming_status", _loc_keys())
+
+
+class PenaltyCellTest(unittest.TestCase):
+    """GW-8: the Warming Penalty cell prints two of the Climate Warming
+    modifier's lines at today's scale. Its per-degree values are the static
+    modifier's, which the entry applies at multiplier = the anomaly."""
+
+    def test_the_cell_figures_follow_the_modifier(self):
+        mods = _read(os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt"))
+        gw = _top_level(mods, "global_warming")
+        sol = float(re.search(r"state_standard_of_living_add = (-?[\d.]+)", gw).group(1))
+        mort = float(re.search(r"state_mortality_mult = (-?[\d.]+)", gw).group(1))
+        values = _read(VALUES)
+        self.assertRegex(_top_level(values, "gw_disp_penalty_sol"),
+                         r"^\s*value = gw_warming_penalty_scale_display\s*multiply = (-?[\d.]+)\s*$")
+        got_sol = float(re.search(r"multiply = (-?[\d.]+)", _top_level(values, "gw_disp_penalty_sol")).group(1))
+        got_mort = float(re.search(r"multiply = (-?[\d.]+)", _top_level(values, "gw_disp_penalty_mortality_pct")).group(1))
+        self.assertEqual(got_sol, sol)
+        self.assertEqual(got_mort, mort * 100)
+        self.assertIn("multiplier = temperature_anomaly_display", _read(JE))
+        self.assertIn("gw_disp_penalty_sol", _loc_value("gw_ov_penalty_word"))
+        self.assertIn("gw_disp_penalty_mortality_pct", _loc_value("gw_ov_penalty_third"))
+        # The anomaly itself is the temperature row's; the cell no longer repeats it.
+        self.assertNotIn("gw_warming_penalty_scale_display", _loc_value("gw_ov_penalty_word"))
 
 
 class OverviewWidthTest(unittest.TestCase):
@@ -376,7 +490,19 @@ class RoundThreeTest(unittest.TestCase):
         rows = re.findall(r'gw_value_row = \{\s*(?:block "gw_market_country" \{[^{}]*\}\s*)?tooltip = "(\w+)"\s*'
                           r'blockoverride "row_label" \{\s*text = "(\w+)"', body)
         self.assertEqual(rows, [("gw_cond_emis_tt", "gw_emis_market_label"), ("gw_emis_capture_tt", "gw_emis_capture_label"),
-                                ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label")])
+                                ("gw_emis_world_tt", "gw_emis_world_label"), ("gw_cond_trend_tt", "gw_emis_warming_label"),
+                                ("gw_emis_aerosol_tt", "gw_emis_aerosol_label")])
+
+    def test_aerosol_mask_line_shows_only_with_a_mask(self):
+        """Geoengineering: the line is there only while there is a haze or one on its way."""
+        body = _type_body(_read(GUI), "te_gw_overview_panel")
+        start = body.index('tooltip = "gw_emis_aerosol_tt"')
+        row = _block_from(body, body.rindex("{", 0, start) + 1)
+        self.assertIn("visible = \"[GetScriptedGui('gw_aerosol_shown_sgui').IsShown( "
+                      "GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]\"", row)
+        shown = _top_level(_read(SGUIS), "gw_aerosol_shown_sgui")
+        self.assertIn("gw_aerosol_mask > 0", shown)
+        self.assertIn("gw_aerosol_deployers > 0", shown)
 
     def test_the_section_is_gone(self):
         gui = _read(GUI)
@@ -463,6 +589,16 @@ class ProjectionBarTest(unittest.TestCase):
 # round-2 screenshot showed all 25 characters of "1.61 -> 1.82 C (+0.02/yr)" in
 # its 198-unit cell). The default font is otherwise taken as medium. Plus 10%.
 UNITS = {"large": 10.0, "medium": 8.6, "small": 7.0, "digits": 7.1}
+# The panel's own sizes (GW-15: the gw_fontsize_* templates at the head of the
+# widget), scaled as Banking's test scales its: the serif face at 10 a
+# character in 20, the overview's tooltip face at 8.6 in 16.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template gw_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(GUI))}
+UNITS.update(row=10.0 / 20 * _SIZES["row"], heading=10.0 / 20 * _SIZES["heading"],
+             overview=8.6 / 16 * _SIZES["overview"])
+# Banking's overview cell (te_banking_ov_cell), which the overview reuses: its
+# words and third lines share the caption's column at Banking's overview size.
+DASH = os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")
 MARGIN = 1.1
 
 
@@ -484,11 +620,15 @@ class WidthBudgetTest(unittest.TestCase):
         gui = _read(GUI)
         row = _type_body(gui, "gw_policy_row")
         cls.name_cell = int(re.search(r"max_width = (\d+)\s*elide = right\s*align = nobaseline\s*"
-                                      r"using = fontsize_large", row).group(1))
+                                      r"using = gw_fontsize_row", row).group(1))
         table = _type_body(gui, "gw_value_row")
         cls.label_cell, cls.value_cell = (int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", table))
         cls.pie_cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(gui, "te_gw_ov_pie")).group(1))
-        cls.icon_cell = int(re.search(r"max_width = (\d+)", _type_body(gui, "te_gw_ov_icon_label")).group(1))
+        dash = _read(DASH)
+        cls.ov_cell = int(re.search(r"max_width = (\d+)", _type_body(dash, "te_banking_ov_word")).group(1))
+        cls.ov_font = 8.6 / 16 * int(re.search(r"template banking_dash_fontsize_overview \{\s*fontsize = (\d+)",
+                                               dash).group(1))
+        UNITS["ov_cell"] = cls.ov_font
         ov = _type_body(gui, "te_gw_overview_panel")
         cls.temp_label_cell = int(re.search(r'max_width = (\d+)\s*elide = right\s*align = left\|nobaseline\s*'
                                             r'text = "gw_ov_temp_label"', ov).group(1))
@@ -505,15 +645,22 @@ class WidthBudgetTest(unittest.TestCase):
         cases = [
             # (loc key, font, cell width)
             ("gw_ov_temp_label", "medium", self.temp_label_cell),   # "Temperature", default font
-            ("gw_ov_treaty_label", "small", self.icon_cell),
-            ("gw_market_role_leader", "small", self.icon_cell),
-            ("gw_market_role_member", "small", self.icon_cell),
-            ("gw_emis_market_label_ours", "medium", self.label_cell),
-            ("gw_emis_market_label_theirs", "medium", self.label_cell),
-            ("gw_emis_capture_label", "medium", self.label_cell),
-            ("gw_emis_world_label", "medium", self.label_cell),
-            ("gw_emis_warming_label", "medium", self.label_cell),
-            ("gw_sect_world", "medium", 440 - 32),        # nested header, text after its arrow
+            # The overview's cells (te_banking_ov_cell): captions, words, third lines.
+            ("gw_ov_tier_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_penalty_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_caption", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_word", "ov_cell", self.ov_cell),
+            ("gw_ov_treaty_third", "ov_cell", self.ov_cell),
+            ("gw_ov_tier_next_none", "ov_cell", self.ov_cell),
+            ("gw_market_role_leader", "ov_cell", self.ov_cell),
+            ("gw_market_role_member", "ov_cell", self.ov_cell),
+            ("gw_emis_market_label_ours", "row", self.label_cell),
+            ("gw_emis_market_label_theirs", "row", self.label_cell),
+            ("gw_emis_capture_label", "row", self.label_cell),
+            ("gw_emis_world_label", "row", self.label_cell),
+            ("gw_emis_warming_label", "row", self.label_cell),
+            ("gw_emis_aerosol_label", "row", self.label_cell),
+            ("gw_sect_world", "heading", 440 - 32),       # nested header, text after its arrow
             ("gw_sect_policies", "large", 480),           # section headers, 520 with the arrow
             ("gw_sect_emitters", "large", 480),
             ("gw_sect_history", "large", 480),
@@ -522,8 +669,8 @@ class WidthBudgetTest(unittest.TestCase):
             ("gw_btn_repeal", "large", 104),
         ]
         for p in MARKET_WIDE + NATIONAL:
-            cases.append((f"GW_{p.upper()}_ROW", "large", self.name_cell))   # the policy row name
-            cases.append((f"GW_{p.upper()}_ROW", "medium", self.label_cell))  # Around the World's label
+            cases.append((f"GW_{p.upper()}_ROW", "row", self.name_cell))     # the policy row name
+            cases.append((f"GW_{p.upper()}_ROW", "row", self.label_cell))    # Around the World's label
         for key, font, cell in cases:
             self.assertFits(_visible_text(_loc_value(key)), font, cell, key)
 
@@ -532,20 +679,24 @@ class WidthBudgetTest(unittest.TestCase):
                  ("negligible", "slight", "moderate", "significant", "severe", "catastrophic", "apocalyptic")]
         self.assertEqual(max(tiers, key=len), "Catastrophic")
         cases = [
-            (max(tiers, key=len), "small", self.icon_cell, "tier word"),
-            ("Penalty ×9.99", "small", self.icon_cell, "penalty cell (anomaly below 10 C)"),
+            (max(tiers, key=len), "ov_cell", self.ov_cell, "tier word"),
+            ("Next at 4.0 °C", "ov_cell", self.ov_cell, "the next tier"),
+            ("Market", "ov_cell", self.ov_cell, "the role caption, vanilla's concept_market"),
+            ("SoL -9.9", "ov_cell", self.ov_cell, "penalty word (anomaly below 10 C)"),
+            ("Mortality +50%", "ov_cell", self.ov_cell, "penalty third line"),
             ("9.99 → 9.99 °C (-0.20/yr)", "digits", self.headline_cell, "temperature headline"),
             ([("9.99 °C ", "digits"), ("(no rate yet)", "medium")], None, self.headline_cell,
              "headline before January"),
-            ("Emissions Cut 100%", "medium", self.pie_cell, "cut pie label"),
-            ("Our Share 100%", "medium", self.pie_cell, "share pie label"),
-            ("Their Share 100%", "medium", self.pie_cell, "share pie label, another market"),
+            ("Emissions Cut 100%", "overview", self.pie_cell, "cut pie label"),
+            ("Our Share 100%", "overview", self.pie_cell, "share pie label"),
+            ("Their Share 100%", "overview", self.pie_cell, "share pie label, another market"),
             (_visible_text(_loc_value("gw_ov_share_theirs") + _loc_value("gw_ov_pie_share_pending").split(")]", 1)[1]),
-             "medium", self.pie_cell, "share pie label, pending"),
-            ("-999.9/yr", "medium", self.value_cell, "an emissions value"),
-            ("99999/yr", "medium", self.value_cell, "world emissions"),
-            ("+0.20 °C", "medium", self.value_cell, "warming last year"),
-            ("136 nations", "medium", self.value_cell, "an adoption count (every country)"),
+             "overview", self.pie_cell, "share pie label, pending"),
+            ("-999.9/yr", "row", self.value_cell, "an emissions value"),
+            ("99999/yr", "row", self.value_cell, "world emissions"),
+            ("+0.20 °C", "row", self.value_cell, "warming last year"),
+            ("-2.00 °C", "row", self.value_cell, "the aerosol mask"),
+            ("136 nations", "row", self.value_cell, "an adoption count (every country)"),
         ]
         for text, font, cell, what in cases:
             self.assertFits(text, font, cell, what)
@@ -558,25 +709,25 @@ class WidthBudgetTest(unittest.TestCase):
         gui = _read(GUI)
         row = _type_body(gui, "gw_emitter_row")
         name = int(re.search(r'minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ \d+ -1 \}\s*autoresize = yes\s*'
-                             r'elide = right\s*align = left\|nobaseline\s*using = fontsize_medium\s*'
-                             r'default_format = "#tooltippable"\s*text = "gw_te_row_name"', row).group(1))
+                             r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
+                             r'text = "gw_te_row_name"', row).group(1))
         cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
-                                                 r'using = fontsize_\w+\s*(?:default_format = "#v"\s*)?'
-                                                 r'(?:block "row_ours" \{\}\s*)?text = "(\w+)"', row)}
+                                                 r'using = gw_fontsize_row\s*(?:default_format = "#v"\s*)?'
+                                                 r'(?:visible = "[^"]*"\s*)?text = "(\w+)"', row)}
         head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
-                                                 r'using = fontsize_small\s*default_format = "#tooltippable"\s*'
+                                                 r'using = gw_fontsize_row\s*'
                                                  r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
         self.assertEqual(set(cell), {"gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum", "gw_te_ours"})
         self.assertEqual(set(head), {"gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"})
         cases = [
-            ("United Socialist Council Republics of California", "medium", name, "the longest country name"),
-            ("-9999.9/yr", "medium", cell["gw_te_row_annual"], "a market's annual emissions"),
-            ("100%", "medium", cell["gw_te_row_share"], "a share"),
-            ("-9,999,999", "medium", cell["gw_te_row_cum"], "a cumulative total"),
-            (_visible_text(_loc_value("gw_te_ours")), "small", cell["gw_te_ours"], "our market's mark"),
+            ("United Socialist Council Republics of California", "row", name, "the longest country name"),
+            ("-9999.9/yr", "row", cell["gw_te_row_annual"], "a country's annual emissions"),
+            ("100%", "row", cell["gw_te_row_share"], "a share"),
+            ("-9,999,999", "row", cell["gw_te_row_cum"], "a cumulative total"),
+            (_visible_text(_loc_value("gw_te_ours")), "row", cell["gw_te_ours"], "our country's mark"),
         ]
         for key, width in head.items():
-            cases.append((_visible_text(_loc_value(key)), "small", width, key))
+            cases.append((_visible_text(_loc_value(key)), "row", width, key))
         for text, font, width, what in cases:
             self.assertFits(text, font, width, what)
 
@@ -586,7 +737,9 @@ class LocTest(unittest.TestCase):
         keys = _loc_keys()
         gui = _read(GUI)
         named = set(re.findall(r'\b(?:text|tooltip) = "([A-Za-z]\w*)"', gui))
-        named |= set(re.findall(r"(?:Localize|SelectLocalization)\([^\]]*?'(\w+)'", gui))
+        # a SelectLocalization's keys, not the scripted GUI its condition names
+        named |= set(re.findall(r"(?:Localize|SelectLocalization)\([^\]]*?'(\w+)'",
+                                re.sub(r"GetScriptedGui\('\w+'\)", "GetScriptedGui()", gui)))
         missing = sorted(k for k in named if "_" in k and k not in keys)
         self.assertEqual(missing, [])
 
@@ -609,7 +762,15 @@ OLD_PLACEHOLDERS = {
     "gfx/interface/icons/production_method_icons/cat_building_green_p1.dds",
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds",
     "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds",
+    # GW-12's two policy rows, painted in icon batch 7.
+    "gfx/interface/icons/trade_icons/max_tariffs.dds",
+    "gfx/interface/icons/invention_icons/carbon_capture_and_storage.dds",
 }
+# Policy rows still on a borrowed icon, marked `# Placeholder Icon` in the .gui
+# until the icon pipeline paints theirs (icon_prompts.py's `gw` category has
+# the subject; docs/systems/global_warming_gui_icons.md lists them). None since
+# icon batch 9 painted Aerosol Injection's.
+PLACEHOLDER_POLICY_ICONS = {}
 # The two marks that stay vanilla by design.
 VANILLA_MARKS = {"gfx/interface/icons/generic_icons/green_checkmark.dds",
                  "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"}
@@ -630,24 +791,34 @@ class GwIconsTest(unittest.TestCase):
 
     def test_every_tier_code_has_its_own_file(self):
         found = dict(re.findall(r"ScriptValue\('gw_disp_tier_code'\), '\(CFixedPoint\)(\d)' \)\]\"\s*"
-                                r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview))
+                                r"texture = \"([^\"]+)\"", self.overview))
         self.assertEqual(found, {str(c): f"{GW_ICONS}tier_{t}.dds" for c, t in enumerate(TIERS)})
 
     def test_roles_and_penalty(self):
-        leader = re.search(r"IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)\]\"\s*"
-                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
-        member = re.search(r"IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \) \)\]\"\s*"
-                           r"blockoverride \"icon_texture\" \{\s*texture = \"([^\"]+)\"", self.overview)
+        leader = re.search(r"gw_is_market_leader_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \)\]\"\s*"
+                           r"texture = \"([^\"]+)\"", self.overview)
+        member = re.search(r"gw_is_market_leader_sgui'\)\.IsShown\( GuiScope\.SetRoot\( Country\.MakeScope \)\.End \) \)\]\"\s*"
+                           r"texture = \"([^\"]+)\"", self.overview)
         self.assertEqual(leader.group(1), f"{GW_ICONS}role_leader.dds")
         self.assertEqual(member.group(1), f"{GW_ICONS}role_member.dds")
-        self.assertRegex(self.overview, rf'tooltip = "gw_cond_penalty_tt"\s*blockoverride "icon_texture" \{{\s*'
+        self.assertRegex(self.overview, rf'tooltip = "gw_cond_penalty_tt"\s*size = \{{ 238 70 \}}\s*'
+                                        rf'blockoverride "caption" \{{\s*text = "gw_ov_penalty_caption"\s*\}}\s*'
+                                        rf'blockoverride "icons" \{{\s*icon = \{{\s*size = \{{ 100% 100% \}}\s*'
                                         rf'texture = "{re.escape(GW_ICONS)}penalty\.dds"')
 
     def test_every_policy_has_its_own_file(self):
+        """GW-12: no two rows share an icon. A row on a placeholder says so."""
+        seen = []
         for p in MARKET_WIDE + NATIONAL:
-            icon = {"carbon_removal": "renewable_investment", "fossil_fuel_tariffs": "fossil_fuel_divestment"}.get(p, p)
-            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*"
-                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(GW_ICONS)}policy_{icon}\.dds"', p)
+            path = PLACEHOLDER_POLICY_ICONS.get(p, f"{GW_ICONS}policy_{p}.dds")
+            mark = r" # Placeholder Icon" if p in PLACEHOLDER_POLICY_ICONS else ""
+            self.assertRegex(self.policies, rf"GetScriptedGui\('gw_active_{p}_sgui'\)\]\"\s*(?:#[^\n]*\n\s*)?"
+                                            rf'blockoverride "row_icon" \{{\s*texture = "{re.escape(path)}"{mark}', p)
+            seen.append(path)
+        self.assertEqual(len(seen), len(set(seen)))
+        # A placeholder is borrowed from outside the widget's own set.
+        for path in PLACEHOLDER_POLICY_ICONS.values():
+            self.assertFalse(path.startswith(GW_ICONS), path)
 
     def test_pies(self):
         for pie, key in (("pie_share", "gw_ov_pie_share"), ("pie_cut", "gw_ov_pie_cut")):
@@ -664,9 +835,10 @@ class GwIconsTest(unittest.TestCase):
         textures = set(re.findall(r'texture = "(gfx/[^"]+)"', self.gui))
         self.assertEqual(textures & OLD_PLACEHOLDERS, set())
         icons = textures - NOT_ICONS - VANILLA_MARKS - set(TRANSITION_ICONS.values()) - {
-            "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"}
+            "gfx/interface/icons/un_icons/pie_rest.dds", "gfx/interface/icons/un_icons/pie_members.dds"} - set(
+            PLACEHOLDER_POLICY_ICONS.values())
         self.assertTrue(all(t.startswith(GW_ICONS) for t in icons), sorted(icons))
-        self.assertEqual(len(icons), 7 + 2 + 1 + 8 + 2)   # tiers, roles, penalty, policies, pies
+        self.assertEqual(len(icons), 7 + 2 + 1 + 11 + 2)   # tiers, roles, penalty, policies, pies
 
 
 class IconsDocTest(unittest.TestCase):
@@ -743,12 +915,12 @@ def _widget_with(text, line, start=None):
 
 def _market_cells(overview):
     """The bodies of the overview's four market-cell widgets (those carrying
-    block "gw_market_country"), with row 1's tier and penalty cells, which read
-    the player's own entry, taken out of the first."""
+    block "gw_market_country"). Since GW-15 the tier and penalty cells, which
+    read the player's own entry, sit in a row of their own, outside them."""
     cells = [_widget_with(overview, MARKET_BLOCK, start=m.start())
              for m in re.finditer(re.escape(MARKET_BLOCK), overview)]
     for world in ('tooltip = "gw_ov_tier_tt"', 'tooltip = "gw_cond_penalty_tt"'):
-        cells[0] = cells[0].replace(_widget_with(cells[0], world), "")
+        assert world not in cells[0], world
     return cells
 
 
@@ -775,6 +947,18 @@ def _txt_block(text, name):
     return _top_level(text, name)
 
 
+def _gui_block(text, name):
+    """The contents of `block "<name>" { … }` in a GUI type."""
+    m = re.search(rf'\bblock "{name}" \{{', text)
+    assert m, name
+    depth = 0
+    for k in range(m.end() - 1, len(text)):
+        depth += {"{": 1, "}": -1}.get(text[k], 0)
+        if depth == 0:
+            return text[m.end():k]
+    raise AssertionError(f"unclosed block {name}")
+
+
 class MarketTabTest(unittest.TestCase):
     """The Market panel's Climate tab (style guide rule 9; feasibility §5.1): the
     journal entry's own composers under GetPlayerJournalEntry, gated, greyed
@@ -786,6 +970,9 @@ class MarketTabTest(unittest.TestCase):
         cls.market = _read(MARKET)
         cls.buttons = _te_blocks(cls.market, BUTTONS_TAG)
         cls.content = _te_blocks(cls.market, "### TE: Climate tab (te_global_warming) ###")
+        # the tab's body, which the Timeline Extended window's tab mounts too
+        # (test_te_system_tab_bodies.py checks the mounts)
+        cls.body = _type_body(_read(GUI), "te_gw_tab_body")
 
     def _gw_buttons(self):
         return {k: v for k, v in _overrides(self.buttons[0]).items() if k.startswith("fifth_button")}
@@ -847,29 +1034,27 @@ class MarketTabTest(unittest.TestCase):
         status = re.findall(r"^\t\t(te_gw_sec_\w+) = \{", _type_body(_read(GUI), "te_gw_status_sections"), re.M)
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", foreign, re.M),
                          roots[:1] + [s for s in status if s not in OWN_MARKET_ONLY])
-        # The reference sections follow both, as the entry's third root does.
-        rest = body[body.index(foreign) + len(foreign):]
+        # The two views are the host's override of the body's market view,
+        # whose default, the window's, is the own-market one.
+        self.assertIn('blockoverride "te_gw_tab_market_view"', body)
+        view = _gui_block(self.body, "te_gw_tab_market_view")
+        self.assertEqual(re.findall(r"^\t+(te_\w+) = \{", view, re.M), roots[:2])
+        # The reference sections follow the view, as the entry's third root does.
+        layout = _gui_block(self.body, "te_gw_tab_layout")
+        rest = layout[layout.index(view) + len(view):]
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", rest, re.M), roots[2:])
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index("te_gw_reference_sections"))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', self.body)
 
     def test_the_gate_sits_above_the_journal_entry_datacontext(self):
-        body = self.content[0]
-        dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_global_warming')]\"")
-        self.assertLess(body.index(f'visible = "[{GW_TAB_GATE}]"'), dc)
-        # The header sits outside the gate.
-        self.assertLess(body.index('text = "je_global_warming"'), body.index(f'visible = "[{GW_TAB_GATE}]"'))
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
-
-    def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self.content[0]
-        dc = body.index("GetPlayerJournalEntry('je_global_warming')")
-        head = body[dc:body.index("te_gw_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's blocks: the header outside the gate, the gate on the
+        datacontext's parent (te_system_tab_frame, its fixed 520 column)."""
+        self.assertRegex(_read(GUI), r"type te_gw_tab_body = te_system_tab_frame \{")
+        o = _overrides(self.body)
+        self.assertEqual(o["tab_gate"], f'visible = "[{GW_TAB_GATE}]"')
+        self.assertEqual(o["tab_entry"], "datacontext = \"[GetPlayerJournalEntry('je_global_warming')]\"")
+        head = self.body[self.body.index('blockoverride "tab_header"'):self.body.index('blockoverride "tab_gate"')]
+        self.assertIn('text = "je_global_warming"', head)
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         halves = self._gw_buttons()
@@ -900,8 +1085,8 @@ class MarketTabTest(unittest.TestCase):
         gw_market_country block. Each sits under the gate on the leader's entry
         running, and never carries a visible of its own."""
         body = self.content[0]
-        self.assertEqual(re.findall(r"\.GetJournalEntry\(", body), [])
-        self.assertEqual(re.findall(r"GetPlayerJournalEntry\('(\w+)'\)", body), ["je_global_warming"])
+        self.assertEqual(re.findall(r"\.GetJournalEntry\(", body + self.body), [])
+        self.assertEqual(re.findall(r"GetPlayerJournalEntry\('(\w+)'\)", body + self.body), ["je_global_warming"])
         foreign = _widget_with(body, f'visible = "[Not( {OWN_MARKET} )]"')
         sites = [m.start() for m in re.finditer(re.escape(f'datacontext = "[{LEADER}]"'), foreign)]
         self.assertEqual(len(sites), 3)   # the intro line, the overview's market cells, the policies
@@ -939,8 +1124,8 @@ class MarketTabTest(unittest.TestCase):
         self.assertEqual(ov.count(MARKET_BLOCK), 4)
         cells = [_block_from(ov, m.end()) for m in re.finditer(re.escape(MARKET_BLOCK), ov)]
         self.assertEqual([" ".join(c.split()) for c in cells], [MARKET_DEFAULT] * 4)
-        self.assertRegex(ov, r"### Row 1:[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
-        self.assertRegex(ov, r"### Row 4:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        self.assertRegex(ov, r"### Row 2:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
+        self.assertRegex(ov, r"### Row 5:[^\n]*\n[^\n]*\n\t+flowcontainer = \{[^{}]*" + re.escape(MARKET_BLOCK))
         for tip in ("gw_cond_emis_tt", "gw_emis_capture_tt"):
             self.assertRegex(ov, r"gw_value_row = \{\s*" + re.escape(MARKET_BLOCK) + r"\s*" + re.escape(MARKET_DEFAULT)
                              + rf'\s*\}}\s*tooltip = "{tip}"', tip)
@@ -961,7 +1146,7 @@ class MarketTabTest(unittest.TestCase):
             self.assertNotIn("JournalEntry", body, name)
         # The journal's roots instance both types bare, so the defaults hold there.
         root = gui.split('name = "widget_je_gw_overview"', 1)[1]
-        self.assertIn("te_gw_overview_panel = {}", root[:root.index("}") + 1])
+        self.assertIn("te_gw_overview_panel = {}", root[:root.index("\n}\n") + 1])
         self.assertIn("te_gw_sec_policies = {}", _type_body(gui, "te_gw_status_sections"))
 
     def test_the_market_parts_loc_reads_country(self):
@@ -1052,15 +1237,15 @@ class MarketTabTest(unittest.TestCase):
 
     def test_the_tooltip_has_three_branches(self):
         """Open: the tab's own tooltip. Conditions met but the entry not
-        running: te_market_tab_met_tt, since IsValidTooltip prints nothing for
+        running: te_system_tab_met_tt, since IsValidTooltip prints nothing for
         a passing test. Otherwise: the locked line and the checklist."""
         root = "GuiScope.SetRoot( GetPlayer.MakeScope ).End"
         expected = (f"tooltip = \"[SelectLocalization( {GW_TAB_GATE}, 'te_market_tab_global_warming_tt', "
-                    f"SelectLocalization( {GW_TAB_UNLOCK}.IsValid( {root} ), 'te_market_tab_met_tt', "
+                    f"SelectLocalization( {GW_TAB_UNLOCK}.IsValid( {root} ), 'te_system_tab_met_tt', "
                     f"Concatenate( Localize( 'te_market_tab_global_warming_locked_tt' ), "
                     f"{GW_TAB_UNLOCK}.IsValidTooltip( {root} ) ) ) )]\"")
         self.assertEqual(self._gw_buttons()["fifth_button_tooltip"], expected)
-        met = _loc_value("te_market_tab_met_tt")
+        met = _loc_value("te_system_tab_met_tt")
         self.assertTrue(met.startswith("#b Not open yet#!"), met)
         self.assertIn("conditions are met", met)
 
@@ -1109,9 +1294,9 @@ class MarketTabTest(unittest.TestCase):
         # The status text is empty while the entry is active.
         self.assertEqual(_loc_value("je_global_warming_status_none"), "")
         # Every scripted button is the AI's.
-        # Eighteen climate buttons and six retirement programme buttons (#660).
+        # Twenty-two climate buttons and six retirement programme buttons (#660).
         names = re.findall(r"(?m)^\tscripted_button = (\w+)", je)
-        self.assertEqual(len(names), 26)
+        self.assertEqual(len(names), 28)
         buttons = _read(BUTTONS) + "\n" + _read(RT_BUTTONS)
         for name in names:
             self.assertRegex(_top_level(buttons, name), r"visible = \{\s*is_ai = yes", name)
@@ -1122,7 +1307,8 @@ class MarketTabTest(unittest.TestCase):
         take a state root, and no type reads the panel's ambient Market."""
         self.assertIn("te_gw_sec_emitters = {}", _type_body(_read(GUI), "te_gw_status_sections"))
         emitters = _type_body(_read(GUI), "te_gw_sec_emitters")
-        self.assertIn("datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('gw_emitter_1').GetState]\"", emitters)
+        self.assertIn("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('gw_te_top')]\"", emitters)
+        self.assertIn("datacontext = \"[Scope.GetState]\"", emitters)
         self.assertIn("GetScriptedGui('gw_top_emitters_sgui').ExecuteTooltip( GuiScope.SetRoot( "
                       "JournalEntry.GetCountry.GetCapital.MakeScope ).End )", emitters)
         self.assertIn("GetScriptedGui('gw_te_members_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End )",
@@ -1130,12 +1316,22 @@ class MarketTabTest(unittest.TestCase):
         sguis = _read(SGUIS)
         for name in ("gw_te_members_sgui", "gw_top_emitters_sgui"):
             self.assertIn("scope = state", _top_level(sguis, name), name)
-        code = "\n".join(line.split("#", 1)[0] for line in _read(GUI).splitlines())
+        # the tab's body aside: its gate and datacontext are the tab's, read
+        # through the player as in every host (test_te_system_tab_bodies.py);
+        # and the Help page's body and popup, whose rule gate and title read the
+        # player, as a popup must (test_te_help_pages.py)
+        text = _read(GUI)
+        text = text.replace("type te_gw_tab_body = te_system_tab_frame {" + _type_body(text, "te_gw_tab_body"), "")
+        text = text.replace("type te_global_warming_help_body = flowcontainer {"
+                            + _type_body(text, "te_global_warming_help_body"), "")
+        text = text.replace("type te_global_warming_help_popup = te_ui_help_popup {"
+                            + _type_body(text, "te_global_warming_help_popup"), "")
+        code = "\n".join(line.split("#", 1)[0] for line in text.splitlines())
         ambient = re.findall(r"(?<![\w.'])(Market|GetPlayer|GetMetaPlayer)\.\w+", code)
         self.assertEqual(ambient, [])
         # Country is only ever the section's own (a gw_market_country block's),
         # never the panel's: none in Top Emitters, History or How.
-        for name in ("te_gw_sec_emitters", "gw_emitter_row", "gw_emitter_header", "te_gw_sec_history", "te_gw_sec_how"):
+        for name in ("te_gw_sec_emitters", "gw_emitter_row", "gw_emitter_header", "te_gw_sec_history"):
             self.assertEqual(re.findall(r"(?<![\w.'])Country\.\w+", _type_body(_read(GUI), name)), [], name)
 
     def test_one_visible_per_widget(self):

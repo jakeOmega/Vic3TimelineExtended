@@ -37,8 +37,10 @@ SIZE = 256
 
 # (output_stem, display label, industry tint RGB). Empty: the icon pipeline's company_logo
 # category replaced all eighteen cards on 2026-10-07 (icon batch 3, #813), and
-# a rerun would write the cards back over the art. Add a stem here only for a
-# new company still waiting for its logo.
+# InGen's and RejoovenEsense's on 2026-10-31 (icon batch 8); a rerun would write
+# the cards back over the art. Add a stem here only for a new company still
+# waiting for its logo (with its icon_prompts.py company_logo entry at seed None),
+# and drop it once the logo is written.
 ICONS: list[tuple[str, str, tuple[int, int, int]]] = []
 
 

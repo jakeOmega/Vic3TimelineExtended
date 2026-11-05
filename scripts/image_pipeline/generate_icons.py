@@ -379,8 +379,10 @@ def stage_render(cat: str, only: set[str], work: Path, seeds: int, offload: str)
         restyle(restyle_jobs(cat, restyles), work / "embeds", work / "raw", offload)
 
 
-# Per-entry settings that change how an entry's render is composed.
-ENTRY_SPEC_KEYS = ("solid", "see_through")
+# Per-entry settings that change how an entry's render is composed. An embossed
+# entry's own colours ("color", "color_bottom") let one category hold several
+# (the Demographics pips: an amber famine, a red war).
+ENTRY_SPEC_KEYS = ("solid", "see_through", "color", "color_bottom")
 # A derived entry's settings added after the UN's (tint, layout, size,
 # marks); recorded only when set, so the UN's manifest entries stay valid.
 DERIVED_KEYS = ("damage", "tilt", "base", "turn", "flip")

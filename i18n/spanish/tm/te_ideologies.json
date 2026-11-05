@@ -1,0 +1,266 @@
+{
+ "ideology_anti_colonialist": {
+  "en": "Anti-Colonialist",
+  "es": "Anticolonialista"
+ },
+ "ideology_anti_colonialist_desc": {
+  "en": "Anti-Colonialists believe that colonialism is wrong and that colonized peoples should be free to govern themselves.",
+  "es": "Los anticolonialistas creen que el colonialismo es injusto y que los pueblos colonizados deben ser libres de gobernarse a sí mismos."
+ },
+ "ideology_anti_colonialist_leader": {
+  "en": "Anti-Colonialist",
+  "es": "Anticolonialista"
+ },
+ "ideology_anti_colonialist_leader_desc": {
+  "en": "This leader holds that colonial rule is wrong and that colonized peoples should govern themselves.",
+  "es": "Este líder sostiene que el dominio colonial es injusto y que los pueblos colonizados deben gobernarse a sí mismos."
+ },
+ "ideology_corporate": {
+  "en": "Corpocrat",
+  "es": "Corpócrata"
+ },
+ "ideology_corporate_desc": {
+  "en": "This leader believes in a system where corporations play a central role in governance and decision-making, shaping policy to benefit business interests. The state and corporations are closely intertwined, with the private sector exerting significant influence over public affairs.",
+  "es": "Este líder cree en un sistema en el que las corporaciones desempeñan un papel central en el gobierno y la toma de decisiones, y orientan las políticas en beneficio de los intereses empresariales. El Estado y las corporaciones están estrechamente entrelazados y el sector privado ejerce una influencia considerable en los asuntos públicos."
+ },
+ "ideology_custom_religion_aristocratic_governance": {
+  "en": "Aristocracy",
+  "es": "Aristocracia"
+ },
+ "ideology_custom_religion_aristocratic_governance_desc": {
+  "en": "This religion is governed by a hereditary elite, emphasizing the importance of noble birth, social status, and inherited privilege.",
+  "es": "Esta religión está gobernada por una élite hereditaria y subraya la importancia del nacimiento noble, la posición social y los privilegios heredados."
+ },
+ "ideology_custom_religion_corporate_governance": {
+  "en": "Corporate Rule",
+  "es": "Gobierno corporativo"
+ },
+ "ideology_custom_religion_corporate_governance_desc": {
+  "en": "This religion sees wealth and power as divinely apportioned and therefore corporations should have a key role in governance.",
+  "es": "Esta religión considera que la riqueza y el poder son de reparto divino y que, por tanto, las corporaciones deben tener un papel clave en el gobierno."
+ },
+ "ideology_custom_religion_exploitative_outlook": {
+  "en": "Exploitation",
+  "es": "Explotación"
+ },
+ "ideology_custom_religion_exploitative_outlook_desc": {
+  "en": "This religion values the extraction of resources, labor, and wealth from others for the good of the faithful, emphasizing the importance of dominance, control, and the pursuit of material gain.",
+  "es": "Esta religión valora la extracción de recursos, trabajo y riqueza de otros en beneficio de los fieles, y subraya la importancia del dominio, el control y la búsqueda del beneficio material."
+ },
+ "ideology_custom_religion_free_market_economy": {
+  "en": "Divine Wealth",
+  "es": "Riqueza divina"
+ },
+ "ideology_custom_religion_free_market_economy_desc": {
+  "en": "This religion believes wealth is divinely apportioned and therefore government should not interfere with the economy.",
+  "es": "Esta religión cree que la riqueza es de reparto divino y que, por tanto, el gobierno no debe interferir en la economía."
+ },
+ "ideology_custom_religion_imperial_cult_economy": {
+  "en": "Enlightened Imperial Economy",
+  "es": "Economía imperial ilustrada"
+ },
+ "ideology_custom_religion_imperial_cult_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure the prosperity of the empire.",
+  "es": "Esta religión cree que la economía debe regularse para garantizar la prosperidad del imperio."
+ },
+ "ideology_custom_religion_imperial_cult_governance": {
+  "en": "Imperial Cult",
+  "es": "Culto imperial"
+ },
+ "ideology_custom_religion_imperial_cult_governance_desc": {
+  "en": "This religion believes the ruler is a divine figure and should be worshipped as such.",
+  "es": "Esta religión cree que el gobernante es una figura divina y que debe ser adorado como tal."
+ },
+ "ideology_custom_religion_imperial_cult_society": {
+  "en": "Imperial Society",
+  "es": "Sociedad imperial"
+ },
+ "ideology_custom_religion_imperial_cult_society_desc": {
+  "en": "This religion believes in the divine right of the ruler and the importance of loyalty, obedience, and service to the empire.",
+  "es": "Esta religión cree en el derecho divino del gobernante y en la importancia de la lealtad, la obediencia y el servicio al imperio."
+ },
+ "ideology_custom_religion_imperialist_outlook": {
+  "en": "Imperialism",
+  "es": "Imperialismo"
+ },
+ "ideology_custom_religion_imperialist_outlook_desc": {
+  "en": "This religion values expansion, conquest, and the establishment of empires, emphasizing the importance of dominance, control, and the spread of faith and civilization.",
+  "es": "Esta religión valora la expansión, la conquista y el establecimiento de imperios, y subraya la importancia del dominio, el control y la difusión de la fe y la civilización."
+ },
+ "ideology_custom_religion_inclusive_society": {
+  "en": "Inclusive Society",
+  "es": "Sociedad inclusiva"
+ },
+ "ideology_custom_religion_inclusive_society_desc": {
+  "en": "This religion values diversity, equality, and social inclusion, emphasizing the importance of tolerance, acceptance, and respect for all individuals.",
+  "es": "Esta religión valora la diversidad, la igualdad y la inclusión social, y subraya la importancia de la tolerancia, la aceptación y el respeto hacia todas las personas."
+ },
+ "ideology_custom_religion_isolationist_outlook": {
+  "en": "Isolationism",
+  "es": "Aislacionismo"
+ },
+ "ideology_custom_religion_isolationist_outlook_desc": {
+  "en": "This religion values self-sufficiency, independence, and the avoidance of entanglements with other nations, emphasizing the importance of autonomy, sovereignty, and non-intervention.",
+  "es": "Esta religión valora la autosuficiencia, la independencia y la evitación de compromisos con otras naciones, y subraya la importancia de la autonomía, la soberanía y la no intervención."
+ },
+ "ideology_custom_religion_meritocratic_society": {
+  "en": "Meritocracy",
+  "es": "Meritocracia"
+ },
+ "ideology_custom_religion_meritocratic_society_desc": {
+  "en": "This religion values talent, ability, and achievement, viewing these as divine gifts.",
+  "es": "Esta religión valora el talento, la capacidad y el logro, y los considera dones divinos."
+ },
+ "ideology_custom_religion_militarist_outlook": {
+  "en": "Militarism",
+  "es": "Militarismo"
+ },
+ "ideology_custom_religion_militarist_outlook_desc": {
+  "en": "This religion values strength, power, and the use of military force to achieve its goals, emphasizing the importance of expansion, security, and national power.",
+  "es": "Esta religión valora la fuerza, el poder y el uso de la fuerza militar para alcanzar sus objetivos, y subraya la importancia de la expansión, la seguridad y el poder nacional."
+ },
+ "ideology_custom_religion_pacifist_outlook": {
+  "en": "Pacifism",
+  "es": "Pacifismo"
+ },
+ "ideology_custom_religion_pacifist_outlook_desc": {
+  "en": "This religion values peace, nonviolence, and the resolution of conflicts through peaceful means, emphasizing the importance of compassion, empathy, and understanding.",
+  "es": "Esta religión valora la paz, la no violencia y la resolución de los conflictos por medios pacíficos, y subraya la importancia de la compasión, la empatía y la comprensión."
+ },
+ "ideology_custom_religion_republican_governance": {
+  "en": "Republicanism",
+  "es": "Republicanismo"
+ },
+ "ideology_custom_religion_republican_governance_desc": {
+  "en": "This religion values representative government, popular sovereignty, and the rule of law, emphasizing the importance of citizen participation, accountability, and democratic [Concept('concept_power_bloc_principle', 'principles')].",
+  "es": "Esta religión valora el gobierno representativo, la soberanía popular y el imperio de la ley, y subraya la importancia de la participación ciudadana, la rendición de cuentas y los [Concept('concept_power_bloc_principle', 'principios')] democráticos."
+ },
+ "ideology_custom_religion_social_democratic_economy": {
+  "en": "Social Welfare",
+  "es": "Bienestar social"
+ },
+ "ideology_custom_religion_social_democratic_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure social welfare and equality.",
+  "es": "Esta religión cree que la economía debe regularse para garantizar el bienestar social y la igualdad."
+ },
+ "ideology_custom_religion_socialist_economy": {
+  "en": "Divine Command Economy",
+  "es": "Economía planificada divina"
+ },
+ "ideology_custom_religion_socialist_economy_desc": {
+  "en": "This religion believes that the economy should be centrally planned and controlled by the government as a representative of the divine.",
+  "es": "Esta religión cree que la economía debe estar planificada de forma centralizada y controlada por el gobierno como representante de lo divino."
+ },
+ "ideology_custom_religion_technocratic_governance": {
+  "en": "Technocracy",
+  "es": "Tecnocracia"
+ },
+ "ideology_custom_religion_technocratic_governance_desc": {
+  "en": "This religion envisages a society in which each person has a role based on their expertise, knowledge, and skills, and is given authority based on their competence.",
+  "es": "Esta religión concibe una sociedad en la que cada persona tiene un papel basado en su pericia, sus conocimientos y sus habilidades, y recibe autoridad en función de su competencia."
+ },
+ "ideology_custom_religion_theocratic_economy": {
+  "en": "Theocratic Economy",
+  "es": "Economía teocrática"
+ },
+ "ideology_custom_religion_theocratic_economy_desc": {
+  "en": "This religion believes the economy should be regulated to ensure the prosperity of the church.",
+  "es": "Esta religión cree que la economía debe regularse para garantizar la prosperidad de la Iglesia."
+ },
+ "ideology_custom_religion_theocratic_governance": {
+  "en": "Theocracy",
+  "es": "Teocracia"
+ },
+ "ideology_custom_religion_theocratic_governance_desc": {
+  "en": "This religion believes that the state should be governed by religious authorities, emphasizing the importance of divine law, spiritual guidance, and religious [Concept('concept_power_bloc_principle', 'principles')].",
+  "es": "Esta religión cree que el Estado debe ser gobernado por autoridades religiosas, y subraya la importancia de la ley divina, la guía espiritual y los [Concept('concept_power_bloc_principle', 'principios')] religiosos."
+ },
+ "ideology_custom_religion_theocratic_outlook": {
+  "en": "Theocratic Expansion",
+  "es": "Expansión teocrática"
+ },
+ "ideology_custom_religion_theocratic_outlook_desc": {
+  "en": "This religion believes that the faith should be spread to all corners of the world.",
+  "es": "Esta religión cree que la fe debe difundirse hasta el último rincón del mundo."
+ },
+ "ideology_custom_religion_theocratic_society": {
+  "en": "Theocratic Society",
+  "es": "Sociedad teocrática"
+ },
+ "ideology_custom_religion_theocratic_society_desc": {
+  "en": "This religion believes that religion should take center-stage in society.",
+  "es": "Esta religión cree que la religión debe ocupar un lugar central en la sociedad."
+ },
+ "ideology_custom_religion_totalitarian_society": {
+  "en": "Totalitarianism",
+  "es": "Totalitarismo"
+ },
+ "ideology_custom_religion_totalitarian_society_desc": {
+  "en": "This religion envisages a society where the state has absolute control over all aspects of public and private life, emphasizing obedience, conformity, and the suppression of dissent.",
+  "es": "Esta religión concibe una sociedad en la que el Estado ejerce un control absoluto sobre todos los aspectos de la vida pública y privada, y subraya la obediencia, la conformidad y la supresión de la disidencia."
+ },
+ "ideology_custom_religion_traditionalist_economy": {
+  "en": "Traditionalism",
+  "es": "Tradicionalismo"
+ },
+ "ideology_custom_religion_traditionalist_economy_desc": {
+  "en": "This religion favors traditional economic practices, emphasizing stability, continuity, and adherence to established customs and norms.",
+  "es": "Esta religión favorece las prácticas económicas tradicionales y subraya la estabilidad, la continuidad y el apego a las costumbres y normas establecidas."
+ },
+ "ideology_custom_religion_traditionalist_society": {
+  "en": "Social Orthodoxy",
+  "es": "Ortodoxia social"
+ },
+ "ideology_custom_religion_traditionalist_society_desc": {
+  "en": "This religion values traditional social norms, customs, and institutions, emphasizing stability, continuity, and adherence to established practices.",
+  "es": "Esta religión valora las normas sociales, las costumbres y las instituciones tradicionales, y subraya la estabilidad, la continuidad y el apego a las prácticas establecidas."
+ },
+ "ideology_environmentalists": {
+  "en": "Environmentalist",
+  "es": "Ecologista"
+ },
+ "ideology_environmentalists_desc": {
+  "en": "Environmentalists believe that the environment should be protected and that human activity is causing harm to the planet.",
+  "es": "Los ecologistas creen que el medio ambiente debe protegerse y que la actividad humana está dañando el planeta."
+ },
+ "ideology_islamic_inheritance": {
+  "en": "Islamic Inheritance",
+  "es": "Herencia islámica"
+ },
+ "ideology_islamic_inheritance_desc": {
+  "en": "Islamic inheritance law, as outlined in the Quran, mandates specific shares for family members.",
+  "es": "La ley islámica de herencia, tal como se expone en el Corán, establece partes concretas para los miembros de la familia."
+ },
+ "ideology_multicultural": {
+  "en": "Multiculturalist",
+  "es": "Multiculturalista"
+ },
+ "ideology_multicultural_desc": {
+  "en": "Multiculturalists believe that diversity is a strength and that different cultures should be celebrated.",
+  "es": "Los multiculturalistas creen que la diversidad es una fortaleza y que las diferentes culturas deben celebrarse."
+ },
+ "ideology_multicultural_ig": {
+  "en": "Multiculturalist",
+  "es": "Multiculturalista"
+ },
+ "ideology_multicultural_ig_desc": {
+  "en": "Multiculturalists believe that diversity is a strength and that different cultures should be celebrated.",
+  "es": "Los multiculturalistas creen que la diversidad es una fortaleza y que las diferentes culturas deben celebrarse."
+ },
+ "ideology_multicultural_inclusive": {
+  "en": "Inclusive Multiculturalist",
+  "es": "Multiculturalista inclusivo"
+ },
+ "ideology_multicultural_inclusive_desc": {
+  "en": "Inclusive Multiculturalists champion diversity across all dimensions — cultural, ethnic, and LGBTQ+ — believing that true equality must be intersectional.",
+  "es": "Los multiculturalistas inclusivos defienden la diversidad en todas sus dimensiones —cultural, étnica y LGBTQ+—, convencidos de que la verdadera igualdad debe ser interseccional."
+ },
+ "ideology_optimist_transhumanist": {
+  "en": "Optimist Transhumanist",
+  "es": "Transhumanista optimista"
+ },
+ "ideology_optimist_transhumanist_desc": {
+  "en": "Optimist Transhumanists believe that technology can be used to improve the human condition and that the future is bright.",
+  "es": "Los transhumanistas optimistas creen que la tecnología puede utilizarse para mejorar la condición humana y que el futuro es prometedor."
+ }
+}

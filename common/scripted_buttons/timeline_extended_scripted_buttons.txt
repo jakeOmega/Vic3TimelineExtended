@@ -976,17 +976,24 @@ select_ideology_traditionalist_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_traditionalist_economy_selected
 				value = 1
@@ -1013,12 +1020,14 @@ deselect_ideology_traditionalist_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_TRADITIONALIST_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_traditionalist_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1042,17 +1051,24 @@ select_ideology_free_market_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_free_market_economy_selected
 				value = 1
@@ -1079,15 +1095,14 @@ deselect_ideology_free_market_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_FREE_MARKET_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_free_market_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1111,17 +1126,24 @@ select_ideology_socialist_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_socialist_economy_selected
 				value = 1
@@ -1148,12 +1170,14 @@ deselect_ideology_socialist_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_SOCIALIST_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_socialist_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1177,17 +1201,24 @@ select_ideology_social_democratic_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_social_democratic_economy_selected
 				value = 1
@@ -1214,12 +1245,14 @@ deselect_ideology_social_democratic_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_SOCIAL_DEMOCRATIC_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_social_democratic_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1243,17 +1276,24 @@ select_ideology_imperial_cult_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_imperial_cult_economy_selected
 				value = 1
@@ -1280,12 +1320,14 @@ deselect_ideology_imperial_cult_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_IMPERIAL_CULT_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_imperial_cult_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1309,17 +1351,24 @@ select_ideology_theocratic_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_free_market_economy_selected }
-		NOT = { has_variable = custom_religion_ideology_socialist_economy_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_ECONOMY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_THEOCRATIC_ECONOMY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_theocratic_economy_selected
 				value = 1
@@ -1346,12 +1395,14 @@ deselect_ideology_theocratic_economy = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_THEOCRATIC_ECONOMY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_theocratic_economy_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1375,17 +1426,24 @@ select_ideology_traditionalist_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
-		NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
-		NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_society_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_traditionalist_society_selected
 				value = 1
@@ -1412,12 +1470,14 @@ deselect_ideology_traditionalist_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_TRADITIONALIST_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_traditionalist_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1441,17 +1501,24 @@ select_ideology_inclusive_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
-		NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
-		NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_society_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_inclusive_society_selected
 				value = 1
@@ -1478,12 +1545,14 @@ deselect_ideology_inclusive_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_INCLUSIVE_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_inclusive_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1507,17 +1576,24 @@ select_ideology_totalitarian_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
-		NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
-		NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_society_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_totalitarian_society_selected
 				value = 1
@@ -1544,12 +1620,14 @@ deselect_ideology_totalitarian_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_TOTALITARIAN_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_totalitarian_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1573,17 +1651,24 @@ select_ideology_meritocratic_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
-		NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
-		NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_society_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_meritocratic_society_selected
 				value = 1
@@ -1610,12 +1695,14 @@ deselect_ideology_meritocratic_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_MERITOCRATIC_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_meritocratic_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1639,18 +1726,24 @@ select_ideology_imperial_cult_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
-		NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
-		NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
-		NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_society_selected }
-
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_imperial_cult_society_selected
 				value = 1
@@ -1677,12 +1770,14 @@ deselect_ideology_imperial_cult_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_IMPERIAL_CULT_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_imperial_cult_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1706,17 +1801,24 @@ select_ideology_theocratic_society = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }
-		NOT = { has_variable = custom_religion_ideology_inclusive_society_selected }
-		NOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }
-		NOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_SOCIETY_TT
+			NOR = {
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_THEOCRATIC_SOCIETY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_theocratic_society_selected
 				value = 1
@@ -1743,12 +1845,14 @@ deselect_ideology_theocratic_society = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_THEOCRATIC_SOCIETY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_theocratic_society_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1772,17 +1876,24 @@ select_ideology_aristocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_aristocratic_governance_selected
 				value = 1
@@ -1809,12 +1920,14 @@ deselect_ideology_aristocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_ARISTOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_aristocratic_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1838,17 +1951,24 @@ select_ideology_technocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_technocratic_governance_selected
 				value = 1
@@ -1875,12 +1995,14 @@ deselect_ideology_technocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_TECHNOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_technocratic_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1904,17 +2026,24 @@ select_ideology_republican_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_republican_governance_selected
 				value = 1
@@ -1941,12 +2070,14 @@ deselect_ideology_republican_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_REPUBLICAN_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_republican_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -1970,17 +2101,24 @@ select_ideology_corporate_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_corporate_governance_selected
 				value = 1
@@ -2007,12 +2145,14 @@ deselect_ideology_corporate_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_CORPORATE_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_corporate_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2036,17 +2176,24 @@ select_ideology_imperial_cult_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_imperial_cult_governance_selected
 				value = 1
@@ -2073,12 +2220,14 @@ deselect_ideology_imperial_cult_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_IMPERIAL_CULT_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_imperial_cult_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2102,17 +2251,24 @@ select_ideology_theocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_republican_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_corporate_governance_selected }
-		NOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_GOVERNANCE_TT
+			NOR = {
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_theocratic_governance_selected
 				value = 1
@@ -2139,12 +2295,14 @@ deselect_ideology_theocratic_governance = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_THEOCRATIC_GOVERNANCE_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_theocratic_governance_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2168,17 +2326,24 @@ select_ideology_pacifist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_pacifist_outlook_selected
 				value = 1
@@ -2205,12 +2370,14 @@ deselect_ideology_pacifist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_PACIFIST_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_pacifist_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2234,17 +2401,24 @@ select_ideology_militarist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_militarist_outlook_selected
 				value = 1
@@ -2271,12 +2445,14 @@ deselect_ideology_militarist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_MILITARIST_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_militarist_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2300,17 +2476,24 @@ select_ideology_isolationist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_isolationist_outlook_selected
 				value = 1
@@ -2337,12 +2520,14 @@ deselect_ideology_isolationist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_ISOLATIONIST_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_isolationist_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2366,17 +2551,24 @@ select_ideology_exploitative_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_exploitative_outlook_selected
 				value = 1
@@ -2403,12 +2595,14 @@ deselect_ideology_exploitative_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_EXPLOITATIVE_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_exploitative_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2432,17 +2626,24 @@ select_ideology_imperialist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_IMPERIALIST_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_imperialist_outlook_selected
 				value = 1
@@ -2469,12 +2670,14 @@ deselect_ideology_imperialist_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_IMPERIALIST_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_imperialist_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2498,17 +2701,24 @@ select_ideology_theocratic_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies < 3
-		NOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }
-		NOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_ROOM_TT
+			var:selected_idelogies < 3
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_OUTLOOK_TT
+			NOR = {
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+			}
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_IDEOLOGY_THEOCRATIC_OUTLOOK_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_ideology_theocratic_outlook_selected
 				value = 1
@@ -2535,12 +2745,14 @@ deselect_ideology_theocratic_outlook = {
 	}
 
 	possible = {
-		var:selected_idelogies > 0
+		custom_tooltip = {
+			text = CNR_REQ_IDEOLOGY_CHOSEN_TT
+			var:selected_idelogies > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_IDEOLOGY_THEOCRATIC_OUTLOOK_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_ideology_theocratic_outlook_selected
 			change_variable = {
 				name = selected_idelogies
@@ -2564,25 +2776,33 @@ select_trait_traditionalist_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_traditionalist_economy_selected
-			has_variable = custom_religion_ideology_traditionalist_society_selected
-			has_variable = custom_religion_ideology_aristocratic_governance_selected
-			has_variable = custom_religion_ideology_isolationist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_loyal_selected
-			has_variable = custom_religion_trait_social_democrat_loyal_selected
-			has_variable = custom_religion_trait_totalitarian_loyal_selected
-			has_variable = custom_religion_trait_imperial_cult_loyal_selected
-			has_variable = custom_religion_trait_theocratic_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TRADITIONALIST_TT
+			OR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_market_liberal_loyal_selected
+				has_variable = custom_religion_trait_social_democrat_loyal_selected
+				has_variable = custom_religion_trait_totalitarian_loyal_selected
+				has_variable = custom_religion_trait_imperial_cult_loyal_selected
+				has_variable = custom_religion_trait_theocratic_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_traditionalist_loyal_selected
 				value = 1
@@ -2609,12 +2829,14 @@ deselect_trait_traditionalist_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TRADITIONALIST_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_traditionalist_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -2638,25 +2860,33 @@ select_trait_traditionalist_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_traditionalist_economy_selected
-			has_variable = custom_religion_ideology_traditionalist_society_selected
-			has_variable = custom_religion_ideology_aristocratic_governance_selected
-			has_variable = custom_religion_ideology_isolationist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_happy_selected
-			has_variable = custom_religion_trait_social_democrat_happy_selected
-			has_variable = custom_religion_trait_totalitarian_happy_selected
-			has_variable = custom_religion_trait_imperial_cult_happy_selected
-			has_variable = custom_religion_trait_theocratic_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TRADITIONALIST_TT
+			OR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_market_liberal_happy_selected
+				has_variable = custom_religion_trait_social_democrat_happy_selected
+				has_variable = custom_religion_trait_totalitarian_happy_selected
+				has_variable = custom_religion_trait_imperial_cult_happy_selected
+				has_variable = custom_religion_trait_theocratic_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_traditionalist_happy_selected
 				value = 1
@@ -2683,12 +2913,14 @@ deselect_trait_traditionalist_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TRADITIONALIST_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_traditionalist_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -2712,25 +2944,33 @@ select_trait_traditionalist_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_traditionalist_economy_selected
-			has_variable = custom_religion_ideology_traditionalist_society_selected
-			has_variable = custom_religion_ideology_aristocratic_governance_selected
-			has_variable = custom_religion_ideology_isolationist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_unhappy_selected
-			has_variable = custom_religion_trait_social_democrat_unhappy_selected
-			has_variable = custom_religion_trait_totalitarian_unhappy_selected
-			has_variable = custom_religion_trait_imperial_cult_unhappy_selected
-			has_variable = custom_religion_trait_theocratic_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TRADITIONALIST_TT
+			OR = {
+				has_variable = custom_religion_ideology_traditionalist_economy_selected
+				has_variable = custom_religion_ideology_traditionalist_society_selected
+				has_variable = custom_religion_ideology_aristocratic_governance_selected
+				has_variable = custom_religion_ideology_isolationist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_market_liberal_unhappy_selected
+				has_variable = custom_religion_trait_social_democrat_unhappy_selected
+				has_variable = custom_religion_trait_totalitarian_unhappy_selected
+				has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+				has_variable = custom_religion_trait_theocratic_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_traditionalist_unhappy_selected
 				value = 1
@@ -2757,12 +2997,14 @@ deselect_trait_traditionalist_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TRADITIONALIST_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_traditionalist_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -2786,25 +3028,33 @@ select_trait_market_liberal_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_free_market_economy_selected
-			has_variable = custom_religion_ideology_meritocratic_society_selected
-			has_variable = custom_religion_ideology_corporate_governance_selected
-			has_variable = custom_religion_ideology_exploitative_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_social_democrat_loyal_selected
-			has_variable = custom_religion_trait_totalitarian_loyal_selected
-			has_variable = custom_religion_trait_traditionalist_loyal_selected
-			has_variable = custom_religion_trait_imperial_cult_loyal_selected
-			has_variable = custom_religion_trait_theocratic_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_MARKET_LIBERAL_TT
+			OR = {
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_loyal_selected
+				has_variable = custom_religion_trait_social_democrat_loyal_selected
+				has_variable = custom_religion_trait_totalitarian_loyal_selected
+				has_variable = custom_religion_trait_imperial_cult_loyal_selected
+				has_variable = custom_religion_trait_theocratic_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_market_liberal_loyal_selected
 				value = 1
@@ -2831,12 +3081,14 @@ deselect_trait_market_liberal_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_MARKET_LIBERAL_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_market_liberal_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -2860,25 +3112,33 @@ select_trait_market_liberal_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_free_market_economy_selected
-			has_variable = custom_religion_ideology_meritocratic_society_selected
-			has_variable = custom_religion_ideology_corporate_governance_selected
-			has_variable = custom_religion_ideology_exploitative_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_social_democrat_happy_selected
-			has_variable = custom_religion_trait_totalitarian_happy_selected
-			has_variable = custom_religion_trait_traditionalist_happy_selected
-			has_variable = custom_religion_trait_imperial_cult_happy_selected
-			has_variable = custom_religion_trait_theocratic_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_MARKET_LIBERAL_TT
+			OR = {
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_happy_selected
+				has_variable = custom_religion_trait_social_democrat_happy_selected
+				has_variable = custom_religion_trait_totalitarian_happy_selected
+				has_variable = custom_religion_trait_imperial_cult_happy_selected
+				has_variable = custom_religion_trait_theocratic_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_market_liberal_happy_selected
 				value = 1
@@ -2905,12 +3165,14 @@ deselect_trait_market_liberal_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_MARKET_LIBERAL_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_market_liberal_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -2934,25 +3196,33 @@ select_trait_market_liberal_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_free_market_economy_selected
-			has_variable = custom_religion_ideology_meritocratic_society_selected
-			has_variable = custom_religion_ideology_corporate_governance_selected
-			has_variable = custom_religion_ideology_exploitative_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_social_democrat_unhappy_selected
-			has_variable = custom_religion_trait_totalitarian_unhappy_selected
-			has_variable = custom_religion_trait_traditionalist_unhappy_selected
-			has_variable = custom_religion_trait_imperial_cult_unhappy_selected
-			has_variable = custom_religion_trait_theocratic_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_MARKET_LIBERAL_TT
+			OR = {
+				has_variable = custom_religion_ideology_free_market_economy_selected
+				has_variable = custom_religion_ideology_meritocratic_society_selected
+				has_variable = custom_religion_ideology_corporate_governance_selected
+				has_variable = custom_religion_ideology_exploitative_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_unhappy_selected
+				has_variable = custom_religion_trait_social_democrat_unhappy_selected
+				has_variable = custom_religion_trait_totalitarian_unhappy_selected
+				has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+				has_variable = custom_religion_trait_theocratic_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_market_liberal_unhappy_selected
 				value = 1
@@ -2979,12 +3249,14 @@ deselect_trait_market_liberal_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_MARKET_LIBERAL_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_market_liberal_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -3008,25 +3280,33 @@ select_trait_social_democrat_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_social_democratic_economy_selected
-			has_variable = custom_religion_ideology_inclusive_society_selected
-			has_variable = custom_religion_ideology_republican_governance_selected
-			has_variable = custom_religion_ideology_pacifist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_loyal_selected
-			has_variable = custom_religion_trait_totalitarian_loyal_selected
-			has_variable = custom_religion_trait_traditionalist_loyal_selected
-			has_variable = custom_religion_trait_imperial_cult_loyal_selected
-			has_variable = custom_religion_trait_theocratic_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_SOCIAL_DEMOCRAT_TT
+			OR = {
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_loyal_selected
+				has_variable = custom_religion_trait_market_liberal_loyal_selected
+				has_variable = custom_religion_trait_totalitarian_loyal_selected
+				has_variable = custom_religion_trait_imperial_cult_loyal_selected
+				has_variable = custom_religion_trait_theocratic_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_social_democrat_loyal_selected
 				value = 1
@@ -3053,12 +3333,14 @@ deselect_trait_social_democrat_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_social_democrat_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -3082,25 +3364,33 @@ select_trait_social_democrat_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_social_democratic_economy_selected
-			has_variable = custom_religion_ideology_inclusive_society_selected
-			has_variable = custom_religion_ideology_republican_governance_selected
-			has_variable = custom_religion_ideology_pacifist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_happy_selected
-			has_variable = custom_religion_trait_totalitarian_happy_selected
-			has_variable = custom_religion_trait_traditionalist_happy_selected
-			has_variable = custom_religion_trait_imperial_cult_happy_selected
-			has_variable = custom_religion_trait_theocratic_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_SOCIAL_DEMOCRAT_TT
+			OR = {
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_happy_selected
+				has_variable = custom_religion_trait_market_liberal_happy_selected
+				has_variable = custom_religion_trait_totalitarian_happy_selected
+				has_variable = custom_religion_trait_imperial_cult_happy_selected
+				has_variable = custom_religion_trait_theocratic_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_social_democrat_happy_selected
 				value = 1
@@ -3127,12 +3417,14 @@ deselect_trait_social_democrat_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_social_democrat_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -3156,25 +3448,33 @@ select_trait_social_democrat_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_social_democratic_economy_selected
-			has_variable = custom_religion_ideology_inclusive_society_selected
-			has_variable = custom_religion_ideology_republican_governance_selected
-			has_variable = custom_religion_ideology_pacifist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_unhappy_selected
-			has_variable = custom_religion_trait_totalitarian_unhappy_selected
-			has_variable = custom_religion_trait_traditionalist_unhappy_selected
-			has_variable = custom_religion_trait_imperial_cult_unhappy_selected
-			has_variable = custom_religion_trait_theocratic_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_SOCIAL_DEMOCRAT_TT
+			OR = {
+				has_variable = custom_religion_ideology_social_democratic_economy_selected
+				has_variable = custom_religion_ideology_inclusive_society_selected
+				has_variable = custom_religion_ideology_republican_governance_selected
+				has_variable = custom_religion_ideology_pacifist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_unhappy_selected
+				has_variable = custom_religion_trait_market_liberal_unhappy_selected
+				has_variable = custom_religion_trait_totalitarian_unhappy_selected
+				has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+				has_variable = custom_religion_trait_theocratic_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_social_democrat_unhappy_selected
 				value = 1
@@ -3201,12 +3501,14 @@ deselect_trait_social_democrat_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_SOCIAL_DEMOCRAT_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_social_democrat_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -3230,25 +3532,33 @@ select_trait_totalitarian_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_socialist_economy_selected
-			has_variable = custom_religion_ideology_totalitarian_society_selected
-			has_variable = custom_religion_ideology_technocratic_governance_selected
-			has_variable = custom_religion_ideology_militarist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_loyal_selected
-			has_variable = custom_religion_trait_social_democrat_loyal_selected
-			has_variable = custom_religion_trait_traditionalist_loyal_selected
-			has_variable = custom_religion_trait_imperial_cult_loyal_selected
-			has_variable = custom_religion_trait_theocratic_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TOTALITARIAN_TT
+			OR = {
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_loyal_selected
+				has_variable = custom_religion_trait_market_liberal_loyal_selected
+				has_variable = custom_religion_trait_social_democrat_loyal_selected
+				has_variable = custom_religion_trait_imperial_cult_loyal_selected
+				has_variable = custom_religion_trait_theocratic_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_totalitarian_loyal_selected
 				value = 1
@@ -3275,12 +3585,14 @@ deselect_trait_totalitarian_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TOTALITARIAN_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_totalitarian_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -3304,25 +3616,33 @@ select_trait_totalitarian_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_socialist_economy_selected
-			has_variable = custom_religion_ideology_totalitarian_society_selected
-			has_variable = custom_religion_ideology_technocratic_governance_selected
-			has_variable = custom_religion_ideology_militarist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_happy_selected
-			has_variable = custom_religion_trait_social_democrat_happy_selected
-			has_variable = custom_religion_trait_traditionalist_happy_selected
-			has_variable = custom_religion_trait_imperial_cult_happy_selected
-			has_variable = custom_religion_trait_theocratic_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TOTALITARIAN_TT
+			OR = {
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_happy_selected
+				has_variable = custom_religion_trait_market_liberal_happy_selected
+				has_variable = custom_religion_trait_social_democrat_happy_selected
+				has_variable = custom_religion_trait_imperial_cult_happy_selected
+				has_variable = custom_religion_trait_theocratic_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_totalitarian_happy_selected
 				value = 1
@@ -3349,12 +3669,14 @@ deselect_trait_totalitarian_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TOTALITARIAN_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_totalitarian_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -3378,26 +3700,33 @@ select_trait_totalitarian_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_socialist_economy_selected
-			has_variable = custom_religion_ideology_social_democratic_economy_selected
-			has_variable = custom_religion_ideology_totalitarian_society_selected
-			has_variable = custom_religion_ideology_technocratic_governance_selected
-			has_variable = custom_religion_ideology_militarist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_unhappy_selected
-			has_variable = custom_religion_trait_social_democrat_unhappy_selected
-			has_variable = custom_religion_trait_traditionalist_unhappy_selected
-			has_variable = custom_religion_trait_imperial_cult_unhappy_selected
-			has_variable = custom_religion_trait_theocratic_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_TOTALITARIAN_TT
+			OR = {
+				has_variable = custom_religion_ideology_socialist_economy_selected
+				has_variable = custom_religion_ideology_totalitarian_society_selected
+				has_variable = custom_religion_ideology_technocratic_governance_selected
+				has_variable = custom_religion_ideology_militarist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_unhappy_selected
+				has_variable = custom_religion_trait_market_liberal_unhappy_selected
+				has_variable = custom_religion_trait_social_democrat_unhappy_selected
+				has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+				has_variable = custom_religion_trait_theocratic_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_totalitarian_unhappy_selected
 				value = 1
@@ -3424,12 +3753,14 @@ deselect_trait_totalitarian_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_TOTALITARIAN_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_totalitarian_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -3453,25 +3784,33 @@ select_trait_imperial_cult_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_imperial_cult_economy_selected
-			has_variable = custom_religion_ideology_imperial_cult_society_selected
-			has_variable = custom_religion_ideology_imperial_cult_governance_selected
-			has_variable = custom_religion_ideology_imperialist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_loyal_selected
-			has_variable = custom_religion_trait_social_democrat_loyal_selected
-			has_variable = custom_religion_trait_totalitarian_loyal_selected
-			has_variable = custom_religion_trait_traditionalist_loyal_selected
-			has_variable = custom_religion_trait_theocratic_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_IMPERIAL_CULT_TT
+			OR = {
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_loyal_selected
+				has_variable = custom_religion_trait_market_liberal_loyal_selected
+				has_variable = custom_religion_trait_social_democrat_loyal_selected
+				has_variable = custom_religion_trait_totalitarian_loyal_selected
+				has_variable = custom_religion_trait_theocratic_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_imperial_cult_loyal_selected
 				value = 1
@@ -3498,12 +3837,14 @@ deselect_trait_imperial_cult_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_IMPERIAL_CULT_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_imperial_cult_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -3527,25 +3868,33 @@ select_trait_imperial_cult_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_imperial_cult_economy_selected
-			has_variable = custom_religion_ideology_imperial_cult_society_selected
-			has_variable = custom_religion_ideology_imperial_cult_governance_selected
-			has_variable = custom_religion_ideology_imperialist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_happy_selected
-			has_variable = custom_religion_trait_social_democrat_happy_selected
-			has_variable = custom_religion_trait_totalitarian_happy_selected
-			has_variable = custom_religion_trait_traditionalist_happy_selected
-			has_variable = custom_religion_trait_theocratic_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_IMPERIAL_CULT_TT
+			OR = {
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_happy_selected
+				has_variable = custom_religion_trait_market_liberal_happy_selected
+				has_variable = custom_religion_trait_social_democrat_happy_selected
+				has_variable = custom_religion_trait_totalitarian_happy_selected
+				has_variable = custom_religion_trait_theocratic_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_imperial_cult_happy_selected
 				value = 1
@@ -3572,12 +3921,14 @@ deselect_trait_imperial_cult_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_IMPERIAL_CULT_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_imperial_cult_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -3601,25 +3952,33 @@ select_trait_imperial_cult_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_imperial_cult_economy_selected
-			has_variable = custom_religion_ideology_imperial_cult_society_selected
-			has_variable = custom_religion_ideology_imperial_cult_governance_selected
-			has_variable = custom_religion_ideology_imperialist_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_unhappy_selected
-			has_variable = custom_religion_trait_social_democrat_unhappy_selected
-			has_variable = custom_religion_trait_totalitarian_unhappy_selected
-			has_variable = custom_religion_trait_traditionalist_unhappy_selected
-			has_variable = custom_religion_trait_theocratic_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_IMPERIAL_CULT_TT
+			OR = {
+				has_variable = custom_religion_ideology_imperial_cult_economy_selected
+				has_variable = custom_religion_ideology_imperial_cult_society_selected
+				has_variable = custom_religion_ideology_imperial_cult_governance_selected
+				has_variable = custom_religion_ideology_imperialist_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_unhappy_selected
+				has_variable = custom_religion_trait_market_liberal_unhappy_selected
+				has_variable = custom_religion_trait_social_democrat_unhappy_selected
+				has_variable = custom_religion_trait_totalitarian_unhappy_selected
+				has_variable = custom_religion_trait_theocratic_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_imperial_cult_unhappy_selected
 				value = 1
@@ -3646,12 +4005,14 @@ deselect_trait_imperial_cult_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_IMPERIAL_CULT_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_imperial_cult_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -3675,25 +4036,33 @@ select_trait_theocratic_loyal = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_theocratic_economy_selected
-			has_variable = custom_religion_ideology_theocratic_society_selected
-			has_variable = custom_religion_ideology_theocratic_governance_selected
-			has_variable = custom_religion_ideology_theocratic_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_loyal_selected
-			has_variable = custom_religion_trait_social_democrat_loyal_selected
-			has_variable = custom_religion_trait_totalitarian_loyal_selected
-			has_variable = custom_religion_trait_traditionalist_loyal_selected
-			has_variable = custom_religion_trait_imperial_cult_loyal_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_THEOCRATIC_TT
+			OR = {
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_LOYAL_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_loyal_selected
+				has_variable = custom_religion_trait_market_liberal_loyal_selected
+				has_variable = custom_religion_trait_social_democrat_loyal_selected
+				has_variable = custom_religion_trait_totalitarian_loyal_selected
+				has_variable = custom_religion_trait_imperial_cult_loyal_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_THEOCRATIC_LOYAL_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_theocratic_loyal_selected
 				value = 1
@@ -3720,12 +4089,14 @@ deselect_trait_theocratic_loyal = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_THEOCRATIC_LOYAL_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_theocratic_loyal_selected
 			change_variable = {
 				name = selected_traits
@@ -3749,25 +4120,33 @@ select_trait_theocratic_happy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_theocratic_economy_selected
-			has_variable = custom_religion_ideology_theocratic_society_selected
-			has_variable = custom_religion_ideology_theocratic_governance_selected
-			has_variable = custom_religion_ideology_theocratic_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_happy_selected
-			has_variable = custom_religion_trait_social_democrat_happy_selected
-			has_variable = custom_religion_trait_totalitarian_happy_selected
-			has_variable = custom_religion_trait_traditionalist_happy_selected
-			has_variable = custom_religion_trait_imperial_cult_happy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_THEOCRATIC_TT
+			OR = {
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_HAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_happy_selected
+				has_variable = custom_religion_trait_market_liberal_happy_selected
+				has_variable = custom_religion_trait_social_democrat_happy_selected
+				has_variable = custom_religion_trait_totalitarian_happy_selected
+				has_variable = custom_religion_trait_imperial_cult_happy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_THEOCRATIC_HAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_theocratic_happy_selected
 				value = 1
@@ -3794,12 +4173,14 @@ deselect_trait_theocratic_happy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_THEOCRATIC_HAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_theocratic_happy_selected
 			change_variable = {
 				name = selected_traits
@@ -3823,25 +4204,33 @@ select_trait_theocratic_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits < 3
-		OR = {
-			has_variable = custom_religion_ideology_theocratic_economy_selected
-			has_variable = custom_religion_ideology_theocratic_society_selected
-			has_variable = custom_religion_ideology_theocratic_governance_selected
-			has_variable = custom_religion_ideology_theocratic_outlook_selected
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_ROOM_TT
+			var:selected_traits < 3
 		}
-		NOR = {
-			has_variable = custom_religion_trait_market_liberal_unhappy_selected
-			has_variable = custom_religion_trait_social_democrat_unhappy_selected
-			has_variable = custom_religion_trait_totalitarian_unhappy_selected
-			has_variable = custom_religion_trait_traditionalist_unhappy_selected
-			has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+		custom_tooltip = {
+			text = CNR_REQ_SCHOOL_THEOCRATIC_TT
+			OR = {
+				has_variable = custom_religion_ideology_theocratic_economy_selected
+				has_variable = custom_religion_ideology_theocratic_society_selected
+				has_variable = custom_religion_ideology_theocratic_governance_selected
+				has_variable = custom_religion_ideology_theocratic_outlook_selected
+			}
+		}
+		custom_tooltip = {
+			text = CNR_REQ_ONE_UNHAPPY_TT
+			NOR = {
+				has_variable = custom_religion_trait_traditionalist_unhappy_selected
+				has_variable = custom_religion_trait_market_liberal_unhappy_selected
+				has_variable = custom_religion_trait_social_democrat_unhappy_selected
+				has_variable = custom_religion_trait_totalitarian_unhappy_selected
+				has_variable = custom_religion_trait_imperial_cult_unhappy_selected
+			}
 		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_TRAIT_THEOCRATIC_UNHAPPY_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_trait_theocratic_unhappy_selected
 				value = 1
@@ -3868,12 +4257,14 @@ deselect_trait_theocratic_unhappy = {
 	}
 
 	possible = {
-		var:selected_traits > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRAIT_CHOSEN_TT
+			var:selected_traits > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_TRAIT_THEOCRATIC_UNHAPPY_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_trait_theocratic_unhappy_selected
 			change_variable = {
 				name = selected_traits
@@ -3898,12 +4289,14 @@ select_name_a = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_a_selected
 				value = 1
@@ -3930,12 +4323,14 @@ deselect_name_a = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_a_selected
 			change_variable = {
 				name = selected_name
@@ -3959,12 +4354,14 @@ select_name_b = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_b_selected
 				value = 1
@@ -3991,12 +4388,14 @@ deselect_name_b = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_b_selected
 			change_variable = {
 				name = selected_name
@@ -4020,12 +4419,14 @@ select_name_c = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_c_selected
 				value = 1
@@ -4052,12 +4453,14 @@ deselect_name_c = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_c_selected
 			change_variable = {
 				name = selected_name
@@ -4081,12 +4484,14 @@ select_name_d = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_d_selected
 				value = 1
@@ -4113,12 +4518,14 @@ deselect_name_d = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_d_selected
 			change_variable = {
 				name = selected_name
@@ -4142,12 +4549,14 @@ select_name_e = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_e_selected
 				value = 1
@@ -4174,12 +4583,14 @@ deselect_name_e = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_e_selected
 			change_variable = {
 				name = selected_name
@@ -4203,12 +4614,14 @@ select_name_f = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_f_selected
 				value = 1
@@ -4235,12 +4648,14 @@ deselect_name_f = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_f_selected
 			change_variable = {
 				name = selected_name
@@ -4264,12 +4679,14 @@ select_name_g = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_g_selected
 				value = 1
@@ -4296,12 +4713,14 @@ deselect_name_g = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_g_selected
 			change_variable = {
 				name = selected_name
@@ -4325,12 +4744,14 @@ select_name_h = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_h_selected
 				value = 1
@@ -4357,12 +4778,14 @@ deselect_name_h = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_h_selected
 			change_variable = {
 				name = selected_name
@@ -4386,12 +4809,14 @@ select_name_i = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_i_selected
 				value = 1
@@ -4418,12 +4843,14 @@ deselect_name_i = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_i_selected
 			change_variable = {
 				name = selected_name
@@ -4447,12 +4874,14 @@ select_name_j = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_j_selected
 				value = 1
@@ -4479,12 +4908,14 @@ deselect_name_j = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_j_selected
 			change_variable = {
 				name = selected_name
@@ -4508,12 +4939,14 @@ select_name_k = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_k_selected
 				value = 1
@@ -4540,12 +4973,14 @@ deselect_name_k = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_k_selected
 			change_variable = {
 				name = selected_name
@@ -4569,12 +5004,14 @@ select_name_l = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_l_selected
 				value = 1
@@ -4601,12 +5038,14 @@ deselect_name_l = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_l_selected
 			change_variable = {
 				name = selected_name
@@ -4630,12 +5069,14 @@ select_name_m = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_m_selected
 				value = 1
@@ -4662,12 +5103,14 @@ deselect_name_m = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_m_selected
 			change_variable = {
 				name = selected_name
@@ -4691,12 +5134,14 @@ select_name_n = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_n_selected
 				value = 1
@@ -4723,12 +5168,14 @@ deselect_name_n = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_n_selected
 			change_variable = {
 				name = selected_name
@@ -4752,12 +5199,14 @@ select_name_o = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_o_selected
 				value = 1
@@ -4784,12 +5233,14 @@ deselect_name_o = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_o_selected
 			change_variable = {
 				name = selected_name
@@ -4813,12 +5264,14 @@ select_name_p = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_p_selected
 				value = 1
@@ -4845,12 +5298,14 @@ deselect_name_p = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_p_selected
 			change_variable = {
 				name = selected_name
@@ -4874,12 +5329,14 @@ select_name_q = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_q_selected
 				value = 1
@@ -4906,12 +5363,14 @@ deselect_name_q = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_q_selected
 			change_variable = {
 				name = selected_name
@@ -4935,12 +5394,14 @@ select_name_r = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_r_selected
 				value = 1
@@ -4967,12 +5428,14 @@ deselect_name_r = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_r_selected
 			change_variable = {
 				name = selected_name
@@ -4996,12 +5459,14 @@ select_name_s = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_s_selected
 				value = 1
@@ -5028,12 +5493,14 @@ deselect_name_s = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_s_selected
 			change_variable = {
 				name = selected_name
@@ -5057,12 +5524,14 @@ select_name_t = {
 	}
 
 	possible = {
-		var:selected_name < 1
+		custom_tooltip = {
+			text = CNR_REQ_NAME_ROOM_TT
+			var:selected_name < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_NAME_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = custom_religion_name_t_selected
 				value = 1
@@ -5089,12 +5558,14 @@ deselect_name_t = {
 	}
 
 	possible = {
-		var:selected_name > 0
+		custom_tooltip = {
+			text = CNR_REQ_NAME_CHOSEN_TT
+			var:selected_name > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_NAME_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_name_t_selected
 			change_variable = {
 				name = selected_name
@@ -5118,12 +5589,14 @@ select_christian = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_CHRISTIAN_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5150,12 +5623,14 @@ deselect_christian = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_CHRISTIAN_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_christian_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5179,12 +5654,14 @@ select_muslim = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_MUSLIM_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5211,12 +5688,14 @@ deselect_muslim = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_MUSLIM_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_muslim_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5240,12 +5719,14 @@ select_judaism = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_JUDAISM_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5272,12 +5753,14 @@ deselect_judaism = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_JUDAISM_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_judaism_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5301,12 +5784,14 @@ select_eastern = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_EASTERN_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5333,12 +5818,14 @@ deselect_eastern = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_EASTERN_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_eastern_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5362,12 +5849,14 @@ select_animist = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_ANIMIST_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5394,12 +5883,14 @@ deselect_animist = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_ANIMIST_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_animist_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5423,12 +5914,14 @@ select_buddhist = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_BUDDHIST_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5455,12 +5948,14 @@ deselect_buddhist = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_BUDDHIST_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_buddhist_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5484,12 +5979,14 @@ select_custom = {
 	}
 
 	possible = {
-		var:selected_religion_group < 1
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_ROOM_TT
+			var:selected_religion_group < 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "SELECT_CUSTOM_DESC"
+		hidden_effect = {
 			set_variable = {
 				name = selected_religion_group
 				value = 1
@@ -5516,12 +6013,14 @@ deselect_custom = {
 	}
 
 	possible = {
-		var:selected_religion_group > 0
+		custom_tooltip = {
+			text = CNR_REQ_TRADITION_CHOSEN_TT
+			var:selected_religion_group > 0
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "DESELECT_CUSTOM_DESC"
+		hidden_effect = {
 			remove_variable = custom_religion_custom_selected
 			change_variable = {
 				name = selected_religion_group
@@ -5544,12 +6043,14 @@ custom_religion_back = {
 	}
 
 	possible = {
-		var:current_stage > 1
+		custom_tooltip = {
+			text = CNR_REQ_PAST_FIRST_STEP_TT
+			var:current_stage > 1
+		}
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CUSTOM_RELIGION_BACK_DESC"
+		hidden_effect = {
 			change_variable = {
 				name = current_stage
 				subtract = 1
@@ -5588,8 +6089,7 @@ custom_religion_next = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "CUSTOM_RELIGION_NEXT_DESC"
+		hidden_effect = {
 			change_variable = {
 				name = current_stage
 				add = 1
@@ -5618,15 +6118,23 @@ create_new_religion = {
 		always = yes
 	}
 
+	# The effect is left open, so the button's tooltip lists what Proclaiming
+	# does (GUI audit JE-2): the state religion, the ruler's and heir's
+	# conversion, and the Devout's new ideologies and traits render as engine
+	# lines. Only the scope bookkeeping is hidden, and the three iterators,
+	# which would list every character and state, say what they do in one
+	# line each.
 	effect = {
 		custom_tooltip = {
-			text = "CREATE_NEW_RELIGION_DESC"
+			text = CREATE_NEW_RELIGION_EXILE_TT
 			every_scope_character = {
 				limit = {
 					interest_group = ROOT.ig:ig_devout
 				}
 				exile_character = yes
 			}
+		}
+		hidden_effect = {
 			if = {
 				limit = { has_variable = custom_religion_christian_selected }
 				rel:custom_religion_christian = {
@@ -5669,188 +6177,191 @@ create_new_religion = {
 					save_scope_as = custom_religion_scope
 				}
 			}
-			set_state_religion = scope:custom_religion_scope
-			ruler = {
-				change_character_religion = scope:custom_religion_scope
+		}
+		set_state_religion = scope:custom_religion_scope
+		ruler = {
+			change_character_religion = scope:custom_religion_scope
+		}
+		heir ?= {
+			change_character_religion = scope:custom_religion_scope
+		}
+		ig:ig_devout = {
+			hidden_effect = { set_interest_group_name = custom_religion }
+			# remove old ideologies
+			remove_all_ideologies = yes
+			# add relevant ideologies
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }}
+				add_ideology = ideology_custom_religion_traditionalist_economy
 			}
-			heir ?= {
-				change_character_religion = scope:custom_religion_scope
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_free_market_economy_selected }}
+				add_ideology = ideology_custom_religion_free_market_economy
 			}
-			ig:ig_devout = {
-				hidden_effect = { set_interest_group_name = custom_religion }
-				# remove old ideologies
-				remove_all_ideologies = yes
-				# add relevant ideologies
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_economy_selected }}
-					add_ideology = ideology_custom_religion_traditionalist_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_free_market_economy_selected }}
-					add_ideology = ideology_custom_religion_free_market_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_socialist_economy_selected }}
-					add_ideology = ideology_custom_religion_socialist_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }}
-					add_ideology = ideology_custom_religion_social_democratic_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }}
-					add_ideology = ideology_custom_religion_imperial_cult_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }}
-					add_ideology = ideology_custom_religion_theocratic_economy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }}
-					add_ideology = ideology_custom_religion_traditionalist_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_inclusive_society_selected }}
-					add_ideology = ideology_custom_religion_inclusive_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }}
-					add_ideology = ideology_custom_religion_totalitarian_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }}
-					add_ideology = ideology_custom_religion_meritocratic_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }}
-					add_ideology = ideology_custom_religion_imperial_cult_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_society_selected }}
-					add_ideology = ideology_custom_religion_theocratic_society
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }}
-					add_ideology = ideology_custom_religion_aristocratic_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }}
-					add_ideology = ideology_custom_religion_technocratic_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_republican_governance_selected }}
-					add_ideology = ideology_custom_religion_republican_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_corporate_governance_selected }}
-					add_ideology = ideology_custom_religion_corporate_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }}
-					add_ideology = ideology_custom_religion_imperial_cult_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }}
-					add_ideology = ideology_custom_religion_theocratic_governance
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }}
-					add_ideology = ideology_custom_religion_pacifist_outlook
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }}
-					add_ideology = ideology_custom_religion_militarist_outlook
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }}
-					add_ideology = ideology_custom_religion_isolationist_outlook
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }}
-					add_ideology = ideology_custom_religion_exploitative_outlook
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }}
-					add_ideology = ideology_custom_religion_imperialist_outlook
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }}
-					add_ideology = ideology_custom_religion_theocratic_outlook
-				}
-				# set ig traits
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_unhappy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_unhappy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_unhappy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_unhappy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_unhappy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_theocratic_loyal_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_loyal
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_theocratic_happy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_happy
-				}
-				if = {
-					limit = { ROOT = { has_variable = custom_religion_trait_theocratic_unhappy_selected }}
-					set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_unhappy
-				}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_socialist_economy_selected }}
+				add_ideology = ideology_custom_religion_socialist_economy
 			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_social_democratic_economy_selected }}
+				add_ideology = ideology_custom_religion_social_democratic_economy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_economy_selected }}
+				add_ideology = ideology_custom_religion_imperial_cult_economy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_economy_selected }}
+				add_ideology = ideology_custom_religion_theocratic_economy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_traditionalist_society_selected }}
+				add_ideology = ideology_custom_religion_traditionalist_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_inclusive_society_selected }}
+				add_ideology = ideology_custom_religion_inclusive_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_totalitarian_society_selected }}
+				add_ideology = ideology_custom_religion_totalitarian_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_meritocratic_society_selected }}
+				add_ideology = ideology_custom_religion_meritocratic_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_society_selected }}
+				add_ideology = ideology_custom_religion_imperial_cult_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_society_selected }}
+				add_ideology = ideology_custom_religion_theocratic_society
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_aristocratic_governance_selected }}
+				add_ideology = ideology_custom_religion_aristocratic_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_technocratic_governance_selected }}
+				add_ideology = ideology_custom_religion_technocratic_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_republican_governance_selected }}
+				add_ideology = ideology_custom_religion_republican_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_corporate_governance_selected }}
+				add_ideology = ideology_custom_religion_corporate_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_imperial_cult_governance_selected }}
+				add_ideology = ideology_custom_religion_imperial_cult_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_governance_selected }}
+				add_ideology = ideology_custom_religion_theocratic_governance
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_pacifist_outlook_selected }}
+				add_ideology = ideology_custom_religion_pacifist_outlook
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_militarist_outlook_selected }}
+				add_ideology = ideology_custom_religion_militarist_outlook
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_isolationist_outlook_selected }}
+				add_ideology = ideology_custom_religion_isolationist_outlook
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_exploitative_outlook_selected }}
+				add_ideology = ideology_custom_religion_exploitative_outlook
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_imperialist_outlook_selected }}
+				add_ideology = ideology_custom_religion_imperialist_outlook
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_ideology_theocratic_outlook_selected }}
+				add_ideology = ideology_custom_religion_theocratic_outlook
+			}
+			# set ig traits
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_traditionalist_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_traditionalist_unhappy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_market_liberal_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_market_liberal_unhappy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_social_democrat_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_social_democrat_unhappy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_totalitarian_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_totalitarian_unhappy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_imperial_cult_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_imperial_cult_unhappy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_theocratic_loyal_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_loyal
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_theocratic_happy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_happy
+			}
+			if = {
+				limit = { ROOT = { has_variable = custom_religion_trait_theocratic_unhappy_selected }}
+				set_ig_trait = ig_trait:ig_trait_custom_religion_theocratic_unhappy
+			}
+		}
+		custom_tooltip = {
+			text = CREATE_NEW_RELIGION_CONVERT_CAPITAL_TT
 			random_scope_state = {
 				limit = {
 					owner = ROOT
@@ -5861,6 +6372,9 @@ create_new_religion = {
 					value = 0.2
 				}
 			}
+		}
+		custom_tooltip = {
+			text = CREATE_NEW_RELIGION_CONVERT_STATES_TT
 			every_scope_state = {
 				limit = {
 					owner = ROOT

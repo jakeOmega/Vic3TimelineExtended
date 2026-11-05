@@ -1,4 +1,5 @@
-"""Unit tests for concept_reference_audit's loc-line handling.
+"""Unit tests for concept_reference_audit: its loc-line handling and the
+`--strict` exit status CI runs it with.
 
 The audit reads `# REVIEWED ...` suppressions from the text after a loc
 value's closing quote, so the escape-aware split (shared with
@@ -17,6 +18,7 @@ from concept_reference_audit import (
     _parse_reviewed,
     audit,
     render_report,
+    strict_exit_code,
 )
 
 
@@ -102,6 +104,60 @@ class RenderReportTests(unittest.TestCase):
                      "registered concepts", "178", "2939", "718"):
             self.assertNotIn(gone, report)
         self.assertIn("- total flags: 2", report)
+
+
+class StrictExitCodeTests(unittest.TestCase):
+    """`--strict` is the CI mode: fail on any flag with no REVIEWED exemption."""
+
+    def _result(self, *exemptions):
+        return AuditResult(flags=[
+            ConceptFlag(f"k{i}", "concept_gone", "localization/english/a_l_english.yml", i + 1,
+                        exemption=ex)
+            for i, ex in enumerate(exemptions)
+        ])
+
+    def test_no_flags_passes(self):
+        self.assertEqual(strict_exit_code(self._result()), 0)
+
+    def test_one_unreviewed_flag_fails(self):
+        self.assertEqual(strict_exit_code(self._result(None)), 1)
+
+    def test_all_reviewed_passes(self):
+        reviewed = {"date": "2026-10-30", "rationale": "registered next patch"}
+        self.assertEqual(strict_exit_code(self._result(reviewed, reviewed)), 0)
+
+    def test_one_unreviewed_among_reviewed_fails(self):
+        reviewed = {"date": "2026-10-30", "rationale": "registered next patch"}
+        self.assertEqual(strict_exit_code(self._result(reviewed, None)), 1)
+
+    def test_unregistered_concept_link_fails_and_registering_it_passes(self):
+        """End to end through audit(): the #1257 shape, a widget tooltip
+        linking a concept `common/game_concepts/` never declared."""
+        line = (" je_space_race_widget_mod_mine_tt:0 "
+                "\"Needs a [concept_sr_extraplanetary_base].\"")
+        concepts = {"concept_x": {}}
+        ms = SimpleNamespace(mod_parsers={"Game Concepts": SimpleNamespace(data=concepts)})
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            path = os.path.join(loc_dir, "a_l_english.yml")
+
+            def run(loc_line):
+                with open(path, "w", encoding="utf-8-sig") as fh:
+                    fh.write("l_english:\n" + loc_line + "\n")
+                return strict_exit_code(audit(ms, mod_path=td))
+
+            self.assertEqual(run(line), 1)
+            self.assertEqual(run(line + " # REVIEWED 2026-10-30: registered next patch"), 0)
+            concepts["concept_sr_extraplanetary_base"] = {}
+            self.assertEqual(run(line), 0)
+
+
+class RepoTests(unittest.TestCase):
+    def test_ci_runs_it_strict(self):
+        root = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(root, ".github", "workflows", "ci.yml"), encoding="utf-8") as fh:
+            self.assertIn("python3 concept_reference_audit.py --strict", fh.read())
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-﻿money_transfer = {
+﻿money_transfer = {  # REVIEWED 2026-11-03 (involvement): overrides vanilla's money transfer, which builds none: a one-off payment
 	kind = directed
 	cost = 25
 

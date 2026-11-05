@@ -240,8 +240,12 @@ class ConsumerTests(unittest.TestCase):
         up = _top_level_block(body, "covert_possible_priority_up = {")
         self.assertIn("text = iw_priority_3_needs_tradecraft_tt", up)
         self.assertIn("covert_tradecraft_unlocks_priority_3 = yes", up)
-        # An operation below priority 2 steps freely.
-        self.assertIn("NOT = { covert_op_priority_at_least = { N = 2 } }", up)
+        # An operation below priority 2 steps freely: the gate sits in a
+        # trigger_if on the step that reaches 3, so it is neither checked nor
+        # printed on a 1 -> 2 step (COV-9b).
+        gate = up[up.index("trigger_if = {", up.index("Tradecraft gate")):]
+        self.assertRegex(gate, r"^trigger_if = \{\s*limit = \{ scope:iw_op \?= \{ covert_op_priority_at_least = \{ N = 2 \} \} \}")
+        self.assertLess(gate.index("covert_op_priority_at_least = { N = 2 }"), gate.index("iw_priority_3_needs_tradecraft_tt"))
         down = _top_level_block(body, "covert_possible_priority_down = {")
         self.assertNotIn("tradecraft", down)
         # The AI goes through the same trigger.

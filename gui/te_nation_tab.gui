@@ -1,12 +1,17 @@
 ﻿### The Nation tab of the Timeline Extended window (gui/te_systems_window.gui
-### instances te_nation_tab_sections): what the country carries for good, in
+### instances te_nation_tab_body, which holds te_nation_tab_sections under the
+### tab's header, with the "?" to the Help page): what the country carries for good, in
 ### one place. Spec: docs/superpowers/archive/specs/2026-10-17-national-modifiers-tab-design.md
 ### § 2. An overview of boxes, two to a row; five sections, open, each its
-### score rows and then its type rows (#1030); Where These Come From and How
-### the Nation Works, collapsed. House style: docs/guides/gui_style_guide.md.
+### score rows and then its type rows (#1030); Where These Come From,
+### collapsed; All Modifiers, collapsed. The explanations are on the Help page
+### (gui/te_popups.gui). House style: docs/guides/gui_style_guide.md.
 ###
-### DATA. No journal entry and no gate: everything reads the player's country
-### through GetPlayer. The score rows read script values
+### DATA. No journal entry and no gate: everything reads the shown country,
+### Country, which each mount supplies (the window's, the player's; National
+### Info's, any country's: spec 2026-11-02-charts-help-national-info § 6.3,
+### test_te_system_tab_bodies.py's BindingTest). Nothing on it is private and it
+### has no control (§ 6.4). The score rows read script values
 ### (common/script_values/te_nation_values.txt) and the engine's modifier sums.
 ### A section's type rows (te_nation_types_<section>, generated in
 ### gui/te_nation_generated.gui) are modifier types' national totals, each
@@ -14,8 +19,10 @@
 ### own timed modifiers filtered by name (te_nation_list_<section> in Where
 ### These Come From, and te_nation_row_<row> under a score row, both
 ### generated), each with its own tooltip, so the engine renders the effects
-### at their current scale. The country panel's list hides the same names
-### (gui/00_te_country_panel_information.gui).
+### at their current scale. All Modifiers (te_nation_all_panel) is the same
+### datamodel unfiltered, every modifier the country holds: the country panel's
+### Information tab lists none, only how many, with a goto here
+### (gui/00_te_country_panel_information.gui; owner, 2026-11-03).
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_nation_fontsize_*; rule 3).
@@ -54,7 +61,7 @@ types te_nation_widget_types
 		using = default_list_position
 	}
 
-	### A heading inside How the Nation Works, with a faint rule under it.
+	### A heading on the Help page, with a faint rule under it.
 	type te_nation_subheader = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -132,7 +139,6 @@ types te_nation_widget_types
 			elide = right
 			align = left|nobaseline
 			using = te_nation_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		textbox = {
@@ -162,7 +168,7 @@ types te_nation_widget_types
 	### `visible`; the list ignores the items it hides.
 	### ----------------------------------------------------------------------
 	type te_nation_list = flowcontainer {
-		datamodel = "[GetPlayer.GetTimedModifiers]"
+		datamodel = "[Country.GetTimedModifiers]"
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 4
@@ -361,7 +367,7 @@ types te_nation_widget_types
 				default_progressbar_horizontal = {
 					size = { 100% 100% }
 					blockoverride "values" {
-						value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_nation_override_bar') )]"
+						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_nation_override_bar') )]"
 						min = 0
 						max = 1
 					}
@@ -391,24 +397,24 @@ types te_nation_widget_types
 				}
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_tier_0"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)1' )]"
 				text = "te_nation_override_tier_1"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)2' )]"
 				text = "te_nation_override_tier_2"
 			}
 			te_nation_row = {
-				visible = "[EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
+				visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_tier'), '(CFixedPoint)3' )]"
 				text = "te_nation_override_tier_3"
 			}
 			### While authority produced, not capacity, holds it there.
 			te_nation_row = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_override_next_cost'), '(CFixedPoint)0' )]"
 				text = "te_nation_override_short"
 			}
 
@@ -418,30 +424,32 @@ types te_nation_widget_types
 			### paper court's under a government that can ignore its courts), and
 			### the courts' own modifiers under it.
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_judiciary_on'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
 				spacing = 4
 
+				### No hover of its own: the label's concept says how the score
+				### moves, and the ceiling's line sits under the bar (2026-10-27
+				### audit, NAT-4).
 				te_nation_row = {
 					text = "te_nation_jud_row"
-					tooltip = "te_nation_jud_row_tt"
 				}
 				te_nation_target_bar = {
 					blockoverride "high" {
-						value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+						value = "[FixedPointToFloat( Max_CFixedPoint( Country.MakeScope.ScriptValue('te_jud_display'), Country.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
 					}
 					blockoverride "low" {
-						value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jud_display'), GetPlayer.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( Country.MakeScope.ScriptValue('te_jud_display'), Country.MakeScope.ScriptValue('te_jud_ceiling') ) )]"
 					}
 				}
 				te_nation_row = {
-					visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
+					visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' ) )]"
 					text = "te_nation_jud_ceiling_row"
 				}
 				te_nation_row = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_jud_paper'), '(CFixedPoint)0' )]"
 					text = "te_nation_jud_ceiling_paper_row"
 				}
 				te_nation_list = {
@@ -453,7 +461,7 @@ types te_nation_widget_types
 
 			### The Algorithmic Mandate, under Algorithmic Governance only.
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_mandate_on'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_mandate_on'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
@@ -491,15 +499,16 @@ types te_nation_widget_types
 			te_nation_row = {
 				text = "te_nation_wc_row"
 				### The Population panel's Demographics tab is there only under the
-				### Demographics rule (te_pops_demog_tab_sgui).
-				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_tt' )]"
+				### Demographics rule (te_pops_demog_tab_sgui); another country's is
+				### in National Info, the window that shows it.
+				tooltip = "[SelectLocalization( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), SelectLocalization( Country.IsLocalPlayer, 'te_nation_wc_row_demog_tt', 'te_nation_wc_row_demog_other_tt' ), 'te_nation_wc_row_tt' )]"
 			}
 			te_nation_target_bar = {
 				blockoverride "high" {
-					value = "[FixedPointToFloat( Max_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+					value = "[FixedPointToFloat( Max_CFixedPoint( Country.MakeScope.ScriptValue('te_inh_concentration_display'), Country.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
 				}
 				blockoverride "low" {
-					value = "[FixedPointToFloat( Min_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_inh_concentration_display'), GetPlayer.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
+					value = "[FixedPointToFloat( Min_CFixedPoint( Country.MakeScope.ScriptValue('te_inh_concentration_display'), Country.MakeScope.ScriptValue('te_inh_concentration_target') ) )]"
 				}
 			}
 			te_nation_list = {
@@ -537,7 +546,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_private_construction'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_private_construction'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 				margin_top = 6
@@ -562,7 +571,7 @@ types te_nation_widget_types
 	### something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_science_and_space = flowcontainer {
-		visible = "[Or( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_science_and_space_count'), '(CFixedPoint)0' ) )]"
+		visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_science_and_space_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -574,7 +583,7 @@ types te_nation_widget_types
 		}
 		te_nation_panel = {
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_tech_spread'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -593,12 +602,12 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### INTERNATIONAL: the type rows only (standing abroad, covert defence,
-	### war support, nuclear, commitments). Drawn only with something to show
-	### (rule 8).
+	### INTERNATIONAL: the United Nations once one exists, then the type rows
+	### (standing abroad, covert defence, war support, nuclear, commitments).
+	### Drawn only with something to show (rule 8).
 	### ----------------------------------------------------------------------
 	type te_nation_section_international = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' )]"
+		visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_types_international_count'), '(CFixedPoint)0' ) )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -609,6 +618,37 @@ types te_nation_widget_types
 			}
 		}
 		te_nation_panel = {
+			### The United Nations (spec 2026-11-02-charts-help-national-info
+			### § 6.4: Nation with the UN lines is public, the UN's own tab
+			### private): the country's seat, its standing, and its dues with any
+			### arrears, once a UN exists. Each reads the UN overview's own code
+			### (common/script_values/un_overview_display_values.txt), which asks
+			### the entry's modifiers through je: in script, so it reads any
+			### country, and says it in the overview's words.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_nation_row = {
+					text = "te_nation_un_member_row"
+					tooltip = "te_nation_un_member_row_tt"
+				}
+				### Once the country has a score: a member's, or one that left
+				### (frozen until it rejoins).
+				te_nation_row = {
+					visible = "[Not( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_standing_code'), '(CFixedPoint)-1' ) )]"
+					text = "te_nation_un_standing_row"
+					tooltip = "te_nation_un_standing_row_tt"
+				}
+				### While it is a member.
+				te_nation_row = {
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)0' )]"
+					text = "te_nation_un_dues_row"
+					tooltip = "te_nation_un_dues_row_tt"
+				}
+			}
 			te_nation_types_international = {}
 		}
 	}
@@ -620,7 +660,7 @@ types te_nation_widget_types
 	### one's full effects, one click away). Drawn only with one to show.
 	### ----------------------------------------------------------------------
 	type te_nation_sources_panel = flowcontainer {
-		visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
+		visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' )]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -631,8 +671,10 @@ types te_nation_widget_types
 				parentanchor = hcenter
 				size = { 520 38 }
 			}
+			### "Label: value": how many of the country's modifiers the lists
+			### hold, so the collapsed panel says what it holds (NAT-2).
 			blockoverride "left_text" {
-				text = "te_nation_sources_header"
+				text = "te_nation_sources_header_count"
 			}
 			blockoverride "onclick" {
 				onclick = "[GetVariableSystem.Toggle('te_nation_sources_open')]"
@@ -649,7 +691,7 @@ types te_nation_widget_types
 			visible = "[GetVariableSystem.Exists('te_nation_sources_open')]"
 
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_governance_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -665,7 +707,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_society_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -681,7 +723,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_economy_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -697,7 +739,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_science_and_space_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -713,7 +755,7 @@ types te_nation_widget_types
 				}
 			}
 			flowcontainer = {
-				visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_list_international_count'), '(CFixedPoint)0' )]"
 				direction = vertical
 				ignoreinvisible = yes
 
@@ -732,108 +774,184 @@ types te_nation_widget_types
 	}
 
 	### ----------------------------------------------------------------------
-	### How the Nation Works: collapsed (te_nation_how_open).
+	### All Modifiers: collapsed (te_nation_all_open). Every modifier the country
+	### holds, timed and lasting, in vanilla's row (icon, name, time left, the
+	### modifier's own tooltip) with no filter, so it includes the lasting ones
+	### the sections add up (the owner, 2026-11-03). The country panel's
+	### Information tab lists none: its line counts them and leads here (its
+	### name filter made it lag, #1372). The rows sit inside the panel that the
+	### flag shows, so while it is collapsed none of them is evaluated (gotcha
+	### #42). Drawn while the country holds a modifier, as vanilla's header was.
 	### ----------------------------------------------------------------------
-	type te_nation_how_panel = flowcontainer {
+	type te_nation_all_panel = flowcontainer {
+		visible = "[Not(IsDataModelEmpty(Country.GetTimedModifiers))]"
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
 		section_header_button = {
+			tooltip = "te_nation_all_header_tt"
 			blockoverride "layout" {
 				parentanchor = hcenter
 				size = { 520 38 }
 			}
+			### "Label: value": how many modifiers the country holds.
 			blockoverride "left_text" {
-				text = "te_nation_how_header"
+				text = "te_nation_all_header_count"
 			}
 			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_nation_how_open')]"
+				onclick = "[GetVariableSystem.Toggle('te_nation_all_open')]"
 			}
 			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_nation_how_open'))]"
+				visible = "[Not(GetVariableSystem.Exists('te_nation_all_open'))]"
 			}
 			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+				visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
 			}
 		}
 
 		te_nation_panel = {
-			visible = "[GetVariableSystem.Exists('te_nation_how_open')]"
+			visible = "[GetVariableSystem.Exists('te_nation_all_open')]"
 
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_tab"
+			### Vanilla's list (country_panel.gui's TIMED MODIFIERS) at the
+			### panel's 480: the name wraps short of the time left.
+			flowcontainer = {
+				datamodel = "[Country.GetTimedModifiers]"
+				direction = vertical
+				spacing = 5
+				minimumsize = { 480 -1 }
+
+				item = {
+					container = {
+						minimumsize = { 480 -1 }
+						tooltip = "[TimedModifier.GetTooltip]"
+
+						flowcontainer = {
+							spacing = 10
+
+							icon = {
+								texture = "[TimedModifier.GetIcon]"
+								size = { 25 25 }
+							}
+
+							textbox = {
+								text = "[TimedModifier.GetName]"
+								autoresize = yes
+								multiline = yes
+								maximumsize = { 340 -1 }
+								align = nobaseline
+								parentanchor = vcenter
+								using = te_nation_fontsize_row
+							}
+						}
+
+						textbox = {
+							text = "[TimedModifier.GetRemainingDuration]"
+							autoresize = yes
+							align = nobaseline
+							parentanchor = right|vcenter
+							using = te_nation_fontsize_row
+						}
+					}
 				}
 			}
-			te_nation_note = {
-				text = "te_nation_how_tab"
+		}
+	}
+
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. It reads no country at all, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_nation_help_popup.
+	type te_nation_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_tab"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_rows"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_tab"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_rows"
 			}
-			te_nation_note = {
-				text = "te_nation_how_rows"
+		}
+		te_nation_note = {
+			text = "te_nation_how_rows"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_override"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_override"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_override"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_jud"
 			}
-			te_nation_note = {
-				text = "te_nation_how_override"
+		}
+		te_nation_note = {
+			text = "te_nation_how_jud"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_mandate"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_jud"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_mandate"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_wc"
 			}
-			te_nation_note = {
-				text = "te_nation_how_jud"
+		}
+		te_nation_note = {
+			text = "te_nation_how_wc"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_construction"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_mandate"
-				}
+		}
+		te_nation_note = {
+			text = "te_nation_how_construction"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_tech"
 			}
-			te_nation_note = {
-				text = "te_nation_how_mandate"
+		}
+		te_nation_note = {
+			text = "te_nation_how_tech"
+		}
+		te_nation_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_nation_how_sub_lists"
 			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_wc"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_wc"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_construction"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_construction"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_tech"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_tech"
-			}
-			te_nation_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_nation_how_sub_lists"
-				}
-			}
-			te_nation_note = {
-				text = "te_nation_how_lists"
-			}
+		}
+		te_nation_note = {
+			text = "te_nation_how_lists"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_nation_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_nation')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_nation_how_header"
+		}
+		blockoverride "popup_list" {
+			te_nation_help_body = {}
 		}
 	}
 
@@ -851,6 +969,73 @@ types te_nation_widget_types
 		te_nation_section_science_and_space = {}
 		te_nation_section_international = {}
 		te_nation_sources_panel = {}
-		te_nation_how_panel = {}
+		te_nation_all_panel = {}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7): te_nation_tab_sections' sections in three columns of a fixed 520,
+	### read down each and then across, so the order is the tab's: the overview
+	### and governance, the economy and what science and the world give, then
+	### Where These Come From and All Modifiers. The window mounts it in
+	### te_nation_tab_body's te_nation_tab_layout, in place of
+	### te_nation_tab_sections, which carries no gate or context; its spacing of
+	### 10 is the columns' own.
+	type te_nation_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_nation_overview_panel = {}
+			te_nation_section_governance = {}
+			te_nation_section_society = {}
+		}
+
+		blockoverride "column_2" {
+			te_nation_section_economy = {}
+			te_nation_section_science_and_space = {}
+			te_nation_section_international = {}
+		}
+
+		### Where These Come From shows only once a permanent effect is listed,
+		### and All Modifiers while the country holds any modifier, so the
+		### column takes both gates (column_3_visible) and closes up only when
+		### both panels hide, rather than leave an empty 520 band
+		### (test_nation_tab.py holds it to their own gates).
+		blockoverride "column_3_visible" {
+			visible = "[Or( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_nation_lists_count'), '(CFixedPoint)0' ), Not(IsDataModelEmpty(Country.GetTimedModifiers)) )]"
+		}
+
+		blockoverride "column_3" {
+			te_nation_sources_panel = {}
+			te_nation_all_panel = {}
+		}
+	}
+
+	### The tab's body (help-button-everywhere PR): te_system_tab_frame, as
+	### every other tab of the window has, for its header: the tab's name and
+	### the "?" to the Help page, hidden for an observer. No gate (the tab is
+	### always open) and no entry, so no Open Journal Entry. The window mounts
+	### it narrow and, with te_nation_tab_layout overridden by
+	### te_nation_wide_sections, full screen and in National Info for the
+	### player's own country; National Info's mount for another country draws
+	### its own header over te_nation_wide_sections.
+	type te_nation_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_window_tab_nation"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_nation')]"
+				}
+			}
+		}
+
+		blockoverride "tab_content" {
+			block "te_nation_tab_layout" {
+				te_nation_tab_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal" {}
 	}
 }

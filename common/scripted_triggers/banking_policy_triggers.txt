@@ -1184,9 +1184,22 @@ banking_cycle_is_expansion_or_boom = {
 	var:finance_cycle_value >= 60
 }
 
+# THE GREYED ENABLE BUTTON'S CONDITION LIST (GUI audit BNK-3, 2026-10-27).
+# IsValidTooltip prints every test below, so each is a `custom_tooltip`
+# phrased as a requirement, like the older tools' (te_monetary_sguis.txt's
+# header says why: it reads right beside a tick and beside a cross). Bare
+# scripted triggers and script-value comparisons printed their internal names.
+# Two tests are `hidden_trigger`s: banking_external_available and the tool's
+# own `_active = no`. The Enable row is drawn only while both hold
+# (banking_dash_enable_cb_* in banking_dashboard_scripted_gui.txt, and the AI's
+# scripted buttons' `visible`), so their lines were always ticked; the cycle's
+# own line (te_banking_cycle_started_tt) still opens the list.
 banking_external_eligible_restrict_inflows = {
-	banking_external_available = yes
-	te_mon_has_dial = yes
+	hidden_trigger = { banking_external_available = yes }
+	custom_tooltip = {
+		text = banking_mon_tt_needs_dial
+		te_mon_has_dial = yes
+	}
 	custom_tooltip = {
 		text = banking_button_locked_capital_controls_tt
 		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
@@ -1195,7 +1208,7 @@ banking_external_eligible_restrict_inflows = {
 banking_possible_cb_restrict_inflows = {
 	te_banking_cycle_started_tt = yes
 	banking_external_eligible_restrict_inflows = yes
-	banking_tool_restrict_inflows_active = no
+	hidden_trigger = { banking_tool_restrict_inflows_active = no }
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
 }
 banking_ai_core_cb_restrict_inflows = {
@@ -1204,15 +1217,21 @@ banking_ai_core_cb_restrict_inflows = {
 }
 
 banking_external_eligible_sterilize_inflows = {
-	banking_external_available = yes
-	te_mon_has_gold_flows = yes
+	hidden_trigger = { banking_external_available = yes }
+	custom_tooltip = {
+		text = banking_mon_tt_recap_has_flows
+		te_mon_has_gold_flows = yes
+	}
 }
 banking_possible_cb_sterilize_inflows = {
 	te_banking_cycle_started_tt = yes
 	banking_external_eligible_sterilize_inflows = yes
-	banking_tool_sterilize_inflows_active = no
+	hidden_trigger = { banking_tool_sterilize_inflows_active = no }
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
-	gold_reserves >= banking_external_sterilization_cost
+	custom_tooltip = {
+		text = banking_external_tt_treasury_pays
+		gold_reserves >= banking_external_sterilization_cost
+	}
 }
 banking_ai_core_cb_sterilize_inflows = {
 	te_mon_gold_flow_signed > 0
@@ -1220,13 +1239,13 @@ banking_ai_core_cb_sterilize_inflows = {
 }
 
 banking_external_eligible_foreign_borrowing_limits = {
-	banking_external_available = yes
+	hidden_trigger = { banking_external_available = yes }
 	has_law_or_variant = law_type:law_national_bank
 }
 banking_possible_cb_foreign_borrowing_limits = {
 	te_banking_cycle_started_tt = yes
 	banking_external_eligible_foreign_borrowing_limits = yes
-	banking_tool_foreign_borrowing_limits_active = no
+	hidden_trigger = { banking_tool_foreign_borrowing_limits_active = no }
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
 }
 banking_ai_core_cb_foreign_borrowing_limits = {
@@ -1234,8 +1253,11 @@ banking_ai_core_cb_foreign_borrowing_limits = {
 }
 
 banking_external_eligible_fx_surrender = {
-	banking_external_available = yes
-	te_mon_has_gold_flows = yes
+	hidden_trigger = { banking_external_available = yes }
+	custom_tooltip = {
+		text = banking_mon_tt_recap_has_flows
+		te_mon_has_gold_flows = yes
+	}
 	custom_tooltip = {
 		text = banking_button_locked_capital_controls_tt
 		OR = { modifier:country_banking_lock_capital_controls_bool = no is_at_war = yes }
@@ -1244,11 +1266,20 @@ banking_external_eligible_fx_surrender = {
 banking_possible_cb_fx_surrender = {
 	te_banking_cycle_started_tt = yes
 	banking_external_eligible_fx_surrender = yes
-	banking_tool_fx_surrender_active = no
+	hidden_trigger = { banking_tool_fx_surrender_active = no }
 	custom_tooltip = { text = BANKING_POINTS_2 modifier:country_banking_intervention_max_add >= 2 }
-	banking_external_export_share > 0
-	gold_reserves > 0
-	te_mon_gold_inflow_room > 0
+	custom_tooltip = {
+		text = banking_external_tt_exports
+		banking_external_export_share > 0
+	}
+	custom_tooltip = {
+		text = banking_external_tt_treasury_has_money
+		gold_reserves > 0
+	}
+	custom_tooltip = {
+		text = banking_mon_tt_recap_room
+		te_mon_gold_inflow_room > 0
+	}
 }
 banking_ai_core_cb_fx_surrender = {
 	te_mon_bank_gold_scaled < 0.5
@@ -1256,16 +1287,22 @@ banking_ai_core_cb_fx_surrender = {
 }
 
 banking_external_eligible_emergency_import_financing = {
-	banking_external_available = yes
+	hidden_trigger = { banking_external_available = yes }
 	has_law_or_variant = law_type:law_national_bank
 }
 banking_possible_cb_emergency_import_financing = {
 	te_banking_cycle_started_tt = yes
 	banking_external_eligible_emergency_import_financing = yes
-	banking_tool_emergency_import_financing_active = no
+	hidden_trigger = { banking_tool_emergency_import_financing_active = no }
 	custom_tooltip = { text = BANKING_POINTS_3 modifier:country_banking_intervention_max_add >= 3 }
-	te_mon_in_financial_crisis = yes
-	gold_reserves >= banking_external_import_cost
+	custom_tooltip = {
+		text = banking_external_tt_crisis
+		te_mon_in_financial_crisis = yes
+	}
+	custom_tooltip = {
+		text = banking_external_tt_treasury_pays
+		gold_reserves >= banking_external_import_cost
+	}
 }
 banking_ai_core_cb_emergency_import_financing = {
 	te_mon_in_financial_crisis = yes

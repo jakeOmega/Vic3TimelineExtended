@@ -1,0 +1,92 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — colony population: the programme's numbers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md
+# § 10. The per-world values (room, people, free room, crews, weights, the
+# sums) are generated in sr_sites_generated.txt; these are the programme's.
+# Country scope unless said otherwise.
+# ============================================================================
+
+# People in one batch (kill_population_in_state takes a constant: 250 middle
+# strata and 250 lower, sr_emig_month).
+sr_emig_batch_people = {
+	value = 500
+}
+
+# The programme's level: 0 Off, 1 Low, 2 Steady, 3 High.
+sr_emig_level_value = {
+	value = 0
+	if = { limit = { has_variable = sr_emig_level } value = var:sr_emig_level }
+}
+
+# Batches a month at the level: Low 1, Steady 2, High 4 (500, 1,000, 2,000 people).
+sr_emig_level_batches = {
+	value = 0
+	if = { limit = { sr_emig_level_value = 1 } value = 1 }
+	else_if = { limit = { sr_emig_level_value = 2 } value = 2 }
+	else_if = { limit = { sr_emig_level_value >= 3 } value = 4 }
+}
+
+# This month's batches: the level's, never more than the open colonies' free
+# room holds (sr_emig_open_room_total: the room of the colonies held and not
+# Closed).
+sr_emig_batches_now = {
+	value = sr_emig_open_room_total
+	divide = sr_emig_batch_people
+	floor = yes
+	max = sr_emig_level_batches
+}
+
+# The programme's upkeep, sr_emigration_programme's multiplier: its level.
+# Journal entry scope (the modifier sits on the entry), so it reads the
+# country through owner.
+sr_emig_upkeep_units = {
+	value = 0
+	owner = { add = sr_emig_level_value }
+}
+
+# The off-world population's bonus (design § 10.5): one unit per
+# sr_offworld_bonus_people of the nation's people off Earth, at most
+# sr_offworld_bonus_cap; nothing below sr_offworld_bonus_minimum.
+sr_offworld_bonus_people = {
+	value = 100000
+}
+sr_offworld_bonus_cap = {
+	value = 10
+}
+sr_offworld_bonus_minimum = {
+	value = 1000
+}
+sr_offworld_units = {
+	value = sr_offworld_pop_total
+	divide = sr_offworld_bonus_people
+	max = sr_offworld_bonus_cap
+}
+# Journal entry scope: sr_offworld_population's multiplier.
+sr_offworld_bonus_units = {
+	value = 0
+	owner = { add = sr_offworld_units }
+}
+
+# The emigration_batch self-check's reading: how much the Space Program's state
+# fell, and 90% of what was sent. Any scope; the globals are set just before
+# (sr_emig_month).
+sr_emig_log_fell = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = sr_emig_log_before_now
+			has_global_variable = sr_emig_log_after_now
+		}
+		value = global_var:sr_emig_log_before_now
+		subtract = global_var:sr_emig_log_after_now
+	}
+}
+sr_emig_log_fell_needed = {
+	value = 0
+	if = {
+		limit = { has_global_variable = sr_emig_log_sent_now }
+		value = global_var:sr_emig_log_sent_now
+		multiply = 0.9
+	}
+}

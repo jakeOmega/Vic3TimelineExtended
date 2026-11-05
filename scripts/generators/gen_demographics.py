@@ -35,6 +35,10 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_slot_births                    a cohort's births: today's single term while the planned and
                                                 unplanned schedules are one, else two terms (phase 2 step 1)
         te_demog_add_bands_to_root, te_demog_reset_country_bands, te_demog_scale_bands
+        te_demog_country_old_rows_store, te_demog_old_rows_reset, _mark, _close, _show
+                                                the pyramid's rows past 85: the sweep's people at each row's start, the
+                                                count's people past each, the country's sums, the rows shown (issue
+                                                #1075; demographics_model.old_rows, old_rows_shown)
         te_demog_gini_band_init, _add, _store, _load, _zero, _add_state
                                                 the Gini's 41 wealth bands: the walk's sums (each pop's
                                                 stand-in income computed in its band's leaf), a state's
@@ -53,6 +57,9 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_cause_deaths_estimate          each natural cause's deaths at the step's rates over the bands, the
                                                 Causes of Death section's estimate (issue #1029; demographics_model
                                                 .band_cause_rates)
+        te_demog_ring_migrate_slots, _bands, _pool_bands, _class
+                                                the 150-year ring's one-time re-filing on the 300-year one, the loops of
+                                                te_demog_ring_migrate (issue #1075; demographics_model.ring_migrate)
     common/script_values/te_demog_generated_values.txt
         per-pop engine curves and wealth TFR; per-state cause multipliers (reads of the
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
@@ -173,7 +180,7 @@ def tree(o, var, lo, hi, leaf):
 
 def sweeps(o):
     o("# The yearly step's sweep: pass 1 visits slots open-1 .. 0 (ages 1 .. open), pass 2")
-    o("# slots 149 .. open (ages open+1 .. 150), so te_demog_slot sees ages in order.")
+    o(f"# slots {N - 1} .. open (ages open+1 .. {N}), so te_demog_slot sees ages in order.")
     o("te_demog_sweep = {")
     for k in range(N - 1, -1, -1):
         o(f"te_demog_slot_p1 = {{ S = {k} }}")
@@ -181,7 +188,7 @@ def sweeps(o):
         o(f"te_demog_slot_p2 = {{ S = {k} }}")
     o("}")
     o("")
-    o("# The seed's sweep: ages 0 .. open, then open+1 .. 149.")
+    o(f"# The seed's sweep: ages 0 .. open, then open+1 .. {N - 1}.")
     o("te_demog_seed_sweep = {")
     for k in range(N - 1, -1, -1):
         o(f"te_demog_seed_p1 = {{ S = {k} }}")
@@ -311,6 +318,14 @@ def normalizers(o):
     for name in names:
         for step in two_step:
             o(step.format(v=name))
+    # the pyramid's rows past 85 (issue #1075), where someone is in them
+    for i in range(1, len(P.OLD_ROWS)):
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_of{i} }}")
+        for s in ("f", "m"):
+            for step in two_step:
+                o(step.format(v=f"te_dg_o{s}{i}"))
+        o("}")
     o("}")
     o("")
 
@@ -530,12 +545,20 @@ def growth_factor(o):
 
 
 def country_bands(o):
-    o("# THIS = a state, ROOT = its owner on the yearly country pulse: add the state's bands.")
+    rows = range(1, len(P.OLD_ROWS))
+    o("# THIS = a state, ROOT = its owner on the yearly country pulse: add the state's bands, and its people past each of")
+    o("# the pyramid's rows past 85 into the country's locals te_dg_c_o<f|m><i> (issue #1075).")
     o("te_demog_add_bands_to_root = {")
     for b in range(P.BANDS):
         for s in ("f", "m"):
             o(f"set_local_variable = {{ name = te_dg_t value = var:te_dg_b{s}{b} }}")
             o(f"root = {{ change_variable = {{ name = te_dg_cb{s}{b} add = local_var:te_dg_t }} }}")
+    for i in rows:
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_of{i} }}")
+        for s in ("f", "m"):
+            o(f"change_local_variable = {{ name = te_dg_c_o{s}{i} add = var:te_dg_o{s}{i} }}")
+        o("}")
     o("}")
     o("")
     o("# THIS = a country: zero its band sums before the states add theirs.")
@@ -543,9 +566,18 @@ def country_bands(o):
     for b in range(P.BANDS):
         o(f"set_variable = {{ name = te_dg_cbf{b} value = 0 }}")
         o(f"set_variable = {{ name = te_dg_cbm{b} value = 0 }}")
+    for i in rows:
+        for s in ("f", "m"):
+            o(f"set_local_variable = {{ name = te_dg_c_o{s}{i} value = 0 }}")
     o("}")
     o("")
-    o("# THIS = a state: multiply the bands and class sums by local_var:te_dg_new_scale.")
+    o("# THIS = a country after its states' loop: its people past each row's start (te_dg_co<f|m><i>), where anyone is.")
+    o("te_demog_country_old_rows_store = {")
+    for i in rows:
+        _store_pair(o, f"te_dg_co{{s}}{i}", f"local_var:te_dg_c_of{i}", f"local_var:te_dg_c_om{i}")
+    o("}")
+    o("")
+    o("# THIS = a state: multiply the bands, the class sums and the rows past 85 by local_var:te_dg_new_scale.")
     o("te_demog_scale_bands = {")
     for b in range(P.BANDS):
         for s in ("f", "m"):
@@ -553,6 +585,170 @@ def country_bands(o):
     for c in range(len(P.MIGRANT_CLASSES)):
         for s in ("f", "m"):
             o(f"change_variable = {{ name = te_dg_c{s}{c} multiply = local_var:te_dg_new_scale }}")
+    for i in rows:
+        o("if = {")
+        o(f"limit = {{ has_variable = te_dg_of{i} }}")
+        for s in ("f", "m"):
+            o(f"change_variable = {{ name = te_dg_o{s}{i} multiply = local_var:te_dg_new_scale }}")
+        o("}")
+    o("}")
+    o("")
+
+
+def _store_pair(o, name, f, m):
+    """Store a women's and men's pair (name with {s} for the sex) where the two hold anyone, else remove it."""
+    o("if = {")
+    o(f"limit = {{ {f} > 0 }}")
+    o(f"set_variable = {{ name = {name.format(s='f')} value = {f} }}")
+    o(f"set_variable = {{ name = {name.format(s='m')} value = {{ value = {m} min = 0 }} }}")
+    o("}")
+    o("else_if = {")
+    o(f"limit = {{ {m} > 0 }}")
+    o(f"set_variable = {{ name = {name.format(s='f')} value = 0 }}")
+    o(f"set_variable = {{ name = {name.format(s='m')} value = {m} }}")
+    o("}")
+    o("else_if = {")
+    o(f"limit = {{ has_variable = {name.format(s='f')} }}")
+    o(f"remove_variable = {name.format(s='f')}")
+    o(f"remove_variable = {name.format(s='m')}")
+    o("}")
+
+
+def old_rows(o):
+    """The pyramid's rows past 85 (issue #1075; demographics_params.OLD_ROWS): the sweep's people at each row's start, the
+    count's people past each, and the rows the pyramid shows (demographics_model.old_rows, old_rows_shown)."""
+    R = len(P.OLD_ROWS)
+    last_mark = R - 2                         # the last row start inside the ring; the pool's row is the ring's end
+    assert P.OLD_ROWS[-1] == N and P.OLD_ROWS[0] == P.BAND_WIDTH * (P.BANDS - 1)
+    o("# THIS = a state, in a sweep: the row starts' running sums at 0 (te_demog_reset_accumulators).")
+    o("te_demog_old_rows_reset = {")
+    o("set_local_variable = { name = te_dg_orow value = 0 }")
+    for i in range(1, last_mark + 1):
+        for s in ("f", "m"):
+            o(f"set_local_variable = {{ name = te_dg_oc{s}{i} value = 0 }}")
+    o("}")
+    o("")
+    o(f"# THIS = a state, in a sweep at the start of row local_var:te_dg_orow (1-{last_mark}, ages {P.OLD_ROWS[1]}-"
+      f"{P.OLD_ROWS[last_mark]}) inside the last")
+    o("# band, 85 and over (te_demog_age_boundaries): the band's people so far, te_dg_oc<f|m><row>, then the next row.")
+    o("te_demog_old_row_mark = {")
+
+    def leaf(o, i):
+        for s in ("f", "m"):
+            o(f"set_local_variable = {{ name = te_dg_oc{s}{i} value = local_var:te_dg_acc_b{s} }}")
+        nxt = P.OLD_ROWS[i + 1] if i < last_mark else 999
+        o(f"set_local_variable = {{ name = te_dg_next_band value = {nxt} }}")
+    tree(o, "te_dg_orow", 1, last_mark, leaf)
+    o("change_local_variable = { name = te_dg_orow add = 1 }")
+    o("}")
+    o("")
+    o("# THIS = a state, at the end of a sweep with the pool in the last band's sums (te_demog_close_accumulators): its people")
+    o("# past each row's start, te_dg_o<f|m><i> (the band's less the people before the start; the last row the pool),")
+    o("# where anyone is (raw, as the bands: te_demog_set_scale or the seed's normalisation scales them).")
+    o("te_demog_old_rows_close = {")
+    for i in range(1, last_mark + 1):
+        for s in ("f", "m"):
+            o(f"set_local_variable = {{ name = te_dg_or{s} value = {{ value = local_var:te_dg_acc_b{s} "
+              f"subtract = local_var:te_dg_oc{s}{i} }} }}")
+        _store_pair(o, f"te_dg_o{{s}}{i}", "local_var:te_dg_orf", "local_var:te_dg_orm")
+    _store_pair(o, f"te_dg_o{{s}}{R - 1}", "var:te_dg_pf", "var:te_dg_pm")
+    o("}")
+    o("")
+    gate = lit(P.OLD_ROW_GATE)
+    o("# THIS = a state or a country, after its count, with local_var:te_dg_or_people its people: the pyramid's rows past 85")
+    o(f"# (demographics_model.old_rows_shown). The top row is the highest whose people and older are {P.OLD_ROW_GATE:.0%} or")
+    o("# more of the people; with one, $TOP$ holds it and $PX$<f|m><i> each row's people, i = 0 (85 to the next start)")
+    o(f"# to {R - 1}: the top row everyone from its start, the rows above it 0. With none (an 1836-2000 pyramid) they go, and")
+    o("# the pyramid ends at 85+. $CUM$<f|m><i>: the people past row i's start; $BAND$<f|m>" f"{P.BANDS - 1}: 85 and over.")
+    o("te_demog_old_rows_show = {")
+    o("set_local_variable = { name = te_dg_or_top value = 0 }")
+    o(f"set_local_variable = {{ name = te_dg_or_gate value = {{ value = local_var:te_dg_or_people multiply = {gate} }} }}")
+    for i in range(R - 1, 0, -1):
+        o("if = {")
+        o("limit = {")
+        o("local_var:te_dg_or_top = 0")
+        o(f"has_variable = $CUM$f{i}")
+        o("}")
+        o(f"set_local_variable = {{ name = te_dg_or_n value = {{ value = var:$CUM$f{i} add = var:$CUM$m{i} }} }}")
+        o("if = {")
+        o("limit = {")
+        o("local_var:te_dg_or_n > 0")
+        o("local_var:te_dg_or_n >= local_var:te_dg_or_gate")
+        o("}")
+        o(f"set_local_variable = {{ name = te_dg_or_top value = {i} }}")
+        o("}")
+        o("}")
+    o("if = {")
+    o("limit = { local_var:te_dg_or_top > 0 }")
+    o("set_variable = { name = $TOP$ value = local_var:te_dg_or_top }")
+    for i in range(R):
+        for s in ("f", "m"):
+            here = f"var:$BAND$" f"{s}{P.BANDS - 1}" if i == 0 else f"var:$CUM${s}{i}"
+            o(f"set_local_variable = {{ name = te_dg_or_a{s} value = 0 }}")
+            if i == 0:
+                o(f"set_local_variable = {{ name = te_dg_or_a{s} value = {here} }}")
+            else:
+                o(f"if = {{ limit = {{ has_variable = $CUM${s}{i} }} set_local_variable = {{ name = te_dg_or_a{s} "
+                  f"value = {here} }} }}")
+            o(f"set_local_variable = {{ name = te_dg_or_b{s} value = 0 }}")
+            if i + 1 < R:
+                o(f"if = {{ limit = {{ has_variable = $CUM${s}{i + 1} }} set_local_variable = {{ name = te_dg_or_b{s} "
+                  f"value = var:$CUM${s}{i + 1} }} }}")
+        o("if = {")
+        o(f"limit = {{ local_var:te_dg_or_top > {i} }}")
+        for s in ("f", "m"):
+            o(f"set_variable = {{ name = $PX${s}{i} value = {{ value = local_var:te_dg_or_a{s} "
+              f"subtract = local_var:te_dg_or_b{s} min = 0 }} }}")
+        o("}")
+        o("else_if = {")
+        o(f"limit = {{ local_var:te_dg_or_top = {i} }}")
+        for s in ("f", "m"):
+            o(f"set_variable = {{ name = $PX${s}{i} value = local_var:te_dg_or_a{s} }}")
+        o("}")
+        o("else = {")
+        for s in ("f", "m"):
+            o(f"set_variable = {{ name = $PX${s}{i} value = 0 }}")
+        o("}")
+    o("}")
+    o("else_if = {")
+    o("limit = { has_variable = $TOP$ }")
+    o("remove_variable = $TOP$")
+    for i in range(R):
+        for s in ("f", "m"):
+            o(f"remove_variable = $PX${s}{i}")
+    o("}")
+    o("}")
+    o("")
+
+
+def ring_migration(o):
+    """The 150-year ring's one-time re-filing on the 300-year one (issue #1075; te_demog_ring_migrate's loops)."""
+    old, w = M.OLD_RING_YEARS, P.LX_BAND_WIDTH
+    assert N == 2 * old, "te_demog_ring_migrate re-files a 150-year ring on a 300-year one"
+    o(f"# THIS = a state, in te_demog_ring_migrate: each old slot 0-{old - 1} to its slot on the {N}-year ring.")
+    o("te_demog_ring_migrate_slots = {")
+    for k in range(old):
+        o(f"te_demog_ring_migrate_slot = {{ S = {k} T = {k + old} }}")
+    o("}")
+    o("")
+    o(f"# THIS = a state, in te_demog_ring_migrate: each old birth band 0-{old // w - 1} with its slots, by its top slot.")
+    o("te_demog_ring_migrate_bands = {")
+    for j in range(old // w):
+        o(f"te_demog_ring_migrate_band = {{ J = {j} T = {j + old // w} TOP = {w * j + w - 1} }}")
+    o("}")
+    o("")
+    o("# THIS = a state, in te_demog_ring_migrate: the pool into the band and slot of its mean age (te_dg_r3_jp, te_dg_r3_kp).")
+    o("te_demog_ring_migrate_pool_bands = {")
+    for j in range(P.LX_BANDS):
+        slots = " ".join(f"S{i} = {w * j + i}" for i in range(w))
+        o(f"te_demog_ring_migrate_pool_band = {{ J = {j} {slots} }}")
+    o("}")
+    o("")
+    last = len(P.MIGRANT_CLASSES) - 1
+    o("# THIS = a state, in te_demog_ring_migrate: the people who flow now and folded before, into the last migrant class.")
+    o("te_demog_ring_migrate_class = {")
+    o(f"change_variable = {{ name = te_dg_cf{last} add = local_var:te_dg_r3_cf }}")
+    o(f"change_variable = {{ name = te_dg_cm{last} add = local_var:te_dg_r3_cm }}")
     o("}")
     o("")
 
@@ -1000,6 +1196,7 @@ def render_effects(root=ROOT):
     slot_births(o)
     growth_factor(o)
     country_bands(o)
+    old_rows(o)
     gini_bands(o, gini_income_pieces(root))
     profile(o)
     migrant_booking(o)
@@ -1010,6 +1207,7 @@ def render_effects(root=ROOT):
     practice_loops(o)
     family_policy_effects(o)
     cause_deaths_estimate(o)
+    ring_migration(o)
     debug_ring(o)
     return o.text()
 
@@ -1572,6 +1770,16 @@ def medicine_target_values(o):
     o("min = 0")
     o(f"max = {lit(P.DIFFUSION_MAX)}")
     o("}")
+    o("# State scope, a state holding Medical Outreach: its share of the gap without the decree's line, so the decree's")
+    o("# state_trigger can ask whether the decree still changes the next count (te_demog_medicine_left_without_outreach).")
+    o("# The decree's name stays in the decree: a release comments the decree out whole.")
+    o("te_demog_medical_diffusion_without_outreach = {")
+    o(f"value = modifier:{P.DIFFUSION_TYPE}")
+    o(f"add = {lit(P.DIFFUSION_BASE)}")
+    o(f"subtract = {lit(P.MEDICAL_OUTREACH_DIFFUSION)}")
+    o("min = 0")
+    o(f"max = {lit(P.DIFFUSION_MAX)}")
+    o("}")
     for cause in P.MEDICINE_CAUSES:
         o(f"# State scope: {cause}'s medicine at its targets (the section's arrow).")
         o(f"te_demog_f_{cause}_medicine_target = {{")
@@ -1655,15 +1863,6 @@ def multipliers(o):
             o(f"add = {lit(1 - w)}")
             o("}")
             o("")
-    o("# State scope: women's share of the workforce, the base plus the women's-rights laws' line (modifier-types")
-    o("# stage 3; demographics_model.female_work_share), within 0-1.")
-    o("te_demog_female_work_share = {")
-    o(f"value = {lit(P.FEMALE_WORK_SHARE_DEFAULT)}")
-    o(f"add = modifier:{P.FEMALE_WORK_SHARE_TYPE}")
-    o("min = 0")
-    o("max = 1")
-    o("}")
-    o("")
     o("# State scope: the share of the gap to desired fertility a population can close (spec 2.3;")
     o("# demographics modifier types, stage 2): traditional methods plus the techs' contraception,")
     o("# at most 1, scaled by literacy, plus the fertility-control shift.")
@@ -1693,8 +1892,8 @@ def constants(o):
         "urban_weight": P.URBAN_WEIGHT, "war_male_share": P.WAR_DEAD_MALE_SHARE,
         "residual_noise_share": P.RESIDUAL_NOISE_SHARE,
         "labour_female_min": P.LABOUR_FEMALE_SHARE_MIN, "labour_female_max": P.LABOUR_FEMALE_SHARE_MAX,
-        "family_base": P.FAMILY_BASE, "family_rights_weight": P.FAMILY_RIGHTS_WEIGHT,
-        "full_female_work_share": P.FULL_FEMALE_WORK_SHARE, "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
+        "family_base": P.FAMILY_BASE, "women_worker_parity": P.WOMEN_WORKER_PARITY,
+        "chain_step": P.CHAIN_STEP, "chain_cap": P.CHAIN_CAP,
         "crisis_at_war": P.CRISIS_AT_WAR,
         "on_top_scale_min": P.ON_TOP_SCALE_MIN, "on_top_factor_min": P.ON_TOP_FACTOR_MIN,
         "window_start_weight": P.WINDOW_START_WEIGHT,
@@ -1938,8 +2137,8 @@ def practices(o):
         o(f"value = te_demog_pr_seed_{p}")
         if p == "lm":
             o(f"add = {{ value = var:te_dg_agr_share multiply = modifier:{P.LM_FARMS_TYPE} }}")
-            o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_female_work_share "
-              f"multiply = {lit(P.LM_WOMENS_WORK / P.FULL_FEMALE_WORK_SHARE)} }}")
+            o(f"add = {{ value = var:te_dg_fjob_share multiply = te_demog_women_worker_share "
+              f"multiply = {lit(P.LM_WOMENS_WORK / P.WOMEN_WORKER_PARITY)} }}")
         o("min = 0")
         o("max = 1")
         o("}")

@@ -40,17 +40,27 @@ def _field(data, key, default=None):
     return val
 
 
-def _event_image(ed):
-    """Return the texture/video string for an event's `event_image` block, or None."""
-    event_image = _field(ed, "event_image")
-    if isinstance(event_image, dict):
-        video = _field(event_image, "video")
-        if video:
-            return video.strip('"')
-        texture = _field(event_image, "texture")
-        if texture:
-            return texture.strip('"')
+def _block_image(block):
+    """The video (else texture) of one `event_image` block, or None."""
+    if isinstance(block, tuple) and len(block) >= 2:
+        block = block[1]
+    if isinstance(block, dict):
+        for key in ("video", "texture"):
+            value = _field(block, key)
+            if value:
+                return value.strip('"')
     return None
+
+
+def _event_image(ed):
+    """Return the texture/video string for an event's `event_image`, or None.
+
+    An event with several blocks (each but the fallback behind a `trigger`)
+    parses as a list: its images are listed in file order, `a | b`."""
+    event_image = ed.get("event_image") if isinstance(ed, dict) else None
+    blocks = event_image if isinstance(event_image, list) else [event_image]
+    images = [image for image in map(_block_image, blocks) if image]
+    return " | ".join(images) or None
 
 
 def _load_localization(mod_path):

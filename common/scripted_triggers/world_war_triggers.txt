@@ -11,6 +11,7 @@ country_is_democratic = {
 	OR = {
 		has_law = law_type:law_census_voting
 		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_liquid_democracy
 		has_law = law_type:law_wealth_voting
 		has_law = law_type:law_landed_voting
 	}

@@ -11,6 +11,12 @@ launch 2026-10-06). #767 switched to SelectLocalization on the strength of
 vanilla's Zanzibar notifications, and the France game that evening logged the
 same three failures 993 times from the SelectLocalization form. So the parent
 keeps every SCOPE read; a named key holds fixed text, or reads GetPlayer.
+
+ROOT goes the same way. The Civil Rights entry's status read its months run
+through ROOT.GetCountry in the parent, which worked, and again inside
+je_civil_rights_months_line, named by AddLocalizationIf, where each of the six
+reads logged "Promote 'ROOT' returned nullptr" (about 220 renders in 36
+seconds, 2026-10-28).
 """
 
 import re
@@ -22,6 +28,7 @@ ROOT = Path(__file__).resolve().parent
 _LOC_LINE = re.compile(r'^\s*([A-Za-z0-9_.\-]+):\d*\s*"(.*)"\s*$')
 _CALL = re.compile(r"(?:AddLocalizationIf|SelectLocalization)\(")
 _STRING_OR_COMMENT = re.compile(r'("[^"\n]*")|#[^\n]*')
+_LOST_SCOPE = re.compile(r"\b(?:SCOPE|ROOT)\.")
 
 
 def english_loc():
@@ -55,7 +62,7 @@ def named_keys(text, loc):
 
 
 class TestAddLocalizationIfScope(unittest.TestCase):
-    def test_no_key_named_in_add_localization_if_or_select_localization_reads_scope(self):
+    def test_no_key_named_in_add_localization_if_or_select_localization_reads_scope_or_root(self):
         loc = english_loc()
         sources = [(f"loc {k}", v) for k, v in loc.items()]
         for path in sorted((ROOT / "gui").rglob("*.gui")):
@@ -65,15 +72,19 @@ class TestAddLocalizationIfScope(unittest.TestCase):
         bad = [f"{where}: '{key}'"
                for where, text in sources
                for key in named_keys(text, loc)
-               if "[SCOPE." in expanded(key, loc)]
-        self.assertEqual(bad, [], "keep SCOPE reads in the parent string; the named key loses SCOPE")
+               if _LOST_SCOPE.search(expanded(key, loc))]
+        self.assertEqual(bad, [], "keep SCOPE and ROOT reads in the parent string; the named key loses both")
 
     def test_the_check_sees_what_it_rejects(self):
         loc = {"a": "x [SCOPE.sCountry('t').GetName]", "b": "$a$!", "c": "no scope", "d": "",
+               "e": "[AddLocalizationIf(GreaterThan_CFixedPoint(ROOT.GetCountry.MakeScope.ScriptValue('m'), "
+                    "'(CFixedPoint)0'), 'c')]", "f": "[GetPlayer.MakeScope.ScriptValue('m')|0]",
                "p": "[AddLocalizationIf(EqualTo_CFixedPoint(SCOPE.ScriptValue('i'), '(CFixedPoint)1'), 'b')]"
-                    "[AddLocalizationIf(Not(Is('x')), 'c')][SelectLocalization(Is('y'), 'a', 'd')]"}
-        self.assertEqual(named_keys(loc["p"], loc), ["b", "c", "a", "d"])
-        self.assertEqual([k for k in named_keys(loc["p"], loc) if "[SCOPE." in expanded(k, loc)], ["b", "a"])
+                    "[AddLocalizationIf(Not(Is('x')), 'c')][SelectLocalization(Is('y'), 'a', 'd')]"
+                    "[AddLocalizationIf(Is('z'), 'e')][AddLocalizationIf(Is('w'), 'f')]"}
+        self.assertEqual(named_keys(loc["p"], loc), ["b", "c", "a", "d", "e", "f"])
+        self.assertEqual([k for k in named_keys(loc["p"], loc) if _LOST_SCOPE.search(expanded(k, loc))],
+                         ["b", "a", "e"])
 
 
 if __name__ == "__main__":

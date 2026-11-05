@@ -5,7 +5,7 @@
 # Washington Consensus conditionality.
 # Uses the engine's built-in country_force_privatization_bool.
 # =================================================================
-enforce_privatization = {
+enforce_privatization = {  # REVIEWED 2026-11-03 (involvement): an imposed restriction, like vanilla's law commitment and no-tariffs articles, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_privatization.dds"
 	kind = directed
 	cost = 150

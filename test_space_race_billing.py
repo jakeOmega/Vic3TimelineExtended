@@ -58,7 +58,7 @@ class BilledTest(unittest.TestCase):
         body = _block(_read(EFFECTS), "sr_apply_milestone_cost_modifiers_base")
         self.assertRegex(body, r"limit = \{ sr_milestone_billed_\$MILESTONE\$ = yes \}")
         self.assertNotIn("has_variable = sr_active_$MILESTONE$", body)
-        for name in ("sr_space_program_cost", "sr_funding_progress"):
+        for name in ("sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput"):
             self.assertIn(f"name = {name}", body)
 
     def test_the_billing_state_is_recorded_and_rechecked_monthly(self):

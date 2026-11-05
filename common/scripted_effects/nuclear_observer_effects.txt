@@ -115,6 +115,7 @@ nd_log_crisis_end = {
 	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 8 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=8; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
 	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 9 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=9; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
 	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 10 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=10; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
+	else_if = { limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 11 } } debug_log = "TE_NUCLEAR: type=crisis_end; outcome=11; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]; issuer=[SCOPE.sCountry('nd_issuer').GetNameNoFormatting]; target=[SCOPE.sCountry('nd_target').GetNameNoFormatting]" }
 }
 
 # Weekly, every armed country (nd_weekly_update). Observer runs only.
@@ -175,5 +176,21 @@ nd_log_strike_eligibility = {
 	else_if = {
 		limit = { has_variable_list = nd_sel_logged }
 		clear_variable_list = nd_sel_logged
+	}
+}
+
+# Issuer scope, from nd_crisis_weekly_tick: one record the first week a crisis
+# is Acute, whatever made it so, for the observer report's uses per Acute
+# crisis (rework spec §2.4). nd_crisis_clear_vars drops the marker.
+nd_log_crisis_acute_once = {
+	if = {
+		limit = {
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage >= 3
+			NOT = { has_variable = nd_crisis_acute_logged }
+		}
+		set_variable = nd_crisis_acute_logged
+		nd_log_context = yes
+		debug_log = "TE_NUCLEAR: type=crisis_acute; date=[TimeKeeper.GetCurrentDate.GetString]; country=[THIS.GetCountry.GetNameNoFormatting]; crisis=[SCOPE.ScriptValue('nd_log_crisis_id')|0]; exchange=[SCOPE.ScriptValue('nd_log_exchange_id')|0]"
 	}
 }

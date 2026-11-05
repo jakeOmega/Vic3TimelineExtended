@@ -1,4 +1,12 @@
 {
+ "country_te_budget_expense_archaeology_add": {
+  "en": "Counted in the Budget Breakdown under Archaeological Digs",
+  "de": "In der Etat-Aufschlüsselung unter Archäologische Grabungen erfasst"
+ },
+ "country_te_budget_expense_archaeology_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Archaeological Digs.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Archäologische Grabungen aufführen kann."
+ },
  "country_te_budget_expense_banking_add": {
   "en": "Counted in the Budget Breakdown under Banking",
   "de": "In der Etat-Aufschlüsselung unter Bankwesen erfasst"
@@ -6,6 +14,14 @@
  "country_te_budget_expense_banking_add_desc": {
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Banking.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Bankwesen aufführen kann."
+ },
+ "country_te_budget_expense_climate_add": {
+  "en": "Counted in the Budget Breakdown under Climate Policy",
+  "de": "In der Etat-Aufschlüsselung unter Klimapolitik erfasst"
+ },
+ "country_te_budget_expense_climate_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Climate Policy.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Klimapolitik aufführen kann."
  },
  "country_te_budget_expense_colonial_add": {
   "en": "Counted in the Budget Breakdown under Colonial Development",
@@ -39,6 +55,14 @@
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Drug Shortage Response.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Reaktion auf Drogenknappheit aufführen kann."
  },
+ "country_te_budget_expense_family_add": {
+  "en": "Counted in the Budget Breakdown under Family Policy",
+  "de": "In der Etat-Aufschlüsselung unter Familienpolitik erfasst"
+ },
+ "country_te_budget_expense_family_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Family Policy.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Familienpolitik aufführen kann."
+ },
  "country_te_budget_expense_nuclear_add": {
   "en": "Counted in the Budget Breakdown under Nuclear Program",
   "de": "In der Etat-Aufschlüsselung unter Nuklearprogramm erfasst"
@@ -55,6 +79,14 @@
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Nuclear Civil Defence.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Nuklearer Zivilschutz aufführen kann."
  },
+ "country_te_budget_expense_pensions_add": {
+  "en": "Counted in the Budget Breakdown under Old-Age Pensions",
+  "de": "In der Etat-Aufschlüsselung unter Altersrenten erfasst"
+ },
+ "country_te_budget_expense_pensions_add_desc": {
+  "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Old-Age Pensions.",
+  "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Altersrenten aufführen kann."
+ },
  "country_te_budget_expense_space_add": {
   "en": "Counted in the Budget Breakdown under Space Race",
   "de": "In der Etat-Aufschlüsselung unter Wettlauf ins All erfasst"
@@ -70,6 +102,14 @@
  "country_te_budget_expense_un_add_desc": {
   "en": "Not a second charge: the $country_expenses_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under United Nations.",
   "de": "Keine zweite Belastung: Die Zeile $country_expenses_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Vereinte Nationen aufführen kann."
+ },
+ "country_te_budget_income_pension_reform_add": {
+  "en": "Counted in the Budget Breakdown under Pension Reform",
+  "de": "In der Etat-Aufschlüsselung unter Rentenreform erfasst"
+ },
+ "country_te_budget_income_pension_reform_add_desc": {
+  "en": "Not a second payment: the $country_tax_income_add$ line already includes this amount. It is repeated so the Budget panel's Breakdown tab can list it under Pension Reform.",
+  "de": "Keine zweite Zahlung: Die Zeile $country_tax_income_add$ enthält diesen Betrag bereits. Er wird wiederholt, damit der Reiter „Aufschlüsselung“ der Etat-Tafel ihn unter Rentenreform aufführen kann."
  },
  "country_te_budget_income_reserve_add": {
   "en": "Counted in the Budget Breakdown under Strategic Reserve Sales",
@@ -311,6 +351,14 @@
   "en": "Shipping and Connections",
   "de": "Schifffahrt und Verbindungen"
  },
+ "te_budget_chart_source_expense_archaeology": {
+  "en": "Archaeological Digs",
+  "de": "Archäologische Grabungen"
+ },
+ "te_budget_chart_source_expense_archaeology_tt": {
+  "en": "#b Archaeological Digs#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Archäologische Grabungen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_archaeology')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_archaeology_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
  "te_budget_chart_source_expense_banking": {
   "en": "Banking",
   "de": "Bankwesen"
@@ -318,6 +366,14 @@
  "te_budget_chart_source_expense_banking_tt": {
   "en": "#b Banking#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
   "de": "#b Bankwesen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_banking')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_banking_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_expense_climate": {
+  "en": "Climate Policy",
+  "de": "Klimapolitik"
+ },
+ "te_budget_chart_source_expense_climate_tt": {
+  "en": "#b Climate Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Klimapolitik#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_climate')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_climate_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
  },
  "te_budget_chart_source_expense_colonial": {
   "en": "Colonial Development",
@@ -351,6 +407,14 @@
   "en": "#b Drug Shortage Response#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
   "de": "#b Reaktion auf Drogenknappheit#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_drugs')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_drugs_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
  },
+ "te_budget_chart_source_expense_family": {
+  "en": "Family Policy",
+  "de": "Familienpolitik"
+ },
+ "te_budget_chart_source_expense_family_tt": {
+  "en": "#b Family Policy#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Familienpolitik#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_family')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_family_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
  "te_budget_chart_source_expense_nuclear": {
   "en": "Nuclear Program",
   "de": "Nuklearprogramm"
@@ -367,6 +431,14 @@
   "en": "#b Nuclear Program#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
   "de": "#b Nuklearprogramm#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_nuclear')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_nuclear_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
  },
+ "te_budget_chart_source_expense_pensions": {
+  "en": "Old-Age Pensions",
+  "de": "Altersrenten"
+ },
+ "te_budget_chart_source_expense_pensions_tt": {
+  "en": "#b Old-Age Pensions#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Altersrenten#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_pensions')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_pensions_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
  "te_budget_chart_source_expense_space": {
   "en": "Space Race",
   "de": "Wettlauf ins All"
@@ -382,6 +454,14 @@
  "te_budget_chart_source_expense_un_tt": {
   "en": "#b United Nations#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
   "de": "#b Vereinte Nationen#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_expense_un')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_expense_un_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
+ },
+ "te_budget_chart_source_income_pension_reform": {
+  "en": "Pension Reform",
+  "de": "Rentenreform"
+ },
+ "te_budget_chart_source_income_pension_reform_tt": {
+  "en": "#b Pension Reform#!\\nWeekly amount: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]\\n\\nCurrent applied sources, including temporary charges, their multipliers and any decay. One-time treasury payments and non-monetary costs are excluded from the weekly budget.",
+  "de": "#b Rentenreform#!\\nWöchentlicher Betrag: @money![TopScope.ScriptValue('te_budget_income_pension_reform')|D]\\n\\n[GetPlayer.GetModifier.GetDescFor('country_te_budget_income_pension_reform_add')]\\n\\nAktuell angewandte Quellen, einschließlich befristeter Belastungen, ihrer Multiplikatoren und eines etwaigen Abklingens. Einmalige Zahlungen aus der Landeskasse und nicht monetäre Kosten sind im wöchentlichen Etat nicht enthalten."
  },
  "te_budget_chart_source_income_reserve": {
   "en": "Strategic Reserve Sales",

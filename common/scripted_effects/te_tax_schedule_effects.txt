@@ -230,3 +230,21 @@ te_tax_history_push = {
 		te_tax_gen_history_write = { KIND = $KIND$ SLOT = $SLOT$ INST = 0 }
 	}
 }
+
+# A kept, broken or renegotiated promise (KIND 11, 12, 13) in obligation slot
+# N: records the group it was made to in the entry's _inst (te_tax_ig_id_<ig>,
+# te_tax_o<N>_ig), so the history row names it (GUI audit TAX-21). Without a
+# group on record, as te_tax_history_push.
+te_tax_history_push_promise = {
+	if = {
+		limit = {
+			te_tax_code_full = yes
+			has_variable = te_tax_schema
+			has_variable = te_tax_o$N$_ig
+		}
+		te_tax_gen_history_write = { KIND = $KIND$ SLOT = none INST = var:te_tax_o$N$_ig }
+	}
+	else = {
+		te_tax_history_push = { KIND = $KIND$ SLOT = none }
+	}
+}

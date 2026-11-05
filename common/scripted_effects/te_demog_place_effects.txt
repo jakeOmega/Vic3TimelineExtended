@@ -7,13 +7,13 @@
 #
 # Under Full only (te_demog_effects_run): the census computes the pattern wherever it runs (Full or Display only), but
 # its effects and the decision act only under Full, as the census's births and deaths do (the release precondition:
-# nothing changes outside Full; mod_systems.md § Demographics).
+# nothing changes outside Full; mod_systems/demographics.md § Demographics).
 #
 # Variables:
 #   country  te_dg_primate_state  its largest city at the last census (a state: the census state with the most urban
 #                                 people, the one primacy is measured by)
 #            te_dg_up_states      the census states counted
-#            te_dg_up_s           the pattern's strength, 0-1 (te_demog_up_strength; 0 under three census states)
+#            te_dg_up_s           the pattern's strength, 0-2 (te_demog_up_strength; 0 under three census states)
 #            te_dg_pc_year        the date its last planned capital was founded (te_demog_ms_now: a year with months)
 #   state    te_dg_up_mult        the multiplier of the state's urban-pattern modifier (its owner's te_dg_up_s at its
 #                                 last pulse; kept, since a modifier's multiplier is read again after it is applied)
@@ -118,17 +118,19 @@ te_demog_pc_state_check = {
 # THIS = ROOT = the country, in te_demog_capital.1's chosen option; scope:$SITE$ = the site (saved in the event's
 # immediate, so it exists in the option's tooltip too). The money and the authority, the new capital's development
 # modifier, then on the click only (te_dg_pc_click: the tooltip walk tests every limit and writes nothing, and the
-# move's dispatcher has a branch for each of 675 state regions) the move, the date and the self-check.
+# move's dispatcher has a branch for each of 675 state regions) the move, the date and the self-check. The durations
+# are literals, five years and 20: add_modifier's days read the named { value = N } script values they once named as 0
+# (the option's tooltip said "for 0 days"; scripting_best_practices.md, "Modifier & Cooldown Duration Units").
 te_demog_pc_build = {
 	add_treasury = te_demog_pc_money_cost
 	add_modifier = {
 		name = te_demog_pc_works
-		days = te_demog_k_pc_works_days
+		days = 1825
 	}
 	scope:$SITE$ = {
 		add_modifier = {
 			name = te_demog_pc_new_capital
-			days = te_demog_k_pc_new_capital_days
+			days = 7300
 		}
 	}
 	custom_tooltip = {
@@ -248,10 +250,10 @@ te_debug_demog_up_selfcheck = {
 				var:te_dg_up_chk_self = 1
 				var:te_dg_up_chk_n = 1
 			}
-			debug_log = "TE_SELF_CHECK OK primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetName] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetNameNoFormatting] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetName] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] (self 1 and states 1 expected: owner = var:te_dg_primate_of doesn't compare a state's owner with a stored country; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN primate_state_flag tag=[THIS.GetCountry.GetTagName] city=[THIS.Var('te_dg_primate_state').GetState.GetNameNoFormatting] self=[THIS.Var('te_dg_up_chk_self').GetValue|0] states=[THIS.Var('te_dg_up_chk_n').GetValue|0] (self 1 and states 1 expected: owner = var:te_dg_primate_of doesn't compare a state's owner with a stored country; take the fallback in docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		debug_log_scopes = yes
 		remove_variable = te_dg_up_chk_n
@@ -285,8 +287,255 @@ te_debug_demog_pc_selfcheck_start = {
 			limit = { has_modifier = moved_capital_recently }
 			set_variable = { name = te_dg_pc_chk_penalty value = 1 }
 		}
-		debug_log = "TE_SELF_CHECK START planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetName] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetName] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_SELF_CHECK START planned_capital_moved tag=[THIS.GetCountry.GetTagName] site=[THIS.Var('te_dg_pc_chk_site').GetState.GetNameNoFormatting] from=[THIS.Var('te_dg_pc_chk_from').GetState.GetNameNoFormatting] at_once=[THIS.Var('te_dg_pc_chk_now').GetValue|0] penalty=[THIS.Var('te_dg_pc_chk_penalty').GetValue|0] (the verdict follows in a week) date=[TimeKeeper.GetCurrentDate.GetString]"
 		debug_log_scopes = yes
 		trigger_event = { id = te_debug_demog.60 days = 7 }
+	}
+}
+
+# ============================================================================
+# Largest Cities (owner, 2026-11-03): a state's towns by name. Its hubs are its towns: the capital (city), the port,
+# mining, farming and logging towns (port, mine, farm, wood), each named on the map (HUB_NAME_<state>_<kind>; a hub with
+# no name is no town: te_demog_town_named_<kind>, te_demog_town_triggers_generated.txt). The yearly walk counts the
+# people at work for each (te_demog_town_<kind>_work, from vanilla's city_type; subsistence for none), farm, mine and
+# logging work at a quarter (te_demog_k_town_rural_weight), and the towns are ordered by those counts, ties to the
+# capital, then port, mining, farming and logging. The largest holds the state's metropolitan share of its urban
+# people (te_dg_mt), the next that share of the rest, and so on (te_demog_town_next_pop). A state with no named hub is
+# one town under its own name (code 0). The country census lists its ten largest towns, three shown and the rest under
+# Show All (gui/te_demographics_towns_generated.gui; scripts/generators/gen_demog_towns.py writes both generated files).
+#
+# Variables:
+#   state    te_dg_tw_n           how many towns it has, 1-5 (te_demog_town_walk_store, at its census walk)
+#            te_dg_tw_1 ... _5    their kinds, largest first: 1 the capital, 2 port, 3 mining, 4 farming, 5 logging,
+#                                 0 a state with no named hub
+#            te_dg_tw_cur         the next of its towns the country's list hasn't taken (te_demog_town_country only;
+#                                 removed after)
+#   country  te_dg_tw_l1 ... _l10 slot i's state, a list of one (a datamodel draws nothing for an empty slot)
+#            te_dg_tw1_c ... 10_c slot i's town's kind (te_dg_tw_<k>'s code)
+#            te_dg_tw1_p ... 10_p slot i's town's people
+# ============================================================================
+
+# THIS = a state, from te_demog_work_walk_init (before the walk's pop loop): the five counts.
+te_demog_town_walk_init = {
+	set_local_variable = { name = te_dg_tw_w1 value = 0 }
+	set_local_variable = { name = te_dg_tw_w2 value = 0 }
+	set_local_variable = { name = te_dg_tw_w3 value = 0 }
+	set_local_variable = { name = te_dg_tw_w4 value = 0 }
+	set_local_variable = { name = te_dg_tw_w5 value = 0 }
+}
+
+# Pop scope, from te_demog_work_walk_pop (under the cohorts only): the pop's people count for its workplace's town. A
+# subsistence building's count for none; a pop with no workplace (the unemployed) lives in the capital.
+te_demog_town_walk_pop = {
+	if = {
+		limit = { exists = workplace }
+		if = {
+			limit = { workplace = { te_demog_town_port_work = yes } }
+			change_local_variable = { name = te_dg_tw_w2 add = total_size }
+		}
+		else_if = {
+			limit = { workplace = { te_demog_town_mine_work = yes } }
+			change_local_variable = { name = te_dg_tw_w3 add = total_size }
+		}
+		else_if = {
+			limit = { workplace = { te_demog_town_farm_work = yes } }
+			change_local_variable = { name = te_dg_tw_w4 add = total_size }
+		}
+		else_if = {
+			limit = { workplace = { te_demog_town_wood_work = yes } }
+			change_local_variable = { name = te_dg_tw_w5 add = total_size }
+		}
+		else_if = {
+			limit = {
+				NOT = { workplace = { te_demog_town_subsistence_work = yes } }
+			}
+			change_local_variable = { name = te_dg_tw_w1 add = total_size }
+		}
+	}
+	else = {
+		change_local_variable = { name = te_dg_tw_w1 add = total_size }
+	}
+}
+
+# THIS = a state, from te_demog_work_walk_store (under the cohorts only): its towns in order. A town with no name is
+# out (-1), and so is a port, mining, farming or logging town with no work of its kind (a state with no mines has no
+# mining town); the capital always counts.
+te_demog_town_walk_store = {
+	set_local_variable = { name = te_dg_tw_s1 value = local_var:te_dg_tw_w1 }
+	set_local_variable = { name = te_dg_tw_s2 value = local_var:te_dg_tw_w2 }
+	set_local_variable = { name = te_dg_tw_s3 value = { value = local_var:te_dg_tw_w3 multiply = te_demog_k_town_rural_weight } }
+	set_local_variable = { name = te_dg_tw_s4 value = { value = local_var:te_dg_tw_w4 multiply = te_demog_k_town_rural_weight } }
+	set_local_variable = { name = te_dg_tw_s5 value = { value = local_var:te_dg_tw_w5 multiply = te_demog_k_town_rural_weight } }
+	if = {
+		limit = { NOT = { te_demog_town_named_city = yes } }
+		set_local_variable = { name = te_dg_tw_s1 value = -1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_port = yes }
+				NOT = { local_var:te_dg_tw_w2 > 0 }
+			}
+		}
+		set_local_variable = { name = te_dg_tw_s2 value = -1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_mine = yes }
+				NOT = { local_var:te_dg_tw_w3 > 0 }
+			}
+		}
+		set_local_variable = { name = te_dg_tw_s3 value = -1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_farm = yes }
+				NOT = { local_var:te_dg_tw_w4 > 0 }
+			}
+		}
+		set_local_variable = { name = te_dg_tw_s4 value = -1 }
+	}
+	if = {
+		limit = {
+			OR = {
+				NOT = { te_demog_town_named_wood = yes }
+				NOT = { local_var:te_dg_tw_w5 > 0 }
+			}
+		}
+		set_local_variable = { name = te_dg_tw_s5 value = -1 }
+	}
+	set_variable = { name = te_dg_tw_n value = 0 }
+	te_demog_town_rank = { K = 1 }
+	te_demog_town_rank = { K = 2 }
+	te_demog_town_rank = { K = 3 }
+	te_demog_town_rank = { K = 4 }
+	te_demog_town_rank = { K = 5 }
+	if = {
+		limit = { var:te_dg_tw_n = 0 }
+		set_variable = { name = te_dg_tw_n value = 1 }
+		set_variable = { name = te_dg_tw_1 value = 0 }
+	}
+	te_demog_town_rank_clear = { K = 2 }
+	te_demog_town_rank_clear = { K = 3 }
+	te_demog_town_rank_clear = { K = 4 }
+	te_demog_town_rank_clear = { K = 5 }
+}
+
+# The $K$th town: the highest count left (te_demog_town_rank_try from the logging town back, so a tie goes to the
+# earlier kind), then taken out.
+te_demog_town_rank = {
+	set_local_variable = { name = te_dg_tw_best value = -1 }
+	set_local_variable = { name = te_dg_tw_bc value = 0 }
+	te_demog_town_rank_try = { C = 5 }
+	te_demog_town_rank_try = { C = 4 }
+	te_demog_town_rank_try = { C = 3 }
+	te_demog_town_rank_try = { C = 2 }
+	te_demog_town_rank_try = { C = 1 }
+	if = {
+		limit = { local_var:te_dg_tw_bc > 0 }
+		set_variable = { name = te_dg_tw_$K$ value = local_var:te_dg_tw_bc }
+		change_variable = { name = te_dg_tw_n add = 1 }
+		te_demog_town_take = { C = 1 }
+		te_demog_town_take = { C = 2 }
+		te_demog_town_take = { C = 3 }
+		te_demog_town_take = { C = 4 }
+		te_demog_town_take = { C = 5 }
+	}
+}
+
+te_demog_town_rank_try = {
+	if = {
+		limit = {
+			local_var:te_dg_tw_s$C$ >= 0
+			local_var:te_dg_tw_s$C$ >= local_var:te_dg_tw_best
+		}
+		set_local_variable = { name = te_dg_tw_best value = local_var:te_dg_tw_s$C$ }
+		set_local_variable = { name = te_dg_tw_bc value = $C$ }
+	}
+}
+
+te_demog_town_take = {
+	if = {
+		limit = { local_var:te_dg_tw_bc = $C$ }
+		set_local_variable = { name = te_dg_tw_s$C$ value = -1 }
+	}
+}
+
+# A kind left over from a census that found more towns.
+te_demog_town_rank_clear = {
+	if = {
+		limit = {
+			has_variable = te_dg_tw_$K$
+			var:te_dg_tw_n < $K$
+		}
+		remove_variable = te_dg_tw_$K$
+	}
+}
+
+# THIS = ROOT = a country, from te_demog_country_lists: its ten largest towns, a slot each. Each pass takes the largest
+# town no slot holds yet, from the state whose next town that is (te_dg_tw_cur), and moves that state on to its next.
+te_demog_town_country = {
+	every_scope_state = {
+		if = {
+			limit = {
+				te_demog_has_census = yes
+				has_variable = te_dg_tw_n
+			}
+			set_variable = { name = te_dg_tw_cur value = 1 }
+		}
+		else_if = {
+			limit = { has_variable = te_dg_tw_cur }
+			remove_variable = te_dg_tw_cur
+		}
+	}
+	te_demog_town_slot = { I = 1 }
+	te_demog_town_slot = { I = 2 }
+	te_demog_town_slot = { I = 3 }
+	te_demog_town_slot = { I = 4 }
+	te_demog_town_slot = { I = 5 }
+	te_demog_town_slot = { I = 6 }
+	te_demog_town_slot = { I = 7 }
+	te_demog_town_slot = { I = 8 }
+	te_demog_town_slot = { I = 9 }
+	te_demog_town_slot = { I = 10 }
+	every_scope_state = {
+		limit = { has_variable = te_dg_tw_cur }
+		remove_variable = te_dg_tw_cur
+	}
+}
+
+# Slot $I$: emptied, then the largest town left, if any.
+te_demog_town_slot = {
+	if = {
+		limit = { has_variable_list = te_dg_tw_l$I$ }
+		clear_variable_list = te_dg_tw_l$I$
+	}
+	if = {
+		limit = { has_variable = te_dg_tw$I$_c }
+		remove_variable = te_dg_tw$I$_c
+	}
+	if = {
+		limit = { has_variable = te_dg_tw$I$_p }
+		remove_variable = te_dg_tw$I$_p
+	}
+	ordered_scope_state = {
+		limit = {
+			has_variable = te_dg_tw_cur
+			te_demog_town_next_pop > 0
+		}
+		order_by = te_demog_town_next_pop
+		max = 1
+		check_range_bounds = no
+		save_temporary_scope_as = te_dg_it
+		set_local_variable = { name = te_dg_tw_pc value = te_demog_town_next_code }
+		set_local_variable = { name = te_dg_tw_pp value = te_demog_town_next_pop }
+		change_variable = { name = te_dg_tw_cur add = 1 }
+		root = {
+			add_to_variable_list = { name = te_dg_tw_l$I$ target = scope:te_dg_it }
+			set_variable = { name = te_dg_tw$I$_c value = local_var:te_dg_tw_pc }
+			set_variable = { name = te_dg_tw$I$_p value = local_var:te_dg_tw_pp }
+		}
 	}
 }

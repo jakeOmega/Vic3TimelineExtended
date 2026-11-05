@@ -27,9 +27,9 @@ gm_step_sig_conquerors_of_space = 0.02
 gm_step_sig_olympic = -0.01
 gm_step_sig_heroes = 0.05
 
-gm_step_sig_local_antiquity = 0.1
+gm_step_sig_local_antiquity = 0.05
 gm_step_sig_local_archive = 0.1
-gm_step_sig_local_first_emperor = 0.25
+gm_step_sig_local_first_emperor = 0.10
 
 # ---- National Effects (country scope) ----------------------------------------------
 # Per signature with a national effect: what it gives (steps x step), the

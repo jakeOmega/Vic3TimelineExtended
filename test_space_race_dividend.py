@@ -23,7 +23,10 @@ import unittest
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
-MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
+# The single-goal milestones the race's end waits for. Not the Moon Base:
+# retired 2026-10-29, its record is a first lunar colony now, which a power may
+# never found once the six lunar worlds are taken (lunar colonization design § 7).
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe",
               "mars_landing", "interstellar_probe")
 
 
@@ -162,6 +165,7 @@ class ConcludedTests(unittest.TestCase):
         for m in MILESTONES:
             with self.subTest(milestone=m):
                 self.assertRegex(body, r"has_variable\s*=\s*sr_completed_" + m + r"\b")
+        self.assertNotIn("sr_completed_moon_base", body)
         self.assertIn("has_global_variable = sr_all_colonies_complete", body)
         self.assertRegex(body, r"NOT\s*=\s*\{\s*sr_has_running_milestone\s*=\s*yes\s*\}")
 

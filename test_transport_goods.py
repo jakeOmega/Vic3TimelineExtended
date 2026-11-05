@@ -4,7 +4,7 @@ merchant marine movement between markets.
 The classification lives in scripts/generators/convert_transport_goods.py;
 these tests read the same tables, so the construction fallback
 (CONSTRUCTION_GOOD = "merchant_marine" plus a rerun) keeps them passing.
-Design: docs/superpowers/specs/2026-10-21-transport-goods-design.md.
+Design: docs/superpowers/archive/specs/2026-10-21-transport-goods-design.md.
 """
 
 import re
@@ -22,7 +22,7 @@ def _pm(name, body):
 
 
 INFRASTRUCTURE_PMS = ctg.RAILWAY_BASE_PMS | {
-    "pm_bullet_trains", "pm_maglev_trains",
+    "pm_vactrain_freight", "pm_bullet_trains", "pm_maglev_trains", "pm_vactrains",
     "pm_basic_port", "pm_industrial_port", "pm_modern_port",
     "pm_container_ports", "pm_global_ports", "pm_magnetic_drive_ports",
 }

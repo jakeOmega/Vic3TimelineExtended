@@ -69,6 +69,7 @@ nd_nuclear_warning_action = {
 							exists = scope:target_country
 							OR = {
 								nd_dispute_guarantee_against = { TARGET = scope:target_country }
+								nd_dispute_peacetime_strike_by = { TARGET = scope:target_country }
 								nd_enemy_threatens_existence = { ENEMY = scope:target_country }
 								nd_core_threatened_by = { ENEMY = scope:target_country }
 							}
@@ -92,6 +93,10 @@ nd_nuclear_warning_action = {
 			}
 			if = {
 				limit = { nd_dispute_guarantee_against = { TARGET = scope:target_country } }
+				add = 15
+			}
+			if = {
+				limit = { nd_dispute_peacetime_strike_by = { TARGET = scope:target_country } }
 				add = 15
 			}
 			if = {
@@ -156,6 +161,7 @@ nd_nuclear_ultimatum_action = {
 							exists = scope:target_country
 							OR = {
 								nd_dispute_guarantee_against = { TARGET = scope:target_country }
+								nd_dispute_peacetime_strike_by = { TARGET = scope:target_country }
 								nd_enemy_threatens_existence = { ENEMY = scope:target_country }
 								nd_core_threatened_by = { ENEMY = scope:target_country }
 							}
@@ -178,6 +184,10 @@ nd_nuclear_ultimatum_action = {
 			}
 			if = {
 				limit = { nd_dispute_guarantee_against = { TARGET = scope:target_country } }
+				add = 15
+			}
+			if = {
+				limit = { nd_dispute_peacetime_strike_by = { TARGET = scope:target_country } }
 				add = 15
 			}
 			if = {

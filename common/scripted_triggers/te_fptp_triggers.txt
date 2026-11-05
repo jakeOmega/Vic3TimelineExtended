@@ -1,0 +1,75 @@
+﻿# First Past the Post triggers (amendment_first_past_the_post,
+# common/amendments/te_first_past_the_post.txt).
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+
+# Country scope. The amendment is on the voting law in force.
+te_fptp_in_force = {
+	active_law:lawgroup_distribution_of_power ?= {
+		has_amendment = amendment_type:amendment_first_past_the_post
+	}
+}
+
+# Law scope. A law the amendment can attach to (its allowed_laws, restated).
+te_fptp_allowed_voting_law = {
+	OR = {
+		type = law_type:law_landed_voting
+		type = law_type:law_wealth_voting
+		type = law_type:law_census_voting
+		type = law_type:law_universal_suffrage
+		type = law_type:law_anarchy
+	}
+}
+
+# Country scope. A law the amendment can attach to is in force.
+te_fptp_on_allowed_voting_law = {
+	active_law:lawgroup_distribution_of_power ?= {
+		te_fptp_allowed_voting_law = yes
+	}
+}
+
+# Country scope. A law the amendment can attach to is being enacted.
+te_fptp_enacting_allowed_voting_law = {
+	OR = {
+		is_enacting_law = law_type:law_landed_voting
+		is_enacting_law = law_type:law_wealth_voting
+		is_enacting_law = law_type:law_census_voting
+		is_enacting_law = law_type:law_universal_suffrage
+		is_enacting_law = law_type:law_anarchy
+	}
+}
+
+# Country scope. The countries vanilla's usa_two_party_system join-weight term
+# covered (its conditions, restated), on a law the amendment can attach to:
+# the seed gives them the amendment once (te_fptp_seed).
+te_fptp_seed_eligible = {
+	is_in_geographic_region = geographic_region_north_america
+	OR = {
+		country_has_primary_culture = cu:yankee
+		country_has_primary_culture = cu:dixie
+	}
+	has_law_or_variant = law_type:law_presidential_republic
+	te_fptp_on_allowed_voting_law = yes
+}
+
+# Party scope, with scope:te_fptp_country saved (te_fptp_refresh_major_parties).
+# The party is one of the country's two largest. One line per party type, as
+# te_fptp_mark_major_party sets them; test_first_past_the_post.py checks both
+# name every party.
+te_fptp_party_is_major = {
+	OR = {
+		AND = { is_party_type = agrarian_party scope:te_fptp_country = { has_variable = te_fptp_major_agrarian_party } }
+		AND = { is_party_type = anarchist_party scope:te_fptp_country = { has_variable = te_fptp_major_anarchist_party } }
+		AND = { is_party_type = communist_party scope:te_fptp_country = { has_variable = te_fptp_major_communist_party } }
+		AND = { is_party_type = conservative_party scope:te_fptp_country = { has_variable = te_fptp_major_conservative_party } }
+		AND = { is_party_type = fascist_party scope:te_fptp_country = { has_variable = te_fptp_major_fascist_party } }
+		AND = { is_party_type = free_trade_party scope:te_fptp_country = { has_variable = te_fptp_major_free_trade_party } }
+		AND = { is_party_type = liberal_party scope:te_fptp_country = { has_variable = te_fptp_major_liberal_party } }
+		AND = { is_party_type = military_party scope:te_fptp_country = { has_variable = te_fptp_major_military_party } }
+		AND = { is_party_type = radical_party scope:te_fptp_country = { has_variable = te_fptp_major_radical_party } }
+		AND = { is_party_type = religious_party scope:te_fptp_country = { has_variable = te_fptp_major_religious_party } }
+		AND = { is_party_type = social_democrat_party scope:te_fptp_country = { has_variable = te_fptp_major_social_democrat_party } }
+		AND = { is_party_type = green_party scope:te_fptp_country = { has_variable = te_fptp_major_green_party } }
+		AND = { is_party_type = populist_party scope:te_fptp_country = { has_variable = te_fptp_major_populist_party } }
+		AND = { is_party_type = technocratic_party scope:te_fptp_country = { has_variable = te_fptp_major_technocratic_party } }
+	}
+}

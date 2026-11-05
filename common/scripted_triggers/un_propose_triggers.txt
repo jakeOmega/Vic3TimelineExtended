@@ -29,11 +29,11 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE SIXTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# THE SEVENTEEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
 # heritage, decolonization, space, law of the sea, physical protection of
 # nuclear material, cultural diversity, the prohibition of nuclear weapons,
-# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium) are
-# at the bottom of the file. The docket raises them for everyone through the proposer events in
+# narcotic drugs, the Antarctic Treaty, the anti-satellite moratorium, the
+# settlement of outer space) are at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -160,11 +160,21 @@ un_propose_sanctions_possible = {
 # Scope: the proposing country
 un_propose_expulsion_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
-	any_country = {
-		has_modifier = un_veto_isolation_modifier	# rarest test first
-		NOT = { this = ROOT }
-		is_un_permanent_member = yes
-	}
+	any_country = { un_expulsion_candidate = yes }
+}
+
+# Whether the scoped country may be named in a motion to expel: a permanent
+# member that has vetoed within five years (un_veto_isolation_modifier), and
+# not the proposer's ally, overlord or subject (un_justice_not_proposer_bloc,
+# the arms embargo's and credentials' rule; 2026-10-24). The availability, the
+# possibility, the pick (un_propose_expulsion_select_target) and the AI's
+# tabling weight all read this, so they agree.
+# Scope: the prospective target; ROOT = the prospective proposer
+un_expulsion_candidate = {
+	has_modifier = un_veto_isolation_modifier	# rarest test first
+	NOT = { this = ROOT }
+	is_un_permanent_member = yes
+	un_justice_not_proposer_bloc = yes
 }
 
 # Scope: the proposing country
@@ -191,11 +201,7 @@ un_propose_expulsion_possible = {
 		text = un_representation_table_tt
 		NOT = { un_representation_suspended = yes }
 	}
-	any_country = {
-		NOT = { this = ROOT }
-		is_un_permanent_member = yes
-		has_modifier = un_veto_isolation_modifier
-	}
+	any_country = { un_expulsion_candidate = yes }
 	un_propose_can_afford_sponsor_punitive = yes
 }
 
@@ -628,9 +634,9 @@ un_propose_lift_sanctions_possible = {
 }
 
 # ============================================================================
-# THE SIXTEEN CONVENTIONS
+# THE SEVENTEEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-19, 29, 31 and 32 of
+# Tabled on our own motion from the chamber (ops 7-19, 29 and 31-33 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -1290,7 +1296,7 @@ un_propose_asat_qualifies = {
 
 # Scope: the proposing country
 un_propose_asat_available = {
-	has_game_rule = space_race_enabled
+	sr_space_race_on = yes
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { un_propose_asat_in_force = yes }
 }
@@ -1300,4 +1306,116 @@ un_propose_asat_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_asat = yes
 	un_propose_asat_qualifies = yes
+}
+
+# ---- The Convention on the Settlement of Outer Space (COPUOS) ----
+# Solar colonization's fleets (docs/superpowers/specs/
+# 2026-10-26-solar-colonization-fleets-design.md § 13; the 1979 Moon
+# Agreement's ambition). Raised by a colony's seizure or destruction (the
+# docket's item 17) and as Assembly business. A party that destroys a colony
+# or seizes a free one pays twice the infamy and twice the case
+# (sr_colony_convention_party, which the fleets read). It forbids nothing.
+# The Space Race rule's Full Colonies and a colony held somewhere are global
+# gates (un_docket_topic_open_colony_protection).
+# Scope: any
+un_propose_colony_protection_in_force = {
+	has_global_variable = un_agency_copuos
+}
+
+# Scope: the prospective proposer: a member that holds a colony, and not the
+# one whose seizure or destruction raised it.
+un_propose_colony_protection_qualifies = {
+	custom_tooltip = {
+		text = un_propose_colony_protection_holder_tt
+		sr_has_space_colony = yes
+	}
+	custom_tooltip = {
+		text = un_propose_colony_protection_not_actor_tt
+		NOT = { has_variable = un_dkt_colony_actor }
+	}
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_colony_protection_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_colony_protection_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_colony_protection_available = {
+	sr_colonies_full_enabled = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_colony_protection_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_colony_protection_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_colony_protection = yes
+	un_propose_colony_protection_qualifies = yes
+}
+
+# ---- The nearest candidate (the 2026-10-27 audit, UN-23) ---------------------------
+# Who could be named on each targeted topic but for its case: the topic's own
+# candidate test without its un_case_supports line. A topic's row, while no one
+# has the case, names the one of these with the strongest case and the
+# threshold it falls short of (un_chamber_propose_nearest_line), so a greyed
+# Propose says which part fails. test_un_propose_nearest.py holds each to its
+# topic's test: change both.
+# Scope: the candidate; ROOT the viewer (the prospective proposer)
+un_condemn_relation = {
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+}
+
+un_sanctions_relation = {
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	NOT = { has_modifier = un_sanctions_target_modifier }
+}
+
+un_arms_embargo_relation = {
+	NOT = { this = ROOT }
+	NOT = { is_country_type = decentralized }
+	NOT = { un_arms_embargo_in_force = yes }
+	OR = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		AND = {
+			is_at_war = yes
+			any_country = {
+				has_war_with = PREV
+				un_member_represented = yes
+			}
+		}
+	}
+	un_justice_not_proposer_bloc = yes
+}
+
+un_credentials_relation = {
+	NOT = { this = ROOT }
+	OR = {
+		un_regime_human_rights_violator = yes
+		AND = {
+			has_variable = un_dos_defiance
+			var:un_dos_defiance >= un_credentials_defiance_min
+		}
+	}
+	un_justice_not_proposer_bloc = yes
+	un_member_represented = yes
+	OR = {
+		NOT = { is_un_permanent_member = yes }
+		un_charter_has_reform = { LEVEL = 2 }
+	}
+}
+
+# un_ceasefire_target_eligible names the proposer scope:un_order_proposer; the
+# row's viewer is ROOT.
+un_ceasefire_relation = {
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+	NOT = { this = ROOT }
+	NOT = { has_variable = un_cf_order_months }
+	un_order_wages_war_on_member = yes
 }

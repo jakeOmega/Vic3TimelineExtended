@@ -966,6 +966,9 @@ types treaty_panel_types
 				### COMPANY (GENERIC)
 				company_generic_article = {}
 
+				### BUILDING TYPE (GENERIC, TE)
+				building_type_generic_article = {}
+
 				### LAW COMMITMENT
 				law_commitment_article = {}
 
@@ -1406,6 +1409,38 @@ types treaty_panel_types
 				max_width = 110
 				using = elide_fontsize_min
 				text = "[Company.GetNameNoFormatting]"
+
+				block "text_format" {
+					default_format = "#black"
+				}
+			}
+		}
+	}
+
+	### BUILDING TYPE (GENERIC - NOT A COMPANY MONOPOLY, TE)
+	# Cede Colony (te_cede_colony) names a colony by a building type alone.
+	type building_type_generic_article = flowcontainer {
+		visible = "[And(Article.RequiresInput('building_type'), Not(Article.HasType('acquire_monopoly_for_company')))]"
+		direction = vertical
+		spacing = 2
+
+		flowcontainer = {
+			datacontext = "[Article.GetBuildingType]"
+			spacing = 2
+
+			icon = {
+				parentanchor = vcenter
+				size = { 30 30 }
+				texture = "[BuildingType.GetIcon]"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				align = nobaseline
+				max_width = 110
+				using = elide_fontsize_min
+				text = "[BuildingType.GetNameNoFormatting]"
 
 				block "text_format" {
 					default_format = "#black"

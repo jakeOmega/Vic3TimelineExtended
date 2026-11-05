@@ -50,7 +50,7 @@ class TestNumbers(unittest.TestCase):
     def test_retooling_and_caps(self):
         self.assertEqual((N.retool_mult, N.retool_weeks), (10.0, 260))
         self.assertEqual((N.base_project_cap, N.base_eos_cap), (10.0, 20.0))
-        self.assertIn((12, "molecular_assemblers", 200.0), N.project_cap_steps)
+        self.assertIn((13, "molecular_assemblers", 200.0), N.project_cap_steps)
         self.assertIn((6, "fluorescent_lamps", 30.0), N.eos_cap_steps)
         self.assertEqual(N.prices["construction"], 1000.0)
         self.assertEqual(N.tech_era["steam_donkey"], 3)
@@ -156,8 +156,18 @@ class TestLadders(unittest.TestCase):
 
     def test_maintenance_rates(self):
         self.assertEqual(D.ladder(MS, N, "heavy").maintenance, 0.1)
-        self.assertEqual(D.ladder(MS, N, "infrastructure").maintenance, 0.15)
         self.assertEqual(D.ladder(MS, N, "mining").maintenance, 0.05)
+        # Railways pay by their train method (pmg_maintenance_graded)
+        rail = D.ladder(MS, N, "infrastructure")
+        self.assertEqual(rail.maintenance, 0.05)
+        self.assertEqual(D.maintenance_at(rail, "pm_steam_trains"), 0.05)
+        self.assertEqual(D.maintenance_at(rail, "pm_electric_trains"), 0.1)
+        self.assertEqual(D.maintenance_at(rail, "pm_diesel_trains_principle_transport_3"), 0.1)
+        self.assertEqual(D.maintenance_at(rail, "pm_containerized_cargo"), 0.15)
+        # a mine's equipment unlocks the rate it already pays
+        mining = D.ladder(MS, N, "mining")
+        for pm in mining.base:
+            self.assertEqual(D.maintenance_at(mining, pm.pm), 0.05)
 
     def test_ladder_shapes(self):
         self.assertEqual(set(MD.ladders), set(D.SECTOR_BUILDINGS))

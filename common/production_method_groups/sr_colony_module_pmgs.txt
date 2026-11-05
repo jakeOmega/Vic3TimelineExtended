@@ -1,0 +1,22 @@
+﻿# ============================================================================
+# COLONY MODULE FABRICATION — the Space Program's module group (colony modules design § 5)
+# ============================================================================
+# A third group on building_space_program (extra_buildings.txt), beside the
+# mission group and debris removal. The methods are in sr_colony_module_pms.txt.
+#
+# ai_selection = most_productive, as the other two groups have: every method
+# only costs goods and outputs a country modifier. The lever the AI is known
+# to pull is script: its yearly module review switches the method
+# (sr_mod_ai_review, sr_colony_module_effects.txt).
+# ============================================================================
+
+pmg_space_program_module_fabrication = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_sr_fabrication_none
+		pm_sr_fabrication_orbital_assembly
+		pm_sr_fabrication_lunar_foundries
+		pm_sr_fabrication_fusion_shipyards
+	}
+}

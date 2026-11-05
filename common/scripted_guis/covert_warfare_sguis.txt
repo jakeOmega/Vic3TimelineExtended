@@ -24,8 +24,9 @@
 #    documented "Using SGUIs to build lists in loc" pattern; see
 #    game/common/scripted_guis/scripted_guis.md.
 #
-# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
-#    covert_ops_phase_ready_sgui, covert_ops_priority_ready_sgui). `.gui` has no
+# 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_funding_ready_sgui,
+#    covert_last_exposed_known_sgui, covert_ops_phase_ready_sgui,
+#    covert_ops_priority_ready_sgui). `.gui` has no
 #    way to ask script a question, so each of these is an is_shown-only entry
 #    read as `[GetScriptedGui('…').IsShown(…)]`. They exist so the widget never
 #    re-encodes a threshold or an existence check itself. See
@@ -44,6 +45,11 @@
 # 6. THE EXPOSE BUTTON (covert_expose_known_sgui). One handler for the Known
 #    Foreign Operations rows; the row's record container arrives as the saved
 #    scope iw_known. See its section header.
+
+# 7. THE STANDING ORDER (covert_catch_policy_sgui, owner 2026-11-04). What
+#    happens when our counterintelligence catches a foreign operation: one
+#    button in the Counterintelligence section cycles iw_catch_policy. See its
+#    section header.
 #
 # Every entry declares `ai_is_valid = { always = no }`: the AI's path into
 # covert funding is je_covert_warfare's monthly pulse, and it must never
@@ -100,6 +106,32 @@ covert_ops_dormant_sgui = {
 			NOT = { has_variable = iw_funding_level }
 			var:iw_funding_level < 1
 		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: funded, with nothing running? ----------------------------------
+# The Funding section's state line shows only then (COV-11): it is the one
+# state the line says something new in, that base maintenance still buys the
+# defensive benefits. Zero funding is said in the overview's funding cell and
+# once above the operations; a running agency needs no line. The same test as
+# covert_funding_state_line's "ready" branch, which the line prints.
+covert_funding_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = iw_funding_level
+		var:iw_funding_level >= 1
+		covert_operations_active < 1
 	}
 
 	is_valid = {
@@ -541,6 +573,69 @@ covert_stand_down_counterintel_support_sgui = {
 	}
 }
 
+covert_stand_down_incite_autonomy_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = incite_autonomy }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_sabotage_colony_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = sabotage_colony }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_survey_defences_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = survey_defences }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = survey_defences ACTION = covert_survey_defences_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # ---- PRIORITY: the row stepper ----------------------------------------------
 # Two handlers, up and down, so the row's container can travel alone in a
 # SINGLE AddScope — the shape the stand-down handlers use. Both delegate to
@@ -658,16 +753,30 @@ covert_expose_known_sgui = {
 	}
 
 	is_valid = {
-		custom_tooltip = {
-			text = iw_expose_known_exists_tt
-			exists = scope:iw_known
+		# The first two are guards, printed only when they fail (COV-9b, as
+		# covert_possible_stand_down): a held guard would be a tick on every row.
+		trigger_if = {
+			limit = { NOT = { exists = scope:iw_known } }
+			custom_tooltip = {
+				text = iw_expose_known_exists_tt
+				always = no
+			}
 		}
-		custom_tooltip = {
-			text = iw_expose_known_ours_tt
-			exists = scope:iw_known
-			has_variable_list = iw_known_ops
-			is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }
-			scope:iw_known ?= { has_tag = iw_known_rec }
+		trigger_if = {
+			limit = {
+				NOT = {
+					AND = {
+						exists = scope:iw_known
+						has_variable_list = iw_known_ops
+						is_target_in_variable_list = { name = iw_known_ops target = scope:iw_known }
+						scope:iw_known ?= { has_tag = iw_known_rec }
+					}
+				}
+			}
+			custom_tooltip = {
+				text = iw_expose_known_ours_tt
+				always = no
+			}
 		}
 		custom_tooltip = {
 			text = iw_expose_known_unordered_tt
@@ -692,6 +801,47 @@ covert_expose_known_sgui = {
 				set_variable = { name = iw_expose_ordered value = 1 }
 			}
 			trigger_event = { id = covert_warfare.4 }
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- THE STANDING ORDER -----------------------------------------------------
+# One button cycles what our counterintelligence does with a caught foreign
+# operation (iw_catch_policy, read by covert_ops_roll_detection_all; the
+# values are covert_catch_policy_watches' header): Ask, Ask about severe
+# operations only, Always expose, Always watch, and round again. A player
+# with many rivals is caught spying on often enough that covert_warfare.3 on
+# every catch is a chore (owner, 2026-11-04). Always valid: the order only
+# matters at a catch, and covert_warfare.3 needs the service anyway.
+covert_catch_policy_sgui = {
+	scope = country
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = {
+				has_variable = iw_catch_policy
+				var:iw_catch_policy >= 3
+			}
+			set_variable = { name = iw_catch_policy value = 0 }
+		}
+		else_if = {
+			limit = { has_variable = iw_catch_policy }
+			change_variable = { name = iw_catch_policy add = 1 }
+		}
+		else = {
+			set_variable = { name = iw_catch_policy value = 1 }
 		}
 	}
 

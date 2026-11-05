@@ -10,7 +10,11 @@ its own file:
   ``un_propose_<key>_effect``
   (``common/scripted_guis/un_chamber_sguis.txt``);
 * ``un_chamber_propose_row_sgui`` renders ``un_chamber_propose_<key>_row``
-  (the same file, over ``common/scripted_effects/un_chamber_display_effects.txt``).
+  (the same file, over ``common/scripted_effects/un_chamber_display_effects.txt``);
+* ``un_chamber_propose_ready_sgui`` and ``un_chamber_propose_shelved_sgui``
+  decide which of the list's two passes shows the row (the 2026-10-27 audit,
+  UN-7): the topics with a case under "Ready to Table", the rest under "No
+  Case Now", a topic in force in neither. Each row appears once in each pass.
 
 Nothing in the engine checks that op 12 means the same topic in all of them:
 a row whose description says one topic while its button tables another is
@@ -98,31 +102,58 @@ class ChamberProposeOpTableTest(unittest.TestCase):
         cls.valid = _branches(_sub_block(propose, "is_valid"))
         cls.effect = _branches(_sub_block(propose, "effect"))
         cls.row = _branches(_block(sguis, "un_chamber_propose_row_sgui"))
+        cls.ready = _branches(_sub_block(_block(sguis, "un_chamber_propose_ready_sgui"), "is_valid"))
+        cls.shelved = _branches(_sub_block(_block(sguis, "un_chamber_propose_shelved_sgui"), "is_valid"))
 
         widget = _read(WIDGET)
         cls.widget_rows = []
+        cls.widget_passes = []
         for m in re.finditer(r"^\t+un_chamber_propose_row\s*=\s*\{", widget, re.M):
             body = _sub_block(widget[m.start():], "un_chamber_propose_row")
             cls.widget_rows.append([int(op) for op in _WIDGET_OP.findall(body)])
+            cls.widget_passes.append(re.findall(r"un_chamber_propose_(ready|shelved)_sgui", body))
 
         cls.defined = set()
         for path in (DISPLAY, EFFECTS, TRIGGERS):
             cls.defined |= set(_TOP_LEVEL.findall(_read(path)))
 
     def test_every_copy_covers_the_same_ops(self):
-        widget_ops = sorted(ops[0] for ops in self.widget_rows)
-        self.assertEqual(widget_ops, sorted(set(widget_ops)), "a widget row is repeated")
+        half = len(self.widget_rows) // 2
+        self.assertEqual(len(self.widget_rows), 2 * half, "the two passes differ in length")
+        ready = [ops[0] for ops in self.widget_rows[:half]]
+        shelved = [ops[0] for ops in self.widget_rows[half:]]
+        self.assertEqual(ready, shelved, "the two passes list the rows in different orders")
+        widget_ops = sorted(ready)
+        self.assertEqual(widget_ops, sorted(set(widget_ops)), "a widget row is repeated in a pass")
         expected = list(range(len(widget_ops)))
         self.assertEqual(widget_ops, expected, "widget ops are not 0..N-1")
         self.assertEqual(sorted(self.valid), expected)
         self.assertEqual(sorted(self.effect), expected)
         self.assertEqual(sorted(self.row), expected)
+        self.assertEqual(sorted(self.ready), expected)
+        self.assertEqual(sorted(self.shelved), expected)
 
     def test_each_widget_row_passes_one_op_everywhere(self):
         for ops in self.widget_rows:
-            # row text, visible, enabled, onclick, and the tooltip's two calls
-            self.assertEqual(len(ops), 6, ops)
+            # row visible, row text, button visible, enabled, onclick, and
+            # the tooltip's two calls
+            self.assertEqual(len(ops), 7, ops)
             self.assertEqual(len(set(ops)), 1, f"a widget row mixes ops {ops}")
+
+    def test_ready_rows_come_first(self):
+        half = len(self.widget_rows) // 2
+        for i, passes in enumerate(self.widget_passes):
+            with self.subTest(row=i):
+                self.assertEqual(passes, ["ready" if i < half else "shelved"])
+
+    def test_the_passes_split_on_the_rows_own_case(self):
+        for op in sorted(self.valid):
+            with self.subTest(op=op):
+                key = _one(r"\bun_propose_(\w+?)_available\b", self.valid[op], "available gate", op)
+                self.assertEqual(_one(r"\bun_propose_(\w+?)_available\b", self.ready[op], "ready gate", op), key)
+                self.assertEqual(_one(r"\bun_propose_(\w+?)_available\b", self.shelved[op], "shelved gate", op), key)
+                self.assertRegex(" ".join(self.shelved[op].split()),
+                                 rf"NOT = \{{ un_propose_{key}_available = yes \}}")
 
     def test_each_op_names_one_topic_in_every_switch(self):
         for op in sorted(self.valid):

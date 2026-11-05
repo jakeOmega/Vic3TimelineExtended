@@ -38,6 +38,7 @@
 #   fossil_fuel_tariffs                -20              -8        10       5     -20
 #   carbon_tax                         -25             -12        10      10     -20
 #   fossil_fuel_divestment             -25              -8        10      10     -25
+#   aerosol_injection                   10               8       -20       5      10
 #
 # Why each row departs from the plain -20 / -8 / 10 / 10 / -10 of the first
 # version, read off the policy's modifier in extra_modifiers.txt:
@@ -56,6 +57,12 @@
 #   carbon_tax          oil extraction taxed double, -10% fuel output,
 #                       +10% manufacturing tax: exporters and industry pay.
 #   fossil_fuel_divestment  +25% oil extraction tax: aimed at the fuel sector.
+#   aerosol_injection   the one policy that asks nothing of industry or fuel
+#                       (Geoengineering, 1% of GDP a year): the free-market,
+#                       industrial and exporting camps prefer it to cuts, so
+#                       their signs flip; the movement opposes it (it stirs the
+#                       movement, -20 on a continuous signal); a rich country
+#                       can spare the money.
 #
 # THE BAND MUST STAY WIDER THAN ANY ONE POLITICAL SWING. Interest groups change
 # at every election, and both IG terms are yes/no; with a band narrower than an
@@ -91,6 +98,12 @@ gw_ai_will_shared = {
 # per-policy thresholds already say how bad each policy needs it to be, so this
 # is not weighted per policy.
 #
+# It reads the warming beneath any aerosol haze (gw_unmasked_temperature), not
+# the felt anomaly: a government knows what comes back if the haze goes. On
+# the felt reading a country running Stratospheric Aerosol Injection would
+# repeal it once its own mask had worked (a degree of mask is 20 points, more
+# than the band), and adopt it again after the termination shock.
+#
 # The cap (5 C) only binds for countries whose signals hold them back: a
 # country with every signal at 0 has reached the top threshold (70) by 3.5 C.
 # It sits where one strong opponent gives way (a full fuel exporter divests
@@ -101,7 +114,7 @@ gw_ai_will_shared = {
 # holdouts are the ones with several reasons to hold out. A cap
 # at 3.5 C froze the will halfway through the catastrophic tier (3 to 4 C).
 gw_ai_will_urgency = {
-	value = temperature_anomaly_display
+	value = gw_unmasked_temperature
 	multiply = 20
 	min = 0
 	max = 100
@@ -284,6 +297,9 @@ gw_ai_will_fossil_fuel_divestment = {
 #   45          Green Building Codes     ministry + movement at 1.26 C
 #   45          Emission Standards       ministry + movement at 1.26 C
 #   55          Carbon Tax               ministry + movement + green IG at 1.26 C
+#   60          Aerosol Injection        everyone at 3 C; a ministry at 2.25 C;
+#                                        a laissez-faire exporter run by
+#                                        industrialists at 1.6 C
 #   70          Fossil-Fuel Divestment   rare before 3 C
 #
 # The signals then move each country off that line by its row in the table:
@@ -420,5 +436,27 @@ gw_ai_adopt_margin_fossil_fuel_tariffs = {
 gw_ai_repeal_margin_fossil_fuel_tariffs = {
 	value = 0
 	subtract = gw_ai_adopt_margin_fossil_fuel_tariffs
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_will_aerosol_injection = {
+	value = gw_ai_will_shared
+	add = { value = gw_ai_sig_laissez_faire multiply = 10 }
+	add = { value = gw_ai_sig_industrialists multiply = 8 }
+	add = { value = gw_ai_sig_movement multiply = -20 }
+	add = { value = gw_ai_sig_wealth multiply = 5 }
+	add = { value = gw_ai_sig_fossil multiply = 10 }
+}
+
+# A last resort, and once started hard to stop: the will reads the warming
+# beneath the haze, so a deployer keeps it up until that falls a band below.
+gw_ai_adopt_margin_aerosol_injection = {
+	value = gw_ai_will_aerosol_injection
+	subtract = 60
+}
+
+gw_ai_repeal_margin_aerosol_injection = {
+	value = 0
+	subtract = gw_ai_adopt_margin_aerosol_injection
 	subtract = gw_ai_repeal_band
 }

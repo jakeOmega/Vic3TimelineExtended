@@ -267,7 +267,10 @@ class LocTest(unittest.TestCase):
         # And the light code's relief and reaction modifiers, steps' reaction lines and ranges
         # (test_tax_code_light.py).
         light = set(gen.light_localization())
-        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments} | task13 | light)
+        # And the history's promise lines, one per outcome and group (GUI audit TAX-21).
+        history = {f"te_tax_hist_promise_{outcome}_{ig}" for outcome, _ in gen.PROMISE_OUTCOME_KINDS.values()
+                   for ig in gen.IGS}
+        self.assertEqual(set(loc), set(amendments) | {f"{n}_desc" for n in amendments} | task13 | light | history)
 
     def test_names_and_descs(self):
         loc = read_loc(ROOT / LOC)

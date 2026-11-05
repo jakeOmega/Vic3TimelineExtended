@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
 
+import demographics_effects as DE  # noqa: E402
 import demographics_harness as H  # noqa: E402
 import demographics_model as M  # noqa: E402
 import demographics_modifiers as DM  # noqa: E402
@@ -27,6 +28,8 @@ ANCHORS = ROOT / "test_fixtures" / "demographics" / "history_anchors.csv"
 CONSOLE = ROOT / "common" / "scripted_effects" / "te_debug_demog_effects.txt"
 GENERATED_EFFECTS = ROOT / "common" / "scripted_effects" / "te_demog_generated_effects.txt"
 LOG_PREFIX = "[12:00:00][jomini_effect_impl.cpp:454]: common/scripted_effects/te_debug_demog_effects.txt:66: "
+# one in-game step's replay lines: the head, then each ten slots' before and after lines (the ring's years / 10 each)
+REPLAY_LINES = 1 + 2 * P.RING_YEARS // 10
 
 
 class TestPredict(unittest.TestCase):
@@ -430,7 +433,7 @@ class TestHarness(unittest.TestCase):
                 "m_inf": mult["infection"], "m_ext": mult["external"], "m_chr": mult["chronic"],
                 "m_work_f": work_f, "m_work_m": work_m, "inf_ad": M.infection_adult(inp), "profile": prof}
         lines = H.format_replay("TEST", 1837, before, head, after)
-        self.assertEqual(len(lines), 31)
+        self.assertEqual(len(lines), REPLAY_LINES)
         self.assertIn("pop=2_10_0", lines[0])
         blocks = H.parse_replay(lines)
         self.assertEqual(len(blocks), 1)
@@ -463,7 +466,7 @@ class TestHarness(unittest.TestCase):
         before = M.seed(inp, 1836, 1_000_000)
         after = copy.deepcopy(before)
         M.step(after, inp, 1837, engine_pop=1_000_000)
-        after.f[(1837 - 30) % 150] *= 1.5   # the script got one cohort wrong
+        after.f[(1837 - 30) % P.RING_YEARS] *= 1.5   # the script got one cohort wrong
         qf, qm, mmr = M.group_rates(inp)
         mult = M.cause_multipliers(inp)
         work_f, work_m = M.work_split(inp, mult["work"])
@@ -503,7 +506,7 @@ class TestHarness(unittest.TestCase):
 
     def _step_lines(self, pop=2_000_000, pop_after=2_010_000, war=500, mig=-3000, logged_mmr=True,
                     drop_after=False):
-        """The 31 lines of one in-game step: the model stepped from its own seed.
+        """The REPLAY_LINES lines of one in-game step: the model stepped from its own seed.
 
         drop_after writes the after cohorts under half a person as 0, as the game drops them.
         """
@@ -520,7 +523,7 @@ class TestHarness(unittest.TestCase):
         return [re.sub(r"\b(f|m)=(\S+)", zero, x) if " after " in x else x for x in lines]
 
     def _good_lines(self):
-        """The 31 lines of one correct in-game step at 2 million people."""
+        """The REPLAY_LINES lines of one correct in-game step at 2 million people."""
         return self._step_lines()
 
     def _replay_cli(self, lines, *flags):
@@ -541,14 +544,14 @@ class TestHarness(unittest.TestCase):
 
     def test_replay_cli_rejects_a_block_missing_its_last_after_lines(self):
         lines = self._good_lines()
-        self.assertEqual(len(lines), 31)
+        self.assertEqual(len(lines), REPLAY_LINES)
         code, out = self._replay_cli(lines[:-5])
         self.assertEqual(code, 1, out)
         self.assertIn("MISMATCH (incomplete:", out)
         self.assertIn("after", out)
 
     def test_replay_cli_rejects_a_block_with_no_after_lines(self):
-        code, out = self._replay_cli(self._good_lines()[:16])
+        code, out = self._replay_cli(self._good_lines()[:1 + P.RING_YEARS // 10])
         self.assertEqual(code, 1, out)
         self.assertIn("MISMATCH (incomplete:", out)
         self.assertIn("after pool missing", out)
@@ -791,7 +794,7 @@ class TestConsoleReplayLines(unittest.TestCase):
         for mig, kills in ((-3000, 0), (4000, 250)):
             with self.subTest(mig=mig):
                 lines = self._console_lines(mig, kills)
-                self.assertEqual(len(lines), 31)
+                self.assertEqual(len(lines), REPLAY_LINES)
                 self.assertFalse([x for x in lines if "[" in x[len(LOG_PREFIX):]], "an unresolved template")
                 blocks = H.parse_replay(lines)
                 self.assertEqual(len(blocks), 1)
@@ -944,6 +947,177 @@ class TestWealthConcentrationReader(unittest.TestCase):
         bad.write_bytes(b"SAV010000\x00\x01binary")
         with redirect_stderr(io.StringIO()):
             self.assertEqual(H.main(["wc", str(bad)]), 1)
+
+
+def _variables(values):
+    """A save's variables block: a number as a fixed-point value, ("state", id) as a state reference (the form
+    a plain-text save writes, e.g. te_dg_primate_state in puerto rico_1836_01_20.v3)."""
+    out = []
+    for flag, v in values.items():
+        if isinstance(v, tuple):
+            kind, identity = v
+        else:
+            kind, identity = "value", round(v * 100000) % 2 ** 64
+        out.append(f"\t\t\t\tflag={flag}\n\t\t\t\tdata={{\n\t\t\t\t\ttype={kind}\n\t\t\t\t\tidentity={identity}\n"
+                   f"\t\t\t\t}}\n")
+    return "\tvariables={\n\t\tdata={ {\n" + "\t\t\t} {\n".join(out) + "\t\t\t} }\n\t}\n"
+
+
+def _effects_save(countries, states):
+    """A plain-text save from {id: (tag, {var: value})} and {id: (owner id, {var: value})}."""
+    text = "SAV0100effects-test\nmeta_data={\n\tversion=\"1.14.5\"\n}\ncountry_manager={\n\tdatabase={\n"
+    for cid, (tag, values) in countries.items():
+        text += f"{cid}={{\n\tdefinition=\"{tag}\"\n" + (_variables(values) if values else "") + "}\n"
+    text += "\t}\n}\nstates={\n\tdatabase={\n"
+    for sid, (owner, values) in states.items():
+        text += f"{sid}={{\n\tcountry={owner}\n" + (_variables(values) if values else "") + "}\n"
+    return text + "\t}\n}\n"
+
+
+EFFECTS_COUNTRIES = {"1": ("GBR", {"te_inh_concentration": 76.3, "te_dg_primacy": 0.6, "te_dg_up_states": 3,
+                                   "te_dg_primate_state": ("state", 5)}),
+                     "2": ("SIC", {})}
+EFFECTS_STATES = {"5": ("1", {"te_dg_wc": 94, "te_dg_walk_pop": 2e6, "te_dg_gini": 0.75, "te_dg_mt": 80,
+                              "te_dg_sex_balance": 140, "te_dg_agr_share": 0.5}),
+                  "6": ("1", {"te_dg_wc": 15, "te_dg_walk_pop": 1e6, "te_dg_gini": 0.5, "te_dg_mt": 10,
+                              "te_dg_sex_balance": 75})}
+
+
+def run(argv, code=0):
+    """H.main(argv)'s printed text; it must return code."""
+    out = io.StringIO()
+    with redirect_stdout(out), redirect_stderr(io.StringIO()):
+        got = H.main(argv)
+    assert got == code, (argv, got, out.getvalue())
+    return out.getvalue()
+
+
+class TestEffects(unittest.TestCase):
+    """Phase 0's readouts (2026-10-22 effects design): each condition's strength in a save, old curve against new."""
+
+    def setUp(self):
+        self.path = Path(tempfile.mkdtemp()) / "effects.v3"
+        self.path.write_text(_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES), encoding="utf-8")
+
+    def test_raw_variables_keep_the_reference(self):
+        countries, _ = S.read_variables(self.path, ("te_dg_primate_state", "te_dg_primacy"), (),
+                                        raw=("te_dg_primate_state",))
+        self.assertEqual(countries["1"]["vars"]["te_dg_primate_state"], "5")
+        self.assertAlmostEqual(countries["1"]["vars"]["te_dg_primacy"], 0.6)
+
+    def test_strength_bins(self):
+        rows = H.strength_bins([(0.0, 1e6), (0.01, 1e6), (0.3, 2e6), (1.2, 1e6), (2.0, 5e5)])
+        self.assertEqual([r[0] for r in rows], ["0", "0-0.5", "0.5-1", "1-1.5", "1.5-2", ">2"])
+        self.assertEqual([r[1] for r in rows], [2, 1, 0, 1, 1, 0], "0.01 itself applies no modifier")
+        self.assertEqual(rows[1][2], 2e6)
+
+    def test_wc_prints_both_curves(self):
+        text = run(["wc", str(self.path)])
+        self.assertRegex(text, r"state scores.*\n.*80-90")
+        self.assertIn("1-1.5", text)
+
+    def test_gini_counts_states_above_070(self):
+        # The fixture has no pops, so the pop-by-pop part reports none and exits 1; the census line still prints.
+        self.assertRegex(run(["gini", str(self.path)], code=1), r"above 0\.70: 1 of 2 states \(67% of people\)")
+
+    def test_effects_prints_every_condition(self):
+        text = run(["effects", str(self.path)])
+        for name in ("wc_high", "wc_low", "primacy", "metro_up", "inequality", "more_men", "fewer_men", "youth"):
+            self.assertIn(name, text)
+        self.assertIn("radicals stack", text)
+        self.assertIn("turmoil stack", text)
+        self.assertIn("primate Urban Center stack", text)
+
+    def test_effects_reads_the_new_sizes(self):
+        rows = H.effects_rows(*S.read_variables(self.path, H.EFFECT_COUNTRY_VARS, H.EFFECT_STATE_VARS,
+                                                raw=H.EFFECT_RAW_VARS), {}, {})
+        # The primate state 5: Primate City 0.2 x primacy(0.6) + Metropolis 0.1 x metro_up(80).
+        self.assertEqual([r[0] for r in rows["uc"]], ["GBR"])
+        self.assertAlmostEqual(rows["uc"][0][2], 0.2 * 1.2 + 0.1 * 1.5)
+        radicals = dict((r[0], r[2]) for r in rows["radicals"])
+        # State 5: Land Hunger 0.1 x wc_high(94) x 0.5 + Inequality 0.1 x inequality(0.75) + More Men 0.15 x
+        # more_men(140); state 6: Dispersed Property -0.1 x wc_low(15) + Inequality 0.1 x inequality(0.5).
+        self.assertAlmostEqual(radicals["5"], 0.1 * (44 / 30) * 0.5 + 0.1 * 1.75 + 0.15 * 1.25)
+        self.assertAlmostEqual(radicals["6"], -0.1 * (1 + (35 / 30 - 1) / 2) + 0.1 * 0.25)
+        turmoil = dict((r[0], r[2]) for r in rows["turmoil"])
+        self.assertAlmostEqual(turmoil["6"], 0.15 * 1.2, msg="Provincial Neglect on the non-primate state")
+
+    def test_effects_skips_missing_figures(self):
+        states = dict(EFFECTS_STATES, **{"6": ("1", {"te_dg_wc": 15})})
+        sparse = self.path.with_name("sparse.v3")
+        sparse.write_text(_effects_save(EFFECTS_COUNTRIES, states), encoding="utf-8")
+        text = run(["effects", str(sparse)])
+        self.assertIn("wc_high", text)
+        # State 6 has a score but no Gini: counted in wc_low's table, left out of inequality's (not put at 0).
+        for name, states in (("wc_low (state)", 2), ("inequality", 1)):
+            table = text.split(name + ":")[1].split("\n\n")[0].split("\n")[1:7]
+            self.assertEqual(sum(int(line.split()[4]) for line in table), states, name)
+
+
+def _binary_effects_save(countries, states, laws=()):
+    """The binary twin of _effects_save, from save_country_probe's tests' builders; laws: (id, name, owner id)."""
+    import test_save_country_probe as B
+    records = [B.state_db(*(B.state(int(sid), f"STATE_S{sid}", int(owner), variables=values or None)
+                            for sid, (owner, values) in states.items()))]
+    if laws:
+        records.append(B.law_db(*(B.law(rid, name, owner, active=True) for rid, name, owner in laws)))
+    return B.write_save([B.country(int(cid), tag, variables=values or None) for cid, (tag, values) in countries.items()],
+                        records=records)
+
+
+class TestBinarySaves(unittest.TestCase):
+    """wc, effects and gini's census line read an ordinary binary save (S.read_save_variables, through
+    save_country_probe's decoder), and print what the same save in plain text prints."""
+
+    def setUp(self):
+        self.binary = _binary_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES)
+        self.addCleanup(Path(self.binary).unlink)
+        self.plain = Path(tempfile.mkdtemp()) / "effects.v3"
+        self.plain.write_text(_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES), encoding="utf-8")
+
+    def test_effects_and_wc_print_what_plain_text_prints(self):
+        for command in ("effects", "wc"):
+            self.assertEqual(run([command, self.binary]), run([command, str(self.plain)]), command)
+
+    def test_gini_prints_the_census_line_alone(self):
+        text = run(["gini", self.binary])
+        self.assertIn("a binary save has no pops", text)
+        self.assertIn("census Ginis above 0.70: 1 of 2 states (67% of people)", text)
+
+    def test_variables_laws_and_references_read_as_plain_text(self):
+        path = _binary_effects_save(EFFECTS_COUNTRIES, EFFECTS_STATES, laws=[(40, "law_primogeniture", 1)])
+        self.addCleanup(Path(path).unlink)
+        countries, states = S.read_save_variables(path, H.EFFECT_COUNTRY_VARS, H.EFFECT_STATE_VARS)
+        self.assertEqual(countries["1"]["tag"], "GBR")
+        self.assertEqual(countries["1"]["laws"], {"law_primogeniture"})
+        self.assertEqual(countries["1"]["vars"]["te_dg_primate_state"], "5")
+        self.assertAlmostEqual(countries["1"]["vars"]["te_inh_concentration"], 76.3)
+        self.assertEqual(countries["2"]["vars"], {})
+        self.assertEqual(states["5"]["owner"], "1")
+        self.assertAlmostEqual(states["5"]["vars"]["te_dg_gini"], 0.75)
+        self.assertNotIn("te_dg_wc", S.read_save_variables(path, (), ("te_dg_gini",))[1]["5"]["vars"])
+
+    def test_the_youth_bulge_reads_the_census_unemployment(self):
+        # One state, its young (bands 4 and 5, ages 20-29) at 3 a band and every other band at 1: 12 of 44 people.
+        bands = {f"te_dg_b{s}{b}": (3 if b in (4, 5) else 1) for s in "fm" for b in range(P.BANDS)}
+        for unemp in (0.2, None):
+            values = dict(bands, te_dg_walk_pop=1e6, **({} if unemp is None else {"te_dg_unemp": unemp}))
+            path = _binary_effects_save({"1": ("GBR", {})}, {"5": ("1", values)})
+            self.addCleanup(Path(path).unlink)
+            text = run(["effects", path])
+            self.assertEqual("no stored unemployment" in text, unemp is None)
+            youth = text.split("youth:")[1].split("\n\n")[0].splitlines()[1:]
+            got = next(line.split()[0] for line in youth if line.split()[4] == "1")
+            want = next(b for b, _, n in H.strength_bins([(DE.youth(12 / 44, unemp or 0.0), 1e6)]) if n)
+            self.assertEqual(got, want, unemp)
+            self.assertEqual(got != "0", unemp is not None)
+
+    def test_a_save_neither_can_read_exits_1(self):
+        bad = Path(tempfile.mkdtemp()) / "ironman.v3"
+        bad.write_bytes(b"SAV0103\n\xff\x00 no zip here")
+        with self.assertRaisesRegex(S.NotPlainText, "neither a plain-text save nor a binary one"):
+            S.read_save_variables(bad, (), ())
+        run(["effects", str(bad)], code=1)
 
 
 class TestFidelity(unittest.TestCase):
@@ -1377,7 +1551,8 @@ class TestRebook(unittest.TestCase):
             v = {"te_dg_year": float(year), "te_dg_stepped": 0.0 if i == 0 else 1.0, "te_dg_people": people,
                  "te_dg_net_migration": 0.0 if i == 0 else rate * people, "te_dg_sol": 8.0, "te_dg_lit": 0.1,
                  "te_dg_urban_share": 0.05, "te_dg_fjob_share": 0.02, "te_dg_inflow_years": 0.0,
-                 "te_dg_scale": ring.scale, "te_dg_pf": 0.0, "te_dg_pm": 0.0, "te_dg_pa": 150.0}
+                 "te_dg_scale": ring.scale, "te_dg_pf": 0.0, "te_dg_pm": 0.0, "te_dg_pa": float(P.RING_YEARS),
+                 "te_dg_ring": float(P.RING_YEARS)}
             v.update({f"te_dg_b{s}{b}": 1000.0 for s in "fm" for b in range(P.BANDS)})
             state = {"country": "3", "region": "STATE_TEST", "devastation": 0.0, "vars": v}
             if i == 0:
@@ -1411,18 +1586,23 @@ class TestRebook(unittest.TestCase):
             self.assertEqual(out_save, 0.0)
 
     def test_the_profiles_carriers_reach_the_inputs(self):
-        # the rebook reads the women's work share and the families' line from the game files (modifier-types stage 3)
+        # the rebook reads the families' line (modifier-types stage 3) and the women's-work participation lines from the
+        # game files, and women's share of the workers from the save's count where it holds one (2026-10-25)
         import demographics_rebook as RB
         techs = frozenset({"paddle_steamer", "railways", "combustion_engine", "commercial_aviation",
                            "jet_engine_technology"})
         self.assertEqual(RB.transport_techs(), techs)
-        self.assertEqual(RB.women_laws(), frozenset({"law_women_in_the_fields", "law_women_own_property",
-                                                     "law_women_in_the_workplace", "law_womens_suffrage",
-                                                     "law_protected_class"}))
+        self.assertLessEqual({"law_women_in_the_fields", "law_women_own_property", "law_women_in_the_workplace",
+                              "law_womens_suffrage", "law_protected_class"}, RB.women_laws())
         country = {"laws": frozenset({"law_protected_class"}), "techs": techs, "at_war": False}
         inp = RB.inputs({"owner": "3", "vars": {}}, None, country, 1990, {})
-        self.assertAlmostEqual(M.female_work_share(inp), 0.48, places=9)
+        self.assertAlmostEqual(inp.mods[P.WOMENS_WORK_TYPE], 0.2, places=9)
+        self.assertAlmostEqual(M.women_worker_share(inp), M.women_worker_share(
+            M.Inputs(mods={P.WOMENS_WORK_TYPE: 0.2})), places=9)
         self.assertAlmostEqual(inp.mods[P.FAMILY_MIGRATION_TYPE], 0.45, places=9)
+        counted = RB.inputs({"owner": "3", "vars": {"te_dg_fws_wk": 0.41, "te_dg_low_share": 0.3}}, None, country,
+                            1990, {})
+        self.assertEqual((M.women_worker_share(counted), counted.low_share), (0.41, 0.3))
 
     def test_a_seed_in_the_save_seeds_the_walk(self):
         with tempfile.TemporaryDirectory() as tmp:

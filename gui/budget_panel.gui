@@ -159,6 +159,9 @@ types budget
 				# EXCEPTION (#805): a country with a monetary stance but no entry
 				# (te_budget_banking_readout_sgui) gets the tab enabled, read-only,
 				# with the monetary readout.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fourth_button"
 				{
 					text = "te_budget_tab_banking"
@@ -173,11 +176,11 @@ types budget
 				}
 				blockoverride "fourth_button_visibility"
 				{
-					visible = "[And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_banking'), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_visibility_checked"
 				{
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_banking') ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fourth_button_selected"
 				{
@@ -194,6 +197,8 @@ types budget
 				# guide rule 9). Both halves of an unused slot default to
 				# `visible = no`, so each visibility block tests the gate as well
 				# as the tab.
+				# Not( GetMetaPlayer.IsObserver ) first in each visibility block, as
+				# for Banking: an observer has no GetPlayer.
 				blockoverride "fifth_button"
 				{
 					text = "te_tax_tab"
@@ -208,11 +213,11 @@ types budget
 				}
 				blockoverride "fifth_button_visibility"
 				{
-					visible = "[And( InformationPanel.IsTabSelected('te_tax_code'), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_tax_code'), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked"
 				{
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_tax_code') ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_tax_code') ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected"
 				{
@@ -404,7 +409,7 @@ types budget
 								size = { 35 35 }
 								onclick = "[BudgetPanel.ToggleAddConsumptionTaxMenu(PdxGuiWidget.AccessSelf)]"
 								enabled = "[And( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), BudgetPanel.CanTaxGoods )]"
-								tooltip = "[SelectLocalization( BudgetPanel.CanTaxGoods, 'TAX_GOODS', 'NO_GOODS_TO_TAX' )]"
+								tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_goods' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_goods_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization( BudgetPanel.CanTaxGoods, 'TAX_GOODS', 'NO_GOODS_TO_TAX' )  ) )]"
 							}
 						}
 
@@ -1565,27 +1570,13 @@ types budget
 			}
 
 			### MOD: Banking tab (te_banking) ###
-			# The banking journal entry's panels, composed by the same layout types
-			# the entry attaches (gui/journal_entry_widgets/banking_layout_widget.gui):
-			# the overview, the live sections, then the reference sections (the
-			# history charts, open, and How Banking Works), and a link back to the
-			# entry at the foot. The
-			# entry's scripted buttons are not drawn: they are the AI's (each is
-			# `is_ai = yes`), and the policy sections carry the same actions.
-			#
-			# Three layers, so a failure shows where it is. The header sits outside
-			# the gate, so it appears whenever the tab is selected. The gate
-			# (te_budget_banking_tab_sgui, the same one the tab button uses) sits
-			# on a parent of the datacontext, never on the widget that carries it:
-			# vanilla's shape for GetPlayerJournalEntry (states_panel.gui, the Meiji
-			# faction button).
-			#
-			# A country with a monetary stance but no entry (#805,
-			# te_budget_banking_readout_sgui) gets the monetary readout instead,
-			# under a Monetary Policy header, with a note naming what opens the
-			# rest. The readout reads GetPlayer, so it needs no datacontext. Its
-			# gate and the entry's are never true together, so exactly one header
-			# shows.
+			# The tab's content is te_banking_tab_body
+			# (gui/journal_entry_widgets/banking_layout_widget.gui), which the
+			# Timeline Extended window's Banking tab mounts too, so the two can't
+			# drift: the header, the monetary readout for a country with no entry
+			# (#805), the entry's panels under the tab's gate, and the link back
+			# to the entry. This flowcontainer keeps what is the panel's own: the
+			# tab's selection, its fade, its position and its margin.
 			flowcontainer = {
 				name = "te_budget_banking_tab"
 				visible = "[InformationPanel.IsTabSelected('te_banking')]"
@@ -1596,86 +1587,18 @@ types budget
 				spacing = 10
 				margin_bottom = 15
 
-				default_header = {
-					visible = "[Not( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
-					blockoverride "text" {
-						text = "je_banking_cycle"
-					}
-				}
-
-				default_header = {
-					visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					blockoverride "text" {
-						text = "banking_dash_cat_monetary"
-					}
-				}
-
-				flowcontainer = {
-					visible = "[GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					using = default_list_position
-					direction = vertical
-					ignoreinvisible = yes
-					spacing = 10
-
-					te_banking_mon_readout = {}
-
-					# What opens the rest: the tab's own unlock checklist on hover,
-					# asked IsValid first like the tab's tooltip.
-					textbox = {
-						parentanchor = hcenter
-						autoresize = yes
-						multiline = yes
-						max_width = 480
-						align = center|nobaseline
-						using = fontsize_large
-						text = "banking_dash_ro_note"
-						tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'banking_dash_ro_note_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
-					}
-				}
-
-				flowcontainer = {
-					visible = "[GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					using = default_list_position
-					direction = vertical
-					ignoreinvisible = yes
-
-					flowcontainer = {
-						datacontext = "[GetPlayerJournalEntry('je_banking_cycle')]"
-						using = default_list_position
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-
-						te_banking_overview_panel = {}
-						te_banking_status_sections = {}
-						te_banking_reference_sections = {}
-
-						button = {
-							visible = "[JournalEntry.IsActive]"
-							using = default_button
-							using = fontsize_large
-							parentanchor = hcenter
-							size = { 480 32 }
-							text = "te_system_tab_open_journal"
-							tooltip = "te_budget_banking_open_journal_tt"
-							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-						}
-					}
-				}
+				te_banking_tab_body = {}
 			}
 			### END MOD ###
 
 			### MOD: Tax Code tab (te_tax_code) ###
-			# The tax code journal entry's panels, composed by the same types the
-			# entry attaches (gui/journal_entry_widgets/te_tax_layout_widget.gui):
-			# the overview, the live sections, then the history and How Tax
-			# Legislation Works, and a link back to the entry below everything.
-			# The Banking tab's three layers: the header outside the gate; the gate
-			# (te_budget_tax_tab_sgui, the one the tab button uses) on a parent of
-			# the GetPlayerJournalEntry datacontext, never on the widget carrying
-			# it; the column a fixed 520. The types read the player's country
-			# (GetPlayer), so the datacontext serves only the IsActive gates and
-			# the link.
+			# The tab's content is te_tax_tab_body
+			# (gui/journal_entry_widgets/te_tax_layout_widget.gui), which the
+			# Timeline Extended window's Tax Code tab mounts too: the header, the
+			# entry's panels under the tab's gate, and the link back to the entry.
+			# This flowcontainer keeps the tab's selection, its fade, its position
+			# and its margin; the panel's fixed_bottom below keeps the draft and
+			# bill summaries.
 			flowcontainer = {
 				name = "te_budget_tax_tab"
 				visible = "[InformationPanel.IsTabSelected('te_tax_code')]"
@@ -1685,68 +1608,41 @@ types budget
 				spacing = 10
 				margin_bottom = 15
 
-				default_header = {
-					blockoverride "text" {
-						text = "je_tax_code"
-					}
-				}
-
-				flowcontainer = {
-					visible = "[GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-					using = default_list_position
-					direction = vertical
-					ignoreinvisible = yes
-
-					flowcontainer = {
-						datacontext = "[GetPlayerJournalEntry('je_tax_code')]"
-						using = default_list_position
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 10
-						minimumsize = { 520 -1 }
-
-						te_tax_overview_panel = {}
-						te_tax_status_sections = {
-							blockoverride "draft_summary" {}
-						}
-						te_tax_reference_sections = {}
-
-						button = {
-							visible = "[JournalEntry.IsActive]"
-							using = default_button
-							parentanchor = hcenter
-							size = { 480 32 }
-							text = "te_system_tab_open_journal"
-							tooltip = "te_tax_open_journal_tt"
-							onclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"
-						}
-					}
-				}
+				te_tax_tab_body = {}
 			}
 			### END MOD ###
+			### MOD: Breakdown tab (te_breakdown) ###
+			# te_budget_breakdown_tab_body (gui/te_budget_breakdown.gui), which the
+			# Timeline Extended window's Budget Breakdown tab mounts too: its header,
+			# with the "?" to the Help page, then the panel.
 			flowcontainer = {
 				visible = "[InformationPanel.IsTabSelected('te_breakdown')]"
 				using = default_content_fade
 				using = default_list_position
-				te_budget_breakdown_panel = {}
+				te_budget_breakdown_tab_body = {}
 			}
+			### END MOD ###
 		}
 
 		### MOD: Tax Code tab (te_tax_code) ###
 		# The draft summary (te_tax_draft_summary, te_tax_workbench_widget.gui)
 		# below the scrolling content, so Review, Discard and Introduce stay on
 		# screen while the player works through the workbench (the Diplomacy
-		# overview's footer, diplomatic_overview.gui). Only on the Tax Code tab,
-		# only while the tab is open and a draft is. Budget had no fixed_bottom
-		# before; the summary reads GetPlayer only, as there is no journal
-		# entry datacontext here, and the tab's content leaves its own copy out
-		# (te_tax_status_sections' "draft_summary" block).
+		# overview's footer, diplomatic_overview.gui); with no draft open, the
+		# bill under debate's (te_tax_bill_summary, te_tax_politics_widget.gui:
+		# its support, its debate, Pass, Force Through and Withdraw; GUI audit
+		# TAX-2). Each gates itself. Only on the Tax Code tab, only while the
+		# tab is open and a draft or a bill is. Budget had no fixed_bottom
+		# before; the summaries read GetPlayer only, as there is no journal
+		# entry datacontext here, and the tab's content leaves its own copy of
+		# the draft's out (te_tax_status_sections' "draft_summary" block).
 		blockoverride "fixed_bottom"
 		{
 			flowcontainer = {
 				direction = vertical
-				visible = "[And( InformationPanel.IsTabSelected('te_tax_code'), And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+				visible = "[And( InformationPanel.IsTabSelected('te_tax_code'), And( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Or( GetScriptedGui('te_tax_show_draft_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_tax_show_bill_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
 				margin_bottom = 4
+				ignoreinvisible = yes
 
 				divider_clean = {
 					size = { @panel_width_plus_14 4 }
@@ -1757,6 +1653,7 @@ types budget
 				}
 
 				te_tax_draft_summary = {}
+				te_tax_bill_summary = {}
 			}
 		}
 		### END MOD ###
@@ -1924,7 +1821,7 @@ types budget
 
 		### Max tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
@@ -1944,7 +1841,7 @@ types budget
 
 		### High tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
@@ -1964,7 +1861,7 @@ types budget
 
 		### Low tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
@@ -1984,7 +1881,7 @@ types budget
 
 		### No tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescNone(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportTariffsDescNone(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
@@ -2004,7 +1901,7 @@ types budget
 
 		### Low subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
@@ -2024,7 +1921,7 @@ types budget
 
 		### High subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
@@ -2045,7 +1942,7 @@ types budget
 
 		### Max subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetExportSubventionsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
@@ -2070,7 +1967,7 @@ types budget
 
 		### Max tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/max_tariffs.dds"
@@ -2090,7 +1987,7 @@ types budget
 
 		### High tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/high_tariffs.dds"
@@ -2110,7 +2007,7 @@ types budget
 
 		### Low tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/low_tariffs.dds"
@@ -2130,7 +2027,7 @@ types budget
 
 		### No tariffs
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescNone(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportTariffsDescNone(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/no_tariffs_no_subvention.dds"
@@ -2150,7 +2047,7 @@ types budget
 
 		### Low subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescLow(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/low_subvention.dds"
@@ -2170,7 +2067,7 @@ types budget
 
 		### High subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescHigh(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/high_subvention.dds"
@@ -2191,7 +2088,7 @@ types budget
 
 		### Max subventions
 		set_level_bar_item = {
-			tooltip = "[SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')]"
+			tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_tariff' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_tariff_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), SelectLocalization(Goods.GetMarket.IsSame(GetPlayer.GetCapital.GetMarket), GetPlayer.GetImportSubventionsDescMax(Goods.Self), 'NOT_PLAYER_MARKET_PRIORITY')  ) )]"
 
 			blockoverride "button_texture" {
 				texture = "gfx/interface/icons/trade_icons/max_subvention.dds"
@@ -2224,7 +2121,7 @@ types budget
 			block "visibility_1" {}
 
 			block "tooltip_1" {
-				tooltip = "[GetPlayer.GetTaxLevelDescVeryLow]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_level' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), GetPlayer.GetTaxLevelDescVeryLow  ) )]"
 			}
 
 			blockoverride "button_texture" {
@@ -2258,7 +2155,7 @@ types budget
 			block "visibility_2" {}
 
 			block "tooltip_2" {
-				tooltip = "[GetPlayer.GetTaxLevelDescLow]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_level' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), GetPlayer.GetTaxLevelDescLow  ) )]"
 			}
 
 			blockoverride "button_texture" {
@@ -2291,7 +2188,7 @@ types budget
 			block "visibility_3" {}
 
 			block "tooltip_3" {
-				tooltip = "[GetPlayer.GetTaxLevelDescMedium]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_level' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), GetPlayer.GetTaxLevelDescMedium  ) )]"
 			}
 
 			blockoverride "button_texture" {
@@ -2324,7 +2221,7 @@ types budget
 			block "visibility_4" {}
 
 			block "tooltip_4" {
-				tooltip = "[GetPlayer.GetTaxLevelDescHigh]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_level' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), GetPlayer.GetTaxLevelDescHigh  ) )]"
 			}
 
 			blockoverride "button_texture" {
@@ -2357,7 +2254,7 @@ types budget
 			block "visibility_5" {}
 
 			block "tooltip_5" {
-				tooltip = "[GetPlayer.GetTaxLevelDescVeryHigh]"
+				tooltip = "[Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tax_tt_native_locked_level' ), Concatenate( SelectLocalization( GetScriptedGui('te_tax_native_controls_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_empty', 'te_tt_break' ), GetPlayer.GetTaxLevelDescVeryHigh  ) )]"
 			}
 
 			blockoverride "button_texture" {

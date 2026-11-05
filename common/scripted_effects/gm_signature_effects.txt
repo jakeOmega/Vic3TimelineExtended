@@ -261,8 +261,8 @@ gm_tr_sig_backfill = {
 # that count, and the trophies this country holds on their parent, at their own
 # grandeur (gm_tr_grandeur, already half what was carried off) whatever its
 # government. A family's sum counts its one-offs (gm_sig_counts_as_*). Then the
-# curve with a first step of 5, and the monument policy's standing factor, as
-# the standing grandeur's prestige (Mothballed halves it).
+# curve with a first step of 5. Only Ancestral Antiquity's pull moves with the
+# monument policy (Cultural Promotion, gm_sig_set_steps_lin_open).
 gm_sig_compute_sums = {
 	gm_sig_zero_sum = { SIG = antiquity }
 	gm_sig_zero_sum = { SIG = archive }
@@ -404,10 +404,9 @@ gm_mon_sig_add_to_sum = {
 	}
 }
 
-# Country scope. Grandeur -> steps and the next step, then the policy factor.
+# Country scope. Grandeur -> steps and the next step.
 gm_sig_set_steps = {
 	gm_set_steps = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ F = 5 }
-	gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }
 }
 
 # The same on the 1/n curve with no end, for a signature whose effect is
@@ -416,14 +415,17 @@ gm_sig_set_steps = {
 # changes hands; none can be built).
 gm_sig_set_steps_lin_open = {
 	gm_set_steps_lin_open = { IN = gm_g_sig_$SIG$ OUT = gm_s_sig_$SIG$ NEXT = gm_n_sig_$SIG$ WIDTH = gm_w_sig_$SIG$ F = 5 }
-	gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_standing }
+	# Cultural Promotion covers Antiquity's pull: it is monument pull (policy
+	# spec 2026-10-23 § 4.3).
+	gm_policy_scale_steps = { S = sig_$SIG$ FACTOR = gm_policy_factor_culture }
 }
 
 # ---- The local effects (§2.2): on_monthly_pulse_state, ROOT = the state --------------
 # From gm_state_monthly, beside gm_state_local_steps_one. Signature $SIG$'s
 # local effect here: the 1/n curve over the grandeur of every monument standing here
 # that carries it on its parent, the primary's and each secondary's, whatever
-# its status (heritage and contested too, as the dedications' local effects).
+# its status (heritage and contested too, as the dedications' local effects),
+# times $FACTOR$: the monument policy's factor for a tourism effect, else 1.
 # Its multiplier variable is zeroed, never removed.
 gm_state_sig_local_steps_one = {
 	set_variable = {
@@ -454,7 +456,7 @@ gm_state_sig_local_steps_one = {
 		name = gm_sig_local_steps_$SIG$
 		value = {
 			value = gm_curve_steps_lin_f5
-			multiply = gm_policy_factor_local
+			multiply = $FACTOR$
 		}
 	}
 	if = {

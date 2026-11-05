@@ -249,7 +249,8 @@ un_resolution_age_order = {
 # Display order for the UN chamber's history list: highest for the newest
 # resolution, so `ordered_in_global_list = { order_by = un_res_recency_order }`
 # walks un_resolution_history newest-first. The inverse of
-# un_resolution_age_order; read-only, used by un_chamber_history_sgui.
+# un_resolution_age_order; read-only, used by the archive's rows
+# (un_chamber_history_brief_row and the rows beside it).
 # Scope: resolution container
 un_res_recency_order = {
 	value = var:un_res_seq
@@ -392,8 +393,9 @@ un_sponsor_influence_cost = { value = 150 }
 un_sponsor_punitive_influence_cost = { value = 300 }
 
 # Two years: about as long as a resolution takes to come to a vote and be
-# carried out. Not decaying, so the cost holds at its figure throughout.
-un_sponsor_cost_days = { value = 730 }
+# carried out. Not decaying, so the cost holds at its figure throughout. A bare
+# number: add_modifier's days reads a { value = N } script value as 0.
+un_sponsor_cost_days = 730
 
 # ---- Financial Cost / Benefit Scaling ----
 
@@ -497,6 +499,7 @@ un_agency_count = {
 	if = { limit = { has_global_variable = un_agency_tpnw } add = 1 }
 	if = { limit = { has_global_variable = un_agency_ats } add = 1 }
 	if = { limit = { has_global_variable = un_agency_unoda } add = 1 }
+	if = { limit = { has_global_variable = un_agency_copuos } add = 1 }
 }
 
 # ---- Authorized Military Mandates ----

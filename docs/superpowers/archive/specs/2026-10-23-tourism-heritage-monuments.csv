@@ -1,0 +1,66 @@
+key,kind,state,name,level,built,form,owner_or_technology_guess,note
+pyramids_of_giza,landmark,STATE_LOWER_EGYPT,Pyramids of Giza,15,-2560,pyramid,EGY,
+petra,landmark,STATE_TRANSJORDAN,Petra,3,-100,rock_cut,EGY,beside the Mesha Stele
+moscow_kremlin,landmark,STATE_MOSCOW,Moscow Kremlin,3,1495,tower,RUS,beside St Basil's (vanilla)
+fasil_ghebbi,landmark,STATE_GONDER,Fasil Ghebbi,3,1636,hall,?,"Gondar's part, not Tigray's"
+valley_of_the_temples,landmark,STATE_SICILY,Valley of the Temples,3,-500,pantheon,SIC,
+borobudur,landmark,STATE_CENTRAL_JAVA,Borobudur,3,825,gate,DEI,Kedu was Dutch
+old_city_of_sanaa,landmark,STATE_YEMEN,Old City of Sana'a,3,600,hall,ZAI?,
+shibam,landmark,STATE_YEMEN,Shibam,3,1530,tower,KAT?,Hadhramaut's part
+amphitheatre_of_el_djem,landmark,STATE_TUNISIA,Amphitheatre of El Djem,3,238,forum,TUN,
+abu_simbel,landmark,STATE_EGYPTIAN_DESERT,Abu Simbel,10,-1264,rock_cut,EGY,
+temple_of_seti_abydos,landmark,STATE_MIDDLE_EGYPT,Temple of Seti I at Abydos,3,-1290,colonnade,EGY,"verify Abydos is in Middle Egypt; Dendera is the zodiac trophy's origin, not this"
+pyramids_of_meroe,landmark,STATE_DONGOLA,Pyramids of Meroë,6,-300,pyramid,EGY,Ferlini looted them in 1834
+windsor_castle,landmark,STATE_HOME_COUNTIES,Windsor Castle,3,1070,tower,GBR,
+pont_du_gard,landmark,STATE_LANGUEDOC,Pont du Gard,3,50,arch,FRA,
+palais_des_papes,landmark,STATE_PROVENCE,Palais des Papes,3,1364,hall,FRA,
+mont_saint_michel,landmark,STATE_NORMANDY,Mont-Saint-Michel,3,1228,tower,FRA,a prison in 1836
+chateau_de_chambord,landmark,STATE_ORLEANS,Château de Chambord,3,1547,hall,FRA,
+jeronimos_monastery,landmark,STATE_ESTREMADURA,Jerónimos Monastery,3,1601,hall,POR,
+alhambra,landmark,STATE_UPPER_ANDALUSIA,Alhambra,3,1354,hall,SPA,verify Granada's state
+mezquita_of_cordoba,landmark,STATE_LOWER_ANDALUSIA,Mezquita of Córdoba,3,987,hall,SPA,verify Córdoba's state
+shore_temple,landmark,STATE_MADRAS,Shore Temple of Mahabalipuram,3,700,pillar,?,
+charminar,landmark,STATE_HYDERABAD,Charminar,3,1591,gate,HYD?,
+gwalior_fort,landmark,STATE_MALWA,Gwalior Fort,3,1486,gate,?,
+meteora,landmark,STATE_THESSALIA,Meteora,3,1382,memorial_church,TUR,Ottoman until 1881
+citadel_of_aleppo,landmark,STATE_ALEPPO,Citadel of Aleppo,6,1213,gate,EGY,
+naqsh_e_jahan_square,landmark,STATE_ISFAHAN,Naqsh-e Jahan Square,10,1629,hall,PER,
+buddhas_of_bamiyan,landmark,STATE_CENTRAL_HIGHLANDS,Buddhas of Bamiyan,3,570,statue,?,
+musalla_of_herat,landmark,STATE_HERAT,Musalla of Herat,3,1417,tower,?,
+grand_palace_bangkok,landmark,STATE_BANGKOK,Grand Palace,6,1782,hall,SIA,built 1782: ages
+changdeokgung,landmark,STATE_SEOUL,Changdeokgung,6,1610,hall,KOR,Gyeongbokgung lay in ruins until 1867
+bulguksa,landmark,STATE_BUSAN,Bulguksa,3,774,pagoda,KOR,
+kinkaku_ji,landmark,STATE_KYOTO,Kinkaku-ji,6,1397,pagoda,JAP,
+todai_ji,landmark,STATE_KYOTO,Tōdai-ji,5,752,hall,JAP,beside Kinkaku-ji
+itsukushima_shrine,landmark,STATE_CHUGOKU,Itsukushima Shrine,3,1168,gate,JAP,
+potala_palace,landmark,STATE_LHASA,Potala Palace,3,1694,hall,TIB?,
+swayambhunath,landmark,STATE_HIMALAYAS,Swayambhunath,3,460,pagoda,NEP,
+leshan_giant_buddha,landmark,STATE_SICHUAN,Leshan Giant Buddha,3,803,statue,CHI,
+temple_of_confucius,landmark,STATE_SHANDONG,Temple of Confucius,3,1499,hall,CHI,
+yungang_grottoes,landmark,STATE_SHANXI,Yungang Grottoes,3,494,rock_cut,CHI,
+humble_administrators_garden,landmark,STATE_SUZHOU,Humble Administrator's Garden,3,1513,pagoda,CHI,not the gardens form: that is Naturalist's
+longmen_grottoes,landmark,STATE_HENAN,Longmen Grottoes,3,675,rock_cut,CHI,
+registan,landmark,STATE_UZBEKIA,Registan,10,1660,gate,BUK?,
+itchan_kala,landmark,STATE_KHIVA,Itchan Kala,6,1800,gate,KHI?,walls of c. 1800: ages
+mausoleum_of_sultan_sanjar,landmark,STATE_MERZ,Mausoleum of Sultan Sanjar,3,1157,mausoleum,?,
+kazan_kremlin,landmark,STATE_KAZAN,Kazan Kremlin,3,1562,tower,RUS,
+saint_sophia_kiev,landmark,STATE_KIEV,Saint Sophia Cathedral,3,1037,memorial_church,RUS,
+diocletians_palace,landmark,STATE_DALMATIA,Diocletian's Palace,3,305,colonnade,AUS,
+marksburg,landmark,STATE_RHINELAND,Marksburg,3,1283,tower,?,Rhine Gorge: Nassau's or Prussia's part
+aachen_cathedral,landmark,STATE_NORTH_RHINE,Aachen Cathedral,3,805,hall,PRU,Cologne's was unfinished until 1880
+basilica_of_saint_francis,landmark,STATE_UMBRIA,Basilica of Saint Francis,3,1253,hall,PAP,
+walls_of_tallinn,landmark,STATE_TALINN,Walls of Tallinn,3,1355,gate,RUS,
+ephesus,site,STATE_AYDIN,Ephesus,3,-550,colonnade,empiricism,"Wood, 1863-69"
+tikal,site,STATE_GUATEMALA,Tikal,3,750,pyramid,romanticism,"Méndez, 1848"
+chichen_itza,site,STATE_YUCATAN,Chichén Itzá,3,1000,pyramid,empiricism,"Carnegie, 1924"
+teotihuacan,site,STATE_MEXICO,Teotihuacan,6,200,pyramid,empiricism,"Batres, 1905-10"
+monte_alban,site,STATE_OAXACA,Monte Albán,3,-500,pyramid,?,"Caso, 1931 (Tomb 7)"
+leptis_magna,site,STATE_TRIPOLI,Leptis Magna,6,200,forum,?,1920s
+cyrene,site,STATE_LIBYA,Cyrene,3,-630,pantheon,?,"1860s, 1910s"
+merida_theatre,site,STATE_EXTREMADURA,Roman Theatre of Mérida,3,-16,forum,?,1910-15
+chogha_zanbil,site,STATE_KHUZESTAN,Chogha Zanbil,3,-1250,pyramid,?,"Ghirshman, 1951-62"
+hattusa,site,STATE_ANKARA,Hattusa,6,-1650,gate,?,"Winckler, 1906"
+mount_nemrut,site,STATE_DIYARBAKIR,Mount Nemrut,3,-62,statue,?,"Sester, 1881"
+mogao_caves,site,STATE_GANSU,Mogao Library Cave,3,1000,rock_cut,?,"Wang Yuanlu, 1900; Stein, 1907"
+khajuraho,site,STATE_BUNDELKHAND,Khajuraho,3,1000,pillar,romanticism,"Burt, 1838"
+hampi,site,STATE_MYSORE,Hampi,3,1500,pillar,?,verify Bellary's state

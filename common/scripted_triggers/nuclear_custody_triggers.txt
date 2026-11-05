@@ -193,6 +193,9 @@ nd_bp_guarantor_valid = {
 		is_country_alive = yes
 		nd_believed_armed = yes
 		NOT = { has_war_with = $STATE$ }
+		# A deployment conceded in a nuclear crisis bars a guarantee next to
+		# the country conceded to, as the article's can_ratify does (dispute 7).
+		NOT = { var:nd_crisis_deploy_bar ?= { is_adjacent_to_country = $STATE$ } }
 	}
 }
 

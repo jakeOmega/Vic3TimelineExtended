@@ -40,10 +40,16 @@ ww_rearm_button = {
 	}
 
 	possible = {
-		NOT = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
-		ww_ideological_tension >= 30
 		custom_tooltip = {
-			text = WW_REARM_POSSIBLE_TT
+			text = WW_REQ_NOT_APPEASING_TT
+			NOT = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
+		}
+		custom_tooltip = {
+			text = WW_REQ_TENSION_30_TT
+			ww_ideological_tension >= 30
+		}
+		custom_tooltip = {
+			text = WW_REQ_COMBINED_ARMS_TT
 			has_technology_researched = combined_arms
 		}
 	}
@@ -129,8 +135,14 @@ ww_appease_button = {
 	}
 
 	possible = {
-		NOT = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
-		ww_ideological_tension >= 20
+		custom_tooltip = {
+			text = WW_REQ_NOT_REARMING_TT
+			NOT = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
+		}
+		custom_tooltip = {
+			text = WW_REQ_TENSION_20_TT
+			ww_ideological_tension >= 20
+		}
 		custom_tooltip = {
 			text = WW_APPEASE_POSSIBLE_TT
 			country_is_democratic = yes
@@ -227,7 +239,10 @@ ww_lend_lease_button = {
 	}
 
 	possible = {
-		country_rank >= rank_value:major_power
+		custom_tooltip = {
+			text = WW_REQ_MAJOR_POWER_TT
+			country_rank >= rank_value:major_power
+		}
 		custom_tooltip = {
 			text = WW_LEND_LEASE_POSSIBLE_TT
 			OR = {
@@ -299,10 +314,13 @@ ww_total_war_economy_button = {
 	}
 
 	possible = {
-		has_variable = ww_active_phase
-		is_at_war = yes
 		custom_tooltip = {
-			text = WW_TOTAL_WAR_POSSIBLE_TT
+			text = WW_REQ_FIGHTING_TT
+			has_variable = ww_active_phase
+			is_at_war = yes
+		}
+		custom_tooltip = {
+			text = WW_REQ_COMBINED_ARMS_TT
 			has_technology_researched = combined_arms
 		}
 	}
@@ -386,8 +404,11 @@ ww_war_propaganda_button = {
 	}
 
 	possible = {
-		has_variable = ww_active_phase
-		is_at_war = yes
+		custom_tooltip = {
+			text = WW_REQ_FIGHTING_TT
+			has_variable = ww_active_phase
+			is_at_war = yes
+		}
 		custom_tooltip = {
 			text = WW_PROPAGANDA_POSSIBLE_TT
 			has_technology_researched = mass_media
@@ -460,8 +481,11 @@ ww_wartime_rationing_button = {
 	}
 
 	possible = {
-		has_variable = ww_active_phase
-		is_at_war = yes
+		custom_tooltip = {
+			text = WW_REQ_FIGHTING_TT
+			has_variable = ww_active_phase
+			is_at_war = yes
+		}
 	}
 
 	effect = {
@@ -583,9 +607,15 @@ ww_join_war_button = {
 	possible = {
 		custom_tooltip = {
 			text = WW_JOIN_WAR_POSSIBLE_TT
-			NOT = { has_modifier = ww_late_entry_cooldown }
-			is_at_war = no
 			ww_world_war_open_to_entrants = yes
+		}
+		custom_tooltip = {
+			text = WW_REQ_NOT_AT_WAR_TT
+			is_at_war = no
+		}
+		custom_tooltip = {
+			text = WW_REQ_NO_ENTRY_COOLDOWN_TT
+			NOT = { has_modifier = ww_late_entry_cooldown }
 		}
 		custom_tooltip = {
 			text = WW_JOIN_WAR_NEEDS_MAJOR_POWER

@@ -4,6 +4,9 @@ import os
 import re
 import unittest
 
+from gui_test_helpers import _block_at, _strip_comments, assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 W = os.path.join(REPO, "gui", "journal_entry_widgets")
 LAYOUT = os.path.join(W, "un_layout_widget.gui")
@@ -13,11 +16,18 @@ UN_GUI.append(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
 
 STATUS = ["te_un_sec_assembly", "te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes",
           "te_un_sec_mandates", "te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure"]
-REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive", "te_un_sec_how"]
+REFERENCE = ["te_un_sec_auth_history", "te_un_sec_archive"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7). The
+# Assembly is by far the largest section, so column 1 holds it under only the
+# overview and the Status line (shown at a founding or a dissolution).
+WIDE_COLUMNS = [["te_un_overview_panel", "te_un_sec_status", "te_un_sec_assembly"],
+                ["te_un_sec_why", "te_un_sec_missions", "te_un_sec_programmes", "te_un_sec_mandates"],
+                ["te_un_sec_obligations", "te_un_sec_dev_fund", "te_un_sec_exposure",
+                 "te_un_sec_auth_history", "te_un_sec_archive"]]
 OLD_FLAGS = ["un_chamber_delegations", "un_chamber_standing", "un_chamber_exposure",
              "un_chamber_missions", "un_chamber_obligations", "un_chamber_votes",
              "un_chamber_propose", "un_chamber_mandates", "un_chamber_history", "un_auth_hist_open"]
-NOT_SECTIONS = {"un_chamber_veto_armed", "un_chamber_history_details"}
+NOT_SECTIONS = {"un_chamber_veto_armed", "un_chamber_history_details", "un_leave_armed"}
 
 
 def _read(path):
@@ -96,7 +106,7 @@ class SessionStripTest(unittest.TestCase):
     def test_every_topic_has_an_icon(self):
         codes = {int(n) for n in re.findall(
             r"ScriptValue\('un_disp_res_topic_code'\), '\(CFixedPoint\)(\d+)'", _read(LAYOUT))}
-        self.assertEqual(codes, set(range(33)))
+        self.assertEqual(codes, set(range(34)))
 
 AUTHORITY = os.path.join(W, "un_authority_widget.gui")
 PILLARS = ("participation", "commitment", "credibility", "funding", "order", "delivery")
@@ -113,29 +123,46 @@ class PillarBarTest(unittest.TestCase):
 
 class TabStatusTest(unittest.TestCase):
     def test_the_tab_keeps_the_entrys_status_text_open(self):
-        """Open by default (owner, 2026-09-28): the flag is the CLOSED flag."""
-        tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
-        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", tab, re.S)
+        """Open by default (owner, 2026-09-28): the flag is the CLOSED flag. In
+        te_un_sec_status, the section the tab's body places after the
+        overview, which the Diplomacy panel, the Timeline Extended window and
+        its full-screen columns all mount."""
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        m = re.search(r"flowcontainer = \{\s*visible = \"\[Not\(GetVariableSystem\.Exists\('te_un_tab_status_closed'\)\)\]\"(.*?)\}", status, re.S)
         self.assertTrue(m, "no Status section gated on te_un_tab_status_closed")
         self.assertIn("te_je_status_desc", m.group(1))
 
+    def test_the_tab_places_the_status_section_bare_after_the_overview(self):
+        """The section's gate is its type's root visible, so the instance
+        carries none (gotcha #17), and the layout draws nothing inline."""
+        tab = _type_body(_read(LAYOUT), "te_un_tab_body")
+        self.assertRegex(tab, r"te_un_overview_panel = \{\}\s*(?:#[^\n]*\n\s*)*te_un_sec_status = \{\}")
+        self.assertNotIn("un_chamber_section_header", tab)
+        self.assertNotIn("te_je_status_desc", tab)
+
 CHAMBER = os.path.join(W, "un_chamber_widget.gui")
 # Explanations that live in "How the UN works", and the live sections they left.
+# The log's and the reasons' intros joined them in the 2026-10-27 audit (UN-24).
 HOW_KEYS = ["je_un_chamber_missions_intro", "je_un_chamber_missions_help",
-            "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help"]
+            "je_un_chamber_deleg_intro", "je_un_chamber_obligations_help", "je_un_chamber_exposure_help",
+            "je_un_chamber_reasons_intro", "je_un_auth_log_intro"]
 LIVE_SECTIONS = [(AUTHORITY, "te_un_sec_why"), (CHAMBER, "te_un_sec_missions"),
                  (CHAMBER, "te_un_sec_delegations"), (CHAMBER, "te_un_sec_obligations"),
-                 (CHAMBER, "te_un_sec_exposure")]
+                 (CHAMBER, "te_un_sec_exposure"), (AUTHORITY, "te_un_sec_auth_history")]
 
 
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_the_un_works(self):
-        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        """On the Help page (te_united_nations_help_body), the UN's two help
+        types with it, which the "?" at the top of the entry and in the tab's
+        header opens; the link section is gone (test_te_help_pages.py)."""
+        how = _type_body(_read(LAYOUT), "te_united_nations_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sub in ("te_un_help_authority", "te_un_help_standing"):
             self.assertIn(f"{sub} = {{", how, sub)
-        self.assertIn("GetVariableSystem.Toggle('un_how_open')", how)
+        self.assertNotIn("te_un_sec_how", "\n".join(_read(p) for p in UN_GUI))
+        self.assertNotIn("un_how_open", _read(LAYOUT))
 
     def test_live_sections_carry_no_explanations(self):
         for path, sec in LIVE_SECTIONS:
@@ -172,11 +199,18 @@ PROGRAMME_TALLIES = ("un_peacekeeping_count", "un_development_count", "un_human_
 
 
 class ProgrammesTest(unittest.TestCase):
-    def test_programmes_are_a_collapsed_table(self):
+    def test_programmes_are_an_open_table_with_our_controls(self):
+        """Open by default since the owner's decision of 2026-10-27, which
+        gave the table an Ours column with the programme controls (UN-9)."""
         body = _type_body(_read(CHAMBER), "te_un_sec_programmes")
-        self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_open')", body)
+        self.assertIn("GetVariableSystem.Toggle('un_chamber_programmes_closed')", body)
         for sv in PROGRAMME_TALLIES:
             self.assertIn(f"ScriptValue('{sv}')", body, sv)
+        for sgui in ("un_act_peacekeeping_mission_sgui", "un_act_end_peacekeeping_sgui",
+                     "un_act_human_rights_resolution_sgui", "un_act_withdraw_human_rights_sgui",
+                     "un_act_arms_control_sgui", "un_act_withdraw_arms_control_sgui",
+                     "un_act_lift_sanctions_sgui"):
+            self.assertIn(f"GetScriptedGui('{sgui}')", body, sgui)
 
 CONCEPTS = os.path.join(REPO, "common", "game_concepts", "extra_concepts.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
@@ -396,7 +430,7 @@ def _modifier_name(mod):
 class MissionButtonsTest(unittest.TestCase):
     def test_send_and_bring_home_are_centred(self):
         row = _type_body(_read(CHAMBER), "un_chamber_mission_row")
-        buttons = re.findall(r"button = \{\s*using = default_button_action\s*size = \{ 200 28 \}\s*(parentanchor = \w+)?", row)
+        buttons = re.findall(r"button = \{\s*using = default_button_action\s*size = \{ 236 30 \}\s*(parentanchor = \w+)?", row)
         self.assertEqual(buttons, ["parentanchor = hcenter"] * 2)
 
 
@@ -417,8 +451,10 @@ class ObligationsTest(unittest.TestCase):
         self.assertTrue(_modifier_name(modifier), f"{modifier} has no name")
 
     def test_our_dues_sit_beside_the_budget(self):
+        # The budget is a table since the 2026-10-27 audit (UN-13); its first
+        # row is all the members' dues.
         dues = self.gui.index("un_chamber_dues_sgui")
-        budget = self.gui.index("un_chamber_budget_sgui")
+        budget = self.gui.index("je_un_budget_dues_label")
         conventions = self.gui.index("je_un_chamber_sub_regimes")
         self.assertLess(dues, budget)
         self.assertLess(budget, conventions)
@@ -503,7 +539,7 @@ class HowStyleTest(unittest.TestCase):
     subheadings (owner, 2026-09-28)."""
 
     def test_every_text_is_a_note(self):
-        how = _type_body(_read(LAYOUT), "te_un_sec_how")
+        how = _type_body(_read(LAYOUT), "te_united_nations_help_body")
         helps = _type_body(_read(AUTHORITY), "te_un_help_authority") + _type_body(_read(CHAMBER), "te_un_help_standing")
         for body in (how, helps):
             self.assertNotIn("ExecuteTooltip", body)
@@ -594,8 +630,9 @@ class TabUnlockTooltipTest(unittest.TestCase):
         # then says te_system_tab_met_tt.
         pat = re.compile(r"GetScriptedGui\('([a-z_]+_tab_unlock_sgui)'\)\.IsValidTooltip\(")
         found = 0
+        # the hosts, and the Banking tab's body, which holds the readout note
         for name in ("budget_panel.gui", "culture_panel.gui", "diplomatic_overview.gui", "panel_military.gui",
-                     "pops_overview.gui"):
+                     "pops_overview.gui", os.path.join("journal_entry_widgets", "banking_layout_widget.gui")):
             text = _read(os.path.join(REPO, "gui", name))
             for line in text.splitlines():
                 for sgui in pat.findall(line):
@@ -696,8 +733,9 @@ class ReviewRound2Test(unittest.TestCase):
         self.assertIn("$je_un_conv_name_decolonization$", _loc("je_un_chamber_regime_colonial_pressure"))
 
     def test_the_tab_status_hides_with_nothing_to_say(self):
-        tab = _read(os.path.join(REPO, "gui", "diplomatic_overview.gui"))
-        self.assertIn("GetScriptedGui('un_status_text_sgui').IsShown", tab)
+        status = _type_body(_read(LAYOUT), "te_un_sec_status")
+        root = status.split("un_chamber_section_header")[0]
+        self.assertIn("visible = \"[GetScriptedGui('un_status_text_sgui').IsShown", root)
         for key in ("je_un_status_conference", "je_un_status_dissolved"):
             self.assertFalse(_loc(key).endswith("\\n"), key)
 
@@ -711,6 +749,32 @@ class ReviewRound2Test(unittest.TestCase):
 
     def test_the_refugee_target_line_ends_its_sentence(self):
         self.assertTrue(_loc("je_un_chamber_propose_target_refugee").endswith("nobody."))
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_un_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_un_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_un_wide_sections",
+                                             layout=("te_un_tab_body", "te_un_tab_layout"))
+        self.assertEqual(columns, WIDE_COLUMNS)
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["united_nations"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_un_tab_body", "te_un_tab_layout", "te_un_wide_sections"))
+
+    def test_the_header_is_centered_over_the_columns(self):
+        """In full screen the frame is as wide as its column row, so a header with no anchor sits at the row's left
+        edge (#1335's review). default_list_position centers it; where the header is the widest child (the host
+        panels, the side panel) nothing moves."""
+        body = _type_body(_strip_comments(_read(LAYOUT)), "te_un_tab_body")
+        header = _block_at(body, body.index('blockoverride "tab_header"'))
+        self.assertGreater(header.count("default_header = {"), 0)
+        self.assertEqual(header.count("using = default_list_position"), header.count("default_header = {"))
+
 
 if __name__ == "__main__":
     unittest.main()

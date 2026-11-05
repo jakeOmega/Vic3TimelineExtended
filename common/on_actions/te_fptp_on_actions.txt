@@ -1,0 +1,40 @@
+﻿# First Past the Post (amendment_first_past_the_post, te_fptp_effects.txt).
+# Design: docs/superpowers/specs/2026-10-25-first-past-the-post-design.md.
+
+# Root = Country. Ranks the parties, seeds the amendment once, keeps
+# te_fptp_var, and runs the once-a-game self-check.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_fptp_country_pulse
+	}
+}
+
+# ROOT = the law. A law's amendments leave with it, so when a voting law the
+# amendment allows arrives in a country that held first past the post, an event
+# asks whether to keep it (te_fptp_events.1). Enactment or activate_law alike.
+on_law_activated = {
+	on_actions = {
+		te_fptp_from_law_scope
+	}
+}
+
+te_fptp_country_pulse = {
+	effect = {
+		te_fptp_monthly = yes
+	}
+}
+
+te_fptp_from_law_scope = {
+	effect = {
+		if = {
+			limit = {
+				te_fptp_allowed_voting_law = yes
+				NOT = { has_amendment = amendment_type:amendment_first_past_the_post }
+				owner = { has_variable = te_fptp_var }
+			}
+			owner = {
+				trigger_event = { id = te_fptp_events.1 popup = yes }
+			}
+		}
+	}
+}

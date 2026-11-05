@@ -27,6 +27,8 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass
 
+from paradox_file_parser import directive_prefixes
+
 HELPER_DIRS = ("scripted_effects", "scripted_triggers")
 DEFINITION_DIRS = HELPER_DIRS + ("script_values",)
 
@@ -35,7 +37,8 @@ _DEF_TOKEN_RE = re.compile(
     r"(?P<open>\{)|(?P<close>\})"
     r"|(?P<key>[A-Za-z_@][A-Za-z0-9_.:@\-]*)\s*=\s*(?P<block>\{)?"
 )
-_MERGE_PREFIX_RE = re.compile(r"^(?:INJECT|REPLACE|REPLACE_OR_CREATE|TRY_INJECT|INJECT_OR_CREATE):")
+# The six merge directives (paradox_file_parser.directive_prefixes).
+_MERGE_PREFIX_RE = re.compile(r"^(?:" + "|".join(map(re.escape, directive_prefixes)) + ")")
 
 
 @dataclass(frozen=True)

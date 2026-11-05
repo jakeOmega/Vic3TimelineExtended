@@ -1,0 +1,119 @@
+﻿# ============================================================================
+# Government buildings the mod adds: State Youth Centers, Public Housing
+# ============================================================================
+# This file's name sets where its buildings appear in the building list,
+# whose default sort is the order building definitions load: file names in
+# ASCII order, vanilla's and the mod's in one list. 07_zz_te_government.txt sorts
+# right after vanilla's 07_government.txt, so these buildings follow its government buildings (after Skyscrapers).
+# Keep them bare definitions, not REPLACE_OR_CREATE: a directive applies
+# after every bare definition, so the entry it creates may land at the end.
+# Rule: docs/guides/scripting_best_practices.md § Load Order (probed
+# 2026-10-26), "Building list order"; test_building_list_order.py.
+# ============================================================================
+
+building_state_youth_centers = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_state_youth_centers.dds"
+	city_type = city
+	has_max_level = yes
+
+	# owner ?= : the engine can ask while a state's owner is briefly invalid.
+	potential = {
+		owner ?= {
+			OR = {
+				has_law = law_type:law_pro_natalist_subsidies
+				has_law = law_type:law_state_sponsored_family_planning
+				has_law = law_type:law_communal_child_rearing
+				has_law = law_type:law_state_eugenics_program
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
+	}
+
+	production_method_groups = {
+		pmg_childrens_creche_philosophy
+		pmg_childrens_creche_advanced_nurturing
+		pmg_maintenance_light
+	}
+
+	required_construction = construction_cost_medium
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	ai_value = {
+		value = 1000
+		if = {
+			limit = { owner = { has_law = law_type:law_communal_child_rearing } }
+			add = 8000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_state_eugenics_program } }
+			add = 6000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_mandatory_augmentation } }
+			add = 5000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_state_sponsored_family_planning } }
+			add = 3000
+		}
+		if = {
+			limit = { owner = { has_law = law_type:law_pro_natalist_subsidies } }
+			add = 1000
+		}
+	}
+}
+
+# Public Housing (2026-10-31): housing the state builds and runs, so a state
+# can hold more people before Migration Crowding. Its methods grant the state
+# Urban Engineering (state_building_construction_sector_max_level_add,
+# relocalized), workforce-scaled, so an unstaffed level houses no one; each
+# point houses migration_crowding_urban_engineering_pop (1,000) people before
+# tolerance (extra_script_values.txt, § MIGRATION CROWDING). No eligibility
+# gate beyond the technology: a state that isn't crowded gains nothing from
+# it, and the AI's ai_value is 0 there.
+# Level cap (2026-11-02, owner): state_building_public_housing_max_level_add
+# from six technologies, sized so the newest method at the cap, with the
+# technologies' crowding tolerance, houses half to all of the era's largest
+# rich city (urban_planning 12, paved_roads +3, modern_skyscrapers +5,
+# computer_aided_design +10, advanced_nanofabrication +5,
+# programmable_matter +5; test_public_housing_cap.py). Scaled 2026-11-02
+# (owner): each level consumes and houses ten times what it did, for the same
+# staff, and the cap is a tenth of what it was.
+# docs/systems/mod_systems/pops_and_migration.md § Public Housing.
+building_public_housing = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_public_housing.dds"
+	city_type = city
+	has_max_level = yes
+
+	unlocking_technologies = {
+		urban_planning
+	}
+
+	production_method_groups = {
+		pmg_base_building_public_housing
+		pmg_maintenance
+	}
+
+	required_construction = construction_cost_high
+
+	# State scope. Worth building only where the state is past its crowding
+	# threshold, and more the more crowded it is (migration_crowding_ratio:
+	# 0 at the threshold, 1 at ten times it, where the pull penalty is 45%).
+	# Each level lowers the ratio, so the value falls as the housing works.
+	ai_value = {
+		value = 0
+		if = {
+			limit = { migration_crowding_ratio > 0.1 }
+			add = 300
+			add = {
+				value = migration_crowding_ratio
+				multiply = 2000
+				max = 4000
+			}
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+}

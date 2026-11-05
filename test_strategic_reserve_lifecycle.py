@@ -113,6 +113,10 @@ class NothingTradesWithoutHubTests(unittest.TestCase):
 
     def test_every_control_greys_without_a_hub(self):
         names = re.findall(r"(?m)^(st_res_\w+_sgui)\s*=\s*\{", SGUIS)
+        # Read-only tooltip builders act on nothing (SR-9's Blocked list).
+        read_only = [n for n in names if re.search(r"is_valid = \{ always = no \}", _block(SGUIS, n))]
+        self.assertEqual(read_only, ["st_res_ov_held_sgui"])
+        names = [n for n in names if n not in read_only]
         self.assertEqual(len(names), 21)
         for name in names:
             with self.subTest(sgui=name):

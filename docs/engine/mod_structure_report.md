@@ -10,11 +10,12 @@ don't balance. The engine silently truncates the tail of unbalanced
 files; nothing surfaces in `error.log`.
 
 **Silent INJECT**: an `INJECT:<name>` directive targeting an entity
-that is either mod-only (no vanilla version) or REPLACEd elsewhere
-in the mod. The engine's merge order causes the INJECT to silently
-*not* merge — symptom: the INJECT's modifiers don't apply at
-runtime even though the file parses cleanly. Fix: edit the entity's
-bare or REPLACE declaration directly.
+that is REPLACEd elsewhere in the mod, or is mod-only (no vanilla
+version). Every INJECT on a key applies before any REPLACE on it, so
+an INJECT on a REPLACEd entity never applies at runtime, though the
+file parses cleanly. On a mod-only entity a cross-file INJECT merges
+and a same-file one may not; either way the entity's body is split.
+Fix: edit the entity's bare or REPLACE declaration directly.
 
 **Top-level collision**: an entity defined more than once at top
 level (no `REPLACE:` / `INJECT:` prefix) across the mod's `common/`

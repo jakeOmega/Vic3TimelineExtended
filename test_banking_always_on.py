@@ -348,27 +348,33 @@ class PanelTest(unittest.TestCase):
         # The bars, row 1 (phase, momentum) and row 2 (bubble, budget).
         self.assertEqual(overview.count(RUNNING_SGUI), 3)
         self.assertEqual(overview.count(DORMANT_SGUI), 1)
-        bars = overview.index("te_je_scripted_bars = {}")
-        self.assertLess(overview.rindex(RUNNING_SGUI, 0, bars), bars)
+        # The player's own bars are the entry's; another country's, te_banking_bars
+        # (National Info). Both wait for the cycle.
+        for bars in (overview.index("te_je_scripted_bars = {}"), overview.index("te_banking_bars = {")):
+            self.assertLess(overview.rindex(RUNNING_SGUI, 0, bars), bars)
 
     def test_is_active_gates_only_the_containers(self):
         # JournalEntry.IsActive is true for a dormant entry, so it may gate only
         # the containers (the panel opened on an entry not yet activated), never
-        # what reads the cycle.
+        # what reads the cycle. The window's full-screen layout's wrappers
+        # repeat the status composer's gate around its sections. Since the
+        # panel reads Country (National Info, 2026-11-02) the composers ask the
+        # same of the country, te_budget_banking_tab_sgui on Country (the entry
+        # held), which is as true for a dormant entry.
         allowed = {"te_banking_status_sections", "te_banking_reference_sections", "te_banking_overview_panel",
-                   "te_banking_topbar_gate"}
+                   "te_banking_topbar_gate", "te_banking_wide_sections"}
         for path in (DASH, HISTORY, LAYOUT):
             text = _strip_comments(_read(path))
             for m in re.finditer(r"type (\w+) = \w+ \{", text):
                 body = _block_from(text, m.end() - 1)
-                if "JournalEntry.IsActive" in body:
+                if "JournalEntry.IsActive" in body or "te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country" in body:
                     with self.subTest(type=m.group(1)):
                         self.assertIn(m.group(1), allowed)
 
     def test_the_dormant_notes(self):
         self.assertIn('text = "banking_dash_dormant_tools_note"', _type_body(self.dash, "te_banking_sec_interventions"))
         self.assertIn('text = "banking_dash_dormant_monetary_note"', _type_body(self.dash, "te_banking_sec_monetary"))
-        self.assertIn('text = "banking_dash_how_start"', _type_body(self.layout, "te_banking_sec_how"))
+        self.assertIn('text = "banking_dash_how_start"', _type_body(self.layout, "te_banking_help_body"))
         loc = _loc()
         for key in ("te_banking_cycle_started_tt", "banking_dash_not_started_value",
                     "banking_dash_not_started_conditions", "banking_dash_not_started_tt",

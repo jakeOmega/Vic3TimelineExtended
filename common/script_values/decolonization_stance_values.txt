@@ -1,0 +1,248 @@
+﻿# ============================================================================
+# DECOLONIZATION — A COUNTRY'S STANCE ON COLONIALISM, AND THE COLONIAL POWERS
+#
+# The figures behind decolonization_stance_effects.txt and the Colonial Empire
+# tab's two sections that outlive the entry (owner, 2026-11-03): Our Stance on
+# Colonialism (te_ce_sec_stance) and The Colonial Powers (te_ce_sec_powers), in
+# gui/journal_entry_widgets/colonial_empire_widget.gui. Both read GetPlayer, so
+# they show with the entry, and without it from the moment the country has
+# researched Decolonization.
+#
+# Scope: country unless a header says otherwise.
+# ============================================================================
+
+# ---- What a stance costs, and how often it can change ----------------------
+
+# The influence a stance holds while it counts: the country_influence_cost_add
+# of gp_anti_colonial_policy_modifier and gp_pro_colonial_policy_modifier
+# (common/static_modifiers/extra_modifiers.txt), restated here for the gates
+# that ask for it and the tooltips that name it. A flat cost, as the UN's
+# stances' (un_stance_influence_cost), at a sixth of a great power's base
+# influence. test_decolonization_stance.py holds the three together.
+decol_stance_influence_cost = 150
+
+# Months between two changes of stance, however it changes: the panel's
+# buttons, The Colonial Question (decolonization_events.14) or a vote for a
+# Decolonization Resolution (un_vote_effects.txt). Counted down monthly in
+# decol_stance_months_left (decol_stance_monthly).
+decol_stance_cooldown_months = 24
+
+# The AI starts paying for a stance only with this much influence to spare
+# beyond its cost, and drops a stance once its influence goes negative, so what
+# dropping frees never reaches the start line and it does not flip back and
+# forth (scripting_best_practices.md, "Influence is a capacity too").
+decol_stance_ai_spare_influence = 100
+
+decol_stance_ai_start_influence = {
+	value = decol_stance_influence_cost
+	add = decol_stance_ai_spare_influence
+}
+
+# ---- Our Stance on Colonialism (te_ce_sec_stance), read every frame --------
+
+# -1 condemning colonialism, 0 neutral, 1 supporting the colonial powers.
+decol_stance_disp_code = {
+	value = 0
+	if = {
+		limit = { has_variable = gp_anti_colonial_stance }
+		value = -1
+	}
+	else_if = {
+		limit = { has_variable = gp_pro_colonial_stance }
+		value = 1
+	}
+}
+
+# Whether the stance weighs on anyone: 0 neutral, 1 it counts (a great power's,
+# which holds its modifier and pays for it), 2 dormant (held below great-power
+# rank: it costs nothing and moves no one until the country is one again).
+decol_stance_disp_weight = {
+	value = 0
+	if = {
+		limit = { decol_stance_paid = yes }
+		value = 1
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_variable = gp_anti_colonial_stance
+				has_variable = gp_pro_colonial_stance
+			}
+		}
+		value = 2
+	}
+}
+
+# Months until the stance can change again; 0 when it can now.
+decol_stance_disp_months_left = {
+	value = 0
+	if = {
+		limit = { has_variable = decol_stance_months_left }
+		value = var:decol_stance_months_left
+	}
+}
+
+# ---- Our share of great-power prestige (te_ce_sec_stance) ------------------
+# How much a stance weighs (owner, 2026-11-03): the shares of the great powers
+# condemning an empire add up to the share its two escalations fire on
+# (colonial_gp_condemner_prestige_share, whose pool also counts the empire).
+
+# Every great power's prestige, summed once a month into
+# global_var:decol_gp_prestige_total (decol_gp_prestige_on_action, from the
+# global on_monthly_pulse), so the panel walks no country. Floored at 1.
+decol_gp_prestige_sum = {
+	value = 0
+	every_country = {
+		limit = { country_rank >= rank_value:great_power }
+		add = prestige
+	}
+	min = 1
+}
+
+# The line's figure, read every frame: a great power's prestige as a share of
+# every great power's (0-1, its own included), or -1 below great-power rank,
+# where the stance lies dormant and the country holds no share. Today's
+# prestige over the month's total, so it is capped at 1; before the first
+# monthly sum (an older save's first month) it walks the countries itself.
+decol_stance_disp_gp_share = {
+	value = -1
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		value = prestige
+		if = {
+			limit = { has_global_variable = decol_gp_prestige_total }
+			divide = global_var:decol_gp_prestige_total
+		}
+		else = {
+			divide = decol_gp_prestige_sum
+		}
+		max = 1
+	}
+}
+
+# ---- The Colonial Powers (te_ce_sec_powers): who is one, and its row -------
+
+# A colonial power's size, the list's order: the people of its colonies
+# (is_overseas_colonial_state) and of its colonial subjects
+# (is_qualifying_colonial_subject), the two halves of je_colonial_empire's
+# `possible`. Walks the country's states and subjects: read only by the monthly
+# snapshot (decol_world_refresh_display), never by the panel.
+ce_power_colonial_population = {
+	value = 0
+	every_scope_state = {
+		limit = { is_overseas_colonial_state = yes }
+		add = state_population
+	}
+	every_subject_or_below = {
+		limit = { is_qualifying_colonial_subject = yes }
+		add = total_population
+	}
+}
+
+# Where the power stands: 0 its entry has not begun (it has not researched
+# Decolonization, or the entry starts this month or, after an earlier run has
+# ended, within two months: ce_reentry_monthly), 1-5 the entry runs, in that
+# band (colonial_empire_live_tier: 1 collapsing .. 5 solidified), 6 it secured
+# its empire (colonial_empire_completed, the entry's win), 7 its colonial
+# system collapsed in the last ten years (colonial_empire_collapsed_recently).
+ce_power_status = {
+	value = 0
+	if = {
+		limit = { has_journal_entry = je_colonial_empire }
+		value = colonial_empire_live_tier
+	}
+	else_if = {
+		limit = { has_variable = colonial_empire_completed }
+		value = 6
+	}
+	else_if = {
+		limit = { has_variable = colonial_empire_collapsed_recently }
+		value = 7
+	}
+}
+
+# Its stability, to the nearest 5, while its entry runs, as a share (0-1, the
+# panel prints it as a percentage like the overview's bar value): the bucket
+# its own monthly refresh takes (colonial_empire_refresh_display), which script
+# can read where the bar itself is a trigger only. -1 when there is none to show:
+# no entry, or an entry in its first month, whose bucket was taken in
+# `immediate` before the bar held its start value (colonial_je_total_months
+# exists from the entry's first monthly pulse).
+ce_power_stability = {
+	value = -1
+	if = {
+		limit = {
+			has_journal_entry = je_colonial_empire
+			has_variable = colonial_je_total_months
+			has_variable = colonial_empire_bar_bucket
+		}
+		value = var:colonial_empire_bar_bucket
+		divide = 100
+	}
+}
+
+# Country scope: a colonial power, scope:ce_pw_viewer the player building the
+# list. What the viewer's stance does to the power's stability a month: the
+# one term of its colonial_stability_term_gp_condemnation or _support the
+# viewer makes (the viewer's prestige over the power's, clamped to 0.25-2,
+# times the per-power figure), as colonial_empire_gp_row weighs a great power
+# on the empire's own table. 0 while the power runs no entry, the viewer's
+# stance does not count (neutral, or dormant below great-power rank), or the
+# power is the viewer.
+ce_power_viewer_weight = {
+	value = 0
+	if = {
+		limit = {
+			has_journal_entry = je_colonial_empire
+			NOT = { this = scope:ce_pw_viewer }
+			scope:ce_pw_viewer = { decol_stance_paid = yes }
+		}
+		value = scope:ce_pw_viewer.prestige
+		divide = { value = prestige min = 1 }
+		min = 0.25
+		max = 2
+		if = {
+			limit = { scope:ce_pw_viewer = { has_variable = gp_anti_colonial_stance } }
+			multiply = colonial_gp_condemnation_per_power
+		}
+		else = {
+			multiply = colonial_gp_support_per_power
+		}
+	}
+}
+
+# ---- A row's figures, read on its script container (ce_pw_row) -------------
+# Each guarded: the panel renders every frame, and a container from an older
+# save, or one being rebuilt, may lack a variable.
+
+ce_pw_row_disp_population = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_pw_population }
+		value = var:ce_pw_population
+	}
+}
+
+ce_pw_row_disp_status = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_pw_status }
+		value = var:ce_pw_status
+	}
+}
+
+ce_pw_row_disp_stability = {
+	value = -1
+	if = {
+		limit = { has_variable = ce_pw_stability }
+		value = var:ce_pw_stability
+	}
+}
+
+ce_pw_row_disp_weight = {
+	value = 0
+	if = {
+		limit = { has_variable = ce_pw_weight }
+		value = var:ce_pw_weight
+	}
+}

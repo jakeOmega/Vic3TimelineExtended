@@ -54,6 +54,15 @@ gm_state_tr_takeable = {
 	NOT = { has_variable = gm_tr_cooldown }
 }
 
+# Country scope. Owns a state whose monument can be carried off: a state Surrender
+# a Monument could name (its state_valid_trigger). The article's visible and
+# possible, so the treaty draft offers it only where there is a monument to give.
+gm_tr_country_has_takeable = {
+	any_scope_state = {
+		gm_state_tr_takeable = yes
+	}
+}
+
 # State scope. $WHO$ (a country) is at war with the state's owner, is not its
 # civil-war twin (both sides of a civil war carry te_cw_role) and controls half
 # or more of the state's provinces: the base game's rule for war-goal control

@@ -127,7 +127,10 @@ te_seabed_royalty_refresh = {
 # Open a station. Its research and its upkeep at once; the monthly refresh
 # keeps them. The decision's tooltip shows the research modifier and states
 # the upkeep in words: the upkeep's multiplier is a variable set in this
-# block, which a tooltip (which runs nothing) cannot read. A party's terms are
+# block, which a tooltip (which runs nothing) cannot read. The tooltip still
+# evaluates the multiplier inside hidden_effect, so the add waits on
+# has_variable: false while the tooltip is built, true once the set has run
+# (214 'none' lines in one hover, 2026-10-24). A party's terms are
 # re-read at its next monthly pulse, which gives it the treaty's station term.
 # The country's first station is docket business while the treaty is not in
 # force (un_docket_antarctic_candidate).
@@ -145,9 +148,12 @@ te_antarctic_station_open = {
 			limit = { has_modifier = te_antarctic_station_upkeep }
 			remove_modifier = te_antarctic_station_upkeep
 		}
-		add_modifier = {
-			name = te_antarctic_station_upkeep
-			multiplier = var:te_antarctic_station_upkeep_cached
+		if = {
+			limit = { has_variable = te_antarctic_station_upkeep_cached }
+			add_modifier = {
+				name = te_antarctic_station_upkeep
+				multiplier = var:te_antarctic_station_upkeep_cached
+			}
 		}
 	}
 	if = {

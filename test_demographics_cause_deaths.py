@@ -264,7 +264,7 @@ class TestCountryCauses(unittest.TestCase):
     """The country's census sums its states' slices and weights the multipliers, access and childbirth's rate."""
 
     def census(self, states):
-        eng = _CountryEngine(states=states, fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+        eng = _CountryEngine(states=states, fixtures={"year": 1900.0},
                              triggers={"is_ai": True, "te_demog_cohorts_run": True})
         eng.call("te_demog_country_census")
         return eng.vars
@@ -318,7 +318,7 @@ class TestCountryCauses(unittest.TestCase):
         def outline(trt_a, trt_b):
             a, b = self.states()
             a["te_dg_trt_inf"], b["te_dg_trt_inf"] = trt_a, trt_b
-            eng = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+            eng = _CountryEngine(states=[a, b], fixtures={"year": 1900.0},
                                  triggers={"is_ai": False, "te_demog_cohorts_run": True})
             eng.call("te_demog_country_census")
             return eng.vars
@@ -334,7 +334,7 @@ class TestCountryCauses(unittest.TestCase):
         self.assertGreater(sum(v[k] for k in adults), sum(plain[k] for k in adults))
         a, b = self.states()
         del a["te_dg_acc"], b["te_dg_acc"]
-        none = _CountryEngine(states=[a, b], fixtures={"year": 1900.0, "te_demog_female_work_share": 0.25},
+        none = _CountryEngine(states=[a, b], fixtures={"year": 1900.0},
                               triggers={"is_ai": True, "te_demog_cohorts_run": True})
         none.call("te_demog_country_census")
         self.assertEqual(none.vars["te_dg_inf_ad"], 1.0)

@@ -168,6 +168,9 @@ types pops_overview
 				# and the te_system_tab_met_tt branch can't be reached here; it stays
 				# for the shape every tab tooltip shares. Gates:
 				# common/scripted_guis/te_system_tab_sguis.txt.
+				# An observer has no GetPlayer, so each visibility block checks
+				# Not( GetMetaPlayer.IsObserver ) first: the gate's is_shown otherwise
+				# logs a null-country error every frame (gui_modding_guide.md).
 				blockoverride "fifth_button" {
 					text = "te_pops_tab_demog"
 				}
@@ -179,10 +182,10 @@ types pops_overview
 					onclick = "[InformationPanel.SelectTab('te_demog')]"
 				}
 				blockoverride "fifth_button_visibility" {
-					visible = "[And( InformationPanel.IsTabSelected('te_demog'), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( InformationPanel.IsTabSelected('te_demog'), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_visibility_checked" {
-					visible = "[And( Not( InformationPanel.IsTabSelected('te_demog') ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					visible = "[And( Not( GetMetaPlayer.IsObserver ), And( Not( InformationPanel.IsTabSelected('te_demog') ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_pops_tab_demog"
@@ -599,9 +602,12 @@ types pops_overview
 
 			### MOD: Demographics tab (te_demog) ###
 			# The census: one instance of the sections' composer, in
-			# gui/te_demographics_layout.gui (gui_style_guide.md rule 9). The gate on
-			# the rule sits on a parent of the instance; inside it, the composer shows
-			# the sections once the country has a census, and a pending line before.
+			# gui/te_demographics_layout.gui (gui_style_guide.md rule 9), in the
+			# window's tab body (te_demog_window_body) for its header, the tab's name
+			# and the "?" to the Help page, as the mod's tabs in the other panels
+			# have. The gate on the rule sits on a parent of the instance, so the
+			# header goes with it; inside it, the composer shows the sections once
+			# the country has a census, and a pending line before.
 			flowcontainer = {
 				name = "te_pops_demog_tab"
 				visible = "[InformationPanel.IsTabSelected('te_demog')]"
@@ -616,7 +622,11 @@ types pops_overview
 					direction = vertical
 					ignoreinvisible = yes
 
-					te_demog_tab_sections = {}
+					te_demog_window_body = {
+						blockoverride "te_demog_tab_layout" {
+							te_demog_tab_sections = {}
+						}
+					}
 				}
 			}
 			### END MOD ###

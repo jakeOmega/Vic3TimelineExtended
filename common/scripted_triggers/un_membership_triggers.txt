@@ -174,5 +174,6 @@ un_rep_any_convention_missed = {
 			NOT = { has_variable = te_antarctic_denounced }
 		}
 		un_rep_convention_missed = { AGENCY = unoda MODIFIER = un_asat_moratorium_modifier }
+		un_rep_convention_missed = { AGENCY = copuos MODIFIER = un_colony_protection_modifier }
 	}
 }

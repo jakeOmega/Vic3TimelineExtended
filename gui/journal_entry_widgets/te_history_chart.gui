@@ -14,11 +14,16 @@
 ### variable, so stored samples cannot feed a plotline. The column chart below
 ### is the supported way to draw script-held history.
 ###
-### HOW TO ADD A SERIES (see docs/systems/mod_systems.md)
+### HOW TO ADD A SERIES (see docs/systems/mod_systems/history_charts.md)
 ###   1. `te_history_record_sample = { METRIC = <m> VALUE = <v> }` from the
 ###      system's monthly pulse.
-###   2. Instantiate te_history_chart with blockoverrides for the title, the
-###      legend, and a bar body reading `te_hist_v_<m>`.
+###   2. Write a te_history_chart instance with blockoverrides for the title,
+###      the legend, and a bar body reading `te_hist_v_<m>`, as a fragment in
+###      scripts/generators/te_history_charts/<system>.gui.in, add its Chart
+###      line to scripts/generators/gen_te_history_charts.py and run it; the
+###      section instances the generated te_hist_<id>. No chart is written
+###      inline: the generator draws each at the panel's size and the
+###      full-screen viewer's.
 ###   3. Add the loc keys for the title, the legend and the bar tooltip.
 ### Nothing else — the store, the pruning, the ranges, the marker icons, the
 ### empty state and the "available since" line are all shared.
@@ -175,6 +180,31 @@ types te_history_chart_types
 		block "range_onclick" {}
 	}
 
+	### The open button beside a panel chart's title (charts PR C2, spec
+	### docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md
+	### § 4.2): it opens the chart alone at full size, a popup in te_popups
+	### (gui/te_popups.gui). Each chart's panel wrapper instances it in its
+	### "chart_open" block twice, one button showing at a time: for the player's
+	### own country (OWN_COUNTRY_ONLY in the generator) te_popup = chart_<id>,
+	### the player's viewer; for another (OTHER_COUNTRY, in National Info)
+	### te_ni_chart = <id>, the viewer the window holds, on its own Country
+	### (PR F1). The icon is a placeholder, vanilla's area-charts toggle (style
+	### guide rule 10; docs/systems/te_systems_window_gui_icons.md).
+	type te_chart_open_button = button_icon_round {
+		parentanchor = vcenter
+		tooltip = "te_chart_open_tt"
+
+		blockoverride "size" {
+			size = { 24 24 }
+		}
+		blockoverride "icon_size" {
+			size = { 80% 80% }
+		}
+		blockoverride "icon" {
+			texture = "gfx/interface/buttons/button_icons/areacharts.dds"
+		}
+	}
+
 	### Key for the two marker pips a chart can draw on a bar. Same textures at
 	### the same sizes as the pips themselves, so the row reads as a key and not
 	### as a second set of markers.
@@ -189,6 +219,11 @@ types te_history_chart_types
 		ignoreinvisible = yes
 		spacing = 1
 		margin = { 4 2 }
+		### The monthly chart's width, so the key shares the charts' left edge,
+		### and each line wraps inside it (at fontsize_medium, Banking's, the
+		### marker's runs to two lines).
+		minimumsize = { 496 -1 }
+		maximumsize = { 496 -1 }
 
 		flowcontainer = {
 			direction = horizontal
@@ -205,6 +240,7 @@ types te_history_chart_types
 			textbox = {
 				parentanchor = vcenter
 				autoresize = yes
+				multiline = yes
 				max_width = 460
 				align = nobaseline
 				block "marker_legend_font" {
@@ -230,6 +266,7 @@ types te_history_chart_types
 				textbox = {
 					parentanchor = vcenter
 					autoresize = yes
+					multiline = yes
 					max_width = 460
 					align = nobaseline
 					block "crash_legend_font" {
@@ -249,8 +286,12 @@ types te_history_chart_types
 		ignoreinvisible = yes
 		spacing = 0
 
+		### The shown country's store: every host supplies a Country (the
+		### journal root's te_je_country, the tab's frame, the window's mounts,
+		### the viewer's popup), so a chart draws for whichever country its
+		### panel shows (spec 2026-11-02-charts-help-national-info § 6.6).
 		block "sample_datamodel" {
-			datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"
+			datamodel = "[Country.MakeScope.GetList('te_hist')]"
 		}
 
 		item = {
@@ -267,7 +308,7 @@ types te_history_chart_types
 				### The sample's age in months is "now" minus the month
 				### index stored on the container.
 				block "sample_visible" {
-					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
+					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
 				}
 
 				block "bar_tooltip" {}
@@ -307,7 +348,13 @@ types te_history_chart_types
 	### "bar_tooltip". Optional: "zero_axis" (signed series only),
 	### "marker_pips" (override to nothing for a series with no markers) and
 	### "plot_size" (the frame, for a chart whose bars are not 480px wide or
-	### 84px tall, with "plot_layouts" carrying the matching bar sizes).
+	### 84px tall, with "plot_layouts" carrying the matching bar sizes),
+	### "chart_title_width" (the title's max_width), "chart_text_width" (the
+	### legend's), "empty_width" (the empty state's) and "chart_width" (the
+	### chart's own, fixed), so one chart draws at another size: the
+	### full-screen viewer's (gen_te_history_charts.py sets them), and
+	### "chart_open", beside the title, which the panel's wrapper fills with
+	### te_chart_open_button.
 	### Override them here, on the chart instance; a custom "plot_layouts" holds
 	### plain te_history_plot instances. A type derived from te_history_plot
 	### that carries these blocks drew nothing in game (gui_modding_guide.md
@@ -335,10 +382,22 @@ types te_history_chart_types
 	### for SOME history lengths (121 samples leave a 117px remainder).
 	type te_history_chart = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 		margin = { 0 4 }
+		### A FIXED WIDTH, whatever the title and the legend say: the frame, or
+		### the text over it where that is wider (an annual chart's 488). Sized
+		### by its content, a chart was centered at its text's width alone, the
+		### plot left out (gui_modding_guide.md gotcha #46). The generator sets
+		### it on every chart and its wrapper (gen_te_history_charts.Dims.width).
+		### NO ANCHOR: the chart sits at the left of its wrapper, which is as
+		### wide as it and does the centering, so its place never depends on a
+		### width measured from its content (gotcha #43). Neither does the
+		### title and legend column below, which sits at x 4.
+		block "chart_width" {
+			minimumsize = { 496 -1 }
+			maximumsize = { 496 -1 }
+		}
 
 		### TITLE OVER LEGEND, not title beside legend. Beside the title a
 		### legend had about 230px, and the two monetary legends that have to
@@ -355,22 +414,41 @@ types te_history_chart_types
 			### The fonts are blocks so a system can scale its charts: the banking
 			### charts override both one step up (a Steam Workshop player found
 			### the panel's text too small, 2026-10-13); the others keep these.
-			textbox = {
-				autoresize = yes
-				max_width = 484
-				elide = right
-				align = nobaseline
-				block "chart_title_font" {
-					using = fontsize_large
+			###
+			### THE TITLE AND THE OPEN BUTTON share a row (charts PR C2): the
+			### panel's wrapper (gen_te_history_charts.py) fills "chart_open"
+			### with te_chart_open_button and narrows "chart_title_width" by the
+			### button and its gap; the full-screen viewer's leaves both. The
+			### legend keeps its own width, "chart_text_width".
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					block "chart_title_width" {
+						max_width = 484
+					}
+					elide = right
+					align = nobaseline
+					block "chart_title_font" {
+						using = fontsize_large
+					}
+					default_format = "#title"
+					block "chart_title" {}
 				}
-				default_format = "#title"
-				block "chart_title" {}
+
+				block "chart_open" {}
 			}
 
 			textbox = {
 				autoresize = yes
 				multiline = yes
-				max_width = 484
+				block "chart_text_width" {
+					max_width = 484
+				}
 				align = nobaseline
 				block "chart_legend_font" {
 					using = fontsize_small
@@ -417,18 +495,23 @@ types te_history_chart_types
 			}
 
 			### Empty state — nothing recorded yet, e.g. an existing save that
-			### has not reached its first monthly pulse since the update.
+			### has not reached its first monthly pulse since the update; or, for
+			### a country that keeps no history (neither played nor a major
+			### power: te_history_tracked_sgui, on the host's Country, so any
+			### country's in National Info), that none is kept.
 			textbox = {
 				block "empty_visible" {
-					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') )]"
+					visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_hist') )]"
 				}
 				parentanchor = center
 				autoresize = yes
 				multiline = yes
-				max_width = 420
+				block "empty_width" {
+					max_width = 420
+				}
 				align = hcenter|nobaseline
 				block "empty_text" {
-					text = "te_hist_empty_state"
+					text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_hist_empty_state', 'te_history_untracked' )]"
 				}
 			}
 		}

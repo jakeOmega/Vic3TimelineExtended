@@ -381,5 +381,33 @@ class Extensions(unittest.TestCase):
                              'c779b9073eed7929d14b6b59410b8764acd7c87563600d2927dd80a123272336')
 
 
+class ExtraBubble(unittest.TestCase):
+    """A flat monthly bubble term (Wealth Concentration's national line, 2026-10-22 effects design)."""
+
+    def test_default_is_zero(self):
+        self.assertEqual(S.Config().extra_bubble, 0.0)
+
+    def test_non_finite_is_rejected(self):
+        with self.assertRaises(ValueError):
+            S.Config(extra_bubble=float('nan'))
+
+    def test_a_standing_push_raises_bubble_and_crashes(self):
+        # Fiat under the price mandate, a real country's arm: fiat with no monetary policy at all
+        # (the default Config) crashes about 34 times a century whatever the bubble does.
+        cfg = dict(currency='fiat', mode=S.MODE_PRICE, years=100)
+        base = S._run_cell((S.Config(**cfg, extra_bubble=0.0), 1, 60, {}))
+        push = S._run_cell((S.Config(**cfg, extra_bubble=0.5), 1, 60, {}))
+        self.assertGreater(push['bubble_mean'], base['bubble_mean'])
+        self.assertGreater(push['crashes_per_century_mean'], base['crashes_per_century_mean'])
+
+    def test_the_cli_takes_the_flag(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / 'rows.json'
+            subprocess.run([sys.executable, str(ROOT / 'scripts/analysis/banking_cycle_sim.py'), '--runs', '2',
+                            '--years', '5', '--only', 'fiat', '--points', '0', '--jobs', '1', '--extra-bubble', '0.3',
+                            '--json', str(out)], check=True, capture_output=True)
+            self.assertTrue(json.loads(out.read_text()))
+
+
 if __name__ == '__main__':
     unittest.main()

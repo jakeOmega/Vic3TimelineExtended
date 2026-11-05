@@ -180,7 +180,9 @@ scripts/generators/gen_covert_tech_theft.py — do not edit manually`:
 
   The `else_if` guard means `random_list` never runs with every entry disabled.
   The current-research branch needs no `can_research`: a technology being
-  researched is researchable.
+  researched is researchable. (Superseded by #1244: not in a save made before
+  one of its prerequisites was added, so the branch also checks each
+  prerequisite with `has_technology_researched`.)
 
 **`common/scripted_triggers/covert_tech_theft_generated.txt`**
 

@@ -17,7 +17,7 @@ te_seabed_administer_claims = {
 	}
 	requires_approval = no
 
-	texture = "gfx/interface/icons/diplomatic_action_icons/raise_payments.dds"
+	texture = "gfx/interface/icons/diplomatic_action_icons/te_seabed_administer_claims.dds"
 
 	selectable = {
 		te_global_commons_enabled = yes

@@ -867,6 +867,7 @@ gm_state_mark_restore_pm = {
 	gm_state_mark_restore_pm_one = { KEY = scientific }
 	gm_state_mark_restore_pm_one = { KEY = industrial }
 	gm_state_mark_restore_pm_one = { KEY = athletic }
+	gm_state_mark_restore_pm_one = { KEY = historic }
 }
 
 gm_state_mark_restore_pm_one = {
@@ -911,6 +912,7 @@ gm_state_restore_dedication = {
 		gm_state_restore_dedication_one = { KEY = scientific }
 		gm_state_restore_dedication_one = { KEY = industrial }
 		gm_state_restore_dedication_one = { KEY = athletic }
+		gm_state_restore_dedication_one = { KEY = historic }
 	}
 }
 

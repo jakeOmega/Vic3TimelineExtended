@@ -5,19 +5,23 @@
 # ============================================================================
 
 # The two urban-pattern modifiers, at full strength. Each state's yearly pulse applies one, under Full only, with its
-# owner's strength from the last census as the multiplier (te_demog_up_state_refresh: 0 at 25% primacy, 1 at 60%).
-# The country's largest city: agglomeration.
+# owner's strength from the last census as the multiplier (te_demog_up_state_refresh: 0 at 25% primacy, 1 at 50%, and
+# on at half the slope to 2 at 100%; the 2026-10-22 effects design).
+# The country's largest city: agglomeration, and talent and ideas gathering in its universities.
 te_demog_primate_city = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	building_urban_center_throughput_add = 0.1
-	state_migration_pull_mult = 0.15
+	building_urban_center_throughput_add = 0.2
+	state_migration_pull_mult = 0.25
+	building_university_throughput_add = 0.1
 }
 
-# Every other state of a country with a large primate city: migrants drawn away, and regional resentment.
+# Every other state of a country with a large primate city: migrants drawn away, and regional resentment, which moves
+# only a province with an identity of its own (a minority culture) toward its cultural minority movement.
 te_demog_provincial_neglect = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_migration_pull_mult = -0.1
-	state_turmoil_effects_mult = 0.1
+	state_migration_pull_mult = -0.15
+	state_turmoil_effects_mult = 0.15
+	state_pop_support_movement_cultural_minority_mult = 0.15
 }
 
 # The Planned Capital decision (te_demog_capital.1): the five years of building, on the country, for their authority.

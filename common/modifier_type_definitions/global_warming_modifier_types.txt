@@ -33,6 +33,36 @@ country_institution_impact_institution_ministry_of_the_environment_mult = {
 }
 
 # ----- Global Warming -----
+# Environmental Movement radicalism (GW-3, 2026-10-27): each national climate
+# policy's static modifier carries it (-0.10, Carbon Removal Support -0.05), so
+# the policy's tooltip prints the line, and movement_environmental's
+# additional_radicalism_factors reads the owner's total
+# (common/political_movements/new_ideological_movements.txt). The engine
+# consumes nothing; more radicalism is bad for the player.
+country_environmental_movement_radicalism_add = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
+# Geoengineering's marker (era 13 spec § 7.5). The technology unlocks the
+# Stratospheric Aerosol Injection climate policy, which the engine does not
+# list, so before it had this and its weather-modification lines the tech tree
+# showed no effect at all (2026-11-01). Display
+# only: the policy's gate, gw_possible_aerosol_injection, reads the technology,
+# as every climate policy's does, so a grayed Adopt names it
+# (global_warming_triggers.txt). test_gw_geoengineering.py pins the two to the
+# same technology. The engine consumes nothing.
+country_gw_aerosol_injection_bool = {
+	color = good
+	boolean = yes
+	script_only = yes
+}
+
 country_greenhouse_gas_emissions_mult = {
 	color = bad
 	percent = yes

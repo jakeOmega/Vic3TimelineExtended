@@ -5,14 +5,17 @@
 # ============================================================================
 
 # Long-Haul Seabed Operations (§ 2.4): a Deep-Sea Mine level on a distant
-# basin's licence works at -25% throughput. A unit state modifier, applied
-# from on_monthly_pulse_state with multiplier = the state's share of distant
-# licences (te_seabed_long_haul_mult); its one refresh site is
+# basin's licence works at -25% throughput. A unit building modifier on the
+# state's Deep-Sea Mine, where its throughput breakdown shows it (owner,
+# 2026-10-27; it was a state modifier), applied from on_monthly_pulse_state
+# with multiplier = the state's share of distant licences
+# (var:te_seabed_long_haul_x, te_seabed_long_haul_mult kept on the state:
+# a building has no variables); its one refresh site is
 # te_seabed_refresh_long_haul. The figure is restated as
 # te_seabed_long_haul_penalty_pct for display.
 te_seabed_long_haul = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	building_ocean_mine_throughput_add = -0.25
+	building_throughput_add = -0.25
 }
 
 # The holding fee (seabed claims spec § 2.1): money a week per licence on a
@@ -40,4 +43,28 @@ te_seabed_policy_sponsor_cost = {
 te_seabed_policy_unilateral_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_cost_add = 1
+}
+
+# What each seabed policy does (audit SEA-2), for display only: never added to
+# a country. The policy buttons (te_seabed_policy_effect_<n>_tt) and the
+# overview's Policy box (te_seabed_ov_policy_ours_<n>) print them with
+# GetStaticModifier(...).GetDesc. Each line restates a script value
+# (te_global_commons_seabed_values.txt), held to it by test_seabed_layout.py:
+# the claim weight is te_seabed_policy_factor_<policy> - 1, Sponsor's floor
+# te_seabed_floor_keep, Unilateral's navy te_seabed_assertive_navy_mult - 1
+# and its relations te_seabed_unilateral_relations. A factor of 1 has no line.
+te_seabed_policy_survey_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_claim_weight_mult = -0.25
+}
+
+te_seabed_policy_sponsor_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_claim_floor_add = 0.75
+}
+
+te_seabed_policy_unilateral_display = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_seabed_naval_weight_mult = 1
+	country_seabed_unilateral_relations_add = -10
 }

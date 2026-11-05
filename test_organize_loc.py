@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 from organize_loc import (
-    categorize_key, find_diplo_action_keys, find_drift, find_parameterized_keys,
+    categorize_key, find_country_keys, find_diplo_action_keys, find_drift, find_parameterized_keys,
     find_quoted_loc_args, find_treaty_article_keys, find_used_keys_explicitly,
     find_war_goal_keys, organize_all, treaty_article_families,
 )
@@ -56,7 +56,7 @@ class CategorizeKeyTests(unittest.TestCase):
     def test_te_decision_family_stays_together(self):
         for key in ("te_decision_found_space_program", "te_decision_found_space_program_desc",
                     "te_decision_space_mission_moon", "te_decision_space_mission_moon_desc",
-                    "te_decision_tt_leads_market"):
+                    "te_decision_tt_create_space_program"):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
@@ -101,7 +101,7 @@ class CategorizeKeyTests(unittest.TestCase):
             "setting_te_tax_code_enabled", "setting_te_tax_code_enabled_customs_desc",
             "law_te_tax_code", "law_te_tax_code_desc",
             # the journal entry's keys stay with the family, not in te_journal_entries
-            "je_tax_code", "je_tax_code_desc", "je_tax_code_reason", "je_tax_code_status_none",
+            "je_tax_code", "je_tax_code_reason", "je_tax_code_status_none",
         ):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "TAX")
@@ -138,6 +138,36 @@ class OrganizeAllUnusedTests(unittest.TestCase):
         self.assertIn(" te_tp_action_snapshot:", harness)
         self.assertIn(" te_tp_action_arm:", harness)
         self.assertNotIn(" te_tp_action_arm:", unused)
+        self.assertIn(" widget_dead:", unused)
+
+    def test_country_adjective_is_used_and_city_state_keys_file_together(self):
+        # The engine reads TAG_ADJ for every defined country with no script
+        # naming it; a city-state's name and adjective file in their own file.
+        loc = (
+            "l_english:\n"
+            " SGP:0 \"Singapore\"\n"
+            " SGP_ADJ:0 \"Singaporean\"\n"
+            " widget_dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "x_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            defs = os.path.join(td, "common", "country_definitions")
+            os.makedirs(defs)
+            with open(os.path.join(defs, "x.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write("SGP = {\n\ttier = city_state\n}\n")
+            self.assertEqual(find_country_keys(td), {"SGP", "SGP_ADJ"})
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_city_states_l_english.yml"), encoding="utf-8-sig") as fh:
+                city_states = fh.read()
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        self.assertIn(" SGP:", city_states)
+        self.assertIn(" SGP_ADJ:", city_states)
+        self.assertNotIn("SGP", unused)
         self.assertIn(" widget_dead:", unused)
 
     def test_generator_file_keeps_unreferenced_keys_and_its_marker(self):

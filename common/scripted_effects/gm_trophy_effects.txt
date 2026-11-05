@@ -77,6 +77,8 @@ gm_state_tr_take = {
 	clear_saved_scope = gm_tr_taker
 	clear_saved_scope = gm_tr_victim
 	save_scope_as = gm_tr_state
+	# The state the notices name (gm_tr_notify_taking).
+	save_scope_as = gm_tr_notice_state
 	$WHO$ = { save_scope_as = gm_tr_taker }
 	owner = { save_scope_as = gm_tr_victim }
 	if = {
@@ -248,6 +250,7 @@ gm_tr_record_dedication = {
 	gm_tr_record_dedication_one = { KEY = scientific }
 	gm_tr_record_dedication_one = { KEY = industrial }
 	gm_tr_record_dedication_one = { KEY = athletic }
+	gm_tr_record_dedication_one = { KEY = historic }
 }
 
 gm_tr_record_dedication_one = {
@@ -395,6 +398,8 @@ gm_tr_take_from_site = {
 			scope:gm_tr_taker = { exists = capital }
 		}
 		scope:gm_tr_moving = { set_variable = { name = gm_tr_tmp_g value = gm_mon_grandeur } }
+		# The site it is carried off from, for the notices (gm_tr_notify_taking).
+		var:gm_tr_site ?= { save_scope_as = gm_tr_notice_state }
 		scope:gm_tr_taker = {
 			capital = { save_scope_as = gm_tr_site_state }
 			set_variable = { name = gm_tr_tmp_grandeur value = scope:gm_tr_moving.var:gm_tr_tmp_g }
@@ -433,6 +438,7 @@ gm_tr_return_home = {
 	clear_saved_scope = gm_tr_giver
 	save_scope_as = gm_tr_moving
 	var:gm_tr_origin ?= {
+		save_scope_as = gm_tr_notice_state
 		owner = { save_scope_as = gm_tr_receiver }
 	}
 	var:gm_tr_site ?= {
@@ -781,7 +787,7 @@ gm_state_tr_monthly = {
 # state (gm_trophy_values.txt, Occupation), and only an enemy can occupy.
 gm_state_tr_find_occupier = {
 	save_temporary_scope_as = gm_tmp_tr_site
-	owner = {
+	owner ?= {
 		random_enemy_in_war = {
 			limit = {
 				save_temporary_scope_as = gm_tmp_tr_enemy
@@ -968,11 +974,14 @@ gm_tr_repair_places = {
 gm_tr_monthly_one = {
 	clear_saved_scope = gm_tr_ai_holder
 	clear_saved_scope = gm_tr_ai_claimant
+	# owner ?=: a state can stand ownerless for a pulse while a revolt's part
+	# merges back (2026-10-25: six trophies, the month France's revolution
+	# ended); gm_tr_repair_places finds it again once it is gone.
 	var:gm_tr_site ?= {
-		owner = { save_scope_as = gm_tr_ai_holder }
+		owner ?= { save_scope_as = gm_tr_ai_holder }
 	}
 	var:gm_tr_origin ?= {
-		owner = { save_scope_as = gm_tr_ai_claimant }
+		owner ?= { save_scope_as = gm_tr_ai_claimant }
 	}
 	if = {
 		limit = {
@@ -1007,6 +1016,7 @@ gm_tr_monthly_one = {
 			NOT = { has_variable = gm_tr_home_notified }
 		}
 		set_variable = gm_tr_home_notified
+		var:gm_tr_origin ?= { save_scope_as = gm_tr_notice_state }
 		scope:gm_tr_ai_holder = { post_notification = gm_tr_home_reach_notice }
 	}
 	if = {
@@ -1056,6 +1066,7 @@ gm_tr_monthly_one = {
 					}
 				}
 				set_variable = { name = gm_tr_reach_by value = scope:gm_tr_occupier }
+				var:gm_tr_site = { save_scope_as = gm_tr_notice_state }
 				scope:gm_tr_occupier = { post_notification = gm_tr_site_reach_notice }
 			}
 		}
@@ -1119,7 +1130,8 @@ gm_tr_list_one = {
 			add_to_variable_list = { name = gm_trophies_here target = scope:gm_tr_listing }
 			gm_tr_count_add = { VAR = gm_tr_here_count ADD = 1 }
 			gm_tr_count_add = { VAR = gm_tr_here_grandeur ADD = scope:gm_tr_listing.var:gm_tr_grandeur }
-			owner = {
+			# An ownerless state for a pulse (gm_tr_monthly_one)
+			owner ?= {
 				gm_tr_country_listed = yes
 				add_to_variable_list = { name = gm_trophies_held target = scope:gm_tr_listing }
 				change_variable = { name = gm_tr_held_count add = 1 }
@@ -1134,7 +1146,7 @@ gm_tr_list_one = {
 			gm_tr_holder_owns_origin = no
 		}
 		var:gm_tr_origin = {
-			owner = {
+			owner ?= {
 				gm_tr_country_listed = yes
 				add_to_variable_list = { name = gm_trophies_abroad target = scope:gm_tr_listing }
 				change_variable = { name = gm_tr_abroad_count add = 1 }

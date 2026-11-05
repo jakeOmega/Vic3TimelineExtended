@@ -20,7 +20,8 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-CHECKS = ("nd_doctrine_permits_strike", "nd_pledge_permits_strike", "nd_war_law_permits_strategic_strike")
+CHECKS = ("nd_doctrine_permits_strike", "nd_pledge_permits_strike", "nd_war_law_permits_strategic_strike",
+          "nd_launch_under_attack_doctrine")
 
 
 def _strip(text):

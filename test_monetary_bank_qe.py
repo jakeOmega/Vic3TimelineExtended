@@ -563,7 +563,7 @@ class DelegationHint(unittest.TestCase):
 
     def test_the_hint_closes_the_tooltips_first_paragraph(self):
         tip = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_tt')
-        call = "[JournalEntry.GetCountry.GetCustom('te_mon_delegation_purchase_hint')]"
+        call = "[Country.GetCustom('te_mon_delegation_purchase_hint')]"
         self.assertEqual(tip.count(call), 1)
         self.assertLess(tip.index(call), tip.index('$TOOLTIP_DELIMITER$'))
 
@@ -581,7 +581,7 @@ class DelegationHint(unittest.TestCase):
 
     def test_the_hint_names_the_condition_rather_than_promising_purchases(self):
         hint = TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint')
-        self.assertTrue(hint.startswith(' Your rate is on its floor and prices are falling'))
+        self.assertTrue(hint.startswith(' The rate is on its floor and prices are falling'))
         self.assertIn('whenever its rule asked for a lower rate than the floor allows', hint)
         self.assertNotIn('\\n', hint)
         self.assertEqual(TooltipNumbers.loc(self, 'banking_dash_mon_delegation_purchase_hint_none'), '')
@@ -591,13 +591,15 @@ class TooltipNumbers(unittest.TestCase):
     """The tooltips state the figures in words, so a retune has to edit them."""
 
     def loc(self, key):
-        match = re.search(rf'^ {key}:0 "(.*)"$', LOC.read_text(encoding='utf-8-sig'), re.M)
+        match = re.search(rf'^ {key}:0 "(.*)"(?:\s*#[^"]*)?$', LOC.read_text(encoding='utf-8-sig'), re.M)
         self.assertIsNotNone(match, key)
         return match.group(1)
 
     def test_mandate_tooltip_states_the_slope_the_cap_and_each_mandates_rule(self):
+        # The rule moved from the Mandate row's tooltip to How Banking Works,
+        # The Mandates (GUI audit BNK-1, 2026-10-27).
         per_pp, cap = constants()
-        text = self.loc('banking_dash_mon_mandate_tt')
+        text = self.loc('banking_dash_how_mandates_floor')
         self.assertEqual(per_pp, 1.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertEqual(cap, 5.0, 'retuned: edit the tooltip, the player guide and §0.12')
         self.assertIn('#b one point#! of upward pressure on prices for every point it would have cut below the floor', text)

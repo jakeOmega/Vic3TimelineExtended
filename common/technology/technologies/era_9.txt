@@ -39,7 +39,8 @@ cloud_computing = {
 }
 
 biotechnology = {
-	# Synthetic Wood Plant, GMO plantation PMs for plantations, Corporate Genetic Licensing law
+	# Synthetic Wood Plant, GMO plantation PMs for plantations. (The Corporate Genetic Licensing law that the
+	# biotech companies need opens earlier, with Gene Splicing.)
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/biotechnology.dds"
 	category = production
@@ -145,8 +146,11 @@ clean_energy_technologies = {
 	}
 
 	modifier = {
+		state_climate_heat_relief_add = 0.1 # Local Climate: cheap clean power for cooling
+		state_climate_water_relief_add = 0.15 # Local Climate: desalination on cheap clean power
 		country_institution_ministry_of_the_environment_max_investment_add = 1
 		country_clean_energy_pb_principles_bool = yes
+		country_grid_transmission_efficiency_add = 0.03
 	}
 
 	ai_weight = {
@@ -625,7 +629,7 @@ LGBTQ_rights_movement = {
 }
 
 cybersecurity = {
-	# Strong Privacy Rights and Digital Currency laws
+	# Strong Privacy Rights law (Digital Currency moved to universal_digital_identity)
 	era = era_9
 	texture = "gfx/interface/icons/invention_icons/cybersecurity.dds"
 	category = society

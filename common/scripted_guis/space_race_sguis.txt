@@ -7,7 +7,10 @@
 # common/scripted_triggers/space_race_triggers.txt and every action delegates to
 # the shared bodies in common/scripted_effects/space_race_effects.txt — the very
 # helpers the journal entries' own scripted buttons call. Change an approach or
-# funding rule in the helper and both surfaces follow.
+# funding rule in the helper and both surfaces follow. One gate differs on
+# purpose: op 3 asks sr_possible_fund_up (up to six levels past the cap), while
+# the AI's increase-funding buttons ask sr_possible_fund_up_within_cap, since
+# the AI stays within the cap (lunar colonization design § 5.1, § 15.6).
 #
 # One scripted GUI per milestone, with the control passed in from the .gui as a
 # single saved scope. IMPLICIT CONTRACT with the widget — keep both sides in
@@ -30,8 +33,9 @@
 # docs/guides/scripting_best_practices.md, "Journal-Entry Buttons Are the AI's
 # Only Path".
 #
-# sr_rivals_sgui at the bottom is display-only: it is called through
-# ExecuteTooltip and never Execute, and its is_valid is always = no.
+# The Rivals and Space Powers lists are datamodels of the script lists
+# sr_rivals_list_<m> and sr_powers_list (space_race_effects.txt), so their
+# "+N more" scripted GUIs went with audit SPC-9 (2026-10-27).
 # ============================================================================
 
 sr_milestone_suborbital_sgui = {
@@ -494,73 +498,6 @@ sr_milestone_solar_colonization_sgui = {
 		}
 		else = {
 			sr_effect_standard = { MILESTONE = solar_colonization }
-		}
-	}
-}
-
-# ----------------------------------------------------------------------------
-# Who else is racing (the Rivals section). Display only — the widget calls
-# ExecuteTooltip, which renders the effect body without running it, and
-# is_valid is always = no so no control can ever fire it.
-#
-#   scope:op   0 suborbital · 1 orbital · 2 moon_landing · 3 probe
-#              4 moon_base  · 5 mars_landing · 6 interstellar_probe
-#              7 solar_colonization
-#
-# `.gui` has no verified way to list countries (docs/guides/gui_modding_guide.md
-# gotchas #11 and #15), so the list is built here and handed over as text. Each
-# entry prints inside a country scope change, which is what gives it a flag and
-# a bullet for free (gotcha #19). Note gotcha #18: every line printed at ROOT
-# scope — the intro — renders ABOVE the country entries whatever order the
-# script is in.
-#
-# Whether "the first" is still open is the overview's (sr_disp_first_claimed_<m>
-# in common/script_values/space_race_display_values.txt), so this prints the
-# participants only, for every milestone.
-# ----------------------------------------------------------------------------
-sr_rivals_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	ai_is_valid = {
-		always = no
-	}
-
-	is_valid = {
-		always = no
-	}
-
-	effect = {
-		if = {
-			limit = { scope:op = 0 }
-			sr_rivals_participants_base = { MILESTONE = suborbital }
-		}
-		else_if = {
-			limit = { scope:op = 1 }
-			sr_rivals_participants_base = { MILESTONE = orbital }
-		}
-		else_if = {
-			limit = { scope:op = 2 }
-			sr_rivals_participants_base = { MILESTONE = moon_landing }
-		}
-		else_if = {
-			limit = { scope:op = 3 }
-			sr_rivals_participants_base = { MILESTONE = probe }
-		}
-		else_if = {
-			limit = { scope:op = 4 }
-			sr_rivals_participants_base = { MILESTONE = moon_base }
-		}
-		else_if = {
-			limit = { scope:op = 5 }
-			sr_rivals_participants_base = { MILESTONE = mars_landing }
-		}
-		else_if = {
-			limit = { scope:op = 6 }
-			sr_rivals_participants_base = { MILESTONE = interstellar_probe }
-		}
-		else = {
-			sr_rivals_participants_base = { MILESTONE = solar_colonization }
 		}
 	}
 }

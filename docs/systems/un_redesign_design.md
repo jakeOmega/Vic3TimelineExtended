@@ -1073,16 +1073,17 @@ good standing; a negative one counts for anyone (§0.10 ruling 2). All are pinne
 | Peace Palace | +0.5 | `pm_wonder_peace_palace` |
 | Palais des Nations | +0.5 | `pm_wonder_palais_des_nations` |
 | A party to the Antarctic Treaty (the Global Commons, 2026-10-16) | +0.25 | `un_antarctic_policy_modifier`, applied at ×1 from party status (`te_antarctic_policy_refresh`), never with the convention's enforcement multiplier |
+| International Oversight (Frontier AI Control, era 13 phase 3, 2026-10-31) | +0.5 | `law_international_ai_oversight`, `te_frontier_ai_laws.txt`; only a member can enact or keep it |
 
 **Rulings.**
 
 1. **Sizing.** The weights sum to about 10, so a value every country held would move Policy by
-   about 10× that value. One country's whole positive stack is +5.35 at weight 1 (Limited War,
-   the aid ministry at 9, No First Use, the HQ and both palaces); a committed member great
-   power without the buildings holds about +2.5 to +3.4. The whole negative stack is −6
-   (Total War, Isolationism, Warfighting, a full burden). The test holds the two stacks to
-   +5.5 and −6.5. A rogue superpower at ×5 can therefore take the pillar to its floor alone;
-   that is intended.
+   about 10× that value. One country's whole positive stack is +5.85 at weight 1 (Limited War,
+   International Oversight, the aid ministry at 9, No First Use, the HQ and both palaces); a
+   committed member great power without the buildings holds about +2.5 to +3.9. The whole
+   negative stack is −6 (Total War, Isolationism, Warfighting, a full burden). The test holds
+   the two stacks to +6 and −6.5 (+5.5 until International Oversight). A rogue superpower at
+   ×5 can therefore take the pillar to its floor alone; that is intended.
 2. **Nothing rides on the UN's own enforcement.** No grant sits on a modifier applied with
    `multiplier = un_enforcement` or `un_convention_multiplier`, whose tier-driven multiplier
    would feed authority back into its own target (tested).
@@ -1584,7 +1585,7 @@ economy changes. The rule is about who speaks for it abroad.
      `un_chamber_ballot_open`, the chamber's vote control);
    - **is not counted in the two-thirds** (`un_vote_eligible_member_count`);
    - **tables nothing** (the seven topic `un_propose_*_possible` triggers and
-     `un_propose_own_motion_possible`, which the sixteen conventions share);
+     `un_propose_own_motion_possible`, which the seventeen conventions share);
    - **is offered nothing by the docket** (`un_docket_can_be_offered`; the peacekeeping and aid
      asks, `un_docket_peacekeeping_power` and `un_docket_aid_power`; the lending facility,
      `un_docket_loan_candidate`);
@@ -2582,9 +2583,11 @@ docket prompts reaching human players, and the aggrieved party going first.
 8. **Proposal pace (great powers and standing).** `common/script_values/un_propose_pace_values.txt`
    holds one multiplier, `un_propose_pace_mult`, read three ways:
    - the sponsor mark (`un_ga_resolution_modifier`, 5 years) and `un_request_cooldown` (10 years)
-     run `un_propose_sponsor_days` / `un_propose_cooldown_days` at every site that adds them
-     (`un_propose_effects.txt`, `un_events.2`). The sponsor mark also bars a second proposal, so
-     the two are scaled together;
+     run the base times the multiplier at every site that adds them (`un_propose_effects.txt`,
+     `un_events.2`), through `un_propose_add_sponsor_mark` / `un_propose_add_request_cooldown`:
+     a ladder of literal durations, since `add_modifier` read the computed script values they
+     first passed as 0 days (2026-10-23). The sponsor mark also bars a second proposal, so the
+     two are scaled together;
    - `un_docket_offer_order` ranks the members a convention is offered to (power share ÷ the
      multiplier), so a great power in good standing is offered first;
    - `un_docket_agenda_months_value` halves the Assembly-business cadence (24 to 12 months) while
@@ -3256,7 +3259,7 @@ extreme within decades. The swing between the last two examples is about 70 poin
 - **Pillar breakdown:** one bar per pillar with its value, and for the two power-weighted
   pillars the three largest contributors by name.
 - **History chart:** authority and target, using `te_history_record_global_sample` and the
-  existing `te_history_chart` widget. The chart's recipe in `mod_systems.md` § "History
+  existing `te_history_chart` widget. The chart's recipe in `mod_systems/history_charts.md` § "History
   Store and Charts" already anticipates a UN series.
 - **World-moment markers** on that chart (`te_history_record_global_marker`).
 
@@ -3529,7 +3532,7 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 - **The victim goes first:** for a situation's own docket item, the aggrieved party gets
   first refusal for 30 days.
 - **Conventions on our own motion (shipped after phase 6):** a human member may also table
-  any of the sixteen conventions from the chamber (ops 7–19, 29, 31 and 32; the physical protection of
+  any of the seventeen conventions from the chamber (ops 7–19, 29 and 31–33; the physical protection of
   nuclear material joined on 2026-09-26), under the docket's own gates plus
   the costs every own-motion proposal takes. The AI still reaches them only through the
   docket, so its pacing is unchanged. See `journal_entry_systems.md` § Chamber Widget.

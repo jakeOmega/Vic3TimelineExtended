@@ -133,6 +133,15 @@ nd_crisis_ultimatum_issued = {
 	color = neutral
 }
 
+# A deployment concession switched our missile defense off again
+# (nd_deploy_bar_enforce).
+nd_deploy_bar_enforced = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	color = neutral
+}
+
 nd_crisis_warning_reported = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
@@ -283,6 +292,77 @@ gp_support_declined_notice = {
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
 	notification_type = feed
 	color = neutral
+}
+
+# Wars of independence (decolonization_war_effects.txt, events .70-.80)
+decol_iw_war_begins_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_war_begins_rebels_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_war_ends_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_war_won_rebels_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_iw_war_unstarted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_talks_opened_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_iw_accords_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
+
+decol_iw_rebels_armed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_intervention_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+decol_iw_allied_arms_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
 }
 
 # International Relations bilateral notifications
@@ -2042,6 +2122,65 @@ iw_election_interference_confidence = {
 covert_severe_exposure_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+# Covert warfare, the defender's side (owner, 2026-11-04). An exposure the
+# defender ordered, with the follow-up it chose at the catch, posted by
+# covert_exposure_response_apply in place of covert_warfare.2: one message
+# per follow-up. And a catch the standing order watched without asking
+# (Always watch, covert_ops_roll_detection_all). All four sit in one group,
+# so Message Settings can mute them.
+covert_exposure_shored_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_exposure_expelled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_exposure_turned_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = good
+}
+
+covert_catch_watched_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
+	notification_type = feed
+	group = "te_covert_notification_group"
+	color = neutral
+}
+
+# ---- Space Race: the Earth alert (UI pass design § 9, sr_earth_alert_step) ----
+# A fleet of a power at war with us has set out for Earth, or a war began while
+# it was on the way; once a leg. One that would change something on landing
+# gets space_race_events.111 instead.
+sr_earth_hostile_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/military.dds"
+	notification_type = feed
+	color = bad
+}
+
+# A nation runs one Space Command (sr_sc_one_per_nation): one came with land
+# we took or formed, and the smaller was dismantled. One a building, naming its
+# state (scope:sr_sc_dismantled) and the one kept (scope:sr_sc_keeper).
+sr_space_command_dismantled_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/buildings.dds"
 	notification_type = feed
 	color = bad
 }

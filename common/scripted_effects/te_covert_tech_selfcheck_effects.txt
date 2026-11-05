@@ -1,0 +1,26 @@
+﻿# TEMPORARY (#1251, 2026-10-30): the tallies behind TE_SELF_CHECK
+# covert_can_research_current and covert_can_research_stranded
+# (common/on_actions/te_covert_tech_selfcheck_on_actions.txt, which says what
+# they test and when to delete them). Called from the generated
+# covert_tech_selfcheck_research_tally with the technology the country is
+# researching.
+# Scope: country.
+
+# $TECH$ is our current research and we hold its prerequisites.
+covert_tech_selfcheck_held = {
+	change_global_variable = { name = te_cov_cr_held add = 1 }
+	if = {
+		limit = { can_research = $TECH$ }
+		change_global_variable = { name = te_cov_cr_held_can add = 1 }
+	}
+}
+
+# $TECH$ is our current research and one of its prerequisites is missing: a
+# save made before that prerequisite was added (#1244).
+covert_tech_selfcheck_stranded = {
+	change_global_variable = { name = te_cov_cr_stranded add = 1 }
+	if = {
+		limit = { can_research = $TECH$ }
+		change_global_variable = { name = te_cov_cr_stranded_can add = 1 }
+	}
+}

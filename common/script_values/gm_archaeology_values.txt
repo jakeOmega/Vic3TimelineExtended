@@ -19,8 +19,8 @@ gm_arch_find_chance = {
 # The seeding's round: a game seeded in an earlier round runs the seeding again,
 # which adds only the sites added since (gm_arch_monthly). 2: Pompeii. 3: each
 # site still buried learns the year it was built (gm_tr_built, owner
-# 2026-10-19).
-gm_arch_seed_rounds = { value = 3 }
+# 2026-10-19). 4: the To History sites (tourism heritage spec 2026-10-23 § 9).
+gm_arch_seed_rounds = { value = 4 }
 
 # Container scope, a site: the year it was built (negative before Christ), or
 # this year for a site seeded before round 3 that has not learned it, which

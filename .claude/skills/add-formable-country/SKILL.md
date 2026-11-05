@@ -28,18 +28,21 @@ If any decision is genuinely flexible, present 2–3 options to the user; don't 
 
 ## File layout
 
-All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing convention is `te_*.txt` (sorts after vanilla `00_*.txt` so mod entries override on tag-key collision).
+All paths are repo-relative (`mod_path` in `path_constants`). The mod's existing convention is `te_*.txt`. These sort after vanilla's `00_*.txt`, and the first bare definition of a key wins, so a bare entry here for a tag vanilla already defines is **dropped** (`Duplicated key` in debug.log; `docs/guides/scripting_best_practices.md` § Load Order (probed 2026-10-26)). Extend a vanilla tag with `INJECT:` and override it with `REPLACE:`, as the file does for BHT and IDN.
 
 | File | Required for | What goes in |
 |---|---|---|
 | `common/country_definitions/te_formable_countries.txt` | new tags only | tag, color, country_type=recognized, tier, cultures, capital. **Skip for BHT/IDN/etc. that already exist in vanilla** — vanilla's definition stays. |
-| `common/country_formation/te_formable_countries.txt` | every formable | formation rule per tag. To convert a vanilla minor formable to major: re-declare the tag here with `is_major_formation = yes` etc. — last-wins overrides vanilla. |
+| `common/country_formation/te_formable_countries.txt` | every formable | formation rule per tag. To convert a vanilla minor formable to major: `REPLACE:<TAG>` here, restating vanilla's whole body plus `is_major_formation = yes` etc. A bare re-declaration would be dropped against vanilla's earlier-sorting copy. |
 | `common/dynamic_country_names/te_formable_countries.txt` | if you want gov-flavored names | one block per tag, multiple `dynamic_country_name = { … }` entries inside. |
 | `common/diplomatic_plays/te_unification_plays.txt` | major formations only | one `dp_unify_X` + one `dp_leadership_X` per major. Reuse vanilla `gfx/interface/icons/war_goals/unification.dds`. |
 | `common/geographic_regions/te_formable_regions.txt` | only if no vanilla region fits | new `geographic_region_*` definitions. |
 | `localization/english/te_formable_countries_l_english.yml` | every formable | tag display name + adjective + every `dyn_c_*` and `dp_*` key referenced. |
+| `common/coat_of_arms/coat_of_arms/te_formable_countries.txt` | new tags only | the flag: a coat of arms named after the tag, built from vanilla patterns and colored emblems (`texture_reference_audit` checks the names). With no coat of arms and no `common/flag_definitions/` entry, the engine draws a **random** flag, silently. To reuse a vanilla country's flags with their government variants, restate its `flag_definitions` block under the new tag instead (ZHO restates CHI in `common/flag_definitions/te_formable_countries.txt`). |
 
-This file is rebuilt by `python organize_loc.py` (which auto-runs on every `POST /reload`). Make sure `organize_loc.py`'s `categorize_key` routes your new tag's loc keys to `FORMABLE_COUNTRIES` — the mod already routes `dyn_c_*`, `dp_unify_*`, `dp_leadership_*`, and the registered tag/adjective set `{AFU, INM, EAF, EUN, UNA, UNE, ZHO, BHA, NUS, DAR, *_ADJ}` (see `organize_loc.py`'s `categorize_key`). Add new tags to that set when you introduce them, otherwise their `TAG:` and `TAG_ADJ:` keys land in MISCELLANEOUS or CONCEPTS.
+This file is rebuilt by `python organize_loc.py` (which auto-runs on every `POST /reload`). Make sure `organize_loc.py`'s `categorize_key` routes your new tag's loc keys to `FORMABLE_COUNTRIES` — the mod already routes `dyn_c_*`, `dp_unify_*`, `dp_leadership_*`, and the registered tag/adjective set `{AFU, INM, EAF, EUN, UNA, UNE, ZHO, BHA, NUS, DAR, *_ADJ}` (see `organize_loc.py`'s `categorize_key`). Add new tags to that set when you introduce them, otherwise their `TAG:` and `TAG_ADJ:` keys land in MISCELLANEOUS or CONCEPTS. (Both keys count as used for every tag in `common/country_definitions/`, through `find_country_keys`, so an adjective no dynamic name repeats no longer drifts to `te_unused_l_english.yml`.)
+
+**A releasable country instead of a formable** (one its owner releases, or a Liberate Country war goal frees) is a `common/country_creation/` entry, not a formation rule: `states = { … }`, `use_culture_states = yes`, or `provinces = { x… }` to take only part of a state, as vanilla's Hamburg and the mod's city-states in `te_city_states.txt` do. The country definition, flag and loc rows above apply to it too (the loc is `TAG` and `TAG_ADJ`, both); the city-states' loc files in `te_city_states_l_english.yml` through `organize_loc.py`'s `CITY_STATE_TAGS`.
 
 ## Country formation DSL (essentials)
 
@@ -107,7 +110,7 @@ Available government triggers (canonical, no-registration scripted triggers in v
 
 **2nd-axis flavor** (priority 5+): combine the gov trigger with `was_formed_from = TAG` (which country formed this; e.g. INM-from-Hungary → Crown of Saint Stephen) or `ruler ?= { has_culture = cu:X }` (AU-with-Amhara-ruler → Solomonic African Empire). Higher priority wins on match.
 
-If no entry matches, the engine falls back to the tag's own loc key (e.g. `AFU:0 "African Union"`), so always ship a `TAG:` and `TAG_ADJ:` loc.
+If no entry matches, the engine falls back to the tag's own loc key (e.g. `AFU:0 "African Union"`), so always ship a `TAG:` and `TAG_ADJ:` loc. The engine logs nothing for a missing one: the 22 city-states (#1266) shipped names and no adjectives, so war and treaty names printed a blank. `test_country_definition_loc.py` now fails on any tag in `common/country_definitions/` without both.
 
 Reference: `references/dynamic_name_patterns.md` has the full vanilla USA block plus a worked Intermarium example.
 

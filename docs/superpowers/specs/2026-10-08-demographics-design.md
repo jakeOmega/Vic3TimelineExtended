@@ -11,7 +11,7 @@
 > cohort storage, urban population, land tenure and France's start); each is fixed in place.
 > Phase 0 (the model, its harness and these corrections) is built in PR 1 (#828); phase 1 (the census, both panels,
 > per-state Wealth Concentration and the rule) is built in PR 2 (branch `demographics-phase1`). It applies nothing to
-> population yet: what waits for phases 2 and 3 is listed in `docs/systems/mod_systems.md` § Demographics.
+> population yet: what waits for phases 2 and 3 is listed in `docs/systems/mod_systems/demographics.md` § Demographics.
 > The late game (biological age, the pension age, fertility under life extension, who gets life extension, its costs
 > and display) is scoped in `2026-10-11-demographics-late-game-design.md` (approved 2026-10-11), which amends §1, design
 > rule 3, §7, §8.2, §8.3, §10 and §13.
@@ -82,7 +82,7 @@ So age and sex must be **modelled**. The model takes engine readouts as inputs a
 - **Deaths the mod causes.** Nuclear strikes store `nuclear_strike_killed_population` on the state. Violent Hostility
   kills 2–10% of a culture a year. The anti-war movement reads `num_country_casualties`.
 - **Mortality the mod already touches.** The Ministry of Consumer Protection (`institution_ministry_of_consumer_protection`,
-  −1% mortality), the pharmaceutical companies and the drugs system (`mod_systems.md` § Drugs).
+  −1% mortality), the pharmaceutical companies and the drugs system (`mod_systems/production_methods.md` § Drugs).
 - **Panels.**
   - The vanilla **Population** panel (`gui/pops_overview.gui`, `PopsOverviewPanel`; title `POPS_OVERVIEW_TITLE`) has
     four tabs: Overview, Charts, Detailed List and National Cast. It shows strata over time, SoL over time, spending and
@@ -134,7 +134,10 @@ state 17 five-year bands, updated monthly. The owner doesn't use it. §11.5 cove
    - Ones that stand for women's or children's work stay.
 4. **Slow clocks with visible momentum.** Each number moves over a generation, and the panel shows where it is heading.
    The fun is in seeing a window open twenty years ahead (§9, §10).
-5. **Effects are deviations from a stated reference, and capped.** The reference structure is the 1836 equilibrium.
+5. **Effects are deviations from a stated reference, and capped.** (Revised 2026-10-22 for the effect sizes: a strong
+   condition is worth about one vanilla law on its main effect, and the reference point is a size, not a ceiling; see
+   `2026-10-22-demographic-effects-impact-design.md`. The census's own model terms keep this rule.) The reference
+   structure is the 1836 equilibrium.
    Every state starts at the equilibrium of its own 1836 inputs, so nothing jumps on day one. A save from before the
    system starts each state at its equilibrium (the #822 pattern).
 6. **Every number has a real meaning and an anchor value.** The sources are UN World Population Prospects (WPP) for
@@ -251,6 +254,10 @@ how old their body is, not the year they were born.
   pyramid's top.
 - **So the ring runs to about 150 from 1836** (owner, provisional). The extra slots sit empty, and are skipped, until
   someone lives that long. The benchmark (§14 Q9) found them cheap: an empty slot costs one variable check.
+- **Since issue #1075 (2026-10-27) it runs to 299**, the pool from 300: in the owner's 2057 game 98 million people sat
+  in the 150-and-over pool with no ages. A census taken on the 150-year ring is re-filed at its next step, and the
+  pyramid splits 85 and over into rows where people live past 100 (`docs/systems/mod_systems/demographics.md`, § The ring's 300
+  years and the pyramid past 85).
 
 ## 2. The age model
 
@@ -324,7 +331,7 @@ means" view of the fertility transition.
   - **Access** multiplies the means: 0.3 + 0.7 × literacy.
   - **Laws and measures** shift it (§8.1) through `state_fertility_means_add`, after literacy. The cap is 0.95.
     *(2026-10-20, owner: the cap is 1, the natural bound of a share; 0.95 had no reason written and held 221
-    states of the 2057 EU save. `docs/systems/mod_systems.md` § The safeguards pass.)*
+    states of the 2057 EU save. `docs/systems/mod_systems/demographics.md` § The safeguards pass.)*
 - **The fertility factor** = 1 − means × (1 − desired). Children per woman = wealth × natural × the fertility factor.
 
 **Age structure.** Births come from the cohorts of women aged 15–49 (§2.1), so the share of women of childbearing age
@@ -409,7 +416,7 @@ engine did, so the ring places the deaths added on top by the model's own age pa
 2026-10-10: one scale on every cause; a per-term split, devastation on everyone and pollution on chronic causes, waits
 until the panel shows an artefact). *(2026-10-22, owner: it showed, an Added on Top slice that named no cause. The
 deaths on top now count under their causes, each engine line tagged with its cause and devastation's beside the war
-dead, and each cause's multiplier takes its own share: `docs/systems/mod_systems.md` § Causes of Death, "Deaths on top
+dead, and each cause's multiplier takes its own share: `docs/systems/mod_systems/demographics.md` § Causes of Death, "Deaths on top
 by cause".)* The share of old people therefore
 drives the death rate, as the owner asked. An aged state with excellent health still has a high crude death rate:
 Japan's is 13 per 1,000 because a third of its people are over 60, not because its health is poor.
@@ -464,6 +471,11 @@ profile mixes three kinds of migrant:
 | **Labour migrants** | 18–35 | set by the jobs at the destination (below) | the destination's job openings; the cost of the move being high |
 | **Families** | parents with children; few over 60 | about half | cheaper transport (`paddle_steamer`, `railways`, `combustion_engine` and the mod's aviation techs); women's rights at the origin, since women can move on their own account; the time a migration has been running (chain migration: the men send for their families) |
 | **Refugees** | everyone | about half | war, devastation, turmoil and Violent Hostility at the origin |
+
+*Changed 2026-10-25 (owner):* women's rights no longer raise the families' weight (women who can move on their own
+account move as labour migrants, not as families), and the labour migrants' women's share reads the census's own count
+of women among the destination's workers in place of the women's-rights laws' share (`docs/systems/mod_systems/demographics.md`
+§ The census, Flows).
 
 **Labour migrants' women's share follows the destination's jobs.**
 - Mines, logging, plantations, construction, railways and the army draw men.
@@ -630,7 +642,8 @@ state. The stock is the #822 score.
   - relative deprivation: lower-strata radicals rise with the Gini above about 0.45 (a threshold on the first build's
     scale: set it afresh on the wealth-band figure when this is built). **Built 2026-10-19, under Full only** (owner):
     radicals rise with the state's shown Gini above 0.45, by 10% at 0.65 and on at that slope with no cap (owner,
-    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row);
+    2026-10-20; the first build stopped at 10%), +27.5% at a Gini of 1 (§7's Inequality row); since 2026-10-22 twice
+    as steep above 0.70, with socialist and labor support (+42.5% at 1; `2026-10-22-demographic-effects-impact-design.md`);
   - an input to crime for the policing laws. **Dropped** (owner, 2026-10-19): the engine has no crime quantity.
 
 ### 4.2 Wealth Concentration (per state, the #822 score)
@@ -800,7 +813,7 @@ migration needs the score and the agrarian share, so it is its own modifier.
 below, each effect at most 10% at the Metropolis label; the share computed and shown under Display only and Full, the
 effects under Full only; the Overspill (§9) on the real share. The crowding effect is a negative `state_migration_crowding_density_mult`,
 since the type is a state's capacity (owner, 2026-10-20: the metropolis crowds sooner). The weights, the sizes within
-the cap and the panel's place are recorded in `docs/systems/mod_systems.md` § Demographics, "The metropolitan share", with the anchors
+the cap and the panel's place are recorded in `docs/systems/mod_systems/demographics.md` § Demographics, "The metropolitan share", with the anchors
 in `scripts/analysis/demographics_metro.py`.
 
 A Victoria state has one city hub and no cities below it, so this is a modelled stock. **Metropolitan share**, 0–100,
@@ -859,6 +872,9 @@ Market Towns (< 20).
 | Capital, ports, area, industry, infrastructure, crowding, urban planning | settlement pattern | §5.2 |
 
 ## 7. What it feeds
+
+> **Sizes revised 2026-10-22** (`2026-10-22-demographic-effects-impact-design.md`): the effects below are now worth
+> about one vanilla law at their reference, and keep rising past it; that spec's tables are the current sizes.
 
 All effects are refreshed once a year by the dynamic-modifier pattern, each from one site. State effects run from the
 state pulse and country effects from the country pulse. Sizes are starting proposals.
@@ -1241,7 +1257,7 @@ to be sane.
   +0.6 outside it. Two choices the proposal left open: the share rises only (toward its target and toward its
   neighbours'), since a practice once learned isn't unlearned and France's would otherwise leak to its neighbours'
   zero; and its line erodes with modern contraception, which takes its place in the means. Forced Heirship's rural cut
-  rides the moved lines' absorbed family, as Primogeniture's does. `docs/systems/mod_systems.md` § Demographics, "Phase
+  rides the moved lines' absorbed family, as Primogeniture's does. `docs/systems/mod_systems/demographics.md` § Demographics, "Phase
   3"; fit: `docs/testing/demographics-family-limitation-2026-10-12.md`.
 - **What the panel's children per woman shows once phase 2 applies the births (owner's question, 2026-10-10).** The
   census's figure starts from the standard-of-living curve and reads no engine birth modifier: Forced Heirship,

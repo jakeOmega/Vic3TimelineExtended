@@ -8,8 +8,10 @@
 # collects what that law would (te_tax_code_counts_as_per_capita,
 # _proportional, _graduated in common/scripted_triggers/te_tax_triggers.txt):
 # the taxation OR in `complete` becomes a trigger_if on te_tax_code_full whose
-# OR adds the matching counts-as lines, and a trigger_else holding vanilla's
-# OR unchanged, so with the rule off the entry and its tooltip are vanilla's.
+# OR holds only the matching counts-as lines (the rule puts every country on
+# the code, so vanilla's taxation laws there were goal lines no one could
+# meet; GUI audit JE-9), and a trigger_else holding vanilla's OR unchanged, so
+# with the rule off the entry and its tooltip are vanilla's.
 # REPLACE: of one entry, the mod's narrowest precedent for a vanilla journal
 # entry (te_vanilla_turtle_island.txt).
 #
@@ -37,9 +39,6 @@ REPLACE:je_great_reforms_bureaucratic = {
 		trigger_if = {
 			limit = { te_tax_code_full = yes }
 			OR = {
-				has_law_or_variant = law_type:law_per_capita_based_taxation
-				has_law_or_variant = law_type:law_proportional_taxation
-				has_law_or_variant = law_type:law_graduated_taxation
 				custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
 				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
 				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
@@ -138,8 +137,6 @@ REPLACE:je_imperialism_of_promise = {
 		trigger_if = {
 			limit = { te_tax_code_full = yes }
 			OR = {
-				has_law_or_variant = law_type:law_proportional_taxation
-				has_law_or_variant = law_type:law_graduated_taxation
 				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
 				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
 			}
@@ -341,9 +338,6 @@ REPLACE:je_portugal_regeneration = {
 		trigger_if = {
 			limit = { te_tax_code_full = yes }
 			OR = {
-				has_law = law_type:law_per_capita_based_taxation
-				has_law = law_type:law_proportional_taxation
-				has_law = law_type:law_graduated_taxation
 				custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
 				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
 				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }

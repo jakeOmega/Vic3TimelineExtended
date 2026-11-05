@@ -1,0 +1,21 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE — DEBUG CENSUS (te_debug_colonial_empire.4)
+#
+# One TE_CE_CENSUS line for a country, then one for each of its non-homeland
+# states of colonial_territory_min_population people or more, with each part
+# of the colony test as 1 or 0 (colonial_territory_disp_*). Console only.
+# Scope: country.
+# ============================================================================
+
+te_debug_ce_census_country = {
+	save_scope_as = ce_census_country
+	debug_log = "TE_CE_CENSUS country=[SCOPE.sCountry('ce_census_country').GetNameNoFormatting] colonies=[SCOPE.sCountry('ce_census_country').MakeScope.ScriptValue('colonial_state_count')|0] eligible=[SCOPE.sCountry('ce_census_country').MakeScope.ScriptValue('colonial_eligible_state_count')|0] colonial_subjects=[SCOPE.sCountry('ce_census_country').MakeScope.ScriptValue('colonial_subject_count')|0] cached=[SCOPE.sCountry('ce_census_country').MakeScope.ScriptValue('ce_debug_separation_cached')|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+	every_scope_state = {
+		limit = {
+			state_population >= colonial_territory_min_population
+			NOT = { is_homeland_of_country_cultures = owner }
+		}
+		save_scope_as = ce_census_state
+		debug_log = "TE_CE_CENSUS   state=[SCOPE.sState('ce_census_state').GetName] people=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_population')|0] separated=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_separated')|0] distinct=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_distinct')|0] settled=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_settled')|0] unincorporated=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_unincorporated')|0] indigenous=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_indigenous')|0] disparity=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_disparity')|0] eligible=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_eligible')|0] colony=[SCOPE.sState('ce_census_state').MakeScope.ScriptValue('colonial_territory_disp_colony')|0]"
+	}
+}

@@ -25,7 +25,7 @@ te_orbital_debris.1 = {
 	duration = 3
 
 	trigger = {
-		has_game_rule = space_race_enabled
+		sr_space_race_on = yes
 		te_debris_index >= te_debris_tier_hazardous
 		any_scope_building = {
 			is_building_type = building_space_elevator

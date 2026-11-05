@@ -47,6 +47,18 @@
   "en": "A highly effective campaign to encourage migration to a region.",
   "de": "Eine hochwirksame Kampagne zur Förderung der Migration in eine Region."
  },
+ "decree_medical_outreach": {
+  "en": "Medical Outreach",
+  "de": "Medizinische Aufbauhilfe"
+ },
+ "decree_medical_outreach_behind_tt": {
+  "en": "This state's medicine is still behind what our technology and laws allow, and the next yearly count won't close the gap on its own",
+  "de": "Die Medizin dieses Staates liegt noch hinter dem zurück, was unsere Technologie und Gesetze erlauben, und die nächste Jahreszählung schließt die Lücke nicht von selbst"
+ },
+ "decree_medical_outreach_desc": {
+  "en": "Doctors and nurses go out to train this state's practitioners and staff its clinics, so the newest treatments and the reach of our health system arrive here years sooner.",
+  "de": "Ärzte und Pflegekräfte gehen hinaus, um die Mediziner dieses Staates auszubilden und seine Kliniken zu besetzen, sodass die neuesten Behandlungen und die Reichweite unseres Gesundheitssystems Jahre früher hier ankommen."
+ },
  "decree_migration_invalid_tooltip": {
   "en": "In a [concept_power_bloc] allowing forced migration.",
   "de": "In einem [concept_power_bloc], der Zwangsmigration erlaubt."

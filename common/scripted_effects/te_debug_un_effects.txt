@@ -111,7 +111,7 @@ te_debug_un_set_standing = {
 
 # Open a resolution on $TOPIC$ with $PROPOSER$ as its sponsor, so the player can
 # vote on it from the chamber card on day one instead of waiting for a proposer
-# event to fire and then thirty days for the un_vote.1 popup. $PROPOSER$ must be
+# event to fire and then nine months for the un_vote.1 popup. $PROPOSER$ must be
 # a UN member other than the player (run te_debug_un_setup first); the player is
 # then an ordinary voter with Vote in Favour / Vote Against live immediately,
 # and Veto too if the player holds a permanent seat and $TOPIC$ is binding.
@@ -427,7 +427,7 @@ te_debug_un_cycle_subject_member = {
 # ---- §0.9: a revolution's winner ----
 
 # Do to our journal entry what a won revolution does to the winner's: every UN
-# modifier on it goes, and the eight country-scoped conventions with them, while
+# modifier on it goes, and the nine country-scoped conventions with them, while
 # the variables stay (scripting_best_practices.md § "What a Civil War's Winner
 # Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
 # record a winner inherits. The mirrors are brought up to date first, in case
@@ -502,6 +502,10 @@ te_debug_un_wipe_entry = {
 	if = {
 		limit = { has_modifier = un_asat_moratorium_modifier }
 		remove_modifier = un_asat_moratorium_modifier
+	}
+	if = {
+		limit = { has_modifier = un_colony_protection_modifier }
+		remove_modifier = un_colony_protection_modifier
 	}
 	if = {
 		limit = { NOT = { has_variable = un_state_rebuild_pending } }

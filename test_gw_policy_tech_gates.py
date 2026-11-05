@@ -36,12 +36,14 @@ GATES = {
     "green_building_codes": "clean_energy_technologies",
     "carbon_removal": "carbon_capture_and_storage",
     "fossil_fuel_tariffs": None,
+    # Geoengineering is the will to use it, not a building (era 13 spec § 7.5).
+    "aerosol_injection": "geoengineering",
 }
 
 # What each technology is there for: (file, entity, technology it names).
 REASONS = (
-    ("common/buildings/extra_buildings.txt", "REPLACE_OR_CREATE:building_renewable_energy_plant", "clean_energy_technologies"),
-    ("common/buildings/extra_buildings.txt", "REPLACE_OR_CREATE:building_synthetics_plant_coal", "carbon_capture_and_storage"),
+    ("common/buildings/06_zz_te_clean_power.txt", "building_renewable_energy_plant", "clean_energy_technologies"),
+    ("common/buildings/01_zz_te_industry.txt", "building_synthetics_plant_coal", "carbon_capture_and_storage"),
     ("common/production_methods/extra_pms.txt", "pm_multimodal_transit", "modern_urban_planning"),
 )
 
@@ -52,9 +54,9 @@ def _techs(body):
 
 
 def _possible_modifier(body):
-    """The policy modifier whose absence the adoption test's first line checks."""
-    tooltips = body["custom_tooltip"]
-    first = tooltips[0] if isinstance(tooltips, list) else tooltips
+    """The policy modifier whose absence the adoption test's first line checks
+    (a hidden_trigger since GW-16: the widget only offers Adopt out of force)."""
+    first = body["hidden_trigger"]
     # Tariffs test their own trigger (they follow the market leader), not a modifier.
     return first.get("NOT", {}).get("je:je_global_warming", {}).get("has_modifier")
 

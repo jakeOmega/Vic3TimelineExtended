@@ -344,20 +344,26 @@ cultural_pull_from_sol = {
 	min = cultural_pull_sol_min
 	max = cultural_pull_sol_max
 	# Scale by country rank
+	multiply = ch_sol_rank_factor
+}
+
+# What cultural_pull_from_sol counts of the standard-of-living gap for a
+# country's rank: great power 1, major power 0.5, minor power 0.25, any other
+# rank 0. Its own value so the breakdown row's hover can say it (CH-1).
+# Scope: country
+ch_sol_rank_factor = {
+	value = 0
 	if = {
 		limit = { country_rank >= rank_value:great_power }
-		# Full value - no change
+		value = 1
 	}
 	else_if = {
 		limit = { country_rank = rank_value:major_power }
-		multiply = 0.5
+		value = 0.5
 	}
 	else_if = {
 		limit = { country_rank = rank_value:minor_power }
-		multiply = 0.25
-	}
-	else = {
-		multiply = 0
+		value = 0.25
 	}
 }
 
@@ -636,6 +642,81 @@ ch_benchmark_legitimacy_display = {
 	multiply = cultural_hegemony_foreign_benchmark_legitimacy
 }
 
+# ---- Hegemony Bonus: the overview cell and its hover --------------------------
+# What the cultural_hegemony_effect modifier gives at the strength the last
+# monthly pulse applied. The modifier sits on the journal entry, so only the
+# entry's own modifier strip showed it; these let every host of the panels
+# (the Society tab, the Timeline Extended window, another country's National
+# Info) print it through Country.
+#
+# The strength is the multiplier the pulse applied, and 0 while the entry
+# carries no modifier: the pulse removes it below 1% share but keeps
+# ch_effect_mult_cached, so the variable alone would show a stale strength.
+ch_bonus_strength_display = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = ch_effect_mult_cached
+			je:je_cultural_hegemony ?= { has_modifier = cultural_hegemony_effect }
+		}
+		add = var:ch_effect_mult_cached
+	}
+}
+
+# Each field of cultural_hegemony_effect at multiplier 1 (1% of world cultural
+# influence), named ch_bonus_unit_<field>. Keep each equal to its field in
+# common/static_modifiers/extra_modifiers.txt: a script value cannot read a
+# static modifier, and test_cultural_hegemony_layout.HegemonyBonusTest fails
+# when the two differ or a field has no unit, display value and hover line.
+ch_bonus_unit_country_mass_migration_attraction_mult = 0.0025
+ch_bonus_unit_goods_output_tourism_mult = 0.01
+ch_bonus_unit_goods_trade_advantage_fine_art_mult = 0.01
+ch_bonus_unit_country_loyalists_from_legitimacy_mult = 0.01
+ch_bonus_unit_country_leverage_generation_mult = 0.01
+ch_bonus_unit_country_diplomatic_reputation_add = 0.1
+ch_bonus_unit_country_infamy_decay_mult = 0.01
+ch_bonus_unit_state_assimilation_mult = 0.05
+
+ch_bonus_country_mass_migration_attraction_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_mass_migration_attraction_mult
+}
+
+ch_bonus_goods_output_tourism_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_goods_output_tourism_mult
+}
+
+ch_bonus_goods_trade_advantage_fine_art_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_goods_trade_advantage_fine_art_mult
+}
+
+ch_bonus_country_loyalists_from_legitimacy_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_loyalists_from_legitimacy_mult
+}
+
+ch_bonus_country_leverage_generation_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_leverage_generation_mult
+}
+
+ch_bonus_country_diplomatic_reputation_add_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_diplomatic_reputation_add
+}
+
+ch_bonus_country_infamy_decay_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_country_infamy_decay_mult
+}
+
+ch_bonus_state_assimilation_mult_display = {
+	value = ch_bonus_strength_display
+	multiply = ch_bonus_unit_state_assimilation_mult
+}
+
 # How much of the foreign benchmark still lands: 1 minus
 # country_ideology_resistance_mult, floored at 0.
 # Scope: country (the benchmark's add_modifier runs in the JE's monthly pulse,
@@ -840,6 +921,54 @@ ch_disp_tier_code = {
 	if = {
 		limit = { has_variable = ch_tier }
 		add = var:ch_tier
+	}
+}
+
+# The share each influence tier starts at, in percent (CH-5). ch_set_display_state
+# derives ch_tier from them, the tier tooltip names the next one and the tier
+# concept prints the ladder, so this is the one copy of 2 / 5 / 10 / 15 / 25.
+ch_tier_1_floor = 2
+ch_tier_2_floor = 5
+ch_tier_3_floor = 10
+ch_tier_4_floor = 15
+ch_tier_5_floor = 25
+
+# The share the next tier starts at, for the tier tooltip's "Next" line; the
+# top tier's own floor once there (the line then says so instead).
+ch_disp_next_tier_floor = {
+	value = ch_tier_5_floor
+	if = {
+		limit = { ch_disp_tier_code < 1 }
+		value = ch_tier_1_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 2 }
+		value = ch_tier_2_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 3 }
+		value = ch_tier_3_floor
+	}
+	else_if = {
+		limit = { ch_disp_tier_code < 4 }
+		value = ch_tier_4_floor
+	}
+}
+
+# 1 once the Top Cultural Powers board has a row (ch_board_rebuild), so the
+# board's datamodel never reads a store that does not exist yet; 0 before the
+# first recount after this update.
+ch_board_has_rows = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = ch_board_store
+			global_var:ch_board_store = {
+				has_variable_list = ch_board
+				any_in_list = { variable = ch_board count >= 1 }
+			}
+		}
+		value = 1
 	}
 }
 

@@ -1,7 +1,7 @@
 # The extended timeline
 
 The base game ends in 1936 after five eras of technology. This mod moves the end
-date to 2136 and adds seven more eras, numbered 6 to 12, with 171 new
+date to 2136 and adds eight more eras, numbered 6 to 13, with 191 new
 technologies. The base game has 179, so the technology tree roughly doubles. The
 new eras bring twelve new goods, dozens of new buildings and production methods,
 a flagship building for every company, 37 wonders and seven megaprojects. None
@@ -11,12 +11,15 @@ technologies start. The one exception is the International Space Station
 wonder, which needs a Moon landing from the space race. The repeatable [Grand
 Monument](#grand-monuments) has a game rule of its own.
 
-## Eras six to twelve
+## Eras six to thirteen
 
 The technology tree continues past the base game's fifth era. Eras 6 to 9 follow
-the twentieth century, and eras 10 to 12 run from the present into the future.
-The game shows eras only by number; the periods below are the ones the mod's
-technologies were chosen to fit, so treat them as a rough guide.
+the twentieth century, and eras 10 to 13 run from the present into the future.
+The game shows eras only by number. The years for eras 6 to 9 are the periods
+the mod's technologies were chosen to fit, so treat them as a rough guide. The
+later eras are told apart by how far off their technologies are. Era 11's are on
+today's roadmaps. Era 12's are known to be possible, with no near-term path to
+them. Era 13's need breakthroughs nobody yet knows how to plan for.
 
 ![Part of the production tree in eras 6 to 8, from Modern Materials and Television down to Cellular Networks and Personal Computers. The numeral under each icon is its era.](images/tech_tree_production_era_6_7_8.jpg)
 
@@ -26,22 +29,25 @@ technologies were chosen to fit, so treat them as a rough guide.
 | 7 | 1946–1967 | 65,000 | 29 | Transistors, nuclear power, jets, the Green Revolution, missiles and satellites |
 | 8 | 1968–1987 | 115,000 | 21 | Computer networks, robotics, containerization, pharmaceuticals, stealth |
 | 9 | 1988–2012 | 210,000 | 28 | The internet, renewable energy, biotechnology, globalization, drones and cyber defense |
-| 10 | the present to about 2030 | 450,000 | 17 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
-| 11 | about 2030–2060 | 800,000 | 20 | Advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
-| 12 | after 2060 | 2,000,000 | 18 | General AI, nanofabrication, megaprojects in orbit, antimatter, mind uploading, post-scarcity |
+| 10 | the present day | 450,000 | 20 | Machine learning, electric vehicles, reusable rockets, hypersonic and cyber weapons |
+| 11 | the near future | 800,000 | 26 | AI agents and robots, advanced materials, fusion power, deep-sea and asteroid mining, genetic engineering, augmentation |
+| 12 | the medium-term future | 1,500,000 | 16 | General AI, nanofabrication, compact fusion, orbital industry, space colonization, life extension |
+| 13 | the speculative future | 3,000,000 | 13 | Molecular assemblers, antimatter, the space elevator, immortality, mind uploading, post-scarcity |
 
 ### Research costs in the new eras
 
 Each technology costs its era's base research cost, before the usual modifiers.
 The base game's last era costs 17,500 per technology; era 6 is only a small step
-up at 20,000, but era 7 more than triples it, and an era 12 technology costs a
-hundred times as much as an era 6 one. The base game's surcharge for researching
+up at 20,000, but era 7 more than triples it, and an era 13 technology costs
+150 times as much as an era 6 one. The base game's surcharge for researching
 ahead of unresearched technologies in the same tree still applies, and it grows
 with the number of eras between them.
 
 Your innovation has to grow to match. Many of the new technologies raise the
-weekly innovation cap by 10 to 100 each, adding between 250 and 1,000 per era
-through era 11. Five [wonders](#wonders) raise it further, and new University
+weekly innovation cap by 10 to 300 each, adding between 250 and 1,000 per era
+through era 11, 500 in era 12 and 200 in era 13. Self-Driving Laboratories (era
+11) and Artificial General Intelligence (era 12) give the largest steps. Five
+[wonders](#wonders) raise it further, and new University
 production methods (National Labs, Academic Computing and AI Assisted Research)
 raise the innovation each university produces.
 
@@ -69,8 +75,9 @@ Era 8 brings computers and automation. Computer Networks unlocks the Software
 Industry and Network Infrastructure, Industrial Robotics the Robotics Industry,
 and Modern Pharmaceuticals the Rational Drug Design method for Pharmaceutical
 Industries ([Pharmaceutical Industries and
-Drugs](#pharmaceutical-industries-and-drugs)). Containerization,
-Fiber Optics, Cellular Networks, Microprocessor, Gene Splicing, Stealth
+Drugs](#pharmaceutical-industries-and-drugs)). Gene Splicing opens the Ban on
+Genetic Modification, Corporate Genetic Licensing and Open-Source Genetics laws.
+Containerization, Fiber Optics, Cellular Networks, Microprocessor, Stealth
 Technology and Video Games are also here.
 
 Era 9 is the internet age. World Wide Web opens the internet laws, Clean Energy
@@ -82,23 +89,40 @@ Systems and Network Centric Warfare are also in this era.
 Era 10 is the present day: Machine Learning, Generative AI, Additive
 Manufacturing, Electric Vehicles, Internet of Things, Reusable Rocketry,
 Hypersonic Weapons, Cyber Warfare, Universal Basic Income and Mental Health
-Awareness.
+Awareness. Cislunar Infrastructure opens the Space Program's Solar Colonization
+method, and with it colonies on the Moon after a Moon Landing, and In-Situ
+Resource Utilization the Extraplanetary Base.
 
 Era 11 is the near future. Modern Material Science unlocks the Advanced Material
 Fabricator, Abyssal Plain Mining the Deep-Sea Mine, Asteroid Mining the
-Extraplanetary Base, and Fusion Power the Fusion Plant. Genetic Engineering
-unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
+Extraplanetary Base's Asteroid Mine method, Fusion Power the Fusion Plant, and
+Advanced Fission a second, more productive base method for the Nuclear Plant.
+Genetic Engineering unlocks the Carbon Conversion Works and Integrated Biorefinery, Lab-Grown Food
 the Cultured Meat Plant and Cultured Produce Facility, and Synthetic Biology
 adds bioengineered production methods such as Designed Crops. Brain-Computer
-Interfaces and Human Augmentation bring augmentation laws.
+Interfaces and Human Augmentation bring augmentation laws. Era 11 also brings
+the AI that works on its own: AI Agents (the Automated Bureaucracy law and
+Fully Automated Content Creation), Self-Driving Laboratories (the University's
+AI Assisted Research), Humanoid Robotics (Robotic Service Providers and
+Neuromorphic Computing) and Autonomous Weapons (Robotic Soldiers). Artificial
+General Intelligence in era 12 needs Self-Driving Laboratories and Humanoid
+Robotics.
 
-Era 12 is the far future. Artificial General Intelligence adds AI-managed
-production methods to many industries, and Molecular Assemblers, Programmable
-Matter and Orbital Manufacturing add a final tier to many more. Space Elevator,
-Space-Based Solar Power, Orbital Weapon Platforms, Antimatter Production, Mind
+Era 12 is the medium-term future. Artificial General Intelligence adds AI-managed
+production methods to many industries, and Orbital Manufacturing and Advanced
+Nanofabrication add a late tier to many more. Compact Fusion Reactors brings the
+fusion torch, Space-Based Solar Power and Orbital Weapon Platforms each unlock a
+[megaproject](#megaprojects), and Bioenhanced Soldiers brings the Mandatory
+Augmentation law. Rejuvenation Therapies halves the pace of aging for those in
+longevity care, and Post-Work Society opens the [Post-Scarcity
+Transition](07-social-movements.md#movement-journal-entries-at-a-glance).
+
+Era 13 is the speculative future. Molecular Assemblers and Programmable Matter
+add a final tier to many industries. Space Elevator, Antimatter Production, Mind
 Backups, Molecular Assemblers and Telepathic Communities each unlock a
-[megaproject](#megaprojects). Space Colonization, Biological Immortality and
-Post-Scarcity Economy are among the last technologies in the tree.
+megaproject. Self-Directed Evolution brings the Clade Citizenship law, and
+Biological Immortality and Post-Scarcity Economy are among the last
+technologies in the tree.
 
 Some of the mod's buildings arrive earlier, with base-game technologies: the
 Aerospace Industry with Military Aviation, the Highway with Paved Roads, and the
@@ -107,14 +131,18 @@ Tourism Industry with Romanticism.
 ### Global technological development
 
 The further the world's leading powers advance, the faster everyone else
-catches up. Once a year, every country checks a list of 54 mid-century and later
-technologies, from Television and Cryptography to Space Colonization. Each one
+catches up. Once a year, every country checks a list of 55 mid-century and later
+technologies, from Television and Cryptography to Post-Scarcity Economy. Each one
 that any great power has researched adds a bonus to technology spread, the
 trickle of innovation that pulls you toward technologies others already have.
 The bonuses add up, and the later the technology, the more it is worth: the
-earliest tier adds a small step, and the last tier (Artificial Intelligence,
-Space Colonization and their peers) adds ten times as much. Only great powers count, so a technology first reached by a
-minor country does not move the world's pace until a great power follows.
+earliest tier adds a small step, era 12's (Artificial Intelligence, Space
+Colonization and their peers) ten times as much, and era 13's two (Biological
+Immortality and Post-Scarcity Economy) fifteen times. Only great powers count, so a technology first reached by a
+minor country does not move the world's pace until a great power follows. One
+law adds to the bonus too: each major power or greater that holds Open Weights
+([Who builds frontier AI](06-politics.md#who-builds-frontier-ai)) adds 100, up
+to 300.
 
 The bonus appears on your country as the Global Technological Development
 modifier, and every country gets the same one, recognized or not. It is a
@@ -123,8 +151,8 @@ gains the most from it, because spread only works on technologies you lack. The
 leaders gain little, since spread only ever feeds technologies someone has
 already researched. The further ahead the great powers pull, the larger the
 bonus, but it closes the gap less than that suggests. The bonus is a flat amount
-of spread, and technology costs climb much faster than its tiers do: an era 12
-technology costs a hundred times as much as an era 6 one. So the same bonus
+of spread, and technology costs climb much faster than its tiers do: an era 13
+technology costs 150 times as much as an era 6 one. So the same bonus
 pays for less of each technology as the eras go on. The tooltip on the modifier shows your current figure. It sits alongside the
 usual sources of spread (literacy, laws and power bloc principles) and is
 separate from [agricultural diffusion](#agricultural-diffusion), which grants
@@ -165,6 +193,23 @@ Each of the four also raises the Schools institution's maximum investment by one
 level. Funding schools and the laws that raise education access are how a
 country holds its literacy against the drop.
 
+AI Tutors (era 11, after Digital Education) works the other way. A personal
+tutor for every child adds 10 points of education access, speeds literacy growth
+and raises qualifications by 10%, so pops retrain for new jobs sooner. With all
+five researched, education access ends 30 points down rather than 40.
+
+What the tutors teach is the catch. AI Tutors raises the Ministry of Thought
+Control's maximum investment by one level, and two events can follow, each at
+most once. Under Unregulated Internet, a private tutoring platform is caught
+steering its pupils' politics. Under State-Controlled Internet, or with a
+Ministry of Propaganda or of Thought Control, the state has written the syllabus
+every tutor will teach. Each event trades loyalty against trust and research.
+Controlling the lessons turns a small share of your people loyalist every month
+for ten years, fading, at a cost in legitimacy and research speed. Opening them
+up gives legitimacy and research speed instead, pleases the Intelligentsia, and
+radicalizes whoever lost control of them: the platform's capitalist owners or
+the ministry's bureaucrats.
+
 ### Technologies that open the mod's systems
 
 Several of the new technologies first bring a system from another chapter into
@@ -180,8 +225,9 @@ view. Each system also needs its game rule, and some have further conditions.
 | Civil Rights Movement | 7 | The civil rights journal entry | [Social movements](07-social-movements.md) |
 | Automated Surveillance or Cybersecurity | 9 | The digital rights journal entry | [Social movements](07-social-movements.md) |
 | Mental Health Awareness | 10 | The mental health journal entry | [Social movements](07-social-movements.md) |
-| Universal Basic Income | 10 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
 | Brain-Computer Interfaces or Human Augmentation | 11 | The human augmentation journal entry | [Social movements](07-social-movements.md) |
+| Post-Work Society | 12 | The post-scarcity journal entry | [Social movements](07-social-movements.md) |
+| Morphological Freedom | 12 | The morphological freedom journal entry and the Bodily Autonomy laws | [Social movements](07-social-movements.md#the-morphological-freedom-debate) |
 
 Some society technologies also start occasional narrative events (Second Wave
 Feminism, Contraceptive Pill, Social Media and others), covered in [Social
@@ -189,7 +235,7 @@ movements](07-social-movements.md).
 
 ## New goods
 
-The new industries trade in twelve goods the base game doesn't have, and the mod
+The new industries trade in thirteen goods the base game doesn't have, and the mod
 renames twelve base-game goods to fit a longer timeline.
 
 ### Goods the mod adds
@@ -206,8 +252,9 @@ renames twelve base-game goods to fit a longer timeline.
 | Construction Services | Industrial | Construction Sector | The construction market ([Economy and construction](03-economy.md)) |
 | Tourism | Luxury | Tourism Industry, National Park and others | The pops' Tourism need |
 | Tech-Critical Metals | Industrial | Nickel and Cobalt, Lithium, Rare Earth Metals and Platinum Group Metals Mines; also the Deep-Sea Mine and Extraplanetary Base | Electronics, robotics, modern power plants and other high-tech production methods |
-| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations; the pops' Leisure need, as Steamers |
+| Motor Ships | Industrial | Shipyards, from Advanced Submarine Technology | Later production methods for ports, fishing wharves and whaling stations, and the Deep-Sea Mine's tenders; the pops' Leisure need, as Steamers |
 | Magnetic Drive Ships | Industrial | Shipyards, from Modern Material Science | The last tier of the same production methods; the Leisure need too |
+| Grid Power | Industrial | Grid Transfer Stations, from a state's spare Electricity | Grid Transfer Stations, which turn it back into Electricity in short states of the same power grid ([Economy and construction](03-economy.md#power-grids)) |
 
 The Convenience and Tourism needs, which wealthier pops fill with these goods,
 are covered in [Pop consumption at high
@@ -258,32 +305,51 @@ mineral deposits](03-economy.md#new-mineral-deposits).
 | Phosphate, Potash, Industrial Mineral and Salt | Chemical and Industrial Minerals |
 
 Two late buildings mine several goods at once. The Deep-Sea Mine (Abyssal Plain
-Mining) can be built in any coastal state, and each level needs a seabed licence
-([Seabed licences](#seabed-licences)). Like a fishing wharf, it loses up to
-three quarters of its throughput while its state is blockaded. The
-Extraplanetary Base (Asteroid Mining) costs 20,000 construction per level. It
-mines metals and minerals, and after Space Colonization it can switch to the
-Resort Colony production method, which produces art and tourism instead.
+Mining) can be built in any coastal state, and each level needs a seabed license
+([Seabed licenses](#seabed-licenses)). Like a fishing wharf, it loses up to
+three quarters of its throughput while its state is blockaded. Its ships come
+from the Support Vessels group: Motor Ship Tenders run it on Motor Ships, and
+Magnetic Drive Tenders, from Modern Material Science, run it on fewer Magnetic
+Drive Ships for £1,000 a level less each week at base prices. Switching an
+existing mine costs about £260,000 a level in
+[retooling](03-economy.md#construction-maintenance-and-retooling), around 5
+years of that saving, so the switch pays back sooner while Motor Ships are
+expensive. The
+Extraplanetary Base (In-Situ Resource Utilization) costs 20,000 construction per
+level. Its staff is the same at any size: a large base needs no more workers
+than a small one. It starts on Regolith Processing, which makes Structural Metals,
+Tech-Critical Metals and Glass and Plastics at a thin margin: about £1,600 a
+level a week at base prices. Asteroid Mining brings the Asteroid Mine method,
+and Space Colonization the larger Mining Colony, or the Resort Colony production
+method, which produces art and tourism instead. Von Neumann Machines (era 13)
+brings Self-Replicating Miners, which build their copies from the ore they dig:
+against a Mining Colony, a level uses a third less Launch Capacity and mines a
+quarter more of each good. With
+the Space Race rule on Simple Colonies or Full Colonies its levels need room,
+from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
+[Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 
 The Deep-Sea Mine costs 5,000 construction per level, a quarter of the
 Extraplanetary Base's, and at base prices earns more per level: about three
 times as much in era 11, and still more than a Mining Colony after Advanced
 Nanofabrication. Most of an Extraplanetary Base's running cost is Launch
-Capacity, and in era 12 two production method groups each cut that bill by 30%:
-Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (not
-an elevator of your own), and Transport in Space, whose Fusion Tugs need
-Muon-Catalyzed Fusion Reactors. A Mining Colony with Fusion Tugs already earns
+Capacity, and two late production method groups each cut that bill by 30%:
+Transport in Space, whose Fusion Tugs need Compact Fusion Reactors (era 12), and
+Launch to Orbit, whose Tethered Launch needs the Space Elevator technology (era
+13; not an elevator of your own). A Mining Colony with Fusion Tugs already earns
 about as much per level as an Advanced Deep-Sea Mine, and with both upgrades half
-as much again. With the Global Commons rule off, the Deep-Sea Mine has no
-licences and keeps its older, smaller output.
+as much again. Self-Replicating Miners with neither upgrade earn more than a
+Mining Colony with both, and the upgrades add less to them, since they launch
+less. With the Global Commons rule off, the Deep-Sea Mine has no
+licenses and keeps its older, smaller output.
 
-### Seabed licences
+### Seabed licenses
 
 With the Global Commons rule on (the default), each Deep-Sea Mine level needs a
-seabed licence. The seabed is split into five ocean basins, each holding a fixed
-pool of licences. A coastal state belongs to the basin its sea lane opens onto.
+seabed license. The seabed is split into five ocean basins, each holding a fixed
+pool of licenses. A coastal state belongs to the basin its sea lane opens onto.
 
-| Basin | Licences | Includes |
+| Basin | Licenses | Includes |
 |---|---|---|
 | Pacific | 300 | the Sea of Japan and the East and South China Seas |
 | Atlantic | 250 | the Mediterranean, Black Sea, Baltic, North Sea, Caribbean and Gulf of Mexico |
@@ -291,10 +357,13 @@ pool of licences. A coastal state belongs to the basin its sea lane opens onto.
 | Southern | 150 | Patagonia, the Cape of Good Hope, southern Australia and the Tasman Sea |
 | Arctic | 100 | the Barents Sea, Greenland and Hudson Bay |
 
-Every January the pools are shared out by claim weight among the countries with
-Abyssal Plain Mining. A country that has just researched it gets its share the
-month after, and that sharing divides every pool again, so your own share can
-move in the middle of a year. In a basin where you have coastal states, your
+Every January the pools are shared out by claim weight among every coastal
+country. A country without Abyssal Plain Mining counts at three quarters of
+its weight, and its share waits for it: no one can build on it. Researching the
+technology first gives you a head start, then, and every other coastal country
+keeps a share for when it catches up. A country that has just researched it
+gets its share as claims the month after, and that sharing divides every pool
+again, so your own share can move in the middle of a year. In a basin where you have coastal states, your
 weight counts those states twice, their port levels, and your naval power
 projection, scaled to about one unit a warship (the weight hover shows the
 divisor), in proportion to the coast you have there; an unincorporated state
@@ -306,19 +375,20 @@ outweighs a larger obsolete one.
 An event announces the seabed rush when the first coastal country researches
 Abyssal Plain Mining. After that, a notification tells you when a country wins
 its first share in a basin on your coast where you have one, and when a basin
-you have coast or a share in has all its licences held. Both can be muted in
-the message settings, under Seabed Licences.
+you have coast or a share in has all its licenses held. Both can be muted in
+the message settings, under Seabed Licenses.
 
-A licence is held by a level, built or queued, and stays with it for good. It
+A license is held by a level, built or queued, and stays with it for good. It
 belongs to the state the mine stands in and passes with it: conquer a mined
-state and its licences come with it. Built levels are never taken away. If your
+state and its licenses come with it. Built levels are never taken away. If your
 share in a basin falls below what you hold there, you keep every level and
-can't take more licences from that basin until you are back under it; levels
-you downsize, or that are destroyed, give their licences back. A new level
-takes its own basin's licence first. Once your claims there are used up it
+can't take more licenses from that basin until you are back under it; levels
+you downsize, or that are destroyed, give their licenses back. A new level
+takes its own basin's license first. Once your claims there are used up it
 takes one from another basin and works at -25% throughput (Long-Haul Seabed
-Operations), until a local claim frees up and replaces it on its own. The
-building's requirements list how many licences you have to spare and which
+Operations, shown on the mine), until a local claim frees up and replaces it on
+its own. The
+building's requirements list how many licenses you have to spare and which
 kind the next level would take.
 
 #### Claims, protection and the holding fee
@@ -328,14 +398,14 @@ Each January divides them again, so a rival's naval buildup can take them. On
 Sponsor Contractors the January sharing leaves you at least three quarters of
 each basin's claims, so they fade by a quarter a year at most; on the other
 policies they are divided again in full. A sharing in the middle of the year,
-when a new claimant appears, honours January's protection without adding to it.
+when a new claimant appears, honors January's protection without adding to it.
 A Scramble ends all protection. When the Law of the Sea comes into force after
 open years, protected claims can come out of the reserved half, as the real
 convention's pioneer investors kept the sites they had registered; they fade by
 a quarter a year like any other, so the reserved half refills.
 
-Queueing a level turns a claim into a licence at once, so you can hold a
-basin's claims by queueing far ahead. That costs a holding fee: a licence on a
+Queuing a level turns a claim into a license at once, so you can hold a
+basin's claims by queuing far ahead. That costs a holding fee: a license on a
 level still unbuilt a year after it was queued pays 2% of a level's base output
 value a week (about 900), half the royalty, until the level is built. Building
 at a normal pace never pays it, whoever queued the level. Under the Regulated
@@ -346,7 +416,7 @@ You can Relinquish a basin's claims from your own row in that basin's list of
 claimants: they are gone at once, so Sponsor Contractors' influence falls with
 them, and the next sharing divides them among the other claimants. You claim
 nothing there until you press Claim Again, which counts from the sharing after.
-Licences on your levels are untouched.
+Licenses on your levels are untouched.
 
 #### Leasing seabed claims
 
@@ -354,8 +424,8 @@ A Lease Seabed Claims treaty article, one for each basin, leases some of one
 country's own claims there to another, up to the number agreed. They pass at
 once, so the lessee can build before January. Each sharing divides them again,
 and the lease then takes them back from the lessor's new share, as far as it
-goes, until the licences built on the lease and its unused claims make up the
-number. Licences built on a lease are the lessee's for good, but they count
+goes, until the licenses built on the lease and its unused claims make up the
+number. Licenses built on a lease are the lessee's for good, but they count
 against the lessor's share, not the lessee's, even after the lease ends, for as
 long as both countries take part in the sharing; meanwhile the lessee can lease
 that basin's claims again only from the same lessor. When the lease ends, its
@@ -370,9 +440,9 @@ price.
 An overlord can take its subject's unused claims with Administer Seabed Claims,
 an action like Raise Subject Payments: no approval, and not on a protectorate
 or a personal union. While it stands, the subject's claims pass to the overlord
-at once and after every sharing, with no limit, and the licences the overlord
+at once and after every sharing, with no limit, and the licenses the overlord
 builds on them count against the subject's share, even after the action ends,
-while both take part. The subject keeps its own licences. Its liberty desire rises as under Raise Subject Payments, and
+while both take part. The subject keeps its own licenses. Its liberty desire rises as under Raise Subject Payments, and
 relations between the two fall. Only the overlord starts or ends it; when it
 ends, the subject's claims are its own again from the next sharing. AI
 overlords use it on subjects with claims to spare and liberty desire below 25,
@@ -382,25 +452,31 @@ and end it at 50.
 
 The Seabed tab of the Timeline Extended window answers four questions. Its
 overview says how many more Deep-Sea Mines you can queue (and how many at home,
-without the long-haul penalty), your licences and any holding fee, your
+without the long-haul penalty), your licenses and any holding fee, your
 long-haul levels, your unused claims and what next January can take of them,
 your policy and when it can next change, and the regime. The Ocean Basins table
 has a row for each basin: Free is your claims there, green where you have coast
 to build on at full throughput; Pool is a bar of the whole pool, from your
 mines and claims to rivals' mines and the rivals' claims a buildup could win;
-Weight is your share of the basin's claim weight; +1 licence is about how much
-more naval power projection would win you one more licence at the next sharing,
+Weight is your share of the basin's claim weight; +1 license is about how much
+more naval power projection would win you one more license at the next sharing,
 a figure that is enough and often more than needed. Click a basin to see its claimants, largest
-share first, with your own row and its Relinquish button. A Seabed Licences
-tile on every coastal state's panel shows that state's basin, the licences its
+share first, each with its mines, claims and share of the weight in columns,
+and your own row with its Relinquish button. A Seabed Licenses
+tile on every coastal state's panel shows that state's basin, the licenses its
 mines hold and how many are long-haul, your unused claims in its basin (what a
 new level there would take at full throughput) and what the state adds to your
-claim weight there. The tile's tooltip has the national figures.
+claim weight there. The tile's tooltip has the national figures. Once you have
+researched Abyssal Plain Mining, every other coastal state, whoever owns it,
+shows its basin in an Ocean Basin tile, so you can see which pool a port there
+would weigh in. Another country's National Info has a Seabed tab with that
+country's overview and Ocean Basins table; the policy buttons and the claimant
+lists, with Relinquish and Claim Again, are only on your own.
 
 | Policy | Influence held | Claim weight | When to use it |
 |---|---|---|---|
-| Scientific Survey (default) | none | ×0.25 | You aren't building Deep-Sea Mines yet. |
-| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licences, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
+| Scientific Survey (default) | none | ×0.75 | You aren't building Deep-Sea Mines yet, or you build your claims as fast as you get them and need no protection. |
+| Sponsor Contractors | 50, plus 0.5 for each unused claim | ×1, claims protected | You want licenses, and want to keep the claims you can't build on yet: the lawful route under the Law of the Sea. |
 | Unilateral Licensing | 1.5 times Sponsor Contractors' figure, at least 150 | ×1, naval power projection counted twice | A large navy and little coast. Relations fall by 10 a year with each other unilateral claimant in a basin where you both have coast, and while the Law of the Sea regulates the seabed, a party that licenses unilaterally defects from it ([The United Nations](10-united-nations.md)). |
 
 A new policy holds its influence from the day you choose it; its weight counts
@@ -410,7 +486,7 @@ in one of your home basins has switched to it since your last change, and
 Scientific Survey, while your influence is in deficit. Sponsor Contractors'
 cost has no cap, so claiming a whole basin is expensive; to cut it, build on
 the claims, relinquish a basin, or drop to Scientific Survey when you can. AI
-countries take up Sponsor Contractors when it would bring them a licence and
+countries take up Sponsor Contractors when it would bring them a license and
 Tech-Critical Metals sell above base price, and more readily the more unused
 claims they hold. A few great powers, mostly those with poor UN standing or a
 rival claimant, choose Unilateral Licensing. The AI keeps to the five-year lock
@@ -426,7 +502,7 @@ too.
 | Power | Hydro Plant, Nuclear Plant, Renewable Energy Plant and Fusion Plant, alongside the base game's Power Plants. |
 | Transport | Airport and Highway, both producing Transportation, and airports some Merchant Marine too ([Transportation and shipping](03-economy.md#transportation-and-shipping)). |
 | Leisure | Tourism Industry and National Park ([States and population](08-states.md)). |
-| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; and Military Base ([Military and war](13-military.md)). |
+| Government | Space Program ([The space race](16-space.md)), which counts as a monument like the wonders below; State Youth Centers, which need Pro-Natalist Policy, State-Sponsored Family Planning, Communal Child-Rearing, State Eugenics Program or Mandatory Augmentation; Military Base ([Military and war](13-military.md)); and Public Housing, which raises its state's crowding threshold ([States and population](08-states.md#migration-crowding)). |
 
 ### Pharmaceutical Industries and Drugs
 
@@ -482,7 +558,7 @@ Launch Systems.
 
 ### Companies added by the mod
 
-The mod adds 93 company types. 82 are flavored companies, mostly real firms of
+The mod adds 95 company types. 84 are flavored companies, mostly real firms of
 the twentieth and twenty-first centuries (Volkswagen, Intel, SpaceX, Pfizer,
 Saudi Aramco and many more) plus a few fictional far-future ones such as
 Tessier-Ashpool S.A. The other eleven are generic companies for the new sectors:
@@ -497,17 +573,20 @@ the leading producer of their good. Japan can found Saudi Aramco and the United
 States can found Volkswagen if they meet those conditions. Generic companies
 need a large enough building of their industry.
 
-Biotechnology companies, the generic one and eight flavored ones such as
+Biotechnology companies, the generic one and ten flavored ones such as
 Genentech and BioNTech, also need the Corporate Genetic Licensing law
 ([Economic law groups](06-politics.md#economic-law-groups)), which
-Biotechnology unlocks.
+Gene Splicing unlocks, a technology earlier than Biotechnology. Three of them come from fiction and unlock late: the
+Rosen Association's androids with Genetic Engineering, InGen's resurrected
+species with Synthetic Biology, and RejoovenEsense's longevity treatments with
+Rejuvenation Therapies.
 
 ## Wonders
 
 The mod adds 37 wonders: landmarks of the twentieth and twenty-first centuries.
 Each costs 5,000 construction, has one level, and exists once in the world.
 Wonders, like the base game's monuments and the Space Program, count as
-monuments: each one raises Tourism Industry throughput in its state by 25% and
+monuments: each one raises tourism output in its state by 10% and
 adds 3 cultural pull ([Where cultural pull comes
 from](11-influence.md#where-cultural-pull-comes-from)).
 
@@ -546,7 +625,7 @@ changes](09-diplomacy.md#other-power-bloc-changes).
 
 ## Megaprojects
 
-Megaprojects are the far-future wonders of era 12, too large to build with
+Megaprojects are the wonders of eras 12 and 13, too large to build with
 construction points alone. Instead you feed a construction site vast quantities
 of goods and specialists for one to four years.
 
@@ -601,7 +680,7 @@ revolution, its leader, its faith or the nation. You build it as a **Grand
 Monument (Under Construction)**: each level costs 1,000 construction, and while
 it is being built it has no upkeep and no effects. Dedicating it finishes it: a
 Grand Monument stands in its place at level 1, keeping the levels it was built
-with, and needs only maintenance for those levels and a small caretaker staff.
+with. It costs nothing to maintain and needs only a small caretaker staff.
 A monument's **grandeur** starts at what its levels were worth when they were
 built and grows as the monument ages (see [A finished monument and its
 age](#a-finished-monument-and-its-age)). The Grand Monuments game rule can
@@ -612,8 +691,8 @@ grandeur, and in a world ten times as rich it adds a tenth as much: 5 times the
 world's GDP in 1836, divided by the world's GDP when the level is finished,
 updated each January, to the nearest 0.001 and never less than 0.001. So the
 same share of the world's wealth buys the same grandeur in any era. The rate
-shows at the top of National Effects, on a construction site's card and in the
-build menu before you build. The monuments standing in 1836, the trophies
+shows on the last line of the Grand Monuments overview, on a construction site's
+card and in the build menu before you build. The monuments standing in 1836, the trophies
 abroad in 1836 and the monuments dug up count at the 1836 rate, 5 grandeur a
 level, split as if each had been dedicated in the year it was built and had aged
 ever since (see [A finished monument and its age](#a-finished-monument-and-its-age)).
@@ -637,7 +716,7 @@ Legitimacy and cultural pull take steps of 10. National effects count all your
 monuments' grandeur together, so twenty small monuments give the same national
 effects as one tall one; local effects count each monument on its own.
 
-Forty-two monuments already stand when a game begins, among them the Arc de
+Ninety-three monuments already stand when a game begins, among them the Arc de
 Triomphe in Paris, the Alexander Column in Saint Petersburg, the Temple of
 Heaven in Beijing, Topkapı Palace, La Scala in Milan and the Jantar Mantar in
 Jaipur. Nineteen stand where the great powers' armies and collectors took the
@@ -646,13 +725,18 @@ Xanthos, the Temples of Baalbek, Palmyra, the Mesha Stele, the Arch of
 Ctesiphon, the Obelisks of Karnak, the royal palaces of Benin, Kumasi and
 Abomey, Great Zimbabwe, Persepolis, the Red Fort in Delhi, the
 Bukgwan Victory Stele in Korea, the Imperial City of Huế and Klungkung Palace
-on Bali. Most monuments to a crown or a republic stand in countries that still
+on Bali. Fifty-one are the great sites of the past that draw visitors to their
+states, among them the Pyramids of Giza, Petra, Abu Simbel, the Alhambra,
+Windsor Castle, Kinkaku-ji, the Potala Palace, Borobudur and the Registan in
+Samarkand. They stand [To History](#monument-dedications) and carry the tourism
+their state's Base Appeal leaves to them (see [Tourism
+output](08-states.md#tourism-output)). Most monuments to a crown or a republic stand in countries that still
 honor them; two start contested: the Lion of Saint Mark, the old Venetian
 Republic's, in Austrian Venice, and Sans-Souci, a king's palace in republican
 Haiti. Each is a historical monument: it keeps its own look and picture while it stands, through a contest,
 a change of owner or a rededication. It keeps its name too unless it is
 rededicated; then it is named again like any new monument, and the naming event
-can give the historical name back. Rename and Name It are greyed out while it
+can give the historical name back. Rename and Name It are grayed out while it
 carries its historical name. Only pulling it down, or demolishing it, ends it.
 
 ![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
@@ -671,13 +755,16 @@ shows, and any boon it carries, have run out.
 The same panels appear on the Grand Monuments tab of the Timeline Extended
 window, which the button under the sidebar's Map List opens, and a change made
 in one shows in the other. The tab is grayed until the journal entry is active, and it
-ends with an Open Journal Entry button.
+ends with an Open Journal Entry button. Another country's National Info has a
+Grand Monuments tab with that country's monuments, national effects, trophies,
+works abroad and digs; the buttons, an open opportunity and Interest Group
+Approval are only on your own.
 
 The state panel of a state with a Grand Monument, yours or another country's,
 shows a Grand Monument card under the tourism card: the monument's status, name
 and dedication, its grandeur with a bar toward its next step, its levels and age
-once finished, and the Tourism
-Industry throughput and local effect it gives that state. Hover a line for its
+once finished, and the tourism
+output and local effect it gives that state. Hover a line for its
 breakdown. The card's arrow, on your own states, opens the Grand Monuments tab of
 the Timeline Extended window, where the buttons are. While you can carry the
 monument off as a trophy, the card has a Carry It Off button. A Grand Monument
@@ -687,36 +774,45 @@ state its Dedicate button. A state with more
 than one monument lists the others in the same card, under these details, and a
 state where trophies stand shows a Trophies on Display card under it.
 
-The overview at the top is always shown. It has an icon for each status a
-monument can hold, with the number of your monuments in that status beneath:
-Upheld (a gold wreath on the stone), Heritage (a railing in front), Being Built
-(the bare stone: your monuments under construction) and Contested (cracked, and its word red while any monument is
-contested). An icon is dimmed while no monument holds its status. Hover an icon
-for what the status means; Heritage and Contested are also terms you can hover.
-While a finished level would cause [vanity backlash](#vanity-backlash), a red
-Hard Times appears under the icons; hover it for why. The last line names your
-[monument policy](#monument-policy); hover it for what the policy does and when
-it can next change.
+The overview at the top is always shown: four boxes, two to a row, each with
+an icon, a caption, a word that turns red when something waits on you, and a
+figure. An icon is dimmed while its count is zero. Hover a box for its
+breakdown; Heritage and Contested are also terms you can hover.
+
+| Box | Icon | Shows |
+|---|---|---|
+| Our Monuments | A gold wreath on the stone | How many are Upheld, and how many are Heritage. |
+| Contested | The stone cracked | How many wait for your decision, in red, and the grandeur they hold back meanwhile. |
+| Sites | The bare stone | How many construction sites you can dedicate now, in red, or how many are still building, and the grandeur they come to. |
+| Hard Times | A mallet and chisel by an empty bowl | Red while a finished level would cause [vanity backlash](#vanity-backlash), with the remedy: pause construction. |
+
+Under the boxes, a line names your [monument policy](#monument-policy); hover it
+for what the policy does and when it can next change. The last line says what a
+level built this year adds; hover it for how the rate is worked out.
 
 These sections follow:
 
 | Section | Starts | Shows |
 |---|---|---|
-| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the months left, what completing it gives, Raise It and Let It Pass. |
+| Opportunity | Open | Only while an opportunity is open: the moment that brought it, who asks for which dedication, what the monument will be named for, a bar of the grandeur added against the target, the levels still to build at today's rate, the months left, what completing it gives, Raise It and Let It Pass. |
+| Awaiting a Decision | Open | Only while a monument of yours is contested: its row, which names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A contested monument that stands beside a state's own has its row here too. |
+| Awaiting Dedication | Open | Only while one of your Grand Monuments is a construction site: a row for each site, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
 | Archaeological Expeditions | Open | Only while you dig a buried site or one is open to you: the digs under way and the innovation they divert each week, each with its state, its weekly innovation and, abroad, its terms; then the sites you can dig, with the levels each will raise, the terms if you would dig it abroad, and a button for each method you can use. |
-| National Effects | Open | A row for each national effect in force: Prestige, Legitimacy, Cultural Pull, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total, and Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. The four monument policy buttons are at the foot. |
-| Awaiting Dedication | Open | Only while one of your Grand Monuments is under construction: a row for each, with its levels built, the grandeur they come to and whether levels are still being built, and a Dedicate button under it. |
-| Our Monuments | Open | A row for each finished monument: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename, Name It and Clear Name under it. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A contested row names its Old Supporters and the group it is Resented By, with Pull Down, Rededicate and Keep as Heritage under it. A monument you can carry off as a trophy has Carry It Off. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
+| National Effects | Open | The four monument policy buttons first. Then a row for each national effect in force: Prestige and Prestige (%), Legitimacy, Cultural Pull, Education Access under Public Education, each dedication's own effect, such as Authority or Max Innovation, and each [unique dedication](#unique-dedications)'s. Each row's bar shows how far the step now being filled has come. Hover the row for the full effect, the grandeur behind it and where its next step completes. Below them, Interest Group Approval lists each group with a total; hover a group for the monuments it approves of, those it objects to, the contested ones it resents and its fading record. Fading Legitimacy shows what remains from pulling monuments down (The Old Order Torn Down) and from levels finished in hard times (Palaces amid Hardship). Opportunities Seized lists each boon in force with its months left, and each unique dedication you hold for a monument still to come. |
+| Our Monuments | Open | A row for each finished monument that is not contested: its status as an icon with the word beneath, its name and dedication, and its state and grandeur. An upheld monument's row has Rename and Name It under it, and Clear Name once you have typed a name. A monument shows Unsettled for a moment after a change of government, until the month's check decides whether it still fits. A monument you can carry off as a trophy has Carry It Off, and the least grand of six in one state has Clear It Away. A monument that stands beside a state's own has a row after the states' rows, with where it stands. |
 | Trophies | Open | Only while you hold a trophy or The Homecoming runs: what your trophies count for, The Homecoming's months left, and a row for each trophy with its monument's picture, what it was, where it came from and when, its worth here, who claims it, and Return It or Bring It Home. |
 | Held Abroad | Open | Only while a trophy taken from your lands stands abroad: a row for each, with its holder and where it stands. |
-| How Grand Monuments Work | Collapsed | The explanations: grandeur and steps, what counts where, contested monuments, hard times, opportunities, unique dedications, names, the monument policy and trophies. |
+
+The "?" at the right of the tab's header, and at the top of the journal entry, opens the Help page, How Grand Monuments Work. It explains grandeur and
+steps, what counts where, contested monuments, hard times, opportunities,
+unique dedications, names, the monument policy, trophies and archaeology.
 
 Every monument, whatever it honors, gives:
 
-- +25 prestige for each step of standing grandeur, counting every monument that
-  is not contested.
-- +25% Tourism Industry throughput in its state for each step of its own
-  grandeur, so five grandeur matches one of the base game's monuments.
+- +10 prestige and +1% prestige for each step of standing grandeur, counting
+  every monument that is not contested.
+- +10% tourism output in its state for each step of its own grandeur, so five
+  grandeur matches one wonder.
 - +1 cultural pull for each step of standing grandeur (steps of 10, 20, 30 and
   so on), with no ceiling.
 
@@ -726,7 +822,7 @@ A monument is **finished** once it is dedicated. Until then it stands under
 construction and every level built on it joins it, for as long as you like: you
 can pause its construction and come back to it decades later. Its **Dedicate**
 button, on its card in the state view and under Awaiting Dedication, holds the
-dedication ceremony. The button is greyed while any of its levels are under
+dedication ceremony. The button is grayed while any of its levels are under
 construction: let them finish or cancel them first. The dedication finishes the
 monument at the levels built: a Grand Monument stands in its place at level 1,
 and the state card and its row under Our Monuments show "Finished: 15 levels ·
@@ -735,18 +831,18 @@ Age: +3.2". Damage to its building never shrinks it.
 A finished monument grows grander with the years: by 2% of the grandeur it was
 dedicated with a year, so it doubles its grandeur in fifty years and triples it
 in a hundred, and then it stops. A historical monument's earlier years are
-already counted: the Parthenon has finished ageing, the Brandenburg Gate grows
+already counted: the Parthenon has finished aging, the Brandenburg Gate grows
 for another 55 years to 79, and the Arc de Triomphe, finished in 1836, grows
 from 75 to 225 by 1936.
 
 | Grandeur at dedication | +25 years | +50 years | +100 years |
 |---|---|---|---|
 | 5 | 7.5 | 10 | 15 |
-| 10 | 15 | 20 | 30 |
+| 10 | 15 | 20 | 20 |
 | 25 | 37.5 | 50 | 75 |
 
-It ages while its message stands or while it is kept as heritage, at half the
-rate under Mothballed, and not at all while it is contested. A
+It ages while its message stands or while it is kept as heritage, and not at
+all while it is contested. A
 trophy abroad does not age; it starts again once home. Each anniversary's first
 option adds a tenth of the grandeur it was dedicated with, at least 1, and
 completing an [opportunity](#monument-opportunities) adds 5. Pulling a monument
@@ -762,6 +858,15 @@ there, the site among them; the build tooltip names the reason. Levels already
 under construction always go on. The AI raises new monuments in other states
 before it builds beside one.
 
+Once six stand in one of your states, the least grand of them, contested ones
+aside, has a Clear It Away button on its row and on the state's monument card.
+It is gone for good, with its grandeur and everything it gave, and a site can be
+started again, so you can replace a small monument with a grander one. Nothing
+else follows: no interest group objects and no legitimacy comes of it, as Pull
+Down's does for a contested monument. If it was the state's first monument, the
+grandest of the others takes its place. A historical monument can be cleared
+away too, and its tooltip warns you. The AI never clears one away.
+
 ### Several monuments in one state
 
 A state has one Grand Monument building, so a second monument there stands
@@ -775,26 +880,26 @@ The state's one Grand Monument building stands at level 1 whatever stands
 there; each monument keeps its own levels. Each monument counts on its own: its dedication gives its own effect in the state and in the nation
 while its message stands, its interest groups approve or object, and it ages and
 can be contested on its own. A civic obelisk beside a crown column adds to the
-Petty Bourgeoisie's approval, not to the crown's legitimacy, and Tourism
-Industry throughput counts every monument's grandeur together.
+Petty Bourgeoisie's approval, not to the crown's legitimacy, and tourism
+output counts every monument's grandeur together.
 
 The first monument is the grandest: once a new monument raised beside it has
 its dedication and name, the grander of the two stands first. Each of the others
 has its own row in the state's monument card, under the first one's details, and
-under Our Monuments, with its status and grandeur. A contested one's row under
-Our Monuments has Pull Down, Rededicate and Keep as Heritage; rededicating it
+under Our Monuments, with its status and grandeur. A contested one's row, under
+Awaiting a Decision, has Pull Down, Rededicate and Keep as Heritage; rededicating it
 makes it the state's first monument, at half its levels. An army that
 holds the state carries monuments off one at a time, with the Carry It Off on
 the first one's details or on another's row, and the rest stay. If the first
-monument is pulled down or carried off whole, the largest of the others takes
-its place.
+monument is pulled down, cleared away or carried off whole, the largest of the
+others takes its place.
 
 ### Monument dedications
 
 A monument's Dedicate button holds its dedication ceremony, which asks what it
 honors. The choice is permanent, and the ceremony's tooltips list each
 dedication's effects. The ceremony lists every dedication: one you can't raise
-yet is greyed out, with what it needs. Choosing to leave it as it is for now
+yet is grayed out, with what it needs. Choosing to leave it as it is for now
 closes the ceremony and keeps the button for later; a monument under
 construction has no effects until it is dedicated.
 Dedicating a monument finishes it (see
@@ -815,6 +920,15 @@ dedicates its monuments once nothing more is queued for them.
 | Grand Observatory | Empiricism | Intelligentsia | +3 innovation cap | Faster literacy growth |
 | Great Exhibition Hall | Marketing Research, no Industry Banned | Industrialists | +5% Industrialists attraction | +10% migration pull |
 | Grand Stadium | Television Broadcasting | Trade Unions | | 10% lower turmoil effects, up to 50% |
+| To History | Only the historical monuments that carry it | | | |
+
+To History is the dedication of fifty-one historical monuments standing in 1836
+and of fourteen buried sites once they are dug up. No ceremony offers it. It
+gives the tourism, prestige and cultural pull every monument gives and nothing
+more: it honors nothing that can fall, so no change of government or conquest
+contests it, and it can't be pulled down or rededicated. An army can still carry
+it, or a piece of it, off as a [trophy](#monument-trophies). Every monument
+policy counts it at half.
 
 Legitimacy counts the grandeur of all your monuments to the Crown, the Republic,
 the Revolution and the Leader together, in steps of 10, and only while each
@@ -844,11 +958,11 @@ It counts only while the monument stands on the dedication it was given on:
 National effects count every monument that carries the same unique dedication
 together, in steps of 5 like the dedications' own, and each in force has its own
 row in National Effects. Ancestral Antiquity's cultural pull tapers slowly, like
-the monuments' own pull; the others taper fast. Mothballed halves them. Monuments of one kind share one:
+the monuments' own pull; the others taper fast. Monuments of one kind share one:
 
 | Unique dedication | Carried by | Per step |
 |---|---|---|
-| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, on top of the monuments' own pull and with no ceiling, and +10% Tourism Industry throughput in its state; the Intelligentsia approve |
+| Ancestral Antiquity | The ruins, tombs and treasures of the ancient world: the Obelisks of Karnak, Persepolis, the Venus de Milo, Troy, the Tomb of Tutankhamun and 32 more | +1 cultural pull, on top of the monuments' own pull and with no ceiling, and +5% tourism output in its state; the Intelligentsia approve |
 | Epigraphic Archive | Inscriptions and lost libraries: the Rosetta Stone, the Temple of Dendera, the Mesha Stele, the Library of Ashurbanipal, the Dead Sea Scrolls and 10 more | +2 innovation cap and +2% technology spread, and +10% University throughput in its state; the Intelligentsia approve |
 | Seat of the Throne | Royal palaces: Topkapı Palace, the Red Fort, Sans-Souci Palace, the Royal Palace of Benin and 6 more | +3% authority |
 | Royal Pantheon | Royal tombs and statues: the Alexander Column, the Basilica of Superga, Nikkō Tōshō-gū and 4 more | +5% loyalists from high legitimacy |
@@ -861,7 +975,7 @@ adds a little more: The Mandate of Heaven (the Temple of Heaven, Seat of the
 Throne and +1 legitimacy), To the Grande Armée (the Arc de Triomphe, Martial
 Glory and +3% prestige), The Glory of Athens (the Parthenon, Ancestral
 Antiquity and +2% influence) and The First Emperor's Army (the Terracotta Army,
-Ancestral Antiquity and +25% Tourism Industry throughput in its state). La
+Ancestral Antiquity and +10% tourism output in its state). La
 Scala, the Teatro di San Carlo, the Jantar Mantar, the Shalimar Gardens, the
 Jardim Botânico and the Muhammad Ali Mosque have none.
 
@@ -1001,8 +1115,8 @@ Amharic or Tigrinya one, and so on through the classical languages that language
 reform can revive. A Grand Shrine takes the style of your state religion's great
 building: a basilica, a great mosque, a great temple, a pagoda. An opera house,
 gardens, an observatory or a stadium can take a style where your heritage has a
-tradition of its own, such as a Greek open-air theatre, a Persian garden, a
-Jantar Mantar or a Roman amphitheatre; for these the style changes only the
+tradition of its own, such as a Greek open-air theater, a Persian garden, a
+Jantar Mantar or a Roman amphitheater; for these the style changes only the
 look. When more than one style fits, an event asks which, and each style's
 option names what makes it fit; the AI keeps the most specific style without
 being asked. The style changes the monument's name and look, not what it does.
@@ -1035,22 +1149,27 @@ keeps its name.
 ### Monument policy
 
 One policy covers all your monuments. You set it with the four buttons at the
-foot of National Effects, and the overview's last line names the one in force.
-After a change the policy cannot change again for five years, but your first
-choice starts no wait.
+top of National Effects, and a line under the overview's boxes names the one
+in force. Each policy is the best at one thing, so the cost of choosing one is
+what the others would give. After a change the policy cannot change again for five
+years, but your first choice starts no wait.
 
-| Policy | Gives | Costs | When it is worth it |
-|---|---|---|---|
-| Standard | Nothing changes. | Nothing. | The default. |
-| Open to the Public | The Tourism Industry throughput each monument gives ×1.5, and anniversaries about twice as often. | Maintenance ×1.5. | Monuments that stand beside a Tourism Industry. |
-| State Ceremonial | Legitimacy and authority from monuments to the Crown, the Republic, the Revolution and the Leader ×1.5. | Tourism from each monument ×0.5. | Low legitimacy with regime monuments standing. |
-| Mothballed | No maintenance. | Prestige and cultural pull from monuments, and each monument's tourism and local effect, ×0.5; no anniversaries. | Hard times or debt. |
+| Policy | Gives | When it is worth it |
+|---|---|---|
+| Open to the Public | Tourism output from each monument ×1.5, from a monument To History ×1.25, the tourism of Ancestral Antiquity and the First Emperor's Army included. | Monuments that stand beside a Tourism Industry. |
+| State Ceremonial | Legitimacy and the Leader's authority from monuments also count a quarter of the grandeur of every monument you hold that is not contested, heritage and trophies included, whatever it honors; a monument To History counts at half. | Low legitimacy. |
+| Cultural Promotion | Cultural pull from monuments ×1.5, Ancestral Antiquity's included, and the share of it from monuments To History ×1.25. With the Cultural Hegemony rule off, prestige from monuments instead, on the same terms. | The policy until you choose another. |
+| Public Education | +1% education access in every state for each step of standing grandeur, a monument To History counting half, in steps of 10, 20, 30 and so on. | Literacy still well short of what your people could reach. |
 
-The national effects change at once, and each monument's own at the start of
-the next month. The AI picks each January: Mothballed in hard times or in debt,
-State Ceremonial with legitimacy under 40 and regime monuments standing, Open to
-the Public with a monument in a state with a Tourism Industry, and otherwise
-Standard.
+No policy changes maintenance, which Grand Monuments don't need, or aging,
+anniversaries or what a dedication does in its own state.
+
+The national effects change at once, and each monument's tourism at the start
+of the next month. The AI picks each January: State Ceremonial with legitimacy
+under 40 when its regime grandeur and the quarter together reach legitimacy's
+first step, Open to the Public
+with a monument in a state with a Tourism Industry, Public Education with
+literacy under 50%, and otherwise Cultural Promotion.
 
 ### Contested monuments
 
@@ -1063,8 +1182,9 @@ state, but gives no prestige, legitimacy or approval, and the group that objecte
 to its message resents it every month it stands undecided.
 
 When it happens, a notice lets you decide for all of them at once or one at a
-time. You can also decide later from the monument's row under Our Monuments on
-the Grand Monuments tab.
+time. You can also decide later from the monument's row under Awaiting a
+Decision on the Grand Monuments tab. Each choice's hover gives this month's
+figures: the legitimacy Pull Down brings and the approval each choice moves.
 
 | Choice | What happens |
 |---|---|
@@ -1171,11 +1291,11 @@ ally or a power bloc partner.
 
 ### Buried sites
 
-Thirty-five monuments lie buried when a game begins, and a country that holds
+Fifty monuments lie buried when a game begins, and a country that holds
 the ground, or the right to dig it by treaty, can dig them up: Nineveh's
 library, Troy, Mycenae, Olympia, Delphi, Knossos, the Pergamon Altar, the Ishtar
 Gate of Babylon, Machu Picchu, the tombs of Tutankhamun and Philip II, the
-Terracotta Army, Göbekli Tepe and others. A dug-up site is a historical monument
+Terracotta Army, Göbekli Tepe, Ephesus, Teotihuacan, Hattusa and others. A dug-up site is a historical monument
 like those standing at the start. It keeps its name and look, and an army can
 carry it off as a [trophy](#monument-trophies).
 
@@ -1191,7 +1311,7 @@ Romanticism for Nineveh, Empiricism for Troy, Mycenae, Pergamon, Olympia and
 Sidon, and later ones for the finds of the twentieth century, up to E-commerce
 for Göbekli Tepe. Some are known and open at once, and The Scholars Know Where
 to Look tells you when one is. The rest are found by chance: once you have the
-technology, each month there is about a 1% chance that a plough, a railway
+technology, each month there is about a 1% chance that a plow, a railway
 cutting or a hiker turns one up, and Something Under the Spade tells you. Both
 events name the place and the state, say what was found, add a short note on
 how it was found in history, and offer the dig.
@@ -1212,14 +1332,17 @@ the innovation cap stays. A site's size sets its months, so a 10-level site dug
 by Systematic Stratigraphy diverts 20 innovation a week for 40 months, a 5-level
 one for 27. The button's tooltip gives this site's months, and a dig's row
 gives the innovation it diverts. Nothing caps how many digs you run, but a
-method's button is greyed while you make less weekly innovation than it would
+method's button is grayed while you make less weekly innovation than it would
 divert, so a new dig never takes your innovation below zero. Suspend Dig stops
 a dig and keeps its progress. A dig also stops if you lose the state,
 or the treaty that let you dig there ends, and whoever may dig it next can take
 it up from where it stopped.
 
 A finished dig stands in the state it was dug in, To the Nation, at the site's
-levels (5 to 15). With no monument there it is a new one; otherwise it stands
+levels (5 to 15). Fourteen sites stand To History instead, at 3 or 6 levels:
+the ruins whose visitors their state's Base Appeal leaves out until they are
+dug, such as Ephesus, Tikal, Chichén Itzá, Teotihuacan, Leptis Magna and the
+library cave at Mogao. With no monument there it is a new one; otherwise it stands
 beside the one there as [several monuments in one state](#several-monuments-in-one-state).
 An event tells you how it went, again with the place, the find and its history.
 The AI, at peace and out of default, starts a dig now and then, never runs
@@ -1261,11 +1384,10 @@ pause construction first.
 
 ### Monument anniversaries
 
-Every dedication has an anniversary event that can fire once a monument of that
+Every dedication but To History has an anniversary event that can fire once a monument of that
 dedication reaches level 3 and still fits. Each offers a choice between two
 benefits, usually for two interest groups, and the only cost is money. A
-contested or heritage monument holds no anniversaries, and none come while your
-monument policy is Mothballed.
+contested or heritage monument holds no anniversaries.
 
 The AI raises most of its monuments through opportunities. Without one, it raises
 them mainly as a great or major power, in a state with a

@@ -17,6 +17,9 @@ from test_demographics_registry import (  # noqa: E402  (helpers and paths only:
     APPLIED, DEMOG_ON_ACTIONS, EFFECTS, INH_EFFECTS, VALUES, WEALTH_EFFECTS, _block, _CountryEngine, _find,
     _parse_script, _raw_blocks, _text)
 
+sys.path.insert(0, str(ROOT / "scripts" / "analysis"))
+import demographics_effects as DE  # noqa: E402
+
 INEQ_MODIFIERS = ROOT / "common" / "static_modifiers" / "te_demog_inequality_modifiers.txt"
 WIDGETS = ROOT / "gui" / "te_demographics_widgets.gui"
 NATION_TAB = ROOT / "scripts" / "generators" / "gen_nation_tab.py"
@@ -513,7 +516,7 @@ class TestReturnOnCapital(unittest.TestCase):
         eng.vars["te_dg_wc_rg"] = 0.0
         self.assertEqual(eng.value("te_demog_wc_rg_on"), 1.0)
         loc = _loc()
-        for key, scope, figures in (("te_demog_wc_t_rg_tt", "GetPlayer", "te_demog_wc_t_rg_figures"),
+        for key, scope, figures in (("te_demog_wc_t_rg_tt", "Country", "te_demog_wc_t_rg_figures"),
                                     ("te_demog_st_wc_t_rg_tt", "State.GetOwner", "te_demog_st_wc_t_rg_figures")):
             self.assertNotIn("te_dg_wc_r'", loc[key], "the figures sit in the named key")
             self.assertIn(f"{scope}.MakeScope.ScriptValue('te_demog_wc_rg_on')", loc[key])
@@ -566,7 +569,7 @@ class TestReturnOnCapital(unittest.TestCase):
 
     def test_both_panels_show_the_term(self):
         widgets = _text(WIDGETS)
-        self.assertIn("GetPlayer.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
+        self.assertIn("Country.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
         self.assertIn("State.GetOwner.MakeScope.ScriptValue('te_demog_wc_rg_term')", widgets)
         keys = _loc_keys()
         for key in ("te_demog_wc_t_rg", "te_demog_wc_t_rg_tt", "te_demog_st_wc_t_rg_tt"):
@@ -587,10 +590,13 @@ class TestInequality(unittest.TestCase):
         return eng
 
     def test_from_045_on_with_no_cap(self):
-        """The same slope past 0.65 (owner, 2026-10-20: the cap at 1 went): +27.5% at a Gini of 1."""
+        """No cap (owner, 2026-10-20), and twice as steep above 0.70 (2026-10-22 effects design): +42.5% at a Gini
+        of 1."""
         # at or under 0.452 the multiplier is 0.01 or less, and no modifier is applied
         for gini, mult in ((0.30, None), (0.45, None), (0.452, None), (0.50, 0.25), (0.55, 0.5), (0.65, 1.0),
-                           (0.80, 1.75), (1.0, 2.75)):
+                           (0.70, 1.25), (0.80, 2.25), (1.0, 4.25)):
+            if mult is not None:
+                self.assertAlmostEqual(DE.inequality(gini), mult, places=5)
             with self.subTest(gini=gini):
                 eng = self.refresh(gini, had=0.4)
                 got = eng.modifiers.get("te_demog_census_inequality")
@@ -622,13 +628,15 @@ class TestInequality(unittest.TestCase):
 
     def test_no_max_on_the_multiplier(self):
         body = _block(_text(WEALTH_EFFECTS), "te_demog_inequality_refresh")
-        self.assertIn("value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 } }", body)
+        self.assertIn("value = { value = var:te_dg_gini subtract = 0.45 multiply = 5 min = 0 add = { value = "
+                      "var:te_dg_gini subtract = 0.70 multiply = 5 min = 0 } } }", body)
         self.assertNotIn("max =", body)
         self.assertNotIn("up to 10%", _loc()["te_demog_census_inequality_desc"])
 
     def test_the_modifier(self):
         body = _block(_text(INEQ_MODIFIERS), "te_demog_census_inequality")
-        self.assertIn("state_radicals_from_political_movements_mult = 0.1", body)
+        fields = {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+        self.assertEqual(fields, DE.SIZES["te_demog_census_inequality"])
         self.assertIn("te_demog_census_inequality", _loc_keys())
         self.assertIn("te_demog_census_inequality_desc", _loc_keys())
         self.assertIn('"te_demog_census_*": "states"', _text(NATION_TAB), "the Nation tab's family places it")

@@ -20,7 +20,7 @@ on_monthly_pulse = {
 sr_launch_windows_on_action = {
 	effect = {
 		if = {
-			limit = { has_game_rule = space_race_enabled }
+			limit = { sr_space_race_on = yes }
 			sr_launch_windows_refresh_cache = yes
 		}
 	}

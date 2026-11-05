@@ -1,0 +1,387 @@
+﻿# ======================================================================
+#  JUDICIARY — amendments (phase 3)
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md § 10, § 14.2
+#  Each takes its interest groups' stances from a parent law elsewhere
+#  whose supporters backed it in history, and each has a scripted way in:
+#  a petition on a court law in force (amendment_petition_events.21-.27)
+#  and, for three, a debate event while a host court law is enacted
+#  (te_judiciary_events.20-.22). An amendment that changes a rule moves
+#  the court laws' tooltip lines (judiciary_modifier_types.txt), so the
+#  rule shows where the player reads it.
+#  Upkeep: te_jud_amendment_upkeep (te_judiciary_effects.txt) lifts the
+#  suspension of habeas corpus at peace and the people's tribunals without
+#  a single-party state, since `possible` is read only when an amendment is
+#  added.
+# ======================================================================
+
+# Suspension of Habeas Corpus - Lincoln's suspension (1861) and Ex parte
+# Merryman, Britain's in the French wars. Detention without trial for the
+# war's duration: the courts can't free a prisoner, so they earn less trust
+# (the ceiling's multiplier line), and dissent is cheap to suppress. Only
+# in wartime, and it lapses at peace (country_amendment_lapses_at_peace_bool,
+# te_jud_amendment_upkeep). Parent Secret Police: the groups that want a
+# political police want detention without trial.
+amendment_habeas_corpus_suspension = {
+	parent = law_secret_police
+
+	allowed_laws = {
+		law_statutory_courts
+		law_constitutional_review
+	}
+
+	modifier = {
+		country_suppression_cost_mult = -0.25
+		country_judicial_independence_ceiling_mult = -0.2
+		country_legitimacy_base_add = -5
+		country_amendment_lapses_at_peace_bool = yes
+	}
+
+	possible = {
+		is_at_war = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_armed_forces
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_secret_police
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Judicial Elections - Mississippi elected its judges from 1832 and New York
+# from 1846, the Jacksonians' answer to judges who answered to nobody. The
+# voters trust judges they chose, and judges who face the voters defer to
+# them: legitimacy up, the ceiling 20 lower. Under an elected government
+# only. Parent Universal Suffrage: populists and Jacksonian Democrats back
+# it, paternalists oppose it.
+amendment_judicial_elections = {
+	parent = law_universal_suffrage
+
+	allowed_laws = {
+		law_statutory_courts
+		law_constitutional_review
+	}
+
+	modifier = {
+		country_judicial_independence_ceiling_add = -20
+		country_legitimacy_base_add = 5
+	}
+
+	possible = {
+		te_jud_elected_government = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_jacksonian_democrat
+					has_ideology = ideology:ideology_populist
+				}
+			}
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_universal_suffrage
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Mixed Commercial Courts - the Ottoman commercial courts (1840) and Egypt's
+# mixed courts (1875): merchants' disputes with foreigners go to courts with
+# foreign and local judges, beside the religious or executive courts. They
+# answer the credit cost of those courts (-0.5pp, Religious Courts'
+# +0.5pp), earn a little more trust, and take cases from the clergy. Parent
+# Free Trade: the merchants and the market liberals who wanted the trade.
+amendment_mixed_commercial_courts = {
+	parent = law_free_trade
+
+	allowed_laws = {
+		law_religious_courts
+		law_executive_tribunals
+	}
+
+	modifier = {
+		country_credit_standing_add = -0.005
+		country_judicial_independence_ceiling_add = 10
+		interest_group_ig_devout_pol_str_mult = -0.05
+	}
+
+	possible = {
+		NOT = { has_law_or_variant = law_type:law_isolationism }
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_industrialists
+			is_interest_group_type = ig_petty_bourgeoisie
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_free_trade
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Jury Trials - Russia's judicial reform of 1864 brought juries with it,
+# and a jury acquitted Vera Zasulich in 1878 after she shot the governor of
+# St Petersburg. Citizens judging citizens: the courts earn more trust and
+# the public more say, but juries acquit the government's enemies, so
+# suppression costs more. Parent Guaranteed Liberties: liberals and radicals
+# back it, authoritarians oppose it.
+amendment_jury_trials = {
+	parent = law_guaranteed_liberties
+
+	allowed_laws = {
+		law_statutory_courts
+		law_constitutional_review
+	}
+
+	modifier = {
+		country_judicial_independence_ceiling_add = 10
+		country_suppression_cost_mult = 0.1
+		country_legitimacy_base_add = 3
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_guaranteed_liberties
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Military Tribunals for Civilians - courts-martial for civilians accused
+# of rebellion or sedition, in peace as in war (Spain's code of military
+# justice, Latin America's state-of-siege laws). The army's justice is
+# quick and its courts answer to it: suppression is cheaper, the Armed
+# Forces stronger, and the courts earn less trust. Parent Outlawed Dissent:
+# the groups that would outlaw dissent want it tried by soldiers.
+amendment_military_tribunals = {
+	parent = law_outlawed_dissent
+
+	allowed_laws = {
+		law_executive_tribunals
+		law_statutory_courts
+	}
+
+	modifier = {
+		country_suppression_cost_mult = -0.15
+		interest_group_ig_armed_forces_pol_str_mult = 0.1
+		country_judicial_independence_ceiling_mult = -0.2
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_armed_forces
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_outlawed_dissent
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# People's Tribunals - courts of the ruling party, judging by its idea of
+# justice: Soviet troikas, the Nazi Volksgerichtshof (1934), the people's
+# courts of revolutionary regimes. Cheap suppression and loyal followers,
+# and lenders charge for justice that follows the party line. Executive
+# Tribunals under a Single-Party State only (te_jud_amendment_upkeep lifts
+# it if the party loses its monopoly). Parent Single-Party State: the
+# vanguard and fascist ideologies back it.
+amendment_peoples_tribunals = {
+	parent = law_single_party_state
+
+	allowed_laws = {
+		law_executive_tribunals
+	}
+
+	modifier = {
+		country_suppression_cost_mult = -0.2
+		state_loyalists_from_political_movements_mult = 0.1
+		country_credit_standing_add = 0.005
+	}
+
+	possible = {
+		has_law = law_type:law_single_party_state
+	}
+
+	would_sponsor = {
+		OR = {
+			leader ?= {
+				OR = {
+					has_ideology = ideology:ideology_vanguardist
+					has_ideology = ideology:ideology_fascist
+				}
+			}
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_single_party_state
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}
+
+# Human-in-the-Loop Appeals - a human judge hears any appeal against a
+# machine's ruling (the EU's right not to be subject to a purely automated
+# decision, GDPR art. 22, 2018). Legitimacy for efficiency: the public
+# trusts a ruling a person can review, and it gives back half the law's
+# administrative saving. A human signature on every appeal also breaks the
+# capture under Algorithmic Governance (the override line, -2). Parent
+# Strong Privacy Rights: the groups that would limit what machines know
+# about people want a person to check what machines decide.
+amendment_human_in_the_loop = {
+	parent = law_strong_privacy_rights
+
+	allowed_laws = {
+		law_algorithmic_jurisprudence
+	}
+
+	modifier = {
+		country_legitimacy_base_add = 5
+		state_bureaucracy_population_base_cost_factor_mult = 0.05
+		country_override_with_algorithmic_governance_add = -2
+		country_judicial_independence_ceiling_add = 10
+	}
+
+	possible = {
+		always = yes
+	}
+
+	would_sponsor = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+			AND = {
+				exists = scope:approval
+				scope:approval > 0
+			}
+		}
+	}
+
+	ai_will_revoke = {
+		any_interest_group = {
+			is_in_government = yes
+			law_stance = {
+				law = law_type:law_strong_privacy_rights
+				value < neutral
+			}
+		}
+	}
+
+	can_repeal = {
+		legitimacy >= legitimacy_to_repeal_amendment
+	}
+
+	amendment_activism_multiplier = 0.5
+}

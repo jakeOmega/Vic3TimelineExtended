@@ -168,5 +168,19 @@ class LintTest(unittest.TestCase):
         self.assertEqual(lint.loc_args(expr), ["key_a", "key_b"])
 
 
+
+class DefinitionRuleTest(unittest.TestCase):
+    def test_merge_target_is_not_a_definition(self):
+        # gui_reference_audit's rule (#1180): INJECT:/REPLACE: names resolve
+        # only through their own definition; *_OR_CREATE: names define.
+        with tempfile.TemporaryDirectory() as repo:
+            os.makedirs(os.path.join(repo, "common", "scripted_guis"))
+            with open(os.path.join(repo, "common", "scripted_guis", "s.txt"), "w", encoding="utf-8-sig") as f:
+                f.write("real_sgui = {\n\tscope = country\n}\nINJECT:inject_only = { }\n"
+                        "TRY_REPLACE:try_only = { }\nREPLACE_OR_CREATE:made = { }\n")
+            linter = lint.Linter.__new__(lint.Linter)
+            linter.repo = repo
+            self.assertEqual(linter._top_level_keys("common/scripted_guis/**/*.txt"), {"real_sgui", "made"})
+
 if __name__ == "__main__":
     unittest.main()

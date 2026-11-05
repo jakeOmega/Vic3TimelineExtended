@@ -25,7 +25,7 @@ RULES = "common/game_rules/extra_game_rules.txt"
 RULE_SETTINGS = ("internal_resettlement_enabled", "internal_resettlement_ai_voluntary",
                  "internal_resettlement_disabled")
 
-BUILDING_FILE = "common/buildings/resettlement.txt"
+BUILDING_FILE = "common/buildings/07_zz_te_resettlement.txt"
 PMG_FILE = "common/production_method_groups/resettlement_pmgs.txt"
 PM_FILE = "common/production_methods/resettlement_pms.txt"
 MODIFIER_TYPES = "common/modifier_type_definitions/mod_entity_modifier_types.txt"
@@ -229,6 +229,20 @@ class FrontierTests(unittest.TestCase):
         text = strip_comments(read(VALUES))
         self.assertRegex(text, r"(?m)^resettlement_frontier_open_base = 2\s*$")
         self.assertRegex(text, r"(?m)^resettlement_frontier_close_base = 10\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_frontier_empty_base = 0\.5\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_frontier_reference_population = 1000000000\s*$")
+
+    def test_thresholds_scale_in_proportion_to_world_population(self):
+        text = read(VALUES)
+        scale = squash(block(text, "resettlement_world_population_scale"))
+        self.assertIn("value = global_population", scale)
+        self.assertIn("divide = resettlement_frontier_reference_population", scale)
+        # Proportional: no floor or ceiling, and nothing added.
+        for word in ("min =", "max =", "add ="):
+            self.assertNotIn(word, scale)
+        for name in ("resettlement_frontier_open_density", "resettlement_frontier_close_density",
+                     "resettlement_frontier_empty_density"):
+            self.assertIn("multiply = resettlement_world_population_scale", squash(block(text, name)), name)
 
     def test_density_is_region_population_over_area(self):
         text = read(VALUES)
@@ -254,7 +268,8 @@ class FrontierTests(unittest.TestCase):
     def test_margins_are_threshold_minus_density(self):
         text = read(VALUES)
         for margin, threshold in (("resettlement_frontier_open_margin", "resettlement_frontier_open_density"),
-                                  ("resettlement_frontier_close_margin", "resettlement_frontier_close_density")):
+                                  ("resettlement_frontier_close_margin", "resettlement_frontier_close_density"),
+                                  ("resettlement_frontier_empty_margin", "resettlement_frontier_empty_density")):
             body = squash(block(text, margin))
             self.assertIn(f"value = {threshold}", body)
             self.assertIn("subtract = resettlement_frontier_density", body)
@@ -479,6 +494,11 @@ class BuildingTests(unittest.TestCase):
                      "resettlement_state_frontier_still_open = yes"):
             self.assertIn(trig, possible)
         self.assertNotIn("law_closed_borders", possible)
+
+    def test_ai_empty_frontier_bonus_scales_with_world_population(self):
+        ai = squash(block(block(read(BUILDING_FILE), "building_resettlement_colony"), "ai_value"))
+        self.assertIn("resettlement_frontier_empty_margin > 0", ai)
+        self.assertNotRegex(ai, r"resettlement_frontier_density [<>]")
 
     def test_level_cap_is_five_plus_five_per_tech(self):
         base = block(read(BASE_VALUES), "INJECT:base_values")
@@ -1021,13 +1041,13 @@ class DebugTests(unittest.TestCase):
 
 # ---- the docs and the concept (Task 8) -------------------------------------------------
 
-MOD_SYSTEMS = "docs/systems/mod_systems.md"
+MOD_SYSTEMS = "docs/systems/mod_systems/pops_and_migration.md"
 
 
 class DocsTests(unittest.TestCase):
     def test_the_system_section_names_every_programme(self):
         text = read(MOD_SYSTEMS)
-        m = re.search(r"(?ms)^## Internal Resettlement \(Settlement Authority\)\n(.*?)(?=^## )", text)
+        m = re.search(r"(?ms)^## Internal Resettlement \(Settlement Authority\)\n(.*?)(?=^## |\Z)", text)
         self.assertIsNotNone(m)
         section = m.group(1)
         L = loc()
@@ -1039,7 +1059,9 @@ class DocsTests(unittest.TestCase):
                       "across all Authorities", section)
 
     def test_no_doc_names_the_old_transfer(self):
-        self.assertNotIn("resettlement_transfer_on_action", read(MOD_SYSTEMS))
+        for path in sorted((ROOT / "docs/systems/mod_systems").glob("*.md")):
+            with self.subTest(file=path.name):
+                self.assertNotIn("resettlement_transfer_on_action", path.read_text(encoding="utf-8"))
 
     def test_concept(self):
         self.assertIsNotNone(block(read("common/game_concepts/extra_concepts.txt"), "concept_internal_resettlement"))

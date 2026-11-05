@@ -45,6 +45,8 @@ class LegacyIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.triggers = parse('common/scripted_triggers/legacy_event_integration_triggers.txt')
+        # The Space Race rule's gate (sr_space_race_on): its four settings.
+        cls.triggers.update(parse('common/scripted_triggers/sr_site_triggers.txt'))
         cls.effects = parse('common/scripted_effects/legacy_event_integration_effects.txt')
         cls.values = parse('common/script_values/legacy_event_integration_values.txt')
         cls.agency = parse('common/scripted_effects/te_event_agency_misc_effects.txt')

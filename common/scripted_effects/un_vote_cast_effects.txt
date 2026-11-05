@@ -4,8 +4,8 @@
 # THE single implementation of what casting a vote does. Three callers:
 #
 #   1. events/un_vote_events.txt, un_vote.1 options A / B / C — the popup that
-#      reaches every human member 30 days after a resolution opens (and again
-#      at months 9 and 11 to one that chose to decide later).
+#      reaches every human member once, in the ninth month of a resolution's
+#      session.
 #   2. common/scripted_guis/un_chamber_sguis.txt, un_chamber_vote_sgui — the
 #      Vote in Favour / Vote Against / Veto controls on the chamber widget's
 #      active-resolution card, available to a human member from the day the
@@ -123,6 +123,11 @@ un_vote_cast_yes = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 				add_modifier = { name = un_asat_moratorium_modifier multiplier = un_convention_multiplier }
 				custom_tooltip = un_asat_terms_tt
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				add_modifier = { name = un_colony_protection_modifier multiplier = un_convention_multiplier }
+				custom_tooltip = un_colony_protection_terms_tt
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_cultural_diversity } }
@@ -403,17 +408,21 @@ un_vote_cast_veto = {
 				# tally (the graduated form needs a majority). Every veto is a
 				# credibility debit weighted by the vetoer's weight in world affairs.
 				un_resolution_record_veto = yes
-				add_modifier = {
-					name = un_veto_authority_drain_modifier
-					days = long_modifier_time
-					is_decaying = yes
-				}
-				# Diplomatic isolation
-				add_modifier = {
-					name = un_veto_isolation_modifier
-					days = normal_modifier_time
-					is_decaying = yes
-				}
+				# The veto record, the case for expelling us from the seat
+				# (un_dossier_effects.txt); the tooltip names it.
+				un_veto_record_add = yes
+			}
+			# Outside the wrapper, so the vote prints the modifiers' own lines.
+			add_modifier = {
+				name = un_veto_authority_drain_modifier
+				days = long_modifier_time
+				is_decaying = yes
+			}
+			# Diplomatic isolation
+			add_modifier = {
+				name = un_veto_isolation_modifier
+				days = normal_modifier_time
+				is_decaying = yes
 			}
 
 			# Infamy hit on punitive resolutions (vetoing humanitarian intervention,

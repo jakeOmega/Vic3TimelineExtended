@@ -7,20 +7,37 @@ The mod is written in English. `localization/english/` is the only loc the repo 
 
 None of the generated `.yml` is committed. The translation memory is.
 
+Two languages have one: German (`german/`) and Spanish (`spanish/`), both machine-translated.
+
 ## What's here
 
 | Path | What |
 |---|---|
 | `<language>/BRIEF.md` | The translator's instructions: markup rules, grammar conventions, voice. Every agent run reads it. |
 | `<language>/terms.json` | Terms coined during runs, English → translation (the mod's recurring names that aren't loc keys of their own, plus official game terms agents kept getting wrong). `prepare` adds the ones a chunk contains to its glossary; `check-terms` finds translations that disagree. Add to it whenever a report shows two chunks rendering one term differently. |
-| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`. Declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+| `<language>/tm/<file>.json` | The translation memory, one file per English loc file. Each key maps to `{"en": <the English it was translated from>, "de": <the translation>}`; the translation's field is the language's code in `TM_FIELDS` (`"de"`, `"es"`). German's declined country-name forms (`AFU_DAT`, …) have no English key of their own; they carry `"base": <key>` and sit with that key. |
+
+## What differs by language
+
+`scripts/i18n/translate_loc.py` keeps what differs between languages in four tables, each taken from what the base game's own loc does in that language (issue #566 has the survey):
+
+| Table | German | Spanish |
+|---|---|---|
+| `TM_FIELDS`: the TM field, and `--field`'s default | `de` | `es` |
+| `COUNTRY_FORMS`: declined country names, reached through `GetAltName('<FORM>')` | seven forms per name (`NOM` … `NACH`), translated in the glossary chunk | none: names stay `GetName`, and merge rejects a `GetAltName` |
+| `QUOTES`, `QUOTE_MARKS`: the marks merge rewrites the English's `\"…\"` and a stray `"` into | „…“ with ‚…‘ inside | «…» with “…” inside |
+| `THOUSANDS_SEPARATOR`, `CLOSED_PERCENT`: what merge writes for 1,000, and whether 10 % closes up | 1.000, 10% | 1 000 with a no-break space, 10% |
+
+A new language needs a row in each table it differs in, a `BRIEF.md` (copy the nearest one and rewrite its grammar, number, quote and voice sections against the base game's loc in that language), and an empty `terms.json`. Pass `--language <folder>` to every command below; the default is German.
 
 ## When the English changes
 
 A translation stays attached to the English it was made from. When that English changes, the key is **stale**:
 
-- a small change keeps the old translation until the next run. For text of six words or more, that means the same numbers and at least 85% similarity; for shorter text (names, labels), only case, spacing or final punctuation may differ.
+- a small change keeps the old translation until the next run. For text of six words or more, that means the same numbers and at least 85% similarity; for shorter text (names, labels), only case, spacing or final punctuation may differ. A change of spelling only, British to American as `scripts/analysis/check_loc_spelling.py` makes it (Licence to License), is small at any length.
 - anything larger ships English until the key is translated again.
+
+Renaming a script value, scripted GUI or variable that a line reads (`ScriptValue('x')`, `GetVariable('x')`) changes its English too, and the word count leaves the markup out, so a short line such as a panel row counts as short text and ships English. Make the same swap in the memory's `en` and `de`/`es` fields of each record, after checking that its `en` still matches the current English, so the translation keeps shipping with the new binding. Otherwise a small change keeps the old translation, old binding included (lunar colonization PR 3a, Next Windows lines).
 
 The next `prepare` offers a stale key again, with the English its translation was made from and that translation as comments above the line (BRIEF.md § Updated lines), so the agent edits the translation rather than starting over. Developer test benches (`DEV_ONLY_FILES` in the script) are never offered.
 
@@ -45,10 +62,23 @@ The second update pass (October 2026) covered 2,125 keys and 23,800 words, 51 of
 
 The third update pass (October 2026, on the 1.1.8 release branch) covered 1,735 keys and 37,300 words, 221 of them stale; the largest new families were the Demographics tab and the budget panel's new tab. Seventeen names were translated by hand, then five content chunks went out in parallel (one held all 229 `te_demog_*` lines, another the whole `te_budget` file) and finished in 2 to 15 minutes, and a 57-line correction chunk went to one more agent: about 40 minutes in all, with no line rejected. A new system's lowercase words were settled before dispatch and appended to the prompts (*census* is *Volkszählung*, as the base game says, not *Zensus*; *posture* is *Haltung*; the budget panel is the *Etat*). The reports and `check-terms` turned up names coined twice where a name's key sat in one chunk and the prose that mentions it in another (the inheritance amendments, now *Nachlassabgaben* and *Grunderbe* for Paine's Birthright Endowment; *Inflationssteuerung*), two vanilla terms the agents missed (*Verkäufer* for Shopkeepers, *einvernehmlich* for amicable relations), and three splits already in the memory: *Zusatz* for amendment in 15 lines against the base game's *Nachtrag*, *Steuerungsrad* beside *Regler* for the banking dial, and *Notfall-Liquidität* beside *Notliquidität*. Merge pruned 36 entries whose English is gone.
 
+The fourth update pass (October 2026) covered 4,954 keys and 74,300 words, 408 of them stale; the largest new families were the Grand Monuments' archaeology and trophies, Demographics' family policy and causes of death, seabed licences and the UN chamber. It ran in a cloud container with no game install, so without the vanilla glossary (below). The 46 names went by hand, then 41 more short keys that lines in other chunks insert by `$key$` (the causes of death, the seabed basins, the monuments' unique dedications): `prepare` gives a chunk a key's German only once it is in the memory, so a script listed every pending key another chunk references, and they merged as a hand-made chunk in the manifest before `prepare` cut the rest. The 1,342 generated capital bloc names are two templates and were written by script („Liga von …“, „Pakt von …“). Eight content chunks went out in parallel and finished in 12 to 16 minutes, with no line rejected. 84 lines were then corrected by script. Most of the splits were names whose key sat in one chunk while prose in another named them: the family-policy measures (*Intensivkampagne*, *Familienwohnungsbau*, *Sexualaufklärung*), the seabed policies, *Wanderungssaldo*, and the Demographics rule's "Full" setting, which about 30 lines called *Voll* and 11 *Vollständig* (the label is now *Voll*). `check-terms` misses a plural or a lowercase variant ("ribbon strikes", "wegschaffen"), so after fixing a term, grep the memory for the losing form.
+
+Without a game install, run `prepare --no-vanilla`. The chunk headers then have no VANILLA TERMS and no base-game keys under REFERENCED KEYS. The fourth pass made up for it with a file listing, for each base-game key the chunks referenced, the inflected forms and surrounding text the memory already gives it, and told the agents to grep the memory for any base-game term (`grep -h -i '<term>' i18n/german/tm/*.json`), since those lines were translated with the official glossary. Expect more guessed genders around base-game concepts than in a run with the game.
+
+The Spanish run (October 2026) translated the whole mod in one pass: 29,120 keys and 404,500 words, half again the German first run. It took about an hour and a half: a glossary chunk of 2,323 names (18 minutes for one agent), then 45 content chunks with eight agents kept running at a time, then a correction chunk of 113 lines. Agents averaged about ten minutes and 220,000 tokens a chunk. One line was rejected, because the brief at first suggested swapping a `GetAdjective` for `GetName`, which the markup check counts as a lost call. What worked, for the next language:
+
+- **Seed `terms.json` before the first content chunk.** The German list's English side, looked up in the base game's loc for the new language (`VanillaTerms`) or taken from the glossary chunk's own renderings, gave about 135 terms before the first content chunk. Pop types, interest groups, vanilla law names (the voting laws) and the UN agencies' acronyms (OMS, ACNUR, CIJ) were the terms agents most often got wrong without one.
+- **Dispatch on a rolling basis, not in waves.** After each merge, add what the report settled to `terms.json`, `refresh` the chunks no agent has started, and send the next one, so eight stay busy and each new chunk carries every term settled so far.
+- **Keep lowercase common nouns out of `terms.json`.** `check-terms` matches the English with its markup, so *peasants* inside `[GetPopType('peasants')]`, or *homeland* used loosely, flags correct lines. Dropping those entries cut 91 mismatches to 39, nearly all of them real.
+- **Expect tier and band names to drift.** A system's level names (the UN authority tiers, the tradecraft tiers, nuclear readiness, the colonial bands, the monetary stance bands) sit as one-word label keys in one chunk while the prose that names them sits in others, and `chunk_glossary` leaves lone words out. Four agents rendered nuclear readiness "Recessed" four ways. The correction chunk took them back to the label keys' wording with `--key-note`s chosen by an English-and-Spanish regex pair per family, each note conditional ("if the word here means something else, keep the line").
+
+The fifth update pass (October 2026) brought both languages up together, in a cloud container with no game install: 1,185 keys and 20,700 words each, 104 of them stale. The largest new families were the judiciary's amendments and court cases, the colonial wars of independence, the space colonies' modules and fleets, and 65 more Grand Monument landmarks. 378 short keys per language went by hand first: the glossary chunk, every name another chunk inserts by `$key$` (colony sites, landmarks, monument policies), and the new systems' labels (modules, drives, fabrication methods, the judiciary's modifiers), with their multi-word names added to `terms.json`. Four content chunks per language then went to eight agents at once, which finished in 6 to 12 minutes with no line rejected. `check-terms` and a grep of the new lines found three splits between chunks, fixed by script: *chartered company* (back to the memory's *Handelsgesellschaft* and *compañía privilegiada*), *Veto-Bilanz*, and the colony record. A `terms.json` entry can also flag a base-game name that shares the English word: German's colony *Raumhafen* flagged vanilla's *Weltraumbahnhof* spaceport method, so that entry came out. Without the game files nobody could confirm the German name of the base game's sea node, so the German lines phrase around the link („Meeresabschnitt ([concept_sea_node])“). A pass run with the game should swap in the official term.
+
 `merge` also drops every TM entry, in every file, whose key the English no longer has. In a feature branch that translates only its own files (`prepare --files te_tax`), revert the other TM files it pruned (`git checkout -- i18n/<language>/tm/<file>.json`) so the pruning lands with a translation pass instead.
 
 Runs are resumable: whatever has merged is done, and `prepare` only offers what is still missing or stale. The merge check passes 97% of the base game's own English/German pairs unchanged; what it rejects there is vanilla German that has drifted from its English.
 
 ## Corrections from players
 
-Edit the key's `"de"` value in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.
+Edit the key's translation (`"de"`, `"es"`) in `<language>/tm/*.json`, keeping `"en"` as it is, and commit. The next deploy ships it.

@@ -3,8 +3,158 @@
 # scripts/analysis/demographics_params.py.
 
 # The yearly step's sweep: pass 1 visits slots open-1 .. 0 (ages 1 .. open), pass 2
-# slots 149 .. open (ages open+1 .. 150), so te_demog_slot sees ages in order.
+# slots 299 .. open (ages open+1 .. 300), so te_demog_slot sees ages in order.
 te_demog_sweep = {
+	te_demog_slot_p1 = { S = 299 }
+	te_demog_slot_p1 = { S = 298 }
+	te_demog_slot_p1 = { S = 297 }
+	te_demog_slot_p1 = { S = 296 }
+	te_demog_slot_p1 = { S = 295 }
+	te_demog_slot_p1 = { S = 294 }
+	te_demog_slot_p1 = { S = 293 }
+	te_demog_slot_p1 = { S = 292 }
+	te_demog_slot_p1 = { S = 291 }
+	te_demog_slot_p1 = { S = 290 }
+	te_demog_slot_p1 = { S = 289 }
+	te_demog_slot_p1 = { S = 288 }
+	te_demog_slot_p1 = { S = 287 }
+	te_demog_slot_p1 = { S = 286 }
+	te_demog_slot_p1 = { S = 285 }
+	te_demog_slot_p1 = { S = 284 }
+	te_demog_slot_p1 = { S = 283 }
+	te_demog_slot_p1 = { S = 282 }
+	te_demog_slot_p1 = { S = 281 }
+	te_demog_slot_p1 = { S = 280 }
+	te_demog_slot_p1 = { S = 279 }
+	te_demog_slot_p1 = { S = 278 }
+	te_demog_slot_p1 = { S = 277 }
+	te_demog_slot_p1 = { S = 276 }
+	te_demog_slot_p1 = { S = 275 }
+	te_demog_slot_p1 = { S = 274 }
+	te_demog_slot_p1 = { S = 273 }
+	te_demog_slot_p1 = { S = 272 }
+	te_demog_slot_p1 = { S = 271 }
+	te_demog_slot_p1 = { S = 270 }
+	te_demog_slot_p1 = { S = 269 }
+	te_demog_slot_p1 = { S = 268 }
+	te_demog_slot_p1 = { S = 267 }
+	te_demog_slot_p1 = { S = 266 }
+	te_demog_slot_p1 = { S = 265 }
+	te_demog_slot_p1 = { S = 264 }
+	te_demog_slot_p1 = { S = 263 }
+	te_demog_slot_p1 = { S = 262 }
+	te_demog_slot_p1 = { S = 261 }
+	te_demog_slot_p1 = { S = 260 }
+	te_demog_slot_p1 = { S = 259 }
+	te_demog_slot_p1 = { S = 258 }
+	te_demog_slot_p1 = { S = 257 }
+	te_demog_slot_p1 = { S = 256 }
+	te_demog_slot_p1 = { S = 255 }
+	te_demog_slot_p1 = { S = 254 }
+	te_demog_slot_p1 = { S = 253 }
+	te_demog_slot_p1 = { S = 252 }
+	te_demog_slot_p1 = { S = 251 }
+	te_demog_slot_p1 = { S = 250 }
+	te_demog_slot_p1 = { S = 249 }
+	te_demog_slot_p1 = { S = 248 }
+	te_demog_slot_p1 = { S = 247 }
+	te_demog_slot_p1 = { S = 246 }
+	te_demog_slot_p1 = { S = 245 }
+	te_demog_slot_p1 = { S = 244 }
+	te_demog_slot_p1 = { S = 243 }
+	te_demog_slot_p1 = { S = 242 }
+	te_demog_slot_p1 = { S = 241 }
+	te_demog_slot_p1 = { S = 240 }
+	te_demog_slot_p1 = { S = 239 }
+	te_demog_slot_p1 = { S = 238 }
+	te_demog_slot_p1 = { S = 237 }
+	te_demog_slot_p1 = { S = 236 }
+	te_demog_slot_p1 = { S = 235 }
+	te_demog_slot_p1 = { S = 234 }
+	te_demog_slot_p1 = { S = 233 }
+	te_demog_slot_p1 = { S = 232 }
+	te_demog_slot_p1 = { S = 231 }
+	te_demog_slot_p1 = { S = 230 }
+	te_demog_slot_p1 = { S = 229 }
+	te_demog_slot_p1 = { S = 228 }
+	te_demog_slot_p1 = { S = 227 }
+	te_demog_slot_p1 = { S = 226 }
+	te_demog_slot_p1 = { S = 225 }
+	te_demog_slot_p1 = { S = 224 }
+	te_demog_slot_p1 = { S = 223 }
+	te_demog_slot_p1 = { S = 222 }
+	te_demog_slot_p1 = { S = 221 }
+	te_demog_slot_p1 = { S = 220 }
+	te_demog_slot_p1 = { S = 219 }
+	te_demog_slot_p1 = { S = 218 }
+	te_demog_slot_p1 = { S = 217 }
+	te_demog_slot_p1 = { S = 216 }
+	te_demog_slot_p1 = { S = 215 }
+	te_demog_slot_p1 = { S = 214 }
+	te_demog_slot_p1 = { S = 213 }
+	te_demog_slot_p1 = { S = 212 }
+	te_demog_slot_p1 = { S = 211 }
+	te_demog_slot_p1 = { S = 210 }
+	te_demog_slot_p1 = { S = 209 }
+	te_demog_slot_p1 = { S = 208 }
+	te_demog_slot_p1 = { S = 207 }
+	te_demog_slot_p1 = { S = 206 }
+	te_demog_slot_p1 = { S = 205 }
+	te_demog_slot_p1 = { S = 204 }
+	te_demog_slot_p1 = { S = 203 }
+	te_demog_slot_p1 = { S = 202 }
+	te_demog_slot_p1 = { S = 201 }
+	te_demog_slot_p1 = { S = 200 }
+	te_demog_slot_p1 = { S = 199 }
+	te_demog_slot_p1 = { S = 198 }
+	te_demog_slot_p1 = { S = 197 }
+	te_demog_slot_p1 = { S = 196 }
+	te_demog_slot_p1 = { S = 195 }
+	te_demog_slot_p1 = { S = 194 }
+	te_demog_slot_p1 = { S = 193 }
+	te_demog_slot_p1 = { S = 192 }
+	te_demog_slot_p1 = { S = 191 }
+	te_demog_slot_p1 = { S = 190 }
+	te_demog_slot_p1 = { S = 189 }
+	te_demog_slot_p1 = { S = 188 }
+	te_demog_slot_p1 = { S = 187 }
+	te_demog_slot_p1 = { S = 186 }
+	te_demog_slot_p1 = { S = 185 }
+	te_demog_slot_p1 = { S = 184 }
+	te_demog_slot_p1 = { S = 183 }
+	te_demog_slot_p1 = { S = 182 }
+	te_demog_slot_p1 = { S = 181 }
+	te_demog_slot_p1 = { S = 180 }
+	te_demog_slot_p1 = { S = 179 }
+	te_demog_slot_p1 = { S = 178 }
+	te_demog_slot_p1 = { S = 177 }
+	te_demog_slot_p1 = { S = 176 }
+	te_demog_slot_p1 = { S = 175 }
+	te_demog_slot_p1 = { S = 174 }
+	te_demog_slot_p1 = { S = 173 }
+	te_demog_slot_p1 = { S = 172 }
+	te_demog_slot_p1 = { S = 171 }
+	te_demog_slot_p1 = { S = 170 }
+	te_demog_slot_p1 = { S = 169 }
+	te_demog_slot_p1 = { S = 168 }
+	te_demog_slot_p1 = { S = 167 }
+	te_demog_slot_p1 = { S = 166 }
+	te_demog_slot_p1 = { S = 165 }
+	te_demog_slot_p1 = { S = 164 }
+	te_demog_slot_p1 = { S = 163 }
+	te_demog_slot_p1 = { S = 162 }
+	te_demog_slot_p1 = { S = 161 }
+	te_demog_slot_p1 = { S = 160 }
+	te_demog_slot_p1 = { S = 159 }
+	te_demog_slot_p1 = { S = 158 }
+	te_demog_slot_p1 = { S = 157 }
+	te_demog_slot_p1 = { S = 156 }
+	te_demog_slot_p1 = { S = 155 }
+	te_demog_slot_p1 = { S = 154 }
+	te_demog_slot_p1 = { S = 153 }
+	te_demog_slot_p1 = { S = 152 }
+	te_demog_slot_p1 = { S = 151 }
+	te_demog_slot_p1 = { S = 150 }
 	te_demog_slot_p1 = { S = 149 }
 	te_demog_slot_p1 = { S = 148 }
 	te_demog_slot_p1 = { S = 147 }
@@ -155,6 +305,156 @@ te_demog_sweep = {
 	te_demog_slot_p1 = { S = 2 }
 	te_demog_slot_p1 = { S = 1 }
 	te_demog_slot_p1 = { S = 0 }
+	te_demog_slot_p2 = { S = 299 }
+	te_demog_slot_p2 = { S = 298 }
+	te_demog_slot_p2 = { S = 297 }
+	te_demog_slot_p2 = { S = 296 }
+	te_demog_slot_p2 = { S = 295 }
+	te_demog_slot_p2 = { S = 294 }
+	te_demog_slot_p2 = { S = 293 }
+	te_demog_slot_p2 = { S = 292 }
+	te_demog_slot_p2 = { S = 291 }
+	te_demog_slot_p2 = { S = 290 }
+	te_demog_slot_p2 = { S = 289 }
+	te_demog_slot_p2 = { S = 288 }
+	te_demog_slot_p2 = { S = 287 }
+	te_demog_slot_p2 = { S = 286 }
+	te_demog_slot_p2 = { S = 285 }
+	te_demog_slot_p2 = { S = 284 }
+	te_demog_slot_p2 = { S = 283 }
+	te_demog_slot_p2 = { S = 282 }
+	te_demog_slot_p2 = { S = 281 }
+	te_demog_slot_p2 = { S = 280 }
+	te_demog_slot_p2 = { S = 279 }
+	te_demog_slot_p2 = { S = 278 }
+	te_demog_slot_p2 = { S = 277 }
+	te_demog_slot_p2 = { S = 276 }
+	te_demog_slot_p2 = { S = 275 }
+	te_demog_slot_p2 = { S = 274 }
+	te_demog_slot_p2 = { S = 273 }
+	te_demog_slot_p2 = { S = 272 }
+	te_demog_slot_p2 = { S = 271 }
+	te_demog_slot_p2 = { S = 270 }
+	te_demog_slot_p2 = { S = 269 }
+	te_demog_slot_p2 = { S = 268 }
+	te_demog_slot_p2 = { S = 267 }
+	te_demog_slot_p2 = { S = 266 }
+	te_demog_slot_p2 = { S = 265 }
+	te_demog_slot_p2 = { S = 264 }
+	te_demog_slot_p2 = { S = 263 }
+	te_demog_slot_p2 = { S = 262 }
+	te_demog_slot_p2 = { S = 261 }
+	te_demog_slot_p2 = { S = 260 }
+	te_demog_slot_p2 = { S = 259 }
+	te_demog_slot_p2 = { S = 258 }
+	te_demog_slot_p2 = { S = 257 }
+	te_demog_slot_p2 = { S = 256 }
+	te_demog_slot_p2 = { S = 255 }
+	te_demog_slot_p2 = { S = 254 }
+	te_demog_slot_p2 = { S = 253 }
+	te_demog_slot_p2 = { S = 252 }
+	te_demog_slot_p2 = { S = 251 }
+	te_demog_slot_p2 = { S = 250 }
+	te_demog_slot_p2 = { S = 249 }
+	te_demog_slot_p2 = { S = 248 }
+	te_demog_slot_p2 = { S = 247 }
+	te_demog_slot_p2 = { S = 246 }
+	te_demog_slot_p2 = { S = 245 }
+	te_demog_slot_p2 = { S = 244 }
+	te_demog_slot_p2 = { S = 243 }
+	te_demog_slot_p2 = { S = 242 }
+	te_demog_slot_p2 = { S = 241 }
+	te_demog_slot_p2 = { S = 240 }
+	te_demog_slot_p2 = { S = 239 }
+	te_demog_slot_p2 = { S = 238 }
+	te_demog_slot_p2 = { S = 237 }
+	te_demog_slot_p2 = { S = 236 }
+	te_demog_slot_p2 = { S = 235 }
+	te_demog_slot_p2 = { S = 234 }
+	te_demog_slot_p2 = { S = 233 }
+	te_demog_slot_p2 = { S = 232 }
+	te_demog_slot_p2 = { S = 231 }
+	te_demog_slot_p2 = { S = 230 }
+	te_demog_slot_p2 = { S = 229 }
+	te_demog_slot_p2 = { S = 228 }
+	te_demog_slot_p2 = { S = 227 }
+	te_demog_slot_p2 = { S = 226 }
+	te_demog_slot_p2 = { S = 225 }
+	te_demog_slot_p2 = { S = 224 }
+	te_demog_slot_p2 = { S = 223 }
+	te_demog_slot_p2 = { S = 222 }
+	te_demog_slot_p2 = { S = 221 }
+	te_demog_slot_p2 = { S = 220 }
+	te_demog_slot_p2 = { S = 219 }
+	te_demog_slot_p2 = { S = 218 }
+	te_demog_slot_p2 = { S = 217 }
+	te_demog_slot_p2 = { S = 216 }
+	te_demog_slot_p2 = { S = 215 }
+	te_demog_slot_p2 = { S = 214 }
+	te_demog_slot_p2 = { S = 213 }
+	te_demog_slot_p2 = { S = 212 }
+	te_demog_slot_p2 = { S = 211 }
+	te_demog_slot_p2 = { S = 210 }
+	te_demog_slot_p2 = { S = 209 }
+	te_demog_slot_p2 = { S = 208 }
+	te_demog_slot_p2 = { S = 207 }
+	te_demog_slot_p2 = { S = 206 }
+	te_demog_slot_p2 = { S = 205 }
+	te_demog_slot_p2 = { S = 204 }
+	te_demog_slot_p2 = { S = 203 }
+	te_demog_slot_p2 = { S = 202 }
+	te_demog_slot_p2 = { S = 201 }
+	te_demog_slot_p2 = { S = 200 }
+	te_demog_slot_p2 = { S = 199 }
+	te_demog_slot_p2 = { S = 198 }
+	te_demog_slot_p2 = { S = 197 }
+	te_demog_slot_p2 = { S = 196 }
+	te_demog_slot_p2 = { S = 195 }
+	te_demog_slot_p2 = { S = 194 }
+	te_demog_slot_p2 = { S = 193 }
+	te_demog_slot_p2 = { S = 192 }
+	te_demog_slot_p2 = { S = 191 }
+	te_demog_slot_p2 = { S = 190 }
+	te_demog_slot_p2 = { S = 189 }
+	te_demog_slot_p2 = { S = 188 }
+	te_demog_slot_p2 = { S = 187 }
+	te_demog_slot_p2 = { S = 186 }
+	te_demog_slot_p2 = { S = 185 }
+	te_demog_slot_p2 = { S = 184 }
+	te_demog_slot_p2 = { S = 183 }
+	te_demog_slot_p2 = { S = 182 }
+	te_demog_slot_p2 = { S = 181 }
+	te_demog_slot_p2 = { S = 180 }
+	te_demog_slot_p2 = { S = 179 }
+	te_demog_slot_p2 = { S = 178 }
+	te_demog_slot_p2 = { S = 177 }
+	te_demog_slot_p2 = { S = 176 }
+	te_demog_slot_p2 = { S = 175 }
+	te_demog_slot_p2 = { S = 174 }
+	te_demog_slot_p2 = { S = 173 }
+	te_demog_slot_p2 = { S = 172 }
+	te_demog_slot_p2 = { S = 171 }
+	te_demog_slot_p2 = { S = 170 }
+	te_demog_slot_p2 = { S = 169 }
+	te_demog_slot_p2 = { S = 168 }
+	te_demog_slot_p2 = { S = 167 }
+	te_demog_slot_p2 = { S = 166 }
+	te_demog_slot_p2 = { S = 165 }
+	te_demog_slot_p2 = { S = 164 }
+	te_demog_slot_p2 = { S = 163 }
+	te_demog_slot_p2 = { S = 162 }
+	te_demog_slot_p2 = { S = 161 }
+	te_demog_slot_p2 = { S = 160 }
+	te_demog_slot_p2 = { S = 159 }
+	te_demog_slot_p2 = { S = 158 }
+	te_demog_slot_p2 = { S = 157 }
+	te_demog_slot_p2 = { S = 156 }
+	te_demog_slot_p2 = { S = 155 }
+	te_demog_slot_p2 = { S = 154 }
+	te_demog_slot_p2 = { S = 153 }
+	te_demog_slot_p2 = { S = 152 }
+	te_demog_slot_p2 = { S = 151 }
+	te_demog_slot_p2 = { S = 150 }
 	te_demog_slot_p2 = { S = 149 }
 	te_demog_slot_p2 = { S = 148 }
 	te_demog_slot_p2 = { S = 147 }
@@ -307,8 +607,158 @@ te_demog_sweep = {
 	te_demog_slot_p2 = { S = 0 }
 }
 
-# The seed's sweep: ages 0 .. open, then open+1 .. 149.
+# The seed's sweep: ages 0 .. open, then open+1 .. 299.
 te_demog_seed_sweep = {
+	te_demog_seed_p1 = { S = 299 }
+	te_demog_seed_p1 = { S = 298 }
+	te_demog_seed_p1 = { S = 297 }
+	te_demog_seed_p1 = { S = 296 }
+	te_demog_seed_p1 = { S = 295 }
+	te_demog_seed_p1 = { S = 294 }
+	te_demog_seed_p1 = { S = 293 }
+	te_demog_seed_p1 = { S = 292 }
+	te_demog_seed_p1 = { S = 291 }
+	te_demog_seed_p1 = { S = 290 }
+	te_demog_seed_p1 = { S = 289 }
+	te_demog_seed_p1 = { S = 288 }
+	te_demog_seed_p1 = { S = 287 }
+	te_demog_seed_p1 = { S = 286 }
+	te_demog_seed_p1 = { S = 285 }
+	te_demog_seed_p1 = { S = 284 }
+	te_demog_seed_p1 = { S = 283 }
+	te_demog_seed_p1 = { S = 282 }
+	te_demog_seed_p1 = { S = 281 }
+	te_demog_seed_p1 = { S = 280 }
+	te_demog_seed_p1 = { S = 279 }
+	te_demog_seed_p1 = { S = 278 }
+	te_demog_seed_p1 = { S = 277 }
+	te_demog_seed_p1 = { S = 276 }
+	te_demog_seed_p1 = { S = 275 }
+	te_demog_seed_p1 = { S = 274 }
+	te_demog_seed_p1 = { S = 273 }
+	te_demog_seed_p1 = { S = 272 }
+	te_demog_seed_p1 = { S = 271 }
+	te_demog_seed_p1 = { S = 270 }
+	te_demog_seed_p1 = { S = 269 }
+	te_demog_seed_p1 = { S = 268 }
+	te_demog_seed_p1 = { S = 267 }
+	te_demog_seed_p1 = { S = 266 }
+	te_demog_seed_p1 = { S = 265 }
+	te_demog_seed_p1 = { S = 264 }
+	te_demog_seed_p1 = { S = 263 }
+	te_demog_seed_p1 = { S = 262 }
+	te_demog_seed_p1 = { S = 261 }
+	te_demog_seed_p1 = { S = 260 }
+	te_demog_seed_p1 = { S = 259 }
+	te_demog_seed_p1 = { S = 258 }
+	te_demog_seed_p1 = { S = 257 }
+	te_demog_seed_p1 = { S = 256 }
+	te_demog_seed_p1 = { S = 255 }
+	te_demog_seed_p1 = { S = 254 }
+	te_demog_seed_p1 = { S = 253 }
+	te_demog_seed_p1 = { S = 252 }
+	te_demog_seed_p1 = { S = 251 }
+	te_demog_seed_p1 = { S = 250 }
+	te_demog_seed_p1 = { S = 249 }
+	te_demog_seed_p1 = { S = 248 }
+	te_demog_seed_p1 = { S = 247 }
+	te_demog_seed_p1 = { S = 246 }
+	te_demog_seed_p1 = { S = 245 }
+	te_demog_seed_p1 = { S = 244 }
+	te_demog_seed_p1 = { S = 243 }
+	te_demog_seed_p1 = { S = 242 }
+	te_demog_seed_p1 = { S = 241 }
+	te_demog_seed_p1 = { S = 240 }
+	te_demog_seed_p1 = { S = 239 }
+	te_demog_seed_p1 = { S = 238 }
+	te_demog_seed_p1 = { S = 237 }
+	te_demog_seed_p1 = { S = 236 }
+	te_demog_seed_p1 = { S = 235 }
+	te_demog_seed_p1 = { S = 234 }
+	te_demog_seed_p1 = { S = 233 }
+	te_demog_seed_p1 = { S = 232 }
+	te_demog_seed_p1 = { S = 231 }
+	te_demog_seed_p1 = { S = 230 }
+	te_demog_seed_p1 = { S = 229 }
+	te_demog_seed_p1 = { S = 228 }
+	te_demog_seed_p1 = { S = 227 }
+	te_demog_seed_p1 = { S = 226 }
+	te_demog_seed_p1 = { S = 225 }
+	te_demog_seed_p1 = { S = 224 }
+	te_demog_seed_p1 = { S = 223 }
+	te_demog_seed_p1 = { S = 222 }
+	te_demog_seed_p1 = { S = 221 }
+	te_demog_seed_p1 = { S = 220 }
+	te_demog_seed_p1 = { S = 219 }
+	te_demog_seed_p1 = { S = 218 }
+	te_demog_seed_p1 = { S = 217 }
+	te_demog_seed_p1 = { S = 216 }
+	te_demog_seed_p1 = { S = 215 }
+	te_demog_seed_p1 = { S = 214 }
+	te_demog_seed_p1 = { S = 213 }
+	te_demog_seed_p1 = { S = 212 }
+	te_demog_seed_p1 = { S = 211 }
+	te_demog_seed_p1 = { S = 210 }
+	te_demog_seed_p1 = { S = 209 }
+	te_demog_seed_p1 = { S = 208 }
+	te_demog_seed_p1 = { S = 207 }
+	te_demog_seed_p1 = { S = 206 }
+	te_demog_seed_p1 = { S = 205 }
+	te_demog_seed_p1 = { S = 204 }
+	te_demog_seed_p1 = { S = 203 }
+	te_demog_seed_p1 = { S = 202 }
+	te_demog_seed_p1 = { S = 201 }
+	te_demog_seed_p1 = { S = 200 }
+	te_demog_seed_p1 = { S = 199 }
+	te_demog_seed_p1 = { S = 198 }
+	te_demog_seed_p1 = { S = 197 }
+	te_demog_seed_p1 = { S = 196 }
+	te_demog_seed_p1 = { S = 195 }
+	te_demog_seed_p1 = { S = 194 }
+	te_demog_seed_p1 = { S = 193 }
+	te_demog_seed_p1 = { S = 192 }
+	te_demog_seed_p1 = { S = 191 }
+	te_demog_seed_p1 = { S = 190 }
+	te_demog_seed_p1 = { S = 189 }
+	te_demog_seed_p1 = { S = 188 }
+	te_demog_seed_p1 = { S = 187 }
+	te_demog_seed_p1 = { S = 186 }
+	te_demog_seed_p1 = { S = 185 }
+	te_demog_seed_p1 = { S = 184 }
+	te_demog_seed_p1 = { S = 183 }
+	te_demog_seed_p1 = { S = 182 }
+	te_demog_seed_p1 = { S = 181 }
+	te_demog_seed_p1 = { S = 180 }
+	te_demog_seed_p1 = { S = 179 }
+	te_demog_seed_p1 = { S = 178 }
+	te_demog_seed_p1 = { S = 177 }
+	te_demog_seed_p1 = { S = 176 }
+	te_demog_seed_p1 = { S = 175 }
+	te_demog_seed_p1 = { S = 174 }
+	te_demog_seed_p1 = { S = 173 }
+	te_demog_seed_p1 = { S = 172 }
+	te_demog_seed_p1 = { S = 171 }
+	te_demog_seed_p1 = { S = 170 }
+	te_demog_seed_p1 = { S = 169 }
+	te_demog_seed_p1 = { S = 168 }
+	te_demog_seed_p1 = { S = 167 }
+	te_demog_seed_p1 = { S = 166 }
+	te_demog_seed_p1 = { S = 165 }
+	te_demog_seed_p1 = { S = 164 }
+	te_demog_seed_p1 = { S = 163 }
+	te_demog_seed_p1 = { S = 162 }
+	te_demog_seed_p1 = { S = 161 }
+	te_demog_seed_p1 = { S = 160 }
+	te_demog_seed_p1 = { S = 159 }
+	te_demog_seed_p1 = { S = 158 }
+	te_demog_seed_p1 = { S = 157 }
+	te_demog_seed_p1 = { S = 156 }
+	te_demog_seed_p1 = { S = 155 }
+	te_demog_seed_p1 = { S = 154 }
+	te_demog_seed_p1 = { S = 153 }
+	te_demog_seed_p1 = { S = 152 }
+	te_demog_seed_p1 = { S = 151 }
+	te_demog_seed_p1 = { S = 150 }
 	te_demog_seed_p1 = { S = 149 }
 	te_demog_seed_p1 = { S = 148 }
 	te_demog_seed_p1 = { S = 147 }
@@ -459,6 +909,156 @@ te_demog_seed_sweep = {
 	te_demog_seed_p1 = { S = 2 }
 	te_demog_seed_p1 = { S = 1 }
 	te_demog_seed_p1 = { S = 0 }
+	te_demog_seed_p2 = { S = 299 }
+	te_demog_seed_p2 = { S = 298 }
+	te_demog_seed_p2 = { S = 297 }
+	te_demog_seed_p2 = { S = 296 }
+	te_demog_seed_p2 = { S = 295 }
+	te_demog_seed_p2 = { S = 294 }
+	te_demog_seed_p2 = { S = 293 }
+	te_demog_seed_p2 = { S = 292 }
+	te_demog_seed_p2 = { S = 291 }
+	te_demog_seed_p2 = { S = 290 }
+	te_demog_seed_p2 = { S = 289 }
+	te_demog_seed_p2 = { S = 288 }
+	te_demog_seed_p2 = { S = 287 }
+	te_demog_seed_p2 = { S = 286 }
+	te_demog_seed_p2 = { S = 285 }
+	te_demog_seed_p2 = { S = 284 }
+	te_demog_seed_p2 = { S = 283 }
+	te_demog_seed_p2 = { S = 282 }
+	te_demog_seed_p2 = { S = 281 }
+	te_demog_seed_p2 = { S = 280 }
+	te_demog_seed_p2 = { S = 279 }
+	te_demog_seed_p2 = { S = 278 }
+	te_demog_seed_p2 = { S = 277 }
+	te_demog_seed_p2 = { S = 276 }
+	te_demog_seed_p2 = { S = 275 }
+	te_demog_seed_p2 = { S = 274 }
+	te_demog_seed_p2 = { S = 273 }
+	te_demog_seed_p2 = { S = 272 }
+	te_demog_seed_p2 = { S = 271 }
+	te_demog_seed_p2 = { S = 270 }
+	te_demog_seed_p2 = { S = 269 }
+	te_demog_seed_p2 = { S = 268 }
+	te_demog_seed_p2 = { S = 267 }
+	te_demog_seed_p2 = { S = 266 }
+	te_demog_seed_p2 = { S = 265 }
+	te_demog_seed_p2 = { S = 264 }
+	te_demog_seed_p2 = { S = 263 }
+	te_demog_seed_p2 = { S = 262 }
+	te_demog_seed_p2 = { S = 261 }
+	te_demog_seed_p2 = { S = 260 }
+	te_demog_seed_p2 = { S = 259 }
+	te_demog_seed_p2 = { S = 258 }
+	te_demog_seed_p2 = { S = 257 }
+	te_demog_seed_p2 = { S = 256 }
+	te_demog_seed_p2 = { S = 255 }
+	te_demog_seed_p2 = { S = 254 }
+	te_demog_seed_p2 = { S = 253 }
+	te_demog_seed_p2 = { S = 252 }
+	te_demog_seed_p2 = { S = 251 }
+	te_demog_seed_p2 = { S = 250 }
+	te_demog_seed_p2 = { S = 249 }
+	te_demog_seed_p2 = { S = 248 }
+	te_demog_seed_p2 = { S = 247 }
+	te_demog_seed_p2 = { S = 246 }
+	te_demog_seed_p2 = { S = 245 }
+	te_demog_seed_p2 = { S = 244 }
+	te_demog_seed_p2 = { S = 243 }
+	te_demog_seed_p2 = { S = 242 }
+	te_demog_seed_p2 = { S = 241 }
+	te_demog_seed_p2 = { S = 240 }
+	te_demog_seed_p2 = { S = 239 }
+	te_demog_seed_p2 = { S = 238 }
+	te_demog_seed_p2 = { S = 237 }
+	te_demog_seed_p2 = { S = 236 }
+	te_demog_seed_p2 = { S = 235 }
+	te_demog_seed_p2 = { S = 234 }
+	te_demog_seed_p2 = { S = 233 }
+	te_demog_seed_p2 = { S = 232 }
+	te_demog_seed_p2 = { S = 231 }
+	te_demog_seed_p2 = { S = 230 }
+	te_demog_seed_p2 = { S = 229 }
+	te_demog_seed_p2 = { S = 228 }
+	te_demog_seed_p2 = { S = 227 }
+	te_demog_seed_p2 = { S = 226 }
+	te_demog_seed_p2 = { S = 225 }
+	te_demog_seed_p2 = { S = 224 }
+	te_demog_seed_p2 = { S = 223 }
+	te_demog_seed_p2 = { S = 222 }
+	te_demog_seed_p2 = { S = 221 }
+	te_demog_seed_p2 = { S = 220 }
+	te_demog_seed_p2 = { S = 219 }
+	te_demog_seed_p2 = { S = 218 }
+	te_demog_seed_p2 = { S = 217 }
+	te_demog_seed_p2 = { S = 216 }
+	te_demog_seed_p2 = { S = 215 }
+	te_demog_seed_p2 = { S = 214 }
+	te_demog_seed_p2 = { S = 213 }
+	te_demog_seed_p2 = { S = 212 }
+	te_demog_seed_p2 = { S = 211 }
+	te_demog_seed_p2 = { S = 210 }
+	te_demog_seed_p2 = { S = 209 }
+	te_demog_seed_p2 = { S = 208 }
+	te_demog_seed_p2 = { S = 207 }
+	te_demog_seed_p2 = { S = 206 }
+	te_demog_seed_p2 = { S = 205 }
+	te_demog_seed_p2 = { S = 204 }
+	te_demog_seed_p2 = { S = 203 }
+	te_demog_seed_p2 = { S = 202 }
+	te_demog_seed_p2 = { S = 201 }
+	te_demog_seed_p2 = { S = 200 }
+	te_demog_seed_p2 = { S = 199 }
+	te_demog_seed_p2 = { S = 198 }
+	te_demog_seed_p2 = { S = 197 }
+	te_demog_seed_p2 = { S = 196 }
+	te_demog_seed_p2 = { S = 195 }
+	te_demog_seed_p2 = { S = 194 }
+	te_demog_seed_p2 = { S = 193 }
+	te_demog_seed_p2 = { S = 192 }
+	te_demog_seed_p2 = { S = 191 }
+	te_demog_seed_p2 = { S = 190 }
+	te_demog_seed_p2 = { S = 189 }
+	te_demog_seed_p2 = { S = 188 }
+	te_demog_seed_p2 = { S = 187 }
+	te_demog_seed_p2 = { S = 186 }
+	te_demog_seed_p2 = { S = 185 }
+	te_demog_seed_p2 = { S = 184 }
+	te_demog_seed_p2 = { S = 183 }
+	te_demog_seed_p2 = { S = 182 }
+	te_demog_seed_p2 = { S = 181 }
+	te_demog_seed_p2 = { S = 180 }
+	te_demog_seed_p2 = { S = 179 }
+	te_demog_seed_p2 = { S = 178 }
+	te_demog_seed_p2 = { S = 177 }
+	te_demog_seed_p2 = { S = 176 }
+	te_demog_seed_p2 = { S = 175 }
+	te_demog_seed_p2 = { S = 174 }
+	te_demog_seed_p2 = { S = 173 }
+	te_demog_seed_p2 = { S = 172 }
+	te_demog_seed_p2 = { S = 171 }
+	te_demog_seed_p2 = { S = 170 }
+	te_demog_seed_p2 = { S = 169 }
+	te_demog_seed_p2 = { S = 168 }
+	te_demog_seed_p2 = { S = 167 }
+	te_demog_seed_p2 = { S = 166 }
+	te_demog_seed_p2 = { S = 165 }
+	te_demog_seed_p2 = { S = 164 }
+	te_demog_seed_p2 = { S = 163 }
+	te_demog_seed_p2 = { S = 162 }
+	te_demog_seed_p2 = { S = 161 }
+	te_demog_seed_p2 = { S = 160 }
+	te_demog_seed_p2 = { S = 159 }
+	te_demog_seed_p2 = { S = 158 }
+	te_demog_seed_p2 = { S = 157 }
+	te_demog_seed_p2 = { S = 156 }
+	te_demog_seed_p2 = { S = 155 }
+	te_demog_seed_p2 = { S = 154 }
+	te_demog_seed_p2 = { S = 153 }
+	te_demog_seed_p2 = { S = 152 }
+	te_demog_seed_p2 = { S = 151 }
+	te_demog_seed_p2 = { S = 150 }
 	te_demog_seed_p2 = { S = 149 }
 	te_demog_seed_p2 = { S = 148 }
 	te_demog_seed_p2 = { S = 147 }
@@ -3699,6 +4299,1506 @@ te_demog_normalize_slots = {
 		change_variable = { name = te_dg_m149 multiply = local_var:te_dg_norm_e5 }
 		change_variable = { name = te_dg_m149 divide = 100000 }
 	}
+	if = {
+		limit = { has_variable = te_dg_f150 }
+		change_variable = { name = te_dg_f150 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f150 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m150 }
+		change_variable = { name = te_dg_m150 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m150 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f151 }
+		change_variable = { name = te_dg_f151 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f151 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m151 }
+		change_variable = { name = te_dg_m151 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m151 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f152 }
+		change_variable = { name = te_dg_f152 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f152 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m152 }
+		change_variable = { name = te_dg_m152 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m152 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f153 }
+		change_variable = { name = te_dg_f153 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f153 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m153 }
+		change_variable = { name = te_dg_m153 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m153 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f154 }
+		change_variable = { name = te_dg_f154 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f154 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m154 }
+		change_variable = { name = te_dg_m154 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m154 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f155 }
+		change_variable = { name = te_dg_f155 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f155 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m155 }
+		change_variable = { name = te_dg_m155 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m155 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f156 }
+		change_variable = { name = te_dg_f156 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f156 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m156 }
+		change_variable = { name = te_dg_m156 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m156 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f157 }
+		change_variable = { name = te_dg_f157 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f157 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m157 }
+		change_variable = { name = te_dg_m157 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m157 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f158 }
+		change_variable = { name = te_dg_f158 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f158 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m158 }
+		change_variable = { name = te_dg_m158 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m158 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f159 }
+		change_variable = { name = te_dg_f159 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f159 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m159 }
+		change_variable = { name = te_dg_m159 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m159 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f160 }
+		change_variable = { name = te_dg_f160 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f160 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m160 }
+		change_variable = { name = te_dg_m160 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m160 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f161 }
+		change_variable = { name = te_dg_f161 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f161 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m161 }
+		change_variable = { name = te_dg_m161 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m161 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f162 }
+		change_variable = { name = te_dg_f162 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f162 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m162 }
+		change_variable = { name = te_dg_m162 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m162 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f163 }
+		change_variable = { name = te_dg_f163 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f163 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m163 }
+		change_variable = { name = te_dg_m163 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m163 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f164 }
+		change_variable = { name = te_dg_f164 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f164 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m164 }
+		change_variable = { name = te_dg_m164 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m164 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f165 }
+		change_variable = { name = te_dg_f165 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f165 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m165 }
+		change_variable = { name = te_dg_m165 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m165 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f166 }
+		change_variable = { name = te_dg_f166 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f166 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m166 }
+		change_variable = { name = te_dg_m166 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m166 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f167 }
+		change_variable = { name = te_dg_f167 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f167 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m167 }
+		change_variable = { name = te_dg_m167 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m167 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f168 }
+		change_variable = { name = te_dg_f168 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f168 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m168 }
+		change_variable = { name = te_dg_m168 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m168 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f169 }
+		change_variable = { name = te_dg_f169 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f169 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m169 }
+		change_variable = { name = te_dg_m169 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m169 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f170 }
+		change_variable = { name = te_dg_f170 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f170 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m170 }
+		change_variable = { name = te_dg_m170 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m170 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f171 }
+		change_variable = { name = te_dg_f171 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f171 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m171 }
+		change_variable = { name = te_dg_m171 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m171 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f172 }
+		change_variable = { name = te_dg_f172 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f172 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m172 }
+		change_variable = { name = te_dg_m172 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m172 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f173 }
+		change_variable = { name = te_dg_f173 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f173 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m173 }
+		change_variable = { name = te_dg_m173 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m173 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f174 }
+		change_variable = { name = te_dg_f174 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f174 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m174 }
+		change_variable = { name = te_dg_m174 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m174 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f175 }
+		change_variable = { name = te_dg_f175 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f175 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m175 }
+		change_variable = { name = te_dg_m175 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m175 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f176 }
+		change_variable = { name = te_dg_f176 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f176 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m176 }
+		change_variable = { name = te_dg_m176 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m176 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f177 }
+		change_variable = { name = te_dg_f177 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f177 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m177 }
+		change_variable = { name = te_dg_m177 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m177 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f178 }
+		change_variable = { name = te_dg_f178 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f178 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m178 }
+		change_variable = { name = te_dg_m178 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m178 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f179 }
+		change_variable = { name = te_dg_f179 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f179 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m179 }
+		change_variable = { name = te_dg_m179 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m179 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f180 }
+		change_variable = { name = te_dg_f180 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f180 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m180 }
+		change_variable = { name = te_dg_m180 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m180 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f181 }
+		change_variable = { name = te_dg_f181 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f181 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m181 }
+		change_variable = { name = te_dg_m181 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m181 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f182 }
+		change_variable = { name = te_dg_f182 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f182 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m182 }
+		change_variable = { name = te_dg_m182 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m182 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f183 }
+		change_variable = { name = te_dg_f183 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f183 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m183 }
+		change_variable = { name = te_dg_m183 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m183 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f184 }
+		change_variable = { name = te_dg_f184 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f184 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m184 }
+		change_variable = { name = te_dg_m184 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m184 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f185 }
+		change_variable = { name = te_dg_f185 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f185 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m185 }
+		change_variable = { name = te_dg_m185 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m185 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f186 }
+		change_variable = { name = te_dg_f186 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f186 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m186 }
+		change_variable = { name = te_dg_m186 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m186 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f187 }
+		change_variable = { name = te_dg_f187 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f187 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m187 }
+		change_variable = { name = te_dg_m187 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m187 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f188 }
+		change_variable = { name = te_dg_f188 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f188 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m188 }
+		change_variable = { name = te_dg_m188 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m188 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f189 }
+		change_variable = { name = te_dg_f189 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f189 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m189 }
+		change_variable = { name = te_dg_m189 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m189 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f190 }
+		change_variable = { name = te_dg_f190 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f190 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m190 }
+		change_variable = { name = te_dg_m190 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m190 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f191 }
+		change_variable = { name = te_dg_f191 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f191 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m191 }
+		change_variable = { name = te_dg_m191 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m191 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f192 }
+		change_variable = { name = te_dg_f192 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f192 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m192 }
+		change_variable = { name = te_dg_m192 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m192 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f193 }
+		change_variable = { name = te_dg_f193 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f193 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m193 }
+		change_variable = { name = te_dg_m193 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m193 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f194 }
+		change_variable = { name = te_dg_f194 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f194 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m194 }
+		change_variable = { name = te_dg_m194 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m194 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f195 }
+		change_variable = { name = te_dg_f195 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f195 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m195 }
+		change_variable = { name = te_dg_m195 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m195 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f196 }
+		change_variable = { name = te_dg_f196 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f196 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m196 }
+		change_variable = { name = te_dg_m196 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m196 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f197 }
+		change_variable = { name = te_dg_f197 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f197 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m197 }
+		change_variable = { name = te_dg_m197 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m197 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f198 }
+		change_variable = { name = te_dg_f198 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f198 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m198 }
+		change_variable = { name = te_dg_m198 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m198 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f199 }
+		change_variable = { name = te_dg_f199 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f199 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m199 }
+		change_variable = { name = te_dg_m199 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m199 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f200 }
+		change_variable = { name = te_dg_f200 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f200 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m200 }
+		change_variable = { name = te_dg_m200 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m200 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f201 }
+		change_variable = { name = te_dg_f201 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f201 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m201 }
+		change_variable = { name = te_dg_m201 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m201 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f202 }
+		change_variable = { name = te_dg_f202 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f202 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m202 }
+		change_variable = { name = te_dg_m202 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m202 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f203 }
+		change_variable = { name = te_dg_f203 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f203 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m203 }
+		change_variable = { name = te_dg_m203 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m203 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f204 }
+		change_variable = { name = te_dg_f204 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f204 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m204 }
+		change_variable = { name = te_dg_m204 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m204 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f205 }
+		change_variable = { name = te_dg_f205 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f205 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m205 }
+		change_variable = { name = te_dg_m205 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m205 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f206 }
+		change_variable = { name = te_dg_f206 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f206 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m206 }
+		change_variable = { name = te_dg_m206 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m206 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f207 }
+		change_variable = { name = te_dg_f207 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f207 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m207 }
+		change_variable = { name = te_dg_m207 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m207 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f208 }
+		change_variable = { name = te_dg_f208 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f208 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m208 }
+		change_variable = { name = te_dg_m208 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m208 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f209 }
+		change_variable = { name = te_dg_f209 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f209 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m209 }
+		change_variable = { name = te_dg_m209 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m209 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f210 }
+		change_variable = { name = te_dg_f210 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f210 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m210 }
+		change_variable = { name = te_dg_m210 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m210 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f211 }
+		change_variable = { name = te_dg_f211 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f211 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m211 }
+		change_variable = { name = te_dg_m211 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m211 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f212 }
+		change_variable = { name = te_dg_f212 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f212 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m212 }
+		change_variable = { name = te_dg_m212 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m212 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f213 }
+		change_variable = { name = te_dg_f213 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f213 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m213 }
+		change_variable = { name = te_dg_m213 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m213 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f214 }
+		change_variable = { name = te_dg_f214 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f214 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m214 }
+		change_variable = { name = te_dg_m214 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m214 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f215 }
+		change_variable = { name = te_dg_f215 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f215 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m215 }
+		change_variable = { name = te_dg_m215 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m215 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f216 }
+		change_variable = { name = te_dg_f216 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f216 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m216 }
+		change_variable = { name = te_dg_m216 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m216 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f217 }
+		change_variable = { name = te_dg_f217 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f217 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m217 }
+		change_variable = { name = te_dg_m217 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m217 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f218 }
+		change_variable = { name = te_dg_f218 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f218 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m218 }
+		change_variable = { name = te_dg_m218 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m218 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f219 }
+		change_variable = { name = te_dg_f219 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f219 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m219 }
+		change_variable = { name = te_dg_m219 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m219 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f220 }
+		change_variable = { name = te_dg_f220 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f220 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m220 }
+		change_variable = { name = te_dg_m220 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m220 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f221 }
+		change_variable = { name = te_dg_f221 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f221 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m221 }
+		change_variable = { name = te_dg_m221 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m221 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f222 }
+		change_variable = { name = te_dg_f222 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f222 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m222 }
+		change_variable = { name = te_dg_m222 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m222 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f223 }
+		change_variable = { name = te_dg_f223 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f223 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m223 }
+		change_variable = { name = te_dg_m223 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m223 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f224 }
+		change_variable = { name = te_dg_f224 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f224 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m224 }
+		change_variable = { name = te_dg_m224 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m224 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f225 }
+		change_variable = { name = te_dg_f225 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f225 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m225 }
+		change_variable = { name = te_dg_m225 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m225 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f226 }
+		change_variable = { name = te_dg_f226 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f226 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m226 }
+		change_variable = { name = te_dg_m226 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m226 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f227 }
+		change_variable = { name = te_dg_f227 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f227 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m227 }
+		change_variable = { name = te_dg_m227 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m227 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f228 }
+		change_variable = { name = te_dg_f228 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f228 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m228 }
+		change_variable = { name = te_dg_m228 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m228 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f229 }
+		change_variable = { name = te_dg_f229 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f229 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m229 }
+		change_variable = { name = te_dg_m229 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m229 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f230 }
+		change_variable = { name = te_dg_f230 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f230 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m230 }
+		change_variable = { name = te_dg_m230 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m230 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f231 }
+		change_variable = { name = te_dg_f231 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f231 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m231 }
+		change_variable = { name = te_dg_m231 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m231 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f232 }
+		change_variable = { name = te_dg_f232 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f232 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m232 }
+		change_variable = { name = te_dg_m232 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m232 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f233 }
+		change_variable = { name = te_dg_f233 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f233 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m233 }
+		change_variable = { name = te_dg_m233 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m233 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f234 }
+		change_variable = { name = te_dg_f234 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f234 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m234 }
+		change_variable = { name = te_dg_m234 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m234 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f235 }
+		change_variable = { name = te_dg_f235 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f235 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m235 }
+		change_variable = { name = te_dg_m235 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m235 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f236 }
+		change_variable = { name = te_dg_f236 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f236 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m236 }
+		change_variable = { name = te_dg_m236 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m236 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f237 }
+		change_variable = { name = te_dg_f237 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f237 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m237 }
+		change_variable = { name = te_dg_m237 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m237 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f238 }
+		change_variable = { name = te_dg_f238 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f238 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m238 }
+		change_variable = { name = te_dg_m238 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m238 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f239 }
+		change_variable = { name = te_dg_f239 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f239 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m239 }
+		change_variable = { name = te_dg_m239 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m239 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f240 }
+		change_variable = { name = te_dg_f240 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f240 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m240 }
+		change_variable = { name = te_dg_m240 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m240 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f241 }
+		change_variable = { name = te_dg_f241 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f241 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m241 }
+		change_variable = { name = te_dg_m241 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m241 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f242 }
+		change_variable = { name = te_dg_f242 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f242 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m242 }
+		change_variable = { name = te_dg_m242 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m242 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f243 }
+		change_variable = { name = te_dg_f243 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f243 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m243 }
+		change_variable = { name = te_dg_m243 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m243 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f244 }
+		change_variable = { name = te_dg_f244 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f244 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m244 }
+		change_variable = { name = te_dg_m244 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m244 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f245 }
+		change_variable = { name = te_dg_f245 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f245 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m245 }
+		change_variable = { name = te_dg_m245 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m245 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f246 }
+		change_variable = { name = te_dg_f246 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f246 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m246 }
+		change_variable = { name = te_dg_m246 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m246 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f247 }
+		change_variable = { name = te_dg_f247 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f247 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m247 }
+		change_variable = { name = te_dg_m247 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m247 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f248 }
+		change_variable = { name = te_dg_f248 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f248 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m248 }
+		change_variable = { name = te_dg_m248 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m248 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f249 }
+		change_variable = { name = te_dg_f249 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f249 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m249 }
+		change_variable = { name = te_dg_m249 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m249 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f250 }
+		change_variable = { name = te_dg_f250 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f250 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m250 }
+		change_variable = { name = te_dg_m250 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m250 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f251 }
+		change_variable = { name = te_dg_f251 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f251 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m251 }
+		change_variable = { name = te_dg_m251 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m251 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f252 }
+		change_variable = { name = te_dg_f252 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f252 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m252 }
+		change_variable = { name = te_dg_m252 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m252 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f253 }
+		change_variable = { name = te_dg_f253 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f253 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m253 }
+		change_variable = { name = te_dg_m253 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m253 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f254 }
+		change_variable = { name = te_dg_f254 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f254 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m254 }
+		change_variable = { name = te_dg_m254 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m254 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f255 }
+		change_variable = { name = te_dg_f255 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f255 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m255 }
+		change_variable = { name = te_dg_m255 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m255 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f256 }
+		change_variable = { name = te_dg_f256 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f256 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m256 }
+		change_variable = { name = te_dg_m256 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m256 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f257 }
+		change_variable = { name = te_dg_f257 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f257 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m257 }
+		change_variable = { name = te_dg_m257 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m257 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f258 }
+		change_variable = { name = te_dg_f258 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f258 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m258 }
+		change_variable = { name = te_dg_m258 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m258 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f259 }
+		change_variable = { name = te_dg_f259 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f259 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m259 }
+		change_variable = { name = te_dg_m259 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m259 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f260 }
+		change_variable = { name = te_dg_f260 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f260 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m260 }
+		change_variable = { name = te_dg_m260 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m260 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f261 }
+		change_variable = { name = te_dg_f261 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f261 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m261 }
+		change_variable = { name = te_dg_m261 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m261 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f262 }
+		change_variable = { name = te_dg_f262 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f262 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m262 }
+		change_variable = { name = te_dg_m262 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m262 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f263 }
+		change_variable = { name = te_dg_f263 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f263 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m263 }
+		change_variable = { name = te_dg_m263 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m263 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f264 }
+		change_variable = { name = te_dg_f264 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f264 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m264 }
+		change_variable = { name = te_dg_m264 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m264 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f265 }
+		change_variable = { name = te_dg_f265 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f265 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m265 }
+		change_variable = { name = te_dg_m265 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m265 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f266 }
+		change_variable = { name = te_dg_f266 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f266 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m266 }
+		change_variable = { name = te_dg_m266 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m266 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f267 }
+		change_variable = { name = te_dg_f267 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f267 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m267 }
+		change_variable = { name = te_dg_m267 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m267 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f268 }
+		change_variable = { name = te_dg_f268 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f268 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m268 }
+		change_variable = { name = te_dg_m268 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m268 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f269 }
+		change_variable = { name = te_dg_f269 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f269 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m269 }
+		change_variable = { name = te_dg_m269 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m269 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f270 }
+		change_variable = { name = te_dg_f270 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f270 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m270 }
+		change_variable = { name = te_dg_m270 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m270 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f271 }
+		change_variable = { name = te_dg_f271 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f271 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m271 }
+		change_variable = { name = te_dg_m271 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m271 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f272 }
+		change_variable = { name = te_dg_f272 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f272 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m272 }
+		change_variable = { name = te_dg_m272 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m272 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f273 }
+		change_variable = { name = te_dg_f273 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f273 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m273 }
+		change_variable = { name = te_dg_m273 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m273 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f274 }
+		change_variable = { name = te_dg_f274 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f274 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m274 }
+		change_variable = { name = te_dg_m274 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m274 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f275 }
+		change_variable = { name = te_dg_f275 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f275 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m275 }
+		change_variable = { name = te_dg_m275 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m275 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f276 }
+		change_variable = { name = te_dg_f276 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f276 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m276 }
+		change_variable = { name = te_dg_m276 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m276 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f277 }
+		change_variable = { name = te_dg_f277 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f277 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m277 }
+		change_variable = { name = te_dg_m277 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m277 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f278 }
+		change_variable = { name = te_dg_f278 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f278 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m278 }
+		change_variable = { name = te_dg_m278 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m278 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f279 }
+		change_variable = { name = te_dg_f279 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f279 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m279 }
+		change_variable = { name = te_dg_m279 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m279 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f280 }
+		change_variable = { name = te_dg_f280 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f280 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m280 }
+		change_variable = { name = te_dg_m280 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m280 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f281 }
+		change_variable = { name = te_dg_f281 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f281 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m281 }
+		change_variable = { name = te_dg_m281 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m281 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f282 }
+		change_variable = { name = te_dg_f282 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f282 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m282 }
+		change_variable = { name = te_dg_m282 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m282 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f283 }
+		change_variable = { name = te_dg_f283 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f283 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m283 }
+		change_variable = { name = te_dg_m283 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m283 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f284 }
+		change_variable = { name = te_dg_f284 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f284 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m284 }
+		change_variable = { name = te_dg_m284 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m284 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f285 }
+		change_variable = { name = te_dg_f285 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f285 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m285 }
+		change_variable = { name = te_dg_m285 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m285 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f286 }
+		change_variable = { name = te_dg_f286 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f286 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m286 }
+		change_variable = { name = te_dg_m286 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m286 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f287 }
+		change_variable = { name = te_dg_f287 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f287 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m287 }
+		change_variable = { name = te_dg_m287 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m287 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f288 }
+		change_variable = { name = te_dg_f288 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f288 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m288 }
+		change_variable = { name = te_dg_m288 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m288 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f289 }
+		change_variable = { name = te_dg_f289 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f289 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m289 }
+		change_variable = { name = te_dg_m289 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m289 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f290 }
+		change_variable = { name = te_dg_f290 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f290 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m290 }
+		change_variable = { name = te_dg_m290 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m290 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f291 }
+		change_variable = { name = te_dg_f291 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f291 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m291 }
+		change_variable = { name = te_dg_m291 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m291 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f292 }
+		change_variable = { name = te_dg_f292 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f292 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m292 }
+		change_variable = { name = te_dg_m292 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m292 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f293 }
+		change_variable = { name = te_dg_f293 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f293 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m293 }
+		change_variable = { name = te_dg_m293 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m293 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f294 }
+		change_variable = { name = te_dg_f294 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f294 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m294 }
+		change_variable = { name = te_dg_m294 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m294 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f295 }
+		change_variable = { name = te_dg_f295 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f295 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m295 }
+		change_variable = { name = te_dg_m295 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m295 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f296 }
+		change_variable = { name = te_dg_f296 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f296 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m296 }
+		change_variable = { name = te_dg_m296 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m296 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f297 }
+		change_variable = { name = te_dg_f297 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f297 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m297 }
+		change_variable = { name = te_dg_m297 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m297 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f298 }
+		change_variable = { name = te_dg_f298 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f298 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m298 }
+		change_variable = { name = te_dg_m298 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m298 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_f299 }
+		change_variable = { name = te_dg_f299 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_f299 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_m299 }
+		change_variable = { name = te_dg_m299 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_m299 divide = 100000 }
+	}
 }
 
 # THIS = a state, seed only. The same two steps on the bands, the class sums and the pool's sums (phase 2 step 4).
@@ -3799,6 +5899,48 @@ te_demog_normalize_bands = {
 	change_variable = { name = te_dg_faw divide = 100000 }
 	change_variable = { name = te_dg_fam multiply = local_var:te_dg_norm_e5 }
 	change_variable = { name = te_dg_fam divide = 100000 }
+	if = {
+		limit = { has_variable = te_dg_of1 }
+		change_variable = { name = te_dg_of1 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of1 divide = 100000 }
+		change_variable = { name = te_dg_om1 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om1 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of2 }
+		change_variable = { name = te_dg_of2 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of2 divide = 100000 }
+		change_variable = { name = te_dg_om2 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om2 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of3 }
+		change_variable = { name = te_dg_of3 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of3 divide = 100000 }
+		change_variable = { name = te_dg_om3 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om3 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of4 }
+		change_variable = { name = te_dg_of4 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of4 divide = 100000 }
+		change_variable = { name = te_dg_om4 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om4 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of5 }
+		change_variable = { name = te_dg_of5 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of5 divide = 100000 }
+		change_variable = { name = te_dg_om5 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om5 divide = 100000 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of6 }
+		change_variable = { name = te_dg_of6 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_of6 divide = 100000 }
+		change_variable = { name = te_dg_om6 multiply = local_var:te_dg_norm_e5 }
+		change_variable = { name = te_dg_om6 divide = 100000 }
+	}
 }
 
 # THIS = a state. The life table over the age groups in order (demographics_model.life_table),
@@ -4699,7 +6841,8 @@ te_demog_set_growth_factor = {
 	}
 }
 
-# THIS = a state, ROOT = its owner on the yearly country pulse: add the state's bands.
+# THIS = a state, ROOT = its owner on the yearly country pulse: add the state's bands, and its people past each of
+# the pyramid's rows past 85 into the country's locals te_dg_c_o<f|m><i> (issue #1075).
 te_demog_add_bands_to_root = {
 	set_local_variable = { name = te_dg_t value = var:te_dg_bf0 }
 	root = { change_variable = { name = te_dg_cbf0 add = local_var:te_dg_t } }
@@ -4773,6 +6916,36 @@ te_demog_add_bands_to_root = {
 	root = { change_variable = { name = te_dg_cbf17 add = local_var:te_dg_t } }
 	set_local_variable = { name = te_dg_t value = var:te_dg_bm17 }
 	root = { change_variable = { name = te_dg_cbm17 add = local_var:te_dg_t } }
+	if = {
+		limit = { has_variable = te_dg_of1 }
+		change_local_variable = { name = te_dg_c_of1 add = var:te_dg_of1 }
+		change_local_variable = { name = te_dg_c_om1 add = var:te_dg_om1 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of2 }
+		change_local_variable = { name = te_dg_c_of2 add = var:te_dg_of2 }
+		change_local_variable = { name = te_dg_c_om2 add = var:te_dg_om2 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of3 }
+		change_local_variable = { name = te_dg_c_of3 add = var:te_dg_of3 }
+		change_local_variable = { name = te_dg_c_om3 add = var:te_dg_om3 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of4 }
+		change_local_variable = { name = te_dg_c_of4 add = var:te_dg_of4 }
+		change_local_variable = { name = te_dg_c_om4 add = var:te_dg_om4 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of5 }
+		change_local_variable = { name = te_dg_c_of5 add = var:te_dg_of5 }
+		change_local_variable = { name = te_dg_c_om5 add = var:te_dg_om5 }
+	}
+	if = {
+		limit = { has_variable = te_dg_of6 }
+		change_local_variable = { name = te_dg_c_of6 add = var:te_dg_of6 }
+		change_local_variable = { name = te_dg_c_om6 add = var:te_dg_om6 }
+	}
 }
 
 # THIS = a country: zero its band sums before the states add theirs.
@@ -4813,9 +6986,115 @@ te_demog_reset_country_bands = {
 	set_variable = { name = te_dg_cbm16 value = 0 }
 	set_variable = { name = te_dg_cbf17 value = 0 }
 	set_variable = { name = te_dg_cbm17 value = 0 }
+	set_local_variable = { name = te_dg_c_of1 value = 0 }
+	set_local_variable = { name = te_dg_c_om1 value = 0 }
+	set_local_variable = { name = te_dg_c_of2 value = 0 }
+	set_local_variable = { name = te_dg_c_om2 value = 0 }
+	set_local_variable = { name = te_dg_c_of3 value = 0 }
+	set_local_variable = { name = te_dg_c_om3 value = 0 }
+	set_local_variable = { name = te_dg_c_of4 value = 0 }
+	set_local_variable = { name = te_dg_c_om4 value = 0 }
+	set_local_variable = { name = te_dg_c_of5 value = 0 }
+	set_local_variable = { name = te_dg_c_om5 value = 0 }
+	set_local_variable = { name = te_dg_c_of6 value = 0 }
+	set_local_variable = { name = te_dg_c_om6 value = 0 }
 }
 
-# THIS = a state: multiply the bands and class sums by local_var:te_dg_new_scale.
+# THIS = a country after its states' loop: its people past each row's start (te_dg_co<f|m><i>), where anyone is.
+te_demog_country_old_rows_store = {
+	if = {
+		limit = { local_var:te_dg_c_of1 > 0 }
+		set_variable = { name = te_dg_cof1 value = local_var:te_dg_c_of1 }
+		set_variable = { name = te_dg_com1 value = { value = local_var:te_dg_c_om1 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om1 > 0 }
+		set_variable = { name = te_dg_cof1 value = 0 }
+		set_variable = { name = te_dg_com1 value = local_var:te_dg_c_om1 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof1 }
+		remove_variable = te_dg_cof1
+		remove_variable = te_dg_com1
+	}
+	if = {
+		limit = { local_var:te_dg_c_of2 > 0 }
+		set_variable = { name = te_dg_cof2 value = local_var:te_dg_c_of2 }
+		set_variable = { name = te_dg_com2 value = { value = local_var:te_dg_c_om2 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om2 > 0 }
+		set_variable = { name = te_dg_cof2 value = 0 }
+		set_variable = { name = te_dg_com2 value = local_var:te_dg_c_om2 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof2 }
+		remove_variable = te_dg_cof2
+		remove_variable = te_dg_com2
+	}
+	if = {
+		limit = { local_var:te_dg_c_of3 > 0 }
+		set_variable = { name = te_dg_cof3 value = local_var:te_dg_c_of3 }
+		set_variable = { name = te_dg_com3 value = { value = local_var:te_dg_c_om3 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om3 > 0 }
+		set_variable = { name = te_dg_cof3 value = 0 }
+		set_variable = { name = te_dg_com3 value = local_var:te_dg_c_om3 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof3 }
+		remove_variable = te_dg_cof3
+		remove_variable = te_dg_com3
+	}
+	if = {
+		limit = { local_var:te_dg_c_of4 > 0 }
+		set_variable = { name = te_dg_cof4 value = local_var:te_dg_c_of4 }
+		set_variable = { name = te_dg_com4 value = { value = local_var:te_dg_c_om4 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om4 > 0 }
+		set_variable = { name = te_dg_cof4 value = 0 }
+		set_variable = { name = te_dg_com4 value = local_var:te_dg_c_om4 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof4 }
+		remove_variable = te_dg_cof4
+		remove_variable = te_dg_com4
+	}
+	if = {
+		limit = { local_var:te_dg_c_of5 > 0 }
+		set_variable = { name = te_dg_cof5 value = local_var:te_dg_c_of5 }
+		set_variable = { name = te_dg_com5 value = { value = local_var:te_dg_c_om5 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om5 > 0 }
+		set_variable = { name = te_dg_cof5 value = 0 }
+		set_variable = { name = te_dg_com5 value = local_var:te_dg_c_om5 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof5 }
+		remove_variable = te_dg_cof5
+		remove_variable = te_dg_com5
+	}
+	if = {
+		limit = { local_var:te_dg_c_of6 > 0 }
+		set_variable = { name = te_dg_cof6 value = local_var:te_dg_c_of6 }
+		set_variable = { name = te_dg_com6 value = { value = local_var:te_dg_c_om6 min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_c_om6 > 0 }
+		set_variable = { name = te_dg_cof6 value = 0 }
+		set_variable = { name = te_dg_com6 value = local_var:te_dg_c_om6 }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_cof6 }
+		remove_variable = te_dg_cof6
+		remove_variable = te_dg_com6
+	}
+}
+
+# THIS = a state: multiply the bands, the class sums and the rows past 85 by local_var:te_dg_new_scale.
 te_demog_scale_bands = {
 	change_variable = { name = te_dg_bf0 multiply = local_var:te_dg_new_scale }
 	change_variable = { name = te_dg_bm0 multiply = local_var:te_dg_new_scale }
@@ -4863,6 +7142,466 @@ te_demog_scale_bands = {
 	change_variable = { name = te_dg_cm3 multiply = local_var:te_dg_new_scale }
 	change_variable = { name = te_dg_cf4 multiply = local_var:te_dg_new_scale }
 	change_variable = { name = te_dg_cm4 multiply = local_var:te_dg_new_scale }
+	if = {
+		limit = { has_variable = te_dg_of1 }
+		change_variable = { name = te_dg_of1 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om1 multiply = local_var:te_dg_new_scale }
+	}
+	if = {
+		limit = { has_variable = te_dg_of2 }
+		change_variable = { name = te_dg_of2 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om2 multiply = local_var:te_dg_new_scale }
+	}
+	if = {
+		limit = { has_variable = te_dg_of3 }
+		change_variable = { name = te_dg_of3 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om3 multiply = local_var:te_dg_new_scale }
+	}
+	if = {
+		limit = { has_variable = te_dg_of4 }
+		change_variable = { name = te_dg_of4 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om4 multiply = local_var:te_dg_new_scale }
+	}
+	if = {
+		limit = { has_variable = te_dg_of5 }
+		change_variable = { name = te_dg_of5 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om5 multiply = local_var:te_dg_new_scale }
+	}
+	if = {
+		limit = { has_variable = te_dg_of6 }
+		change_variable = { name = te_dg_of6 multiply = local_var:te_dg_new_scale }
+		change_variable = { name = te_dg_om6 multiply = local_var:te_dg_new_scale }
+	}
+}
+
+# THIS = a state, in a sweep: the row starts' running sums at 0 (te_demog_reset_accumulators).
+te_demog_old_rows_reset = {
+	set_local_variable = { name = te_dg_orow value = 0 }
+	set_local_variable = { name = te_dg_ocf1 value = 0 }
+	set_local_variable = { name = te_dg_ocm1 value = 0 }
+	set_local_variable = { name = te_dg_ocf2 value = 0 }
+	set_local_variable = { name = te_dg_ocm2 value = 0 }
+	set_local_variable = { name = te_dg_ocf3 value = 0 }
+	set_local_variable = { name = te_dg_ocm3 value = 0 }
+	set_local_variable = { name = te_dg_ocf4 value = 0 }
+	set_local_variable = { name = te_dg_ocm4 value = 0 }
+	set_local_variable = { name = te_dg_ocf5 value = 0 }
+	set_local_variable = { name = te_dg_ocm5 value = 0 }
+}
+
+# THIS = a state, in a sweep at the start of row local_var:te_dg_orow (1-5, ages 100-250) inside the last
+# band, 85 and over (te_demog_age_boundaries): the band's people so far, te_dg_oc<f|m><row>, then the next row.
+te_demog_old_row_mark = {
+	if = {
+		limit = { local_var:te_dg_orow <= 3 }
+		if = {
+			limit = { local_var:te_dg_orow <= 2 }
+			if = {
+				limit = { local_var:te_dg_orow <= 1 }
+				set_local_variable = { name = te_dg_ocf1 value = local_var:te_dg_acc_bf }
+				set_local_variable = { name = te_dg_ocm1 value = local_var:te_dg_acc_bm }
+				set_local_variable = { name = te_dg_next_band value = 125 }
+			}
+			else = {
+				set_local_variable = { name = te_dg_ocf2 value = local_var:te_dg_acc_bf }
+				set_local_variable = { name = te_dg_ocm2 value = local_var:te_dg_acc_bm }
+				set_local_variable = { name = te_dg_next_band value = 150 }
+			}
+		}
+		else = {
+			set_local_variable = { name = te_dg_ocf3 value = local_var:te_dg_acc_bf }
+			set_local_variable = { name = te_dg_ocm3 value = local_var:te_dg_acc_bm }
+			set_local_variable = { name = te_dg_next_band value = 200 }
+		}
+	}
+	else = {
+		if = {
+			limit = { local_var:te_dg_orow <= 4 }
+			set_local_variable = { name = te_dg_ocf4 value = local_var:te_dg_acc_bf }
+			set_local_variable = { name = te_dg_ocm4 value = local_var:te_dg_acc_bm }
+			set_local_variable = { name = te_dg_next_band value = 250 }
+		}
+		else = {
+			set_local_variable = { name = te_dg_ocf5 value = local_var:te_dg_acc_bf }
+			set_local_variable = { name = te_dg_ocm5 value = local_var:te_dg_acc_bm }
+			set_local_variable = { name = te_dg_next_band value = 999 }
+		}
+	}
+	change_local_variable = { name = te_dg_orow add = 1 }
+}
+
+# THIS = a state, at the end of a sweep with the pool in the last band's sums (te_demog_close_accumulators): its people
+# past each row's start, te_dg_o<f|m><i> (the band's less the people before the start; the last row the pool),
+# where anyone is (raw, as the bands: te_demog_set_scale or the seed's normalisation scales them).
+te_demog_old_rows_close = {
+	set_local_variable = { name = te_dg_orf value = { value = local_var:te_dg_acc_bf subtract = local_var:te_dg_ocf1 } }
+	set_local_variable = { name = te_dg_orm value = { value = local_var:te_dg_acc_bm subtract = local_var:te_dg_ocm1 } }
+	if = {
+		limit = { local_var:te_dg_orf > 0 }
+		set_variable = { name = te_dg_of1 value = local_var:te_dg_orf }
+		set_variable = { name = te_dg_om1 value = { value = local_var:te_dg_orm min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_orm > 0 }
+		set_variable = { name = te_dg_of1 value = 0 }
+		set_variable = { name = te_dg_om1 value = local_var:te_dg_orm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of1 }
+		remove_variable = te_dg_of1
+		remove_variable = te_dg_om1
+	}
+	set_local_variable = { name = te_dg_orf value = { value = local_var:te_dg_acc_bf subtract = local_var:te_dg_ocf2 } }
+	set_local_variable = { name = te_dg_orm value = { value = local_var:te_dg_acc_bm subtract = local_var:te_dg_ocm2 } }
+	if = {
+		limit = { local_var:te_dg_orf > 0 }
+		set_variable = { name = te_dg_of2 value = local_var:te_dg_orf }
+		set_variable = { name = te_dg_om2 value = { value = local_var:te_dg_orm min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_orm > 0 }
+		set_variable = { name = te_dg_of2 value = 0 }
+		set_variable = { name = te_dg_om2 value = local_var:te_dg_orm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of2 }
+		remove_variable = te_dg_of2
+		remove_variable = te_dg_om2
+	}
+	set_local_variable = { name = te_dg_orf value = { value = local_var:te_dg_acc_bf subtract = local_var:te_dg_ocf3 } }
+	set_local_variable = { name = te_dg_orm value = { value = local_var:te_dg_acc_bm subtract = local_var:te_dg_ocm3 } }
+	if = {
+		limit = { local_var:te_dg_orf > 0 }
+		set_variable = { name = te_dg_of3 value = local_var:te_dg_orf }
+		set_variable = { name = te_dg_om3 value = { value = local_var:te_dg_orm min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_orm > 0 }
+		set_variable = { name = te_dg_of3 value = 0 }
+		set_variable = { name = te_dg_om3 value = local_var:te_dg_orm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of3 }
+		remove_variable = te_dg_of3
+		remove_variable = te_dg_om3
+	}
+	set_local_variable = { name = te_dg_orf value = { value = local_var:te_dg_acc_bf subtract = local_var:te_dg_ocf4 } }
+	set_local_variable = { name = te_dg_orm value = { value = local_var:te_dg_acc_bm subtract = local_var:te_dg_ocm4 } }
+	if = {
+		limit = { local_var:te_dg_orf > 0 }
+		set_variable = { name = te_dg_of4 value = local_var:te_dg_orf }
+		set_variable = { name = te_dg_om4 value = { value = local_var:te_dg_orm min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_orm > 0 }
+		set_variable = { name = te_dg_of4 value = 0 }
+		set_variable = { name = te_dg_om4 value = local_var:te_dg_orm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of4 }
+		remove_variable = te_dg_of4
+		remove_variable = te_dg_om4
+	}
+	set_local_variable = { name = te_dg_orf value = { value = local_var:te_dg_acc_bf subtract = local_var:te_dg_ocf5 } }
+	set_local_variable = { name = te_dg_orm value = { value = local_var:te_dg_acc_bm subtract = local_var:te_dg_ocm5 } }
+	if = {
+		limit = { local_var:te_dg_orf > 0 }
+		set_variable = { name = te_dg_of5 value = local_var:te_dg_orf }
+		set_variable = { name = te_dg_om5 value = { value = local_var:te_dg_orm min = 0 } }
+	}
+	else_if = {
+		limit = { local_var:te_dg_orm > 0 }
+		set_variable = { name = te_dg_of5 value = 0 }
+		set_variable = { name = te_dg_om5 value = local_var:te_dg_orm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of5 }
+		remove_variable = te_dg_of5
+		remove_variable = te_dg_om5
+	}
+	if = {
+		limit = { var:te_dg_pf > 0 }
+		set_variable = { name = te_dg_of6 value = var:te_dg_pf }
+		set_variable = { name = te_dg_om6 value = { value = var:te_dg_pm min = 0 } }
+	}
+	else_if = {
+		limit = { var:te_dg_pm > 0 }
+		set_variable = { name = te_dg_of6 value = 0 }
+		set_variable = { name = te_dg_om6 value = var:te_dg_pm }
+	}
+	else_if = {
+		limit = { has_variable = te_dg_of6 }
+		remove_variable = te_dg_of6
+		remove_variable = te_dg_om6
+	}
+}
+
+# THIS = a state or a country, after its count, with local_var:te_dg_or_people its people: the pyramid's rows past 85
+# (demographics_model.old_rows_shown). The top row is the highest whose people and older are 1% or
+# more of the people; with one, $TOP$ holds it and $PX$<f|m><i> each row's people, i = 0 (85 to the next start)
+# to 6: the top row everyone from its start, the rows above it 0. With none (an 1836-2000 pyramid) they go, and
+# the pyramid ends at 85+. $CUM$<f|m><i>: the people past row i's start; $BAND$<f|m>17: 85 and over.
+te_demog_old_rows_show = {
+	set_local_variable = { name = te_dg_or_top value = 0 }
+	set_local_variable = { name = te_dg_or_gate value = { value = local_var:te_dg_or_people multiply = 0.01 } }
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f6
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f6 add = var:$CUM$m6 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 6 }
+		}
+	}
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f5
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f5 add = var:$CUM$m5 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 5 }
+		}
+	}
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f4
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f4 add = var:$CUM$m4 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 4 }
+		}
+	}
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f3
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f3 add = var:$CUM$m3 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 3 }
+		}
+	}
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f2
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f2 add = var:$CUM$m2 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 2 }
+		}
+	}
+	if = {
+		limit = {
+			local_var:te_dg_or_top = 0
+			has_variable = $CUM$f1
+		}
+		set_local_variable = { name = te_dg_or_n value = { value = var:$CUM$f1 add = var:$CUM$m1 } }
+		if = {
+			limit = {
+				local_var:te_dg_or_n > 0
+				local_var:te_dg_or_n >= local_var:te_dg_or_gate
+			}
+			set_local_variable = { name = te_dg_or_top value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:te_dg_or_top > 0 }
+		set_variable = { name = $TOP$ value = local_var:te_dg_or_top }
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		set_local_variable = { name = te_dg_or_af value = var:$BAND$f17 }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f1 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f1 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		set_local_variable = { name = te_dg_or_am value = var:$BAND$m17 }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m1 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m1 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 0 }
+			set_variable = { name = $PX$f0 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m0 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 0 }
+			set_variable = { name = $PX$f0 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m0 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f0 value = 0 }
+			set_variable = { name = $PX$m0 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f1 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f1 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f2 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f2 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m1 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m1 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m2 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m2 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 1 }
+			set_variable = { name = $PX$f1 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m1 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 1 }
+			set_variable = { name = $PX$f1 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m1 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f1 value = 0 }
+			set_variable = { name = $PX$m1 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f2 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f2 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f3 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f3 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m2 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m2 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m3 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m3 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 2 }
+			set_variable = { name = $PX$f2 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m2 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 2 }
+			set_variable = { name = $PX$f2 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m2 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f2 value = 0 }
+			set_variable = { name = $PX$m2 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f3 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f3 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f4 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f4 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m3 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m3 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m4 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m4 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 3 }
+			set_variable = { name = $PX$f3 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m3 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 3 }
+			set_variable = { name = $PX$f3 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m3 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f3 value = 0 }
+			set_variable = { name = $PX$m3 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f4 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f4 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f5 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f5 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m4 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m4 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m5 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m5 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 4 }
+			set_variable = { name = $PX$f4 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m4 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 4 }
+			set_variable = { name = $PX$f4 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m4 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f4 value = 0 }
+			set_variable = { name = $PX$m4 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f5 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f5 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		if = { limit = { has_variable = $CUM$f6 } set_local_variable = { name = te_dg_or_bf value = var:$CUM$f6 } }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m5 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m5 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = { limit = { has_variable = $CUM$m6 } set_local_variable = { name = te_dg_or_bm value = var:$CUM$m6 } }
+		if = {
+			limit = { local_var:te_dg_or_top > 5 }
+			set_variable = { name = $PX$f5 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m5 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 5 }
+			set_variable = { name = $PX$f5 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m5 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f5 value = 0 }
+			set_variable = { name = $PX$m5 value = 0 }
+		}
+		set_local_variable = { name = te_dg_or_af value = 0 }
+		if = { limit = { has_variable = $CUM$f6 } set_local_variable = { name = te_dg_or_af value = var:$CUM$f6 } }
+		set_local_variable = { name = te_dg_or_bf value = 0 }
+		set_local_variable = { name = te_dg_or_am value = 0 }
+		if = { limit = { has_variable = $CUM$m6 } set_local_variable = { name = te_dg_or_am value = var:$CUM$m6 } }
+		set_local_variable = { name = te_dg_or_bm value = 0 }
+		if = {
+			limit = { local_var:te_dg_or_top > 6 }
+			set_variable = { name = $PX$f6 value = { value = local_var:te_dg_or_af subtract = local_var:te_dg_or_bf min = 0 } }
+			set_variable = { name = $PX$m6 value = { value = local_var:te_dg_or_am subtract = local_var:te_dg_or_bm min = 0 } }
+		}
+		else_if = {
+			limit = { local_var:te_dg_or_top = 6 }
+			set_variable = { name = $PX$f6 value = local_var:te_dg_or_af }
+			set_variable = { name = $PX$m6 value = local_var:te_dg_or_am }
+		}
+		else = {
+			set_variable = { name = $PX$f6 value = 0 }
+			set_variable = { name = $PX$m6 value = 0 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = $TOP$ }
+		remove_variable = $TOP$
+		remove_variable = $PX$f0
+		remove_variable = $PX$m0
+		remove_variable = $PX$f1
+		remove_variable = $PX$m1
+		remove_variable = $PX$f2
+		remove_variable = $PX$m2
+		remove_variable = $PX$f3
+		remove_variable = $PX$m3
+		remove_variable = $PX$f4
+		remove_variable = $PX$m4
+		remove_variable = $PX$f5
+		remove_variable = $PX$m5
+		remove_variable = $PX$f6
+		remove_variable = $PX$m6
+	}
 }
 
 # THIS = a state, before its pop walk: the Gini's wealth-band sums (spec 4.1).
@@ -7897,6 +10636,264 @@ te_demog_cause_deaths_estimate = {
 	}
 }
 
+# THIS = a state, in te_demog_ring_migrate: each old slot 0-149 to its slot on the 300-year ring.
+te_demog_ring_migrate_slots = {
+	te_demog_ring_migrate_slot = { S = 0 T = 150 }
+	te_demog_ring_migrate_slot = { S = 1 T = 151 }
+	te_demog_ring_migrate_slot = { S = 2 T = 152 }
+	te_demog_ring_migrate_slot = { S = 3 T = 153 }
+	te_demog_ring_migrate_slot = { S = 4 T = 154 }
+	te_demog_ring_migrate_slot = { S = 5 T = 155 }
+	te_demog_ring_migrate_slot = { S = 6 T = 156 }
+	te_demog_ring_migrate_slot = { S = 7 T = 157 }
+	te_demog_ring_migrate_slot = { S = 8 T = 158 }
+	te_demog_ring_migrate_slot = { S = 9 T = 159 }
+	te_demog_ring_migrate_slot = { S = 10 T = 160 }
+	te_demog_ring_migrate_slot = { S = 11 T = 161 }
+	te_demog_ring_migrate_slot = { S = 12 T = 162 }
+	te_demog_ring_migrate_slot = { S = 13 T = 163 }
+	te_demog_ring_migrate_slot = { S = 14 T = 164 }
+	te_demog_ring_migrate_slot = { S = 15 T = 165 }
+	te_demog_ring_migrate_slot = { S = 16 T = 166 }
+	te_demog_ring_migrate_slot = { S = 17 T = 167 }
+	te_demog_ring_migrate_slot = { S = 18 T = 168 }
+	te_demog_ring_migrate_slot = { S = 19 T = 169 }
+	te_demog_ring_migrate_slot = { S = 20 T = 170 }
+	te_demog_ring_migrate_slot = { S = 21 T = 171 }
+	te_demog_ring_migrate_slot = { S = 22 T = 172 }
+	te_demog_ring_migrate_slot = { S = 23 T = 173 }
+	te_demog_ring_migrate_slot = { S = 24 T = 174 }
+	te_demog_ring_migrate_slot = { S = 25 T = 175 }
+	te_demog_ring_migrate_slot = { S = 26 T = 176 }
+	te_demog_ring_migrate_slot = { S = 27 T = 177 }
+	te_demog_ring_migrate_slot = { S = 28 T = 178 }
+	te_demog_ring_migrate_slot = { S = 29 T = 179 }
+	te_demog_ring_migrate_slot = { S = 30 T = 180 }
+	te_demog_ring_migrate_slot = { S = 31 T = 181 }
+	te_demog_ring_migrate_slot = { S = 32 T = 182 }
+	te_demog_ring_migrate_slot = { S = 33 T = 183 }
+	te_demog_ring_migrate_slot = { S = 34 T = 184 }
+	te_demog_ring_migrate_slot = { S = 35 T = 185 }
+	te_demog_ring_migrate_slot = { S = 36 T = 186 }
+	te_demog_ring_migrate_slot = { S = 37 T = 187 }
+	te_demog_ring_migrate_slot = { S = 38 T = 188 }
+	te_demog_ring_migrate_slot = { S = 39 T = 189 }
+	te_demog_ring_migrate_slot = { S = 40 T = 190 }
+	te_demog_ring_migrate_slot = { S = 41 T = 191 }
+	te_demog_ring_migrate_slot = { S = 42 T = 192 }
+	te_demog_ring_migrate_slot = { S = 43 T = 193 }
+	te_demog_ring_migrate_slot = { S = 44 T = 194 }
+	te_demog_ring_migrate_slot = { S = 45 T = 195 }
+	te_demog_ring_migrate_slot = { S = 46 T = 196 }
+	te_demog_ring_migrate_slot = { S = 47 T = 197 }
+	te_demog_ring_migrate_slot = { S = 48 T = 198 }
+	te_demog_ring_migrate_slot = { S = 49 T = 199 }
+	te_demog_ring_migrate_slot = { S = 50 T = 200 }
+	te_demog_ring_migrate_slot = { S = 51 T = 201 }
+	te_demog_ring_migrate_slot = { S = 52 T = 202 }
+	te_demog_ring_migrate_slot = { S = 53 T = 203 }
+	te_demog_ring_migrate_slot = { S = 54 T = 204 }
+	te_demog_ring_migrate_slot = { S = 55 T = 205 }
+	te_demog_ring_migrate_slot = { S = 56 T = 206 }
+	te_demog_ring_migrate_slot = { S = 57 T = 207 }
+	te_demog_ring_migrate_slot = { S = 58 T = 208 }
+	te_demog_ring_migrate_slot = { S = 59 T = 209 }
+	te_demog_ring_migrate_slot = { S = 60 T = 210 }
+	te_demog_ring_migrate_slot = { S = 61 T = 211 }
+	te_demog_ring_migrate_slot = { S = 62 T = 212 }
+	te_demog_ring_migrate_slot = { S = 63 T = 213 }
+	te_demog_ring_migrate_slot = { S = 64 T = 214 }
+	te_demog_ring_migrate_slot = { S = 65 T = 215 }
+	te_demog_ring_migrate_slot = { S = 66 T = 216 }
+	te_demog_ring_migrate_slot = { S = 67 T = 217 }
+	te_demog_ring_migrate_slot = { S = 68 T = 218 }
+	te_demog_ring_migrate_slot = { S = 69 T = 219 }
+	te_demog_ring_migrate_slot = { S = 70 T = 220 }
+	te_demog_ring_migrate_slot = { S = 71 T = 221 }
+	te_demog_ring_migrate_slot = { S = 72 T = 222 }
+	te_demog_ring_migrate_slot = { S = 73 T = 223 }
+	te_demog_ring_migrate_slot = { S = 74 T = 224 }
+	te_demog_ring_migrate_slot = { S = 75 T = 225 }
+	te_demog_ring_migrate_slot = { S = 76 T = 226 }
+	te_demog_ring_migrate_slot = { S = 77 T = 227 }
+	te_demog_ring_migrate_slot = { S = 78 T = 228 }
+	te_demog_ring_migrate_slot = { S = 79 T = 229 }
+	te_demog_ring_migrate_slot = { S = 80 T = 230 }
+	te_demog_ring_migrate_slot = { S = 81 T = 231 }
+	te_demog_ring_migrate_slot = { S = 82 T = 232 }
+	te_demog_ring_migrate_slot = { S = 83 T = 233 }
+	te_demog_ring_migrate_slot = { S = 84 T = 234 }
+	te_demog_ring_migrate_slot = { S = 85 T = 235 }
+	te_demog_ring_migrate_slot = { S = 86 T = 236 }
+	te_demog_ring_migrate_slot = { S = 87 T = 237 }
+	te_demog_ring_migrate_slot = { S = 88 T = 238 }
+	te_demog_ring_migrate_slot = { S = 89 T = 239 }
+	te_demog_ring_migrate_slot = { S = 90 T = 240 }
+	te_demog_ring_migrate_slot = { S = 91 T = 241 }
+	te_demog_ring_migrate_slot = { S = 92 T = 242 }
+	te_demog_ring_migrate_slot = { S = 93 T = 243 }
+	te_demog_ring_migrate_slot = { S = 94 T = 244 }
+	te_demog_ring_migrate_slot = { S = 95 T = 245 }
+	te_demog_ring_migrate_slot = { S = 96 T = 246 }
+	te_demog_ring_migrate_slot = { S = 97 T = 247 }
+	te_demog_ring_migrate_slot = { S = 98 T = 248 }
+	te_demog_ring_migrate_slot = { S = 99 T = 249 }
+	te_demog_ring_migrate_slot = { S = 100 T = 250 }
+	te_demog_ring_migrate_slot = { S = 101 T = 251 }
+	te_demog_ring_migrate_slot = { S = 102 T = 252 }
+	te_demog_ring_migrate_slot = { S = 103 T = 253 }
+	te_demog_ring_migrate_slot = { S = 104 T = 254 }
+	te_demog_ring_migrate_slot = { S = 105 T = 255 }
+	te_demog_ring_migrate_slot = { S = 106 T = 256 }
+	te_demog_ring_migrate_slot = { S = 107 T = 257 }
+	te_demog_ring_migrate_slot = { S = 108 T = 258 }
+	te_demog_ring_migrate_slot = { S = 109 T = 259 }
+	te_demog_ring_migrate_slot = { S = 110 T = 260 }
+	te_demog_ring_migrate_slot = { S = 111 T = 261 }
+	te_demog_ring_migrate_slot = { S = 112 T = 262 }
+	te_demog_ring_migrate_slot = { S = 113 T = 263 }
+	te_demog_ring_migrate_slot = { S = 114 T = 264 }
+	te_demog_ring_migrate_slot = { S = 115 T = 265 }
+	te_demog_ring_migrate_slot = { S = 116 T = 266 }
+	te_demog_ring_migrate_slot = { S = 117 T = 267 }
+	te_demog_ring_migrate_slot = { S = 118 T = 268 }
+	te_demog_ring_migrate_slot = { S = 119 T = 269 }
+	te_demog_ring_migrate_slot = { S = 120 T = 270 }
+	te_demog_ring_migrate_slot = { S = 121 T = 271 }
+	te_demog_ring_migrate_slot = { S = 122 T = 272 }
+	te_demog_ring_migrate_slot = { S = 123 T = 273 }
+	te_demog_ring_migrate_slot = { S = 124 T = 274 }
+	te_demog_ring_migrate_slot = { S = 125 T = 275 }
+	te_demog_ring_migrate_slot = { S = 126 T = 276 }
+	te_demog_ring_migrate_slot = { S = 127 T = 277 }
+	te_demog_ring_migrate_slot = { S = 128 T = 278 }
+	te_demog_ring_migrate_slot = { S = 129 T = 279 }
+	te_demog_ring_migrate_slot = { S = 130 T = 280 }
+	te_demog_ring_migrate_slot = { S = 131 T = 281 }
+	te_demog_ring_migrate_slot = { S = 132 T = 282 }
+	te_demog_ring_migrate_slot = { S = 133 T = 283 }
+	te_demog_ring_migrate_slot = { S = 134 T = 284 }
+	te_demog_ring_migrate_slot = { S = 135 T = 285 }
+	te_demog_ring_migrate_slot = { S = 136 T = 286 }
+	te_demog_ring_migrate_slot = { S = 137 T = 287 }
+	te_demog_ring_migrate_slot = { S = 138 T = 288 }
+	te_demog_ring_migrate_slot = { S = 139 T = 289 }
+	te_demog_ring_migrate_slot = { S = 140 T = 290 }
+	te_demog_ring_migrate_slot = { S = 141 T = 291 }
+	te_demog_ring_migrate_slot = { S = 142 T = 292 }
+	te_demog_ring_migrate_slot = { S = 143 T = 293 }
+	te_demog_ring_migrate_slot = { S = 144 T = 294 }
+	te_demog_ring_migrate_slot = { S = 145 T = 295 }
+	te_demog_ring_migrate_slot = { S = 146 T = 296 }
+	te_demog_ring_migrate_slot = { S = 147 T = 297 }
+	te_demog_ring_migrate_slot = { S = 148 T = 298 }
+	te_demog_ring_migrate_slot = { S = 149 T = 299 }
+}
+
+# THIS = a state, in te_demog_ring_migrate: each old birth band 0-29 with its slots, by its top slot.
+te_demog_ring_migrate_bands = {
+	te_demog_ring_migrate_band = { J = 0 T = 30 TOP = 4 }
+	te_demog_ring_migrate_band = { J = 1 T = 31 TOP = 9 }
+	te_demog_ring_migrate_band = { J = 2 T = 32 TOP = 14 }
+	te_demog_ring_migrate_band = { J = 3 T = 33 TOP = 19 }
+	te_demog_ring_migrate_band = { J = 4 T = 34 TOP = 24 }
+	te_demog_ring_migrate_band = { J = 5 T = 35 TOP = 29 }
+	te_demog_ring_migrate_band = { J = 6 T = 36 TOP = 34 }
+	te_demog_ring_migrate_band = { J = 7 T = 37 TOP = 39 }
+	te_demog_ring_migrate_band = { J = 8 T = 38 TOP = 44 }
+	te_demog_ring_migrate_band = { J = 9 T = 39 TOP = 49 }
+	te_demog_ring_migrate_band = { J = 10 T = 40 TOP = 54 }
+	te_demog_ring_migrate_band = { J = 11 T = 41 TOP = 59 }
+	te_demog_ring_migrate_band = { J = 12 T = 42 TOP = 64 }
+	te_demog_ring_migrate_band = { J = 13 T = 43 TOP = 69 }
+	te_demog_ring_migrate_band = { J = 14 T = 44 TOP = 74 }
+	te_demog_ring_migrate_band = { J = 15 T = 45 TOP = 79 }
+	te_demog_ring_migrate_band = { J = 16 T = 46 TOP = 84 }
+	te_demog_ring_migrate_band = { J = 17 T = 47 TOP = 89 }
+	te_demog_ring_migrate_band = { J = 18 T = 48 TOP = 94 }
+	te_demog_ring_migrate_band = { J = 19 T = 49 TOP = 99 }
+	te_demog_ring_migrate_band = { J = 20 T = 50 TOP = 104 }
+	te_demog_ring_migrate_band = { J = 21 T = 51 TOP = 109 }
+	te_demog_ring_migrate_band = { J = 22 T = 52 TOP = 114 }
+	te_demog_ring_migrate_band = { J = 23 T = 53 TOP = 119 }
+	te_demog_ring_migrate_band = { J = 24 T = 54 TOP = 124 }
+	te_demog_ring_migrate_band = { J = 25 T = 55 TOP = 129 }
+	te_demog_ring_migrate_band = { J = 26 T = 56 TOP = 134 }
+	te_demog_ring_migrate_band = { J = 27 T = 57 TOP = 139 }
+	te_demog_ring_migrate_band = { J = 28 T = 58 TOP = 144 }
+	te_demog_ring_migrate_band = { J = 29 T = 59 TOP = 149 }
+}
+
+# THIS = a state, in te_demog_ring_migrate: the pool into the band and slot of its mean age (te_dg_r3_jp, te_dg_r3_kp).
+te_demog_ring_migrate_pool_bands = {
+	te_demog_ring_migrate_pool_band = { J = 0 S0 = 0 S1 = 1 S2 = 2 S3 = 3 S4 = 4 }
+	te_demog_ring_migrate_pool_band = { J = 1 S0 = 5 S1 = 6 S2 = 7 S3 = 8 S4 = 9 }
+	te_demog_ring_migrate_pool_band = { J = 2 S0 = 10 S1 = 11 S2 = 12 S3 = 13 S4 = 14 }
+	te_demog_ring_migrate_pool_band = { J = 3 S0 = 15 S1 = 16 S2 = 17 S3 = 18 S4 = 19 }
+	te_demog_ring_migrate_pool_band = { J = 4 S0 = 20 S1 = 21 S2 = 22 S3 = 23 S4 = 24 }
+	te_demog_ring_migrate_pool_band = { J = 5 S0 = 25 S1 = 26 S2 = 27 S3 = 28 S4 = 29 }
+	te_demog_ring_migrate_pool_band = { J = 6 S0 = 30 S1 = 31 S2 = 32 S3 = 33 S4 = 34 }
+	te_demog_ring_migrate_pool_band = { J = 7 S0 = 35 S1 = 36 S2 = 37 S3 = 38 S4 = 39 }
+	te_demog_ring_migrate_pool_band = { J = 8 S0 = 40 S1 = 41 S2 = 42 S3 = 43 S4 = 44 }
+	te_demog_ring_migrate_pool_band = { J = 9 S0 = 45 S1 = 46 S2 = 47 S3 = 48 S4 = 49 }
+	te_demog_ring_migrate_pool_band = { J = 10 S0 = 50 S1 = 51 S2 = 52 S3 = 53 S4 = 54 }
+	te_demog_ring_migrate_pool_band = { J = 11 S0 = 55 S1 = 56 S2 = 57 S3 = 58 S4 = 59 }
+	te_demog_ring_migrate_pool_band = { J = 12 S0 = 60 S1 = 61 S2 = 62 S3 = 63 S4 = 64 }
+	te_demog_ring_migrate_pool_band = { J = 13 S0 = 65 S1 = 66 S2 = 67 S3 = 68 S4 = 69 }
+	te_demog_ring_migrate_pool_band = { J = 14 S0 = 70 S1 = 71 S2 = 72 S3 = 73 S4 = 74 }
+	te_demog_ring_migrate_pool_band = { J = 15 S0 = 75 S1 = 76 S2 = 77 S3 = 78 S4 = 79 }
+	te_demog_ring_migrate_pool_band = { J = 16 S0 = 80 S1 = 81 S2 = 82 S3 = 83 S4 = 84 }
+	te_demog_ring_migrate_pool_band = { J = 17 S0 = 85 S1 = 86 S2 = 87 S3 = 88 S4 = 89 }
+	te_demog_ring_migrate_pool_band = { J = 18 S0 = 90 S1 = 91 S2 = 92 S3 = 93 S4 = 94 }
+	te_demog_ring_migrate_pool_band = { J = 19 S0 = 95 S1 = 96 S2 = 97 S3 = 98 S4 = 99 }
+	te_demog_ring_migrate_pool_band = { J = 20 S0 = 100 S1 = 101 S2 = 102 S3 = 103 S4 = 104 }
+	te_demog_ring_migrate_pool_band = { J = 21 S0 = 105 S1 = 106 S2 = 107 S3 = 108 S4 = 109 }
+	te_demog_ring_migrate_pool_band = { J = 22 S0 = 110 S1 = 111 S2 = 112 S3 = 113 S4 = 114 }
+	te_demog_ring_migrate_pool_band = { J = 23 S0 = 115 S1 = 116 S2 = 117 S3 = 118 S4 = 119 }
+	te_demog_ring_migrate_pool_band = { J = 24 S0 = 120 S1 = 121 S2 = 122 S3 = 123 S4 = 124 }
+	te_demog_ring_migrate_pool_band = { J = 25 S0 = 125 S1 = 126 S2 = 127 S3 = 128 S4 = 129 }
+	te_demog_ring_migrate_pool_band = { J = 26 S0 = 130 S1 = 131 S2 = 132 S3 = 133 S4 = 134 }
+	te_demog_ring_migrate_pool_band = { J = 27 S0 = 135 S1 = 136 S2 = 137 S3 = 138 S4 = 139 }
+	te_demog_ring_migrate_pool_band = { J = 28 S0 = 140 S1 = 141 S2 = 142 S3 = 143 S4 = 144 }
+	te_demog_ring_migrate_pool_band = { J = 29 S0 = 145 S1 = 146 S2 = 147 S3 = 148 S4 = 149 }
+	te_demog_ring_migrate_pool_band = { J = 30 S0 = 150 S1 = 151 S2 = 152 S3 = 153 S4 = 154 }
+	te_demog_ring_migrate_pool_band = { J = 31 S0 = 155 S1 = 156 S2 = 157 S3 = 158 S4 = 159 }
+	te_demog_ring_migrate_pool_band = { J = 32 S0 = 160 S1 = 161 S2 = 162 S3 = 163 S4 = 164 }
+	te_demog_ring_migrate_pool_band = { J = 33 S0 = 165 S1 = 166 S2 = 167 S3 = 168 S4 = 169 }
+	te_demog_ring_migrate_pool_band = { J = 34 S0 = 170 S1 = 171 S2 = 172 S3 = 173 S4 = 174 }
+	te_demog_ring_migrate_pool_band = { J = 35 S0 = 175 S1 = 176 S2 = 177 S3 = 178 S4 = 179 }
+	te_demog_ring_migrate_pool_band = { J = 36 S0 = 180 S1 = 181 S2 = 182 S3 = 183 S4 = 184 }
+	te_demog_ring_migrate_pool_band = { J = 37 S0 = 185 S1 = 186 S2 = 187 S3 = 188 S4 = 189 }
+	te_demog_ring_migrate_pool_band = { J = 38 S0 = 190 S1 = 191 S2 = 192 S3 = 193 S4 = 194 }
+	te_demog_ring_migrate_pool_band = { J = 39 S0 = 195 S1 = 196 S2 = 197 S3 = 198 S4 = 199 }
+	te_demog_ring_migrate_pool_band = { J = 40 S0 = 200 S1 = 201 S2 = 202 S3 = 203 S4 = 204 }
+	te_demog_ring_migrate_pool_band = { J = 41 S0 = 205 S1 = 206 S2 = 207 S3 = 208 S4 = 209 }
+	te_demog_ring_migrate_pool_band = { J = 42 S0 = 210 S1 = 211 S2 = 212 S3 = 213 S4 = 214 }
+	te_demog_ring_migrate_pool_band = { J = 43 S0 = 215 S1 = 216 S2 = 217 S3 = 218 S4 = 219 }
+	te_demog_ring_migrate_pool_band = { J = 44 S0 = 220 S1 = 221 S2 = 222 S3 = 223 S4 = 224 }
+	te_demog_ring_migrate_pool_band = { J = 45 S0 = 225 S1 = 226 S2 = 227 S3 = 228 S4 = 229 }
+	te_demog_ring_migrate_pool_band = { J = 46 S0 = 230 S1 = 231 S2 = 232 S3 = 233 S4 = 234 }
+	te_demog_ring_migrate_pool_band = { J = 47 S0 = 235 S1 = 236 S2 = 237 S3 = 238 S4 = 239 }
+	te_demog_ring_migrate_pool_band = { J = 48 S0 = 240 S1 = 241 S2 = 242 S3 = 243 S4 = 244 }
+	te_demog_ring_migrate_pool_band = { J = 49 S0 = 245 S1 = 246 S2 = 247 S3 = 248 S4 = 249 }
+	te_demog_ring_migrate_pool_band = { J = 50 S0 = 250 S1 = 251 S2 = 252 S3 = 253 S4 = 254 }
+	te_demog_ring_migrate_pool_band = { J = 51 S0 = 255 S1 = 256 S2 = 257 S3 = 258 S4 = 259 }
+	te_demog_ring_migrate_pool_band = { J = 52 S0 = 260 S1 = 261 S2 = 262 S3 = 263 S4 = 264 }
+	te_demog_ring_migrate_pool_band = { J = 53 S0 = 265 S1 = 266 S2 = 267 S3 = 268 S4 = 269 }
+	te_demog_ring_migrate_pool_band = { J = 54 S0 = 270 S1 = 271 S2 = 272 S3 = 273 S4 = 274 }
+	te_demog_ring_migrate_pool_band = { J = 55 S0 = 275 S1 = 276 S2 = 277 S3 = 278 S4 = 279 }
+	te_demog_ring_migrate_pool_band = { J = 56 S0 = 280 S1 = 281 S2 = 282 S3 = 283 S4 = 284 }
+	te_demog_ring_migrate_pool_band = { J = 57 S0 = 285 S1 = 286 S2 = 287 S3 = 288 S4 = 289 }
+	te_demog_ring_migrate_pool_band = { J = 58 S0 = 290 S1 = 291 S2 = 292 S3 = 293 S4 = 294 }
+	te_demog_ring_migrate_pool_band = { J = 59 S0 = 295 S1 = 296 S2 = 297 S3 = 298 S4 = 299 }
+}
+
+# THIS = a state, in te_demog_ring_migrate: the people who flow now and folded before, into the last migrant class.
+te_demog_ring_migrate_class = {
+	change_variable = { name = te_dg_cf4 add = local_var:te_dg_r3_cf }
+	change_variable = { name = te_dg_cm4 add = local_var:te_dg_r3_cm }
+}
+
 # THIS = a state: the ring as TE_DEMOG_REPLAY before lines (demographics_harness.format_replay).
 te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=0 f=[THIS.ScriptValue('te_demog_dbg_f0')|5],[THIS.ScriptValue('te_demog_dbg_f1')|5],[THIS.ScriptValue('te_demog_dbg_f2')|5],[THIS.ScriptValue('te_demog_dbg_f3')|5],[THIS.ScriptValue('te_demog_dbg_f4')|5],[THIS.ScriptValue('te_demog_dbg_f5')|5],[THIS.ScriptValue('te_demog_dbg_f6')|5],[THIS.ScriptValue('te_demog_dbg_f7')|5],[THIS.ScriptValue('te_demog_dbg_f8')|5],[THIS.ScriptValue('te_demog_dbg_f9')|5] m=[THIS.ScriptValue('te_demog_dbg_m0')|5],[THIS.ScriptValue('te_demog_dbg_m1')|5],[THIS.ScriptValue('te_demog_dbg_m2')|5],[THIS.ScriptValue('te_demog_dbg_m3')|5],[THIS.ScriptValue('te_demog_dbg_m4')|5],[THIS.ScriptValue('te_demog_dbg_m5')|5],[THIS.ScriptValue('te_demog_dbg_m6')|5],[THIS.ScriptValue('te_demog_dbg_m7')|5],[THIS.ScriptValue('te_demog_dbg_m8')|5],[THIS.ScriptValue('te_demog_dbg_m9')|5] pool_f=[THIS.ScriptValue('te_demog_dbg_pool_f')|5] pool_m=[THIS.ScriptValue('te_demog_dbg_pool_m')|5] pool_age=[THIS.Var('te_dg_pa').GetValue|5]"
@@ -7914,6 +10911,21 @@ te_demog_debug_log_ring_before = {
 	debug_log = "TE_DEMOG_REPLAY before from=120 f=[THIS.ScriptValue('te_demog_dbg_f120')|5],[THIS.ScriptValue('te_demog_dbg_f121')|5],[THIS.ScriptValue('te_demog_dbg_f122')|5],[THIS.ScriptValue('te_demog_dbg_f123')|5],[THIS.ScriptValue('te_demog_dbg_f124')|5],[THIS.ScriptValue('te_demog_dbg_f125')|5],[THIS.ScriptValue('te_demog_dbg_f126')|5],[THIS.ScriptValue('te_demog_dbg_f127')|5],[THIS.ScriptValue('te_demog_dbg_f128')|5],[THIS.ScriptValue('te_demog_dbg_f129')|5] m=[THIS.ScriptValue('te_demog_dbg_m120')|5],[THIS.ScriptValue('te_demog_dbg_m121')|5],[THIS.ScriptValue('te_demog_dbg_m122')|5],[THIS.ScriptValue('te_demog_dbg_m123')|5],[THIS.ScriptValue('te_demog_dbg_m124')|5],[THIS.ScriptValue('te_demog_dbg_m125')|5],[THIS.ScriptValue('te_demog_dbg_m126')|5],[THIS.ScriptValue('te_demog_dbg_m127')|5],[THIS.ScriptValue('te_demog_dbg_m128')|5],[THIS.ScriptValue('te_demog_dbg_m129')|5]"
 	debug_log = "TE_DEMOG_REPLAY before from=130 f=[THIS.ScriptValue('te_demog_dbg_f130')|5],[THIS.ScriptValue('te_demog_dbg_f131')|5],[THIS.ScriptValue('te_demog_dbg_f132')|5],[THIS.ScriptValue('te_demog_dbg_f133')|5],[THIS.ScriptValue('te_demog_dbg_f134')|5],[THIS.ScriptValue('te_demog_dbg_f135')|5],[THIS.ScriptValue('te_demog_dbg_f136')|5],[THIS.ScriptValue('te_demog_dbg_f137')|5],[THIS.ScriptValue('te_demog_dbg_f138')|5],[THIS.ScriptValue('te_demog_dbg_f139')|5] m=[THIS.ScriptValue('te_demog_dbg_m130')|5],[THIS.ScriptValue('te_demog_dbg_m131')|5],[THIS.ScriptValue('te_demog_dbg_m132')|5],[THIS.ScriptValue('te_demog_dbg_m133')|5],[THIS.ScriptValue('te_demog_dbg_m134')|5],[THIS.ScriptValue('te_demog_dbg_m135')|5],[THIS.ScriptValue('te_demog_dbg_m136')|5],[THIS.ScriptValue('te_demog_dbg_m137')|5],[THIS.ScriptValue('te_demog_dbg_m138')|5],[THIS.ScriptValue('te_demog_dbg_m139')|5]"
 	debug_log = "TE_DEMOG_REPLAY before from=140 f=[THIS.ScriptValue('te_demog_dbg_f140')|5],[THIS.ScriptValue('te_demog_dbg_f141')|5],[THIS.ScriptValue('te_demog_dbg_f142')|5],[THIS.ScriptValue('te_demog_dbg_f143')|5],[THIS.ScriptValue('te_demog_dbg_f144')|5],[THIS.ScriptValue('te_demog_dbg_f145')|5],[THIS.ScriptValue('te_demog_dbg_f146')|5],[THIS.ScriptValue('te_demog_dbg_f147')|5],[THIS.ScriptValue('te_demog_dbg_f148')|5],[THIS.ScriptValue('te_demog_dbg_f149')|5] m=[THIS.ScriptValue('te_demog_dbg_m140')|5],[THIS.ScriptValue('te_demog_dbg_m141')|5],[THIS.ScriptValue('te_demog_dbg_m142')|5],[THIS.ScriptValue('te_demog_dbg_m143')|5],[THIS.ScriptValue('te_demog_dbg_m144')|5],[THIS.ScriptValue('te_demog_dbg_m145')|5],[THIS.ScriptValue('te_demog_dbg_m146')|5],[THIS.ScriptValue('te_demog_dbg_m147')|5],[THIS.ScriptValue('te_demog_dbg_m148')|5],[THIS.ScriptValue('te_demog_dbg_m149')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=150 f=[THIS.ScriptValue('te_demog_dbg_f150')|5],[THIS.ScriptValue('te_demog_dbg_f151')|5],[THIS.ScriptValue('te_demog_dbg_f152')|5],[THIS.ScriptValue('te_demog_dbg_f153')|5],[THIS.ScriptValue('te_demog_dbg_f154')|5],[THIS.ScriptValue('te_demog_dbg_f155')|5],[THIS.ScriptValue('te_demog_dbg_f156')|5],[THIS.ScriptValue('te_demog_dbg_f157')|5],[THIS.ScriptValue('te_demog_dbg_f158')|5],[THIS.ScriptValue('te_demog_dbg_f159')|5] m=[THIS.ScriptValue('te_demog_dbg_m150')|5],[THIS.ScriptValue('te_demog_dbg_m151')|5],[THIS.ScriptValue('te_demog_dbg_m152')|5],[THIS.ScriptValue('te_demog_dbg_m153')|5],[THIS.ScriptValue('te_demog_dbg_m154')|5],[THIS.ScriptValue('te_demog_dbg_m155')|5],[THIS.ScriptValue('te_demog_dbg_m156')|5],[THIS.ScriptValue('te_demog_dbg_m157')|5],[THIS.ScriptValue('te_demog_dbg_m158')|5],[THIS.ScriptValue('te_demog_dbg_m159')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=160 f=[THIS.ScriptValue('te_demog_dbg_f160')|5],[THIS.ScriptValue('te_demog_dbg_f161')|5],[THIS.ScriptValue('te_demog_dbg_f162')|5],[THIS.ScriptValue('te_demog_dbg_f163')|5],[THIS.ScriptValue('te_demog_dbg_f164')|5],[THIS.ScriptValue('te_demog_dbg_f165')|5],[THIS.ScriptValue('te_demog_dbg_f166')|5],[THIS.ScriptValue('te_demog_dbg_f167')|5],[THIS.ScriptValue('te_demog_dbg_f168')|5],[THIS.ScriptValue('te_demog_dbg_f169')|5] m=[THIS.ScriptValue('te_demog_dbg_m160')|5],[THIS.ScriptValue('te_demog_dbg_m161')|5],[THIS.ScriptValue('te_demog_dbg_m162')|5],[THIS.ScriptValue('te_demog_dbg_m163')|5],[THIS.ScriptValue('te_demog_dbg_m164')|5],[THIS.ScriptValue('te_demog_dbg_m165')|5],[THIS.ScriptValue('te_demog_dbg_m166')|5],[THIS.ScriptValue('te_demog_dbg_m167')|5],[THIS.ScriptValue('te_demog_dbg_m168')|5],[THIS.ScriptValue('te_demog_dbg_m169')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=170 f=[THIS.ScriptValue('te_demog_dbg_f170')|5],[THIS.ScriptValue('te_demog_dbg_f171')|5],[THIS.ScriptValue('te_demog_dbg_f172')|5],[THIS.ScriptValue('te_demog_dbg_f173')|5],[THIS.ScriptValue('te_demog_dbg_f174')|5],[THIS.ScriptValue('te_demog_dbg_f175')|5],[THIS.ScriptValue('te_demog_dbg_f176')|5],[THIS.ScriptValue('te_demog_dbg_f177')|5],[THIS.ScriptValue('te_demog_dbg_f178')|5],[THIS.ScriptValue('te_demog_dbg_f179')|5] m=[THIS.ScriptValue('te_demog_dbg_m170')|5],[THIS.ScriptValue('te_demog_dbg_m171')|5],[THIS.ScriptValue('te_demog_dbg_m172')|5],[THIS.ScriptValue('te_demog_dbg_m173')|5],[THIS.ScriptValue('te_demog_dbg_m174')|5],[THIS.ScriptValue('te_demog_dbg_m175')|5],[THIS.ScriptValue('te_demog_dbg_m176')|5],[THIS.ScriptValue('te_demog_dbg_m177')|5],[THIS.ScriptValue('te_demog_dbg_m178')|5],[THIS.ScriptValue('te_demog_dbg_m179')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=180 f=[THIS.ScriptValue('te_demog_dbg_f180')|5],[THIS.ScriptValue('te_demog_dbg_f181')|5],[THIS.ScriptValue('te_demog_dbg_f182')|5],[THIS.ScriptValue('te_demog_dbg_f183')|5],[THIS.ScriptValue('te_demog_dbg_f184')|5],[THIS.ScriptValue('te_demog_dbg_f185')|5],[THIS.ScriptValue('te_demog_dbg_f186')|5],[THIS.ScriptValue('te_demog_dbg_f187')|5],[THIS.ScriptValue('te_demog_dbg_f188')|5],[THIS.ScriptValue('te_demog_dbg_f189')|5] m=[THIS.ScriptValue('te_demog_dbg_m180')|5],[THIS.ScriptValue('te_demog_dbg_m181')|5],[THIS.ScriptValue('te_demog_dbg_m182')|5],[THIS.ScriptValue('te_demog_dbg_m183')|5],[THIS.ScriptValue('te_demog_dbg_m184')|5],[THIS.ScriptValue('te_demog_dbg_m185')|5],[THIS.ScriptValue('te_demog_dbg_m186')|5],[THIS.ScriptValue('te_demog_dbg_m187')|5],[THIS.ScriptValue('te_demog_dbg_m188')|5],[THIS.ScriptValue('te_demog_dbg_m189')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=190 f=[THIS.ScriptValue('te_demog_dbg_f190')|5],[THIS.ScriptValue('te_demog_dbg_f191')|5],[THIS.ScriptValue('te_demog_dbg_f192')|5],[THIS.ScriptValue('te_demog_dbg_f193')|5],[THIS.ScriptValue('te_demog_dbg_f194')|5],[THIS.ScriptValue('te_demog_dbg_f195')|5],[THIS.ScriptValue('te_demog_dbg_f196')|5],[THIS.ScriptValue('te_demog_dbg_f197')|5],[THIS.ScriptValue('te_demog_dbg_f198')|5],[THIS.ScriptValue('te_demog_dbg_f199')|5] m=[THIS.ScriptValue('te_demog_dbg_m190')|5],[THIS.ScriptValue('te_demog_dbg_m191')|5],[THIS.ScriptValue('te_demog_dbg_m192')|5],[THIS.ScriptValue('te_demog_dbg_m193')|5],[THIS.ScriptValue('te_demog_dbg_m194')|5],[THIS.ScriptValue('te_demog_dbg_m195')|5],[THIS.ScriptValue('te_demog_dbg_m196')|5],[THIS.ScriptValue('te_demog_dbg_m197')|5],[THIS.ScriptValue('te_demog_dbg_m198')|5],[THIS.ScriptValue('te_demog_dbg_m199')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=200 f=[THIS.ScriptValue('te_demog_dbg_f200')|5],[THIS.ScriptValue('te_demog_dbg_f201')|5],[THIS.ScriptValue('te_demog_dbg_f202')|5],[THIS.ScriptValue('te_demog_dbg_f203')|5],[THIS.ScriptValue('te_demog_dbg_f204')|5],[THIS.ScriptValue('te_demog_dbg_f205')|5],[THIS.ScriptValue('te_demog_dbg_f206')|5],[THIS.ScriptValue('te_demog_dbg_f207')|5],[THIS.ScriptValue('te_demog_dbg_f208')|5],[THIS.ScriptValue('te_demog_dbg_f209')|5] m=[THIS.ScriptValue('te_demog_dbg_m200')|5],[THIS.ScriptValue('te_demog_dbg_m201')|5],[THIS.ScriptValue('te_demog_dbg_m202')|5],[THIS.ScriptValue('te_demog_dbg_m203')|5],[THIS.ScriptValue('te_demog_dbg_m204')|5],[THIS.ScriptValue('te_demog_dbg_m205')|5],[THIS.ScriptValue('te_demog_dbg_m206')|5],[THIS.ScriptValue('te_demog_dbg_m207')|5],[THIS.ScriptValue('te_demog_dbg_m208')|5],[THIS.ScriptValue('te_demog_dbg_m209')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=210 f=[THIS.ScriptValue('te_demog_dbg_f210')|5],[THIS.ScriptValue('te_demog_dbg_f211')|5],[THIS.ScriptValue('te_demog_dbg_f212')|5],[THIS.ScriptValue('te_demog_dbg_f213')|5],[THIS.ScriptValue('te_demog_dbg_f214')|5],[THIS.ScriptValue('te_demog_dbg_f215')|5],[THIS.ScriptValue('te_demog_dbg_f216')|5],[THIS.ScriptValue('te_demog_dbg_f217')|5],[THIS.ScriptValue('te_demog_dbg_f218')|5],[THIS.ScriptValue('te_demog_dbg_f219')|5] m=[THIS.ScriptValue('te_demog_dbg_m210')|5],[THIS.ScriptValue('te_demog_dbg_m211')|5],[THIS.ScriptValue('te_demog_dbg_m212')|5],[THIS.ScriptValue('te_demog_dbg_m213')|5],[THIS.ScriptValue('te_demog_dbg_m214')|5],[THIS.ScriptValue('te_demog_dbg_m215')|5],[THIS.ScriptValue('te_demog_dbg_m216')|5],[THIS.ScriptValue('te_demog_dbg_m217')|5],[THIS.ScriptValue('te_demog_dbg_m218')|5],[THIS.ScriptValue('te_demog_dbg_m219')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=220 f=[THIS.ScriptValue('te_demog_dbg_f220')|5],[THIS.ScriptValue('te_demog_dbg_f221')|5],[THIS.ScriptValue('te_demog_dbg_f222')|5],[THIS.ScriptValue('te_demog_dbg_f223')|5],[THIS.ScriptValue('te_demog_dbg_f224')|5],[THIS.ScriptValue('te_demog_dbg_f225')|5],[THIS.ScriptValue('te_demog_dbg_f226')|5],[THIS.ScriptValue('te_demog_dbg_f227')|5],[THIS.ScriptValue('te_demog_dbg_f228')|5],[THIS.ScriptValue('te_demog_dbg_f229')|5] m=[THIS.ScriptValue('te_demog_dbg_m220')|5],[THIS.ScriptValue('te_demog_dbg_m221')|5],[THIS.ScriptValue('te_demog_dbg_m222')|5],[THIS.ScriptValue('te_demog_dbg_m223')|5],[THIS.ScriptValue('te_demog_dbg_m224')|5],[THIS.ScriptValue('te_demog_dbg_m225')|5],[THIS.ScriptValue('te_demog_dbg_m226')|5],[THIS.ScriptValue('te_demog_dbg_m227')|5],[THIS.ScriptValue('te_demog_dbg_m228')|5],[THIS.ScriptValue('te_demog_dbg_m229')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=230 f=[THIS.ScriptValue('te_demog_dbg_f230')|5],[THIS.ScriptValue('te_demog_dbg_f231')|5],[THIS.ScriptValue('te_demog_dbg_f232')|5],[THIS.ScriptValue('te_demog_dbg_f233')|5],[THIS.ScriptValue('te_demog_dbg_f234')|5],[THIS.ScriptValue('te_demog_dbg_f235')|5],[THIS.ScriptValue('te_demog_dbg_f236')|5],[THIS.ScriptValue('te_demog_dbg_f237')|5],[THIS.ScriptValue('te_demog_dbg_f238')|5],[THIS.ScriptValue('te_demog_dbg_f239')|5] m=[THIS.ScriptValue('te_demog_dbg_m230')|5],[THIS.ScriptValue('te_demog_dbg_m231')|5],[THIS.ScriptValue('te_demog_dbg_m232')|5],[THIS.ScriptValue('te_demog_dbg_m233')|5],[THIS.ScriptValue('te_demog_dbg_m234')|5],[THIS.ScriptValue('te_demog_dbg_m235')|5],[THIS.ScriptValue('te_demog_dbg_m236')|5],[THIS.ScriptValue('te_demog_dbg_m237')|5],[THIS.ScriptValue('te_demog_dbg_m238')|5],[THIS.ScriptValue('te_demog_dbg_m239')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=240 f=[THIS.ScriptValue('te_demog_dbg_f240')|5],[THIS.ScriptValue('te_demog_dbg_f241')|5],[THIS.ScriptValue('te_demog_dbg_f242')|5],[THIS.ScriptValue('te_demog_dbg_f243')|5],[THIS.ScriptValue('te_demog_dbg_f244')|5],[THIS.ScriptValue('te_demog_dbg_f245')|5],[THIS.ScriptValue('te_demog_dbg_f246')|5],[THIS.ScriptValue('te_demog_dbg_f247')|5],[THIS.ScriptValue('te_demog_dbg_f248')|5],[THIS.ScriptValue('te_demog_dbg_f249')|5] m=[THIS.ScriptValue('te_demog_dbg_m240')|5],[THIS.ScriptValue('te_demog_dbg_m241')|5],[THIS.ScriptValue('te_demog_dbg_m242')|5],[THIS.ScriptValue('te_demog_dbg_m243')|5],[THIS.ScriptValue('te_demog_dbg_m244')|5],[THIS.ScriptValue('te_demog_dbg_m245')|5],[THIS.ScriptValue('te_demog_dbg_m246')|5],[THIS.ScriptValue('te_demog_dbg_m247')|5],[THIS.ScriptValue('te_demog_dbg_m248')|5],[THIS.ScriptValue('te_demog_dbg_m249')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=250 f=[THIS.ScriptValue('te_demog_dbg_f250')|5],[THIS.ScriptValue('te_demog_dbg_f251')|5],[THIS.ScriptValue('te_demog_dbg_f252')|5],[THIS.ScriptValue('te_demog_dbg_f253')|5],[THIS.ScriptValue('te_demog_dbg_f254')|5],[THIS.ScriptValue('te_demog_dbg_f255')|5],[THIS.ScriptValue('te_demog_dbg_f256')|5],[THIS.ScriptValue('te_demog_dbg_f257')|5],[THIS.ScriptValue('te_demog_dbg_f258')|5],[THIS.ScriptValue('te_demog_dbg_f259')|5] m=[THIS.ScriptValue('te_demog_dbg_m250')|5],[THIS.ScriptValue('te_demog_dbg_m251')|5],[THIS.ScriptValue('te_demog_dbg_m252')|5],[THIS.ScriptValue('te_demog_dbg_m253')|5],[THIS.ScriptValue('te_demog_dbg_m254')|5],[THIS.ScriptValue('te_demog_dbg_m255')|5],[THIS.ScriptValue('te_demog_dbg_m256')|5],[THIS.ScriptValue('te_demog_dbg_m257')|5],[THIS.ScriptValue('te_demog_dbg_m258')|5],[THIS.ScriptValue('te_demog_dbg_m259')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=260 f=[THIS.ScriptValue('te_demog_dbg_f260')|5],[THIS.ScriptValue('te_demog_dbg_f261')|5],[THIS.ScriptValue('te_demog_dbg_f262')|5],[THIS.ScriptValue('te_demog_dbg_f263')|5],[THIS.ScriptValue('te_demog_dbg_f264')|5],[THIS.ScriptValue('te_demog_dbg_f265')|5],[THIS.ScriptValue('te_demog_dbg_f266')|5],[THIS.ScriptValue('te_demog_dbg_f267')|5],[THIS.ScriptValue('te_demog_dbg_f268')|5],[THIS.ScriptValue('te_demog_dbg_f269')|5] m=[THIS.ScriptValue('te_demog_dbg_m260')|5],[THIS.ScriptValue('te_demog_dbg_m261')|5],[THIS.ScriptValue('te_demog_dbg_m262')|5],[THIS.ScriptValue('te_demog_dbg_m263')|5],[THIS.ScriptValue('te_demog_dbg_m264')|5],[THIS.ScriptValue('te_demog_dbg_m265')|5],[THIS.ScriptValue('te_demog_dbg_m266')|5],[THIS.ScriptValue('te_demog_dbg_m267')|5],[THIS.ScriptValue('te_demog_dbg_m268')|5],[THIS.ScriptValue('te_demog_dbg_m269')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=270 f=[THIS.ScriptValue('te_demog_dbg_f270')|5],[THIS.ScriptValue('te_demog_dbg_f271')|5],[THIS.ScriptValue('te_demog_dbg_f272')|5],[THIS.ScriptValue('te_demog_dbg_f273')|5],[THIS.ScriptValue('te_demog_dbg_f274')|5],[THIS.ScriptValue('te_demog_dbg_f275')|5],[THIS.ScriptValue('te_demog_dbg_f276')|5],[THIS.ScriptValue('te_demog_dbg_f277')|5],[THIS.ScriptValue('te_demog_dbg_f278')|5],[THIS.ScriptValue('te_demog_dbg_f279')|5] m=[THIS.ScriptValue('te_demog_dbg_m270')|5],[THIS.ScriptValue('te_demog_dbg_m271')|5],[THIS.ScriptValue('te_demog_dbg_m272')|5],[THIS.ScriptValue('te_demog_dbg_m273')|5],[THIS.ScriptValue('te_demog_dbg_m274')|5],[THIS.ScriptValue('te_demog_dbg_m275')|5],[THIS.ScriptValue('te_demog_dbg_m276')|5],[THIS.ScriptValue('te_demog_dbg_m277')|5],[THIS.ScriptValue('te_demog_dbg_m278')|5],[THIS.ScriptValue('te_demog_dbg_m279')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=280 f=[THIS.ScriptValue('te_demog_dbg_f280')|5],[THIS.ScriptValue('te_demog_dbg_f281')|5],[THIS.ScriptValue('te_demog_dbg_f282')|5],[THIS.ScriptValue('te_demog_dbg_f283')|5],[THIS.ScriptValue('te_demog_dbg_f284')|5],[THIS.ScriptValue('te_demog_dbg_f285')|5],[THIS.ScriptValue('te_demog_dbg_f286')|5],[THIS.ScriptValue('te_demog_dbg_f287')|5],[THIS.ScriptValue('te_demog_dbg_f288')|5],[THIS.ScriptValue('te_demog_dbg_f289')|5] m=[THIS.ScriptValue('te_demog_dbg_m280')|5],[THIS.ScriptValue('te_demog_dbg_m281')|5],[THIS.ScriptValue('te_demog_dbg_m282')|5],[THIS.ScriptValue('te_demog_dbg_m283')|5],[THIS.ScriptValue('te_demog_dbg_m284')|5],[THIS.ScriptValue('te_demog_dbg_m285')|5],[THIS.ScriptValue('te_demog_dbg_m286')|5],[THIS.ScriptValue('te_demog_dbg_m287')|5],[THIS.ScriptValue('te_demog_dbg_m288')|5],[THIS.ScriptValue('te_demog_dbg_m289')|5]"
+	debug_log = "TE_DEMOG_REPLAY before from=290 f=[THIS.ScriptValue('te_demog_dbg_f290')|5],[THIS.ScriptValue('te_demog_dbg_f291')|5],[THIS.ScriptValue('te_demog_dbg_f292')|5],[THIS.ScriptValue('te_demog_dbg_f293')|5],[THIS.ScriptValue('te_demog_dbg_f294')|5],[THIS.ScriptValue('te_demog_dbg_f295')|5],[THIS.ScriptValue('te_demog_dbg_f296')|5],[THIS.ScriptValue('te_demog_dbg_f297')|5],[THIS.ScriptValue('te_demog_dbg_f298')|5],[THIS.ScriptValue('te_demog_dbg_f299')|5] m=[THIS.ScriptValue('te_demog_dbg_m290')|5],[THIS.ScriptValue('te_demog_dbg_m291')|5],[THIS.ScriptValue('te_demog_dbg_m292')|5],[THIS.ScriptValue('te_demog_dbg_m293')|5],[THIS.ScriptValue('te_demog_dbg_m294')|5],[THIS.ScriptValue('te_demog_dbg_m295')|5],[THIS.ScriptValue('te_demog_dbg_m296')|5],[THIS.ScriptValue('te_demog_dbg_m297')|5],[THIS.ScriptValue('te_demog_dbg_m298')|5],[THIS.ScriptValue('te_demog_dbg_m299')|5]"
 }
 
 # THIS = a state: the ring as TE_DEMOG_REPLAY after lines (demographics_harness.format_replay).
@@ -7933,4 +10945,19 @@ te_demog_debug_log_ring_after = {
 	debug_log = "TE_DEMOG_REPLAY after from=120 f=[THIS.ScriptValue('te_demog_dbg_f120')|5],[THIS.ScriptValue('te_demog_dbg_f121')|5],[THIS.ScriptValue('te_demog_dbg_f122')|5],[THIS.ScriptValue('te_demog_dbg_f123')|5],[THIS.ScriptValue('te_demog_dbg_f124')|5],[THIS.ScriptValue('te_demog_dbg_f125')|5],[THIS.ScriptValue('te_demog_dbg_f126')|5],[THIS.ScriptValue('te_demog_dbg_f127')|5],[THIS.ScriptValue('te_demog_dbg_f128')|5],[THIS.ScriptValue('te_demog_dbg_f129')|5] m=[THIS.ScriptValue('te_demog_dbg_m120')|5],[THIS.ScriptValue('te_demog_dbg_m121')|5],[THIS.ScriptValue('te_demog_dbg_m122')|5],[THIS.ScriptValue('te_demog_dbg_m123')|5],[THIS.ScriptValue('te_demog_dbg_m124')|5],[THIS.ScriptValue('te_demog_dbg_m125')|5],[THIS.ScriptValue('te_demog_dbg_m126')|5],[THIS.ScriptValue('te_demog_dbg_m127')|5],[THIS.ScriptValue('te_demog_dbg_m128')|5],[THIS.ScriptValue('te_demog_dbg_m129')|5]"
 	debug_log = "TE_DEMOG_REPLAY after from=130 f=[THIS.ScriptValue('te_demog_dbg_f130')|5],[THIS.ScriptValue('te_demog_dbg_f131')|5],[THIS.ScriptValue('te_demog_dbg_f132')|5],[THIS.ScriptValue('te_demog_dbg_f133')|5],[THIS.ScriptValue('te_demog_dbg_f134')|5],[THIS.ScriptValue('te_demog_dbg_f135')|5],[THIS.ScriptValue('te_demog_dbg_f136')|5],[THIS.ScriptValue('te_demog_dbg_f137')|5],[THIS.ScriptValue('te_demog_dbg_f138')|5],[THIS.ScriptValue('te_demog_dbg_f139')|5] m=[THIS.ScriptValue('te_demog_dbg_m130')|5],[THIS.ScriptValue('te_demog_dbg_m131')|5],[THIS.ScriptValue('te_demog_dbg_m132')|5],[THIS.ScriptValue('te_demog_dbg_m133')|5],[THIS.ScriptValue('te_demog_dbg_m134')|5],[THIS.ScriptValue('te_demog_dbg_m135')|5],[THIS.ScriptValue('te_demog_dbg_m136')|5],[THIS.ScriptValue('te_demog_dbg_m137')|5],[THIS.ScriptValue('te_demog_dbg_m138')|5],[THIS.ScriptValue('te_demog_dbg_m139')|5]"
 	debug_log = "TE_DEMOG_REPLAY after from=140 f=[THIS.ScriptValue('te_demog_dbg_f140')|5],[THIS.ScriptValue('te_demog_dbg_f141')|5],[THIS.ScriptValue('te_demog_dbg_f142')|5],[THIS.ScriptValue('te_demog_dbg_f143')|5],[THIS.ScriptValue('te_demog_dbg_f144')|5],[THIS.ScriptValue('te_demog_dbg_f145')|5],[THIS.ScriptValue('te_demog_dbg_f146')|5],[THIS.ScriptValue('te_demog_dbg_f147')|5],[THIS.ScriptValue('te_demog_dbg_f148')|5],[THIS.ScriptValue('te_demog_dbg_f149')|5] m=[THIS.ScriptValue('te_demog_dbg_m140')|5],[THIS.ScriptValue('te_demog_dbg_m141')|5],[THIS.ScriptValue('te_demog_dbg_m142')|5],[THIS.ScriptValue('te_demog_dbg_m143')|5],[THIS.ScriptValue('te_demog_dbg_m144')|5],[THIS.ScriptValue('te_demog_dbg_m145')|5],[THIS.ScriptValue('te_demog_dbg_m146')|5],[THIS.ScriptValue('te_demog_dbg_m147')|5],[THIS.ScriptValue('te_demog_dbg_m148')|5],[THIS.ScriptValue('te_demog_dbg_m149')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=150 f=[THIS.ScriptValue('te_demog_dbg_f150')|5],[THIS.ScriptValue('te_demog_dbg_f151')|5],[THIS.ScriptValue('te_demog_dbg_f152')|5],[THIS.ScriptValue('te_demog_dbg_f153')|5],[THIS.ScriptValue('te_demog_dbg_f154')|5],[THIS.ScriptValue('te_demog_dbg_f155')|5],[THIS.ScriptValue('te_demog_dbg_f156')|5],[THIS.ScriptValue('te_demog_dbg_f157')|5],[THIS.ScriptValue('te_demog_dbg_f158')|5],[THIS.ScriptValue('te_demog_dbg_f159')|5] m=[THIS.ScriptValue('te_demog_dbg_m150')|5],[THIS.ScriptValue('te_demog_dbg_m151')|5],[THIS.ScriptValue('te_demog_dbg_m152')|5],[THIS.ScriptValue('te_demog_dbg_m153')|5],[THIS.ScriptValue('te_demog_dbg_m154')|5],[THIS.ScriptValue('te_demog_dbg_m155')|5],[THIS.ScriptValue('te_demog_dbg_m156')|5],[THIS.ScriptValue('te_demog_dbg_m157')|5],[THIS.ScriptValue('te_demog_dbg_m158')|5],[THIS.ScriptValue('te_demog_dbg_m159')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=160 f=[THIS.ScriptValue('te_demog_dbg_f160')|5],[THIS.ScriptValue('te_demog_dbg_f161')|5],[THIS.ScriptValue('te_demog_dbg_f162')|5],[THIS.ScriptValue('te_demog_dbg_f163')|5],[THIS.ScriptValue('te_demog_dbg_f164')|5],[THIS.ScriptValue('te_demog_dbg_f165')|5],[THIS.ScriptValue('te_demog_dbg_f166')|5],[THIS.ScriptValue('te_demog_dbg_f167')|5],[THIS.ScriptValue('te_demog_dbg_f168')|5],[THIS.ScriptValue('te_demog_dbg_f169')|5] m=[THIS.ScriptValue('te_demog_dbg_m160')|5],[THIS.ScriptValue('te_demog_dbg_m161')|5],[THIS.ScriptValue('te_demog_dbg_m162')|5],[THIS.ScriptValue('te_demog_dbg_m163')|5],[THIS.ScriptValue('te_demog_dbg_m164')|5],[THIS.ScriptValue('te_demog_dbg_m165')|5],[THIS.ScriptValue('te_demog_dbg_m166')|5],[THIS.ScriptValue('te_demog_dbg_m167')|5],[THIS.ScriptValue('te_demog_dbg_m168')|5],[THIS.ScriptValue('te_demog_dbg_m169')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=170 f=[THIS.ScriptValue('te_demog_dbg_f170')|5],[THIS.ScriptValue('te_demog_dbg_f171')|5],[THIS.ScriptValue('te_demog_dbg_f172')|5],[THIS.ScriptValue('te_demog_dbg_f173')|5],[THIS.ScriptValue('te_demog_dbg_f174')|5],[THIS.ScriptValue('te_demog_dbg_f175')|5],[THIS.ScriptValue('te_demog_dbg_f176')|5],[THIS.ScriptValue('te_demog_dbg_f177')|5],[THIS.ScriptValue('te_demog_dbg_f178')|5],[THIS.ScriptValue('te_demog_dbg_f179')|5] m=[THIS.ScriptValue('te_demog_dbg_m170')|5],[THIS.ScriptValue('te_demog_dbg_m171')|5],[THIS.ScriptValue('te_demog_dbg_m172')|5],[THIS.ScriptValue('te_demog_dbg_m173')|5],[THIS.ScriptValue('te_demog_dbg_m174')|5],[THIS.ScriptValue('te_demog_dbg_m175')|5],[THIS.ScriptValue('te_demog_dbg_m176')|5],[THIS.ScriptValue('te_demog_dbg_m177')|5],[THIS.ScriptValue('te_demog_dbg_m178')|5],[THIS.ScriptValue('te_demog_dbg_m179')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=180 f=[THIS.ScriptValue('te_demog_dbg_f180')|5],[THIS.ScriptValue('te_demog_dbg_f181')|5],[THIS.ScriptValue('te_demog_dbg_f182')|5],[THIS.ScriptValue('te_demog_dbg_f183')|5],[THIS.ScriptValue('te_demog_dbg_f184')|5],[THIS.ScriptValue('te_demog_dbg_f185')|5],[THIS.ScriptValue('te_demog_dbg_f186')|5],[THIS.ScriptValue('te_demog_dbg_f187')|5],[THIS.ScriptValue('te_demog_dbg_f188')|5],[THIS.ScriptValue('te_demog_dbg_f189')|5] m=[THIS.ScriptValue('te_demog_dbg_m180')|5],[THIS.ScriptValue('te_demog_dbg_m181')|5],[THIS.ScriptValue('te_demog_dbg_m182')|5],[THIS.ScriptValue('te_demog_dbg_m183')|5],[THIS.ScriptValue('te_demog_dbg_m184')|5],[THIS.ScriptValue('te_demog_dbg_m185')|5],[THIS.ScriptValue('te_demog_dbg_m186')|5],[THIS.ScriptValue('te_demog_dbg_m187')|5],[THIS.ScriptValue('te_demog_dbg_m188')|5],[THIS.ScriptValue('te_demog_dbg_m189')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=190 f=[THIS.ScriptValue('te_demog_dbg_f190')|5],[THIS.ScriptValue('te_demog_dbg_f191')|5],[THIS.ScriptValue('te_demog_dbg_f192')|5],[THIS.ScriptValue('te_demog_dbg_f193')|5],[THIS.ScriptValue('te_demog_dbg_f194')|5],[THIS.ScriptValue('te_demog_dbg_f195')|5],[THIS.ScriptValue('te_demog_dbg_f196')|5],[THIS.ScriptValue('te_demog_dbg_f197')|5],[THIS.ScriptValue('te_demog_dbg_f198')|5],[THIS.ScriptValue('te_demog_dbg_f199')|5] m=[THIS.ScriptValue('te_demog_dbg_m190')|5],[THIS.ScriptValue('te_demog_dbg_m191')|5],[THIS.ScriptValue('te_demog_dbg_m192')|5],[THIS.ScriptValue('te_demog_dbg_m193')|5],[THIS.ScriptValue('te_demog_dbg_m194')|5],[THIS.ScriptValue('te_demog_dbg_m195')|5],[THIS.ScriptValue('te_demog_dbg_m196')|5],[THIS.ScriptValue('te_demog_dbg_m197')|5],[THIS.ScriptValue('te_demog_dbg_m198')|5],[THIS.ScriptValue('te_demog_dbg_m199')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=200 f=[THIS.ScriptValue('te_demog_dbg_f200')|5],[THIS.ScriptValue('te_demog_dbg_f201')|5],[THIS.ScriptValue('te_demog_dbg_f202')|5],[THIS.ScriptValue('te_demog_dbg_f203')|5],[THIS.ScriptValue('te_demog_dbg_f204')|5],[THIS.ScriptValue('te_demog_dbg_f205')|5],[THIS.ScriptValue('te_demog_dbg_f206')|5],[THIS.ScriptValue('te_demog_dbg_f207')|5],[THIS.ScriptValue('te_demog_dbg_f208')|5],[THIS.ScriptValue('te_demog_dbg_f209')|5] m=[THIS.ScriptValue('te_demog_dbg_m200')|5],[THIS.ScriptValue('te_demog_dbg_m201')|5],[THIS.ScriptValue('te_demog_dbg_m202')|5],[THIS.ScriptValue('te_demog_dbg_m203')|5],[THIS.ScriptValue('te_demog_dbg_m204')|5],[THIS.ScriptValue('te_demog_dbg_m205')|5],[THIS.ScriptValue('te_demog_dbg_m206')|5],[THIS.ScriptValue('te_demog_dbg_m207')|5],[THIS.ScriptValue('te_demog_dbg_m208')|5],[THIS.ScriptValue('te_demog_dbg_m209')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=210 f=[THIS.ScriptValue('te_demog_dbg_f210')|5],[THIS.ScriptValue('te_demog_dbg_f211')|5],[THIS.ScriptValue('te_demog_dbg_f212')|5],[THIS.ScriptValue('te_demog_dbg_f213')|5],[THIS.ScriptValue('te_demog_dbg_f214')|5],[THIS.ScriptValue('te_demog_dbg_f215')|5],[THIS.ScriptValue('te_demog_dbg_f216')|5],[THIS.ScriptValue('te_demog_dbg_f217')|5],[THIS.ScriptValue('te_demog_dbg_f218')|5],[THIS.ScriptValue('te_demog_dbg_f219')|5] m=[THIS.ScriptValue('te_demog_dbg_m210')|5],[THIS.ScriptValue('te_demog_dbg_m211')|5],[THIS.ScriptValue('te_demog_dbg_m212')|5],[THIS.ScriptValue('te_demog_dbg_m213')|5],[THIS.ScriptValue('te_demog_dbg_m214')|5],[THIS.ScriptValue('te_demog_dbg_m215')|5],[THIS.ScriptValue('te_demog_dbg_m216')|5],[THIS.ScriptValue('te_demog_dbg_m217')|5],[THIS.ScriptValue('te_demog_dbg_m218')|5],[THIS.ScriptValue('te_demog_dbg_m219')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=220 f=[THIS.ScriptValue('te_demog_dbg_f220')|5],[THIS.ScriptValue('te_demog_dbg_f221')|5],[THIS.ScriptValue('te_demog_dbg_f222')|5],[THIS.ScriptValue('te_demog_dbg_f223')|5],[THIS.ScriptValue('te_demog_dbg_f224')|5],[THIS.ScriptValue('te_demog_dbg_f225')|5],[THIS.ScriptValue('te_demog_dbg_f226')|5],[THIS.ScriptValue('te_demog_dbg_f227')|5],[THIS.ScriptValue('te_demog_dbg_f228')|5],[THIS.ScriptValue('te_demog_dbg_f229')|5] m=[THIS.ScriptValue('te_demog_dbg_m220')|5],[THIS.ScriptValue('te_demog_dbg_m221')|5],[THIS.ScriptValue('te_demog_dbg_m222')|5],[THIS.ScriptValue('te_demog_dbg_m223')|5],[THIS.ScriptValue('te_demog_dbg_m224')|5],[THIS.ScriptValue('te_demog_dbg_m225')|5],[THIS.ScriptValue('te_demog_dbg_m226')|5],[THIS.ScriptValue('te_demog_dbg_m227')|5],[THIS.ScriptValue('te_demog_dbg_m228')|5],[THIS.ScriptValue('te_demog_dbg_m229')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=230 f=[THIS.ScriptValue('te_demog_dbg_f230')|5],[THIS.ScriptValue('te_demog_dbg_f231')|5],[THIS.ScriptValue('te_demog_dbg_f232')|5],[THIS.ScriptValue('te_demog_dbg_f233')|5],[THIS.ScriptValue('te_demog_dbg_f234')|5],[THIS.ScriptValue('te_demog_dbg_f235')|5],[THIS.ScriptValue('te_demog_dbg_f236')|5],[THIS.ScriptValue('te_demog_dbg_f237')|5],[THIS.ScriptValue('te_demog_dbg_f238')|5],[THIS.ScriptValue('te_demog_dbg_f239')|5] m=[THIS.ScriptValue('te_demog_dbg_m230')|5],[THIS.ScriptValue('te_demog_dbg_m231')|5],[THIS.ScriptValue('te_demog_dbg_m232')|5],[THIS.ScriptValue('te_demog_dbg_m233')|5],[THIS.ScriptValue('te_demog_dbg_m234')|5],[THIS.ScriptValue('te_demog_dbg_m235')|5],[THIS.ScriptValue('te_demog_dbg_m236')|5],[THIS.ScriptValue('te_demog_dbg_m237')|5],[THIS.ScriptValue('te_demog_dbg_m238')|5],[THIS.ScriptValue('te_demog_dbg_m239')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=240 f=[THIS.ScriptValue('te_demog_dbg_f240')|5],[THIS.ScriptValue('te_demog_dbg_f241')|5],[THIS.ScriptValue('te_demog_dbg_f242')|5],[THIS.ScriptValue('te_demog_dbg_f243')|5],[THIS.ScriptValue('te_demog_dbg_f244')|5],[THIS.ScriptValue('te_demog_dbg_f245')|5],[THIS.ScriptValue('te_demog_dbg_f246')|5],[THIS.ScriptValue('te_demog_dbg_f247')|5],[THIS.ScriptValue('te_demog_dbg_f248')|5],[THIS.ScriptValue('te_demog_dbg_f249')|5] m=[THIS.ScriptValue('te_demog_dbg_m240')|5],[THIS.ScriptValue('te_demog_dbg_m241')|5],[THIS.ScriptValue('te_demog_dbg_m242')|5],[THIS.ScriptValue('te_demog_dbg_m243')|5],[THIS.ScriptValue('te_demog_dbg_m244')|5],[THIS.ScriptValue('te_demog_dbg_m245')|5],[THIS.ScriptValue('te_demog_dbg_m246')|5],[THIS.ScriptValue('te_demog_dbg_m247')|5],[THIS.ScriptValue('te_demog_dbg_m248')|5],[THIS.ScriptValue('te_demog_dbg_m249')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=250 f=[THIS.ScriptValue('te_demog_dbg_f250')|5],[THIS.ScriptValue('te_demog_dbg_f251')|5],[THIS.ScriptValue('te_demog_dbg_f252')|5],[THIS.ScriptValue('te_demog_dbg_f253')|5],[THIS.ScriptValue('te_demog_dbg_f254')|5],[THIS.ScriptValue('te_demog_dbg_f255')|5],[THIS.ScriptValue('te_demog_dbg_f256')|5],[THIS.ScriptValue('te_demog_dbg_f257')|5],[THIS.ScriptValue('te_demog_dbg_f258')|5],[THIS.ScriptValue('te_demog_dbg_f259')|5] m=[THIS.ScriptValue('te_demog_dbg_m250')|5],[THIS.ScriptValue('te_demog_dbg_m251')|5],[THIS.ScriptValue('te_demog_dbg_m252')|5],[THIS.ScriptValue('te_demog_dbg_m253')|5],[THIS.ScriptValue('te_demog_dbg_m254')|5],[THIS.ScriptValue('te_demog_dbg_m255')|5],[THIS.ScriptValue('te_demog_dbg_m256')|5],[THIS.ScriptValue('te_demog_dbg_m257')|5],[THIS.ScriptValue('te_demog_dbg_m258')|5],[THIS.ScriptValue('te_demog_dbg_m259')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=260 f=[THIS.ScriptValue('te_demog_dbg_f260')|5],[THIS.ScriptValue('te_demog_dbg_f261')|5],[THIS.ScriptValue('te_demog_dbg_f262')|5],[THIS.ScriptValue('te_demog_dbg_f263')|5],[THIS.ScriptValue('te_demog_dbg_f264')|5],[THIS.ScriptValue('te_demog_dbg_f265')|5],[THIS.ScriptValue('te_demog_dbg_f266')|5],[THIS.ScriptValue('te_demog_dbg_f267')|5],[THIS.ScriptValue('te_demog_dbg_f268')|5],[THIS.ScriptValue('te_demog_dbg_f269')|5] m=[THIS.ScriptValue('te_demog_dbg_m260')|5],[THIS.ScriptValue('te_demog_dbg_m261')|5],[THIS.ScriptValue('te_demog_dbg_m262')|5],[THIS.ScriptValue('te_demog_dbg_m263')|5],[THIS.ScriptValue('te_demog_dbg_m264')|5],[THIS.ScriptValue('te_demog_dbg_m265')|5],[THIS.ScriptValue('te_demog_dbg_m266')|5],[THIS.ScriptValue('te_demog_dbg_m267')|5],[THIS.ScriptValue('te_demog_dbg_m268')|5],[THIS.ScriptValue('te_demog_dbg_m269')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=270 f=[THIS.ScriptValue('te_demog_dbg_f270')|5],[THIS.ScriptValue('te_demog_dbg_f271')|5],[THIS.ScriptValue('te_demog_dbg_f272')|5],[THIS.ScriptValue('te_demog_dbg_f273')|5],[THIS.ScriptValue('te_demog_dbg_f274')|5],[THIS.ScriptValue('te_demog_dbg_f275')|5],[THIS.ScriptValue('te_demog_dbg_f276')|5],[THIS.ScriptValue('te_demog_dbg_f277')|5],[THIS.ScriptValue('te_demog_dbg_f278')|5],[THIS.ScriptValue('te_demog_dbg_f279')|5] m=[THIS.ScriptValue('te_demog_dbg_m270')|5],[THIS.ScriptValue('te_demog_dbg_m271')|5],[THIS.ScriptValue('te_demog_dbg_m272')|5],[THIS.ScriptValue('te_demog_dbg_m273')|5],[THIS.ScriptValue('te_demog_dbg_m274')|5],[THIS.ScriptValue('te_demog_dbg_m275')|5],[THIS.ScriptValue('te_demog_dbg_m276')|5],[THIS.ScriptValue('te_demog_dbg_m277')|5],[THIS.ScriptValue('te_demog_dbg_m278')|5],[THIS.ScriptValue('te_demog_dbg_m279')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=280 f=[THIS.ScriptValue('te_demog_dbg_f280')|5],[THIS.ScriptValue('te_demog_dbg_f281')|5],[THIS.ScriptValue('te_demog_dbg_f282')|5],[THIS.ScriptValue('te_demog_dbg_f283')|5],[THIS.ScriptValue('te_demog_dbg_f284')|5],[THIS.ScriptValue('te_demog_dbg_f285')|5],[THIS.ScriptValue('te_demog_dbg_f286')|5],[THIS.ScriptValue('te_demog_dbg_f287')|5],[THIS.ScriptValue('te_demog_dbg_f288')|5],[THIS.ScriptValue('te_demog_dbg_f289')|5] m=[THIS.ScriptValue('te_demog_dbg_m280')|5],[THIS.ScriptValue('te_demog_dbg_m281')|5],[THIS.ScriptValue('te_demog_dbg_m282')|5],[THIS.ScriptValue('te_demog_dbg_m283')|5],[THIS.ScriptValue('te_demog_dbg_m284')|5],[THIS.ScriptValue('te_demog_dbg_m285')|5],[THIS.ScriptValue('te_demog_dbg_m286')|5],[THIS.ScriptValue('te_demog_dbg_m287')|5],[THIS.ScriptValue('te_demog_dbg_m288')|5],[THIS.ScriptValue('te_demog_dbg_m289')|5]"
+	debug_log = "TE_DEMOG_REPLAY after from=290 f=[THIS.ScriptValue('te_demog_dbg_f290')|5],[THIS.ScriptValue('te_demog_dbg_f291')|5],[THIS.ScriptValue('te_demog_dbg_f292')|5],[THIS.ScriptValue('te_demog_dbg_f293')|5],[THIS.ScriptValue('te_demog_dbg_f294')|5],[THIS.ScriptValue('te_demog_dbg_f295')|5],[THIS.ScriptValue('te_demog_dbg_f296')|5],[THIS.ScriptValue('te_demog_dbg_f297')|5],[THIS.ScriptValue('te_demog_dbg_f298')|5],[THIS.ScriptValue('te_demog_dbg_f299')|5] m=[THIS.ScriptValue('te_demog_dbg_m290')|5],[THIS.ScriptValue('te_demog_dbg_m291')|5],[THIS.ScriptValue('te_demog_dbg_m292')|5],[THIS.ScriptValue('te_demog_dbg_m293')|5],[THIS.ScriptValue('te_demog_dbg_m294')|5],[THIS.ScriptValue('te_demog_dbg_m295')|5],[THIS.ScriptValue('te_demog_dbg_m296')|5],[THIS.ScriptValue('te_demog_dbg_m297')|5],[THIS.ScriptValue('te_demog_dbg_m298')|5],[THIS.ScriptValue('te_demog_dbg_m299')|5]"
 }

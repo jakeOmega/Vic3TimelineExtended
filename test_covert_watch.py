@@ -325,8 +325,10 @@ class Events(unittest.TestCase):
 
     def test_options_guard_the_operation_and_say_what_they_do(self):
         ev = event(".3")
-        for name in ("covert_warfare.3.a", "covert_warfare.3.b"):
-            opt = option(ev, name)
+        # The three Expose options share covert_catch_expose; Let it run is
+        # its own.
+        for name, opt in (("covert_catch_expose", scripted_effect("covert_catch_expose")),
+                          ("covert_warfare.3.b", option(ev, "covert_warfare.3.b"))):
             self.assertIn("exists = scope:iw_caught_op", opt, name)
             self.assertIn("custom_tooltip = covert_warfare.3.gone_tt", opt, name)
             self.assertIn("hidden_effect = {", opt, name)
@@ -334,12 +336,14 @@ class Events(unittest.TestCase):
         self.assertIn("covert_watch_start = yes", option(ev, "covert_warfare.3.b"))
 
     def test_expose_option_takes_the_lock_or_waits(self):
-        opt = option(event(".3"), "covert_warfare.3.a")
+        opt = scripted_effect("covert_catch_expose")
         self.assertIn("covert_exposure_in_flight = yes", opt)
-        self.assertIn("covert_exposure_fire = yes", opt)
-        # Locked: watch now, with the exposure ordered, and look again once
-        # the open covert_warfare.1 (up to a month) has closed.
+        self.assertIn("covert_exposure_fire_with_response = { RESPONSE = $RESPONSE$ }", opt)
+        # Locked: watch now, with the exposure ordered and its follow-up on the
+        # record, and look again once the open covert_warfare.1 (up to a
+        # month) has closed.
         self.assertIn("name = iw_expose_ordered value = 1", opt)
+        self.assertIn("name = iw_expose_response value = $RESPONSE$", opt)
         self.assertIn("trigger_event = { id = covert_warfare.4 days = 4 }", opt)
 
     def test_after_clears_the_pending_mark(self):
@@ -354,7 +358,8 @@ class Events(unittest.TestCase):
         self.assertIn("GetCustom('covert_caught_type_name')", text)
         for key in ("covert_warfare.3.t", "covert_warfare.3.f", "covert_warfare.3.a", "covert_warfare.3.b",
                     "covert_warfare.3.a_tt", "covert_warfare.3.a_wait_tt", "covert_warfare.3.b_tt",
-                    "covert_warfare.3.gone_tt"):
+                    "covert_warfare.3.gone_tt", "covert_warfare.3.expel", "covert_warfare.3.turn",
+                    "covert_warfare.3.a_follow_tt", "covert_warfare.3.expel_tt", "covert_warfare.3.turn_tt"):
             self.assertIn(key, loc, key)
 
     def test_let_it_run_tooltip_says_what_watching_does(self):
@@ -553,8 +558,12 @@ class Growth(unittest.TestCase):
     def test_watch_gain_constants(self):
         values = _text(VALUES)
         self.assertRegex(values, r"(?m)^covert_net_watch_gain_p1 = 4$")
-        self.assertRegex(values, r"(?m)^covert_net_watch_gain_p2 = 5\.4$")
-        self.assertRegex(values, r"(?m)^covert_net_watch_gain_p3 = 6\.4$")
+        # The busier levels are the base gain x the priority effect
+        # multipliers, derived so a retune of priority carries them along.
+        for p in (2, 3):
+            block = script_value("covert_net_watch_gain_p%d" % p)
+            self.assertIn("value = covert_net_watch_gain_p1", block)
+            self.assertIn("multiply = covert_op_priority_%d_effect_mult" % p, block)
 
 
 class Monthly(unittest.TestCase):
@@ -609,6 +618,135 @@ class CustomLoc(unittest.TestCase):
         # Every watchable code (the registry test holds it to the full table).
         self.assertLessEqual({(c, t) for t, c in HOSTILE_CODES.items()}, {(int(c), t) for c, t in pairs})
         self.assertIn("localization_key = iw_op_name_unknown", block)
+
+
+
+SGUIS = ROOT / "common/scripted_guis/covert_warfare_sguis.txt"
+MESSAGES_FILE = ROOT / "common/messages/extra_messages.txt"
+WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
+NOTICES = ("covert_exposure_shored_notice", "covert_exposure_expelled_notice",
+           "covert_exposure_turned_notice", "covert_catch_watched_notice")
+
+
+class FollowUp(unittest.TestCase):
+    """The defender's follow-up is chosen with the exposure and lands with it
+    (owner, 2026-11-04): no second event after the player has decided."""
+
+    def test_three_expose_options_differ_only_in_the_follow_up(self):
+        ev = event(".3")
+        for name, code in (("covert_warfare.3.a", 1), ("covert_warfare.3.expel", 2), ("covert_warfare.3.turn", 3)):
+            opt = option(ev, name)
+            self.assertIn("covert_catch_expose = { RESPONSE = %d }" % code, opt, name)
+        self.assertIn("default_option = yes", option(ev, "covert_warfare.3.a"))
+        self.assertIn("covert_counterintel_alert_add = yes", option(ev, "covert_warfare.3.a"))
+        self.assertIn("show_as_tooltip", option(ev, "covert_warfare.3.a"))
+        self.assertIn("value = covert_expulsion_relations", option(ev, "covert_warfare.3.expel"))
+        # Let it run stays last, after the three exposures.
+        self.assertGreater(ev.index("name = covert_warfare.3.b"), ev.index("name = covert_warfare.3.turn"))
+
+    def test_the_follow_up_is_set_only_when_the_exposure_goes_out(self):
+        body = scripted_effect("covert_exposure_fire_with_response")
+        guard = str(_innermost_enclosing(body, "name = iw_expose_response value = $RESPONSE$", "if = {"))
+        self.assertIn("NOT = { covert_exposure_in_flight = yes }", guard)
+        self.assertIn("exists = scope:iw_burned_op", guard)
+        self.assertLess(body.index("name = iw_expose_response"), body.index("covert_exposure_fire = yes"))
+
+    def test_event_1_applies_the_follow_up_or_asks(self):
+        after = event_block(event(".1"), "after")
+        branch = str(_innermost_enclosing(after, "covert_exposure_response_apply = yes", "if = {"))
+        self.assertIn("has_variable = iw_expose_response", branch)
+        self.assertIn("trigger_event = { id = covert_warfare.2 }", after)
+        # Released with the lock, outside the target guard.
+        removal = str(_innermost_enclosing(after, "remove_variable = iw_expose_response", "if = {"))
+        self.assertIn("has_variable = iw_expose_response", removal)
+        self.assertNotIn("detected_by_country", removal)
+
+    def test_each_follow_up_posts_its_notice(self):
+        body = scripted_effect("covert_exposure_response_apply")
+        self.assertIn("ROOT = { save_scope_as = iw_exposed_by }", body)
+        expel = str(_innermost_enclosing(body, "post_notification = covert_exposure_expelled_notice", "if = {"))
+        self.assertIn("var:iw_expose_response = 2", expel)
+        self.assertIn("value = covert_expulsion_relations", expel)
+        self.assertEqual(expel.count("covert_net_expel"), 2)
+        turn = body[body.index("else_if = {"):body.index("post_notification = covert_exposure_turned_notice")]
+        self.assertIn("var:iw_expose_response = 3", turn)
+        self.assertIn("covert_can_watch = yes", turn)
+        self.assertIn("covert_retaliation_seed_network = { TARGET = scope:iw_exposed_by }", turn)
+        shore = body[body.rindex("else = {"):]
+        self.assertIn("covert_counterintel_alert_add = yes", shore)
+        self.assertIn("post_notification = covert_exposure_shored_notice", shore)
+
+    def test_the_alert_refreshes_rather_than_stacks(self):
+        body = scripted_effect("covert_counterintel_alert_add")
+        self.assertLess(body.index("remove_modifier_if_exists_effect = { MODIFIER = covert_counterintelligence_alert }"),
+                        body.index("name = covert_counterintelligence_alert"))
+        self.assertIn("covert_counterintel_alert_add = yes", option(event(".2"), "covert_warfare.2.a"))
+        self.assertNotIn("add_modifier", option(event(".2"), "covert_warfare.2.a"))
+
+    def test_a_players_watched_exposure_carries_a_follow_up(self):
+        body = scripted_effect("covert_watch_expose_record")
+        player = str(_innermost_enclosing(body, "covert_exposure_fire_with_response", "if = {"))
+        self.assertIn("is_player = yes", player)
+        self.assertIn("name = iw_expose_response value = 1", player)
+        self.assertIn("RESPONSE = scope:iw_expose_rec.var:iw_expose_response", player)
+
+    def test_lock_failsafes_drop_the_follow_up(self):
+        body = scripted_effect("covert_watch_attacker_monthly")
+        self.assertEqual(body.count("remove_variable = iw_expose_response"), 2)
+
+    def test_notices_are_defined_grouped_and_written(self):
+        messages = _text(MESSAGES_FILE)
+        loc = _loc()
+        for name in NOTICES:
+            with self.subTest(name=name):
+                block = _top_level_block(messages, name + " = {")
+                self.assertIn('group = "te_covert_notification_group"', block)
+                for suffix in ("_name", "_desc", "_tooltip"):
+                    self.assertIn("notification_%s%s" % (name, suffix), loc)
+        self.assertIn("te_covert_notification_group", loc)
+        for name in NOTICES[:3]:
+            self.assertIn("sCountry('iw_exposed_by')", loc["notification_%s_desc" % name])
+        self.assertIn("sCountry('iw_catcher_attacker')", loc["notification_covert_catch_watched_notice_desc"])
+
+
+class StandingOrder(unittest.TestCase):
+    """Ask / Ask if severe / Expose / Watch for a player's catches (owner,
+    2026-11-04)."""
+
+    def test_the_roll_reads_the_order_before_asking(self):
+        body = scripted_effect("covert_ops_roll_detection_all")
+        ai = body.index("is_player = no")
+        watch = body.index("covert_catch_policy_watches = yes")
+        expose = body.index("covert_exposure_fire_with_response = { RESPONSE = 1 }")
+        ask = body.index("trigger_event = { id = covert_warfare.3 }")
+        self.assertLess(ai, watch)
+        self.assertLess(watch, expose)
+        self.assertLess(expose, ask)
+        branch = str(_innermost_enclosing(body, "covert_exposure_fire_with_response = { RESPONSE = 1 }", "else_if = {"))
+        self.assertIn("var:iw_catch_policy = 2", branch)
+        self.assertIn("var:iw_catch_policy = 1", branch)
+        self.assertIn("NOT = { covert_code_tier_severe = { VAR = iw_type_code } }", branch)
+        watched = body[watch:expose]
+        self.assertIn("save_scope_as = iw_caught_op", watched)
+        self.assertIn("covert_watch_start = yes", watched)
+        self.assertIn("post_notification = covert_catch_watched_notice", watched)
+        self.assertIn("name = iw_caught_type_code", watched)
+        self.assertIn("var:iw_catch_policy = 3", scripted_trigger("covert_catch_policy_watches"))
+
+    def test_the_button_cycles_four_orders(self):
+        sgui = strip_comments(_top_level_block(_text(SGUIS), "covert_catch_policy_sgui = {"))
+        self.assertIn("var:iw_catch_policy >= 3", sgui)
+        self.assertIn("set_variable = { name = iw_catch_policy value = 0 }", sgui)
+        self.assertIn("change_variable = { name = iw_catch_policy add = 1 }", sgui)
+        self.assertIn("set_variable = { name = iw_catch_policy value = 1 }", sgui)
+        self.assertIn("ai_is_valid = {\n\t\talways = no", sgui)
+        widget = _text(WIDGET)
+        self.assertIn("GetScriptedGui('covert_catch_policy_sgui')", widget)
+        names = _top_level_block(_text(CUSTOM_LOC), "covert_catch_policy_name = {")
+        loc = _loc()
+        for n in range(4):
+            self.assertIn("iw_catch_policy_name_%d" % n, names)
+            self.assertIn("iw_catch_policy_name_%d" % n, loc)
 
 
 if __name__ == "__main__":

@@ -1,13 +1,14 @@
 """Rivals' estimated progress: "a bar with some fuzz" (owner's play-test, 2026-09-29).
 
-The Rivals section shows up to five rivals as estimate rows. Each rival carries
+The Rivals section lists every rival as an estimate row. Each rival carries
 one random offset per milestone (sr_fuzz_<m>, -1 to +1), drawn again a year
 after it was drawn. The viewer sees progress + offset x band, inside a band of
 +-25% of the goal that the viewer's covert network in the rival narrows to
 +-10% / +-5% (intelligence tier 1 / 2), so the true figure is always inside the
-band. A monthly refresh, for players only, fills the viewer's slots (how many
-rivals, and the first five's capitals); the numbers are read live, with the
-rival passed in to the script values as scope:sr_rival.
+band. A monthly refresh, for players only, fills the viewer's list of the
+rivals' capitals, furthest first (audit SPC-9: a datamodel replaced five slots
+and "+N more"); the numbers are read live, with the rival passed in to the
+script values as scope:sr_rival.
 """
 import glob
 import os
@@ -25,10 +26,11 @@ COVERT_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "covert_warfar
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base", "mars_landing",
-              "interstellar_probe", "solar_colonization")  # sr_rivals_sgui op order
+              "interstellar_probe", "solar_colonization")  # je_space_race.txt's order
 FUZZ_STEPS = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]
 ROW_VALUE = ("[FixedPointToFloat( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
              ".AddScope( 'sr_rival', State.GetCountry.MakeScope ).ScriptValue('{}') )]")
+LIST = "JournalEntry.GetCountry.MakeScope.GetList('sr_rivals_list_{}')"
 
 
 def _read(path, comments=False):
@@ -58,7 +60,8 @@ def _root(text, name):
     assert m, name
     start = text.rfind("flowcontainer = {", 0, m.start())
     root = _body(text[start:], "flowcontainer")
-    for wrapped in re.findall(r"^\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
+    # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
+    for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
         root += "\n" + _body(text, wrapped, prefix=r"\ttype ")
     return root
 
@@ -72,15 +75,14 @@ def _loc(key):
 
 
 class RivalTestTest(unittest.TestCase):
-    def test_one_rival_test_for_list_rows_and_refresh(self):
+    def test_one_rival_test_for_the_draws_and_the_list(self):
         body = _body(_read(TRIGGERS), "sr_is_rival").split()
         self.assertEqual(" ".join(body), "NOT = { THIS = ROOT } has_variable = sr_active_$MILESTONE$ "
                                          "sr_ai_should_participate = yes")
-        effects = _read(EFFECTS)
-        for name in ("sr_rivals_participants_base", "sr_rivals_estimate_refresh_base", "sr_rival_slot"):
-            self.assertIn("sr_is_rival = { MILESTONE = $MILESTONE$ }", _body(effects, name), name)
-        self.assertNotIn("has_variable = sr_active_$MILESTONE$\n\t\t\t\tsr_ai_should_participate",
-                         _body(effects, "sr_rivals_participants_base"))
+        refresh = _body(_read(EFFECTS), "sr_rivals_estimate_refresh_base")
+        # the offsets' every_country, the list's guard and its ordered_country
+        self.assertEqual(refresh.count("sr_is_rival = { MILESTONE = $MILESTONE$ }"), 3)
+        self.assertNotIn("sr_ai_should_participate", refresh)
 
 
 class RefreshTest(unittest.TestCase):
@@ -108,6 +110,44 @@ class RefreshTest(unittest.TestCase):
         self.assertRegex(body, r"else_if = \{\s*limit = \{ var:sr_fuzz_until_\$MILESTONE\$ <= te_history_month_index \}\s*"
                                r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
 
+    def test_each_country_running_a_milestone_draws_its_own_offset(self):
+        """Another country's National Info draws its band around progress +
+        offset x band (spec 2026-11-02-charts-help-national-info § 6.4), and a
+        player who doesn't race that milestone draws no rival's offset, so each
+        country running one draws its own, monthly, in every participant's
+        pulse (AI too), with Space Powers' own draw (sr_power_fuzz_base)."""
+        body = _body(self.effects, "sr_own_fuzz_refresh")
+        self.assertEqual(re.findall(r"sr_power_fuzz_base = \{ MILESTONE = (\w+)", body), list(MILESTONES))
+        base = _body(self.effects, "sr_power_fuzz_base")
+        self.assertRegex(base, r"^\s*if = \{\s*limit = \{ has_variable = sr_active_\$MILESTONE\$ \}")
+        self.assertRegex(base, r"limit = \{ NOT = \{ has_variable = sr_fuzz_until_\$MILESTONE\$ \} \}\s*"
+                               r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
+        self.assertRegex(base, r"else_if = \{\s*limit = \{ var:sr_fuzz_until_\$MILESTONE\$ <= te_history_month_index \}\s*"
+                               r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}")
+        pulse = _body(_read(ON_ACTIONS), "space_race_on_action")
+        self.assertRegex(pulse, r"limit = \{ sr_space_race_participant = yes \}(?:(?!is_player)[\s\S])*?"
+                                r"sr_own_fuzz_refresh = yes")
+
+    def test_a_milestone_draws_its_offset_as_it_starts(self):
+        """Review of #1367, M1: the band is drawn around progress + offset x
+        band, so with no offset yet it would sit centered on the exact figure
+        until the next monthly pulse. Each place a milestone starts draws its
+        first offset there, if it has none, so a re-run of the immediate (a
+        revolution's inheritance) keeps the one it has."""
+        first = _body(self.effects, "sr_power_fuzz_first")
+        self.assertRegex(first, r"^\s*if = \{\s*limit = \{ NOT = \{ has_variable = sr_fuzz_until_\$MILESTONE\$ \} \}\s*"
+                                r"sr_roll_rival_fuzz = \{ MILESTONE = \$MILESTONE\$ \}\s*\}\s*$")
+        starts = []
+        for path in ("common/journal_entries/je_space_race.txt", "common/scripted_effects/sr_site_effects.txt"):
+            text = _read(os.path.join(REPO, path))
+            for m in re.finditer(r"set_variable = \{ name = sr_active_(\w+) value = yes \}\n(.*)\n(.*)\n", text):
+                if m.group(1) == "interstellar_results":  # the wait for data: no band
+                    continue
+                starts.append(m.group(1))
+                with self.subTest(path=path, milestone=m.group(1)):
+                    self.assertEqual(m.group(3).strip(), f"sr_power_fuzz_first = {{ MILESTONE = {m.group(1)} }}")
+        self.assertEqual(sorted(starts), sorted(MILESTONES + ("solar_colonization",)))
+
     def test_the_draw(self):
         roll = _body(self.effects, "sr_roll_rival_fuzz")
         branches = re.findall(r"(\d+) = \{ set_variable = \{ name = sr_fuzz_\$MILESTONE\$ value = (-?[\d.]+) \} \}", roll)
@@ -116,27 +156,34 @@ class RefreshTest(unittest.TestCase):
         self.assertIn("set_variable = { name = sr_fuzz_until_$MILESTONE$ value = te_history_month_index }", roll)
         self.assertIn("change_variable = { name = sr_fuzz_until_$MILESTONE$ add = 12 }", roll)
 
-    def test_five_slots_each_checked_before_it_is_read(self):
+    def test_the_list_holds_every_rival_furthest_first(self):
+        """Audit SPC-9: the rows are a datamodel of one list per milestone,
+        rebuilt each month from empty, every rival's capital by the open
+        estimate (min/max with check_range_bounds walks the whole field)."""
         body = _body(self.effects, "sr_rivals_estimate_refresh_base")
-        slots = re.findall(r"sr_rival_slot = \{ MILESTONE = \$MILESTONE\$ N = (\d) POS = (\d) \}", body)
-        self.assertEqual(slots, [(str(n), str(n - 1)) for n in range(1, 6)])
-        slot = _body(self.effects, "sr_rival_slot")
-        # an ordered_ position past the end clamps to the last element, so count first
-        self.assertRegex(slot, r"any_country = \{\s*sr_is_rival = \{ MILESTONE = \$MILESTONE\$ \}\s*count >= \$N\$")
-        self.assertIn("order_by = sr_rival_est_open_$MILESTONE$", slot)
-        self.assertIn("position = $POS$", slot)
-        self.assertIn("set_variable = { name = sr_rival_$MILESTONE$_$N$ value = scope:sr_rival_capital }", slot)
+        self.assertTrue(body.lstrip().startswith("sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }"))
+        walk = _body(body, "ordered_country", prefix=r"\s*")
+        self.assertIn("limit = { sr_is_rival = { MILESTONE = $MILESTONE$ } }", walk)
+        self.assertIn("order_by = sr_rival_est_open_$MILESTONE$", walk)
+        for line in ("min = 0", "max = 40", "check_range_bounds = no"):
+            self.assertIn(line, walk)
+        self.assertNotIn("position", walk)
+        self.assertIn("capital = { save_scope_as = sr_rival_capital }", walk)
+        self.assertIn("add_to_variable_list = { name = sr_rivals_list_$MILESTONE$ target = scope:sr_rival_capital }",
+                      walk)
+        self.assertNotIn("sr_rival_slot", self.effects)
 
     def test_cleanup(self):
         clear = _body(self.effects, "sr_clear_rival_slots")
+        self.assertIn("limit = { has_variable_list = sr_rivals_list_$MILESTONE$ } "
+                      "clear_variable_list = sr_rivals_list_$MILESTONE$", clear)
+        # the count and five slots an older save still holds
         for var in ["sr_rival_total_$MILESTONE$"] + [f"sr_rival_$MILESTONE$_{n}" for n in range(1, 6)]:
             self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", clear)
         cleanup = _body(self.effects, "sr_cleanup_milestone_if_inactive_base")
         for var in ("sr_fuzz_$MILESTONE$", "sr_fuzz_until_$MILESTONE$"):
             self.assertRegex(cleanup, rf"has_variable = {re.escape(var)}\s*\}}\s*remove_variable = {re.escape(var)}")
         self.assertIn("sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }", cleanup)
-        self.assertIn("sr_clear_rival_slots = { MILESTONE = $MILESTONE$ }",
-                      _body(self.effects, "sr_rivals_estimate_refresh_base").split("else = {")[-1])
 
 
 class BandTest(unittest.TestCase):
@@ -187,8 +234,8 @@ class EstimateValueTest(unittest.TestCase):
                 self.assertEqual(_body(display, f"sr_disp_rival_hi_{m}").split(),
                                  ["value", "=", f"sr_disp_rival_est_{m}", "add", "=", "sr_disp_rival_band",
                                   "min", "=", "0", "max", "=", "1"])
-                self.assertIn(f"has_variable = sr_rival_total_{m} }} value = var:sr_rival_total_{m}",
-                              _body(display, f"sr_disp_rival_total_{m}"))
+                self.assertNotIn(f"sr_disp_rival_total_{m}", display)
+                self.assertNotIn(f"sr_disp_rival_more_{m}", display)
                 open_est = _body(values, f"sr_rival_est_open_{m}")
                 self.assertRegex(open_est, rf"limit = \{{ has_variable = sr_fuzz_{m} \}}\s*add = \{{\s*"
                                            rf"value = var:sr_fuzz_{m}\s*multiply = sr_rival_band_open")
@@ -199,12 +246,12 @@ class RowTest(unittest.TestCase):
     def setUpClass(cls):
         cls.gui = _read(GUI)
 
-    def test_the_row_is_fixed_width_and_reads_its_slot_only_when_shown(self):
+    def test_the_row_is_fixed_width(self):
         row = _body(self.gui, "te_sr_rival_row", prefix=r"\ttype ")
-        self.assertTrue(row.lstrip().startswith("size = { 480 42 }\n\t\tblock \"row_visible\" {}"), row[:80])
+        self.assertTrue(row.lstrip().startswith("size = { 480 42 }\n\n\t\tflowcontainer = {"), row[:80])
+        self.assertNotIn("row_visible", row)
+        self.assertNotIn("row_context", row)
         inner = row[row.index("flowcontainer = {"):]
-        self.assertIn('block "row_context" {}', inner)          # the datacontext is on the inner container
-        self.assertNotIn('block "row_context"', row[:row.index("flowcontainer = {")])
         # round 3: the name has the whole line (a country's name runs to 48
         # characters); the bar and the band in words share the line beneath,
         # 380 + 8 + 92 = 480
@@ -218,42 +265,50 @@ class RowTest(unittest.TestCase):
         self.assertIn('block "row_est" {}', inner)
         self.assertIn("progressbar_marker.dds", inner)
 
-    def test_the_section_has_five_rows(self):
+    def test_the_section_is_one_datamodel_of_capitals(self):
         section = _body(self.gui, "te_sr_sec_rivals", prefix=r"\ttype ")
-        self.assertEqual(re.findall(r'block "rival_(\d)" \{\}', section), ["1", "2", "3", "4", "5"])
-        self.assertEqual(section.count("te_sr_rival_row = {"), 5)
+        self.assertEqual(section.count("te_sr_rival_row = {"), 1)
+        self.assertRegex(section, r'block "rivals_datamodel" \{\}\s*item = \{\s*te_sr_rival_row = \{\s*'
+                                  r'datacontext = "\[Scope\.GetState\]"')
         self.assertIn('text = "sr_rivals_none"', section)
+        self.assertNotIn("rivals_more", section)
 
     def test_each_root_feeds_its_own_milestone(self):
-        for op, m in enumerate(MILESTONES):
+        for m in MILESTONES:
             with self.subTest(milestone=m):
                 root = _root(self.gui, f"widget_je_space_race_{m}")
-                total = f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_rival_total_{m}')"
-                self.assertIn(f"[EqualTo_CFixedPoint( {total}, '(CFixedPoint)0' )]", root)
-                for n in range(1, 6):
-                    self.assertRegex(root, rf'blockoverride "sr_rival_{n}" \{{\s*visible = "\[GreaterThanOrEqualTo_CFixedPoint\( '
-                                           rf"{re.escape(total)}, '\(CFixedPoint\){n}' \)\]\"")
-                    self.assertRegex(root, rf'blockoverride "sr_rival_{n}_context" \{{\s*datacontext = '
-                                           rf"\"\[JournalEntry\.GetCountry\.MakeScope\.Var\('sr_rival_{m}_{n}'\)\.GetState\]\"")
+                lst = LIST.format(m)
+                self.assertIn(f'datamodel = "[{lst}]"', root)
+                self.assertIn(f'visible = "[IsDataModelEmpty( {lst} )]"', root)
                 for part in ("lo", "hi", "est"):
                     self.assertIn(f'value = "{ROW_VALUE.format(f"sr_disp_rival_{part}_{m}")}"', root)
                 self.assertIn(f'tooltip = "je_space_race_widget_rival_tt_{m}"', root)
                 self.assertIn(f'text = "je_space_race_widget_rival_range_{m}"', root)
-                self.assertRegex(root, rf"GreaterThanOrEqualTo_CFixedPoint\( {re.escape(total)}, '\(CFixedPoint\)6' \)")
-                self.assertIn(f"MakeScopeValue( '(CFixedPoint){op}' )", root)
+                self.assertNotIn("sr_disp_rival_total", root)
+                self.assertNotIn("sr_rivals_sgui", root)
 
 
 class TooltipTest(unittest.TestCase):
     def test_the_tooltip_says_it_is_an_estimate_and_what_narrows_it(self):
+        """Each row names the Program Estimate concept (SPC-10), whose
+        description holds the band's rules once: the estimate, what narrows it."""
+        desc = _loc("concept_sr_estimate_desc")
+        self.assertIn("intelligence network", desc)
+        self.assertIn("±25%", desc)
         for m in MILESTONES:
             with self.subTest(milestone=m):
                 tt = _loc(f"je_space_race_widget_rival_tt_{m}")
-                self.assertIn("estimate", tt.lower())
-                self.assertIn("intelligence network", tt)
+                self.assertIn("[concept_sr_estimate]", tt)
+                self.assertNotIn("intelligence network", tt)
                 for part in ("lo", "hi", "est"):
                     self.assertIn(f"ScriptValue('sr_disp_rival_{part}_{m}')", tt)
                 self.assertIn("ScriptValue('sr_disp_rival_band')", tt)
                 self.assertIn("State.GetCountry.GetName", tt)
+                # an item's tooltip has no JournalEntry (gotcha #24): the
+                # viewer is the player, as in the band's words beside the bar
+                self.assertNotIn("JournalEntry", tt)
+                self.assertIn("GuiScope.SetRoot( GetPlayer.MakeScope )", tt)
+                self.assertNotIn("JournalEntry", _loc(f"je_space_race_widget_rival_range_{m}"))
         how = _loc("je_space_race_widget_how_rivals")
         self.assertIn("estimate", how)
         self.assertIn("intelligence network", how)

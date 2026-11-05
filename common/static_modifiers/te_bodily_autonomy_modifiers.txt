@@ -1,0 +1,24 @@
+﻿# ======================================================================
+#  BODILY AUTONOMY — static modifiers (era 13 spec § 7.3)
+#  Laws: common/laws/te_bodily_autonomy_laws.txt.
+# ======================================================================
+# Clade Citizenship's heritage parity: one point of acceptance each, for a
+# shared heritage trait, a shared heritage trait group and no shared heritage.
+# te_clade_parity_refresh (common/scripted_effects/te_bodily_autonomy_effects.txt),
+# their only writer, applies each at the gap between its figure and the
+# highest of the three, so every pop reads the same heritage figure.
+
+te_clade_parity_trait = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_shared_heritage_trait_add = 1
+}
+
+te_clade_parity_group = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_shared_heritage_trait_group_add = 1
+}
+
+te_clade_parity_none = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_acceptance_no_shared_heritage_trait_add = 1
+}

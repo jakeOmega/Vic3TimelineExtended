@@ -1,0 +1,163 @@
+﻿# ============================================================================
+# Strategic Reserve Buildings
+# ============================================================================
+# Two buildings:
+#   - building_strategic_reserve_hub: capital-only, controlled from the JE.
+#     Each PMG has a single reserve PM with base 1-unit input and output, and
+#     scripted building modifiers choose direction and scale actual flow.
+#   - building_strategic_reserve_silo: buildable in any state, passive. Only
+#     provides additional capacity. Useless without a hub, but a hub alone
+#     caps out quickly so silos are the way to scale reserves up.
+# ============================================================================
+
+# ---------------- HUB ----------------
+building_strategic_reserve_hub = {
+	building_group = bg_public_infrastructure
+	city_type = city
+	levels_per_mesh = -1
+
+	has_max_level = yes
+
+	# A standing national asset: neither the player nor the AI can downsize or
+	# demolish it. The one way to lose it is to lose its state to another
+	# nation (st_res_on_state_owner_change demolishes a captured hub; script's
+	# remove_building is unaffected by this flag). A hub that ends up outside
+	# the capital, after a capital move or a civil war, is rebuilt in the
+	# capital for free (st_res_relocate_hub_to_capital_effect).
+	downsizeable = no
+
+	unlocking_technologies = {
+		logistics
+	}
+
+	production_method_groups = {
+		pmg_st_res_hub
+	}
+
+	icon = "gfx/interface/icons/building_icons/building_strategic_reserve_hub.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	# Nearly free to set up: construction_cost_very_low is 100 points (it was
+	# construction_cost_very_high, 800, until 2026-09-26, then construction_cost_low,
+	# 200, until 2026-10-04). The hub is the reserve's front door, and capacity is
+	# what costs, through the silos.
+	required_construction = construction_cost_very_low
+
+	possible = {
+		is_capital = yes
+		# One hub per country: every st_res effect reads "the" hub through
+		# random_scope_building. After a capital move the weekly pulse brings
+		# the hub to the new capital for free, so this also stops a player
+		# paying for one in the meantime. The hub's own state always passes,
+		# so the guard never reads against the building it guards, and so
+		# does the reserve's own relocation: whether create_building checks
+		# possible is unverified, so st_res_relocate_hub_to_capital_effect
+		# raises st_res_hub_relocating around its call (the
+		# te_cm_placing_site pattern).
+		custom_tooltip = {
+			text = st_res_hub_one_per_country_tt
+			OR = {
+				has_building = building_strategic_reserve_hub
+				owner = { has_variable = st_res_hub_relocating }
+				owner = {
+					NOT = {
+						any_scope_building = { is_building_type = building_strategic_reserve_hub }
+					}
+				}
+			}
+		}
+	}
+
+	# GOVERNMENT_BUILDING_BASE_VALUE (1000) is what a government building with
+	# no ai_value gets; this one used to script 50, or 200 at war, which the AI
+	# read as nearly worthless. 2000 is vanilla's "higher base value" tier
+	# (naval administration). A depot is built for the next war, so peacetime
+	# counts double: one begun during a war finishes too late to fill before
+	# the peace, when barracks already take every round the market makes.
+	#
+	# On top of that, any country whose GDP is above st_res_ai_hub_min_gdp
+	# (a great power or not) gets +10000, the value vanilla gives a monument:
+	# an economy that size can afford the reserve many times over, and at 100
+	# points the hub is done within a build cycle, so war does not discount it.
+	# No "does not have one yet" test is needed: possible allows one hub per
+	# country, so the building is only ever evaluated for a country without one.
+	# Not borne out in game: in an observer run to 2015, 1 of 157 countries built
+	# one. The AI founds its reserve through te_decision_establish_strategic_reserve
+	# (extra_decisions.txt), whose ai_chance has this shape
+	# (strategic_reserve_system.md §7).
+	# Evaluated in STATE scope: ROOT is the capital, owner reaches the country.
+	ai_value = {
+		value = 0
+		if = {
+			limit = {
+				owner = {
+					is_great_or_major_power = yes
+				}
+			}
+			add = 1000
+			if = {
+				limit = {
+					owner = { is_at_war = no }
+				}
+				add = 1000
+			}
+		}
+		if = {
+			limit = {
+				owner = { gdp > st_res_ai_hub_min_gdp }
+			}
+			add = 10000
+		}
+	}
+}
+
+# ---------------- SILO ----------------
+# Passive capacity-only building. One PMG with a single idle PM that adds
+# capacity for all three goods at each level. Expandable up to a high cap
+# so large empires can pile up reserves.
+building_strategic_reserve_silo = {
+	building_group = bg_public_infrastructure
+	city_type = city
+	levels_per_mesh = 3
+
+	unlocking_technologies = {
+		logistics
+	}
+
+	production_method_groups = {
+		pmg_st_res_silo_capacity
+	}
+
+	icon = "gfx/interface/icons/building_icons/building_strategic_reserve_silo.dds"
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+
+	required_construction = construction_cost_high
+
+	# Storage is worth building when the reserve is running out of room: at
+	# the government-building default (1000) while any good stands at 75% of
+	# capacity (st_res_reserve_filling_up), and next to nothing otherwise. A
+	# flat value with no such signal would have the AI raise silos without
+	# end, since, unlike a bureaucracy or a barracks, nothing in code tells
+	# it how much storage it needs. A war drains the reserve, so the value
+	# falls on its own while one is on. owner ?= : the AI can ask while a
+	# state's owner is briefly invalid.
+	ai_value = {
+		value = 0
+		if = {
+			limit = {
+				owner ?= {
+					any_scope_building = {
+						is_building_type = building_strategic_reserve_hub
+					}
+				}
+			}
+			add = 25
+			if = {
+				limit = {
+					owner = { st_res_reserve_filling_up = yes }
+				}
+				add = 1000
+			}
+		}
+	}
+}

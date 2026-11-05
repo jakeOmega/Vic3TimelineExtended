@@ -33,8 +33,23 @@
 	# entry to inactive once SoL recovers. Kept rather than deleted: no vanilla
 	# entry has a native progressbar without a complete trigger, so dropping
 	# it would be untested.
+	# The goal line says what the bar counts toward, not the raw variable
+	# (GUI audit JE-1).
 	complete = {
-		ROOT.var:state_collapse_progress >= 52
+		custom_tooltip = {
+			text = je_state_collapse_complete_tt
+			ROOT.var:state_collapse_progress >= 52
+		}
+	}
+
+	# The weeks left before the next collapse (state_collapse_weeks_left).
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_state_collapse_status
+				trigger = { always = yes }
+			}
+		}
 	}
 
 	current_value = {
@@ -269,6 +284,29 @@ je_create_new_religion = {
 
 	complete = {
 		country_has_any_custom_religion = yes
+	}
+
+	# Where the builder is: which of the four steps, and how many picks it has
+	# (GUI audit JE-2). The buttons show only the current step's choices.
+	status_desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = je_create_new_religion_status_1
+				trigger = { has_variable = current_stage var:current_stage = 1 }
+			}
+			triggered_desc = {
+				desc = je_create_new_religion_status_2
+				trigger = { has_variable = current_stage var:current_stage = 2 }
+			}
+			triggered_desc = {
+				desc = je_create_new_religion_status_3
+				trigger = { has_variable = current_stage var:current_stage = 3 }
+			}
+			triggered_desc = {
+				desc = je_create_new_religion_status_4
+				trigger = { has_variable = current_stage var:current_stage = 4 }
+			}
+		}
 	}
 
 	on_weekly_pulse = {

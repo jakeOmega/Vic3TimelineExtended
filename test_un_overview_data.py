@@ -229,11 +229,14 @@ class StatusDescTest(unittest.TestCase):
 
     def test_what_only_it_says_stays(self):
         status = self._status()
-        for kept in ("je_un_statistics", "je_un_status_conference", "je_un_status_dissolved"):
+        for kept in ("je_un_status_conference", "je_un_status_dissolved"):
             self.assertIn(kept, status, kept)
-        # The headquarters moved to the overview, the programmes to their own section.
-        for moved in ("je_un_hq_", "je_un_active_programs"):
+        # The headquarters moved to the overview, the programmes to their own
+        # section, and the Assembly's statistics under the overview's pies
+        # (the 2026-10-27 audit, UN-20).
+        for moved in ("je_un_hq_", "je_un_active_programs", "je_un_statistics"):
             self.assertNotIn(moved, status, moved)
+        self.assertIn('text = "je_un_ov_stats"', _read(OVERVIEW))
 
     def test_a_non_member_learns_what_joining_brings(self):
         self.assertIn("je_un_status_not_member", _block(_read(SGUIS), "un_chamber_status_sgui"))
@@ -286,13 +289,20 @@ TOPIC_ICONS = ["topic_condemn", "topic_sanctions", "topic_expulsion", "topic_man
                # §0.12a, code 30.
                "topic_lift_sanctions",
                # The Global Commons (2026-10-16-global-commons-design.md §4, §6.5), codes 31-32.
-               "topic_antarctic", "topic_asat"]
+               "topic_antarctic", "topic_asat",
+               # Solar colonization's fleets (2026-10-26-solar-colonization-fleets-design.md § 13), code 33.
+               "topic_colony_protection"]
 AGENCY_KEYS = ["who", "unesco", "icj", "unhrc", "iaea", "unep", "unhcr", "unoosa", "itlos", "icc", "cppnm",
-               "ccd", "tpnw", "incb", "ats", "unoda"]
+               "ccd", "tpnw", "incb", "ats", "unoda", "copuos"]
 # Icons the UN GUI uses as they are: vanilla's, used as vanilla uses them, and
 # the headquarters building's own. Everything else is the UN's own art.
 VANILLA_KEPT = {"generic_icons/transparent.dds", "generic_icons/trend_up.dds", "generic_icons/trend_down.dds",
-                "generic_icons/trend_nochange.dds", "building_icons/building_un_headquarters.dds"}
+                "generic_icons/trend_nochange.dds", "building_icons/building_un_headquarters.dds",
+                # The overview's cells (the 2026-10-27 audit, UN-1): a vote's
+                # approval, disapproval and undecided marks, as vanilla's
+                # interest groups use them, and its money and prestige icons.
+                "generic_icons/approval_icon.dds", "generic_icons/disapproval_icon.dds",
+                "generic_icons/undecided_icon.dds", "generic_icons/money.dds", "generic_icons/prestige.dds"}
 
 
 def _tracked(path):

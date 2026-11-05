@@ -18,7 +18,7 @@ class RenderReportTests(unittest.TestCase):
                      "Duplicate top-level `law_x = { ... }` in `common/laws/` "
                      "(also at `common/laws/a.txt:5`); engine drops all but one silently."),
                 Flag("inject", "common/buildings/c.txt", 44,
-                     "`INJECT:building_y` won't merge: mod-only entity defined at "
+                     "`INJECT:building_y` targets a mod-only entity defined at "
                      "`common/buildings/d.txt:12`. Edit the definition directly.",
                      exemption={"date": "2026-06-01", "rationale": "load order checked"}),
             ],
@@ -26,7 +26,7 @@ class RenderReportTests(unittest.TestCase):
         )
         report = render_report(result)
         self.assertIn(
-            "- `common/buildings/c.txt` — `INJECT:building_y` won't merge: mod-only entity "
+            "- `common/buildings/c.txt` — `INJECT:building_y` targets a mod-only entity "
             "defined at `common/buildings/d.txt`. Edit the definition directly. — "
             "**2026-06-01**: load order checked", report)
         self.assertNotIn("c.txt:44", report)

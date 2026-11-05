@@ -3,6 +3,7 @@
 #   event te_debug_colonial_empire.1    put the stability bar in any band
 #   event te_debug_colonial_empire.2    great-power pressure and the decisions
 #   event te_debug_colonial_empire.3    programme costs and the AI's review
+#   event te_debug_colonial_empire.4    the colony test's census, to debug.log
 # ============================================================================
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires these events.
@@ -111,8 +112,10 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 		has_journal_entry = je_colonial_empire
 	}
 
-	# Four condemners: crosses the -1.0 tier-4 escalation without reaching the
-	# -2.0 tier-6 one, so the Great-power pressure row should read about -3.4.
+	# Every other great power condemns: each -0.45 against a peer (scaled by
+	# prestige, 0.25-2), plus the -0.75 isolation at a third of great-power
+	# prestige and the further -1.5 consensus at two thirds, so the Great-power
+	# pressure row and International Pressure's table fill out.
 	option = {
 		name = te_debug_colonial_empire.2.a
 		default_option = yes
@@ -120,9 +123,13 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 			limit = {
 				NOT = { this = ROOT }
 				country_rank >= rank_value:great_power
-				NOT = { has_variable = gp_anti_colonial_stance }
 			}
+			# Every other great power, a condemner already included: the
+			# stance's 24-month wait, so the AI's monthly review
+			# (decol_stance_monthly) leaves a colonial great power's
+			# condemnation in place while the table is checked.
 			set_variable = gp_anti_colonial_stance
+			decol_stance_start_cooldown = yes
 		}
 		colonial_empire_refresh_display = yes
 	}
@@ -184,11 +191,66 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 		colonial_empire_effect_planned_decolonization = yes
 	}
 
+	# Open the Colonial Holdings section's three per-target confirmations
+	# (.402 / .403 / .404) for the largest territory and the largest direct
+	# colonial subject, through the same shared effects the rows' buttons call.
+	# Each has Reconsider as its default.
+	option = {
+		name = te_debug_colonial_empire.2.h
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_scope_state = { is_decolonization_eligible_state = yes }
+		}
+		ordered_scope_state = {
+			limit = { is_decolonization_eligible_state = yes }
+			order_by = gdp
+			max = 1
+			save_scope_as = te_debug_ce_state
+		}
+		colonial_empire_effect_release_state = { STATE = scope:te_debug_ce_state }
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.i
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_direct_subject = { is_qualifying_colonial_subject = yes }
+		}
+		ordered_direct_subject = {
+			limit = { is_qualifying_colonial_subject = yes }
+			order_by = gdp
+			max = 1
+			capital ?= { save_scope_as = te_debug_ce_capital }
+		}
+		colonial_empire_effect_free_subject = { CAPITAL = scope:te_debug_ce_capital }
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.j
+		trigger = {
+			colonial_empire_no_offer_pending = yes
+			any_direct_subject = {
+				is_qualifying_colonial_subject = yes
+				is_subject_type = subject_type_colony
+			}
+		}
+		ordered_direct_subject = {
+			limit = {
+				is_qualifying_colonial_subject = yes
+				is_subject_type = subject_type_colony
+			}
+			order_by = gdp
+			max = 1
+			capital ?= { save_scope_as = te_debug_ce_capital }
+		}
+		colonial_empire_effect_dominion_subject = { CAPITAL = scope:te_debug_ce_capital }
+	}
+
 	# Diagnostics for the decolonization rows when they look wrong.
 	option = {
 		name = te_debug_colonial_empire.2.g
 		colonial_empire_refresh_display = yes
-		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[THIS.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
+		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] colonies=[THIS.GetVariable('colonial_empire_colony_count').GetValue] subjects=[THIS.GetVariable('colonial_empire_subject_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
 	}
 }
 
@@ -244,3 +306,52 @@ te_debug_colonial_empire.3 = { # REVIEWED 2026-10-09: console-only test event (`
 		colonial_empire_refresh_display = yes
 	}
 }
+
+# The colony test, country by country: re-runs the separation pass
+# (ce_separation_step, colonial_geography_effects.txt) for every country, then
+# logs each country that holds a non-homeland state of 100,000 people or more,
+# and each such state's parts of the test. grep TE_CE_CENSUS in debug.log. For
+# the play-test and the 1836 holdings table of the design (docs/superpowers/
+# archive/specs/2026-10-24-colonial-criteria-and-independence-wars-design.md § 1.5).
+te_debug_colonial_empire.4 = { # REVIEWED 2026-10-24: console-only test event (`event te_debug_colonial_empire.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_colonial_empire.4.t
+	desc = te_debug_colonial_empire.4.d
+	flavor = te_debug_colonial_empire.4.f
+
+	# The whole world.
+	option = {
+		name = te_debug_colonial_empire.4.a
+		default_option = yes
+		hidden_effect = {
+			every_country = { ce_separation_step = yes }
+			every_country = {
+				limit = {
+					any_scope_state = {
+						state_population >= colonial_territory_min_population
+						NOT = { is_homeland_of_country_cultures = owner }
+					}
+				}
+				te_debug_ce_census_country = yes
+			}
+		}
+	}
+
+	# Only us.
+	option = {
+		name = te_debug_colonial_empire.4.b
+		hidden_effect = {
+			ce_separation_step = yes
+			te_debug_ce_census_country = yes
+		}
+	}
+}
+

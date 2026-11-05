@@ -1,10 +1,11 @@
 # Diplomacy
 
-The mod adds 39 treaty articles, extra escalation in diplomatic plays, events
+The mod adds 41 treaty articles, extra escalation in diplomatic plays, events
 between rival powers, a reunification system for divided nations, two more tiers
-of power bloc principles, and ten late-game formable countries. None of this has
-a game rule or journal entry of its own: it works through the base game's treaty
-screen, diplomatic plays, power bloc panel and formation panel, though some
+of power bloc principles, ten late-game formable countries, and 22 city-states
+you can release. None of this has a game rule or journal entry of its own: it
+works through the base game's treaty screen, diplomatic plays, power bloc panel,
+formation panel and releasable countries list, though some
 pieces depend on other systems' rules. Much of it opens up in era 6, with
 Decolonization and Intergovernmental Organizations.
 
@@ -20,6 +21,22 @@ goal. The draft shows each article's influence cost and who pays it. A demand
 is paid for by the country making it, so Seize Company, Disband Company, Return
 Cultural Property, Surrender a Monument and the Lease Seabed Claims articles
 cost the conceding country no influence.
+
+Most articles that stay in force also build Involvement, as the base game's
+alliances, investment rights and embassies do. The side that gains a presence
+through the article (the donor of aid, the bloc leader extending its influence,
+the anchor of a currency peg, the power protecting a minority) gains up to a
+fixed amount of Involvement in every strategic region where the other country is
+local, scaled by how much of that region the other country holds. The mutual
+articles build it for both sides. Most give up to 1,000. Extend Influence,
+Request Influence, both currency pegs, Debt Receivership and Nuclear Basing give
+up to 2,000, and the two excavation articles 500. All treaties and pacts
+together add at most 5,000 in a region, the threshold of Pervasive. Articles
+that act once (Seize Company, Return Cultural Property, Population Transfer and
+the like), articles that only restrict the conceding country (Demilitarized
+Zone, Forced Disarmament, Nuclear Disarmament and the like), the seabed leases
+and Reduce Subject Liberty build none. The article's tooltip in the draft gives
+its figure.
 
 ### Choosing a company or state for an article
 
@@ -48,6 +65,12 @@ back.
 Excavation Concession and Excavation Permit leave nothing on the state. They
 let the other side dig there only while the treaty is in force and the conceding
 country owns the state, so a dig under one stops as soon as either ends.
+
+The four Grand Monument articles appear in a draft only where they have
+something to act on. Surrender a Monument is listed for a conceding country
+that owns a monument it could give up, Return Cultural Property for one that
+holds a trophy from the other side's lands, and the two excavation articles for
+one with a buried site open to the other side.
 
 ![Choosing the company for a Disband Company article. The list holds the conceding country's companies.](images/disband_company.png)
 
@@ -124,6 +147,8 @@ The remaining articles belong to systems with chapters of their own.
 | Require UN Membership | United Nations | [The United Nations](10-united-nations.md) |
 | Enforce Emissions Reduction | Global Warming | [Climate and pollution](15-climate.md) |
 | Lease Pacific, Atlantic, Indian, Arctic and Southern Seabed Claims | Global Commons | [The extended timeline](02-timeline.md#leasing-seabed-claims) |
+| Cede Colony | Space Race set to Simple Colonies or Full Colonies | [The space race](16-space.md#ceding-a-colony) |
+| Grid Interconnection Agreement | None | [Economy and construction](03-economy.md#power-grids) |
 
 ### Treaty article events
 
@@ -470,6 +495,33 @@ pressure it into accession as a major power or greater (8 infamy), or leave it
 be.
 
 <!-- screenshot: the formation panel showing the European Union with its requirements tooltip -->
+
+## Releasable city-states
+
+The mod adds 22 city-states you can release, from New York and Singapore to
+Constantinople, Lagos and Guayaquil. Each is a port city carved out of a larger
+state. They work like the base game's free cities, such as Hamburg and Danzig:
+releasing one hands over only the city's own province (New York also takes Long
+Island), so the state splits and you keep the rest of the region as a smaller
+state. Whoever holds the city releases it from the Releasable Countries list on
+the Diplomacy panel, and another country can demand it in a diplomatic play with
+a Liberate Country war goal. The AI never releases one on its own.
+
+Most of these cities sit on one of their state's hub provinces. A split state
+shares the region's arable land and resources out by province, with hub
+provinces counting for more, so a city-state takes a larger share than its one
+province suggests.
+
+Some start in a colonial power's hands: Britain holds Singapore, Portugal holds
+Macau and Goa, and France holds Pondicherry, each as a small holding of its own,
+so they can be released from the first day. Hong Kong is the province a treaty
+port in Eastern Guangdong takes, so a power that wins it as a treaty port can
+later release it. Constantinople holds the European end of the Bosphorus strait.
+San Francisco appears only while the Releasable Nations game rule is set to All,
+the default, as with the base game's less plausible releasables.
+
+The full list, with the state each city-state comes from and who holds it at the
+start, is in the [appendix](20-appendix-reference-lists.md#city-state-list).
 
 ## Country ranks and other diplomatic actions
 

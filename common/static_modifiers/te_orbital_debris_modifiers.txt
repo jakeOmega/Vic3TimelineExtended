@@ -48,7 +48,7 @@ te_debris_removal_method_prestige = {
 }
 
 te_orbital_network_disrupted = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_military_negative.dds
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_negative.dds
 	unit_offense_mult = -0.1
 	unit_defense_mult = -0.1
 	country_space_race_progress_mult = -0.2

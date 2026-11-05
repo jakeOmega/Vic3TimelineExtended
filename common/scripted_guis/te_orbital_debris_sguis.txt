@@ -1,0 +1,105 @@
+﻿# ============================================================================
+# ORBITAL DEBRIS AND THE ANTI-SATELLITE STRIKE — scripted GUIs (display only)
+# ============================================================================
+# The Orbit section of the Timeline Extended window's Space Race tab
+# (te_sr_sec_orbit, gui/journal_entry_widgets/space_race_widget.gui), rooted on
+# the player (GetPlayer). Neither has an action: te_asat_strike_ready_sgui is
+# read through IsValid / IsValidTooltip / ExecuteTooltip, te_asat_record_sgui
+# through ExecuteTooltip, and neither is Executed. The rules stay where they
+# are: the strike is te_asat_strike_action (common/diplomatic_actions/), which
+# a player uses from the Diplomacy panel.
+# ============================================================================
+
+# Our Strike: whether we could strike at all (is_valid: what the action needs
+# of the striker, the lines of its own `potential` and `possible`), and on
+# hover whom we could strike now: every country at war with us that has
+# something in orbit to hit (te_asat_has_orbital_assets), each struck by
+# anyone in the last 12 months marked with when it opens again
+# (te_asat_struck_recently). Scope: country (the player).
+te_asat_strike_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		sr_space_race_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = te_asat_tt_guided_missiles
+			has_technology_researched = guided_missiles
+		}
+		custom_tooltip = {
+			text = te_asat_tt_own_program
+			sr_has_space_program = yes
+		}
+	}
+
+	effect = {
+		if = {
+			limit = {
+				any_country = {
+					has_war_with = ROOT
+					te_asat_has_orbital_assets = yes
+				}
+			}
+			custom_tooltip_no_bullet = te_asat_targets_intro
+			every_country = {
+				limit = {
+					has_war_with = ROOT
+					te_asat_has_orbital_assets = yes
+				}
+				if = {
+					limit = { te_asat_struck_recently = yes }
+					custom_tooltip = te_asat_targets_entry_cooldown
+				}
+				else = {
+					custom_tooltip = te_asat_targets_entry
+				}
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = te_asat_targets_none
+		}
+	}
+}
+
+# Strikes So Far: the last strike, who struck whom and when (the globals
+# te_asat_strike_effect writes). A strike made before the record named its
+# countries, or one whose countries are gone, is told by its date alone.
+# Scope: country (the player; nothing of it is read).
+te_asat_record_sgui = {
+	scope = country
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = te_asat_last_striker
+				has_global_variable = te_asat_last_target
+				exists = global_var:te_asat_last_striker
+				exists = global_var:te_asat_last_target
+			}
+			global_var:te_asat_last_striker = { save_temporary_scope_as = te_asat_disp_striker }
+			global_var:te_asat_last_target = { save_temporary_scope_as = te_asat_disp_target }
+			custom_tooltip_no_bullet = te_asat_record_last
+		}
+		else_if = {
+			limit = { has_global_variable = te_asat_last_strike_month }
+			custom_tooltip_no_bullet = te_asat_record_last_unnamed
+		}
+		else = {
+			custom_tooltip_no_bullet = te_asat_record_none
+		}
+	}
+}

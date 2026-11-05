@@ -129,12 +129,18 @@ LAWGROUP_PRIORITY = [
     "lawgroup_right_to_information",
     "lawgroup_inheritance",
     "lawgroup_human_augmentation",
+    "lawgroup_bodily_autonomy",
     "lawgroup_genetic_rights",
     "lawgroup_family_reproductive_policy",
     "lawgroup_language_policy",
     "lawgroup_antitrust",
+    # Era 13 spec § 7.1: no law in it needs another law.
+    "lawgroup_automation_policy",
     "lawgroup_financial_regulation",
     "lawgroup_internet_governance",
+    # No constrained law today, so no helper; listed for when one gains a
+    # constraint (te_frontier_ai_laws.txt's header).
+    "lawgroup_frontier_ai_control",
     "lawgroup_privacy_rights",
     "lawgroup_electoral_finance",
 

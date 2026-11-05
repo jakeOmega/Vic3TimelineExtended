@@ -847,6 +847,84 @@
   "de": "von der Amerikanischen Imperialunion",
   "base": "dyn_c_american_imperial_union"
  },
+ "dyn_c_american_technate": {
+  "en": "American Technate",
+  "de": "Amerikanisches Technat"
+ },
+ "dyn_c_american_technate_AKK": {
+  "en": "American Technate",
+  "de": "das Amerikanische Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_DAT": {
+  "en": "American Technate",
+  "de": "dem Amerikanischen Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_GEN": {
+  "en": "American Technate",
+  "de": "des Amerikanischen Technats",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_IN": {
+  "en": "American Technate",
+  "de": "im Amerikanischen Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_NACH": {
+  "en": "American Technate",
+  "de": "ins Amerikanische Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_NOM": {
+  "en": "American Technate",
+  "de": "das Amerikanische Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_american_technate_VON": {
+  "en": "American Technate",
+  "de": "vom Amerikanischen Technat",
+  "base": "dyn_c_american_technate"
+ },
+ "dyn_c_associated_trusts_of_america": {
+  "en": "Associated Trusts of America",
+  "de": "Vereinigte Trusts von Amerika"
+ },
+ "dyn_c_associated_trusts_of_america_AKK": {
+  "en": "Associated Trusts of America",
+  "de": "die Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_DAT": {
+  "en": "Associated Trusts of America",
+  "de": "den Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_GEN": {
+  "en": "Associated Trusts of America",
+  "de": "der Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_IN": {
+  "en": "Associated Trusts of America",
+  "de": "in den Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_NACH": {
+  "en": "Associated Trusts of America",
+  "de": "in die Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_NOM": {
+  "en": "Associated Trusts of America",
+  "de": "die Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
+ "dyn_c_associated_trusts_of_america_VON": {
+  "en": "Associated Trusts of America",
+  "de": "von den Vereinigten Trusts von Amerika",
+  "base": "dyn_c_associated_trusts_of_america"
+ },
  "dyn_c_bharati_adj": {
   "en": "Bharati",
   "de": "Bharati"
@@ -1632,6 +1710,45 @@
   "de": "von der Europäischen Union",
   "base": "dyn_c_european_union"
  },
+ "dyn_c_federal_district_of_columbia": {
+  "en": "Federal District of Columbia",
+  "de": "Bundesdistrikt Columbia"
+ },
+ "dyn_c_federal_district_of_columbia_AKK": {
+  "en": "Federal District of Columbia",
+  "de": "den Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_DAT": {
+  "en": "Federal District of Columbia",
+  "de": "dem Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_GEN": {
+  "en": "Federal District of Columbia",
+  "de": "des Bundesdistrikts Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_IN": {
+  "en": "Federal District of Columbia",
+  "de": "im Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_NACH": {
+  "en": "Federal District of Columbia",
+  "de": "in den Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_NOM": {
+  "en": "Federal District of Columbia",
+  "de": "der Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
+ "dyn_c_federal_district_of_columbia_VON": {
+  "en": "Federal District of Columbia",
+  "de": "vom Bundesdistrikt Columbia",
+  "base": "dyn_c_federal_district_of_columbia"
+ },
  "dyn_c_great_qing_empire": {
   "en": "Empire of the Great Qing",
   "de": "Reich des Großen Qing"
@@ -1972,6 +2089,45 @@
   "en": "Imperial Mexican",
   "de": "Kaiserlich-Mexikanisch"
  },
+ "dyn_c_imperial_union_of_america": {
+  "en": "Imperial Union of America",
+  "de": "Imperiale Union von Amerika"
+ },
+ "dyn_c_imperial_union_of_america_AKK": {
+  "en": "Imperial Union of America",
+  "de": "die Imperiale Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_DAT": {
+  "en": "Imperial Union of America",
+  "de": "der Imperialen Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_GEN": {
+  "en": "Imperial Union of America",
+  "de": "der Imperialen Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_IN": {
+  "en": "Imperial Union of America",
+  "de": "in der Imperialen Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_NACH": {
+  "en": "Imperial Union of America",
+  "de": "in die Imperiale Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_NOM": {
+  "en": "Imperial Union of America",
+  "de": "die Imperiale Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
+ "dyn_c_imperial_union_of_america_VON": {
+  "en": "Imperial Union of America",
+  "de": "von der Imperialen Union von Amerika",
+  "base": "dyn_c_imperial_union_of_america"
+ },
  "dyn_c_indonesia_raya": {
   "en": "Indonesia Raya",
   "de": "Indonesia Raya"
@@ -2249,6 +2405,45 @@
   "de": "von der Wiedergeburt von Majapahit",
   "base": "dyn_c_majapahit_revival"
  },
+ "dyn_c_national_estates_of_america": {
+  "en": "National Estates of America",
+  "de": "Nationalstände von Amerika"
+ },
+ "dyn_c_national_estates_of_america_AKK": {
+  "en": "National Estates of America",
+  "de": "die Nationalstände von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_DAT": {
+  "en": "National Estates of America",
+  "de": "den Nationalständen von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_GEN": {
+  "en": "National Estates of America",
+  "de": "der Nationalstände von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_IN": {
+  "en": "National Estates of America",
+  "de": "in den Nationalständen von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_NACH": {
+  "en": "National Estates of America",
+  "de": "in die Nationalstände von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_NOM": {
+  "en": "National Estates of America",
+  "de": "die Nationalstände von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
+ "dyn_c_national_estates_of_america_VON": {
+  "en": "National Estates of America",
+  "de": "von den Nationalständen von Amerika",
+  "base": "dyn_c_national_estates_of_america"
+ },
  "dyn_c_negara_islam_adj": {
   "en": "Indonesian Islamic",
   "de": "Indonesisch-Islamisch"
@@ -2291,6 +2486,45 @@
   "en": "Negara Islam Indonesia",
   "de": "von Negara Islam Indonesia",
   "base": "dyn_c_negara_islam_indonesia"
+ },
+ "dyn_c_new_canaan": {
+  "en": "New Canaan",
+  "de": "Neu-Kanaan"
+ },
+ "dyn_c_new_canaan_AKK": {
+  "en": "New Canaan",
+  "de": "Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_DAT": {
+  "en": "New Canaan",
+  "de": "Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_GEN": {
+  "en": "New Canaan",
+  "de": "Neu-Kanaans",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_IN": {
+  "en": "New Canaan",
+  "de": "in Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_NACH": {
+  "en": "New Canaan",
+  "de": "nach Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_NOM": {
+  "en": "New Canaan",
+  "de": "Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
+ },
+ "dyn_c_new_canaan_VON": {
+  "en": "New Canaan",
+  "de": "von Neu-Kanaan",
+  "base": "dyn_c_new_canaan"
  },
  "dyn_c_north_american_royal_adj": {
   "en": "North American Royal",
@@ -3077,6 +3311,45 @@
   "de": "von der Sowjetischen Föderation Nordamerikas",
   "base": "dyn_c_soviet_federation_of_north_america"
  },
+ "dyn_c_state_and_district_of_america": {
+  "en": "State and District of America",
+  "de": "Staat und Distrikt von Amerika"
+ },
+ "dyn_c_state_and_district_of_america_AKK": {
+  "en": "State and District of America",
+  "de": "den Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_DAT": {
+  "en": "State and District of America",
+  "de": "dem Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_GEN": {
+  "en": "State and District of America",
+  "de": "des Staates und Distrikts von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_IN": {
+  "en": "State and District of America",
+  "de": "im Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_NACH": {
+  "en": "State and District of America",
+  "de": "in den Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_NOM": {
+  "en": "State and District of America",
+  "de": "der Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
+ "dyn_c_state_and_district_of_america_VON": {
+  "en": "State and District of America",
+  "de": "vom Staat und Distrikt von Amerika",
+  "base": "dyn_c_state_and_district_of_america"
+ },
  "dyn_c_technocratic_republic_of_china": {
   "en": "Technocratic Republic of China",
   "de": "Technokratische Republik China"
@@ -3611,6 +3884,45 @@
  "dyn_c_weltbund_adj": {
   "en": "Weltbund",
   "de": "Weltbund"
+ },
+ "dyn_c_workers_commonwealth_of_america": {
+  "en": "Workers' Commonwealth of America",
+  "de": "Arbeitergemeinwesen von Amerika"
+ },
+ "dyn_c_workers_commonwealth_of_america_AKK": {
+  "en": "Workers' Commonwealth of America",
+  "de": "das Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_DAT": {
+  "en": "Workers' Commonwealth of America",
+  "de": "dem Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_GEN": {
+  "en": "Workers' Commonwealth of America",
+  "de": "des Arbeitergemeinwesens von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_IN": {
+  "en": "Workers' Commonwealth of America",
+  "de": "im Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_NACH": {
+  "en": "Workers' Commonwealth of America",
+  "de": "ins Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_NOM": {
+  "en": "Workers' Commonwealth of America",
+  "de": "das Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
+ },
+ "dyn_c_workers_commonwealth_of_america_VON": {
+  "en": "Workers' Commonwealth of America",
+  "de": "vom Arbeitergemeinwesen von Amerika",
+  "base": "dyn_c_workers_commonwealth_of_america"
  },
  "dyn_c_yuan_imperial_adj": {
   "en": "Yuan Imperial",

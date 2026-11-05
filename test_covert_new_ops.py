@@ -184,7 +184,7 @@ class NuclearSabotageTests(unittest.TestCase):
         # phase x priority multiplier the operation must leave it positive.
         static = _top_level_block(_text(STATIC), "covert_nuclear_sabotage = {")
         mult = float(re.search(r"country_nuclear_program_progress_mult = (-?[\d.]+)", static).group(1))
-        self.assertEqual(mult, -0.25)
+        self.assertEqual(mult, -0.2)
         values = _text(VALUES)
         pri3 = float(re.search(r"(?m)^covert_op_priority_3_effect_mult = ([\d.]+)$", values).group(1))
         full = float(re.search(r"(?m)^covert_op_phase_full_mult = ([\d.]+)$", values).group(1))

@@ -1,8 +1,10 @@
 ﻿# ============================================================================
 # CULTURAL HEGEMONY — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGET
 # ============================================================================
-# Read by gui/journal_entry_widgets/cultural_hegemony_widget.gui. Twelve
-# handlers, in two kinds.
+# Read by gui/journal_entry_widgets/cultural_hegemony_widget.gui. Eight
+# handlers, in two kinds. (The board's three, ch_board_row_sgui,
+# ch_board_detail_sgui and ch_board_is_us_sgui, went when the board became a
+# datamodel over ch_board_rebuild's rows, CH-2.)
 #
 # WHY THERE ARE FOUR ch_active_<programme>_sgui HANDLERS THAT TAKE NO SCOPE
 # Whether a `saved_scopes` value reaches a handler's `is_shown` is UNPROVEN in
@@ -13,24 +15,19 @@
 # Whether the player can act at all must not rest on that. So the Enable/Disable
 # swap is answered by four scope-free handlers in the banking dashboard's
 # play-tested shape, and `op` is used only for is_valid, Execute and the
-# tooltips, where Strategic Reserve proves it works. The two display handlers
-# that still branch on `op` for row visibility FAIL OPEN, and the only
-# fail-closed one is the "is this row us" marker.
+# tooltips, where Strategic Reserve proves it works. The display handler that
+# still branches on `op` for row visibility, ch_show_sgui, FAILS OPEN.
 #
 # 1. THE ONE INTERACTIVE HANDLER — ch_policy_sgui. It holds no logic of its own:
 #    `is_shown` mirrors each journal-entry button's `visible`, `is_valid`
 #    delegates to `ch_possible_<button>` and `effect` to `ch_effect_<button>`, so
 #    the widget and the AI's buttons run the same script.
 #
-# 2. DISPLAY-ONLY HANDLERS — ch_show_sgui, ch_board_row_sgui,
-#    ch_board_detail_sgui (and the scope-free yes/no handlers at the foot of the
-#    file). All of them carry
-#    `is_valid = { always = no }` and `ai_is_valid = { always = no }`, so neither
-#    a player nor the AI can execute them. Two are pure questions with an empty
-#    effect (the banking dashboard's `banking_dash_phase_*` shape); one emits
-#    nothing but `custom_tooltip` lines for `ExecuteTooltip` to render — vanilla's
-#    documented "using SGUIs to build lists in loc" pattern, see
-#    game/common/scripted_guis/scripted_guis.md.
+# 2. DISPLAY-ONLY HANDLERS — ch_show_sgui (and the scope-free yes/no handlers
+#    at the foot of the file). All of them carry `is_valid = { always = no }`
+#    and `ai_is_valid = { always = no }`, so neither a player nor the AI can
+#    execute them: pure questions with an empty effect (the banking
+#    dashboard's `banking_dash_phase_*` shape).
 #
 # ---- ch_policy_sgui op table (keep in step with the .gui header and the doc) --
 #   0 / 1   programme funding   decrease / increase
@@ -54,9 +51,6 @@
 #   line now test ch_rank_self_display without a saved scope)
 #   31-45  one "Political models" legend row each (op = 30 + ch_model code)
 #   (fail open: no scope -> the row shows)
-#
-# ---- ch_board_row_sgui / ch_board_detail_sgui / ch_board_is_us_sgui --------
-#   op = board rank, 1 to 10. The first two fail open, the last fails closed.
 #
 # ---- ch_active_<programme>_sgui --------------------------------------------
 #   No saved scope at all. is_shown = ch_active_<programme>, the shared trigger
@@ -226,7 +220,9 @@ ch_show_sgui = {
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 3 }
 			has_variable = ch_sol
-			var:ch_sol > 0
+			# Either sign: a standard of living below the world average takes pull
+			# away, and the row must show it so the lines add up to the Raw Score.
+			NOT = { var:ch_sol = 0 }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op scope:op = 4 }
@@ -361,204 +357,6 @@ ch_show_sgui = {
 }
 
 # ---------------------------------------------------------------------------
-# LEADERBOARD — one row's line
-# ---------------------------------------------------------------------------
-# `is_shown` doubles as the row's visibility: a slot that the yearly pass left
-# empty, or whose country has since ceased to exist, hides its whole row rather
-# than printing a placeholder.
-#
-# The effect enters the ranked country's scope and prints one line, so the loc
-# key can use [THIS.GetCountry.GetName] — the chain vanilla itself uses for a
-# country list inside a scripted GUI. The engine prefixes a line printed inside
-# a country scope change with that country's flag for free, so the keys add none.
-ch_board_row_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		# FAIL OPEN, like ch_show_sgui: a missing scope leaves ten empty rows,
-		# not a missing leaderboard. The effect below is guarded separately with
-		# `?=`, so an unfilled slot prints nothing either way — which matters
-		# because ExecuteTooltip ignores is_shown (gotcha #16).
-		trigger_if = {
-			limit = { NOT = { exists = scope:op } }
-			always = yes
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			has_global_variable = ch_rank_1
-			exists = global_var:ch_rank_1
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			has_global_variable = ch_rank_2
-			exists = global_var:ch_rank_2
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 3 }
-			has_global_variable = ch_rank_3
-			exists = global_var:ch_rank_3
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 4 }
-			has_global_variable = ch_rank_4
-			exists = global_var:ch_rank_4
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 5 }
-			has_global_variable = ch_rank_5
-			exists = global_var:ch_rank_5
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 6 }
-			has_global_variable = ch_rank_6
-			exists = global_var:ch_rank_6
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 7 }
-			has_global_variable = ch_rank_7
-			exists = global_var:ch_rank_7
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 8 }
-			has_global_variable = ch_rank_8
-			exists = global_var:ch_rank_8
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 9 }
-			has_global_variable = ch_rank_9
-			exists = global_var:ch_rank_9
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 10 }
-			has_global_variable = ch_rank_10
-			exists = global_var:ch_rank_10
-		}
-		trigger_else = {
-			always = no
-		}
-	}
-
-	is_valid = {
-		always = no
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	effect = {
-		if = {
-			limit = { exists = scope:op scope:op = 1 }
-			global_var:ch_rank_1 ?= { custom_tooltip_no_bullet = ch_board_row_1 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			global_var:ch_rank_2 ?= { custom_tooltip_no_bullet = ch_board_row_2 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 3 }
-			global_var:ch_rank_3 ?= { custom_tooltip_no_bullet = ch_board_row_3 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 4 }
-			global_var:ch_rank_4 ?= { custom_tooltip_no_bullet = ch_board_row_4 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 5 }
-			global_var:ch_rank_5 ?= { custom_tooltip_no_bullet = ch_board_row_5 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 6 }
-			global_var:ch_rank_6 ?= { custom_tooltip_no_bullet = ch_board_row_6 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 7 }
-			global_var:ch_rank_7 ?= { custom_tooltip_no_bullet = ch_board_row_7 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 8 }
-			global_var:ch_rank_8 ?= { custom_tooltip_no_bullet = ch_board_row_8 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 9 }
-			global_var:ch_rank_9 ?= { custom_tooltip_no_bullet = ch_board_row_9 }
-		}
-		else_if = {
-			limit = { exists = scope:op scope:op = 10 }
-			global_var:ch_rank_10 ?= { custom_tooltip_no_bullet = ch_board_row_10 }
-		}
-	}
-}
-
-# ---------------------------------------------------------------------------
-# LEADERBOARD — one row's hover breakdown
-# ---------------------------------------------------------------------------
-# The yearly snapshot of that rank's four largest components and its raw score,
-# which is what the retired concept_ch_rank_N_breakdown tooltips used to show.
-# Snapshot, not live: these are the numbers the displayed score was computed
-# from, so they still add up.
-ch_board_detail_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		always = yes
-	}
-
-	is_valid = {
-		always = no
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	effect = {
-		if = {
-			limit = { exists = scope:op scope:op = 1 }
-			global_var:ch_rank_1 ?= { custom_tooltip_no_bullet = ch_board_detail_1 }
-		}
-		else_if = {
-			limit = { scope:op = 2 }
-			global_var:ch_rank_2 ?= { custom_tooltip_no_bullet = ch_board_detail_2 }
-		}
-		else_if = {
-			limit = { scope:op = 3 }
-			global_var:ch_rank_3 ?= { custom_tooltip_no_bullet = ch_board_detail_3 }
-		}
-		else_if = {
-			limit = { scope:op = 4 }
-			global_var:ch_rank_4 ?= { custom_tooltip_no_bullet = ch_board_detail_4 }
-		}
-		else_if = {
-			limit = { scope:op = 5 }
-			global_var:ch_rank_5 ?= { custom_tooltip_no_bullet = ch_board_detail_5 }
-		}
-		else_if = {
-			limit = { scope:op = 6 }
-			global_var:ch_rank_6 ?= { custom_tooltip_no_bullet = ch_board_detail_6 }
-		}
-		else_if = {
-			limit = { scope:op = 7 }
-			global_var:ch_rank_7 ?= { custom_tooltip_no_bullet = ch_board_detail_7 }
-		}
-		else_if = {
-			limit = { scope:op = 8 }
-			global_var:ch_rank_8 ?= { custom_tooltip_no_bullet = ch_board_detail_8 }
-		}
-		else_if = {
-			limit = { scope:op = 9 }
-			global_var:ch_rank_9 ?= { custom_tooltip_no_bullet = ch_board_detail_9 }
-		}
-		else_if = {
-			limit = { scope:op = 10 }
-			global_var:ch_rank_10 ?= { custom_tooltip_no_bullet = ch_board_detail_10 }
-		}
-	}
-}
-
-# ---------------------------------------------------------------------------
 # IS A PROGRAMME RUNNING? — scope-free, for the widget's Enable/Disable swap
 # ---------------------------------------------------------------------------
 # Four handlers that take NO saved scope, so the one question the player's
@@ -626,83 +424,6 @@ ch_active_cultural_protectionism_sgui = {
 
 	is_shown = {
 		ch_active_cultural_protectionism = yes
-	}
-
-	is_valid = {
-		always = no
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	effect = { }
-}
-
-# ---------------------------------------------------------------------------
-# LEADERBOARD — is board slot <op> the viewing country?
-# ---------------------------------------------------------------------------
-# Drives the row's "us" marker and nothing else. Deliberately FAIL CLOSED — the
-# one place in this file that is — because if the saved scope never arrives, no
-# marker is right and ten markers is absurd. op = board rank, 1 to 10.
-ch_board_is_us_sgui = {
-	scope = country
-	saved_scopes = { op }
-
-	is_shown = {
-		trigger_if = {
-			limit = { exists = scope:op scope:op = 1 }
-			has_global_variable = ch_rank_1
-			global_var:ch_rank_1 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 2 }
-			has_global_variable = ch_rank_2
-			global_var:ch_rank_2 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 3 }
-			has_global_variable = ch_rank_3
-			global_var:ch_rank_3 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 4 }
-			has_global_variable = ch_rank_4
-			global_var:ch_rank_4 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 5 }
-			has_global_variable = ch_rank_5
-			global_var:ch_rank_5 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 6 }
-			has_global_variable = ch_rank_6
-			global_var:ch_rank_6 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 7 }
-			has_global_variable = ch_rank_7
-			global_var:ch_rank_7 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 8 }
-			has_global_variable = ch_rank_8
-			global_var:ch_rank_8 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 9 }
-			has_global_variable = ch_rank_9
-			global_var:ch_rank_9 ?= ROOT
-		}
-		trigger_else_if = {
-			limit = { exists = scope:op scope:op = 10 }
-			has_global_variable = ch_rank_10
-			global_var:ch_rank_10 ?= ROOT
-		}
-		trigger_else = {
-			always = no
-		}
 	}
 
 	is_valid = {

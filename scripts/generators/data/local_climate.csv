@@ -1,0 +1,676 @@
+state,ref_place,summer_mean_c,summer_humidity,winter_mean_c,aridity,malaria,latitude,hot_day_c,heat_index,heat_source,reason
+STATE_SVEALAND,Stockholm,18,1,-2,0,1,59,30.3,23.7,WMO02484:2km,Cool continental Baltic coast; Mälaren basin ague
+STATE_GOTALAND,Göteborg,17,1,0,0,0,58,30,23.3,WMO02513:1km,Cool maritime west coast
+STATE_SCANIA,Malmö,17,1,1,0,0,56,30.2,24.3,WMO02635:6km,Cool maritime southern plain
+STATE_NORRLAND,Sundsvall,16,1,-6,0,0,62,28.6,22.1,WMO02366:15km,Subarctic coast with cold snowy winters
+STATE_GOTLAND,Visby,17,1,0,0,0,58,29.4,23.6,ESSV:4km,Cool maritime Baltic island
+STATE_JUTLAND,Aarhus,17,1,1,0,0,56,28.6,23,WMO06074:10km,Cool maritime
+STATE_ZEALAND,Copenhagen,17,1,1,0,0,56,29.6,23.8,EKCH:9km,Cool maritime
+STATE_WESTERN_NORWAY,Bergen,15,1,2,0,0,60,29.1,22,ENVV:0km,Cool wet maritime fjord coast
+STATE_NORTHERN_NORWAY,Trondhjem,14,1,-2,0,0,63,28.3,21.7,WMO01257:4km,Cool northern maritime
+STATE_EASTERN_NORWAY,Christiania,17,1,-4,0,0,60,29.6,22.6,WMO01492:4km,Cool continental cold winters
+STATE_ICELAND,Reykjavík,11,0,0,0,0,64,20.8,16.2,WMO04130:2km,Subpolar oceanic
+STATE_GREENLAND,Godthaab,7,0,-8,0,0,64,21,15,BGGH:3km,Arctic tundra coast
+STATE_HOME_COUNTIES,London,18,1,5,0,0,51,33.3,25.4,WMO03770:1km,Mild maritime
+STATE_LANCASHIRE,Manchester,16,1,4,0,0,53,28.7,22.5,WMO03316:10km,Mild wet maritime
+STATE_WALES,Cardiff,16,1,5,0,0,51,28.5,22.7,EGDX:20km,Mild wet maritime
+STATE_YORKSHIRE,Leeds,16,1,4,0,0,54,27.8,22.3,EGNM:10km,Mild maritime
+STATE_HIGHLANDS,Inverness,14,1,3,0,0,57,27.8,21.1,WMO03063:38km,Cool maritime
+STATE_MIDLANDS,Birmingham,17,1,4,0,0,52,30.7,23.9,WMO03535:15km,Mild maritime
+STATE_EAST_ANGLIA,Norwich,17,1,4,0,1,53,30.7,24.1,EGSH:5km,Mild dry maritime fenland ague
+STATE_WEST_COUNTRY,Bristol,17,1,5,0,0,51,28.5,22.8,EGGD:12km,Mild maritime
+STATE_LOWLANDS,Glasgow,15,1,4,0,0,56,27.2,21.4,WMO03134:18km,Cool wet maritime
+STATE_ULSTER,Belfast,15,1,5,0,0,55,26,20.9,EGAA:21km,Cool wet maritime
+STATE_MUNSTER,Cork,15,1,6,0,0,52,23.6,19.7,EICK:6km,Mild wet maritime
+STATE_LEINSTER,Dublin,15,1,5,0,0,53,25,20.5,EIDW:11km,Mild maritime
+STATE_CONNAUGHT,Galway,15,1,6,0,0,53,25.8,20.5,WMO03970:49km,Mild wet Atlantic maritime
+STATE_ILE_DE_FRANCE,Paris,20,1,4,0,0,49,37.6,27.6,WMO07156:4km,Mild temperate
+STATE_PROVENCE,Marseille,24,1,7,0,1,43,36.6,27.8,LFML:20km,Dry-summer Mediterranean coast; ague of the Camargue
+STATE_NORMANDY,Rouen,17,1,4,0,0,49,35.6,26.8,LFOP:9km,Mild maritime
+STATE_LANGUEDOC,Toulouse,22,1,5,0,1,44,37.6,28.1,LFBO:6km,Warm temperate southern lowland; ague of the coastal lagoons
+STATE_RHONE,Lyon,21,1,3,0,0,46,37.4,27.6,LFLY:9km,Warm temperate river valley
+STATE_FRENCH_LOW_COUNTRIES,Lille,18,1,3,0,0,51,35.7,26.7,LFQQ:8km,Mild maritime
+STATE_PICARDY,Amiens,18,1,4,0,0,50,35.7,26.7,LFAQ:31km,Mild maritime
+STATE_ALSACE_LORRAINE,Strasbourg,20,1,1,0,1,49,36.5,27.6,LFST:9km,Temperate Rhine valley; ague of the unregulated Rhine plain
+STATE_POITOU,Poitiers,20,1,5,0,1,47,36.8,27.3,LFBI:3km,Mild Atlantic temperate; ague of the Marais poitevin
+STATE_GUYENNE,Montauban,22,1,5,0,0,44,38.4,28.3,LFDB:2km,Warm temperate southern lowland
+STATE_AUVERGNE_LIMOUSIN,Limoges,19,1,4,0,0,46,35,26,LFBL:7km,Mild temperate upland
+STATE_BRITTANY,Nantes,19,1,6,0,1,47,36.4,27,LFRS:9km,Mild Atlantic maritime; ague of the Briere and the Loire estuary
+STATE_BURGUNDY,Dijon,20,1,2,0,0,47,36.2,26.9,LFSD:7km,Temperate with cool winters
+STATE_CHAMPAGNE,Reims,19,1,3,0,0,49,36.7,27.2,LFQA:10km,Mild temperate
+STATE_FRANCHE_COMTE,Besançon,19,1,2,0,0,47,35.7,26.7,LFSA:3km,Temperate with cool winters
+STATE_LORRAINE,Nancy,19,1,1,0,0,49,36.6,27.1,LFSN:3km,Temperate with cool winters
+STATE_AQUITAINE,Bordeaux,21,1,6,0,1,45,38,28,LFBD:9km,Mild Atlantic temperate; ague of the Landes and Médoc
+STATE_ORLEANS,Orléans,19,1,4,0,1,48,36.8,27.2,LFOJ:14km,Mild temperate; the Sologne's ague
+STATE_HOLLAND,Amsterdam,17,1,3,0,1,52,33.2,25.9,EHAM:9km,Mild maritime coastal polder ague
+STATE_FRIESLAND,Groningen,17,1,2,0,1,53,33.7,26.1,EHGG:11km,Mild maritime coastal marsh ague
+STATE_GELRE,Arnhem,18,1,3,0,0,52,35.4,26.9,EHDL:8km,Mild maritime
+STATE_WALLONIA,Liège,18,1,3,0,0,51,35.5,26.5,EBLG:9km,Mild temperate
+STATE_FLANDERS,Brussels,18,1,3,0,1,51,34.7,26,WMO06447:4km,Mild maritime coastal polder ague
+STATE_AUSTRIA,Vienna,20,1,0,0,0,48,37.1,28.2,WMO11034:1km,Temperate continental
+STATE_BOHEMIA,Prague,19,1,-1,0,0,50,35.9,26.8,WMO11520:9km,Temperate continental cold winters
+STATE_MORAVIA,Brno,19,1,-2,0,0,49,35.3,26.6,LKTB:8km,Temperate continental cold winters
+STATE_STYRIA,Graz,19,1,-1,0,0,47,34.2,26.7,WMO11290:1km,Temperate continental cold winters
+STATE_TYROL,Innsbruck,18,1,-2,0,0,47,34.9,26.1,LOWI:4km,Alpine valley cold winters
+STATE_SOUTH_TYROL,Trento,22,1,1,0,1,46,37.5,28.4,LIPB:5km,Warm alpine valley; ague in the Adige and Valsugana
+STATE_POMERANIA,Stettin,18,1,0,0,0,53,34,26,EPSC:29km,Temperate cool winters
+STATE_ELBE,Hamburg,17,1,1,0,1,54,33.3,25.6,EDDH:9km,Mild maritime; Elbe marsh fever
+STATE_EAST_SWITZERLAND,Zürich,18,1,0,0,0,47,33.6,25.8,WMO06660:2km,Temperate cool winters
+STATE_WEST_SWITZERLAND,Bern,18,1,-1,0,0,47,33.3,25.6,WMO06631:5km,Temperate cool winters
+STATE_WESTPHALIA,Dortmund,18,1,2,0,0,52,34,25.6,WMO10424:30km,Mild temperate
+STATE_ANHALT,Magdeburg,19,1,0,0,0,52,36,26.5,EDDP:88km,Temperate dry lee lowland
+STATE_RHINELAND,Saarbrücken,18,1,1,0,0,49,35,26.3,EDDR:8km,Mild temperate
+STATE_NORTH_RHINE,Cologne,18,1,2,0,0,51,37.2,27.3,EDDK:16km,Mild temperate
+STATE_BRANDENBURG,Berlin,19,1,0,0,0,53,35.8,26.4,EDDT:8km,Temperate cool winters
+STATE_SCHLESWIG_HOLSTEIN,Kiel,17,1,1,0,1,54,30,23.7,EDHK:7km,Cool maritime; marsh fever of the west coast
+STATE_WURTTEMBERG,Stuttgart,19,1,1,0,0,49,35,26.4,EDDS:10km,Temperate
+STATE_BADEN,Karlsruhe,20,1,1,0,1,49,36.2,27.2,EDSB:34km,Warm temperate Rhine valley; ague of the unregulated Rhine plain
+STATE_HANNOVER,Hanover,18,1,1,0,0,52,35.3,26.2,EDDV:8km,Mild temperate
+STATE_BRUNSWICK,Brunswick,18,1,1,0,0,52,34.3,25.7,ETHC:49km,Mild temperate
+STATE_BAVARIA,Munich,18,1,-2,0,0,48,33,24.8,EDMO:23km,Temperate cold winters
+STATE_FRANCONIA,Nuremberg,19,1,0,0,0,49,35.5,26.4,EDDN:6km,Temperate cool winters
+STATE_SAXONY,Dresden,19,1,0,0,0,51,34.7,25.8,EDDC:9km,Temperate cool winters
+STATE_HESSE,Frankfurt,19,1,1,0,0,50,37.2,27.3,EDDF:10km,Mild temperate
+STATE_MECKLENBURG,Rostock,17,1,0,0,0,54,32.8,25.3,ETNL:22km,Cool maritime Baltic
+STATE_RUHR,Düsseldorf,18,1,2,0,0,51,36.7,27.1,EDDL:8km,Mild temperate
+STATE_MAINE_ANJOU,Angers,19,1,5,0,0,47,36.8,27.4,LFRA:5km,Mild Atlantic temperate
+STATE_LOMBARDY,Milan,24,2,2,0,1,45,36,28.1,LIML:6km,Humid Po plain with rice-field ague
+STATE_PIEDMONT,Turin,23,1,1,0,1,45,35.1,27.5,LIMC:22km,Po valley continental rice-field ague
+STATE_SARDINIA,Cagliari,25,2,10,0,2,39,38.7,29.4,LIEE:5km,Hot Mediterranean island endemic malaria
+STATE_MALTA,Valletta,27,2,13,0,0,36,37.9,29.3,LMML:6km,Hot humid Mediterranean island
+STATE_UMBRIA,Ancona,24,2,6,0,1,44,36.3,27.7,LIPY:13km,Adriatic coast with local marsh ague
+STATE_CORSICA,Bastia,24,2,9,0,1,43,34.5,27.2,LFKB:18km,Mediterranean island malarious eastern plain
+STATE_CAMPANIA,Naples,25,2,9,0,1,41,36.5,28.3,LIRN:7km,Mediterranean coast local lowland malaria
+STATE_CALABRIA,Cosenza,25,1,8,0,2,39,36,28.2,LICA:8km,Hot dry-summer valleys endemic malaria
+STATE_APULIA,Bari,25,2,9,0,2,41,37.1,28.2,WMO16271:2km,Hot Adriatic plain endemic malaria
+STATE_ABRUZZO,Vasto,24,2,7,0,1,42,37.3,29.7,LIBT:28km,Adriatic hill coast with local ague
+STATE_SAVOY,Chambery,21,1,1,0,0,46,36,27.4,LFLB:9km,Alpine valley mild summers cold winters
+STATE_EMILIA,Parma,24,2,2,0,1,45,36.6,28.3,LIMP:4km,Humid Po plain marsh ague
+STATE_TUSCANY,Florence,25,1,6,0,1,44,39.3,28.9,LIRQ:6km,Inland Mediterranean basin Maremma malaria
+STATE_ROMAGNA,Bologna,25,2,2,0,1,44,37.8,28.5,LIPE:6km,Humid Po plain coastal marsh fevers
+STATE_LAZIO,Rome,25,2,8,0,2,42,37.8,28.5,LIRU:7km,Mediterranean; the Roman Campagna's malaria
+STATE_VENETIA,Venice,23,2,3,0,1,45,34.8,28.6,LIPZ:8km,Humid lagoon coast seasonal fevers
+STATE_SICILY,Palermo,27,2,11,0,2,38,38.1,28.7,LICJ:24km,Hot Mediterranean island endemic malaria
+STATE_NEW_CASTILE,Madrid,25,0,6,1,1,40,39.6,27.3,LEVS:9km,Dry semi-arid continental plateau
+STATE_GALICIA,Santiago de Compostela,19,1,7,0,0,43,36.3,27.1,LEST:11km,Mild wet Atlantic
+STATE_ASTURIAS,Oviedo,18,1,7,0,0,43,33,25.9,WMO08015:2km,Mild wet Atlantic
+STATE_OLD_CASTILE,Valladolid,21,1,4,0,0,42,38.3,26.5,WMO08141:2km,Dry-summer continental plateau
+STATE_BASQUE_COUNTRY,Pamplona,20,1,5,0,0,43,39.2,27.9,LEPP:5km,Mild temperate Atlantic fringe
+STATE_ARAGON,Zaragoza,24,1,6,1,1,42,40.9,28.6,LEZG:10km,Semi-arid Ebro valley with ague
+STATE_CATALONIA,Barcelona,25,2,10,0,0,41,33.9,27.6,LEBL:13km,Mediterranean coast with a humid summer
+STATE_BALEARIC_ISLANDS,Palma,25,2,10,0,1,40,38.4,29,LEPA:8km,Mediterranean island with a humid summer
+STATE_LOWER_ANDALUSIA,Seville,28,1,11,0,1,37,43,29.4,LEZL:10km,"Hot, dry-summer interior; marsh fevers on the Guadalquivir"
+STATE_UPPER_ANDALUSIA,Granada,25,0,7,0,1,37,40.1,27.1,LEGA:6km,Hot dry-summer interior basin
+STATE_EXTREMADURA,Badajoz,26,1,9,0,1,39,42.2,29.2,LEBZ:14km,Hot dry-summer interior Guadiana fevers
+STATE_VALENCIA,Valencia,26,2,11,0,1,39,39.6,28.8,LEVC:9km,Humid Mediterranean coast rice-field fevers
+STATE_BEIRA,Coimbra,22,1,10,0,1,40,38.6,27.7,WMO08548:8km,Mild dry-summer Atlantic Mondego ague
+STATE_ESTREMADURA,Lisbon,23,1,11,0,1,39,38,28,WMO08535:2km,Mild Atlantic Mediterranean Tagus marsh fevers
+STATE_ALENTEJO,Evora,24,1,9,0,1,39,41.4,28.3,WMO08558:4km,Hot dry-summer interior plain
+STATE_CAPE_VERDE,Praia,27,3,23,2,1,15,34.6,29,GVAC:210km,Hot tropical desert island seasonal malaria
+STATE_CANARY_ISLANDS,Santa Cruz de Tenerife,25,2,18,1,0,28,36,26.9,WMO60020:1km,Warm dry subtropical coast; people on the wetter trade-wind slopes
+STATE_AZORES,Ponta Delgada,22,2,14,0,0,38,27.5,24.3,LPPD:3km,Mild humid oceanic island
+STATE_MADEIRA,Funchal,23,2,16,0,0,33,32.7,25,WMO08522:2km,Mild subtropical island
+STATE_EASTERN_THRACE,Constantinople,23,2,5,0,1,41,34.5,28.3,WMO17061:7km,Humid Mediterranean straits with local ague
+STATE_DOBRUDJA,Tulcea,23,2,-1,0,2,45,36.6,27.9,LRTC:15km,Continental Danube delta endemic malaria
+STATE_ALBANIA,Shkoder,25,1,5,0,2,42,39.1,29.9,LASK:4km,Mediterranean lowland endemic malaria
+STATE_BOSNIA,Sarajevo,19,1,-1,0,1,44,36.4,26.7,WMO14654:3km,Continental mountain basin
+STATE_NORTHERN_THRACE,Plovdiv,24,1,0,0,1,42,37.2,27.9,LBPD:13km,Continental Maritsa plain rice-field ague
+STATE_BULGARIA,Sofia,20,1,-2,0,1,43,35.8,26.7,LBSF:7km,Continental highland basin Danube ague
+STATE_SLOVENIA,Ljubljana,20,1,-1,0,0,46,36.1,27.6,WMO14015:1km,Humid continental basin
+STATE_DALMATIA,Split,26,1,8,0,1,44,36.5,27.6,WMO14445:1km,Dry-summer Adriatic coast local fevers
+STATE_CROATIA,Zagreb,21,1,0,0,0,46,36.2,27.9,WMO14236:0km,Humid continental
+STATE_SLAVONIA,Osijek,21,1,-1,0,1,46,36.4,28.1,LDOC:12km,Continental river lowland marsh ague
+STATE_ISTRIA,Trieste,24,1,5,0,1,46,36,28.8,LIVT:4km,Northern Adriatic coast local fevers
+STATE_MONTENEGRO,Podgorica,26,1,5,0,1,42,40.1,29,WMO13463:3km,Hot dry-summer basin lake marsh fevers
+STATE_WESTERN_SERBIA,Belgrade,22,1,0,0,1,45,37.6,28.1,WMO13274:4km,Continental Danube lowland ague
+STATE_EASTERN_SERBIA,Nis,22,1,0,0,1,43,37.9,27.9,LYNI:1km,Continental Morava valley ague
+STATE_KOSOVO,Prizren,22,1,0,0,1,42,37.6,28.1,LAKU:34km,Continental upland basin local ague
+STATE_CRETE,Irakleion,26,2,12,0,1,35,36.3,27.9,LGIR:4km,Hot Mediterranean island
+STATE_WEST_AEGEAN_ISLANDS,Hermoupolis,25,2,12,1,0,37,35.5,26.8,LGSO:4km,Dry windy Aegean islands
+STATE_EAST_AEGEAN_ISLANDS,Chios,26,2,11,0,1,38,35.8,27.7,LGHI:3km,Hot Aegean islands local ague
+STATE_ATTICA,Athens,27,1,10,1,1,38,38.6,28.8,LGAT:10km,Hot dry-summer semi-arid plain
+STATE_THESSALIA,Larisa,27,1,5,0,2,40,40.2,28.7,LGLR:4km,Hot continental plain endemic malaria
+STATE_SKOPIA,Skopje,23,1,0,0,1,42,38.4,27.8,LWSK:15km,Continental Vardar valley ague
+STATE_MACEDONIA,Salonica,26,1,5,0,2,41,37.9,28.2,LGTS:14km,Hot dry-summer plain endemic malaria
+STATE_WESTERN_THRACE,Kavala,26,2,6,0,2,41,40.5,29.1,WMO16606:72km,Aegean coast endemic marsh malaria
+STATE_IONIAN_ISLANDS,Corfu,26,2,10,0,1,40,38.2,29.7,LGKR:1km,Humid Mediterranean island
+STATE_PELOPONNESE,Patras,26,2,10,0,1,38,38.1,28.8,LGRX:28km,Mediterranean coast with local marsh malaria
+STATE_MURCIA,Murcia,27,2,11,1,1,38,41.7,30.9,WMO08430:4km,Hot semi-arid irrigated huerta
+STATE_LEON,Leon,20,1,3,0,0,43,34.8,24.4,LELN:7km,Dry-summer continental plateau
+STATE_ENTRE_DOURO_E_MINHO,Oporto,20,1,9,0,0,41,36,26.1,LPPR:11km,Mild wet Atlantic
+STATE_MAZOVIA,Płock,19,1,-3,0,0,53,33.8,26.4,EPPL:5km,Humid continental cold winters
+STATE_LOWER_SILESIA,Breslau,19,1,-1,0,0,51,35.1,27.1,EPWR:10km,Mild humid continental Oder plain
+STATE_UPPER_SILESIA,Oppeln,19,1,-1,0,0,51,35.1,26.8,WMO12530:6km,Mild humid continental
+STATE_GREATER_POLAND,Warszawa,19,1,-2,0,0,52,34.6,26.9,EPWA:8km,Humid continental cold winters
+STATE_LESSER_POLAND,Lublin,18,1,-3,0,0,51,33.5,26,EPLR:13km,Humid continental cold winters
+STATE_WEST_PRUSSIA,Danzig,18,1,-1,0,1,54,32,25.1,EPGD:12km,Cool Baltic coast Vistula delta ague
+STATE_EAST_PRUSSIA,Königsberg,18,1,-2,0,0,55,32,25.3,EPEL:82km,Cool Baltic coast cold winters
+STATE_POSEN,Posen,19,1,-1,0,0,52,34.8,26.7,EPPO:8km,Mild humid continental
+STATE_WEST_GALICIA,Kraków,19,1,-2,0,0,50,34.3,26.5,EPKK:10km,Humid continental cold winters
+STATE_EAST_GALICIA,Lviv,18,1,-3,0,0,50,33.1,25.7,UKLL:6km,Humid continental cold winters
+STATE_CENTRAL_HUNGARY,Buda,22,1,-1,0,1,47,36.4,27.4,WMO12843:13km,Warm continental plain marsh fevers
+STATE_BEKES,Nagyvárad,21,1,-2,0,1,47,36.5,27.6,LROD:4km,Warm continental plain marsh fevers
+STATE_TRANSDANUBIA,Székesfehérvár,21,1,-1,0,1,47,35.7,27.5,WMO12846:16km,Warm continental hills and marsh fevers
+STATE_DELVIDEK,Novi Sad,22,1,0,0,1,45,36.7,28.2,WMO13168:8km,Warm continental Danube plain marsh fevers
+STATE_BANAT,Timişoara,22,1,-1,0,1,46,36.7,28.2,LRTR:10km,Warm continental plain marsh fevers
+STATE_SLOVAKIA,Pressburg,21,1,-1,0,1,48,35.9,27,LZIB:8km,Warm continental Danube lowland ague
+STATE_RUTHENIA,Uzhhorod,20,1,-2,0,1,49,34.8,27.1,UKLU:3km,Continental Tisza lowland ague
+STATE_SOUTHERN_TRANSYLVANIA,Brașov,18,1,-4,0,0,46,33.8,25.5,WMO15300:8km,Cool continental mountain basin
+STATE_NORTHERN_TRANSYLVANIA,Kolozsvár,19,1,-3,0,0,47,35.1,26.6,LRCL:7km,Continental plateau cold winters
+STATE_MOLDAVIA,Iaşi,22,1,-3,0,1,47,35.8,27.4,WMO15113:38km,Warm continental river valley ague
+STATE_BUKOVINA,Czernowitz,20,1,-3,0,0,48,34.4,26.4,UKLN:6km,Humid continental foothills
+STATE_WALLACHIA,Bucharest,23,2,-1,0,2,44,38.1,29,WMO15422:3km,Hot humid Danube plain endemic malaria
+STATE_BESSARABIA,Chişinău,22,1,-2,0,1,47,35.5,26.4,UKII:12km,Warm continental Dniester and Danube ague
+STATE_LOWER_EGYPT,Cairo,29,2,14,0,1,30,43.8,30.4,HECA:18km,Hot desert climate on the Nile Delta
+STATE_UPPER_EGYPT,Luxor,34,1,15,0,1,26,46.9,32.2,HELX:6km,Very hot desert valley watered by the Nile
+STATE_MIDDLE_EGYPT,Beni Suef,29,1,13,0,1,29,45,30.5,HE25:116km,"Hot desert climate, watered by the Nile"
+STATE_EGYPTIAN_DESERT,Aswan,35,0,16,0,1,24,47.2,30.2,HESN:16km,Extreme desert heat; its people live on the Nile at Aswan
+STATE_MATRUH,Marsa Matruh,27,2,14,2,0,31,41.6,30,HEMM:3km,Humid Mediterranean desert coast
+STATE_SINAI,Port Said,28,3,15,2,0,31,38.7,30.4,WMO62332:5km,Hot humid desert coast
+STATE_ERITREA,Asmara,18,0,13,1,0,15,32.5,22.6,fit,Mild dry semi-arid highland plateau
+STATE_DONGOLA,Dongola,36,1,18,0,1,19,49,31.3,HSDN:1km,Extreme desert heat watered by the Nile
+STATE_KORDOFAN,El Obeid,32,1,22,1,1,13,43.9,30.3,HSOB:4km,Hot semi-arid Sahel seasonal fevers
+STATE_DARFUR,Zalingei,28,1,20,1,1,13,40.4,28.6,fit,Hot semi-arid uplands below Jebel Marra
+STATE_BLUE_NILE,Khartoum,35,0,24,0,1,16,48.6,30.3,HSOB:365km;fit_hot_day,Extreme dry heat where the two Niles meet
+STATE_MARRAKECH,Marrakech,29,2,13,1,1,32,45.9,30.6,GMMX:5km,Hot semi-arid plain below the Atlas
+STATE_FEZ,Fez,27,2,10,0,1,34,43.7,29.4,GMFF:13km,Hot-summer Mediterranean interior
+STATE_AL_RIF,Tangier,24,2,13,0,1,36,38.2,28,GMTT:11km,Mild Mediterranean strait coast
+STATE_INNER_MOROCCO,Taroudant,28,1,13,1,1,30,45.8,30.6,GMAD:54km,Hot semi-arid Souss valley
+STATE_ALGIERS,Algiers,27,2,11,0,2,37,36.9,28.8,WMO60369:5km,Mediterranean coast the Mitidja's malaria
+STATE_CONSTANTINE,Constantine,27,1,7,0,1,36,42.7,29.1,DABC:10km,Hot-summer Mediterranean upland
+STATE_ORAN,Oran,27,2,11,1,1,36,36.1,28.1,WMO60461:0km,Semi-arid Mediterranean coast marsh fevers
+STATE_TUNISIA,Tunis,29,3,12,0,1,37,42.3,30.8,DTTA:1km,Hot muggy Mediterranean lagoon coast
+STATE_TRIPOLI,Tripoli,29,3,14,1,0,33,42.6,32.3,WMO62007:102km,Hot muggy semi-arid coast
+STATE_LIBYA,Benghazi,27,2,13,1,0,32,41.3,29.4,HLLB:19km,Warm semi-arid Mediterranean coast
+STATE_LIBYAN_DESERT,Murzuq,34,0,13,2,1,26,45.6,30.8,WMO62131:407km,Hot desert oasis fevers
+STATE_SAHARA,Ghardaia,34,0,11,2,0,32,45.7,29.4,DAUG:17km,Desert oasis towns
+STATE_EAST_SAHARA,Touggourt,34,0,11,2,1,33,47.9,32.3,DAUK:4km,Desert palm oases with oasis fevers
+STATE_WEST_SAHARA,Laayoune,24,2,17,2,0,27,36.1,27.3,GCFV:157km,Mild Atlantic desert coast
+STATE_MAURITANIA,Rosso,31,2,23,0,1,17,43.7,32.4,GOSS:88km,Hot Sahel steppe on the Senegal river
+STATE_INNER_MAURITANIA,Kiffa,35,2,22,2,1,17,46.5,33.2,GAYE:188km,Very hot desert edge seasonal fevers
+STATE_EASTERN_MALI,Sikasso,32,2,25,0,2,11,41.3,31.3,GASK:3km,Hot humid Sudanian savanna endemic malaria
+STATE_WESTERN_MALI,Kayes,35,1,25,0,2,14,46.7,32.8,GAKD:2km,Very hot savanna on the Senegal river
+STATE_TIMBUKTU,Gao,35,1,23,0,1,16,46.1,31.7,GAGO:0km,Very hot desert edge watered by the Niger
+STATE_NIGER,Agadez,34,1,20,2,1,17,46.5,31.8,DRZA:4km,Hot desert Air oasis town
+STATE_CHAD,Bokoro,33,1,24,1,1,12,46.6,32.9,FTTJ:222km,Hot semi-arid Sahel
+STATE_IVORY_COAST,Yamoussoukro,28,3,25,0,2,7,38.9,30.7,DIYO:13km,Hot humid forest-savanna edge endemic malaria
+STATE_WINDWARD_COAST,Daloa,27,3,24,0,2,7,38,30.6,DIDL:3km,Hot humid rainforest endemic malaria
+STATE_SENEGAL,Saint-Louis,28,3,22,1,1,16,43.7,32.4,GOSS:4km,Semi-arid Sahel coast with a humid rainy season
+STATE_SIERRA_LEONE,Freetown,28,3,25,0,2,8,36.6,30.2,GFLL:15km,Hot humid monsoon coast endemic malaria
+STATE_VOLTA,Ouagadougou,32,1,25,1,2,12,44.2,31.9,DFFD:3km,Hot semi-arid savanna with a long dry season
+STATE_LIBERIA,Monrovia,27,3,25,0,2,6,35.9,30.2,GLRB:49km,Hot humid rainforest coast endemic malaria
+STATE_HAUSALAND,Sokoto,34,1,24,1,2,13,45.4,32.5,DRRB:81km,Hot semi-arid Sahel savanna seasonal rains
+STATE_BENIN,Benin City,29,3,25,0,2,6,38.5,31.7,DNMM:256km,Hot humid rainforest endemic malaria
+STATE_YORUBA_STATES,Ibadan,28,3,24,0,2,7,38.5,31.7,DNMM:111km,Hot humid forest-savanna edge endemic malaria
+STATE_NIGER_DELTA,Onitsha,29,3,26,0,2,6,36.3,30.4,FGSL:341km,Hot humid forest above the delta endemic malaria
+STATE_OUTER_HAUSALAND,Zinder,33,1,22,1,1,14,44.5,31,DRZR:2km,Hot semi-arid Sahel seasonal fevers
+STATE_BORNU,Kukawa,33,1,22,1,2,13,45.2,32.6,DRZF:115km,Hot semi-arid Sahel near Lake Chad
+STATE_NIGERIA,Bauchi,30,1,23,0,2,10,41.7,31.8,WMO61091:312km;fit_hot_day,Hot tropical savanna with a long dry season
+STATE_EAST_HAUSALAND,Kano,31,1,22,1,2,12,44.5,31.8,WMO61091:118km,Hot semi-arid savanna endemic malaria
+STATE_GUINEA,Kindia,28,2,24,0,2,10,38.4,30.9,GUCY:97km,Hot wet savanna foothills endemic malaria
+STATE_GOLD_COAST,Kumasi,27,3,24,0,2,7,35.6,30.1,DIBU:197km;fit_hot_day,Hot humid forest endemic malaria
+STATE_TOGO,Atakpame,28,3,24,0,2,8,38.3,30.2,DXAK:6km,Hot humid forest-savanna hills endemic malaria
+STATE_DAHOMEY,Abomey,29,3,25,0,2,7,38.5,31.4,DBBC:9km,Hot humid savanna plateau endemic malaria
+STATE_LINDI,Iringa,21,1,16,0,1,-8,32.5,24.8,HTIR:13km,Mild upland plateau with a dry winter
+STATE_ZANZIBAR,Zanzibar,28,3,25,0,2,-6,36.8,30.6,HTZA:6km,Hot humid island coast endemic malaria
+STATE_TANGANYIKA,Kigali,22,1,20,0,1,-2,32,24.9,HRYR:9km,Mild equatorial highland hills
+STATE_KENYA,Embu,21,1,18,0,1,-1,31.4,23.6,HKEM:8km,Mild equatorial highland with two rainy seasons
+STATE_RIFT_VALLEY,Kisumu,24,2,22,0,2,0,35.9,26.9,HKKI:2km,Warm humid Lake Victoria shore endemic malaria
+STATE_OROMIA,Ankober,17,0,14,0,1,10,28.9,20.9,HAAB:122km,Cool highland plateau escarpment
+STATE_AMHARA,Jimma,21,1,18,0,1,8,34,25.5,fit,Mild humid highland with seasonal fevers
+STATE_GONDER,Gondar,23,0,18,0,1,13,37.3,25.7,fit,Mild highland with a dry season
+STATE_KAZEMBE,Kasama,23,0,17,0,2,-10,37.4,25.7,fit,Warm plateau savanna with a hot dry season
+STATE_SOMALILAND,Mogadishu,29,3,26,1,1,2,39.4,30,HKWJ:584km,Hot humid semi-arid monsoon coast
+STATE_SOUTH_MADAGASCAR,Fianarantsoa,21,2,14,0,1,-21,33.2,26.8,FMSF:4km,Mild humid highland plateau
+STATE_NORTH_MADAGASCAR,Antananarivo,21,2,15,0,1,-19,32.8,26,FMMI:11km,Mild humid highland plateau
+STATE_UGANDA,Kampala,23,2,21,0,2,0,31.2,25.5,HUEN:34km,Warm humid equatorial lakeshore endemic malaria
+STATE_EQUATORIA,Malakal,31,1,26,0,2,10,43.9,30.3,HSOB:430km,Hot savanna floodplain on the White Nile
+STATE_MOCAMBIQUE,Angoche,28,3,23,0,2,-16,38.4,29.5,FQNP:141km,Hot humid monsoon coast endemic malaria
+STATE_WADDAI,Ndjamena,33,1,24,1,2,12,46.6,32.9,FTTJ:2km,Hot semi-arid Sahel savanna on the Chari
+STATE_NORTH_CAMEROON,Ngaoundere,25,1,21,0,2,7,36.5,27.4,FKKN:5km,Warm upland savanna plateau endemic malaria
+STATE_SOUTH_CAMEROON,Yaounde,25,2,22,0,2,4,34.5,27.8,FKYS:4km,Warm humid rainforest upland endemic malaria
+STATE_UBANGI_SHARI,Bangui,28,3,25,0,2,4,39.8,31,FEFF:6km,Hot humid forest-savanna edge endemic malaria
+STATE_CONGO,Brazzaville,27,3,22,0,2,-4,36.4,29.6,FCBB:3km,Hot humid Congo savanna endemic malaria
+STATE_CONGO_ORIENTALE,Kisangani,26,3,25,0,2,1,35.4,29.5,fit,Hot humid equatorial rainforest endemic malaria
+STATE_KASAI,Kananga,25,2,23,0,2,-6,36.6,29.8,FZAA:788km,Hot humid savanna-forest mosaic endemic malaria
+STATE_BAS_CONGO,Kinshasa,27,3,23,0,2,-4,36.4,29.6,FCBB:10km,Hot humid Congo river savanna endemic malaria
+STATE_EQUATEUR,Mbandaka,26,3,25,0,2,0,34,30.6,FCOI:176km;fit_hot_day,Hot humid equatorial rainforest endemic malaria
+STATE_NORTH_ANGOLA,Sao Salvador,25,3,20,0,2,-6,34.9,29.8,FNCA:241km,Hot humid Kongo plateau endemic malaria
+STATE_SOUTH_ANGOLA,Huambo,21,1,16,0,1,-13,32,24.2,FNHU:6km,Mild highland plateau with a dry winter
+STATE_EAST_ANGOLA,Malanje,23,1,19,0,2,-10,35.8,26.5,fit,Warm plateau savanna with a dry winter
+STATE_KATANGA,Kapanga,25,1,21,0,2,-8,34.4,27.2,HTKA:870km,Hot savanna plateau with a long dry season
+STATE_GABON,Libreville,27,3,24,0,2,0,35,29.9,FOOL:9km,Hot humid equatorial coast endemic malaria
+STATE_ZAMBIA,Lusaka,24,0,16,0,2,-15,37.8,27.1,FLKK:21km,Warm plateau savanna with a hot dry season
+STATE_ZAMBEZIA,Quelimane,28,3,22,0,2,-18,41.8,32.3,FQQL:1km,Hot humid Zambezi delta coast endemic malaria
+STATE_ZAMBEZI,Harare,21,1,14,0,1,-18,35,24.9,FVHA:12km,Mild highveld plateau with a dry winter; malaria in the Zambezi valley
+STATE_NAMAQUALAND,Rehoboth,24,0,13,2,0,-23,37.9,26.1,FAWE:83km,Hot semi-desert plateau with frosty nights
+STATE_HEREROLAND,Ondangwa,27,1,16,1,2,-18,39.3,28.4,FYGF:294km,Hot semi-arid floodplain with summer rains
+STATE_ZULULAND,Ulundi,24,2,15,0,1,-28,41.5,30.6,FAUL:1km,Warm humid subtropical hills river-valley fevers
+STATE_VRYSTAAT,Bloemfontein,23,1,8,1,0,-29,38.5,26,WMO68443:3km,Semi-arid highveld with frosty winters
+STATE_TRANSVAAL,Pretoria,23,1,12,0,1,-26,36.6,25.6,FAWB:8km,Warm highveld with summer rains
+STATE_EASTERN_CAPE,Grahamstown,21,1,12,0,0,-33,38.8,28.6,WMO68849:2km,Mild temperate hills with year-round rain
+STATE_CAPE_COLONY,Cape Town,21,1,12,0,0,-34,37.3,26.9,WMO68819:1km,Mediterranean coast with dry windy summers
+STATE_NORTHERN_CAPE,Kimberley,25,1,10,1,0,-29,41,28.2,FAKM:6km,Hot semi-arid interior plateau
+STATE_BOTSWANA,Tlokweng,26,1,13,1,1,-25,39.5,27.4,FBSK:6km,Hot semi-arid savanna with summer rains; malaria in the northern swamps
+STATE_LOURENCO_MARQUES,Inhambane,27,3,20,0,2,-24,36.1,30.3,FQIN:0km,Hot humid subtropical coast endemic malaria
+STATE_DISTRICT_OF_COLUMBIA,Washington,27,2,2,0,1,39,36.8,29.9,KDCA:6km,Humid subtropical Potomac tidewater fevers
+STATE_LOUISIANA,New Orleans,28,3,12,0,2,30,35.1,29.8,KNEW:9km,Hot oppressively humid delta endemic malaria
+STATE_NEW_YORK,New York,25,2,1,0,1,41,35.9,28.8,KLGA:10km,Humid continental coast seasonal upstate ague
+STATE_VIRGINIA,Richmond,27,2,4,0,2,38,36.8,29.7,KRIC:14km,Humid subtropical tidewater endemic malaria
+STATE_ALASKA,Sitka,14,1,1,0,0,57,23.1,18.4,PASI:11km,Cool wet maritime rainforest coast
+STATE_WASHINGTON,Seattle,19,1,5,0,0,48,32.9,24.2,KBFI:9km,Mild marine with dry summers
+STATE_OREGON,Portland,21,1,5,0,1,46,37,26.9,KPDX:7km,Mild marine Willamette valley ague
+STATE_IDAHO,Boise,25,0,0,1,0,44,40.4,26.5,KBOI:4km,Semi-arid valley hot dry summers
+STATE_COLORADO,Denver,23,0,-1,1,0,40,36.4,24.9,KBKF:12km,Semi-arid high plains sunny and dry
+STATE_WYOMING,Cheyenne,21,0,-2,1,0,41,34.5,23.7,KCYS:3km,Windy semi-arid high plains
+STATE_MONTANA,Helena,21,0,-5,1,0,47,36.5,24.7,KHLN:3km,Semi-arid mountain valley cold winters
+STATE_NORTH_DAKOTA,Bismarck,22,1,-10,0,0,47,37.2,28,KBIS:3km,Cold continental northern plains
+STATE_SOUTH_DAKOTA,Sioux Falls,23,2,-8,0,0,44,35.1,28.5,KFSD:4km,Humid continental prairie cold winters
+STATE_NEBRASKA,Omaha,25,2,-4,0,1,41,36.4,29.9,KMLE:10km,Humid continental Missouri valley ague
+STATE_KANSAS,Topeka,26,2,-2,0,1,39,38.8,30.8,KTOP:7km,Humid continental prairie river ague
+STATE_OKLAHOMA,Tulsa,29,3,3,0,1,36,39.1,30.4,KTUL:8km,Hot humid Arkansas valley seasonal ague
+STATE_ARKANSAS,Little Rock,28,3,5,0,2,35,37.9,30.3,KLIT:11km,Hot humid river lowland endemic malaria
+STATE_MISSOURI,St Louis,27,2,0,0,1,39,36.4,29.5,KCPS:12km,Hot humid Mississippi valley ague
+STATE_IOWA,Des Moines,25,2,-5,0,1,42,36.3,29.4,KDSM:5km,Humid continental prairie river ague
+STATE_MINNESOTA,Minneapolis,23,2,-9,0,0,45,34.9,28.2,KMSP:9km,Cold continental lakes country free of ague
+STATE_WISCONSIN,Milwaukee,22,2,-5,0,1,43,33,26.4,KMWC:7km,Humid continental lakeshore valley ague
+STATE_INDIANA,Indianapolis,25,2,-2,0,1,40,34.7,28.7,KIND:13km,Humid continental Ohio valley ague
+STATE_MICHIGAN,Detroit,23,2,-4,0,1,42,34.2,27.6,KDET:8km,Humid continental lakes notorious Michigan ague
+STATE_OHIO,Cincinnati,25,2,0,0,1,39,34.5,28.5,KLUK:9km,Humid continental; Ohio valley ague
+STATE_KENTUCKY,Louisville,27,2,2,0,1,38,35.9,29.2,KLOU:7km,Humid subtropical Ohio valley ague
+STATE_TENNESSEE,Nashville,27,2,4,0,1,36,36.8,29.5,KBNA:10km,Humid subtropical Cumberland basin seasonal ague
+STATE_MISSISSIPPI,Vicksburg,28,3,8,0,2,32,36.9,30.3,KTVR:14km,Hot humid river bluffs endemic malaria
+STATE_ALABAMA,Mobile,28,3,11,0,2,31,35.9,30,KBFM:6km,Hot humid Gulf coast endemic malaria
+STATE_FLORIDA,Tallahassee,28,3,11,0,2,30,37.2,30.2,KTLH:12km,"Hot, humid subtropical; endemic malaria"
+STATE_GEORGIA,Savannah,28,3,8,0,2,32,36.6,30.2,KSVN:1km,"Hot, humid coastal lowland; endemic malaria"
+STATE_WEST_VIRGINIA,Charleston,25,2,1,0,1,38,34.7,28.4,KCRW:5km,Humid Appalachian river valleys seasonal ague
+STATE_MARYLAND,Baltimore,26,2,1,0,1,39,36.6,29.5,KBWI:16km,Humid subtropical Chesapeake seasonal fevers
+STATE_DELAWARE,Wilmington,25,2,1,0,1,40,35.2,29.1,KILG:10km,Humid coastal plain seasonal ague
+STATE_PENNSYLVANIA,Philadelphia,26,2,1,0,1,40,36,29.2,KPHL:17km,Humid continental Delaware valley marsh ague
+STATE_NEW_JERSEY,Newark,26,2,1,0,1,41,36.7,29.3,KEWR:5km,Humid continental tidal marsh ague
+STATE_ILLINOIS,Chicago,24,2,-4,0,1,42,34.7,28.2,KMDW:8km,Humid continental lakeshore prairie ague
+STATE_RHODE_ISLAND,Providence,23,2,-1,0,0,42,34.5,28.3,KPVD:11km,Humid continental coast cold winters
+STATE_CONNECTICUT,New Haven,24,2,-1,0,0,41,33.4,27.8,KHVN:6km,Humid continental coast cold winters
+STATE_MASSACHUSETTS,Boston,23,2,-2,0,0,42,35.4,28.3,KBOS:3km,"Humid continental, cold winters"
+STATE_NEW_HAMPSHIRE,Manchester,23,1,-5,0,0,43,35,27.7,KMHT:6km,Humid continental river valley cold winters
+STATE_VERMONT,Burlington,22,1,-7,0,0,44,34.3,27.4,KBTV:8km,Cold continental lake valley
+STATE_MAINE,Portland,21,1,-5,0,0,44,33.4,26.7,KPWM:4km,Cool humid continental coast
+STATE_NORTH_CAROLINA,Wilmington,28,3,9,0,2,34,36.7,30.4,KILM:7km,Hot humid Cape Fear lowland endemic malaria
+STATE_UTAH,Salt Lake City,27,0,-1,1,0,41,38.7,25.8,KSLC:3km,Semi-arid basin below the Wasatch
+STATE_SOUTH_CAROLINA,Charleston,28,3,10,0,2,33,36.4,30.2,KCHS:12km,Hot humid lowcountry endemic malaria
+STATE_HAWAIIAN_ISLANDS,Honolulu,28,2,23,0,0,21,33,27.2,PHIK:9km,Warm tropical trade-wind islands
+STATE_ONTARIO,Toronto,22,1,-4,0,1,44,34.3,27.7,CXTO:2km,Humid continental lakeshore seasonal ague
+STATE_NEW_BRUNSWICK,Halifax,19,1,-4,0,0,45,30.8,24.6,CAAW:9km,Cool maritime cold snowy winters
+STATE_QUEBEC,Montreal,21,1,-10,0,0,46,33.6,27.4,CWTA:2km,Cold continental St Lawrence valley
+STATE_NEWFOUNDLAND,St. John's,16,1,-5,0,0,48,28.2,23.7,CYYT:6km,Cool foggy maritime damp winters
+STATE_ALBERTA,Edmonton,18,1,-11,0,0,54,31.9,24.1,CXEC:4km,Cold continental parkland long winters
+STATE_BRITISH_COLUMBIA,Vancouver,18,1,4,0,0,49,30.2,23.1,CWHC:2km,Mild marine coast rainy winters
+STATE_SASKATCHEWAN,Regina,19,1,-15,0,0,50,34.9,26,CYQR:5km,Severe continental open prairie
+STATE_MANITOBA,Winnipeg,20,1,-16,0,0,50,34.5,26.9,CXWN:3km,Severe continental Red River prairie
+STATE_YUKON_TERRITORY,Dawson City,16,1,-26,0,0,64,30.4,22,CWON:14km,Subarctic interior extreme winters
+STATE_NORTHWEST_TERRITORIES,Hay River,16,1,-23,0,0,61,31.8,23.4,CZHY:3km,Subarctic boreal lakeshore long winters
+STATE_NUNAVUT,Rankin Inlet,11,0,-31,0,0,63,24,18.3,CYRT:1km,Arctic tundra coast
+STATE_BERMUDA,Hamilton,28,3,18,0,0,32,31.4,27.8,TXKF:13km,Warm humid subtropical island
+STATE_TEXAS,Austin,30,2,11,0,2,30,40.6,31.3,KATT:2km,Hot humid subtropical endemic malaria
+STATE_NEVADA,Carson City,22,0,1,1,0,39,38.7,25.8,KRNO:40km,Semi-arid basin below the Sierra
+STATE_ARIZONA,Tucson,31,1,11,2,0,32,42.3,29.4,KDMA:2km,Hot desert with a summer monsoon
+STATE_NEW_MEXICO,Santa Fe,21,0,-1,1,0,36,36,24.4,KSAF:13km,Semi-arid highland with a summer monsoon
+STATE_CALIFORNIA,San Francisco,18,1,11,0,1,38,33.2,23.9,KSFO:17km,Cool foggy Mediterranean coast inland valley ague
+STATE_SONORA,Hermosillo,32,2,17,2,1,29,47.4,33.3,MMHO:8km,Hot desert with a humid monsoon
+STATE_CHIHUAHUA,Chihuahua,26,0,10,1,0,29,39.5,27.5,MMCU:14km,Hot semi-arid high plateau
+STATE_RIO_GRANDE,Monterrey,29,2,15,1,1,26,42.1,31.5,WMO76393:7km,Hot semi-arid foothills with humid summers
+STATE_DURANGO,Durango,22,0,11,1,0,24,38.7,26.6,MMDO:17km,Semi-arid highland plateau mild winters
+STATE_SINALOA,Culiacán,30,3,20,1,2,25,41.1,32.9,MMCL:9km,Hot muggy semi-arid plain endemic malaria
+STATE_BAJIO,Guanajuato,22,0,14,1,0,21,36.9,27.7,MGUJ:2km,Semi-arid highland basin warm dry spring
+STATE_YUCATAN,Mérida,29,3,23,0,2,21,41.4,31.8,MMID:4km,Hot humid tropical lowland endemic malaria
+STATE_MEXICO,Mexico City,19,0,14,0,0,19,32.2,23.4,WMO76680:6km,Mild subtropical highland valley
+STATE_VERACRUZ,Veracruz,28,3,21,0,2,19,38.9,31.2,WMO76692:3km,Hot humid tropical port endemic malaria
+STATE_GUERRERO,Chilpancingo,23,1,18,0,1,18,36.7,28.2,MMCH:0km,Warm highland valley above malarial lowlands
+STATE_OAXACA,Oaxaca,24,1,18,1,1,17,37.5,27.7,MMOX:2km,Warm semi-arid highland valley dry winters
+STATE_JALISCO,Guadalajara,25,0,16,0,0,21,37,26.5,MGDJ:6km,Warm highland with a hot dry spring
+STATE_ZACATECAS,Zacatecas,18,0,10,1,0,23,29.1,20.1,WMO76525:1km,Cool semi-arid mining highland
+STATE_CHIAPAS,San Cristóbal de las Casas,17,1,12,0,1,17,29.2,23.4,MMSC:2km,Cool highland plateau above fever lowlands
+STATE_BAJA_CALIFORNIA,La Paz,30,3,18,2,0,24,42.4,33.2,WMO76405:3km,Hot desert coast with humid late summer
+STATE_SAN_SALVADOR,San Salvador,24,2,22,0,1,14,37,29,MSSS:8km,Warm humid tropical upland
+STATE_GUATEMALA,Guatemala City,20,1,17,0,1,15,31.6,24.7,MGGT:6km,Mild tropical highland
+STATE_HONDURAS,Tegucigalpa,25,2,21,0,1,14,35.1,27.1,MHTG:5km,Warm tropical upland valley
+STATE_NICARAGUA,Managua,29,3,27,0,2,12,37.1,30.1,MNMG:12km,Hot humid tropical lowland endemic malaria
+STATE_COSTA_RICA,San Jose,22,2,20,0,1,10,31.6,25.3,MRPV:7km,Mild tropical highland valley
+STATE_PANAMA,Panama City,28,3,26,0,2,9,35.1,29.7,MPMG:2km,Hot humid tropical isthmus endemic malaria
+STATE_HAITI,Port au Prince,29,3,26,0,2,19,37.3,31.1,WMO78458:231km,Hot humid Caribbean lowland endemic malaria
+STATE_SANTO_DOMINGO,Santo Domingo,28,3,24,0,2,18,36.1,30.5,TSDM:6km,Hot humid Caribbean coast endemic malaria
+STATE_PUERTO_RICO,San Juan,28,3,25,0,2,18,34.8,29.6,TJSJ:13km,Hot humid Caribbean island endemic malaria
+STATE_BAHAMAS,Nassau,28,3,21,0,0,25,36,30.3,MYNN:14km,Hot humid subtropical coral islands
+STATE_WEST_INDIES,Saint-Pierre,28,3,26,0,1,15,34.4,29.4,TFFF:25km,Hot humid tropical islands local malaria
+STATE_JAMAICA,Kingston,28,3,25,0,2,18,35.5,29.7,MKJP:6km,Hot humid Caribbean island endemic malaria
+STATE_WESTERN_CUBA,Havana,28,3,22,0,2,23,34.7,28.9,MUHA:16km,Hot humid Caribbean island endemic malaria
+STATE_EASTERN_CUBA,Santiago de Cuba,28,3,25,0,2,20,35.1,28.6,MUCU:6km,Hot humid Caribbean coast endemic malaria
+STATE_CENTRAL_CUBA,Puerto Principe,28,3,22,0,2,21,35.5,29.2,MUCM:9km,Hot humid interior plains endemic malaria
+STATE_ECUADOR,Quito,15,0,14,0,0,0,24.8,18.4,SEQM:21km,Cool spring-like equatorial highland
+STATE_GUAYANA,Georgetown,28,3,27,0,2,7,36.2,30.1,SYCJ:34km,Hot humid equatorial coast endemic malaria
+STATE_ZULIA,Barquisimeto,25,2,24,1,1,10,35.3,27.3,fit,Warm semi-arid upland valley
+STATE_MIRANDA,Caracas,25,2,22,0,1,10,36.4,27.7,SVMI:14km;fit_index,Warm humid highland valley
+STATE_BOLIVAR,Ciudad Bolivar,30,3,26,0,2,8,37.7,31,SVBC:252km,Hot humid Orinoco savanna endemic malaria
+STATE_ANTIOQUIA,Medellin,24,2,22,0,0,6,32.6,24.7,SKMD:3km,Warm humid Andean valley
+STATE_GUAVIARE,Villavicencio,27,2,24,0,2,4,35.4,28.1,SKVV:3km,Hot wet llanos foothills endemic malaria
+STATE_CUNDINAMARCA,Bogota,14,1,14,0,0,5,25.5,18.9,SKBO:14km,Cool damp high Andean plateau
+STATE_CAUCA,Cali,24,2,23,0,1,3,35.6,27.8,SKCL:20km,Warm humid Cauca valley
+STATE_PASTAZA,Iquitos,28,3,26,0,2,-4,36.9,30.3,SPQT:13km,Hot humid Amazon rainforest endemic malaria
+STATE_TARAPACA,Iquique,22,1,16,2,0,-20,29.5,23.5,SCDA:34km,Mild foggy Atacama desert coast
+STATE_ANTOFAGASTA,Antofagasta,20,1,14,2,0,-24,27.4,22.3,SCFA:23km,Mild foggy Atacama desert coast
+STATE_SANTA_CRUZ,Santa Cruz de la Sierra,27,3,21,0,2,-18,37.9,29.7,SLET:6km,Hot humid tropical lowland endemic malaria
+STATE_LA_PAZ,La Paz,12,0,8,0,0,-16,27.1,20,fit,Cold dry high Andean valley
+STATE_POTOSI,Sucre,17,0,12,0,0,-19,31.8,22.6,fit,Mild dry Andean highland
+STATE_CAJAMARCA,Trujillo,24,3,18,1,1,-8,28.7,24.7,SPRU:9km,Warm coastal desert valley watered by the Moche
+STATE_LIMA,Lima,25,3,17,1,1,-12,30.7,25.8,SPIM:11km,Mild coastal desert watered by the Rimac
+STATE_ICA,Cuzco,15,0,11,0,0,-14,26.2,17.6,SPZO:6km,Cool dry high Andean valley
+STATE_AREQUIPA,Arequipa,15,0,13,1,0,-16,26.9,18.9,SPQU:8km,Dry highland desert oasis on the Chili
+STATE_URUGUAY,Montevideo,23,2,11,0,0,-35,35.5,28.5,WMO86585:4km,Mild humid subtropical coast
+STATE_JUJUY,Salta,22,1,10,0,1,-25,37.4,27.5,SASA:11km,Mild subtropical highland valley seasonal fevers
+STATE_ALTO_PARAGUAY,Pozo Colorado,29,3,18,0,1,-23,42.1,31.9,SGPC:11km,Hot humid Chaco savanna
+STATE_BAJO_PARAGUAY,Asuncion,28,3,17,0,1,-25,39.5,30.8,WMO86221:62km,Hot humid subtropical river port
+STATE_BUENOS_AIRES,Buenos Aires,25,2,11,0,0,-35,35.7,28.8,SABE:7km,Humid subtropical Pampas estuary
+STATE_PATAGONIA,Neuquen,24,0,6,1,0,-39,40,28.3,SAZN:6km,Cool steppe-desert valleys of the Limay and Neuquen
+STATE_RIO_NEGRO,Mendoza,26,1,8,1,0,-33,40.1,29,SAME:7km,Dry continental irrigated oasis below the Andes
+STATE_LA_PAMPA,Cordoba,25,2,11,0,0,-31,39.4,29.6,SACO:9km,Humid subtropical inland plain
+STATE_SANTA_FE,Santa Fe,26,2,12,0,0,-32,39,30.6,SAAV:17km,Humid subtropical Parana river plain
+STATE_CORRIENTES,Corrientes,27,3,15,0,1,-27,39.7,31.2,SARC:7km,Hot humid subtropical Parana riverside
+STATE_TUCUMAN,San Miguel de Tucuman,25,2,12,0,1,-27,40.9,31.2,SANT:10km,Humid subtropical foothills seasonal fevers
+STATE_CHACO,Resistencia,27,3,15,0,1,-27,41,31.9,SARE:7km,Hot humid Chaco river plain
+STATE_SANTIAGO,Santiago,22,1,10,0,0,-33,35.8,24.8,WMO85577:4km,Dry-summer valley watered by Andean rivers
+STATE_LOS_RIOS,Concepcion,17,1,10,0,0,-37,29.3,22.4,SCIE:5km,Cool Mediterranean Pacific coast
+STATE_ARAUCANIA,Ancud,15,1,8,0,0,-42,29.1,22.1,SCTE:78km,Cool wet oceanic archipelago
+STATE_SOUTH_ATLANTIC_ISLANDS,Stanley,10,0,2,0,0,-52,24.9,18.5,EGYP:45km,Cold windy subpolar oceanic islands
+STATE_PARA,Belem,27,3,26,0,2,-1,34.3,28.9,SBBE:7km,Hot humid Amazon estuary endemic malaria
+STATE_MARANHAO,Sao Luis,29,3,27,0,2,-3,34.9,28.8,WMO82281:9km,Hot humid tropical coast endemic malaria
+STATE_AMAZONAS,Manaus,29,3,27,0,2,-3,36.4,29.8,SBMN:2km,Hot humid Amazon rainforest endemic malaria
+STATE_ACRE,Cruzeiro do Sul,26,3,25,0,2,-8,36.7,30.3,SBCZ:0km,Hot humid Amazon rainforest endemic malaria
+STATE_GOIAS,Goias,29,2,25,0,1,-16,39.6,30.2,fit,Hot tropical savanna with a long dry season
+STATE_MATO_GROSSO,Cuiaba,28,3,24,0,2,-16,40.3,30.3,SBCY:6km,Hot humid savanna by the Pantanal endemic malaria
+STATE_RIO_GRANDE_DO_SUL,Porto Alegre,25,3,14,0,0,-30,37.8,30.4,SBPA:7km,Hot humid subtropical lagoon city
+STATE_PARANA,Curitiba,21,2,14,0,0,-25,33.2,26.3,SBBI:5km,Mild humid subtropical plateau
+STATE_SANTA_CATARINA,Desterro,25,3,17,0,1,-28,36,29.8,SBFL:8km,Hot humid subtropical island coast
+STATE_SAO_PAULO,Sao Paulo,23,2,16,0,0,-24,34.9,26.9,SBMT:5km,Warm humid subtropical plateau
+STATE_MINAS_GERAIS,Belo Horizonte,24,2,19,0,0,-20,35.2,26.4,SBBH:8km,Warm humid tropical highland
+STATE_RIO_DE_JANEIRO,Rio de Janeiro,28,3,23,0,1,-23,37.9,30.8,SBRJ:5km,Hot humid tropical bay coast
+STATE_BAHIA,Salvador,27,3,24,0,1,-13,32.7,28.5,SBSV:18km,Hot humid tropical coast
+STATE_RIO_GRANDE_DO_NORTE,Natal,28,3,25,0,1,-6,32.6,27.9,SBNT:12km,Hot humid trade-wind coast
+STATE_CEARA,Fortaleza,28,3,26,0,1,-4,32.8,27.9,SBFZ:5km,Hot humid trade-wind coast
+STATE_PIAUI,Oeiras,30,2,26,1,1,-7,40.5,30.7,SBTE:230km,Hot semi-arid sertao
+STATE_PARAIBA,Campina Grande,25,2,22,0,1,-7,34.6,27.8,SBKG:1km,Warm agreste upland
+STATE_PERNAMBUCO,Recife,27,3,24,0,1,-8,32,27.8,SBRF:8km,Hot humid tropical coast
+STATE_NEJD,Riyadh,36,0,14,2,0,25,46.8,29.9,OERY:8km,Hot desert oasis towns of the plateau
+STATE_OMAN,Muscat,35,3,21,2,1,24,46.4,34.6,OOMS:9km,Hot oppressively humid desert coast
+STATE_ABU_DHABI,Manama,34,3,17,2,1,26,45.6,34.5,OBBI:9km,Hot oppressively humid Gulf desert coast
+STATE_YEMEN,Sanaa,21,0,13,1,0,15,35.4,24.2,fit,Mild semi-arid highland plateau
+STATE_HEDJAZ,Mecca,36,1,24,2,1,21,48,34.9,WMO41032:19km,Hot desert valley in the Red Sea hills
+STATE_HAIL,Buraydah,34,0,12,2,0,26,47.6,31.4,OEGS:21km,Hot desert oasis towns of Qassim
+STATE_CYPRUS,Nicosia,29,1,10,1,2,35,41.1,30.1,LCNC:3km,Hot dry-summer semi-arid plain endemic malaria
+STATE_TRANSJORDAN,Salt,24,1,8,0,1,32,40.4,27.5,OJAM:27km,Dry-summer hill country above the Jordan
+STATE_PALESTINE,Jerusalem,24,1,9,0,1,32,38.4,27,WMO40183:2km,Mediterranean hill country
+STATE_LEBANON,Deir al-Qamar,23,2,8,0,1,34,37.8,28.9,OLBA:16km,Mild Mediterranean mountain villages
+STATE_SYRIA,Damascus,27,0,7,1,1,34,43.6,29.7,OSDI:21km,Hot dry summer oasis on the steppe edge
+STATE_ALEPPO,Aleppo,29,1,6,1,1,36,43.5,29.9,OSAP:6km,Hot dry-summer semi-arid plateau
+STATE_BAGHDAD,Baghdad,35,0,10,0,2,33,49.7,32.3,ORBB:16km,Hot desert watered by the Tigris
+STATE_MOSUL,Mosul,34,0,7,0,2,36,47.8,32.4,ORBM:4km,Hot dry summer Tigris valley and foothills
+STATE_DEIR_EZ_ZOR,Deir ez-Zor,33,0,7,0,1,35,45.3,30.6,OSDZ:3km,Hot desert Euphrates valley
+STATE_BASRA,Basra,37,1,13,0,2,31,51.7,34.3,ORMM:17km,Extreme heat delta marshes endemic malaria
+STATE_FARS,Shiraz,30,0,6,1,1,30,41.6,26.7,OISS:10km,Hot dry summer upland basin
+STATE_LARISTAN,Bandar Abbas,35,3,18,2,2,27,46.2,34.8,OIKB:13km,Hot oppressively humid Gulf desert coast
+STATE_KERMAN,Kerman,27,0,4,2,0,30,40.5,25.1,OIKK:12km,Dry upland desert qanat towns
+STATE_SISTAN,Bampur,36,0,15,2,2,27,48.1,32.4,OIZI:27km,Hot desert valley endemic malaria
+STATE_KHORASAN,Mashhad,26,0,2,1,1,36,41.1,26.5,OIMM:4km,Semi-arid continental steppe cold winters
+STATE_KHUZESTAN,Shushtar,37,1,12,0,2,32,49.8,32.1,OIAI:42km,Extreme heat lowland on the Karun
+STATE_ISFAHAN,Isfahan,29,0,3,1,1,33,43.7,29,fit,Hot dry plateau oasis on the Zayandeh
+STATE_MAZANDARAN,Barfurush,26,3,7,0,2,37,38.4,30.6,WMO40737:11km,Humid subtropical Caspian lowland endemic malaria
+STATE_IRAKAJEMI,Tehran,30,0,4,1,1,36,41.5,26.1,OIII:8km,Hot dry summer semi-arid plateau
+STATE_SEMNAN,Semnan,31,0,4,2,0,36,39.6,27.2,WMO40739:60km,Hot dry desert edge plateau
+STATE_TABRIZ,Tabriz,26,0,-2,1,1,38,37.6,25.7,WMO40704:78km,Semi-arid continental upland cold winters
+STATE_URMIA,Urmia,24,1,-3,1,1,38,40,26.4,OITM:103km,Continental upland lake plain cold winters
+STATE_LURISTAN,Khorramabad,29,0,5,0,1,33,44,26.8,OICK:9km,Hot dry summer Zagros valleys
+STATE_PERSIAN_KURDISTAN,Kermanshah,27,0,2,0,1,34,42.6,25.7,OICC:10km,Hot dry summer Zagros upland cold winters
+STATE_HUDAVENDIGAR,Bursa,24,1,5,0,1,40,37.1,28.1,LTBE:0km,Mediterranean foothills with mild winters
+STATE_AYDIN,Izmir,28,1,9,0,1,38,38.8,28.3,WMO17220:2km,Hot dry-summer Aegean coast
+STATE_KONYA,Konya,24,0,0,1,1,38,36.7,24.8,LTAN:13km,Semi-arid continental plateau
+STATE_KASTAMONU,Kastamonu,20,1,-1,0,0,41,37,26.1,LTAL:1km,Cool upland with cold winters
+STATE_DIYARBAKIR,Diyarbakir,31,0,2,0,1,38,43.1,27.7,LTCC:4km,Hot dry-summer upper Tigris basin
+STATE_ADANA,Adana,29,3,10,0,2,37,40.6,30.9,LTAF:2km,Hot humid Cilician plain endemic malaria
+STATE_TRABZON,Trabzon,23,2,7,0,1,41,32.2,26.6,LTCG:6km,Mild humid Black Sea coast
+STATE_ERZURUM,Erzurum,19,0,-9,0,0,40,33.5,22.3,WMO17095:1km,Cold high plateau with harsh winters
+STATE_ANKARA,Kayseri,23,0,-2,1,1,39,38.1,25.7,LTAU:5km,Semi-arid continental plateau cold winters
+STATE_KARS,Kars,18,0,-11,0,0,41,33,23.2,LTCF:5km,Cold high plateau with harsh winters
+STATE_DAGESTAN,Temir-Khan-Shura,23,1,-2,0,1,43,37.6,29.5,WMO37472:36km,Continental foothills with lowland marsh fevers
+STATE_KUBAN,Yekaterinodar,24,1,-1,0,1,45,37.6,28.9,URKK:13km,Continental steppe with Kuban marsh fevers
+STATE_ARMENIA,Yerevan,26,0,-3,1,1,40,40.5,28.7,WMO37788:10km,Dry continental basin Ararat plain fevers
+STATE_AZERBAIJAN,Baku,27,2,4,1,1,40,39.7,30.3,UBBB:19km,Hot semi-arid Caspian coast
+STATE_GREATER_CAUCASUS,Tiflis,24,1,1,0,1,42,37.6,27.6,WMO37545:7km,Warm continental valley Transcaucasian fevers
+STATE_SAMARA,Samara,21,1,-10,0,1,53,36.4,26,UWWW:34km,Continental Volga steppe with cold winters
+STATE_TARTARIA,Saratov,22,1,-8,0,1,52,36.8,26.3,WMO34163:41km,Continental Volga steppe with cold winters
+STATE_ASTRAKHAN,Astrakhan,26,1,-4,0,1,46,40.2,28.9,URWA:8km,Desert steppe watered by the Volga delta
+STATE_UZBEKIA,Samarkand,26,0,1,1,1,40,40.4,27.2,UTSS:3km,Hot dry irrigated oasis valley
+STATE_TAJIKISTAN,Dushanbe,27,0,2,0,2,39,41.7,28.2,UTDD:5km,Hot dry-summer valley with malarious lowlands
+STATE_KIRGHIZIA,Pishpek,25,1,-3,0,1,43,39.5,26.1,UAFF:4km,Continental foothill valley with cold winters
+STATE_TURKMENIA,Askhabad,31,0,3,2,1,38,44.5,30,UTAA:3km,Hot desert foothill oasis strip
+STATE_PASHTUNISTAN,Peshawar,33,2,11,1,2,34,43.7,32.3,OPRN:12km,Hot semi-arid valley Peshawar fever
+STATE_CENTRAL_HIGHLANDS,Bamian,19,0,-6,1,0,35,34.4,23.8,fit,Cold dry high mountain valley
+STATE_NORTHERN_BALUCHISTAN,Chakhansur,34,0,8,1,1,31,48.4,30.5,OIZB:49km,Hot desert watered by the Helmand
+STATE_HERAT,Herat,29,0,3,1,1,34,43.2,27.6,OAHR:16km,Hot dry irrigated oasis valley
+STATE_BALKH,Mazar-i-Sharif,31,0,3,1,2,37,44.4,27.5,OAMS:10km,Hot dry oasis plain notorious marsh fevers
+STATE_QUETTA,Quetta,26,0,3,1,1,30,39.4,27.9,OPQT:9km,Dry highland basin with cold winters
+STATE_KANDAHAR,Kandahar,31,0,6,1,1,32,44.1,27.6,OAKN:19km,Hot dry irrigated desert-edge oasis
+STATE_KABUL,Kabul,25,0,-2,1,1,35,37.7,26.3,OAKB:6km,Semi-arid highland basin with cold winters
+STATE_BALUCHISTAN,Kalat,25,0,2,1,0,29,35.4,23.9,WMO41696:0km,Semi-arid highland with hot summers cold winters
+STATE_LHASA,Lhasa,16,0,-1,0,0,30,28.1,19.2,WMO55591:0km,Cold dry high plateau valley
+STATE_NGARI,Lhatse,14,0,-4,1,0,29,23.6,15.8,WMO55664:73km,Cold semi-arid high plateau valley
+STATE_HIMALAYAS,Kathmandu,24,3,10,0,1,28,33.5,26.7,VNKT:5km,Mild monsoon highland valley
+STATE_EASTERN_HIMALAYAS,Punakha,24,3,10,0,1,28,33.5,26.7,analog:STATE_HIMALAYAS,Mild monsoon Himalayan valley
+STATE_BIHAR,Patna,32,3,16,0,2,26,43.2,33.2,VEPT:5km,Hot humid Ganges plain endemic malaria
+STATE_WEST_BENGAL,Calcutta,31,3,20,0,2,23,40.4,33.2,VECC:12km,"Hot, oppressively humid delta; endemic malaria"
+STATE_EAST_BENGAL,Dacca,29,3,19,0,2,24,38,31.2,VGHS:9km,Hot oppressively humid delta endemic malaria
+STATE_ASSAM,Gauhati,29,3,17,0,2,26,38.3,32.5,VEGT:18km,Hot humid Brahmaputra valley endemic malaria
+STATE_DELHI,Delhi,33,2,14,0,2,29,45.5,33.9,VIDD:10km,Hot monsoon plain on the Jumna
+STATE_AWADH,Lucknow,33,2,15,0,2,27,45.5,34.1,VILK:10km,Hot monsoon Ganges plain endemic malaria
+STATE_AGRA,Agra,35,2,15,0,2,27,45.5,33.9,VIDD:175km,Hot semi-arid Doab on the Jumna
+STATE_GUJARAT,Ahmadabad,34,2,20,1,2,23,46.2,33.9,VAAH:8km,Hot semi-arid monsoon plain
+STATE_BUNDELKHAND,Rewa,34,1,16,0,2,25,45.7,32.4,VIST:46km,Hot dry pre-monsoon forest plateau
+STATE_MALWA,Gwalior,35,1,15,0,2,26,45.8,32.5,WMO42559:195km,Hot dry pre-monsoon upland plain
+STATE_KASHMIR,Srinagar,25,2,3,0,1,34,34.5,27.2,WMO42027:4km,Temperate highland vale with cold winters
+STATE_PUNJAB,Lahore,34,2,13,0,2,32,44.6,32.8,OPLH:2km,Hot semi-arid river plain endemic malaria
+STATE_HILL_PUNJAB,Ludhiana,33,2,12,0,2,31,45.3,33.9,WMO42101:85km,Hot plain below the Himalayan foothills
+STATE_CENTRAL_PROVINCES,Nagpur,35,1,21,0,2,21,47.1,33,VANP:8km,Very hot dry pre-monsoon plateau
+STATE_SINDH,Hyderabad,35,3,18,0,2,25,46.4,34.6,OPKD:7km,Hot desert watered by the Indus
+STATE_RAJPUTANA,Jaipur,33,2,15,1,1,27,46,33,VIJP:10km,Hot semi-arid upland on the desert edge
+STATE_CEYLON,Colombo,28,3,26,0,1,7,35.6,29.9,WMO43466:4km,Equatorial wet coast
+STATE_INDIAN_OCEAN_TERRITORY,Saint-Denis,27,3,22,0,0,-21,32.9,28.2,FMEE:6km,Tropical trade-wind islands malaria-free until 1867
+STATE_ORISSA,Cuttack,33,3,21,0,2,20,43.5,34.7,VEBS:26km,Hot humid Mahanadi delta endemic malaria
+STATE_CIRCARS,Vizagapatam,31,3,24,0,2,18,38.7,32.1,WMO43150:5km,Hot oppressively humid monsoon coast
+STATE_MYSORE,Bangalore,27,1,21,0,1,13,37.1,28.7,WMO43295:1km,Mild tropical upland plateau
+STATE_TRAVANCORE,Calicut,29,3,26,0,2,11,37.4,31.6,WMO43314:1km,Hot oppressively humid monsoon coast
+STATE_MADRAS,Madras,33,3,25,0,2,13,42.5,33.6,VOMM:14km,Hot oppressively humid Coromandel coast
+STATE_KURNOOL,Kurnool,34,2,24,1,2,16,43.9,32.5,WMO43213:5km,Hot semi-arid Deccan famine country
+STATE_HYDERABAD,Hyderabad,33,2,21,0,2,17,44.3,31.9,VOHY:10km,Hot tropical Deccan plateau
+STATE_BOMBAY,Bombay,30,3,24,0,2,19,39.9,31.1,VABB:3km,Hot oppressively humid monsoon coast
+STATE_TENASSERIM,Tavoy,28,3,25,0,2,14,38.1,31.5,VBTV:2km,Hot humid monsoon coast endemic malaria
+STATE_KACHIN,Sagaing,31,2,21,0,2,22,41,32.3,VYMD:18km,Hot dry-zone Irrawaddy plain
+STATE_SHAN_STATES,Lashio,25,2,16,0,2,23,36.9,29.4,VBLS:2km,Warm upland plateau endemic hill malaria
+STATE_MANDALAY,Mandalay,31,2,21,0,2,22,41.9,33.3,VBRM:1km,Hot dry-zone Irrawaddy plain
+STATE_PEGU,Rangoon,30,3,25,0,2,17,39.7,32.6,VBBS:148km,Hot humid monsoon delta endemic malaria
+STATE_ARAKAN,Akyab,28,3,22,0,2,20,37.4,31.8,VYSW:2km,Hot humid monsoon coast endemic malaria
+STATE_DZUNGARIA,Urumqi,24,0,-12,1,0,44,37.2,25,WMO51463:4km,Semi-arid continental steppe with bitter winters
+STATE_TIANSHAN,Kashgar,26,0,-5,1,1,39,37.7,24.7,ZWSH:8km,Hot dry continental oasis of the Kashgar river
+STATE_SICHUAN,Chengdu,26,3,6,0,1,31,36,29.6,WMO56187:21km,Humid subtropical basin with mild cloudy winters
+STATE_YUNNAN,Kunming,20,2,8,0,1,25,31.6,24.1,WMO56786:11km,Mild subtropical highland plateau
+STATE_GUIZHOU,Guiyang,24,2,5,0,1,27,32.9,27.3,WMO57922:129km,Humid subtropical cloudy plateau
+STATE_SHAOZHOU,Shaoguan,29,3,10,0,2,25,37.8,30.8,WMO59082:15km,Hot humid subtropical hills endemic malaria
+STATE_ALXA,Bayanhot,23,0,-9,2,0,39,39.9,27.5,WMO53502:106km,Cold desert herding country
+STATE_HINGGAN,Hohhot,23,1,-11,1,0,41,34.6,25.6,ZBHH:13km,Semi-arid steppe with severe winters
+STATE_GUANGXI,Nanning,28,3,13,0,2,23,36.9,31.3,WMO59632:101km,Hot humid subtropical hills endemic malaria
+STATE_BEIJING,Beijing,27,3,-3,0,1,40,37.6,30.9,fit,Hot humid summers and cold dry winters
+STATE_SHENGJING,Mukden,25,2,-11,0,0,42,34.9,28.7,ZYTX:4km,Humid continental monsoon with severe winters
+STATE_OUTER_MANCHURIA,Khabarovsk,21,2,-20,0,0,48,31.7,26.6,WMO31733:72km,Continental monsoon with bitter winters
+STATE_SOUTHERN_MANCHURIA,Jilin,23,2,-17,0,0,44,33.9,27.8,WMO54273:98km,Continental monsoon with bitter winters
+STATE_NORTHERN_MANCHURIA,Qiqihar,23,2,-18,0,0,47,35.4,27.5,ZYQQ:3km,Continental steppe with bitter winters
+STATE_SHANXI,Taiyuan,24,2,-5,1,0,38,36.8,27.9,ZBYN:16km,Semi-arid loess plateau with cold winters
+STATE_NINGXIA,Lanzhou,23,1,-5,0,0,36,32.4,24.4,WMO52983:47km,Semi-arid valley watered by the Yellow River
+STATE_GANSU,Jiuquan,22,0,-9,2,0,40,35.8,25.2,ZLJQ:3km,Cold desert oases of the Hexi corridor
+STATE_XIAN,Xi'an,27,2,0,0,0,34,39.3,30.8,WMO57131:19km,Hot summer continental Wei valley
+STATE_QINGHAI,Xining,18,1,-7,1,0,37,31.9,23.3,ZLXN:0km,Cool semi-arid highland valley
+STATE_CHONGQING,Chongqing,29,3,8,0,1,30,38.8,30.9,WMO57411:137km,Hot oppressively humid river gorge city
+STATE_GUANGDONG,Guangzhou,29,3,14,0,2,23,37.8,31.2,ZGGG:31km,Hot humid subtropical delta endemic malaria
+STATE_FUJIAN,Fuzhou,29,3,11,0,2,26,38.5,31.6,WMO58847:2km,Hot humid subtropical coast endemic malaria
+STATE_ZHEJIANG,Hangzhou,29,3,4,0,1,30,39,31.4,WMO58556:93km,Hot humid summers cool winters rice fevers
+STATE_JIANGSU,Huai'an,27,3,1,0,1,34,36.4,31.4,WMO58141:7km,Humid Huai plain with seasonal ague
+STATE_NANJING,Nanjing,28,3,3,0,1,32,38.6,31.7,ZSNJ:17km,Hot humid Yangtze valley with seasonal ague
+STATE_HENAN,Kaifeng,27,3,0,0,1,35,38.1,31,WMO54909:112km,Hot humid North China plain summers
+STATE_ZHILI,Baoding,27,3,-3,0,1,39,38.3,30.6,WMO54602:15km,Hot humid summers and cold dry winters
+STATE_JIANGXI,Nanchang,30,3,5,0,1,29,37.6,31.3,ZSCN:20km,Hot humid subtropical lake basin
+STATE_SOUTHERN_ANHUI,Hefei,28,3,3,0,1,32,38.6,32.3,ZSOF:8km,Hot humid summers cool winters
+STATE_NORTHERN_ANHUI,Zhoukou,27,3,1,0,1,34,38.5,31.6,WMO57193:20km,Humid Huai plain with seasonal ague
+STATE_WESTERN_HUBEI,Yichang,28,3,5,0,1,31,38.1,31.4,WMO57461:9km,Hot humid Yangtze valley
+STATE_EASTERN_HUBEI,Wuchang,30,3,4,0,1,31,38.6,31.7,WMO57399:86km,Hot oppressively humid Yangtze valley
+STATE_HUNAN,Changsha,30,3,5,0,1,28,38.2,31,WMO57687:20km,Hot oppressively humid subtropical valley
+STATE_FORMOSA,Tainan,29,3,18,0,2,23,34.5,29.6,WMO59358:3km,Hot humid subtropical plain endemic malaria
+STATE_SHANDONG,Jinan,28,3,0,0,1,37,37.9,30.6,ZSTN:9km,Hot humid summers and cold dry winters
+STATE_SUZHOU,Suzhou,29,3,4,0,1,31,37.9,31.2,WMO58362:83km,Hot humid Yangtze delta
+STATE_ULIASTAI,Uliastai,15,0,-23,1,0,48,31.5,21.4,WMO44272:1km,Cold semi-arid steppe with extreme winters
+STATE_URGA,Urga,17,0,-21,1,0,48,34.4,23.8,WMO44291:15km,Cold semi-arid steppe with extreme winters
+STATE_CAMBODIA,Phnom Penh,30,3,26,0,2,12,39.5,31.6,VDPP:9km,Hot humid tropical monsoon endemic malaria
+STATE_BANGKOK,Bangkok,30,3,27,0,2,14,39.7,32.4,WMO48455:8km,Hot humid tropical delta endemic malaria
+STATE_TONKIN,Hanoi,29,3,17,0,2,21,39.9,32.8,WMO48825:10km,Hot humid delta with cool winters
+STATE_ANNAM,Hue,29,3,20,0,2,16,39.6,31.8,VVDN:80km,Hot humid tropical coast endemic malaria
+STATE_MEKONG,Saigon,29,3,26,0,2,11,37.6,31,VVTS:6km,Hot humid tropical delta endemic malaria
+STATE_LAOS,Luang Prabang,28,3,21,0,2,20,39.8,31.5,VLLB:2km,Hot humid tropical river valley
+STATE_CHIANG_MAI,Chiang Mai,30,2,21,0,2,19,40.2,30.1,VTCC:3km,Tropical savanna valley with a hot dry spring
+STATE_NAKHON_RATCHASIMA,Korat,30,3,24,0,2,15,40.4,32.2,VTUN:4km,Hot tropical savanna plateau endemic malaria
+STATE_SAKHALIN,Korsakov,17,1,-10,0,0,47,31.5,24.3,fit,Cold foggy maritime monsoon
+STATE_HOKKAIDO,Hakodate,22,2,-3,0,0,42,31.8,27.1,WMO47430:2km,Cool humid summers and snowy winters
+STATE_TOHOKU,Sendai,24,2,2,0,0,38,35.3,29.2,WMO47590:1km,Warm humid summers and cool winters
+STATE_KANTO,Edo,27,3,5,0,0,36,37,30.4,RJTD:4km,Hot humid summers and mild winters
+STATE_TOKAI,Nagoya,28,3,5,0,0,35,37.7,30.3,WMO47636:6km,Hot humid summers and mild winters
+STATE_HOKUSHINETSU,Kanazawa,27,3,4,0,1,37,36.5,29.6,WMO47605:3km,Humid summers heavy snow and marsh ague
+STATE_KANSAI,Osaka,29,3,6,0,0,35,37.5,30.5,WMO47772:2km,Hot humid summers and mild winters
+STATE_KYOTO,Kyoto,28,3,5,0,1,35,38.2,30.5,WMO47759:3km,Hot humid basin with Lake Biwa ague
+STATE_KYUSHU,Fukuoka,28,3,7,0,0,34,37.2,30.6,WMO47807:3km,Hot humid summers and mild winters
+STATE_RYUKYU_ISLANDS,Shuri,29,3,17,0,1,26,33.8,29.6,WMO47936:1km,Hot humid subtropical islands
+STATE_CHUGOKU,Hiroshima,28,3,5,0,0,34,36.6,29.6,WMO47765:2km,Hot humid Inland Sea coast
+STATE_SHIKOKU,Takamatsu,29,3,6,0,0,34,36.9,30.3,WMO47891:3km,Hot humid Inland Sea coast
+STATE_SEOUL,Seoul,26,3,-2,0,1,38,35.7,29.1,RKSL:3km,Humid continental monsoon with cold winters
+STATE_BUSAN,Daegu,26,3,1,0,1,36,37,29.9,RKTT:2km,Hot humid summers and cold dry winters
+STATE_YANGHO,Jeonju,26,3,0,0,1,36,36,30,WMO47146:4km,Humid rice plain with cold winters
+STATE_SARIWON,Hamhung,23,2,-6,0,0,40,36,29.7,ZKHH:3km,Humid continental coast with cold winters
+STATE_PYONGYANG,Pyongyang,24,2,-6,0,1,39,34.2,29.6,WMO47060:46km,Humid continental monsoon with cold winters
+STATE_MALAYA,Singapore,28,3,27,0,2,1,35.5,30.3,WSAP:9km,Hot humid equatorial coast endemic malaria
+STATE_NORTH_BORNEO,Brunei,28,3,27,0,2,5,35.7,30.3,WBSB:6km,Hot humid equatorial rainforest coast
+STATE_WEST_BORNEO,Pontianak,28,3,27,0,2,0,36.2,30.4,WIOO:16km,Hot humid equatorial river delta
+STATE_EAST_BORNEO,Banjarmasin,28,3,27,0,2,-3,37,30.5,WAOO:23km,Hot humid equatorial river delta
+STATE_WEST_JAVA,Batavia,29,3,27,0,2,-6,36.7,30.4,WMO96745:2km,Hot humid tropical coast endemic malaria
+STATE_EAST_JAVA,Surabaya,29,3,27,0,2,-7,37.9,31.2,WMO96937:4km,Hot humid tropical coast endemic malaria
+STATE_CENTRAL_JAVA,Yogyakarta,27,3,25,0,2,-8,36.6,30,WMO96837:90km,Hot humid tropical volcanic plain
+STATE_NORTH_SUMATRA,Padang,27,3,26,0,2,-1,34.2,29.2,WMO96163:8km,Hot humid equatorial rainforest coast
+STATE_SOUTH_SUMATRA,Palembang,28,3,27,0,2,-3,35.7,30,WIPP:12km,Hot humid equatorial river lowland
+STATE_ACEH,Banda Aceh,28,3,26,0,2,6,36.9,30.1,WITT:11km,Hot humid tropical coast endemic malaria
+STATE_WESTERN_NEW_GUINEA,Fakfak,27,3,26,0,2,-3,34.6,29,WASF:8km,Hot humid equatorial rainforest coast
+STATE_MOLUCCAS,Ambon,28,3,25,0,2,-4,37.1,30.6,WAPP:8km,Hot humid tropical islands endemic malaria
+STATE_CELEBES,Macassar,28,3,26,0,2,-5,36.3,30.6,WMO97182:18km,Hot humid tropical coast endemic malaria
+STATE_EASTERN_NEW_GUINEA,Port Moresby,28,3,26,0,2,-9,35.7,29.8,AYPY:6km,Hot tropical savanna coast endemic malaria
+STATE_SUNDA_ISLANDS,Denpasar,28,3,26,0,2,-9,34.4,29.6,WADD:12km,Hot humid tropical volcanic islands
+STATE_MINDANAO,Zamboanga,28,3,27,0,2,7,36.7,30.8,RPMZ:2km,Hot humid tropical coast endemic malaria
+STATE_LUZON,Manila,30,3,26,0,2,15,37.2,30.7,WMO98425:2km,Hot humid tropical monsoon coast
+STATE_VISAYAS,Cebu,29,3,27,0,2,10,35.3,30.2,RPMT:10km,Hot humid tropical islands
+STATE_WEST_MICRONESIA,Weno,28,3,27,0,2,7,36.1,30.8,PTKK:3km,Hot humid tropical lagoon islands
+STATE_EAST_MICRONESIA,Palikir,27,3,27,0,2,7,35.5,30,PTTP:8km,Hot very wet tropical islands
+STATE_SOLOMON_ISLANDS,Honiara,27,3,26,0,2,-9,35.1,29.8,WMO91517:6km,Hot humid tropical islands endemic malaria
+STATE_NAURU,Nauru,28,3,27,0,2,-1,35,30,NGTA:700km,Hot humid equatorial coral island
+STATE_FIJI,Nadi,27,3,23,0,0,-18,35.4,29.7,NFFN:6km,Hot humid tropical islands; no malaria (no Anopheles east of Vanuatu)
+STATE_VANUATU,Port Vila,27,3,22,0,2,-18,35,29.9,NVVV:5km,Hot humid tropical islands endemic malaria
+STATE_KANAK,Noumea,26,3,21,0,2,-22,36.1,29.3,NWWW:37km,Warm humid tropical island with mild winters
+STATE_BOUGAINVILLE,Arawa,27,3,26,0,2,-6,34.5,29.9,WMO91502:105km,Hot humid tropical island endemic malaria
+STATE_TAHITI,Papeete,27,3,24,0,2,-18,33.6,28.5,NTAA:6km,Hot humid tropical volcanic islands
+STATE_TONGA,Nuku'alofa,26,3,21,0,0,-21,33,29.1,NFTF:12km,Warm humid tropical islands; no malaria (no Anopheles east of Vanuatu)
+STATE_NEW_SOUTH_WALES,Sydney,22,2,12,0,0,-34,39.8,29,WMO94768:1km,Humid subtropical coast
+STATE_VICTORIA,Melbourne,20,1,10,0,0,-38,41,29,WMO95936:2km,Mild temperate coast
+STATE_TASMANIA,Hobart,17,1,8,0,0,-43,36.7,26,WMO94970:5km,Cool maritime
+STATE_QUEENSLAND,Brisbane,25,2,15,0,0,-27,36.4,29.2,WMO94576:3km,Hot humid subtropical coast
+STATE_SOUTH_AUSTRALIA,Adelaide,23,0,11,1,0,-35,43.6,29.6,WMO94675:2km,Hot dry-summer Mediterranean semi-arid edge
+STATE_WESTERN_AUSTRALIA,Perth,24,1,13,0,0,-32,41.9,29.5,WMO94608:6km,Hot dry-summer Mediterranean coast of the south-west
+STATE_NORTHERN_TERRITORY,Darwin,29,3,25,0,1,-12,37,30.3,YPDN:5km,Hot tropical savanna of the Top End with a long dry season
+STATE_NORTH_ISLAND,Auckland,20,1,11,0,0,-37,28.3,23.9,WMO93110:18km,Mild oceanic
+STATE_SOUTH_ISLAND,Christchurch,17,1,6,0,0,-44,33.5,24.4,WMO93781:10km,Cool oceanic
+STATE_URAL,Yekaterinburg,19,1,-12,0,0,57,32.6,24.3,WMO28541:87km,Cold continental Ural foothills
+STATE_TOMSK,Tomsk,19,1,-17,0,0,56,32.1,24.9,WMO29430:3km,Cold continental taiga river town
+STATE_TUVA,Kyzyl,20,1,-31,1,0,52,36.4,25.5,WMO36096:8km,Dry steppe basin extreme winters
+STATE_TOBOLSK,Tyumen,19,1,-15,0,0,57,33.2,25.5,WMO28367:7km,Cold continental forest steppe
+STATE_UPPER_YENISEYSK,Yeniseysk,18,1,-21,0,0,58,32.4,25.5,UNII:1km,Cold continental Yenisei taiga
+STATE_OB,Salekhard,15,1,-23,0,0,67,29.4,22.9,USDD:7km,Subarctic forest tundra long winters
+STATE_CHUKOTKA,Markovo,14,0,-26,0,0,65,28.9,22,UHMO:2km,Subarctic tundra river valley
+STATE_KAMCHATKA,Petropavlovsk-Kamchatsky,14,1,-7,0,0,53,25.3,20.2,WMO32583:6km,Cool damp maritime volcanic coast
+STATE_OKHOTSK,Okhotsk,13,1,-21,0,0,59,25.7,19.6,WMO31088:4km,Cold subarctic sea coast
+STATE_YAKUTSK,Yakutsk,19,1,-38,0,0,62,34.3,25.4,WMO24856:68km,Extreme continental cold
+STATE_TRANS_BAIKAL,Chita,19,1,-24,0,0,52,34.5,25,WMO30846:104km,Extreme continental dry-winter steppe
+STATE_IRKUTSK,Irkutsk,19,1,-18,0,0,52,33.8,25.6,fit,Cold continental Angara valley
+STATE_TALINN,Tallinn,17,1,-4,0,0,59,30.5,24.4,EETN:6km,Cool Baltic coast cold winters
+STATE_TARTU,Tartu,17,1,-6,0,0,58,31.4,25.1,EETU:8km,Cool continental Baltic interior
+STATE_RIGA,Riga,18,1,-4,0,0,57,31.6,25,UMRR:2km,Cool Baltic coast cold winters
+STATE_COURLAND,Jelgava,18,1,-4,0,0,57,32.2,25.9,WMO26425:4km,Cool Baltic lowland cold winters
+STATE_KAUNAS,Kaunas,18,1,-4,0,0,55,32.8,25.6,WMO26629:3km,Cool humid continental Baltic interior
+STATE_VILNIUS,Vilnius,18,1,-5,0,0,55,32.8,25.6,EYVI:6km,Cool humid continental cold winters
+STATE_KUOPIO,Kuopio,17,1,-10,0,0,63,29.8,23.7,EFKU:14km,Subarctic lake country long cold winters
+STATE_UUSIMAA,Helsingfors,18,1,-5,0,0,60,28.4,23.1,WMO02978:1km,Cool Baltic coast cold winters
+STATE_WEST_KARELIA,Viipuri,18,1,-8,0,0,61,30.1,24.1,WMO22892:2km,Cool continental Karelian lake country
+STATE_ALAND,Mariehamn,16,1,-3,0,0,60,27.3,22.4,EFMA:3km,Cool maritime archipelago
+STATE_OSTROBOTHNIA,Vasa,16,1,-7,0,0,63,29.1,22.7,EFVA:9km,Cool Bothnian coast cold winters
+STATE_OULU,Oulu,16,1,-10,0,0,65,27.9,22.6,WMO02876:4km,Subarctic Bothnian coast long cold winters
+STATE_EAST_KARELIA,Petrozavodsk,17,1,-9,0,0,62,30,23.6,ULPB:12km,Subarctic lake country long cold winters
+STATE_KOLA,Kola,13,0,-11,0,0,69,28.3,21.4,WMO22113:5km,Arctic coast cool summers long winters
+STATE_INGRIA,St Petersburg,19,1,-6,0,0,60,30.8,24.6,WMO26072:38km,Cool humid continental Baltic coast
+STATE_MOSCOW,Moscow,19,1,-7,0,0,56,32.3,25.7,WMO27612:9km,"Humid continental, cold winters"
+STATE_BREST,Hrodna,18,1,-4,0,0,54,32.1,25.3,UMMG:17km,Humid continental cold winters
+STATE_VOLHYNIA,Lutsk,19,1,-4,0,0,51,34.1,26,UKLR:60km,Humid continental cold winters
+STATE_KIEV,Kyiv,20,1,-4,0,0,50,34.9,26.5,UKKK:8km,Humid continental forest-steppe cold winters
+STATE_ORYOL,Tula,19,1,-8,0,0,54,32.8,25.5,WMO27719:4km,Humid continental cold winters
+STATE_SMOLENSK,Smolensk,18,1,-7,0,0,55,31.3,24.6,WMO26781:4km,Humid continental cold winters
+STATE_MOGILEV,Magiliow,18,1,-6,0,0,54,32.5,25,UMOO:16km,Humid continental cold winters
+STATE_ARKHANGELSK,Arkhangelsk,16,1,-12,0,0,65,27.4,22,WMO22551:34km,Subarctic White Sea coast long winters
+STATE_NOVGOROD,Novgorod,18,1,-7,0,0,59,30,24.2,ULNN:1km,Humid continental cold winters
+STATE_CRIMEA,Simferopol,22,1,0,0,1,45,36.8,27.7,UKFF:13km,Mild steppe foothills with seasonal fevers
+STATE_KHARKOV,Kharkiv,21,1,-5,0,0,50,36.2,26.5,UKHH:8km,Humid continental forest-steppe cold winters
+STATE_KURSK,Kursk,20,1,-7,0,0,52,34.3,25.6,WMO34009:4km,Humid continental black-earth cold winters
+STATE_TVER,Tver,18,1,-8,0,0,57,32.2,25.1,UUEM:9km,Humid continental cold winters
+STATE_CHERSON,Odesa,23,1,-1,0,1,46,36,27.2,UKOO:6km,Warm Black Sea steppe coast liman fevers
+STATE_GALICH,Vologda,17,1,-11,0,0,59,31.2,24.6,ULWW:11km,Cold continental northern forest
+STATE_MINSK,Minsk,18,1,-5,0,0,54,33.2,25.6,UMMM:5km,Humid continental cold winters
+STATE_ROSTOV,Rostov-on-Don,23,1,-3,0,1,47,37.9,28.3,WMO34838:157km,Warm continental steppe Don delta ague
+STATE_PERM,Perm,19,1,-13,0,0,58,33.3,25.2,WMO28224:3km,Cold continental Ural foothills
+STATE_KAZAN,Kazan,20,1,-10,0,0,56,33.5,25.9,WMO27485:130km,Cold continental middle Volga
+STATE_URALSK,Uralsk,23,1,-12,1,0,51,40.4,27.9,WMO35302:90km,Semi-arid steppe hot summers cold winters
+STATE_KHIVA,Khiva,28,1,-3,0,1,41,42.7,30.1,WMO38396:30km,Hot desert oasis watered by the Amu Darya
+STATE_SEMIRECHE,Semipalatinsk,21,1,-15,1,0,50,35.3,25.5,WMO36034:143km,Semi-arid steppe severe winters
+STATE_JETISY,Verny,24,1,-5,0,0,43,40,26.5,WMO36864:137km,Continental foothills below the Tian Shan
+STATE_AKMOLINSK,Akmolinsk,20,1,-14,1,0,51,34.7,24.9,WMO35085:99km,Semi-arid steppe severe winters
+STATE_FERGANA,Tashkent,28,1,1,1,2,41,42,28.4,UTTT:6km,Hot dry-summer oasis on the Chirchiq; endemic malaria
+STATE_MERZ,Chardzhuy,30,0,0,0,2,39,43.3,29.3,UTAV:4km,Hot desert on the Amu Darya endemic malaria
+STATE_SYRDARYA,Shymkent,27,0,-1,1,1,42,39.2,26.2,WMO38334:61km,Hot dry-summer foothill oases
+STATE_AKTOBE,Aktobe,22,0,-13,1,0,50,41.3,27.4,WMO35426:126km,Semi-arid steppe severe winters
+STATE_KALMYKIA,Elista,25,1,-5,1,0,46,40.2,27.3,URWI:11km,Hot semi-arid steppe cold winters
+STATE_NORTH_CAUCASUS,Grozny,24,2,-3,0,1,43,38.9,29.4,WMO37085:139km,Warm humid foothills Terek valley fevers
+STATE_TAURIDA,Oleksandrivsk,23,1,-3,0,1,48,37.7,27.6,UKDE:11km,Warm continental steppe Dnieper valley ague
+STATE_TAMBOV,Tambov,20,1,-9,0,0,53,35.9,26.7,UUOT:9km,Humid continental black-earth cold winters
+STATE_RYAZAN,Ryazan,19,1,-9,0,0,55,33.6,25.6,WMO27730:3km,Humid continental cold winters
+STATE_VITEBSK,Vitsyebsk,18,1,-7,0,0,55,33.1,25.6,UMII:12km,Humid continental cold winters
+STATE_PSKOV,Pskov,18,1,-7,0,0,58,32.5,25.7,ULOO:6km,Humid continental cold winters
+STATE_YAROSLAVL,Yaroslavl,18,1,-9,0,0,58,32,25.3,WMO27329:54km,Cold continental upper Volga
+STATE_NIZHNY_NOVGOROD,Nizhny Novgorod,19,1,-9,0,0,56,34,26.1,UWGG:18km,Cold continental Volga confluence
+STATE_VYATKA,Vyatka,18,1,-13,0,0,59,32.6,25.4,WMO27199:2km,Cold continental northern forest
+STATE_UFA,Ufa,20,1,-13,0,0,55,35.1,26.4,WMO28722:15km,Cold continental Ural foothills
+STATE_SURGUT,Surgut,17,1,-20,0,0,61,31.8,24.6,USRR:10km,Subarctic taiga long severe winters
+STATE_KRASNOYARSK,Krasnoyarsk,19,1,-16,0,0,56,32.5,24.7,UNKL:39km,Severe continental Siberian winters
+STATE_ALTAI,Ulala,18,1,-14,0,0,52,36,26.3,WMO36058:59km,Mountain valleys severe winters
+STATE_BURYATIA,Verkhneudinsk,20,1,-23,0,0,52,34.3,24.8,WMO30838:104km,Dry severe continental Siberian winters
+STATE_KOLYMA,Srednekolymsk,13,0,-37,0,0,67,30.6,23.2,UESK:2km,Extreme continental subarctic cold
+STATE_AMUR,Aigun,21,2,-22,0,0,50,34.5,27.1,WMO50468:3km,Monsoonal humid summers severe winters
+STATE_CHELYABINSK,Chelyabinsk,19,1,-14,0,0,55,34.1,25.8,WMO28645:8km,Cold continental Ural steppe edge
+STATE_ELIZAVETPOL,Elizavetpol,26,1,1,1,2,41,38.9,29.2,WMO37735:6km,Hot semi-arid Kura foothills endemic malaria
+STATE_STAVROPOL,Stavropol,22,1,-3,0,1,45,36.4,26.5,URMT:13km,Warm continental steppe upland
+STATE_CHUVASHIA,Cheboksary,19,1,-11,0,0,56,32.7,25.5,WMO27479:47km,Cold continental middle Volga
+STATE_CHERNIHIV,Chernihiv,20,1,-5,0,0,51,34.7,26.6,UKRR:5km,Humid continental cold winters
+STATE_NENETSIA,Mezen,15,1,-14,0,0,66,30,23.4,ULAE:3km,Subarctic White Sea coast long winters

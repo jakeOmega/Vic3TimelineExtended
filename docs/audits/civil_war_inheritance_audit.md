@@ -416,6 +416,13 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   exception is F1 (agdiff).
 - **One-time event flags**: event-id flags (`lobby_events.11`, `exiles_events.3`, ...) are variables and
   inherited, so events don't re-fire.
+- **First Past the Post** (`te_fptp_effects.txt`, added 2026-10-25, after this report): the amendment sits on
+  the voting law, so the winner keeps it only if its own law carries it. The once-per-country seed skips
+  revolutionaries, so a winning revolution inherits the nation's `te_fptp_seed_checked` rather than being
+  seeded with an amendment the nation had repealed. `te_fptp_repair_after_civil_war` (in `te_civil_war_on_won`)
+  asks whether to keep it (`te_fptp_events.1`) when the winner inherits `te_fptp_var` on an allowed voting law
+  without it. The party marks are recomputed on the next monthly pulse. Not yet read in game: play-test row 9 in
+  `docs/testing/first-past-the-post-playtest.md`.
 
 ## Doc corrections (done in the PR that added this report)
 The "the JE and its modifiers move, variables don't" claim is corrected at:

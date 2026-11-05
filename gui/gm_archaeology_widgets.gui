@@ -17,6 +17,8 @@
 ###   GUI's is_shown (gm_archaeology_sguis.txt).
 ### * The collapse flag says its default: *_closed sections are open until
 ###   closed.
+### * Type sizes are the panel's templates (gm_fontsize_*,
+###   grand_monuments_widget.gui).
 
 types gm_archaeology_widget_types
 {
@@ -27,14 +29,14 @@ types gm_archaeology_widget_types
 		minimumsize = { 480 -1 }
 		maximumsize = { 480 -1 }
 		align = left|nobaseline
-		using = fontsize_medium
+		using = gm_fontsize_row
 	}
 
 	### A row's button: its scripted GUI, tooltip and label from the instance,
 	### its site as gm_arch. Three of these fit a row (3 x 150 + 2 x 8 = 466).
 	type gm_arch_button = button {
 		using = default_button_action
-		size = { 150 26 }
+		size = { 150 28 }
 		margin_top = 2
 
 		block "arch_button" {}
@@ -45,7 +47,7 @@ types gm_archaeology_widget_types
 			autoresize = yes
 			max_width = 140
 			elide = right
-			using = fontsize_small
+			using = gm_fontsize_row
 			block "arch_button_text" {}
 		}
 	}
@@ -59,7 +61,7 @@ types gm_archaeology_widget_types
 		spacing = 2
 
 		gm_arch_line = {
-			using = fontsize_large
+			using = gm_fontsize_heading
 			text = "gm_arch_row_title"
 		}
 		gm_arch_line = {
@@ -68,24 +70,28 @@ types gm_archaeology_widget_types
 		### Abroad: decided for the viewer (gm_arch_abroad_*_sgui), the row
 		### being shared by every country that may dig the site.
 		gm_arch_line = {
-			visible = "[GetScriptedGui('gm_arch_abroad_concession_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+			visible = "[GetScriptedGui('gm_arch_abroad_concession_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_concession"
+			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
-			visible = "[GetScriptedGui('gm_arch_abroad_permit_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+			visible = "[GetScriptedGui('gm_arch_abroad_permit_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 			text = "gm_arch_row_abroad_permit"
+			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
 			visible = "[GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_progress'), '(CFixedPoint)0' )]"
 			text = "gm_arch_row_resume"
 		}
 		gm_arch_line = {
-			default_format = "#tooltippable"
 			tooltip = "gm_tr_row_landmark_tt"
 			text = "gm_row_landmark"
 		}
 
+		# The launch buttons: the player's own (te_own_country_only), so
+		# another country's National Info lists the site without them.
 		flowcontainer = {
+			using = te_own_country_only
 			direction = horizontal
 			ignoreinvisible = yes
 			spacing = 8
@@ -94,9 +100,9 @@ types gm_archaeology_widget_types
 			gm_arch_button = {
 				blockoverride "arch_button" {
 					datacontext = "[GetScriptedGui('gm_arch_launch_antiquarian_sgui')]"
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 					tooltip = "gm_arch_launch_antiquarian_tooltip"
 				}
 				blockoverride "arch_button_text" {
@@ -106,9 +112,9 @@ types gm_archaeology_widget_types
 			gm_arch_button = {
 				blockoverride "arch_button" {
 					datacontext = "[GetScriptedGui('gm_arch_launch_systematic_sgui')]"
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 					tooltip = "gm_arch_launch_systematic_tooltip"
 				}
 				blockoverride "arch_button_text" {
@@ -118,9 +124,9 @@ types gm_archaeology_widget_types
 			gm_arch_button = {
 				blockoverride "arch_button" {
 					datacontext = "[GetScriptedGui('gm_arch_launch_forensic_sgui')]"
-					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
 					tooltip = "gm_arch_launch_forensic_tooltip"
 				}
 				blockoverride "arch_button_text" {
@@ -138,7 +144,7 @@ types gm_archaeology_widget_types
 		spacing = 2
 
 		gm_arch_line = {
-			using = fontsize_large
+			using = gm_fontsize_heading
 			text = "gm_arch_row_title"
 		}
 		gm_arch_line = {
@@ -150,39 +156,49 @@ types gm_archaeology_widget_types
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)1' )]"
 			text = "gm_arch_row_dig_concession"
+			tooltip = "gm_arch_row_abroad_concession_tt"
 		}
 		gm_arch_line = {
 			visible = "[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('gm_arch_disp_terms'), '(CFixedPoint)2' )]"
 			text = "gm_arch_row_dig_permit"
+			tooltip = "gm_arch_row_abroad_permit_tt"
 		}
 		gm_arch_line = {
-			default_format = "#tooltippable"
 			tooltip = "gm_tr_row_landmark_tt"
 			text = "gm_row_landmark"
 		}
 
-		gm_arch_button = {
-			blockoverride "arch_button" {
-				datacontext = "[GetScriptedGui('gm_arch_suspend_sgui')]"
-				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
-				tooltip = "gm_arch_suspend_tooltip"
-			}
-			blockoverride "arch_button_text" {
-				text = "gm_arch_suspend"
+		# Suspend: the player's own (te_own_country_only).
+		flowcontainer = {
+			using = te_own_country_only
+			direction = vertical
+			ignoreinvisible = yes
+
+			gm_arch_button = {
+				blockoverride "arch_button" {
+					datacontext = "[GetScriptedGui('gm_arch_suspend_sgui')]"
+					visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'gm_arch', ScriptContainer.MakeScope ).End )]"
+					tooltip = "gm_arch_suspend_tooltip"
+				}
+				blockoverride "arch_button_text" {
+					text = "gm_arch_suspend"
+				}
 			}
 		}
 	}
 
 	### Archaeological Expeditions (open): shown while a dig runs or a site
-	### waits for us. Digs first, then the sites open to us.
+	### waits for us. Digs first, then the sites open to us, each list under a
+	### heading shown while it has a row (GM-14); how digs work is How Grand
+	### Monuments Work's Archaeology.
 	type te_gm_sec_archaeology = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_shown'), '(CFixedPoint)1' )]"
+		visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('gm_arch_disp_shown'), '(CFixedPoint)1' )]"
 
 		gm_section_header = {
 			blockoverride "left_text" {
@@ -204,35 +220,45 @@ types gm_archaeology_widget_types
 			spacing = 2
 
 			gm_text = {
-				default_format = "#tooltippable"
 				tooltip = "gm_je_arch_summary_tt"
 				text = "gm_je_arch_summary"
 			}
 			gm_text = {
-				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
-				default_format = "#tooltippable"
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
 				tooltip = "gm_je_arch_costs_tt"
 				text = "gm_je_arch_costs"
 			}
 
+			gm_subheader = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_arch_disp_dig_count'), '(CFixedPoint)0' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_arch_sub_digs"
+				}
+			}
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 10
 				margin_top = 4
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_arch_digging')]"
+				datamodel = "[Country.MakeScope.GetList('gm_arch_digging')]"
 
 				item = {
 					gm_arch_row_digging = { datacontext = "[Scope.GetScriptContainer]" }
 				}
 			}
 
+			gm_subheader = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_arch_disp_open_count'), '(CFixedPoint)0' )]"
+				blockoverride "subheader_text" {
+					text = "gm_je_arch_sub_open"
+				}
+			}
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
 				spacing = 10
 				margin_top = 4
-				datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('gm_arch_available')]"
+				datamodel = "[Country.MakeScope.GetList('gm_arch_available')]"
 
 				item = {
 					gm_arch_row_open = { datacontext = "[Scope.GetScriptContainer]" }

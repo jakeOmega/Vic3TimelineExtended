@@ -178,6 +178,14 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_member_gdp_share value = un_member_gdp_share_value }
 	set_global_variable = { name = un_member_pop_share value = un_member_pop_share_value }
 	set_global_variable = { name = un_vote_eligible_count value = un_vote_eligible_member_count }
+	# The overview's membership line under the pies (the 2026-10-27 audit,
+	# UN-20; the entry's status text until then, which swept every country
+	# each frame it was drawn).
+	set_global_variable = { name = un_stat_members value = un_member_count }
+	set_global_variable = { name = un_stat_eligible value = un_eligible_country_count }
+	set_global_variable = { name = un_stat_suspended value = un_suspended_member_count }
+	set_global_variable = { name = un_stat_gp_members value = un_gp_member_count }
+	set_global_variable = { name = un_stat_gps value = un_total_gp_count }
 
 	# 4. Saves from the drift model. Their authority is kept, NOT reseeded at the
 	#    target: the credibility and delivery ledgers start empty in such a save,

@@ -31,5 +31,6 @@ pmg_monument_dedication = {
 		pm_monument_scientific
 		pm_monument_industrial
 		pm_monument_athletic
+		pm_monument_historic
 	}
 }

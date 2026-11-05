@@ -9,13 +9,14 @@
 # from a proposer event (un_events) or a JE button, and every event here gets
 # it as scope:un_resolution.
 #
-# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later (and
-#          again at months 9 and 11 to a member that chose to decide later);
-#          the AI votes in script by the itemised lean, late and staggered: the
-#          hidden un_vote.4 reaches every member from the day the resolution
-#          opens and every month after, and an AI member casts in its own at
-#          month 9, 10 or 11, or at the last call (un_vote.6) five days before
-#          the results (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md).
+# Phase 1: un_vote.1 fires to every other HUMAN member in the ninth month
+#          (un_resolutions_monthly_update), once per resolution; its default,
+#          and its timeout, is to decide later (the member votes in the
+#          chamber, or abstains). The AI votes in script by the itemised lean,
+#          late and staggered: the hidden un_vote.4 reaches every member from
+#          the day the resolution opens and every month after, and an AI
+#          member casts in its own at month 9, 10 or 11, or at the last call
+#          (un_vote.6) five days before the results (docs/superpowers/archive/specs/2026-09-27-un-vote-lobbying-design.md).
 #          Votes go into the resolution's un_res_yes / un_res_no lists.
 # Phase 2: un_vote.2 fires to the proposer 365 days after opening. Its
 #          immediate closes the vote; its option applies the outcome.
@@ -60,6 +61,7 @@
 # ---- Phase 1: All UN members vote on the proposed resolution ----
 un_vote.1 = {
 	# REVIEWED 2026-09-25 (system_ungated): the generic vote event names every resolution topic; each topic is raised by its own gated docket item
+	# REVIEWED 2026-10-25 (unchosen_self_action): "our veto record" shows only to an expulsion motion's target, which must carry un_veto_isolation_modifier (un_expulsion_candidate), added only in its own veto option (un_vote_cast_effects)
 	type = country_event
 	placement = ROOT
 
@@ -142,6 +144,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.t_asat
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_colony_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_icc
@@ -305,6 +311,10 @@ un_vote.1 = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 			}
 			triggered_desc = {
+				desc = un_vote.1.d_colony_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+			}
+			triggered_desc = {
 				desc = un_vote.1.d_icc
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 			}
@@ -465,7 +475,6 @@ un_vote.1 = {
 			trigger = { always = yes }
 			text = un_vote.1.a
 		}
-		default_option = yes
 
 		# Everything this option does — the treaty-topic show_as_tooltip preview,
 		# the lobbying keep line, the recorded ballot, the target-acceptance branch
@@ -550,43 +559,21 @@ un_vote.1 = {
 		ai_chance = { base = 0 }
 	}
 
-	# Option D: Decide later (spec §2). Casts nothing: the member goes on the
-	# resolution's un_res_deferred list, and un_resolutions_monthly_update
-	# sends this event again at month 9 and at month 11 — unless the member has
-	# voted by then, which this event's own trigger checks when it fires. The
-	# chamber's vote buttons stay open throughout. The second line says which
-	# reminders are still to come.
+	# Option D: Decide later (spec §2), the default (owner, 2026-11-03), so an
+	# event left to time out casts nothing. Casts nothing and is not sent
+	# again: this event fires once per resolution, in the ninth month (owner,
+	# 2026-11-03; it fired 30 days in and came back at months 9 and 11 until
+	# then). The chamber's vote buttons stay open
+	# until the results; a member that never uses them abstains.
+	# Vanilla gives default_option to a triggered option too
+	# (italian_unification.4.c, bulgaria_events.2.b).
 	option = {
 		name = un_vote.1.later
 		trigger = { is_ai = no }
+		default_option = yes
 
-		custom_tooltip = {
-			text = un_vote_decide_later_tt
-			scope:un_resolution ?= {
-				if = {
-					limit = {
-						NOT = {
-							AND = {
-								has_variable_list = un_res_deferred
-								is_target_in_variable_list = { name = un_res_deferred target = ROOT }
-							}
-						}
-					}
-					add_to_variable_list = { name = un_res_deferred target = ROOT }
-				}
-			}
-		}
-		if = {
-			limit = { scope:un_resolution ?= { var:un_res_months < 9 } }
-			custom_tooltip = un_vote_decide_later_both_tt
-		}
-		else_if = {
-			limit = { scope:un_resolution ?= { var:un_res_months < 11 } }
-			custom_tooltip = un_vote_decide_later_eleven_tt
-		}
-		else = {
-			custom_tooltip = un_vote_decide_later_none_tt
-		}
+		# REVIEWED 2026-11-03 (no_effect_option): deferring is the point; the vote is cast later in the chamber
+		custom_tooltip = un_vote_decide_later_tt
 
 		ai_chance = { base = 0 }
 	}
@@ -838,6 +825,14 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_asat } }
 				desc = un_vote.2.d_asat_failed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection has_tag = un_res_passed } }
+				desc = un_vote.2.d_colony_protection_passed
+			}
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				desc = un_vote.2.d_colony_protection_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
@@ -1791,6 +1786,17 @@ un_vote.2 = {
 				set_global_variable = un_agency_unoda
 			}
 
+			# ---- The Convention on the Settlement of Outer Space (solar
+			#      colonization fleets design § 13): a party's destruction of a
+			#      colony, or assault on a free one, costs twice the infamy and
+			#      the case; parties gain prestige ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_colony_protection } }
+				custom_tooltip = un_vote_colony_protection_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_copuos
+			}
+
 			# ---- Convention on Cultural Diversity (redesign phase 7, §0.12
 			#      item 5): parties' minorities assimilate and lose their
 			#      homelands more slowly, trailing parties feel the hegemon's
@@ -2408,6 +2414,15 @@ un_vote.3 = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_asat }
 					has_variable = un_dkt_asat_struck
+				}
+				add = 50
+			}
+			# The outer-space convention: a power whose fleets have just seized
+			# or destroyed a colony keeps its hands free
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_colony_protection }
+					has_variable = un_dkt_colony_actor
 				}
 				add = 50
 			}

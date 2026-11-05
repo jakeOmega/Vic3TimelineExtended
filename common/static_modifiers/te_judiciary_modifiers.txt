@@ -1,6 +1,6 @@
 ﻿# ======================================================================
 #  JUDICIARY — static modifiers
-#  Spec: docs/superpowers/specs/2026-10-17-judiciary-design.md
+#  Spec: docs/superpowers/archive/specs/2026-10-17-judiciary-design.md
 # ======================================================================
 
 # Judicial Independence at 100 (spec § 3.2). te_jud_refresh, its only
@@ -50,4 +50,134 @@ te_jud_constitutional_challenge = {
 te_jud_supremacy_challenge = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_law_enactment_success_add = -0.15
+}
+
+# ----------------------------------------------------------------------
+#  Phase 2: defying the court (spec § 14.1), events/te_judiciary_events.txt
+# ----------------------------------------------------------------------
+
+# The court struck the act down and the government obeyed (.3a), five
+# years, decaying.
+te_jud_ruling_obeyed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+# Obeyed, but the law it replaced could not be restored (.3a's fallback,
+# when no replaced law was recorded): the forced law stands with the court
+# against it.
+te_jud_ruling_unreversed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -10
+}
+
+# The ruling defied (.3b): the overhaul shock's credit term at a gap of 50,
+# five years, decaying.
+te_jud_ruling_defied = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_risk_premium_add = 0.01
+	country_legitimacy_base_add = -5
+}
+
+# The court packed (te_jud_pack_court): ten years of a bench that
+# challenges nothing and is trusted less. The packing's authority cost
+# fades over five.
+te_jud_court_packed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_court_challenges_ignored_bool = yes
+	country_judicial_independence_ceiling_mult = -0.3
+	country_legitimacy_base_add = -5
+}
+
+te_jud_packing_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_authority_cost_add = 150
+}
+
+# The old bench restored (.5c), five years, decaying.
+te_jud_bench_restored = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+# The court found the forced act lawful (.4), two years, decaying.
+te_jud_act_upheld = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 3
+}
+
+# Lawyers in the Streets (.6): clearing the streets takes authority, and a
+# promise of tenure costs the governing groups' patience, two years each.
+te_jud_protests_dispersed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	country_authority_cost_add = 100
+}
+
+te_jud_tenure_promised = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	interest_group_in_government_approval_add = -1
+}
+
+# ----------------------------------------------------------------------
+#  Phase 4: landmark cases (spec § 14.3), events/te_judiciary_events.txt
+# ----------------------------------------------------------------------
+
+# The Free Soil Case. Upholding slavery as property hardened the
+# abolitionists (Dred Scott, 1857); a free-soil ruling makes abolition easier
+# to pass. Ten years each.
+te_jud_case_dred_scott = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	state_pop_support_movement_anti_slavery_mult = 0.25
+	state_radicals_from_political_movements_mult = 0.1
+}
+
+te_jud_case_free_soil = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_enactment_success_chance_law_slavery_banned_add = 0.15
+	state_pop_support_movement_anti_slavery_mult = 0.1
+}
+
+# The Otsu Case, five years, decaying.
+te_jud_case_otsu_upheld = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+te_jud_case_otsu_overruled = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -5
+}
+
+# Freedom of Contract accepted: ten years in which the unions lose ground
+# and the labour movement gains it.
+te_jud_case_freedom_of_contract = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	interest_group_ig_trade_unions_pol_str_mult = -0.1
+	interest_group_ig_industrialists_pol_str_mult = 0.1
+	state_pop_support_movement_labor_mult = 0.25
+}
+
+# The Voided Election. Respected, five years, decaying; the Emergency,
+# three years: the courts are set aside and dissent is cheap to crush.
+te_jud_case_election_respected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 10
+}
+
+te_jud_case_emergency = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_court_challenges_ignored_bool = yes
+	country_suppression_cost_mult = -0.25
+	country_legitimacy_base_add = -15
+}
+
+# The Doctrine of Necessity, five years, decaying.
+te_jud_case_necessity = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_legitimacy_base_add = 10
+}
+
+te_jud_case_judges_resign = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -10
 }

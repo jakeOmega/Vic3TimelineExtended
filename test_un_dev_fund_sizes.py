@@ -232,7 +232,10 @@ class FourSizeSaveTest(unittest.TestCase):
             for line in _read(path).splitlines():
                 if re.search(r"set_variable\s*=\s*\{\s*name\s*=\s*un_dev_fund_size\b", line):
                     writes += 1
-        self.assertEqual(writes, 3)  # the button, the resize, the monthly pulse
+        # The button, the resize, the monthly pulse, and the panel's control,
+        # which mirrors the button word for word (un_action_sguis.txt,
+        # test_un_actions.py).
+        self.assertEqual(writes, 4)
         button = _flat(_block(_read(BUTTONS), "un_fund_development_button"))
         self.assertIn("set_variable = { name = un_dev_fund_size value = 1 } set_variable = un_dev_fund_five_sizes", button)
         effects = _read(ECONOMY_EFFECTS)

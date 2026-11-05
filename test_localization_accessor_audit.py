@@ -22,6 +22,7 @@ from localization_accessor_audit import (
     extract_chains,
     parse_reviewed_comment,
     render_report,
+    resolve_first_step,
     validate_chain,
 )
 
@@ -174,6 +175,26 @@ class ContextClassificationTests(unittest.TestCase):
 
     def test_unclassified_falls_back_to_permissive(self):
         self.assertEqual(classify_context("some_random_key"), "permissive")
+
+
+class FirstStepTests(unittest.TestCase):
+    """`resolve_first_step`, shared with loc_accessor_usage (#1246)."""
+
+    def test_context_magic_scope_wins(self):
+        self.assertEqual(resolve_first_step("ROOT", "events"), "country")
+        self.assertEqual(resolve_first_step("SCOPE", "events"), "scope_object")
+
+    def test_global_constructor(self):
+        self.assertEqual(resolve_first_step("PoliticalLobby", "events"), "political_lobby")
+        self.assertEqual(resolve_first_step("GetPlayer", "permissive"), "country")
+
+    def test_magic_scope_of_another_context_is_accepted_outside_permissive(self):
+        # `FIRST_COUNTRY` is a treaty-article scope; an event may still name it.
+        self.assertEqual(resolve_first_step("FIRST_COUNTRY", "events"), "country")
+
+    def test_unrecognized_first_step_is_unknown(self):
+        self.assertEqual(resolve_first_step("PopsOverviewPanelX", "events"), "unknown")
+        self.assertEqual(resolve_first_step("", "permissive"), "unknown")
 
 
 class ValidationTests(unittest.TestCase):

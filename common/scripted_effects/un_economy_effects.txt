@@ -725,11 +725,13 @@ un_food_reserve_withdraw_pledge = {
 
 # ---- The chamber ----------------------------------------------------------------------
 
-# Our part in the two institutions, under Our Obligations' dues (called at the
-# end of un_chamber_dues_lines, un_chamber_display_effects.txt): the Fund's
-# grant to us, or why there is none; what our Development Programs
-# contribution does for it; our grain pledge. Root-level lines only.
-# Scope: country (a member)
+# Our part in the World Development Fund, the first row of its own section
+# (te_un_sec_dev_fund; un_chamber_dev_fund_position_sgui), with the four
+# Development Programs controls under it: the Fund's grant to us, or why there
+# is none; what our Development Programs contribution does for it. It sat under
+# Our Obligations' dues until the 2026-10-27 audit (UN-13), two sections from
+# the Fund it describes. Root-level lines only.
+# Scope: country
 un_economy_obligation_lines = {
 	if = {
 		limit = { has_global_variable = un_inst_development_fund }
@@ -824,6 +826,13 @@ un_economy_obligation_lines = {
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_patron
 		}
 	}
+}
+
+# Our grain pledge to the World Food Reserve, under Our Obligations' dues
+# (un_chamber_food_reserve_sgui), with Pledge Grain or Withdraw Our Pledge
+# under it. Root-level lines only.
+# Scope: country (a member)
+un_food_reserve_obligation_lines = {
 	if = {
 		limit = { has_global_variable = un_inst_food_reserve }
 		if = {
@@ -837,47 +846,6 @@ un_economy_obligation_lines = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_food_reserve_cannot_pledge
 		}
-	}
-}
-
-# What the institutions take of the budget, and what is left to lend, after
-# the line with all members' dues (un_chamber_budget_sgui, un_chamber_sguis.txt).
-# Shown to everyone while the Standing UN Force or the Fund stands.
-# Scope: country
-un_economy_budget_lines = {
-	if = {
-		limit = {
-			OR = {
-				has_global_variable = un_inst_standing_force
-				has_global_variable = un_inst_development_fund
-			}
-		}
-		if = {
-			limit = { has_global_variable = un_inst_standing_force }
-			custom_tooltip_no_bullet = je_un_chamber_budget_force
-		}
-		if = {
-			limit = { has_global_variable = un_inst_development_fund }
-			if = {
-				limit = {
-					un_charter_has_reform = { LEVEL = 1 }
-					un_dev_fund_line_floored = yes
-				}
-				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_floored
-			}
-			else_if = {
-				limit = { un_charter_has_reform = { LEVEL = 1 } }
-				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund
-			}
-			else_if = {
-				limit = { un_dev_fund_line_floored = yes }
-				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary_floored
-			}
-			else = {
-				custom_tooltip_no_bullet = je_un_chamber_budget_dev_fund_voluntary
-			}
-		}
-		custom_tooltip_no_bullet = je_un_chamber_budget_free
 	}
 }
 

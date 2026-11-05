@@ -1,19 +1,31 @@
 ﻿### Global Commons: the Seabed tab of the Timeline Extended window
-### (gui/te_systems_window.gui instances the four panels). Layout A of the
+### (te_seabed_tab_body, at the foot of this file, composes the three panels;
+### the window mounts it from gui/te_systems_window_generated.gui). Layout A of the
 ### seabed claims spec (docs/superpowers/archive/specs/2026-10-17-seabed-claims-and-
 ### panel-design.md § 3): an overview of six boxes, two to a row; the three
 ### policy buttons; the Ocean Basins table, each basin opening onto its
-### claimants; How Seabed Licences Work, collapsed. House style:
-### docs/guides/gui_style_guide.md.
+### claimants. The explanations are on the Help page (gui/te_popups.gui), which
+### the "?" in the tab's header opens. House style: docs/guides/gui_style_guide.md.
 ###
-### DATA. No journal entry, so every read goes through GetPlayer.MakeScope:
-### the guarded *_disp_* script values (te_global_commons_seabed_values.txt),
-### which read 0 where a variable is missing, under the tab's gate
-### (te_window_seabed_tab_sgui) on a parent in the window. The rivals are the
-### Cultural Hegemony leaderboard's shape (gotcha #15): te_seabed_rival_row_sgui
-### prints each ranked country from its global, and each flag reads the
-### ranked country's capital stored on the player (te_seabed_rkcap_<b>_<n>),
-### shown only while te_seabed_rkcap_count_<b> says that seat is filled.
+### DATA. No journal entry: every read is the shown country's, Country, which
+### the mount supplies (the window's, the player; National Info's, any
+### country; spec docs/superpowers/specs/2026-11-02-charts-help-national-info-
+### design.md § 6.3), through Country.MakeScope: the guarded *_disp_* script
+### values (te_global_commons_seabed_values.txt), which read 0 where a
+### variable is missing, under the tab's gate (te_window_seabed_tab_sgui) on a
+### parent in the window. A basin's rivals are a datamodel of the player's
+### list te_seabed_rk_list_<b>, the other claimants' capitals, largest share
+### first (te_seabed_rank_list; audit SEA-3): each item reaches its country
+### through State.GetCountry (gotcha #15).
+###
+### ANOTHER COUNTRY (National Info). The player's own parts sit under
+### te_own_country_only (gui/te_system_tab_widgets.gui): the policy buttons,
+### each basin's claimants with Relinquish and Claim Again, and the chevron
+### that opens them. The claimant list leaves out its viewer, whose own row is
+### drawn apart, so read for another country it would show that country twice
+### and leave the player out (spec § 6.7: a list relative to the viewer is
+### hidden). The basin row already gives that country's Free, Pool and
+### Weight, and the pool's hover its mines.
 ###
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_seabed_fontsize_*, below; rule 3); test_seabed_layout.py
@@ -70,7 +82,7 @@ types te_seabed_widget_types
 		}
 	}
 
-	### Explanatory text in How Seabed Licences Work.
+	### Explanatory text on the Help page.
 	type te_seabed_note = textbox {
 		autoresize = yes
 		multiline = yes
@@ -117,7 +129,6 @@ types te_seabed_widget_types
 			elide = right
 			align = left|nobaseline
 			using = te_seabed_fontsize_overview
-			default_format = "#tooltippable"
 			block "caption" {}
 		}
 		block "word" {}
@@ -149,9 +160,9 @@ types te_seabed_widget_types
 		using = default_button
 		size = { 156 32 }
 		block "policy_context" {}
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
 		textbox = {
 			parentanchor = center
@@ -163,15 +174,16 @@ types te_seabed_widget_types
 		}
 	}
 
-	### Relinquish / Claim Again, in our own row of a basin's claimants.
+	### Relinquish / Claim Again, in our own row of a basin's claimants (the
+	### player's own: under te_own_country_only with the claimants).
 	type te_seabed_claim_button = button {
 		using = default_button
 		size = { 110 26 }
 		parentanchor = vcenter
 		block "claim_context" {}
-		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 
 		textbox = {
 			parentanchor = center
@@ -206,7 +218,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_free_tt"
 			text = "te_seabed_col_free"
 		}
@@ -216,7 +227,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = center|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_pool_tt"
 			text = "te_seabed_col_pool"
 		}
@@ -226,7 +236,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_weight_tt"
 			text = "te_seabed_col_weight"
 		}
@@ -236,7 +245,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			tooltip = "te_seabed_col_next_tt"
 			text = "te_seabed_col_next"
 		}
@@ -252,6 +260,7 @@ types te_seabed_widget_types
 			size = { 104 24 }
 
 			button = {
+				using = te_own_country_only
 				size = { 20 24 }
 				parentanchor = left|vcenter
 				tooltip = "te_seabed_rivals_hint_tt"
@@ -264,7 +273,6 @@ types te_seabed_widget_types
 				max_width = 82
 				align = left|nobaseline
 				using = te_seabed_fontsize_row
-				default_format = "#tooltippable"
 				block "basin_name" {}
 			}
 		}
@@ -274,7 +282,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_free" {}
 		}
 		widget = {
@@ -287,7 +294,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_weight" {}
 		}
 		textbox = {
@@ -296,7 +302,6 @@ types te_seabed_widget_types
 			autoresize = yes
 			align = right|nobaseline
 			using = te_seabed_fontsize_row
-			default_format = "#tooltippable"
 			block "basin_next" {}
 		}
 	}
@@ -372,63 +377,164 @@ types te_seabed_widget_types
 		}
 	}
 
-	### A claimant's row under its basin: the flag (vanilla's tiny flag: name on
-	### hover, opens the country on click), then its mines, claims and weight.
-	### The line wraps rather than eliding (a name can run to forty
-	### characters). 8 + 28 + 6 + 438 = 480.
-	type te_seabed_rival_row = flowcontainer {
+	### The claimants under a basin, in fixed columns (audit SEA-3): the flag
+	### (vanilla's tiny flag: the full name on hover, the country on click) and
+	### the name, elided, then Mines, Claims and Weight, and in our own row the
+	### basin's Relinquish or Claim Again. 8 + 28 + 4 + 136 + 4 + 56 + 4 + 60 + 4
+	### + 64 + 110 = 478, in the 480 column; the heads span the same widths. Every
+	### rival is a row, an item of the basin's list of capitals
+	### (te_seabed_rk_list_<b>), its figures read through State.GetCountry.
+	type te_seabed_rival_head = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
 		margin_left = 8
-		spacing = 6
-		datacontext = "[GetScriptedGui('te_seabed_rival_row_sgui')]"
-		block "row_visible" {}
 
-		widget = {
-			size = { 28 22 }
-			widget = {
-				size = { 28 22 }
-				block "flag_visible" {}
-				tiny_flag = {
-					parentanchor = center
-					block "flag_context" {}
-				}
-			}
-		}
 		textbox = {
+			minimumsize = { 168 -1 }
+			max_width = 168
 			autoresize = yes
-			multiline = yes
-			maximumsize = { 438 -1 }
 			align = left|nobaseline
 			using = te_seabed_fontsize_row
-			block "row_text" {}
+			default_format = "#grey"
+			text = "te_seabed_rival_col_name"
+		}
+		textbox = {
+			minimumsize = { 60 -1 }
+			max_width = 60
+			autoresize = yes
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			tooltip = "te_seabed_rival_col_mines_tt"
+			text = "te_seabed_rival_col_mines"
+		}
+		textbox = {
+			minimumsize = { 64 -1 }
+			max_width = 64
+			autoresize = yes
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			tooltip = "te_seabed_rival_col_claims_tt"
+			text = "te_seabed_rival_col_claims"
+		}
+		textbox = {
+			minimumsize = { 68 -1 }
+			max_width = 68
+			autoresize = yes
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			tooltip = "te_seabed_rival_col_weight_tt"
+			text = "te_seabed_rival_col_weight"
 		}
 	}
 
-	### Our own row, with the basin's Relinquish or Claim Again (rule 6: beside
-	### the item it acts on). 8 + 28 + 6 + 322 + 6 + 110 = 480.
-	type te_seabed_rival_us = flowcontainer {
+	### One claimant's columns: the instance passes the flag's country context
+	### and the three figures (raw_text).
+	type te_seabed_rival_cells = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		margin_left = 8
-		spacing = 6
-		block "row_visible" {}
+		spacing = 4
 
 		widget = {
 			size = { 28 22 }
 			tiny_flag = {
 				parentanchor = center
-				datacontext = "[GetPlayer]"
+				block "flag_context" {}
 			}
 		}
 		textbox = {
+			minimumsize = { 136 -1 }
+			max_width = 136
 			autoresize = yes
-			multiline = yes
-			minimumsize = { 322 -1 }
-			maximumsize = { 322 -1 }
+			elide = right
+			parentanchor = vcenter
 			align = left|nobaseline
 			using = te_seabed_fontsize_row
-			block "row_text" {}
+			block "cell_name" {}
+		}
+		textbox = {
+			minimumsize = { 56 -1 }
+			max_width = 56
+			autoresize = yes
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			default_format = "#v"
+			block "cell_mines" {}
+		}
+		textbox = {
+			minimumsize = { 60 -1 }
+			max_width = 60
+			autoresize = yes
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			default_format = "#v"
+			block "cell_claims" {}
+		}
+		textbox = {
+			minimumsize = { 64 -1 }
+			max_width = 64
+			autoresize = yes
+			parentanchor = vcenter
+			align = right|nobaseline
+			using = te_seabed_fontsize_row
+			default_format = "#v"
+			block "cell_weight" {}
+		}
+	}
+
+	### A rival's row: an item of the basin's claimant list
+	### (te_seabed_rk_list_<b>, its capital the item's datacontext; audit
+	### SEA-3), its columns read through State.GetCountry.
+	type te_seabed_rival_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin_left = 8
+
+		te_seabed_rival_cells = {
+			blockoverride "flag_context" {
+				datacontext = "[State.GetCountry]"
+			}
+			blockoverride "cell_name" {
+				raw_text = "[State.GetCountry.GetNameNoFormatting]"
+			}
+			blockoverride "cell_mines" {
+				block "rival_mines" {}
+			}
+			blockoverride "cell_claims" {
+				block "rival_claims" {}
+			}
+			blockoverride "cell_weight" {
+				block "rival_weight" {}
+			}
+		}
+	}
+
+	### Our own row, with the basin's Relinquish or Claim Again in its last
+	### cell (rule 6: beside the item it acts on). The flag is the shown
+	### country's, Country, as the row's figures are.
+	type te_seabed_rival_us = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		margin_left = 8
+		block "row_visible" {}
+
+		te_seabed_rival_cells = {
+			blockoverride "flag_context" {
+				datacontext = "[Country]"
+			}
+			blockoverride "cell_name" {
+				text = "te_seabed_rival_us_name"
+			}
+			blockoverride "cell_mines" {
+				block "us_mines" {}
+			}
+			blockoverride "cell_claims" {
+				block "us_claims" {}
+			}
+			blockoverride "cell_weight" {
+				block "us_weight" {}
+			}
 		}
 		block "row_buttons" {}
 	}
@@ -507,11 +613,11 @@ types te_seabed_widget_types
 						}
 						blockoverride "fig" {
 							te_seabed_ov_fig = {
-								visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_fee_disp'), '(CFixedPoint)0' ) )]"
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_fee_disp'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_licences_fig"
 							}
 							te_seabed_ov_fig = {
-								visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_fee_disp'), '(CFixedPoint)0' )]"
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_fee_disp'), '(CFixedPoint)0' )]"
 								text = "te_seabed_ov_licences_fig_fee"
 							}
 						}
@@ -531,21 +637,21 @@ types te_seabed_widget_types
 						}
 						blockoverride "word" {
 							te_seabed_ov_word = {
-								visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
 								text = "te_seabed_ov_longhaul_word"
 							}
 							te_seabed_ov_word = {
-								visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' ) )]"
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_longhaul_word_none"
 							}
 						}
 						blockoverride "fig" {
 							te_seabed_ov_fig = {
-								visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' )]"
 								text = "te_seabed_ov_longhaul_fig"
 							}
 							te_seabed_ov_fig = {
-								visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' ) )]"
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_distant_total'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_longhaul_fig_none"
 							}
 						}
@@ -565,11 +671,11 @@ types te_seabed_widget_types
 						}
 						blockoverride "fig" {
 							te_seabed_ov_fig = {
-								visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_protected_disp'), '(CFixedPoint)0' )]"
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_protected_disp'), '(CFixedPoint)0' )]"
 								text = "te_seabed_ov_claims_fig"
 							}
 							te_seabed_ov_fig = {
-								visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_protected_disp'), '(CFixedPoint)0' ) )]"
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_protected_disp'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_claims_fig_all"
 							}
 						}
@@ -594,11 +700,11 @@ types te_seabed_widget_types
 						}
 						blockoverride "fig" {
 							te_seabed_ov_fig = {
-								visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_locked_disp'), '(CFixedPoint)0' )]"
+								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_policy_locked_disp'), '(CFixedPoint)0' )]"
 								text = "te_seabed_ov_policy_fig"
 							}
 							te_seabed_ov_fig = {
-								visible = "[Not( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_policy_locked_disp'), '(CFixedPoint)0' ) )]"
+								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_policy_locked_disp'), '(CFixedPoint)0' ) )]"
 								text = "te_seabed_ov_policy_fig_free"
 							}
 						}
@@ -618,15 +724,15 @@ types te_seabed_widget_types
 						}
 						blockoverride "fig" {
 							te_seabed_ov_fig = {
-								visible = "[And( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+								visible = "[And( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 								text = "te_seabed_ov_regime_fig"
 							}
 							te_seabed_ov_fig = {
-								visible = "[And( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+								visible = "[And( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_seabed_itlos_party_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 								text = "te_seabed_ov_regime_fig_noparty"
 							}
 							te_seabed_ov_fig = {
-								visible = "[Not( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+								visible = "[Not( GetScriptedGui('te_seabed_un_line_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 								text = "te_seabed_ov_regime_fig_nocon"
 							}
 						}
@@ -639,9 +745,12 @@ types te_seabed_widget_types
 	### ----------------------------------------------------------------------
 	### The policy: one national choice, three short buttons centred under the
 	### heading (rule 6); the full name, factor, influence and the five-year lock
-	### on hover (rule 3).
+	### on hover (rule 3). The buttons are all it holds, so the whole panel is
+	### the player's own (te_own_country_only); the overview's Policy box shows
+	### another country's policy and its lock.
 	### ----------------------------------------------------------------------
 	type te_seabed_policy_panel = flowcontainer {
+		using = te_own_country_only
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
@@ -692,6 +801,8 @@ types te_seabed_widget_types
 	### claimants (collapsed by default, te_seabed_rivals_<basin>_open: five open
 	### lists would push the rest off the panel), our own row with Relinquish or
 	### Claim Again, and the claimants past six. The bar's legend under the table.
+	### The claimants and the chevron that opens them are the player's own
+	### (te_own_country_only; the file's header says why).
 	### ----------------------------------------------------------------------
 	type te_seabed_basins_panel = flowcontainer {
 		direction = vertical
@@ -717,7 +828,7 @@ types te_seabed_widget_types
 					max_width = 210
 					align = right|nobaseline
 					using = te_seabed_fontsize_row
-					text = "[SelectLocalization( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_asof_year_disp'), '(CFixedPoint)0' ), 'te_seabed_basins_asof', 'te_seabed_basins_asof_old' )]"
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_asof_year_disp'), '(CFixedPoint)0' ), 'te_seabed_basins_asof', 'te_seabed_basins_asof_old' )]"
 				}
 			}
 			divider_clean = {
@@ -749,8 +860,8 @@ types te_seabed_widget_types
 					text = "te_seabed_basin_pacific"
 				}
 				blockoverride "basin_free" {
-					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_pacific', 'te_seabed_free_pacific' )]"
+					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_pacific'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_pacific', 'te_seabed_free_pacific' )]"
 				}
 				blockoverride "basin_pool" {
 					te_seabed_pool_bar = {
@@ -758,16 +869,16 @@ types te_seabed_widget_types
 							tooltip = "te_seabed_pool_tt_pacific"
 						}
 						blockoverride "bar_4" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_pacific_4') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_pacific_4') )]"
 						}
 						blockoverride "bar_3" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_pacific_3') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_pacific_3') )]"
 						}
 						blockoverride "bar_2" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_pacific_2') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_pacific_2') )]"
 						}
 						blockoverride "bar_1" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_pacific_1') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_pacific_1') )]"
 						}
 					}
 				}
@@ -776,137 +887,78 @@ types te_seabed_widget_types
 					text = "te_seabed_weight_pct_pacific"
 				}
 				blockoverride "basin_next" {
-					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_next_tt_pacific', 'te_seabed_col_next_tt' )]"
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_pacific' ) )]"
+					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)0' ), 'te_seabed_next_tt_pacific', 'te_seabed_col_next_tt' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_pacific' ) )]"
 				}
 			}
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
-				margin_bottom = 4
-				visible = "[GetVariableSystem.Exists('te_seabed_rivals_pacific_open')]"
 
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_1').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_2').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_3').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_4').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_5').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)15' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_pacific'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_pacific_6').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
-					}
-				}
-				te_seabed_rival_us = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_us_shown_pacific'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "row_buttons" {
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_relinquish_pacific_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_relinquish_pacific_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_relinquish_btn"
-							}
-						}
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_claim_again_pacific_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_claim_again_pacific_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_claim_again_btn"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 4
+					visible = "[GetVariableSystem.Exists('te_seabed_rivals_pacific_open')]"
+
+					te_seabed_rival_head = {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_pacific')]"
+
+						item = {
+							te_seabed_rival_row = {
+								datacontext = "[Scope.GetState]"
+								blockoverride "rival_mines" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_pacific')|0]"
+								}
+								blockoverride "rival_claims" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
+								}
+								blockoverride "rival_weight" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
+								}
 							}
 						}
 					}
-					blockoverride "row_text" {
-						text = "te_seabed_rival_us_pacific"
+					te_seabed_rival_us = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_us_shown_pacific'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "row_buttons" {
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_relinquish_pacific_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_relinquish_pacific_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_relinquish_btn"
+								}
+							}
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_claim_again_pacific_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_claim_again_pacific_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_claim_again_btn"
+								}
+							}
+						}
+						blockoverride "us_mines" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_our_lic_pacific')|0]"
+						}
+						blockoverride "us_claims" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]"
+						}
+						blockoverride "us_weight" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_weight_pct_disp_pacific')|0]%"
+						}
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_pacific'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_pacific"
 				}
 			}
 			te_seabed_basin_row = {
@@ -932,8 +984,8 @@ types te_seabed_widget_types
 					text = "te_seabed_basin_atlantic"
 				}
 				blockoverride "basin_free" {
-					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_atlantic', 'te_seabed_free_atlantic' )]"
+					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_atlantic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_atlantic', 'te_seabed_free_atlantic' )]"
 				}
 				blockoverride "basin_pool" {
 					te_seabed_pool_bar = {
@@ -941,16 +993,16 @@ types te_seabed_widget_types
 							tooltip = "te_seabed_pool_tt_atlantic"
 						}
 						blockoverride "bar_4" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_atlantic_4') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_atlantic_4') )]"
 						}
 						blockoverride "bar_3" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_atlantic_3') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_atlantic_3') )]"
 						}
 						blockoverride "bar_2" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_atlantic_2') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_atlantic_2') )]"
 						}
 						blockoverride "bar_1" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_atlantic_1') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_atlantic_1') )]"
 						}
 					}
 				}
@@ -959,137 +1011,78 @@ types te_seabed_widget_types
 					text = "te_seabed_weight_pct_atlantic"
 				}
 				blockoverride "basin_next" {
-					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_next_tt_atlantic', 'te_seabed_col_next_tt' )]"
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_atlantic' ) )]"
+					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)0' ), 'te_seabed_next_tt_atlantic', 'te_seabed_col_next_tt' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_atlantic' ) )]"
 				}
 			}
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
-				margin_bottom = 4
-				visible = "[GetVariableSystem.Exists('te_seabed_rivals_atlantic_open')]"
 
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_1').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)21' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_2').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)22' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_3').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)23' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_4').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_5').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_atlantic'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_atlantic_6').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)26' ) ).End )]"
-					}
-				}
-				te_seabed_rival_us = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_us_shown_atlantic'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "row_buttons" {
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_relinquish_atlantic_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_relinquish_atlantic_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_relinquish_btn"
-							}
-						}
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_claim_again_atlantic_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_claim_again_atlantic_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_claim_again_btn"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 4
+					visible = "[GetVariableSystem.Exists('te_seabed_rivals_atlantic_open')]"
+
+					te_seabed_rival_head = {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_atlantic')]"
+
+						item = {
+							te_seabed_rival_row = {
+								datacontext = "[Scope.GetState]"
+								blockoverride "rival_mines" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_atlantic')|0]"
+								}
+								blockoverride "rival_claims" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
+								}
+								blockoverride "rival_weight" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
+								}
 							}
 						}
 					}
-					blockoverride "row_text" {
-						text = "te_seabed_rival_us_atlantic"
+					te_seabed_rival_us = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_us_shown_atlantic'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "row_buttons" {
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_relinquish_atlantic_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_relinquish_atlantic_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_relinquish_btn"
+								}
+							}
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_claim_again_atlantic_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_claim_again_atlantic_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_claim_again_btn"
+								}
+							}
+						}
+						blockoverride "us_mines" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_our_lic_atlantic')|0]"
+						}
+						blockoverride "us_claims" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]"
+						}
+						blockoverride "us_weight" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_weight_pct_disp_atlantic')|0]%"
+						}
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_atlantic'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_atlantic"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1115,8 +1108,8 @@ types te_seabed_widget_types
 					text = "te_seabed_basin_indian"
 				}
 				blockoverride "basin_free" {
-					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_indian', 'te_seabed_free_indian' )]"
+					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_indian'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_indian', 'te_seabed_free_indian' )]"
 				}
 				blockoverride "basin_pool" {
 					te_seabed_pool_bar = {
@@ -1124,16 +1117,16 @@ types te_seabed_widget_types
 							tooltip = "te_seabed_pool_tt_indian"
 						}
 						blockoverride "bar_4" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_indian_4') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_indian_4') )]"
 						}
 						blockoverride "bar_3" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_indian_3') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_indian_3') )]"
 						}
 						blockoverride "bar_2" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_indian_2') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_indian_2') )]"
 						}
 						blockoverride "bar_1" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_indian_1') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_indian_1') )]"
 						}
 					}
 				}
@@ -1142,137 +1135,78 @@ types te_seabed_widget_types
 					text = "te_seabed_weight_pct_indian"
 				}
 				blockoverride "basin_next" {
-					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_next_tt_indian', 'te_seabed_col_next_tt' )]"
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_indian' ) )]"
+					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)0' ), 'te_seabed_next_tt_indian', 'te_seabed_col_next_tt' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_indian' ) )]"
 				}
 			}
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
-				margin_bottom = 4
-				visible = "[GetVariableSystem.Exists('te_seabed_rivals_indian_open')]"
 
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_1').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_2').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_3').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_4').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_5').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_indian'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_indian_6').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)36' ) ).End )]"
-					}
-				}
-				te_seabed_rival_us = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_us_shown_indian'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "row_buttons" {
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_relinquish_indian_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_relinquish_indian_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_relinquish_btn"
-							}
-						}
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_claim_again_indian_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_claim_again_indian_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_claim_again_btn"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 4
+					visible = "[GetVariableSystem.Exists('te_seabed_rivals_indian_open')]"
+
+					te_seabed_rival_head = {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_indian')]"
+
+						item = {
+							te_seabed_rival_row = {
+								datacontext = "[Scope.GetState]"
+								blockoverride "rival_mines" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_indian')|0]"
+								}
+								blockoverride "rival_claims" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
+								}
+								blockoverride "rival_weight" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
+								}
 							}
 						}
 					}
-					blockoverride "row_text" {
-						text = "te_seabed_rival_us_indian"
+					te_seabed_rival_us = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_us_shown_indian'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "row_buttons" {
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_relinquish_indian_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_relinquish_indian_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_relinquish_btn"
+								}
+							}
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_claim_again_indian_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_claim_again_indian_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_claim_again_btn"
+								}
+							}
+						}
+						blockoverride "us_mines" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_our_lic_indian')|0]"
+						}
+						blockoverride "us_claims" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]"
+						}
+						blockoverride "us_weight" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_weight_pct_disp_indian')|0]%"
+						}
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_indian'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_indian"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1298,8 +1232,8 @@ types te_seabed_widget_types
 					text = "te_seabed_basin_arctic"
 				}
 				blockoverride "basin_free" {
-					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_arctic', 'te_seabed_free_arctic' )]"
+					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_arctic', 'te_seabed_free_arctic' )]"
 				}
 				blockoverride "basin_pool" {
 					te_seabed_pool_bar = {
@@ -1307,16 +1241,16 @@ types te_seabed_widget_types
 							tooltip = "te_seabed_pool_tt_arctic"
 						}
 						blockoverride "bar_4" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_arctic_4') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_arctic_4') )]"
 						}
 						blockoverride "bar_3" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_arctic_3') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_arctic_3') )]"
 						}
 						blockoverride "bar_2" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_arctic_2') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_arctic_2') )]"
 						}
 						blockoverride "bar_1" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_arctic_1') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_arctic_1') )]"
 						}
 					}
 				}
@@ -1325,137 +1259,78 @@ types te_seabed_widget_types
 					text = "te_seabed_weight_pct_arctic"
 				}
 				blockoverride "basin_next" {
-					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_next_tt_arctic', 'te_seabed_col_next_tt' )]"
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_arctic' ) )]"
+					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_next_tt_arctic', 'te_seabed_col_next_tt' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_arctic' ) )]"
 				}
 			}
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
-				margin_bottom = 4
-				visible = "[GetVariableSystem.Exists('te_seabed_rivals_arctic_open')]"
 
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_1').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)41' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_2').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)42' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_3').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)43' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_4').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_5').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)46' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_arctic'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_arctic_6').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)46' ) ).End )]"
-					}
-				}
-				te_seabed_rival_us = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_us_shown_arctic'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "row_buttons" {
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_relinquish_arctic_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_relinquish_arctic_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_relinquish_btn"
-							}
-						}
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_claim_again_arctic_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_claim_again_arctic_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_claim_again_btn"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 4
+					visible = "[GetVariableSystem.Exists('te_seabed_rivals_arctic_open')]"
+
+					te_seabed_rival_head = {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_arctic')]"
+
+						item = {
+							te_seabed_rival_row = {
+								datacontext = "[Scope.GetState]"
+								blockoverride "rival_mines" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_arctic')|0]"
+								}
+								blockoverride "rival_claims" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
+								}
+								blockoverride "rival_weight" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
+								}
 							}
 						}
 					}
-					blockoverride "row_text" {
-						text = "te_seabed_rival_us_arctic"
+					te_seabed_rival_us = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_us_shown_arctic'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "row_buttons" {
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_relinquish_arctic_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_relinquish_arctic_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_relinquish_btn"
+								}
+							}
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_claim_again_arctic_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_claim_again_arctic_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_claim_again_btn"
+								}
+							}
+						}
+						blockoverride "us_mines" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_our_lic_arctic')|0]"
+						}
+						blockoverride "us_claims" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]"
+						}
+						blockoverride "us_weight" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_weight_pct_disp_arctic')|0]%"
+						}
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_arctic'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_arctic"
 				}
 			}
 			te_seabed_basin_row = {
@@ -1481,8 +1356,8 @@ types te_seabed_widget_types
 					text = "te_seabed_basin_southern"
 				}
 				blockoverride "basin_free" {
-					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_southern', 'te_seabed_free_southern' )]"
+					tooltip = "[GetScriptedGui('te_seabed_build_in_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					text = "[SelectLocalization( And( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_southern'), '(CFixedPoint)0' ), GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern'), '(CFixedPoint)0' ) ), 'te_seabed_free_home_southern', 'te_seabed_free_southern' )]"
 				}
 				blockoverride "basin_pool" {
 					te_seabed_pool_bar = {
@@ -1490,16 +1365,16 @@ types te_seabed_widget_types
 							tooltip = "te_seabed_pool_tt_southern"
 						}
 						blockoverride "bar_4" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_southern_4') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_southern_4') )]"
 						}
 						blockoverride "bar_3" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_southern_3') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_southern_3') )]"
 						}
 						blockoverride "bar_2" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_southern_2') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_southern_2') )]"
 						}
 						blockoverride "bar_1" {
-							value = "[FixedPointToFloat( GetPlayer.MakeScope.ScriptValue('te_seabed_bar_southern_1') )]"
+							value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_seabed_bar_southern_1') )]"
 						}
 					}
 				}
@@ -1508,137 +1383,78 @@ types te_seabed_widget_types
 					text = "te_seabed_weight_pct_southern"
 				}
 				blockoverride "basin_next" {
-					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_next_tt_southern', 'te_seabed_col_next_tt' )]"
-					text = "[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_southern' ) )]"
+					tooltip = "[SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)0' ), 'te_seabed_next_tt_southern', 'te_seabed_col_next_tt' )]"
+					text = "[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)-2' ), 'te_seabed_next_none', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern'), '(CFixedPoint)-1' ), 'te_seabed_next_full', 'te_seabed_next_southern' ) )]"
 				}
 			}
 			flowcontainer = {
+				using = te_own_country_only
 				direction = vertical
 				ignoreinvisible = yes
-				spacing = 2
-				margin_bottom = 4
-				visible = "[GetVariableSystem.Exists('te_seabed_rivals_southern_open')]"
 
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)1' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_1').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)52' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)2' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_2').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)52' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)53' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)3' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_3').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)53' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)54' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)4' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_4').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)54' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)55' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)5' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_5').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)55' ) ).End )]"
-					}
-				}
-				te_seabed_rival_row = {
-					blockoverride "row_visible" {
-						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)56' ) ).End )]"
-					}
-					blockoverride "flag_visible" {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rkcap_count_disp_southern'), '(CFixedPoint)6' )]"
-					}
-					blockoverride "flag_context" {
-						datacontext = "[GetPlayer.MakeScope.Var('te_seabed_rkcap_southern_6').GetState.GetCountry]"
-					}
-					blockoverride "row_text" {
-						text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)56' ) ).End )]"
-					}
-				}
-				te_seabed_rival_us = {
-					blockoverride "row_visible" {
-						visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_us_shown_southern'), '(CFixedPoint)0' )]"
-					}
-					blockoverride "row_buttons" {
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_relinquish_southern_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_relinquish_southern_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_relinquish_btn"
-							}
-						}
-						te_seabed_claim_button = {
-							visible = "[GetScriptedGui('te_seabed_claim_again_southern_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-							blockoverride "claim_context" {
-								datacontext = "[GetScriptedGui('te_seabed_claim_again_southern_sgui')]"
-							}
-							blockoverride "claim_text" {
-								text = "te_seabed_claim_again_btn"
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 2
+					margin_bottom = 4
+					visible = "[GetVariableSystem.Exists('te_seabed_rivals_southern_open')]"
+
+					te_seabed_rival_head = {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+						datamodel = "[GetPlayer.MakeScope.GetList('te_seabed_rk_list_southern')]"
+
+						item = {
+							te_seabed_rival_row = {
+								datacontext = "[Scope.GetState]"
+								blockoverride "rival_mines" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_held_disp_southern')|0]"
+								}
+								blockoverride "rival_claims" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
+								}
+								blockoverride "rival_weight" {
+									raw_text = "[State.GetCountry.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
+								}
 							}
 						}
 					}
-					blockoverride "row_text" {
-						text = "te_seabed_rival_us_southern"
+					te_seabed_rival_us = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_us_shown_southern'), '(CFixedPoint)0' )]"
+						}
+						blockoverride "row_buttons" {
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_relinquish_southern_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_relinquish_southern_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_relinquish_btn"
+								}
+							}
+							te_seabed_claim_button = {
+								visible = "[GetScriptedGui('te_seabed_claim_again_southern_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+								blockoverride "claim_context" {
+									datacontext = "[GetScriptedGui('te_seabed_claim_again_southern_sgui')]"
+								}
+								blockoverride "claim_text" {
+									text = "te_seabed_claim_again_btn"
+								}
+							}
+						}
+						blockoverride "us_mines" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_our_lic_southern')|0]"
+						}
+						blockoverride "us_claims" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]"
+						}
+						blockoverride "us_weight" {
+							raw_text = "[Country.MakeScope.ScriptValue('te_seabed_weight_pct_disp_southern')|0]%"
+						}
 					}
-				}
-				textbox = {
-					visible = "[GreaterThan_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_seabed_rk_more_disp_southern'), '(CFixedPoint)0' )]"
-					autoresize = yes
-					max_width = 438
-					margin_left = 42
-					align = left|nobaseline
-					using = te_seabed_fontsize_row
-					text = "te_seabed_rivals_more_southern"
 				}
 			}
 			flowcontainer = {
@@ -1741,91 +1557,133 @@ types te_seabed_widget_types
 		}
 	}
 
-	### ----------------------------------------------------------------------
-	### How Seabed Licences Work: collapsed (te_seabed_how_open).
-	### ----------------------------------------------------------------------
-	type te_seabed_how_panel = flowcontainer {
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. Seabed has no journal entry, and the figures its notes
+	### quote read GetPlayer, as they did in the panel, so the page opens from
+	### any host (test_te_help_pages.py). Instanced only by te_seabed_help_popup.
+	type te_seabed_help_body = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
-		section_header_button = {
-			blockoverride "layout" {
-				parentanchor = hcenter
-				size = { 520 38 }
-			}
-			blockoverride "left_text" {
-				text = "te_seabed_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('te_seabed_how_open')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('te_seabed_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_pools"
 			}
 		}
+		te_seabed_note = {
+			text = "te_seabed_how_pools"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_weight"
+			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_weight"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_licences"
+			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_licences"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_distant"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_claims"
+			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_claims"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_leases"
+			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_leases"
+		}
+		te_seabed_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_seabed_how_sub_policy"
+			}
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_policy"
+		}
+		te_seabed_note = {
+			text = "te_seabed_how_regime"
+		}
+	}
 
-		te_seabed_panel = {
-			visible = "[GetVariableSystem.Exists('te_seabed_how_open')]"
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_seabed_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_seabed')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_seabed_how_header"
+		}
+		blockoverride "popup_list" {
+			te_seabed_help_body = {}
+		}
+	}
 
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_pools"
+	### ----------------------------------------------------------------------
+	### The Seabed tab of the Timeline Extended window (te_system_tab_frame,
+	### gui/te_system_tab_widgets.gui; the window mounts it from
+	### gui/te_systems_window_generated.gui). No journal entry: the panels read
+	### Country, the player's in the window (the frame's tab_country), under the tab's gate
+	### (te_window_seabed_tab_sgui) on a parent, the header outside it, and no
+	### Open Journal Entry. te_seabed_tab_layout is the block a wide mount
+	### overrides.
+	### ----------------------------------------------------------------------
+	type te_seabed_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_seabed_tab_header"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_seabed')]"
 				}
 			}
-			te_seabed_note = {
-				text = "te_seabed_how_pools"
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_content" {
+			block "te_seabed_tab_layout" {
+				te_seabed_overview_panel = {}
+				te_seabed_policy_panel = {}
+				te_seabed_basins_panel = {}
 			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_weight"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_weight"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_licences"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_licences"
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_distant"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_claims"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_claims"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_leases"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_leases"
-			}
-			te_seabed_subheader = {
-				blockoverride "subheader_text" {
-					text = "te_seabed_how_sub_policy"
-				}
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_policy"
-			}
-			te_seabed_note = {
-				text = "te_seabed_how_regime"
-			}
+		}
+		blockoverride "tab_open_journal" {}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_seabed_tab_layout's override in the window's full-screen
+	### frame: the overview and the policy, then the Ocean Basins table, in two
+	### columns of a fixed 520 (te_ui_columns_two). The tab's gate stays on the
+	### frame's parent; the panels' spacing of 10 is the columns'.
+	type te_seabed_wide_sections = te_ui_columns_two {
+		blockoverride "column_1" {
+			te_seabed_overview_panel = {}
+			te_seabed_policy_panel = {}
+		}
+
+		blockoverride "column_2" {
+			te_seabed_basins_panel = {}
 		}
 	}
 }

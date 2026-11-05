@@ -10,7 +10,7 @@
 # monument_trophy_events.13, outside the treaty designer's preview pass,
 # which runs this hook every frame with scope:article_options unbound.
 # =================================================================
-return_cultural_property = {
+return_cultural_property = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, like vanilla's state, ship and money transfers, which build none
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/return_cultural_property.dds"
 	kind = directed
 	cost = 50
@@ -26,8 +26,13 @@ return_cultural_property = {
 	# demands and gifts do (owner, 2026-10-12; the source paid).
 	maintenance_paid_by = target_country
 
+	# Shown only where there is something to return (owner, 2026-10-23): the
+	# prospective source holds a trophy whose origin the other country owns, as
+	# possible asks (below).
 	visible = {
 		gm_system_enabled = yes
+		exists = scope:other_country
+		gm_tr_country_holds_from = { CLAIMANT = scope:other_country }
 	}
 
 	# ROOT is the prospective source, the holder that gives the trophies back,

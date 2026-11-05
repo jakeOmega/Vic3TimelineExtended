@@ -171,6 +171,18 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_counterintel_support
 	}
 	text = {
+		trigger = { var:iw_last_exposed_type = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 17 }
+		localization_key = iw_op_name_survey_defences
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -242,6 +254,18 @@ covert_last_exposed_type_desc = {
 	text = {
 		trigger = { var:iw_last_exposed_type = 14 }
 		localization_key = iw_op_exposed_desc_counterintel_support
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 15 }
+		localization_key = iw_op_exposed_desc_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 16 }
+		localization_key = iw_op_exposed_desc_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 17 }
+		localization_key = iw_op_exposed_desc_survey_defences
 	}
 	text = {
 		localization_key = iw_op_exposed_desc_unknown
@@ -316,6 +340,18 @@ covert_burned_type_name = {
 		localization_key = iw_op_name_counterintel_support
 	}
 	text = {
+		trigger = { var:iw_burned_type_code = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 17 }
+		localization_key = iw_op_name_survey_defences
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -387,6 +423,18 @@ covert_caught_type_name = {
 	text = {
 		trigger = { var:iw_caught_type_code = 14 }
 		localization_key = iw_op_name_counterintel_support
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 15 }
+		localization_key = iw_op_name_incite_autonomy
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 16 }
+		localization_key = iw_op_name_sabotage_colony
+	}
+	text = {
+		trigger = { var:iw_caught_type_code = 17 }
+		localization_key = iw_op_name_survey_defences
 	}
 	text = {
 		localization_key = iw_op_name_unknown
@@ -555,5 +603,37 @@ covert_tradecraft_last_reason = {
 	}
 	text = {
 		localization_key = iw_tradecraft_reason_0
+	}
+}
+
+# The standing order for a caught foreign operation (iw_catch_policy), for the
+# Counterintelligence section's button and its tooltip.
+covert_catch_policy_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 1
+		}
+		localization_key = iw_catch_policy_name_1
+	}
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 2
+		}
+		localization_key = iw_catch_policy_name_2
+	}
+	text = {
+		trigger = {
+			has_variable = iw_catch_policy
+			var:iw_catch_policy = 3
+		}
+		localization_key = iw_catch_policy_name_3
+	}
+	text = {
+		localization_key = iw_catch_policy_name_0
 	}
 }

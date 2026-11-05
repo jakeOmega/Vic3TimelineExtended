@@ -185,18 +185,23 @@ class EffectTests(unittest.TestCase):
             self.assertNotRegex(body, r"var:iw_net_intel_(ic|techs|ops)\b", path.name)
 
 
+# The Report column's word, one per tier (COV-12: the network table); the
+# report itself is the word's hover.
 INTEL_LINES = (
-    ("je_iw_net_row_intel_none", ("0",)),
-    ("je_iw_net_row_intel_service", ("1", "2")),
-    ("je_iw_net_row_intel_ops_locked", ("1",)),
-    ("je_iw_net_row_intel_ops", ("2",)),
+    ("je_iw_net_row_report_0", ("0",)),
+    ("je_iw_net_row_report_1", ("1",)),
+    ("je_iw_net_row_report_2", ("2",)),
 )
 
 INTEL_LOC_KEYS = (
-    "je_iw_net_row_intel_none",
+    "je_iw_net_row_report_0",
+    "je_iw_net_row_report_1",
+    "je_iw_net_row_report_2",
+    "je_iw_net_row_report_1_tt",
+    "je_iw_net_row_report_2_tt",
+    "je_iw_net_report_tt",
     "je_iw_net_row_intel_service",
     "je_iw_net_row_intel_service_tooltip",
-    "je_iw_net_row_intel_ops_locked",
     "je_iw_net_row_intel_ops",
     "je_iw_net_row_intel_ops_tooltip",
 )
@@ -209,8 +214,8 @@ class WidgetTests(unittest.TestCase):
     def _line(self, key):
         row = self._row()
         end = row.index('text = "%s"' % key)
-        start = row.rindex("widget_je_covert_operation_detail = {", 0, end)
-        return row[start:row.index("}", end)]
+        start = row.rindex("textbox = {", 0, end)
+        return row[start:row.index("\n\t\t\t}", end)]
 
     def test_lines_on_the_network_row_gated_on_the_code(self):
         for key, codes in INTEL_LINES:
@@ -250,13 +255,23 @@ class WidgetTests(unittest.TestCase):
         self.assertIn("GetVariableValue('iw_net_intel_ops')", value("je_iw_net_row_intel_ops"))
         # Thresholds are printed from the constants, never typed. Since the
         # style-guide pass the row's strength hover names both (the owner
-        # dropped round 1's "45 -> 50" headline and bar marker in round 3),
-        # and the report lines below don't repeat them.
-        hover = value("je_iw_net_row_strength_tt")
+        # dropped round 1's "45 -> 50" headline and bar marker in round 3).
+        # Since the network table (COV-12) that hover is the Report head's
+        # and the "None" word's; each tier's word carries its own lines.
+        hover = value("je_iw_net_report_tt")
         self.assertIn("covert_net_intel_tier_1_strength", hover)
         self.assertIn("covert_net_intel_tier_2_strength", hover)
-        for key in ("je_iw_net_row_intel_none", "je_iw_net_row_intel_ops_locked", "je_iw_net_row_strength_tt"):
-            self.assertNotRegex(value(key), r"\b(50|75)\b", key)
+        self.assertNotIn("je_iw_net_row_intel_ops_locked", loc)
+        self.assertNotIn(" je_iw_net_row_intel_none:", loc)
+        self.assertNotRegex(hover, r"\b(50|75)\b")
+        self.assertIn("$je_iw_net_row_intel_service$", value("je_iw_net_row_report_1_tt"))
+        self.assertNotIn("$je_iw_net_row_intel_ops$", value("je_iw_net_row_report_1_tt"))
+        for line in ("$je_iw_net_row_intel_service$", "$je_iw_net_row_intel_ops$"):
+            self.assertIn(line, value("je_iw_net_row_report_2_tt"), line)
+        # The lines are tooltips inside a datamodel item now, so ours come
+        # through GetPlayer (gotcha #24).
+        self.assertNotIn("JournalEntry", service)
+        self.assertIn("GetPlayer.MakeScope.ScriptValue('intelligence_capacity_total')", service)
         header = value("je_iw_net_header_tooltip")
         self.assertIn("covert_net_intel_tier_1_strength", header)
         self.assertIn("covert_net_intel_tier_2_strength", header)

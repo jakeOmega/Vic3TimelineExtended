@@ -12,16 +12,16 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts" / "generators"))
 import gen_covert_tech_theft as gen  # noqa: E402
 
-LIVE = gen.Constants(share=Decimal("0.05"), full=Decimal("2"), pri2=Decimal("1.35"), pri3=Decimal("1.6"))
+LIVE = gen.Constants(share=Decimal("0.05"), full=Decimal("2"), pri2=Decimal("1.65"), pri3=Decimal("2"))
 
 
 class AmountTest(unittest.TestCase):
     def test_era_7_amounts(self):
-        self.assertEqual(gen.amounts(65000, LIVE), [3250, 4388, 5200, 6500, 8775, 10400])
+        self.assertEqual(gen.amounts(65000, LIVE), [3250, 5363, 6500, 6500, 10725, 13000])
 
     def test_half_rounds_up(self):
-        # 17,500 x 0.05 x 2.7 = 2,362.5
-        self.assertEqual(gen.amounts(17500, LIVE)[4], 2363)
+        # 17,500 x 0.05 x 3.3 = 2,887.5
+        self.assertEqual(gen.amounts(17500, LIVE)[4], 2888)
 
 
 class CatalogTest(unittest.TestCase):
@@ -36,13 +36,13 @@ class CatalogTest(unittest.TestCase):
 
     def test_era_costs(self):
         costs = gen.read_era_costs(ROOT)
-        self.assertEqual(sorted(costs), list(range(1, 13)))
-        self.assertEqual((costs[1], costs[7], costs[12]), (7500, 65000, 2000000))
+        self.assertEqual(sorted(costs), list(range(1, 14)))
+        self.assertEqual((costs[1], costs[7], costs[12], costs[13]), (7500, 65000, 1500000, 3000000))
 
     def test_categories_and_eras(self):
         self.assertEqual((self.by_key["railways"].category, self.by_key["railways"].era), ("production", 2))
         self.assertEqual((self.by_key["ICBMs"].category, self.by_key["ICBMs"].era), ("military", 7))
-        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 13)))
+        self.assertEqual({tech.era for tech in self.catalog}, set(range(1, 14)))
 
     def test_excludes_society_and_unresearchable(self):
         self.assertNotIn("mass_media", self.by_key)  # society: no operation steals it
@@ -76,6 +76,29 @@ class RenderTest(unittest.TestCase):
             ladder.count("scope:iw_theft_target ?= { has_technology_researched = "), len(self.production)
         )
 
+    def test_catalog_reads_prerequisites(self):
+        by_key = {tech.key: tech for tech in self.catalog}
+        self.assertEqual(
+            by_key["asteroid_mining"].prereqs, ("in_situ_resource_utilization", "directed_energy_weapons")
+        )
+        self.assertTrue(any(not tech.prereqs for tech in self.catalog))
+
+    def test_ladder_branch_requires_prerequisites(self):
+        # Researching a technology doesn't mean holding its prerequisites: a
+        # save from before #1234 kept LIB and UNA researching asteroid_mining
+        # without in_situ_resource_utilization, and the engine refused the
+        # theft every month (#1244).
+        for tech in self.production:
+            start = self.steal.index(f"\t\t\tis_researching_technology = {tech.key}\n")
+            limit = self.steal[start : self.steal.index("\t\t}", start)]
+            expected = [
+                f"is_researching_technology = {tech.key}",
+                f"NOT = {{ has_technology_researched = {tech.key} }}",
+                *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                f"scope:iw_theft_target ?= {{ has_technology_researched = {tech.key} }}",
+            ]
+            self.assertEqual([line.strip() for line in limit.splitlines()], expected, tech.key)
+
     def test_random_list_behind_stealable_guard(self):
         guard = self.steal.index("covert_tech_stealable_production = { TARGET = scope:iw_theft_target }")
         self.assertLess(guard, self.steal.index("random_list = {"))
@@ -86,13 +109,24 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(entries.count("can_research = "), len(self.production))
 
     def test_stealable_accepts_current_research(self):
-        # The theft's current-research branch needs no can_research, so the
-        # launch and keep gates must not need it for that technology either:
-        # a gate stricter than the theft would end an operation still stealing.
+        # The gate accepts a technology on the theft's own current-research
+        # terms (researching it, its prerequisites held, no can_research): a
+        # gate stricter than the theft would end an operation still stealing,
+        # and a looser one would keep an operation alive with nothing to take.
         text = gen.render_stealable("production", self.production)
-        self.assertEqual(text.count("\t\tAND = {"), len(self.production))
+        self.assertEqual(text.count("\n\t\tAND = {"), len(self.production))
         for tech in self.production:
-            self.assertIn(f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}", text)
+            if not tech.prereqs:
+                self.assertIn(f"OR = {{ can_research = {tech.key} is_researching_technology = {tech.key} }}", text)
+                continue
+            current = "".join(
+                f"\t\t\t\t\t{line}\n"
+                for line in (
+                    f"is_researching_technology = {tech.key}",
+                    *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                )
+            )
+            self.assertIn(f"\t\t\tOR = {{\n\t\t\t\tcan_research = {tech.key}\n\t\t\t\tAND = {{\n{current}\t\t\t\t}}\n", text)
 
     def test_target_reads_are_guarded(self):
         for text in self.outputs.values():
@@ -108,6 +142,66 @@ class RenderTest(unittest.TestCase):
     def test_committed_outputs_are_current(self):
         for relative, text in self.outputs.items():
             self.assertEqual((ROOT / relative).read_text(encoding="utf-8-sig"), text, str(relative))
+
+
+class CanResearchSelfcheckTest(unittest.TestCase):
+    """TEMPORARY, with TE_SELF_CHECK covert_can_research_current/_stranded."""
+
+    HOOK = "common/on_actions/te_covert_tech_selfcheck_on_actions.txt"
+    HELPERS = "common/scripted_effects/te_covert_tech_selfcheck_effects.txt"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.catalog = gen.tech_catalog(gen.load_state(ROOT))
+        cls.tally = gen.render_selfcheck(cls.catalog)
+
+    def test_tally_sorts_every_technology_by_its_prerequisites(self):
+        for tech in self.catalog:
+            start = self.tally.index(f"\t\tlimit = {{ is_researching_technology = {tech.key} }}\n")
+            end = self.tally.find("\n\t}\n", start)
+            branch = [line.strip() for line in self.tally[start:end].splitlines()]
+            held = f"covert_tech_selfcheck_held = {{ TECH = {tech.key} }}"
+            if not tech.prereqs:
+                self.assertEqual(branch[1:], [held], tech.key)
+                continue
+            self.assertEqual(
+                branch[1:],
+                [
+                    "if = {",
+                    "limit = {",
+                    *(f"has_technology_researched = {prereq}" for prereq in tech.prereqs),
+                    "}",
+                    held,
+                    "}",
+                    "else = {",
+                    f"covert_tech_selfcheck_stranded = {{ TECH = {tech.key} }}",
+                    "}",
+                ],
+                tech.key,
+            )
+
+    def test_helpers_ask_can_research(self):
+        for name, counter in (("held", "te_cov_cr_held"), ("stranded", "te_cov_cr_stranded")):
+            block = " ".join(_block(self.HELPERS, f"covert_tech_selfcheck_{name}").split())
+            self.assertIn(f"change_global_variable = {{ name = {counter} add = 1 }}", block)
+            self.assertIn(
+                f"limit = {{ can_research = $TECH$ }} change_global_variable = {{ name = {counter}_can add = 1 }}", block
+            )
+
+    def test_hook_runs_once_with_a_sample(self):
+        block = " ".join(_block(self.HOOK, "te_covert_tech_can_research_selfcheck").split())
+        self.assertIn("limit = { NOT = { has_global_variable = te_cov_cr_checked } }", block)
+        self.assertIn("every_country = { covert_tech_selfcheck_research_tally = yes }", block)
+        # Marked done only once some country holds its prerequisites, so OK
+        # can't pass on an empty sample; the stranded line needs its own.
+        self.assertIn(
+            "limit = { global_var:te_cov_cr_held > 0 } set_global_variable = { name = te_cov_cr_checked value = yes }",
+            block,
+        )
+        self.assertLess(block.index("global_var:te_cov_cr_stranded > 0"), block.index("covert_can_research_stranded"))
+        for verdict in ("OK", "BROKEN"):
+            for name in ("covert_can_research_current", "covert_can_research_stranded"):
+                self.assertEqual(block.count(f"TE_SELF_CHECK {verdict} {name} "), 1, (verdict, name))
 
 
 def _block(path: str, name: str) -> str:
@@ -254,7 +348,7 @@ class ReviewFixTest(unittest.TestCase):
         self.assertIn("set_variable = { name = iw_stolen_total value = 0 }", text)
 
     def test_system_doc_drops_retired_spread_pick(self):
-        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        doc = "".join(p.read_text(encoding="utf-8") for p in (ROOT / "docs/systems/mod_systems").glob("*.md"))
         self.assertNotIn("covert_op_target_ahead_in_tech", doc)
         self.assertNotIn("Military espionage's conditional tech spread", doc)
 
@@ -262,7 +356,7 @@ class ReviewFixTest(unittest.TestCase):
         guide = (ROOT / "docs/player_guide/11-influence.md").read_text(encoding="utf-8")
         section = guide[guide.index("#### Stealing technology") : guide.index("Hover over an operation before launching it")]
         self.assertIn("if it is in that tree and the target has researched it", " ".join(section.split()))
-        self.assertIn("16% fully operational at priority 3", " ".join(section.split()))
+        self.assertIn("20% fully operational at priority 3", " ".join(section.split()))
 
 
 class RowTest(unittest.TestCase):

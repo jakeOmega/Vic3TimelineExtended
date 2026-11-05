@@ -145,13 +145,14 @@
 
 	status_desc = {
 		# The overview (gui/journal_entry_widgets/un_overview_widget.gui) shows
-		# membership, the tier, the crisis, authority, the Security Council and
-		# the agencies and the headquarters, with the old lines here as its
-		# tooltips; the programmes under way are the "Programmes and
-		# Conventions" section (owner, 2026-09-28). This text keeps what only it
-		# says: whether a UN exists, and who sits in the Assembly.
-		#
-		# 1. No UN: a founding conference in session, or dissolved.
+		# membership, the tier, the crisis, authority, who sits in the
+		# Assembly, the Security Council, the agencies and the headquarters,
+		# with the old lines here as its tooltips; the programmes under way are
+		# the "Programmes and Conventions" section (owner, 2026-09-28). This
+		# text keeps what only it says: that no UN exists, because a founding
+		# conference is in session or the last one was dissolved. The
+		# Assembly's statistics were its second half until the 2026-10-27
+		# audit (UN-20), which moved them under the overview's pies.
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_status_conference
@@ -160,36 +161,6 @@
 			triggered_desc = {
 				desc = je_un_status_dissolved
 				trigger = { un_founding_is_refounding = yes }
-			}
-		}
-
-		# 2. General Assembly statistics (§0.8 ruling 8): the represented
-		# members of the eligible nations, then the members whose
-		# representation is suspended, in the singular or the plural.
-		first_valid = {
-			triggered_desc = {
-				desc = je_un_statistics_suspended_many
-				trigger = {
-					any_country = {
-						un_representation_suspended = yes
-						count >= 2
-					}
-				}
-			}
-			triggered_desc = {
-				desc = je_un_statistics_suspended_one
-				trigger = {
-					any_country = { un_representation_suspended = yes }
-				}
-			}
-			triggered_desc = {
-				desc = je_un_statistics
-				trigger = {
-					any_country = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						count >= 1
-					}
-				}
 			}
 		}
 	}
@@ -300,6 +271,25 @@
 				# Of our Development Programs money, member or not, so the
 				# goodwill fades once it stops (un_economy_effects.txt).
 				un_dev_fund_patron_pulse = yes
+
+				# How long until we may table on our own motion again, member or
+				# not: the display mirror of our two tabling marks
+				# (un_propose_effects.txt; the 2026-10-27 audit, UN-8).
+				un_propose_wait_monthly = yes
+				# Which topics have a case for us, for a human member's overview
+				# and proposal list (un_propose_ready_snapshot): a snapshot, so
+				# the panel does not sweep thirty-four topics every frame.
+				if = {
+					limit = {
+						is_player = yes
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
+					}
+					un_propose_ready_snapshot = yes
+				}
+				else_if = {
+					limit = { has_variable = un_propose_ready_count }
+					un_propose_ready_clear = yes
+				}
 
 				# ---- Member-only logic ----
 				if = {

@@ -17,7 +17,47 @@ covert_warfare.1 = {
 	placement = root
 
 	title = covert_warfare.1.t
-	desc = covert_warfare.1.d
+	# The lobbies the exposure reaches, by name, as vanilla's lobby events name
+	# theirs: at home the one that favours the target, when it was a friend
+	# (covert_backlash_home, the options' appeasement line); in the target the
+	# one that favours us, whose members its public turns on
+	# (covert_backlash_public, in `after`). Neither when the exposure is
+	# costless. The paragraphs are their own keys, spliced onto
+	# covert_warfare.1.d with $key$, so the main text exists once.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					exists = scope:iw_home_lobby
+					exists = scope:iw_abroad_lobby
+					has_variable = iw_burned_friend
+					var:iw_burned_friend = 1
+					NOT = { covert_exposure_is_costless = yes }
+				}
+				desc = covert_warfare.1.d_home_abroad
+			}
+			triggered_desc = {
+				trigger = {
+					exists = scope:iw_home_lobby
+					has_variable = iw_burned_friend
+					var:iw_burned_friend = 1
+					NOT = { covert_exposure_is_costless = yes }
+				}
+				desc = covert_warfare.1.d_home
+			}
+			triggered_desc = {
+				trigger = {
+					exists = scope:iw_abroad_lobby
+					NOT = { covert_exposure_is_costless = yes }
+				}
+				desc = covert_warfare.1.d_abroad
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = covert_warfare.1.d
+			}
+		}
+	}
 	flavor = covert_warfare.1.f
 
 	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
@@ -95,6 +135,24 @@ covert_warfare.1 = {
 		}
 		else = {
 			set_variable = { name = iw_burned_friend value = 0 }
+		}
+		# The lobby at home that favours the target and the one in the target
+		# that favours us (covert_backlash_pro_lobby_of), pinned for the text
+		# and for covert_backlash_home, which changes scope:iw_home_lobby
+		# directly so the options' tooltips name it. Saved scopes, unlike the
+		# copies above, need no removal in `after`.
+		if = {
+			limit = { exists = scope:detected_by_country }
+			random_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:detected_by_country } }
+				save_scope_as = iw_home_lobby
+			}
+			scope:detected_by_country = {
+				random_political_lobby = {
+					limit = { covert_backlash_pro_lobby_of = { TARGET = ROOT } }
+					save_scope_as = iw_abroad_lobby
+				}
+			}
 		}
 		# UN redesign phase 3: an exposed severe operation is a record the
 		# General Assembly can hold against us (un_dossier_effects.txt), unless
@@ -280,6 +338,18 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 14 }
 				covert_op_burn = { TYPE = counterintel_support ACTION = covert_counterintel_support_action TARGET = scope:detected_by_country CODE = 14 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 15 }
+				covert_op_burn = { TYPE = incite_autonomy ACTION = covert_incite_autonomy_action TARGET = scope:detected_by_country CODE = 15 }
+			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 16 }
+				covert_op_burn = { TYPE = sabotage_colony ACTION = covert_sabotage_colony_action TARGET = scope:detected_by_country CODE = 16 }
+			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 17 }
+				covert_op_burn = { TYPE = survey_defences ACTION = covert_survey_defences_action TARGET = scope:detected_by_country CODE = 17 }
+			}
 
 			# The defender's public turns on the interest groups friendly to
 			# us (covert_backlash_public). Here and not in covert_warfare.2,
@@ -292,9 +362,25 @@ covert_warfare.1 = {
 			# while iw_burned_type_code still exists; removed further down.
 			covert_tradecraft_burn_loss = yes
 
-			scope:detected_by_country = {
-				trigger_event = { id = covert_warfare.2 }
+			# The follow-up: chosen at the catch when the defender ordered the
+			# exposure (iw_expose_response, covert_exposure_fire_with_response:
+			# covert_warfare.3, the Known Foreign Operations panel, the standing
+			# order), applied here with a notice; otherwise covert_warfare.2
+			# asks the defender (owner, 2026-11-04: a second event after the
+			# player had already decided read oddly).
+			if = {
+				limit = { has_variable = iw_expose_response }
+				scope:detected_by_country = { covert_exposure_response_apply = yes }
 			}
+			else = {
+				scope:detected_by_country = {
+					trigger_event = { id = covert_warfare.2 }
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = iw_expose_response }
+			remove_variable = iw_expose_response
 		}
 		if = {
 			limit = { has_variable = iw_burned_type_code }
@@ -382,8 +468,18 @@ covert_warfare.2 = {
 		# defender-side backlash effect in covert_warfare.1's `after` sets
 		# iw_last_exposed_public, and clears it on every exposure that did
 		# not). A sibling of the first_valid above, so the two concatenate;
-		# the texts open with a blank line.
+		# the texts open with a blank line. The first names the lobby and its
+		# interest groups (scope:iw_exposed_lobby, pinned in immediate), as
+		# vanilla's lobby events do; the others are for a lobby that has gone.
 		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_public
+					exists = scope:iw_exposed_by
+					exists = scope:iw_exposed_lobby
+				}
+				desc = covert_warfare.2.d_public_lobby
+			}
 			triggered_desc = {
 				trigger = {
 					has_variable = iw_last_exposed_public
@@ -450,6 +546,19 @@ covert_warfare.2 = {
 		# checks the perpetrator is still alive when it is clicked, so a
 		# country annexed while the popup is open closes it.
 		var:iw_last_exposed_country ?= { save_scope_as = iw_exposed_by }
+		# The lobby whose members the exposure discredited, for the public
+		# paragraph: the defender-side backlash effect hit it the same day, in
+		# covert_warfare.1's `after` just before triggering this event.
+		if = {
+			limit = {
+				has_variable = iw_last_exposed_public
+				exists = scope:iw_exposed_by
+			}
+			random_political_lobby = {
+				limit = { covert_backlash_pro_lobby_of = { TARGET = scope:iw_exposed_by } }
+				save_scope_as = iw_exposed_lobby
+			}
+		}
 	}
 
 	option = {
@@ -458,15 +567,9 @@ covert_warfare.2 = {
 
 		# Harden defenses: a decaying boost to separatism and coup resistance,
 		# three times the unit the command centre scales with intelligence
-		# capacity, and +6 intelligence capacity (2 per unit). Its own
-		# modifier: intelligence_capacity_defense at country scope is stripped
-		# every month by legacy_je_modifier_cleanup_effect.
-		add_modifier = {
-			name = covert_counterintelligence_alert
-			days = normal_modifier_time
-			is_decaying = yes
-			multiplier = 3
-		}
+		# capacity, and +6 intelligence capacity (2 per unit). Refreshed, not
+		# stacked (covert_counterintel_alert_add).
+		covert_counterintel_alert_add = yes
 
 		ai_chance = {
 			base = 10
@@ -570,13 +673,20 @@ covert_warfare.2 = {
 # While this is open the operation carries iw_catch_pending and is not rolled
 # again; `after` clears it. Not behind covert_warfare.2's 24-month cooldown:
 # every catch reaches the target.
-#   a. Expose them: covert_warfare.1 on the attacker, today's flow. If an
-#      exposure of that attacker is already in flight, the operation is
-#      watched with its exposure ordered. covert_warfare.4 tries again four
-#      days later, and the monthly pass (covert_watch_monthly) after that,
-#      until the attacker has answered the open covert_warfare.1, which a
-#      player may leave open for up to its month (duration is in months).
+#   a, expel, turn. Expose them (covert_catch_expose): covert_warfare.1 on
+#      the attacker, with the follow-up chosen here: shore up our
+#      counterintelligence, expel their diplomats, or turn it against them
+#      (covert_exposure_fire_with_response). covert_warfare.1's `after`
+#      applies it and posts a notice, in place of covert_warfare.2 (owner,
+#      2026-11-04). If an exposure of that attacker is already in flight, the
+#      operation is watched with its exposure ordered and the follow-up on its
+#      record. covert_warfare.4 tries again four days later, and the monthly
+#      pass (covert_watch_monthly) after that, until the attacker has answered
+#      the open covert_warfare.1, which a player may leave open for up to its
+#      month (duration is in months).
 #   b. Let it run: covert_watch_start. The attacker is not told.
+# A player's standing order (iw_catch_policy) can settle a catch without this
+# event: covert_ops_roll_detection_all.
 # The operation can end while the event is open, up to three months
 # (stand-down, the monthly sync, a lapsed pact); every use is guarded with
 # `exists`, and the options say so instead of acting.
@@ -611,6 +721,12 @@ covert_warfare.3 = {
 			# the later one's operation, and act on their own.
 			ROOT = { set_variable = { name = iw_caught_type_code value = PREV.var:iw_type_code } }
 		}
+		# The lobby here that favours the attacker, whose members an exposure
+		# discredits (covert_backlash_public), so Expose can name it and them.
+		random_political_lobby = {
+			limit = { covert_backlash_pro_lobby_of = { TARGET = scope:iw_catcher_attacker } }
+			save_scope_as = iw_catcher_lobby
+		}
 		# Self-check, once a game: the scopes the roll saved in the attacker's
 		# pulse reached the target's event (the BROKEN half is
 		# covert_watch_attacker_monthly's pending-decision watchdog).
@@ -621,38 +737,57 @@ covert_warfare.3 = {
 		}
 	}
 
+	# Expose them, with the follow-up chosen here (owner, 2026-11-04): it
+	# rides with the exposure and lands when covert_warfare.1 resolves, so no
+	# second event asks again. The three differ only in the follow-up; what
+	# exposing does, and the wait while another exposure of this attacker is
+	# open, are covert_catch_expose's.
 	option = {
 		name = covert_warfare.3.a
 		default_option = yes
 
-		# Expose them
+		covert_catch_expose = { RESPONSE = 1 }
 		if = {
 			limit = {
 				exists = scope:iw_caught_op
 				scope:iw_catcher_attacker = { is_country_alive = yes }
 			}
-			if = {
-				limit = { scope:iw_catcher_attacker = { covert_exposure_in_flight = yes } }
-				custom_tooltip = covert_warfare.3.a_wait_tt
-				hidden_effect = {
-					covert_watch_start = yes
-					if = {
-						limit = { exists = scope:iw_new_rec }
-						scope:iw_new_rec = { set_variable = { name = iw_expose_ordered value = 1 } }
-					}
-					trigger_event = { id = covert_warfare.4 days = 4 }
-				}
+			custom_tooltip = covert_warfare.3.a_follow_tt
+			show_as_tooltip = {
+				covert_counterintel_alert_add = yes
 			}
-			else = {
-				custom_tooltip = covert_warfare.3.a_tt
-				hidden_effect = {
-					scope:iw_caught_op = { save_scope_as = iw_burned_op }
-					scope:iw_catcher_attacker = { covert_exposure_fire = yes }
+		}
+	}
+
+	option = {
+		name = covert_warfare.3.expel
+
+		covert_catch_expose = { RESPONSE = 2 }
+		if = {
+			limit = {
+				exists = scope:iw_caught_op
+				scope:iw_catcher_attacker = { is_country_alive = yes }
+			}
+			custom_tooltip = covert_warfare.3.expel_tt
+			show_as_tooltip = {
+				change_relations = {
+					country = scope:iw_catcher_attacker
+					value = covert_expulsion_relations
 				}
 			}
 		}
-		else = {
-			custom_tooltip = covert_warfare.3.gone_tt
+	}
+
+	option = {
+		name = covert_warfare.3.turn
+
+		covert_catch_expose = { RESPONSE = 3 }
+		if = {
+			limit = {
+				exists = scope:iw_caught_op
+				scope:iw_catcher_attacker = { is_country_alive = yes }
+			}
+			custom_tooltip = covert_warfare.3.turn_tt
 		}
 	}
 

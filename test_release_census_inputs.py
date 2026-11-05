@@ -182,15 +182,13 @@ class ReleaseCensusInputsTest(unittest.TestCase):
             self.assertFalse([c for c in code if c], rel)
 
     def test_the_migrant_profiles_inputs_go_and_their_carriers_stay(self):
-        """Stage 3 of the modifier-types design (2026-10-19): women's share of the workforce and families among migrants
-        are census-only types. A release comments their lines out on the mod's own carriers too (Protected Class, the
-        two aviation techs), and keeps every other line those carry; the vanilla carriers' INJECTs go whole
-        (test_the_injection_files_are_inert)."""
-        for name in ("state_female_work_share_add", "state_family_migration_add"):
-            self.assertIn(name, self.types)
+        """Stage 3 of the modifier-types design (2026-10-19): families among migrants is a census-only type. A release
+        comments its lines out on the mod's own carriers too (the two aviation techs), and keeps every other line those
+        carry; the vanilla carriers' INJECTs go whole (test_the_injection_files_are_inert). Stage 3's other type, the
+        women's-rights laws' share of women at work, went on 2026-10-25."""
+        self.assertIn("state_family_migration_add", self.types)
+        self.assertNotIn("state_female_work_share_add", self.types)
         for rel, entry, typ, kept in (
-                ("common/laws/extra_laws.txt", "law_protected_class", "state_female_work_share_add",
-                 "state_dependent_political_participation_add = 0.5"),
                 ("common/technology/technologies/era_6.txt", "commercial_aviation", "state_family_migration_add",
                  "state_building_airport_max_level_add = 1"),
                 ("common/technology/technologies/era_7.txt", "jet_engine_technology", "state_family_migration_add",
@@ -206,13 +204,15 @@ class ReleaseCensusInputsTest(unittest.TestCase):
 
     def test_the_late_chronic_treatment_lines_go_and_their_technologies_stay(self):
         """The safeguards pass (owner, 2026-10-20): chronic treatment on Genetic Engineering, Molecular Assemblers and
-        Biological Immortality. A release comments each line out and keeps every other line the technology carries."""
+        Biological Immortality, and Rejuvenation Therapies since the era 13 spec (2026-10-31). A release comments each
+        line out and keeps every other line the technology carries."""
         self.assertIn("state_chronic_treatment_add", self.types)
         for rel, entry, kept in (
                 ("common/technology/technologies/era_11.txt", "genetic_engineering", "state_arable_land_mult = 0.50"),
-                ("common/technology/technologies/era_12.txt", "molecular_assemblers",
+                ("common/technology/technologies/era_12.txt", "rejuvenation_therapies", "character_health_add = 25"),
+                ("common/technology/technologies/era_13.txt", "molecular_assemblers",
                  "country_max_weekly_construction_progress_add = 200"),
-                ("common/technology/technologies/era_12.txt", "biological_immortality", "character_health_add = 100")):
+                ("common/technology/technologies/era_13.txt", "biological_immortality", "character_health_add = 100")):
             with self.subTest(entry=entry):
                 lines = self._text(rel).split("\n")
                 body = [lines[i] for i in sorted(self._entry_lines(self._text(rel), entry))]

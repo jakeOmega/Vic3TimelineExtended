@@ -14,7 +14,7 @@
 te_debris_uses_orbit = {
 	OR = {
 		has_technology_researched = guided_missiles
-		has_technology_researched = asteroid_mining
+		has_technology_researched = in_situ_resource_utilization
 		has_technology_researched = space_elevator
 		has_technology_researched = space_based_solar_power
 		has_technology_researched = orbital_weapon_platforms

@@ -141,7 +141,7 @@ te_demog_workforce_heal = {
 	}
 }
 
-# THIS = ROOT = a state: W's pair at |te_dg_mw|, one side at most. Removed and re-applied (docs/systems/mod_systems.md,
+# THIS = ROOT = a state: W's pair at |te_dg_mw|, one side at most. Removed and re-applied (docs/systems/mod_systems/dynamic_modifier_pattern.md,
 # the dynamic-modifier scaling pattern).
 te_demog_workforce_apply = {
 	te_demog_workforce_remove = yes

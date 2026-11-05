@@ -1610,7 +1610,7 @@ the bank leaves the clamp in month 4 (3 before) and reaches 0% in month 32 (27),
 
 ## 17. Crash ceilings (2026-10-05)
 
-The crash tiers (value 5…40, momentum −5…−1) were absolute resets, so a crash could lift a country that was already below the tier, and a softening response could add on top of that. The script now treats the tier figures as ceilings and holds every option to the pre-crash level (`docs/systems/mod_systems.md`, Monthly Pulse step 3; `test_banking_crash_no_raise.py`). `apply_crash` ports both.
+The crash tiers (value 5…40, momentum −5…−1) were absolute resets, so a crash could lift a country that was already below the tier, and a softening response could add on top of that. The script now treats the tier figures as ceilings and holds every option to the pre-crash level (`docs/systems/mod_systems/banking_cycle.md`, Monthly Pulse step 3; `test_banking_crash_no_raise.py`). `apply_crash` ports both.
 
 The simulator only models the origin crash, which fires from a high cycle, so it barely sees the bug. Wrapping `apply_crash` to compare each crash's figures before and after (100 runs × 100 years in each of the 26 cells at 0 and 5 points, a one-off, not kept in the repo): before, 17,211 crashes, 0 of which raised cycle value and 3 of which raised momentum (by up to 0.31); after, 17,215 crashes and 0. Trajectories diverge after the first changed crash, so the cells are not comparable beyond noise: the largest difference in any cell was 0.12 crashes a century, 0.4 points of mean severity and about a tenth of a point of months in recession. The 2026-09-22 retune stands.
 
@@ -1959,7 +1959,7 @@ In play, cooperative economies boomed and crashed a lot. The simulator runs a ma
 
 1. **The cooperative cycle on its own was too calm.** Untooled it crashed 0.6 times a century, against 10.9 for a market economy, and spent 0.2% of months in Boom or Frenzy. It had no positive feedback: `banking_cycle_apply_phase_modifiers` gave bubble inertia to market economies only, so a cooperative economy almost never left Stable, and the cooperative boom events (`.61`, `.62`, `.64`, `.66`, `.67`) had little to fire from.
 2. **Two council tools did all the booming.** Collective Capital Investment Plan carried +0.30 momentum and Cooperative Credit Union Expansion +0.25. §1's F1 explains why that is huge (a standing momentum add converges on ten times itself in cycle points a month), and §3 cut the market tools to ×0.3 for it; the council tools were never measured and kept the old scale. Together they moved the cycle +5.5 points a month, and switching them off left about 50 points of push. A player who left both on spent 28% of months in Frenzy. Under the AI the crash rate *rose* with the point budget (0.4 at 2 points, 3.6 at 6).
-3. **The pool term compounded.** Each week the cooperative phases added `investment_pool × country_weekly_investment_pool_mult`: a share of the pool's balance, not of its income, so an unspent pool grew ×1.68 a year in Frenzy (+0.01 a week) and halved in a year of Panic. Market phases move the capitalists' contribution instead, a flow. `mod_systems.md` § Overinvestment already named it as one way an Overinvestment episode runs on indefinitely.
+3. **The pool term compounded.** Each week the cooperative phases added `investment_pool × country_weekly_investment_pool_mult`: a share of the pool's balance, not of its income, so an unspent pool grew ×1.68 a year in Frenzy (+0.01 a week) and halved in a year of Panic. Market phases move the capitalists' contribution instead, a flow. `mod_systems/construction.md` § Overinvestment already named it as one way an Overinvestment episode runs on indefinitely.
 
 Ruled out: the coop-only events (`.60`–`.67`: one-off ±1–2 momentum, ±3–8 bubble) and the cooperative −0.5pp on the neutral rate, which, if anything, tightens the stance.
 
@@ -2450,3 +2450,37 @@ move off it loses the bonus at once.
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat [--wage-pressure 1.0] [--tune it_lean=0.25 | --tune cred_it=0 | --tune cred_growth=-0.1]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 300 --points 0 --only fiat --fin-law law_central_bank_independence --bank-level 9 [--wage-pressure 1.0] [--tune cred_it=0]
 ```
+
+## 27. Wealth Concentration's bubble line (2026-10-22)
+
+The demographic effects design (`docs/superpowers/specs/2026-10-22-demographic-effects-impact-design.md`) puts bubble
+pressure on Wealth Concentration's national pair: Great Family Fortunes +0.3 a month at a score of 80 (+0.5 at 100),
+Dispersed Wealth −0.4 at 20 (−0.53 at 0). The dispersed line was −0.3 until the owner's review of #1101; the last
+column is the size it moved to. `--extra-bubble X` adds a flat monthly term after the laws' lines (a run at 0 is
+bit-identical; `test_banking_sim_extensions.ExtraBubble`; −0.53 is `--extra-bubble -0.5333`). 400 runs a cell, market
+economy, crashes a century:
+
+| Arm | 0 | +0.3 (80) | −0.3 | +0.5 (100) | −0.4 (20) | −0.53 (0) |
+|---|---|---|---|---|---|---|
+| gold, no policy, no tools | 7.9 | 8.8 (+11%) | 7.4 (−6%) | 9.9 (+25%) | 7.3 (−8%) | 7.1 (−10%) |
+| gold, no policy, 5 points | 5.5 | 7.3 (+33%) | 4.3 (−22%) | 8.9 (+62%) | 3.8 (−31%) | 3.3 (−40%) |
+| gold, price mandate, no tools | 10.1 | 11.8 (+17%) | 9.1 (−10%) | 12.8 (+27%) | 8.9 (−12%) | 8.5 (−16%) |
+| fiat, price mandate, no tools | 15.8 | 18.6 (+18%) | 13.7 (−13%) | 21.1 (+34%) | 13.3 (−16%) | 12.4 (−22%) |
+| fiat, price mandate, 5 points | 8.2 | 11.7 (+43%) | 5.7 (−30%) | 14.2 (+73%) | 4.7 (−43%) | 3.6 (−56%) |
+| fiat, inflation targeting, no tools | 16.4 | 19.7 (+20%) | 14.7 (−10%) | 22.1 (+35%) | 14.2 (−13%) | 13.5 (−18%) |
+| fiat, growth mandate, no tools | 20.6 | 22.9 (+11%) | 18.8 (−9%) | 23.9 (+16%) | 18.1 (−12%) | 17.9 (−13%) |
+
+- **+0.3 and −0.4.** The design asked for a score-100 country to crash 10–30% more often than a neutral one untooled,
+  and a score-0 country 10–25% less. At ±0.3 the high end gave +16% to +35% and the low end −8% to −16%: two fiat
+  arms (+34%, +35%) above the +30% edge, and gold with no monetary policy (−8%) short of −10%. The two lines are
+  separate modifiers, so each end moves alone. At −0.4 every untooled arm at a score of 0 lands inside the band, −10%
+  to −22% (gold with no policy at −10% exactly, within the noise of 400 runs), and at 20 the cut, −8% to −16%, is
+  close to the +11% to +20% a score of 80 adds. The high side stays at +0.3, its two fiat arms a few points over the
+  edge, as a judgment call. The owner reads the no-policy row as the least realistic, and wanted the dispersed
+  extreme stronger anyway.
+- **The response is asymmetric.** A push down helps only while a bubble is building, since bubble pressure stops at
+  0: at the old size, −0.4 moved crashes about half as far as +0.5. That is why the dispersed line is the larger.
+- **Tools amplify it.** A managed cycle has less noise for the line to hide in: with 5 points the gaps are two to four
+  times the untooled ones. A player who manages the cycle feels the line most.
+- **Fiat with no monetary policy at all is saturated** (about 34 crashes a century, under every bubble term), and no
+  country runs it in game.

@@ -239,6 +239,26 @@ class PostLoadFailureWarningTests(_PostLoadChainTestBase):
         self.assertEqual([w["label"] for w in mss._post_load_warnings], ["boom"])
 
 
+class PostLoadWarnKeyTests(_PostLoadChainTestBase):
+    """An audit's summary reaches the reload `warnings` through
+    `_POST_LOAD_WARN_KEYS`; a key outside it is only logged (#1156 review)."""
+
+    def test_catalog_stale_true_becomes_a_warning(self):
+        self._install_module("fake_stale_catalog_audit",
+                             lambda mod_state=None: {"unreviewed": 0, "catalog_stale": True})
+        self._run([], [("stale_catalog", "fake_stale_catalog_audit")], audits_only=True)
+        self.assertEqual([(w["label"], w["counts"]) for w in mss._post_load_warnings],
+                         [("stale_catalog", {"catalog_stale": True})])
+
+    def test_catalog_fresh_or_unchecked_is_quiet(self):
+        for value in (False, None):
+            with self.subTest(catalog_stale=value):
+                self._install_module("fake_fresh_catalog_audit",
+                                     lambda mod_state=None, v=value: {"unreviewed": 0, "catalog_stale": v})
+                self._run([], [("fresh_catalog", "fake_fresh_catalog_audit")], audits_only=True)
+                self.assertEqual(mss._post_load_warnings, [])
+
+
 class PostLoadWriterDetectionTests(_PostLoadChainTestBase):
     def setUp(self):
         super().setUp()

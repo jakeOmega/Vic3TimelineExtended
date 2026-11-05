@@ -108,9 +108,9 @@ def iter_loc_files(loc_path):
 
 # Vanilla entity types ModState loads for the mod state server, as
 # {entity_type: directory relative to <base_game_path>/game/common, with
-# forward slashes}. mod_state_server builds its absolute base_game_paths from
-# this, and vanilla_parsed snapshots exactly these types — add a vanilla
-# entity type here, not in the server.
+# forward slashes}. entity_paths() builds the server's and mod_state_script's
+# base_game_paths / mod_paths from this, and vanilla_parsed snapshots exactly
+# these types — add a vanilla entity type here, not in either table.
 VANILLA_COMMON_DIRS = {
     "Building Groups": "building_groups",
     "Buildings": "buildings",
@@ -119,6 +119,7 @@ VANILLA_COMMON_DIRS = {
     "PMs": "production_methods",
     "Ideologies": "ideologies",
     "Political Movements": "political_movements",
+    "Parties": "parties",
     "Battle Conditions": "battle_conditions",
     "Buy Packages": "buy_packages",
     "Character Interactions": "character_interactions",
@@ -169,6 +170,39 @@ VANILLA_COMMON_DIRS = {
     "Terrains": "terrain",
     "Game Concepts": "game_concepts",
 }
+
+# Entity types ModState reads from the mod alone, as {entity_type: directory
+# relative to the mod root, with forward slashes}. The server serves them
+# mod-only and vanilla_parsed doesn't snapshot them.
+MOD_ONLY_DIRS = {
+    "Scripted Effects": "common/scripted_effects",
+    "Scripted Triggers": "common/scripted_triggers",
+    "Scripted GUIs": "common/scripted_guis",
+    "Scripted Progress Bars": "common/scripted_progress_bars",
+    "On Actions": "common/on_actions",
+    "Events": "events",
+}
+
+
+def entity_paths(base_game_path, mod_path):
+    """(base_game_paths, mod_paths), the {entity_type: absolute directory}
+    pair ModState takes: every VANILLA_COMMON_DIRS type on both sides, plus
+    the MOD_ONLY_DIRS types on the mod side. The server and mod_state_script
+    both build their tables here, so neither can fall behind the type list."""
+    base_common = os.path.join(base_game_path, "game", "common")
+    mod_common = os.path.join(mod_path, "common")
+    base_game_paths = {
+        entity_type: os.path.join(base_common, *rel.split("/"))
+        for entity_type, rel in VANILLA_COMMON_DIRS.items()
+    }
+    mod_paths = {
+        entity_type: os.path.join(mod_common, *rel.split("/"))
+        for entity_type, rel in VANILLA_COMMON_DIRS.items()
+    }
+    for entity_type, rel in MOD_ONLY_DIRS.items():
+        mod_paths[entity_type] = os.path.join(mod_path, *rel.split("/"))
+    return base_game_paths, mod_paths
+
 
 # Entity types whose entities are script values: an INJECT into one appends
 # its steps instead of merging them (ParadoxFileParser.script_values).

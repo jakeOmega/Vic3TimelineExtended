@@ -9,12 +9,16 @@ Clausewitz engine's normal logging:
 
 2. **Silent INJECT** — an `INJECT:<name> = { ... }` directive that targets
    an entity which is either:
+   - **REPLACEd** by another file in the mod. Every INJECT on a key applies
+     before any REPLACE on it, whichever file sorts first, so the REPLACE's
+     body is the final entry and the INJECT's modifiers/effects never apply,
+     though the file parses cleanly (read in game: scripting_best_practices.md
+     § Load Order (probed 2026-10-26), fact 8); OR
    - **mod-only** (not vanilla-defined; the entity's only declaration is a
-     bare `<name> = { ... }` somewhere in the mod), OR
-   - **REPLACEd** by another file in the mod.
-   In both cases, engine merge order causes the INJECT block to silently
-   *not* merge into the final entity. Symptom: the modifiers/effects in the
-   INJECT block never apply at runtime, even though the file parses cleanly.
+     bare `<name> = { ... }` somewhere in the mod). A cross-file INJECT there
+     does merge (same section, fact 8); a same-file one was seen not to
+     (§ `INJECT:` silently fails on mod-only or REPLACEd entities). Either way
+     the entity's body ends up split across blocks.
    **Fix:** edit the entity's bare/REPLACE declaration directly instead of
    using INJECT.
 
@@ -226,12 +230,13 @@ def audit(mod_state, mod_path: str | None = None) -> AuditResult:
                 rsite = all_replaces[name][0]
                 detail = (
                     f"`INJECT:{name}` won't merge: REPLACEd by "
-                    f"`{rsite[0]}:{rsite[1]}`. Edit the REPLACE block directly."
+                    f"`{rsite[0]}:{rsite[1]}`, and a REPLACE applies after every INJECT. "
+                    "Edit the REPLACE block directly."
                 )
             else:
                 dsite = bare_name_locations[name][0]
                 detail = (
-                    f"`INJECT:{name}` won't merge: mod-only entity defined at "
+                    f"`INJECT:{name}` targets a mod-only entity defined at "
                     f"`{dsite[0]}:{dsite[1]}`. Edit the definition directly."
                 )
             flags.append(Flag(
@@ -289,11 +294,12 @@ def render_report(result: AuditResult) -> str:
         "files; nothing surfaces in `error.log`.",
         "",
         "**Silent INJECT**: an `INJECT:<name>` directive targeting an entity",
-        "that is either mod-only (no vanilla version) or REPLACEd elsewhere",
-        "in the mod. The engine's merge order causes the INJECT to silently",
-        "*not* merge — symptom: the INJECT's modifiers don't apply at",
-        "runtime even though the file parses cleanly. Fix: edit the entity's",
-        "bare or REPLACE declaration directly.",
+        "that is REPLACEd elsewhere in the mod, or is mod-only (no vanilla",
+        "version). Every INJECT on a key applies before any REPLACE on it, so",
+        "an INJECT on a REPLACEd entity never applies at runtime, though the",
+        "file parses cleanly. On a mod-only entity a cross-file INJECT merges",
+        "and a same-file one may not; either way the entity's body is split.",
+        "Fix: edit the entity's bare or REPLACE declaration directly.",
         "",
         "**Top-level collision**: an entity defined more than once at top",
         "level (no `REPLACE:` / `INJECT:` prefix) across the mod's `common/`",

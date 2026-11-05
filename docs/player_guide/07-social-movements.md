@@ -1,17 +1,18 @@
 # Social movements
 
 The later eras bring social questions your government must answer: equal rights
-for discriminated minorities, human augmentation, digital privacy, mental health
-and life after work. Each has a journal entry that opens with a technology and
-ends when you settle the question, mostly by passing a law, or when time runs
-out. Other movements arrive as events without a journal entry, and religious
-revival events push back against secularization. The Social Movements game rule
-(on by default) controls the five journal entries and their events; the
+for discriminated minorities, human augmentation, the freedom to change how your
+body looks, digital privacy, mental health and life after work. Each has a
+journal entry that opens with a technology and ends when you settle the
+question, mostly by passing a law, or when time runs out. Other movements
+arrive as events without a journal entry, and religious revival events push
+back against secularization. The Social Movements game rule
+(on by default) controls the six journal entries and their events; the
 movements carried by events run either way.
 
 ## Movement journal entries at a glance
 
-All five sit in the journal's Domestic Affairs group, except the Post-Scarcity
+All six sit in the journal's Domestic Affairs group, except the Post-Scarcity
 Transition (Development). Decentralized countries never get them. The laws are
 described in [The mod's new laws](06-politics.md#the-mods-new-laws).
 
@@ -19,9 +20,10 @@ described in [The mod's new laws](06-politics.md#the-mods-new-laws).
 |---|---|---|---|---|
 | Civil Rights Movement | Civil Rights Movement (era 7), while an incorporated state holds pops below Provisional Acceptance | Movement Support reaches 100, or you enact Affirmative Action, or Universal Citizenship together with Protection | Movement Support falls to 0, or the Civil Rights political movement is gone | None |
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
-| Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 15 years |
+| Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom or Clade Citizenship | Natural Form still in force when time runs out, or Prescribed Form enacted | 20 years |
+| Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 20 years |
 | Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps still in force 10 years after the entry opens | 20 years |
-| Post-Scarcity Transition | Universal Basic Income (era 10) | Post-Scarcity Economy law | Never | 30 years |
+| Post-Scarcity Transition | Post-Work Society (era 12) | Post-Scarcity Economy law | Never | 30 years |
 
 ## The Civil Rights Movement journal entry
 
@@ -70,8 +72,8 @@ groups exclude each other. Cooptation is limited only by its law requirement.
 
 | Policy | Requires | What it does |
 |---|---|---|
-| Encourage Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
-| Federal Civil Rights Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
+| Grassroots Organizing | No crackdown | Raises support; helps enact laws but brings more radicals |
+| Federal Protection | Indifference, Protection or Affirmative Action; Minor Power rank or above; no crackdown | Raises support the most of the three; raises acceptance, costs bureaucracy and authority |
 | Gradualist Accommodation | No crackdown | Raises support a little; eases turmoil, raises acceptance slightly |
 | Cooptation / Token Reform | Discrimination, Indifference or Cultural Assimilation | Raises support for 12 months only; eases turmoil, costs legitimacy through ideological incoherence |
 | Suppression / Crackdown | No pro-movement policy | Lowers support; adds authority and turmoil |
@@ -126,6 +128,8 @@ policy must run more than 18 months to count. Results decay over ten years.
 | The Movement Fades (failure) | Otherwise | Radicals among lower-strata pops |
 
 Ties between pro-movement policies go to Federal Protection, then Grassroots.
+The entry's status lists the months each policy has run and names the ending
+the movement would reach if it won or collapsed now.
 
 ### How the AI handles civil rights
 
@@ -138,17 +142,18 @@ Suppression / Crackdown. They never switch a policy off.
 
 ## Debates settled by law
 
-The other four journal entries share a simpler shape. Each applies a modifier
+The other five journal entries share a simpler shape. Each applies a modifier
 while it runs and has up to a one-in-five chance each month (one in nine for
-Digital Rights) of one of its five events, whose options run from paying for
-reform to a hard-line response. It ends when you enact the settling law, or
-times out with radicals and a penalty.
+Digital Rights) of one of its five events (six for Morphological Freedom),
+whose options run from paying for reform to a hard-line response. It ends when
+you enact the settling law, or times out with a penalty.
 Outcome modifiers decay over ten years.
 
 | Journal entry | While active | Success | Failure | Time-out |
 |---|---|---|---|---|
 | Human Augmentation Debate | +5% innovation, +5% turmoil penalties | +10% innovation, +5% prestige | −10% innovation and −2% prestige, or +15% turmoil penalties and −5% prestige (your choice) | +15% turmoil penalties |
-| Digital Rights & Surveillance | +50 Authority, +5% turmoil penalties | +5% prestige, +5% innovation | +150 Authority, −5% innovation, −5% prestige; or radicals | −25 prestige, +5% turmoil penalties |
+| Morphological Freedom Debate | +5% Cultural Pull from Art, +5% turmoil penalties | +10% Cultural Pull from Art, +5% prestige | −10% Cultural Pull from Art and −5% migration pull, or +10% turmoil penalties and −2% prestige (your choice) | +10% turmoil penalties, under Licensed Modification |
+| Digital Rights & Surveillance | +50 Authority, +5% turmoil penalties | +5% prestige, +5% innovation | +150 Authority, −5% innovation, −5% prestige; or radicals | −25 prestige, +5% turmoil penalties and academic radicals; half that and no radicals under Moderate Data Privacy |
 | Mental Health Crisis | +3% mortality | −3% mortality, +5% prestige | +5% mortality, −5% prestige; or radicals | +5% mortality, −25 prestige |
 | Post-Scarcity Transition | +10% turmoil penalties | +15% prestige, +10% innovation | Can't fail | +15% turmoil penalties, −50 prestige |
 
@@ -162,10 +167,33 @@ Augmentation needs Bioenhanced Soldiers and the Ministry of War Established law.
 The events cover a society divided by augmentation, black-market implants,
 workplace discrimination, augmented crime and religious condemnation.
 
+### The morphological freedom debate
+
+Every country starts on Natural Form, and the Morphological Freedom technology
+(era 12) unlocks Licensed Modification and Morphological Freedom. Enacting
+Morphological Freedom settles the debate, as does Clade Citizenship if Self-Directed
+Evolution (era 13) arrives while it runs. Licensed Modification is a step on
+the way: held to the end, it leaves the question unsettled. If Natural Form is
+still in force when the twenty years run out, the debate is lost, and an event
+asks whether to enforce the law against people already changed or look away.
+Enacting Prescribed Form ends the debate at once as a failure, with no event:
+the state has settled the question.
+The Devout and the Rural Folk oppose both freer laws and the Intelligentsia
+support them; the laws themselves are in [Rights and society
+laws](06-politics.md#rights-and-society-laws). The events bring the first
+clinics, a television host's transformation, sport and eligibility, a teenager's
+case in court, a backlash from the pulpits and a fashion that sweeps the young,
+no two of them within two years of each other.
+
 ### The digital rights debate
 
-The entry opens in era 9, but Strong Privacy Rights needs Universal Digital
-Identity from era 11 and the Guaranteed Liberties law, and you have 15 years.
+Cybersecurity, the era 9 technology that opens the entry, unlocks Strong
+Privacy Rights; if Automated Surveillance opened it, research Cybersecurity
+first. The law also needs Guaranteed Liberties, which needs Right of Assembly or
+Protected Speech, and the Paternalistic, Patriotic and Traditionalist ideologies
+strongly oppose it, so the twenty years are mostly a political fight. The
+entry's status line names the step you are missing. Running out the clock under
+Moderate Data Privacy costs half the time-out penalty and no radicals.
 The events bring a whistleblower, a data breach, hackers, predictive policing
 and foreign cyber-espionage. The first three are leaks, and no two of them
 come within two years of each other. With Covert Warfare on, the last follows
@@ -184,9 +212,10 @@ PTSD and a care-home scandal.
 
 ### The post-scarcity debate
 
-This entry can't fail: it succeeds or times out. It opens in era 10, while the
-Post-Scarcity Economy law needs the era 12 technology of that name, so the 30
-years are a race through two eras (see [The extended timeline](02-timeline.md)).
+This entry can't fail: it succeeds or times out. It opens with Post-Work Society
+in era 12, while the Post-Scarcity Economy law needs the era 13 technology of
+that name, which requires Post-Work Society: the 30 years are a race into the
+last era (see [The extended timeline](02-timeline.md)).
 The events bring unemployment protests, a crisis of meaning, AI replacing
 bureaucrats, neo-Luddite terrorism and an art renaissance.
 

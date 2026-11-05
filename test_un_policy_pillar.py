@@ -53,6 +53,8 @@ GRANTS = {
     ("common/production_methods/unique_pms.txt", "pm_wonder_palais_des_nations"): 0.5,
     # The Antarctic Treaty's parties (the Global Commons, §4), applied at x1.
     ("common/static_modifiers/te_global_commons_un_modifiers.txt", "un_antarctic_policy_modifier"): 0.25,
+    # Frontier AI Control (era 13 spec § 7.1): a law only a member can hold.
+    ("common/laws/te_frontier_ai_laws.txt", "law_international_ai_oversight"): 0.5,
 }
 MAX_INSTITUTION_INVESTMENT = 9  # common/defines/extra_defines.txt
 
@@ -170,11 +172,13 @@ class GrantShapeTest(unittest.TestCase):
     def test_one_countrys_stack_stays_inside_the_pillar(self):
         """The weights sum to about 10, so one country holding the whole positive
         or negative stack at weight 1 must stay well inside +-25 (§0.10 ruling 4).
-        Positive: the best Rules of War law, the aid ministry at the cap, no first
-        use, the HQ and both palaces. Negative: Total War, Isolationism, nuclear
-        warfighting and a full possession burden."""
+        Positive: the best Rules of War law, International Oversight, the aid
+        ministry at the cap, no first use, the HQ and both palaces. Negative:
+        Total War, Isolationism, nuclear warfighting and a full possession
+        burden."""
         laws = "common/laws/extra_laws.txt"
         best = (self._g(laws, "law_limited_war")
+                + self._g("common/laws/te_frontier_ai_laws.txt", "law_international_ai_oversight")
                 + self._g("common/institutions/extra_institutions.txt",
                           "institution_ministry_of_international_aid") * MAX_INSTITUTION_INVESTMENT
                 + self._g("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_1")
@@ -183,7 +187,7 @@ class GrantShapeTest(unittest.TestCase):
         worst = (self._g(laws, "law_total_war") + self._g(laws, "INJECT:law_isolationism")
                  + self._g("common/static_modifiers/nuclear_deterrence_modifiers.txt", "nd_doctrine_mod_5")
                  + self._g("common/static_modifiers/nuclear_taboo_modifiers.txt", "nd_taboo_possession_cost"))
-        self.assertLessEqual(best, 5.5)
+        self.assertLessEqual(best, 6)
         self.assertGreaterEqual(worst, -6.5)
 
     def test_no_grant_rides_on_the_uns_own_enforcement(self):

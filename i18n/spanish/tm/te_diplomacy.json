@@ -1,0 +1,570 @@
+{
+ "annex_subject_peaceful": {
+  "en": "Peaceful Integration",
+  "es": "Integración pacífica"
+ },
+ "annex_subject_peaceful_action_name": {
+  "en": "Peaceful Integration",
+  "es": "Integración pacífica"
+ },
+ "annex_subject_peaceful_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has peacefully integrated [TARGET_COUNTRY.GetName].",
+  "es": "[INITIATOR_COUNTRY.GetName] ha integrado pacíficamente a [TARGET_COUNTRY.GetName]."
+ },
+ "annex_subject_peaceful_action_notification_name": {
+  "en": "Peaceful Integration",
+  "es": "Integración pacífica"
+ },
+ "annex_subject_peaceful_action_propose_name": {
+  "en": "Propose Peaceful Integration",
+  "es": "Proponer integración pacífica"
+ },
+ "annex_subject_peaceful_desc": {
+  "en": "Peaceful Integration is a [concept_diplomatic_action] that allows a country to peacefully annex a subject country.",
+  "es": "La integración pacífica es una [concept_diplomatic_action|l] que permite a un país anexionar pacíficamente a un país súbdito."
+ },
+ "annex_subject_peaceful_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] accepted our proposal for Peaceful Integration.",
+  "es": "[TARGET_COUNTRY.GetName] ha aceptado nuestra propuesta de integración pacífica."
+ },
+ "annex_subject_peaceful_proposal_accepted_name": {
+  "en": "Peaceful Integration Accepted",
+  "es": "Integración pacífica aceptada"
+ },
+ "annex_subject_peaceful_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] declined our proposal for Peaceful Integration.",
+  "es": "[TARGET_COUNTRY.GetName] ha rechazado nuestra propuesta de integración pacífica."
+ },
+ "annex_subject_peaceful_proposal_declined_name": {
+  "en": "Peaceful Integration Declined",
+  "es": "Integración pacífica rechazada"
+ },
+ "annex_subject_peaceful_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] wishes to peacefully integrate with us.",
+  "es": "[INITIATOR_COUNTRY.GetName] desea integrarse pacíficamente con nosotros."
+ },
+ "annex_subject_peaceful_proposal_notification_name": {
+  "en": "Proposal for Peaceful Integration",
+  "es": "Propuesta de integración pacífica"
+ },
+ "colonial_collapse_subject_unrest_modifier": {
+  "en": "Imperial Collapse Aftershock",
+  "es": "Secuelas del colapso imperial"
+ },
+ "colonial_overlord_collapsing_subject_ld_modifier": {
+  "en": "Subject on the Brink",
+  "es": "Súbdito al borde del abismo"
+ },
+ "colonial_overlord_crumbling_subject_ld_modifier": {
+  "en": "Defiant Colonial Subject",
+  "es": "Súbdito colonial desafiante"
+ },
+ "colonial_overlord_strained_subject_ld_modifier": {
+  "en": "Restless Colonial Subject",
+  "es": "Súbdito colonial inquieto"
+ },
+ "covert_comms_disruption_action_pact_desc": {
+  "en": "We are disrupting military communications of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], degrading their combat effectiveness.",
+  "es": "Estamos interfiriendo las comunicaciones militares de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], lo que degrada su eficacia en combate."
+ },
+ "covert_counterintel_support_action_pact_desc": {
+  "en": "We are supporting the counterintelligence services of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos apoyando a los servicios de contrainteligencia de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_cultivate_assets_action_pact_desc": {
+  "en": "We are cultivating intelligence assets in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos cultivando activos de inteligencia en [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_destabilization_action_pact_desc": {
+  "en": "We are conducting a destabilization campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], fueling political unrest and separatism.",
+  "es": "Estamos llevando a cabo una campaña de desestabilización contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], alimentando el malestar político y el separatismo."
+ },
+ "covert_election_interference_action_pact_desc": {
+  "en": "We are running a covert election interference campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], undermining their political [concept_legitimacy].",
+  "es": "Estamos llevando a cabo una campaña encubierta de injerencia electoral contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], socavando su [concept_legitimacy|l] política."
+ },
+ "covert_financial_subversion_action_pact_desc": {
+  "en": "We are conducting covert financial subversion against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], destabilizing their financial markets.",
+  "es": "Estamos llevando a cabo una subversión financiera encubierta contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], desestabilizando sus mercados financieros."
+ },
+ "covert_ideological_subversion_action_pact_desc": {
+  "en": "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')].",
+  "es": "Estamos promoviendo encubiertamente nuestra ideología en [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], apoyando a [Concept('concept_political_movement', 'movimientos políticos')] afines."
+ },
+ "covert_industrial_espionage_action_pact_desc": {
+  "en": "We are conducting industrial espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], stealing their production secrets.",
+  "es": "Estamos llevando a cabo espionaje industrial contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], robando sus secretos de producción."
+ },
+ "covert_influence_campaign_action_pact_desc": {
+  "en": "We are conducting an influence campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], weakening their resistance to our [concept_power_bloc] pressure.",
+  "es": "Estamos llevando a cabo una campaña de influencia contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], debilitando su resistencia a la presión de nuestro [concept_power_bloc|l]."
+ },
+ "covert_infrastructure_sabotage_action_pact_desc": {
+  "en": "We are conducting covert sabotage operations against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], disrupting their [concept_infrastructure].",
+  "es": "Estamos llevando a cabo operaciones de sabotaje encubiertas contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], perturbando sus [concept_infrastructure|l]."
+ },
+ "covert_military_espionage_action_pact_desc": {
+  "en": "We are conducting military espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], gathering intelligence on their armed forces.",
+  "es": "Estamos llevando a cabo espionaje militar contra [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], recabando información sobre sus fuerzas armadas."
+ },
+ "covert_nuclear_sabotage_action_pact_desc": {
+  "en": "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos saboteando el programa de armas nucleares de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_regime_change_action_pact_desc": {
+  "en": "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos financiando un cambio de gobierno en [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_secure_material_action_pact_desc": {
+  "en": "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos buscando material nuclear extraviado en [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "covert_space_espionage_action_pact_desc": {
+  "en": "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "Estamos robando diseños del programa espacial de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "decolonize_diplo_action": {
+  "en": "Decolonize",
+  "es": "Descolonizar"
+ },
+ "decolonize_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has initiated [concept_decolonization_system] of [TARGET_COUNTRY.GetName].",
+  "es": "[INITIATOR_COUNTRY.GetName] ha iniciado la [concept_decolonization_system|l] de [TARGET_COUNTRY.GetName]."
+ },
+ "decolonize_diplo_action_action_notification_name": {
+  "en": "Decolonization",
+  "es": "Descolonización"
+ },
+ "decolonize_diplo_action_desc": {
+  "en": "Release a colonial territory as an independent nation.",
+  "es": "Libera un territorio colonial como nación independiente."
+ },
+ "diplomatic_alignment": {
+  "en": "Diplomatic Alignment",
+  "es": "Alineamiento diplomático"
+ },
+ "diplomatic_alignment_action_break_name": {
+  "en": "End Diplomatic Alignment",
+  "es": "Terminar el alineamiento diplomático"
+ },
+ "diplomatic_alignment_action_name": {
+  "en": "Diplomatic Alignment",
+  "es": "Alineamiento diplomático"
+ },
+ "diplomatic_alignment_action_notification_break_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has ended their alignment of [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
+  "es": "[INITIATOR_COUNTRY.GetName] ha puesto fin al alineamiento de la política exterior de [TARGET_COUNTRY.GetName] con la suya."
+ },
+ "diplomatic_alignment_action_notification_break_name": {
+  "en": "Diplomatic Alignment Ended",
+  "es": "Alineamiento diplomático terminado"
+ },
+ "diplomatic_alignment_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has aligned [TARGET_COUNTRY.GetName]'s foreign policy with their own.",
+  "es": "[INITIATOR_COUNTRY.GetName] ha alineado la política exterior de [TARGET_COUNTRY.GetName] con la suya."
+ },
+ "diplomatic_alignment_action_notification_name": {
+  "en": "Diplomatic Alignment",
+  "es": "Alineamiento diplomático"
+ },
+ "diplomatic_alignment_action_propose_name": {
+  "en": "Diplomatic Alignment",
+  "es": "Alineamiento diplomático"
+ },
+ "diplomatic_alignment_desc": {
+  "en": "Diplomatic Alignment is a [concept_diplomatic_action] that allows a country to influence the foreign policy of another country.",
+  "es": "El alineamiento diplomático es una [concept_diplomatic_action|l] que permite a un país influir en la política exterior de otro país."
+ },
+ "diplomatic_alignment_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] is aligning its foreign policy with [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName].",
+  "es": "[SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] está alineando su política exterior con la de [SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName]."
+ },
+ "diplomatic_overture_modifier": {
+  "en": "Diplomatic Overture",
+  "es": "Acercamiento diplomático"
+ },
+ "diplomatic_overture_modifier_desc": {
+  "en": "Our diplomats are pursuing negotiations and diplomatic engagement to resolve international tensions.",
+  "es": "Nuestros diplomáticos llevan a cabo negociaciones y contactos diplomáticos para resolver las tensiones internacionales."
+ },
+ "diplomatic_overture_rebuffed_modifier": {
+  "en": "Diplomatic Overture Rebuffed",
+  "es": "Acercamiento diplomático rechazado"
+ },
+ "diplomatic_overture_rebuffed_modifier_desc": {
+  "en": "Our diplomatic overture was rejected, resulting in a humiliating loss of face on the international stage.",
+  "es": "Nuestro acercamiento diplomático fue rechazado, lo que supuso una humillante pérdida de reputación en la escena internacional."
+ },
+ "foreign_terror_diplomacy_modifier": {
+  "en": "Intelligence Cooperation",
+  "es": "Cooperación en inteligencia"
+ },
+ "foreign_terror_diplomacy_modifier_desc": {
+  "en": "Quiet intelligence-sharing agreements help prevent future attacks while maintaining diplomatic channels.",
+  "es": "Unos discretos acuerdos de intercambio de inteligencia ayudan a prevenir futuros atentados sin cerrar los canales diplomáticos."
+ },
+ "humanitarian_aid_pact_desc": {
+  "en": "Gives money to the poor in another country, increasing influence and relations.",
+  "es": "Entrega dinero a los pobres de otro país, lo que aumenta la influencia y las relaciones."
+ },
+ "identity_diplomatic": {
+  "en": "Diplomatic Framework",
+  "es": "Marco diplomático"
+ },
+ "identity_diplomatic_desc": {
+  "en": "This Identity is founded on [Concept('concept_power_bloc_principle', 'principles')] of collective security, shared prosperity, and respect for international law.",
+  "es": "Esta identidad se funda en [Concept('concept_power_bloc_principle', 'principios')] de seguridad colectiva, prosperidad compartida y respeto al derecho internacional."
+ },
+ "intelligence_sharing_pact": {
+  "en": "Intelligence Sharing Pact",
+  "es": "Pacto de intercambio de inteligencia"
+ },
+ "intelligence_sharing_pact_article_short_desc": {
+  "en": "Both countries will share intelligence",
+  "es": "Ambos países compartirán inteligencia"
+ },
+ "intelligence_sharing_pact_desc": {
+  "en": "An agreement between two countries to share intelligence information.",
+  "es": "Un acuerdo entre dos países para compartir información de inteligencia."
+ },
+ "intelligence_sharing_pact_effects_desc": {
+  "en": "• +5% intelligence [concept_institution] effectiveness for both countries.\\n• +3 [concept_intelligence_capacity] for both.\\n• Once a year, the partner with the weaker covert defense is shielded by the stronger partner's intelligence, raising its Economic, Military and Ideological covert defense according to the gap between them.\\n• +10% intelligence institution costs for both.\\n• +300 [concept_treaty] leverage generation for both.\\n• Both countries gain 1 [concept_infamy] upon signing.\\n• Improves relations over time (max +60).",
+  "es": "• +5% de eficacia de la [concept_institution|l] de inteligencia para ambos países.\\n• +3 de [concept_intelligence_capacity|l] para ambos.\\n• Una vez al año, el socio con la defensa encubierta más débil queda protegido por la inteligencia del socio más fuerte, lo que eleva su defensa encubierta económica, militar e ideológica según la diferencia entre ambos.\\n• +10% de coste de la institución de inteligencia para ambos.\\n• +300 de generación de potestad del [concept_treaty|l] para ambos.\\n• Ambos países ganan 1 de [concept_infamy|l] al firmar.\\n• Mejora las relaciones con el tiempo (máx. +60)."
+ },
+ "iw_target_not_our_subject_tt": {
+  "en": "Cannot target our own subjects",
+  "es": "No se puede apuntar a nuestros propios súbditos"
+ },
+ "ministry_fa_diplomacy_advance": {
+  "en": "Foreign Affairs Ministry: Diplomacy Advance",
+  "es": "Ministerio de Asuntos Exteriores: avance diplomático"
+ },
+ "ministry_fa_diplomacy_advance_desc": {
+  "en": "A strong positive boost to ministry law enactment progress from a recent event.",
+  "es": "Un fuerte impulso positivo al progreso de promulgación de leyes del ministerio procedente de un evento reciente."
+ },
+ "ministry_fa_diplomacy_cautious": {
+  "en": "Foreign Affairs Ministry: Diplomacy Cautious Advance",
+  "es": "Ministerio de Asuntos Exteriores: avance prudente en diplomacia"
+ },
+ "ministry_fa_diplomacy_cautious_desc": {
+  "en": "A smaller positive boost to ministry law enactment progress from a recent event.",
+  "es": "Un impulso positivo menor al progreso de promulgación de leyes del ministerio procedente de un evento reciente."
+ },
+ "ministry_fa_diplomacy_stall": {
+  "en": "Foreign Affairs Ministry: Diplomacy Stall",
+  "es": "Ministerio de Asuntos Exteriores: diplomacia estancada"
+ },
+ "mutual_assistance_pact": {
+  "en": "Mutual Assistance Pact",
+  "es": "Pacto de asistencia mutua"
+ },
+ "nd_withdraw_umbrella_action_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has withdrawn its nuclear umbrella from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName].",
+  "es": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] ha retirado su paraguas nuclear a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ },
+ "nuke_diplo_action": {
+  "en": "Nuclear Weapon Industrial Strike",
+  "es": "Ataque industrial con arma nuclear"
+ },
+ "nuke_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has launched a Nuclear Weapon Industrial Strike.",
+  "es": "[INITIATOR_COUNTRY.GetName] ha lanzado un ataque industrial con arma nuclear."
+ },
+ "nuke_diplo_action_action_notification_name": {
+  "en": "Nuclear Weapon Industrial Strike Launched",
+  "es": "Ataque industrial con arma nuclear lanzado"
+ },
+ "nuke_diplo_action_desc": {
+  "en": "Launch a [concept_nuclear_strike] on an industrial center.",
+  "es": "Lanza un [concept_nuclear_strike|l] contra un centro industrial."
+ },
+ "pacific_rim_pact": {
+  "en": "Pacific Rim Pact",
+  "es": "Pacto de la Cuenca del Pacífico"
+ },
+ "peace_rally_diplomatic_leverage_modifier": {
+  "en": "Peace Rally Diplomatic Leverage",
+  "es": "Potestad diplomática de la concentración por la paz"
+ },
+ "peace_rally_diplomatic_leverage_modifier_desc": {
+  "en": "The massive peace rally has been leveraged as evidence of popular mandate for diplomacy, boosting our international influence.",
+  "es": "La multitudinaria concentración por la paz se ha aprovechado como prueba de un mandato popular a favor de la diplomacia, lo que aumenta nuestra influencia internacional."
+ },
+ "power_bloc_can_use_diplomatic_alignment_bool": {
+  "en": "Leader Can Use Diplomatic Alignment [concept_diplomatic_action]",
+  "es": "El líder puede usar la [concept_diplomatic_action|l] Alineamiento diplomático"
+ },
+ "power_bloc_can_use_diplomatic_alignment_bool_desc": {
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can use the Diplomatic Alignment [concept_diplomatic_action] to align the foreign policy of a [concept_country] with the [concept_power_bloc].",
+  "es": "El [Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')|l] puede usar la [concept_diplomatic_action|l] Alineamiento diplomático para alinear la política exterior de un [concept_country|l] con el [concept_power_bloc|l]."
+ },
+ "principle_diplomacy_1_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "es": "El [concept_power_bloc|l] fomenta la diplomacia y la resolución pacífica de los conflictos."
+ },
+ "principle_diplomacy_2_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "es": "El [concept_power_bloc|l] fomenta la diplomacia y la resolución pacífica de los conflictos."
+ },
+ "principle_diplomacy_3_desc": {
+  "en": "The [concept_power_bloc] encourages diplomacy and peaceful resolution of conflicts.",
+  "es": "El [concept_power_bloc|l] fomenta la diplomacia y la resolución pacífica de los conflictos."
+ },
+ "principle_group_diplomacy": {
+  "en": "Foreign Service",
+  "es": "Servicio exterior"
+ },
+ "principle_group_diplomacy_desc": {
+  "en": "The [concept_power_bloc] maintains a professional foreign service, projecting influence through bilateral diplomacy and peaceful resolution of conflicts.",
+  "es": "El [concept_power_bloc|l] mantiene un servicio exterior profesional que proyecta influencia mediante la diplomacia bilateral y la resolución pacífica de los conflictos."
+ },
+ "ruler_average_diplomat": {
+  "en": "Average Diplomat",
+  "es": "Diplomático corriente"
+ },
+ "ruler_average_diplomat_desc": {
+  "en": "A ruler of unremarkable diplomatic skill. They manage foreign affairs competently but without particular distinction.",
+  "es": "Un gobernante de habilidad diplomática poco destacable. Gestiona los asuntos exteriores con competencia, pero sin especial distinción."
+ },
+ "ruler_exceptional_diplomat": {
+  "en": "Master Diplomat",
+  "es": "Maestro diplomático"
+ },
+ "ruler_exceptional_diplomat_desc": {
+  "en": "A diplomat of legendary skill whose charm and cunning elevate the nation's standing on the world stage. Foreign courts hang upon their every word.",
+  "es": "Un diplomático de habilidad legendaria cuyo encanto y astucia elevan la posición de la nación en el escenario mundial. Las cortes extranjeras están pendientes de cada una de sus palabras."
+ },
+ "ruler_poor_diplomat": {
+  "en": "Inept Diplomat",
+  "es": "Diplomático inepto"
+ },
+ "ruler_poor_diplomat_desc": {
+  "en": "A ruler whose social graces and diplomatic instincts leave much to be desired. Foreign envoys are unimpressed, and the nation's voice carries little weight abroad.",
+  "es": "Un gobernante cuyas dotes sociales e instintos diplomáticos dejan mucho que desear. Los enviados extranjeros no se dejan impresionar, y la voz de la nación pesa poco en el extranjero."
+ },
+ "ruler_skilled_diplomat": {
+  "en": "Skilled Diplomat",
+  "es": "Diplomático hábil"
+ },
+ "ruler_skilled_diplomat_desc": {
+  "en": "A ruler with natural charm and a talent for negotiation. The nation enjoys enhanced [concept_prestige] and a more favorable reputation in foreign courts.",
+  "es": "Un gobernante con un encanto natural y talento para la negociación. La nación disfruta de mayor [concept_prestige|l] y de una reputación más favorable en las cortes extranjeras."
+ },
+ "ruler_terrible_diplomat": {
+  "en": "Terrible Diplomat",
+  "es": "Diplomático nefasto"
+ },
+ "ruler_terrible_diplomat_desc": {
+  "en": "A ruler spectacularly unsuited for diplomacy. Foreign envoys leave insulted, alliances crumble, and the nation's reputation suffers at every turn.",
+  "es": "Un gobernante espectacularmente inadecuado para la diplomacia. Los enviados extranjeros se marchan ofendidos, las alianzas se desmoronan y la reputación de la nación se resiente a cada paso."
+ },
+ "ste_telepathic_diplomacy": {
+  "en": "Telepathic Diplomacy",
+  "es": "Diplomacia telepática"
+ },
+ "ste_telepathic_diplomacy_desc": {
+  "en": "A direct mind-to-mind diplomatic channel has opened new possibilities for cooperation.",
+  "es": "Un canal diplomático directo de mente a mente ha abierto nuevas posibilidades de cooperación."
+ },
+ "ste_telepathic_diplomacy_rejected": {
+  "en": "Telepathic Diplomacy Rejected",
+  "es": "Diplomacia telepática rechazada"
+ },
+ "ste_telepathic_diplomacy_rejected_desc": {
+  "en": "Telepathic diplomacy was deemed too risky to pursue.",
+  "es": "Se consideró demasiado arriesgado recurrir a la diplomacia telepática."
+ },
+ "suppress_subject_liberty": {
+  "en": "Reduce Subject Liberty",
+  "es": "Reducir la libertad del súbdito"
+ },
+ "suppress_subject_liberty_article_short_desc": {
+  "en": "[SOURCE_COUNTRY.GetNameNoFormatting] will accept tighter control from [TARGET_COUNTRY.GetNameNoFormatting]",
+  "es": "[SOURCE_COUNTRY.GetNameNoFormatting] aceptará un control más estricto por parte de [TARGET_COUNTRY.GetNameNoFormatting]"
+ },
+ "suppress_subject_liberty_desc": {
+  "en": "Reduce Subject Liberty that allows a country to decrease the autonomy of a subject nation.",
+  "es": "Reducir la libertad del súbdito permite a un país disminuir la autonomía de una nación súbdita."
+ },
+ "suppress_subject_liberty_effects_desc": {
+  "en": "• Reduces [concept_liberty_desire] in the source (subject) country.",
+  "es": "• Reduce el [concept_liberty_desire|l] en el país de origen (el súbdito)."
+ },
+ "tactical_nuke_diplo_action": {
+  "en": "Tactical [concept_nuclear_strike]",
+  "es": "[concept_nuclear_strike] táctico"
+ },
+ "tactical_nuke_diplo_action_action_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] has launched a Tactical [concept_nuclear_strike].",
+  "es": "[INITIATOR_COUNTRY.GetName] ha lanzado un [concept_nuclear_strike|l] táctico."
+ },
+ "tactical_nuke_diplo_action_action_notification_name": {
+  "en": "Tactical [concept_nuclear_strike] Launched",
+  "es": "[concept_nuclear_strike] táctico lanzado"
+ },
+ "tactical_nuke_diplo_action_desc": {
+  "en": "Launch a tactical [concept_nuclear_strike] on a military target.",
+  "es": "Lanza un [concept_nuclear_strike|l] táctico contra un objetivo militar."
+ },
+ "te_diplomacy_tab_un": {
+  "en": "UN",
+  "es": "ONU"
+ },
+ "te_diplomacy_tab_un_locked_tt": {
+  "en": "#b $je_united_nations$#!\\nNot open yet. It opens once:\\n",
+  "es": "#b $je_united_nations$#!\\nAún no está disponible. Se abre cuando:\\n"
+ },
+ "te_diplomacy_tab_un_tt": {
+  "en": "The General Assembly, your standing and the UN's authority, with every action the journal entry offers. These are the journal entry's own panels: a change made here shows there too.",
+  "es": "La Asamblea General, tu posición y la autoridad de la ONU, con todas las acciones que ofrece la anotación en el diario. Son los paneles propios de la anotación en el diario: un cambio hecho aquí se refleja también allí."
+ },
+ "te_diplomacy_un_open_journal_tt": {
+  "en": "Opens $je_united_nations$ in the journal.",
+  "es": "Abre $je_united_nations$ en el diario."
+ },
+ "te_diplomacy_un_tab_actions_header": {
+  "en": "Actions",
+  "es": "Acciones"
+ },
+ "te_diplomacy_un_tab_status_header": {
+  "en": "Status",
+  "es": "Situación"
+ },
+ "te_diplomatic_relations_boost": {
+  "en": "Diplomatic Goodwill",
+  "es": "Buena voluntad diplomática"
+ },
+ "te_diplomatic_relations_drain": {
+  "en": "Diplomatic Friction",
+  "es": "Fricción diplomática"
+ },
+ "te_seabed_administer_claims_pact_desc": {
+  "en": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administers the seabed claims of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]",
+  "es": "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] administra las reclamaciones del lecho marino de [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]"
+ },
+ "te_seabed_administer_subject_claimant_tt": {
+  "en": "The subject has researched $abyssal_plain_mining$ and has a coastal state",
+  "es": "El súbdito ha investigado $abyssal_plain_mining$ y tiene un estado costero"
+ },
+ "te_seabed_administer_subject_tt": {
+  "en": "The country is still our direct subject",
+  "es": "El país sigue siendo nuestro súbdito directo"
+ },
+ "trade_diplomacy_modifier": {
+  "en": "Trade Diplomacy",
+  "es": "Diplomacia comercial"
+ },
+ "trade_diplomacy_modifier_desc": {
+  "en": "We chose diplomacy over sanctions, maintaining trade flows but appearing unwilling to confront our rival.",
+  "es": "Elegimos la diplomacia antes que las sanciones, lo que mantiene los flujos comerciales pero da la impresión de que no queremos enfrentarnos a nuestro rival."
+ },
+ "treaty_name_education_and_training_pact": {
+  "en": "Education and Training Pact",
+  "es": "Pacto de educación y formación"
+ },
+ "un_lobby_against_action_pact_desc": {
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #R against#! the resolution before the [concept_un_general_assembly].",
+  "es": "Nuestra delegación presiona a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] para que vote #R en contra#! de la resolución ante la [concept_un_general_assembly]."
+ },
+ "un_lobby_for_action_pact_desc": {
+  "en": "Our delegation is pressing [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] to vote #G in favour#! of the resolution before the [concept_un_general_assembly].",
+  "es": "Nuestra delegación presiona a [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName] para que vote #G a favor#! de la resolución ante la [concept_un_general_assembly]."
+ },
+ "un_refuse_aid_diplomatic_penalty_tt": {
+  "en": "As a #bold [concept_major_power]#! refusing aid with [concept_un_authority] above 40, we will suffer #R diplomatic penalties#! ([concept_prestige] and relations).",
+  "es": "Como #bold [concept_major_power|l]#! que rechaza la ayuda con [concept_un_authority|l] por encima de 40, sufriremos #R penalizaciones diplomáticas#! ([concept_prestige|l] y relaciones)."
+ },
+ "un_secure_commitment_action_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote in favour of the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "es": "[TARGET_COUNTRY.GetName] se ha comprometido a votar a favor de la resolución ante la [concept_un_general_assembly]. Le debemos una [concept_obligation|l] por ello."
+ },
+ "un_secure_commitment_action_proposal_accepted_name": {
+  "en": "A vote pledged to us",
+  "es": "Un voto comprometido a nuestro favor"
+ },
+ "un_secure_commitment_action_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote in favour of the resolution.",
+  "es": "[TARGET_COUNTRY.GetName] no comprometerá su voto a favor de la resolución."
+ },
+ "un_secure_commitment_action_proposal_declined_name": {
+  "en": "Our approach was refused",
+  "es": "Nuestra petición fue rechazada"
+ },
+ "un_secure_commitment_action_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote in favour of the resolution before the [concept_un_general_assembly].",
+  "es": "[INITIATOR_COUNTRY.GetName] nos pide que votemos a favor de la resolución ante la [concept_un_general_assembly]."
+ },
+ "un_secure_commitment_action_proposal_notification_name": {
+  "en": "A request for our vote at the United Nations",
+  "es": "Una petición de nuestro voto en las Naciones Unidas"
+ },
+ "un_secure_commitment_against_action_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has undertaken to vote against the resolution before the [concept_un_general_assembly]. We owe them an [concept_obligation] for it.",
+  "es": "[TARGET_COUNTRY.GetName] se ha comprometido a votar en contra de la resolución ante la [concept_un_general_assembly]. Le debemos una [concept_obligation|l] por ello."
+ },
+ "un_secure_commitment_against_action_proposal_accepted_name": {
+  "en": "A vote pledged against",
+  "es": "Un voto comprometido en contra"
+ },
+ "un_secure_commitment_against_action_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] will not pledge their vote against the resolution.",
+  "es": "[TARGET_COUNTRY.GetName] no comprometerá su voto en contra de la resolución."
+ },
+ "un_secure_commitment_against_action_proposal_declined_name": {
+  "en": "Our approach was refused",
+  "es": "Nuestra petición fue rechazada"
+ },
+ "un_secure_commitment_against_action_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] asks us to vote against the resolution before the [concept_un_general_assembly].",
+  "es": "[INITIATOR_COUNTRY.GetName] nos pide que votemos en contra de la resolución ante la [concept_un_general_assembly]."
+ },
+ "un_secure_commitment_against_action_proposal_notification_name": {
+  "en": "A request for our vote at the United Nations",
+  "es": "Una petición de nuestro voto en las Naciones Unidas"
+ },
+ "voluntary_union_proposal_accepted_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has accepted our proposal of voluntary union.",
+  "es": "[TARGET_COUNTRY.GetName] ha aceptado nuestra propuesta de unión voluntaria."
+ },
+ "voluntary_union_proposal_accepted_name": {
+  "en": "Voluntary Union Accepted",
+  "es": "Unión voluntaria aceptada"
+ },
+ "voluntary_union_proposal_declined_desc": {
+  "en": "[TARGET_COUNTRY.GetName] has declined our proposal of voluntary union.",
+  "es": "[TARGET_COUNTRY.GetName] ha rechazado nuestra propuesta de unión voluntaria."
+ },
+ "voluntary_union_proposal_declined_name": {
+  "en": "Voluntary Union Declined",
+  "es": "Unión voluntaria rechazada"
+ },
+ "voluntary_union_proposal_notification_desc": {
+  "en": "[INITIATOR_COUNTRY.GetName] is offering [TARGET_COUNTRY.GetName] a voluntary union.",
+  "es": "[INITIATOR_COUNTRY.GetName] ofrece a [TARGET_COUNTRY.GetName] una unión voluntaria."
+ },
+ "voluntary_union_proposal_notification_effects_desc": {
+  "en": "On acceptance, [TARGET_COUNTRY.GetName] will be peacefully annexed by [INITIATOR_COUNTRY.GetName].",
+  "es": "Si se acepta, [INITIATOR_COUNTRY.GetName] anexionará pacíficamente a [TARGET_COUNTRY.GetName]."
+ },
+ "voluntary_union_proposal_notification_name": {
+  "en": "Voluntary Union Proposed",
+  "es": "Unión voluntaria propuesta"
+ },
+ "we_am_diplomacy_arsenal": {
+  "en": "Antimatter Arsenal Prestige",
+  "es": "Prestigio del arsenal de antimateria"
+ },
+ "we_am_diplomacy_arsenal_desc": {
+  "en": "The antimatter arsenal commands deference from rival nations and strengthens sovereign authority.",
+  "es": "El arsenal de antimateria impone deferencia a las naciones rivales y refuerza la autoridad soberana."
+ },
+ "we_am_diplomacy_olive": {
+  "en": "Antimatter Diplomacy",
+  "es": "Diplomacia de la antimateria"
+ },
+ "we_am_diplomacy_olive_desc": {
+  "en": "Diplomatic outreach balances antimatter capability with international cooperation.",
+  "es": "La labor diplomática equilibra la capacidad de antimateria con la cooperación internacional."
+ }
+}

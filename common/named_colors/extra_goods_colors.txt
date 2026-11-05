@@ -11,4 +11,5 @@
 	tech_metals = hsv360 { 230 55 65 }
 	motor_ships = hsv360 { 100 50 55 }
 	magnetic_drive_ships = hsv360 { 165 60 65 }
+	grid_power = hsv360 { 50 75 95 }
 }

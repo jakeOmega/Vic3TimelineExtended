@@ -29,6 +29,11 @@ Suppress an intentional unregistered reference with a trailing comment on the
 loc line. The engine ignores anything after the closing quote on a loc line:
 
     my_loc_key:0 "... [concept_X] ..." # REVIEWED 2026-05-09: rationale
+
+`python3 concept_reference_audit.py --strict` is the CI mode (the committed
+`vanilla_parsed/` snapshot stands in for the game). It exits 1 when any flag
+lacks that comment: #1257 shipped `je_space_race_widget_mod_mine_tt` linking
+`[concept_sr_extraplanetary_base]`, which never existed, and nothing failed.
 """
 import os
 import re
@@ -173,6 +178,12 @@ def audit(ms, mod_path: str | None = None) -> AuditResult:
     )
 
 
+def strict_exit_code(result: AuditResult) -> int:
+    """Exit status for `--strict` (CI mode): 1 if any flag lacks a
+    `# REVIEWED` exemption."""
+    return 1 if any(not f.exemption for f in result.flags) else 0
+
+
 def render_report(result: AuditResult) -> str:
     unrev = [f for f in result.flags if not f.exemption]
     exemp = [f for f in result.flags if f.exemption]
@@ -274,6 +285,12 @@ if __name__ == "__main__":
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from path_constants import mod_path
     import mod_state_server
+    # Vanilla's concepts from where a server load takes them (the
+    # vanilla_parsed/ snapshot without a game install): a bare ModState has
+    # none, so every reference to one false-flags.
     ms = mod_state_server.cli_mod_state()
     result = audit(ms, mod_path=mod_path)
     print(render_report(result))
+    # --strict: CI mode. Exit 1 if any flag lacks a `# REVIEWED ...` exemption.
+    if "--strict" in sys.argv:
+        raise SystemExit(strict_exit_code(result))

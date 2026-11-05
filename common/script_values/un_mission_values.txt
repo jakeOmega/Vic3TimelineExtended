@@ -466,6 +466,628 @@ un_disp_msn_strength = {
 	}
 }
 
+# The same three, for the mission in display slot N (0-7), for the chamber's
+# rows (the 2026-10-27 audit, UN-15): a GUI script value takes no argument, so
+# each slot has its own. 0 while the slot is empty. _frac is the progress
+# bar's 0-1.
+# Scope: any
+un_disp_msn_slot_0_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_0_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_0_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 0 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_1_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_1_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_1_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 1 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_2_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_2_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_2_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 2 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_3_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_3_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_3_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 3 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_4_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_4_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_4_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 4 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_5_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_5_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_5_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 5 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_6_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_6_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_6_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 6 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+un_disp_msn_slot_7_frac = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_progress }
+				add = var:un_msn_progress
+			}
+		}
+	}
+	divide = 100
+	min = 0
+	max = 1
+}
+un_disp_msn_slot_7_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_months }
+				add = var:un_msn_months
+			}
+		}
+	}
+}
+un_disp_msn_slot_7_strength = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = 7 } }
+			if = {
+				limit = { has_variable = un_msn_strength }
+				add = var:un_msn_strength
+			}
+		}
+	}
+}
+
+# The contributors of the mission in display slot N (0-7), for its row's
+# flags (the 2026-10-27 audit, UN-15; un_mission_mirror_flags):
+# _contributors is how many still exist (the flag row shows while it is above
+# 0); _flags how many of them the viewer holds a capital for, never more than
+# are still there (flag K shows while it is above K); _more the rest, the
+# row's "+N". 0 while the slot is empty.
+# Scope: country (the viewer)
+un_disp_msn_slot_0_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 0 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_0_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_0 }
+		value = var:un_msn_cap_count_0
+	}
+	max = un_disp_msn_slot_0_contributors
+}
+un_disp_msn_slot_0_more = {
+	value = un_disp_msn_slot_0_contributors
+	subtract = un_disp_msn_slot_0_flags
+	min = 0
+}
+un_disp_msn_slot_1_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 1 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_1_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_1 }
+		value = var:un_msn_cap_count_1
+	}
+	max = un_disp_msn_slot_1_contributors
+}
+un_disp_msn_slot_1_more = {
+	value = un_disp_msn_slot_1_contributors
+	subtract = un_disp_msn_slot_1_flags
+	min = 0
+}
+un_disp_msn_slot_2_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 2 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_2_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_2 }
+		value = var:un_msn_cap_count_2
+	}
+	max = un_disp_msn_slot_2_contributors
+}
+un_disp_msn_slot_2_more = {
+	value = un_disp_msn_slot_2_contributors
+	subtract = un_disp_msn_slot_2_flags
+	min = 0
+}
+un_disp_msn_slot_3_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 3 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_3_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_3 }
+		value = var:un_msn_cap_count_3
+	}
+	max = un_disp_msn_slot_3_contributors
+}
+un_disp_msn_slot_3_more = {
+	value = un_disp_msn_slot_3_contributors
+	subtract = un_disp_msn_slot_3_flags
+	min = 0
+}
+un_disp_msn_slot_4_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 4 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_4_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_4 }
+		value = var:un_msn_cap_count_4
+	}
+	max = un_disp_msn_slot_4_contributors
+}
+un_disp_msn_slot_4_more = {
+	value = un_disp_msn_slot_4_contributors
+	subtract = un_disp_msn_slot_4_flags
+	min = 0
+}
+un_disp_msn_slot_5_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 5 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_5_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_5 }
+		value = var:un_msn_cap_count_5
+	}
+	max = un_disp_msn_slot_5_contributors
+}
+un_disp_msn_slot_5_more = {
+	value = un_disp_msn_slot_5_contributors
+	subtract = un_disp_msn_slot_5_flags
+	min = 0
+}
+un_disp_msn_slot_6_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 6 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_6_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_6 }
+		value = var:un_msn_cap_count_6
+	}
+	max = un_disp_msn_slot_6_contributors
+}
+un_disp_msn_slot_6_more = {
+	value = un_disp_msn_slot_6_contributors
+	subtract = un_disp_msn_slot_6_flags
+	min = 0
+}
+un_disp_msn_slot_7_contributors = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				un_mission_in_slot = { SLOT = 7 }
+				has_variable_list = un_msn_contributors
+			}
+			every_in_list = {
+				variable = un_msn_contributors
+				limit = { exists = this }
+				add = 1
+			}
+		}
+	}
+}
+un_disp_msn_slot_7_flags = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_cap_count_7 }
+		value = var:un_msn_cap_count_7
+	}
+	max = un_disp_msn_slot_7_contributors
+}
+un_disp_msn_slot_7_more = {
+	value = un_disp_msn_slot_7_contributors
+	subtract = un_disp_msn_slot_7_flags
+	min = 0
+}
+
 # Order key for the register display and eviction: newest first / oldest first.
 # Scope: mission container
 un_mission_recency_order = {

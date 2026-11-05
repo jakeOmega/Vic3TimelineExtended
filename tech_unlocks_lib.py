@@ -26,9 +26,7 @@ from typing import Iterator
 # can declare `unlocking_technologies = { ... }`.
 #
 # `entity_type` matches the `ms.mod_parsers` keys used by mod_state_server
-# (see `base_game_paths` in that file). `parties/` is mod-only and isn't
-# in mod_parsers; we still index it so annotators that target "Parties"
-# would work if registered later.
+# (see `base_game_paths` in that file), "Parties" included since #1164.
 UNLOCK_SOURCES: list[tuple[str, str]] = [
     ("Buildings",            "buildings"),
     ("Combat Unit Types",    "combat_unit_types"),
@@ -52,7 +50,7 @@ UNLOCK_SOURCES: list[tuple[str, str]] = [
 # Vic3 also uses Clausewitz merge-directive prefixes: `INJECT:foo = { … }`,
 # `REPLACE:foo = { … }`, `REPLACE_OR_CREATE:foo = { … }`. The engine resolves
 # them to the underlying entity `foo`, so the inverted index needs to do the
-# same — otherwise (e.g.) `REPLACE_OR_CREATE:building_synthetics_plant_rubber`
+# same — otherwise (e.g.) `REPLACE_OR_CREATE:building_space_program`
 # falls out of the walk and its `unlocking_technologies` is missed.
 _TOP_LEVEL_RE = re.compile(
     r"^(?:(?P<directive>[A-Z_]+):)?(?P<id>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{",

@@ -391,6 +391,9 @@ te_debug_monuments.5 = { # REVIEWED 2026-10-11: console-only test event (`event 
 	option = {
 		name = te_debug_monuments.5.a
 		gm_seed_landmarks = yes
+		# An older save now has the To History landmarks, so base appeal gives up
+		# their heritage too (tourism_heritage_moved).
+		set_global_variable = gm_landmarks_seeded_2
 	}
 
 	option = {

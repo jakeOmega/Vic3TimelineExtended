@@ -47,7 +47,28 @@ the panel each cause's deaths on top (te_dg_dc_<c>_top), and te_dg_dc_ontop and 
 recorded numbers only rich_full's Causes of Death slices move: its window ran above the census's rate with no split by
 cause, so what was its Added on Top slice now spreads over the four natural causes by the estimate (and the fit moves
 in its last place). Its ring, births and deaths, which the scales reach, are as they were: with no split, one scale.
-rich_full alone was re-recorded on this tree."""
+rich_full alone was re-recorded on this tree.
+
+Women's share of the workers (2026-10-25) changes every census case on purpose. The census's own count of women among
+its workers (te_dg_fws_wk, else the sexes' rates before a count: te_demog_women_worker_share) splits work deaths under
+every setting the census runs, and Late Marriage's women's work reads it (te_demog_pr_target_lm,
+WOMEN_WORKERS_DIGESTS); the women's-rights laws' share went (te_demog_female_work_share), and with it the families'
+rights term (WOMEN_WORKERS_REMOVED; te_demog_k_family_base takes No Women's Rights' 0.0417). So the seed's and the
+step's split move in the Display-only case too, which now holds step 2's figures (and every name added since step 1,
+when it was last recorded), and every Late Marriage target. The
+model's cases move with them: the model's step reads the ring's last count (Ring.fws_work), and RICH's Protected Class
+no longer stands for 48% of the workers (its inputs hold no women's-work line, so its women are about 5%). The five
+census and model cases were re-recorded on this tree (TE_RECORD_GOLDEN_CASES); the lines' two cases are as they were.
+
+The ring's 300 years (issue #1075) re-files every slot and changes no number. The cases were recorded on the 150-year
+ring: each recorded slot compares re-filed as te_demog_ring_migrate re-files a save's (the cohort of age a from slot
+(Y - a) mod 150 to (Y - a) mod 300, Y the cases' last count, 1837; RING300_YEAR), and nobody in them is 150 or more, so
+the sweep's new ages hold nobody and every recorded value stays. New names (RING300_VARS): te_dg_ring, and the people
+past the pyramid's row starts past 85 (te_dg_of<i>, te_dg_om<i>), which the farm cases hold for their few aged 100 (the
+rows themselves don't show: under 1% of the people). The sweeps, the slots' normalisation and the bands' blocks that
+carry the rows are held to their new digests (RING300_DIGESTS). The model's rich case, whose ring keeps a few survivors
+past 150 (under a billionth of a person each, to age 169), ages them in their own slots instead of the pool, and its
+births and deaths moved by -1.9e-11 of themselves; it alone was re-recorded on this tree (TE_RECORD_GOLDEN_CASES)."""
 
 import functools
 import hashlib
@@ -214,6 +235,15 @@ RATE_FLOOR_DIGESTS = {
     ("generated_values", "te_demog_pop_death_mult"):
         "58ceeec452f3b205b3f49a8d5e0fd16300684cdb251c6aef4a3b852593a880ea",
 }
+# Women's share of the workers (2026-10-25; the docstring): Late Marriage's women's work reads the census's count over
+# parity, and the families' weight takes No Women's Rights' part of the retired rights term
+WOMEN_WORKERS_DIGESTS = {
+    ("generated_values", "te_demog_k_family_base"): "6f26d9a5fc7324a0931bb84c8145eb57b7f48c49f00c743200cb1afb30dc63d7",
+    ("generated_values", "te_demog_pr_target_lm"): "2264b061bc4f22584c7a149857a963264ce47e99486a7ce7836f9f05c49a7b27",
+}
+WOMEN_WORKERS_REMOVED = {("generated_values", "te_demog_female_work_share"),
+                         ("generated_values", "te_demog_k_family_rights_weight"),
+                         ("generated_values", "te_demog_k_full_female_work_share")}
 # The safeguards pass (owner, 2026-10-20): chronic treatment's cap 0.85 to 0.99, no floor but 0 on a cause's laws factor
 # (was 0.2), no ceiling on crowding's infection term (was +50%), the means' cap 1 (was 0.95), and the life table's open last
 # interval (te_demog_life_table passes its last group's rates to te_demog_lt_finish, whose survivors at 150 live on at
@@ -231,6 +261,39 @@ SAFEGUARDS_DIGESTS = {
     ("generated_values", "te_demog_treatment_target_chronic"):
         "41fdf5c92606c931702efb29e240f2e378966a156fd3c442ec4236c04ceaa310",
 }
+# The ring's 300 years (issue #1075; the docstring): the cases' last count, for re-filing their recorded slots; the new
+# names; the blocks the ring's length or the rows past 85 rewrote
+RING300_YEAR = 1837
+RING300_VARS = {"te_dg_ring", "te_dg_pyr_top"} | {f"te_dg_{k}{s}{i}" for k in ("o", "px") for s in "fm"
+                                                  for i in range(len(P.OLD_ROWS))}
+RING300_DIGESTS = {
+    # the sweeps, the slots' normalisation and the replay's ring lines run over 300 slots
+    ("generated_effects", "te_demog_sweep"): "eddf05eee7a6fb9fe0d3ad9641ff9ff9b3d6dc4ce645b02fadbeb474ba212fe7",
+    ("generated_effects", "te_demog_seed_sweep"): "fe22c425de633aa1fea5b1edac1a8228710891ffb3ae70b3b9238b8d3000a362",
+    ("generated_effects", "te_demog_normalize_slots"): "5ae92f56e09c1773a111a680542325477ddf561c53a877eda672b67c9baf66b6",
+    ("generated_effects", "te_demog_debug_log_ring_before"):
+        "00500221bcd238c5258bc618f87ba316447fa7769b349acf1409c58e84c914de",
+    ("generated_effects", "te_demog_debug_log_ring_after"):
+        "9b934aa10780d25c8cdc01c4790528f1e4b7febaa8b886bcb461375458a4d21c",
+    # the bands' blocks carry the rows past 85 beside the bands
+    ("generated_effects", "te_demog_normalize_bands"): "139ce6ae78d9c410308d2f4cbf4c0095fc1faf4dcc6e4a301740a4066829d0ef",
+    ("generated_effects", "te_demog_scale_bands"): "b669c91510a30f84d938918c39ea755aa8a99cfeb2c53c33fcaa9996be1a55be",
+    ("generated_effects", "te_demog_add_bands_to_root"):
+        "6c0d4825584eb5089d3464641964ba087af5477e1af8d65ddd600a68763c9d83",
+    ("generated_effects", "te_demog_reset_country_bands"):
+        "f4a032062b67769cb25ad877d56f9593c00a4b65c58d7f8874bb1fc890638b15",
+}
+
+
+def _ring300(name):
+    """A slot's name on the 150-year ring as the 300-year ring files the same cohort (te_demog_ring_migrate)."""
+    m = re.fullmatch(r"te_dg_([fm])(\d+)", name)
+    if not m or int(m.group(2)) >= M.OLD_RING_YEARS:
+        return name
+    age = (RING300_YEAR - int(m.group(2))) % M.OLD_RING_YEARS
+    return f"te_dg_{m.group(1)}{(RING300_YEAR - age) % P.RING_YEARS}"
+
+
 BLOCK_FILES = {"generated_effects": GENERATED_EFFECTS, "generated_values": GENERATED_VALUES,
                "line_effects": LINE_EFFECTS, "line_values": LINE_VALUES, "line_modifiers": LINE_MODIFIERS}
 CARRIERS = DM.load_carriers()
@@ -349,6 +412,12 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
             for case in FULL_CASES:
                 golden["cases"][case] = cls.now["cases"][case]
             GOLDEN.write_text(json.dumps(golden, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        if os.environ.get("TE_RECORD_GOLDEN_CASES"):
+            # the named cases alone (comma-separated), as women's share of the workers re-recorded five (the docstring)
+            golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
+            for case in os.environ["TE_RECORD_GOLDEN_CASES"].split(","):
+                golden["cases"][case] = cls.now["cases"][case]
+            GOLDEN.write_text(json.dumps(golden, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         cls.golden = json.loads(GOLDEN.read_text(encoding="utf-8"))
 
     def test_every_recorded_output_is_unchanged(self):
@@ -363,6 +432,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                     if name in CAUSES_ON_TOP_GONE:
                         self.assertNotIn(name, self.now["cases"][case][kind], f"{case}: {name} is back")
                         continue
+                    name = _ring300(name)
                     self.assertIn(name, self.now["cases"][case][kind], f"{case}: {name} is gone")
                     now = self.now["cases"][case][kind][name]
                     if isinstance(value, float) and isinstance(now, float):
@@ -376,17 +446,17 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
     def test_only_step_ones_names_are_new(self):
         for case, rec in self.golden["cases"].items():
             now = self.now["cases"][case]
-            self.assertEqual(set(now["vars"]) - set(rec["vars"]) - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
-                             - SAFETY_VARS - CAUSE_DEATH_VARS,
+            recorded = {_ring300(name) for name in rec["vars"]}
+            self.assertEqual(set(now["vars"]) - recorded - NEW_VARS - STEP3_VARS - STEP4_NEW_VARS - PHASE3_VARS
+                             - SAFETY_VARS - CAUSE_DEATH_VARS - RING300_VARS,
                              set(), case)
             self.assertEqual(set(now["modifiers"]) - set(rec["modifiers"]) - NEW_MODIFIERS, set(), case)
 
-    def test_the_full_cases_hold_step_twos_split(self):
-        """The re-recorded Full cases hold step 2's figures (te_dg_fws_wk splits their work deaths); the Display-only
-        case holds none of them, so a golden recorded before step 2 would fail here."""
-        for case in FULL_CASES:
+    def test_the_census_cases_hold_step_twos_split(self):
+        """The re-recorded census cases hold step 2's figures (te_dg_fws_wk splits their work deaths), the Display-only
+        case too since women's share of the workers (2026-10-25), so a golden recorded before either would fail here."""
+        for case in FULL_CASES + ("farm_display_only",):
             self.assertTrue(STEP2_VARS <= set(self.golden["cases"][case]["vars"]), case)
-        self.assertFalse(STEP2_VARS & set(self.golden["cases"]["farm_display_only"]["vars"]))
 
     def test_the_census_term_is_recorded(self):
         """The Full cases hold the census's own modifiers, so a change to M would show."""
@@ -402,7 +472,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 if (key, name) in LAW_LINE_MOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
-                if (key, name) in RATE_FLOOR_REMOVED | CAUSES_ON_TOP_REMOVED:
+                if (key, name) in RATE_FLOOR_REMOVED | CAUSES_ON_TOP_REMOVED | WOMEN_WORKERS_REMOVED:
                     self.assertNotIn(name, self.now["blocks"][key], f"{key}: {name} is back")
                     continue
                 self.assertIn(name, self.now["blocks"][key], f"{key}: {name} is gone")
@@ -415,6 +485,8 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = RATE_FLOOR_DIGESTS.get((key, name), want)
                 want = SAFEGUARDS_DIGESTS.get((key, name), want)
                 want = CAUSES_ON_TOP_DIGESTS.get((key, name), want)
+                want = WOMEN_WORKERS_DIGESTS.get((key, name), want)
+                want = RING300_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

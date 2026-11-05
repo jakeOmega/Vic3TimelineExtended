@@ -1,0 +1,154 @@
+{
+ "ship_type_amphibious_assault_ship": {
+  "en": "Amphibious Assault Ship",
+  "es": "Buque de asalto anfibio"
+ },
+ "ship_type_amphibious_assault_ship_desc": {
+  "en": "A modern landing helicopter assault platform that can deploy a [concept_battalion] of marines onto a hostile coast in a single wave. Replaces wartime troop transports.",
+  "es": "Una moderna plataforma de asalto con helicópteros de desembarco que puede desplegar un [concept_battalion|l] de infantes de marina en una costa hostil en una sola oleada. Sustituye a los transportes de tropas de la época de guerra."
+ },
+ "ship_type_antimatter_battleship": {
+  "en": "Antimatter Battleship",
+  "es": "Acorazado de antimateria"
+ },
+ "ship_type_antimatter_battleship_desc": {
+  "en": "A fusion-driven capital ship armed with antimatter-tipped mass-driver projectiles. The terminal expression of surface naval firepower.",
+  "es": "Un buque insignia impulsado por fusión y armado con proyectiles de acelerador de masa con punta de antimateria. La expresión definitiva de la potencia de fuego naval de superficie."
+ },
+ "ship_type_arsenal_ship": {
+  "en": "Arsenal Ship",
+  "es": "Buque arsenal"
+ },
+ "ship_type_arsenal_ship_desc": {
+  "en": "A capital-class missile platform packing hundreds of vertical-launch cells. Slow and lightly defended, but unmatched in sustained firepower.",
+  "es": "Una plataforma de misiles de la categoría de los buques insignia que reúne cientos de celdas de lanzamiento vertical. Lenta y poco defendida, pero insuperable en potencia de fuego sostenida."
+ },
+ "ship_type_asw_destroyer": {
+  "en": "ASW Destroyer",
+  "es": "Destructor ASW"
+ },
+ "ship_type_asw_destroyer_desc": {
+  "en": "An anti-submarine specialist destroyer equipped with sonar arrays and depth charges. Outclasses earlier destroyers against subsurface threats.",
+  "es": "Un destructor especializado en guerra antisubmarina, equipado con sonares y cargas de profundidad. Supera a los destructores anteriores frente a amenazas submarinas."
+ },
+ "ship_type_autonomous_swarm_submarine": {
+  "en": "Autonomous Swarm Submarine",
+  "es": "Submarino de enjambre autónomo"
+ },
+ "ship_type_autonomous_swarm_submarine_desc": {
+  "en": "An unmanned wolfpack of cooperating attack drones, coordinated by onboard AI. Devastating against capitals; vulnerable to dedicated point-defense escorts.",
+  "es": "Una manada de lobos no tripulada de drones de ataque que cooperan, coordinados por una IA a bordo. Devastador contra buques insignia; vulnerable a escoltas dedicadas a la defensa puntual."
+ },
+ "ship_type_expeditionary_fast_transport": {
+  "en": "Expeditionary Fast Transport",
+  "es": "Transporte rápido expedicionario"
+ },
+ "ship_type_expeditionary_fast_transport_desc": {
+  "en": "A high-speed catamaran troop transport that keeps pace with carrier strike groups. Trades capacity for speed — the inverse doctrine of the Expeditionary Sea Base.",
+  "es": "Un transporte de tropas catamarán de alta velocidad que mantiene el ritmo de los grupos de ataque de portaaviones. Cambia capacidad por velocidad: la doctrina inversa de la Base marítima expedicionaria."
+ },
+ "ship_type_expeditionary_sea_base": {
+  "en": "Expeditionary Sea Base",
+  "es": "Base marítima expedicionaria"
+ },
+ "ship_type_expeditionary_sea_base_desc": {
+  "en": "A floating staging platform that supports rapid forward deployment of marines and supplies far from any friendly port.",
+  "es": "Una plataforma flotante de apoyo logístico que permite el despliegue avanzado rápido de infantes de marina y suministros lejos de cualquier puerto amigo."
+ },
+ "ship_type_fleet_carrier": {
+  "en": "Fleet Carrier",
+  "es": "Portaaviones de flota"
+ },
+ "ship_type_fleet_carrier_desc": {
+  "en": "A heavy fleet carrier purpose-built around carrier aviation doctrine. Projects air power across a task force at long range while [concept_screening] capital ships from torpedo strikes.",
+  "es": "Un portaaviones de flota pesado diseñado expresamente en torno a la doctrina de la aviación embarcada. Proyecta poder aéreo sobre un grupo operativo a larga distancia y hace de [concept_screening|l] para los buques insignia frente a los ataques con torpedos."
+ },
+ "ship_type_guided_missile_ship": {
+  "en": "Guided Missile Ship",
+  "es": "Buque de misiles guiados"
+ },
+ "ship_type_guided_missile_ship_desc": {
+  "en": "A destroyer-class warship armed with guided anti-ship missiles. Trades close-in armament for stand-off precision strike capability.",
+  "es": "Un buque de guerra de clase destructor armado con misiles antibuque guiados. Cambia el armamento de corto alcance por capacidad de ataque de precisión a distancia."
+ },
+ "ship_type_hypersonic_missile_platform": {
+  "en": "Hypersonic Missile Platform",
+  "es": "Plataforma de misiles hipersónicos"
+ },
+ "ship_type_hypersonic_missile_platform_desc": {
+  "en": "A capital warship optimized as a launch platform for hypersonic anti-ship missiles, capable of striking targets thousands of kilometers away in minutes.",
+  "es": "Un buque de guerra insignia optimizado como plataforma de lanzamiento de misiles antibuque hipersónicos, capaz de alcanzar objetivos a miles de kilómetros en cuestión de minutos."
+ },
+ "ship_type_marine_assault_ship": {
+  "en": "Marine Assault Ship",
+  "es": "Buque de asalto de infantería de marina"
+ },
+ "ship_type_marine_assault_ship_desc": {
+  "en": "A Cold War-era helicopter-capable amphibious assault ship. Replaces wartime LHAs as the standard troop transport once precision-guided munitions doctrine matures.",
+  "es": "Un buque de asalto anfibio con capacidad para helicópteros de la época de la Guerra Fría. Sustituye a los LHA de la época de guerra como transporte de tropas estándar cuando madura la doctrina de las municiones guiadas de precisión."
+ },
+ "ship_type_networked_air_defense_cruiser": {
+  "en": "Networked Air Defense Cruiser",
+  "es": "Crucero de defensa aérea en red"
+ },
+ "ship_type_networked_air_defense_cruiser_desc": {
+  "en": "An anti-air and anti-missile escort that pools tracking data with allied ships and aircraft. Excels at swatting incoming guided weapons before they reach the fleet.",
+  "es": "Una escolta antiaérea y antimisiles que comparte datos de seguimiento con buques y aeronaves aliados. Destaca a la hora de derribar armas guiadas entrantes antes de que lleguen a la flota."
+ },
+ "ship_type_nuclear_submarine": {
+  "en": "Nuclear Submarine",
+  "es": "Submarino nuclear"
+ },
+ "ship_type_nuclear_submarine_desc": {
+  "en": "A nuclear-powered attack submarine capable of patrolling the deep ocean for months without surfacing. Devastating against capital ships.",
+  "es": "Un submarino de ataque de propulsión nuclear capaz de patrullar las profundidades del océano durante meses sin emerger. Devastador contra buques insignia."
+ },
+ "ship_type_nuclear_supercarrier": {
+  "en": "Nuclear Supercarrier",
+  "es": "Superportaaviones nuclear"
+ },
+ "ship_type_nuclear_supercarrier_desc": {
+  "en": "A massive nuclear-powered fleet carrier with virtually unlimited endurance, projecting overwhelming air power across the world's oceans.",
+  "es": "Un enorme portaaviones de flota de propulsión nuclear con una autonomía prácticamente ilimitada, que proyecta un poder aéreo abrumador sobre los océanos del mundo."
+ },
+ "ship_type_orbital_support_amphibious_mothership": {
+  "en": "Orbital Support Mothership",
+  "es": "Nave nodriza de apoyo orbital"
+ },
+ "ship_type_orbital_support_amphibious_mothership_desc": {
+  "en": "A sea-based mothership that calls in orbital drop pods for marine deployment. Carries a brigade of marines and weeks of independent supply.",
+  "es": "Una nave nodriza marítima que solicita cápsulas de descenso orbital para desplegar infantes de marina. Transporta una brigada de infantes de marina y semanas de suministros independientes."
+ },
+ "ship_type_pulsed_laser_escort": {
+  "en": "Pulsed Laser Escort",
+  "es": "Escolta de láser pulsado"
+ },
+ "ship_type_pulsed_laser_escort_desc": {
+  "en": "A cruiser equipped with directed-energy weapons. Pinpoint accuracy makes it devastating against missiles, aircraft, and small craft.",
+  "es": "Un crucero equipado con armas de energía dirigida. Su precisión milimétrica lo hace devastador contra misiles, aeronaves y embarcaciones pequeñas."
+ },
+ "ship_type_stealth_attack_submarine": {
+  "en": "Stealth Attack Submarine",
+  "es": "Submarino de ataque furtivo"
+ },
+ "ship_type_stealth_attack_submarine_desc": {
+  "en": "An air-independent-propulsion boat with a near-silent acoustic signature. Carries a heavy torpedo and cruise-missile payload designed to gut capital ships.",
+  "es": "Un submarino de propulsión independiente del aire con una firma acústica casi silenciosa. Lleva una pesada carga de torpedos y misiles de crucero concebida para destripar buques insignia."
+ },
+ "ship_type_stealth_battlecruiser": {
+  "en": "Stealth Battlecruiser",
+  "es": "Crucero de batalla furtivo"
+ },
+ "ship_type_stealth_battlecruiser_desc": {
+  "en": "A network-linked capital ship with a radar-absorbent hull. Coordinates with offboard sensors to engage at extreme range while remaining hard to detect.",
+  "es": "Un buque insignia conectado en red con un casco absorbente de radar. Se coordina con sensores externos para combatir a distancias extremas sin dejar de ser difícil de detectar."
+ },
+ "ship_type_swarm_coordination_vessel": {
+  "en": "Swarm Coordination Vessel",
+  "es": "Buque de coordinación de enjambres"
+ },
+ "ship_type_swarm_coordination_vessel_desc": {
+  "en": "Cruiser-sized command ship that coordinates large drone swarms, multiplying the effective firepower of every other ship in its fleet.",
+  "es": "Buque de mando del tamaño de un crucero que coordina grandes enjambres de drones y multiplica la potencia de fuego efectiva de cada uno de los demás buques de su flota."
+ }
+}

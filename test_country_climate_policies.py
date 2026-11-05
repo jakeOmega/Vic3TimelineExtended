@@ -147,9 +147,9 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         bg_power = json.loads((ROOT / "vanilla_parsed/common/building_groups.json").read_text(encoding="utf-8"))["bg_power"][1]
         for key in ("lens", "urbanization", "economy_of_scale_ai_factor", "infrastructure_usage_per_level"):
             self.assertEqual(group[key], bg_power[key][1], key)
-        buildings = load("common/buildings/extra_buildings.txt")
+        buildings = {**load("common/buildings/extra_buildings.txt"), **load("common/buildings/06_zz_te_clean_power.txt")}
         for name in ("hydro_plant", "nuclear_plant", "fusion_plant", "renewable_energy_plant"):
-            self.assertEqual(buildings[f"REPLACE_OR_CREATE:building_{name}"]["building_group"], "bg_clean_power", name)
+            self.assertEqual(buildings[f"building_{name}"]["building_group"], "bg_clean_power", name)
         # The mod leaves the coal and oil plant (and every other building) out of the child group,
         # and puts nothing in bg_power itself that the group should hold.
         self.assertEqual([name for name, block in buildings.items() if isinstance(block, dict)
@@ -174,9 +174,11 @@ class RenewableInvestmentCostTest(unittest.TestCase):
 
     def test_cost_goes_on_and_off_with_the_policy(self):
         effects = load(EFFECTS)
-        adopt = effects["gw_effect_renewable_investment"]["custom_tooltip"]
+        adopt = effects["gw_effect_renewable_investment"]
         repeal = effects["gw_effect_remove_renewable_investment"]["custom_tooltip"]
+        # Outside the adopt custom_tooltip, so the tooltip prints the cost (GW-4).
         self.assertEqual(adopt["gw_renewable_investment_cost_apply"], "yes")
+        self.assertNotIn("gw_renewable_investment_cost_apply", adopt["custom_tooltip"])
         self.assertEqual(repeal["remove_modifier"], self.COST)
         # The removal comes first: after the add it would strip the fresh cost.
         self.assertEqual(effects["gw_renewable_investment_cost_apply"], {
@@ -237,7 +239,9 @@ class RenewableInvestmentCostTest(unittest.TestCase):
         self.assertEqual(sync["else_if"]["remove_modifier"], self.COST)
         sweep = effects["gw_refresh_policy_costs_effect"]["every_country"]
         self.assertEqual(sweep["gw_renewable_investment_cost_sync"], "yes")
-        self.assertEqual(sweep["limit"]["OR"], {"has_journal_entry": "je_global_warming", "has_modifier": self.COST})
+        self.assertEqual(sweep["limit"]["OR"]["has_journal_entry"], "je_global_warming")
+        held = sweep["limit"]["OR"]["has_modifier"]
+        self.assertIn(self.COST, held if isinstance(held, list) else [held])
         pulse = load("common/on_actions/extra_on_actions.txt")["global_warming_events_on_action"]["effect"]
         self.assertEqual(pulse["gw_refresh_policy_costs_effect"], "yes")
 

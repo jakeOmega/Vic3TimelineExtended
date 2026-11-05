@@ -1,0 +1,255 @@
+﻿# ============================================================================
+# DECOLONIZATION — A COUNTRY'S STANCE ON COLONIALISM: the tests
+#
+# A stance is two variables, gp_anti_colonial_stance and gp_pro_colonial_stance
+# (neither is neutral), which every reader keys on: the colonial empires' bar
+# (colonial_gp_condemnation_weight and the rest in colonial_empire_values.txt,
+# great powers only), the wars of independence's notices, the pool's events.
+# decolonization_stance_effects.txt is the only place that sets them, apart
+# from the debug harness. Scope: country.
+# ============================================================================
+
+# The stance counts: held by a great power, the only rank whose stance any
+# colonial empire's bar weighs. While it counts the country holds the stance's
+# policy modifier and pays its influence (decol_stance_refresh); below
+# great-power rank the stance lies dormant.
+decol_stance_anti_counts = {
+	has_variable = gp_anti_colonial_stance
+	country_rank >= rank_value:great_power
+}
+
+decol_stance_pro_counts = {
+	has_variable = gp_pro_colonial_stance
+	country_rank >= rank_value:great_power
+}
+
+# The country pays for a stance now, so moving to the other side costs it
+# nothing more.
+decol_stance_paid = {
+	OR = {
+		decol_stance_anti_counts = yes
+		decol_stance_pro_counts = yes
+	}
+}
+
+# Influence for a stance: already paying for one, or as much available
+# influence as one costs (the `influence` trigger reads what is unspent). The
+# Colonial Question's two sides and the panel's Condemn and Support.
+decol_stance_affordable = {
+	custom_tooltip = {
+		text = decol_stance_influence_tt
+		OR = {
+			decol_stance_paid = yes
+			influence >= decol_stance_influence_cost
+		}
+	}
+}
+
+# The AI's start line (decolonization_events.14's weights): a stance it already
+# pays for, while its influence is not in deficit, or the cost with a spare in
+# hand. decol_stance_monthly drops a paid stance whose influence goes negative.
+decol_stance_ai_can_hold = {
+	OR = {
+		AND = {
+			decol_stance_paid = yes
+			influence >= 0
+		}
+		influence >= decol_stance_ai_start_influence
+	}
+}
+
+# ---- The AI's stance on colonialism (issue #1370, owner 2026-11-03) --------
+# The Colonial Question's weights (decolonization_events.14) and the AI's
+# monthly review (decol_stance_monthly). An AI that runs an empire never
+# condemns colonialism, and one with a stake in colonialism, at home or through
+# its partners, condemns it less often. Nothing here reads is_ai: the event
+# and the monthly review's own branch are the AI's paths.
+
+# The country runs a colonial empire: its Colonial Empire entry, or what the
+# entry's `possible` asks (a colony, is_overseas_colonial_state, or a colonial
+# subject, country_has_qualifying_colonial_subject). Cheapest first: the
+# colony test walks the pops. Scope: country.
+decol_holds_colonial_empire = {
+	OR = {
+		has_journal_entry = je_colonial_empire
+		country_has_qualifying_colonial_subject = yes
+		any_scope_state = { is_overseas_colonial_state = yes }
+	}
+}
+
+# The country is regressive on colonialism, by the game's own laws and rulers,
+# each read from its description: Colonial Exploitation ("colonies are
+# established to exploit the area for their natural resources and cheap
+# labor"); a citizenship law that ranks people by blood or race (law_ethnostate,
+# the mod's Ancestral Citizenship: "only those of the core ancestral lineage are
+# recognized as legal members of the nation"; law_racial_segregation,
+# Racialized Citizenship: "citizenship is stratified based on perceived racial
+# or ancestral proximity"); slavery in any form (every law but Slavery Banned,
+# "no human being may be owned by another"); a Jingoist ruler ("an aggressive
+# foreign policy, emphasizing readiness to go to war to advance its
+# ambitions", the leader ideology that strongly approves of Colonial
+# Exploitation); or a Colonialist group in government ("a colonial interest
+# reliant upon the continuous extraction of wealth from their territory").
+# law_national_supremacy (Cultural Citizenship, membership by "the language,
+# traditions, and heritage of the dominant culture") is left out: it is the
+# starting law of most European great powers, and it asks for a culture, not
+# a lineage. Scope: country.
+decol_ai_regressive = {
+	OR = {
+		has_law = law_type:law_colonial_exploitation
+		has_law = law_type:law_ethnostate
+		has_law = law_type:law_racial_segregation
+		decol_ai_slaveholding = yes
+		ruler ?= { has_ideology = ideology:ideology_jingoist_leader }
+		any_interest_group = {
+			is_in_government = yes
+			has_ideology = ideology:ideology_colonialist
+		}
+	}
+}
+
+# Slavery is legal: any slavery law but Slavery Banned. Part of the regressive
+# test, and on top of it a further halving of Condemn (owner, 2026-11-03:
+# "with slavery, I feel like it could be even lower"). Scope: country.
+decol_ai_slaveholding = {
+	NOT = { has_law = law_type:law_slavery_banned }
+}
+
+# A partner of the country runs a colonial empire: an ally or defensive-pact
+# partner, a member of its power bloc, its subject or its overlord
+# (decol_iw_can_intervene's set of countries a great power stands by). The
+# relation first: the empire test walks states. Scope: country.
+decol_ai_partner_holds_empire = {
+	save_temporary_scope_as = decol_ai_self
+	OR = {
+		overlord ?= { decol_holds_colonial_empire = yes }
+		any_country = {
+			NOT = { this = scope:decol_ai_self }
+			OR = {
+				has_treaty_alliance_with = { TARGET = scope:decol_ai_self }
+				has_treaty_defensive_pact_with = { TARGET = scope:decol_ai_self }
+				is_in_same_power_bloc = scope:decol_ai_self
+				is_subject_of = scope:decol_ai_self
+			}
+			decol_holds_colonial_empire = yes
+		}
+	}
+}
+
+# ---- Who backs the colonial powers (owner, 2026-11-03) ---------------------
+# The Colonial Question's Support weights (decolonization_events.14, option C):
+# besides an empire and a partner of one, a country whose own laws colonize
+# and one whose government answers to no voter lean toward backing the
+# colonial powers.
+
+# Its Colonization law founds colonies: Colonial Resettlement ("colonies are
+# established to provide land to settlers from the country's incorporated
+# states") or Colonial Exploitation ("to exploit the area for their natural
+# resources and cheap labor"), the two the owner named. Frontier Colonization
+# settles "the wild frontiers on our borders", not lands overseas, and the
+# mod's Neocolonialism, which Decolonization unlocks, is indirect control after
+# the empire: neither counts. A variant of either counts too. Scope: country.
+decol_ai_colonial_laws = {
+	OR = {
+		has_law_or_variant = law_type:law_colonial_resettlement
+		has_law_or_variant = law_type:law_colonial_exploitation
+	}
+}
+
+# Illiberal: a government no election chooses, or one that outlaws dissent,
+# each read from its description. Distribution of Power: Autocracy ("the Head
+# of State's power is absolute"); Oligarchy ("a small group of powerful,
+# unelected individuals"); Elder Council ("the most venerated men");
+# Technocracy ("an unelected council"); Single-Party State ("a monopoly on all
+# political activity"); and the mod's Algorithmic Governance (authority
+# "vested in artificial intelligence"). Free Speech: Outlawed Dissent
+# ("criticizing the government is considered treasonous"). Censorship is left
+# out: it is most countries' starting law. has_law_or_variant takes each law's
+# variants as well (Bakufu and Neo-Absolutism of Autocracy, Organic Regulation
+# of Oligarchy, and any a later patch adds). A Council Republic ("workers elect
+# delegates to local councils") is never illiberal here, whatever its other
+# laws (owner, 2026-11-03): the Soviet-style single-party council states were
+# colonialism's loudest critics, so none gains Support from this test, and
+# Condemn's +3 for a left-leaning law still applies. Scope: country.
+decol_ai_illiberal = {
+	NOT = { has_law_or_variant = law_type:law_council_republic }
+	OR = {
+		has_law_or_variant = law_type:law_autocracy
+		has_law_or_variant = law_type:law_oligarchy
+		has_law_or_variant = law_type:law_elder_council
+		has_law_or_variant = law_type:law_technocracy
+		has_law_or_variant = law_type:law_single_party_state
+		has_law_or_variant = law_type:law_algorithmic_governance
+		has_law_or_variant = law_type:law_outlawed_dissent
+	}
+}
+
+# The panel's three buttons (colonial_empire_stance_sgui), each greyed with
+# the failing line on hover. Shared lines first: not the stance held already,
+# and not changed in the last decol_stance_cooldown_months.
+decol_stance_not_cooling_down = {
+	custom_tooltip = {
+		text = decol_stance_cooldown_tt
+		NOT = { has_variable = decol_stance_months_left }
+	}
+}
+
+decol_stance_possible_anti = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		NOT = { has_variable = gp_anti_colonial_stance }
+	}
+	decol_stance_not_cooling_down = yes
+	custom_tooltip = {
+		text = decol_stance_great_power_tt
+		country_rank >= rank_value:great_power
+	}
+	decol_stance_affordable = yes
+}
+
+decol_stance_possible_pro = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		NOT = { has_variable = gp_pro_colonial_stance }
+	}
+	decol_stance_not_cooling_down = yes
+	custom_tooltip = {
+		text = decol_stance_great_power_tt
+		country_rank >= rank_value:great_power
+	}
+	decol_stance_affordable = yes
+}
+
+# Stepping back to neutral needs no rank and no influence: a country can always
+# drop a stance, a dormant one included.
+decol_stance_possible_neutral = {
+	custom_tooltip = {
+		text = decol_stance_current_tt
+		OR = {
+			has_variable = gp_anti_colonial_stance
+			has_variable = gp_pro_colonial_stance
+		}
+	}
+	decol_stance_not_cooling_down = yes
+}
+
+# The Colonial Question (decolonization_events.14) is due: an AI is asked every
+# three years (the event's own gp_colonial_policy_cooldown), a player once
+# (decol_stance_asked, set in the event's `immediate`), since the tab's buttons
+# change the stance after that. The event's trigger and its pool entry
+# (decolonization_events_on_action) both read it.
+decol_stance_question_due = {
+	OR = {
+		is_ai = yes
+		NOT = { has_variable = decol_stance_asked }
+	}
+}
+
+# The Colonial Empire tab of the Timeline Extended window opens with this
+# (te_window_colonial_empire_tab_unlock_sgui's is_valid, the greyed tab's
+# checklist): Our Stance on Colonialism and The Colonial Powers need nothing
+# else, and the entry's own panels join them while it runs (ce_entry_unlocked,
+# colonial_empire_triggers.txt). The Colonial Question asks the same research.
+ce_tab_unlocked = {
+	has_technology_researched = decolonization
+}

@@ -285,6 +285,36 @@ nuclear_program_next_warhead = {
 	}
 }
 
+# The overview's Program cell (NUC-21): when the next warhead comes, short
+# enough for its 154 column. Only a developing or producing program that is
+# funded and free of a pause or a disarmament progresses (the ceiling stops
+# production, and its state is At Ceiling); a country with no program, or one
+# that renounced or was disarmed, gets no line.
+nuclear_program_next_short = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			NOT = { modifier:country_nuclear_program_pause_bool = yes }
+			NOT = { modifier:country_nuclear_disarmament_bool = yes }
+			nuclear_program_display_state >= 1
+			nuclear_program_display_state <= 2
+		}
+		localization_key = nuclear_program_next_short_estimate
+	}
+	text = {
+		trigger = { nuclear_program_display_state >= 6 }
+		localization_key = nuke_line_empty
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nuclear_program_next_warhead_stalled
+	}
+}
+
 # Appended after the first-device year. Separate block for the same reason as
 # the assistance line: exactly one branch of a block can be chosen, and being
 # first in the world is orthogonal to whether the year was recorded.
@@ -333,6 +363,9 @@ nuclear_program_first_device = {
 
 # ---- The arsenal: a ceiling, or dismantling it (the nuclear taboo) -----------
 
+# What follows the count on the Forces section's Warheads row (NUC-12): a
+# tighter ceiling than our own, or the dismantling under way. Each target is a
+# short suffix, so "999 (est. 999)" and it fit the row's value cell.
 nd_taboo_arsenal_status = {
 	type = country
 	random_valid = no
@@ -357,13 +390,10 @@ nd_taboo_arsenal_status = {
 		}
 		localization_key = nd_taboo_arsenal_treaty
 	}
-	text = {
-		trigger = { has_variable = nd_warhead_ceiling }
-		localization_key = nd_taboo_arsenal_ceiling
-	}
+	# Our own ceiling is the stepper's value, just below: nothing to add.
 	text = {
 		trigger = { always = yes }
-		localization_key = nd_taboo_arsenal_free
+		localization_key = nuke_line_empty
 	}
 }
 
@@ -414,25 +444,6 @@ nd_taboo_burden_hint = {
 	text = {
 		trigger = { always = yes }
 		localization_key = nd_taboo_burden_hint_only_dismantling
-	}
-}
-
-# Where the taboo is heading (nd_taboo_gap_value).
-nd_taboo_heading = {
-	type = country
-	random_valid = no
-
-	text = {
-		trigger = { nd_taboo_gap_value > 1 }
-		localization_key = nd_taboo_heading_up
-	}
-	text = {
-		trigger = { nd_taboo_gap_value < -1 }
-		localization_key = nd_taboo_heading_down
-	}
-	text = {
-		trigger = { always = yes }
-		localization_key = nd_taboo_heading_steady
 	}
 }
 

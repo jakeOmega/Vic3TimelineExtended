@@ -114,6 +114,13 @@ def concentrated(share):
     return clamp((share - P.MT_EFFECT_FROM) / (P.MT_EFFECT_FULL - P.MT_EFFECT_FROM), 0.0, 1.0)
 
 
+def concentrated_strength(share):
+    """Metropolis's strength (te_demog_mt_e_pos_strength): the concentrated side's ramp, full at MT_EFFECT_FULL and on
+    at half the slope (the 2026-10-22 effects design's curve). Crowding and the fertility scale keep `concentrated`."""
+    x = max((share - P.MT_EFFECT_FROM) / (P.MT_EFFECT_FULL - P.MT_EFFECT_FROM), 0.0)
+    return (x + min(x, 1.0)) / 2
+
+
 def dispersed(share):
     """The dispersed side's strength, 0-1: nothing at MT_DISPERSED_FROM, full at MT_DISPERSED_FULL
     (te_demog_mt_e_neg)."""
@@ -125,7 +132,8 @@ def effects(share):
     full sizes x its strength (the two never overlap)."""
     c, d = concentrated(share), dispersed(share)
     if c > 0:
-        return {k: v * c for k, v in P.MT_EFFECTS.items()}
+        strength = concentrated_strength(share)
+        return {**{k: v * strength for k, v in P.MT_EFFECTS.items()}, **{k: v * c for k, v in P.MT_CROWDING.items()}}
     if d > 0:
         return {k: v * d for k, v in P.MT_DISPERSED_EFFECTS.items()}
     return {}

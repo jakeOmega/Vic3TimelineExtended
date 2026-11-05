@@ -12,7 +12,8 @@ Food Reserve...). It is shown in four places, and this file pins each:
 - the "Its terms" hover on the resolution card's If it carries line
   (je_un_chamber_conseq_<tag>);
 - a convention's line in Our Obligations (je_un_chamber_conv_<key>_tt);
-- the agency's icon in the overview (je_un_ov_agency_<agency>_tt).
+- the "Its terms" hover in the agency icon's tooltip in the overview
+  (je_un_ov_agency_<agency>_tt).
 
 Modifier effects render through GetStaticModifier(...).GetDesc, so they
 cannot drift. The figures typed by hand (rules that live in script values, not
@@ -132,13 +133,20 @@ class TermsReachEveryPlaceTest(unittest.TestCase):
                 self.assertIn(f"$je_un_terms_{c.key}$", LOC[f"je_un_chamber_conv_{c.key}_tt"])
 
     def test_every_agency_hovers_its_terms(self):
+        # The icon's own hover stays short (its name and whether it stands);
+        # the convention's terms are one hover away, on "Its terms", as on the
+        # resolution card (long_tooltip_audit; style rules 2 and 3).
         gui = _read("gui", "journal_entry_widgets", "un_overview_widget.gui")
         for agency, key in AGENCY.items():
             with self.subTest(agency=agency):
                 self.assertIn(f'tooltip = "je_un_ov_agency_{agency}_tt"', gui)
                 tip = LOC[f"je_un_ov_agency_{agency}_tt"]
                 self.assertIn(f"ScriptValue('un_disp_agency_{agency}')", tip)
-                self.assertIn(f"$je_un_terms_{key}$" if key else "$je_un_ov_agency_icj_terms$", tip)
+                if key:
+                    self.assertIn(f"#tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_terms_{key} ", tip)
+                    self.assertNotIn(f"$je_un_terms_{key}$", tip)
+                else:
+                    self.assertIn("$je_un_ov_agency_icj_terms$", tip)
 
     def test_terms_read_no_scope(self):
         # They render on a proposal row (a country), a resolution card (a

@@ -54,6 +54,7 @@ un_state_heal_needed = {
 		un_state_country_missing = { MODIFIER = un_nuclear_ban_modifier }
 		un_state_country_missing = { MODIFIER = un_antarctic_treaty_modifier }
 		un_state_country_missing = { MODIFIER = un_asat_moratorium_modifier }
+		un_state_country_missing = { MODIFIER = un_colony_protection_modifier }
 	}
 }
 

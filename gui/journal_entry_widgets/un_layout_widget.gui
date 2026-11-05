@@ -162,8 +162,14 @@ types un_layout_widget_types
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)32' )]"
 							texture = "gfx/interface/icons/un_icons/topic_asat.dds"
 						}
-						# Phase 7 (§0.12): each topic's icon is, for now, a copy of its
-						# nearest older topic's, under its own name, so new art drops in.
+						# The outer-space convention (solar colonization fleets § 13):
+						# COPUOS's icon under the scroll (icon batch 6).
+						icon = {
+							size = { 40 40 }
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)33' )]"
+							texture = "gfx/interface/icons/un_icons/topic_colony_protection.dds"
+						}
+						# Phase 7 (§0.12): each topic's own icon (docs/systems/un_gui_icons.md).
 						icon = {
 							size = { 40 40 }
 							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_topic_code'), '(CFixedPoint)18' )]"
@@ -273,15 +279,21 @@ types un_layout_widget_types
 								}
 								# two-thirds mark: expulsion and charter reform pass on two
 								# thirds of the members with a vote (un_vote_supermajority_passed);
-								# 200 is two thirds of the bar's 300.
+								# 200 is two thirds of the bar's 300. A thin cream line with a
+								# hover of its own, as Global Warming's thresholds are (the
+								# 2026-10-27 audit, UN-17; it was the eye-shaped marker the
+								# style guide retired).
 								icon = {
 									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' )]"
-									size = { 3 22 }
-									position = { 199 -2 }
-									texture = "gfx/interface/progressbar/progressbar_marker.dds"
+									size = { 3 24 }
+									position = { 199 -3 }
+									texture = "gfx/interface/backgrounds/white.dds"
+									color = { 0.96 0.90 0.72 0.95 }
+									tooltip = "je_un_tally_two_thirds_tt"
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
@@ -291,14 +303,16 @@ types un_layout_widget_types
 						textbox = {
 							autoresize = yes
 							align = left|nobaseline
-							using = fontsize_medium
+							using = un_fontsize_row
 							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_res_supermajority'), '(CFixedPoint)1' ), 'je_un_tally_rule_super', 'je_un_tally_rule_simple' )]"
 						}
 
-						### Time in session
+						### Time in session: the report-back rule on hover (UN-3; it was a
+						### line of the session card).
 						flowcontainer = {
 							direction = horizontal
 							spacing = 6
+							tooltip = "je_un_session_months_tt"
 
 							default_progressbar_horizontal = {
 								size = { 300 12 }
@@ -310,6 +324,7 @@ types un_layout_widget_types
 								}
 							}
 							textbox = {
+								using = un_fontsize_row
 								autoresize = yes
 								parentanchor = vcenter
 								align = left|nobaseline
@@ -317,6 +332,161 @@ types un_layout_widget_types
 							}
 						}
 					}
+				}
+			}
+
+			# Our ballot, under the tally (the 2026-10-27 audit, UN-2): how we
+			# voted, or that our vote is due (un_disp_our_vote_code), then the
+			# three vote controls, and how the Assembly reads our position, one
+			# row with its terms on hover (UN-4). They followed the whole
+			# session card until then, and how we had voted showed only in the
+			# greyed buttons' tooltips.
+			#
+			# Every part is a fixed width, centred in a fixed 480: the vote
+			# controls are hidden whenever no vote is open, and a centred block
+			# sized by them would be centred at that empty width and spill out of
+			# the panel when they appeared (gotcha #43).
+			flowcontainer = {
+				direction = vertical
+				spacing = 4
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				minimumsize = { 480 -1 }
+				visible = "[GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				textbox = {
+					autoresize = yes
+					minimumsize = { 480 -1 }
+					maximumsize = { 480 -1 }
+					align = hcenter|nobaseline
+					using = un_fontsize_row
+					text = "je_un_our_vote_line"
+				}
+				# ---- Our ballot ----
+				# Available from the day the resolution opens; the un_vote.1 popup that
+				# arrives on day 30 is the same three options and is skipped entirely
+				# once a ballot is on the record (its trigger is re-evaluated when it
+				# fires). One scripted GUI, one op code per control:
+				#
+				#   op 0  Vote in Favour    op 1  Vote Against    op 2  Veto
+				#
+				# The table is repeated in common/scripted_guis/un_chamber_sguis.txt;
+				# keep the two in step. Each tooltip is IsValidTooltip (why the control
+				# is greyed out) concatenated with ExecuteTooltip (what the vote does),
+				# which is the un_vote.1 option's own consequence text, lobbying
+				# keep/break line included.
+				# For and Against show together (one is_shown); the veto row's two
+				# slots sit under them, Veto or Confirm under For and Cancel under
+				# Against: 236 + 4 + 236 = 476 whichever shows.
+				flowcontainer = {
+					direction = vertical
+					spacing = 4
+					ignoreinvisible = yes
+					parentanchor = hcenter
+					minimumsize = { 476 -1 }
+					datacontext = "[GetScriptedGui('un_chamber_vote_sgui')]"
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						ignoreinvisible = yes
+
+						un_chamber_action_button = {
+							blockoverride "action_label" {
+								text = "je_un_chamber_vote_yes_label"
+							}
+							blockoverride "action_binding" {
+								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+							}
+						}
+
+						un_chamber_action_button = {
+							blockoverride "action_label" {
+								text = "je_un_chamber_vote_no_label"
+							}
+							blockoverride "action_binding" {
+								visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+							}
+						}
+					}
+
+					# The veto is armed before it is cast. A scripted GUI's documented
+					# confirm_title / confirm_text fields have no usage anywhere in
+					# vanilla to copy, and this cannot be tested without running the
+					# game, so the confirmation is built out of the expander mechanism
+					# this widget already relies on: GetVariableSystem state, which is
+					# client-side, never saved and never gameplay state.
+					# Veto, and once armed Confirm, take turns in the slot under For;
+					# Cancel has the slot under Against.
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+
+						widget = {
+							size = { 236 30 }
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Not(GetVariableSystem.Exists('un_chamber_veto_armed')) )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
+							}
+
+							un_chamber_action_button = {
+								blockoverride "action_label" {
+									text = "je_un_chamber_vote_veto_confirm_label"
+								}
+								blockoverride "action_binding" {
+									visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+									enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+									onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+									tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+								}
+							}
+						}
+						widget = {
+							size = { 236 30 }
+
+							button = {
+								using = default_button_action
+								size = { 236 30 }
+								parentanchor = vcenter
+								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), GetVariableSystem.Exists('un_chamber_veto_armed') )]"
+								onclick = "[GetVariableSystem.Toggle('un_chamber_veto_armed')]"
+								tooltip = "je_un_chamber_vote_veto_cancel_tt"
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 226
+									elide = right
+									using = un_fontsize_row
+									text = "je_un_chamber_vote_veto_cancel_label"
+								}
+							}
+						}
+					}
+				}
+				un_chamber_text = {
+					visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					parentanchor = hcenter
+					align = hcenter|nobaseline
+					text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					tooltip = "[GetScriptedGui('un_chamber_position_terms_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 				}
 			}
 
@@ -330,6 +500,44 @@ types un_layout_widget_types
 			te_un_sec_propose = {
 				visible = "[Not( GetScriptedGui('un_session_open_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 			}
+		}
+	}
+
+	### The tab's Status section: the entry's own status text (a founding
+	### conference or a dissolution), open by default (the owner's call,
+	### 2026-09-28): nothing the journal says is lost from the tab. The whole
+	### section hides while the text is empty (un_status_text_sgui), which is
+	### whenever a UN stands: the Assembly's statistics moved into the overview
+	### (the 2026-10-27 audit, UN-20). te_je_status_desc has a visible of its
+	### own, so the section's gate is on this root (gotcha #17), and an
+	### instance of this type carries none. Only the tab's body and its wide
+	### columns place it; the journal draws the text itself.
+	type te_un_sec_status = flowcontainer {
+		visible = "[GetScriptedGui('un_status_text_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+
+		un_chamber_section_header = {
+			blockoverride "left_text" {
+				text = "te_diplomacy_un_tab_status_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_un_tab_status_closed')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[GetVariableSystem.Exists('te_un_tab_status_closed')]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+			}
+		}
+		flowcontainer = {
+			visible = "[Not(GetVariableSystem.Exists('te_un_tab_status_closed'))]"
+			parentanchor = hcenter
+			direction = vertical
+
+			te_je_status_desc = {}
 		}
 	}
 
@@ -351,86 +559,88 @@ types un_layout_widget_types
 		te_un_sec_exposure = {}
 	}
 
-	### "How the UN Works": every explanation, gathered out of the live sections
-	### (owner, 2026-09-28) into one section, collapsed by default, one heading
-	### per topic. The live sections above say what is happening; this says how
-	### it works.
-	type te_un_sec_how = flowcontainer {
+	### The Help page: every explanation, gathered out of the live sections, one
+	### subheading per topic. The live sections say what is happening; this says
+	### how it works. Its authority and standing topics are the UN's own help
+	### types, te_un_help_authority (un_authority_widget.gui) and
+	### te_un_help_standing (un_chamber_widget.gui). It reads GetPlayer only,
+	### never the entry, so it opens from any host (test_te_help_pages.py).
+	### Instanced only by te_united_nations_help_popup.
+	type te_united_nations_help_body = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 
-		un_chamber_section_header = {
-			blockoverride "left_text" {
-				text = "je_un_how_header"
-			}
-			blockoverride "onclick" {
-				onclick = "[GetVariableSystem.Toggle('un_how_open')]"
-			}
-			blockoverride "onclick_showmore" {
-				visible = "[Not(GetVariableSystem.Exists('un_how_open'))]"
-			}
-			blockoverride "onclick_showless" {
-				visible = "[GetVariableSystem.Exists('un_how_open')]"
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_authority"
 			}
 		}
-
-		un_chamber_panel = {
-			visible = "[GetVariableSystem.Exists('un_how_open')]"
-
-			un_chamber_subheader = {
-				blockoverride "subheader_margin" {}
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_authority"
-				}
+		te_un_help_authority = {}
+		un_chamber_note = {
+			text = "je_un_auth_log_intro"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_standing"
 			}
-			te_un_help_authority = {}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_standing"
-				}
+		}
+		te_un_help_standing = {}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_missions"
 			}
-			te_un_help_standing = {}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_missions"
-				}
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_help"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_delegations"
 			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_deleg_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_reasons_intro"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_dues"
 			}
-			un_chamber_note = {
-				text = "je_un_chamber_missions_help"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_obligations_help"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_how_sub_record"
 			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_delegations"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_deleg_intro"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_dues"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_obligations_help"
-			}
-			un_chamber_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_how_sub_record"
-				}
-			}
-			un_chamber_note = {
-				text = "je_un_chamber_exposure_help"
-			}
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_exposure_help"
 		}
 	}
 
-	### The chart, then the record, then how it all works.
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_united_nations_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_united_nations')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_un_how_header"
+		}
+		blockoverride "popup_list" {
+			te_united_nations_help_body = {}
+		}
+	}
+
+	### The chart, then the record.
 	type te_un_reference_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -440,7 +650,116 @@ types un_layout_widget_types
 
 		te_un_sec_auth_history = {}
 		te_un_sec_archive = {}
-		te_un_sec_how = {}
+	}
+
+	### The tab's body (spec 2026-11-02-te-window-wide-mode § 9.1):
+	### te_system_tab_frame with its blocks filled, mounted by the Diplomacy
+	### panel's UN tab and the Timeline Extended window's United Nations tab.
+	### In the order this file sets for both hosts: the overview, the entry's
+	### status text as a Status section (te_un_sec_status: open; only a founding
+	### conference or a dissolution), the status sections (the chart among them), the record
+	### and the explanations, inside te_un_tab_layout, which a wide mount
+	### overrides; then the frame's Open Journal Entry. The entry's scripted
+	### buttons are the AI's (`is_ai = yes`, the 2026-10-27 audit's UN-9), so
+	### the tab has no Actions section: each control sits beside the figure it
+	### acts on, and founding sits under the overview's No UN cell. Spec:
+	### docs/superpowers/archive/specs/2026-09-28-un-gui-pass-design.md.
+	type te_un_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "je_united_nations"
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
+				}
+			}
+		}
+
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+
+		blockoverride "tab_entry" {
+			datacontext = "[GetPlayerJournalEntry('je_united_nations')]"
+		}
+
+		blockoverride "tab_content" {
+			block "te_un_tab_layout" {
+				te_un_overview_panel = {}
+
+				# The entry's own status text (te_un_sec_status): its gate is
+				# its type's root visible, so the instance carries none
+				# (gotcha #17).
+				te_un_sec_status = {}
+
+				te_un_status_sections = {}
+
+				te_un_reference_sections = {}
+			}
+		}
+
+		blockoverride "tab_open_journal_tooltip" {
+			tooltip = "te_diplomacy_un_open_journal_tt"
+		}
+	}
+
+	### The tab in the Timeline Extended window's full screen (spec
+	### 2026-11-02-te-window-wide-mode § 7): te_un_tab_layout's sections on
+	### te_ui_columns_three, read down each column and then across, each under
+	### its composer's gate. The General Assembly is by far the largest
+	### section, so column 1 holds it under only the overview and the Status
+	### section. The window's wide mount puts it in place of te_un_tab_layout;
+	### the Diplomacy panel and the side panel keep the one column.
+	### test_un_layout.py holds the columns.
+	type te_un_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_un_overview_panel = {}
+			te_un_sec_status = {}
+
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_assembly = {}
+			}
+		}
+
+		blockoverride "column_2" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_why = {}
+				te_un_sec_missions = {}
+				te_un_sec_programmes = {}
+				te_un_sec_mandates = {}
+			}
+		}
+
+		blockoverride "column_3" {
+			flowcontainer = {
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+				visible = "[JournalEntry.IsActive]"
+
+				te_un_sec_obligations = {}
+				te_un_sec_dev_fund = {}
+				te_un_sec_exposure = {}
+			}
+
+			te_un_reference_sections = {}
+		}
 	}
 }
 
@@ -451,10 +770,20 @@ types un_layout_widget_types
 flowcontainer = {
 	name = "widget_je_un_overview"
 	visible = "[JournalEntry.IsActive]"
+	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_un_overview_panel = {}
+	### The "?" to the Help page, at the top of the entry (te_help_row).
+	te_help_row = {
+		blockoverride "help_onclick" {
+			onclick = "[GetVariableSystem.Set('te_popup', 'help_united_nations')]"
+		}
+	}
+
+	te_je_country = {
+		te_un_overview_panel = {}
+	}
 }
 
 flowcontainer = {
@@ -463,7 +792,9 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_un_status_sections = {}
+	te_je_country = {
+		te_un_status_sections = {}
+	}
 }
 
 flowcontainer = {
@@ -472,5 +803,7 @@ flowcontainer = {
 	parentanchor = hcenter
 	ignoreinvisible = yes
 
-	te_un_reference_sections = {}
+	te_je_country = {
+		te_un_reference_sections = {}
+	}
 }

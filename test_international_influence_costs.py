@@ -2,8 +2,9 @@
 """International actions cost influence (owner, 2026-10-12).
 
 The UN's stances, founding, programmes and own-motion resolutions, the two
-outward cultural hegemony programmes and the hegemon's "Our Model Abroad"
-choice hold a ``country_influence_cost_add`` while they run. Each figure is
+outward cultural hegemony programmes, the hegemon's "Our Model Abroad"
+choice and a great power's stance on colonialism hold a
+``country_influence_cost_add`` while they run. Each figure is
 restated three times: in the modifier, in a script value the button's gate
 reads (``influence >= ...``), and in the tooltip that explains a refusal. The
 engine checks none of them against the others, so a figure changed in one place
@@ -39,6 +40,7 @@ UN_BUTTONS = _path("common", "scripted_buttons", "un_buttons.txt")
 UN_TRIGGERS = _path("common", "scripted_triggers", "un_propose_triggers.txt")
 UN_EFFECTS = _path("common", "scripted_effects", "un_propose_effects.txt")
 CH_VALUES = _path("common", "script_values", "cultural_hegemony_script_values.txt")
+STANCE_VALUES = _path("common", "script_values", "decolonization_stance_values.txt")
 CH_TRIGGERS = _path("common", "scripted_triggers", "cultural_hegemony_triggers.txt")
 COVERT_ACTIONS = _path("common", "diplomatic_actions", "covert_operations.txt")
 COVERT_VALUES = _path("common", "script_values", "covert_warfare_script_values.txt")
@@ -114,6 +116,10 @@ GATED_COSTS = (
      "un_sponsor_punitive_influence_tt", UN_VALUES),
     ("ch_cultural_institutes_program", "ch_cultural_institutes_influence_cost", "CH_INSTITUTES_INFLUENCE_TT", CH_VALUES),
     ("ch_global_media_campaign", "ch_global_media_influence_cost", "CH_MEDIA_INFLUENCE_TT", CH_VALUES),
+    # A great power's stance on colonialism, while it counts (owner, 2026-11-03)
+    ("gp_anti_colonial_policy_modifier", "decol_stance_influence_cost", "decol_stance_influence_tt", STANCE_VALUES),
+    ("gp_pro_colonial_policy_modifier", "decol_stance_influence_cost", "decol_stance_influence_tt", STANCE_VALUES),
+    ("gp_anti_colonial_policy_modifier", "decol_stance_influence_cost", "decol_stance_un_vote_tt", STANCE_VALUES),
 )
 
 # Influence instead of the authority or bureaucracy they used to cost.
@@ -127,6 +133,8 @@ INFLUENCE_ONLY = (
     "ch_cultural_institutes_program",
     "ch_global_media_campaign",
     "ch_model_champion",
+    "gp_anti_colonial_policy_modifier",
+    "gp_pro_colonial_policy_modifier",
 )
 
 # Each button's `possible` asks for its tooltip's figure.
@@ -164,7 +172,7 @@ class GatedCostTest(unittest.TestCase):
     def setUpClass(cls):
         cls.modifiers = _read(MODIFIERS)
         cls.loc = _loc()
-        cls.values = {UN_VALUES: _read(UN_VALUES), CH_VALUES: _read(CH_VALUES)}
+        cls.values = {UN_VALUES: _read(UN_VALUES), CH_VALUES: _read(CH_VALUES), STANCE_VALUES: _read(STANCE_VALUES)}
 
     def test_modifier_value_and_tooltip_agree(self):
         for modifier, value, tooltip, values_file in GATED_COSTS:

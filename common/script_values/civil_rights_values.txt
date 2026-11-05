@@ -32,3 +32,122 @@ cr_cooptation_months_left = {
 	}
 	min = 0
 }
+
+# ----------------------------------------------------------------------------
+# The entry's status (je_civil_rights_progress_lines, GUI audit JE-4): the
+# months each policy has run, which the endings are decided by, and the ending
+# the movement would reach if it won or collapsed now. The *_months counters
+# are seeded in the entry's immediate; these read 0 without them.
+# ----------------------------------------------------------------------------
+cr_months_disp_grassroots = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_grassroots_months }
+		value = var:cr_grassroots_months
+	}
+}
+cr_months_disp_federal = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_federal_months }
+		value = var:cr_federal_months
+	}
+}
+cr_months_disp_gradualist = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_gradualist_months }
+		value = var:cr_gradualist_months
+	}
+}
+cr_months_disp_cooptation = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_cooptation_months }
+		value = var:cr_cooptation_months
+	}
+}
+cr_months_disp_suppression = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_suppression_months }
+		value = var:cr_suppression_months
+	}
+}
+cr_months_disp_segregationist = {
+	value = 0
+	if = {
+		limit = { has_variable = cr_segregationist_months }
+		value = var:cr_segregationist_months
+	}
+}
+cr_months_disp_total = {
+	value = cr_months_disp_grassroots
+	add = cr_months_disp_federal
+	add = cr_months_disp_gradualist
+	add = cr_months_disp_cooptation
+	add = cr_months_disp_suppression
+	add = cr_months_disp_segregationist
+}
+
+# The victory event je_civil_rights's on_complete would fire now: 1 Victory on
+# Paper (.240), 2 the Civil Rights Mandate (.220), 3 the Movement Carries the
+# Day (.221), 4 a Settlement (.222), 5 Reform on Paper (.223), 6 the generic
+# ending (.200). The same branches as on_complete, in the same order, over the
+# display copies of its counters; test_vanilla_panel_additions.py holds the
+# two to the same conditions.
+cr_win_ending_now = {
+	value = 6
+	if = {
+		limit = { has_discriminatory_minority_law = yes }
+		value = 1
+	}
+	else_if = {
+		limit = {
+			cr_months_disp_federal >= cr_months_disp_grassroots
+			cr_months_disp_federal >= cr_months_disp_gradualist
+			cr_months_disp_federal > 18
+		}
+		value = 2
+	}
+	else_if = {
+		limit = {
+			cr_months_disp_grassroots >= cr_months_disp_gradualist
+			cr_months_disp_grassroots > 18
+		}
+		value = 3
+	}
+	else_if = {
+		limit = { cr_months_disp_gradualist > 18 }
+		value = 4
+	}
+	else_if = {
+		limit = { cr_months_disp_cooptation > 18 }
+		value = 5
+	}
+}
+
+# The failure event on_fail would fire now: 1 the Movement Broken (.100),
+# 2 the Movement Demobilizes (.230), 3 the Long Drift (.231), 4 the Movement
+# Fades (.232). Mirrors on_fail as cr_win_ending_now mirrors on_complete.
+cr_fail_ending_now = {
+	value = 4
+	if = {
+		limit = {
+			OR = {
+				cr_months_disp_suppression > cr_months_disp_segregationist
+				cr_months_disp_segregationist > 18
+				has_discriminatory_minority_law = yes
+			}
+		}
+		value = 1
+	}
+	else_if = {
+		limit = { cr_months_disp_cooptation > 18 }
+		value = 2
+	}
+	else_if = {
+		limit = { cr_months_disp_gradualist > 18 }
+		value = 3
+	}
+}

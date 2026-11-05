@@ -237,10 +237,15 @@ class HouseholdEmissionsTest(unittest.TestCase):
         importer = self.values.value("gw_state_greenhouse_gas_emissions", state(industry=168))
         self.assertLess(producer, 0)
         self.assertEqual(producer + importer, 0)
+        # The accounting is explained once, in How Global Warming Works; the
+        # capture rows' hovers send the reader there (GW-14, 2026-10-27).
+        loc = (ROOT / "localization/english/te_miscellaneous_l_english.yml").read_text(encoding="utf-8-sig").splitlines()
+        def line(key):
+            return next(line for line in loc if line.startswith(f" {key}:"))
+        self.assertIn("exporting synthetic fuels can report negative emissions", line("gw_how_emissions_1"))
         for key in ("gw_emis_capture_tt_ours", "gw_emis_capture_tt_theirs"):
-            line = next(line for line in (ROOT / "localization/english/te_miscellaneous_l_english.yml").read_text(encoding="utf-8-sig").splitlines() if line.startswith(f" {key}:"))
-            self.assertIn("Exporting synthetic fuels", line)
-            self.assertNotIn("only way", line)
+            self.assertIn("How Global Warming Works", line(key))
+            self.assertNotIn("only way", line(key))
 
     def test_dac_goods_cost_exceeds_representative_tier_two_source_capture(self):
         methods = self.graph.mod_parsers["PMs"].data

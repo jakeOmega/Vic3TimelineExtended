@@ -166,14 +166,18 @@ un_court_ruling_chance = {
 # un_court_referral_on_carried (trigger_event takes no script value), and in
 # the loc; kept here for the record.
 un_court_ruling_delay_days = { value = 30 }
+# The two durations below are set_variable lifetimes, written as bare numbers
+# as vanilla writes every duration it names (election_event_cooldown_months =
+# 3): add_modifier's days reads a { value = N } script value as 0, and no
+# vanilla set_variable shows that form working either.
 # Defied: for ten years the claimant may move for a military mandate over the
 # region against the holder without the case of 60.
-un_court_defiance_days = { value = 3650 }
+un_court_defiance_days = 3650
 # Found for the holder: for twenty years a war goal the claimant adds against
 # a state in the region costs extra infamy, x E. Charged once per diplomatic
 # play (on_wargoal_added does not say which goal was added, so the charge is
 # per play rather than per goal; un_court_bar_war_goal).
-un_court_bar_days = { value = 7300 }
+un_court_bar_days = 7300
 un_court_bar_infamy_base = { value = 10 }
 # Globals only (un_enforcement).
 un_court_bar_infamy = {

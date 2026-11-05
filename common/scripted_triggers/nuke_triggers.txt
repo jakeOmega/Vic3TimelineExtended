@@ -103,9 +103,13 @@ nuclear_program_possible_increase_funding = {
 # decrease_funding_nuclear_program's `possible`. Reads the variable unguarded,
 # exactly as the button did: every caller is gated on the entry being active,
 # which is the only state in which the variable exists (the entry's `immediate`
-# creates it).
+# creates it). Worded as a requirement, since a greyed button's tooltip prints
+# it (button_reason_audit).
 nuclear_program_possible_decrease_funding = {
-	var:nuclear_weapons_program_funding > 0
+	custom_tooltip = {
+		text = nuclear_program_tt_funding_above_zero
+		var:nuclear_weapons_program_funding > 0
+	}
 }
 
 # Country scope: is this country's nuclear weapons programme funded and

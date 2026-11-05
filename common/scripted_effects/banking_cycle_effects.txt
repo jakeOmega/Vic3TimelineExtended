@@ -2240,6 +2240,21 @@ banking_cycle_start = {
 # 0. Weekly effects
 banking_cycle_weekly_effects = {
 	add_investment_pool = investment_pool_banking_cycle_add
+	# A bank holiday's days left, for its Active Policies row (set by
+	# banking_effect_cb_bank_holiday). A week's resolution is enough for a
+	# ninety-day term. Gone once the modifier is: expired, disabled, removed
+	# with a change of economic system, or not inherited by a revolution.
+	if = {
+		limit = { has_variable = banking_bank_holiday_days_left }
+		if = {
+			limit = { banking_tool_bank_holiday_active = yes }
+			change_variable = { name = banking_bank_holiday_days_left subtract = 7 }
+			clamp_variable = { name = banking_bank_holiday_days_left min = 0 max = 90 }
+		}
+		else = {
+			remove_variable = banking_bank_holiday_days_left
+		}
+	}
 }
 
 # 1. Fiscal policy modifier: re-apply every month to reflect current deficit/surplus.

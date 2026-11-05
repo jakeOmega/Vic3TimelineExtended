@@ -90,6 +90,10 @@ gm_disp_com_progress = {
 # The levels the whole target takes at today's rate, for the offer's text.
 gm_disp_com_target_levels = { value = gm_com_target_levels }
 
+# The levels still to build at today's rate, the Opportunity section's Levels
+# to Go row (GM-12): gm_com_levels_to_go, which Raise It queues.
+gm_disp_com_levels_to_go = { value = gm_com_levels_to_go }
+
 gm_disp_com_target = {
 	value = 0
 	if = {

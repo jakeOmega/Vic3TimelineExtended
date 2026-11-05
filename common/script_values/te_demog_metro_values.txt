@@ -45,20 +45,22 @@ te_demog_k_mt_crowd_ceiling = { value = 4.5 }
 te_demog_k_mt_planned_towns_per_level = { value = -2 }
 te_demog_k_mt_planned_capital = { value = -10 }
 te_demog_k_mt_plan_min = { value = -30 }
-# The effects' ramps: the concentrated side from nothing at Leading City's floor to full at Metropolis's; the dispersed
-# side (the infrastructure loss alone) from nothing at Market Towns' ceiling to full at the target's floor.
+# The effects' ramps: the concentrated side from nothing at Leading City's floor to full at Metropolis's, and Metropolis
+# on at half the slope (te_demog_mt_e_pos_strength; the 2026-10-22 effects design); the dispersed side (the
+# infrastructure loss alone) from nothing at Market Towns' ceiling to full at the target's floor.
 te_demog_k_mt_effect_from = { value = 40 }
 te_demog_k_mt_effect_full = { value = 60 }
 te_demog_k_mt_dispersed_from = { value = 20 }
 te_demog_k_mt_dispersed_full = { value = 5 }
-# The effects' full sizes (Full only; each at most 10%, owner 2026-10-19), pinned to te_demog_metro_modifiers.txt.
+# The effects' full sizes (Full only; about 20% on the main line since the 2026-10-22 effects design lifted the owner's
+# 10% cap of 2026-10-19), pinned to te_demog_metro_modifiers.txt.
 # Crowding: a negative value crowds sooner (state_population_density divides by 1 + the type: a positive value is
 # capacity, extra_script_values.txt).
 te_demog_k_mt_crowding = { value = -0.1 }
-te_demog_k_mt_infra_up = { value = 0.1 }
-te_demog_k_mt_services = { value = 0.05 }
-te_demog_k_mt_turmoil = { value = 0.05 }
-te_demog_k_mt_infra_down = { value = -0.1 }
+te_demog_k_mt_infra_up = { value = 0.2 }
+te_demog_k_mt_services = { value = 0.1 }
+te_demog_k_mt_turmoil = { value = 0.1 }
+te_demog_k_mt_infra_down = { value = -0.2 }
 # fertility: the census's urban term raised by this x the concentrated side's strength (te_demog_mt_fertility_scale,
 # te_demog_values.txt)
 te_demog_k_mt_fertility = { value = 0.1 }
@@ -284,6 +286,16 @@ te_demog_mt_step = {
 	multiply = te_demog_k_mt_drift
 }
 
+# The stored share, 0 with none: the order of the Metropolises list (te_dg_mt_states, te_demog_country_lists) and its
+# rows' figure, which a state that has lost its share since the census reads as 0 rather than a missing variable.
+te_demog_mt_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = var:te_dg_mt
+	}
+}
+
 # 0 Metropolis, 1 Leading City, 2 Several Cities, 3 Market Towns (3 with no share: the panel shows no label then).
 te_demog_mt_label = {
 	value = 3
@@ -304,8 +316,9 @@ te_demog_mt_label = {
 	}
 }
 
-# The effects' strengths, 0-1, from the stored share: the concentrated side (te_demog_mt_metropolis) and the dispersed
-# side (te_demog_mt_dispersed). The two never overlap.
+# The effects' strengths from the stored share: the concentrated side, 0-1 (te_demog_mt_crowding, and the fertility
+# scale: model terms), and the dispersed side (te_demog_mt_dispersed), 0-1. The two never overlap. Metropolis
+# (te_demog_mt_metropolis) reads te_demog_mt_e_pos_strength, below.
 te_demog_mt_e_pos = {
 	value = 0
 	if = {
@@ -320,6 +333,30 @@ te_demog_mt_e_pos = {
 		min = 0
 		max = 1
 	}
+}
+# Metropolis's strength: the concentrated side's reach (its ramp with no ceiling), then (x + min(x, 1)) / 2: 1 at 60,
+# 1.5 at 80, 1.875 at the target's ceiling of 95. Python twin: demographics_metro.concentrated_strength.
+te_demog_mt_up_reach = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_mt }
+		value = var:te_dg_mt
+		subtract = te_demog_k_mt_effect_from
+		divide = {
+			value = te_demog_k_mt_effect_full
+			subtract = te_demog_k_mt_effect_from
+			min = 1
+		}
+		min = 0
+	}
+}
+te_demog_mt_e_pos_strength = {
+	value = te_demog_mt_up_reach
+	add = {
+		value = te_demog_mt_up_reach
+		max = 1
+	}
+	divide = 2
 }
 te_demog_mt_e_neg = {
 	value = 0
@@ -388,7 +425,7 @@ te_demog_mt_shown_crowding = {
 	multiply = -1
 }
 te_demog_mt_shown_infra_up = {
-	value = te_demog_mt_e_pos
+	value = te_demog_mt_e_pos_strength
 	multiply = te_demog_k_mt_infra_up
 }
 te_demog_mt_shown_infra_down = {
@@ -397,11 +434,11 @@ te_demog_mt_shown_infra_down = {
 	multiply = -1
 }
 te_demog_mt_shown_services = {
-	value = te_demog_mt_e_pos
+	value = te_demog_mt_e_pos_strength
 	multiply = te_demog_k_mt_services
 }
 te_demog_mt_shown_turmoil = {
-	value = te_demog_mt_e_pos
+	value = te_demog_mt_e_pos_strength
 	multiply = te_demog_k_mt_turmoil
 }
 te_demog_mt_shown_fertility = {

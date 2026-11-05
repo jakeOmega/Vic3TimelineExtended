@@ -12,6 +12,9 @@ import os
 import re
 import unittest
 
+import gui_tree
+from gui_test_helpers import _strip_comments, assert_column_closes_with_its_sections, assert_wide_matches_narrow
+from scripts.generators import gen_te_systems_window as gen
 from test_covert_op_registry import HOSTILE_TYPES, PLACEHOLDER_ICON
 from test_covert_op_registry import TYPES as OP_TYPES
 
@@ -28,14 +31,18 @@ SGUIS_FILE = os.path.join(REPO, "common", "scripted_guis", "covert_warfare_sguis
 # is a table at the top of Operations, not a section of its own.
 STATUS = ["te_covert_sec_operations", "te_covert_sec_funding", "te_covert_sec_networks",
           "te_covert_sec_counterintel", "te_covert_sec_known"]
-REFERENCE = ["te_covert_sec_how"]
+# The full-screen columns (spec 2026-11-02-te-window-wide-mode § 7).
+WIDE_COLUMNS = [["te_covert_overview_panel", "te_covert_sec_operations"],
+                ["te_covert_sec_funding", "te_covert_sec_networks", "te_covert_sec_counterintel"],
+                ["te_covert_sec_known"]]
 # root name -> (container, what it wraps)
 ROOTS = {
     "widget_je_covert_overview": ("custom_widget_container_1", "te_covert_overview_panel"),
     "widget_je_covert_status": ("custom_widget_container_2", "te_covert_status_sections"),
-    "widget_je_covert_reference": ("custom_widget_container_3", "te_covert_reference_sections"),
 }
-OLD_ROOTS = ["widget_je_covert_command_centre", "widget_je_covert_operations", "widget_je_covert_networks"]
+# the reference root went with How Covert Warfare Works' link (its only section)
+OLD_ROOTS = ["widget_je_covert_command_centre", "widget_je_covert_operations", "widget_je_covert_networks",
+             "widget_je_covert_reference"]
 
 # Explanations that live in "How Covert Warfare Works" only.
 HOW_KEYS = ["je_iw_how_ops", "je_iw_how_funding", "je_iw_how_detection", "je_iw_net_header_tooltip",
@@ -65,8 +72,10 @@ OTHER_ICONS = {
     "slot": COVERT_ICONS + "operation_slot.dds",
 }
 # Vanilla's own marks, kept as the UN's panels keep them.
+# The eye-shaped progressbar_marker is not among them: rule 5 retired it, and
+# the bars' thresholds are thin lines (COV-6, covert_bar_line).
 VANILLA_MARKS = {GENERIC + "trend_up.dds", GENERIC + "trend_down.dds", GENERIC + "trend_nochange.dds",
-                 GENERIC + "transparent.dds", "gfx/interface/progressbar/progressbar_marker.dds"}
+                 GENERIC + "transparent.dds"}
 
 
 def _read(path):
@@ -102,6 +111,16 @@ def _loc():
     return out
 
 
+def _shown_raw(loc, key, depth=0):
+    """A key's value with its $splices$ resolved, recursively: a tooltip's
+    context is lost through a splice as surely as in the key itself
+    (gui_modding_guide.md gotcha #24)."""
+    value = loc[key]
+    if depth > 5:
+        return value
+    return re.sub(r"\$([\w.]+)\$", lambda m: _shown_raw(loc, m.group(1), depth + 1) if m.group(1) in loc else m.group(0), value)
+
+
 def _gate_before(body, key):
     """The `visible` of the widget whose `text` is `key`: the last visible
     before the key, which the markup always puts first in the block."""
@@ -110,16 +129,16 @@ def _gate_before(body, key):
 
 
 class OrderTest(unittest.TestCase):
-    def test_status_and_reference_order(self):
+    def test_status_order(self):
         gui = _read(GUI)
-        for composer, expected in (("te_covert_status_sections", STATUS),
-                                   ("te_covert_reference_sections", REFERENCE)):
-            found = re.findall(r"^\t\t(te_covert_sec_\w+) = \{", _type_body(gui, composer), re.M)
-            self.assertEqual(found, expected, composer)
+        found = re.findall(r"^\t\t(te_covert_sec_\w+) = \{", _type_body(gui, "te_covert_status_sections"), re.M)
+        self.assertEqual(found, STATUS)
+        # no reference composer: its one section was the link to the Help page
+        self.assertNotIn("te_covert_reference_sections", gui)
 
     def test_composers_and_overview_are_gated_on_the_active_entry(self):
         gui = _read(GUI)
-        for t in ("te_covert_overview_panel", "te_covert_status_sections", "te_covert_reference_sections"):
+        for t in ("te_covert_overview_panel", "te_covert_status_sections"):
             self.assertIn('visible = "[JournalEntry.IsActive]"', _type_body(gui, t)[:300], t)
 
 
@@ -136,8 +155,10 @@ class RootTest(unittest.TestCase):
             root = _root(gui, name)
             self.assertIn('visible = "[JournalEntry.IsActive]"', root, name)
             self.assertIn(f"{inner} = {{}}", root, name)
-            # A bare wrapper: nothing else in it.
-            self.assertEqual(len(re.findall(r"^\t\w+ = \{", root, re.M)), 1, name)
+            # A bare wrapper: nothing else in it, but the overview's "?" at the
+            # top of the entry (test_te_help_pages.py).
+            expected = ["te_help_row", "te_je_country"] if name == "widget_je_covert_overview" else ["te_je_country"]
+            self.assertEqual(re.findall(r"^\t(\w+) = \{", root, re.M), expected, name)
 
     def test_the_old_roots_are_gone(self):
         text = _read(GUI) + _read(JE)
@@ -167,7 +188,7 @@ class FlagTest(unittest.TestCase):
     def test_section_flags_say_their_default(self):
         flags = set(re.findall(r"GetVariableSystem\.Toggle\('(\w+)'\)", self.text))
         self.assertEqual(flags, {"covert_ops_closed", "covert_nets_closed", "covert_funding_closed",
-                                 "covert_counterintel_closed", "covert_known_closed", "covert_how_open"})
+                                 "covert_counterintel_closed", "covert_known_closed"})
         for f in flags:
             negated = len(re.findall(rf"Not\(\s*GetVariableSystem\.Exists\('{f}'\)\s*\)", self.text))
             bare = len(re.findall(rf"GetVariableSystem\.Exists\('{f}'\)", self.text)) - negated
@@ -179,15 +200,23 @@ class FlagTest(unittest.TestCase):
                 self.assertGreaterEqual(bare, 2, f)
 
     def test_each_section_has_its_own_flag(self):
-        for sec in STATUS + REFERENCE:
+        for sec in STATUS:
             body = _type_body(self.text, sec)
             self.assertEqual(len(re.findall(r"GetVariableSystem\.Toggle\('", body)), 1, sec)
 
-    def test_only_how_it_works_starts_collapsed(self):
-        how = _type_body(self.text, "te_covert_sec_how")
-        self.assertIn("GetVariableSystem.Toggle('covert_how_open')", how)
+    def test_every_live_section_starts_open(self):
         for sec in STATUS:
             self.assertRegex(_type_body(self.text, sec), r"Toggle\('covert_\w+_closed'\)", sec)
+
+    def test_how_it_works_is_the_help_page(self):
+        """How Covert Warfare Works is the Help page (te_covert_warfare_help_popup,
+        on te_popup = help_covert_warfare), which only the "?" opens: the link at
+        the panel's foot is gone, and its collapse flag with it
+        (test_te_help_pages.py)."""
+        text = _strip_comments(self.text)
+        self.assertNotIn("te_covert_sec_how", text)
+        self.assertIn("type te_covert_warfare_help_body = flowcontainer {", text)
+        self.assertNotIn("covert_how_open", self.text)
 
 
 class StateGateTest(unittest.TestCase):
@@ -239,9 +268,28 @@ class StateGateTest(unittest.TestCase):
         line = ci[ci.index('text = "je_iw_ci_sub_caught"'):]
         self.assertIn(CAUGHT, line[:line.index("covert_last_exposed_sgui')")])
 
-    def test_markers_hide_when_there_is_nothing_further(self):
+    def test_bar_thresholds_are_lines_with_hovers(self):
+        # Rule 5: a fixed threshold on a bar is a thin line with its own hover,
+        # never the eye-shaped marker (COV-6). Each Tradecraft tier's floor
+        # and each standing floor, placed by a display value.
         ov = _type_body(self.text, "te_covert_overview_panel")
-        self.assertIn("visible = \"[NotEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('covert_tradecraft_tier'), '(CFixedPoint)4' )]\"", ov)
+        self.assertNotIn("progressbar_marker", self.text)
+        line = _type_body(self.text, "covert_bar_line")
+        self.assertIn('texture = "gfx/interface/backgrounds/white.dds"', line)
+        self.assertIn('block "line_tooltip" {}', line)
+        loc = _loc()
+        for n in range(1, 5):
+            for value, tip in ((f"covert_disp_tc_floor_{n}_frac", f"je_iw_tc_floor_{n}_tt"),
+                               (f"covert_disp_standing_floor_{n}_frac", f"je_iw_standing_floor_{n}_tt")):
+                with self.subTest(value=value):
+                    self.assertIn(f"ScriptValue('{value}')", ov)
+                    self.assertIn(f'tooltip = "{tip}"', ov)
+                    self.assertIn(tip, loc)
+        # The headline names the next floor, never with the arrow rule 5
+        # keeps for where a value is heading.
+        self.assertNotIn("→", loc["je_iw_tradecraft_line"])
+
+    def test_markers_hide_when_there_is_nothing_further(self):
         # The network bar's marker went in round 3 (owner: "just the
         # strength, the bar filling up, and the trend").
         net = _type_body(self.text, "widget_je_covert_network_row")
@@ -249,11 +297,15 @@ class StateGateTest(unittest.TestCase):
         self.assertNotIn("covert_disp_net_next_intel_frac", self.text)
 
     def test_no_section_opens_on_a_line_that_can_be_empty(self):
-        # Funding opens on the state line, which the custom loc always fills.
+        # Funding opens on the state line, shown only while funded with
+        # nothing running (COV-11: zero funding is said in the overview and
+        # above the operations), then the stepper, which is never empty.
         fund = _type_body(self.text, "te_covert_sec_funding")
         panel = fund[fund.index("covert_panel = {"):]
-        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*(\w+) = \"([^\"]*)\"", panel)
-        self.assertEqual(first.group(1, 2, 3), ("covert_text", "text", "je_iw_funding_state"))
+        first = re.search(r"\n\t\t\t(\w+) = \{\s*\n\s*visible = \"([^\"]*)\"\s*\n\s*text = \"([^\"]*)\"", panel)
+        self.assertEqual(first.group(1, 3), ("covert_text", "je_iw_funding_state"))
+        self.assertIn("GetScriptedGui('covert_funding_ready_sgui').IsShown", first.group(2))
+        self.assertLess(panel.index("je_iw_funding_state"), panel.index("covert_cc_funding_stepper = { }"))
         self.assertIn("GetCustom('covert_funding_state_line')", _loc()["je_iw_funding_state"])
 
 
@@ -277,11 +329,49 @@ class OverviewTest(unittest.TestCase):
         # Distinct from every other icon in the row.
         self.assertFalse(set(TRADECRAFT_ICONS.values()) & (set(STANDING_ICONS.values()) | set(OTHER_ICONS.values())))
 
-    def test_ten_slots_lit_by_the_operations_running(self):
+    def test_ten_slots_lit_by_the_slots_filled(self):
+        # An operation fills one slot per level of its priority, so the icons
+        # lit are the slots filled, not the operations running.
         for n in range(1, 11):
             self.assertIn(f"ScriptValue('covert_disp_slots_shown'), '(CFixedPoint){n}' )", self.ov, n)
-            self.assertEqual(self.ov.count(f"ScriptValue('covert_active_display'), '(CFixedPoint){n}' )"), 2, n)
+            self.assertEqual(self.ov.count(f"ScriptValue('covert_slots_used_display'), '(CFixedPoint){n}' )"), 2, n)
+        self.assertNotIn("ScriptValue('covert_active_display'), '(CFixedPoint)", self.ov)
         self.assertNotIn("(CFixedPoint)11' )", self.ov)
+
+    def test_the_rows_keep_their_width_whichever_cells_show(self):
+        # Both rows are centred, so each must be one width whatever shows
+        # (gui_modding_guide.md gotcha #43).
+        text = _read(GUI)
+        tree = gui_tree.parse(text)
+        cell = gui_tree.size(next(n for n in tree.walk() if n.kind == "type" and n.name == "covert_ov_icon_label"))
+        # Row 1: one standing, funding and Tradecraft cell each always shows
+        # (codes 0-4, zero or not, tiers 0-4); the catch, which comes and goes,
+        # sits in an ungated slot of a cell's size. Centred at 342, it ended near 527.
+        row = gui_tree.node_after(tree, text, "### Row 1: standing", "flowcontainer")
+        self.assertEqual(row.prop("parentanchor").value, "hcenter")
+        groups = {}
+        for child in gui_tree.widgets(row):
+            gate = child.prop("visible") and re.search(r"ScriptValue\('(\w+)'\), '\(CFixedPoint\)(\d+)'",
+                                                       child.prop("visible").value)
+            if child.kind == "covert_ov_icon_label" and gate:
+                groups.setdefault(gate.group(1), set()).add(child.prop("visible").value.startswith("[Not(") or int(gate.group(2)))
+            else:
+                self.assertEqual((child.kind, child.prop("visible")), ("widget", None))
+                self.assertEqual(gui_tree.size(child), cell)
+                (caught,) = gui_tree.widgets(child)
+                self.assertEqual(caught.prop("visible").value, f"[{CAUGHT}]")
+                groups["caught"] = {"slot"}
+        self.assertEqual(groups, {"covert_disp_standing_code": set(range(5)), "covert_funding_level_display": {0, True},
+                                  "covert_tradecraft_tier": set(range(5)), "caught": {"slot"}})
+        # Row 2's strip: up to ten 30 slots at 2 apart, held at the ten's width.
+        strip = next(n for n in gui_tree.node_after(tree, text, "### Row 2: operation slots", "flowcontainer").walk()
+                     if n.kind == "flowcontainer" and n.prop("direction") and n.prop("direction").value == "horizontal")
+        slots = gui_tree.widgets(strip)
+        self.assertEqual([s.kind for s in slots], ["covert_ov_slot"] * 10)
+        self.assertEqual(strip.prop("parentanchor").value, "hcenter")
+        slot = gui_tree.size(next(n for n in tree.walk() if n.kind == "type" and n.name == "covert_ov_slot"))[0]
+        spacing = int(strip.prop("spacing").value)
+        self.assertEqual(gui_tree.size(strip, "minimumsize"), (10 * slot + 9 * spacing, -1))
 
     def test_the_trend_arrow_covers_every_code(self):
         self.assertEqual(self._coded("covert_disp_tc_trend"),
@@ -292,12 +382,13 @@ class OverviewTest(unittest.TestCase):
         self.assertIn(OTHER_ICONS["funding"], self.ov)
 
     def test_bars_read_display_fractions(self):
-        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac", "covert_disp_tc_next_frac"):
+        for sv in ("covert_disp_capacity_frac", "covert_disp_tc_frac"):
             self.assertIn(f"FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('{sv}') )", self.ov, sv)
 
     def test_the_bar_rows_line_up(self):
-        # Label 100, bar 200, value 120 and a 24 px trend cell in both rows.
-        rows = re.findall(r"minimumsize = \{ 100 -1 \}.*?size = \{ 200 18 \}.*?minimumsize = \{ 120 -1 \}.*?size = \{ 24 24 \}",
+        # Label 100, bar 180, value 140 and a 24 px trend cell in both rows
+        # (COV-14: the value is at 16 now, and the top tier's line is longest).
+        rows = re.findall(r"minimumsize = \{ 100 -1 \}.*?size = \{ 180 18 \}.*?minimumsize = \{ 140 -1 \}.*?size = \{ 24 24 \}",
                           self.ov, re.S)
         self.assertEqual(len(rows), 2)
 
@@ -337,7 +428,7 @@ class OperationRowTest(unittest.TestCase):
             self.assertIn("covert_ops_priority_ready_sgui", gate, n)
             self.assertIn(f"GetVariableValue('iw_priority'), '(CFixedPoint){n}')", gate, n)
             self.assertNotIn(f'text = "je_iw_op_row_priority_{n}"', self.row, n)
-        self.assertEqual(stepper.count('default_format = "#tooltippable"'), 3)
+        self.assertNotIn("#tooltippable", stepper)  # style guide rule 3
 
     def test_row_tooltips_need_no_journal_entry(self):
         # A tooltip inside a datamodel item renders with the item's
@@ -346,54 +437,147 @@ class OperationRowTest(unittest.TestCase):
         for key in ("je_iw_op_row_phase_prep_tt", "je_iw_op_row_phase_est_tt", "je_iw_op_row_phase_full_tt",
                     "je_iw_op_row_detection_tt", "je_iw_net_row_trend_growing", "je_iw_net_row_trend_decaying",
                     "je_iw_net_row_trend_holding", "je_iw_net_row_intel_service_tooltip",
-                    "je_iw_net_row_intel_ops_tooltip", "je_iw_net_row_strength_tt",
+                    "je_iw_net_row_intel_ops_tooltip", "je_iw_net_report_tt", "je_iw_net_row_tt",
+                    "je_iw_net_row_report_1_tt", "je_iw_net_row_report_2_tt", "je_iw_net_row_country",
+                    "je_iw_net_row_head_start",
                     "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3",
                     "je_iw_known_row_tt", "je_iw_known_row_months", "je_iw_known_row_attacker",
-                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip"):
-            self.assertNotIn("JournalEntry", loc[key], key)
+                    "je_iw_known_ordered", "je_iw_known_ordered_tt", "je_iw_known_expose_tooltip",
+                    # The row's buttons (COV-9a) and the hovers COV-1 and COV-4 added.
+                    "je_iw_stand_down_tooltip", "je_iw_priority_step_up_tooltip",
+                    "je_iw_priority_step_down_tooltip", "je_iw_op_row_strength_line",
+                    *(f"je_iw_op_row_{t}_tt" for t in OP_TYPES),
+                    *(f"je_iw_op_row_exposure_{n}_tt" for n in range(1, 5))):
+            self.assertNotIn("JournalEntry", _shown_raw(loc, key), key)
 
 
 
-class NetworkRowTest(unittest.TestCase):
-    """The network row: the target's flag and title (round 2), then the
-    strength, the bar filling up and the trend (round 3: no marker and no
-    "45 -> 50" headline), then the report lines. The strength's hover says
-    what each part of the report reveals."""
+class NetworkTableTest(unittest.TestCase):
+    """The Agent Networks table (COV-12, the owner's 2026-10-27 call over
+    round 3's two-line rows): a head, then one line a network, in shared
+    columns: the target's flag, the country, strength (the figure, the bar
+    filling up and the trend; round 3: no marker and no "45 -> 50"
+    headline), our operations there, the head start and the report's word.
+    The Report head's hover says what each part of the report reveals."""
+
+    COLUMNS = [28, 120, 112, 40, 94, 66]
 
     @classmethod
     def setUpClass(cls):
-        cls.row = _type_body(_read(GUI), "widget_je_covert_network_row")
+        cls.gui = _read(GUI)
+        cls.row = _type_body(cls.gui, "widget_je_covert_network_row")
+        cls.head = _type_body(cls.gui, "covert_net_head")
         cls.loc = _loc()
 
+    @staticmethod
+    def _cells(body):
+        """The widths of the direct children, in order: each child's first
+        `size = { w` or `minimumsize = { w`."""
+        widths, depth, child = [], 0, None
+        for line in body.split("\n"):
+            s = line.strip()
+            if depth == 0 and s.endswith("= {") and not s.startswith(("background", "blockoverride")):
+                child = []
+            if child == []:
+                m = re.match(r"(?:size|minimumsize) = \{ (\d+)", s)
+                if m:
+                    child.append(int(m.group(1)))
+            depth += s.count("{") - s.count("}")
+            if depth == 0 and child is not None:
+                if child:
+                    widths.append(child[0])
+                child = None
+        return widths
+
+    def test_head_and_rows_share_the_columns(self):
+        self.assertEqual(self._cells(self.row), self.COLUMNS)
+        head = [28] + [int(m) for m in re.findall(r"size = \{ (\d+) 24 \}", self.head)[1:]]
+        # The head's Ops cell keeps the cell type's default size, 40.
+        cell = _type_body(self.gui, "covert_net_head_cell")
+        self.assertIn("size = { 40 24 }", cell)
+        head.insert(3, 40)
+        self.assertEqual(head, self.COLUMNS)
+        for body in (self.row, self.head):
+            self.assertIn("spacing = 2", body[:200])
+        # 5 + the columns + 2 between + 5 is the panel's 480 column, the
+        # width of the Known Foreign Operations rows.
+        self.assertEqual(sum(self.COLUMNS) + 2 * (len(self.COLUMNS) - 1) + 10, 480)
+        self.assertIn("margin = { 5 2 }", self.row[:200])
+        self.assertIn("margin = { 5 1 }", self.head[:200])
+
+    def test_the_section_is_the_head_then_the_rows(self):
+        sec = _type_body(self.gui, "te_covert_sec_networks")
+        panel = sec[sec.index("covert_panel = {"):]
+        self.assertIn("visible = \"[Not(GetVariableSystem.Exists('covert_nets_closed'))]\"", panel[:200])
+        self.assertLess(panel.index("covert_net_head = {}"), panel.index("datamodel = \"[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]\""))
+        self.assertIn("widget_je_covert_network_row = {", panel)
+
     def test_the_row_leads_with_the_targets_flag(self):
-        # Owner, round 2: vanilla's flag widget, as the UN overview's council
-        # seats use it, from the stored capital, gated on the variable.
-        head = self.row[: self.row.index('text = "je_iw_net_row_title"')]
-        self.assertIn("flag = {", head)
-        wrapper = head[head.rindex("widget = {"):]
-        self.assertIn("visible = \"[ScriptContainer.HasVariable('iw_target_capital')]\"", wrapper[:wrapper.index("flag = {")])
+        # Vanilla's tiny_flag, as the Cultural Hegemony board draws its rows,
+        # from the stored capital, gated on the variable.
+        head = self.row[: self.row.index('text = "je_iw_net_row_country"')]
+        self.assertIn("tiny_flag = {", head)
+        wrapper = head[head.rindex("widget = {", 0, head.index("tiny_flag")):]
+        self.assertIn("visible = \"[ScriptContainer.HasVariable('iw_target_capital')]\"", wrapper[:wrapper.index("tiny_flag = {")])
         self.assertIn("datacontext = \"[ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry]\"", wrapper)
-        self.assertLess(self.row.index("flag = {"), self.row.index("je_iw_net_row_strength"))
 
-    def test_strength_bar_and_trend_share_one_line(self):
-        start = self.row.rindex("flowcontainer = {", 0, self.row.index('text = "je_iw_net_row_strength"'))
-        line = self.row[start:self.row.index('text = "je_iw_net_row_ops"')]
-        self.assertIn("direction = horizontal", line[:120])
-        self.assertIn('tooltip = "je_iw_net_row_strength_tt"', line[:300])
-        self.assertLess(line.index("je_iw_net_row_strength"), line.index("default_progressbar_horizontal"))
-        self.assertLess(line.index("default_progressbar_horizontal"), line.index("iw_net_trend"))
-        self.assertIn("ScriptValue('covert_disp_net_strength_frac')", line)
-        self.assertNotIn("marker", line)
-        self.assertEqual(self.row.count('text = "je_iw_net_row_strength'), 1)
+    def test_the_country_wraps_and_carries_the_networks_hover(self):
+        cell = self.row[self.row.rindex("textbox = {", 0, self.row.index('text = "je_iw_net_row_country"')):]
+        cell = cell[:cell.index("\n\t\t}")]
+        self.assertIn("multiline = yes", cell)
+        self.assertNotIn("elide", cell)
+        self.assertIn('tooltip = "je_iw_net_row_tt"', cell)
+        self.assertNotIn("#tooltippable", cell)  # style guide rule 3
+        hover = _shown_raw(self.loc, "je_iw_net_row_tt")
+        self.assertIn("covert_net_catch_display", hover)
+        self.assertIn("covert_net_catch_max_display", hover)
 
-    def test_strength_reads_the_figure_and_the_hover_names_the_marks(self):
-        self.assertRegex(self.loc["je_iw_net_row_strength"], r"^Strength #v \[ScriptContainer\.GetVariableValue\('iw_net_strength'\)\|0\]#!$")
-        hover = self.loc["je_iw_net_row_strength_tt"]
+    def test_strength_bar_and_trend_share_one_cell(self):
+        start = self.row.index('text = "je_iw_net_row_strength_value"')
+        cell = self.row[self.row.rindex("size = { 112 24 }", 0, start):self.row.index('text = "je_iw_net_row_ops_value"')]
+        self.assertIn("direction = horizontal", cell)
+        self.assertLess(cell.index("je_iw_net_row_strength_value"), cell.index("default_progressbar_horizontal"))
+        self.assertLess(cell.index("default_progressbar_horizontal"), cell.index("iw_net_trend"))
+        self.assertIn("ScriptValue('covert_disp_net_strength_frac')", cell)
+        self.assertNotIn("marker", cell)
+        for trend in ("growing", "decaying", "holding"):
+            self.assertIn(f'tooltip = "je_iw_net_row_trend_{trend}"', cell, trend)
+        self.assertRegex(self.loc["je_iw_net_row_strength_value"],
+                         r"^#v \[ScriptContainer\.GetVariableValue\('iw_net_strength'\)\|0\]#!$")
+
+    def test_the_head_cells_say_what_their_columns_are(self):
+        for key, tip in (("je_iw_net_head_strength", "je_iw_net_head_strength_tt"),
+                         ("je_iw_net_head_ops", "je_iw_net_head_ops_tt"),
+                         ("je_iw_net_head_start", "je_iw_net_head_start_tt"),
+                         ("je_iw_net_head_report", "je_iw_net_report_tt")):
+            with self.subTest(key=key):
+                block = self.head[self.head.rindex("covert_net_head_cell = {", 0, self.head.index(f'"{key}"')):]
+                self.assertIn(f'tooltip = "{tip}"', block[:block.index("}\n\t\t}")])
+                self.assertIn(tip, self.loc)
+        self.assertIn("covert_net_head_start_max", self.loc["je_iw_net_head_start_tt"])
+
+    def test_the_report_hover_names_the_marks(self):
+        hover = self.loc["je_iw_net_report_tt"]
         for name in ("covert_net_intel_tier_1_strength", "covert_net_intel_tier_2_strength"):
             self.assertIn(name, hover, name)
         self.assertNotIn("marker", hover)
-        for gone in ("je_iw_net_row_strength_to_service", "je_iw_net_row_strength_to_ops", "je_iw_net_row_strength_full"):
+        # The two-line row's keys are gone with it.
+        for gone in ("je_iw_net_row_strength", "je_iw_net_row_strength_tt", "je_iw_net_row_ops",
+                     "je_iw_net_row_benefit", "je_iw_net_row_intel_none",
+                     "je_iw_net_row_strength_to_service", "je_iw_net_row_strength_to_ops", "je_iw_net_row_strength_full"):
             self.assertNotIn(gone, self.loc, gone)
+            self.assertNotIn(f'"{gone}"', self.gui, gone)
+
+    def test_the_head_start_says_month_once(self):
+        value = self.loc["je_iw_net_row_head_start"]
+        self.assertIn("GetVariableValue('iw_net_head_start_offer'), '(CFixedPoint)1'", value)
+        self.assertEqual(self.loc["je_iw_net_row_head_start_one"], "#v 1#! month")
+        self.assertTrue(self.loc["je_iw_net_row_head_start_many"].endswith("#! months"))
+        # Either ending fits the 94 column at the row size (WidthBudgetTest
+        # reads the SelectLocalization as one number).
+        for key in ("je_iw_net_row_head_start_one", "je_iw_net_row_head_start_many"):
+            text = _shown(self.loc[key], self.loc)
+            self.assertLessEqual(len(text) * UNITS["row"] * MARGIN, 94, text)
 
 
 def _git_files():
@@ -426,9 +610,12 @@ class KnownSectionTest(unittest.TestCase):
         self.assertLess(composer.index("te_covert_sec_counterintel = {}"), composer.index("te_covert_sec_known = {}"))
 
     def test_the_military_tab_gets_it_from_the_composer(self):
-        # The Covert tab instances te_covert_status_sections, so it needs no edit of its own.
+        # The Covert tab's body instances te_covert_status_sections, so the
+        # tab needs no edit of its own.
         self.assertNotIn("te_covert_sec_known", _read(MILITARY))
-        self.assertIn("te_covert_status_sections = {}", _read(MILITARY))
+        self.assertIn("te_covert_tab_body = {}", _read(MILITARY))
+        self.assertIn("te_covert_status_sections = {}", _type_body(_read(GUI), "te_covert_tab_body"))
+        self.assertNotIn("te_covert_sec_known", _type_body(_read(GUI), "te_covert_tab_body"))
 
     def test_hidden_while_nothing_is_watched(self):
         self.assertIn("visible = \"[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_known_ops') ) )]\"",
@@ -473,9 +660,10 @@ class KnownSectionTest(unittest.TestCase):
 
     def test_the_row_says_how_long_and_the_hover_what_it_earns_and_costs(self):
         self.assertIn("GetVariableValue('iw_watch_months')", self.loc["je_iw_known_row_months"])
-        # The months line is underlined: the row's hover is under it (rule 3).
+        # The row's hover is under the months line; as in vanilla, the line
+        # is not underlined (style guide rule 3).
         line = self.row[self.row.rindex("widget_je_covert_operation_detail = {", 0, self.row.index('text = "je_iw_known_row_months"')):]
-        self.assertIn('default_format = "#tooltippable"', line[:120])
+        self.assertNotIn("#tooltippable", line[:120])
         self.assertIn('tooltip = "je_iw_known_row_tt"', self.row)
         hover = self.loc["je_iw_known_row_tt"]
         for part in ("iw_watch_months", "iw_watch_net", "covert_net_watch_gain_p1", "covert_net_watch_gain_p3"):
@@ -526,7 +714,7 @@ class KnownSectionTest(unittest.TestCase):
             self.assertIn(key, self.loc, key)
 
     def test_how_it_works_explains_watching(self):
-        how = _type_body(self.gui, "te_covert_sec_how")
+        how = _type_body(self.gui, "te_covert_warfare_help_body")
         self.assertIn('text = "je_iw_how_sub_watching"', how)
         self.assertLess(how.index("je_iw_how_ci"), how.index("je_iw_how_sub_watching"))
         self.assertLess(how.index("je_iw_how_sub_watching"), how.index("je_iw_how_sub_standing"))
@@ -610,10 +798,16 @@ class FundingTableTest(unittest.TestCase):
 
 
 # ---- Round 3, rule 1: nothing a player reads ends in "..." ----------------
-# The owner's measurements, in GUI units per character: the large font about
-# 10, the medium (table) font about 8.6. The small font was not measured; it
-# is taken at the medium rate, which overstates it. Plus 10% margin.
-UNITS = {"small": 8.6, "medium": 8.6, "large": 10.0}
+# The owner's measurements, in GUI units per character: the serif face about
+# 10 at 20 (0.5 a point, so 8.5 at the 17 row size), the overview's tooltip
+# face 8.6 at 16. Plus 10% margin. The panel's sizes are its own
+# covert_fontsize_* templates (COV-14, the 17 / 20 / 16 ladder), read from
+# the file, so a change of type re-budgets every cell; "large" is the
+# section headers' vanilla font, which is not the panel's.
+_SIZES = {m.group(1): int(m.group(2)) for m in re.finditer(
+    r"template covert_fontsize_(\w+) \{\s*fontsize = (\d+)", _read(GUI))}
+UNITS = {"row": 10.0 / 20 * _SIZES["row"], "heading": 10.0 / 20 * _SIZES["heading"],
+         "overview": 8.6 / 16 * _SIZES["overview"], "large": 10.0}
 MARGIN = 1.1
 # The longest names a dynamic label can show.
 LONGEST = {
@@ -622,27 +816,33 @@ LONGEST = {
 }
 # Fixed-width cells whose text is set outside a row type: (key, width, font).
 FIXED_CELLS = [
-    ("je_iw_ov_standing_0", 108, "small"), ("je_iw_ov_standing_1", 108, "small"),
-    ("je_iw_ov_standing_2", 108, "small"), ("je_iw_ov_standing_3", 108, "small"),
-    ("je_iw_ov_standing_4", 108, "small"), ("je_iw_ov_funding_label", 108, "small"),
-    ("je_iw_ov_tc_label", 108, "small"), ("je_iw_ov_caught_label", 108, "small"),
-    ("je_iw_capacity_header", 100, "medium"), ("je_iw_tradecraft_header", 100, "medium"),
-    ("je_iw_capacity_total", 120, "medium"), ("je_iw_tradecraft_line", 120, "medium"),
-    ("je_iw_funding_stepper_label", 80, "medium"), ("je_iw_funding_stepper_value", 180, "medium"),
-    ("je_iw_priority_stepper_label", 80, "small"), ("je_iw_stand_down_button", 140, "small"),
-    ("je_iw_net_row_strength", 120, "medium"),
+    ("je_iw_ov_standing_0", 108, "overview"), ("je_iw_ov_standing_1", 108, "overview"),
+    ("je_iw_ov_standing_2", 108, "overview"), ("je_iw_ov_standing_3", 108, "overview"),
+    ("je_iw_ov_standing_4", 108, "overview"), ("je_iw_ov_funding_label", 108, "overview"),
+    ("je_iw_ov_tc_label", 108, "overview"), ("je_iw_ov_caught_label", 108, "overview"),
+    ("je_iw_capacity_header", 100, "overview"), ("je_iw_tradecraft_header", 100, "overview"),
+    ("je_iw_capacity_total", 140, "overview"), ("je_iw_tradecraft_line", 140, "overview"),
+    ("je_iw_funding_stepper_label", 80, "row"), ("je_iw_funding_stepper_value", 180, "row"),
+    ("je_iw_priority_stepper_label", 80, "row"), ("je_iw_stand_down_button", 140, "row"),
+    # The Agent Networks table (COV-12): heads and values in their columns.
+    ("je_iw_net_head_country", 120, "row"), ("je_iw_net_head_strength", 112, "row"),
+    ("je_iw_net_head_ops", 40, "row"), ("je_iw_net_head_start", 94, "row"),
+    ("je_iw_net_head_report", 66, "row"), ("je_iw_net_row_strength_value", 30, "row"),
+    ("je_iw_net_row_ops_value", 40, "row"), ("je_iw_net_row_head_start", 94, "row"),
+    ("je_iw_net_row_report_0", 66, "row"),
+    ("je_iw_net_row_report_1", 66, "row"), ("je_iw_net_row_report_2", 66, "row"),
     # Section headers: 520 wide, less the arrow.
     ("je_iw_sec_ops_header", 440, "large"), ("je_iw_funding_header", 440, "large"),
     ("je_iw_net_header", 440, "large"), ("je_iw_defense_header", 440, "large"),
     ("je_iw_known_header", 440, "large"), ("je_iw_how_header", 440, "large"),
     # The Known Foreign Operations button: 150 wide, less the margin.
-    ("je_iw_known_expose_button", 140, "large"), ("je_iw_known_ordered", 460, "medium"),
+    ("je_iw_known_expose_button", 140, "row"), ("je_iw_known_ordered", 460, "row"),
 ]
 # Columns of the row types, by block name: (width, font).
 ROW_COLUMNS = {
-    "covert_value_row": {"row_label": (320, "medium"), "row_value": (140, "medium")},
-    "covert_levels_row": {"level_text": (170, "medium"), "stealth_text": (80, "medium"),
-                          "capacity_text": (80, "medium"), "cost_text": (130, "medium")},
+    "covert_value_row": {"row_label": (320, "row"), "row_value": (140, "row")},
+    "covert_levels_row": {"level_text": (170, "row"), "stealth_text": (80, "row"),
+                          "capacity_text": (80, "row"), "cost_text": (130, "row")},
 }
 
 
@@ -664,6 +864,34 @@ def _shown(value, loc):
     value = re.sub(r"@\w+!", "@@", value)                    # a text icon: about two characters
     value = re.sub(r"#[A-Za-z_]+(?:;[^ ]*)? ?", "", value)    # format openers
     return value.replace("#!", "")
+
+
+def _font_of(gui, key):
+    """The covert_fontsize_* template the textbox showing `key` reads: its
+    own `using`, or, when the key is set in a blockoverride of a type
+    instance, the type's."""
+    at = gui.index(f'text = "{key}"')
+    depth, i = 0, at
+    openers = []
+    while i > 0 and len(openers) < 3:
+        i -= 1
+        if gui[i] == "}":
+            depth += 1
+        elif gui[i] == "{":
+            if depth == 0:
+                line = gui[gui.rindex("\n", 0, i) + 1:i]
+                openers.append((line.strip(), i))
+            else:
+                depth -= 1
+    name, start = openers[0]
+    body = gui[start:]
+    body = body[:body.index("\n" + gui[gui.rindex("\n", 0, start) + 1:start].split(name.split()[0])[0] + "}")]
+    m = re.search(r"using = covert_fontsize_(\w+)", body)
+    if m and not name.startswith("blockoverride"):
+        return m.group(1)
+    instance = openers[1][0].split(" =")[0] if name.startswith("blockoverride") else name.split(" =")[0]
+    m = re.search(r"using = covert_fontsize_(\w+)", _type_body(gui, instance))
+    return m and m.group(1)
 
 
 class WidthBudgetTest(unittest.TestCase):
@@ -706,6 +934,29 @@ class WidthBudgetTest(unittest.TestCase):
                             checked += 1
         self.assertGreater(checked, 40)
 
+    def test_every_textbox_reads_a_panel_template(self):
+        # COV-14: no textbox in the panel sets its own size from vanilla's
+        # ladder; each reads one of the three templates.
+        self.assertEqual(set(_SIZES), {"row", "heading", "overview"})
+        self.assertEqual((_SIZES["row"], _SIZES["heading"], _SIZES["overview"]), (17, 20, 16))
+        self.assertNotRegex(self.gui, r"using = fontsize_(small|medium|large|xl)\b")
+
+    def test_the_fixed_cells_fonts_are_the_markups(self):
+        # The font each FIXED_CELLS entry is budgeted at is the one its
+        # textbox (or, for a type instance's block, the type) reads.
+        for key, _, font in FIXED_CELLS:
+            if font == "large":
+                continue
+            with self.subTest(key=key):
+                self.assertEqual(_font_of(self.gui, key), font)
+
+    def test_the_tradecraft_line_fits_with_either_ending(self):
+        # Its ending is a SelectLocalization, which _shown reads as one number.
+        for option in ("je_iw_tradecraft_line_next", "je_iw_tradecraft_line_top"):
+            with self.subTest(option=option):
+                text = "100 " + _shown(self.loc[option], self.loc)
+                self.assertLessEqual(len(text) * UNITS["overview"] * MARGIN, 140, text)
+
     def test_the_overview_funding_word_is_short(self):
         # "Covert Network" does not fit a 108-unit cell, so the cell says
         # "Funding 3" and the name is on hover.
@@ -716,7 +967,7 @@ class WidthBudgetTest(unittest.TestCase):
 class HowItWorksTest(unittest.TestCase):
     def test_explanations_live_in_how_it_works(self):
         gui = _read(GUI)
-        how = _type_body(gui, "te_covert_sec_how")
+        how = _type_body(gui, "te_covert_warfare_help_body")
         for key in HOW_KEYS:
             self.assertIn(f'"{key}"', how, key)
         for sec in STATUS + ["te_covert_overview_panel", "widget_je_covert_operation_row",
@@ -726,7 +977,7 @@ class HowItWorksTest(unittest.TestCase):
                 self.assertNotIn(f'"{key}"', body, f"{sec} still explains ({key})")
 
     def test_every_topic_has_a_heading(self):
-        how = _type_body(_read(GUI), "te_covert_sec_how")
+        how = _type_body(_read(GUI), "te_covert_warfare_help_body")
         self.assertEqual(how.count("covert_subheader = {"), len(HOW_KEYS))
         self.assertEqual(how.count("covert_note = {"), len(HOW_KEYS))
 
@@ -915,26 +1166,31 @@ class MilitaryCovertTabTest(unittest.TestCase):
         cls.military = _read(MILITARY)
         cls.blocks = _marked(cls.military, TAB_TAG)
 
-    def _content(self):
+    def _host(self):
         body = self.blocks[1]
         self.assertIn('name = "te_military_covert_tab"', body)
         return body
 
+    def _content(self):
+        """The tab's body (te_covert_tab_body), which the Military panel's tab
+        and the Timeline Extended window's both mount
+        (test_te_system_tab_bodies.py checks the mounts)."""
+        self.assertIn("te_covert_tab_body = {}", self._host())
+        return _type_body(_read(GUI), "te_covert_tab_body")
+
     def test_two_marked_blocks_the_button_and_the_content(self):
         self.assertEqual(len(self.blocks), 2)
         self.assertIn('blockoverride "fifth_button"', self.blocks[0])
-        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._content())
+        self.assertIn("visible = \"[InformationPanel.IsTabSelected('te_covert')]\"", self._host())
 
     def test_the_tab_composes_the_journal_roots_types_in_order(self):
         body = self._content()
         mounted = re.findall(r'name = "(widget_je_covert_\w+)"', _read(JE))
         wrapped = [ROOTS[name][1] for name in mounted]
-        self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections",
-                                   "te_covert_reference_sections"])
+        self.assertEqual(wrapped, ["te_covert_overview_panel", "te_covert_status_sections"])
         self.assertEqual(re.findall(r"^\t+(te_\w+) = \{\}", body, re.M), wrapped)
-        # The link back to the entry comes after every section.
-        self.assertGreater(body.index('text = "te_system_tab_open_journal"'), body.index(wrapped[-1]))
-        self.assertIn("onclick = \"[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]\"", body)
+        # The link back to the entry is the frame's, after every section.
+        self.assertNotIn('blockoverride "tab_open_journal" ', body)
 
     def test_the_journal_draws_nothing_the_composers_do_not(self):
         """No te_je_* piece is needed (feasibility study 5.1): no goal bar, no
@@ -953,18 +1209,16 @@ class MilitaryCovertTabTest(unittest.TestCase):
         body = self._content()
         dc = body.index("datacontext = \"[GetPlayerJournalEntry('je_covert_warfare')]\"")
         self.assertLess(body.index(f'visible = "[{TAB_GATE}]"'), dc)
-        # Never on the widget that carries the datacontext itself.
-        opener = body.rindex("flowcontainer = {", 0, dc)
-        self.assertNotIn("visible", body[opener:dc])
+        # Never on the widget that carries the datacontext itself (the
+        # frame's tab_entry block holds it alone).
+        self.assertNotIn("visible", body[body.index('blockoverride "tab_entry"'):dc])
         # The header sits outside the gate.
         self.assertLess(body.index('text = "je_covert_warfare"'), body.index(f'visible = "[{TAB_GATE}]"'))
 
     def test_the_column_is_as_wide_as_the_journal_roots(self):
-        body = self._content()
-        dc = body.index("GetPlayerJournalEntry('je_covert_warfare')")
-        head = body[dc:body.index("te_covert_overview_panel", dc)]
-        self.assertIn("minimumsize = { 520 -1 }", head)
-        self.assertIn("parentanchor = hcenter", head)
+        """The frame's column, a fixed 520 (test_te_system_tab_bodies.py)."""
+        self._content()
+        self.assertRegex(_read(GUI), r"type te_covert_tab_body = te_system_tab_frame \{")
 
     def test_the_button_is_greyed_until_the_entry_runs(self):
         button = self.blocks[0]
@@ -1052,6 +1306,26 @@ class MilitaryCovertTabTest(unittest.TestCase):
                 for _ in range(line.count("}")):
                     if len(stack) > 1:
                         stack.pop()
+
+
+class WideTest(unittest.TestCase):
+    """The full-screen columns (spec 2026-11-02-te-window-wide-mode §§ 7, 9.4,
+    9.5): te_covert_wide_sections places the tab's sections, under the same
+    gates, in fixed 520 columns read down each and then across, and the
+    window's wide mount holds it in place of te_covert_tab_layout."""
+
+    def test_the_wide_layout_is_the_tabs_in_three_columns(self):
+        columns = assert_wide_matches_narrow(self, "te_covert_wide_sections",
+                                             layout=("te_covert_tab_body", "te_covert_tab_layout"),
+                                             added_gates=("te_covert_sec_known",))
+        self.assertEqual(columns, WIDE_COLUMNS)
+        # Known Foreign Operations shows only once one is known: column 3
+        # closes up on its gate until then.
+        assert_column_closes_with_its_sections(self, "te_covert_wide_sections", 3, ["te_covert_sec_known"])
+
+    def test_the_window_registers_it(self):
+        tab = {t.key: t for t in gen.TABS}["covert_warfare"]
+        self.assertEqual((tab.body, tab.layout, tab.wide), ("te_covert_tab_body", "te_covert_tab_layout", "te_covert_wide_sections"))
 
 
 if __name__ == "__main__":

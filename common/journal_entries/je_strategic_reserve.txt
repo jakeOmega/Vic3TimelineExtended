@@ -7,9 +7,9 @@
 # (gui/journal_entry_widgets/strategic_reserve_widget.gui): an overview of the
 # hub, its flow cap and the week's sales income; the inventory table, one row
 # per unlocked good with its fill bar, status, policy and decrease/stop/increase
-# controls, the step size and reset-all buttons, and each good's fill history;
-# and How the Strategic Reserve Works. Positive rates store goods, negative
-# rates withdraw them. This JE keeps the no-hub status line, the two shared
+# controls, the step size and reset-all buttons, and each good's fill history.
+# Positive rates store goods, negative rates withdraw them. This JE keeps the
+# no-hub status line, the two shared
 # scripted buttons (now the AI's only; the panel's buttons are the player's),
 # the weekly pulse, the monthly history sample and the lifecycle entry points
 # into the SR wrapper effects; persistent reserve state lives on country vars.
@@ -57,9 +57,9 @@ je_strategic_reserve = {
 	# the decision Establish a Strategic Reserve offer a new hub. A captured
 	# hub still costs the stock (st_res_on_state_owner_change).
 
-	# The panel, in three parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
-	# the overview at the top, the inventory table (with the step size and
-	# reset-all buttons), and How the Strategic Reserve Works at the foot.
+	# The panel, in two parts (gui/journal_entry_widgets/strategic_reserve_widget.gui):
+	# the overview at the top, with the "?" to the Help page above it, and the
+	# inventory table (with the step size and reset-all buttons).
 	widget = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
 		name = "widget_je_strategic_reserve_overview"
@@ -69,11 +69,6 @@ je_strategic_reserve = {
 		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
 		name = "widget_je_strategic_reserve_inventory"
 		container = "custom_widget_container_2"
-	}
-	widget = {
-		gui = "gui/journal_entry_widgets/strategic_reserve_widget.gui"
-		name = "widget_je_strategic_reserve_reference"
-		container = "custom_widget_container_3"
 	}
 
 	# The two reserve-wide actions. The panel draws them as its own buttons

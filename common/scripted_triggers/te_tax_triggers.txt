@@ -209,10 +209,12 @@ te_tax_light_in_force = {
 # force, full or light, so the greyed tab's checklist and the entry cannot
 # disagree. One custom_tooltip line: the checklist is IsValidTooltip, which
 # would print the conditions inside te_tax_code_in_force without a heading of
-# their own.
+# their own. Its own line, a condition in the checklists' shape
+# (gui_style_guide.md rule 9); te_tax_tt_code_in_force stays the tax
+# tooltips' line.
 te_tax_entry_unlocked = {
 	custom_tooltip = {
-		text = te_tax_tt_code_in_force
+		text = te_tax_tt_unlock_code
 		OR = {
 			te_tax_code_in_force = yes
 			te_tax_light_in_force = yes

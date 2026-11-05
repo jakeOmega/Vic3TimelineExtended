@@ -189,7 +189,7 @@ class LeaseSharingTest(unittest.TestCase):
     def test_the_one_lease_tooltip_names_the_record(self):
         loc = english_loc()
         line = re.search(r"(?m)^ te_seabed_lease_one_tt:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("licences built on", line)
+        self.assertIn("licenses built on", line)
 
     def test_settle_tops_up_from_own_claims(self):
         body = strip_comments(block(read(EFFECTS), "te_seabed_settle_lease"))
@@ -301,8 +301,15 @@ class LeasePanelTest(unittest.TestCase):
         claims = re.search(r"(?m)^ te_seabed_ov_claims_tt:0 \"(.*)\"$", loc).group(1)
         self.assertIn("'te_seabed_ov_claims_lent'", claims)
         lent = re.search(r"(?m)^ te_seabed_ov_claims_lent:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("te_seabed_leased_out_disp", lent)
-        self.assertIn("te_seabed_charged_disp", lent)
+        # the player's words, and another country's in National Info (spec
+        # 2026-11-02-charts-help-national-info § 6.8), each with both figures
+        branches = re.findall(r"'(te_seabed_ov_claims_lent_\w+)'", lent)
+        self.assertEqual(branches, ["te_seabed_ov_claims_lent_ours", "te_seabed_ov_claims_lent_theirs"])
+        self.assertIn("SelectLocalization( Country.IsLocalPlayer, ", lent)
+        for key in branches:
+            text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
+            self.assertIn("te_seabed_leased_out_disp", text)
+            self.assertIn("te_seabed_charged_disp", text)
         values = read(VALUES)
         for b in m.BASINS:
             self.assertIn(f"te_seabed_leased_out_{b}", block(values, "te_seabed_leased_out_disp"))
@@ -441,7 +448,7 @@ class SubjectActionTest(unittest.TestCase):
                        "_action_propose_name", "_action_break_name", "_pact_desc"):
             self.assertRegex(loc, rf"(?m)^ te_seabed_administer_claims{suffix}:0 \"", suffix)
         desc = re.search(r"(?m)^ te_seabed_administer_claims_desc:0 \"(.*)\"$", loc).group(1)
-        self.assertIn("licence", desc)
+        self.assertIn("license", desc.lower())
         self.assertIn("long-haul", desc.lower())
 
 

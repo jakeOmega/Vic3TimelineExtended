@@ -106,6 +106,14 @@ you qualify.
 | Perpetual Dynastic Trusts (*Dynasty Trusts*) | Freedom of Testation, with the Industrialists powerful or in government; from Globalization on | 2.5% | Industrialists |
 | Birthright Endowment (*The Duty and the Stake*) | A law carrying Estate Duties, which the Endowment replaces, with a reformist or social democratic group in government; from Universal Basic Income on | 2.5% | Trade Unions, or Intelligentsia |
 | Undivided Farm Succession (*The Farm Is Not to Be Cut*) | Forced Heirship or Customary Inheritance, with the Rural Folk powerful or in government | 2.5% | Rural Folk |
+| Suspension of Habeas Corpus (*The Writ Suspended*) | Statutory Courts or Constitutional Review, at war, with the Armed Forces powerful or in government | 25% | Armed Forces |
+| Judicial Elections (*Let the People Choose Their Judges*) | Statutory Courts or Constitutional Review under an elected government, with a group led by a Jacksonian Democrat or populist powerful or in government | 5% | That group |
+| Mixed Commercial Courts (*Courts for the Merchants*) | Religious Courts or Executive Tribunals, not under Isolationism, with the Industrialists or Petite Bourgeoisie powerful or in government | 2.5% | The stronger of the two |
+| Jury Trials (*Twelve Good Citizens*) | Statutory Courts or Constitutional Review, with the Intelligentsia powerful or in government | 2.5% | Intelligentsia |
+| Military Tribunals for Civilians (*Courts-Martial for Rebels*) | Executive Tribunals or Statutory Courts, unrest as for Order in the Courts, and the Armed Forces powerful or in government | 10% | Armed Forces |
+| People's Tribunals (*Justice of the Party*) | Executive Tribunals under a Single-Party State, with a governing group led by a vanguardist or fascist | 5% | That group |
+| Human-in-the-Loop Appeals (*A Human Signature*) | Algorithmic Jurisprudence, with legitimacy below 50 or the Intelligentsia or Trade Unions powerful or in government | 5% | Intelligentsia, or Trade Unions |
+| First Past the Post (*Two Parties Are Enough*) | Two parties whose groups hold at least 60% of your clout, on a voting law without it | 2.5% | The strongest group in either party |
 
 Refusing Order in the Courts or Those Who Speak Up also costs up to 2 legitimacy
 for a few years, and refusing The Pulpit's Exception costs the Devout 5 approval
@@ -133,6 +141,38 @@ groups](06-politics.md#new-laws-in-base-game-law-groups).
 | Corporate Autocracy | Neocameralism without a voting franchise | Director |
 | Algorithmic Directorate | Algorithmic Governance, except under Collective Governance or Neocameralism | Director |
 
+## City-state list
+
+The 22 city-states from [Releasable city-states](09-diplomacy.md#releasable-city-states),
+with the state each is carved from and its owner at the 1836 start. Dakar and
+Calabar start inside decentralized nations, which can't release them, so they
+become releasable once another country holds the city.
+
+| City-state | State | Held at the start by |
+|---|---|---|
+| New York | New York | United States of America |
+| San Francisco | California | Mexico |
+| Singapore | Malaya | Great Britain |
+| Hong Kong | Eastern Guangdong | Great Qing |
+| Shanghai | Suzhou | Great Qing |
+| Constantinople | Eastern Thrace | Ottoman Empire |
+| Macau | Western Guangdong | Portugal |
+| Kuwait | Basra | Ottoman Empire |
+| Fiume | Croatia | Croatia-Slavonia |
+| Bombay | Bombay | East India Company |
+| Goa | Bombay | Portugal |
+| Pondicherry | Carnatic | France |
+| Aden | Yemen | Lahej |
+| Dubai | Trucial Coast | Trucial States |
+| Tangier | al Rif | Morocco |
+| Lagos | Yoruba States | Oyo |
+| Dakar | Senegal | Cayor |
+| Djibouti | Eritrea | Aussa |
+| Calabar | Niger Delta | Igbo |
+| Guayaquil | Ecuador | Ecuador |
+| Cartagena | Antioquia | New Granada |
+| Buenos Aires | Buenos Aires | Argentine Confederation |
+
 ## Combat unit list
 
 The mod's battalion types by unit group, with the technology that unlocks each.
@@ -142,25 +182,25 @@ units](13-military.md#new-combat-units).
 | Group | Unit | Technology | Era | Battalion size |
 |---|---|---|---|---|
 | Infantry | Armored Infantry | Combined Arms | 6 | 1000 |
-| Infantry | Robotic Soldiers | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
+| Infantry | Robotic Soldiers | Autonomous Weapons | 11 | 600 |
 | Infantry | Swarm Bots | Swarm Technology | 11 | 400 |
-| Infantry | Utility Fog Phalanx | Molecular Assemblers | 12 | 250 |
+| Infantry | Utility Fog Phalanx | Molecular Assemblers | 13 | 250 |
 | Marines | Combined Arms Marines | Combined Arms | 6 | 1000 |
 | Marines | Stealth Marines | Stealth Technology | 8 | 800 |
-| Marines | Networked Marines | JADC2 | 10 | 600 |
-| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 11 | 500 |
+| Marines | Networked Marines | Joint All-Domain Command and Control (JADC2) | 10 | 600 |
+| Marines | Bioenhanced Marines | Bioenhanced Soldiers | 12 | 500 |
 | Artillery | Motorized Artillery | Motorized Artillery | 6 | 1000 |
 | Artillery | Guided Artillery Projectiles | Guided Missiles | 7 | 1000 |
 | Artillery | Networked Guided Artillery Projectiles | Network Centric Warfare | 9 | 800 |
 | Artillery | Orbital Bombardment | Space Militarization | 11 | 100 |
-| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 12 | 100 |
+| Artillery | Orbital Precision Antimatter Strikes | Antimatter Production | 13 | 100 |
 | Cavalry | Modern Scout Tank | Inertial Navigation Systems | 7 | 1000 |
 | Cavalry | Stealth Reconnaissance Drone Carrier | Rapid Deployment Forces | 9 | 1000 |
 | Cavalry | Holographic Ambush Combat Vehicle | Augmented Reality Warfare | 11 | 1000 |
 | Heavy Tanks | Main Battle Tanks | Guided Missiles | 7 | 1000 |
 | Heavy Tanks | Reactive Armor Tank | Advanced Materials Armor | 8 | 1000 |
 | Heavy Tanks | Railgun Tank | Hypersonic Weapons | 10 | 1000 |
-| Heavy Tanks | DEW Tank | Muon-Catalyzed Fusion Reactors | 12 | 1000 |
+| Heavy Tanks | DEW Tank | Compact Fusion Reactors | 12 | 1000 |
 | Aircraft | Propeller Aircraft | Bombing Aircraft | 6 | 200 |
 | Aircraft | Jet-Powered Aircraft | Jet Engine Technology | 7 | 200 |
 | Aircraft | Stealth Aircraft | Stealth Technology | 8 | 200 |
@@ -192,24 +232,33 @@ modifications](13-military.md#ships-and-ship-modifications).
 | Pulsed Laser Escort | Cruisers | Escort | Directed Energy Weapons | 11 | |
 | Swarm Coordination Vessel | Cruisers | Escort | Swarm Technology | 11 | |
 | Autonomous Swarm Submarine | Torpedo Craft | Submarine | Swarm Technology | 11 | |
-| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 12 | |
+| Antimatter Battleship | Capital Ships | Battle line | Antimatter Production | 13 | |
 | Orbital Support Mothership | Cruisers | Transport | Orbital Weapon Platforms | 12 | |
 
 ## Ship utility modification list
 
-The eight utility modifications the mod adds to the ship designer, and the new
-ships that can mount them.
+The utility modifications the mod adds to the ship designer, each with the
+base-game (or earlier) modification it succeeds and can't be fitted alongside,
+and the new ships that can mount them. The battle-line ships are the Arsenal
+Ship, Stealth Battlecruiser, Hypersonic Missile Platform and Antimatter
+Battleship; the cruiser escorts the Networked Air Defense Cruiser, Pulsed Laser
+Escort and Swarm Coordination Vessel.
 
-| Utility modification | Technology | Effect | Mounted on |
-|---|---|---|---|
-| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | ASW Destroyer, the three new submarines |
-| Ballistic Missile Bay | Precision Guided Munitions | +50% blockade strength, +15% hull damage | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
-| Underway Replenishment | Containerization | +100 supply capacity, +25% supply efficiency, +30% distance from port | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
-| Aegis Air Defense | Network Centric Warfare | +200 screening, +30% accuracy against Guided Missile Ships, +20% against Arsenal Ships | Guided Missile Ship, Networked Air Defense Cruiser |
-| Helicopter Pad | Rapid Deployment Forces | +0.1 marine capacity, +0.2 carrying capacity, +15% naval invasion efficiency | The five transports |
-| DEW Point Defense | Directed Energy Weapons | −25% vulnerability, +200 screening | Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership |
-| Drone Complement | Swarm Technology | +30% accuracy, +25% screening, +200 detection | Nuclear Supercarrier, Expeditionary Sea Base, Stealth Battlecruiser, Hypersonic Missile Platform, Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship, Orbital Support Mothership, the two later submarines |
-| Composite Armor Plating | Modern Material Science | +200 armor, −15% hull damage and −20% critical hits taken | Pulsed Laser Escort, Swarm Coordination Vessel, Antimatter Battleship |
+| Utility modification | Technology | Effect | Succeeds | Mounted on |
+|---|---|---|---|---|
+| Damage Control Teams | Naval Convoy Defense | −35% hull damage and −15% crew casualties taken | Fire Suppression | ASW Destroyer, the two carriers, the battle-line ships, Amphibious and Marine Assault Ships, Swarm Coordination Vessel, Orbital Support Mothership |
+| Composite Armor Plating | Modern Material Science | −45% hull damage and −40% critical hits taken, +20% armor | Damage Control Teams, Fire Suppression | The battle-line ships, Pulsed Laser Escort, Swarm Coordination Vessel |
+| Close-In Weapon System | Precision Guided Munitions | −20% accuracy of ships firing at it, −60% vulnerability | Torpedo Nets, Camouflage | Every new ship except the submarines |
+| Electronic Countermeasures | Electronic Warfare | −30% accuracy of ships firing at it, −40% visibility | Camouflage | The battle-line ships, Nuclear Supercarrier, Swarm Coordination Vessel, Orbital Support Mothership |
+| DEW Point Defense | Directed Energy Weapons | −35% accuracy of ships firing at it, −70% vulnerability, +200 screening | Close-In Weapon System, Torpedo Nets | The battle-line ships, Nuclear Supercarrier, Pulsed Laser Escort, Swarm Coordination Vessel, Orbital Support Mothership |
+| Precision Warheads | Guided Missiles | +75% critical hit chance, +40% crew damage | Advanced Explosives | The battle-line ships, the cruiser escorts, Guided Missile Ship, Autonomous Swarm Submarine, Orbital Support Mothership |
+| Ballistic Missile Bay | Precision Guided Munitions | +35% hull damage, +60% blockade strength | Large Carronades, Patrol Boats | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
+| Drone Complement | Swarm Technology | +40% accuracy, +40% screening, +200 detection | Range Finder | The battle-line ships, the cruiser escorts, Guided Missile Ship, Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, the two later submarines |
+| Aegis Air Defense | Network Centric Warfare | +20% readiness, +200 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
+| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +50% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
+| Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | | ASW Destroyer, the three new submarines |
+| Helicopter Pad | Rapid Deployment Forces | +40% naval invasion efficiency, +25% marine and carrying capacity | Landing Skiffs | The five transports |
+| Underway Replenishment | Containerization | +40% supply capacity, +25% supply efficiency, +30% distance from port | | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |
 
 ## Mobilization option list
 
