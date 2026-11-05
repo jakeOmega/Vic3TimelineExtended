@@ -5,7 +5,10 @@
 # Interconnection Agreement), so every grid is balanced in one run, on the 1st
 # of the month. The global pulse has no ROOT, and the flow modifiers'
 # multipliers want one, so it fires te_grid.1 (events/te_grid_events.txt) on
-# one country that has a station; its immediate runs the world-wide update
+# one country that has a station, or a state a station has left its figures on
+# (the run's own country filter): so the run after the world's last station is
+# demolished still clears that state and the grid record the tab reads
+# (te_grid_record_clear_effect). Its immediate runs the world-wide update
 # (scripting_best_practices.md, "The global pulse has no ROOT, so dispatch
 # through a country event").
 # ============================================================================
@@ -21,7 +24,12 @@ te_grid_world_dispatch = {
 	effect = {
 		random_country = {
 			limit = {
-				any_scope_state = { has_building = building_grid_transfer_station }
+				any_scope_state = {
+					OR = {
+						has_building = building_grid_transfer_station
+						has_variable = te_grid_flow
+					}
+				}
 			}
 			trigger_event = { id = te_grid.1 }
 		}

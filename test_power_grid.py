@@ -1413,5 +1413,111 @@ class LocalizationTest(unittest.TestCase):
             self.assertIn(key, keys)
 
 
+class RecordTest(unittest.TestCase):
+    """The grid's record, for the Power Grids tab: a grid lasts one run, so its hub carries its
+    figures and each country lists its grids and stations until the next run clears them."""
+
+    REC_VARS = ("te_grid_rec_supply", "te_grid_rec_demand", "te_grid_rec_price", "te_grid_rec_sent",
+                "te_grid_rec_delivered", "te_grid_rec_countries", "te_grid_rec_markets")
+
+    def setUp(self):
+        self.effects = _code(_read(EFFECTS))
+        self.run_block = _top_level(self.effects, "te_grid_world_update_effect")
+
+    def test_the_run_clears_last_months_record_before_it_lists_anything(self):
+        self.assertEqual(self.run_block.count("te_grid_record_clear_effect = yes"), 1)
+        self.assertLess(self.run_block.index("te_grid_record_clear_effect = yes"), self.run_block.index("every_country"))
+        # Never at the run's end, which would leave the tab nothing to read.
+        self.assertNotIn("te_grid_record_clear_effect", _top_level(self.effects, "te_grid_world_clear_effect"))
+        clear = _top_level(self.effects, "te_grid_record_clear_effect")
+        # Each list is walked, its entries cleared, and only then emptied; a dead entry is skipped.
+        for name, inner in (("te_grid_record_hubs", ("te_grid_clear_record_effect = yes",)),
+                            ("te_grid_record_countries", ("clear_variable_list = te_grid_hubs",
+                                                          "clear_variable_list = te_grid_stations"))):
+            walk = clear.index(f"variable = {name}")
+            loop = _block_from(clear, clear.rindex("{", 0, walk) + 1)
+            self.assertIn("limit = { exists = this }", loop)
+            for line in inner:
+                self.assertIn(line, loop)
+            self.assertLess(walk, clear.index(f"clear_global_variable_list = {name}"))
+
+    def test_the_dispatch_runs_while_a_station_left_its_figures(self):
+        # Else the run after the world's last station is demolished never comes, and the record stays.
+        dispatch = _top_level(_code(_read(ON_ACTIONS)), "te_grid_world_dispatch")
+        countries = _sub(self.run_block, "every_country")
+        for block in (dispatch, countries):
+            states = _sub(block, "any_scope_state")
+            self.assertIn("has_building = building_grid_transfer_station", states)
+            self.assertIn("has_variable = te_grid_flow", states)
+
+    def test_every_country_with_a_station_is_cleared_next_run(self):
+        countries = _sub(self.run_block, "every_country")
+        self.assertIn("add_to_global_variable_list = { name = te_grid_record_countries target = this }", countries)
+
+    def test_the_record_follows_the_orders(self):
+        balance = _top_level(self.effects, "te_grid_balance_region_effect")
+        self.assertLess(balance.index("te_grid_set_station_flow_effect = yes"), balance.index("te_grid_record_effect = yes"))
+        self.assertLess(balance.index("te_grid_cross_market_effect = yes"), balance.index("te_grid_record_effect = yes"))
+
+    def test_every_figure_written_on_the_hub_is_cleared(self):
+        record = _top_level(self.effects, "te_grid_record_effect")
+        written = dict(re.findall(r"set_variable = \{ name = (te_grid_rec_\w+) value = ([\w:]+) \}", record))
+        self.assertEqual(written, {
+            "te_grid_rec_supply": "local_var:te_grid_sum_production",
+            "te_grid_rec_demand": "local_var:te_grid_sum_consumption",
+            "te_grid_rec_price": "global_var:te_grid_price",
+            "te_grid_rec_sent": "local_var:te_grid_rec_sent",
+            "te_grid_rec_delivered": "local_var:te_grid_rec_delivered",
+            "te_grid_rec_countries": "local_var:te_grid_rec_countries",
+            "te_grid_rec_markets": "local_var:te_grid_rec_markets"})
+        # On the hub, every one, and the hub (not ROOT, the country) is what the next run clears.
+        hub_blocks = [_block_from(record, m.end()) for m in re.finditer(r"scope:te_grid_hub_state = \{", record)]
+        self.assertEqual(sum(b.count("set_variable = { name = te_grid_rec_") for b in hub_blocks), len(self.REC_VARS))
+        self.assertTrue(any("add_to_global_variable_list = { name = te_grid_record_hubs target = this }" in b
+                            for b in hub_blocks))
+        cleared = set(re.findall(r"remove_variable = (te_grid_rec_\w+)", _top_level(self.effects, "te_grid_clear_record_effect")))
+        self.assertEqual(cleared, set(self.REC_VARS))
+        self.assertIn("clear_variable_list = te_grid_rec_capitals", _top_level(self.effects, "te_grid_clear_record_effect"))
+
+    def test_each_owner_lists_the_grid_once_and_every_member(self):
+        record = _top_level(self.effects, "te_grid_record_effect")
+        owner = _sub(record, "owner")
+        self.assertIn("NOT = { is_target_in_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state } }", owner)
+        once = _sub(owner, "if")
+        self.assertIn("add_to_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state }", once)
+        # Every member is listed, not only each owner's first.
+        self.assertNotIn("te_grid_stations", once)
+        self.assertIn("add_to_variable_list = { name = te_grid_stations target = scope:te_grid_rec_member }", owner)
+        self.assertIn("change_local_variable = { name = te_grid_rec_countries add = 1 }", once)
+        # A country with no capital lists no flag (an empty target would fail the add).
+        self.assertIn("exists = capital", once)
+        self.assertIn("name = te_grid_rec_capitals target = scope:te_grid_rec_capital", once)
+
+    def test_flows_are_the_tiles(self):
+        record = _top_level(self.effects, "te_grid_record_effect")
+        self.assertEqual(record.count("add = te_grid_electricity_moved_disp"), 2)
+        # A sender's flow is positive (te_grid_mode_disp), a receiver's negative.
+        self.assertRegex(record, r"limit = \{ var:te_grid_flow > 0 \}\s*change_local_variable = \{ name = te_grid_rec_sent ")
+        self.assertRegex(record, r"limit = \{ var:te_grid_flow < 0 \}\s*change_local_variable = \{ name = te_grid_rec_delivered ")
+
+    def test_markets_are_counted_once_each(self):
+        cross = _top_level(self.effects, "te_grid_cross_market_effect")
+        self.assertIn("set_local_variable = { name = te_grid_rec_markets value = 1 }", cross)
+        spanning = cross[cross.index("if = {"):]
+        self.assertIn("set_local_variable = { name = te_grid_rec_markets value = 0 }", spanning)
+        settle = _top_level(self.effects, "te_grid_settle_market_effect")
+        self.assertEqual(settle.count("change_local_variable = { name = te_grid_rec_markets add = 1 }"), 1)
+
+    def test_stations_on_no_grid_follow_those_on_one(self):
+        after = self.run_block[self.run_block.index("te_grid_close_region_effect = yes"):]
+        self.assertIn("variable = te_grid_record_countries", after)
+        limit = _sub(_sub(after, "every_scope_state"), "limit")
+        self.assertIn("has_building = building_grid_transfer_station", limit)
+        self.assertIn("NOT = { has_variable = te_grid_hub }", limit)
+        self.assertIn("add_to_variable_list = { name = te_grid_stations target = prev }", after)
+        # The idle station loses its hub, so it is listed here and only here.
+        self.assertIn("remove_variable = te_grid_hub", _top_level(self.effects, "te_grid_idle_station_effect"))
+
+
 if __name__ == "__main__":
     unittest.main()
