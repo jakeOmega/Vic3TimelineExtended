@@ -158,6 +158,10 @@ LOC_KEY_FAMILIES: dict[str, list[tuple[str, str]]] = {
     "Country Formation": [("name", ""), ("desc", "_desc")],
     "Modifiers":         [("name", ""), ("desc", "_desc")],
     "Institutions":      [("name", ""), ("desc", "_desc")],
+    # 1.15: a glossary entry needs both (common/glossary/glossary.md); an
+    # exile pool's name is its tab in the Invite Exile screen.
+    "Glossary":          [("name", ""), ("desc", "_desc")],
+    "Regional Exile Pools": [("name", "")],
 }
 
 
@@ -186,6 +190,8 @@ ENTITY_TYPE_TO_DATATYPE: dict[str, str] = {
     "Technologies": "Technology",
     "Institutions": "Institution",
     "Game Concepts": "Concept",
+    "Glossary": "GlossaryType",
+    "Regional Exile Pools": "RegionalExilePool",
     "Country Formation": "CountryFormation",
     "Parties": "Party",
 }
@@ -3168,7 +3174,8 @@ _SHARED_BY_DESIGN_ICON_FIELDS: list[tuple[str, str]] = [
     ("Institutions",               "background_texture"),
     ("Journal Entries",            "icon"),
     ("Messages",                   "texture"),
-    ("Mobilization Option Groups", "icon"),
+    ("Journal Entry Groups",       "illustration"),
+    ("Mobilization Option Groups", "background"),  # `icon` until 1.15
     ("Modifiers",                  "icon"),
     ("PM Groups",                  "texture"),
     ("PMs",                        "texture"),
