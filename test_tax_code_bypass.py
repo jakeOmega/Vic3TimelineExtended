@@ -25,6 +25,7 @@ the committed files; the classes that read the installed game skip without it.
 Run: python3 -m unittest test_tax_code_bypass -v
 """
 
+import copy
 import difflib
 import json
 import os
@@ -33,6 +34,7 @@ import unittest
 from decimal import Decimal
 from pathlib import Path
 
+from je_test_helpers import outcome
 from test_tax_code_rule import load, plain
 from test_tax_code_state import KEYS, block, catalog, close, gen, schema_tokens
 
@@ -780,11 +782,11 @@ class CountsAsTest(unittest.TestCase):
 
 
 class VanillaJournalEntryTest(unittest.TestCase):
-    """Each patched entry is vanilla's (vanilla_parsed, 1.14.5) except its
-    `complete`, where the taxation OR becomes a trigger_if on the rule: with the
-    rule on, only the code counting as one of the original laws (every country
-    then holds the code, so the laws themselves could never be met); with it
-    off (trigger_else), vanilla's OR unchanged."""
+    """Each patched entry is vanilla's (vanilla_parsed, 1.15) except its success
+    outcome's `trigger`, where the taxation OR becomes a trigger_if on the rule:
+    with the rule on, only the code counting as one of the original laws (every
+    country then holds the code, so the laws themselves could never be met); with
+    it off (trigger_else), vanilla's OR unchanged."""
 
     @classmethod
     def setUpClass(cls):
@@ -797,7 +799,7 @@ class VanillaJournalEntryTest(unittest.TestCase):
         self.assertTrue((ROOT / JE_OVERRIDES).read_bytes().startswith(b"\xef\xbb\xbf"))
 
     def taxation_or(self, complete):
-        """Vanilla's OR over the taxation laws in a `complete` block."""
+        """Vanilla's OR over the taxation laws in a success outcome's `trigger`."""
         ors = complete["OR"] if isinstance(complete["OR"], list) else [complete["OR"]]
         found = [o for o in ors if all(
             item in {f"law_type:{law}" for law in LAW_OF.values()}
@@ -805,19 +807,19 @@ class VanillaJournalEntryTest(unittest.TestCase):
         self.assertEqual(len(found), 1)
         return found[0]
 
-    def test_everything_but_complete_is_vanilla(self):
+    def test_everything_but_the_success_trigger_is_vanilla(self):
         for name in PATCHED_JES:
-            mine = dict(self.mod[f"REPLACE:{name}"])
-            theirs = dict(self.vanilla[name])
+            mine = copy.deepcopy(self.mod[f"REPLACE:{name}"])
+            theirs = copy.deepcopy(self.vanilla[name])
             with self.subTest(name=name):
-                mine.pop("complete")
-                theirs.pop("complete")
+                outcome(mine, "complete").pop("trigger")
+                outcome(theirs, "complete").pop("trigger")
                 self.assertEqual(mine, theirs)
 
-    def test_complete_branches_on_the_rule(self):
+    def test_success_trigger_branches_on_the_rule(self):
         for name, kinds in PATCHED_JES.items():
-            mine = dict(self.mod[f"REPLACE:{name}"]["complete"])
-            theirs = dict(self.vanilla[name]["complete"])
+            mine = dict(outcome(self.mod[f"REPLACE:{name}"], "complete")["trigger"])
+            theirs = dict(outcome(self.vanilla[name], "complete")["trigger"])
             original = self.taxation_or(theirs)
             with self.subTest(name=name):
                 for law in original.values():
@@ -838,7 +840,7 @@ class VanillaJournalEntryTest(unittest.TestCase):
                 expected["custom_tooltip"] = tips if len(tips) > 1 else tips[0]
                 self.assertEqual(rule_on[0]["OR"], expected)
                 self.assertEqual(set(rule_on[0]), {"limit", "OR"})
-                # The rest of vanilla's complete, untouched.
+                # The rest of vanilla's trigger, untouched.
                 if isinstance(theirs["OR"], list):
                     left = [o for o in theirs["OR"] if o is not original]
                     theirs["OR"] = left if len(left) > 1 else left[0]

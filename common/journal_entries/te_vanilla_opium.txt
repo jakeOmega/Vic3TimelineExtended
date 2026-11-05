@@ -10,30 +10,34 @@
 # Pharmaceutical Industries make and modern markets import as medicine, so
 # left open the entry would fire against a 20th-century importer.
 #
-# The mod-only lines are the three game_date checks and on_fail: the entry is
-# neither shown nor started after 23 January 1912 (the International Opium
-# Convention), an active one fails then, and failing sets opium_je_done as
-# completing does, so it never comes back.
+# The mod-only lines (marked MOD) are the two game_date checks and the failure
+# outcome: the entry is neither shown nor started after 23 January 1912 (the
+# International Opium Convention), an active one fails then, and failing sets
+# opium_je_done as completing does, so it never comes back.
 #
-# Everything else is vanilla je_opium, restated from the 1.14.5 snapshot
-# (vanilla_parsed/common/journal_entries.json) — re-diff on every Vic3 patch.
+# Everything else is vanilla 1.15.0's je_opium, copied from the installed game
+# (common/journal_entries/00_opium.txt). Re-diff on every Vic3 patch:
+# test_vanilla_je_replacements.py compares it, less the MOD lines, with
+# vanilla_parsed/ and fails when vanilla moves.
 
 REPLACE:je_opium = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	group = je_group_foreign_affairs
 
+	activation_description = {
+		always = yes
+	}
+
 	is_shown_when_inactive = {
 		any_market = {
 			owner ?= root
 		}
-		NOT = {
-			has_variable = opium_je_done
-		}
+		NOT = { has_variable = opium_je_done }
 		any_scope_state = {
 			has_potential_resource = building_opium_plantation
 		}
-		game_date < 1912.1.23
+		game_date < 1912.1.23 # MOD: the International Opium Convention
 	}
 
 	possible = {
@@ -45,57 +49,65 @@ REPLACE:je_opium = {
 				has_cultural_obsession = opium
 			}
 		}
-		game_date < 1912.1.23
+		game_date < 1912.1.23 # MOD: the International Opium Convention
 	}
 
-	complete = {
-		any_scope_building = {
-			is_building_type = building_opium_plantation
-			cash_reserves_ratio > 0.5
-			weekly_profit > 0
-			occupancy >= 0.75
-			level >= 10
-		}
-		any_market = {
-			NOT = {
-				owner ?= root
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			any_scope_building = {
+				is_building_type = building_opium_plantation
+				cash_reserves_ratio > 0.5
+				weekly_profit > 0
+				occupancy >= 0.75
+				level >= 10
 			}
-			mg:opium ?= {
-				market_goods_imports >= 200
-			}
-			owner = {
-				any_primary_culture = {
-					NOT = {
-						has_cultural_obsession = opium
+			any_market = {
+				NOT = { owner ?= root }
+				mg:opium ?= {
+					market_goods_imports >= 200
+				}
+				owner = {
+					any_primary_culture = {
+						NOT = {
+							has_cultural_obsession = opium
+						}
 					}
 				}
 			}
 		}
-	}
-
-	on_complete = {
-		trigger_event = {
-			id = opium_events.1
-		}
-		set_variable = {
-			name = opium_je_done
+		effect = {
+			trigger_event = { id = opium_events.1 }
+			set_variable = {
+				name = opium_je_done
+			}
 		}
 	}
 
-	fail = {
-		custom_tooltip = {
-			text = je_opium_international_opium_convention_tt
-			game_date >= 1912.1.23
+	### MOD: the entry fails at the International Opium Convention
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_opium_fail_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = je_opium_international_opium_convention_tt
+				game_date >= 1912.1.23
+			}
+		}
+		effect = {
+			set_variable = {
+				name = opium_je_done
+			}
+			je_opium_cleanup = yes
 		}
 	}
-
-	on_fail = {
-		set_variable = {
-			name = opium_je_done
-		}
-	}
+	### END MOD ###
 
 	transferable = no
-
 	weight = 100
 }

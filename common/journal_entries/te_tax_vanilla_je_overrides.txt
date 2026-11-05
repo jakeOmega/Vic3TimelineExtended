@@ -7,71 +7,93 @@
 # taxation could never complete. These three accept the code instead when it
 # collects what that law would (te_tax_code_counts_as_per_capita,
 # _proportional, _graduated in common/scripted_triggers/te_tax_triggers.txt):
-# the taxation OR in `complete` becomes a trigger_if on te_tax_code_full whose
-# OR holds only the matching counts-as lines (the rule puts every country on
-# the code, so vanilla's taxation laws there were goal lines no one could
-# meet; GUI audit JE-9), and a trigger_else holding vanilla's OR unchanged, so
-# with the rule off the entry and its tooltip are vanilla's.
-# REPLACE: of one entry, the mod's narrowest precedent for a vanilla journal
-# entry (te_vanilla_turtle_island.txt).
+# the taxation OR in the success outcome's `trigger` becomes a trigger_if on
+# te_tax_code_full whose OR holds only the matching counts-as lines (the rule
+# puts every country on the code, so vanilla's taxation laws there were goal
+# lines no one could meet; GUI audit JE-9), and a trigger_else holding
+# vanilla's OR unchanged, so with the rule off the entry and its tooltip are
+# vanilla's. REPLACE: of one entry, the mod's narrowest precedent for a
+# vanilla journal entry (te_vanilla_turtle_island.txt).
 #
-# Everything else is vanilla 1.14.5, copied from the installed game:
+# Everything else is vanilla 1.15.0, copied from the installed game:
 #   je_great_reforms_bureaucratic   common/journal_entries/03_russia.txt
 #   je_imperialism_of_promise       common/journal_entries/04_imperialism_of_promise.txt
 #   je_portugal_regeneration        common/journal_entries/06_portugal_politics.txt
 # The mod-only lines sit between `### MOD: Tax Code` and `### END MOD ###`.
 # Re-diff on every Vic3 patch: test_tax_code_bypass.py compares each entry,
-# outside `complete`, with vanilla_parsed/ and fails when vanilla moves.
+# outside its success outcome's `trigger`, with vanilla_parsed/ and fails
+# when vanilla moves.
 
 REPLACE:je_great_reforms_bureaucratic = {
 	icon = "gfx/interface/icons/institution_icons/home_affairs.dds"
 
 	group = je_group_russia_great_reformer
 
+	activation_description = {
+		always = yes
+	}
+
 	immediate = {
 		ruler = {
 			save_scope_as = alexander_ii_scope
 		}
 	}
-	complete = {
-		has_law_or_variant = law_type:law_appointed_bureaucrats
-		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
-		trigger_if = {
-			limit = { te_tax_code_full = yes }
-			OR = {
-				custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
-				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
-				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			NOT = {
+				has_law_or_variant = law_type:law_military_bureaucrats
 			}
-		}
-		trigger_else = {
-			OR = {
-				has_law_or_variant = law_type:law_per_capita_based_taxation
-				has_law_or_variant = law_type:law_proportional_taxation
-				has_law_or_variant = law_type:law_graduated_taxation
+			### MOD: Tax Code: under the rule the code counts as the laws it collects like.
+			trigger_if = {
+				limit = { te_tax_code_full = yes }
+				OR = {
+					custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
+					custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
+					custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
+				}
 			}
+			trigger_else = {
+				OR = {
+					has_law_or_variant = law_type:law_per_capita_based_taxation
+					has_law_or_variant = law_type:law_proportional_taxation
+					has_law_or_variant = law_type:law_graduated_taxation
+				}
+			}
+			### END MOD ###
+			bureaucracy >= 0
+			approaching_bureaucracy_shortage = no
 		}
-		### END MOD ###
-		bureaucracy >= 0
-		approaching_bureaucracy_shortage = no
+		effect = {
+			custom_tooltip = {
+				text = advances_great_reforms_tt
+				set_variable = je_great_reforms_bureaucratic_complete
+				change_variable = { name = great_reforms_var add = 1 }
+			}
+			je_great_reforms_bureaucratic_cleanup = yes
+		}
 	}
 
-	fail = {
-		custom_tooltip = {
-			text = ruler_not_alexander_ii_tt
-			ruler = {
-				NOT = {
-					has_template = RUS_alexander_ii
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_standard_failure_conclusion_desc
+		trigger = {
+			custom_tooltip = {
+				text = ruler_not_alexander_ii_tt
+				ruler = {
+					NOT = {
+						has_template = RUS_alexander_ii
+					}
 				}
 			}
 		}
-	}
-
-	on_complete = {
-		custom_tooltip = {
-			text = advances_great_reforms_tt
-			set_variable = je_great_reforms_bureaucratic_complete
-			change_variable = { name = great_reforms_var add = 1 }
+		effect = {
+			je_great_reforms_bureaucratic_cleanup = yes
 		}
 	}
 
@@ -84,6 +106,11 @@ REPLACE:je_imperialism_of_promise = {
 	icon = "gfx/interface/icons/invention_icons/central_planning.dds"
 
 	group = je_group_british_india
+	dlc = dlc011
+
+	activation_description = {
+		always = yes
+	}
 
 	is_shown_when_inactive = {
 		has_dlc_feature = ip2_content
@@ -120,101 +147,122 @@ REPLACE:je_imperialism_of_promise = {
 		trigger_event = { id = utilitarian.9 popup = yes }
 	}
 
-	complete = {
-		root.average_sol >= 10
-		custom_tooltip = {
-			text = bureaucrats_no_shortage_trigger
-			bureaucracy >= 0
-			approaching_bureaucracy_shortage = no
-		}
-		NOT = {
-			has_law_or_variant = law_type:law_no_womens_rights
-		}
-		has_law_or_variant = law_type:law_compulsory_primary_school
-		has_law_or_variant = law_type:law_public_schools
-		has_law_or_variant = law_type:law_slavery_banned
-		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
-		trigger_if = {
-			limit = { te_tax_code_full = yes }
-			OR = {
-				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
-				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
-			}
-		}
-		trigger_else = {
-			OR = {
-				has_law_or_variant = law_type:law_proportional_taxation
-				has_law_or_variant = law_type:law_graduated_taxation
-			}
-		}
-		### END MOD ###
-	}
-
-	fail = {
-		OR = {
-			scope:BIC_scope ?= {
-				has_journal_entry = je_sepoy_mutiny
-			}
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			root.average_sol >= 10
 			custom_tooltip = {
-				text = bic_collapse_var_tt
-				has_variable = bic_collapse_var
+				text = bureaucrats_no_shortage_trigger
+				bureaucracy >= 0
+				approaching_bureaucracy_shortage = no
 			}
-			custom_tooltip = {
-				text = secession_war_in_progress_tt
-				any_civil_war ?= {
-					political_movement = {
-						is_political_movement_type = movement_cultural_minority
-					}
+			NOT = {
+				has_law_or_variant = law_type:law_no_womens_rights
+			}
+			has_law_or_variant = law_type:law_compulsory_primary_school
+			has_law_or_variant = law_type:law_public_schools
+			has_law_or_variant = law_type:law_slavery_banned
+			### MOD: Tax Code: under the rule the code counts as the laws it collects like.
+			trigger_if = {
+				limit = { te_tax_code_full = yes }
+				OR = {
+					custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
+					custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
+				}
+			}
+			trigger_else = {
+				OR = {
+					has_law_or_variant = law_type:law_proportional_taxation
+					has_law_or_variant = law_type:law_graduated_taxation
+				}
+			}
+			### END MOD ###
+		}
+		effect = {
+			trigger_event = { id = utilitarian.1 popup = yes }
+			set_variable = utilitarianism_done
+		}
+		event_outcome_desc = {
+			first_valid = {
+				triggered_desc = {
+					desc = event_effects_utilitarian.1_tt
 				}
 			}
 		}
 	}
 
-	invalid = {
-		OR = {
-			NOT = {
-				exists = c:BIC
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_standard_failure_conclusion_desc
+		trigger = {
+			OR = {
+				scope:BIC_scope ?= {
+					has_journal_entry = je_sepoy_mutiny
+				}
+				custom_tooltip = {
+					text = bic_collapse_var_tt
+					has_variable = bic_collapse_var
+				}
+				custom_tooltip = {
+					text = secession_war_in_progress_tt
+					any_civil_war ?= {
+						political_movement = {
+							is_political_movement_type = movement_cultural_minority
+						}
+					}
+				}
 			}
-			NOT = {
-				country_has_primary_culture = cu:british
+		}
+		effect = {
+			trigger_event = { id = utilitarian.2 popup = yes }
+			set_variable = utilitarianism_done
+		}
+		event_outcome_desc = {
+			first_valid = {
+				triggered_desc = {
+					desc = event_effects_utilitarian.2_tt
+				}
 			}
 		}
 	}
-	on_complete = {
-		trigger_event = { id = utilitarian.1 popup = yes }
-		set_variable = utilitarianism_done
-	}
 
-	event_outcome_completed_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = event_effects_utilitarian.1_tt
+	outcome = {
+		flags = { hidden invalid_outcome }
+		conclusion_desc = je_standard_failure_conclusion_desc
+		trigger = {
+			OR = {
+				NOT = {
+					exists = c:BIC
+				}
+				NOT = {
+					country_has_primary_culture = cu:british
+				}
 			}
+		}
+		effect = {
+			je_imperialism_of_promise_cleanup = yes
 		}
 	}
 
-	on_fail = {
-		trigger_event = { id = utilitarian.2 popup = yes }
-		set_variable = utilitarianism_done
-	}
-
-	event_outcome_failed_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = event_effects_utilitarian.2_tt
-			}
+	outcome = {
+		header = JOURNAL_ENTRY_TIMEOUT
+		effect_header = JOURNAL_ENTRY_ON_TIMEOUT
+		flags = { timeout }
+		conclusion_desc = JOURNAL_ENTRY_TIMEOUT_CONCLUSION_DESC
+		effect = {
+			trigger_event = { id = utilitarian.3 popup = yes }
+			set_variable = utilitarianism_done
 		}
-	}
-
-	on_timeout = {
-		trigger_event = { id = utilitarian.3 popup = yes }
-		set_variable = utilitarianism_done
-	}
-
-	event_outcome_timeout_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = event_effects_utilitarian.3_tt
+		event_outcome_desc = {
+			first_valid = {
+				triggered_desc = {
+					desc = event_effects_utilitarian.3_tt
+				}
 			}
 		}
 	}
@@ -252,6 +300,11 @@ REPLACE:je_portugal_regeneration = {
 	}
 
 	group = je_group_historical_content
+	dlc = dlc016
+
+	activation_description = {
+		always = yes
+	}
 
 	is_shown_when_inactive = {
 		OR = {
@@ -295,8 +348,8 @@ REPLACE:je_portugal_regeneration = {
 	}
 
 	immediate = {
-		set_variable = { name = surplus_time_var value = 0 } # REVIEWED 2026-10-02: vanilla 1.14.5's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
-		set_variable = { name = je_age_in_months_var value = 0 } # REVIEWED 2026-10-02: vanilla 1.14.5's own immediate, copied verbatim so the rule-off entry stays vanilla's; a revolution resets it in vanilla too
+		set_variable = { name = surplus_time_var value = 0 }
+		set_variable = { name = je_age_in_months_var value = 0 }
 		add_journal_entry = { type = je_portugal_regeneration_public_works }
 		add_journal_entry = { type = je_portugal_regeneration_agriculture }
 		add_journal_entry = { type = je_portugal_regeneration_institutions }
@@ -315,142 +368,149 @@ REPLACE:je_portugal_regeneration = {
 		}
 	}
 
-	complete = {
-		trigger_if = {
-			limit = {
-				AND = {
-					has_variable = surplus_time_var
-					has_variable = je_age_in_months_var
-				}
-			}
-			OR = {
-				custom_tooltip = {
-					text = surplus_50_percent_of_the_time_tt
-					var:surplus_time_var >= {
-						value = var:je_age_in_months_var
-						divide = 2
-					}
-				}
-				gold_reserves > 0
-			}
-		}
-		### MOD: Tax Code: under the rule the code counts as the laws it collects like.
-		trigger_if = {
-			limit = { te_tax_code_full = yes }
-			OR = {
-				custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
-				custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
-				custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
-			}
-		}
-		trigger_else = {
-			OR = {
-				has_law = law_type:law_per_capita_based_taxation
-				has_law = law_type:law_proportional_taxation
-				has_law = law_type:law_graduated_taxation
-			}
-		}
-		### END MOD ###
-		custom_tooltip = {
-			text = je_portugal_regeneration_public_works_tt
-			has_variable = je_portugal_regeneration_public_works
-		}
-		custom_tooltip = {
-			text = je_portugal_regeneration_agriculture_complete_tt
-			has_variable = je_portugal_regeneration_agriculture_complete
-		}
-		custom_tooltip = {
-			text = je_portugal_regeneration_institutions_tt
-			has_variable = je_portugal_regeneration_institutions
-		}
-	}
-
-	on_complete = {
-		set_variable = regeneration_complete
-		trigger_event = { id = portugal_regeneration.2 }
-	}
-
-	event_outcome_completed_effect_desc = {
-		header = portugal_regeneration.2.a
-		effect = {
-			add_modifier = {
-				name = modifier_regenerated_portugal
-				days = very_long_modifier_time
-				is_decaying = yes
-			}
-			active_law:lawgroup_economic_system ?= {
-				add_amendment = {
-					type = amendment_economic_regeneration_1
-					sponsor = PREV.ig:ig_industrialists
-					cooldown = 240
-				}
-			}
-		}
-	}
-
-	event_outcome_completed_effect_desc = {
-		header = portugal_regeneration.2.b
-		effect = {
-			ruler = {
-				add_modifier = {
-					name = modifier_successful_regeneration
-					days = very_long_modifier_time
-				}
-			}
-			ordered_interest_group = {
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_standard_completion_conclusion_desc
+		trigger = {
+			trigger_if = {
 				limit = {
-					is_in_government = yes
-					OR = {
-						is_interest_group_type = ig_petty_bourgeoisie
-						is_interest_group_type = ig_intelligentsia
-						is_interest_group_type = ig_industrialists
-						is_interest_group_type = ig_trade_unions
+					AND = {
+						has_variable = surplus_time_var
+						has_variable = je_age_in_months_var
 					}
 				}
-				order_by = ig_clout
-				position = 0
-				check_range_bounds = no
-				leader = {
+				OR = {
+					custom_tooltip = {
+						text = surplus_50_percent_of_the_time_tt
+						var:surplus_time_var >= {
+							value = var:je_age_in_months_var
+							divide = 2
+						}
+					}
+					gold_reserves > 0
+				}
+			}
+			### MOD: Tax Code: under the rule the code counts as the laws it collects like.
+			trigger_if = {
+				limit = { te_tax_code_full = yes }
+				OR = {
+					custom_tooltip = { text = te_tax_tt_counts_as_per_capita te_tax_code_counts_as_per_capita = yes }
+					custom_tooltip = { text = te_tax_tt_counts_as_proportional te_tax_code_counts_as_proportional = yes }
+					custom_tooltip = { text = te_tax_tt_counts_as_graduated te_tax_code_counts_as_graduated = yes }
+				}
+			}
+			trigger_else = {
+				OR = {
+					has_law = law_type:law_per_capita_based_taxation
+					has_law = law_type:law_proportional_taxation
+					has_law = law_type:law_graduated_taxation
+				}
+			}
+			### END MOD ###
+			custom_tooltip = {
+				text = je_portugal_regeneration_public_works_tt
+				has_variable = je_portugal_regeneration_public_works
+			}
+			custom_tooltip = {
+				text = je_portugal_regeneration_agriculture_complete_tt
+				has_variable = je_portugal_regeneration_agriculture_complete
+			}
+			custom_tooltip = {
+				text = je_portugal_regeneration_institutions_tt
+				has_variable = je_portugal_regeneration_institutions
+			}
+		}
+		effect = {
+			set_variable = regeneration_complete
+			trigger_event = { id = portugal_regeneration.2 }
+		}
+		event_outcome_effect_desc = {
+			header = portugal_regeneration.2.a
+			effect = {
+				add_modifier = {
+					name = modifier_regenerated_portugal
+					days = very_long_modifier_time
+					is_decaying = yes
+				}
+				active_law:lawgroup_economic_system ?= {
+					add_amendment = {
+						type = amendment_economic_regeneration_1
+						sponsor = PREV.ig:ig_industrialists
+						cooldown = 240
+					}
+				}
+			}
+		}
+		event_outcome_effect_desc = {
+			header = portugal_regeneration.2.b
+			effect = {
+				ruler = {
 					add_modifier = {
 						name = modifier_successful_regeneration
 						days = very_long_modifier_time
 					}
 				}
-			}
-			add_modifier = {
-				name = modifier_regenerated_portugal
-				days = very_long_modifier_time
-				multiplier = 0.5
-				is_decaying = yes
-			}
-			active_law:lawgroup_economic_system ?= {
-				add_amendment = {
-					type = amendment_economic_regeneration_2
-					sponsor = PREV.ig:ig_industrialists
-					cooldown = 240
+				ordered_interest_group = {
+					limit = {
+						is_in_government = yes
+						OR = {
+							is_interest_group_type = ig_petty_bourgeoisie
+							is_interest_group_type = ig_intelligentsia
+							is_interest_group_type = ig_industrialists
+							is_interest_group_type = ig_trade_unions
+						}
+					}
+					order_by = ig_clout
+					position = 0
+					check_range_bounds = no
+					leader = {
+						add_modifier = {
+							name = modifier_successful_regeneration
+							days = very_long_modifier_time
+						}
+					}
+				}
+				add_modifier = {
+					name = modifier_regenerated_portugal
+					days = very_long_modifier_time
+					multiplier = 0.5
+					is_decaying = yes
+				}
+				active_law:lawgroup_economic_system ?= {
+					add_amendment = {
+						type = amendment_economic_regeneration_2
+						sponsor = PREV.ig:ig_industrialists
+						cooldown = 240
+					}
 				}
 			}
 		}
 	}
 
-	fail = {
-		OR = {
-			custom_tooltip = {
-				text = no_coups_tt
-				has_variable = recent_coup_or_revolution_var
+	outcome = {
+		header = je_standard_failure_header
+		effect_header = je_standard_on_failure_header
+		color = "blue_negative"
+		conclusion_desc = je_standard_failure_conclusion_desc
+		trigger = {
+			OR = {
+				custom_tooltip = {
+					text = no_coups_tt
+					has_variable = recent_coup_or_revolution_var
+				}
+				in_default = yes
 			}
-			in_default = yes
 		}
-	}
-
-	on_fail = {
-		trigger_event = { id = portugal_regeneration.3 }
-	}
-
-	event_outcome_failed_desc = {
-		first_valid = {
-			triggered_desc = {
-				desc = event_effects_portugal_regeneration.3_tt
+		effect = {
+			trigger_event = { id = portugal_regeneration.3 }
+		}
+		event_outcome_desc = {
+			first_valid = {
+				triggered_desc = {
+					desc = event_effects_portugal_regeneration.3_tt
+				}
 			}
 		}
 	}
