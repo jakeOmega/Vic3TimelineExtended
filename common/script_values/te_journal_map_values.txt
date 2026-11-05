@@ -1,0 +1,114 @@
+﻿# Journal entry map modes (vanilla 1.15; docs/systems/mod_systems/journal_map_modes.md). Every value here runs with a
+# STATE as root: the engine evaluates an entry's map_color once per state in the world. So they read only what is
+# already stored (a census variable, an engine figure), never walk pops, and each factor is clamped to 0-1 against
+# fixed bounds, so a color means the same thing in 1850 and 1950 (docs/audits/vanilla_1_15_prep.md § 4.1).
+
+# ---------------------------------------------------------------------------
+# The selector: which of je_te_map_host's maps the player picked
+# ---------------------------------------------------------------------------
+# 1 turmoil, 2 literacy, 3 life expectancy, 4 fertility, 5 median age, 6 the scope probe, 7 the refresh tick; 0 none.
+# The pick is written to two places (te_jmap_set_selector): the picking country, which only scope:journal_entry can
+# reach from a state (if the engine sets it in map_color at all: the scope probe answers that), and a global variable,
+# which every state can read but which one player sets for all (multiplayer would share it). The entry's owner wins
+# when it is reachable.
+te_jmap_selector = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:journal_entry
+			scope:journal_entry ?= {
+				owner ?= { has_variable = te_jmap_sel }
+			}
+		}
+		value = scope:journal_entry.owner.var:te_jmap_sel
+	}
+	else_if = {
+		limit = { has_global_variable = te_jmap_sel }
+		value = global_var:te_jmap_sel
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Factors, each 0-1
+# ---------------------------------------------------------------------------
+# Turmoil is the radicals' share; above a half is a state in uproar, so the scale saturates there (as vanilla's
+# Forest of Bayonets map does).
+te_jmap_turmoil_factor = {
+	value = turmoil
+	multiply = 2
+	min = 0
+	max = 1
+}
+
+te_jmap_literacy_factor = {
+	value = literacy_rate
+	min = 0
+	max = 1
+}
+
+# Life expectancy at birth, 25 to 80 years; two halves for a three-color gradient (low to mid, mid to high).
+te_jmap_e0_factor = {
+	value = var:te_dg_e0
+	subtract = 25
+	divide = 55
+	min = 0
+	max = 1
+}
+te_jmap_e0_factor_lower = {
+	value = te_jmap_e0_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_e0_factor_upper = {
+	value = te_jmap_e0_factor
+	subtract = 0.5
+	multiply = 2
+	min = 0
+	max = 1
+}
+
+# Fertility diverges at replacement, 2.1 children a woman: 1.0 to 2.1 below it, 2.1 to 6.5 above.
+te_jmap_tfr_factor_lower = {
+	value = var:te_dg_tfr
+	subtract = 1
+	divide = 1.1
+	min = 0
+	max = 1
+}
+te_jmap_tfr_factor_upper = {
+	value = var:te_dg_tfr
+	subtract = 2.1
+	divide = 4.4
+	min = 0
+	max = 1
+}
+
+# Median age, 15 to 45 years, in two halves at 30.
+te_jmap_median_factor_lower = {
+	value = var:te_dg_median
+	subtract = 15
+	divide = 15
+	min = 0
+	max = 1
+}
+te_jmap_median_factor_upper = {
+	value = var:te_dg_median
+	subtract = 30
+	divide = 15
+	min = 0
+	max = 1
+}
+
+# The refresh tick (je_te_map_host's weekly pulse adds a quarter and wraps at one). If the map's shade moves each week
+# while the panel stays open, map_color is re-evaluated as the game runs; if it moves only when the panel is reopened,
+# it is evaluated on opening.
+te_jmap_tick_factor = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_tick }
+		value = global_var:te_jmap_tick
+	}
+	min = 0
+	max = 1
+}

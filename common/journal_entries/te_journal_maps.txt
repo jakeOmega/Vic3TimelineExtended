@@ -1,0 +1,316 @@
+﻿# ============================================================================
+# Journal entry map modes: the map host and the hidden world entry (vanilla 1.15, first pass, 2026-11-05)
+# ============================================================================
+# docs/systems/mod_systems/journal_map_modes.md; the in-game checks in docs/testing/journal-map-modes-playtest.md.
+#
+# Vanilla 1.15 lets an entry paint the map: map_color (and map_color_second, drawn as stripes) returns a color for each
+# state, with the state as root, and map_tooltip prints the hover text. The engine shows that map itself (the hidden
+# mm_journal_entry_map_data mode); no .gui calls it. One map per entry, so this file tests three ways round that:
+#
+#   je_te_map_host           several maps on one entry: map_color is an if/else_if ladder on a selector the entry's
+#                            buttons set (te_jmap_selector). It stays out of the journal until a button asks for it
+#                            (common/scripted_effects/te_journal_map_effects.txt) and leaves when closed.
+#   je_te_map_hidden_world   an entry no country is involved in and none can see, so it is never listed in a
+#                            journal. One flat color: if the map turns magenta, this entry painted it.
+#
+# Maps on live entries carry their own blocks (je_banking_cycle, je_banking.txt). Both entries here are the player's
+# tools only: no AI country ever holds the host (only a button adds it), and the world entry has no effects.
+
+je_te_map_host = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	group = je_group_internal_affairs
+
+	# A view, not a system: a revolution's winner or a country the player switches to starts without it.
+	transferable = no
+	can_revolution_inherit = no
+
+	# Shown and active while the country holds te_jmap_host_on, out of the journal otherwise. A button adds it at once
+	# (add_journal_entry ignores these two); setting the variable alone leaves the engine to activate it.
+	is_shown_when_inactive = {
+		has_variable = te_jmap_host_on
+	}
+	possible = {
+		has_variable = te_jmap_host_on
+	}
+	can_deactivate = yes
+
+	immediate = {
+		debug_log = "TE_JMAP host activated (the entry's immediate; compare its date with the button's line)"
+	}
+
+	scripted_button = te_jmap_pick_turmoil
+	scripted_button = te_jmap_pick_literacy
+	scripted_button = te_jmap_pick_life_expectancy
+	scripted_button = te_jmap_pick_fertility
+	scripted_button = te_jmap_pick_median_age
+	scripted_button = te_jmap_pick_scope_probe
+	scripted_button = te_jmap_pick_refresh_tick
+	scripted_button = te_jmap_close
+
+	# The refresh tick: a quarter a week, back to nothing after a full step. The tick map's shade follows it.
+	on_weekly_pulse = {
+		effect = {
+			if = {
+				limit = {
+					has_global_variable = te_jmap_tick
+					global_var:te_jmap_tick < 0.75
+				}
+				change_global_variable = { name = te_jmap_tick add = 0.25 }
+			}
+			else = {
+				set_global_variable = { name = te_jmap_tick value = 0 }
+			}
+		}
+	}
+
+	# Root: the state being painted. A branch that matches nothing leaves the state unpainted, which is how a map with
+	# no pick (selector 0) should look.
+	map_color = {
+		# 1. Turmoil.
+		if = {
+			limit = { te_jmap_selector = 1 }
+			lerp = {
+				min_color = "te_jmap_turmoil_low"
+				max_color = "te_jmap_turmoil_high"
+				factor = te_jmap_turmoil_factor
+			}
+		}
+		# 2. Literacy.
+		else_if = {
+			limit = { te_jmap_selector = 2 }
+			lerp = {
+				min_color = "te_jmap_literacy_low"
+				max_color = "te_jmap_literacy_high"
+				factor = te_jmap_literacy_factor
+			}
+		}
+		# 3. Life expectancy (Demographics), in two halves at 52.5 years.
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+				te_jmap_e0_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_e0_low"
+				max_color = "te_jmap_e0_mid"
+				factor = te_jmap_e0_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+			}
+			lerp = {
+				min_color = "te_jmap_e0_mid"
+				max_color = "te_jmap_e0_high"
+				factor = te_jmap_e0_factor_upper
+			}
+		}
+		# 4. Fertility (Demographics), diverging at replacement.
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+				var:te_dg_tfr < 2.1
+			}
+			lerp = {
+				min_color = "te_jmap_tfr_low"
+				max_color = "te_jmap_tfr_mid"
+				factor = te_jmap_tfr_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+			}
+			lerp = {
+				min_color = "te_jmap_tfr_mid"
+				max_color = "te_jmap_tfr_high"
+				factor = te_jmap_tfr_factor_upper
+			}
+		}
+		# 5. Median age (Demographics), in two halves at 30 years.
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+				var:te_dg_median < 30
+			}
+			lerp = {
+				min_color = "te_jmap_median_low"
+				max_color = "te_jmap_median_mid"
+				factor = te_jmap_median_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+			}
+			lerp = {
+				min_color = "te_jmap_median_mid"
+				max_color = "te_jmap_median_high"
+				factor = te_jmap_median_factor_upper
+			}
+		}
+		# The Demographics maps, a state with no census yet (or the rule off).
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 3
+					te_jmap_selector = 4
+					te_jmap_selector = 5
+				}
+			}
+			value = "te_jmap_no_data"
+		}
+		# 6. The scope probe: which scopes map_color reaches besides the state. Green: scope:journal_entry and its
+		# owner (a selector can live on the player's country, safe in multiplayer). Yellow: the entry but not its
+		# owner. Blue: neither; only the global variable got through (a selector must be global).
+		else_if = {
+			limit = {
+				te_jmap_selector = 6
+				exists = scope:journal_entry
+				scope:journal_entry ?= {
+					owner ?= { is_player = yes }
+				}
+			}
+			value = "te_jmap_probe_entry_owner"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 6
+				exists = scope:journal_entry
+			}
+			value = "te_jmap_probe_entry_only"
+		}
+		else_if = {
+			limit = { te_jmap_selector = 6 }
+			value = "te_jmap_probe_global_only"
+		}
+		# 7. The refresh tick: every state one shade, which steps each week.
+		else_if = {
+			limit = { te_jmap_selector = 7 }
+			lerp = {
+				min_color = "te_jmap_tick_low"
+				max_color = "te_jmap_tick_high"
+				factor = te_jmap_tick_factor
+			}
+		}
+	}
+
+	# Stripes, on the scope probe only: white over every state the player owns, through the state's own owner link.
+	map_color_second = {
+		if = {
+			limit = {
+				te_jmap_selector = 6
+				owner ?= { is_player = yes }
+			}
+			value = "te_jmap_probe_stripe"
+		}
+	}
+
+	# Root: the state under the cursor. Never runs as an effect; it only prints.
+	map_tooltip = {
+		if = {
+			limit = { te_jmap_selector = 1 }
+			custom_tooltip_no_bullet = te_jmap_tt_turmoil
+		}
+		else_if = {
+			limit = { te_jmap_selector = 2 }
+			custom_tooltip_no_bullet = te_jmap_tt_literacy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 3
+				has_variable = te_dg_e0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_life_expectancy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 4
+				has_variable = te_dg_tfr
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_fertility
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 5
+				has_variable = te_dg_median
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_median_age
+		}
+		else_if = {
+			limit = {
+				OR = {
+					te_jmap_selector = 3
+					te_jmap_selector = 4
+					te_jmap_selector = 5
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_no_census
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 6
+				exists = scope:journal_entry
+				scope:journal_entry ?= {
+					owner ?= { is_player = yes }
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_probe_entry_owner
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 6
+				exists = scope:journal_entry
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_probe_entry_only
+		}
+		else_if = {
+			limit = { te_jmap_selector = 6 }
+			custom_tooltip_no_bullet = te_jmap_tt_probe_global_only
+		}
+		else_if = {
+			limit = { te_jmap_selector = 7 }
+			custom_tooltip_no_bullet = te_jmap_tt_refresh_tick
+		}
+		else = {
+			custom_tooltip_no_bullet = te_jmap_tt_no_pick
+		}
+	}
+}
+
+# A contextless entry with nobody involved: active for the whole world from the game's start, in no country's journal.
+# The test strip's "Hidden entry" button tries to open it through GetPlayerJournalEntry. Whether that finds an entry the
+# player is not involved in, and whether opening it paints the map, are the questions.
+je_te_map_hidden_world = {
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+	group = je_group_internal_affairs
+	context = none
+
+	transferable = no
+	can_revolution_inherit = no
+
+	is_shown_when_inactive = {
+		always = yes
+	}
+	should_be_involved = {
+		always = no
+	}
+	should_show_when_not_involved = {
+		always = no
+	}
+
+	map_color = {
+		value = "te_jmap_hidden_world"
+	}
+
+	map_tooltip = {
+		custom_tooltip_no_bullet = te_jmap_tt_hidden_world
+	}
+}

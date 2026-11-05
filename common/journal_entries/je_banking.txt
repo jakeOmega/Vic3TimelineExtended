@@ -329,4 +329,117 @@
 			}
 		}
 	}
+
+	# The map (vanilla 1.15 journal entry map mode; docs/systems/mod_systems/journal_map_modes.md). Root: the state
+	# being painted, so `owner` is that state's country, not the player: every country holds this entry, and the map is
+	# the world's cycle, each country in its phase's color (the panel's own bands, market_triggers.txt), with yellow
+	# stripes where a crash is likely (banking_cycle_bubble_risk_high, the overview's red badge). A country whose
+	# cycle has not started is grey; one with no entry (the rule off, a decentralized nation) is left unpainted.
+	map_color = {
+		if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_panic = yes
+				}
+			}
+			value = "te_jmap_bank_panic"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_downturn = yes
+				}
+			}
+			value = "te_jmap_bank_downturn"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_stagnation = yes
+				}
+			}
+			value = "te_jmap_bank_stagnation"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_stable = yes
+				}
+			}
+			value = "te_jmap_bank_stable"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_expansion = yes
+				}
+			}
+			value = "te_jmap_bank_expansion"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_boom = yes
+				}
+			}
+			value = "te_jmap_bank_boom"
+		}
+		else_if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_is_frenzy = yes
+				}
+			}
+			value = "te_jmap_bank_frenzy"
+		}
+		else_if = {
+			limit = {
+				owner ?= { has_journal_entry = je_banking_cycle }
+			}
+			value = "te_jmap_no_data"
+		}
+	}
+
+	map_color_second = {
+		if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_bubble_risk_high = yes
+				}
+			}
+			value = "te_jmap_bank_risk_stripe"
+		}
+	}
+
+	map_tooltip = {
+		if = {
+			limit = {
+				owner ?= {
+					te_banking_cycle_running = yes
+					banking_cycle_bubble_risk_high = yes
+				}
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_banking_risk
+		}
+		else_if = {
+			limit = {
+				owner ?= { te_banking_cycle_running = yes }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_banking
+		}
+		else_if = {
+			limit = {
+				owner ?= { has_journal_entry = je_banking_cycle }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_banking_dormant
+		}
+	}
 }

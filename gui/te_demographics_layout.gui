@@ -169,11 +169,18 @@ types te_demographics_layout
 				blockoverride "text" {
 					text = "te_window_tab_demographics"
 				}
+				### Show the census on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_demog_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"
 				}
 			}
+		}
+
+		### The map test strip, debug mode only (gui/te_map_widgets.gui; docs/testing/journal-map-modes-playtest.md).
+		blockoverride "tab_before_gate" {
+			te_jmap_test_strip = {}
 		}
 
 		blockoverride "tab_gate" {

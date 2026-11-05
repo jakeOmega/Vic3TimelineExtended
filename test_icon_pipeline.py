@@ -190,13 +190,16 @@ class RegistryTests(unittest.TestCase):
     def test_journal_categories_cover_every_mod_entry_but_the_nuclear_one(self):
         """Every mod-defined journal entry is in the registry, except the nuclear one (own art) and the 1.15
         probe, an AI-only entry no player sees, deleted once docs/testing/vanilla-1-15-playtest.md's probes answer.
+        The two journal map entries (te_journal_maps.txt) borrow vanilla's event_map.dds while they are a first pass
+        under test (docs/testing/journal-map-modes-playtest.md); the hidden world entry is shown to no one.
         REPLACE:-ed vanilla entries do not match the pattern, and the registry cannot wire them."""
         import re
         defined = set()
         for path in Path(MOD_ROOT, "common", "journal_entries").glob("*.txt"):
             defined |= set(re.findall(r"^([A-Za-z0-9_]+)\s*=\s*\{", path.read_text(encoding="utf-8-sig"), re.M))
         registered = set(ip.ICONS["journal_entry"]) | set(ip.ICONS["journal_entry_space"])
-        self.assertEqual(defined - registered, {"je_nuclear_program", "te_probe_115"})
+        self.assertEqual(defined - registered,
+                         {"je_nuclear_program", "te_probe_115", "je_te_map_host", "je_te_map_hidden_world"})
         self.assertEqual(registered - defined, set())
 
 

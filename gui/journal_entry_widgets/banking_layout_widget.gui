@@ -242,6 +242,8 @@ types banking_layout_widget_types
 				blockoverride "text" {
 					text = "je_banking_cycle"
 				}
+				### Show the world's cycle on the map (gui/te_map_widgets.gui; journal_map_modes.md).
+				te_jmap_banking_map_button = {}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_banking')]"
