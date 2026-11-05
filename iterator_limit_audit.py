@@ -79,6 +79,11 @@ ITERATOR_PROPERTY_KEYS = {
     # Container iterators (1.13.10+) filter by tag.
     "tag",
     "tags",
+    # 1.15: a trigger iterator's tooltip lists each scope it matched
+    # (`list_scopes`) and the trigger per scope (`show_trigger_per_scope`).
+    # Vanilla writes them after `filter` / `percent` and before `count`.
+    "list_scopes",
+    "show_trigger_per_scope",
 }
 
 # Iterator properties only in scalar form. `parent = scope:x` filters a
