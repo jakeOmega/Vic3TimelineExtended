@@ -15,7 +15,8 @@
 # dropped this copy instead — in that case replace this approach with a
 # whole-file override of events/misc_unifications.txt. Re-sync the body below
 # against vanilla on every vanilla bump (see docs/guides/vanilla_patch_runbook.md).
-# Only the two BHA/NUS lines in the NOR block differ from vanilla.
+# Only the two BHA/NUS lines in the NOR block differ from vanilla. Last re-synced:
+# vanilla 1.15.0 (its six new tags, USA to GAL, in the NOR block).
 # ============================================================================
 
 formation.17 = {
@@ -37,6 +38,7 @@ formation.17 = {
 	duration = 3
 
 	trigger = {
+		# triggered by on_action - on_country_formed
 		NOR = {
 			c:LAO ?= THIS
 			c:UBD ?= THIS
@@ -64,6 +66,12 @@ formation.17 = {
 			c:GCO ?= THIS
 			c:PBC ?= THIS
 			c:FND ?= THIS
+			c:USA ?= THIS
+			c:SAF ?= THIS
+			c:CLI ?= THIS
+			c:AFG ?= THIS
+			c:FSA ?= THIS
+			c:GAL ?= THIS
 			c:BHA ?= THIS	# mod: India gets bespoke formation_te.1
 			c:NUS ?= THIS	# mod: Indonesia gets bespoke formation_te.2
 		}

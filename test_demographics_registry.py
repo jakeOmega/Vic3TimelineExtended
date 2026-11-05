@@ -1747,6 +1747,8 @@ class TestEngineLinesMoved(unittest.TestCase):
         ("law", "law_child_labor_allowed", "modifier", "state_machinists_mortality_mult"): ("absorbed", 0.05),
         ("law", "law_child_labor_allowed", "modifier", "state_peasants_mortality_mult"): ("absorbed", 0.05),
         ("law", "law_communal_child_rearing", "modifier", "state_birth_rate_mult"): ("ontop", -0.2),
+        # vanilla 1.15's new Internal Security law; wealth mortality is on top by field (P.ENGINE_FIELDS_ON_TOP)
+        ("law", "law_extraordinary_commission", "institution_modifier", "state_mortality_wealth_mult"): ("ontop", 0.001),
         ("law", "law_full_equality_and_protection", "modifier", "state_birth_rate_mult"): ("ontop", -0.01),
         ("law", "law_mandatory_augmentation", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
         ("law", "law_medical_augmentation_only", "institution_modifier", "state_mortality_mult"): ("absorbed", -0.02),
@@ -2003,6 +2005,8 @@ class TestWorkforceLinesMoved(unittest.TestCase):
             ("state_working_adult_ratio_add = -0.05", f"{P.REPLACED_TYPE} = 0.05", f"{P.PARTICIPATION_TYPE} = 0.014"),
         ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_woman_soldiers"):
             ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
+        ("common/static_modifiers/te_demog_workforce_injections.txt", "INJECT:modifier_social_revolution"):
+            ("state_working_adult_ratio_add = -0.05", f"{P.WOMENS_WORK_TYPE} = 0.05"),
         ("common/static_modifiers/extra_modifiers.txt", "INJECT:state_region_pollution_health"):
             (f"{P.REPLACED_TYPE} = -0.05", f"{P.CAPACITY_TYPE} = -0.1"),
     }
@@ -2074,6 +2078,7 @@ class TestWorkforceLinesMoved(unittest.TestCase):
         ("laws", "law_women_in_the_workplace"), ("laws", "law_womens_suffrage"), ("laws", "law_old_age_pension"),
         ("interest_group_traits", "ig_trait_solidarity"), ("interest_group_traits", "ig_trait_bourse_du_travail"),
         ("modifiers", "modifier_woman_soldiers"),
+        ("modifiers", "modifier_social_revolution"),   # vanilla 1.15 (the communism journal entry)
     }
 
     def test_every_vanilla_carrier_is_moved(self):

@@ -1698,14 +1698,19 @@ intelligence_sharing_pact = {
 		country_treaty_leverage_generation_add = 300
 	}
 
-	# Executed once when the treaty is signed.
+	# Executed once when the treaty is signed. From vanilla 1.15 a renegotiated
+	# treaty re-runs this hook with scope:is_renegotiation set; the infamy is
+	# charged only the first time.
 	on_entry_into_force = {
-		# The world takes notice of this deep alliance, generating a small amount of Infamy.
-		scope:article_options.first_country = {
-			change_infamy = 1
-		}
-		scope:article_options.second_country = {
-			change_infamy = 1
+		if = {
+			limit = { NOT = { exists = scope:is_renegotiation } }
+			# The world takes notice of this deep alliance, generating a small amount of Infamy.
+			scope:article_options.first_country = {
+				change_infamy = 1
+			}
+			scope:article_options.second_country = {
+				change_infamy = 1
+			}
 		}
 	}
 

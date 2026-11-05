@@ -3675,10 +3675,11 @@ irredentism_bloc_approval_on_action = {
 
 # ============================================================================
 # MANDATE RESERVE - yearly cohesion bonus on the leader's bloc, scaled to the
-# stockpile of unused mandates. Engine has no on_yearly_pulse_power_bloc and
-# no add_mandate/remove_mandate effect, so we run from on_yearly_pulse_country
-# gated on is_power_bloc_leader = yes and scope into the bloc to apply the
-# modifier. remove_modifier first prevents stack drift across years.
+# stockpile of unused mandates. Engine has no on_yearly_pulse_power_bloc, so
+# we run from on_yearly_pulse_country gated on is_power_bloc_leader = yes and
+# scope into the bloc to apply the modifier. (Vanilla 1.15 adds
+# add_power_bloc_mandate, but still no way to remove one, and the count still
+# has no script-value accessor, hence the tiered value.) remove_modifier first prevents stack drift across years.
 # months = 13 outlives the yearly pulse so the modifier never blinks off.
 # ============================================================================
 te_unused_mandate_reserve_on_action = {

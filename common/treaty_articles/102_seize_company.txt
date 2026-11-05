@@ -67,9 +67,15 @@ seize_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, li
 
 	# The source country's company is removed, the target country gains it.
 	on_entry_into_force = {
+		# Once, when the article is first formed. From vanilla 1.15 a renegotiated
+		# treaty re-runs this hook with scope:is_renegotiation set, and the company
+		# it seizes is gone by then (treaty_articles.md, can_be_renegotiated).
 		scope:article_options = {
 			if = {
-				limit = { exists = input_company }
+				limit = {
+					exists = input_company
+					NOT = { exists = scope:is_renegotiation }
+				}
 				input_company = {
 					save_scope_as = target_company
 				}

@@ -1160,7 +1160,10 @@ gm_seed_landmark_beside = {
 			set_variable = gm_mon_listed
 			trigger_event = { id = monument_events.20 }
 		}
-		debug_log = "TE_MONUMENTS: landmark $KEY$ placed beside the monument already standing in its state: level $LEVEL$, form $FORM$"
+		# its records, not its arguments (no $X$ inside a debug_log string: te_debug_log_arg_effects.txt)
+		scope:gm_tr_moving = {
+			debug_log = "TE_MONUMENTS: landmark [THIS.Var('gm_tr_landmark').GetFlagName] placed beside the monument already standing in its state: level [THIS.Var('gm_tr_levels').GetValue|0], form [THIS.Var('gm_tr_form').GetFlagName]"
+		}
 	}
 }
 

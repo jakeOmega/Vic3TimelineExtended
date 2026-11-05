@@ -384,13 +384,6 @@ REPLACE:joint_front = {
 	}
 }
 
-# The AI keeps Imperial Circle for a monarchy's Sovereign Empire.
-REPLACE:imperial_circle = {
-	trigger = {
-		coa_monarchy_trigger = yes
-		OR = {
-			is_ai = no
-			scope:selected_identity = identity:identity_sovereign_empire
-		}
-	}
-}
+# Imperial Circle is vanilla's own since 1.15: it passes only for a Sovereign
+# Empire (1.14.5 passed it for any monarchy, and the mod held the AI to a
+# monarchy's Sovereign Empire with a REPLACE).

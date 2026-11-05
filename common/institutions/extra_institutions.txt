@@ -32,6 +32,8 @@ institution_ministry_of_foreign_affairs = {
 		country_influence_add = 100
 		country_influence_mult = 0.1
 		country_leverage_generation_mult = 0.05
+		# Inert before vanilla 1.15, which made it apply from any source: now live, +10% per
+		# investment level (+90% at the cap of 9). Kept as written pending a play-test.
 		military_formation_interest_gain_mult = 0.1
 		country_infamy_decay_mult = 0.05  # REVIEWED 2026-05-13 (issue #18): structural — bureaucratic capacity, not contrition; no generation_mult pairing
 	}

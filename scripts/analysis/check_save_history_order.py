@@ -26,9 +26,10 @@ again, so a store already scrambled when it froze stays that way. That used to
 be unreachable, since nobody could open another country's journal entry, and
 was labelled `frozen` without failing. National Info (spec
 docs/superpowers/specs/2026-11-02-charts-help-national-info-design.md § 6.6)
-shows another country's charts, so it is reachable now, and an old-save repair
-(`te_repair_history_order`, common/on_actions/te_old_save_repairs.txt) sorts
-every store once. A store whose newest sample is more than one step (a month,
+shows another country's charts, so it is reachable now. An old-save repair
+(`te_repair_history_order`) sorted every store once until the vanilla 1.15
+migration retired it, so a save from before 2026-09-21 (#356) may still show
+one. A store whose newest sample is more than one step (a month,
 or a year for `te_dg_hist`) behind its kind's newest is still labelled
 `frozen`, for the reader, and fails like a live one.
 
@@ -200,7 +201,7 @@ def check_save(save_path):
                 frozen += is_frozen
             detail = "".join(f"  break@{k}: {fmt(seq[k])} -> {fmt(seq[k + 1])}" for k in breaks[:3])
             if not ascending and is_frozen:
-                detail += f"  [frozen since {fmt(max(seq))}: te_repair_history_order sorts it once]"
+                detail += f"  [frozen since {fmt(max(seq))}: scrambled before #356, 2026-09-21]"
             print(f"  {name} 0x{off:x}  n={len(ids):3d}  {fmt(min(seq))}..{fmt(max(seq))}"
                   f"  ascending={ascending}{detail}")
         if frozen:

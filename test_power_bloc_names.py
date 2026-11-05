@@ -26,7 +26,8 @@ NAMES = ROOT / "common" / "power_bloc_names" / "extra_power_bloc_names.txt"
 LOC = ROOT / "localization" / "english"
 
 # Vanilla's names that pass for any country. A patch adding one must add it here
-# and to the REPLACE block (docs/guides/vanilla_patch_runbook.md § 6b).
+# and to the REPLACE block (docs/guides/vanilla_patch_runbook.md § 6b). Re-checked
+# against vanilla 1.15.0: the same eleven; its five new names are country-specific.
 CATCH_ALLS = {
     "great_alliance", "grand_coalition", "council_of_nations", "universal_league",
     "steadfast_union", "glorious_union", "unity_league", "supreme_alliance",
@@ -71,11 +72,14 @@ class PowerBlocNamesTest(unittest.TestCase):
                 self.assertTrue(replace, "must be a REPLACE: of vanilla's entry")
                 self.assertRegex(body, r"^trigger = \{ is_ai = no\b", "is_ai = no must gate the whole trigger")
 
-    def test_imperial_circle_open_to_ai_only_for_sovereign_empire(self):
-        replace, body = self.mod["imperial_circle"]
-        self.assertTrue(replace)
-        self.assertIn("coa_monarchy_trigger = yes", body)
-        self.assertIn("OR = { is_ai = no scope:selected_identity = identity:identity_sovereign_empire }", body)
+    def test_imperial_circle_is_vanillas(self):
+        """Vanilla 1.15 gates Imperial Circle on the Sovereign Empire identity (1.14.5: any monarchy, which the mod
+        REPLACEd to hold the AI to a monarchy's Sovereign Empire), so the mod no longer overrides it."""
+        self.assertNotIn("imperial_circle", self.mod)
+        vanilla = Path(os.environ.get("VIC3_BASE_GAME", "/nonexistent")) / "game" / "common" / "power_bloc_names" / "00_power_bloc_names.txt"
+        if vanilla.is_file():
+            _, body = entries(vanilla.read_text(encoding="utf-8-sig"))["imperial_circle"]
+            self.assertEqual(body, "trigger = { scope:selected_identity = identity:identity_sovereign_empire }")
 
     def test_ai_has_at_least_as_many_unconditional_names(self):
         unconditional = [k for k, (rep, body) in self.mod.items() if not rep and body == "trigger = { always = yes }"]

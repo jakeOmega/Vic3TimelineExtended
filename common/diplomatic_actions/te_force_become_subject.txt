@@ -21,7 +21,9 @@
 # accept_effect, potential, and ai blocks were copied byte-identical from
 # vanilla 31_power_bloc_force_become_subject.txt — re-diff on every Vic3
 # patch. Vanilla version copied: 1.10 (Steam, 2026-05). Last re-diffed:
-# 1.13.7 (2026-06-11) — still byte-identical apart from the documented
+# 1.15.0 (2026-11-05): ported 1.15's can-be-subjugated tooltip in `possible`
+# and the AI's regional-objective lines (ai_is_regional_objective_subjugate_target,
+# from 1.14.x, missed then); otherwise byte-identical apart from the documented
 # intentional changes. The change_infamy block is mod-only; everything
 # else above it remains vanilla-shaped.
 #
@@ -54,6 +56,12 @@ REPLACE:force_become_subject = {
 			is_subject = no
 			country_rank < rank_value:unrecognized_major_power
 			is_diplomatic_play_committed_participant = no
+		}
+
+		# vanilla 1.15
+		custom_tooltip = {
+			text = DIPLOMATIC_PACT_REQUIREMENT_CAN_BE_SUBJUGATED
+			scope:target_country = { modifier:country_cannot_be_subjugated_bool ?= no }
 		}
 
 		power_bloc = {
@@ -154,6 +162,7 @@ REPLACE:force_become_subject = {
 					attitude = domineering
 				}
 				power_bloc ?= { current_cohesion_percentage >= 0.8 }
+				ai_is_regional_objective_subjugate_target = { TARGET = scope:target_country }
 			}
 			OR = {
 				AND = {
@@ -166,11 +175,19 @@ REPLACE:force_become_subject = {
 				scope:target_country = {
 					is_country_type = unrecognized
 				}
+				ai_is_regional_objective_subjugate_target = { TARGET = scope:target_country }
 			}
 		}
 
 		propose_score = {
 			value = 10
+
+			if = {
+				limit = {
+					ai_is_regional_objective_subjugate_target = { TARGET = scope:target_country }
+				}
+				add = 20
+			}
 		}
 	}
 }

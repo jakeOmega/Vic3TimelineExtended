@@ -890,7 +890,9 @@ un_propose_refugee_source = {
 }
 
 # The graver case, preferred when there is one: famine, or a war that has
-# devastated a state. Same calling rule as un_propose_refugee_source.
+# devastated a state or taken a quarter of the country (un_docket_war_victim_standing's
+# two measures; vanilla 1.15: occupation no longer devastates). Same calling
+# rule as un_propose_refugee_source.
 # Scope: the candidate source
 un_propose_refugee_grave_source = {
 	NOT = { this = PREV }
@@ -899,7 +901,10 @@ un_propose_refugee_grave_source = {
 		any_scope_state = { has_famine = yes }
 		AND = {
 			is_at_war = yes
-			any_scope_state = { devastation > un_docket_war_devastation }
+			OR = {
+				any_scope_state = { devastation > un_docket_war_devastation }
+				enemy_occupation > un_docket_war_occupation
+			}
 		}
 	}
 }

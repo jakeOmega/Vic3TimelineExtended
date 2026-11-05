@@ -939,7 +939,7 @@ gm_state_restore_dedication_one = {
 				if = {
 					limit = { NOT = { has_global_variable = gm_created_self_checked } }
 					set_global_variable = gm_created_self_checked
-					debug_log = "TE_SELF_CHECK OK monument_created_on_dedication (create_building put a site's dedication, pm_monument_$KEY$, on the finished Grand Monument it made)"
+					debug_log = "TE_SELF_CHECK OK monument_created_on_dedication (create_building put a site's dedication, pm_monument_[THIS.Var('gm_restore_pm').GetFlagName], on the finished Grand Monument it made)"
 				}
 				remove_variable = gm_created_check
 			}
@@ -954,7 +954,7 @@ gm_state_restore_dedication_one = {
 				if = {
 					limit = { NOT = { has_global_variable = gm_created_self_checked } }
 					set_global_variable = gm_created_self_checked
-					debug_log = "TE_SELF_CHECK BROKEN monument_created_on_dedication (the finished Grand Monument a site's dedication made stood on another method; gm_restore_pm switches it to pm_monument_$KEY$; see docs/testing/grand-monuments-ageing-playtest.md)"
+					debug_log = "TE_SELF_CHECK BROKEN monument_created_on_dedication (the finished Grand Monument a site's dedication made stood on another method; gm_restore_pm switches it to pm_monument_[THIS.Var('gm_restore_pm').GetFlagName]; see docs/testing/grand-monuments-ageing-playtest.md)"
 				}
 				remove_variable = gm_created_check
 			}
@@ -1568,7 +1568,7 @@ gm_state_become_landmark = {
 		limit = { NOT = { has_variable = gm_restore_pm } }
 		gm_state_update_picture = yes
 	}
-	debug_log = "TE_MONUMENTS: a historical opportunity completed: the monument is now the landmark $KEY$"
+	debug_log = "TE_MONUMENTS: a historical opportunity completed: the monument is now the landmark [THIS.Var('gm_landmark').GetFlagName]"
 }
 
 # Container scope, a monument beside another that completed a historical
@@ -1613,5 +1613,5 @@ gm_mon_become_landmark = {
 	gm_remove_state_var = { VAR = gm_tr_name_enemy_cap }
 	gm_tr_sig_backfill = yes
 	gm_tr_update_picture = yes
-	debug_log = "TE_MONUMENTS: a historical opportunity completed beside another monument: it is now the landmark $KEY$"
+	debug_log = "TE_MONUMENTS: a historical opportunity completed beside another monument: it is now the landmark [THIS.Var('gm_tr_landmark').GetFlagName]"
 }

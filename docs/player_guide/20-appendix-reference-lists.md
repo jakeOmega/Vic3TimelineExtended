@@ -255,7 +255,7 @@ Escort and Swarm Coordination Vessel.
 | Ballistic Missile Bay | Precision Guided Munitions | +35% hull damage, +60% blockade strength | Large Carronades, Patrol Boats | Guided Missile Ship, Arsenal Ship, Hypersonic Missile Platform, Antimatter Battleship |
 | Drone Complement | Swarm Technology | +40% accuracy, +40% screening, +200 detection | Range Finder | The battle-line ships, the cruiser escorts, Guided Missile Ship, Nuclear Supercarrier, Expeditionary Sea Base, Orbital Support Mothership, the two later submarines |
 | Aegis Air Defense | Network Centric Warfare | +20% readiness, +200 screening, +40% accuracy against the Guided Missile Ship, Arsenal Ship and Hypersonic Missile Platform | Fire-Control System | The battle-line ships, the cruiser escorts, Guided Missile Ship |
-| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +50% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
+| Surface Search Radar | Radar | −75% of the accuracy bad weather costs, +100% detection | Searchlights | ASW Destroyer, Fleet Carrier, Expeditionary Fast Transport, the cruiser escorts |
 | Sonar Suite | Sonar | +50% accuracy against every submarine, +100 detection | | ASW Destroyer, the three new submarines |
 | Helicopter Pad | Rapid Deployment Forces | +40% naval invasion efficiency, +25% marine and carrying capacity | Landing Skiffs | The five transports |
 | Underway Replenishment | Containerization | +40% supply capacity, +25% supply efficiency, +30% distance from port | | Fleet Carrier, Nuclear Supercarrier, Arsenal Ship, Stealth Battlecruiser |

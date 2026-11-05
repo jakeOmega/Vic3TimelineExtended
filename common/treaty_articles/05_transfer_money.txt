@@ -9,6 +9,7 @@
 		can_be_enforced
 		can_be_renegotiated
 		giftable
+		ai_consider_threaten_naval_hostilities
 	}
 
 	maintenance_paid_by = target_country
@@ -269,24 +270,6 @@
 					}
 				}
 
-				# Longer treaties mean more total money paid out
-				if = {
-					limit = {
-						NOT = { exists = scope:is_treaty_active }
-						exists = scope:treaty
-						scope:treaty.binding_period >= 1825
-					}
-					multiply = {
-						desc = "DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD"
-						value = 1
-						add = {
-							value = scope:treaty.binding_period
-							min = 365
-							divide = 3650
-						}
-						max = 2
-					}
-				}
 			}
 			else = {
 				scope:source_country = {
@@ -461,27 +444,55 @@
 						}
 					}
 				}
+			}
+		}
 
-				# Longer treaties mean more total money received: scale acceptance strongly
+		# Vanilla 1.15's binding-period term, verbatim. The treaty is out of
+		# reach in inherent_accept_score (treaty_articles.md), so the mod's two
+		# multipliers there (x2 for the payer, x5 for the receiver, read from
+		# scope:treaty) never applied; vanilla moved its own the same way.
+		contextual_accept_score = {
+			value = 0
+
+			if = {
+				limit = {
+					NOT = { exists = scope:is_treaty_active }
+					scope:treaty.binding_period > 1825
+					exists = scope:article.input_quantity
+				}
+
 				if = {
 					limit = {
-						NOT = { exists = scope:is_treaty_active }
-						exists = scope:treaty
-						scope:treaty.binding_period >= 1825
+						scope:source_country ?= this
 					}
-					multiply = {
+
+					subtract = {
 						desc = "DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD"
-						value = 1
-						add = {
+						value = scope:article.input_quantity
+						divide = 25
+						multiply = {
 							value = scope:treaty.binding_period
-							min = 365
-							divide = 1825
+							subtract = 1825
+							divide = 3650
+							max = 1
 						}
-						max = 5
+					}
+				}
+				else = {
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_BINDING_PERIOD"
+						value = scope:article.input_quantity
+						divide = 100
+						max = 75
+						multiply = {
+							value = scope:treaty.binding_period
+							subtract = 1825
+							divide = 3650
+							max = 1
+						}
 					}
 				}
 			}
-
 		}
 	}
 

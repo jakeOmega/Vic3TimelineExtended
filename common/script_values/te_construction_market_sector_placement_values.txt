@@ -47,7 +47,10 @@ te_construction_market_per_site = {
 # was observed in-game (Yemen save) to under-report even at 100% laborer
 # staffing: 30/30 laborers + "Fully Employed", yet the trigger returned
 # below the 20% threshold and the else branch fired, inflating throughput
-# to +1005%. `occupancy` reads the engine's slot-fill ratio directly.
+# to +1005%. The cause was vanilla's: before 1.15 the trigger compared its
+# operands in the wrong order (fixed in 1.15, per its changelog), so it
+# answered the opposite comparison. `occupancy` reads the engine's
+# slot-fill ratio directly, and stays.
 te_construction_market_employment_adjusted_per_site = {
 	value = owner.te_construction_market_per_site
 	# Floor staffing at 0.1 to avoid divide-by-zero (matches the staircase's

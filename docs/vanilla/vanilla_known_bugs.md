@@ -1457,6 +1457,7 @@ The persistent reader scans every file under the saves directory at startup and 
 
 ### `journal_entry_manager.cpp:370` — revolt-spawned countries duplicate every parent JE
 - source: `journal_entry_manager.cpp:370`
+- source: `journal_entry_manager.cpp:372`
 
 ```
 already has a journal entry of type
@@ -1501,6 +1502,7 @@ Parallel to the existing `events/slave_revolts.txt:38` entry. Vanilla secession 
 
 ### `jomini_mapobject_manager.cpp:3509` — invalid camera index 0
 - source: `jomini_mapobject_manager.cpp:3509`
+- source: `jomini_mapobject_manager.cpp:3549`
 
 ```
 CMapObjectManager::GetVisibleObjects: invalid camera index 0 requested
@@ -1799,6 +1801,7 @@ Plain startup instrumentation ("Starting/Done pre-enumerating '<dir>'…") misca
 
 ### `jomini_trigger.cpp:102` — trigger added after PostInitAndValidate
 - source: `jomini_trigger.cpp:102`
+- source: `jomini_trigger.cpp:103`
 
 ```
 Adding trigger after PostInitAndValidate
