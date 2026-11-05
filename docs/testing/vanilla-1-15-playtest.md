@@ -13,7 +13,9 @@ migration record that doc becomes), and an engine fact in `docs/guides/scripting
 - **The probes** need nothing but time: any game, observer or played, new or loaded, for **four months of game time**.
   They run once a game on one AI major power, which picks itself within 14 days of the start (or of loading a save
   that has never run them), then take about three months. A game whose every major power is at war or held by a
-  player never starts them.
+  player never starts them. No `TE_PROBE_115 start` line after a month: before blaming that, grep `debug.log` for
+  errors naming `te_probe_115_probes.txt` or `te_probe_115_bars.txt`; a field the engine rejects at load can drop the
+  whole entry.
 - **Logs.** Read `debug.log`, not `error.log`: `grep TE_PROBE_115 debug.log`, or with the server
   `curl -s "http://localhost:8950/logs/debug?debug_log=only&mod_only=true&q=TE_PROBE_115"`. `debug.log` rolls over at
   512 KB, and a probe that fired once is gone after a few launches: copy the lines out right after the run
