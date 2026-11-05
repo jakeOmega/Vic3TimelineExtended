@@ -78,6 +78,12 @@ stayed on lead (munitions, glass and porcelain, rubber, fission and fusion shiel
 replaced methods vanilla changed were re-based. Companies, customs and the tax code learned copper, and carbon
 accounting was regenerated for vanilla's fuel cuts, which renamed some capture variants.
 
+The producers split as follows. The mod's old copper mine ran the lead mine's method groups, so it made lead; the
+copper mine now makes copper, and so do Sumitomo's Besshi mine (25, was lead) and the Kirgizian smelter (30, was
+iron). The lead mine, the mod's Precious & Minor Base Metals mine, BHP's Broken Hill and generic ore processing
+stay on lead. The ocean mines split their old lead output 2:1 copper to lead, and the space mine, space colony
+mining and self-replicating miners 3:2, at the same total.
+
 **The map.** `map_data/state_regions/` regenerated from 1.15: KAUNAS is LITHUANIA and TARTARIA is SARATOV (pure
 renames), GALICH is VOLOGDA (259 of its 282 provinces), TULA (id 575) and KOSTROMA (id 834) are new, CHUKOTKA is
 merged into KAMCHATKA. `resources.py` now fails on a config key that matches no state, deletes copies vanilla no
@@ -110,8 +116,10 @@ unions in for its endpoints, and a test of a script-only type caught it.
 **Script sweep and defines.** The mod's three devastation overrides go, for 1.15's battle-based devastation;
 `INCOHERENCE_FACTOR` stays at 2 (vanilla went from 5 to 2.5). No `$ARG$` is left inside a `debug_log` string: 20
 lines in 12 helpers pass their arguments through `te_log_args_set` (`te_debug_log_arg_effects.txt`), and
-`test_debug_log_arguments.py` keeps it so. Treaty articles gained renegotiation guards, and state-modifier articles
-remove before they re-add. The UN docket counts a war victim by `enemy_occupation > 0.25`, and its strike lists
+`test_debug_log_arguments.py` keeps it so. 1.15 re-runs `on_entry_into_force` with `scope:is_renegotiation` set,
+for an article carried over and for one a renegotiation adds. Intelligence Sharing skips its +1 infamy then (an
+added one charges none, accepted), Seize and Disband Company rely on `exists = input_company` (a carried-over
+copy's company is gone, while an added one must still run), and state-modifier articles remove before they re-add. The UN docket counts a war victim by `enemy_occupation > 0.25`, and its strike lists
 follow 1.15's new plays. Decolonization's subject-war tracker skips wars with the overlord's own revolutionaries.
 The mod's ships take 1.15's construction goods in their modules, and its submarines use
 `ai_ship_category_submarines`. The Subjugate replacement ports 1.15's checks, the scripted rules were re-copied,
@@ -155,7 +163,8 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
 
 - **Copper deposits discoverable.** The mine moved into the mod's discoverable group so the mod's endowments arrive
   through discovery, as its other mines' do; vanilla's caps are the discovered part. Left capped they would all
-  be open in 1836. Unverified in game (play-test list).
+  be open in 1836. Unverified in game: a once-a-game `TE_SELF_CHECK OK|BROKEN copper_mine_discoverable` line
+  answers it, and the fallback is a `TRY_REPLACE` of vanilla's entry (play-test list).
 - **Communal Administration's old extras** (Trade Unions and Rural Folk +10% political strength, -5% radicalism,
   -10% tax capacity) were left off; vanilla's law has its own balance. Restoring them is three lines.
 - **BHP's Broken Hill** stays on lead (it is silver, lead and zinc), though vanilla moved BHP's company to copper.
@@ -163,6 +172,11 @@ months of any game (`TE_PROBE_115` lines). The play-test list says how to read t
 - **The states panel:** vanilla's new Cold tile sits beside the mod's Local Climate tile. **The market panel:**
   vanilla's Monthly Price Report stays out, where the mod's trade charts stand (the mod's copy never had it).
 - **The tooltip header** lost vanilla's `margin_top = 5` in the rebuilt `tooltip.gui`, as the mod's copy had.
+- **Two panel hints went with the old fields.** The Nuclear Weapons Program's "First Nuclear Weapon Created and
+  Stockpiled…" / "Additional Nuclear Weapon Created…" and Solar Colonization's "A new colony has been established
+  in the solar system" were `on_complete` tooltips under a `complete = { always = no }`. They only told the player
+  what filling the bar does. The converter drops a never-true ending, so the three loc keys went too. Restoring
+  them is an outcome with `trigger = { always = no }` holding the tooltip, if 1.15's panel shows one.
 - **Battle and growth numbers 1.15 moved under the mod.** Fixing the double-counted kill rate halves every one of
   the mod's 29 kill-rate sources, so battle deaths (and the census's war deaths) roughly halve: scale them up?
   Base literacy growth went from 0.0005 to 0.002, so the mod's 17 literacy-growth adds went from about a tenth of
