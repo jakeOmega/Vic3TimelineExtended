@@ -729,7 +729,7 @@ types market_panel
 					}
 				}
 
-				section_header_button = {
+				section_header_button = {					
 					blockoverride "left_text" {
 						text = "FILTERS"
 						fontsize_min = 12
@@ -745,7 +745,7 @@ types market_panel
 					blockoverride "onclick" {
 						onclick = "[GetVariableSystem.Toggle( 'market_filters' )]"
 					}
-
+					
 					blockoverride "onclick_showmore" {
 						visible = "[GetVariableSystem.Exists( 'market_filters' )]" # Flipped to show by Default
 					}
@@ -1804,7 +1804,7 @@ types market_panel
 
 				block "last_column" {
 					widget = {
-						size = { 210 55 }
+						size = { 215 55 }
 
 						textbox = {
 							raw_text = "@money![Goods.GetMarketPrice|0v] [Goods.GetCompareIconAgainstBasePriceNoFormatting( Goods.GetMarketPrice )]"
@@ -2097,12 +2097,27 @@ types market_panel
 				goods_prestige_goods_breakdown_list_item = {
 					size = { 530 55 }
 
+					blockoverride "prestige_goods_item_name_size" {
+						minimumsize = { 295 -1 }
+						maximumsize = { 295 -1 }
+					}
+
+					blockoverride "prestige_goods_item_editable_name_size" {
+						minimumsize = { 260 -1 }
+						maximumsize = { 260 -1 }
+					}
+
 					blockoverride "prestige_goods_item_text_1" {
 						raw_text = "BASE_GOODS_MARKET_SELL_ORDERS"
 					}
 
 					blockoverride "prestige_goods_item_text_2" {
 						raw_text = "BASE_GOODS_MARKET_BUY_ORDERS"
+					}
+
+					blockoverride "prestige_goods_item_text_size" {
+						minimumsize = { 89 -1 }
+						maximumsize = { 89 -1 }
 					}
 				}
 				margin_left = 10
@@ -2117,20 +2132,22 @@ types market_panel
 
 
 				item = {
-					container = {
-						goods_prestige_goods_breakdown_list_item = {
-							visible = "[Goods.CanEditName]"
-							size = { 530 55 }
+					goods_prestige_goods_breakdown_list_item = {
+						size = { 530 55 }
 
-							blockoverride "prestige_goods_item_name_size" {
-								minimumsize = { 240 -1 }
-								maximumsize = { 240 -1 }
-							}
+						blockoverride "prestige_goods_item_name_size" {
+							minimumsize = { 295 -1 }
+							maximumsize = { 295 -1 }
 						}
 
-						goods_prestige_goods_breakdown_list_item = {
-							visible = "[Not(Goods.CanEditName)]"
-							size = { 530 55 }
+						blockoverride "prestige_goods_item_editable_name_size" {
+							minimumsize = { 260 -1 }
+							maximumsize = { 260 -1 }
+						}
+
+						blockoverride "prestige_goods_item_text_size" {
+							minimumsize = { 89 -1 }
+							maximumsize = { 89 -1 }
 						}
 					}
 				}
@@ -2178,14 +2195,28 @@ types market_panel
 					}
 
 					textbox = {
-						text = "[Goods.GetNameNoFormatting]"
+						visible = "[Not(Goods.CanEditName)]"
 						autoresize = yes
 						margin_left = 7
 						multiline = yes
+						text = "[Goods.GetNameNoFormatting]"
 
 						block "prestige_goods_item_name_size" {
-							minimumsize = { 270 -1 }
-							maximumsize = { 270 -1 }
+							minimumsize = { 250 -1 }
+							maximumsize = { 250 -1 }
+						}
+					}
+
+					textbox = {
+						visible = "[Goods.CanEditName]"
+						autoresize = yes
+						margin_left = 7
+						multiline = yes
+						text = "[Goods.GetNameNoFormatting]"
+
+						block "prestige_goods_item_editable_name_size" {
+							minimumsize = { 215 -1 }
+							maximumsize = { 215 -1 }
 						}
 					}
 
@@ -2197,13 +2228,13 @@ types market_panel
 						multiline = yes
 
 						block "prestige_goods_item_text_1" {
-							raw_text = "PRESTIGE_GOODS_MARKET_SELL_ORDERS"
 							alpha = "[TransparentIfZero(Goods.GetMarketSellOrders)]"
+							raw_text = "PRESTIGE_GOODS_MARKET_SELL_ORDERS"
 						}
 
 						block "prestige_goods_item_text_size" {
-							minimumsize = { 90 -1 }
-							maximumsize = { 90 -1 }
+							minimumsize = { 100 -1 }
+							maximumsize = { 100 -1 }
 						}
 					}
 
@@ -2215,21 +2246,135 @@ types market_panel
 					}
 
 					textbox = {
-						block "prestige_goods_item_text_2" {
-							raw_text = "PRESTIGE_GOODS_MARKET_BUY_ORDERS"
-							alpha = "[TransparentIfZero(Goods.GetMarketBuyOrders)]"
-						}
 						autoresize = yes
 						margin_left = 7
-
-						block "prestige_goods_item_text_size" {
-							minimumsize = { 90 -1 }
-							maximumsize = { 90 -1 }
-						}
-
 						align = hcenter|nobaseline
 						margin_right = 10
 						multiline = yes
+
+						block "prestige_goods_item_text_2" {
+							alpha = "[TransparentIfZero(Goods.GetMarketBuyOrders)]"
+							raw_text = "PRESTIGE_GOODS_MARKET_BUY_ORDERS"
+						}
+
+						block "prestige_goods_item_text_size" {
+							minimumsize = { 100 -1 }
+							maximumsize = { 100 -1 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	type goods_prestige_goods_breakdown_list_item_selected = widget {
+		size = { 540 55 }
+
+		hbox = {
+			layoutpolicy_horizontal = expanding
+			spacing = 5
+
+			button_icon_edit = {
+				visible = "[And(Goods.IsPrestigeGoods, Goods.CanEditName)]"
+				size = { 30 30 }
+				onclick = "[PopupManager.ShowPrestigeGoodChangeName(Goods.Self)]"
+				using = tooltip_se
+				tooltip = "CHANGE_NAME_OF_PRESTIGE_GOOD"
+			}
+
+			widget = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				alwaystransparent = no
+
+				background = {
+					using = paper_bg
+				}
+
+				icon = {
+					size = { 100% 100% }
+					using = highlighted_selected_square_selection
+				}
+
+				tooltipwidget = {
+					FancyTooltip_Goods = {}
+				}
+
+				hbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+
+					flowcontainer = {
+						using = goods_list_item
+					}
+
+					textbox = {
+						visible = "[Not(Goods.CanEditName)]"
+						autoresize = yes
+						margin_left = 7
+						multiline = yes
+						text = "[Goods.GetNameNoFormatting]"
+
+						block "prestige_goods_item_name_size" {
+							minimumsize = { 250 -1 }
+							maximumsize = { 250 -1 }
+						}
+					}
+
+					textbox = {
+						visible = "[Goods.CanEditName]"
+						autoresize = yes
+						margin_left = 7
+						multiline = yes
+						text = "[Goods.GetNameNoFormatting]"
+
+						block "prestige_goods_item_editable_name_size" {
+							minimumsize = { 215 -1 }
+							maximumsize = { 215 -1 }
+						}
+					}
+
+					textbox = {
+						autoresize = yes
+						margin_left = 7
+						align = hcenter|nobaseline
+						margin_right = 10
+						multiline = yes
+
+						block "prestige_goods_item_text_1" {
+							alpha = "[TransparentIfZero(Goods.GetMarketSellOrders)]"
+							raw_text = "PRESTIGE_GOODS_MARKET_SELL_ORDERS"
+						}
+
+						block "prestige_goods_item_text_size" {
+							minimumsize = { 100 -1 }
+							maximumsize = { 100 -1 }
+						}
+					}
+
+					vertical_divider = {
+						blockoverride "size" {
+							layoutpolicy_vertical = expanding
+							size = { 2 0 }
+						}
+					}
+
+					textbox = {
+						autoresize = yes
+						margin_left = 7
+						align = hcenter|nobaseline
+						margin_right = 10
+						multiline = yes
+
+						block "prestige_goods_item_text_2" {
+							alpha = "[TransparentIfZero(Goods.GetMarketBuyOrders)]"
+							raw_text = "PRESTIGE_GOODS_MARKET_BUY_ORDERS"
+						}
+
+						block "prestige_goods_item_text_size" {
+							minimumsize = { 100 -1 }
+							maximumsize = { 100 -1 }
+						}
 					}
 				}
 			}
