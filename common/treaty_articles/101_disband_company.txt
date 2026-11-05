@@ -56,14 +56,15 @@ disband_company = {  # REVIEWED 2026-11-03 (involvement): a one-off concession, 
 
 	# The source country's company is disbanded.
 	on_entry_into_force = {
-		# Once, when the article is first formed. From vanilla 1.15 a renegotiated
-		# treaty re-runs this hook with scope:is_renegotiation set, and the company
-		# it disbands is gone by then (treaty_articles.md, can_be_renegotiated).
+		# From vanilla 1.15 a renegotiated treaty re-runs this hook, with
+		# scope:is_renegotiation set, for a carried-over copy and for one newly added
+		# in the renegotiation (treaty_articles.md, can_be_renegotiated). Only
+		# exists = input_company tells them apart: the company a carried-over copy
+		# disbands is gone by then, and a new or re-pointed one must still run.
 		scope:article_options = {
 			if = {
 				limit = {
 					exists = input_company
-					NOT = { exists = scope:is_renegotiation }
 				}
 				input_company = {
 					save_scope_as = target_company

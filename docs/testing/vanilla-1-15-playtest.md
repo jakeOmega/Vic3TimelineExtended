@@ -169,6 +169,8 @@ or Spanish game.
 - A demilitarized zone renegotiated, and a seabed lease's quantity on renegotiation; the money transfer's
   contextual score.
 - Decolonization: a subject's war against the overlord's own revolutionaries or secessionists isn't tracked.
+- Renegotiate a treaty to add Seize Company or Disband Company, or point one at another company: it takes effect.
+  A copy carried over from the old treaty doesn't seize or disband a second time.
 - The first 1.15 new game: `TE_SELF_CHECK gm_world_base` (the `gm_world_gdp_1836` reset).
 - Ships: module costs in the ship designer; AI submarines built only under Jeune École or Merchant Navy and sailing
   in `submarine_raiding_fleet`.

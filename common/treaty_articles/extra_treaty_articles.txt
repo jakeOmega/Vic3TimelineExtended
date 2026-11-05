@@ -1700,7 +1700,9 @@ intelligence_sharing_pact = {
 
 	# Executed once when the treaty is signed. From vanilla 1.15 a renegotiated
 	# treaty re-runs this hook with scope:is_renegotiation set; the infamy is
-	# charged only the first time.
+	# charged only the first time. An article newly added in a renegotiation runs
+	# with it set too, so it charges none: accepted, since telling it apart from a
+	# carried-over copy needs the old treaty, a link nobody has tested here.
 	on_entry_into_force = {
 		if = {
 			limit = { NOT = { exists = scope:is_renegotiation } }
