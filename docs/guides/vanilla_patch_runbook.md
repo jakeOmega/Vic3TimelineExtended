@@ -2,7 +2,7 @@
 
 End-to-end workflow for updating Vic3TimelineExtended for a new vanilla Victoria 3 patch (e.g. 1.12.4 → 1.13). Follow in order — earlier steps unlock later ones.
 
-**1.15 (due 2026-11-05):** `docs/audits/vanilla_1_15_prep.md` lists what is specific to it: the release-day checks, the full state-region copies `resources.py` must regenerate first, the key collisions with new vanilla content, the journal entry outcome conversion, the removed progress bar presets and the copied journal entry panel. Read it alongside this runbook.
+**1.15 (released 2026-11-05):** `docs/audits/vanilla_1_15_prep.md` lists what is specific to it: the release-day checks, the full state-region copies `resources.py` must regenerate first, the key collisions with new vanilla content, the journal entry outcome conversion, the removed progress bar presets and the copied journal entry panel. Read it alongside this runbook.
 
 ## 0. Prerequisites
 
