@@ -153,7 +153,7 @@ religious_mission_rights = {
 			}
 			if = {
 				limit = {
-					has_law = law_type:law_state_religion
+					has_law_or_variant = law_type:law_state_religion
 				}
 				add = 0.15
 			}
@@ -195,7 +195,7 @@ religious_mission_rights = {
 					if = {
 						limit = {
 							OR = {
-								has_law = law_type:law_state_religion
+								has_law_or_variant = law_type:law_state_religion
 								has_law = law_type:law_millet_system
 							}
 						}
@@ -266,7 +266,7 @@ religious_mission_rights = {
 					}
 					else_if = {
 						limit = {
-							has_law = law_type:law_state_religion
+							has_law_or_variant = law_type:law_state_religion
 						}
 						# State religion actively wants to spread faith
 						add = {
