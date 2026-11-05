@@ -5418,4 +5418,6 @@ the state unpainted. `map_tooltip` loc reaches the state as `[THIS.GetState…]`
 `mm_journal_entry_map_data` is hidden and engine-driven, so a "show on the map" button opens the entry's page. There is
 no `remove_journal_entry` effect: an entry leaves the journal by concluding, or by `can_deactivate = yes` with its
 `possible` failing and `is_shown_when_inactive` false. Read stored variables only, never walk pops, until the play-test
-says how often the map is evaluated. The mod's maps and the open questions: `docs/systems/mod_systems/journal_map_modes.md`.
+says how often the map is evaluated. An entry with all three blocks loads with no log line, and so does a copy of vanilla's
+journal map mode with `is_visible = yes` (first launch, 2026-11-05). The mod's maps and the open questions:
+`docs/systems/mod_systems/journal_map_modes.md`.

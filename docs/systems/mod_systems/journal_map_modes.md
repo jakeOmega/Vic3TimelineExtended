@@ -78,10 +78,12 @@ cycle value. Every country holds the entry, so this is a world map read from eac
 - `te_jmap_banking_map_button`, in the Banking tab's header (`te_banking_tab_body`): opens `je_banking_cycle`.
 - `te_jmap_test_strip`, on the Demographics tab above its sections, in debug mode only (`InDebugMode`): Add + Open in one
   click, Request (the activation-trigger route), Close, Hidden Entry (`je_te_map_hidden_world`), and two hover previews
-  (`SetTempMapModeByKey` on vanilla's mode and on the mod's listed copy).
+  (`SetTempMapModeByKey` on vanilla's mode and on the mod's listed copy). Add + Open names the entry with no datacontext,
+  as `GetPlayerJournalEntry('je_te_map_host').AccessSelf`: `GetPlayerJournalEntry` is a promote only, and passed bare as
+  an argument it failed at load and lost the button its second click (`gui_modding_guide.md` gotcha #29).
 - `gfx/map/map_modes/te_map_modes.txt` defines `mm_te_journal_entry_map`, vanilla's journal entry painting with
   `is_visible = yes`, so it is listed in the lens toolbar's map mode dropdown: the test of a journal map with no page
-  open. If the game will not load with it, delete it; nothing else needs it.
+  open. The game loads with it (first launch, 2026-11-05); nothing else needs it.
 
 ## Adding a Map
 
