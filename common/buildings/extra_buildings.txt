@@ -571,6 +571,14 @@ INJECT:building_gold_mine = {
 	}
 }
 
+# Vanilla's copper mine (1.15), which replaced the mod's discoverable one
+INJECT:building_copper_mine = {
+	production_method_groups = {
+		pmg_tailings_wastewater_management
+		pmg_maintenance_mine
+	}
+}
+
 # Precision environmental management for cereal grain farms
 INJECT:building_rye_farm = {
 	production_method_groups = {
