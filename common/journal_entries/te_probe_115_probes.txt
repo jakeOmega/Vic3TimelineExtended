@@ -38,7 +38,7 @@ te_probe_115 = {
 	}
 
 	# Once claimed, no country can ever take the entry, so its inactive records go (C21 reads whether they did).
-	disable_evaluation = { # REVIEWED 2026-11-05: a 1.15 journal entry field (game/common/journal_entries/journal_entries.md) no vanilla entry uses yet, so the catalog lacks it
+	disable_evaluation = {
 		has_global_variable = te_probe_115_claimed
 	}
 

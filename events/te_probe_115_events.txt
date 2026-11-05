@@ -58,7 +58,7 @@ te_probe_115.10 = {
 te_probe_115.11 = {
 	type = country_event
 	hidden = yes
-	fire_only_once_globally = yes # REVIEWED 2026-11-05: a 1.15 event field (Modding-Digests 1.15.0 changes_features.md, One Time Events) only vanilla's commented-out test.122 uses, so the catalog lacks it
+	fire_only_once_globally = yes
 
 	immediate = {
 		change_global_variable = { name = te_probe_115_c20_globally_n add = 1 }
