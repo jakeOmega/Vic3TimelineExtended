@@ -281,3 +281,12 @@ INJECT:law_crownland_diets = {
 		country_legislative_override_capacity_add = -1
 	}
 }
+
+# A delegate answers to the assembly that can recall them, not to the centre
+# (Elected -1, Devolution -2): the value the mod gave its own Communal
+# Administration before vanilla 1.15 added the law.
+INJECT:law_communal_administration = {
+	modifier = {
+		country_legislative_override_capacity_add = -2
+	}
+}

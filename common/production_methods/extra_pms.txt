@@ -5037,37 +5037,13 @@ pm_service_contractors = {
 	}
 }
 
-# Communal Administration's staffing (law_communal_administration), in the
-# bureaucrat-professionalism group. Delegates chosen by local assemblies serve
-# a term and return to their work, so a level employs 250 bureaucrats and 250
-# clerks instead of Professional Bureaucrats' 500 bureaucrats. At wage weights
-# 4 and 1.5 that saves about 625 wage units a level, and clerks qualify at
-# lower literacy than bureaucrats, so the buildings staff up more easily. The
-# cost is in the law: less tax capacity and weaker override. No
-# required_input_goods: under the law this is the group's only PM.
-pm_recallable_delegates = {
-	texture = "gfx/interface/icons/production_method_icons/worker_cooperative.dds"
-	is_hidden_when_unavailable = yes
-
-	unlocking_laws = {
-		law_communal_administration
-	}
-
-	building_modifiers = {
-		level_scaled = {
-			building_employment_bureaucrats_add = 250
-			building_employment_clerks_add = 250
-		}
-	}
-}
-
 # The staffing PMs above replace Professional Bureaucrats while their laws
-# hold, as vanilla's Hereditary Bureaucrats PM does under its law.
+# hold, as vanilla's Hereditary, Military and Communal ones do under theirs
+# (vanilla's own disallowing_laws lists those three laws).
 INJECT:pm_professional_bureaucrats = {
 	disallowing_laws = {
 		law_automated_bureaucracy
 		law_contracted_administration
-		law_communal_administration
 	}
 }
 

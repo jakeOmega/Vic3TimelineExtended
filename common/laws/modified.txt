@@ -69,6 +69,25 @@ INJECT:law_appointed_bureaucrats = {
 	}
 }
 
+# Communal Administration is vanilla's since 1.15 (00_bureaucracy.txt: Council
+# Republic or Factory Councils, with Socialism; vanilla's
+# pm_communal_representatives staffs the Government Administrations). The mod
+# adds what its own law of that name had: Anarchy and Collective Governance
+# unlock it too, and it keeps Elected Bureaucrats' exclusions (rotating
+# delegates are the opposite of rule by experts or by elders) plus machine
+# rule's lock. Both lists append to vanilla's.
+INJECT:law_communal_administration = {
+	unlocking_laws = {
+		law_anarchy
+		law_direct_democracy # displayed as Collective Governance
+	}
+	disallowing_laws = {
+		law_technocracy
+		law_elder_council
+		law_algorithmic_governance
+	}
+}
+
 # Collective Governance (law_direct_democracy) allows Anarchy, and Anarchy
 # needs Cooperative Ownership, which vanilla unlocks only with Council Republic
 # or Corporate State. Without this the pair could never hold: the law
