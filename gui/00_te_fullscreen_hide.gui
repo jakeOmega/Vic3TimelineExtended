@@ -1,5 +1,6 @@
 ﻿### Timeline Extended: vanilla's three HUD visibility templates
-### (game/gui/block_windows.gui:984-1000, vanilla 1.14.5), redefined so the
+### (game/gui/block_windows.gui:990-1002, vanilla 1.15.0, unchanged since
+### 1.14.5), redefined so the
 ### HUD hides under the Timeline Extended window's Full Screen as it does under
 ### vanilla's full-screen panels: the outliner, the wars list, the lens
 ### toolbar and the notifications beside the outliner (half_and_fullscreen_hide),

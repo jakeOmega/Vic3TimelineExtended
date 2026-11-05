@@ -1,4 +1,9 @@
-﻿types right_click_menu_types {
+﻿# TE override of vanilla right_click_menu.gui (1.15.0): vanilla's file plus the treaty-article inputs
+# vanilla draws only for its own articles (a quantity for any article, #542; a company; a building type
+# and Cede Colony's colonies, #1140, #1255), each marked TE, and the taxation toggles greyed while the
+# legislated tax code sets the taxed goods (### MOD: Tax Code).
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+types right_click_menu_types {
 	type right_click_menu_item = button {
 		name = "right_click_menu_item"
 		align = left|nobaseline
@@ -985,7 +990,7 @@
 						autoresize = yes
 
 						block "name_text" {
-							text = "[MilitaryFormation.GetNameNoIcon]"
+							text = "[MilitaryFormation.GetNameNoFormatting]"
 						}
 
 						block "name_max_width" {
@@ -2115,7 +2120,6 @@ right_click_menu = {
 				}
 
 				blockoverride "texture" {
-					### PLACEHOLDER ICON
 					texture = "gfx/interface/icons/commander_order_icons/move.dds"
 				}
 
@@ -2290,6 +2294,7 @@ right_click_menu = {
 
 				blockoverride "properties" {
 					tooltip = "MILITARY_FORMATION_TRANSFER_UNIT_TOOLTIP"
+					enabled = "[Not(MilitaryFormation.IsDefeated)]"
 					onclick = "[PopupManager.ShowTransferFormation( MilitaryFormation.AccessSelf )]"
 				}
 
@@ -2310,7 +2315,7 @@ right_click_menu = {
 			right_click_menu_item = {
 				blockoverride "properties" {
 					tooltip = "REHOME_MILITARY_FORMATION_TOOLTIP"
-					enabled = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
+					enabled = "[And(MilitaryFormation.GetCountry.IsLocalPlayer, MilitaryFormation.CanRehome)]"
 					onclick = "[MilitaryFormation.OnRehomeClicked]"
 				}
 
@@ -2675,6 +2680,7 @@ right_click_menu = {
 								}
 
 								blockoverride "onclick" {
+									enabled = "[Not(MilitaryFormation.IsDefeated)]"
 									onclick = "[TransferFormationPopup.SetSelectedLeftFormation( MilitaryFormation.AccessSelf )]"
 		                       		onclick = "[RightClickMenuManager.Close]"
 								}
@@ -3512,25 +3518,6 @@ types company_charter_types
 	type active_charter_right_click_item = widget {
 		size = { 460 44 }
 
-		tooltipwidget = {
-			FancyTooltip_CompanyCharter = {
-				blockoverride "tooltip_content_before" {
-					custom_tooltip_textbox = {
-						text = "COMPANY_CHARTER_TYPE_IS_ACTIVE"
-					}
-
-					custom_tooltip_textbox_with_empty_line = {
-						text = "COMPANY_CHARTER_AUTHORITY_COST"
-					}
-
-					custom_tooltip_textbox_with_empty_line = {
-						datacontext = "[Company.GetCountry]"
-						text = "USING_X_FREE_CHARTERS"
-				}
-			}
-		}
-		}
-
 		background = {
 			using = paper_bg
 		}
@@ -3539,6 +3526,25 @@ types company_charter_types
 			layoutpolicy_horizontal = expanding
 			layoutpolicy_vertical = expanding
 			margin_left  = 10
+
+			tooltipwidget = {
+				FancyTooltip_CompanyCharter = {
+					blockoverride "tooltip_content_before" {
+						custom_tooltip_textbox = {
+							text = "COMPANY_CHARTER_TYPE_IS_ACTIVE"
+						}
+
+						custom_tooltip_textbox_with_empty_line = {
+							text = "COMPANY_CHARTER_AUTHORITY_COST"
+						}
+
+						custom_tooltip_textbox_with_empty_line = {
+							datacontext = "[Company.GetCountry]"
+							text = "USING_X_FREE_CHARTERS"
+						}
+					}
+				}
+			}
 
 			icon = {
 				size = { 28 28 }
@@ -3632,6 +3638,7 @@ right_click_menu = {
 								}
 
 								blockoverride "onclick" {
+									enabled = "[Not(MilitaryFormation.IsDefeated)]"
 									onclick = "[TransferFormationPopup.SetSelectedRightFormation( MilitaryFormation.AccessSelf )]"
 									onclick = "[GetVariableSystem.Clear( 'transfer_formation_new_formation' )]"
 									onclick = "[GetVariableSystem.Clear( Concatenate( StagedFormation.GetIDString, '_new_formation') )]"
@@ -4479,7 +4486,7 @@ right_click_menu = {
 							tooltipwidget = {
 								FancyTooltip_MilitaryFormation = {
 									blockoverride "text_before" {
-										visible = "[Not(IsValid(TransportPlannerPopup.GetTransportCommand(MilitaryFormation.Self)))]"
+										visible = "[Not(TransportPlannerPopup.CanFleetTransport(MilitaryFormation.Self))]"
 										text = "[GetDesc(TransportPlannerPopup.GetTransportCommand(MilitaryFormation.Self))]"
 										margin_bottom = 15
 									}
@@ -4488,7 +4495,7 @@ right_click_menu = {
 						}
 
 						blockoverride "onclick" {
-							enabled = "[IsValid(TransportPlannerPopup.GetTransportCommand(MilitaryFormation.Self))]"
+							enabled = "[TransportPlannerPopup.CanFleetTransport(MilitaryFormation.Self)]"
 							onclick = "[TransportPlannerPopup.OnSelectedFleet(MilitaryFormation.AccessSelf)]"
 							onclick = "[RightClickMenuManager.Close]"
 						}
@@ -6499,7 +6506,7 @@ right_click_menu = {
 
 		### ALL GENERAL DIPLOMATIC DEMANDS TARGETING THIS STATE
 		right_click_menu_dropdown = {
-			visible = "[Not(IsDataModelEmpty(State.GetPotentialDiploPlays))]"
+			visible = "[Or(Not(IsDataModelEmpty(State.GetPotentialDiploPlays)), Not(IsDataModelEmpty(State.GetReturnStateToSubjectCandidates)))]"
 
 			blockoverride "section_header_tooltip" {
 				tooltip = "COUNTRY_RIGHT_CLICK_MENU_STATE_DIPLOMATIC_DEMANDS_TOOLTIP"
@@ -6515,7 +6522,7 @@ right_click_menu = {
 
 			blockoverride "section_header_right_text" {
 				section_header_right_text = {
-					raw_text = "#v [GetDataModelSize(State.GetPotentialDiploPlays)]#!"
+					raw_text = "#v [Add_int32(GetDataModelSize(State.GetPotentialDiploPlays), GetDataModelSize(State.GetReturnStateToSubjectCandidates))]#!"
 				}
 			}
 
@@ -6557,6 +6564,37 @@ right_click_menu = {
 
 			blockoverride "item_margin" {
 				margin_left = 55
+			}
+
+			blockoverride "additional_dropdown_items_after_gridbox" {
+				dynamicgridbox = {
+					visible = "[GetVariableSystem.Exists('show_state_diplomatic_demands_right_click_menu')]"
+					datacontext = "[GetDiplomaticPlayType('dp_return_state_to_subject')]"
+					datamodel = "[State.GetReturnStateToSubjectCandidates]"
+
+					item = {
+						right_click_menu_item = {
+							blockoverride "properties" {
+								enabled = "[IsValid(DiplomaticPlayType.GetStartCommandStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition))]"
+								onclick = "[DiplomaticPlayType.ShowConfirmationStateWithDefinition(State.Self, Country.GetDefinition)]"
+								using = confirm_button_sound
+								tooltip = "[DiplomaticPlayType.GetStartTooltipStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition)]"
+							}
+
+							blockoverride "margin" {
+								margin_left = 55
+							}
+
+							blockoverride "text" {
+								text = "RETURN_STATE_TO_SUBJECT_ITEM"
+							}
+
+							blockoverride "texture" {
+								texture = "[DiplomaticPlayType.GetTexture]"
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -7423,6 +7461,46 @@ right_click_menu = {
 
 			blockoverride "text" {
 				text = "STATE_VALUE_CLICK_MENU_SET_PERSPECTIVE"
+			}
+		}
+	}
+}
+
+right_click_menu = {
+	name = "return_state_to_subject_right_click_menu"
+
+	blockoverride "title_text" {
+		text = "RETURN_STATE_TO_SUBJECT_RIGHT_CLICK_MENU_TITLE"
+	}
+
+	blockoverride "items" {
+		dynamicgridbox = {
+			datamodel = "[State.GetReturnStateToSubjectCandidates]"
+
+			item = {
+				right_click_menu_item = {
+					blockoverride "properties" {
+						enabled = "[IsValid(DiplomaticPlayType.GetStartCommandStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition))]"
+						onclick = "[DiplomaticPlayType.ShowConfirmationStateWithDefinition(State.Self, Country.GetDefinition)]"
+						tooltip = "[DiplomaticPlayType.GetStartTooltipStateWithDefinition(GetPlayer, State.Self, Country.GetDefinition)]"
+					}
+
+					blockoverride "sound" {
+						using = confirm_button_sound
+					}
+
+					blockoverride "icon" {
+						tiny_flag_no_interact = {}
+					}
+
+					blockoverride "text" {
+						text = "[Country.GetNameNoFormatting]"
+					}
+
+					blockoverride "size" {
+						size = { 360 44 }
+					}
+				}
 			}
 		}
 	}
@@ -8323,6 +8401,35 @@ right_click_menu = {
 }
 
 right_click_menu = {
+	name = "treaty_draft_remove_ship_transfer_bundle_menu"
+	parentanchor = vcenter|right
+	widgetanchor = vcenter
+
+	blockoverride "title_text" {
+		text = "REMOVE_SHIP_TRANSFER_BUNDLE_MENU_TITLE"
+	}
+
+	blockoverride "items" {
+		right_click_menu_item = {
+			blockoverride "properties" {
+				enabled = "[TreatyDraft.CanRemoveShipTransferBundle(ArticleDraft.Self)]"
+				onclick = "[TreatyDraft.RemoveShipTransferBundle(ArticleDraft.Self)]"
+				onclick = "[RightClickMenuManager.Close]"
+				using = ui_item_remove
+			}
+
+			blockoverride "texture" {
+				texture = "gfx/interface/buttons/button_icons/close.dds"
+			}
+
+			blockoverride "text" {
+				text = "REMOVE_SHIP_TRANSFER_BUNDLE_CONFIRM"
+			}
+		}
+	}
+}
+
+right_click_menu = {
 	name = "treaty_draft_bind_period_menu"
 	parentanchor = bottom
 
@@ -8449,6 +8556,57 @@ right_click_menu = {
 				}
 			}
 		}
+
+		widget = {
+			size = { 5 5 }
+		}
+
+		### AUTOMATIC WITHDRAWAL
+		widget = {
+			size = { 280 40 }
+
+			background = {
+				visible = "[Not(TreatyDraft.WillAutomaticallyWithdraw(TreatyDraft.GetLeftCountry.Self))]"
+				using = entry_bg_simple_solid
+			}
+
+			background = {
+				visible = "[TreatyDraft.WillAutomaticallyWithdraw(TreatyDraft.GetLeftCountry.Self)]"
+				using = paper_bg
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				layoutpolicy_vertical = expanding
+				spacing = 5
+				margin = { 10 5 }
+				using = tooltip_se
+				tooltip = "TREATY_DRAFT_AUTOMATIC_WITHDRAWAL_TOOLTIP"
+				enabled = "[TreatyDraft.CanAutomaticallyWithdraw]"
+
+				widget = {
+					size = { 25 25 }
+
+					checkbutton = {
+						using = check_button
+						size = { 100% 100% }
+						enabled = "[TreatyDraft.CanAutomaticallyWithdraw]"
+						onclick = "[TreatyDraft.ToggleAutomaticWithdrawal(TreatyDraft.GetLeftCountry.Self)]"
+						checked = "[TreatyDraft.WillAutomaticallyWithdraw(TreatyDraft.GetLeftCountry.Self)]"
+					}
+				}
+
+				textbox = {
+					align = nobaseline
+					autoresize = yes
+					max_width = 200
+					using = elide_fontsize_min
+					text = "AUTOMATIC_WITHDRAWAL"
+				}
+
+				expand = {}
+			}
+		}
 	}
 }
 
@@ -8463,7 +8621,6 @@ types treaty_binding_types {
 			using = default_button_action
 			using = ui_notification_dismiss
 			block "binding_button_onclick" {}
-			onclick = "[RightClickMenuManager.Close]"
 
 			textbox = {
 				parentanchor = center
@@ -8592,11 +8749,12 @@ template article_input_fixed_top {
 		direction = vertical
 		parentanchor = hcenter
 		spacing = 5
-		margin = { 5 5 }
+		margin = { 10 5 }
 
 		flowcontainer = {
+			parentanchor = hcenter
 			spacing = 2
-			wrap_count = 4
+			wrap_count = 5
 			datamodel = "[TreatyShipFilterList.GetShipTypeFilters]"
 
 			button = {
@@ -9707,198 +9865,205 @@ types article_input_types
 	}
 
 	### SHIP LIST
-	type article_input_ship_list = dynamicgridbox {
-		datamodel_wrap = 2
-		flipdirection = yes
-		datamodel = "[ArticleDraft.GetValidShips]"
+	type article_input_ship_list = flowcontainer {
+		direction = vertical
+		minimumsize = { 704 -1 }
 
-		item = {
-			flowcontainer = {
-				margin = { 2 2 }
+		dynamicgridbox = {
+			parentanchor = hcenter
+			datamodel_wrap = 2
+			flipdirection = yes
+			datamodel = "[ArticleDraft.GetValidShips]"
 
-				button = {
-					visible = "[Not(ObjectsEqual(ArticleDraft.GetShip.Self, Ship.Self))]"
-					size = { 340 100 }
-					using = default_button
-					onclick = "[ArticleDraft.SetShip(Ship.Self)]"
+			item = {
+				flowcontainer = {
+					margin = { 2 2 }
 
-					tooltipwidget = {
-						FancyTooltip_Ship = {
-							blockoverride "tooltip_content_before" {
-								flowcontainer = {
-									visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
-									spacing = 5
-									tooltip = "[TreatyDraft.GetArticleTypeAcceptanceBreakdownWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self)]"
+					button = {
+						visible = "[Not(ArticleDraft.IsShipSelected(Ship.Self))]"
+						size = { 340 125 }
+						using = default_button
+						onclick = "[ArticleDraft.SelectShip(Ship.Self)]"
 
-									treaty_draft_input_acceptance_icon = {
-										blockoverride "approval_visibility" {
-											visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+						tooltipwidget = {
+							FancyTooltip_Ship = {
+								blockoverride "tooltip_content_before" {
+									flowcontainer = {
+										visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
+										spacing = 5
+										tooltip = "[TreatyDraft.GetArticleTypeAcceptanceBreakdownWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self)]"
+
+										treaty_draft_input_acceptance_icon = {
+											blockoverride "approval_visibility" {
+												visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+											}
+
+											blockoverride "disapproval_visibility" {
+												visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+											}
+
+											blockoverride "undecided_visibility" {
+												visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+											}
 										}
 
-										blockoverride "disapproval_visibility" {
-											visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+										custom_tooltip_textbox = {
+											parentanchor = vcenter
+											max_width = 500
+											text = "TREATY_DRAFT_ACCEPTANCE_WITH_LABEL_SHIP"
 										}
-
-										blockoverride "undecided_visibility" {
-											visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
-										}
-									}
-
-									custom_tooltip_textbox = {
-										parentanchor = vcenter
-										max_width = 500
-										text = "TREATY_DRAFT_ACCEPTANCE_WITH_LABEL_SHIP"
-									}
-								}
-							}
-						}
-					}
-
-					compact_ship_info_and_silhouette = {
-						datacontext = "[Ship.GetType]"
-
-						blockoverride "more_grid_items" {
-							### SPEED
-							small_header_grid_item = {
-								tooltip = "SHIP_SPEED_TOOLTIP"
-								size = { 80 24 }
-								using = tooltip_es
-
-								blockoverride "icon_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "icon_widget_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "text" {
-									text = "[Ship.GetMovementSpeed|v^2]"
-								}
-
-								blockoverride "icon" {
-									texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
-								}
-							}
-
-							### SUPPLY CAPACITY
-							small_header_grid_item = {
-								size = { 80 24 }
-								datacontext = "[Ship.GetModifier]"
-								tooltip = "[Modifier.GetShipSupplyCapacityTooltip]"
-								using = tooltip_es
-
-								blockoverride "icon_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "icon_widget_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "text" {
-									text = "[Modifier.GetShipSupplyCapacity|v0]"
-								}
-
-								blockoverride "icon" {
-									texture = "gfx/interface/icons/military_icons/navy_icons/supply_efficiency.dds"
-								}
-							}
-						}
-					}
-
-					ship_header_and_acceptance_icon = {}
-				}
-
-				widget = {
-					visible = "[ObjectsEqual(ArticleDraft.GetShip.Self, Ship.Self)]"
-					size = { 340 100 }
-
-					tooltipwidget = {
-						FancyTooltip_Ship = {
-							blockoverride "text_before" {
-								text = "ARTICLE_SELECTED"
-							}
-
-							blockoverride "tooltip_content_before_before" {
-								flowcontainer = {
-									visible = "[Not(PdxGuiWidget.HasContext('WarGoalDraft'))]"
-									spacing = 5
-									tooltip = "[ArticleDraft.GetAcceptanceBreakdown(TreatyDraft.GetRightCountry.Self)]"
-
-									treaty_draft_input_acceptance_icon = {}
-
-									custom_tooltip_textbox = {
-										parentanchor = vcenter
-										max_width = 500
-										text = "ARTICLE_DRAFT_ACCEPTANCE_WITH_LABEL"
 									}
 								}
 							}
 						}
-					}
 
-					background = {
-						using = paper_bg
-					}
+						compact_ship_info_and_silhouette = {
+							datacontext = "[Ship.GetType]"
 
-					compact_ship_info_and_silhouette = {
-						datacontext = "[Ship.GetType]"
+							blockoverride "more_grid_items" {
+								### SPEED
+								small_header_grid_item = {
+									tooltip = "SHIP_SPEED_TOOLTIP"
+									size = { 80 24 }
+									using = tooltip_es
 
-						blockoverride "more_grid_items" {
-							### SPEED
-							small_header_grid_item = {
-								tooltip = "SHIP_SPEED_TOOLTIP"
-								size = { 80 24 }
-								using = tooltip_es
+									blockoverride "icon_size" {
+										size = { 24 24 }
+									}
 
-								blockoverride "icon_size" {
-									size = { 24 24 }
+									blockoverride "icon_widget_size" {
+										size = { 24 24 }
+									}
+
+									blockoverride "text" {
+										text = "[Ship.GetMovementSpeed|v^2]"
+									}
+
+									blockoverride "icon" {
+										texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
+									}
 								}
 
-								blockoverride "icon_widget_size" {
-									size = { 24 24 }
-								}
+								### SUPPLY CAPACITY
+								small_header_grid_item = {
+									size = { 80 24 }
+									datacontext = "[Ship.GetModifier]"
+									tooltip = "[Modifier.GetShipSupplyCapacityTooltip]"
+									using = tooltip_es
 
-								blockoverride "text" {
-									raw_text = "#v [Ship.GetMovementSpeed|0]#!"
-								}
+									blockoverride "icon_size" {
+										size = { 24 24 }
+									}
 
-								blockoverride "icon" {
-									texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
-								}
-							}
+									blockoverride "icon_widget_size" {
+										size = { 24 24 }
+									}
 
-							### SUPPLY CAPACITY
-							small_header_grid_item = {
-								size = { 80 24 }
-								datacontext = "[Ship.GetModifier]"
-								tooltip = "[Modifier.GetShipSupplyCapacityTooltip]"
-								using = tooltip_es
+									blockoverride "text" {
+										text = "[Modifier.GetShipSupplyCapacity|v0]"
+									}
 
-								blockoverride "icon_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "icon_widget_size" {
-									size = { 24 24 }
-								}
-
-								blockoverride "text" {
-									text = "[Modifier.GetShipSupplyCapacity|v0]"
-								}
-
-								blockoverride "icon" {
-									texture = "gfx/interface/icons/military_icons/navy_icons/supply_efficiency.dds"
+									blockoverride "icon" {
+										texture = "gfx/interface/icons/military_icons/navy_icons/supply_efficiency.dds"
+									}
 								}
 							}
 						}
+
+						ship_header_and_acceptance_icon = {}
 					}
 
-					ship_header_and_acceptance_icon = {}
+					button = {
+						visible = "[ArticleDraft.IsShipSelected(Ship.Self)]"
+						size = { 340 125 }
+						onclick = "[ArticleDraft.SelectShip(Ship.Self)]"
 
-					icon = {
-						using = highlighted_square_selection
+						tooltipwidget = {
+							FancyTooltip_Ship = {
+								blockoverride "text_before" {
+									text = "ARTICLE_SELECTED"
+								}
+
+								blockoverride "tooltip_content_before_before" {
+									flowcontainer = {
+										visible = "[Not(PdxGuiWidget.HasContext('WarGoalDraft'))]"
+										spacing = 5
+										tooltip = "[ArticleDraft.GetAcceptanceBreakdown(TreatyDraft.GetRightCountry.Self)]"
+
+										treaty_draft_input_acceptance_icon = {}
+
+										custom_tooltip_textbox = {
+											parentanchor = vcenter
+											max_width = 500
+											text = "ARTICLE_DRAFT_ACCEPTANCE_WITH_LABEL"
+										}
+									}
+								}
+							}
+						}
+
+						background = {
+							using = paper_bg
+						}
+
+						compact_ship_info_and_silhouette = {
+							datacontext = "[Ship.GetType]"
+
+							blockoverride "more_grid_items" {
+								### SPEED
+								small_header_grid_item = {
+									tooltip = "SHIP_SPEED_TOOLTIP"
+									size = { 80 24 }
+									using = tooltip_es
+
+									blockoverride "icon_size" {
+										size = { 24 24 }
+									}
+
+									blockoverride "icon_widget_size" {
+										size = { 24 24 }
+									}
+
+									blockoverride "text" {
+										raw_text = "#v [Ship.GetMovementSpeed|0]#!"
+									}
+
+									blockoverride "icon" {
+										texture = "gfx/interface/icons/military_icons/navy_icons/speed_navy.dds"
+									}
+								}
+
+								### SUPPLY CAPACITY
+								small_header_grid_item = {
+									size = { 80 24 }
+									datacontext = "[Ship.GetModifier]"
+									tooltip = "[Modifier.GetShipSupplyCapacityTooltip]"
+									using = tooltip_es
+
+									blockoverride "icon_size" {
+										size = { 24 24 }
+									}
+
+									blockoverride "icon_widget_size" {
+										size = { 24 24 }
+									}
+
+									blockoverride "text" {
+										text = "[Modifier.GetShipSupplyCapacity|v0]"
+									}
+
+									blockoverride "icon" {
+										texture = "gfx/interface/icons/military_icons/navy_icons/supply_efficiency.dds"
+									}
+								}
+							}
+						}
+
+						ship_header_and_acceptance_icon = {}
+
+						icon = {
+							using = highlighted_square_selection
+						}
 					}
 				}
 			}
@@ -9906,7 +10071,7 @@ types article_input_types
 	}
 
 	type ship_header_and_acceptance_icon = widget {
-		size = { 100% 40 }
+		size = { 100% 65 }
 
 		background = {
 			using = dark_area
@@ -9916,57 +10081,105 @@ types article_input_types
 			}
 		}
 
-		hbox = {
+		vbox = {
 			layoutpolicy_horizontal = expanding
 			layoutpolicy_vertical = expanding
-			margin = { 10 5 }
+			margin = { 14 7 }
+			margin_right = 10
+			margin_bottom = 5
 
-			button = {
-				visible = "[Ship.IsFlagship]"
-				size = { 30 30 }
-				alwaystransparent = yes
-				texture = "gfx/interface/icons/military_icons/navy_icons/flagship.dds"
-			}
-
-			### Ship name
-			textbox = {
+			hbox = {
 				layoutpolicy_horizontal = expanding
-				layoutpolicy_vertical = expanding
-				align = nobaseline
-				using = elide_fontsize_min
-				text = "[Ship.GetNameNoFormatting]"
-			}
 
-			expand = {}
+				button = {
+					visible = "[Ship.IsFlagship]"
+					size = { 30 30 }
+					alwaystransparent = yes
+					texture = "gfx/interface/icons/military_icons/navy_icons/flagship.dds"
+				}
 
-			flowcontainer = {
-				datacontext = "[Ship.GetTemplate]"
-				spacing = 2
-				margin_right = 10
-				datamodel = "[ShipTemplate.GetModifications]"
+				### Ship name
+				textbox = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					align = nobaseline
+					using = elide_fontsize_min
+					text = "[Ship.GetNameNoFormatting]"
+				}
 
-				item = {
-					icon = {
-						size = { 24 24 }
-						texture = "[ShipModificationType.GetIcon]"
+				flowcontainer = {
+					spacing = 2
+					datacontext = "[Ship.GetTemplate]"
+					datamodel = "[ShipTemplate.GetModifications]"
+
+					item = {
+						icon = {
+							size = { 24 24 }
+							texture = "[ShipModificationType.GetIcon]"
+						}
 					}
 				}
 			}
 
-			### ACCEPTANCE ICON - SHIP - NOT SELECTED
-			treaty_draft_input_acceptance_button_icon = {
-				visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				margin_bottom = 1
 
-				blockoverride "approval_visibility" {
-					visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+				textbox = {
+					layoutpolicy_horizontal = expanding
+					datacontext = "[Ship.GetFleet]"
+					align = nobaseline
+					fontsize = 15
+					using = elide_fontsize_min
+					text = "[MilitaryFormation.GetName]"
 				}
 
-				blockoverride "disapproval_visibility" {
-					visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+				### IN TREATY TAG
+				hbox = {
+					visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.IsShipInTreaty(ArticleDraft.Self, Ship.Self))]"
+					spacing = 2
+					margin = { 4 0 }
+					margin_right = 6
+					tooltip = "TREATY_SHIP_ALREADY_IN_TREATY"
+
+					background = {
+						using = entry_bg_simple_solid
+						alpha = 0.8
+					}
+
+					icon = {
+						size = { 20 20 }
+						texture = "gfx/interface/icons/generic_icons/diplomatic_treaties.dds"
+					}
+
+					textbox = {
+						align = nobaseline
+						autoresize = yes
+						fontsize = 15
+						text = "TREATY_SHIP_IN_TREATY"
+					}
 				}
 
-				blockoverride "undecided_visibility" {
-					visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+				widget = {
+					visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.IsShipInTreaty(ArticleDraft.Self, Ship.Self))]"
+					size = { 8 0 }
+				}
+
+				### ACCEPTANCE ICON - SHIP - NOT SELECTED
+				treaty_draft_input_acceptance_button_icon = {
+					visible = "[And(Not(PdxGuiWidget.HasContext('WarGoalDraft')), TreatyDraft.GetRightCountry.IsAI)]"
+
+					blockoverride "approval_visibility" {
+						visible = "[GreaterThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+					}
+
+					blockoverride "disapproval_visibility" {
+						visible = "[LessThan_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+					}
+
+					blockoverride "undecided_visibility" {
+						visible = "[EqualTo_int32(TreatyDraft.GetArticleTypeAcceptanceWithShip(ArticleType.Self, ArticleDraft.GetFirstOrSource.Self, Ship.Self), '(int32)0')]"
+					}
 				}
 			}
 		}
@@ -12125,7 +12338,7 @@ types article_input_types
 			}
 
 			flowcontainer = {
-				visible = "[ArticleDraft.HasInputValue('ship')]"
+				visible = "[And(ArticleDraft.HasInputValue('ship'), EqualTo_int32(ArticleDraft.GetNumSelectedShips, '(int32)0'))]"
 				parentanchor = vcenter
 				spacing = 5
 
@@ -12149,6 +12362,35 @@ types article_input_types
 					using = elide_fontsize_min
 					max_width = 200
 					text = "[ArticleDraft.GetShip.GetName]"
+				}
+			}
+
+			flowcontainer = {
+				visible = "[GreaterThan_int32(ArticleDraft.GetNumSelectedShips, '(int32)0')]"
+				parentanchor = vcenter
+				spacing = 5
+				tooltip = "[ArticleDraft.GetSelectedShipsDesc]"
+
+				textbox = {
+					parentanchor = vcenter
+					align = nobaseline
+					autoresize = yes
+					using = elide_fontsize_min
+					max_width = 150
+					text = "TREATY_TRANSFER"
+				}
+
+				tiny_flag_no_interact = {
+					parentanchor = vcenter
+				}
+
+				textbox = {
+					parentanchor = vcenter
+					align = nobaseline
+					autoresize = yes
+					using = elide_fontsize_min
+					max_width = 200
+					text = "TREATY_TRANSFER_NUM_SHIPS"
 				}
 			}
 		}
@@ -13817,7 +14059,7 @@ right_click_menu = {
 				}
 
 				blockoverride "properties" {
-					enabled = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
+					enabled = "[And(MilitaryFormation.GetCountry.IsLocalPlayer, MilitaryFormation.CanRehome)]"
 					onclick = "[MilitaryFormation.OnRehomeClicked]"
 				}
 
@@ -13827,6 +14069,12 @@ right_click_menu = {
 
 				blockoverride "text" {
 					text = "REHOME_MILITARY_FORMATION_LABEL"
+				}
+
+				action_selection_number = {
+					blockoverride "text" {
+						text = "[MilitaryFormation.GetNumRehomeSelections|+]"
+					}
 				}
 			}
 		}
@@ -13919,7 +14167,7 @@ right_click_menu = {
 				}
 
 				blockoverride "properties" {
-					enabled = "[MilitaryFormation.GetCountry.IsLocalPlayer]"
+					enabled = "[And(MilitaryFormation.GetCountry.IsLocalPlayer, MilitaryFormation.CanRehome)]"
 					onclick = "[MilitaryFormation.OnRehomeClicked]"
 				}
 
@@ -13929,6 +14177,12 @@ right_click_menu = {
 
 				blockoverride "text" {
 					text = "REHOME_MILITARY_FORMATION_LABEL"
+				}
+
+				action_selection_number = {
+					blockoverride "text" {
+						text = "[MilitaryFormation.GetNumRehomeSelections|+]"
+					}
 				}
 			}
 
@@ -14215,7 +14469,11 @@ right_click_menu = {
 
 							blockoverride "ship_type_tooltip" {
 								tooltipwidget = {
-									FancyTooltip_ShipTemplate = {}
+									FancyTooltip_ShipTemplate = {
+										blockoverride "tooltip_content_before_before" {
+											ship_type_obsolete_tooltip_line = {}
+										}
+									}
 								}
 							}
 
@@ -14226,7 +14484,10 @@ right_click_menu = {
 							}
 
 							blockoverride "queue_enabled_and_onclick" {
-								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_FleetShipTemplateConstruction = {}
+								}
+
 								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 							}
@@ -14245,7 +14506,7 @@ right_click_menu = {
 							}
 
 							blockoverride "selected_ship_template_name" {
-								text = "[ShipType.GetNameNoFormatting]"
+								text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 							}
 
 							blockoverride "default_template_onclick" {
@@ -14270,7 +14531,11 @@ right_click_menu = {
 
 							blockoverride "ship_type_tooltip" {
 								tooltipwidget = {
-									FancyTooltip_ShipTemplate = {}
+									FancyTooltip_ShipTemplate = {
+										blockoverride "tooltip_content_before_before" {
+											ship_type_obsolete_tooltip_line = {}
+										}
+									}
 								}
 							}
 						}
@@ -14300,7 +14565,10 @@ right_click_menu = {
 							}
 
 							blockoverride "queue_enabled_and_onclick" {
-								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_FleetShipTemplateConstruction = {}
+								}
+
 								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 							}
@@ -14319,7 +14587,7 @@ right_click_menu = {
 							}
 
 							blockoverride "selected_ship_template_name" {
-								text = "[ShipType.GetNameNoFormatting]"
+								text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 							}
 
 							blockoverride "default_template_onclick" {
@@ -14391,7 +14659,10 @@ right_click_menu = {
 								}
 
 								blockoverride "queue_enabled_and_onclick" {
-									tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+									tooltipwidget = {
+										RegularTooltip_FleetShipTemplateConstruction = {}
+									}
+
 									enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 									onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 								}
@@ -14410,7 +14681,7 @@ right_click_menu = {
 								}
 
 								blockoverride "selected_ship_template_name" {
-									text = "[ShipType.GetNameNoFormatting]"
+									text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 								}
 
 								blockoverride "default_template_onclick" {
@@ -14525,6 +14796,10 @@ right_click_menu = {
 						blockoverride "ship_type_tooltip" {
 							tooltipwidget = {
 								FancyTooltip_ShipTemplate = {
+									blockoverride "tooltip_content_before_before" {
+										ship_type_obsolete_tooltip_line = {}
+									}
+
 									blockoverride "tooltip_content_before" {
 										custom_tooltip_textbox = {
 											block "construction_command_desc" {
@@ -14548,7 +14823,10 @@ right_click_menu = {
 						}
 
 						blockoverride "queue_enabled_and_onclick" {
-							tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+							tooltipwidget = {
+								RegularTooltip_FleetShipTemplateConstruction = {}
+							}
+
 							enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 							onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 						}
@@ -14567,7 +14845,7 @@ right_click_menu = {
 						}
 
 						blockoverride "selected_ship_template_name" {
-							text = "[ShipType.GetNameNoFormatting]"
+							text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 						}
 
 						blockoverride "default_template_onclick" {
@@ -14617,6 +14895,10 @@ right_click_menu = {
 							blockoverride "ship_type_tooltip" {
 								tooltipwidget = {
 									FancyTooltip_ShipTemplate = {
+										blockoverride "tooltip_content_before_before" {
+											ship_type_obsolete_tooltip_line = {}
+										}
+
 										blockoverride "tooltip_content_before" {
 											custom_tooltip_textbox = {
 												block "construction_command_desc" {
@@ -14640,7 +14922,10 @@ right_click_menu = {
 							}
 
 							blockoverride "queue_enabled_and_onclick" {
-								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_FleetShipTemplateConstruction = {}
+								}
+
 								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 							}
@@ -14659,7 +14944,7 @@ right_click_menu = {
 							}
 
 							blockoverride "selected_ship_template_name" {
-								text = "[ShipType.GetNameNoFormatting]"
+								text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 							}
 
 							blockoverride "default_template_onclick" {
@@ -14726,7 +15011,10 @@ right_click_menu = {
 							}
 
 							blockoverride "queue_enabled_and_onclick" {
-								tooltip = "FLEET_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+								tooltipwidget = {
+									RegularTooltip_FleetShipTemplateConstruction = {}
+								}
+
 								enabled = "[IsValid(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 								onclick = "[Execute(ShipTemplate.QueueConstructionForFleet(MilitaryFormation.Self))]"
 							}
@@ -14745,7 +15033,7 @@ right_click_menu = {
 							}
 
 							blockoverride "selected_ship_template_name" {
-								text = "[ShipType.GetNameNoFormatting]"
+								text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 							}
 
 							blockoverride "default_template_onclick" {
@@ -14939,6 +15227,10 @@ right_click_menu = {
 						blockoverride "template_tooltip" {
 							tooltipwidget = {
 								FancyTooltip_ShipTemplate = {
+									blockoverride "tooltip_content_before_before" {
+										ship_type_obsolete_tooltip_line = {}
+									}
+
 									blockoverride "tooltip_content_before" {
 										custom_tooltip_textbox = {
 											margin_bottom = 5
@@ -15031,7 +15323,11 @@ right_click_menu = {
 					onclick = "[RightClickMenuManager.Close]"
 
 					tooltipwidget = {
-						FancyTooltip_ShipType = {}
+						FancyTooltip_ShipType = {
+							blockoverride "tooltip_content_before_before" {
+								ship_type_obsolete_tooltip_line = {}
+							}
+						}
 					}
 
 					textbox = {
@@ -15107,7 +15403,11 @@ right_click_menu = {
 					onclick = "[RightClickMenuManager.Close]"
 
 					tooltipwidget = {
-						FancyTooltip_ShipTemplate = {}
+						FancyTooltip_ShipTemplate = {
+							blockoverride "tooltip_content_before_before" {
+								ship_type_obsolete_tooltip_line = {}
+							}
+						}
 					}
 
 					hbox = {
@@ -15532,6 +15832,10 @@ types right_click_menu {
 
 		tooltipwidget = {
 			FancyTooltip_ShipTemplate = {
+				blockoverride "tooltip_content_before_before" {
+					ship_type_obsolete_tooltip_line = {}
+				}
+
 				blockoverride "tooltip_content_before" {
 					custom_tooltip_textbox = {
 						margin_bottom = 5
@@ -15603,6 +15907,10 @@ types right_click_menu {
 		block "template_tooltip" {
 			tooltipwidget = {
 				FancyTooltip_ShipTemplate = {
+					blockoverride "tooltip_content_before_before" {
+						ship_type_obsolete_tooltip_line = {}
+					}
+
 					blockoverride "tooltip_content_before" {
 						custom_tooltip_textbox = {
 							margin_bottom = 5
@@ -15903,6 +16211,10 @@ types right_click_menu {
 		block "ship_type_tooltip" {
 			tooltipwidget = {
 				FancyTooltip_ShipType = {
+					blockoverride "tooltip_content_before_before" {
+						ship_type_obsolete_tooltip_line = {}
+					}
+
 					blockoverride "tooltip_content_before" {
 						custom_tooltip_textbox = {
 							block "construction_command_desc" {
@@ -15926,12 +16238,16 @@ types right_click_menu {
 			}
 
 			tooltipwidget = {
-				FancyTooltip_ShipType = {}
+				FancyTooltip_ShipType = {
+					blockoverride "tooltip_content_before_before" {
+						ship_type_obsolete_tooltip_line = {}
+					}
+				}
 			}
 
 			blockoverride "left_text" {
 				block "selected_ship_template_name" {
-					text = "[ShipType.GetNameNoFormatting]"
+					text = "SHIP_TYPE_NAME_WITH_OBSOLETE_WARNING"
 				}
 			}
 
@@ -16046,7 +16362,10 @@ types right_click_menu {
 						using = fleet_panel_construction_template_build
 
 						block "queue_enabled_and_onclick" {
-							tooltip = "QUEUE_SHIP_TEMPLATE_CONSTRUCTION_TOOLTIP"
+							tooltipwidget = {
+								RegularTooltip_ShipTemplateConstruction = {}
+							}
+
 							enabled = "[IsValid(ShipTemplate.QueueConstruction)]"
 							onclick = "[Execute(ShipTemplate.QueueConstruction)]"
 						}
@@ -16082,6 +16401,10 @@ types right_click_menu {
 
 							tooltipwidget = {
 								FancyTooltip_ShipTemplate = {
+									blockoverride "tooltip_content_before_before" {
+										ship_type_obsolete_tooltip_line = {}
+									}
+
 									blockoverride "tooltip_content_before" {
 										custom_tooltip_textbox_fixed_width = {
 											visible = "[PdxGuiWidget.HasContext('MilitaryFormation')]"

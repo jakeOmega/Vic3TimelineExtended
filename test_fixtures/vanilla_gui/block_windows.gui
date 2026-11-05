@@ -85,7 +85,9 @@ types vfx_types {
 			}
 
 			block "camera_fov_y_degrees" {}
-			block "camera_position" {}		
+			block "camera_position" {}
+			block "camera_look_at" {}
+			block "camera_near_far" {}
 			block "entity_instance" {}
 			block "alpha" {}
 			block "visible" {}
@@ -359,7 +361,7 @@ types windows {
 					spriteType = Corneredtiled
 					spriteborder = { 10 0 }
 					margin = { 3 0 }
-					margin_top = -84
+					margin_top = -100
 					shaderfile = "gfx/FX/pdxgui_default.shader"
 					texture = "gfx/interface/backgrounds/side_frame.dds"
 					texture_density = 2
@@ -706,7 +708,7 @@ types windows {
 				}
 
 				align = hcenter|nobaseline
-				size = { 395 40 }
+				size = { 375 40 }
 				multiline = yes
 				fontsize_min = 17
 				elide = right

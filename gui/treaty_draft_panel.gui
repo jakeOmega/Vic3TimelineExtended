@@ -1,4 +1,7 @@
-﻿# COPY-PASTED FOR NOW
+﻿# TE override of vanilla treaty_draft_panel.gui (1.15.0): vanilla's file plus the article inputs vanilla
+# draws only for its own articles: a quantity for any article (#542), a company and a building type (TE).
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+# COPY-PASTED FOR NOW
 @panel_width_minus_10 = 530			# used to be 450
 @panel_width = 540  				# used to be 460
 @panel_width_half = 270				# used to be 230
@@ -197,37 +200,42 @@ types treaty_draft_panel_types
 
 					expand = {}
 
-					### RIGHT TOTAL INFLUENCE COST
-					total_influence_cost = {
+					### Using a container here to make sure the influence cost background goes behind the flag.
+					container = {
 						datacontext = "[TreatyDraft.GetRightCountry]"
 
-						blockoverride "expand_before" {
-							expand = {}
+						### RIGHT TOTAL INFLUENCE COST
+						widget = {
+							parentanchor = vcenter
+							size = { 68 29 }
+
+							total_influence_cost = {
+								blockoverride "horizontal_margins" {
+									margin_left = 2
+									margin_right = 9
+								}
+
+								blockoverride "influence_number" {
+									raw_text = "#v [TreatyDraft.GetCost(Country.Self)|0]#!"
+								}
+
+								blockoverride "expand_before" {
+									expand = {}
+								}
+
+								blockoverride "expand_after" {}
+
+								blockoverride "background_margin" {
+									margin_right = 10
+								}
+							}
 						}
 
-						blockoverride "expand_after" {}
-
-						blockoverride "horizontal_margins" {
-							margin_left = 5
-							margin_right = 5
+						### RIGHT FLAG
+						small_flag = {
+							parentanchor = vcenter
+							position = { 73 0 }
 						}
-
-						blockoverride "background_margin" {
-							margin_right = 10
-						}
-
-						blockoverride "text_minimumsize" {
-							minimumsize = { 20 -1 }
-						}
-
-						blockoverride "influence_number" {
-							raw_text = "#v [TreatyDraft.GetCost(Country.Self)|0]#!"
-						}
-					}
-
-					### RIGHT FLAG
-					small_flag = {
-						datacontext = "[TreatyDraft.GetRightCountry]"
 					}
 				}
 
@@ -281,13 +289,28 @@ types treaty_draft_panel_types
 							datamodel = "[TreatyDraft.GetSelectedOffers]"
 
 							item = {
-								article_draft = {
-									datacontext = "[TreatyDraft.GetLeftCountry]"
-									using = tooltip_ws
+								vbox = {
+									visible = "[Or(TreatyDraft.IsFirstInShipTransferBundle(ArticleDraft.Self), Not(TreatyDraft.IsInShipTransferBundle(ArticleDraft.Self)))]"
+									layoutpolicy_horizontal = expanding
 
-									state = {
-										name = _show
-										start_sound = { soundeffect = "event:/SFX/UI/Global/item_add" }
+									ship_transfer_bundle_draft = {
+										visible = "[TreatyDraft.IsFirstInShipTransferBundle(ArticleDraft.Self)]"
+										datacontext = "[TreatyDraft.GetLeftCountry]"
+
+										blockoverride "bundled_article_draft" {
+											using = tooltip_ws
+										}
+									}
+
+									article_draft = {
+										visible = "[Not(TreatyDraft.IsInShipTransferBundle(ArticleDraft.Self))]"
+										datacontext = "[TreatyDraft.GetLeftCountry]"
+										using = tooltip_ws
+
+										state = {
+											name = _show
+											start_sound = { soundeffect = "event:/SFX/UI/Global/item_add" }
+										}
 									}
 								}
 							}
@@ -331,17 +354,35 @@ types treaty_draft_panel_types
 							datamodel = "[TreatyDraft.GetSelectedDemands]"
 
 							item = {
-								article_draft = {
-									datacontext = "[TreatyDraft.GetRightCountry]"
+								vbox = {
+									visible = "[Or(TreatyDraft.IsFirstInShipTransferBundle(ArticleDraft.Self), Not(TreatyDraft.IsInShipTransferBundle(ArticleDraft.Self)))]"
+									layoutpolicy_horizontal = expanding
 
-									state = {
-										name = _show
-										start_sound = { soundeffect = "event:/SFX/UI/Global/item_add" }
+									ship_transfer_bundle_draft = {
+										visible = "[TreatyDraft.IsFirstInShipTransferBundle(ArticleDraft.Self)]"
+										datacontext = "[TreatyDraft.GetRightCountry]"
+
+										blockoverride "bundled_article_draft" {
+											blockoverride "right_click_menu_onclick" {
+												onclick = "[RightClickMenuManager.Close]"
+												onclick = "[RightClickMenuManager.ToggleArticleDraftInput(TreatyDraft.Self, ArticleDraft.Self, Country.Self, PdxGuiWidget.AccessSelf, 'article_input_right_click_menu_right')]"
+											}
+										}
 									}
 
-									blockoverride "right_click_menu_onclick" {
-										onclick = "[RightClickMenuManager.Close]"
-										onclick = "[RightClickMenuManager.ToggleArticleDraftInput(TreatyDraft.Self, ArticleDraft.Self, Country.Self, PdxGuiWidget.AccessSelf, 'article_input_right_click_menu_right')]"
+									article_draft = {
+										visible = "[Not(TreatyDraft.IsInShipTransferBundle(ArticleDraft.Self))]"
+										datacontext = "[TreatyDraft.GetRightCountry]"
+
+										state = {
+											name = _show
+											start_sound = { soundeffect = "event:/SFX/UI/Global/item_add" }
+										}
+
+										blockoverride "right_click_menu_onclick" {
+											onclick = "[RightClickMenuManager.Close]"
+											onclick = "[RightClickMenuManager.ToggleArticleDraftInput(TreatyDraft.Self, ArticleDraft.Self, Country.Self, PdxGuiWidget.AccessSelf, 'article_input_right_click_menu_right')]"
+										}
 									}
 								}
 							}
@@ -588,7 +629,7 @@ types treaty_draft_panel_types
 						size = { 45 45 }
 						enabled = "[TreatyDraft.CanMakeThisWork(AccessPlayer.Self)]"
 						onclick = "[TreatyDraft.MakeThisWork(AccessPlayer.Self)]"
-						using = tooltip_above
+						using = tooltip_ne
 						tooltip = "[TreatyDraft.GetCanMakeThisWorkDesc(AccessPlayer.Self)]"
 
 						blockoverride "icon" {
@@ -891,6 +932,150 @@ types treaty_draft_panel_types
 		}
 	}
 
+	type ship_transfer_bundle_draft = vbox {
+		layoutpolicy_horizontal = expanding
+		spacing = 5
+
+		### BUNDLE HEADER
+		vbox = {
+			layoutpolicy_horizontal = expanding
+			margin_bottom = 5
+
+			background = {
+				using = frame_decorative_light_bg
+			}
+
+			button = {
+				layoutpolicy_horizontal = expanding
+				size = { 0 34 }
+				onclick = "[GetVariableSystem.Toggle(Concatenate('ship_transfer_bundle_draft_', ArticleDraft.GetFirstOrSource.GetIDString))]"
+				using = expand_button_bg_no_fade
+
+				hbox = {
+					size = { 100% 100% }
+					margin = { 5 0 }
+					spacing = 5
+
+					### EXPAND ARROW
+					widget = {
+						size = { 25 25 }
+
+						button = {
+							visible = "[Not(GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_draft_', ArticleDraft.GetFirstOrSource.GetIDString)))]"
+							size = { 100% 100% }
+							alwaystransparent = yes
+							using = expand_arrow
+						}
+
+						button = {
+							visible = "[GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_draft_', ArticleDraft.GetFirstOrSource.GetIDString))]"
+							size = { 100% 100% }
+							alwaystransparent = yes
+							using = expand_arrow_expanded
+						}
+					}
+
+					### NAME
+					textbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						align = nobaseline
+						default_format = "#white"
+						using = elide_fontsize_min
+						text = "SHIP_TRANSFER_BUNDLE_NAME"
+					}
+
+					### REMOVE BUNDLE BUTTON
+					button_icon_cancel = {
+						size = { 25 25 }
+						onclick = "[RightClickMenuManager.ToggleShipTransferBundleRemove(TreatyDraft.AccessSelf, ArticleDraft.Self, PdxGuiWidget.AccessSelf)]"
+						enabled = "[TreatyDraft.CanRemoveShipTransferBundle(ArticleDraft.Self)]"
+						tooltip = "[TreatyDraft.GetRemoveShipTransferBundleDesc(ArticleDraft.Self)]"
+					}
+				}
+			}
+
+			### INFORMATION AREA
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				margin = { 10 5 }
+
+				### SHIP COUNT
+				treaty_textbox = {
+					margin = { 5 0 }
+					align = nobaseline
+					autoresize = yes
+					using = elide_fontsize_min
+					tooltip = "[TreatyDraft.GetShipTransferBundleShipsDesc(ArticleDraft.Self)]"
+					text = "SHIP_TRANSFER_BUNDLE_NUM_SHIPS"
+				}
+
+				expand = {}
+
+				### ACCEPTANCE
+				hbox = {
+					visible = "[TreatyDraft.GetRightCountry.IsAI]"
+					layoutpolicy_horizontal = expanding
+					maximumsize = { 58 -1 }
+					tooltip = "[TreatyDraft.GetShipTransferBundleAcceptanceBreakdown(ArticleDraft.Self, TreatyDraft.GetRightCountry.Self)]"
+
+					background = {
+						using = entry_bg_simple_solid
+						alpha = 0.4
+					}
+
+					### ACCEPTANCE ICON
+					widget = {
+						size = { 10 20 }
+
+						treaty_draft_input_acceptance_icon = {
+							parentanchor = center
+							size = { 20 20 }
+							position = { -5 0 }
+
+							blockoverride "approval_visibility" {
+								visible = "[GreaterThan_int32(TreatyDraft.GetShipTransferBundleAcceptance(ArticleDraft.Self, TreatyDraft.GetRightCountry.Self), '(int32)0')]"
+							}
+
+							blockoverride "disapproval_visibility" {
+								visible = "[LessThan_int32(TreatyDraft.GetShipTransferBundleAcceptance(ArticleDraft.Self, TreatyDraft.GetRightCountry.Self), '(int32)0')]"
+							}
+
+							blockoverride "undecided_visibility" {
+								visible = "[EqualTo_int32(TreatyDraft.GetShipTransferBundleAcceptance(ArticleDraft.Self, TreatyDraft.GetRightCountry.Self), '(int32)0')]"
+							}
+						}
+					}
+
+					### ACCEPTANCE VALUE
+					textbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						align = right|nobaseline
+						margin_right = 5
+						elide = right
+						fontsize_min = 10
+						raw_text = "#v [TreatyDraft.GetShipTransferBundleAcceptance(ArticleDraft.Self, TreatyDraft.GetRightCountry.Self)|0+=]#!"
+					}
+				}
+			}
+		}
+
+		### BUNDLED ARTICLES
+		vbox = {
+			visible = "[GetVariableSystem.Exists(Concatenate('ship_transfer_bundle_draft_', ArticleDraft.GetFirstOrSource.GetIDString))]"
+			layoutpolicy_horizontal = expanding
+			spacing = 5
+			datamodel = "[TreatyDraft.GetShipTransferBundle(ArticleDraft.Self)]"
+
+			item = {
+				article_draft = {
+					block "bundled_article_draft" {}
+				}
+			}
+		}
+	}
+
 	type article_draft = vbox {
 		layoutpolicy_horizontal = expanding
 
@@ -941,6 +1126,13 @@ types treaty_draft_panel_types
 				}
 
 				expand = {}
+
+				### CANNOT WITHDRAW
+				icon = {
+					visible = "[Not(And(ArticleDraft.CanWithdraw(ArticleDraft.GetFirstOrSource.Self), ArticleDraft.CanWithdraw(ArticleDraft.GetSecondOrTarget.Self)))]"
+					size = { 22 22 }
+					texture = "gfx/interface/icons/generic_icons/map_list_lock.dds"
+				}
 
 				### LIST NUMBER
 				treaty_textbox = {
@@ -1763,7 +1955,7 @@ types treaty_draft_panel_types
 		block "tooltip_anchor" {}
 
 		tooltipwidget = {
-			FancyTooltip_ArticleType = {
+			FancyTooltip_ArticleTypeInDraft = {
 				blockoverride "tooltip_content_before" {
 					custom_tooltip_textbox = {
 						visible = "[TreatyDraft.HasSelectedArticle(ArticleType.Self, Country.Self)]"
@@ -1998,7 +2190,7 @@ types treaty_draft_panel_types
 			block "tooltip_anchor" {}
 
 			tooltipwidget = {
-				FancyTooltip_ArticleType = {}
+				FancyTooltip_ArticleTypeInDraft = {}
 
 				blockoverride "tooltip_content_before" {
 					custom_tooltip_textbox = {
@@ -2099,7 +2291,7 @@ types treaty_draft_panel_types
 			}
 
 			tooltipwidget = {
-				FancyTooltip_ArticleType = {}
+				FancyTooltip_ArticleTypeInDraft = {}
 
 				blockoverride "tooltip_content_before" {
 					custom_tooltip_textbox = {
@@ -3035,7 +3227,7 @@ types treaty_draft_panel_types
 				}
 
 				blockoverride "portrait_texture" {
-					portrait_texture = "[Character.GetAnimatedPortrait('characters_portrait_environment_right', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+					portrait_texture = "[Character.GetAnimatedPortrait('treaty_portrait_environment_right', 'camera_event_right', 'idle', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
 				}
 
 				blockoverride "portrait_icons" {}

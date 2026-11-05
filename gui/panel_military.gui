@@ -1,4 +1,7 @@
-﻿# COPY-PASTED FOR NOW
+﻿# TE override of vanilla panel_military.gui (1.15.0): vanilla's file plus the Nuclear and Covert tabs
+# (### MOD blocks) and the mobilization option groups one a row (datamodel_wrap = 1, commented there).
+# Re-diff against the installed file on every vanilla patch (docs/guides/vanilla_patch_runbook.md § 5).
+# COPY-PASTED FOR NOW
 @panel_width_minus_10 = 530			# used to be 450
 @panel_width = 540  				# used to be 460
 @panel_width_half = 270				# used to be 230
@@ -98,6 +101,7 @@ types panel_military {
 
 			big_mobilize_all_button = {}
 		}
+
 	}
 
 	type tab_navy = top_illu {
@@ -108,14 +112,13 @@ types panel_military {
 			using = top_illu_properties
 		}
 
-		flowcontainer = {
-			parentanchor = center
-			spacing = 50
+		vbox = {
+			layoutpolicy_horizontal = expanding
+			margin = { 20 4 }
 
-			flowcontainer = {
-				parentanchor = vcenter
-				direction = vertical
-				spacing = 10
+			hbox = {
+				layoutpolicy_horizontal = expanding
+				spacing = 20
 
 				military_panel_ship_info = {}
 
@@ -132,102 +135,147 @@ types panel_military {
 						text = "EXPENSES"
 					}
 				}
+
+				military_panel_sailors_info = {}
 			}
 
-			supply_network_information_small = {
-				parentanchor = vcenter
+			divider_clean = {
+				blockoverride "size" {
+					layoutpolicy_horizontal = expanding
+					size = { 0 2 }
+				}
+			}
+
+			hbox = {
+				layoutpolicy_horizontal = expanding
+
+				widget = {
+					layoutpolicy_horizontal = expanding
+					size = { 0 28 }
+
+					supply_network_information_small = {
+						parentanchor = vcenter
+					}
+				}
+
+				widget = {
+					layoutpolicy_horizontal = expanding
+					size = { 0 40 }
+
+					supply_route_filter_row = {
+						parentanchor = vcenter
+					}
+				}
 			}
 		}
 	}
 
-	type supply_network_information_small = widget {
+	type supply_network_information_small = flowcontainer {
+		spacing = 8
+		alwaystransparent = no
+		max_update_rate = 8
 		onmousehierarchyenter = "[AccessHighlightManager.HighlightSupplyNetwork(Country.Self)]"
 		onmousehierarchyleave = "[AccessHighlightManager.RemoveHighlight]"
-		alwaystransparent = no
-		size = { 330 130 }
+		tooltip = "SUPPLY_NETWORK_STRENGTH_TOOLTIP"
 
-		using = entry_bg_fancy_solid_bg
+		textbox = {
+			parentanchor = vcenter
+			max_width = 200
+			autoresize = yes
+			align = nobaseline
+			using = elide_fontsize_min
+			text = "SUPPLY_NETWORK_STRENGTH_TEXT"
+		}
 
-		vbox = {
-			margin = { 20 20 }
-			max_update_rate = 8
+		textbox = {
+			parentanchor = vcenter
+			max_width = 50
+			autoresize = yes
+			align = nobaseline
+			using = elide_fontsize_min
+			text = "SUPPLY_NETWORK_STRENGTH_VALUE"
+		}
+	}
 
-			hbox = {
-				tooltip = "SUPPLY_NETWORK_STRENGTH_TOOLTIP"
-				layoutpolicy_horizontal = expanding
+	type supply_route_filter_row = flowcontainer {
+		spacing = 6
 
-				textbox = {
-					layoutpolicy_horizontal = expanding
-					size = { 0 32 }
-					text = "SUPPLY_NETWORK_STRENGTH_TEXT"
-					align = nobaseline
-				}
+		textbox = {
+			parentanchor = vcenter
+			max_width = 110
+			autoresize = yes
+			align = nobaseline
+			margin_right = 12
+			using = elide_fontsize_min
+			text = "SUPPLY_ROUTE_FILTERS_LABEL"
+		}
 
-				textbox = {
-					layoutpolicy_horizontal = expanding
-					size = { 0 32 }
-					text = "SUPPLY_NETWORK_STRENGTH_VALUE"
-					align = right|nobaseline
-				}
+		supply_route_filter_checkbox = {
+			blockoverride "button" {
+				onclick = "[ToggleOwnSupplyRoutes]"
+				tooltip = "SHOW_OWN_SUPPLY_ROUTES_TOOLTIP"
 			}
 
-			widget = {
-				size = { 290 26 }
-				max_update_rate = 8
-				tooltip = "COUNTRY_SAILORS_TOOLTIP"
+			blockoverride "icon_texture" {
+				texture = "gfx/interface/navy/supply_line_filter_own.dds"
+			}
 
-				changed_value_increased_progressbar_horizontal = {
-					visible = "[And(Country.HasSailorDeficit, Country.IsGainingSailors)]"
-					size = { 100% 100% }
+			blockoverride "highlight_visibility" {
+				visible = "[IsShowingOwnSupplyRoutes]"
+			}
+		}
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
-						min = 0
-						max = 1
-					}
-				}
+		supply_route_filter_checkbox = {
+			blockoverride "button" {
+				onclick = "[ToggleAlliedSupplyRoutes]"
+				tooltip = "SHOW_ALLIED_SUPPLY_ROUTES_TOOLTIP"
+			}
 
-				bad_progressbar_horizontal = {
-					visible = "[And(Country.HasSailorDeficit, Not(Country.IsGainingSailors))]"
-					size = { 100% 100% }
+			blockoverride "icon_texture" {
+				texture = "gfx/interface/navy/supply_line_filter_allies.dds"
+			}
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
-						min = 0
-						max = 1
-					}
-				}
+			blockoverride "highlight_visibility" {
+				visible = "[IsShowingAlliedSupplyRoutes]"
+			}
+		}
 
-				default_progressbar_horizontal = {
-					visible = "[Not(Country.HasSailorDeficit)]"
-					size = { 100% 100% }
+		supply_route_filter_checkbox = {
+			blockoverride "button" {
+				onclick = "[ToggleEnemySupplyRoutes]"
+				tooltip = "SHOW_ENEMY_SUPPLY_ROUTES_TOOLTIP"
+			}
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
-						min = 0
-						max = 1
-					}
-				}
+			blockoverride "icon_texture" {
+				texture = "gfx/interface/navy/supply_line_filter_enemy.dds"
+			}
 
-				flowcontainer = {
-					parentanchor = vcenter
-					spacing = 7
+			blockoverride "highlight_visibility" {
+				visible = "[IsShowingEnemySupplyRoutes]"
+			}
+		}
+	}
 
-					textbox = {
-						parentanchor = vcenter
-						margin_left = 10
-						autoresize = yes
-						align = nobaseline
-						text = "COUNTRY_SAILORS_LABEL"
-					}
+	### SUPPLY ROUTE FILTER CHECKBOX
+	type supply_route_filter_checkbox = flowcontainer {
 
-					textbox = {
-						parentanchor = vcenter
-						autoresize = yes
-						align = nobaseline
-						text = "COUNTRY_SAILORS_VALUE"
-					}
-				}
+		button = {
+			size = { 40 40 }
+			using = default_button
+			using = tooltip_se
+
+			block "button" {}
+
+			icon = {
+				size = { 70% 70% }
+				parentanchor = center
+
+				block "icon_texture" {}
+			}
+
+			icon = {
+				block "highlight_visibility" {}
+				using = highlighted_square_selection
 			}
 		}
 	}
@@ -237,7 +285,9 @@ types panel_military {
 		spacing = 2
 
 		block "tooltip" {
-			tooltip = "PANEL_MILITARY_NAVY_CURRENT_SHIPS_TOOLTIP"
+			tooltipwidget = {
+				RegularTooltip_CountryShips = {}
+			}
 		}
 
 		textbox = {
@@ -251,7 +301,7 @@ types panel_military {
 		}
 
 		widget = {
-			size = { 100 35 }
+			size = { 100 26 }
 
 			background = {
 				using = entry_bg_simple
@@ -265,7 +315,7 @@ types panel_military {
 			textbox = {
 				autoresize = yes
 				align = nobaseline
-				using = fontsize_xl
+				using = fontsize_large
 				parentanchor = vcenter
 				margin_left = 5
 				max_width = 90
@@ -277,6 +327,68 @@ types panel_military {
 			}
 		}
 
+	}
+
+	type military_panel_sailors_info = flowcontainer {
+		direction = vertical
+		spacing = 2
+		tooltip = "COUNTRY_SAILORS_TOOLTIP"
+
+		textbox = {
+			autoresize = yes
+			align = nobaseline
+			margin_left = 5
+			text = "COUNTRY_SAILORS_LABEL"
+		}
+
+		widget = {
+			size = { 280 26 }
+			max_update_rate = 8
+
+			changed_value_increased_progressbar_horizontal = {
+				visible = "[And(Country.HasSailorDeficit, Country.IsGainingSailors)]"
+				size = { 100% 100% }
+
+				blockoverride "values" {
+					value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+					min = 0
+					max = 1
+				}
+			}
+
+			bad_progressbar_horizontal = {
+				visible = "[And(Country.HasSailorDeficit, Not(Country.IsGainingSailors))]"
+				size = { 100% 100% }
+
+				blockoverride "values" {
+					value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+					min = 0
+					max = 1
+				}
+			}
+
+			default_progressbar_horizontal = {
+				visible = "[Not(Country.HasSailorDeficit)]"
+				size = { 100% 100% }
+
+				blockoverride "values" {
+					value = "[FixedPointToFloat(Country.GetSailorSufficiency)]"
+					min = 0
+					max = 1
+				}
+			}
+
+			textbox = {
+				autoresize = yes
+				align = nobaseline
+				using = fontsize_large
+				parentanchor = vcenter
+				margin_left = 5
+				max_width = 270
+				using = elide_fontsize_min
+				text = "COUNTRY_SAILORS_VALUE"
+			}
+		}
 	}
 
 	### MOBILIZATION CONTROLS
@@ -300,7 +412,7 @@ types panel_military {
 
 	type icon_with_background_big = widget {
 		size = { 60 60 }
-		
+
 		icon = {
 			size = { 100% 100% }
 			texture = "gfx/interface/backgrounds/round_button_bg.dds"
@@ -497,11 +609,11 @@ types panel_military {
 			}
 		}
 
-		widget = { size = { 1 10 }}
+		widget = { size = { 1 5 }}
 
 		military_formation_list = {}
 
-		widget = { size = { 1 10 }}
+		widget = { size = { 1 5 }}
 	}
 
 	type military_panel_navy_content = flowcontainer {
@@ -535,11 +647,154 @@ types panel_military {
 			}
 		}
 
-		widget = { size = { 1 10 }}
+		flowcontainer = {
+			visible = "[Not(IsDataModelEmpty(Country.GetShipList.GetShipTypesWithShipsOrNewBuilds))]"
+			parentanchor = hcenter
+			direction = vertical
+			datacontext = "[Country.GetShipList]"
+
+			background = {
+				using = dropdown_background
+				margin = { 0 -2 }
+			}
+
+			section_header_button = {
+				blockoverride "left_text" {
+					text = "FILTERS"
+				}
+
+				blockoverride "right_text" {
+					section_header_right_text = {
+						visible = "[Not(ShipList.HasShipTypeFilter)]"
+						text = "ALL"
+					}
+
+					flowcontainer = {
+						visible = "[ShipList.HasShipTypeFilter]"
+						margin_right = 20
+						spacing = 10
+
+						flowcontainer = {
+							spacing = 5
+							datamodel = "[DataModelFirst(ShipList.GetShipTypeFilters, '(int32)3')]"
+
+							item = {
+								flowcontainer = {
+									parentanchor = vcenter
+									spacing = 5
+
+									vertical_divider_full = {
+										visible = "[NotEqualTo_int32(PdxGuiWidget.AccessParent.GetIndexInDataModel, '(int32)0')]"
+										parentanchor = vcenter
+									}
+
+									textbox = {
+										parentanchor = vcenter
+										max_width = 120
+										autoresize = yes
+										align = nobaseline
+										alwaystransparent = yes
+										default_format = "#v"
+										using = elide_fontsize_min
+										text = "[ShipType.GetNameNoFormatting]"
+									}
+								}
+							}
+						}
+
+						textbox = {
+							visible = "[GreaterThan_int32(GetDataModelSize(ShipList.GetShipTypeFilters), '(int32)3')]"
+							autoresize = yes
+							align = nobaseline
+							alwaystransparent = yes
+							raw_text = "#v [GetDataModelSize(DataModelSkipFirst(ShipList.GetShipTypeFilters, '(int32)3'))|=]#!"
+						}
+					}
+				}
+
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle( 'navy_ship_type_filters_collapsed' )]"
+				}
+
+				blockoverride "onclick_showmore" {
+					visible = "[GetVariableSystem.Exists( 'navy_ship_type_filters_collapsed' )]"
+				}
+
+				blockoverride "onclick_showless" {
+					visible = "[Not(GetVariableSystem.Exists( 'navy_ship_type_filters_collapsed' ))]"
+				}
+			}
+
+			flowcontainer = {
+				visible = "[Not(GetVariableSystem.Exists( 'navy_ship_type_filters_collapsed' ))]"
+				minimumsize = { @panel_width 40 }
+				parentanchor = hcenter
+				spacing = 2
+				margin = { 2 10 }
+				margin_top = 5
+
+				textbox = {
+					size = { 102 40 }
+					margin = { 8 8 }
+					align = nobaseline
+					alpha = 0.5
+					using = elide_fontsize_min
+					text = "FILTER_SHIP_TYPE"
+				}
+
+				country_ship_types = {
+					blockoverride "wrap_count" {
+						wrap_count = 4
+					}
+
+					blockoverride "ship_types_datamodel" {
+						datamodel = "[ShipList.GetShipTypesWithShipsOrNewBuilds]"
+					}
+
+					blockoverride "ship_type_size" {
+						size = { 105 40 }
+					}
+
+					blockoverride "filter_tooltip" {
+						tooltip = "COMPACT_SHIP_TYPE_FILTER_TOOLTIP"
+					}
+
+					blockoverride "filter_ship_number" {
+						text = "COMPACT_SHIP_TYPE_NUMBER"
+					}
+
+					blockoverride "background_visibility" {
+						visible = no
+					}
+
+					blockoverride "filter_button_visibility" {}
+
+					blockoverride "filter_onclick" {
+						onclick = "[ShipList.ToggleShipTypeFilter(ShipType.Self)]"
+					}
+
+					blockoverride "filter_highlight_visibility" {
+						visible = "[ShipList.IsShipTypeFilterSelected(ShipType.Self)]"
+					}
+				}
+			}
+		}
+
+		widget = { size = { 1 5 }}
+
+		empty_state = {
+			blockoverride "visible" {
+				visible = "[And(Country.GetShipList.HasShipTypeFilter, IsDataModelEmpty(Country.GetShipList.GetFleetsFilteredByShipType))]"
+			}
+
+			blockoverride "text" {
+				text = "NO_FLEETS_WITH_SELECTED_SHIP_TYPES"
+			}
+		}
 
 		military_formation_list = {
 			blockoverride "datamodel" {
-				datamodel = "[Country.GetMilitaryFormationsFleet]"
+				datamodel = "[Country.GetShipList.GetFleetsFilteredByShipType]"
 			}
 		}
 
@@ -786,7 +1041,7 @@ types panel_military {
 				}
 
 				widget = {
-					size = { 5 5 }
+					size = { 1 1 }
 				}
 
 				flowcontainer = {
@@ -928,12 +1183,12 @@ types panel_military {
 				}
 			}
 
-				flowcontainer = {
+			flowcontainer = {
 				visible = "[And(InformationPanel.IsTabSelected('mobilization'), Country.IsCommittedInDiplomaticPlay)]"
 				margin_bottom = 10
 				direction = vertical
 				spacing = 10
-					
+
 				divider_clean = {
 					size = { @panel_width_plus_14 4 }
 				}
@@ -956,10 +1211,10 @@ types mobilization_options {
 	type mobilization_option_small = widget {
 		alpha = "[TransparentIfFalse(Or(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf),IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf))))]"
 		#visible = "[Or(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf),IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf)))]"
-		size = { 50 50 }
+		size = { 45 45 }
 
 		widget = {
-			size = { 50 50 }
+			size = { 100% 100% }
 
 			# Activate
 			widget = {
@@ -975,6 +1230,7 @@ types mobilization_options {
 					enabled = "[And(Not(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf)), IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf)))]"
 					onclick = "[PopupManager.AskConfirmation(MobilizationOption.Toggle(MilitaryFormation.AccessSelf))]"
 					tooltip = "ACTIVATE_MOBILIZATION_OPTION_BUTTON_TOOLTIP"
+					using = tooltip_se
 				}
 
 				# Activate button - no confirmation popup
@@ -986,6 +1242,7 @@ types mobilization_options {
 					enabled = "[And(Not(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf)), IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf)))]"
 					onclick = "[Execute(MobilizationOption.Toggle(MilitaryFormation.AccessSelf))]"
 					tooltip = "ACTIVATE_MOBILIZATION_OPTION_BUTTON_TOOLTIP"
+					using = tooltip_se
 				}
 			}
 
@@ -1003,6 +1260,7 @@ types mobilization_options {
 					enabled = "[And(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf), IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf)))]"
 					onclick = "[PopupManager.AskConfirmation(MobilizationOption.Toggle(MilitaryFormation.AccessSelf))]"
 					tooltip = "DEACTIVATE_MOBILIZATION_OPTION_BUTTON_TOOLTIP"
+					using = tooltip_se
 				}
 
 				# Deactivate button - no confirmation popup
@@ -1014,12 +1272,13 @@ types mobilization_options {
 					enabled = "[And(MobilizationOption.IsActivated(MilitaryFormation.AccessSelf), IsValid(MobilizationOption.Toggle(MilitaryFormation.AccessSelf)))]"
 					onclick = "[Execute(MobilizationOption.Toggle(MilitaryFormation.AccessSelf))]"
 					tooltip = "DEACTIVATE_MOBILIZATION_OPTION_BUTTON_TOOLTIP"
+					using = tooltip_se
 				}
 			}
 		}
 
 		icon = {
-			size = { 38 38 }
+			size = { 75% 75% }
 			texture = "[MobilizationOption.GetTexture]"
 			parentanchor = center
 		}
@@ -1031,7 +1290,6 @@ types mobilization_options {
 	}
 
 	type big_mobilize_all_button = container {
-
 		### Mobilize button
 		widget = {
 			size = { 500 50 }
@@ -1098,7 +1356,7 @@ types mobilization_options {
 
 			icon_with_background_big = {
 				parentanchor = left|vcenter
-				enabled = "[IsValid( Country.MobilizeAllArmies )]"
+				enabled = "[IsValid( Country.DemobilizeAllArmies )]"
 			}
 		}
 	}
@@ -1168,29 +1426,49 @@ types mobilization_options {
 
 		dynamicgridbox = {
 			datamodel = "[GetMobilizationOptionGroups]"
+			# TE: one group a row: with the mod's options a group holds up to ten (special_weapons),
+			# 45 px each, too wide to share a row
 			datamodel_wrap = 1
 			flipdirection = yes
 			parentanchor = hcenter
 
 			item = {
 				flowcontainer = {
-					direction = vertical
-
-					textbox = {
-						text = "[MobilizationOptionGroup.GetNameNoFormatting]"
-						autoresize = yes
-						align = nobaseline
-						default_format = "#title"
-						margin_left = 2
-					}
+					minimumsize = { 262 75 }
 
 					flowcontainer = {
-						datamodel = "[MobilizationOptionGroup.GetMobilizationOptions]"
-						margin_right = 5
-						margin_bottom = 5
+						minimumsize = { 258 75 }
+						direction = vertical
+						spacing = 2
 
-						item = {
-							mobilization_option_small = {}
+						background = {
+							texture = "[MobilizationOptionGroup.GetBackground]"
+							alpha = 0.8
+							fittype = centercrop
+						}
+
+						background = {
+							using = entry_bg_simple
+						}
+
+						textbox = {
+							text = "[MobilizationOptionGroup.GetNameNoFormatting]"
+							margin_left = 10
+							maximumsize = { 238 -1 }
+							autoresize = yes
+							align = left|nobaseline
+							default_format = "#title"
+							fontsize_min = 12
+							elide = right
+						}
+
+						flowcontainer = {
+							datamodel = "[MobilizationOptionGroup.GetMobilizationOptions]"
+							margin_left = 10
+
+							item = {
+								mobilization_option_small = {}
+							}
 						}
 					}
 				}
