@@ -8,7 +8,9 @@ Suppress a flag by adding a same-line comment in the format:
 
 ## Unreviewed Flags
 
-_None._
+### bureaucracy (1)
+
+- `events/te_debug_tax_events.txt:389` — event `te_debug_tax.34` — `country_bureaucracy_add=-10000 (in te_tp_bureaucracy)` — fix: use bureaucracy_loss_<tier> / bureaucracy_gain_<tier> static modifier (mult-based, no multiplier needed) — `te_tp_bureaucracy` carries a hardcoded fast-scaling field; either replace the reference with a mult-based generic (prestige_loss_<tier> / bureaucracy_loss_<tier>), or convert the static modifier itself to use _mult.
 
 ## Reviewed Exemptions
 
@@ -18,6 +20,6 @@ _None._
 
 ## Coverage
 
-- total flags: 3
-- unreviewed: 0
+- total flags: 4
+- unreviewed: 1
 - exempted: 3

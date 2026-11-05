@@ -8,8 +8,8 @@ Flag kinds: **unresolved-helper-call** is an unknown name in call form (`x = yes
 
 **unterminated-string** is a quoted string the file ends inside, or one running over more lines than any vanilla string does: almost always a stray `"` at or just above the line named, which turns the rest of the file into text the other checks can't read.
 
-- Catalog size: **7536**
-- Context catalog: **3657** effect-only, **2595** trigger-only names
+- Catalog size: **9507**
+- Context catalog: **4821** effect-only, **3041** trigger-only names
 - Flags (unreviewed): **0**
 - Flags (REVIEWED-suppressed): **4**
 

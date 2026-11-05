@@ -24,13 +24,17 @@ _None._
 
 - `common/scripted_effects/un_lobby_effects.txt` — `prev` = `var:un_lc_lobbyist` inside `any_scope_diplomatic_pact` — **2026-09-27**: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
 - `common/scripted_effects/un_lobby_effects.txt` — `prev` = `var:un_lc_lobbyist` inside `any_scope_diplomatic_pact` — **2026-09-27**: prev is var:un_lc_lobbyist on purpose — the pact must run from the lobbyist to the member
+- `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-10-02**: prev is the row's member (var:un_deleg_row_$N$), deliberately
 - `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-09-27**: prev is the row's member (var:un_deleg_row_$N$), deliberately
 - `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-09-27**: prev is the row's member (var:un_deleg_row_$N$), deliberately
+- `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-10-02**: prev is the row's member (var:un_deleg_row_$N$), deliberately
 - `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-09-27**: prev is the row's member (var:un_deleg_row_$N$), deliberately
+- `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-10-02**: prev is the row's member (var:un_deleg_row_$N$), deliberately
+- `common/scripted_triggers/un_lobby_triggers.txt` — `prev` = `var:un_deleg_row_$N$` inside `ROOT` — **2026-09-30**: prev is the row's member (var:un_deleg_row_$N$), deliberately
 
 ## Coverage
 
-- total flags: 5
+- total flags: 9
 - unreviewed: 0
-- exempted: 5
+- exempted: 9
 

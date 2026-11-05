@@ -1011,13 +1011,13 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_pop_support_movement_{ideology}_add`
 
 - Placeholder: `ideology` (vocab: `ideology`)
-- Members: **19**
+- Members: **18**
   - Examples: `anarchist`, `anti_slavery`, `bonapartist`, `carlist`, `communist`, `corporatist`
 
 ### `state_pop_support_movement_{ideology}_mult`
 
 - Placeholder: `ideology` (vocab: `ideology`)
-- Members: **19**
+- Members: **18**
   - Examples: `anarchist`, `anti_slavery`, `bonapartist`, `carlist`, `communist`, `corporatist`
 
 ### `state_sell_orders_{good}_add`

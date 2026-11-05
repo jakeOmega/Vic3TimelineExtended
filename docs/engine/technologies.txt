@@ -11,7 +11,7 @@
 		Unlocking Technologies:
 			Enclosure
 			Manufacturies
-		Unlocks Buildings: Coal Mines, Copper Mine, Iron Mines, Lead Mines, Sulfur Mines
+		Unlocks Buildings: Coal Mines, Copper Mines, Iron Mines, Lead Mines, Sulfur Mines
 		Unlocks Decrees: Develop Provincial Extraction, Encourage Resource Industry
 	Cotton Gin - The cotton gin is a machine which quickly separates the cotton from its seeds, enabling a much faster processing time than doing it by hand.
 		Unlocking Technologies:
@@ -859,12 +859,12 @@
 		Unlocking Technologies:
 			Arc Welding
 		Unlocks Buildings: Nickel and Cobalt Mine
-		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
 	Modern Tools - Tools like forklifts have made our workplaces more efficient and safer. They've improved productivity and reduced the number of accidents, which is good for everyone.
 		Unlocking Technologies:
 			Modern Materials
 		Unlocks Buildings: Manganese Mine
-		Unlocks PMs: 9 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
 	Modern Skyscrapers - Thanks to new architectural designs and materials, we can now build taller and more impressive buildings. These skyscrapers have become symbols of our modern, urban world.
 		Unlocking Technologies:
 			Modern Materials
@@ -917,7 +917,6 @@
 	Rural Electrification - Bringing electricity to the countryside has improved the quality of life and created new economic opportunities for rural populations. It's a key step in modernizing a nation.
 		Unlocking Technologies:
 			Paved Roads
-		Unlocks Buildings: Copper Mine
 	Fluorescent Lamps - These new lamps are much more efficient than the old arc lamps. They've made electrical lighting more widespread, and our cities a lot brighter.
 		Unlocking Technologies:
 			Radio
@@ -926,7 +925,7 @@
 			Nitrogen Fixation
 			Isoprene
 		Unlocks Buildings: Lithium Mine
-		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 13 (listed under their buildings in buildings.txt)
 	Aluminum Mass Production - We've figured out how to make aluminum on a large scale. This lightweight metal is useful in all sorts of industries, so expect to see it everywhere.
 		Unlocking Technologies:
 			Arc Welding
@@ -992,7 +991,7 @@
 		Unlocking Technologies:
 			Modern Tools
 		Unlocks Buildings: Berlin TV Tower, Electronic Components and Semiconductor Industry
-		Unlocks PMs: 10 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
 	Nuclear Energy - By harnessing the power of nuclear reactions, we've found a new and powerful source of energy. It has fueled our industries and reduced our reliance on fossil fuels, but it comes with its own set of risks.
 		Unlocking Technologies:
 			Nuclear Weapons
@@ -1060,7 +1059,7 @@
 		Unlocking Technologies:
 			Transistor Technology
 		Unlocks Buildings: Moscow State University
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Integrated Circuits - By putting many electronic components onto a single chip, we can make our devices smaller, faster, and more powerful. It's the secret behind our modern electronics.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1179,7 +1178,7 @@
 			Computer Networks
 			Advanced Assembly Lines
 		Unlocks Buildings: Itaipu Dam, Robotics Industry
-		Unlocks PMs: 14 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 15 (listed under their buildings in buildings.txt)
 	Supersonic Aircraft - Aircraft that can travel faster than the speed of sound. They've made air travel faster and have enhanced our military aviation capabilities.
 		Unlocking Technologies:
 			Inertial Navigation Systems
@@ -1221,7 +1220,7 @@
 			Barcodes and Scanners
 		Unlocks Buildings: Petronas Towers
 		Unlocks Mobilization Options: Home Communications
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	Barcodes and Scanners - Those little black and white lines have changed the face of retail and logistics. Now we can track products and sales with a simple scan, making everything much more efficient.
 		Unlocking Technologies:
 			Laser Technology
@@ -1279,7 +1278,7 @@
 		Unlocking Technologies:
 			Personal Computers
 		Unlocks Buildings: Gardens by the Bay, HVDC Undersea Interconnector, Renewable Energy Plant, Three Gorges Dam
-		Unlocks PMs: 118 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 121 (listed under their buildings in buildings.txt)
 	Supply Chain Management - By using technology and data to optimize our supply chains, we can make them more efficient and less costly. It's all about getting the right things to the right place at the right time.
 		Unlocking Technologies:
 			Computer Networks
@@ -1390,7 +1389,7 @@
 			Clean Energy Technologies
 		Unlocks Buildings: Carbon Conversion Works
 		Unlocks Laws: Managed Fossil Phaseout
-		Unlocks PMs: 117 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 120 (listed under their buildings in buildings.txt)
 	Machine Learning - We can now build computers that can learn from data. This has led to a host of new technologies and applications, and it's only going to get more powerful.
 		Unlocking Technologies:
 			Cloud Computing
@@ -1422,7 +1421,7 @@
 		Unlocking Technologies:
 			Wireless Internet (Wi-Fi)
 			Cloud Computing
-		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 7 (listed under their buildings in buildings.txt)
 	mRNA Therapeutics - Lipid-nanoparticle delivery of synthetic mRNA enables rapid-response vaccines and gene therapies. Outbreak response timelines collapse from years to months.
 		Unlocking Technologies:
 			Modern Pharmaceuticals
@@ -1497,7 +1496,7 @@
 			Additive Manufacturing
 		Unlocks Buildings: Advanced Material Fabricator
 		Unlocks Ship Modifications: Composite Armor Plating
-		Unlocks PMs: 136 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 140 (listed under their buildings in buildings.txt)
 	Abyssal Plain Mining - By mining the deep ocean floor, we can access valuable minerals and resources that are otherwise out of reach. This could be a game-changer for industries like electronics and renewable energy.
 		Unlocking Technologies:
 			Additive Manufacturing
@@ -1549,7 +1548,7 @@
 			Directed Energy Defenses
 		Unlocks Ship Types: Pulsed Laser Escort
 		Unlocks Ship Modifications: DEW Point Defense
-		Unlocks PMs: 11 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Space Militarization - As space becomes more important strategically, we're seeing a push to develop and deploy military capabilities there. This raises concerns about the weaponization of space and the need for new rules of engagement.
 		Unlocking Technologies:
 			Reusable Rocketry

@@ -192,9 +192,9 @@ Tooling Workshops (bg_light_industry):
 		Partial Carbon Capture (5 Oil)
 		Carbon Capture and Storage (5 Oil)
 		Advanced Carbon Capture (5 Oil)
-		Partial Carbon Capture (10 Oil)
-		Carbon Capture and Storage (10 Oil)
-		Advanced Carbon Capture (10 Oil)
+		Partial Carbon Capture (9 Oil)
+		Carbon Capture and Storage (9 Oil)
+		Advanced Carbon Capture (9 Oil)
 		Partial Carbon Capture (10 Coal)
 		Carbon Capture and Storage (10 Coal)
 		Advanced Carbon Capture (10 Coal)
@@ -614,12 +614,9 @@ Arms Industries (bg_military_industry):
 		Partial Carbon Capture (5 Oil)
 		Carbon Capture and Storage (5 Oil)
 		Advanced Carbon Capture (5 Oil)
-		Partial Carbon Capture (10 Oil)
-		Carbon Capture and Storage (10 Oil)
-		Advanced Carbon Capture (10 Oil)
-		Partial Carbon Capture (15 Coal)
-		Carbon Capture and Storage (15 Coal)
-		Advanced Carbon Capture (15 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Artillery Foundry (bg_military_industry):
 	Unlocking Technology: Gunsmithing
@@ -663,12 +660,9 @@ Artillery Foundry (bg_military_industry):
 		Partial Carbon Capture (5 Oil)
 		Carbon Capture and Storage (5 Oil)
 		Advanced Carbon Capture (5 Oil)
-		Partial Carbon Capture (10 Oil)
-		Carbon Capture and Storage (10 Oil)
-		Advanced Carbon Capture (10 Oil)
-		Partial Carbon Capture (15 Coal)
-		Carbon Capture and Storage (15 Coal)
-		Advanced Carbon Capture (15 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Munition Plants (bg_military_industry):
 	Unlocking Technology: Percussion Cap
@@ -709,12 +703,9 @@ Munition Plants (bg_military_industry):
 		Partial Carbon Capture (5 Oil)
 		Carbon Capture and Storage (5 Oil)
 		Advanced Carbon Capture (5 Oil)
-		Partial Carbon Capture (10 Oil)
-		Carbon Capture and Storage (10 Oil)
-		Advanced Carbon Capture (10 Oil)
-		Partial Carbon Capture (15 Coal)
-		Carbon Capture and Storage (15 Coal)
-		Advanced Carbon Capture (15 Coal)
+		Partial Carbon Capture (10 Coal)
+		Carbon Capture and Storage (10 Coal)
+		Advanced Carbon Capture (10 Coal)
 
 Rye Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
@@ -1339,15 +1330,15 @@ Gold Fields (bg_gold_fields):
 	$pm_base$:
 		$pm_default$
 
-Copper Mine (bg_discoverable_mining):
-	Unlocking Technology: Rural Electrification
-	Mining Equipment:
-		Picks and Shovels
-		Atmospheric Engine Pump
+Copper Mines (bg_discoverable_mining):
+	Unlocking Technology: Shaft Mining
+	$pmg_mining_equipment_building_coal_mine$:
+		$pm_picks_and_shovels_building_coal_mine$
+		$pm_atmospheric_engine_pump_building_coal_mine$
 			Monthly Pollution: 5
-		Condensing Engine Pump
+		$pm_condensing_engine_pump_building_coal_mine$
 			Monthly Pollution: 15
-		Diesel Pump
+		$pm_diesel_pump_building_coal_mine$
 			Monthly Pollution: 10
 		High-Pressure Hydraulic Pump
 			Monthly Pollution: 15
@@ -1355,11 +1346,11 @@ Copper Mine (bg_discoverable_mining):
 			Monthly Pollution: 15
 		Smart Miners
 			Monthly Pollution: 10
-	Explosives:
+	$pmg_explosives_building_coal_mine$:
 		Manual Drilling
-		Nitroglycerin
+		$pm_nitroglycerin_building_coal_mine$
 			Monthly Pollution: 5
-		Dynamite
+		$pm_dynamite_building_coal_mine$
 			Monthly Pollution: 10
 		Ammonium Nitrate
 			Monthly Pollution: 10
@@ -1396,7 +1387,7 @@ Copper Mine (bg_discoverable_mining):
 		Traditional Workings
 		Mechanized Workings
 		No Maintenance
-	Carbon Capture ($pmg_mining_equipment_building_lead_mine$):
+	Carbon Capture ($pmg_mining_equipment_building_copper_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (5 Oil)
@@ -1411,7 +1402,7 @@ Copper Mine (bg_discoverable_mining):
 		Partial Carbon Capture (15 Coal)
 		Carbon Capture and Storage (15 Coal)
 		Advanced Carbon Capture (15 Coal)
-	Carbon Capture ($pmg_steam_automation_building_lead_mine$):
+	Carbon Capture ($pmg_steam_automation_building_copper_mine$):
 		No Carbon Capture
 		Capture Not Applicable
 		Partial Carbon Capture (4 Coal)
@@ -1778,18 +1769,18 @@ Power Plants (bg_power):
 		No Maintenance
 	Carbon Capture ($building_power_plant$):
 		No Carbon Capture
-		Partial Carbon Capture (25 Oil)
-		Carbon Capture and Storage (25 Oil)
-		Advanced Carbon Capture (25 Oil)
+		Partial Carbon Capture (20 Oil)
+		Carbon Capture and Storage (20 Oil)
+		Advanced Carbon Capture (20 Oil)
 		Partial Carbon Capture (35 Oil)
 		Carbon Capture and Storage (35 Oil)
 		Advanced Carbon Capture (35 Oil)
 		Partial Carbon Capture (5 Coal)
 		Carbon Capture and Storage (5 Coal)
 		Advanced Carbon Capture (5 Coal)
-		Partial Carbon Capture (20 Coal)
-		Carbon Capture and Storage (20 Coal)
-		Advanced Carbon Capture (20 Coal)
+		Partial Carbon Capture (15 Coal)
+		Carbon Capture and Storage (15 Coal)
+		Advanced Carbon Capture (15 Coal)
 		Partial Carbon Capture (25 Coal)
 		Carbon Capture and Storage (25 Coal)
 		Advanced Carbon Capture (25 Coal)
@@ -1811,7 +1802,6 @@ Government Administration (bg_bureaucracy):
 		Communal Representatives
 		Automated Casework
 		Service Contractors
-		Recallable Delegates
 	Secularism:
 		Administrative Clergy
 		Secular Administration

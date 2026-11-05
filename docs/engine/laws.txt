@@ -24,8 +24,8 @@ Bureaucracy:
 		Bureaucrats are appointed by rulers to serve the country's best interests in exchange for high wages.
 	Elected Bureaucrats [progressiveness=50]
 		Local governors are elected by their constituents, decentralizing power while making citizens easier to manage.
-	Communal Administration [progressiveness=75]
-		Local assemblies run public services and local affairs through delegates who serve short terms and can be recalled at any time. Citizens take part in administration directly rather than electing officials to act for them.
+	Communal Administration [progressiveness=100] - Unlocking Technology: Socialism
+		Common administrative tasks are placed under the purview of workers' organizations, with central administration carried out by their elected representatives.
 	Contracted Administration [progressiveness=-2] - Unlocking Technology: Supply Chain Management
 		Private firms carry out much of the state's administration under contract. A smaller civil service writes and oversees the contracts, and the firms that win them answer for results rather than procedure.
 	Automated Bureaucracy [progressiveness=-10] - Unlocking Technology: AI Agents

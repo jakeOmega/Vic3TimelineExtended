@@ -16,6 +16,12 @@ Fix: add `concept_X = {}` to `common/game_concepts/extra_concepts.txt`
 When `X` is not meant to be a concept at all (a modifier or other
 entity name), drop the `Concept()` wrapper and keep the display text.
 
+A **glossary** flag is a 1.15 glossary link, `[glossary_X]` or
+`[Glossary('glossary_X', 'text')]`, with no `glossary_X` in
+`common/glossary/` (vanilla or mod): add `glossary_X = {}` and its
+`glossary_X` / `glossary_X_desc` loc. A glossary entry is never
+linked through `Concept()`, which looks up game concepts only.
+
 Suppress an intentional unregistered reference with a trailing
 comment on the loc line:
 `my_loc_key:0 "... [concept_X] ..." # REVIEWED YYYY-MM-DD: rationale`

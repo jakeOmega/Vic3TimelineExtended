@@ -1623,23 +1623,21 @@ _A bonus or penalty to the maximum level of Barracks buildings._
 
 - `state_infrastructure_from_luxury_clothes_consumption_add`, `state_infrastructure_from_luxury_furniture_consumption_add`, `state_infrastructure_from_merchant_marine_consumption_add`, `state_infrastructure_from_transportation_consumption_add`
 
-### `state_pop_support_movement_{ideology}_add` (19 members)
+### `state_pop_support_movement_{ideology}_add` (18 members)
 
 _An increase or decrease to the attraction for Pops towards joining a Political Movement._
 
 - `state_pop_support_movement_anarchist_add`, `state_pop_support_movement_anti_slavery_add`, `state_pop_support_movement_bonapartist_add`, `state_pop_support_movement_carlist_add`, `state_pop_support_movement_communist_add`, `state_pop_support_movement_corporatist_add`
 - `state_pop_support_movement_fascist_add`, `state_pop_support_movement_feminist_add`, `state_pop_support_movement_legitimist_add`, `state_pop_support_movement_liberal_add`, `state_pop_support_movement_miguelist_add`, `state_pop_support_movement_modernizer_add`
 - `state_pop_support_movement_nihilist_add`, `state_pop_support_movement_orleanist_add`, `state_pop_support_movement_positivist_add`, `state_pop_support_movement_pro_slavery_add`, `state_pop_support_movement_radical_add`, `state_pop_support_movement_reactionary_add`
-- `state_pop_support_movement_socialist_add`
 
-### `state_pop_support_movement_{ideology}_mult` (19 members)
+### `state_pop_support_movement_{ideology}_mult` (18 members)
 
 _An increase or decrease to the attraction for Pops towards joining a Political Movement._
 
 - `state_pop_support_movement_anarchist_mult`, `state_pop_support_movement_anti_slavery_mult`, `state_pop_support_movement_bonapartist_mult`, `state_pop_support_movement_carlist_mult`, `state_pop_support_movement_communist_mult`, `state_pop_support_movement_corporatist_mult`
 - `state_pop_support_movement_fascist_mult`, `state_pop_support_movement_feminist_mult`, `state_pop_support_movement_legitimist_mult`, `state_pop_support_movement_liberal_mult`, `state_pop_support_movement_miguelist_mult`, `state_pop_support_movement_modernizer_mult`
 - `state_pop_support_movement_nihilist_mult`, `state_pop_support_movement_orleanist_mult`, `state_pop_support_movement_positivist_mult`, `state_pop_support_movement_pro_slavery_mult`, `state_pop_support_movement_radical_mult`, `state_pop_support_movement_reactionary_mult`
-- `state_pop_support_movement_socialist_mult`
 
 ### `state_sell_orders_{good}_add` (54 members)
 
@@ -2495,7 +2493,7 @@ _Cannon Artillery Offense_
 - `ship_vulnerability_add` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 - `ship_vulnerability_mult` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 
-### state (223)
+### state (225)
 
 - `state_allow_assimilation_in_homeland_bool` — **Assimilation in Homeland States Allowed** — Assimilation of Pops is allowed even if they are living in one of their Homeland States
 - `state_allow_assimilation_without_presence_bool` — **Assimilation to Primary Culture Always Allowed** — Assimilation to Primary Culture is allowed even if no Pops of that Culture are present in the State
@@ -2678,6 +2676,8 @@ _Cannon Artillery Offense_
 - `state_pop_support_movement_royalist_constitutional_mult` — **Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_slave_revolt_add` — **Slave Revolt Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_slave_revolt_mult` — **Slave Revolt Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
+- `state_pop_support_movement_socialist_add` — **Socialist Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
+- `state_pop_support_movement_socialist_mult` — **Socialist Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
 - `state_pop_support_movement_tokugawa_loyalist_add`
 - `state_pop_support_movement_tokugawa_loyalist_mult`
 - `state_pop_support_movement_utilitarian_add` — **Utilitarian Movement Pop Attraction** — An increase or decrease to the attraction for Pops towards joining a Political Movement.
