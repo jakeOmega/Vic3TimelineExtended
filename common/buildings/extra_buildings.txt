@@ -67,6 +67,23 @@ REPLACE:building_synthetics_plant = {
 
 	required_construction = construction_cost_very_high
 
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
+
 	possible = {
 		is_industrial_production_allowed = yes
 	}
@@ -112,6 +129,23 @@ REPLACE:building_electrics_industry = {
 	}
 
 	required_construction = construction_cost_super_high
+
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes
@@ -168,6 +202,23 @@ REPLACE:building_automotive_industry = {
 	}
 
 	required_construction = construction_cost_very_high
+
+	ai_value = {
+		value = 1000
+
+		if = {
+			limit = {
+				owner ?= {
+					has_journal_entry = je_five_year_plan
+					je:je_five_year_plan ?= {
+						has_variable = five_year_plan_heavy_industry_var
+					}
+					five_year_plan_heavy_industry_goal_met = no
+				}
+			}
+			add = 2500
+		}
+	}
 
 	possible = {
 		is_industrial_production_allowed = yes
