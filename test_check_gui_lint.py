@@ -196,6 +196,45 @@ class LintTest(unittest.TestCase):
 
 
 
+class GlossaryLintTest(unittest.TestCase):
+    """1.15 glossary links, in a .gui expression and in added loc, resolve
+    against common/glossary/ and vanilla_parsed/common/glossary.json."""
+
+    def test_glossary_links(self):
+        with tempfile.TemporaryDirectory() as repo:
+            files = {
+                "gui/base.gui": BASE_GUI,
+                "common/glossary/g.txt": BOM + "glossary_mod_entry = {}\n",
+                "vanilla_parsed/common/glossary.json": '{"glossary_zaibatsu": ["=", {}]}',
+                "localization/english/x_l_english.yml": BOM + 'l_english:\n known_key: "Known"\n',
+            }
+            for rel, text in files.items():
+                os.makedirs(os.path.dirname(os.path.join(repo, rel)), exist_ok=True)
+                with open(os.path.join(repo, rel), "w", encoding="utf-8") as f:
+                    f.write(text)
+            _git(repo, "init", "-q")
+            _git(repo, "add", "-A")
+            _git(repo, "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base")
+            with open(os.path.join(repo, "gui", "g.gui"), "w", encoding="utf-8") as f:
+                f.write(BOM + "types g {\n\ttype g_row = proven_row {\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_zaibatsu','zaibatsu')]\" }\n"
+                        "\t\ttextbox = { text = \"[Glossary('glossary_gone','gone')]\" }\n"
+                        "\t}\n}\n")
+            with open(os.path.join(repo, "localization/english/x_l_english.yml"), "a", encoding="utf-8") as f:
+                f.write(' k_ok: "[glossary_mod_entry] [Glossary(\'glossary_zaibatsu\',\'z\')]"\n'
+                        ' k_bad: "[glossary_missing] [Glossary(\'glossary_absent\',\'a\')]"\n')
+            linter = lint.Linter(repo, "HEAD")
+            for p in linter.changed_gui():
+                linter.lint_file(p)
+            linter.lint_added_loc()
+            errs = [m for s, _p, _ln, m in linter.findings if s == "ERROR" and "glossary" in m]
+            self.assertEqual(sorted(errs), [
+                "glossary entry glossary_gone is not defined",
+                "k_bad: glossary entry glossary_absent is not defined",
+                "k_bad: glossary entry glossary_missing is not defined",
+            ])
+
+
 class DefinitionRuleTest(unittest.TestCase):
     def test_merge_target_is_not_a_definition(self):
         # gui_reference_audit's rule (#1180): INJECT:/REPLACE: names resolve

@@ -18,7 +18,8 @@ ERROR (exit 1):
     SelectLocalization, AddLocalizationIf, AddTextIf) in neither the mod's
     English loc nor vanilla's (vanilla_parsed/localization_english.json)
   - GetScriptedGui('x') with no scripted GUI x; GetPlayerJournalEntry('x') with
-    no journal entry x; Concept('x', ..) or [concept_x] with no concept x
+    no journal entry x; Concept('x', ..) or [concept_x] with no concept x;
+    Glossary('x', ..) or [glossary_x] with no 1.15 glossary entry x
   - margin / margin_<side> directly on a plain widget or icon, which the engine
     does not handle (a WARN when the same line is already on --base)
 WARN:
@@ -101,6 +102,10 @@ def loc_args(expr):
 
 MARGIN_PROPS = {"margin", "margin_left", "margin_right", "margin_top", "margin_bottom"}
 GUI_TOKEN = re.compile(r"\b([A-Za-z_]\w*)\s*=\s*(?:([A-Za-z_]\w*)\s*)?(\{)?|(\{)|(\})")
+
+
+# 1.15's Glossary('glossary_x', 'text') global function (not .GetGlossary).
+GLOSSARY_FN = r"(?<![\w.])Glossary\(\s*'(\w+)'"
 
 
 def collapse_strings(text):
@@ -223,6 +228,9 @@ class Linter:
                     | set(self._vanilla("vanilla_parsed/common/journal_entries.json")))
         self.concepts = (self._top_level_keys("common/game_concepts/**/*.txt")
                          | set(self._vanilla("vanilla_parsed/common/game_concepts.json")))
+        # 1.15 glossary entries, linked [glossary_x] or Glossary('glossary_x', 'text').
+        self.glossary = (self._top_level_keys("common/glossary/**/*.txt")
+                         | set(self._vanilla("vanilla_parsed/common/glossary.json")))
 
     def report(self, sev, path, line, msg):
         self.findings.append((sev, path, line, msg))
@@ -263,6 +271,9 @@ class Linter:
         for k in re.findall(r"Concept\(\s*'(\w+)'", expr):
             if k not in self.concepts:
                 self.report("ERROR", path, ln, f"concept {k} is not defined")
+        for k in re.findall(GLOSSARY_FN, expr):
+            if k not in self.glossary:
+                self.report("ERROR", path, ln, f"glossary entry {k} is not defined")
         for k in loc_args(expr):
             if not self.loc_exists(k) and f"'{k}'" not in self.base_gui_text:
                 self.report("ERROR", path, ln, f"loc key '{k}' is in neither mod nor vanilla loc")
@@ -378,6 +389,9 @@ class Linter:
             for c in re.findall(r"\[(concept_\w+)\]", value):
                 if c not in self.concepts:
                     self.report("ERROR", "loc", 0, f"{key}: concept {c} is not defined")
+            for c in re.findall(r"\[(glossary_\w+)\]", value):
+                if c not in self.glossary:
+                    self.report("ERROR", "loc", 0, f"{key}: glossary entry {c} is not defined")
             for e in bracket_exprs(value):
                 if e.count("(") != e.count(")"):
                     self.report("ERROR", "loc", 0, f"{key}: unbalanced ( ) in [{e[:80]}]")
@@ -387,6 +401,9 @@ class Linter:
                 for k in re.findall(r"Concept\(\s*'(\w+)'", e):
                     if k not in self.concepts:
                         self.report("ERROR", "loc", 0, f"{key}: concept {k} is not defined")
+                for k in re.findall(GLOSSARY_FN, e):
+                    if k not in self.glossary:
+                        self.report("ERROR", "loc", 0, f"{key}: glossary entry {k} is not defined")
                 for k in re.findall(r"ScriptValue\(\s*'(\w+)'", e):
                     if k not in self.svals:
                         self.report("WARN", "loc", 0, f"{key}: script value {k} not found (mod or vanilla)")
