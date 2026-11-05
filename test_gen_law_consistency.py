@@ -356,5 +356,21 @@ class PrerequisiteHoldableTest(unittest.TestCase):
         self.assertTrue(_can_hold("law_mid", {"lawgroup_a": "law_head"}, laws))
 
 
+class StartDateGateTest(unittest.TestCase):
+    def test_on_law_activated_sweep_skips_the_start_date(self):
+        """History's activate_law fires on_law_activated while later groups still hold their first law, so a sweep
+        then took Religious Schools from 36 countries and Interventionism from 46 (Serfdom bars both). The wrapper must skip 1836.1.1."""
+        import re
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "common", "on_actions", "extra_on_actions.txt")
+        with open(path, encoding="utf-8-sig") as f:
+            text = f.read()
+        m = re.search(r"^te_fix_inconsistent_laws_from_law_scope = \{\n(.*?)^\}", text, re.M | re.S)
+        self.assertIsNotNone(m)
+        body = re.sub(r"#[^\n]*", "", m.group(1))
+        gate = body.find("game_date > 1836.1.1")
+        self.assertGreater(gate, -1, "the sweep must not run during history setup")
+        self.assertLess(gate, body.find("te_fix_inconsistent_laws = yes"))
+
+
 if __name__ == "__main__":
     unittest.main()

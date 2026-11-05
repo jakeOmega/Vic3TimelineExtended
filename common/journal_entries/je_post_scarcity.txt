@@ -2,6 +2,12 @@
 	icon = "gfx/interface/icons/event_icons/je_post_scarcity.dds"
 	group = je_group_technology
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	modifiers_while_active = {
 		post_scarcity_transition_active_modifier
 	}

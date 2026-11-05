@@ -3,6 +3,12 @@
 
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# A country with no states (one that lost them all in a war) has no pops
 	# and no living standard to measure, yet the entry stayed active on one and
 	# went on collapsing it: Dharampur, landless in the 2026-10-06 observer
@@ -105,6 +111,12 @@ je_create_new_religion = {
 	icon = "gfx/interface/icons/event_icons/je_create_new_religion.dds"
 
 	group = je_group_internal_affairs
+
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
 
 	is_shown_when_inactive = {
 		NOT = { country_has_any_custom_religion = yes }

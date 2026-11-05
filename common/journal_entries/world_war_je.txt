@@ -13,6 +13,12 @@ je_world_war = {
 	icon = "gfx/interface/icons/event_icons/je_world_war.dds"
 	group = je_group_foreign_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = world_war_enabled
 		has_technology_researched = combined_arms

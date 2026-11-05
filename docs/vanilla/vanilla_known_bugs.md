@@ -1107,6 +1107,82 @@ Event target link 'owner' returned an invalid object
 
 The Remove Opium Ban decision's is_shown checks `exists = market` and then reads `market.owner = root`, and lobby event 5's trigger reads `any_market = { NOT = { owner = root } … }`; both fail on a market whose owner is gone. 2026-10-29 (a game in 2010): 15 and 3 lines over 17 minutes, in the launch where the mod's monthly trade-partner refresh also met a market with no trade-center state (its `trade_center` link invalid, once a month; now skipped). The mod overrides neither file.
 
+### `events/paralegal_discrimination_events.txt:115` — an AI trigger's `has_journal_entry` read in a state scope (1.15)
+
+```
+has_journal_entry trigger [ Wrong scope for trigger: state, expected country ]
+```
+
+The event calls a vanilla AI scripted trigger (00_ai_triggers.txt line 1304) whose `has_journal_entry` runs with a state as its scope. Vanilla 1.15; once at the start of the first 1.15 observer game (2026-11-05).
+
+### `events/brazil/peru_bolivia.txt:793` — `change_relations` between a country and itself (1.15)
+
+```
+Trying to change relations between the same country
+```
+
+The Peru-Bolivia chain's `change_relations` lands on North Peru for both sides; the engine also asserts `Attempted to create relations between a country and itself` (below). Vanilla 1.15, once in the first 1.15 observer game (2026-11-05).
+
+### `events/agitators_events/garibaldi_events.txt:1105` — an unset `garibaldi_scope` (1.15)
+
+```
+Undefined event target 'garibaldi_scope'
+Event target link 'scope' returned an unset scope
+add_modifier effect [ Wrong scope for effect: none
+```
+
+Lines 1105-1106 read `scope:garibaldi_scope` where it was never saved, so the `add_modifier` after it has no scope. Vanilla 1.15, once in the first 1.15 observer game (2026-11-05).
+
+### `common/history/military_formations/01_military_formations_north_america.txt:391` — no land HQ for the Russian-American Company (1.15)
+
+```
+Cannot find land HQ for Russian-American Company
+Failed to create army formation for Russian-American Company
+```
+
+History creates the company's army in `region_pacific_coast`, where it has no land HQ. Vanilla 1.15, once per new game (2026-11-05).
+
+### `events/metro_events.txt:11` — an invalid `owner` (1.15)
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+Vanilla 1.15's metropolis event reads `owner` of a scope that has none. Once in the first 1.15 observer game (2026-11-05). The mod has no file of this name.
+
+### `common/journal_entries/09_forest_of_bayonets.txt` — involved-country iterators with no journal entry in scope (1.15)
+
+```
+random_scope_je_involved effect [ Wrong scope for effect: none, expected journal_entry ]
+every_scope_je_involved effect [ Wrong scope for effect: none, expected journal_entry ]
+```
+
+The entry calls vanilla's ip5 scripted effects (00_victoria_ip5_scripted_effects.txt lines 770 and 781), which iterate the involved countries from no scope. Vanilla 1.15 (2026-11-05).
+
+### `common/journal_entries/03_russia.txt` — `je:je_great_game_control` with no scope (1.15)
+
+```
+je:je_great_game_control effect [ Wrong scope for effect: none, expected country ]
+```
+
+Through the Great Game scripted effects (00_victoria_great_game_scripted_effects.txt line 83). Vanilla 1.15 (2026-11-05).
+
+### `events/balkans_events/00_ip3_hungary_events.txt:768` — `play_as` with no player
+
+```
+Failed to switch player to new country in play_as effect - no player for scoped country
+```
+
+The Hungarian event hands the player a new country; in an observer game there is no player to move. Harmless (2026-11-05).
+
+### `common/journal_entries/06_morocco_lands_of_anarchy.txt:99` — `owner = root` on an al-Rif state with no owner (1.15)
+
+```
+Event target link 'owner' returned an invalid object
+```
+
+The Lands of Anarchy monthly pulse reads `scope:al_rif_state_scope ?= { if = { limit = { owner = root } … } }`; the `?=` guards the saved scope, not the state's owner, so once the state has none the `owner` link errors each month. The `else` branch runs, as it would for a foreign owner. Vanilla 1.15 (2026-11-05).
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -1802,12 +1878,14 @@ Plain startup instrumentation ("Starting/Done pre-enumerating '<dir>'…") misca
 ### `jomini_trigger.cpp:102` — trigger added after PostInitAndValidate
 - source: `jomini_trigger.cpp:102`
 - source: `jomini_trigger.cpp:103`
+- source: `jomini_effect.cpp:160`
 
 ```
 Adding trigger after PostInitAndValidate
+Adding effect after PostInitAndValidate
 ```
 
-Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect.
+Engine-internal validation-timing notice fired once during load (vanilla emits it for its own deferred trigger registration; also fires on filewatcher reloads). No script path, no player-visible effect. 1.15 logs an effect twin, `jomini_effect.cpp:160`, twice a launch (2026-11-05).
 
 ### `power_bloc_statue_hero_type.cpp:141` / `power_bloc_statue_pedestal_type.cpp:62` — no default statue hero/pedestal for `identity_diplomatic`
 - source: `power_bloc_statue_hero_type.cpp:141`
@@ -1985,9 +2063,10 @@ An engine assertion with no script frame, about once a session: eight seconds af
 
 ```
 GameStateAccess._Value == EGameStateAccess::Interface
+GetCurrentIdlerType() == EJominiIdler::INGAME
 ```
 
-An engine assertion with no script frame, once, a few seconds after the observer harness ran its first console command (2026-10-10). Not actionable from script.
+An engine assertion with no script frame, once, a few seconds after the observer harness ran its first console command (2026-10-10). Not actionable from script. On 1.15 it comes with an idler assert on the line before it, at the game's start, in every launch (2026-11-05).
 
 ### `pdx_assert.cpp:641` — pop employment and building placement bookkeeping asserts
 - source: `pdx_assert.cpp:641`
@@ -2020,6 +2099,24 @@ console_success:
 ```
 
 Every console command and its result, one line each. The observer harness runs `observe` and the demographics census event this way (2026-10-10). Not an error; read them with `?vanilla_bugs=only&q=console` to see what was run.
+
+### `hq.cpp:435` — an HQ region where the controller has no port travel position (1.15)
+- source: `hq.cpp:435`
+
+```
+has a port travel position, so a coastal province in the region is missing its required naval connection
+```
+
+1.15's HQ placement logs this for a country (often a revolt) holding no coastal state with a port in a region: The Andes for Bolivia, Oceania for Noongar, Northern Europe for Sweden. Dozens a decade. The mod's `map_data/state_regions` match vanilla 1.15's in every geography field (782 states: ids, provinces, ports, naval exits, cities; 2026-11-05), so the gap is vanilla's.
+
+### `pdx_assert.cpp:641` — relations between a country and itself
+- source: `pdx_assert.cpp:641`
+
+```
+Attempted to create relations between a country and itself
+```
+
+The assert behind `events/brazil/peru_bolivia.txt`'s same-country `change_relations` (above). Once in the first 1.15 observer game (2026-11-05).
 
 ## How to triage a new error-log entry
 

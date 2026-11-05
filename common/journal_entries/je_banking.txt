@@ -2,6 +2,12 @@
 	icon    = "gfx/interface/icons/event_icons/je_banking_cycle.dds"
 	group = je_group_internal_affairs
 
+	# 1.15 asks every entry for this ("missing an activation_description trigger" otherwise);
+	# always = yes is vanilla's own default, in 369 of its 449 entries.
+	activation_description = {
+		always = yes
+	}
+
 	# EVERY COUNTRY HOLDS THIS ENTRY, from the first days of the game
 	# (docs/superpowers/archive/specs/2026-10-17-banking-always-on-design.md). What
 	# starts later is the financial cycle, once te_banking_cycle_unlocked holds
