@@ -114,9 +114,12 @@ class MaskedTemperatureTest(unittest.TestCase):
         body = text[text.index("temperature_anomaly_display = {"):]
         body = body[: body.index("\n}") + 2]
         self.assertRegex(body, r"limit = \{ gw_aerosol_mask > 0 \}\s*subtract = gw_aerosol_mask\s*min = 0")
-        # The emissions still accumulate into the unmasked figure, unchanged.
+        # The emissions still accumulate into the unmasked figure, unchanged; read once the global exists (vanilla
+        # 1.15 evaluates the entry's `possible` before on_game_started sets it).
         raw = values["gw_unmasked_temperature"]
-        self.assertEqual(raw["value"], "global_var:greenhouse_gas_emissions")
+        self.assertEqual(raw["value"], "0")
+        self.assertEqual(raw["if"]["limit"], {"has_global_variable": "greenhouse_gas_emissions"})
+        self.assertEqual(raw["if"]["add"], "global_var:greenhouse_gas_emissions")
 
     def test_the_harms_read_the_felt_anomaly(self):
         je = _text(JE)

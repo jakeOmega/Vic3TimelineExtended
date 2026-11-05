@@ -924,7 +924,11 @@ market_carbon_capture_script_value_display = {
 }
 
 greenhouse_gas_emissions_display = {
-	value = global_var:greenhouse_gas_emissions
+	value = 0
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		add = global_var:greenhouse_gas_emissions
+	}
 	round = yes
 }
 
@@ -974,10 +978,18 @@ gw_unmasked_temperature = {
 	# above), and `round = yes` sits between them so the displayed anomaly is
 	# quantised to 0.01 C. Collapsing them to one divide would report 100x the
 	# real warming.
-	value = global_var:greenhouse_gas_emissions
-	divide = 100
-	round = yes
-	divide = 100
+	# The global is set on game start (te_init_global_state), but vanilla 1.15
+	# evaluates je_global_warming's `possible` for every country before that
+	# (582 "Value of wrong type ... none" lines at its first load): read 0 until
+	# the variable exists.
+	value = 0
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		add = global_var:greenhouse_gas_emissions
+		divide = 100
+		round = yes
+		divide = 100
+	}
 }
 
 # The temperature anomaly the world feels: the warming above, less the aerosol
