@@ -30,6 +30,18 @@ Checks, per `localization/**/*.yml`:
      `key:0"value"` is a typo neither vanilla nor the mod writes (an editor
      that drops a trailing space produces it). `key:"value"`, with no digit,
      is the mod's own older form and renders in game, so it passes.
+  9. every `$key$` splice inside a single-quoted argument of a loc data
+     function (`[Concept('concept_pop','$concept_pops$')]`,
+     `ConcatIfNeitherEmpty('$X$', …)`, `GetRawTextTooltipTag('$X$')`) carries
+     the `q` format flag: `$concept_pops|q$`, or `q` after any flags it already
+     has (`$VALUE|%0q$`). From 1.15 the game logs "missing required
+     quote-escaping" for every one without it (pdx_data_localize.cpp), and
+     vanilla 1.15 escapes all ~9,950 of its own. A `'` counts as a delimiter
+     only inside `[...]`, so a prose apostrophe never pairs with one.
+
+Check 9 also runs over the translation memories (`i18n/<language>/tm/**/*.json`,
+every field of every record), since the deploy swaps their text in: an
+unescaped translation would bring the error back in that language's game.
 
 Pass a directory to check other trees too, e.g. the deploy-time language copies
 `scripts/generators/gen_non_english_loc.py` stages under `build/localization/`.
@@ -37,12 +49,13 @@ Pass a directory to check other trees too, e.g. the deploy-time language copies
 Usage:
     python3 scripts/analysis/check_localization_files.py [paths...]
 
-With no arguments it scans `localization/` under the repo root. Exits 1 and
-prints one `file:line: message` per problem; exits 0 when clean.
+With no arguments it scans `localization/` and `i18n/` under the repo root.
+Exits 1 and prints one `file:line: message` per problem; exits 0 when clean.
 """
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import sys
@@ -65,6 +78,70 @@ _LANGUAGE_SUFFIX_RE = re.compile(r"_l_([a-z_]+)\.yml$")
 
 # An escaped quote whose backslash is not itself escaped.
 _ESCAPED_QUOTE_RE = re.compile(r'(?<!\\)(?:\\\\)*\\"')
+
+# A `$key$` / `$key|flags$` splice (check 9).
+_SPLICE_RE = re.compile(r"\$([^$\s|]+)(?:\|([^$\s]*))?\$")
+
+
+def quoted_arg_splices(value: str) -> list[tuple[int, int, str, str]]:
+    """(start, end, key, flags) of every splice inside a single-quoted
+    argument of a `[...]` data expression in one loc value.
+
+    A `'` is a string delimiter only while a `[` is open; outside brackets it
+    is an apostrophe. Inside a quoted argument brackets are text, so
+    `'[concept_x]'` neither opens nor closes an expression. An argument left
+    unclosed at the end of the value is ignored."""
+    out: list[tuple[int, int, str, str]] = []
+    depth = 0
+    start = -1
+    for i, ch in enumerate(value):
+        if start >= 0:
+            if ch == "'":
+                for m in _SPLICE_RE.finditer(value, start, i):
+                    out.append((m.start(), m.end(), m.group(1), m.group(2) or ""))
+                start = -1
+        elif ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth = max(0, depth - 1)
+        elif ch == "'" and depth:
+            start = i + 1
+    return out
+
+
+def unescaped_quoted_splices(value: str) -> list[str]:
+    """The quoted-argument splices of one loc value that lack the `q` flag."""
+    return [
+        value[start:end]
+        for start, end, _key, flags in quoted_arg_splices(value)
+        if "q" not in flags
+    ]
+
+
+def escape_quoted_splices(value: str) -> tuple[str, int]:
+    """`value` with `q` added to every quoted-argument splice that lacks it
+    (`$x$` -> `$x|q$`, `$x|v$` -> `$x|vq$`, as vanilla 1.15 writes them),
+    and how many it changed."""
+    parts: list[str] = []
+    last = changed = 0
+    for start, end, key, flags in quoted_arg_splices(value):
+        if "q" in flags:
+            continue
+        parts.append(value[last:start])
+        parts.append(f"${key}|{flags}q$")
+        last = end
+        changed += 1
+    parts.append(value[last:])
+    return "".join(parts), changed
+
+
+def _quote_escaping_problem(where: str, key: str, splices: list[str]) -> str:
+    listed = ", ".join(f"`{s}`" for s in splices)
+    return (
+        f"{where}: {listed} in '{key}' sits inside a quoted argument of a loc "
+        f"function and needs quote-escaping: add `q` to its flags (`$x|q$`, "
+        f"`$x|vq$`); the game logs \"missing required quote-escaping\" otherwise"
+    )
 
 
 def iter_loc_files(roots: list[str]) -> list[str]:
@@ -181,27 +258,72 @@ def check_file(path: str) -> list[str]:
                 f"{rel}:{index}: unpaired `\\\"` in '{key}': the game shows a "
                 f"dangling quote mark"
             )
+        unescaped = unescaped_quoted_splices(value)
+        if unescaped:
+            problems.append(_quote_escaping_problem(f"{rel}:{index}", key, unescaped))
 
+    return problems
+
+
+def iter_tm_files(roots: list[str]) -> list[str]:
+    """The translation memories (`.json` files in a `tm` folder) under roots."""
+    found: list[str] = []
+    for root in roots:
+        if os.path.isdir(root):
+            for dirpath, _dirnames, filenames in os.walk(root):
+                parts = os.path.normpath(dirpath).split(os.sep)
+                if "tm" in parts:
+                    found.extend(
+                        os.path.join(dirpath, name) for name in filenames if name.endswith(".json")
+                    )
+        elif root.endswith(".json") and "tm" in os.path.normpath(root).split(os.sep):
+            found.append(root)
+    return sorted(set(found))
+
+
+def check_tm_file(path: str) -> list[str]:
+    """Check 9 over one translation memory: every text field of every record
+    (`en` and the translation; `base` names a key, not text)."""
+    rel = os.path.relpath(path, REPO_ROOT)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            records = json.load(fh)
+    except (OSError, ValueError) as exc:
+        return [f"{rel}:1: not a readable translation memory ({exc})"]
+    problems: list[str] = []
+    for key, record in records.items():
+        if not isinstance(record, dict):
+            continue
+        for field, text in record.items():
+            if field == "base" or not isinstance(text, str):
+                continue
+            unescaped = unescaped_quoted_splices(text)
+            if unescaped:
+                problems.append(_quote_escaping_problem(f"{rel}: {key}.{field}", key, unescaped))
     return problems
 
 
 def main(argv: list[str] | None = None) -> int:
     args = list(argv if argv is not None else sys.argv[1:])
-    roots = args or [os.path.join(REPO_ROOT, "localization")]
+    roots = args or [os.path.join(REPO_ROOT, "localization"), os.path.join(REPO_ROOT, "i18n")]
 
     files = iter_loc_files(roots)
-    if not files:
+    tm_files = iter_tm_files(roots)
+    if not files and not tm_files:
         print(f"No .yml files found under: {', '.join(roots)}", file=sys.stderr)
         return 1
 
     problems: list[str] = []
     for path in files:
         problems.extend(check_file(path))
+    for path in tm_files:
+        problems.extend(check_tm_file(path))
 
     for problem in problems:
         print(problem, file=sys.stderr)
 
-    print(f"Checked {len(files)} localization file(s); {len(problems)} problem(s).")
+    tm_note = f" and {len(tm_files)} translation memor{'y' if len(tm_files) == 1 else 'ies'}" if tm_files else ""
+    print(f"Checked {len(files)} localization file(s){tm_note}; {len(problems)} problem(s).")
     return 1 if problems else 0
 
 

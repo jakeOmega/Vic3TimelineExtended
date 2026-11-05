@@ -80,8 +80,8 @@
   "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ nutzen"
  },
  "power_bloc_can_use_crisis_resolution_bool_desc": {
-  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')], at the cost of [concept_authority].",
-  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zu stabilisieren."
+  "en": "Leader can use the Crisis Resolution [concept_diplomatic_action] to resolve crises and stabilize [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')], at the cost of [concept_authority].",
+  "de": "Anführer kann die [concept_diplomatic_action] „Krisenlösung“ auf Kosten von [concept_authority] nutzen, um Krisen zu lösen und [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zu stabilisieren."
  },
  "power_bloc_can_use_extend_influence_bool": {
   "en": "Can Use Extend Influence [concept_diplomatic_action]",
@@ -96,8 +96,8 @@
   "de": "Anführer kann UN-Mitgliedschaft verlangen"
  },
  "power_bloc_can_use_join_united_nations_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann den Artikel „UN-Mitgliedschaft verlangen“ zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can add the Require UN Membership article to treaties, binding another country into the United Nations.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann den Artikel „UN-Mitgliedschaft verlangen“ zu Verträgen hinzufügen und so ein anderes Land in die Vereinten Nationen binden."
  },
  "power_bloc_fiscal_backstop_bool": {
   "en": "The leader is lender of last resort to every adopter, and their overvaluation premium is halved",
@@ -108,24 +108,24 @@
   "de": "Anführer kann kulturelle Akzeptanz erzwingen"
  },
  "power_bloc_leader_can_force_cultural_acceptance_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zwingen, die [concept_primary_cultures] des Anführers zu ihren Hauptkulturen hinzuzufügen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to add the leader's [concept_primary_cultures] to their primary cultures.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zwingen, die [concept_primary_cultures] des Anführers zu ihren Hauptkulturen hinzuzufügen."
  },
  "power_bloc_leader_can_force_cultural_adoption_bool": {
   "en": "Leader Can Force Cultural Adoption",
   "de": "Anführer kann kulturelle Übernahme erzwingen"
  },
  "power_bloc_leader_can_force_cultural_adoption_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members$')] zwingen, ihre [concept_primary_cultures] durch die Hauptkulturen des Anführers zu ersetzen."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can force [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] to replace their [concept_primary_cultures] with the leader's primary cultures.",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_power_bloc_member', '$concept_power_bloc_members|q$')] zwingen, ihre [concept_primary_cultures] durch die Hauptkulturen des Anführers zu ersetzen."
  },
  "power_bloc_leader_can_peacefully_annex_bool": {
   "en": "Leader Can Peacefully Annex Subjects",
   "de": "Anführer kann Klientelländer friedlich annektieren"
  },
  "power_bloc_leader_can_peacefully_annex_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can peacefully annex [Concept('concept_subject', '$concept_subjects$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
-  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] kann [Concept('concept_subject', '$concept_subjects$')] ohne [concept_diplomatic_play] friedlich annektieren, sofern das Klientelland einen niedrigen [concept_liberty_desire] und ein ausreichend niedriges [Concept('concept_gdp', 'BIP')] hat."
+  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "de": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] kann [Concept('concept_subject', '$concept_subjects|q$')] ohne [concept_diplomatic_play] friedlich annektieren, sofern das Klientelland einen niedrigen [concept_liberty_desire] und ein ausreichend niedriges [Concept('concept_gdp', 'BIP')] hat."
  },
  "power_bloc_monetary_cooperation_bool": {
   "en": "The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month",
